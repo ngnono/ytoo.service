@@ -1,0 +1,92 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.BrandCollectionViewModel
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Name
+        </th>
+        <th>EnglishName
+        </th>
+        <th>Description
+        </th>
+        <th>CreatedUser
+        </th>
+        <th>CreatedDate
+        </th>
+        <th>UpdatedDate
+        </th>
+        <th>UpdatedUser
+        </th>
+        <th>Logo
+        </th>
+        <th>WebSite
+        </th>
+        <th>Status
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Brands)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnglishName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Logo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WebSite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+@Html.Partial("PagerPartialView", this.Model)
+
+@section HeaderStyles
+{
+    <link href="@Url.Content("~/content/themes/webget/easyui/default/easyui.css")"  rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/content/themes/webget/easyui/icon.css")" rel="stylesheet" type="text/css" />
+}
+
+@section HeaderScripts
+{
+    <script src="@Url.Content("~/Scripts/widget/jquery.easyui.min.js")" type="text/javascript"></script>
+}

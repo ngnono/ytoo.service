@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{11F8922E-2EEB-4229-BA7C-1D44843C4EDA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Yintai.Hangzhou.Contract</RootNamespace>
+    <AssemblyName>Yintai.Hangzhou.Contract</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\d\Yintai.Architecture.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Yintai.Architecture.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\d\Yintai.Architecture.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Apns\IApnsDataService.cs" />
+    <Compile Include="Brand\IBrandDataService.cs" />
+    <Compile Include="Comment\ICommentDataService.cs" />
+    <Compile Include="Coupon\ICouponDataService.cs" />
+    <Compile Include="Customer\ICustomerDataService.cs" />
+    <Compile Include="DTO\Request\Coupon\CouponRequest.cs" />
+    <Compile Include="DTO\Request\Feedback\FeedbackCreateRequest.cs" />
+    <Compile Include="DTO\Request\Point\GetPointInfoRequest.cs" />
+    <Compile Include="DTO\Request\ProductComplex\GetItemsListRequest.cs" />
+    <Compile Include="DTO\Request\Tag\TagRequest.cs" />
+    <Compile Include="DTO\Request\Device\DeviceRegisterRequest.cs" />
+    <Compile Include="DTO\Request\BaseRequest.cs" />
+    <Compile Include="DTO\Request\Brand\BrandRequest.cs" />
+    <Compile Include="DTO\Request\Comment\CommentRequest.cs" />
+    <Compile Include="DTO\Request\Favorite\DestroyRequest.cs" />
+    <Compile Include="DTO\Request\Pass\PassCreateRequest.cs" />
+    <Compile Include="DTO\Request\Share\ShareRequest.cs" />
+    <Compile Include="DTO\Request\Store\StoreRequest.cs" />
+    <Compile Include="DTO\Response\Comment\CommentCollectionResponse.cs" />
+    <Compile Include="DTO\Response\Device\DeviceInfoResponse.cs" />
+    <Compile Include="DTO\Response\BaseResponse.cs" />
+    <Compile Include="DTO\Response\Brand\BrandResponse.cs" />
+    <Compile Include="DTO\Response\Coupon\CouponInfoResponse.cs" />
+    <Compile Include="DTO\Response\Device\DeviceLogInfoResponse.cs" />
+    <Compile Include="DTO\Response\ItemsInfoResponse.cs" />
+    <Compile Include="DTO\Response\ItemsCollectionResponse.cs" />
+    <Compile Include="DTO\Response\PagerInfoResponse.cs" />
+    <Compile Include="DTO\Response\Point\PointInfoResponse.cs" />
+    <Compile Include="DTO\Response\Promotion\PromotionInfoResponse.cs" />
+    <Compile Include="DTO\Response\Resources\ResourceInfoResponse.cs" />
+    <Compile Include="DTO\Response\Store\StoreInfoResponse.cs" />
+    <Compile Include="DTO\Response\Tag\TagInfoResponse.cs" />
+    <Compile Include="Favorite\IFavoriteDataService.cs" />
+    <Compile Include="Feedback\IFeedbackDataService.cs" />
+    <Compile Include="Group\Group.cs" />
+    <Compile Include="Like\ILikeDataService.cs" />
+    <Compile Include="Point\IPointDataService.cs" />
+    <Compile Include="ProductComplex\IProductComplexDataService.cs" />
+    <Compile Include="Product\IProductDataService.cs" />
+    <Compile Include="Promotion\IPromotionDataService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Region\IRegionService.cs" />
+    <Compile Include="DTO\Request\Customer\LoginRequest.cs" />
+    <Compile Include="DTO\Request\Favorite\FavoriteRequest.cs" />
+    <Compile Include="DTO\Request\Like\LikeRequest.cs" />
+    <Compile Include="DTO\Request\Product\GetProductListRequest.cs" />
+    <Compile Include="DTO\Request\Promotion\GetPromotionListRequest.cs" />
+    <Compile Include="DTO\Request\Region\GetRegionListRequest.cs" />
+    <Compile Include="DTO\Response\Customer\LoginResponse.cs" />
+    <Compile Include="DTO\Response\Favorite\FavoriteResponse.cs" />
+    <Compile Include="DTO\Response\Like\LikeResponse.cs" />
+    <Compile Include="DTO\Response\Product\GetProductListResponse.cs" />
+    <Compile Include="DTO\Response\Promotion\GetPromotionListResponse.cs" />
+    <Compile Include="DTO\Response\Region\GetRegionListResponse.cs" />
+    <Compile Include="Share\IShareDataService.cs" />
+    <Compile Include="Store\IStoreDataService.cs" />
+    <Compile Include="Tag\ITagDataService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Remind\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
+      <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
+      <Name>Yintai.Hangzhou.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

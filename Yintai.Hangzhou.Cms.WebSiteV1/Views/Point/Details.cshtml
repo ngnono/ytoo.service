@@ -1,0 +1,76 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.PointViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>PointViewModel</legend>
+
+    <div class="display-label">User_Id</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.User_Id)
+    </div>
+
+    <div class="display-label">Amount</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Amount)
+    </div>
+
+    <div class="display-label">Type</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Type)
+    </div>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Description</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">PointSourceId</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PointSourceId)
+    </div>
+
+    <div class="display-label">PointSourceType</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PointSourceType)
+    </div>
+
+    <div class="display-label">Status</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Status)
+    </div>
+
+    <div class="display-label">CreatedUser</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedUser)
+    </div>
+
+    <div class="display-label">CreatedDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedDate)
+    </div>
+
+    <div class="display-label">UpdatedDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedDate)
+    </div>
+
+    <div class="display-label">UpdatedUser</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedUser)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

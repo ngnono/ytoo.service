@@ -1,0 +1,25 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.PagerInfo
+@{
+    var url = String.IsNullOrWhiteSpace(Model.UL) ? String.Format("{0}/{1}", ViewContext.RouteData.Values["controller"].ToString().ToLower(), "list") : Model.UL.ToLower();
+}
+<div class="easyui-pagination" style="background:#fafafa;border:1px solid #ddd;" data-options="  
+                total:@this.Model.TotalCount, 
+                pageNumber:@this.Model.Index,
+                pageSize:@this.Model.Size, 
+                showPageList: false,  
+                showRefresh: false,  
+                displayMsg: '',
+                onSelectPage:function(pageNumber, pageSize){
+					$(this).pagination('loading');
+					pager(pageNumber,pageSize);
+					$(this).pagination('loaded');
+				} 
+            ">
+</div>
+
+<script type="text/javascript">
+    function pager(page, size) {
+
+        window.location.href = '/@url' + '/' + page + '@Html.Raw(Model.Query)';
+    }
+</script>

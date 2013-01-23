@@ -1,0 +1,114 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductViewModel
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>ProductViewModel</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Brand_Id</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Brand_Id)
+    </div>
+
+    <div class="display-label">Description</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">CreatedDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedDate)
+    </div>
+
+    <div class="display-label">CreatedUser</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedUser)
+    </div>
+
+    <div class="display-label">UpdatedDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedDate)
+    </div>
+
+    <div class="display-label">UpdatedUser</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedUser)
+    </div>
+
+    <div class="display-label">Price</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Price)
+    </div>
+
+    <div class="display-label">RecommendedReason</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RecommendedReason)
+    </div>
+
+    <div class="display-label">Favorable</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Favorable)
+    </div>
+
+    <div class="display-label">Status</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Status)
+    </div>
+
+    <div class="display-label">Store_Id</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Store_Id)
+    </div>
+
+    <div class="display-label">Tag_Id</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Tag_Id)
+    </div>
+
+    <div class="display-label">FavoriteCount</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FavoriteCount)
+    </div>
+
+    <div class="display-label">ShareCount</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ShareCount)
+    </div>
+
+    <div class="display-label">InvolvedCount</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.InvolvedCount)
+    </div>
+
+    <div class="display-label">RecommendUser</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RecommendUser)
+    </div>
+
+    <div class="display-label">RecommendSourceType</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RecommendSourceType)
+    </div>
+
+    <div class="display-label">RecommendSourceId</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RecommendSourceId)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "List")
+    </p>
+}

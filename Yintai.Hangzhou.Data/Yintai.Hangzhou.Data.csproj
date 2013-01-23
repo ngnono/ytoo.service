@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B07CEC69-B35A-4435-9E83-D7AD4E1F236E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Yintai.Hangzhou.Data</RootNamespace>
+    <AssemblyName>Yintai.Hangzhou.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Devtalk.EF.CodeFirst">
+      <HintPath>..\packages\EFCodeFirst.CreateTablesOnly.1.0.2\lib\Devtalk.EF.CodeFirst.dll</HintPath>
+    </Reference>
+    <Reference Include="EFCachingProvider">
+      <HintPath>..\_dll\EFCachingProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="EFCachingProvider.Web">
+      <HintPath>..\_dll\EFCachingProvider.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="EFProviderWrapperToolkit">
+      <HintPath>..\_dll\EFProviderWrapperToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="EFTracingProvider">
+      <HintPath>..\_dll\EFTracingProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="EmitMapper">
+      <HintPath>..\_dll\EmitMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
+    <Reference Include="Yintai.Architecture.Common">
+      <HintPath>..\_dll\d\Yintai.Architecture.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Yintai.Architecture.Framework">
+      <HintPath>..\_dll\d\Yintai.Architecture.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
+    <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\CouponHistory.cs" />
+    <Compile Include="Models\DeviceLog.cs" />
+    <Compile Include="Models\DeviceToken.cs" />
+    <Compile Include="Models\Favorite.cs" />
+    <Compile Include="Models\Feedback.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\Like.cs" />
+    <Compile Include="Models\Mapping\BrandMap.cs" />
+    <Compile Include="Models\Mapping\CommentMap.cs" />
+    <Compile Include="Models\Mapping\CouponHistoryMap.cs" />
+    <Compile Include="Models\Mapping\DeviceLogMap.cs" />
+    <Compile Include="Models\Mapping\DeviceTokenMap.cs" />
+    <Compile Include="Models\Mapping\FavoriteMap.cs" />
+    <Compile Include="Models\Mapping\FeedbackMap.cs" />
+    <Compile Include="Models\Mapping\GroupMap.cs" />
+    <Compile Include="Models\Mapping\LikeMap.cs" />
+    <Compile Include="Models\Mapping\OutsiteUserMap.cs" />
+    <Compile Include="Models\Mapping\PointHistoryMap.cs" />
+    <Compile Include="Models\Mapping\ProductMap.cs" />
+    <Compile Include="Models\Mapping\ProductTagRelationMap.cs" />
+    <Compile Include="Models\Mapping\PromotionBrandRelationMap.cs" />
+    <Compile Include="Models\Mapping\PromotionMap.cs" />
+    <Compile Include="Models\Mapping\Ref_EnumerationMap.cs" />
+    <Compile Include="Models\Mapping\Ref_EnumerationMemberMap.cs" />
+    <Compile Include="Models\Mapping\RemindMap.cs" />
+    <Compile Include="Models\Mapping\ResourceMap.cs" />
+    <Compile Include="Models\Mapping\RoleMap.cs" />
+    <Compile Include="Models\Mapping\ShareHistoryMap.cs" />
+    <Compile Include="Models\Mapping\StoreMap.cs" />
+    <Compile Include="Models\Mapping\TagMap.cs" />
+    <Compile Include="Models\Mapping\TimeSeedMap.cs" />
+    <Compile Include="Models\Mapping\UserAccountMap.cs" />
+    <Compile Include="Models\Mapping\UserMap.cs" />
+    <Compile Include="Models\Mapping\UserRoleMap.cs" />
+    <Compile Include="Models\Mapping\VerifyCodeMap.cs" />
+    <Compile Include="Models\Mapping\VUserMap.cs" />
+    <Compile Include="Models\Mapping\VUserRoleMap.cs" />
+    <Compile Include="Models\OutsiteUser.cs" />
+    <Compile Include="Models\PointHistory.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductTagRelation.cs" />
+    <Compile Include="Models\Promotion.cs" />
+    <Compile Include="Models\PromotionBrandRelation.cs" />
+    <Compile Include="Models\Ref_Enumeration.cs" />
+    <Compile Include="Models\Ref_EnumerationMember.cs" />
+    <Compile Include="Models\Remind.cs" />
+    <Compile Include="Models\Resource.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\ShareHistory.cs" />
+    <Compile Include="Models\Store.cs" />
+    <Compile Include="Models\Tag.cs" />
+    <Compile Include="Models\TimeSeed.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserAccount.cs" />
+    <Compile Include="Models\UserRole.cs" />
+    <Compile Include="Models\VerifyCode.cs" />
+    <Compile Include="Models\VUser.cs" />
+    <Compile Include="Models\VUserRole.cs" />
+    <Compile Include="Models\YintaiHangzhouContext.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="CodeTemplates\ReverseEngineerCodeFirst\Context.tt" />
+    <None Include="CodeTemplates\ReverseEngineerCodeFirst\Entity.tt" />
+    <None Include="CodeTemplates\ReverseEngineerCodeFirst\Mapping.tt" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

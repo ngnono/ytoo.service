@@ -1,0 +1,199 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductCollectionViewModel
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var url = String.IsNullOrWhiteSpace(Model.UL) ? String.Format("{0}/{1}", ViewContext.RouteData.Values["controller"].ToString().ToLower(), "list") : Model.UL.ToLower();
+}
+
+<h2>List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div>
+    <form action="/@url">
+        <label for="name">产品名称</label>
+        <input name="name" type="text" />
+
+        <label for="recommenduser">推荐人</label>
+        <input name="recommenduser" type="text" />
+
+        <label for="brandid">品牌Id</label>
+        <input name="brandid" type="text" />
+
+        <label for="tagid">tagId</label>
+        <input name="tagid" type="text" />
+
+        <input type="submit" value="查询" />
+    </form>
+</div>
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Name
+        </th>
+        <th>Brand_Id
+        </th>
+        <th>Description
+        </th>
+        <th>CreatedDate
+        </th>
+        <th>CreatedUser
+        </th>
+        <th>UpdatedDate
+        </th>
+        <th>UpdatedUser
+        </th>
+        <th>Price
+        </th>
+        <th>RecommendedReason
+        </th>
+        <th>Favorable
+        </th>
+        <th>Status
+        </th>
+        <th>Store_Id
+        </th>
+        <th>Tag_Id
+        </th>
+        <th>FavoriteCount
+        </th>
+        <th>ShareCount
+        </th>
+        <th>InvolvedCount
+        </th>
+        <th>RecommendUser
+        </th>
+        <th>RecommendSourceType
+        </th>
+        <th>RecommendSourceId
+        </th>
+        <th>SortOrder
+        </th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Products)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Brand_Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecommendedReason)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Favorable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Store_Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tag_Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FavoriteCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShareCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvolvedCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecommendUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecommendSourceType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecommendSourceId)
+            </td>
+            <td>
+                <input type="text" id="@String.Format("ssorder_{0}", item.Id)" value="@Html.DisplayFor(modelItem => item.SortOrder)"/>
+
+                <input type="button" id="runSsorder" value="editOrder" onclick="setOrder(@item.Id);" />
+            </td>
+            <td>
+                @if (item.Resources != null && item.Resources.Count > 0)
+                {
+                    foreach (var re in item.Resources)
+                    {
+                        if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                        {
+                    <img src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120X0" />
+                        }
+                    }
+                }
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+                @Html.ActionLink("ViewImage", "List", "Resource", new { sourceType = (int)SourceType.Product, sourceid = item.Id }, null)
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.Partial("PagerPartialView", this.Model)
+
+@section HeaderStyles
+{
+    <link href="@Url.Content("~/content/themes/webget/easyui/default/easyui.css")"  rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/content/themes/webget/easyui/icon.css")" rel="stylesheet" type="text/css" />
+}
+
+@section HeaderScripts
+{
+    <script src="@Url.Content("~/Scripts/widget/jquery.easyui.min.js")" type="text/javascript"></script>
+}
+
+@section FooterScripts
+{
+    <script type="text/javascript">
+
+        function setOrder(id) {
+            var o = $('#ssorder_' + id).val();
+            var data = 'id=' + id + '&order=' + o;
+            $.post('@String.Format("/{0}/{1}", ViewContext.RouteData.Values["controller"].ToString().ToLower(), "setorder")', data, function(msg) {
+                if (msg.IsSuccess) {
+                    alert('更新成功');
+                } else {
+                    alert(msg.Message);
+                }
+            }, 'JSON');
+        }
+    </script>
+}

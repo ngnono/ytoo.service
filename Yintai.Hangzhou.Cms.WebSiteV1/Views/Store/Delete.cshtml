@@ -1,0 +1,89 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.StoreViewModel
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>StoreViewModel</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Description</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">Location</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Location)
+    </div>
+
+    <div class="display-label">Tel</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Tel)
+    </div>
+
+    <div class="display-label">CreatedUser</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedUser)
+    </div>
+
+    <div class="display-label">CreatedDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedDate)
+    </div>
+
+    <div class="display-label">UpdatedDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedDate)
+    </div>
+
+    <div class="display-label">UpdatedUser</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedUser)
+    </div>
+
+    <div class="display-label">Longitude</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Longitude)
+    </div>
+
+    <div class="display-label">Latitude</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Latitude)
+    </div>
+
+    <div class="display-label">Group_Id</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Group_Id)
+    </div>
+
+    <div class="display-label">Status</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Status)
+    </div>
+
+    <div class="display-label">Region_Id</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Region_Id)
+    </div>
+
+    <div class="display-label">StoreLevel</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.StoreLevel)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

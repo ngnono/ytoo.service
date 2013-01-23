@@ -1,0 +1,195 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_dll", "_dll", "{DE1A6F43-CAB5-4BD7-899D-A7984F0141EA}"
+	ProjectSection(SolutionItems) = preProject
+		_dll\BouncyCastle.Crypto.dll = _dll\BouncyCastle.Crypto.dll
+		_dll\EFCachingProvider.dll = _dll\EFCachingProvider.dll
+		_dll\EFCachingProvider.pdb = _dll\EFCachingProvider.pdb
+		_dll\EFCachingProvider.Web.dll = _dll\EFCachingProvider.Web.dll
+		_dll\EFCachingProvider.Web.pdb = _dll\EFCachingProvider.Web.pdb
+		_dll\EFProviderWrapperToolkit.dll = _dll\EFProviderWrapperToolkit.dll
+		_dll\EFProviderWrapperToolkit.pdb = _dll\EFProviderWrapperToolkit.pdb
+		_dll\EFTracingProvider.dll = _dll\EFTracingProvider.dll
+		_dll\EFTracingProvider.pdb = _dll\EFTracingProvider.pdb
+		_dll\EmitMapper.dll = _dll\EmitMapper.dll
+		_dll\HtmlAgilityPack.dll = _dll\HtmlAgilityPack.dll
+		_dll\HtmlAgilityPack.pdb = _dll\HtmlAgilityPack.pdb
+		_dll\HtmlAgilityPack.XML = _dll\HtmlAgilityPack.XML
+		_dll\ICSharpCode.SharpZipLib.dll = _dll\ICSharpCode.SharpZipLib.dll
+		_dll\LinqKit.dll = _dll\LinqKit.dll
+		_dll\log4net.dll = _dll\log4net.dll
+		_dll\Microsoft.Practices.EnterpriseLibrary.Common.dll = _dll\Microsoft.Practices.EnterpriseLibrary.Common.dll
+		_dll\Microsoft.Practices.EnterpriseLibrary.Data.dll = _dll\Microsoft.Practices.EnterpriseLibrary.Data.dll
+		_dll\Microsoft.Practices.ObjectBuilder.dll = _dll\Microsoft.Practices.ObjectBuilder.dll
+		_dll\Microsoft.Practices.ObjectBuilder2.dll = _dll\Microsoft.Practices.ObjectBuilder2.dll
+		_dll\Microsoft.Practices.Unity.Configuration.dll = _dll\Microsoft.Practices.Unity.Configuration.dll
+		_dll\Microsoft.Practices.Unity.dll = _dll\Microsoft.Practices.Unity.dll
+		_dll\Newtonsoft.Json.dll = _dll\Newtonsoft.Json.dll
+		_dll\Newtonsoft.Json.xml = _dll\Newtonsoft.Json.xml
+		_dll\Ninject.dll = _dll\Ninject.dll
+		_dll\NVelocity.dll = _dll\NVelocity.dll
+		_dll\Renative.Framework.dll = _dll\Renative.Framework.dll
+		_dll\Renative.Framework.pdb = _dll\Renative.Framework.pdb
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_dependent", "_dependent", "{818D603F-1F5D-4B12-A73F-58DD060A661F}"
+	ProjectSection(SolutionItems) = preProject
+		_dll\d\Yintai.Architecture.Common.dll = _dll\d\Yintai.Architecture.Common.dll
+		_dll\d\Yintai.Architecture.Common.pdb = _dll\d\Yintai.Architecture.Common.pdb
+		_dll\d\Yintai.Architecture.Framework.dll = _dll\d\Yintai.Architecture.Framework.dll
+		_dll\d\Yintai.Architecture.Framework.pdb = _dll\d\Yintai.Architecture.Framework.pdb
+		_dll\d\Yintai.Architecture.ImageClient.dll = _dll\d\Yintai.Architecture.ImageClient.dll
+		_dll\d\Yintai.Architecture.ImageClient.pdb = _dll\d\Yintai.Architecture.ImageClient.pdb
+		_dll\d\Yintai.Architecture.ImageTool.dll = _dll\d\Yintai.Architecture.ImageTool.dll
+		_dll\d\Yintai.Architecture.ImageTool.pdb = _dll\d\Yintai.Architecture.ImageTool.pdb
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiTest", "ApiTest", "{41B39A2D-79C7-4BFA-B313-195A69F2BDC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{F9695D55-57C1-4A7B-B4AA-60908D868CE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.Data", "Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj", "{B07CEC69-B35A-4435-9E83-D7AD4E1F236E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.Model", "Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj", "{173FF5C0-5631-47AD-AF9E-16442858C080}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.Contract", "Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj", "{11F8922E-2EEB-4229-BA7C-1D44843C4EDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.Service", "Yintai.Hangzhou.Service\Yintai.Hangzhou.Service.csproj", "{193902DC-242C-4DBA-B173-EE154E813C4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.Tools.ApiTest", "Yintai.Hangzhou.Tools.ApiTest\Yintai.Hangzhou.Tools.ApiTest.csproj", "{670489E3-6C2D-416B-9665-7B6E9AE690CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.Repository", "Yintai.Hangzhou.Repository\Yintai.Hangzhou.Repository.csproj", "{82BE109A-483E-40BF-98B8-A555BCA86111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.WebApi", "Yintai.Hangzhou.WebApi\Yintai.Hangzhou.WebApi.csproj", "{3A1B5C84-F8E4-46D6-9D25-81CFE1AF27C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.WebApiCore", "Yintai.Hangzhou.WebApiCore\Yintai.Hangzhou.WebApiCore.csproj", "{9EBD5D9A-F4DC-4A75-8348-BCE676C5C795}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "passbook", "passbook", "{94FF341A-9FA9-4996-A878-F0F8A1CF1C97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apns", "apns", "{D855473F-F726-449F-A391-C62B67ABA4D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web", "web", "{2C42D1E9-A0E8-4E96-BE75-578C5848C625}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{DD11E326-149A-43DC-9591-9C281F55C3A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{C663D999-757F-442B-B755-904A56634F40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.WebSupport", "Yintai.Hangzhou.WebAppSupport\Yintai.Hangzhou.WebSupport.csproj", "{A2E82216-56CC-45BF-B671-DB8CC464D573}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.Cms.WebSiteV1", "Yintai.Hangzhou.Cms.WebSiteV1\Yintai.Hangzhou.Cms.WebSiteV1.csproj", "{F20D05CE-1EEE-4DE6-A457-37CEEFB39EEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Hangzhou.Cms.WebSiteCoreV1", "Yintai.Hangzhou.Cms.WebSiteCoreV1\Yintai.Hangzhou.Cms.WebSiteCoreV1.csproj", "{2616C563-F250-4F28-A742-AFB43D219AB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{5B2E60DF-2530-46CB-BB23-88521A844C80}"
+	ProjectSection(SolutionItems) = preProject
+		UnitTest.txt = UnitTest.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Architecture.FileUploadServer", "Yintai.Architecture.FileUploadServer\Yintai.Architecture.FileUploadServer.csproj", "{93E896A8-D229-4422-B31B-DF2F2403728E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{32D121FF-079E-402E-9A1E-C1049913BEF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JdSoft.Apple.Apns.Notifications", "APNS-Sharp-master\JdSoft.Apple.Apns.Notifications\JdSoft.Apple.Apns.Notifications.csproj", "{4CFB9AA8-55F8-46DC-B7BD-9E18B9939110}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JdSoft.Apple.Apns.Notifications.Test", "APNS-Sharp-master\JdSoft.Apple.Apns.Notifications.Test\JdSoft.Apple.Apns.Notifications.Test.csproj", "{3500A7AA-A8C8-4221-8265-48B02ECF2463}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passbook.Generator", "Passbook.Generator\Passbook.Generator.csproj", "{9F0AB42E-2D5A-4DF1-8203-91E8DBA409F3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B07CEC69-B35A-4435-9E83-D7AD4E1F236E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B07CEC69-B35A-4435-9E83-D7AD4E1F236E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B07CEC69-B35A-4435-9E83-D7AD4E1F236E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B07CEC69-B35A-4435-9E83-D7AD4E1F236E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{173FF5C0-5631-47AD-AF9E-16442858C080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{173FF5C0-5631-47AD-AF9E-16442858C080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{173FF5C0-5631-47AD-AF9E-16442858C080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{173FF5C0-5631-47AD-AF9E-16442858C080}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11F8922E-2EEB-4229-BA7C-1D44843C4EDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11F8922E-2EEB-4229-BA7C-1D44843C4EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11F8922E-2EEB-4229-BA7C-1D44843C4EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11F8922E-2EEB-4229-BA7C-1D44843C4EDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{193902DC-242C-4DBA-B173-EE154E813C4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{193902DC-242C-4DBA-B173-EE154E813C4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{193902DC-242C-4DBA-B173-EE154E813C4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{193902DC-242C-4DBA-B173-EE154E813C4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{670489E3-6C2D-416B-9665-7B6E9AE690CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{670489E3-6C2D-416B-9665-7B6E9AE690CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{670489E3-6C2D-416B-9665-7B6E9AE690CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{670489E3-6C2D-416B-9665-7B6E9AE690CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82BE109A-483E-40BF-98B8-A555BCA86111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82BE109A-483E-40BF-98B8-A555BCA86111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82BE109A-483E-40BF-98B8-A555BCA86111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82BE109A-483E-40BF-98B8-A555BCA86111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A1B5C84-F8E4-46D6-9D25-81CFE1AF27C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A1B5C84-F8E4-46D6-9D25-81CFE1AF27C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A1B5C84-F8E4-46D6-9D25-81CFE1AF27C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A1B5C84-F8E4-46D6-9D25-81CFE1AF27C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EBD5D9A-F4DC-4A75-8348-BCE676C5C795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EBD5D9A-F4DC-4A75-8348-BCE676C5C795}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EBD5D9A-F4DC-4A75-8348-BCE676C5C795}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EBD5D9A-F4DC-4A75-8348-BCE676C5C795}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2E82216-56CC-45BF-B671-DB8CC464D573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2E82216-56CC-45BF-B671-DB8CC464D573}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2E82216-56CC-45BF-B671-DB8CC464D573}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2E82216-56CC-45BF-B671-DB8CC464D573}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F20D05CE-1EEE-4DE6-A457-37CEEFB39EEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F20D05CE-1EEE-4DE6-A457-37CEEFB39EEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F20D05CE-1EEE-4DE6-A457-37CEEFB39EEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F20D05CE-1EEE-4DE6-A457-37CEEFB39EEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2616C563-F250-4F28-A742-AFB43D219AB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2616C563-F250-4F28-A742-AFB43D219AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2616C563-F250-4F28-A742-AFB43D219AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2616C563-F250-4F28-A742-AFB43D219AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93E896A8-D229-4422-B31B-DF2F2403728E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93E896A8-D229-4422-B31B-DF2F2403728E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93E896A8-D229-4422-B31B-DF2F2403728E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93E896A8-D229-4422-B31B-DF2F2403728E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CFB9AA8-55F8-46DC-B7BD-9E18B9939110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CFB9AA8-55F8-46DC-B7BD-9E18B9939110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CFB9AA8-55F8-46DC-B7BD-9E18B9939110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CFB9AA8-55F8-46DC-B7BD-9E18B9939110}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3500A7AA-A8C8-4221-8265-48B02ECF2463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3500A7AA-A8C8-4221-8265-48B02ECF2463}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3500A7AA-A8C8-4221-8265-48B02ECF2463}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3500A7AA-A8C8-4221-8265-48B02ECF2463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F0AB42E-2D5A-4DF1-8203-91E8DBA409F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F0AB42E-2D5A-4DF1-8203-91E8DBA409F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F0AB42E-2D5A-4DF1-8203-91E8DBA409F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F0AB42E-2D5A-4DF1-8203-91E8DBA409F3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{818D603F-1F5D-4B12-A73F-58DD060A661F} = {DE1A6F43-CAB5-4BD7-899D-A7984F0141EA}
+		{670489E3-6C2D-416B-9665-7B6E9AE690CC} = {41B39A2D-79C7-4BFA-B313-195A69F2BDC8}
+		{B07CEC69-B35A-4435-9E83-D7AD4E1F236E} = {3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}
+		{82BE109A-483E-40BF-98B8-A555BCA86111} = {3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}
+		{173FF5C0-5631-47AD-AF9E-16442858C080} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
+		{11F8922E-2EEB-4229-BA7C-1D44843C4EDA} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
+		{193902DC-242C-4DBA-B173-EE154E813C4B} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
+		{94FF341A-9FA9-4996-A878-F0F8A1CF1C97} = {F9695D55-57C1-4A7B-B4AA-60908D868CE3}
+		{D855473F-F726-449F-A391-C62B67ABA4D0} = {F9695D55-57C1-4A7B-B4AA-60908D868CE3}
+		{C663D999-757F-442B-B755-904A56634F40} = {2C42D1E9-A0E8-4E96-BE75-578C5848C625}
+		{DD11E326-149A-43DC-9591-9C281F55C3A9} = {2C42D1E9-A0E8-4E96-BE75-578C5848C625}
+		{A2E82216-56CC-45BF-B671-DB8CC464D573} = {2C42D1E9-A0E8-4E96-BE75-578C5848C625}
+		{3A1B5C84-F8E4-46D6-9D25-81CFE1AF27C1} = {C663D999-757F-442B-B755-904A56634F40}
+		{9EBD5D9A-F4DC-4A75-8348-BCE676C5C795} = {C663D999-757F-442B-B755-904A56634F40}
+		{9F0AB42E-2D5A-4DF1-8203-91E8DBA409F3} = {94FF341A-9FA9-4996-A878-F0F8A1CF1C97}
+		{4CFB9AA8-55F8-46DC-B7BD-9E18B9939110} = {D855473F-F726-449F-A391-C62B67ABA4D0}
+		{3500A7AA-A8C8-4221-8265-48B02ECF2463} = {D855473F-F726-449F-A391-C62B67ABA4D0}
+		{F20D05CE-1EEE-4DE6-A457-37CEEFB39EEC} = {DD11E326-149A-43DC-9591-9C281F55C3A9}
+		{2616C563-F250-4F28-A742-AFB43D219AB4} = {DD11E326-149A-43DC-9591-9C281F55C3A9}
+		{93E896A8-D229-4422-B31B-DF2F2403728E} = {32D121FF-079E-402E-9A1E-C1049913BEF9}
+	EndGlobalSection
+EndGlobal

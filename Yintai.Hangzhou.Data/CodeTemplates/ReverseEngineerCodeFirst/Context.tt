@@ -1,0 +1,165 @@
+<#@ template hostspecific="true" language="C#" #>
+<#@ include file="EF.Utility.CS.ttinclude" #><#@
+ output extension=".cs" #><#
+
+    var efHost = (EfTextTemplateHost)Host;
+    var code = new CodeGenerationTools(this);
+#>
+using System;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Data.Objects;
+using EFCachingProvider;
+using EFCachingProvider.Caching;
+using EFTracingProvider;
+using EFProviderWrapperToolkit;
+using <#= code.EscapeNamespace(efHost.MappingNamespace) #>;
+
+namespace <#= code.EscapeNamespace(efHost.Namespace) #>
+{
+    public partial class <#= efHost.EntityContainer.Name #> : DbContext , Architecture.Common.Data.EF.IUnitOfWork
+    {
+        private static readonly Architecture.Common.Logger.ILog _log;
+
+        static <#= efHost.EntityContainer.Name #>()
+        {
+            Database.SetInitializer<<#= efHost.EntityContainer.Name #>>(null);
+            _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
+        }
+
+		public <#= efHost.EntityContainer.Name #>()
+			: base("Name=<#= efHost.EntityContainer.Name #>")
+		{
+		}
+
+        #region ef tracing
+
+		public <#= efHost.EntityContainer.Name #>(string nameOrConnectionString)
+            : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
+        {
+        }
+
+        public <#= efHost.EntityContainer.Name #>(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
+            : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
+        {
+			var ctx = ((IObjectContextAdapter)this).ObjectContext;
+
+            this.ObjectContext = ctx;
+
+            EFTracingConnection tracingConnection;
+            if (ObjectContext.TryUnwrapConnection(out tracingConnection))
+            {
+                ctx.GetTracingConnection().CommandExecuting += (s, e) => _log.Debug(e.ToTraceString());
+            }
+
+            EFCachingConnection cachingConnection;
+            if (ObjectContext.TryUnwrapConnection(out cachingConnection))
+            {
+                Cache = cacheProvider;
+                CachingPolicy = cachingPolicy;
+            }
+        }
+
+        #endregion
+
+		#region Tracing Extensions
+
+        private ObjectContext ObjectContext { get; set; }
+
+        private EFTracingConnection TracingConnection
+        {
+            get { return ObjectContext.UnwrapConnection<EFTracingConnection>(); }
+        }
+
+        public event EventHandler<CommandExecutionEventArgs> CommandExecuting
+        {
+            add { this.TracingConnection.CommandExecuting += value; }
+            remove { this.TracingConnection.CommandExecuting -= value; }
+        }
+
+        public event EventHandler<CommandExecutionEventArgs> CommandFinished
+        {
+            add { this.TracingConnection.CommandFinished += value; }
+            remove { this.TracingConnection.CommandFinished -= value; }
+        }
+
+        public event EventHandler<CommandExecutionEventArgs> CommandFailed
+        {
+            add { this.TracingConnection.CommandFailed += value; }
+            remove { this.TracingConnection.CommandFailed -= value; }
+        }
+
+        #endregion
+
+        #region Caching Extensions
+
+        private EFCachingConnection CachingConnection
+        {
+            get { return ObjectContext.UnwrapConnection<EFCachingConnection>(); }
+        }
+
+        public ICache Cache
+        {
+            get { return CachingConnection.Cache; }
+            set { CachingConnection.Cache = value; }
+        }
+
+        public CachingPolicy CachingPolicy
+        {
+            get { return CachingConnection.CachingPolicy; }
+            set { CachingConnection.CachingPolicy = value; }
+        }
+
+        #endregion
+
+<#
+    foreach (var set in efHost.EntityContainer.BaseEntitySets.OfType<EntitySet>())
+    {
+#>
+        public DbSet<<#= set.ElementType.Name #>Entity> <#= set.Name #> { get; set; }
+<#
+    }
+#>
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            // 移除复数表名的契约
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            // 防止黑幕交易 要不然每次都要访问 EdmMetadata这个表 EF4.1后可注释
+            modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
+
+<#
+    foreach (var set in efHost.EntityContainer.BaseEntitySets.OfType<EntitySet>())
+    {
+#>
+            modelBuilder.Configurations.Add(new <#= set.ElementType.Name #>EntityMap());
+<#
+    }
+#>
+        }
+
+		public override int SaveChanges()
+		{
+			var c =  base.SaveChanges();
+
+			//在更新前清除掉Local中的数据
+			#region clear local
+
+		<#
+		/*
+    foreach (var set in efHost.EntityContainer.BaseEntitySets.OfType<EntitySet>())
+    {
+#>
+			//Set<<#= set.ElementType.Name #>Entity>().Local.Clear();
+<#
+    }
+#>
+	//	*/
+			#endregion
+
+			return c;
+		}
+    }
+}

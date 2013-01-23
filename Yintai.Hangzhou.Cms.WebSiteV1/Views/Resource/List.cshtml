@@ -1,0 +1,162 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@model  Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ResourceCollectionViewModel
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>SourceId
+        </th>
+        <th>SourceType
+        </th>
+        <th>Name
+        </th>
+        <th>ExtName
+        </th>
+        <th>Domain
+        </th>
+        <th>IsDefault
+        </th>
+        <th>SortOrder
+        </th>
+        <th>Type
+        </th>
+        <th>Size
+        </th>
+        <th>Width
+        </th>
+        <th>Height
+        </th>
+        <th>ContentSize
+        </th>
+        <th>Status
+        </th>
+        <th>CreatedUser
+        </th>
+        <th>CreatedDate
+        </th>
+        <th>UpdatedDate
+        </th>
+        <th>UpdatedUser
+        </th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Resources)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SourceId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SourceType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExtName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Domain)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDefault)
+            </td>
+            <td>
+                <input type="text" id="@String.Format("ssorder_{0}", item.Id)" value="@Html.DisplayFor(modelItem => item.SortOrder)"/>
+
+                <input type="button" id="runSsorder" value="editOrder" onclick="setOrder(@item.Id);" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Size)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Width)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Height)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContentSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedUser)
+            </td>
+            <td>@if (item.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                {
+
+                    switch ((SourceType)item.SourceType)
+                    {
+                        case SourceType.CustomerPortrait:
+                <img src="@String.Concat(item.Domain, item.Name, "_50x50.jpg")" alt="50X50" />
+                            break;
+                        default:
+                <img src="@String.Concat(item.Domain, item.Name, "_120x0.jpg")" alt="120X0" />
+                            break;
+                    }
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+   
+    }
+
+</table>
+@Html.Partial("PagerPartialView", Model)
+
+@section HeaderStyles
+{
+    <link href="@Url.Content("~/content/themes/webget/easyui/default/easyui.css")"  rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/content/themes/webget/easyui/icon.css")" rel="stylesheet" type="text/css" />
+}
+
+@section HeaderScripts
+{
+    <script src="@Url.Content("~/Scripts/widget/jquery.easyui.min.js")" type="text/javascript"></script>
+}
+
+@section FooterScripts
+{
+    <script type="text/javascript">
+
+        function setOrder(id) {
+            var o = $('#ssorder_' + id).val();
+            var data = 'id=' + id + '&order=' + o;
+            $.post('/resource/setorder/', data, function(msg) {
+                if (msg.IsSuccess) {
+                    alert('更新成功');
+                } else {
+                    alert(msg.Message);
+                }
+            }, 'JSON');
+        }
+    </script>
+}

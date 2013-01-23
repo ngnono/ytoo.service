@@ -1,0 +1,101 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.PromotionViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>PromotionViewModel</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Description</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">StartDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.StartDate)
+    </div>
+
+    <div class="display-label">EndDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.EndDate)
+    </div>
+
+    <div class="display-label">RecommendSourceId</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RecommendSourceId)
+    </div>
+
+    <div class="display-label">RecommendSourceType</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RecommendSourceType)
+    </div>
+
+    <div class="display-label">RecommendUser</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RecommendUser)
+    </div>
+
+    <div class="display-label">LikeCount</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LikeCount)
+    </div>
+
+    <div class="display-label">FavoriteCount</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FavoriteCount)
+    </div>
+
+    <div class="display-label">ShareCount</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ShareCount)
+    </div>
+
+    <div class="display-label">InvolvedCount</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.InvolvedCount)
+    </div>
+
+    <div class="display-label">Store_Id</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Store_Id)
+    </div>
+
+    <div class="display-label">Status</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Status)
+    </div>
+
+    <div class="display-label">CreatedUser</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedUser)
+    </div>
+
+    <div class="display-label">CreatedDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedDate)
+    </div>
+
+    <div class="display-label">UpdatedDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedDate)
+    </div>
+
+    <div class="display-label">UpdatedUser</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedUser)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

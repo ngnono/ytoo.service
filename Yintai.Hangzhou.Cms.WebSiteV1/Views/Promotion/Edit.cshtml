@@ -1,0 +1,132 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.PromotionViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>PromotionViewModel</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Description)
+        </div>
+        <div class="editor-field">
+            @Html.TextArea("description", Model.Description)
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.StartDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.StartDate)
+            @Html.ValidationMessageFor(model => model.StartDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EndDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.EndDate)
+            @Html.ValidationMessageFor(model => model.EndDate)
+        </div>
+
+        @*  <div class="editor-label">
+            @Html.LabelFor(model => model.RecommendSourceId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RecommendSourceId)
+            @Html.ValidationMessageFor(model => model.RecommendSourceId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.RecommendSourceType)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RecommendSourceType)
+            @Html.ValidationMessageFor(model => model.RecommendSourceType)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.RecommendUser)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RecommendUser)
+            @Html.ValidationMessageFor(model => model.RecommendUser)
+        </div>*@
+
+        @* <div class="editor-label">
+            @Html.LabelFor(model => model.LikeCount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LikeCount)
+            @Html.ValidationMessageFor(model => model.LikeCount)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FavoriteCount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FavoriteCount)
+            @Html.ValidationMessageFor(model => model.FavoriteCount)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShareCount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ShareCount)
+            @Html.ValidationMessageFor(model => model.ShareCount)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.InvolvedCount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.InvolvedCount)
+            @Html.ValidationMessageFor(model => model.InvolvedCount)
+        </div>*@
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Store_Id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Store_Id)
+            @Html.ValidationMessageFor(model => model.Store_Id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Tag_Id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Tag_Id)
+            @Html.ValidationMessageFor(model => model.Tag_Id)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

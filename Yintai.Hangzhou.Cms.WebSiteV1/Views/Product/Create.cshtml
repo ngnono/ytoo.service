@@ -1,0 +1,96 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>ProductViewModel</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Brand_Id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Brand_Id)
+            @Html.ValidationMessageFor(model => model.Brand_Id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Description)
+        </div>
+        <div class="editor-field">
+            @Html.TextArea("description", Model == null ? String.Empty : Model.Description)
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Price)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Price)
+            @Html.ValidationMessageFor(model => model.Price)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.RecommendedReason)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RecommendedReason)
+            @Html.ValidationMessageFor(model => model.RecommendedReason)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Favorable)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Favorable)
+            @Html.ValidationMessageFor(model => model.Favorable)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Store_Id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Store_Id)
+            @Html.ValidationMessageFor(model => model.Store_Id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Tag_Id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Tag_Id)
+            @Html.ValidationMessageFor(model => model.Tag_Id)
+        </div>
+      
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "List")
+</div>
+
+@section HeaderScripts
+{
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+}

@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/modernizr-2.5.3.js")" type="text/javascript"></script>
+@*    <script src="@Url.Content("~/Scripts/widget/jquery.query.js")" type="text/javascript"></script>*@
+    @RenderSection("HeaderStyles", false)
+    @RenderSection("HeaderScripts", false)
+</head>
+<body>
+    <div class="page">
+        <header>
+            <div id="title">
+                <h1>My MVC Application</h1>
+            </div>
+            <div id="logindisplay">
+                @Html.Partial("_LogOnPartial")
+            </div>
+            <nav>
+                <ul id="menu">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Product", "Index", "Product")</li>
+                    <li>@Html.ActionLink("Brand", "Index", "Brand")</li>
+                    <li>@Html.ActionLink("Comment", "Index", "Comment")</li>
+                    <li>@Html.ActionLink("Promotion", "Index", "Promotion")</li>
+                    <li>@Html.ActionLink("Store", "Index", "Store")</li>
+                    <li>@Html.ActionLink("Tag", "Index", "Tag")</li>
+                    <li>@Html.ActionLink("Customer", "Index", "Customer")</li>
+                    <li>@Html.ActionLink("Feedback", "Index", "Feedback")</li>
+                    <li>@Html.ActionLink("Point", "Index", "Point")</li>
+                    <li>@Html.ActionLink("Resource", "Index", "Resource")</li>
+                </ul>
+            </nav>
+        </header>
+        <section id="main">
+            @RenderBody()
+        </section>
+        <footer>
+        </footer>
+    </div>
+
+    @RenderSection("FooterScripts", false)
+</body>
+</html>

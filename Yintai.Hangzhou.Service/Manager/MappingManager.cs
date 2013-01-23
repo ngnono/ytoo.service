@@ -1,0 +1,3470 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using Yintai.Architecture.Common.Helper;
+using Yintai.Architecture.Common.Models;
+using Yintai.Architecture.Framework.Mapping;
+using Yintai.Architecture.Framework.ServiceLocation;
+using Yintai.Architecture.Framework.Utility;
+using Yintai.Hangzhou.Contract.DTO.Request.Brand;
+using Yintai.Hangzhou.Contract.DTO.Request.Product;
+using Yintai.Hangzhou.Contract.DTO.Request.Promotion;
+using Yintai.Hangzhou.Contract.DTO.Request.Store;
+using Yintai.Hangzhou.Contract.DTO.Request.Tag;
+using Yintai.Hangzhou.Contract.DTO.Response;
+using Yintai.Hangzhou.Contract.DTO.Response.Brand;
+using Yintai.Hangzhou.Contract.DTO.Response.Comment;
+using Yintai.Hangzhou.Contract.DTO.Response.Coupon;
+using Yintai.Hangzhou.Contract.DTO.Response.Customer;
+using Yintai.Hangzhou.Contract.DTO.Response.Device;
+using Yintai.Hangzhou.Contract.DTO.Response.Favorite;
+using Yintai.Hangzhou.Contract.DTO.Response.Like;
+using Yintai.Hangzhou.Contract.DTO.Response.Point;
+using Yintai.Hangzhou.Contract.DTO.Response.Product;
+using Yintai.Hangzhou.Contract.DTO.Response.Promotion;
+using Yintai.Hangzhou.Contract.DTO.Response.Resources;
+using Yintai.Hangzhou.Contract.DTO.Response.Store;
+using Yintai.Hangzhou.Contract.DTO.Response.Tag;
+using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Model;
+using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Repository.Contract;
+
+namespace Yintai.Hangzhou.Service.Manager
+{
+    #region static
+
+    /*
+
+    /// <summary>
+    /// customer
+    /// </summary>
+    [System.Obsolete("请使用 MappingManagerV2")]
+    public static class MappingManager
+    {
+        #region fields
+
+        private static readonly ICustomerRepository _customerRepository;
+        private static readonly IStoreRepository _storeRepository;
+        private static readonly IResourceRepository _resourceRepository;
+        private static readonly IPromotionRepository _promotionRepository;
+        private static readonly IBrandRepository _brandRepository;
+        private static readonly ITagRepository _tagRepository;
+        private static readonly IUserAccountRepository _userAccountRepository;
+        private static readonly IVUserRoleRepository _vUserRoleRepository;
+        private static readonly IProductRepository _productRepository;
+        private static readonly IPromotionBrandRelationRepository _promotionBrandRelationRepository;
+
+        #endregion
+
+        #region .ctor
+
+        static MappingManager()
+        {
+            //注意 只能 查询不能有修改操作
+            _customerRepository = ServiceLocator.Current.Resolve<ICustomerRepository>();
+            _storeRepository = ServiceLocator.Current.Resolve<IStoreRepository>();
+            _resourceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
+            _promotionRepository = ServiceLocator.Current.Resolve<IPromotionRepository>();
+            _brandRepository = ServiceLocator.Current.Resolve<IBrandRepository>();
+            _tagRepository = ServiceLocator.Current.Resolve<ITagRepository>();
+            _userAccountRepository = ServiceLocator.Current.Resolve<IUserAccountRepository>();
+            _vUserRoleRepository = ServiceLocator.Current.Resolve<IVUserRoleRepository>();
+            _productRepository = ServiceLocator.Current.Resolve<IProductRepository>();
+            _promotionBrandRelationRepository = ServiceLocator.Current.Resolve<IPromotionBrandRelationRepository>();
+        }
+
+        #endregion
+
+        #region properties
+
+        #endregion
+
+        #region methods
+
+
+        private static string C(string t)
+        {
+            return String.IsNullOrWhiteSpace(t) ? String.Empty : t;
+        }
+
+        private static string GetToken(UserModel userModel)
+        {
+            return SessionKeyHelper.Encrypt(userModel.Id.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>
+        /// M
+        /// </summary>
+        /// <param name="coordinateInfo1"></param>
+        /// <param name="coordinateInfo2"></param>
+        /// <returns></returns>
+        private static double Distance(CoordinateInfo coordinateInfo1, CoordinateInfo coordinateInfo2)
+        {
+            var d = CoordinatePositioningHelper.GetDistance(coordinateInfo1,
+                                                    coordinateInfo2);
+
+            return d * 1000;
+        }
+
+        private static List<ResourceEntity> GetListResourceEntities(SourceType sourceType, int sourceId)
+        {
+            return _resourceRepository.GetList((int)sourceType, sourceId);
+        }
+
+        private static List<ResourceEntity> GetListResourceEntities(SourceType sourceType, List<int> ids)
+        {
+            return _resourceRepository.GetList((int)sourceType, ids);
+        }
+
+        #endregion
+
+        #region customer
+
+        //[System.Obsolete("建议使用usermodel")]
+        //public static ShowCustomerInfoResponse ShowCustomerInfoResponseMapping(UserEntity source,
+        //                                                               List<ResourceEntity> resourceEntities)
+        //{
+        //    if (source == null)
+        //    {
+        //        return null;
+        //    }
+
+        //    var target = Mapper.Map<UserEntity, ShowCustomerInfoResponse>(source);
+
+        //    //if (resourceEntities != null && resourceEntities.Count > 0)
+        //    //{
+        //    //    var resource = resourceEntities.FirstOrDefault();
+        //    //    if (resource != null)
+        //    //    {
+        //    //        target.Logo = Path.Combine(resource.Domain, resource.Name);
+        //    //    }
+        //    //}
+
+        //    return target;
+        //}
+
+        //[System.Obsolete("建议使用usermodel")]
+        //public static ShowCustomerInfoResponse ShowCustomerInfoResponseMapping(UserEntity source)
+        //{
+        //    if (source == null)
+        //    {
+        //        return null;
+        //    }
+        //    //var resources = _resourceRepository.GetList((int)SourceType.CustomerPortrait, source.Id);
+
+        //    //return UserShowResponseMapping(source, resources);
+        //    return ShowCustomerInfoResponseMapping(source, null);
+        //}
+
+        //[System.Obsolete("建议使用usermodel")]
+        //public static IEnumerable<ShowCustomerInfoResponse> ShowCustomerInfoResponseMapping(List<UserEntity> source)
+        //{
+        //    if (source == null || source.Count == 0)
+        //    {
+        //        return new List<ShowCustomerInfoResponse>(0);
+        //    }
+
+        //    var result = new List<ShowCustomerInfoResponse>(source.Count);
+
+        //    foreach (var item in source)
+        //    {
+        //        var target = ShowCustomerInfoResponseMapping(item, null);
+
+        //        if (target != null)
+        //        {
+        //            result.Add(target);
+        //        }
+        //    }
+
+        //    return result;
+        //}
+
+        //[System.Obsolete("建议使用usermodel")]
+        //public static CustomerInfoResponse CustomerInfoResponseMapping(UserEntity source)
+        //{
+        //    if (source == null)
+        //    {
+        //        return null;
+        //    }
+
+        //    var target = Mapper.Map<UserEntity, CustomerInfoResponse>(source);
+
+        //    return target;
+        //}
+
+        //[System.Obsolete("建议使用usermodel")]
+        //public static IEnumerable<CustomerInfoResponse> CustomerInfoResponseMapping(List<UserEntity> source)
+        //{
+        //    foreach (var entity in source)
+        //    {
+        //        yield return CustomerInfoResponseMapping(entity);
+        //    }
+        //}
+
+        public static UserEntity UserEntityMapping(UserEntity source, UserEntity target)
+        {
+            var result = Mapper.Map(source, target);
+
+            return UserEntityCheck(result);
+        }
+
+        private static UserEntity UserEntityCheck(UserEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            source.Description = source.Description ?? String.Empty;
+            source.EMail = source.EMail ?? String.Empty;
+            source.Logo = source.Logo ?? String.Empty;
+            source.Mobile = source.Mobile ?? String.Empty;
+            source.Name = source.Name ?? String.Empty;
+            source.Nickname = source.Nickname ?? String.Empty;
+            source.Password = source.Password ?? String.Empty;
+
+            source.CreatedDate = EntityDateTime(source.CreatedDate);
+            source.UpdatedDate = EntityDateTime(source.UpdatedDate);
+
+            return source;
+        }
+
+        /// <summary>
+        ///  datetime 1753-01-01到9999-12-31 00:00:00 到 23:59:59.997 3.33毫秒
+        ///smalldatetime 1900-01-01 到 2079-06-06 00:00:00 到 23:59:59 分钟
+        ///date 0001-01-01 到 9999-12-31 天
+        ///time 00:00:00.0000000 到 23:59:59.9999999 100 纳秒
+        ///datetime2 0001-01-01 到 9999-12-31 00:00:00 到 23:59:59.9999999 100 纳秒
+        ///datetimeoffset 0001-01-01 到 9999-12-31 00:00:00 到 23:59:59.9999999 -14:00 到 +14:00 100 纳秒
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        private static DateTime EntityDateTime(DateTime? dateTime)
+        {
+            if (dateTime == null)
+            {
+                return DateTime.Now;
+            }
+
+            var min = new DateTime(1800, 1, 1);
+            var max = new DateTime(3800, 1, 1);
+            if (dateTime < min)
+            {
+                return min;
+            }
+
+            if (dateTime > max)
+            {
+                return max;
+            }
+
+            return dateTime.Value;
+        }
+
+        public static IEnumerable<ShowCustomerInfoResponse> ShowCustomerInfoResponseMapping(List<UserEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<ShowCustomerInfoResponse>(0);
+            }
+
+            var userModel = UserModelMapping(source);
+            if (userModel == null)
+            {
+                return null;
+            }
+
+            return ShowCustomerInfoResponseMapping(userModel.ToList());
+        }
+
+        public static ShowCustomerInfoResponse ShowCustomerInfoResponseMapping(UserEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var model = UserModelMapping(source);
+
+            if (model == null)
+            {
+                return null;
+            }
+
+            return ShowCustomerInfoResponseMapping(model);
+        }
+
+        /// <summary>
+        /// DTO  转换
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static CustomerInfoResponse CustomerInfoResponseMapping(UserModel source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<UserModel, CustomerInfoResponse>(source);
+
+            target.Token = GetToken(source);
+            target.AppId = ConfigManager.GetAppleAppId();
+
+            return target;
+        }
+
+        public static ShowCustomerInfoResponse ShowCustomerInfoResponseMapping(UserModel source)
+        {
+            var target = Mapper.Map<UserModel, ShowCustomerInfoResponse>(source);
+
+            return target;
+        }
+
+        public static IEnumerable<ShowCustomerInfoResponse> ShowCustomerInfoResponseMapping(List<UserModel> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<ShowCustomerInfoResponse>(0);
+            }
+
+            var result = new List<ShowCustomerInfoResponse>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = ShowCustomerInfoResponseMapping(item);
+
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+            }
+
+            return result;
+        }
+
+        public static IEnumerable<UserModel> UserModelMapping(List<UserEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<UserModel>(0);
+            }
+
+            var userIds = source.Select(v => v.Id).Distinct().ToList();
+            var storeIds = source.Select(v => v.Store_Id).Where(v => v != 0).Distinct().ToList();
+
+            var stores = StoreModelMapping(_storeRepository.GetListByIds(storeIds)).ToList();
+            var accounts = UserAccountMapping(_userAccountRepository.GetListByUserIds(userIds)).ToList();
+            var userRoles = _vUserRoleRepository.GetList(userIds);
+
+            var result = new List<UserModel>(source.Count);
+
+            foreach (var item in source)
+            {
+                var s = stores.FirstOrDefault(v => v.Id == item.Store_Id);
+                var a = accounts.Where(v => v.User_Id == item.Id).ToList();
+                var r = userRoles.Where(v => v.User_Id == item.Id).ToList();
+                var target = UserModelMapping(item, s, a, UserRolesMapping(r));
+
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+
+            }
+
+            return result;
+        }
+
+        private static UserModel UserModelMapping(UserEntity source, StoreModel storeModel,
+                                          List<UserAccountModel> userAccountModels, List<UserRole> userRoles)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<UserEntity, UserModel>(source);
+
+            //这步可以判断
+            target.Store = storeModel;
+            //modelAccount
+            target.Accounts = userAccountModels;
+            //roles
+            target.UserRoles = userRoles;
+            //favorcount
+            //ilikecount
+            //likemecount
+            if (target.Accounts == null || target.Accounts.Count == 0)
+            {
+                return target;
+            }
+
+            foreach (var item in target.Accounts)
+            {
+                switch (item.AType)
+                {
+                    case AccountType.ConsumptionCount:
+                        target.ConsumptionCount = (int)item.Amount;
+                        break;
+                    case AccountType.Coupon:
+                        target.CouponCount = (int)item.Amount;
+                        break;
+                    case AccountType.FavorCount:
+                        target.FavorCount = (int)item.Amount;
+                        break;
+                    case AccountType.IlikeCount:
+                        target.ILikeCount = (int)item.Amount;
+                        break;
+                    case AccountType.LikeMeCount:
+                        target.LikeMeCount = (int)item.Amount;
+                        break;
+                    case AccountType.Point:
+                        target.PointCount = (int)item.Amount;
+                        break;
+                    case AccountType.ShareCount:
+                        target.ShareCount = (int)item.Amount;
+                        break;
+                }
+            }
+
+            return target;
+        }
+
+
+        public static UserModel UserModelMapping(UserEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            //var target = Mapper.Map<UserEntity, UserModel>(source);
+
+            //这步可以判断
+            var store = StoreModelMapping(_storeRepository.GetItem(source.Store_Id));
+            //modelAccount
+            var accounts = UserAccountMapping(_userAccountRepository.GetUserAccount(source.Id)).ToList();
+            //roles
+            var userRoles = UserRolesMapping(_vUserRoleRepository.GetList(source.Id));
+
+            return UserModelMapping(source, store, accounts, userRoles);
+        }
+
+        public static UserEntity UserEntityMapping(UserModel source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<UserModel, UserEntity>(source);
+
+            return CheckUserEntity(target);
+        }
+
+        private static UserEntity CheckUserEntity(UserEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            source.Name = C(source.Name);
+            source.Description = C(source.Description);
+            source.EMail = C(source.EMail);
+            source.Logo = C(source.Logo);
+            source.Mobile = C(source.Mobile);
+            source.Nickname = C(source.Nickname);
+            source.Password = C(source.Password);
+
+            return source;
+        }
+
+        #endregion
+
+        #region useraccount
+
+        public static UserAccountModel UserAccountMapping(UserAccountEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<UserAccountEntity, UserAccountModel>(source);
+
+            return target;
+        }
+
+        public static IEnumerable<UserAccountModel> UserAccountMapping(List<UserAccountEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<UserAccountModel>(0);
+            }
+
+            var list = new List<UserAccountModel>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = UserAccountMapping(item);
+
+                if (target == null)
+                {
+                    continue;
+                }
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        //public static CustomerAccountResponse UserAccountResponseMapping(UserAccountModel source)
+        //{
+        //    var target = Mapper.Map<UserAccountModel, CustomerAccountResponse>(source);
+
+        //    return target;
+        //}
+
+        //public static IEnumerable<CustomerAccountResponse> UserAccountResponseMapping(List<UserAccountModel> source)
+        //{
+        //    foreach (var userAccountModel in source)
+        //    {
+        //        yield return UserAccountResponseMapping(userAccountModel);
+        //    }
+        //}
+
+        #endregion
+
+        #region vuserRoles
+
+        public static List<UserRole> UserRolesMapping(List<VUserRoleEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<UserRole>(0);
+            }
+
+            var list = new List<UserRole>(source.Count);
+            //var dic = new Dictionary<UserRole, bool>(source.Count);
+            foreach (var item in source)
+            {
+                var target = (UserRole)item.Role_Val;
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+
+
+        #endregion
+
+        #region store
+
+        public static StoreEntity StoreEntityMapping(StoreEntity source, StoreEntity target)
+        {
+            // result.Equery(target) = true;
+            var result = Mapper.Map(source, target);
+
+            return result;
+        }
+
+        public static StoreEntity StoreEntityMapping(StoreInfoRequest source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<StoreInfoRequest, StoreEntity>(source);
+            target.CreatedDate = DateTime.Now;
+            target.CreatedUser = source.AuthUid;
+            target.UpdatedDate = DateTime.Now;
+            target.UpdatedUser = source.AuthUid;
+            target.Status = (int)DataStatus.Normal;
+
+            return target;
+        }
+
+        public static StoreModel StoreModelMapping(StoreEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<StoreEntity, StoreModel>(source);
+
+            return target;
+        }
+
+        public static IEnumerable<StoreModel> StoreModelMapping(List<StoreEntity> source)
+        {
+            foreach (var storeEntity in source)
+            {
+                yield return StoreModelMapping(storeEntity);
+            }
+        }
+
+        public static StoreEntity StoreEntityMapping(StoreModel source)
+        {
+            var target = Mapper.Map<StoreModel, StoreEntity>(source);
+
+            return target;
+        }
+
+        public static StoreInfoResponse StoreResponseMapping(StoreEntity source)
+        {
+            var target = Mapper.Map<StoreEntity, StoreInfoResponse>(source);
+
+            return target;
+        }
+
+        public static StoreInfoResponse StoreResponseMapping(StoreEntity source, CoordinateInfo coordinateInfo)
+        {
+            if (coordinateInfo == null)
+            {
+                return StoreResponseMapping(source);
+            }
+
+            var target = Mapper.Map<StoreEntity, StoreInfoResponse>(source);
+
+            target.Distance = Distance(coordinateInfo, new CoordinateInfo(target.Longitude, target.Latitude));
+
+            return target;
+        }
+
+        public static StoreInfoResponse StoreResponseMapping(StoreInfoResponse source, CoordinateInfo coordinateInfo)
+        {
+            if (coordinateInfo == null)
+            {
+                return source;
+            }
+
+            source.Distance = Distance(coordinateInfo, new CoordinateInfo(source.Longitude, source.Latitude));
+
+            return source;
+        }
+
+        public static IEnumerable<StoreInfoResponse> StoreResponseMapping(List<StoreEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<StoreInfoResponse>(0);
+            }
+
+            var list = new List<StoreInfoResponse>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = StoreResponseMapping(item);
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="coordinateInfo"></param>
+        /// <returns></returns>
+        public static IEnumerable<StoreInfoResponse> StoreResponseMapping(List<StoreEntity> source, CoordinateInfo coordinateInfo)
+        {
+            if (coordinateInfo == null)
+            {
+                foreach (var storeEntity in source)
+                {
+                    yield return StoreResponseMapping(storeEntity);
+                }
+            }
+            else
+            {
+                foreach (var storeEntity in source)
+                {
+                    yield return StoreResponseMapping(storeEntity, coordinateInfo);
+                }
+            }
+        }
+
+        #endregion
+
+        #region resource
+
+        public static IEnumerable<ResourceInfoResponse> ResourceInfoResponsesMapping(List<ResourceEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<ResourceInfoResponse>(0);
+            }
+
+            var list = new List<ResourceInfoResponse>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = ResourceInfoResponsesMapping(item);
+
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        public static ResourceInfoResponse ResourceInfoResponsesMapping(ResourceEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<ResourceEntity, ResourceInfoResponse>(source);
+
+            return target;
+        }
+
+        #endregion
+
+        #region promotion
+
+        public static PromotionEntity PromotionEntityMapping(PromotionEntity source, PromotionEntity target)
+        {
+            var result = Mapper.Map(source, target);
+
+            return result;
+        }
+
+        public static PromotionEntity PromotionEntityMapping(PromotionInfoRequest source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<PromotionInfoRequest, PromotionEntity>(source);
+            target.CreatedDate = DateTime.Now;
+            target.CreatedUser = source.AuthUid;
+            target.UpdatedDate = DateTime.Now;
+            target.UpdatedUser = source.AuthUid;
+            target.Status = (int)DataStatus.Normal;
+            target.RecommendSourceId =
+                target.RecommendUser = source.RecommendUser == null ? source.AuthUid : source.RecommendUser.Value;
+
+            return target;
+        }
+
+        public static PromotionInfoResponse PromotionResponseMapping(PromotionEntity source, CoordinateInfo coordinateInfo, List<int> brandIds, List<ResourceInfoResponse> resourceInfoResponses, StoreInfoResponse storeInfoResponse, ShowCustomerInfoResponse showCustomerInfoResponse)
+        {
+            var target = Mapper.Map<PromotionEntity, PromotionInfoResponse>(source);
+
+            if (showCustomerInfoResponse != null)
+            {
+                target.ShowCustomer = showCustomerInfoResponse;
+            }
+
+            if (storeInfoResponse != null)
+            {
+                target.StoreInfoResponse = storeInfoResponse;
+            }
+
+            if (resourceInfoResponses != null)
+            {
+                target.ResourceInfoResponses = resourceInfoResponses;
+            }
+
+            if (brandIds != null)
+            {
+                target.BrandIds = brandIds;
+            }
+
+            return target;
+        }
+
+        /// <summary>
+        /// 需要计算 距离
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="coordinateInfo">坐标</param>
+        /// <returns></returns>
+        public static PromotionInfoResponse PromotionResponseMapping(PromotionEntity source, CoordinateInfo coordinateInfo)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            ShowCustomerInfoResponse showCustomer = null;
+            StoreInfoResponse storeInfoResponse = null;
+            List<ResourceInfoResponse> resourceInfoResponses = null;
+            List<int> brandIds = null;
+            if (source.RecommendUser > 0)
+            {
+                var userEntity = _customerRepository.GetItem(source.RecommendUser);
+                if (userEntity != null)
+                {
+                    showCustomer = ShowCustomerInfoResponseMapping(userEntity);
+                }
+            }
+
+            if (source.Store_Id > 0)
+            {
+                var store = _storeRepository.GetItem(source.Store_Id);
+                storeInfoResponse = StoreResponseMapping(store, coordinateInfo);
+            }
+
+            var resource = GetListResourceEntities(SourceType.Promotion, source.Id);
+            if (resource != null)
+            {
+                resourceInfoResponses = ResourceInfoResponsesMapping(resource).ToList();
+            }
+
+            var brandids = _promotionBrandRelationRepository.GetList(source.Id).Select(v => v.Brand_Id).ToList();
+
+            if (brandids.Count > 0)
+            {
+                brandIds = brandids;
+            }
+
+            return PromotionResponseMapping(source, coordinateInfo, brandIds, resourceInfoResponses, storeInfoResponse,
+                                            showCustomer);
+        }
+
+        public static PromotionInfoResponse PromotionResponseMapping(PromotionEntity source)
+        {
+            return PromotionResponseMapping(source, null);
+        }
+
+        public static IEnumerable<PromotionInfoResponse> PromotionResponseMapping(List<PromotionEntity> source, CoordinateInfo coordinateInfo)
+        {
+            var userIds = source.Select(v => v.RecommendUser).Where(v => v > 0).Distinct();
+
+            var users = _customerRepository.GetListByIds(userIds.ToList());
+            var responseUser = ShowCustomerInfoResponseMapping(users).ToList();
+            var storeids = source.Select(v => v.Store_Id).Where(v => v > 0).Distinct();
+            var stores = _storeRepository.GetListByIds(storeids.ToList());
+            var storeResponse = StoreResponseMapping(stores, coordinateInfo).ToList();
+            var list = new List<PromotionInfoResponse>();
+            var ids = source.Select(v => v.Id).ToList();
+
+            var resource = GetListResourceEntities(SourceType.Promotion, ids);
+            var brandR = _promotionBrandRelationRepository.GetList(ids);
+
+            List<ResourceInfoResponse> resourceResponse = null;
+            if (resource != null)
+            {
+                resourceResponse = ResourceInfoResponsesMapping(resource).ToList();
+            }
+
+            foreach (var entity in source)
+            {
+                var entity1 = entity;
+                var b = brandR.Where(v => v.Promotion_Id == entity1.Id).Select(v => v.Brand_Id).ToList();
+                var r = resourceResponse == null
+                            ? new List<ResourceInfoResponse>(0)
+                            : resourceResponse.Where(v => v.SourceId == entity1.Id).ToList();
+                var s = storeResponse.FirstOrDefault(v => v.Id == entity.Store_Id);
+                var u = responseUser.FirstOrDefault(v => v.Id == entity.RecommendUser);
+                var target = PromotionResponseMapping(entity, coordinateInfo, b, r, s, u);
+
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        public static IEnumerable<PromotionInfoResponse> PromotionResponseMapping(List<PromotionEntity> source)
+        {
+            return PromotionResponseMapping(source, null);
+        }
+
+        #endregion
+
+        #region coupon
+
+        public static IEnumerable<CouponInfoResponse> CouponInfoResponseMapping(List<CouponHistoryEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<CouponInfoResponse>(0);
+            }
+
+            var promotionIds = source.Select(v => v.FromPromotion).Distinct().Where(v => v != 0);
+            var productIds = source.Select(v => v.FromProduct).Distinct().Where(v => v != 0);
+
+            var promotions = PromotionResponseMapping(_promotionRepository.GetList(promotionIds.ToList())).ToList();
+            var products = ProductInfoResponseMapping(_productRepository.GetList(productIds.ToList())).ToList();
+
+            var result = new List<CouponInfoResponse>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = Mapper.Map<CouponHistoryEntity, CouponInfoResponse>(item);
+
+                CouponInfoResponseMapping(target, products.SingleOrDefault(v => v.Id == item.FromProduct),
+                                                       promotions.SingleOrDefault(v => v.Id == item.FromPromotion));
+
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+            }
+
+            return result;
+        }
+
+        public static CouponInfoResponse CouponInfoResponseMapping(CouponHistoryEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<CouponHistoryEntity, CouponInfoResponse>(source);
+
+            if (source.FromPromotion > 0)
+            {
+                var promotion = PromotionResponseMapping(_promotionRepository.GetItem(source.FromPromotion));
+
+                return CouponInfoResponseMapping(target, null, promotion);
+            }
+
+            if (source.FromProduct > 0)
+            {
+                var product = ProductInfoResponseMapping(_productRepository.GetItem(source.FromProduct));
+
+                return CouponInfoResponseMapping(target, product, null);
+            }
+
+            return target;
+        }
+
+        public static CouponInfoResponse CouponInfoResponseMapping(CouponInfoResponse source, ProductInfoResponse product,
+                                                          PromotionInfoResponse promotion)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = source;
+
+            var productname = String.Empty;
+            var producttype = 0;
+            var productid = 0;
+            var productDescription = String.Empty;
+            if (promotion != null)
+            {
+                productname = promotion.Name;
+                producttype = (int)SourceType.Promotion;
+                productid = promotion.Id;
+                productDescription =
+                promotion.Description;
+                target.PromotionInfoResponse = promotion;
+                target.Stype = SourceType.Promotion;
+            }
+            else
+            {
+                if (product != null)
+                {
+                    productname = product.Name;
+                    producttype = (int)SourceType.Product;
+                    productid = product.Id;
+                    productDescription =
+                    product.Description;
+                    target.ProductInfoResponse = product;
+                    target.Stype = SourceType.Product;
+                }
+            }
+
+            target.ProductId = productid;
+            target.ProductName = productname;
+            target.ProductType = producttype;
+            target.ProductDescription = productDescription;
+
+
+
+            return target;
+        }
+
+        public static CouponCodeResponse CouponCodeResponseMapping(CouponHistoryEntity source, ProductInfoResponse product,
+                                                                  PromotionInfoResponse promotion)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<CouponHistoryEntity, CouponCodeResponse>(source);
+
+            var productname = String.Empty;
+            var producttype = 0;
+            var productid = 0;
+            var productDescription = String.Empty;
+            if (promotion != null)
+            {
+                productname = promotion.Name;
+                producttype = (int)SourceType.Promotion;
+                productid = promotion.Id;
+                productDescription =
+                promotion.Description;
+            }
+            else
+            {
+                if (product != null)
+                {
+                    productname = product.Name;
+                    producttype = (int)SourceType.Product;
+                    productid = product.Id;
+                    productDescription =
+                    product.Description;
+                }
+            }
+
+            target.ProductId = productid;
+            target.ProductName = productname;
+            target.ProductType = producttype;
+            target.ProductDescription = productDescription;
+
+            return target;
+        }
+
+        public static CouponCodeResponse CouponCodeResponseMapping(CouponHistoryEntity source, ProductEntity product,
+                                                                   PromotionEntity promotion)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<CouponHistoryEntity, CouponCodeResponse>(source);
+
+            var productname = String.Empty;
+            var producttype = 0;
+            var productid = 0;
+            var productDescription = String.Empty;
+            if (promotion != null)
+            {
+                productname = promotion.Name;
+                producttype = (int)SourceType.Promotion;
+                productid = promotion.Id;
+                productDescription =
+                promotion.Description;
+                target.Stype = SourceType.Promotion;
+            }
+            else
+            {
+                if (product != null)
+                {
+                    productname = product.Name;
+                    producttype = (int)SourceType.Product;
+                    productid = product.Id;
+                    productDescription =
+                    product.Description;
+                    target.Stype = SourceType.Product;
+                }
+            }
+
+            target.ProductId = productid;
+            target.ProductName = productname;
+            target.ProductType = producttype;
+            target.ProductDescription = productDescription;
+
+
+            return target;
+        }
+        /// <summary>
+        /// 优惠码
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static CouponCodeResponse CouponCodeResponseMapping(CouponHistoryEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            if (source.FromPromotion > 0)
+            {
+                var promotion = _promotionRepository.GetItem(source.FromPromotion);
+
+                return CouponCodeResponseMapping(source, null, promotion);
+            }
+
+            if (source.FromProduct > 0)
+            {
+                var product = _productRepository.GetItem(source.FromProduct);
+
+                return CouponCodeResponseMapping(source, product, null);
+            }
+
+            return Mapper.Map<CouponHistoryEntity, CouponCodeResponse>(source);
+        }
+
+        /// <summary>
+        /// 优惠码
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static List<CouponCodeResponse> CouponCodeResponseMapping(List<CouponHistoryEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<CouponCodeResponse>(0);
+            }
+
+            var promotionIds = source.Select(v => v.FromPromotion).Distinct().Where(v => v != 0);
+            var productIds = source.Select(v => v.FromProduct).Distinct().Where(v => v != 0);
+
+            var promotions = _promotionRepository.GetList(promotionIds.ToList());
+            var products = _productRepository.GetList(productIds.ToList());
+
+            var result = new List<CouponCodeResponse>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = CouponCodeResponseMapping(item, products.SingleOrDefault(v => v.Id == item.FromProduct),
+                                                       promotions.SingleOrDefault(v => v.Id == item.FromPromotion));
+
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        #region favorite
+
+        public static FavoriteInfoResponse FavoriteInfoResponseMapping(FavoriteEntity source, PromotionEntity promotionEntity)
+        {
+            var target = Mapper.Map<FavoriteEntity, FavoriteInfoResponse>(source);
+            target.FavoriteSourceName = promotionEntity == null ? String.Empty : promotionEntity.Name;
+
+            return target;
+        }
+
+        public static FavoriteInfoResponse FavoriteInfoResponseMapping(FavoriteEntity source, ProductEntity entity)
+        {
+            var target = Mapper.Map<FavoriteEntity, FavoriteInfoResponse>(source);
+            target.FavoriteSourceName = entity == null ? String.Empty : entity.Name;
+
+            return target;
+        }
+
+        public static FavoriteCollectionResponse FavoriteCollectionResponseMapping(List<FavoriteEntity> source,
+                                                                                   CoordinateInfo coordinateInfo)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new FavoriteCollectionResponse(new PagerRequest(1, 1)) { Favorites = new List<FavoriteInfoResponse>(0) };
+            }
+
+            var storeids = source.Select(v => v.Store_Id).Distinct().Where(v => v != 0);
+            //var dic = new Dictionary<int, List<int>>();
+            var ms = source.Where(v => v.FavoriteSourceType == (int)SourceType.Promotion).Select(s => s.FavoriteSourceId).Distinct().ToList();
+            var ps = source.Where(v => v.FavoriteSourceType == (int)SourceType.Product).Select(s => s.FavoriteSourceId).Distinct().ToList();
+
+            var stores = StoreResponseMapping(_storeRepository.GetListByIds(storeids.ToList()), coordinateInfo).ToList();
+            var promotions = _promotionRepository.GetList(ms);
+            var products = _productRepository.GetList(ps);
+
+            var productResource = ResourceInfoResponsesMapping(_resourceRepository.GetList((int)SourceType.Product, ps)).ToList();
+            var msresource = ResourceInfoResponsesMapping(_resourceRepository.GetList((int)SourceType.Promotion, ms)).ToList();
+
+            //TODO: 产品这个需要优化
+            var result = new FavoriteCollectionResponse(new PagerRequest(1, source.Count), source.Count)
+            {
+                Favorites = new List<FavoriteInfoResponse>(source.Count)
+            };
+            foreach (var s in source)
+            {
+                //var n = String.Empty;
+                FavoriteInfoResponse response = null;
+                switch (s.FavoriteSourceType)
+                {
+                    case (int)SourceType.Promotion:
+                        var p = promotions.FirstOrDefault(v => v.Id == s.FavoriteSourceId);
+                        response = FavoriteInfoResponseMapping(s, p);
+
+                        response.Resources = p == null ? new List<ResourceInfoResponse>(0) : msresource.Where(v => v.SourceId == p.Id && v.SourceType == (int)SourceType.Promotion).ToList();
+                        break;
+                    case (int)SourceType.Product:
+                        var t = products.FirstOrDefault(v => v.Id == s.FavoriteSourceId);
+                        response = FavoriteInfoResponseMapping(s, t);
+
+                        response.Resources = t == null ? new List<ResourceInfoResponse>(0) :
+                            productResource.Where(v => v.SourceId == t.Id && v.SourceType == (int)SourceType.Product).ToList();
+
+                        break;
+                }
+
+                if (response != null)
+                {
+                    var store = stores.SingleOrDefault(v => v.Id == s.Store_Id);
+                    response.Store = store;
+                    response.StoreId = store == null ? 0 : store.Id;
+
+                    result.Favorites.Add(response);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 还没做产品的需求
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static FavoriteCollectionResponse FavoriteCollectionResponseMapping(List<FavoriteEntity> source)
+        {
+            return FavoriteCollectionResponseMapping(source, null);
+        }
+
+        #endregion
+
+        #region brand
+
+        public static BrandEntity BrandEntityMapping(BrandEntity source, BrandEntity target)
+        {
+            //不变的
+            //不变的要映射
+            var result = Mapper.Map(source, target);
+
+            return result;
+        }
+
+        public static BrandInfoResponse BrandInfoResponseMapping(BrandEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<BrandEntity, BrandInfoResponse>(source);
+
+            return target;
+        }
+
+        public static IEnumerable<BrandInfoResponse> BrandInfoResponseMapping(List<BrandEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<BrandInfoResponse>(0);
+            }
+
+            var list = new List<BrandInfoResponse>(source.Count);
+            foreach (var s in source)
+            {
+                var r = BrandInfoResponseMapping(s);
+                if (r != null)
+                {
+                    list.Add(r);
+                }
+            }
+
+            return list;
+        }
+
+        public static BrandEntity BrandEntityMapping(BrandInfoRequest source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<BrandInfoRequest, BrandEntity>(source);
+            target.CreatedDate = DateTime.Now;
+            target.CreatedUser = source.AuthUid;
+            target.UpdatedDate = DateTime.Now;
+            target.UpdatedUser = source.AuthUid;
+            target.Status = (int)DataStatus.Normal;
+
+            return target;
+        }
+
+        #endregion
+
+        #region devicetoken
+
+        public static DeviceInfoResponse DeviceInfoResponseMapping(DeviceTokenEntity source)
+        {
+            var target = Mapper.Map<DeviceTokenEntity, DeviceInfoResponse>(source);
+
+            return target;
+        }
+
+        #endregion
+
+        #region comment
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="userEntities"></param>
+        /// <returns></returns>
+        public static CommentInfoResponse CommentInfoResponseMapping(CommentEntity source, List<UserEntity> userEntities)
+        {
+            var target = Mapper.Map<CommentEntity, CommentInfoResponse>(source);
+            //找两个用户，当前发评论的用户，被回复的用户
+            var userResponses = ShowCustomerInfoResponseMapping(userEntities).ToList();
+
+            var user = userResponses.FirstOrDefault(v => v.Id == target.User_Id);
+            var replyUser = userResponses.FirstOrDefault(v => v.Id == target.ReplyUser);
+
+            target.Customer = user;
+            target.ReplyUserNickname = (replyUser == null) ? String.Empty : (String.IsNullOrEmpty(replyUser.Nickname) ? replyUser.Name : replyUser.Nickname);
+
+            return target;
+        }
+
+        public static CommentInfoResponse CommentInfoResponseMapping(CommentEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            //找两个用户，当前发评论的用户，被回复的用户
+            var uids = new List<int>(2) { source.User_Id, source.ReplyUser };
+
+            var users = _customerRepository.GetListByIds(uids.Where(v => v != 0).Distinct().ToList());
+
+            return CommentInfoResponseMapping(source, users);
+        }
+
+        public static IEnumerable<CommentInfoResponse> CommentInfoResponseMapping(List<CommentEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<CommentInfoResponse>(0);
+            }
+
+            var users = new List<int>(source.Count * 2);
+
+            users.AddRange(source.Select(v => v.User_Id));
+            users.AddRange(source.Select(v => v.ReplyUser));
+
+            var uids = users.Distinct().Where(v => v != 0);
+
+            var userEntities = _customerRepository.GetListByIds(uids.ToList());
+
+            var target = new List<CommentInfoResponse>(source.Count);
+
+            foreach (var s in source)
+            {
+                var t = CommentInfoResponseMapping(s, userEntities);
+
+                if (t != null)
+                {
+                    target.Add(t);
+                }
+            }
+
+            return target;
+        }
+
+        #endregion
+
+        #region tag
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static TagEntity TagInfoRequestMapping(TagInfoRequest source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<TagInfoRequest, TagEntity>(source);
+
+            return target;
+        }
+
+        public static TagInfoResponse TagInfoResponseMapping(TagEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<TagEntity, TagInfoResponse>(source);
+
+            return target;
+        }
+
+        public static IEnumerable<TagInfoResponse> TagInfoResponseMapping(List<TagEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<TagInfoResponse>(0);
+            }
+
+            var list = new List<TagInfoResponse>(source.Count);
+            foreach (var s in source)
+            {
+                var target = TagInfoResponseMapping(s);
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        #endregion
+
+        #region product
+
+        public static ProductEntity ProductEntityMapping(ProductEntity source, ProductEntity target)
+        {
+            var result = Mapper.Map(source, target);
+
+            return result;
+        }
+
+        public static ProductEntity ProductEntityMapping(ProductInfoRequest source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<ProductInfoRequest, ProductEntity>(source);
+            target.CreatedDate = DateTime.Now;
+            target.CreatedUser = source.AuthUid;
+            target.UpdatedDate = DateTime.Now;
+            target.UpdatedUser = source.AuthUid;
+            target.Status = (int)DataStatus.Normal;
+
+            return target;
+        }
+
+        public static IEnumerable<ProductEntity> ProductEntityMapping(List<ProductInfoRequest> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<ProductEntity>(0);
+            }
+
+            var list = new List<ProductEntity>(source.Count);
+            foreach (var s in source)
+            {
+                var target = ProductEntityMapping(s);
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="brandInfo"></param>
+        /// <param name="storeInfo"></param>
+        /// <param name="showCustomerInfo"></param>
+        /// <param name="tagInfoResponse"></param>
+        /// <param name="resourceInfoResponses"></param>
+        /// <returns></returns>
+        public static ProductInfoResponse ProductInfoResponseMapping(ProductEntity source, BrandInfoResponse brandInfo,
+                                                                     StoreInfoResponse storeInfo,
+                                                                     ShowCustomerInfoResponse showCustomerInfo,
+                                                                     TagInfoResponse tagInfoResponse, List<ResourceInfoResponse> resourceInfoResponses)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<ProductEntity, ProductInfoResponse>(source);
+
+            target.BrandInfoResponse = brandInfo;
+            target.StoreInfoResponse = storeInfo;
+            target.RecommendUserInfoResponse = showCustomerInfo;
+            target.TagInfoResponse = tagInfoResponse;
+            target.ResourceInfoResponses = resourceInfoResponses;
+
+            return target;
+        }
+
+        public static ProductInfoResponse ProductInfoResponseMapping(ProductEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var brand = BrandInfoResponseMapping(_brandRepository.GetItem(source.Brand_Id));
+            var store = StoreResponseMapping(_storeRepository.GetItem(source.Store_Id));
+            var ruser = ShowCustomerInfoResponseMapping(_customerRepository.GetItem(source.RecommendUser));
+            var tag = TagInfoResponseMapping(_tagRepository.GetItem(source.Tag_Id));
+            var resources = ResourceInfoResponsesMapping(_resourceRepository.GetList((int)SourceType.Product, source.Id));
+
+            return ProductInfoResponseMapping(source, brand, store, ruser, tag, resources.ToList());
+        }
+
+        public static IEnumerable<ProductInfoResponse> ProductInfoResponseMapping(List<ProductEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<ProductInfoResponse>(0);
+            }
+
+            var list = new List<ProductInfoResponse>(source.Count);
+
+            var brands = BrandInfoResponseMapping(_brandRepository.GetListByIds(source.Select(v => v.Brand_Id).Distinct().ToList())).ToList();
+            var stores = StoreResponseMapping(_storeRepository.GetListByIds(source.Select(v => v.Store_Id).Distinct().ToList())).ToList();
+            var rusers = ShowCustomerInfoResponseMapping(_customerRepository.GetListByIds(source.Select(v => v.RecommendUser).Distinct().ToList())).ToList();
+            var tags = TagInfoResponseMapping(_tagRepository.GetListByIds(source.Select(v => v.Tag_Id).Distinct().ToList())).ToList();
+            var resources =
+                ResourceInfoResponsesMapping(_resourceRepository.GetList((int)SourceType.Product,
+                                                                         source.Select(v => v.Id).ToList())).ToList();
+
+            foreach (var s in source)
+            {
+                if (s == null)
+                {
+                    continue;
+                }
+
+                var s1 = s;
+                var target = ProductInfoResponseMapping(s, brands.FirstOrDefault(v => v.Id == s.Brand_Id), stores.FirstOrDefault(v => v.Id == s.Store_Id), rusers.FirstOrDefault(v => v.Id == s.RecommendUser), tags.FirstOrDefault(v => v.Id == s.Tag_Id), resources.Where(v => v.SourceId == s1.Id).ToList());
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        #endregion
+
+        //TODO: 没有对返回的user列表和当前用户做 互相关注判断。
+        #region like
+
+        public static LikeCoutomerResponse LikeInfoResponseMapping(LikeEntity source, LikeType likeType)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var t = LikeInfoResponseMapping(new List<LikeEntity> { source }, likeType);
+
+            if (t == null || t.Count == 0)
+            {
+                return null;
+            }
+
+            return new LikeCoutomerResponse() { CustomerInfoResponse = t[0], Id = source.Id };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="likeType">true 是喜欢（返回的喜欢人的列表） false 是被喜欢（返回的是被喜欢人的列表）</param>
+        /// <returns></returns>
+        public static List<ShowCustomerInfoResponse> LikeInfoResponseMapping(List<LikeEntity> source, LikeType likeType)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return null;
+            }
+            List<int> mpUserList = null;
+
+            if (likeType == LikeType.ILike)
+            {
+                mpUserList = source.Select(v => v.LikedUserId).Distinct().ToList();
+            }
+            else
+            {
+                if (likeType == LikeType.LikeMe)
+                {
+                    mpUserList = source.Select(v => v.LikeUserId).Distinct().ToList();
+                }
+            }
+
+            List<ShowCustomerInfoResponse> users = null;
+
+            if (mpUserList != null)
+            {
+                users = ShowCustomerInfoResponseMapping(_customerRepository.GetListByIds(mpUserList.ToList())).ToList();
+            }
+
+            return users ?? new List<ShowCustomerInfoResponse>(0);
+        }
+
+        #endregion
+
+        #region point
+
+        public static PointInfoResponse PointInfoResponseMapping(PointHistoryEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<PointHistoryEntity, PointInfoResponse>(source);
+
+            return target;
+        }
+
+        public static List<PointInfoResponse> PointInfoResponseMapping(List<PointHistoryEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<PointInfoResponse>(0);
+            }
+
+            var result = new List<PointInfoResponse>(source.Count);
+            foreach (var item in source)
+            {
+                var target = PointInfoResponseMapping(item);
+
+                if (target == null)
+                {
+                    continue;
+                }
+
+                result.Add(target);
+            }
+
+            return result;
+        }
+
+        #endregion
+    }
+
+    // */
+
+    #endregion
+
+    public abstract class BaseMappingManager
+    {
+        private readonly IResourceRepository _resourceRepository;
+        protected BaseMappingManager()
+        {
+            _resourceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
+        }
+
+        /// <summary>
+        ///  datetime 1753-01-01到9999-12-31 00:00:00 到 23:59:59.997 3.33毫秒
+        ///smalldatetime 1900-01-01 到 2079-06-06 00:00:00 到 23:59:59 分钟
+        ///date 0001-01-01 到 9999-12-31 天
+        ///time 00:00:00.0000000 到 23:59:59.9999999 100 纳秒
+        ///datetime2 0001-01-01 到 9999-12-31 00:00:00 到 23:59:59.9999999 100 纳秒
+        ///datetimeoffset 0001-01-01 到 9999-12-31 00:00:00 到 23:59:59.9999999 -14:00 到 +14:00 100 纳秒
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        protected static DateTime EntityDateTime(DateTime? dateTime)
+        {
+            if (dateTime == null)
+            {
+                return DateTime.Now;
+            }
+
+            var min = new DateTime(1800, 1, 1);
+            var max = new DateTime(3800, 1, 1);
+            if (dateTime < min)
+            {
+                return min;
+            }
+
+            if (dateTime > max)
+            {
+                return max;
+            }
+
+            return dateTime.Value;
+        }
+
+        protected static string CheckString(string t)
+        {
+            return String.IsNullOrWhiteSpace(t) ? String.Empty : t;
+        }
+
+        /// <summary>
+        /// M
+        /// </summary>
+        /// <param name="coordinateInfo1"></param>
+        /// <param name="coordinateInfo2"></param>
+        /// <returns></returns>
+        protected static double Distance(CoordinateInfo coordinateInfo1, CoordinateInfo coordinateInfo2)
+        {
+            var d = CoordinatePositioningHelper.GetDistance(coordinateInfo1,
+                                                    coordinateInfo2);
+
+            return d * 1000;
+        }
+
+        protected List<ResourceEntity> GetListResourceEntities(SourceType sourceType, int sourceId)
+        {
+            return _resourceRepository.GetList((int)sourceType, sourceId);
+        }
+
+        protected List<ResourceEntity> GetListResourceEntities(SourceType sourceType, List<int> ids)
+        {
+            return _resourceRepository.GetList((int)sourceType, ids);
+        }
+    }
+
+    /// <summary>
+    /// customer
+    /// </summary>
+    public class MappingManagerV2 : BaseMappingManager
+    {
+        #region fields
+
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IStoreRepository _storeRepository;
+        // private readonly IResourceRepository _resourceRepository;
+        private readonly IPromotionRepository _promotionRepository;
+        private readonly IBrandRepository _brandRepository;
+        private readonly ITagRepository _tagRepository;
+        private readonly IUserAccountRepository _userAccountRepository;
+        private readonly IVUserRoleRepository _vUserRoleRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IPromotionBrandRelationRepository _promotionBrandRelationRepository;
+
+        #endregion
+
+        #region .ctor
+
+        public MappingManagerV2()
+        {
+            //注意 只能 查询不能有修改操作
+            _customerRepository = ServiceLocator.Current.Resolve<ICustomerRepository>();
+            _storeRepository = ServiceLocator.Current.Resolve<IStoreRepository>();
+            //_resourceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
+            _promotionRepository = ServiceLocator.Current.Resolve<IPromotionRepository>();
+            _brandRepository = ServiceLocator.Current.Resolve<IBrandRepository>();
+            _tagRepository = ServiceLocator.Current.Resolve<ITagRepository>();
+            _userAccountRepository = ServiceLocator.Current.Resolve<IUserAccountRepository>();
+            _vUserRoleRepository = ServiceLocator.Current.Resolve<IVUserRoleRepository>();
+            _productRepository = ServiceLocator.Current.Resolve<IProductRepository>();
+            _promotionBrandRelationRepository = ServiceLocator.Current.Resolve<IPromotionBrandRelationRepository>();
+        }
+
+        #endregion
+
+        #region properties
+
+        #endregion
+
+        #region methods
+
+        private void Init()
+        {
+            //TODO:MAPPING需要处理为非静态
+        }
+
+        private string GetToken(UserModel userModel)
+        {
+            return SessionKeyHelper.Encrypt(userModel.Id.ToString(CultureInfo.InvariantCulture));
+        }
+
+        #endregion
+
+        #region customer
+
+        //[System.Obsolete("建议使用usermodel")]
+        //public ShowCustomerInfoResponse ShowCustomerInfoResponseMapping(UserEntity source,
+        //                                                               List<ResourceEntity> resourceEntities)
+        //{
+        //    if (source == null)
+        //    {
+        //        return null;
+        //    }
+
+        //    var target = Mapper.Map<UserEntity, ShowCustomerInfoResponse>(source);
+
+        //    //if (resourceEntities != null && resourceEntities.Count > 0)
+        //    //{
+        //    //    var resource = resourceEntities.FirstOrDefault();
+        //    //    if (resource != null)
+        //    //    {
+        //    //        target.Logo = Path.Combine(resource.Domain, resource.Name);
+        //    //    }
+        //    //}
+
+        //    return target;
+        //}
+
+        ////[System.Obsolete("建议使用usermodel")]
+        ////public ShowCustomerInfoResponse ShowCustomerInfoResponseMapping(UserEntity source)
+        ////{
+        ////    if (source == null)
+        ////    {
+        ////        return null;
+        ////    }
+        ////    //var resources = _resourceRepository.GetList((int)SourceType.CustomerPortrait, source.Id);
+
+        ////    //return UserShowResponseMapping(source, resources);
+        ////    return ShowCustomerInfoResponseMapping(source, null);
+        ////}
+
+        //[System.Obsolete("建议使用usermodel")]
+        //public IEnumerable<ShowCustomerInfoResponse> ShowCustomerInfoResponseMapping(List<UserEntity> source)
+        //{
+        //    if (source == null || source.Count == 0)
+        //    {
+        //        return new List<ShowCustomerInfoResponse>(0);
+        //    }
+
+        //    var result = new List<ShowCustomerInfoResponse>(source.Count);
+
+        //    foreach (var item in source)
+        //    {
+        //        var target = ShowCustomerInfoResponseMapping(item, null);
+
+        //        if (target != null)
+        //        {
+        //            result.Add(target);
+        //        }
+        //    }
+
+        //    return result;
+        //}
+
+        //[System.Obsolete("建议使用usermodel")]
+        //public CustomerInfoResponse CustomerInfoResponseMapping(UserEntity source)
+        //{
+        //    if (source == null)
+        //    {
+        //        return null;
+        //    }
+
+        //    var target = Mapper.Map<UserEntity, CustomerInfoResponse>(source);
+
+        //    return target;
+        //}
+
+        //[System.Obsolete("建议使用usermodel")]
+        //public IEnumerable<CustomerInfoResponse> CustomerInfoResponseMapping(List<UserEntity> source)
+        //{
+        //    foreach (var entity in source)
+        //    {
+        //        yield return CustomerInfoResponseMapping(entity);
+        //    }
+        //}
+
+        public UserEntity UserEntityMapping(UserEntity source, UserEntity target)
+        {
+            var result = Mapper.Map(source, target);
+
+            return UserEntityCheck(result);
+        }
+
+        private static UserEntity UserEntityCheck(UserEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            source.Description = source.Description ?? String.Empty;
+            source.EMail = source.EMail ?? String.Empty;
+            source.Logo = source.Logo ?? String.Empty;
+            source.Mobile = source.Mobile ?? String.Empty;
+            source.Name = source.Name ?? String.Empty;
+            source.Nickname = source.Nickname ?? String.Empty;
+            source.Password = source.Password ?? String.Empty;
+
+            source.CreatedDate = EntityDateTime(source.CreatedDate);
+            source.UpdatedDate = EntityDateTime(source.UpdatedDate);
+
+            return source;
+        }
+
+        public IEnumerable<ShowCustomerInfoResponse> ShowCustomerInfoResponseMapping(List<UserEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<ShowCustomerInfoResponse>(0);
+            }
+
+            var userModel = UserModelMapping(source);
+            if (userModel == null)
+            {
+                return null;
+            }
+
+            return ShowCustomerInfoResponseMapping(userModel.ToList());
+        }
+
+        public ShowCustomerInfoResponse ShowCustomerInfoResponseMapping(UserEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var model = UserModelMapping(source);
+
+            if (model == null)
+            {
+                return null;
+            }
+
+            return ShowCustomerInfoResponseMapping(model);
+        }
+
+        /// <summary>
+        /// DTO  转换
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public CustomerInfoResponse CustomerInfoResponseMapping(UserModel source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<UserModel, CustomerInfoResponse>(source);
+
+            target.Token = GetToken(source);
+            target.AppId = ConfigManager.GetAppleAppId();
+
+            return target;
+        }
+
+        public ShowCustomerInfoResponse ShowCustomerInfoResponseMapping(UserModel source)
+        {
+            var target = Mapper.Map<UserModel, ShowCustomerInfoResponse>(source);
+
+            return target;
+        }
+
+        public IEnumerable<ShowCustomerInfoResponse> ShowCustomerInfoResponseMapping(List<UserModel> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<ShowCustomerInfoResponse>(0);
+            }
+
+            var result = new List<ShowCustomerInfoResponse>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = ShowCustomerInfoResponseMapping(item);
+
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+            }
+
+            return result;
+        }
+
+        public IEnumerable<UserModel> UserModelMapping(List<UserEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<UserModel>(0);
+            }
+
+            var userIds = source.Select(v => v.Id).Distinct().ToList();
+            var storeIds = source.Select(v => v.Store_Id).Where(v => v != 0).Distinct().ToList();
+
+            var stores = StoreModelMapping(_storeRepository.GetListByIds(storeIds)).ToList();
+            var accounts = UserAccountMapping(_userAccountRepository.GetListByUserIds(userIds)).ToList();
+            var userRoles = _vUserRoleRepository.GetList(userIds);
+
+            var result = new List<UserModel>(source.Count);
+
+            foreach (var item in source)
+            {
+                var s = stores.FirstOrDefault(v => v.Id == item.Store_Id);
+                var a = accounts.Where(v => v.User_Id == item.Id).ToList();
+                var r = userRoles.Where(v => v.User_Id == item.Id).ToList();
+                var target = UserModelMapping(item, s, a, UserRolesMapping(r));
+
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+
+            }
+
+            return result;
+        }
+
+        private static UserModel UserModelMapping(UserEntity source, StoreModel storeModel,
+                                          List<UserAccountModel> userAccountModels, List<UserRole> userRoles)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<UserEntity, UserModel>(source);
+
+            //这步可以判断
+            target.Store = storeModel;
+            //modelAccount
+            target.Accounts = userAccountModels;
+            //roles
+            target.UserRoles = userRoles;
+            //favorcount
+            //ilikecount
+            //likemecount
+
+            //LOGO
+            if (!String.IsNullOrWhiteSpace(target.Logo))
+            {
+                if (!target.Logo.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+                {
+                    target.Logo = ConfigManager.GetHttpApiImagePath() + target.Logo;
+                }
+            }
+
+            if (target.Accounts == null || target.Accounts.Count == 0)
+            {
+                return target;
+            }
+
+            foreach (var item in target.Accounts)
+            {
+                switch (item.AType)
+                {
+                    case AccountType.ConsumptionCount:
+                        target.ConsumptionCount = (int)item.Amount;
+                        break;
+                    case AccountType.Coupon:
+                        target.CouponCount = (int)item.Amount;
+                        break;
+                    case AccountType.FavorCount:
+                        target.FavorCount = (int)item.Amount;
+                        break;
+                    case AccountType.IlikeCount:
+                        target.ILikeCount = (int)item.Amount;
+                        break;
+                    case AccountType.LikeMeCount:
+                        target.LikeMeCount = (int)item.Amount;
+                        break;
+                    case AccountType.Point:
+                        target.PointCount = (int)item.Amount;
+                        break;
+                    case AccountType.ShareCount:
+                        target.ShareCount = (int)item.Amount;
+                        break;
+                }
+            }
+
+            return target;
+        }
+
+
+        public UserModel UserModelMapping(UserEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            //var target = Mapper.Map<UserEntity, UserModel>(source);
+
+            //这步可以判断
+            var store = StoreModelMapping(_storeRepository.GetItem(source.Store_Id));
+            //modelAccount
+            var accounts = UserAccountMapping(_userAccountRepository.GetUserAccount(source.Id)).ToList();
+            //roles
+            var userRoles = UserRolesMapping(_vUserRoleRepository.GetList(source.Id));
+
+            return UserModelMapping(source, store, accounts, userRoles);
+        }
+
+        public UserEntity UserEntityMapping(UserModel source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<UserModel, UserEntity>(source);
+
+            return CheckUserEntity(target);
+        }
+
+        private static UserEntity CheckUserEntity(UserEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            source.Name = CheckString(source.Name);
+            source.Description = CheckString(source.Description);
+            source.EMail = CheckString(source.EMail);
+            source.Logo = CheckString(source.Logo);
+            source.Mobile = CheckString(source.Mobile);
+            source.Nickname = CheckString(source.Nickname);
+            source.Password = CheckString(source.Password);
+
+            return source;
+        }
+
+        #endregion
+
+        #region useraccount
+
+        public static UserAccountModel UserAccountMapping(UserAccountEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<UserAccountEntity, UserAccountModel>(source);
+
+            return target;
+        }
+
+        public static IEnumerable<UserAccountModel> UserAccountMapping(List<UserAccountEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<UserAccountModel>(0);
+            }
+
+            var list = new List<UserAccountModel>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = UserAccountMapping(item);
+
+                if (target == null)
+                {
+                    continue;
+                }
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        //public static CustomerAccountResponse UserAccountResponseMapping(UserAccountModel source)
+        //{
+        //    var target = Mapper.Map<UserAccountModel, CustomerAccountResponse>(source);
+
+        //    return target;
+        //}
+
+        //public static IEnumerable<CustomerAccountResponse> UserAccountResponseMapping(List<UserAccountModel> source)
+        //{
+        //    foreach (var userAccountModel in source)
+        //    {
+        //        yield return UserAccountResponseMapping(userAccountModel);
+        //    }
+        //}
+
+        #endregion
+
+        #region vuserRoles
+
+        public static List<UserRole> UserRolesMapping(List<VUserRoleEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<UserRole>(0);
+            }
+
+            var list = new List<UserRole>(source.Count);
+            //var dic = new Dictionary<UserRole, bool>(source.Count);
+            foreach (var item in source)
+            {
+                var target = (UserRole)item.Role_Val;
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+
+
+        #endregion
+
+        #region store
+
+        public StoreEntity StoreEntityMapping(StoreEntity source, StoreEntity target)
+        {
+            // result.Equery(target) = true;
+            var result = Mapper.Map(source, target);
+
+            return result;
+        }
+
+        public StoreEntity StoreEntityMapping(StoreInfoRequest source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<StoreInfoRequest, StoreEntity>(source);
+            target.CreatedDate = DateTime.Now;
+            target.CreatedUser = source.AuthUid;
+            target.UpdatedDate = DateTime.Now;
+            target.UpdatedUser = source.AuthUid;
+            target.Status = (int)DataStatus.Normal;
+
+            return target;
+        }
+
+        public StoreModel StoreModelMapping(StoreEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<StoreEntity, StoreModel>(source);
+
+            return target;
+        }
+
+        public IEnumerable<StoreModel> StoreModelMapping(List<StoreEntity> source)
+        {
+            foreach (var storeEntity in source)
+            {
+                yield return StoreModelMapping(storeEntity);
+            }
+        }
+
+        public StoreEntity StoreEntityMapping(StoreModel source)
+        {
+            var target = Mapper.Map<StoreModel, StoreEntity>(source);
+
+            return target;
+        }
+
+        public StoreInfoResponse StoreResponseMapping(StoreEntity source)
+        {
+            var target = Mapper.Map<StoreEntity, StoreInfoResponse>(source);
+
+            return target;
+        }
+
+        public StoreInfoResponse StoreResponseMapping(StoreEntity source, CoordinateInfo coordinateInfo)
+        {
+            if (coordinateInfo == null)
+            {
+                return StoreResponseMapping(source);
+            }
+
+            var target = Mapper.Map<StoreEntity, StoreInfoResponse>(source);
+
+            target.Distance = Distance(coordinateInfo, new CoordinateInfo(target.Longitude, target.Latitude));
+
+            return target;
+        }
+
+        public StoreInfoResponse StoreResponseMapping(StoreInfoResponse source, CoordinateInfo coordinateInfo)
+        {
+            if (coordinateInfo == null)
+            {
+                return source;
+            }
+
+            source.Distance = Distance(coordinateInfo, new CoordinateInfo(source.Longitude, source.Latitude));
+
+            return source;
+        }
+
+        public IEnumerable<StoreInfoResponse> StoreResponseMapping(List<StoreEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<StoreInfoResponse>(0);
+            }
+
+            var list = new List<StoreInfoResponse>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = StoreResponseMapping(item);
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="coordinateInfo"></param>
+        /// <returns></returns>
+        public IEnumerable<StoreInfoResponse> StoreResponseMapping(List<StoreEntity> source, CoordinateInfo coordinateInfo)
+        {
+            if (coordinateInfo == null)
+            {
+                foreach (var storeEntity in source)
+                {
+                    yield return StoreResponseMapping(storeEntity);
+                }
+            }
+            else
+            {
+                foreach (var storeEntity in source)
+                {
+                    yield return StoreResponseMapping(storeEntity, coordinateInfo);
+                }
+            }
+        }
+
+        #endregion
+
+        #region resource
+
+        public IEnumerable<ResourceInfoResponse> ResourceInfoResponsesMapping(List<ResourceEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<ResourceInfoResponse>(0);
+            }
+
+            var list = new List<ResourceInfoResponse>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = ResourceInfoResponsesMapping(item);
+
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        public ResourceInfoResponse ResourceInfoResponsesMapping(ResourceEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<ResourceEntity, ResourceInfoResponse>(source);
+            //zhuyi
+            if (String.IsNullOrWhiteSpace(target.Domain))
+            {
+                switch (target.ResourceType)
+                {
+                    case ResourceType.Image:
+                        target.Domain = ConfigManager.GetHttpApiImagePath();
+                        break;
+                    case ResourceType.Sound:
+                        target.Domain = ConfigManager.GetHttpApiSoundPath();
+                        break;
+                    case ResourceType.Video:
+                        target.Domain = ConfigManager.GetHttpApivideoPath();
+                        break;
+                    case ResourceType.Default:
+                        target.Domain = ConfigManager.GetHttpApidefPath();
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+
+            return target;
+        }
+
+        #endregion
+
+        #region promotion
+
+        public PromotionEntity PromotionEntityMapping(PromotionEntity source, PromotionEntity target)
+        {
+            var result = Mapper.Map(source, target);
+
+            return result;
+        }
+
+        public PromotionEntity PromotionEntityMapping(PromotionInfoRequest source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<PromotionInfoRequest, PromotionEntity>(source);
+            target.CreatedDate = DateTime.Now;
+            target.CreatedUser = source.AuthUid;
+            target.UpdatedDate = DateTime.Now;
+            target.UpdatedUser = source.AuthUid;
+            target.Status = (int)DataStatus.Normal;
+            target.RecommendSourceId =
+                target.RecommendUser = source.RecommendUser == null ? source.AuthUid : source.RecommendUser.Value;
+
+            return target;
+        }
+
+        public PromotionInfoResponse PromotionResponseMapping(PromotionEntity source, CoordinateInfo coordinateInfo, List<int> brandIds, List<ResourceInfoResponse> resourceInfoResponses, StoreInfoResponse storeInfoResponse, ShowCustomerInfoResponse showCustomerInfoResponse)
+        {
+            var target = Mapper.Map<PromotionEntity, PromotionInfoResponse>(source);
+
+            if (showCustomerInfoResponse != null)
+            {
+                target.ShowCustomer = showCustomerInfoResponse;
+            }
+
+            if (storeInfoResponse != null)
+            {
+                target.StoreInfoResponse = storeInfoResponse;
+            }
+
+            if (resourceInfoResponses != null)
+            {
+                target.ResourceInfoResponses = resourceInfoResponses;
+            }
+
+            if (brandIds != null)
+            {
+                target.BrandIds = brandIds;
+            }
+
+            return target;
+        }
+
+        /// <summary>
+        /// 需要计算 距离
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="coordinateInfo">坐标</param>
+        /// <returns></returns>
+        public PromotionInfoResponse PromotionResponseMapping(PromotionEntity source, CoordinateInfo coordinateInfo)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            ShowCustomerInfoResponse showCustomer = null;
+            StoreInfoResponse storeInfoResponse = null;
+            List<ResourceInfoResponse> resourceInfoResponses = null;
+            List<int> brandIds = null;
+            if (source.RecommendUser > 0)
+            {
+                var userEntity = _customerRepository.GetItem(source.RecommendUser);
+                if (userEntity != null)
+                {
+                    showCustomer = ShowCustomerInfoResponseMapping(userEntity);
+                }
+            }
+
+            if (source.Store_Id > 0)
+            {
+                var store = _storeRepository.GetItem(source.Store_Id);
+                storeInfoResponse = StoreResponseMapping(store, coordinateInfo);
+            }
+
+            var resource = GetListResourceEntities(SourceType.Promotion, source.Id);
+            if (resource != null)
+            {
+                resourceInfoResponses = ResourceInfoResponsesMapping(resource).ToList();
+            }
+
+            var brandids = _promotionBrandRelationRepository.GetList(source.Id).Select(v => v.Brand_Id).ToList();
+
+            if (brandids.Count > 0)
+            {
+                brandIds = brandids;
+            }
+
+            return PromotionResponseMapping(source, coordinateInfo, brandIds, resourceInfoResponses, storeInfoResponse,
+                                            showCustomer);
+        }
+
+        public PromotionInfoResponse PromotionResponseMapping(PromotionEntity source)
+        {
+            return PromotionResponseMapping(source, null);
+        }
+
+        public IEnumerable<PromotionInfoResponse> PromotionResponseMapping(List<PromotionEntity> source, CoordinateInfo coordinateInfo)
+        {
+            var userIds = source.Select(v => v.RecommendUser).Where(v => v > 0).Distinct();
+
+            var users = _customerRepository.GetListByIds(userIds.ToList());
+            var responseUser = ShowCustomerInfoResponseMapping(users).ToList();
+            var storeids = source.Select(v => v.Store_Id).Where(v => v > 0).Distinct();
+            var stores = _storeRepository.GetListByIds(storeids.ToList());
+            var storeResponse = StoreResponseMapping(stores, coordinateInfo).ToList();
+            var list = new List<PromotionInfoResponse>();
+            var ids = source.Select(v => v.Id).ToList();
+
+            var resource = GetListResourceEntities(SourceType.Promotion, ids);
+            var brandR = _promotionBrandRelationRepository.GetList(ids);
+
+            List<ResourceInfoResponse> resourceResponse = null;
+            if (resource != null)
+            {
+                resourceResponse = ResourceInfoResponsesMapping(resource).ToList();
+            }
+
+            foreach (var entity in source)
+            {
+                var entity1 = entity;
+                var b = brandR.Where(v => v.Promotion_Id == entity1.Id).Select(v => v.Brand_Id).ToList();
+                var r = resourceResponse == null
+                            ? new List<ResourceInfoResponse>(0)
+                            : resourceResponse.Where(v => v.SourceId == entity1.Id).ToList();
+                var s = storeResponse.FirstOrDefault(v => v.Id == entity.Store_Id);
+                var u = responseUser.FirstOrDefault(v => v.Id == entity.RecommendUser);
+                var target = PromotionResponseMapping(entity, coordinateInfo, b, r, s, u);
+
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        public IEnumerable<PromotionInfoResponse> PromotionResponseMapping(List<PromotionEntity> source)
+        {
+            return PromotionResponseMapping(source, null);
+        }
+
+        #endregion
+
+        #region coupon
+
+        public IEnumerable<CouponInfoResponse> CouponInfoResponseMapping(List<CouponHistoryEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<CouponInfoResponse>(0);
+            }
+
+            var promotionIds = source.Select(v => v.FromPromotion).Distinct().Where(v => v != 0);
+            var productIds = source.Select(v => v.FromProduct).Distinct().Where(v => v != 0);
+
+            var promotions = PromotionResponseMapping(_promotionRepository.GetList(promotionIds.ToList())).ToList();
+            var products = ProductInfoResponseMapping(_productRepository.GetList(productIds.ToList())).ToList();
+
+            var result = new List<CouponInfoResponse>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = Mapper.Map<CouponHistoryEntity, CouponInfoResponse>(item);
+
+                CouponInfoResponseMapping(target, products.SingleOrDefault(v => v.Id == item.FromProduct),
+                                                       promotions.SingleOrDefault(v => v.Id == item.FromPromotion));
+
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+            }
+
+            return result;
+        }
+
+        public CouponInfoResponse CouponInfoResponseMapping(CouponHistoryEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<CouponHistoryEntity, CouponInfoResponse>(source);
+
+            if (source.FromPromotion > 0)
+            {
+                var promotion = PromotionResponseMapping(_promotionRepository.GetItem(source.FromPromotion));
+
+                return CouponInfoResponseMapping(target, null, promotion);
+            }
+
+            if (source.FromProduct > 0)
+            {
+                var product = ProductInfoResponseMapping(_productRepository.GetItem(source.FromProduct));
+
+                return CouponInfoResponseMapping(target, product, null);
+            }
+
+            return target;
+        }
+
+        public static CouponInfoResponse CouponInfoResponseMapping(CouponInfoResponse source, ProductInfoResponse product,
+                                                          PromotionInfoResponse promotion)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = source;
+
+            var productname = String.Empty;
+            var producttype = 0;
+            var productid = 0;
+            var productDescription = String.Empty;
+            if (promotion != null)
+            {
+                productname = promotion.Name;
+                producttype = (int)SourceType.Promotion;
+                productid = promotion.Id;
+                productDescription =
+                promotion.Description;
+                target.PromotionInfoResponse = promotion;
+                target.Stype = SourceType.Promotion;
+            }
+            else
+            {
+                if (product != null)
+                {
+                    productname = product.Name;
+                    producttype = (int)SourceType.Product;
+                    productid = product.Id;
+                    productDescription =
+                    product.Description;
+                    target.ProductInfoResponse = product;
+                    target.Stype = SourceType.Product;
+                }
+            }
+
+            target.ProductId = productid;
+            target.ProductName = productname;
+            target.ProductType = producttype;
+            target.ProductDescription = productDescription;
+
+
+
+            return target;
+        }
+
+        public static CouponCodeResponse CouponCodeResponseMapping(CouponHistoryEntity source, ProductInfoResponse product,
+                                                                  PromotionInfoResponse promotion)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<CouponHistoryEntity, CouponCodeResponse>(source);
+
+            var productname = String.Empty;
+            var producttype = 0;
+            var productid = 0;
+            var productDescription = String.Empty;
+            if (promotion != null)
+            {
+                productname = promotion.Name;
+                producttype = (int)SourceType.Promotion;
+                productid = promotion.Id;
+                productDescription =
+                promotion.Description;
+            }
+            else
+            {
+                if (product != null)
+                {
+                    productname = product.Name;
+                    producttype = (int)SourceType.Product;
+                    productid = product.Id;
+                    productDescription =
+                    product.Description;
+                }
+            }
+
+            target.ProductId = productid;
+            target.ProductName = productname;
+            target.ProductType = producttype;
+            target.ProductDescription = productDescription;
+
+            return target;
+        }
+
+        public static CouponCodeResponse CouponCodeResponseMapping(CouponHistoryEntity source, ProductEntity product,
+                                                                   PromotionEntity promotion)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<CouponHistoryEntity, CouponCodeResponse>(source);
+
+            var productname = String.Empty;
+            var producttype = 0;
+            var productid = 0;
+            var productDescription = String.Empty;
+            if (promotion != null)
+            {
+                productname = promotion.Name;
+                producttype = (int)SourceType.Promotion;
+                productid = promotion.Id;
+                productDescription =
+                promotion.Description;
+                target.Stype = SourceType.Promotion;
+            }
+            else
+            {
+                if (product != null)
+                {
+                    productname = product.Name;
+                    producttype = (int)SourceType.Product;
+                    productid = product.Id;
+                    productDescription =
+                    product.Description;
+                    target.Stype = SourceType.Product;
+                }
+            }
+
+            target.ProductId = productid;
+            target.ProductName = productname;
+            target.ProductType = producttype;
+            target.ProductDescription = productDescription;
+
+
+            return target;
+        }
+        /// <summary>
+        /// 优惠码
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public CouponCodeResponse CouponCodeResponseMapping(CouponHistoryEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            if (source.FromPromotion > 0)
+            {
+                var promotion = _promotionRepository.GetItem(source.FromPromotion);
+
+                return CouponCodeResponseMapping(source, null, promotion);
+            }
+
+            if (source.FromProduct > 0)
+            {
+                var product = _productRepository.GetItem(source.FromProduct);
+
+                return CouponCodeResponseMapping(source, product, null);
+            }
+
+            return Mapper.Map<CouponHistoryEntity, CouponCodeResponse>(source);
+        }
+
+        /// <summary>
+        /// 优惠码
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public List<CouponCodeResponse> CouponCodeResponseMapping(List<CouponHistoryEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<CouponCodeResponse>(0);
+            }
+
+            var promotionIds = source.Select(v => v.FromPromotion).Distinct().Where(v => v != 0);
+            var productIds = source.Select(v => v.FromProduct).Distinct().Where(v => v != 0);
+
+            var promotions = _promotionRepository.GetList(promotionIds.ToList());
+            var products = _productRepository.GetList(productIds.ToList());
+
+            var result = new List<CouponCodeResponse>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = CouponCodeResponseMapping(item, products.SingleOrDefault(v => v.Id == item.FromProduct),
+                                                       promotions.SingleOrDefault(v => v.Id == item.FromPromotion));
+
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        #region favorite
+
+        public FavoriteInfoResponse FavoriteInfoResponseMapping(FavoriteEntity source, PromotionEntity promotionEntity)
+        {
+            var target = Mapper.Map<FavoriteEntity, FavoriteInfoResponse>(source);
+            target.FavoriteSourceName = promotionEntity == null ? String.Empty : promotionEntity.Name;
+
+            return target;
+        }
+
+        public FavoriteInfoResponse FavoriteInfoResponseMapping(FavoriteEntity source, ProductEntity entity)
+        {
+            var target = Mapper.Map<FavoriteEntity, FavoriteInfoResponse>(source);
+            target.FavoriteSourceName = entity == null ? String.Empty : entity.Name;
+
+            return target;
+        }
+
+        public FavoriteCollectionResponse FavoriteCollectionResponseMapping(List<FavoriteEntity> source,
+                                                                                   CoordinateInfo coordinateInfo)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new FavoriteCollectionResponse(new PagerRequest(1, 1)) { Favorites = new List<FavoriteInfoResponse>(0) };
+            }
+
+            var storeids = source.Select(v => v.Store_Id).Distinct().Where(v => v != 0);
+            //var dic = new Dictionary<int, List<int>>();
+            var ms = source.Where(v => v.FavoriteSourceType == (int)SourceType.Promotion).Select(s => s.FavoriteSourceId).Distinct().ToList();
+            var ps = source.Where(v => v.FavoriteSourceType == (int)SourceType.Product).Select(s => s.FavoriteSourceId).Distinct().ToList();
+
+            var stores = StoreResponseMapping(_storeRepository.GetListByIds(storeids.ToList()), coordinateInfo).ToList();
+            var promotions = _promotionRepository.GetList(ms);
+            var products = _productRepository.GetList(ps);
+
+            var productResource = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, ps)).ToList();
+            var msresource = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Promotion, ms)).ToList();
+
+            //TODO: 产品这个需要优化
+            var result = new FavoriteCollectionResponse(new PagerRequest(1, source.Count), source.Count)
+            {
+                Favorites = new List<FavoriteInfoResponse>(source.Count)
+            };
+            foreach (var s in source)
+            {
+                //var n = String.Empty;
+                FavoriteInfoResponse response = null;
+                switch (s.FavoriteSourceType)
+                {
+                    case (int)SourceType.Promotion:
+                        var p = promotions.FirstOrDefault(v => v.Id == s.FavoriteSourceId);
+                        response = FavoriteInfoResponseMapping(s, p);
+
+                        response.Resources = p == null ? new List<ResourceInfoResponse>(0) : msresource.Where(v => v.SourceId == p.Id && v.SourceType == (int)SourceType.Promotion).ToList();
+                        break;
+                    case (int)SourceType.Product:
+                        var t = products.FirstOrDefault(v => v.Id == s.FavoriteSourceId);
+                        response = FavoriteInfoResponseMapping(s, t);
+
+                        response.Resources = t == null ? new List<ResourceInfoResponse>(0) :
+                            productResource.Where(v => v.SourceId == t.Id && v.SourceType == (int)SourceType.Product).ToList();
+
+                        break;
+                }
+
+                if (response != null)
+                {
+                    var store = stores.SingleOrDefault(v => v.Id == s.Store_Id);
+                    response.Store = store;
+                    response.StoreId = store == null ? 0 : store.Id;
+
+                    result.Favorites.Add(response);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 还没做产品的需求
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public FavoriteCollectionResponse FavoriteCollectionResponseMapping(List<FavoriteEntity> source)
+        {
+            return FavoriteCollectionResponseMapping(source, null);
+        }
+
+        #endregion
+
+        #region brand
+
+        public BrandEntity BrandEntityMapping(BrandEntity source, BrandEntity target)
+        {
+            //不变的
+            //不变的要映射
+            var result = Mapper.Map(source, target);
+
+            return result;
+        }
+
+        public BrandInfoResponse BrandInfoResponseMapping(BrandEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<BrandEntity, BrandInfoResponse>(source);
+
+            if (!String.IsNullOrWhiteSpace(target.Logo))
+            {
+                if (!target.Logo.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+                {
+                    target.Logo = ConfigManager.GetHttpApiImagePath() + target.Logo;
+                }
+            }
+
+            return target;
+        }
+
+        public IEnumerable<BrandInfoResponse> BrandInfoResponseMapping(List<BrandEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<BrandInfoResponse>(0);
+            }
+
+            var list = new List<BrandInfoResponse>(source.Count);
+            foreach (var s in source)
+            {
+                var r = BrandInfoResponseMapping(s);
+                if (r != null)
+                {
+                    list.Add(r);
+                }
+            }
+
+            return list;
+        }
+
+        public BrandEntity BrandEntityMapping(BrandInfoRequest source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<BrandInfoRequest, BrandEntity>(source);
+            target.CreatedDate = DateTime.Now;
+            target.CreatedUser = source.AuthUid;
+            target.UpdatedDate = DateTime.Now;
+            target.UpdatedUser = source.AuthUid;
+            target.Status = (int)DataStatus.Normal;
+
+            return target;
+        }
+
+        #endregion
+
+        #region devicetoken
+
+        public DeviceInfoResponse DeviceInfoResponseMapping(DeviceTokenEntity source)
+        {
+            var target = Mapper.Map<DeviceTokenEntity, DeviceInfoResponse>(source);
+
+            return target;
+        }
+
+        public DeviceLogInfoResponse DeviceLogInfoResponseMapping(DeviceLogEntity source)
+        {
+            var target = Mapper.Map<DeviceLogEntity, DeviceLogInfoResponse>(source);
+
+            return target;
+        }
+
+        #endregion
+
+        #region comment
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="userEntities"></param>
+        /// <returns></returns>
+        public CommentInfoResponse CommentInfoResponseMapping(CommentEntity source, List<UserEntity> userEntities)
+        {
+            var target = Mapper.Map<CommentEntity, CommentInfoResponse>(source);
+            //找两个用户，当前发评论的用户，被回复的用户
+            var userResponses = ShowCustomerInfoResponseMapping(userEntities).ToList();
+
+            var user = userResponses.FirstOrDefault(v => v.Id == target.User_Id);
+            var replyUser = userResponses.FirstOrDefault(v => v.Id == target.ReplyUser);
+
+            target.Customer = user;
+            target.ReplyUserNickname = (replyUser == null) ? String.Empty : (String.IsNullOrEmpty(replyUser.Nickname) ? replyUser.Name : replyUser.Nickname);
+
+            return target;
+        }
+
+        public CommentInfoResponse CommentInfoResponseMapping(CommentEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            //找两个用户，当前发评论的用户，被回复的用户
+            var uids = new List<int>(2) { source.User_Id, source.ReplyUser };
+
+            var users = _customerRepository.GetListByIds(uids.Where(v => v != 0).Distinct().ToList());
+
+            return CommentInfoResponseMapping(source, users);
+        }
+
+        public IEnumerable<CommentInfoResponse> CommentInfoResponseMapping(List<CommentEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<CommentInfoResponse>(0);
+            }
+
+            var users = new List<int>(source.Count * 2);
+
+            users.AddRange(source.Select(v => v.User_Id));
+            users.AddRange(source.Select(v => v.ReplyUser));
+
+            var uids = users.Distinct().Where(v => v != 0);
+
+            var userEntities = _customerRepository.GetListByIds(uids.ToList());
+
+            var target = new List<CommentInfoResponse>(source.Count);
+
+            foreach (var s in source)
+            {
+                var t = CommentInfoResponseMapping(s, userEntities);
+
+                if (t != null)
+                {
+                    target.Add(t);
+                }
+            }
+
+            return target;
+        }
+
+        #endregion
+
+        #region tag
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public TagEntity TagInfoRequestMapping(TagInfoRequest source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<TagInfoRequest, TagEntity>(source);
+
+            return target;
+        }
+
+        public TagInfoResponse TagInfoResponseMapping(TagEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<TagEntity, TagInfoResponse>(source);
+
+            return target;
+        }
+
+        public IEnumerable<TagInfoResponse> TagInfoResponseMapping(List<TagEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<TagInfoResponse>(0);
+            }
+
+            var list = new List<TagInfoResponse>(source.Count);
+            foreach (var s in source)
+            {
+                var target = TagInfoResponseMapping(s);
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        #endregion
+
+        #region product
+
+        public ProductEntity ProductEntityMapping(ProductEntity source, ProductEntity target)
+        {
+            var result = Mapper.Map(source, target);
+
+            return result;
+        }
+
+        public ProductEntity ProductEntityMapping(ProductInfoRequest source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<ProductInfoRequest, ProductEntity>(source);
+            target.CreatedDate = DateTime.Now;
+            target.CreatedUser = source.AuthUid;
+            target.UpdatedDate = DateTime.Now;
+            target.UpdatedUser = source.AuthUid;
+            target.Status = (int)DataStatus.Normal;
+
+            return target;
+        }
+
+        public IEnumerable<ProductEntity> ProductEntityMapping(List<ProductInfoRequest> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<ProductEntity>(0);
+            }
+
+            var list = new List<ProductEntity>(source.Count);
+            foreach (var s in source)
+            {
+                var target = ProductEntityMapping(s);
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="brandInfo"></param>
+        /// <param name="storeInfo"></param>
+        /// <param name="showCustomerInfo"></param>
+        /// <param name="tagInfoResponse"></param>
+        /// <param name="resourceInfoResponses"></param>
+        /// <returns></returns>
+        public ProductInfoResponse ProductInfoResponseMapping(ProductEntity source, BrandInfoResponse brandInfo,
+                                                                     StoreInfoResponse storeInfo,
+                                                                     ShowCustomerInfoResponse showCustomerInfo,
+                                                                     TagInfoResponse tagInfoResponse, List<ResourceInfoResponse> resourceInfoResponses)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<ProductEntity, ProductInfoResponse>(source);
+
+            target.BrandInfoResponse = brandInfo;
+            target.StoreInfoResponse = storeInfo;
+            target.RecommendUserInfoResponse = showCustomerInfo;
+            target.TagInfoResponse = tagInfoResponse;
+            target.ResourceInfoResponses = resourceInfoResponses;
+
+            return target;
+        }
+
+        public ProductInfoResponse ProductInfoResponseMapping(ProductEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var brand = BrandInfoResponseMapping(_brandRepository.GetItem(source.Brand_Id));
+            var store = StoreResponseMapping(_storeRepository.GetItem(source.Store_Id));
+            var ruser = ShowCustomerInfoResponseMapping(_customerRepository.GetItem(source.RecommendUser));
+            var tag = TagInfoResponseMapping(_tagRepository.GetItem(source.Tag_Id));
+            var resources = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, source.Id));
+
+            return ProductInfoResponseMapping(source, brand, store, ruser, tag, resources.ToList());
+        }
+
+        public IEnumerable<ProductInfoResponse> ProductInfoResponseMapping(List<ProductEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<ProductInfoResponse>(0);
+            }
+
+            var list = new List<ProductInfoResponse>(source.Count);
+
+            var brands = BrandInfoResponseMapping(_brandRepository.GetListByIds(source.Select(v => v.Brand_Id).Distinct().ToList())).ToList();
+            var stores = StoreResponseMapping(_storeRepository.GetListByIds(source.Select(v => v.Store_Id).Distinct().ToList())).ToList();
+            var rusers = ShowCustomerInfoResponseMapping(_customerRepository.GetListByIds(source.Select(v => v.RecommendUser).Distinct().ToList())).ToList();
+            var tags = TagInfoResponseMapping(_tagRepository.GetListByIds(source.Select(v => v.Tag_Id).Distinct().ToList())).ToList();
+            var resources =
+                ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, source.Select(v => v.Id).ToList())).ToList();
+
+            foreach (var s in source)
+            {
+                if (s == null)
+                {
+                    continue;
+                }
+
+                var s1 = s;
+                var target = ProductInfoResponseMapping(s, brands.FirstOrDefault(v => v.Id == s.Brand_Id), stores.FirstOrDefault(v => v.Id == s.Store_Id), rusers.FirstOrDefault(v => v.Id == s.RecommendUser), tags.FirstOrDefault(v => v.Id == s.Tag_Id), resources.Where(v => v.SourceId == s1.Id).ToList());
+                if (target == null)
+                {
+                    continue;
+                }
+
+                list.Add(target);
+            }
+
+            return list;
+        }
+
+        #endregion
+
+        //TODO: 没有对返回的user列表和当前用户做 互相关注判断。
+        #region like
+
+        public LikeCoutomerResponse LikeInfoResponseMapping(LikeEntity source, LikeType likeType)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var t = LikeInfoResponseMapping(new List<LikeEntity> { source }, likeType);
+
+            if (t == null || t.Count == 0)
+            {
+                return null;
+            }
+
+            return new LikeCoutomerResponse { CustomerInfoResponse = t[0], Id = source.Id };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="likeType">true 是喜欢（返回的喜欢人的列表） false 是被喜欢（返回的是被喜欢人的列表）</param>
+        /// <returns></returns>
+        public List<ShowCustomerInfoResponse> LikeInfoResponseMapping(List<LikeEntity> source, LikeType likeType)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return null;
+            }
+            List<int> mpUserList = null;
+
+            if (likeType == LikeType.ILike)
+            {
+                mpUserList = source.Select(v => v.LikedUserId).Distinct().ToList();
+            }
+            else
+            {
+                if (likeType == LikeType.LikeMe)
+                {
+                    mpUserList = source.Select(v => v.LikeUserId).Distinct().ToList();
+                }
+            }
+
+            List<ShowCustomerInfoResponse> users = null;
+
+            if (mpUserList != null)
+            {
+                users = ShowCustomerInfoResponseMapping(_customerRepository.GetListByIds(mpUserList.ToList())).ToList();
+            }
+
+            return users ?? new List<ShowCustomerInfoResponse>(0);
+        }
+
+        #endregion
+
+        #region point
+
+        public PointInfoResponse PointInfoResponseMapping(PointHistoryEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<PointHistoryEntity, PointInfoResponse>(source);
+
+            return target;
+        }
+
+        public List<PointInfoResponse> PointInfoResponseMapping(List<PointHistoryEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<PointInfoResponse>(0);
+            }
+
+            var result = new List<PointInfoResponse>(source.Count);
+            foreach (var item in source)
+            {
+                var target = PointInfoResponseMapping(item);
+
+                if (target == null)
+                {
+                    continue;
+                }
+
+                result.Add(target);
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        #region items
+
+        public IEnumerable<ItemsInfoResponse> ItemsInfoResponseMapping(List<ProductEntity> productEntities,
+                                                                       List<PromotionEntity> promotionEntities)
+        {
+            if (productEntities == null && promotionEntities == null)
+            {
+                return new List<ItemsInfoResponse>(0);
+            }
+
+            var storeIds = new List<int>();
+
+            var dresources = new List<ResourceInfoResponse>();
+            var mresources = new List<ResourceInfoResponse>();
+
+            if (productEntities != null)
+            {
+                storeIds.AddRange(productEntities.Select(v => v.Store_Id));
+                var productIds = productEntities.Select(v => v.Id).Distinct().ToList();
+
+                dresources.AddRange(ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, productIds)));
+            }
+            if (promotionEntities != null)
+            {
+                storeIds.AddRange(promotionEntities.Select(v => v.Store_Id));
+                var promotionIds = promotionEntities.Select(v => v.Id).Distinct().ToList();
+
+                mresources.AddRange(ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Promotion, promotionIds)));
+            }
+
+            storeIds = storeIds.Distinct().ToList();
+
+            var store = StoreResponseMapping(_storeRepository.GetListByIds(storeIds)).ToList();
+
+            var result = new List<ItemsInfoResponse>();
+
+            if (productEntities != null)
+            {
+                foreach (var item in productEntities)
+                {
+                    var target = ItemsInfoResponseMapping(item, store.SingleOrDefault(v => v.Id == item.Store_Id),
+                                                          dresources.Where(v => v.SourceId == item.Id).ToList());
+
+                    result.Add(target);
+                }
+            }
+
+            if (promotionEntities != null)
+            {
+                foreach (var item in promotionEntities)
+                {
+                    var target = ItemsInfoResponseMapping(item, store.SingleOrDefault(v => v.Id == item.Store_Id),
+                                                          mresources.Where(v => v.SourceId == item.Id).ToList());
+
+                    result.Add(target);
+                }
+            }
+
+            return result;
+        }
+
+        private static ItemsInfoResponse ItemsInfoResponseMapping(ProductEntity source, StoreInfoResponse store, List<ResourceInfoResponse> resources)
+        {
+            var target = Mapper.Map<ProductEntity, ItemsInfoResponse>(source);
+
+            target.SType = SourceType.Product;
+            target.Store = store;
+            target.Resources = resources;
+
+            return target;
+        }
+
+        private static ItemsInfoResponse ItemsInfoResponseMapping(PromotionEntity source, StoreInfoResponse store, List<ResourceInfoResponse> resources)
+        {
+            var target = Mapper.Map<PromotionEntity, ItemsInfoResponse>(source);
+
+            target.SType = SourceType.Promotion;
+            target.Store = store;
+            target.Resources = resources;
+
+            return target;
+        }
+
+        #endregion
+
+    }
+    // */ 
+}
