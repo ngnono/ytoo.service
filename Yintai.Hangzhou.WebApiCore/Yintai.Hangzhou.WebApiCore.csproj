@@ -81,8 +81,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Passbook.Generator\Passbook.Generator.csproj">
-      <Project>{9f0ab42e-2d5a-4df1-8203-91e8dba409f3}</Project>
+    <ProjectReference Include="..\dotnet-passbook-master\Passbook.Generator\Passbook.Generator.csproj">
+      <Project>{cec0a9ce-3250-410f-9469-38eef0f9c8b6}</Project>
       <Name>Passbook.Generator</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">

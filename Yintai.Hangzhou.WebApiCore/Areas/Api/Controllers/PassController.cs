@@ -107,14 +107,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             request.BackgroundColor = "rgb(229,1,80)";// "#e50150";
             request.ForegroundColor = "rgb(255,255,255)";
-      //      request.LabelColor = "rgb(255,255,255)";
+           request.LabelColor = "rgb(255,255,255)";
 
 
             //TODO:???修改 返回应用使用
-     ////       request.AssociatedStoreIdentifiers = new List<int>(1)
-     //          {
-     //              ConfigManager.AppleAppid
-     //          };
+              request.AssociatedStoreIdentifiers = new List<int>(1)
+               {
+                   ConfigManager.AppleAppid
+               };
 
             //var returnAppUrlSchemes = IosUrlSchemesPre + coupponInfo.User_Id.ToString(CultureInfo.InvariantCulture);
 
@@ -128,14 +128,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             //request.Locale = "zh";
 
             // override icon and icon retina
-       //     request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/icon.png")));
+            request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/icon.png")));
             //request.Images.Add(PassbookImage.IconRetina, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/icon@2x.png")));
 
 
             //request.Images.Add(PassbookImage.Strip, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/strip.png")));
             //request.Images.Add(PassbookImage.StripRetina, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/strip@2x.png")));
 
-       //     request.Images.Add(PassbookImage.Logo, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/logo.png")));
+            request.Images.Add(PassbookImage.Logo, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/logo.png")));
             //request.Images.Add(PassbookImage.LogoRetina, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/logo@2x.png")));
 
             request.AddBarCode(coupponInfo.CouponId, BarcodeType.PKBarcodeFormatPDF417, "iso-8859-1" /*"UTF-8"*/, coupponInfo.CouponId);
