@@ -1,0 +1,326 @@
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+2013-01-23 17:09:44,421 [5] - SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Name] AS [Name], 
+[Extent1].[Password] AS [Password], 
+[Extent1].[Nickname] AS [Nickname], 
+[Extent1].[CreatedUser] AS [CreatedUser], 
+[Extent1].[CreatedDate] AS [CreatedDate], 
+[Extent1].[UpdatedUser] AS [UpdatedUser], 
+[Extent1].[UpdatedDate] AS [UpdatedDate], 
+[Extent1].[LastLoginDate] AS [LastLoginDate], 
+[Extent1].[Mobile] AS [Mobile], 
+[Extent1].[EMail] AS [EMail], 
+[Extent1].[Status] AS [Status], 
+[Extent1].[UserLevel] AS [UserLevel], 
+[Extent1].[Store_Id] AS [Store_Id], 
+[Extent1].[Region_Id] AS [Region_Id], 
+[Extent1].[Logo] AS [Logo], 
+[Extent1].[Description] AS [Description], 
+[Extent1].[Gender] AS [Gender]
+FROM [dbo].[User] AS [Extent1]
+WHERE [Extent1].[Name] = @p__linq__0
+-- p__linq__0 (dbtype=String, size=-1, direction=Input) = "admintest"
+2013-01-23 17:09:56,867 [13] - SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Name] AS [Name], 
+[Extent1].[Password] AS [Password], 
+[Extent1].[Nickname] AS [Nickname], 
+[Extent1].[CreatedUser] AS [CreatedUser], 
+[Extent1].[CreatedDate] AS [CreatedDate], 
+[Extent1].[UpdatedUser] AS [UpdatedUser], 
+[Extent1].[UpdatedDate] AS [UpdatedDate], 
+[Extent1].[LastLoginDate] AS [LastLoginDate], 
+[Extent1].[Mobile] AS [Mobile], 
+[Extent1].[EMail] AS [EMail], 
+[Extent1].[Status] AS [Status], 
+[Extent1].[UserLevel] AS [UserLevel], 
+[Extent1].[Store_Id] AS [Store_Id], 
+[Extent1].[Region_Id] AS [Region_Id], 
+[Extent1].[Logo] AS [Logo], 
+[Extent1].[Description] AS [Description], 
+[Extent1].[Gender] AS [Gender]
+FROM [dbo].[User] AS [Extent1]
+WHERE [Extent1].[Name] = @p__linq__0
+-- p__linq__0 (dbtype=String, size=-1, direction=Input) = "AdminTest"
+2013-01-23 17:09:56,992 [13] - SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Name] AS [Name], 
+[Extent1].[Description] AS [Description], 
+[Extent1].[Location] AS [Location], 
+[Extent1].[Tel] AS [Tel], 
+[Extent1].[CreatedUser] AS [CreatedUser], 
+[Extent1].[CreatedDate] AS [CreatedDate], 
+[Extent1].[UpdatedDate] AS [UpdatedDate], 
+[Extent1].[UpdatedUser] AS [UpdatedUser], 
+[Extent1].[Longitude] AS [Longitude], 
+[Extent1].[Latitude] AS [Latitude], 
+[Extent1].[Group_Id] AS [Group_Id], 
+[Extent1].[Status] AS [Status], 
+[Extent1].[Region_Id] AS [Region_Id], 
+[Extent1].[StoreLevel] AS [StoreLevel]
+FROM [dbo].[Store] AS [Extent1]
+WHERE [Extent1].[Id] = @p0
+-- p0 (dbtype=Int32, size=0, direction=Input) = 0
+2013-01-23 17:09:57,124 [13] - SELECT 
+[Extent1].[Id] AS [Id], 
+[Extent1].[AccountType] AS [AccountType], 
+[Extent1].[AccountId] AS [AccountId], 
+[Extent1].[Amount] AS [Amount], 
+[Extent1].[User_Id] AS [User_Id], 
+[Extent1].[CreatedUser] AS [CreatedUser], 
+[Extent1].[CreatedDate] AS [CreatedDate], 
+[Extent1].[UpdatedUser] AS [UpdatedUser], 
+[Extent1].[UpdatedDate] AS [UpdatedDate], 
+[Extent1].[Status] AS [Status]
+FROM [dbo].[UserAccount] AS [Extent1]
+WHERE [Extent1].[User_Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 4
+2013-01-23 17:09:57,263 [13] - SELECT 
+[Extent1].[Role_Id] AS [Role_Id], 
+[Extent1].[User_Id] AS [User_Id], 
+[Extent1].[Role_Name] AS [Role_Name], 
+[Extent1].[Role_Description] AS [Role_Description], 
+[Extent1].[Role_Val] AS [Role_Val]
+FROM [dbo].[VUserRole] AS [Extent1]
+WHERE [Extent1].[User_Id] = @p__linq__0
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 4
+2013-01-23 17:10:06,510 [13] - SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[Resources] AS [Extent1]
+	WHERE 1 = [Extent1].[Status]
+)  AS [GroupBy1]
+2013-01-23 17:10:06,928 [13] - SELECT TOP (20) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[SourceId] AS [SourceId], 
+[Extent1].[SourceType] AS [SourceType], 
+[Extent1].[Name] AS [Name], 
+[Extent1].[Domain] AS [Domain], 
+[Extent1].[CreatedUser] AS [CreatedUser], 
+[Extent1].[CreatedDate] AS [CreatedDate], 
+[Extent1].[UpdatedDate] AS [UpdatedDate], 
+[Extent1].[UpdatedUser] AS [UpdatedUser], 
+[Extent1].[IsDefault] AS [IsDefault], 
+[Extent1].[SortOrder] AS [SortOrder], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[Status] AS [Status], 
+[Extent1].[Size] AS [Size], 
+[Extent1].[Width] AS [Width], 
+[Extent1].[Height] AS [Height], 
+[Extent1].[ContentSize] AS [ContentSize], 
+[Extent1].[ExtName] AS [ExtName]
+FROM [dbo].[Resources] AS [Extent1]
+WHERE 1 = [Extent1].[Status]
+ORDER BY [Extent1].[SourceType] ASC, [Extent1].[SourceId] ASC, [Extent1].[SortOrder] ASC
+2013-01-23 17:10:23,757 [6] - SELECT TOP (2) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[SourceId] AS [SourceId], 
+[Extent1].[SourceType] AS [SourceType], 
+[Extent1].[Name] AS [Name], 
+[Extent1].[Domain] AS [Domain], 
+[Extent1].[CreatedUser] AS [CreatedUser], 
+[Extent1].[CreatedDate] AS [CreatedDate], 
+[Extent1].[UpdatedDate] AS [UpdatedDate], 
+[Extent1].[UpdatedUser] AS [UpdatedUser], 
+[Extent1].[IsDefault] AS [IsDefault], 
+[Extent1].[SortOrder] AS [SortOrder], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[Status] AS [Status], 
+[Extent1].[Size] AS [Size], 
+[Extent1].[Width] AS [Width], 
+[Extent1].[Height] AS [Height], 
+[Extent1].[ContentSize] AS [ContentSize], 
+[Extent1].[ExtName] AS [ExtName]
+FROM [dbo].[Resources] AS [Extent1]
+WHERE [Extent1].[Id] = @p0
+-- p0 (dbtype=Int32, size=0, direction=Input) = 463
+2013-01-23 17:10:33,936 [13] - SELECT 
+[GroupBy1].[A1] AS [C1]
+FROM ( SELECT 
+	COUNT(1) AS [A1]
+	FROM [dbo].[Promotion] AS [Extent1]
+	WHERE 1 = [Extent1].[Status]
+)  AS [GroupBy1]
+2013-01-23 17:10:34,090 [13] - SELECT TOP (20) 
+[Extent1].[Id] AS [Id], 
+[Extent1].[Name] AS [Name], 
+[Extent1].[Description] AS [Description], 
+[Extent1].[CreatedUser] AS [CreatedUser], 
+[Extent1].[CreatedDate] AS [CreatedDate], 
+[Extent1].[UpdatedDate] AS [UpdatedDate], 
+[Extent1].[UpdatedUser] AS [UpdatedUser], 
+[Extent1].[StartDate] AS [StartDate], 
+[Extent1].[EndDate] AS [EndDate], 
+[Extent1].[Status] AS [Status], 
+[Extent1].[LikeCount] AS [LikeCount], 
+[Extent1].[FavoriteCount] AS [FavoriteCount], 
+[Extent1].[ShareCount] AS [ShareCount], 
+[Extent1].[InvolvedCount] AS [InvolvedCount], 
+[Extent1].[Store_Id] AS [Store_Id], 
+[Extent1].[RecommendUser] AS [RecommendUser], 
+[Extent1].[RecommendSourceId] AS [RecommendSourceId], 
+[Extent1].[RecommendSourceType] AS [RecommendSourceType], 
+[Extent1].[Tag_Id] AS [Tag_Id]
+FROM [dbo].[Promotion] AS [Extent1]
+WHERE 1 = [Extent1].[Status]
+ORDER BY [Extent1].[StartDate] DESC
+2013-01-23 17:10:34,291 [13] - SELECT 
+[Extent1].[Id] AS [Id], 
+[Extent1].[SourceId] AS [SourceId], 
+[Extent1].[SourceType] AS [SourceType], 
+[Extent1].[Name] AS [Name], 
+[Extent1].[Domain] AS [Domain], 
+[Extent1].[CreatedUser] AS [CreatedUser], 
+[Extent1].[CreatedDate] AS [CreatedDate], 
+[Extent1].[UpdatedDate] AS [UpdatedDate], 
+[Extent1].[UpdatedUser] AS [UpdatedUser], 
+[Extent1].[IsDefault] AS [IsDefault], 
+[Extent1].[SortOrder] AS [SortOrder], 
+[Extent1].[Type] AS [Type], 
+[Extent1].[Status] AS [Status], 
+[Extent1].[Size] AS [Size], 
+[Extent1].[Width] AS [Width], 
+[Extent1].[Height] AS [Height], 
+[Extent1].[ContentSize] AS [ContentSize], 
+[Extent1].[ExtName] AS [ExtName]
+FROM [dbo].[Resources] AS [Extent1]
+WHERE (1 = [Extent1].[Status]) AND ([Extent1].[SourceType] = @p__linq__0) AND ( EXISTS (SELECT 
+	1 AS [C1]
+	FROM  (SELECT 
+		[UnionAll18].[C1] AS [C1]
+		FROM  (SELECT 
+			[UnionAll17].[C1] AS [C1]
+			FROM  (SELECT 
+				[UnionAll16].[C1] AS [C1]
+				FROM  (SELECT 
+					[UnionAll15].[C1] AS [C1]
+					FROM  (SELECT 
+						[UnionAll14].[C1] AS [C1]
+						FROM  (SELECT 
+							[UnionAll13].[C1] AS [C1]
+							FROM  (SELECT 
+								[UnionAll12].[C1] AS [C1]
+								FROM  (SELECT 
+									[UnionAll11].[C1] AS [C1]
+									FROM  (SELECT 
+										[UnionAll10].[C1] AS [C1]
+										FROM  (SELECT 
+											[UnionAll9].[C1] AS [C1]
+											FROM  (SELECT 
+												[UnionAll8].[C1] AS [C1]
+												FROM  (SELECT 
+													[UnionAll7].[C1] AS [C1]
+													FROM  (SELECT 
+														[UnionAll6].[C1] AS [C1]
+														FROM  (SELECT 
+															[UnionAll5].[C1] AS [C1]
+															FROM  (SELECT 
+																[UnionAll4].[C1] AS [C1]
+																FROM  (SELECT 
+																	[UnionAll3].[C1] AS [C1]
+																	FROM  (SELECT 
+																		[UnionAll2].[C1] AS [C1]
+																		FROM  (SELECT 
+																			[UnionAll1].[C1] AS [C1]
+																			FROM  (SELECT 
+																				9 AS [C1]
+																				FROM  ( SELECT 1 AS X ) AS [SingleRowTable1]
+																			UNION ALL
+																				SELECT 
+																				10 AS [C1]
+																				FROM  ( SELECT 1 AS X ) AS [SingleRowTable2]) AS [UnionAll1]
+																		UNION ALL
+																			SELECT 
+																			70 AS [C1]
+																			FROM  ( SELECT 1 AS X ) AS [SingleRowTable3]) AS [UnionAll2]
+																	UNION ALL
+																		SELECT 
+																		71 AS [C1]
+																		FROM  ( SELECT 1 AS X ) AS [SingleRowTable4]) AS [UnionAll3]
+																UNION ALL
+																	SELECT 
+																	129 AS [C1]
+																	FROM  ( SELECT 1 AS X ) AS [SingleRowTable5]) AS [UnionAll4]
+															UNION ALL
+																SELECT 
+																119 AS [C1]
+																FROM  ( SELECT 1 AS X ) AS [SingleRowTable6]) AS [UnionAll5]
+														UNION ALL
+															SELECT 
+															85 AS [C1]
+															FROM  ( SELECT 1 AS X ) AS [SingleRowTable7]) AS [UnionAll6]
+													UNION ALL
+														SELECT 
+														116 AS [C1]
+														FROM  ( SELECT 1 AS X ) AS [SingleRowTable8]) AS [UnionAll7]
+												UNION ALL
+													SELECT 
+													86 AS [C1]
+													FROM  ( SELECT 1 AS X ) AS [SingleRowTable9]) AS [UnionAll8]
+											UNION ALL
+												SELECT 
+												96 AS [C1]
+												FROM  ( SELECT 1 AS X ) AS [SingleRowTable10]) AS [UnionAll9]
+										UNION ALL
+											SELECT 
+											115 AS [C1]
+											FROM  ( SELECT 1 AS X ) AS [SingleRowTable11]) AS [UnionAll10]
+									UNION ALL
+										SELECT 
+										114 AS [C1]
+										FROM  ( SELECT 1 AS X ) AS [SingleRowTable12]) AS [UnionAll11]
+								UNION ALL
+									SELECT 
+									90 AS [C1]
+									FROM  ( SELECT 1 AS X ) AS [SingleRowTable13]) AS [UnionAll12]
+							UNION ALL
+								SELECT 
+								113 AS [C1]
+								FROM  ( SELECT 1 AS X ) AS [SingleRowTable14]) AS [UnionAll13]
+						UNION ALL
+							SELECT 
+							69 AS [C1]
+							FROM  ( SELECT 1 AS X ) AS [SingleRowTable15]) AS [UnionAll14]
+					UNION ALL
+						SELECT 
+						110 AS [C1]
+						FROM  ( SELECT 1 AS X ) AS [SingleRowTable16]) AS [UnionAll15]
+				UNION ALL
+					SELECT 
+					109 AS [C1]
+					FROM  ( SELECT 1 AS X ) AS [SingleRowTable17]) AS [UnionAll16]
+			UNION ALL
+				SELECT 
+				108 AS [C1]
+				FROM  ( SELECT 1 AS X ) AS [SingleRowTable18]) AS [UnionAll17]
+		UNION ALL
+			SELECT 
+			95 AS [C1]
+			FROM  ( SELECT 1 AS X ) AS [SingleRowTable19]) AS [UnionAll18]
+	UNION ALL
+		SELECT 
+		94 AS [C1]
+		FROM  ( SELECT 1 AS X ) AS [SingleRowTable20]) AS [UnionAll19]
+	WHERE [UnionAll19].[C1] = [Extent1].[SourceId]
+))
+-- p__linq__0 (dbtype=Int32, size=0, direction=Input) = 2

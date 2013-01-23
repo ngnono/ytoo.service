@@ -1,0 +1,85 @@
+------------------------------------------------------------
+2013-01-23 17:17:47,451 [5] - http://localhost:10483/ [ 2013/1/23 17:17:47 ] 
+
+[ Headers ]
+
+Connection : Keep-Alive
+Accept : text/html, application/xhtml+xml, */*
+Accept-Encoding : gzip, deflate
+Accept-Language : zh-CN
+Host : localhost:10483
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+
+2013-01-23 17:17:48,067 [6] - http://localhost:10483/favicon.ico [ 2013/1/23 17:17:48 ] 
+
+[ Headers ]
+
+Connection : Keep-Alive
+Accept : */*
+Accept-Encoding : gzip, deflate
+Host : localhost:10483
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+
+------------------------------------------------------------
+------------------------------------------------------------
+2013-01-23 17:26:06,509 [6] - http://localhost:10483/ [ 2013/1/23 17:26:06 ] 
+
+[ Headers ]
+
+Connection : Keep-Alive
+Accept : text/html, application/xhtml+xml, */*
+Accept-Encoding : gzip, deflate
+Accept-Language : zh-CN
+Host : localhost:10483
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+
+------------------------------------------------------------
+2013-01-23 17:30:08,342 [14] - http://localhost:10483/customer/portrait/create [ 2013/1/23 17:30:08 ] 
+
+[ Headers ]
+
+Cache-Control : no-cache
+Connection : Keep-Alive
+Content-Length : 3801
+Content-Type : multipart/form-data; boundary=---------------------------7dd27e6210d98
+Accept : text/html, application/xhtml+xml, */*
+Accept-Encoding : gzip, deflate
+Accept-Language : zh-CN
+Host : localhost:10483
+Referer : http://localhost:10488/TestCustomer/create
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+Name : testfromlocal
+Description : test
+StartDate : 
+EndDate : 
+uid : 1d28c9ef01a5ec985741a4d53ecabfbd
+sign : 16323A8EB8171CA007EF44A072389DC9
+client_version : 1.0
+token : vJQICst1Gg9E3s9XarQqFzQfXl5tYAufDUhbtxnDqecIMXy6ctfu7xd2Qhi2vHOO
+brandids : 1,2,3
+Upload : Upload
+

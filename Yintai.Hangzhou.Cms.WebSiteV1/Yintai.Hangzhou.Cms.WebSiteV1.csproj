@@ -52,38 +52,32 @@
       <HintPath>..\_dll\EFTracingProvider.dll</HintPath>
     </Reference>
     <Reference Include="EmitMapper">
-      <HintPath>..\..\Yintai.Architecture\_dll\EmitMapper.dll</HintPath>
+      <HintPath>..\_dll\EmitMapper.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Yintai.Architecture\_dll\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\Yintai.Architecture\_dll\HtmlAgilityPack.dll</HintPath>
+      <HintPath>..\_dll\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="LinqKit">
-      <HintPath>..\..\Yintai.Architecture\_dll\LinqKit.dll</HintPath>
+      <HintPath>..\_dll\LinqKit.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\Yintai.Architecture\_dll\log4net.dll</HintPath>
+      <HintPath>..\..\Yintai.Hangzhou\_dll\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Yintai.Architecture\_dll\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <HintPath>..\_dll\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Yintai.Architecture\_dll\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\..\Yintai.Architecture\_dll\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration">
-      <HintPath>..\..\Yintai.Architecture\_dll\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <HintPath>..\_dll\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
-      <HintPath>..\..\Yintai.Architecture\_dll\Ninject.dll</HintPath>
+      <HintPath>..\_dll\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System" />
@@ -115,9 +109,6 @@
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.3.0.20105.1\lib\net40\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Providers">
-      <HintPath>..\packages\Microsoft.AspNet.Providers.Core.1.1\lib\net40\System.Web.Providers.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>

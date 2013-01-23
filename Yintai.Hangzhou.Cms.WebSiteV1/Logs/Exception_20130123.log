@@ -1,0 +1,176 @@
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+2013-01-23 17:01:23,318 [12] - Global:
+2013-01-23 17:01:23,318 [12] - System.InvalidOperationException: The IControllerFactory 'System.Web.Mvc.DefaultControllerFactory' did not return a controller for the name 'account'.
+   在 System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<BeginProcessRequest>b__2()
+   在 System.Web.Mvc.SecurityUtil.<>c__DisplayClassb`1.<ProcessInApplicationTrust>b__a()
+   在 System.Web.Mvc.SecurityUtil.<GetCallInAppTrustThunk>b__0(Action f)
+   在 System.Web.Mvc.SecurityUtil.ProcessInApplicationTrust(Action action)
+   在 System.Web.Mvc.SecurityUtil.ProcessInApplicationTrust[TResult](Func`1 func)
+   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+------------------------------------------------------------
+2013-01-23 17:06:31,756 [5] - Global:
+2013-01-23 17:06:31,757 [5] - System.IO.FileNotFoundException: 未能加载文件或程序集“LinqKit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc217f8844052a91”或它的某一个依赖项。系统找不到指定的文件。
+文件名:“LinqKit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc217f8844052a91”
+   在 Yintai.Architecture.Common.Data.EF.EFRepository`1.Get(Expression`1 filter)
+   在 Yintai.Hangzhou.Repository.Impl.CustomerRepository.GetItem(String name, String password) 位置 d:\Project\Git\ytoo.service\Yintai.Hangzhou.Repository\Impl\CustomerRepository.cs:行号 108
+   在 Yintai.Hangzhou.Service.Impl.UserService.Get(String userName, String password) 位置 d:\Project\Git\ytoo.service\Yintai.Hangzhou.Service\Impl\UserService.cs:行号 65
+   在 Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers.AccountController.Login(FormCollection formCollection, LoginViewModel model, String returnUrl) 位置 d:\Project\Git\ytoo.service\Yintai.Hangzhou.Cms.WebSiteCoreV1\Controllers\AccountController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass15.<InvokeActionMethodWithFilters>b__12()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodFilter(IActionFilter filter, ActionExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass15.<>c__DisplayClass17.<InvokeActionMethodWithFilters>b__14()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodWithFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.ControllerBase.System.Web.Mvc.IController.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.Mvc.SecurityUtil.<GetCallInAppTrustThunk>b__0(Action f)
+   在 System.Web.Mvc.SecurityUtil.ProcessInApplicationTrust(Action action)
+   在 System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+=== 预绑定状态信息 ===
+日志: 用户 = WIN-VG\义
+日志: DisplayName = LinqKit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc217f8844052a91
+ (Fully-specified)
+日志: Appbase = file:///D:/Project/Git/ytoo.service/Yintai.Hangzhou.Cms.WebSiteV1/
+日志: 初始 PrivatePath = D:\Project\Git\ytoo.service\Yintai.Hangzhou.Cms.WebSiteV1\bin
+调用程序集: Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null。
+===
+日志: 此绑定从 default 加载上下文开始。
+日志: 正在使用应用程序配置文件: D:\Project\Git\ytoo.service\Yintai.Hangzhou.Cms.WebSiteV1\web.config
+日志: 使用主机配置文件: 
+日志: 使用 C:\Windows\Microsoft.NET\Framework\v4.0.30319\config\machine.config 的计算机配置文件。
+日志: 策略后引用: LinqKit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc217f8844052a91
+日志: 尝试下载新的 URL file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/Temporary ASP.NET Files/root/0995c996/8828b882/LinqKit.DLL。
+日志: 尝试下载新的 URL file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/Temporary ASP.NET Files/root/0995c996/8828b882/LinqKit/LinqKit.DLL。
+日志: 尝试下载新的 URL file:///D:/Project/Git/ytoo.service/Yintai.Hangzhou.Cms.WebSiteV1/bin/LinqKit.DLL。
+日志: 尝试下载新的 URL file:///D:/Project/Git/ytoo.service/Yintai.Hangzhou.Cms.WebSiteV1/bin/LinqKit/LinqKit.DLL。
+日志: 尝试下载新的 URL file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/Temporary ASP.NET Files/root/0995c996/8828b882/LinqKit.EXE。
+日志: 尝试下载新的 URL file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/Temporary ASP.NET Files/root/0995c996/8828b882/LinqKit/LinqKit.EXE。
+日志: 尝试下载新的 URL file:///D:/Project/Git/ytoo.service/Yintai.Hangzhou.Cms.WebSiteV1/bin/LinqKit.EXE。
+日志: 尝试下载新的 URL file:///D:/Project/Git/ytoo.service/Yintai.Hangzhou.Cms.WebSiteV1/bin/LinqKit/LinqKit.EXE。
+
+2013-01-23 17:06:31,874 [6] - Global:
+2013-01-23 17:06:31,874 [6] - System.IO.FileNotFoundException: 未能加载文件或程序集“LinqKit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc217f8844052a91”或它的某一个依赖项。系统找不到指定的文件。
+文件名:“LinqKit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc217f8844052a91”
+   在 Yintai.Architecture.Common.Data.EF.EFRepository`1.Get(Expression`1 filter)
+   在 Yintai.Hangzhou.Repository.Impl.CustomerRepository.GetItem(String name, String password) 位置 d:\Project\Git\ytoo.service\Yintai.Hangzhou.Repository\Impl\CustomerRepository.cs:行号 108
+   在 Yintai.Hangzhou.Service.Impl.UserService.Get(String userName, String password) 位置 d:\Project\Git\ytoo.service\Yintai.Hangzhou.Service\Impl\UserService.cs:行号 65
+   在 Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers.AccountController.Login(FormCollection formCollection, LoginViewModel model, String returnUrl) 位置 d:\Project\Git\ytoo.service\Yintai.Hangzhou.Cms.WebSiteCoreV1\Controllers\AccountController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass15.<InvokeActionMethodWithFilters>b__12()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodFilter(IActionFilter filter, ActionExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass15.<>c__DisplayClass17.<InvokeActionMethodWithFilters>b__14()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodWithFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.ControllerBase.System.Web.Mvc.IController.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.Mvc.SecurityUtil.<GetCallInAppTrustThunk>b__0(Action f)
+   在 System.Web.Mvc.SecurityUtil.ProcessInApplicationTrust(Action action)
+   在 System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+警告: 程序集绑定日志记录被关闭。
+要启用程序集绑定失败日志记录，请将注册表值 [HKLM\Software\Microsoft\Fusion!EnableLog] (DWORD)设置为 1。
+注意: 会有一些与程序集绑定失败日志记录关联的性能损失。
+要关闭此功能，请移除注册表值 [HKLM\Software\Microsoft\Fusion!EnableLog]。
+
+------------------------------------------------------------
+------------------------------------------------------------
+2013-01-23 17:08:06,892 [11] - Global:
+2013-01-23 17:08:06,893 [11] - System.IO.FileNotFoundException: 未能加载文件或程序集“LinqKit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc217f8844052a91”或它的某一个依赖项。系统找不到指定的文件。
+文件名:“LinqKit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc217f8844052a91”
+   在 Yintai.Architecture.Common.Data.EF.EFRepository`1.Get(Expression`1 filter)
+   在 Yintai.Hangzhou.Repository.Impl.CustomerRepository.GetItem(String name, String password) 位置 d:\Project\Git\ytoo.service\Yintai.Hangzhou.Repository\Impl\CustomerRepository.cs:行号 108
+   在 Yintai.Hangzhou.Service.Impl.UserService.Get(String userName, String password) 位置 d:\Project\Git\ytoo.service\Yintai.Hangzhou.Service\Impl\UserService.cs:行号 65
+   在 Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers.AccountController.Login(FormCollection formCollection, LoginViewModel model, String returnUrl) 位置 d:\Project\Git\ytoo.service\Yintai.Hangzhou.Cms.WebSiteCoreV1\Controllers\AccountController.cs:行号 32
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass15.<InvokeActionMethodWithFilters>b__12()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodFilter(IActionFilter filter, ActionExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass15.<>c__DisplayClass17.<InvokeActionMethodWithFilters>b__14()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodWithFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.ControllerBase.System.Web.Mvc.IController.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.End(IAsyncResult asyncResult, Object tag)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.Mvc.SecurityUtil.<GetCallInAppTrustThunk>b__0(Action f)
+   在 System.Web.Mvc.SecurityUtil.ProcessInApplicationTrust(Action action)
+   在 System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+=== 预绑定状态信息 ===
+日志: 用户 = WIN-VG\义
+日志: DisplayName = LinqKit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc217f8844052a91
+ (Fully-specified)
+日志: Appbase = file:///D:/Project/Git/ytoo.service/Yintai.Hangzhou.Cms.WebSiteV1/
+日志: 初始 PrivatePath = D:\Project\Git\ytoo.service\Yintai.Hangzhou.Cms.WebSiteV1\bin
+调用程序集: Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null。
+===
+日志: 此绑定从 default 加载上下文开始。
+日志: 正在使用应用程序配置文件: D:\Project\Git\ytoo.service\Yintai.Hangzhou.Cms.WebSiteV1\web.config
+日志: 使用主机配置文件: 
+日志: 使用 C:\Windows\Microsoft.NET\Framework\v4.0.30319\config\machine.config 的计算机配置文件。
+日志: 策略后引用: LinqKit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc217f8844052a91
+日志: 尝试下载新的 URL file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/Temporary ASP.NET Files/root/0995c996/8828b882/LinqKit.DLL。
+日志: 尝试下载新的 URL file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/Temporary ASP.NET Files/root/0995c996/8828b882/LinqKit/LinqKit.DLL。
+日志: 尝试下载新的 URL file:///D:/Project/Git/ytoo.service/Yintai.Hangzhou.Cms.WebSiteV1/bin/LinqKit.DLL。
+日志: 尝试下载新的 URL file:///D:/Project/Git/ytoo.service/Yintai.Hangzhou.Cms.WebSiteV1/bin/LinqKit/LinqKit.DLL。
+日志: 尝试下载新的 URL file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/Temporary ASP.NET Files/root/0995c996/8828b882/LinqKit.EXE。
+日志: 尝试下载新的 URL file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/Temporary ASP.NET Files/root/0995c996/8828b882/LinqKit/LinqKit.EXE。
+日志: 尝试下载新的 URL file:///D:/Project/Git/ytoo.service/Yintai.Hangzhou.Cms.WebSiteV1/bin/LinqKit.EXE。
+日志: 尝试下载新的 URL file:///D:/Project/Git/ytoo.service/Yintai.Hangzhou.Cms.WebSiteV1/bin/LinqKit/LinqKit.EXE。
+
+------------------------------------------------------------
+------------------------------------------------------------

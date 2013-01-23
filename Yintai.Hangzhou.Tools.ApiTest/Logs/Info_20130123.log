@@ -1,0 +1,123 @@
+------------------------------------------------------------
+------------------------------------------------------------
+2013-01-23 17:26:29,066 [6] - http://localhost:10488/ [ 2013/1/23 17:26:29 ] 
+
+[ Headers ]
+
+Connection : Keep-Alive
+Accept : text/html, application/xhtml+xml, */*
+Accept-Encoding : gzip, deflate
+Accept-Language : zh-CN
+Host : localhost:10488
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+
+2013-01-23 17:26:29,545 [5] - http://localhost:10488/favicon.ico [ 2013/1/23 17:26:29 ] 
+
+[ Headers ]
+
+Connection : Keep-Alive
+Accept : */*
+Accept-Encoding : gzip, deflate
+Host : localhost:10488
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+
+------------------------------------------------------------
+2013-01-23 17:27:48,800 [10] - http://localhost:10488/TestCustomer/create [ 2013/1/23 17:27:48 ] 
+
+[ Headers ]
+
+Connection : Keep-Alive
+Accept : text/html, application/xhtml+xml, */*
+Accept-Encoding : gzip, deflate
+Accept-Language : zh-CN
+Host : localhost:10488
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+
+2013-01-23 17:28:07,912 [13] - http://localhost:10488/Content/Site.css [ 2013/1/23 17:28:07 ] 
+
+[ Headers ]
+
+Connection : Keep-Alive
+Accept : text/css
+Accept-Encoding : gzip, deflate
+Accept-Language : zh-CN
+Host : localhost:10488
+Referer : http://localhost:10488/TestCustomer/create
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+
+2013-01-23 17:28:07,920 [10] - http://localhost:10488/Scripts/modernizr-1.7.min.js [ 2013/1/23 17:28:07 ] 
+
+[ Headers ]
+
+Connection : Keep-Alive
+Accept : application/javascript, */*;q=0.8
+Accept-Encoding : gzip, deflate
+Accept-Language : zh-CN
+Host : localhost:10488
+Referer : http://localhost:10488/TestCustomer/create
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+
+2013-01-23 17:28:07,921 [9] - http://localhost:10488/Scripts/jquery-1.5.1.min.js [ 2013/1/23 17:28:07 ] 
+
+[ Headers ]
+
+Connection : Keep-Alive
+Accept : application/javascript, */*;q=0.8
+Accept-Encoding : gzip, deflate
+Accept-Language : zh-CN
+Host : localhost:10488
+Referer : http://localhost:10488/TestCustomer/create
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+
+2013-01-23 17:28:08,127 [9] - http://localhost:10488/favicon.ico [ 2013/1/23 17:28:08 ] 
+
+[ Headers ]
+
+Connection : Keep-Alive
+Accept : */*
+Accept-Encoding : gzip, deflate
+Host : localhost:10488
+User-Agent : Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; Touch; ASU2JS)
+
+[ QueryString ]
+
+
+[ Form ]
+
+
