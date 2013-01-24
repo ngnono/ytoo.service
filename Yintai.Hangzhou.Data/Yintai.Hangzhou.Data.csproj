@@ -96,6 +96,7 @@
     <Compile Include="Models\Mapping\FeedbackMap.cs" />
     <Compile Include="Models\Mapping\GroupMap.cs" />
     <Compile Include="Models\Mapping\LikeMap.cs" />
+    <Compile Include="Models\Mapping\NotificationLogMap.cs" />
     <Compile Include="Models\Mapping\OutsiteUserMap.cs" />
     <Compile Include="Models\Mapping\PointHistoryMap.cs" />
     <Compile Include="Models\Mapping\ProductMap.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Models\Mapping\VerifyCodeMap.cs" />
     <Compile Include="Models\Mapping\VUserMap.cs" />
     <Compile Include="Models\Mapping\VUserRoleMap.cs" />
+    <Compile Include="Models\NotificationLog.cs" />
     <Compile Include="Models\OutsiteUser.cs" />
     <Compile Include="Models\PointHistory.cs" />
     <Compile Include="Models\Product.cs" />

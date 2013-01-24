@@ -5,7 +5,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FSNotificationService
+namespace Yintai.Hangzhou.Apns.FSNotificationService
 {
     static class Program
     {
@@ -14,12 +14,18 @@ namespace FSNotificationService
         /// </summary>
         static void Main()
         {
-            ServiceBase[] ServicesToRun;
+#if DEBUG
+            new NFService().Run();
+#else
+           ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
             { 
-                new NFService() 
+                new NFService()
             };
             ServiceBase.Run(ServicesToRun);
+#endif
+
+
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Yintai.Hangzhou.Data.Models
         }
 
 		public YintaiHangzhouContext()
-			: base("Name=YintaiHangzhouContext")
+            : base("Name=YintaiHangzhouContext")
 		{
 		}
 
@@ -30,12 +30,8 @@ namespace Yintai.Hangzhou.Data.Models
 
 		public YintaiHangzhouContext(string nameOrConnectionString)
             : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
-		{
-		    DbContext n = new YintaiHangzhouContext();
-            
-
-		    //= MergeOption.OverwriteChanges;
-		}
+        {
+        }
 
         public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
             : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
@@ -59,8 +55,6 @@ namespace Yintai.Hangzhou.Data.Models
         }
 
         #endregion
-
-       
 
 		#region Tracing Extensions
 
@@ -121,14 +115,12 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<FeedbackEntity> Feedbacks { get; set; }
         public DbSet<GroupEntity> Groups { get; set; }
         public DbSet<LikeEntity> Likes { get; set; }
+        public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
         public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
-        public DbSet<ProductTagRelationEntity> ProductTagRelations { get; set; }
         public DbSet<PromotionEntity> Promotions { get; set; }
         public DbSet<PromotionBrandRelationEntity> PromotionBrandRelations { get; set; }
-        public DbSet<Ref_EnumerationEntity> Ref_Enumeration { get; set; }
-        public DbSet<Ref_EnumerationMemberEntity> Ref_EnumerationMember { get; set; }
         public DbSet<RemindEntity> Reminds { get; set; }
         public DbSet<ResourceEntity> Resources { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
@@ -160,14 +152,12 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new FeedbackEntityMap());
             modelBuilder.Configurations.Add(new GroupEntityMap());
             modelBuilder.Configurations.Add(new LikeEntityMap());
+            modelBuilder.Configurations.Add(new NotificationLogEntityMap());
             modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());
             modelBuilder.Configurations.Add(new ProductEntityMap());
-            modelBuilder.Configurations.Add(new ProductTagRelationEntityMap());
             modelBuilder.Configurations.Add(new PromotionEntityMap());
             modelBuilder.Configurations.Add(new PromotionBrandRelationEntityMap());
-            modelBuilder.Configurations.Add(new Ref_EnumerationEntityMap());
-            modelBuilder.Configurations.Add(new Ref_EnumerationMemberEntityMap());
             modelBuilder.Configurations.Add(new RemindEntityMap());
             modelBuilder.Configurations.Add(new ResourceEntityMap());
             modelBuilder.Configurations.Add(new RoleEntityMap());
@@ -185,44 +175,10 @@ namespace Yintai.Hangzhou.Data.Models
 
 		public override int SaveChanges()
 		{
-			//在更新前清除掉Local中的数据
-			var t =  base.SaveChanges();
+			var c =  base.SaveChanges();
 
-            #region clear local
-
-            //Set<BrandEntity>().Local.Clear();
-            //Set<CommentEntity>().Local.Clear();
-            //Set<CouponHistoryEntity>().Local.Clear();
-            //Set<DeviceLogEntity>().Local.Clear();
-            //Set<DeviceTokenEntity>().Local.Clear();
-            //Set<FavoriteEntity>().Local.Clear();
-            //Set<FeedbackEntity>().Local.Clear();
-            //Set<GroupEntity>().Local.Clear();
-            //Set<LikeEntity>().Local.Clear();
-            //Set<OutsiteUserEntity>().Local.Clear();
-            //Set<PointHistoryEntity>().Local.Clear();
-            //Set<ProductEntity>().Local.Clear();
-            //Set<ProductTagRelationEntity>().Local.Clear();
-            //Set<PromotionEntity>().Local.Clear();
-            //Set<PromotionBrandRelationEntity>().Local.Clear();
-            //Set<Ref_EnumerationEntity>().Local.Clear();
-            //Set<Ref_EnumerationMemberEntity>().Local.Clear();
-            //Set<RemindEntity>().Local.Clear();
-            //Set<ResourceEntity>().Local.Clear();
-            //Set<RoleEntity>().Local.Clear();
-            //Set<ShareHistoryEntity>().Local.Clear();
-            //Set<StoreEntity>().Local.Clear();
-            //Set<TagEntity>().Local.Clear();
-            //Set<TimeSeedEntity>().Local.Clear();
-            //Set<UserEntity>().Local.Clear();
-            //Set<UserAccountEntity>().Local.Clear();
-            //Set<UserRoleEntity>().Local.Clear();
-            //Set<VerifyCodeEntity>().Local.Clear();
-            //Set<VUserEntity>().Local.Clear();
-            //Set<VUserRoleEntity>().Local.Clear();
-            #endregion
-
-		    return t;
+		
+			return c;
 		}
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace FSNotificationService
+﻿using Yintai.Architecture.Common.Logger;
+using Yintai.Architecture.Framework.ServiceLocation;
+namespace Yintai.Hangzhou.Apns.FSNotificationService
 {
     partial class NFService
     {
@@ -30,6 +32,7 @@
         {
             components = new System.ComponentModel.Container();
             this.ServiceName = "Service1";
+            ServiceLocator.Current.RegisterSingleton<ILog, Log4NetLog>();
         }
 
         #endregion

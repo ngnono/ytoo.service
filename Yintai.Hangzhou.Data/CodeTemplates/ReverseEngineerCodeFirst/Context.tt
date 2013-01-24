@@ -144,21 +144,6 @@ namespace <#= code.EscapeNamespace(efHost.Namespace) #>
 		{
 			var c =  base.SaveChanges();
 
-			//在更新前清除掉Local中的数据
-			#region clear local
-
-		<#
-		/*
-    foreach (var set in efHost.EntityContainer.BaseEntitySets.OfType<EntitySet>())
-    {
-#>
-			//Set<<#= set.ElementType.Name #>Entity>().Local.Clear();
-<#
-    }
-#>
-	//	*/
-			#endregion
-
 			return c;
 		}
     }
