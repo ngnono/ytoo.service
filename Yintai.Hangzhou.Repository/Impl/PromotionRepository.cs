@@ -41,24 +41,24 @@ namespace Yintai.Hangzhou.Repository.Impl
             switch (sort)
             {
                 case PromotionSortOrder.CreatedDateDesc:
-                    orderBy = v => v.OrderByDescending(s => s.CreatedDate);
+                    orderBy = v => v.OrderByDescending(s => s.IsTop).ThenByDescending(s => s.CreatedDate);
                     break;
                 case PromotionSortOrder.Near:
                     break;
                 case PromotionSortOrder.Hot://最热
-                    orderBy = v => v.OrderByDescending(s => s.LikeCount);
+                    orderBy = v => v.OrderByDescending(s => s.IsTop).ThenByDescending(s => s.LikeCount);
                     break;
                 //最新
                 case PromotionSortOrder.New:
-                    orderBy = v => v.OrderByDescending(s => s.StartDate);
+                    orderBy = v => v.OrderByDescending(s => s.IsTop).ThenByDescending(s => s.StartDate);
                     break;
                 case PromotionSortOrder.StartAsc:
-                    orderBy = v => v.OrderBy(s => s.StartDate);
+                    orderBy = v => v.OrderByDescending(s => s.IsTop).ThenBy(s => s.StartDate);
                     break;
                 case PromotionSortOrder.StartDesc:
                 case PromotionSortOrder.Default:
                 default:
-                    orderBy = v => v.OrderByDescending(s => s.StartDate);
+                    orderBy = v => v.OrderByDescending(s => s.IsTop).ThenByDescending(s => s.StartDate);
                     break;
             }
 
@@ -192,10 +192,10 @@ namespace Yintai.Hangzhou.Repository.Impl
 
             if (pagerRequest.PageSize == 1)
             {
-                return t.OrderByDescending(v => v.StartDate).Take(pagerRequest.PageSize).ToList();
+                return t.OrderByDescending(s => s.IsTop).ThenByDescending(v => v.StartDate).Take(pagerRequest.PageSize).ToList();
             }
 
-            return t.OrderByDescending(v => v.StartDate).Skip(skip).Take(pagerRequest.PageSize).ToList();
+            return t.OrderByDescending(s => s.IsTop).ThenByDescending(v => v.StartDate).Skip(skip).Take(pagerRequest.PageSize).ToList();
         }
 
         /// <summary>
@@ -620,7 +620,8 @@ namespace Yintai.Hangzhou.Repository.Impl
                                 InvolvedCount = Int32.Parse(record["InvolvedCount"].ToString()),
                                 Store_Id = Int32.Parse(record["Store_Id"].ToString()),
                                 RecommendUser = Int32.Parse(record["RecommendUser"].ToString()),
-                                Tag_Id = Int32.Parse(record["Tag_Id"].ToString())
+                                Tag_Id = Int32.Parse(record["Tag_Id"].ToString()),
+                                IsTop = Boolean.Parse(record["IsTop"].ToString())
                             };
 
             return model;

@@ -24,6 +24,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int RecommendSourceId { get; set; }
         public int RecommendSourceType { get; set; }
         public int Tag_Id { get; set; }
+        public bool IsTop { get; set; }
 
         #region Overrides of BaseEntity
 

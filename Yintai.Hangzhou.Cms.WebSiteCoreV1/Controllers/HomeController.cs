@@ -2,7 +2,7 @@
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : UserController
     {
         public ActionResult Index()
         {

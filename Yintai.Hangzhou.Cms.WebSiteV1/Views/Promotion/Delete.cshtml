@@ -1,5 +1,4 @@
 ﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.PromotionViewModel
-
 @{
     ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -71,6 +70,11 @@
         @Html.DisplayFor(model => model.Store_Id)
     </div>
 
+    <div class="display-label">IsTop</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsTop)
+    </div>
+
     <div class="display-label">Status</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Status)
@@ -96,9 +100,11 @@
         @Html.DisplayFor(model => model.UpdatedUser)
     </div>
 </fieldset>
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     <p>
-        <input type="submit" value="Delete" /> |
+        <input type="submit" value="Delete" />
+        |
         @Html.ActionLink("Back to List", "Index")
     </p>
 }

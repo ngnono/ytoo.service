@@ -9,7 +9,7 @@ using Yintai.Hangzhou.WebSupport.Ioc;
 
 namespace Yintai.Hangzhou.WebSupport.Mvc
 {
-    public class CmsV1Application : System.Web.HttpApplication
+    public class CmsV1Application : MvcApplication
     {
         private readonly string _controller;
 
@@ -22,62 +22,6 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         protected CmsV1Application(string defaultControllerNamespace)
         {
             _controller = defaultControllerNamespace;
-        }
-
-        public void RegisterGlobalFilters(GlobalFilterCollection filters)
-        {
-            filters.Add(new HandleErrorAttribute());
-        }
-
-        public void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            //routes.RouteExistingFiles = false;
-
-            routes.MapLowerCaseUrlRoute(
-                "Default_Page", // Route name
-                "{controller}/{action}/{page}", // URL with parameters
-                new { controller = "Home", action = "Index", id = 0, page = 1 } // Parameter defaults
-                , new { action = @".*List", page = @"\d*" } //正则列表页结尾 list
-                , new[] { _controller }
-            );
-
-            routes.MapLowerCaseUrlRoute(
-                "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional }// Parameter defaults
-                , new[] { _controller }
-            );
-        }
-
-        protected void Application_Start()
-        {
-            AreaRegistration.RegisterAllAreas();
-
-            RegisterGlobalFilters(GlobalFilters.Filters);
-            RegisterRoutes(RouteTable.Routes);
-
-            ServiceLocatorInit();
-
-            CApplication_Start();
-        }
-
-        protected virtual void CApplication_Start()
-        {
-
-        }
-
-        /// <summary>
-        /// 服务定位 初始化
-        /// </summary>
-        protected void ServiceLocatorInit()
-        {
-            //Register
-            IocRegisterRun.Current.Register();
-
-            DependencyResolver.SetResolver(ServiceLocator.Current.Resolve<IDependencyResolver>());
-
-            ModelBinders.Binders.Add(typeof(PagerRequest), ServiceLocator.Current.Resolve<PagerRequestBinder>());
         }
     }
 

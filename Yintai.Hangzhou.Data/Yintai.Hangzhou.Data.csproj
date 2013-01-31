@@ -100,7 +100,9 @@
     <Compile Include="Models\Mapping\OutsiteUserMap.cs" />
     <Compile Include="Models\Mapping\PointHistoryMap.cs" />
     <Compile Include="Models\Mapping\ProductMap.cs" />
+    <Compile Include="Models\Mapping\ProductStageMap.cs" />
     <Compile Include="Models\Mapping\ProductTagRelationMap.cs" />
+    <Compile Include="Models\Mapping\ProductUploadJobMap.cs" />
     <Compile Include="Models\Mapping\PromotionBrandRelationMap.cs" />
     <Compile Include="Models\Mapping\PromotionMap.cs" />
     <Compile Include="Models\Mapping\Ref_EnumerationMap.cs" />
@@ -122,7 +124,9 @@
     <Compile Include="Models\OutsiteUser.cs" />
     <Compile Include="Models\PointHistory.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductStage.cs" />
     <Compile Include="Models\ProductTagRelation.cs" />
+    <Compile Include="Models\ProductUploadJob.cs" />
     <Compile Include="Models\Promotion.cs" />
     <Compile Include="Models\PromotionBrandRelation.cs" />
     <Compile Include="Models\Ref_Enumeration.cs" />
@@ -141,6 +145,7 @@
     <Compile Include="Models\VUser.cs" />
     <Compile Include="Models\VUserRole.cs" />
     <Compile Include="Models\YintaiHangzhouContext.cs" />
+    <Compile Include="Models\YintaiHzhouContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
