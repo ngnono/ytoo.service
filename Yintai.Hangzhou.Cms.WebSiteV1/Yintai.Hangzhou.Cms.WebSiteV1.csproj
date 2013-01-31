@@ -54,10 +54,6 @@
     <Reference Include="EmitMapper">
       <HintPath>..\_dll\EmitMapper.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Yintai.Architecture\_dll\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\_dll\HtmlAgilityPack.dll</HintPath>
     </Reference>

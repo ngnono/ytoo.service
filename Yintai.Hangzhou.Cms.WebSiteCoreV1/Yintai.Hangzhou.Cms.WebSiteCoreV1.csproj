@@ -44,10 +44,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Yintai.Architecture.Common">
+    <Reference Include="Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\d\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.Framework">
+    <Reference Include="Yintai.Architecture.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\d\Yintai.Architecture.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Yintai.Architecture.ImageClient">
