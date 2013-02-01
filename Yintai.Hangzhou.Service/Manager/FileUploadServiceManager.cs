@@ -559,5 +559,68 @@ namespace Yintai.Hangzhou.Service.Manager
         }
 
         #endregion
+        /// <summary>
+        /// restricted to upload image file , for staging purpose
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="key"></param>
+        /// <param name="fileInfor"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
+        internal static FileMessage UploadFile(FileInfo file, string key, out FileInfor fileInfor, string p2)
+        {
+            var client = _imageService;
+            string fileKey;
+            string fileExt;
+            fileInfor = new FileInfor();
+            FileMessage f = client.GetFileName(key, (int)file.Length, file.Name, file.Extension, out fileKey, out fileExt);
+
+            if (f == FileMessage.Success)
+            {
+                fileInfor.FileName = fileKey;
+                fileInfor.FileSize = (int)file.Length;
+                fileInfor.FileExtName = fileExt;
+                fileInfor.ResourceType = ContentType.GetResourceType(fileExt);
+
+
+                try
+                {
+                    FileUploadMessage inValue = new FileUploadMessage();
+                    inValue.FileName = fileKey;
+                    inValue.KeyName = key;
+                    inValue.FileExt = fileExt;
+                    inValue.SaveOrigin = true;
+
+
+                    using (var fileHR = file.OpenRead())
+                    {
+                        inValue.FileData = fileHR;
+
+                        int width, height;
+                        using (var image = System.Drawing.Image.FromStream(fileHR))
+                        {
+                            width = image.Width;
+                            height = image.Height;
+                        }
+                        fileInfor.Width = width;
+                        fileInfor.Height = height;
+
+                        client.UploadFileAndReturnInfo(inValue);
+                        fileHR.Close();
+                    }
+
+
+                    return FileMessage.Success;
+                }
+                catch
+                {
+                    return FileMessage.UnknowError;
+                }
+            }
+            else
+            {
+                return f;
+            }
+        }
     }
 }

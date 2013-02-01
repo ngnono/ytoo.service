@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Web;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web;
@@ -146,6 +147,33 @@ namespace Yintai.Hangzhou.Service.Impl
             }
 
             return new List<ResourceEntity>(0);
+        }
+        /// <summary>
+        /// implement the saveStage
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="sourceType"></param>
+        /// <returns></returns>
+        public FileInfor SaveStage(FileInfo file,int createUser, SourceType sourceType)
+        {
+            if (file == null)
+                return null;
+
+
+            FileInfor fileInfor;
+
+            var fileuploadResult = FileUploadServiceManager.UploadFile(file, sourceType.ToString().ToLower(),
+                                                        out fileInfor, string.Empty);
+
+            if (fileuploadResult == FileMessage.Success)
+            {
+
+                return fileInfor;
+            }
+            else
+                return null;
+
+
         }
 
         public ResourceEntity Get(int resourceId)
