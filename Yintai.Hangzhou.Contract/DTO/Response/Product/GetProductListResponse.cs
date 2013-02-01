@@ -151,7 +151,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Product
         [DataMember(Name = "resources")]
         public List<ResourceInfoResponse> ResourceInfoResponses { get; set; }
 
-
         [DataMember(Name = "likecount")]
         public int LikeCount { get; set; }
 

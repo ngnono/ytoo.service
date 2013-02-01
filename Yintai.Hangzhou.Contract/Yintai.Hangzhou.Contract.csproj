@@ -59,6 +59,7 @@
     <Compile Include="DTO\Request\Feedback\FeedbackCreateRequest.cs" />
     <Compile Include="DTO\Request\Point\GetPointInfoRequest.cs" />
     <Compile Include="DTO\Request\ProductComplex\GetItemsListRequest.cs" />
+    <Compile Include="DTO\Request\SpecialTopic\SpecialTopicRequest.cs" />
     <Compile Include="DTO\Request\Tag\TagRequest.cs" />
     <Compile Include="DTO\Request\Device\DeviceRegisterRequest.cs" />
     <Compile Include="DTO\Request\BaseRequest.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="DTO\Response\ItemsCollectionResponse.cs" />
     <Compile Include="DTO\Response\PagerInfoResponse.cs" />
     <Compile Include="DTO\Response\Point\PointInfoResponse.cs" />
+    <Compile Include="DTO\Response\SpecialTopic\SpecialTopic.cs" />
     <Compile Include="DTO\Response\Promotion\PromotionInfoResponse.cs" />
     <Compile Include="DTO\Response\Resources\ResourceInfoResponse.cs" />
     <Compile Include="DTO\Response\Store\StoreInfoResponse.cs" />
@@ -105,6 +107,7 @@
     <Compile Include="DTO\Response\Promotion\GetPromotionListResponse.cs" />
     <Compile Include="DTO\Response\Region\GetRegionListResponse.cs" />
     <Compile Include="Share\IShareDataService.cs" />
+    <Compile Include="SpecialTopic\ISpecialTopicDataService.cs" />
     <Compile Include="Store\IStoreDataService.cs" />
     <Compile Include="Tag\ITagDataService.cs" />
   </ItemGroup>

@@ -112,6 +112,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 entity.CreatedUser = base.CurrentUser.CustomerId;
                 entity.UpdatedUser = base.CurrentUser.CustomerId;
                 entity.Status = (int)DataStatus.Normal;
+                entity.CreatedDate = DateTime.Now;
+                entity.UpdatedDate = DateTime.Now;
 
                 entity = this._productRepository.Insert(entity);
 

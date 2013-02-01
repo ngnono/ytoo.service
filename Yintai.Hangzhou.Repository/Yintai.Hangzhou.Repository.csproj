@@ -69,6 +69,7 @@
     <Compile Include="Contract\IOutSiteCustomerRepository.cs" />
     <Compile Include="Contract\IPointRepository.cs" />
     <Compile Include="Contract\IProductRepository.cs" />
+    <Compile Include="Contract\IPromotionProductRelationRepository.cs" />
     <Compile Include="Contract\IPromotionRelations.cs" />
     <Compile Include="Contract\IPromotionRepository.cs" />
     <Compile Include="Contract\IRemindRepository.cs" />
@@ -76,7 +77,9 @@
     <Compile Include="Contract\ICustomerRepository.cs" />
     <Compile Include="Contract\IResourceRepository.cs" />
     <Compile Include="Contract\IRoleRepository.cs" />
+    <Compile Include="Contract\ISeedRepository.cs" />
     <Compile Include="Contract\IShareRepository.cs" />
+    <Compile Include="Contract\ISpecialTopicRepository.cs" />
     <Compile Include="Contract\IStoreRepository.cs" />
     <Compile Include="Contract\ITagRepository.cs" />
     <Compile Include="Contract\ITimeSeedRepository.cs" />
@@ -86,6 +89,9 @@
     <Compile Include="Contract\IVUserRepository.cs" />
     <Compile Include="Contract\IVUserRoleRepository.cs" />
     <Compile Include="Impl\BrandRepository.cs" />
+    <Compile Include="Impl\PromotionProductRelation.cs" />
+    <Compile Include="Impl\SeedRepository.cs" />
+    <Compile Include="Impl\SpecialTopicProductRelationRepository.cs" />
     <Compile Include="Impl\CommentRepository.cs" />
     <Compile Include="Impl\CouponRepository.cs" />
     <Compile Include="Impl\DeviceLogsRepository.cs" />
@@ -101,6 +107,7 @@
     <Compile Include="Impl\PromotionRepository.cs" />
     <Compile Include="Impl\RoleRepository.cs" />
     <Compile Include="Impl\ShareRepository.cs" />
+    <Compile Include="Impl\SpecialTopicRepository.cs" />
     <Compile Include="Impl\TagRepository.cs" />
     <Compile Include="Impl\TimeSeedRepository.cs" />
     <Compile Include="Impl\UserRoleRepository.cs" />

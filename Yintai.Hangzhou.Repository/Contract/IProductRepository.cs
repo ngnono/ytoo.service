@@ -2,6 +2,7 @@
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 
 namespace Yintai.Hangzhou.Repository.Contract
 {
@@ -48,6 +49,16 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="sortOrder"></param>
         /// <param name="updateUser"></param>
         /// <returns></returns>
-        ProductEntity SetSortOrder(ProductEntity entity,int sortOrder,int updateUser);
+        ProductEntity SetSortOrder(ProductEntity entity, int sortOrder, int updateUser);
+
+        /// <summary>
+        /// 分页
+        /// </summary>
+        /// <param name="pagerRequest">page</param>
+        /// <param name="totalCount">记录数</param>
+        /// <param name="sortOrder">排序方式</param>
+        /// <param name="productFilter">过滤选项</param>
+        /// <returns></returns>
+        List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter);
     }
 }

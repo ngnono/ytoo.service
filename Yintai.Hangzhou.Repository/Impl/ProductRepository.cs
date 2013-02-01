@@ -8,17 +8,66 @@ using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.Repository.Impl
 {
     public class ProductRepository : RepositoryBase<ProductEntity, int>, IProductRepository
     {
+        private readonly ISpecialTopicProductRelationRepository _specialTopicProductRelationRepository;
+
+        public ProductRepository(ISpecialTopicProductRelationRepository specialTopicProductRelationRepository)
+        {
+            _specialTopicProductRelationRepository = specialTopicProductRelationRepository;
+        }
+
         #region methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private List<int> GetTopicRelationIds(int? id)
+        {
+            if (id == null || id.Value < 1)
+            {
+                return new List<int>(0);
+            }
+
+            var s = new List<int> { id.Value };
+
+            return GetTopicRelationIds(s);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        private List<int> GetTopicRelationIds(List<int> ids)
+        {
+            if (ids == null || ids.Count == 0)
+            {
+                return new List<int>(0);
+            }
+
+            var entitys = _specialTopicProductRelationRepository.GetList(ids);
+
+            if (entitys == null || entitys.Count == 0)
+            {
+                return new List<int>(0);
+            }
+
+            var result = entitys.Select(v => v.Product_Id).Distinct().ToList();
+
+            return result;
+        }
 
         private static Expression<Func<ProductEntity, bool>> Filter(DataStatus? dataStatus, Timestamp timestamp,
                                                                        ICollection<int> tagid,
-                                                                       int? recommendUser, int? brandId = null)
+                                                                       int? recommendUser, int? brandId = null, List<int> productIds = null)
         {
             var filter = PredicateBuilder.True<ProductEntity>();
 
@@ -56,141 +105,30 @@ namespace Yintai.Hangzhou.Repository.Impl
                 filter = filter.And(v => v.Brand_Id == brandId);
             }
 
+            if (productIds != null && productIds.Count > 0)
+            {
+                filter = filter.And(v => productIds.Any(s => s == v.Id));
+            }
+
             return filter;
         }
 
+        private Expression<Func<ProductEntity, bool>> Filter(ProductFilter productFilter)
+        {
+            if (productFilter == null)
+            {
+                return null;
+            }
 
-        //private static Expression<Func<ProductEntity, bool>> GetFilter(DataStatus dataStatus, Timestamp timestamp, List<int> tagid,
-        //                                                               int? recommendUser, int? brandId = null)
-        //{
-        //    Expression<Func<ProductEntity, bool>> filter = null;
+            List<int> pids = null;
+            if (productFilter.TopicId != null && productFilter.TopicId > 0)
+            {
+                pids = GetTopicRelationIds(productFilter.TopicId);
+            }
 
-        //    if (tagid == null || tagid.Count == 0)
-        //    {
-        //        if (recommendUser == null)
-        //        {
-        //            if (brandId == null)
-        //            {
-        //                switch (timestamp.TsType)
-        //                {
-        //                    case TimestampType.New:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate > timestamp.Ts;
-        //                        break;
-        //                    case TimestampType.Old:
-        //                    default:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate <= timestamp.Ts;
-        //                        break;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                switch (timestamp.TsType)
-        //                {
-        //                    case TimestampType.New:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate > timestamp.Ts && v.Brand_Id == brandId.Value;
-        //                        break;
-        //                    case TimestampType.Old:
-        //                    default:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate <= timestamp.Ts && v.Brand_Id == brandId.Value;
-        //                        break;
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (brandId == null)
-        //            {
-        //                switch (timestamp.TsType)
-        //                {
-        //                    case TimestampType.New:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate > timestamp.Ts && v.RecommendUser == recommendUser.Value;
-        //                        break;
-        //                    case TimestampType.Old:
-        //                    default:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate <= timestamp.Ts && v.RecommendUser == recommendUser.Value;
-        //                        break;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                switch (timestamp.TsType)
-        //                {
-        //                    case TimestampType.New:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate > timestamp.Ts && v.RecommendUser == recommendUser.Value && v.Brand_Id == brandId.Value;
-        //                        break;
-        //                    case TimestampType.Old:
-        //                    default:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate <= timestamp.Ts && v.RecommendUser == recommendUser.Value && v.Brand_Id == brandId.Value;
-        //                        break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (recommendUser == null)
-        //        {
-        //            if (brandId == null)
-        //            {
-        //                switch (timestamp.TsType)
-        //                {
-        //                    case TimestampType.New:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate > timestamp.Ts && tagid.Any(s => s == v.Tag_Id);
-        //                        break;
-        //                    case TimestampType.Old:
-        //                    default:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate <= timestamp.Ts && tagid.Any(s => s == v.Tag_Id);
-        //                        break;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                switch (timestamp.TsType)
-        //                {
-        //                    case TimestampType.New:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate > timestamp.Ts && tagid.Any(s => s == v.Tag_Id) && v.Brand_Id == brandId.Value;
-        //                        break;
-        //                    case TimestampType.Old:
-        //                    default:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate <= timestamp.Ts && tagid.Any(s => s == v.Tag_Id) && v.Brand_Id == brandId.Value;
-        //                        break;
-        //                }
-        //            }
-
-        //        }
-        //        else
-        //        {
-        //            if (brandId == null)
-        //            {
-        //                switch (timestamp.TsType)
-        //                {
-        //                    case TimestampType.New:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate > timestamp.Ts && tagid.Any(s => s == v.Tag_Id) && v.RecommendUser == recommendUser.Value;
-        //                        break;
-        //                    case TimestampType.Old:
-        //                    default:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate <= timestamp.Ts && tagid.Any(s => s == v.Tag_Id) && v.RecommendUser == recommendUser.Value;
-        //                        break;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                switch (timestamp.TsType)
-        //                {
-        //                    case TimestampType.New:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate > timestamp.Ts && tagid.Any(s => s == v.Tag_Id) && v.RecommendUser == recommendUser.Value && v.Brand_Id == brandId.Value;
-        //                        break;
-        //                    case TimestampType.Old:
-        //                    default:
-        //                        filter = v => v.Status == (int)dataStatus && v.UpdatedDate <= timestamp.Ts && tagid.Any(s => s == v.Tag_Id) && v.RecommendUser == recommendUser.Value && v.Brand_Id == brandId.Value;
-        //                        break;
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return filter;
-        //}
+            return Filter(productFilter.DataStatus, productFilter.Timestamp, productFilter.TagIds,
+                          productFilter.RecommendUser, productFilter.BrandId, pids);
+        }
 
         /// <summary>
         /// 排序
@@ -205,7 +143,7 @@ namespace Yintai.Hangzhou.Repository.Impl
                 case ProductSortOrder.CreatedDateDesc:
                 case ProductSortOrder.Default:
                 default:
-                    order = v => v.OrderByDescending(s => s.SortOrder).ThenByDescending(s=>s.CreatedDate);
+                    order = v => v.OrderByDescending(s => s.SortOrder).ThenByDescending(s => s.CreatedDate);
                     break;
             }
 
@@ -249,7 +187,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public List<ProductEntity> GetList(List<int> ids)
         {
-            return base.Get(v => ids.Any(s => s == v.Id)).ToList();
+            return base.Get(v => ids.Any(s => s == v.Id) && v.Status == (int)DataStatus.Normal).ToList();
         }
 
         public ProductEntity SetSortOrder(ProductEntity entity, int sortOrder, int updateUser)
@@ -273,6 +211,13 @@ namespace Yintai.Hangzhou.Repository.Impl
             {
                 return null;
             }
+        }
+
+        public List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter)
+        {
+            return
+               base.Get(Filter(productFilter), out totalCount, pagerRequest.PageIndex, pagerRequest.PageSize, GetOrder(sortOrder))
+                   .ToList();
         }
 
         public override ProductEntity GetItem(int key)

@@ -181,11 +181,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
 
 
-          //  byte[] generatedPass = generator.Generate(request);
+            byte[] generatedPass = generator.Generate(request);
 
-          //  return generatedPass;
+            return generatedPass;
             
-            return null;
+            //return null;
         }
 
         private List<BrandInfoResponse> GetBrand(CouponInfoResponse couponInfo)

@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binder\BrandModelBinder.cs" />
+    <Compile Include="Binder\SpecialTopicModelBinder.cs" />
     <Compile Include="Binder\FeedbackModelBinder.cs" />
     <Compile Include="Binder\CommentModelBinder.cs" />
     <Compile Include="Binder\PagerRequestBinder.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Binder\TagModlBinder.cs" />
     <Compile Include="Binder\UserModelBinder.cs" />
     <Compile Include="Configuration\ConfigManager.cs" />
+    <Compile Include="Helper\EnumExtension.cs" />
     <Compile Include="Ioc\BaseIocRegister.cs" />
     <Compile Include="Ioc\ConfigIocRegister.cs" />
     <Compile Include="Ioc\IIocRegister.cs" />
