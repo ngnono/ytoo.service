@@ -5,6 +5,10 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Configuration.Install;
+using System.IO;
+using System.Reflection;
+
 namespace Yintai.Architecture.FileUploadServer
 {
     static class Program
@@ -14,9 +18,18 @@ namespace Yintai.Architecture.FileUploadServer
         /// </summary>
         static void Main(string[] args)
         {
-            if (args.Length > 0)
+            if (System.Environment.UserInteractive)
             {
-                new Service1().Start(args);
+                string parameter = string.Concat(args);
+                switch (parameter)
+                {
+                    case "--install":
+                        ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
+                        break;
+                    case "--uninstall":
+                        ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
+                        break;
+                }
             }
             else
             {
@@ -27,6 +40,7 @@ namespace Yintai.Architecture.FileUploadServer
             };
                 ServiceBase.Run(ServicesToRun);
             }
+           
 
 
         }
