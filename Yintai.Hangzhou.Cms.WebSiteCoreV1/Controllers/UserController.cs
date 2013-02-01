@@ -105,14 +105,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         /// <summary>
         /// 禁止直接使用HttpContext
         /// </summary>
-        [Obsolete]
-        public new HttpContextBase HttpContext
-        {
-            get
-            {
-                throw new NotSupportedException("禁止直接使用HttpContext");
-            }
-        }
+        //[Obsolete]
+        //public new HttpContextBase HttpContext
+        //{
+        //    get
+        //    {
+        //        throw new NotSupportedException("禁止直接使用HttpContext");
+        //    }
+        //}
 
         ///// <summary>
         ///// 禁止直接使用 ControllerContext.

@@ -21,17 +21,12 @@ namespace Yintai.Hangzhou.Data.Models
             _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
         }
 
-<<<<<<< HEAD
-		public YintaiHangzhouContext()
-			: base("Name=YintaiHangzhouContext")
-		{
-		}
-=======
+
         public YintaiHangzhouContext()
             : base("Name=YintaiHangzhouContext")
         {
         }
->>>>>>> 33cac74d7191d234991662ca22d87366ee71faaa
+
 
         #region ef tracing
 
@@ -125,12 +120,12 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
-<<<<<<< HEAD
+
         public DbSet<ProductTagRelationEntity> ProductTagRelations { get; set; }
-=======
+
         public DbSet<ProductStageEntity> ProductStages { get; set; }
         public DbSet<ProductUploadJobEntity> ProductUploadJobs { get; set; }
->>>>>>> 33cac74d7191d234991662ca22d87366ee71faaa
+
         public DbSet<PromotionEntity> Promotions { get; set; }
         public DbSet<PromotionBrandRelationEntity> PromotionBrandRelations { get; set; }
         public DbSet<Ref_EnumerationEntity> Ref_Enumeration { get; set; }
@@ -174,12 +169,12 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());
             modelBuilder.Configurations.Add(new ProductEntityMap());
-<<<<<<< HEAD
+
             modelBuilder.Configurations.Add(new ProductTagRelationEntityMap());
-=======
+
             modelBuilder.Configurations.Add(new ProductStageEntityMap());
             modelBuilder.Configurations.Add(new ProductUploadJobEntityMap());
->>>>>>> 33cac74d7191d234991662ca22d87366ee71faaa
+
             modelBuilder.Configurations.Add(new PromotionEntityMap());
             modelBuilder.Configurations.Add(new PromotionBrandRelationEntityMap());
             modelBuilder.Configurations.Add(new Ref_EnumerationEntityMap());
@@ -208,12 +203,9 @@ namespace Yintai.Hangzhou.Data.Models
         {
             var c = base.SaveChanges();
 
-<<<<<<< HEAD
-			return c;
-		}
-=======
+
             return c;
         }
->>>>>>> 33cac74d7191d234991662ca22d87366ee71faaa
+
     }
 }
