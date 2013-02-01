@@ -23,7 +23,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
         public ProductController(IProductDataService productDataService, IBrandDataService brandDataService)
         {
-            this._productDataService = productDataService;
+            _productDataService = productDataService;
             _passHelper = new PassHelper(brandDataService);
         }
 
@@ -37,11 +37,18 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 {
                     return new RestfulResult
                     {
-                        Data = this._productDataService.RefreshProduct(new GetProductRefreshRequest()
+                        Data = _productDataService.RefreshProduct(new GetProductRefreshRequest
                             {
                                 Page = request.Page,
                                 Pagesize = request.Pagesize,
-                                RefreshTs = request.RefreshTs
+                                RefreshTs = request.RefreshTs,
+                                Sort = request.Sort,
+                                BrandId = request.BrandId,
+                                Lat = request.Lat,
+                                Lng = request.Lng,
+                                TagId = request.TagId,
+                                TopicId = request.TopicId,
+                                PromotionId = request.PromotionId
                             })
                     };
                 }

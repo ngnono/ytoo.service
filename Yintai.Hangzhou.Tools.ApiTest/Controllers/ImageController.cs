@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Yintai.Architecture.Common.Web;
-using Yintai.Architecture.ImageTool.Models;
+﻿using System.Web.Mvc;
 
 namespace Yintai.Hangzhou.Tools.ApiTest.Controllers
 {

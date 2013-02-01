@@ -122,11 +122,16 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<ProductStageEntity> ProductStages { get; set; }
         public DbSet<ProductUploadJobEntity> ProductUploadJobs { get; set; }
         public DbSet<PromotionEntity> Promotions { get; set; }
+        public DbSet<Promotion2ProductEntity> Promotion2Product { get; set; }
         public DbSet<PromotionBrandRelationEntity> PromotionBrandRelations { get; set; }
         public DbSet<RemindEntity> Reminds { get; set; }
         public DbSet<ResourceEntity> Resources { get; set; }
+        public DbSet<ResourceStageEntity> ResourceStages { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
+        public DbSet<SeedEntity> Seeds { get; set; }
         public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
+        public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
+        public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
         public DbSet<StoreEntity> Stores { get; set; }
         public DbSet<TagEntity> Tags { get; set; }
         public DbSet<TimeSeedEntity> TimeSeeds { get; set; }
@@ -161,11 +166,16 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new ProductStageEntityMap());
             modelBuilder.Configurations.Add(new ProductUploadJobEntityMap());
             modelBuilder.Configurations.Add(new PromotionEntityMap());
+            modelBuilder.Configurations.Add(new Promotion2ProductEntityMap());
             modelBuilder.Configurations.Add(new PromotionBrandRelationEntityMap());
             modelBuilder.Configurations.Add(new RemindEntityMap());
             modelBuilder.Configurations.Add(new ResourceEntityMap());
+            modelBuilder.Configurations.Add(new ResourceStageEntityMap());
             modelBuilder.Configurations.Add(new RoleEntityMap());
+            modelBuilder.Configurations.Add(new SeedEntityMap());
             modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
+            modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
+            modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());
             modelBuilder.Configurations.Add(new StoreEntityMap());
             modelBuilder.Configurations.Add(new TagEntityMap());
             modelBuilder.Configurations.Add(new TimeSeedEntityMap());

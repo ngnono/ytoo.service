@@ -24,6 +24,7 @@ using Yintai.Hangzhou.Contract.DTO.Response.Point;
 using Yintai.Hangzhou.Contract.DTO.Response.Product;
 using Yintai.Hangzhou.Contract.DTO.Response.Promotion;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
+using Yintai.Hangzhou.Contract.DTO.Response.SpecialTopic;
 using Yintai.Hangzhou.Contract.DTO.Response.Store;
 using Yintai.Hangzhou.Contract.DTO.Response.Tag;
 using Yintai.Hangzhou.Data.Models;
@@ -1685,6 +1686,9 @@ namespace Yintai.Hangzhou.Service.Manager
     public abstract class BaseMappingManager
     {
         private readonly IResourceRepository _resourceRepository;
+        private static readonly DateTime Min = new DateTime(1900, 1, 1);
+        private static readonly DateTime Max = new DateTime(2079, 1, 1);
+
         protected BaseMappingManager()
         {
             _resourceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
@@ -1707,16 +1711,14 @@ namespace Yintai.Hangzhou.Service.Manager
                 return DateTime.Now;
             }
 
-            var min = new DateTime(1800, 1, 1);
-            var max = new DateTime(3800, 1, 1);
-            if (dateTime < min)
+            if (dateTime < Min)
             {
-                return min;
+                return Min;
             }
 
-            if (dateTime > max)
+            if (dateTime > Max)
             {
-                return max;
+                return Max;
             }
 
             return dateTime.Value;
@@ -3461,6 +3463,67 @@ namespace Yintai.Hangzhou.Service.Manager
             target.Resources = resources;
 
             return target;
+        }
+
+        #endregion
+
+        #region specialtopic
+
+        public SpecialTopicInfoResponse SpecialTopicInfoResponseMapping(SpecialTopicEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var entitys = base.GetListResourceEntities(SourceType.SpecialTopic, source.Id);
+            var res = ResourceInfoResponsesMapping(entitys).ToList();
+
+            return SpecialTopicInfoResponseMapping(source, res);
+        }
+
+        private static SpecialTopicInfoResponse SpecialTopicInfoResponseMapping(SpecialTopicEntity source, List<ResourceInfoResponse> resourceInfoResponses)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<SpecialTopicEntity, SpecialTopicInfoResponse>(source);
+            target.ResourceInfoResponses = resourceInfoResponses;
+
+            return target;
+        }
+
+        public IEnumerable<SpecialTopicInfoResponse> SpecialTopicInfoResponseMapping(List<SpecialTopicEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<SpecialTopicInfoResponse>(0);
+            }
+
+            var result = new List<SpecialTopicInfoResponse>(source.Count);
+            var ids = source.Select(v => v.Id).Distinct().ToList();
+            var res = ResourceInfoResponsesMapping(base.GetListResourceEntities(SourceType.SpecialTopic, ids)).ToList();
+
+            foreach (var item in source)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                var r = res.Where(v => v.SourceId == item.Id).ToList();
+
+                var target = SpecialTopicInfoResponseMapping(item, r);
+
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+            }
+
+            return result;
         }
 
         #endregion

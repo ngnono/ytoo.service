@@ -22,7 +22,7 @@ namespace Yintai.Hangzhou.Data.Models
         }
 
 		public YintaiHangzhouContext()
-            : base("Name=YintaiHangzhouContext")
+			: base("Name=YintaiHangzhouContext")
 		{
 		}
 
@@ -115,18 +115,24 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<FeedbackEntity> Feedbacks { get; set; }
         public DbSet<GroupEntity> Groups { get; set; }
         public DbSet<LikeEntity> Likes { get; set; }
-        public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
         public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<ProductTagRelationEntity> ProductTagRelations { get; set; }
         public DbSet<PromotionEntity> Promotions { get; set; }
         public DbSet<PromotionBrandRelationEntity> PromotionBrandRelations { get; set; }
+        public DbSet<Ref_EnumerationEntity> Ref_Enumeration { get; set; }
+        public DbSet<Ref_EnumerationMemberEntity> Ref_EnumerationMember { get; set; }
         public DbSet<RemindEntity> Reminds { get; set; }
         public DbSet<ResourceEntity> Resources { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
+        public DbSet<SeedEntity> Seeds { get; set; }
         public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
+        public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
+        public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
         public DbSet<StoreEntity> Stores { get; set; }
         public DbSet<TagEntity> Tags { get; set; }
+        public DbSet<tb_SeedEntity> tb_Seed { get; set; }
         public DbSet<TimeSeedEntity> TimeSeeds { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<UserAccountEntity> UserAccounts { get; set; }
@@ -152,18 +158,24 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new FeedbackEntityMap());
             modelBuilder.Configurations.Add(new GroupEntityMap());
             modelBuilder.Configurations.Add(new LikeEntityMap());
-            modelBuilder.Configurations.Add(new NotificationLogEntityMap());
             modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());
             modelBuilder.Configurations.Add(new ProductEntityMap());
+            modelBuilder.Configurations.Add(new ProductTagRelationEntityMap());
             modelBuilder.Configurations.Add(new PromotionEntityMap());
             modelBuilder.Configurations.Add(new PromotionBrandRelationEntityMap());
+            modelBuilder.Configurations.Add(new Ref_EnumerationEntityMap());
+            modelBuilder.Configurations.Add(new Ref_EnumerationMemberEntityMap());
             modelBuilder.Configurations.Add(new RemindEntityMap());
             modelBuilder.Configurations.Add(new ResourceEntityMap());
             modelBuilder.Configurations.Add(new RoleEntityMap());
+            modelBuilder.Configurations.Add(new SeedEntityMap());
             modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
+            modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
+            modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());
             modelBuilder.Configurations.Add(new StoreEntityMap());
             modelBuilder.Configurations.Add(new TagEntityMap());
+            modelBuilder.Configurations.Add(new tb_SeedEntityMap());
             modelBuilder.Configurations.Add(new TimeSeedEntityMap());
             modelBuilder.Configurations.Add(new UserEntityMap());
             modelBuilder.Configurations.Add(new UserAccountEntityMap());
@@ -177,7 +189,6 @@ namespace Yintai.Hangzhou.Data.Models
 		{
 			var c =  base.SaveChanges();
 
-		
 			return c;
 		}
     }

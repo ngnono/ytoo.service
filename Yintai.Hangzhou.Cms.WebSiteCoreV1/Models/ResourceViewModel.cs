@@ -33,7 +33,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public int SourceId { get; set; }
 
         [Required]
-        [Range(0, Int32.MaxValue)]
+       // [Range(0, Int32.MaxValue)]
         public int SourceType { get; set; }
 
         [Required]

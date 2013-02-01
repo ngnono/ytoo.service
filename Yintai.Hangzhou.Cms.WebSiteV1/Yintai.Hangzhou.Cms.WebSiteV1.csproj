@@ -278,7 +278,6 @@
     <Content Include="Configurations\Log4Net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\themes\webget\easyui\default\images\Thumbs.db" />
     <None Include="Properties\PublishProfiles\Hangzhou.Cms.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="robots.txt" />
@@ -383,6 +382,11 @@
     <Content Include="Views\Customer\Details.cshtml" />
     <Content Include="Views\Customer\Edit.cshtml" />
     <Content Include="Views\Customer\List.cshtml" />
+    <Content Include="Views\SpecialTopic\Create.cshtml" />
+    <Content Include="Views\SpecialTopic\Delete.cshtml" />
+    <Content Include="Views\SpecialTopic\Details.cshtml" />
+    <Content Include="Views\SpecialTopic\Edit.cshtml" />
+    <Content Include="Views\SpecialTopic\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

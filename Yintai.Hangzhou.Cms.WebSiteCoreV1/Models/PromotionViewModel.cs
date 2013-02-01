@@ -92,7 +92,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
 
-        [Range(0, 1)]
         [Display(Name = "置顶")]
         public bool IsTop { get; set; }
 

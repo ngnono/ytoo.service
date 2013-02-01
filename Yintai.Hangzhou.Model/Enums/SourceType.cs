@@ -42,6 +42,11 @@ namespace Yintai.Hangzhou.Model.Enums
         /// <summary>
         /// 客户
         /// </summary>
-        Customer = 8
+        Customer = 8,
+
+        /// <summary>
+        /// 专题
+        /// </summary>
+        SpecialTopic = 9
     }
 }

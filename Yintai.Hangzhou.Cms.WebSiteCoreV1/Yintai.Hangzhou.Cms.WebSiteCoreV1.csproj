@@ -68,6 +68,7 @@
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
+    <Compile Include="Controllers\SpecialTopicController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Manager\MappingManager.cs" />
+    <Compile Include="Models\SpecialTopicViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\PointViewModel.cs" />
     <Compile Include="Models\ResourceViewModel.cs" />
