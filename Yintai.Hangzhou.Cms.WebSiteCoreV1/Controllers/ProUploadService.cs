@@ -80,6 +80,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             FileInfor fileInfor = _resourceService.SaveStage(imageFile, 4, SourceType.Product);
             if (fileInfor != null)
             {
+                var itemNames = Path.GetFileNameWithoutExtension(_filePath).Split('@');
+                int sortOrder = 1;
+                int.TryParse(itemNames.Length > 1 ? itemNames[1] : "1", out sortOrder);
                 var entity = _dbContext.ResourceStages.Create();
                 entity.ContentSize = fileInfor.FileSize;
                 entity.ExtName = fileInfor.FileExtName;
@@ -87,8 +90,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 entity.Width = fileInfor.Width;
                 entity.Height = fileInfor.Height;
                 entity.Size = fileInfor.Width.ToString(CultureInfo.InvariantCulture) + "x" + fileInfor.Height.ToString(CultureInfo.InvariantCulture);
-                entity.SortOrder = 1;
-                entity.ItemCode = Path.GetFileNameWithoutExtension(_filePath);
+                entity.SortOrder = sortOrder;
+                entity.ItemCode = itemNames[0] ;
                 entity.InUser = _context.CurrentUser.CustomerId;
                 entity.InDate = DateTime.Now;
                 entity.UploadGroupId = jobId;
@@ -258,7 +261,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                      , new[] { new SqlParameter("inUser",_context.CurrentUser.CustomerId )
                      ,new SqlParameter("jobId",_context.JobId)});
            
-            _context.JobId = 0;
+           // _context.JobId = 0;
             return result;
 
         }

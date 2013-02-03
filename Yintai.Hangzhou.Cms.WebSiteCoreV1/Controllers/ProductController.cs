@@ -24,9 +24,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             this._productRepository = productRepository;
         }
 
-        public ActionResult Index(PagerRequest request, int? sort, string name, int? recommendUser, int? tagId, int? brandId)
+        public ActionResult Index()
         {
-            return List(request, sort, name, recommendUser, tagId, brandId);
+            return View();
         }
 
         public ActionResult List(PagerRequest request, int? sort, string name, int? recommendUser, int? tagId, int? brandId)

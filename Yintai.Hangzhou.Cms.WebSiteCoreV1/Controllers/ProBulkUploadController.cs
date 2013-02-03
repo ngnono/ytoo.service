@@ -40,10 +40,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                
             }
         }
-        public ActionResult Index()
-        {
-            return View();
-        }
         public ActionResult Display()
         {
             PrepareBulkUpload();
