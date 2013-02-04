@@ -22,7 +22,7 @@ $(function () {
             maxFileSize: 500000000,
             resizeMaxWidth: 1920,
             resizeMaxHeight: 1200,
-            maxNumberOfFiles:3,
+            maxNumberOfFiles:1,
             acceptFileTypes: /(\.|\/)(xls)$/i,
 
             done: function (e, data) {
@@ -40,11 +40,9 @@ $(function () {
                         }
                         that._transition($(this)).done(
                             function () {
-                                var node = $(this);
-                               
+                                $(this).remove();
                                 template = that._renderDownload(data.result)
-                                    //.css('height', node.height())
-                                    .replaceAll(node);
+                                    .replaceAll(parentNode.find('.files-result'));
                                 that._forceReflow(template);
                                 that._transition(template).done(
                                     function () {
@@ -57,7 +55,7 @@ $(function () {
                     });
                 } else {
                     template = that._renderDownload(data.result)
-                        .replaceAll(that.options.filesContainer);
+                        .replaceAll(this.element.find('.files-result'));
                     that._forceReflow(template);
                     that._transition(template).done(
                         function () {
@@ -139,7 +137,9 @@ $(function () {
         done: function (e, data) {
             var that = $(this).data('fileupload'),
                 template,
-                preview;
+                preview,
+                    parentNode = $(this);
+            
             if (data.context) {
                 data.context.each(function (index) {
                     var file = ($.isArray(data.result) &&
@@ -147,25 +147,25 @@ $(function () {
                     if (file.error) {
                         that._adjustMaxNumberOfFiles(1);
                     }
+                   
                     that._transition($(this)).done(
-                        function () {
-                            var node = $(this);
-                            template = that._renderDownload(data.result)
-                              //  .css('height', node.height())
-                                .replaceAll(node);
-                            that._forceReflow(template);
-                            that._transition(template).done(
-                                function () {
-                                    data.context = $(this);
-                                    that._trigger('completed', e, data);
-                                }
-                            );
-                        }
-                    );
+                            function () {
+                                $(this).remove();
+                                template = that._renderDownload(data.result)
+                                    .appendTo(parentNode.find('.files-result'));
+                                that._forceReflow(template);
+                                that._transition(template).done(
+                                    function () {
+                                        data.context = $(this);
+                                        that._trigger('completed', e, data);
+                                    }
+                                );
+                            });
                 });
             } else {
+
                 template = that._renderDownload(data.result)
-                    .appendTo(that.options.filesContainer);
+                    .appendTo(this.element.find('.files-result'));
                 that._forceReflow(template);
                 that._transition(template).done(
                     function () {
@@ -173,7 +173,7 @@ $(function () {
                         that._trigger('completed', e, data);
                     }
                 );
-            }
+           }
         }
     });
 });

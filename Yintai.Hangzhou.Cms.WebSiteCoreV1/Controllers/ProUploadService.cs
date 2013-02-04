@@ -55,6 +55,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         { 
             
         }
+        public ProUploadService(ProBulkUploadController context)
+            : this(null, context)
+        { }
         public IEnumerable<ProductUploadInfo> Stage()
         {
             if (!EnsureProFileOnDisk())
@@ -69,11 +72,65 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 return null;
             return TransferImageToStage();
         }
+        public IEnumerable<ProductUploadInfo> List(int? groupId)
+        {
+            if (groupId == null)
+                yield break;
+            foreach (var p in _dbContext.ProductStages.Where(o => o.UploadGroupId == groupId.Value))
+            {
+                yield return new ProductUploadInfo()
+                {
+                    Brand = p.BrandName
+                    ,
+                    Descrip = p.Description
+                    ,
+                    DescripOfPromotion = p.DescripOfPromotion
+                    ,
+                    DescripOfPromotionBeginDate = p.DescripOfProBeginDate
+                    ,
+                    DescripOfPromotionEndDate = p.DescripOfProEndDate
+                    ,
+                    ItemCode = p.ItemCode
+                    ,
+                    Price = p.Price
+                    ,
+                    PromotionIds = p.Promotions
+                    ,
+                    Store = p.Store
+                    ,
+                    Tag = p.Tag
+                    ,
+                    Title = p.name
+                    ,
+                    SubjectIds = p.Subjects
+                    ,
+                    SessionU = p.UploadGroupId.Value
+                    ,Id = p.id
+                };
+            }
+        }
+        internal IEnumerable<ImageUploadInfo> ListImages(int? groupId)
+        {
+            if (groupId == null)
+                yield break;
+            foreach (var img in _dbContext.ResourceStages.Where(i => i.UploadGroupId == groupId))
+            {
+                yield return new ImageUploadInfo() {
+                     ItemCode = img.ItemCode
+                     ,
+                     fileSize = img.Size
+                    ,
+                     FileName = img.Name
+                    ,
+                     Width = img.Width
+                    ,
+                     Height = img.Height
 
+                };
+            }
+        }
         private IEnumerable<ImageUploadInfo> TransferImageToStage()
         {
-            
-            var image = _dbContext.ResourceStages.Create();
             FileInfo imageFile = new FileInfo(_filePath);
             int jobId = _context.JobId;
 
@@ -113,7 +170,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             }
             else
             {
-                 yield return null;
+                 yield break;
             }
 
         }
@@ -227,24 +284,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                     DeleteTempFile();
                 }
             }
-            foreach(var p in _dbContext.ProductStages.Where(o=>o.UploadGroupId==jobId))
-            {
-                yield return new ProductUploadInfo(){
-                     Brand = p.BrandName
-                       ,Descrip = p.Description
-                       ,DescripOfPromotion = p.DescripOfPromotion
-                       , DescripOfPromotionBeginDate = p.DescripOfProBeginDate
-                       , DescripOfPromotionEndDate = p.DescripOfProEndDate
-                       , ItemCode = p.ItemCode
-                       , Price = p.Price
-                       , PromotionIds = p.Promotions
-                       , Store = p.Store
-                       , Tag = p.Tag
-                       , Title = p.name
-                       ,SubjectIds = p.Subjects
-                       ,SessionU = jobId
-                };
-            }
+            return List(jobId);
         }
 
         private void DeleteTempFile()
@@ -264,6 +304,47 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
            // _context.JobId = 0;
             return result;
 
+        }
+
+
+
+
+        internal IEnumerable<ProductUploadJob> JobList()
+        {
+            return from j in _dbContext.ProductUploadJobs
+                   where j.InUser == _context.CurrentUser.CustomerId
+                   select new ProductUploadJob() { 
+                     JobId = j.Id
+                     ,InDate = j.InDate
+                   };
+        }
+
+        internal void Delete(int p)
+        {
+            _dbContext.Database.ExecuteSqlCommand(@"exec dbo.ProductBulkDelete @jobId",
+                new[] { new SqlParameter("@jobId", p) });
+        }
+
+        internal ProductUploadInfo UploadItemDetail(int p)
+        {
+            return (from i in _dbContext.ProductStages
+                    where i.id == p
+                    select new ProductUploadInfo() {
+                         Id = i.id
+                         , Brand = i.BrandName
+                         , Descrip = i.Description
+                         , DescripOfPromotion = i.DescripOfPromotion
+                         , DescripOfPromotionBeginDate = i.DescripOfProBeginDate
+                         , DescripOfPromotionEndDate = i.DescripOfProEndDate
+                         , ItemCode = i.ItemCode
+                         , Price = i.Price
+                         , PromotionIds = i.Promotions
+                         , SessionU = i.UploadGroupId.Value
+                         , Store = i.Store
+                         , SubjectIds = i.Subjects
+                         , Tag = i.Tag
+                         , Title = i.name
+                    }).FirstOrDefault();
         }
     }
 }

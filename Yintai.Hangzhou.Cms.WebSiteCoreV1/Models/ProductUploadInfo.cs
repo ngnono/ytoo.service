@@ -37,6 +37,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public string PromotionIds { get; set; }
         public string SubjectIds { get; set; }
         public int SessionU { get; set; }
+        public int Id { get; set; }
 
+    }
+    public class ProductUploadJob
+    {
+        public int JobId { get; set; }
+        public DateTime? InDate { get; set; }
     }
 }

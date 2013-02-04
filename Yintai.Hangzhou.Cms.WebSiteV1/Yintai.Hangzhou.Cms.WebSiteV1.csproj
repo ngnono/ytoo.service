@@ -423,6 +423,8 @@
     <Content Include="Views\ProBulkUpload\Display.cshtml" />
     <Content Include="Views\Shared\_BLayout.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\ProBulkUpload\List.cshtml" />
+    <Content Include="Views\ProBulkUpload\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

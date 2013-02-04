@@ -27,9 +27,9 @@
 @section PageBread
 {
     <ul class="breadcrumb">
-        <li>@Html.ActionLink("商品管理","index","product")<span class="divider">/</span></li>
+        <li>@Html.ActionLink("商品管理", "index", "product")<span class="divider">/</span></li>
         <li class="active">批量上传</li>
-    </ul>        
+    </ul>
 }
 <!-- Shim to make HTML5 elements usable in older Internet Explorer versions -->
 <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -63,9 +63,47 @@
                 </div>
                 <!-- The loading indicator is shown during image processing -->
                 <div class="fileupload-loading"></div>
-                <!-- The table listing the files available for upload/download -->
                 <table class="table table-striped" data-provides="rowlink">
-                    <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+                    <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
+                    </tbody>
+                </table>
+                <!-- The table listing the result -->
+                <table class="table table-striped" data-provides="rowlink">
+                    <tbody class="files-result" data-toggle="modal-gallery" data-target="#modal-gallery">
+                        <tr>
+                            <th>商品编码</th>
+                            <th>商品名称</th>
+                            <th>商品描述</th>
+                            <th>促销描述</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>品牌名称</th>
+                            <th>Tag名称</th>
+                            <th>价格</th>
+                            <th>实体店名称</th>
+                            <th>绑定促销IDs</th>
+                            <th>绑定主题IDs</th>
+                            <th></th>
+                        </tr>
+                        @foreach (var item in ViewBag.UploadedProducts)
+                        {
+                            <tr class="template-download">
+                                <td class="name"><span>@item.ItemCode</span></td>
+                                <td class="name"><span>@item.Title</span></td>
+                                <td class="name"><span>@item.Descrip</span></td>
+                                <td class="name"><span>@item.DescripOfPromotion</span></td>
+                                <td class="name"><span>@item.DescripOfPromotionBeginDate</span></td>
+                                <td class="name"><span>@item.DescripOfPromotionEndDate</span></td>
+                                <td class="name"><span>@item.Brand</span></td>
+                                <td class="name"><span>@item.Tag</span></td>
+                                <td class="name"><span>@item.Price</span></td>
+                                <td class="name"><span>@item.Store</span></td>
+                                <td class="name"><span>@item.PromotionIds</span></td>
+                                <td class="name"><span>@item.SubjectIds</span></td>
+                                <td class="name"><span><a href="@Url.Action("detail")?uiid=@item.Id" class="btn">编辑</a></span></td>
+                            </tr> 
+                        }
+                    </tbody>
                 </table>
 
             </form>
@@ -82,7 +120,7 @@
                         </ul>
                     </div>
                     <div class="span7">
-                        
+
                         <span class="btn btn-success fileinput-button">
                             <i class="icon-plus icon-white"></i>
                             <span>选择图片</span>
@@ -106,10 +144,32 @@
                 </div>
                 <!-- The loading indicator is shown during image processing -->
                 <div class="fileupload-loading"></div>
-
-                <!-- The table listing the files available for upload/download -->
                 <table class="table table-striped" data-provides="rowlink">
-                    <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+                    <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
+                    </tbody>
+                </table>
+                <!-- The table listing the  -->
+                <table class="table table-striped" data-provides="rowlink">
+                    <tbody class="files-result" data-toggle="modal-gallery" data-target="#modal-gallery">
+                        <tr>
+                            <th>商品编码</th>
+                            <th>图片名称</th>
+                            <th>图片大小</th>
+                            <th>图片宽</th>
+                            <th>图片高</th>
+                        </tr>
+                        @foreach (var item in ViewBag.UploadedImages)
+                        {
+                            <tr class="template-download">
+                                <td class="name"><span>@item.ItemCode</span></td>
+                                <td class="name"><span>@item.FileName</span></td>
+                                <td class="name"><span>@item.fileSize</span></td>
+                                <td class="name"><span>@item.Width</span></td>
+                                <td class="name"><span>@item.Height</span></td>
+                            </tr> 
+                        }
+
+                    </tbody>
                 </table>
 
             </form>
@@ -152,7 +212,7 @@
                                   UpdateTargetId = "fu_publishresult"
                                   ,
                                   LoadingElementId = "fu_publishing"
-                                 
+
                               }, new { @class = "btn btn-primary" })
             <div class="row hide" id="fu_publishing">
                 <img src="@Url.Content("~/Content/img/loading.gif")" class="" />
@@ -161,7 +221,7 @@
             <table class="table table-striped" id="fu_publishresult">
                 <tbody></tbody>
             </table>
-           
+
         </div>
 
     </div>
@@ -201,30 +261,22 @@
 </script>
 <!-- The template to display first step result -->
 <script id="template-download" type="text/x-tmpl">
-  <tr>
-        <th>
-            商品编码
-        </th>
-        <th>商品名称</th>
-        <th>商品描述</th>
-     <th>品牌名称</th>
-        <th>Tag名称</th>
-     <th>价格</th>
-        <th>实体店名称</th>
-        <th>绑定促销IDs</th>
-         <th>绑定主题IDs</th>
-    </tr>
+  
 {% for (var i=0, file; i<o.files.length; i++) { file = o.files[i]; %}
     <tr class="template-download fade">
-            <td class="name"><span>{%=file.ItemCode%}</span></td>
-            <td class="name"><span>{%=file.Title%}</span></td>
-            <td class="name"><span>{%=file.Descrip%}</span></td>
+    <td class="name"><span>{%=file.ItemCode%}</span></td>
+    <td class="name"><span>{%=file.Title%}</span></td>
+    <td class="name"><span>{%=file.Descrip%}</span></td>
+    <td class="name"><span>{%=file.DescripOfPromotion%}</span></td>
+    <td class="name"><span>{%=file.DescripOfPromotionBeginDate%}</span></td>
+    <td class="name"><span>{%=file.DescripOfPromotionEndDate%}</span></td>
     <td class="name"><span>{%=file.Brand%}</span></td>
     <td class="name"><span>{%=file.Tag%}</span></td>
     <td class="name"><span>{%=file.Price%}</span></td>
     <td class="name"><span>{%=file.Store%}</span></td>
     <td class="name"><span>{%=file.PromotionIds%}</span></td>
     <td class="name"><span>{%=file.SubjectIds%}</span></td>
+    <td class="name"><span><a href="@Url.Action("detail")?uiid={%=file.Id%}" class="btn">编辑</a></span></td>
     </tr>
 {% } %}
 </script>

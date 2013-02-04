@@ -40,10 +40,40 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                
             }
         }
-        public ActionResult Display()
+        public ActionResult Display(int? id)
         {
             PrepareBulkUpload();
+            ProUploadService helpService = new ProUploadService(this);
+            ViewBag.UploadedProducts = helpService.List(id);
+            ViewBag.UploadedImages = helpService.ListImages(id);
+            SetGroupIdIfNeed(id);
             return View();
+        }
+        public ActionResult List()
+        {
+            return View(new ProUploadService(this).JobList());
+        }
+        public ActionResult Delete(int? id)
+        {
+            if (id!=null &&
+                id.Value > 0)
+                new ProUploadService(this).Delete(id.Value);
+
+            return RedirectToAction("List");
+        }
+        public ActionResult Detail(int? uiid)
+        {
+            if (uiid!=null &&
+                uiid.Value>0)
+             return View(new ProUploadService(this).UploadItemDetail(uiid.Value));
+            return RedirectToAction("List");
+        }
+        private void SetGroupIdIfNeed(int? groupId)
+        {
+            if (groupId == null ||
+                groupId.Value==0)
+                return;
+            JobId = groupId.Value;
         }
 
         private void PrepareBulkUpload()
@@ -54,12 +84,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
        
         public PartialViewResult Validate()
         {
-            var valResult = new ProUploadService(null,this).Validate().ToArray();
+            var valResult = new ProUploadService(this).Validate().ToArray();
             return PartialView("_ValidatePartial",valResult);
         }
         public PartialViewResult Publish()
         {
-            var pubResult = new ProUploadService(null,this).Publish().ToArray();
+            var pubResult = new ProUploadService(this).Publish().ToArray();
             return PartialView("_PublishPartial",pubResult);
         }
         [HttpPost]

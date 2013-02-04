@@ -1,8 +1,8 @@
 ﻿@if(Request.IsAuthenticated) {
         var selfController = (Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers.UserController)ViewContext.Controller;
     <span class="label">@selfController.CurrentUser.LoginName</span>
-    @Html.ActionLink("Log Off", "LogOff", "Account",new {@class="btn"}) 
+    @Html.ActionLink("Log Off", "LogOff", "Account",null,new {@class="btn"}) 
 }
 else {
-    @:[ @Html.ActionLink("Log On", "Login", "Account",new {@class="btn "}) ]
+    @:[ @Html.ActionLink("Log On", "Login", "Account",null,new {@class="btn "}) ]
 }

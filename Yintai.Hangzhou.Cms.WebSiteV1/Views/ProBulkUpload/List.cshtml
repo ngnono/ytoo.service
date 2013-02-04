@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductUploadJob>
+
+@{
+    ViewBag.Title = "批量导入历史";
+}
+
+<h2>List</h2>
+
+<table>
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            操作日期
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.JobId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Display","ProBulkUpload",new {  id=item.JobId  },null) |
+            @Html.ActionLink("Details", "Display","ProBulkUpload", new {  id=item.JobId },null) |
+            @Html.ActionLink("Delete", "Delete","ProBulkUpload", new {  id=item.JobId  },null)
+        </td>
+    </tr>
+}
+
+</table>
