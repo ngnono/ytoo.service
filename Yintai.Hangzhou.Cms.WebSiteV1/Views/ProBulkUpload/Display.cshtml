@@ -1,10 +1,8 @@
 ﻿@{
     ViewBag.Title = "批量商品上传";
- 
 }
 @section PageCssSection
 {
-    <link href="@Url.Content("~/Content/Bootstrap/bootstrap.min.css")"  rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/Bootstrap/bootstrap-image-gallery.min.css")"  rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/FileUpload/jquery.fileupload-ui.css")"  rel="stylesheet" type="text/css" />
 }
@@ -14,7 +12,6 @@
     <script src="@Url.Content("~/Scripts/FileUpload/tmpl.min.js")" type="text/javascript" ></script>
     <script src="@Url.Content("~/Scripts/FileUpload/canvas-to-blob.min.js")" type="text/javascript" ></script>
     <script src="@Url.Content("~/Scripts/FileUpload/load-image.min.js")" type="text/javascript" ></script>
-    <script src="@Url.Content("~/Scripts/bootstrap.min.js")" type="text/javascript" ></script>
     <script src="@Url.Content("~/Scripts/bootstrap-image-gallery.min.js")" type="text/javascript" ></script>
     <script src="@Url.Content("~/Scripts/FileUpload/jquery.iframe-transport.js")" type="text/javascript" ></script>
     <script src="@Url.Content("~/Scripts/FileUpload/jquery.fileupload.js")" type="text/javascript" ></script>
@@ -34,7 +31,7 @@
 <!-- Shim to make HTML5 elements usable in older Internet Explorer versions -->
 <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-<div class="tabbable tabs-left">
+<div class="tabbable tabs-left span12">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab">第一步：上传商品信息</a></li>
         <li><a href="#tab2" data-toggle="tab">第二步：上传图片信息</a></li>
@@ -63,12 +60,12 @@
                 </div>
                 <!-- The loading indicator is shown during image processing -->
                 <div class="fileupload-loading"></div>
-                <table class="table table-striped" data-provides="rowlink">
+                <table class="table table-bordered table-condensed table-striped" data-provides="rowlink">
                     <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
                     </tbody>
                 </table>
                 <!-- The table listing the result -->
-                <table class="table table-striped" data-provides="rowlink">
+                <table class="table table-bordered table-condensed table-striped" data-provides="rowlink">
                     <tbody class="files-result" data-toggle="modal-gallery" data-target="#modal-gallery">
                         <tr>
                             <th>商品编码</th>
@@ -100,7 +97,7 @@
                                 <td class="name"><span>@item.Store</span></td>
                                 <td class="name"><span>@item.PromotionIds</span></td>
                                 <td class="name"><span>@item.SubjectIds</span></td>
-                                <td class="name"><span><a href="@Url.Action("detail")?uiid=@item.Id" class="btn">编辑</a></span></td>
+                                <td class="name"><span><a href="@Url.Action("detail")?uiid=@item.Id&groupid=@item.GroupId" class="btn">编辑</a></span></td>
                             </tr> 
                         }
                     </tbody>
@@ -144,12 +141,12 @@
                 </div>
                 <!-- The loading indicator is shown during image processing -->
                 <div class="fileupload-loading"></div>
-                <table class="table table-striped" data-provides="rowlink">
+                <table class="table table-bordered table-condensed table-striped" data-provides="rowlink">
                     <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
                     </tbody>
                 </table>
                 <!-- The table listing the  -->
-                <table class="table table-striped" data-provides="rowlink">
+                <table class="table table-bordered table-condensed table-striped" data-provides="rowlink">
                     <tbody class="files-result" data-toggle="modal-gallery" data-target="#modal-gallery">
                         <tr>
                             <th>商品编码</th>
@@ -261,7 +258,21 @@
 </script>
 <!-- The template to display first step result -->
 <script id="template-download" type="text/x-tmpl">
-  
+   <tr>
+                            <th>商品编码</th>
+                            <th>商品名称</th>
+                            <th>商品描述</th>
+                            <th>促销描述</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>品牌名称</th>
+                            <th>Tag名称</th>
+                            <th>价格</th>
+                            <th>实体店名称</th>
+                            <th>绑定促销IDs</th>
+                            <th>绑定主题IDs</th>
+                            <th></th>
+                        </tr>
 {% for (var i=0, file; i<o.files.length; i++) { file = o.files[i]; %}
     <tr class="template-download fade">
     <td class="name"><span>{%=file.ItemCode%}</span></td>

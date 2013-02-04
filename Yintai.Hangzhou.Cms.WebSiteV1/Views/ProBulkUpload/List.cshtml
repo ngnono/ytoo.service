@@ -1,36 +1,48 @@
 ﻿@model IEnumerable<Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductUploadJob>
-
 @{
     ViewBag.Title = "批量导入历史";
 }
-
-<h2>List</h2>
-
-<table>
-    <tr>
-        <th>
-            Id
-        </th>
-        <th>
-            操作日期
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.JobId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Display","ProBulkUpload",new {  id=item.JobId  },null) |
-            @Html.ActionLink("Details", "Display","ProBulkUpload", new {  id=item.JobId },null) |
-            @Html.ActionLink("Delete", "Delete","ProBulkUpload", new {  id=item.JobId  },null)
-        </td>
-    </tr>
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink("商品管理", "Index", "Product")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
 }
+<div class="span5">
+<legend>@ViewBag.Title</legend>
+<table class="table table-bordered table-condensed table-striped">
+    <tr>
+        <th>Id
+        </th>
+        <th>操作日期
+        </th>
+        <th>操作</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.JobId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InDate)
+            </td>
+            <td>
+                <div class="dropdown">
+                <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">编辑<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Edit", "Display", "ProBulkUpload", new { id = item.JobId }, null)</li>
+                    <li>@Html.ActionLink("Delete", "Delete", "ProBulkUpload", new { id = item.JobId }, null)</li>
+
+                </ul>
+                </div>
+
+
+            </td>
+        </tr>
+    }
 
 </table>
+</div>

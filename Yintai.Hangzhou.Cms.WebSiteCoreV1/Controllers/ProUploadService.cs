@@ -106,6 +106,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                     ,
                     SessionU = p.UploadGroupId.Value
                     ,Id = p.id
+                    ,GroupId = p.UploadGroupId.Value
                 };
             }
         }
@@ -313,6 +314,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         {
             return from j in _dbContext.ProductUploadJobs
                    where j.InUser == _context.CurrentUser.CustomerId
+                   orderby j.InDate descending
                    select new ProductUploadJob() { 
                      JobId = j.Id
                      ,InDate = j.InDate
@@ -344,7 +346,33 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                          , SubjectIds = i.Subjects
                          , Tag = i.Tag
                          , Title = i.name
+                         ,GroupId = i.UploadGroupId.Value
                     }).FirstOrDefault();
+        }
+
+        internal ProductUploadInfo ItemDetailUpdate(ProductUploadInfo updatedModel)
+        {
+            var entity = _dbContext.ProductStages.Where(i => i.id == updatedModel.Id).First();
+            entity.ItemCode = updatedModel.ItemCode;
+            entity.name = updatedModel.Title;
+            entity.Price = updatedModel.Price;
+            entity.Promotions = updatedModel.PromotionIds;
+            entity.Store = updatedModel.Store;
+            entity.Subjects = updatedModel.SubjectIds;
+            entity.Tag = updatedModel.Tag;
+            entity.BrandName = updatedModel.Brand;
+            entity.DescripOfProBeginDate = updatedModel.DescripOfPromotionBeginDate;
+            entity.DescripOfProEndDate = updatedModel.DescripOfPromotionEndDate;
+            entity.DescripOfPromotion = updatedModel.DescripOfPromotion;
+            _dbContext.SaveChanges();
+            return updatedModel;
+        }
+
+        internal void DeleteItem(int id)
+        {
+            var entity = _dbContext.ProductStages.Find(id);
+            _dbContext.ProductStages.Remove(entity);
+            _dbContext.SaveChanges();
         }
     }
 }

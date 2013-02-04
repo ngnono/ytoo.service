@@ -24,20 +24,33 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
    
     public class ProductUploadInfo
     {
+        [DisplayName("商品编码")]
         public string ItemCode { get; set; }
+        [DisplayName("商品名称")]
         public string Title { get; set; }
+        [DisplayName("商品描述")]
         public string Descrip { get; set; }
+        [DisplayName("促销描述")]
         public string DescripOfPromotion { get; set; }
+        [DisplayName("促销开始时间")]
         public DateTime? DescripOfPromotionBeginDate { get; set; }
+        [DisplayName("促销结束时间")]
         public DateTime? DescripOfPromotionEndDate { get; set; }
+        [DisplayName("品牌名")]
         public string Brand { get; set; }
+        [DisplayName("Tag名")]
         public string Tag { get; set; }
+        [DisplayName("价格")]
         public decimal? Price { get; set; }
+        [DisplayName("实体店名")]
         public string Store { get; set; }
+        [DisplayName("绑定促销IDs")]
         public string PromotionIds { get; set; }
+        [DisplayName("绑定主题IDs")]
         public string SubjectIds { get; set; }
         public int SessionU { get; set; }
         public int Id { get; set; }
+        public int GroupId { get; set; }
 
     }
     public class ProductUploadJob

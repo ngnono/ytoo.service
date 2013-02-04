@@ -43,6 +43,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult Display(int? id)
         {
             PrepareBulkUpload();
+            if (id!=null)
+                JobId = id.Value;
             ProUploadService helpService = new ProUploadService(this);
             ViewBag.UploadedProducts = helpService.List(id);
             ViewBag.UploadedImages = helpService.ListImages(id);
@@ -61,12 +63,30 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             return RedirectToAction("List");
         }
-        public ActionResult Detail(int? uiid)
+        public ActionResult Detail(int? uiid,int? groupId)
         {
+            ViewBag.JobId = groupId;
             if (uiid!=null &&
                 uiid.Value>0)
              return View(new ProUploadService(this).UploadItemDetail(uiid.Value));
             return RedirectToAction("List");
+        }
+        [HttpPost]
+        public ActionResult Detail(ProductUploadInfo updatedModel,int? groupId)
+        {
+            if (ModelState.IsValid)
+            {
+                var model = new ProUploadService(this).ItemDetailUpdate(updatedModel);
+                return View(model);
+            }
+            else
+                return View(updatedModel);
+            
+        }
+        public ActionResult DeleteItem(int id,int groupId)
+        {
+           new ProUploadService(this).DeleteItem(id);
+           return RedirectToAction("Display", new{id=groupId });
         }
         private void SetGroupIdIfNeed(int? groupId)
         {
