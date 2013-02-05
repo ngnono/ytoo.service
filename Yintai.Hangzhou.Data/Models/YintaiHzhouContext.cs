@@ -128,9 +128,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<ResourceEntity> Resources { get; set; }
         public DbSet<ResourceStageEntity> ResourceStages { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
-
         public DbSet<SeedEntity> Seeds { get; set; }
-
         public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
         public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
         public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
@@ -174,9 +172,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new ResourceEntityMap());
             modelBuilder.Configurations.Add(new ResourceStageEntityMap());
             modelBuilder.Configurations.Add(new RoleEntityMap());
-
             modelBuilder.Configurations.Add(new SeedEntityMap());
-
             modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());

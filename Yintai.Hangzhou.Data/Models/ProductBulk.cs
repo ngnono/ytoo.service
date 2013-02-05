@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
+namespace Yintai.Hangzhou.Data.Models
 {
     public enum ProUploadStatus
     {
@@ -21,7 +21,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Description("发布成功")]
         ProductsOnLive = 5
     }
-   
+
     public class ProductUploadInfo
     {
         [DisplayName("商品编码")]
@@ -48,7 +48,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public string PromotionIds { get; set; }
         [DisplayName("绑定主题IDs")]
         public string SubjectIds { get; set; }
-        public int SessionU { get; set; }
         public int Id { get; set; }
         public int GroupId { get; set; }
 
@@ -58,5 +57,27 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public int JobId { get; set; }
         public DateTime? InDate { get; set; }
         public ProUploadStatus Status { get; set; }
+    }
+    public class ImageUploadInfo
+    {
+        public string ItemCode { get; set; }
+        public int? Width { get; set; }
+        public int? Height { get; set; }
+        public string FileName { get; set; }
+        public string fileSize { get; set; }
+
+    }
+    public class ProductValidateResult
+    {
+        public string ItemCode { get; set; }
+        public string ValidateResult { get; set; }
+        public ProUploadStatus ResultStatus { get; set; }
+    }
+    public class ProductPublishResult
+    {
+        public string ItemCode { get; set; }
+        public ProUploadStatus Status { get; set; }
+        public string PublishMemo { get; set; }
+
     }
 }

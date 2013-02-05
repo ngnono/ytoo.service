@@ -1,3 +1,5 @@
+using System.Data.Entity;
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Repository.Impl;
 
@@ -47,6 +49,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<ISpecialTopicRepository, SpecialTopicRepository>();
 
             Current.Register<ISeedRepository, SeedRepository>();
+            Current.Register<IProductBulkRepository, ProductBulkRepository>();
         }
 
         #endregion

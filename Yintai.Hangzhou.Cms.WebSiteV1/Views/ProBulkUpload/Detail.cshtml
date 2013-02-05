@@ -1,4 +1,4 @@
-﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductUploadInfo
+﻿@model Yintai.Hangzhou.Data.Models.ProductUploadInfo
 
 @{
     ViewBag.Title = "详情";
@@ -93,7 +93,7 @@
         </div>
 
         <div class="span4">
-            @Html.HiddenFor(model => model.SessionU)
+            @Html.HiddenFor(model => model.GroupId)
         </div>
          <div class="row">
             @Html.HiddenFor(model => model.Id)

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductUploadJob>
+﻿@model IEnumerable<Yintai.Hangzhou.Data.Models.ProductUploadJob>
+@using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 @{
     ViewBag.Title = "批量导入历史";
 }
@@ -17,6 +18,7 @@
         </th>
         <th>操作日期
         </th>
+        <th>状态</th>
         <th>操作</th>
     </tr>
 
@@ -29,13 +31,22 @@
             <td>
                 @Html.DisplayFor(modelItem => item.InDate)
             </td>
+             <td>
+                 <p>@item.Status.ToFriendlyString()</p> 
+            </td>
             <td>
                 <div class="dropdown">
                 <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">编辑<b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li>@Html.ActionLink("Edit", "Display", "ProBulkUpload", new { id = item.JobId }, null)</li>
-                    <li>@Html.ActionLink("Delete", "Delete", "ProBulkUpload", new { id = item.JobId }, null)</li>
-
+                    @if (item.Status != Yintai.Hangzhou.Data.Models.ProUploadStatus.ProductsOnLive)
+                    {
+                     <li>@Html.ActionLink("Edit", "Display", "ProBulkUpload", new { id = item.JobId }, null)</li>
+                     <li>@Html.ActionLink("Delete", "Delete", "ProBulkUpload", new { id = item.JobId }, null)</li>
+                    }
+                    else
+                    {
+                     <li>@Html.ActionLink("详情", "Display", "ProBulkUpload", new { id = item.JobId }, null)</li>    
+                    }
                 </ul>
                 </div>
 

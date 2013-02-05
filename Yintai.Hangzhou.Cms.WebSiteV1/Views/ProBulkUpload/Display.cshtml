@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Yintai.Hangzhou.Data.Models.ProductUploadJob
+@{
     ViewBag.Title = "批量商品上传";
 }
 @section PageCssSection
@@ -210,7 +211,8 @@
                                   ,
                                   LoadingElementId = "fu_publishing"
 
-                              }, new { @class = "btn btn-primary" })
+                              }, new { @class = "btn btn-primary "+ (Model!=null&&Model.Status==Yintai.Hangzhou.Data.Models.ProUploadStatus.ProductsOnLive?"disabled":"")
+                                        })
             <div class="row hide" id="fu_publishing">
                 <img src="@Url.Content("~/Content/img/loading.gif")" class="" />
             </div>

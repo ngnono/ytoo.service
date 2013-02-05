@@ -26,6 +26,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int Tag_Id { get; set; }
         public bool IsTop { get; set; }
         public Nullable<bool> IsProdBindable { get; set; }
+        public Nullable<int> PublicationLimit { get; set; }
 
         #region Overrides of BaseEntity
 

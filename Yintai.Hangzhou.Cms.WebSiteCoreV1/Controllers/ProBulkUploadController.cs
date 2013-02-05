@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
@@ -43,13 +44,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult Display(int? id)
         {
             PrepareBulkUpload();
+            
             if (id!=null)
                 JobId = id.Value;
             ProUploadService helpService = new ProUploadService(this);
+            var job = helpService.Job(id);
             ViewBag.UploadedProducts = helpService.List(id);
             ViewBag.UploadedImages = helpService.ListImages(id);
             SetGroupIdIfNeed(id);
-            return View();
+            return View(job);
         }
         public ActionResult List()
         {
@@ -104,7 +107,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
        
         public PartialViewResult Validate()
         {
-            var valResult = new ProUploadService(this).Validate().ToArray();
+            var valResult = new ProUploadService(this).Validate();
             return PartialView("_ValidatePartial",valResult);
         }
         public PartialViewResult Publish()
