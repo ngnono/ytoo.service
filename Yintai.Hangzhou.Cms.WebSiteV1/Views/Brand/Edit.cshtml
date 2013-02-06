@@ -59,6 +59,22 @@
             @Html.ValidationMessageFor(model => model.WebSite)
         </div>
 
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Group)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Group)
+            @Html.ValidationMessageFor(model => model.Group)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Status)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Status)
+            @Html.ValidationMessageFor(model => model.Status)
+        </div>
+
         <p>
             <input type="submit" value="Save" />
         </p>

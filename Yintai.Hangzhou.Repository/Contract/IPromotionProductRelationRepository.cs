@@ -8,5 +8,7 @@ namespace Yintai.Hangzhou.Repository.Contract
         List<Promotion2ProductEntity> GetList(int promotionId);
 
         List<Promotion2ProductEntity> GetList4Product(List<int> productids);
+
+        bool Exists(int promotionid, int productid);
     }
 }

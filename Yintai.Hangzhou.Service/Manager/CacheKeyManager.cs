@@ -66,5 +66,14 @@ namespace Yintai.Hangzhou.Service.Manager
 
             return CacheDateSecond;
         }
+
+        public static int BrandAll4GroupKey(out string key)
+        {
+            const string keyPre4All = BrandKeyPre + "_all4group";
+
+            key = keyPre4All;
+
+            return CacheDateSecond;
+        }
     }
 }

@@ -6,8 +6,11 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Product;
+using Yintai.Hangzhou.Contract.DTO.Request.Promotion;
+using Yintai.Hangzhou.Contract.DTO.Response.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Response.Product;
 using Yintai.Hangzhou.Contract.Product;
+using Yintai.Hangzhou.Contract.Promotion;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
@@ -26,15 +29,19 @@ namespace Yintai.Hangzhou.Service
         private readonly ICouponDataService _couponDataService;
         private readonly IResourceService _resourceService;
         private readonly ICouponService _couponService;
+        private readonly IPromotionService _promotionService;
+        private readonly IPromotionDataService _promotionDataService;
 
-        public ProductDataService(ICouponService couponService, IResourceService resourceService, IProductRepository productRepository, IShareService shareService, IFavoriteService favoriteService, ICouponDataService couponDataService)
+        public ProductDataService(IPromotionDataService promotionDataService, IPromotionService promotionService, ICouponService couponService, IResourceService resourceService, IProductRepository productRepository, IShareService shareService, IFavoriteService favoriteService, ICouponDataService couponDataService)
         {
+            _promotionDataService = promotionDataService;
             _productRepository = productRepository;
             _shareService = shareService;
             _favoriteService = favoriteService;
             _couponDataService = couponDataService;
             _resourceService = resourceService;
             _couponService = couponService;
+            _promotionService = promotionService;
         }
 
         private ProductInfoResponse IsR(ProductInfoResponse response, UserModel currentAuthUser, int productId)
@@ -468,13 +475,50 @@ namespace Yintai.Hangzhou.Service
                 return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
 
-            var coupon = _couponDataService.CreateCoupon(new CouponCouponRequest
+            //判断如果是v1.0版本 可以允许创建优惠券。
+
+            ExecuteResult<CouponCodeResponse> coupon;
+            if (request.Client_Version != "1.0")
             {
-                AuthUid = request.AuthUid,
-                SourceId = product.Id,
-                SourceType = (int)SourceType.Product,
-                Token = request.Token
-            });
+                //判断
+                if (!_promotionService.Exists(request.PromotionId ?? 0, request.ProductId))
+                {
+                    return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "当前商品没有参加该活动" };
+                }
+
+                var pr = _promotionDataService.CreateCoupon(new PromotionCouponCreateRequest
+                    {
+                        AuthUid = request.AuthUid,
+                        AuthUser = request.AuthUser,
+                        Client_Version = request.Client_Version,
+                        IsPass = request.IsPass,
+                        Method = request.Method,
+                        PromotionId = request.PromotionId ?? 0,
+                        Token = request.Token
+                    });
+
+                if (pr.IsSuccess && pr.Data != null && pr.Data.CouponCodeResponse != null)
+                {
+                    coupon = new ExecuteResult<CouponCodeResponse>(pr.Data.CouponCodeResponse);
+                }
+                else
+                {
+                    coupon = new ExecuteResult<CouponCodeResponse>(null) { Message = pr.Message, StatusCode = pr.StatusCode };
+                }
+            }
+            else
+            {
+                coupon = _couponDataService.CreateCoupon(new CouponCouponRequest
+                {
+                    AuthUid = request.AuthUid,
+                    SourceId = product.Id,
+                    SourceType = (int)SourceType.Product,
+                    Token = request.Token,
+                    AuthUser = request.AuthUser,
+                    Method = request.Method,
+                    Client_Version = request.Client_Version
+                });
+            }
 
             if (!coupon.IsSuccess)
             {

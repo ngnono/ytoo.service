@@ -1,5 +1,4 @@
 ﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.BrandViewModel
-
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -25,6 +24,29 @@
         @Html.DisplayFor(model => model.Description)
     </div>
 
+
+
+    <div class="display-label">Logo</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Logo)
+    </div>
+
+    <div class="display-label">WebSite</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.WebSite)
+    </div>
+
+    <div class="display-label">Group</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Group)
+    </div>
+
+
+    <div class="display-label">Status</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Status)
+    </div>
+
     <div class="display-label">CreatedUser</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.CreatedUser)
@@ -45,22 +67,8 @@
         @Html.DisplayFor(model => model.UpdatedUser)
     </div>
 
-    <div class="display-label">Logo</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Logo)
-    </div>
-
-    <div class="display-label">WebSite</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.WebSite)
-    </div>
-
-    <div class="display-label">Status</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Status)
-    </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

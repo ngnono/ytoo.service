@@ -383,6 +383,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Product
     public class CreateCouponProductRequest : AuthRequest
     {
         public int ProductId { get; set; }
+        public int? PromotionId { get; set; }
         public int IsPass { get; set; }
     }
 }

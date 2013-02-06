@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Yintai.Architecture.Common.Models;
@@ -26,7 +27,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Promotion
     }
 
     [DataContract]
-    public class PromotionInfoResponse
+    public class PromotionInfo
     {
         [DataMember(Name = "id")]
         public int Id { get; set; }
@@ -83,8 +84,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Promotion
         [DataMember(Name = "promotionuserid")]
         public int RecommendUser { get; set; }
 
-        [DataMember(Name = "promotionuser")]
-        public ShowCustomerInfoResponse ShowCustomer { get; set; }
 
         [IgnoreDataMember]
         public int PromotionSourceType { get; set; }
@@ -103,6 +102,21 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Promotion
 
         [DataMember(Name = "store_id")]
         public int Store_Id { get; set; }
+
+        [DataMember(Name = "tagid")]
+        public int Tag_Id { get; set; }
+
+        [DataMember(Name = "isproductbinded")]
+        public Nullable<bool> IsProdBindable { get; set; }
+    }
+
+
+    [DataContract]
+    public class PromotionInfoResponse : PromotionInfo
+    {
+
+        [DataMember(Name = "promotionuser")]
+        public ShowCustomerInfoResponse ShowCustomer { get; set; }
 
         [DataMember(Name = "store")]
         public StoreInfoResponse StoreInfoResponse { get; set; }
@@ -127,8 +141,5 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Promotion
         /// </summary>
         [DataMember(Name = "isreceived")]
         public bool CurrentUserIsReceived { get; set; }
-
-        [DataMember(Name = "tagid")]
-        public int Tag_Id { get; set; }
     }
 }

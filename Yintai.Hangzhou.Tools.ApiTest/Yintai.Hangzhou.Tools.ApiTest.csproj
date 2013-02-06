@@ -196,6 +196,7 @@
     <Content Include="Views\TestProduct\Create.cshtml" />
     <Content Include="Views\TestCustomer\Create.cshtml" />
     <Content Include="Views\TestCoupon\Index.cshtml" />
+    <Content Include="Views\TestCoupon\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

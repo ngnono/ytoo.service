@@ -214,7 +214,7 @@ namespace Yintai.Hangzhou.Service
                     AuthUser = null,
                     Method = null,
                     Token = null,
-                    Version = request.Version
+                    Client_Version = request.Client_Version
                 });
         }
 
@@ -383,7 +383,7 @@ namespace Yintai.Hangzhou.Service
                     AuthUser = null,
                     Method = null,
                     Token = null,
-                    Version = request.Version
+                    Client_Version = request.Client_Version
                 });
         }
 
@@ -407,7 +407,7 @@ namespace Yintai.Hangzhou.Service
                 AuthUser = null,
                 Method = null,
                 Token = null,
-                Version = request.Version
+                Client_Version = request.Client_Version
             });
         }
 
@@ -435,7 +435,7 @@ namespace Yintai.Hangzhou.Service
                     AuthUser = request.AuthUser,
                     Method = request.Method,
                     Token = request.Token,
-                    Version = request.Version
+                    Client_Version = request.Client_Version
                 });
         }
 

@@ -82,6 +82,42 @@ namespace Yintai.Hangzhou.Service
             return new ExecuteResult<List<BrandInfoResponse>>(MappingManager.BrandInfoResponseMapping(entities).ToList());
         }
 
+        public ExecuteResult<GroupStructInfoResponse<BrandInfoResponse>> GetAll4Group(BrandAllRequest request)
+        {
+            string cacheKey;
+            var s = CacheKeyManager.BrandAll4GroupKey(out cacheKey);
+
+            var r = CachingHelper.Get(
+                delegate(out GroupStructInfoResponse<BrandInfoResponse> data)
+                {
+                    var objData = CachingHelper.Get(cacheKey);
+                    data = (objData == null) ? null : (GroupStructInfoResponse<BrandInfoResponse>)objData;
+
+                    return objData != null;
+                },
+                () =>
+                {
+                    var entities = _brandRepository.GetListForAll();
+                    return MappingManager.BrandInfoResponse4GroupMapping(entities);
+                },
+                data =>
+                CachingHelper.Insert(cacheKey, data, s));
+
+            return new ExecuteResult<GroupStructInfoResponse<BrandInfoResponse>>(r);
+        }
+
+        public ExecuteResult<GroupStructInfoResponse<BrandInfoResponse>> GetRefresh4Group(BrandRefreshRequest request)
+        {
+            var entities = this._brandRepository.GetListForRefresh(request.Timestamp);
+
+            if (entities == null || entities.Count == 0)
+            {
+                return new ExecuteResult<GroupStructInfoResponse<BrandInfoResponse>>(null);
+            }
+
+            return new ExecuteResult<GroupStructInfoResponse<BrandInfoResponse>>(MappingManager.BrandInfoResponse4GroupMapping(entities));
+        }
+
         public ExecuteResult<BrandInfoResponse> Create(BrandCreateRequest request)
         {
             var entity = MappingManager.BrandEntityMapping(request);

@@ -1,6 +1,3 @@
-using Yintai.Architecture.ImageClient;
-using Yintai.Architecture.ImageTool.Contract;
-using Yintai.Architecture.ImageTool.Impl;
 using Yintai.Hangzhou.Contract.Apns;
 using Yintai.Hangzhou.Contract.Brand;
 using Yintai.Hangzhou.Contract.Comment;
@@ -44,23 +41,21 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<ITagDataService, TagDataService>();
             Current.Register<ILikeDataService, LikeDataService>();
             Current.Register<IPointDataService, PointDataService>();
-
             Current.Register<IFeedbackDataService, FeedbackDataService>();
             Current.Register<IItemsDataService, ItemsDataService>();
-
             Current.Register<ISpecialTopicDataService, SpecialTopicDataService>();
 
             //service
-            Current.Register<Service.Contract.IResourceService, ResourceService>();
-            Current.Register<IRemindService, RemindService>();
-            Current.Register<IShareService, ShareService>();
-            Current.Register<IFavoriteService, FavoriteService>();
-            Current.Register<IUserService, UserService>();
-            Current.Register<Service.Contract.ILikeService, LikeService>();
-            Current.Register<ICouponService, CouponService>();
-
             Current.Register<Service.Contract.IAuthenticationService, AuthenticationService>();
+            Current.Register<ICouponService, CouponService>();
+            Current.Register<IFavoriteService, FavoriteService>();
+            Current.Register<Service.Contract.ILikeService, LikeService>();
             Current.Register<Service.Contract.IPointService, PointService>();
+            Current.Register<Service.Contract.IPromotionService, PromotionService>();
+            Current.Register<IRemindService, RemindService>();
+            Current.Register<Service.Contract.IResourceService, ResourceService>();
+            Current.Register<IShareService, ShareService>();
+            Current.Register<IUserService, UserService>();
 
             Current.Register<MappingManagerV2, MappingManagerV2>();
         }

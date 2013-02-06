@@ -6,7 +6,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
-using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
@@ -44,15 +43,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult Display(int? id)
         {
             PrepareBulkUpload();
-            
-            if (id!=null)
-                JobId = id.Value;
             ProUploadService helpService = new ProUploadService(this);
-            var job = helpService.Job(id);
             ViewBag.UploadedProducts = helpService.List(id);
             ViewBag.UploadedImages = helpService.ListImages(id);
             SetGroupIdIfNeed(id);
-            return View(job);
+            return View();
         }
         public ActionResult List()
         {
@@ -66,30 +61,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             return RedirectToAction("List");
         }
-        public ActionResult Detail(int? uiid,int? groupId)
+        public ActionResult Detail(int? uiid)
         {
-            ViewBag.JobId = groupId;
             if (uiid!=null &&
                 uiid.Value>0)
              return View(new ProUploadService(this).UploadItemDetail(uiid.Value));
             return RedirectToAction("List");
-        }
-        [HttpPost]
-        public ActionResult Detail(ProductUploadInfo updatedModel,int? groupId)
-        {
-            if (ModelState.IsValid)
-            {
-                var model = new ProUploadService(this).ItemDetailUpdate(updatedModel);
-                return View(model);
-            }
-            else
-                return View(updatedModel);
-            
-        }
-        public ActionResult DeleteItem(int id,int groupId)
-        {
-           new ProUploadService(this).DeleteItem(id);
-           return RedirectToAction("Display", new{id=groupId });
         }
         private void SetGroupIdIfNeed(int? groupId)
         {
@@ -107,7 +84,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
        
         public PartialViewResult Validate()
         {
-            var valResult = new ProUploadService(this).Validate();
+            var valResult = new ProUploadService(this).Validate().ToArray();
             return PartialView("_ValidatePartial",valResult);
         }
         public PartialViewResult Publish()

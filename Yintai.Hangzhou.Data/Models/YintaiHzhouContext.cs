@@ -11,29 +11,29 @@ using Yintai.Hangzhou.Data.Models.Mapping;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class YintaiHzhouContext : DbContext , Architecture.Common.Data.EF.IUnitOfWork
+    public partial class YintaiHangzhouContext : DbContext , Architecture.Common.Data.EF.IUnitOfWork
     {
         private static readonly Architecture.Common.Logger.ILog _log;
 
-        static YintaiHzhouContext()
+        static YintaiHangzhouContext()
         {
-            Database.SetInitializer<YintaiHzhouContext>(null);
+            Database.SetInitializer<YintaiHangzhouContext>(null);
             _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
         }
 
-		public YintaiHzhouContext()
-			: base("Name=YintaiHzhouContext")
+		public YintaiHangzhouContext()
+            : base("Name=YintaiHangzhouContext")
 		{
 		}
 
         #region ef tracing
 
-		public YintaiHzhouContext(string nameOrConnectionString)
+		public YintaiHangzhouContext(string nameOrConnectionString)
             : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
         {
         }
 
-        public YintaiHzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
+        public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
             : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
         {
 			var ctx = ((IObjectContextAdapter)this).ObjectContext;

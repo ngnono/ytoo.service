@@ -131,6 +131,11 @@ namespace Yintai.Hangzhou.Repository.Impl
             //return base.Get(filter).ToList();
         }
 
+        public int Get4Count(int sourceId, SourceType sourceType)
+        {
+            return base.Get(Filter(null, DataStatus.Normal, sourceType, sourceId, null)).Count();
+        }
+
         #endregion
     }
 }

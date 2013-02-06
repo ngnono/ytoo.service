@@ -5,8 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Yintai.Hangzhou.Data.Models;
-
+using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 {

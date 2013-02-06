@@ -1,4 +1,3 @@
-using System;
 using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;

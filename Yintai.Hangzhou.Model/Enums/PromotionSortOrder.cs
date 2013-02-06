@@ -5,19 +5,24 @@ using System.Text;
 
 namespace Yintai.Hangzhou.Model.Enums
 {
-
     public enum PromotionFilterMode
     {
         Default = 0,
+
         /// <summary>
-        /// 最先实现
+        /// 最新
         /// </summary>
         New = 1,
 
         /// <summary>
         /// 即将开始
         /// </summary>
-        BeginStart = 2
+        BeginStart = 2,
+
+        /// <summary>
+        /// 未结束
+        /// </summary>
+        NotTheEnd = 3
     }
 
     public enum PromotionSortOrder

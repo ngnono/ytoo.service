@@ -136,7 +136,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             {
                 var result = this._productDataService.CreateCoupon(request);
 
-                if (request.IsPass == 1 && result.Data.CouponCodeResponse != null)
+                if (request.IsPass == 1 && result.Data != null && result.Data.CouponCodeResponse != null)
                 {
                     var code = result.Data.CouponCodeResponse;
                     result.Data.CouponCodeResponse.Pass = _passHelper.GetPass(ControllerContext.HttpContext, code.Id,

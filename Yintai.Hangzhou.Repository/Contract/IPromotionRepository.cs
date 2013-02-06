@@ -153,5 +153,14 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="ids"></param>
         /// <returns></returns>
         List<PromotionEntity> GetList(List<int> ids);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="dataStatus"></param>
+        /// <param name="filterMode">未实现</param>
+        /// <returns></returns>
+        List<PromotionEntity> GetList(List<int> ids, DataStatus? dataStatus, PromotionFilterMode? filterMode);
     }
 }

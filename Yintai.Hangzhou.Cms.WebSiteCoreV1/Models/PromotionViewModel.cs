@@ -95,6 +95,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "置顶")]
         public bool IsTop { get; set; }
 
+        [Display(Name = "是否有商品")]
+        public Nullable<bool> IsProdBindable { get; set; }
+
+        [Display(Name = "发行量（不填或-1视为不限制）")]
+        public Nullable<int> PublicationLimit { get; set; }
+
         public List<ResourceViewModel> Resources { get; set; }
     }
 }
