@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
@@ -36,18 +37,22 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 if (HttpContext.Response.Cookies[_Session_Key] != null)
                     HttpContext.Response.Cookies[_Session_Key].Value = value.ToString();
                 else
-                     HttpContext.Response.Cookies.Add(new HttpCookie(_Session_Key, value.ToString()));
-               
+                    HttpContext.Response.Cookies.Add(new HttpCookie(_Session_Key, value.ToString()));
+
             }
         }
         public ActionResult Display(int? id)
         {
             PrepareBulkUpload();
+
+            if (id != null)
+                JobId = id.Value;
             ProUploadService helpService = new ProUploadService(this);
+            var job = helpService.Job(id);
             ViewBag.UploadedProducts = helpService.List(id);
             ViewBag.UploadedImages = helpService.ListImages(id);
             SetGroupIdIfNeed(id);
-            return View();
+            return View(job);
         }
         public ActionResult List()
         {
@@ -55,23 +60,41 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         }
         public ActionResult Delete(int? id)
         {
-            if (id!=null &&
+            if (id != null &&
                 id.Value > 0)
                 new ProUploadService(this).Delete(id.Value);
 
             return RedirectToAction("List");
         }
-        public ActionResult Detail(int? uiid)
+        public ActionResult Detail(int? uiid, int? groupId)
         {
-            if (uiid!=null &&
-                uiid.Value>0)
-             return View(new ProUploadService(this).UploadItemDetail(uiid.Value));
+            ViewBag.JobId = groupId;
+            if (uiid != null &&
+                uiid.Value > 0)
+                return View(new ProUploadService(this).UploadItemDetail(uiid.Value));
             return RedirectToAction("List");
+        }
+        [HttpPost]
+        public ActionResult Detail(ProductUploadInfo updatedModel, int? groupId)
+        {
+            if (ModelState.IsValid)
+            {
+                var model = new ProUploadService(this).ItemDetailUpdate(updatedModel);
+                return View(model);
+            }
+            else
+                return View(updatedModel);
+
+        }
+        public ActionResult DeleteItem(int id, int groupId)
+        {
+            new ProUploadService(this).DeleteItem(id);
+            return RedirectToAction("Display", new { id = groupId });
         }
         private void SetGroupIdIfNeed(int? groupId)
         {
             if (groupId == null ||
-                groupId.Value==0)
+                groupId.Value == 0)
                 return;
             JobId = groupId.Value;
         }
@@ -79,23 +102,23 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         private void PrepareBulkUpload()
         {
             if (HttpContext.Response.Cookies[_Session_Key] != null)
-                HttpContext.Response.Cookies[_Session_Key].Value = "0" ;
+                HttpContext.Response.Cookies[_Session_Key].Value = "0";
         }
-       
+
         public PartialViewResult Validate()
         {
-            var valResult = new ProUploadService(this).Validate().ToArray();
-            return PartialView("_ValidatePartial",valResult);
+            var valResult = new ProUploadService(this).Validate();
+            return PartialView("_ValidatePartial", valResult);
         }
         public PartialViewResult Publish()
         {
             var pubResult = new ProUploadService(this).Publish().ToArray();
-            return PartialView("_PublishPartial",pubResult);
+            return PartialView("_PublishPartial", pubResult);
         }
         [HttpPost]
         public JsonResult Upload()
         {
-            HttpContextBase context = ControllerContext.HttpContext;        
+            HttpContextBase context = ControllerContext.HttpContext;
             UploadFile(context);
             ProductUploadInfo[] array = new ProUploadService(_fileFullPath, this).Stage().ToArray<ProductUploadInfo>();
             return Json(array);
@@ -104,11 +127,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public JsonResult UploadImage()
         {
             if (!EnsureJobIdContext())
-               throw new Exception("还没有导入商品");
+                throw new Exception("还没有导入商品");
             HttpContextBase context = ControllerContext.HttpContext;
             UploadFile(context);
-            
-            return Json(new ProUploadService(_fileFullPath,this).ImageStage().ToArray());
+
+            return Json(new ProUploadService(_fileFullPath, this).ImageStage().ToArray());
         }
 
         private bool EnsureJobIdContext()
@@ -165,7 +188,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 var fullPath = StorageRoot + Path.GetFileName(file.FileName);
 
                 file.SaveAs(fullPath);
-              
+
                 _fileFullPath = fullPath;
             }
 

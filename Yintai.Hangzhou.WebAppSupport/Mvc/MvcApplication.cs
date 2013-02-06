@@ -112,6 +112,7 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         protected void ServiceLocatorInit()
         {
             //Register
+
             IocRegisterRun.Current.Register();
 
             DependencyResolver.SetResolver(ServiceLocator.Current.Resolve<IDependencyResolver>());

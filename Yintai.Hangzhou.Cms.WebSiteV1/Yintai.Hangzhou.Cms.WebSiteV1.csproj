@@ -54,6 +54,9 @@
     <Reference Include="EmitMapper">
       <HintPath>..\_dll\EmitMapper.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\_dll\HtmlAgilityPack.dll</HintPath>
     </Reference>
@@ -158,6 +161,7 @@
     <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui-timepicker-addon.css" />
     <Content Include="Content\themes\base\jquery-ui.css" />
     <Content Include="Content\themes\base\jquery.ui.accordion.css" />
     <Content Include="Content\themes\base\jquery.ui.all.css" />
@@ -296,6 +300,7 @@
     <Content Include="Configurations\Log4Net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Configurations\unity.config" />
     <None Include="Content\ProTemplate\PRO_UPLOAD_TMP.xls" />
     <None Include="Properties\PublishProfiles\Hangzhou.Cms.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
@@ -317,9 +322,11 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\website.js" />
     <Content Include="Scripts\widget\jquery.easyui.min.js" />
     <Content Include="Scripts\widget\jquery.query.js" />
     <Content Include="Scripts\widget\jquery.uploadify.min.js" />
@@ -425,6 +432,7 @@
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\ProBulkUpload\List.cshtml" />
     <Content Include="Views\ProBulkUpload\Detail.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -130,6 +130,7 @@
     <Compile Include="Models\OutsiteUser.cs" />
     <Compile Include="Models\PointHistory.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductBulk.cs" />
     <Compile Include="Models\ProductStage.cs" />
     <Compile Include="Models\ProductTagRelation.cs" />
     <Compile Include="Models\ProductUploadJob.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Models\VerifyCode.cs" />
     <Compile Include="Models\VUser.cs" />
     <Compile Include="Models\VUserRole.cs" />
+    <Compile Include="Models\YintaiHangzhouContext.cs" />
     <Compile Include="Models\YintaiHzhouContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

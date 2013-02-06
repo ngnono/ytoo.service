@@ -16,12 +16,10 @@ namespace Yintai.Hangzhou.Repository.Impl
     public class ProductBulkRepository:IProductBulkRepository
     {
         private DbContext _context;
-        private DbContext _unManagedContext;
         private const string CONNECT_STRING = "YintaiHangzhouContext";
-        public ProductBulkRepository()
+        public ProductBulkRepository(DbContext context)
         {
-            _context = new YintaiHangzhouContext("YintaiHangzhouContext");
-            _unManagedContext = new YintaiHangzhouContext();
+            _context = context;
         }
         public IEnumerable<Data.Models.ProductStageEntity> FindUploadsByGroupId(int p)
         {
@@ -48,11 +46,14 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public IEnumerable<ProductValidateResult> Validate(int customerId, int jobId)
         {
-           var result = _unManagedContext.Database.SqlQuery<ProductValidateResult>(@"exec dbo.ProductStageValidate @inUser,@jobId",
-                 new[] {new SqlParameter("inUser", customerId)
+            using (var unWrapContext = new YintaiHangzhouContext())
+            {
+                var result = unWrapContext.Database.SqlQuery<ProductValidateResult>(@"exec dbo.ProductStageValidate @inUser,@jobId",
+                      new[] {new SqlParameter("inUser", customerId)
                          ,new SqlParameter("jobId",jobId)
                 });
-           return result.ToArray();
+                return result.ToArray();
+            }
         }
 
         public void BulkInsertProduct(System.Data.DataTable dt, int jobId,IEnumerable<string> cols)
@@ -78,21 +79,26 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public IEnumerable<ProductPublishResult> Publish(int customerId, int jobId)
         {
-
-            return _unManagedContext.Database.SqlQuery<ProductPublishResult>(@"exec dbo.ProductStagePublish2 @inUser,@jobId"
-                     , new[] { new SqlParameter("inUser",customerId )
+            using (var unWrapContext = new YintaiHangzhouContext())
+            {
+                return unWrapContext.Database.SqlQuery<ProductPublishResult>(@"exec dbo.ProductStagePublish2 @inUser,@jobId"
+                         , new[] { new SqlParameter("inUser",customerId )
                      ,new SqlParameter("jobId",jobId)}).ToList();
+            }
         }
 
         public IEnumerable<T> List<T>(Expression<Func<T, bool>> filter) where T : Architecture.Common.Models.BaseEntity
         {
-            return _context.Set<T>().Where(filter);
+            return _context.Set<T>().Where(filter).ToList();
         }
 
         public void BulkDelete(int jobId)
         {
-            _unManagedContext.Database.ExecuteSqlCommand(@"exec dbo.ProductBulkDelete @jobId",
-             new[] { new SqlParameter("@jobId", jobId) });
+            using (var unWrapContext = new YintaiHangzhouContext())
+            {
+                unWrapContext.Database.ExecuteSqlCommand(@"exec dbo.ProductBulkDelete @jobId",
+                 new[] { new SqlParameter("@jobId", jobId) });
+            }
         }
 
         public T Find<T>(int id) where T : Architecture.Common.Models.BaseEntity

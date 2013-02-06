@@ -1,13 +1,12 @@
-<<<<<<< HEAD
-ï»¿@model IEnumerable<Yintai.Hangzhou.Data.Models.ProductUploadJob>
+@model IEnumerable<Yintai.Hangzhou.Data.Models.ProductUploadJob>
 @using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 @{
-    ViewBag.Title = "æ‰¹é‡å¯¼å…¥å†å²";
+    ViewBag.Title = "ÅúÁ¿µ¼ÈëÀúÊ·";
 }
 @section PageBread
 {
     <ul class="breadcrumb">
-        <li>@Html.ActionLink("å•†å“ç®¡ç†", "Index", "Product")<span class="divider">/</span></li>
+        <li>@Html.ActionLink("ÉÌÆ·¹ÜÀí", "Index", "Product")<span class="divider">/</span></li>
         <li class="active">@ViewBag.Title</li>
     </ul>
 }
@@ -17,27 +16,26 @@
     <tr>
         <th>Id
         </th>
-        <th>æ“ä½œæ—¥æœŸ
+        <th>²Ù×÷ÈÕÆÚ
         </th>
-        <th>çŠ¶æ€</th>
-        <th>æ“ä½œ</th>
+        <th>×´Ì¬</th>
+        <th>²Ù×÷</th>
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.JobId)
+                @Html.DisplayFor(model => item.JobId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.InDate)
+                @Html.DisplayFor(model => item.InDate)
             </td>
              <td>
                  <p>@item.Status.ToFriendlyString()</p> 
             </td>
             <td>
                 <div class="dropdown">
-                <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">ç¼–è¾‘<b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">±à¼­<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     @if (item.Status != Yintai.Hangzhou.Data.Models.ProUploadStatus.ProductsOnLive)
                     {
@@ -46,7 +44,7 @@
                     }
                     else
                     {
-                     <li>@Html.ActionLink("è¯¦æƒ…", "Display", "ProBulkUpload", new { id = item.JobId }, null)</li>    
+                     <li>@Html.ActionLink("ÏêÇé", "Display", "ProBulkUpload", new { id = item.JobId }, null)</li>    
                     }
                 </ul>
                 </div>
@@ -58,41 +56,3 @@
 
 </table>
 </div>
-=======
-ï»¿@model IEnumerable<Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductUploadJob>
-
-@{
-    ViewBag.Title = "æ‰¹é‡å¯¼å…¥å†å²";
-}
-
-<h2>List</h2>
-
-<table>
-    <tr>
-        <th>
-            Id
-        </th>
-        <th>
-            æ“ä½œæ—¥æœŸ
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.JobId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Display","ProBulkUpload",new {  id=item.JobId  },null) |
-            @Html.ActionLink("Details", "Display","ProBulkUpload", new {  id=item.JobId },null) |
-            @Html.ActionLink("Delete", "Delete","ProBulkUpload", new {  id=item.JobId  },null)
-        </td>
-    </tr>
-}
-
-</table>
->>>>>>> v2-1

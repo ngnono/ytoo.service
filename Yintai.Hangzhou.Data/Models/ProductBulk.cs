@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
@@ -33,8 +34,10 @@ namespace Yintai.Hangzhou.Data.Models
         [DisplayName("促销描述")]
         public string DescripOfPromotion { get; set; }
         [DisplayName("促销开始时间")]
+        [DataType(DataType.DateTime)]
         public DateTime? DescripOfPromotionBeginDate { get; set; }
         [DisplayName("促销结束时间")]
+        [DataType(DataType.DateTime)]
         public DateTime? DescripOfPromotionEndDate { get; set; }
         [DisplayName("品牌名")]
         public string Brand { get; set; }

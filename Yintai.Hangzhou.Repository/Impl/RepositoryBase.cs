@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Repository.Contract;
 
@@ -22,7 +23,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         //测试用
         protected RepositoryBase()
-            : this(new YintaiHangzhouContext("YintaiHangzhouContext"))
+            : this(ServiceLocator.Current.Resolve<DbContext>())
         {
             //this.DbContext = new MyFinancialEntities();
         }

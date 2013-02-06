@@ -92,10 +92,6 @@
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Manager\MappingManager.cs" />
     <Compile Include="Models\FilesStatus.cs" />
-    <Compile Include="Models\ImageUploadInfo.cs" />
-    <Compile Include="Models\ProductPublishResult.cs" />
-    <Compile Include="Models\ProductUploadInfo.cs" />
-    <Compile Include="Models\ProductValidateResult.cs" />
     <Compile Include="Models\SpecialTopicViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\PointViewModel.cs" />

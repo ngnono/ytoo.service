@@ -49,6 +49,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<ISeedRepository, SeedRepository>();
 
             Current.Register<IPromotionProductRelationRepository, PromotionProductRelationRepository>();
+            Current.Register<IProductBulkRepository, ProductBulkRepository>();
         }
 
         #endregion

@@ -8,6 +8,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
 
         static BaseIocRegister()
         {
+            ServiceLocator.SetLocatorProvider(new PerRequestUnityServiceLocator());
             Current = ServiceLocator.Current;
         }
 
