@@ -2,7 +2,10 @@
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+<<<<<<< HEAD
 using Yintai.Hangzhou.Model.Filters;
+=======
+>>>>>>> edit create coupon logic
 
 namespace Yintai.Hangzhou.Repository.Contract
 {
@@ -49,6 +52,7 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="sortOrder"></param>
         /// <param name="updateUser"></param>
         /// <returns></returns>
+<<<<<<< HEAD
         ProductEntity SetSortOrder(ProductEntity entity, int sortOrder, int updateUser);
 
         /// <summary>
@@ -60,5 +64,8 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="productFilter">过滤选项</param>
         /// <returns></returns>
         List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter);
+=======
+        ProductEntity SetSortOrder(ProductEntity entity,int sortOrder,int updateUser);
+>>>>>>> edit create coupon logic
     }
 }
