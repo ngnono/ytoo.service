@@ -67,6 +67,7 @@
     <Compile Include="Contract\IFavoriteService.cs" />
     <Compile Include="Contract\ILikeService.cs" />
     <Compile Include="Contract\IPointService.cs" />
+    <Compile Include="Contract\IPromotionProductRelation.cs" />
     <Compile Include="Contract\IRemindService.cs" />
     <Compile Include="Contract\IShareService.cs" />
     <Compile Include="FeedbackDataService.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Contract\IUserService.cs" />
     <Compile Include="Impl\LikeService.cs" />
     <Compile Include="Impl\PointService.cs" />
+    <Compile Include="Impl\PromotionService.cs" />
     <Compile Include="Impl\RemindService.cs" />
     <Compile Include="Impl\ResourceService.cs" />
     <Compile Include="Contract\IResourceService.cs" />

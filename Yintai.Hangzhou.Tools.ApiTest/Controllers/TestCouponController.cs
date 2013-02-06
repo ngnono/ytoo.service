@@ -16,5 +16,9 @@ namespace Yintai.Hangzhou.Tools.ApiTest.Controllers
             return View();
         }
 
+        public ActionResult Create()
+        {
+            return View();
+        }
     }
 }

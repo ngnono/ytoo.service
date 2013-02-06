@@ -29,6 +29,20 @@ namespace Yintai.Hangzhou.Contract.Brand
         ExecuteResult<List<BrandInfoResponse>> GetRefresh(BrandRefreshRequest request);
 
         /// <summary>
+        /// 获取全部
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        ExecuteResult<GroupStructInfoResponse<BrandInfoResponse>> GetAll4Group(BrandAllRequest request);
+
+        /// <summary>
+        /// 获取刷新
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        ExecuteResult<GroupStructInfoResponse<BrandInfoResponse>> GetRefresh4Group(BrandRefreshRequest request);
+
+        /// <summary>
         /// 创建一个品牌
         /// </summary>
         /// <param name="request"></param>

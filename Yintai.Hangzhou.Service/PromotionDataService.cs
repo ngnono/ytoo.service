@@ -12,7 +12,6 @@ using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
-using Yintai.Hangzhou.Service.Manager;
 
 namespace Yintai.Hangzhou.Service
 {
@@ -25,8 +24,9 @@ namespace Yintai.Hangzhou.Service
         private readonly IResourceService _resourceService;
         private readonly IPromotionBrandRelationRepository _promotionBrandRelationRepository;
         private readonly ICouponService _couponService;
+        private readonly IPromotionService _promotionService;
 
-        public PromotionDataService(ICouponService couponService, IPromotionBrandRelationRepository promotionBrandRelationRepository, IPromotionRepository promotionRepository, IFavoriteService favoriteService, IShareService shareService, ICouponDataService couponDataService, IResourceService resourceService)
+        public PromotionDataService(IPromotionService promotionService, ICouponService couponService, IPromotionBrandRelationRepository promotionBrandRelationRepository, IPromotionRepository promotionRepository, IFavoriteService favoriteService, IShareService shareService, ICouponDataService couponDataService, IResourceService resourceService)
         {
             _promotionRepository = promotionRepository;
             _favoriteService = favoriteService;
@@ -35,6 +35,7 @@ namespace Yintai.Hangzhou.Service
             _resourceService = resourceService;
             _promotionBrandRelationRepository = promotionBrandRelationRepository;
             _couponService = couponService;
+            _promotionService = promotionService;
         }
 
         private PromotionInfoResponse IsR(PromotionInfoResponse response, UserModel currentAuthUser, int entityId)
@@ -188,7 +189,7 @@ namespace Yintai.Hangzhou.Service
                     //先找 店铺地理位置，找到并且有促销的店铺
                     //根据店铺筛出商品
 
-                    entitys = _promotionRepository.GetList(request.PagerRequest.PageSize, (int) request.SortOrder,
+                    entitys = _promotionRepository.GetList(request.PagerRequest.PageSize, (int)request.SortOrder,
                                                            request.Lng, request.Lat, timestamp);
                     break;
                 case PromotionSortOrder.New:
@@ -241,7 +242,7 @@ namespace Yintai.Hangzhou.Service
 
                     var p2 = new PagerRequest(e2Index, e2Size);
 
-                    e2 = _promotionRepository.GetPagedList(p2, out e2Count, PromotionSortOrder.New, new DateTimeRangeInfo()
+                    e2 = _promotionRepository.GetPagedList(p2, out e2Count, PromotionSortOrder.New, new DateTimeRangeInfo
                     {
                         StartDateTime = DateTime.Now,
                         EndDateTime = DateTime.Now
@@ -403,7 +404,7 @@ namespace Yintai.Hangzhou.Service
 
             promotionEntity.FavoriteCount--;
 
-            this._promotionRepository.Update(promotionEntity);
+            _promotionRepository.Update(promotionEntity);
 
             return GetPromotionInfo(new GetPromotionInfoRequest
             {
@@ -427,12 +428,21 @@ namespace Yintai.Hangzhou.Service
                 return new ExecuteResult<PromotionInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
 
+            var str = _promotionService.Verification(promotionEntity);
+            if (!String.IsNullOrEmpty(str))
+            {
+                return new ExecuteResult<PromotionInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = str };
+            }
+
             var coupon = _couponDataService.CreateCoupon(new CouponCouponRequest
                                                                   {
                                                                       AuthUid = request.AuthUid,
                                                                       SourceId = request.PromotionId,
                                                                       SourceType = (int)SourceType.Promotion,
-                                                                      Token = request.Token
+                                                                      Token = request.Token,
+                                                                      AuthUser = request.AuthUser,
+                                                                      Method = request.Method,
+                                                                      Client_Version = request.Client_Version
                                                                   });
 
             if (!coupon.IsSuccess)

@@ -120,6 +120,30 @@
             @Html.EditorFor(model => model.IsTop)
             @Html.ValidationMessageFor(model => model.IsTop)
         </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IsProdBindable)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IsProdBindable)
+            @Html.ValidationMessageFor(model => model.IsProdBindable)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PublicationLimit)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PublicationLimit)
+            @Html.ValidationMessageFor(model => model.PublicationLimit)
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Status)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Status)
+            @Html.ValidationMessageFor(model => model.Status)
+        </div>
 
         <p>
             <input type="submit" value="Save" />

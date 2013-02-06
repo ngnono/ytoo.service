@@ -1,13 +1,8 @@
 ﻿@if(Request.IsAuthenticated) {
         var selfController = (Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers.UserController)ViewContext.Controller;
-    <span class="btn-group">
-        <a class="btn btn-primary " href="#"><i class="icon-user icon-white"></i>@selfController.CurrentUser.LoginName</a>
-        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            <li>@Html.ActionLink("注销", "LogOff", "Account")</li>
-        </ul>
-    </span>
+    <span class="label">@selfController.CurrentUser.LoginName</span>
+    @Html.ActionLink("Log Off", "LogOff", "Account",null,new {@class="btn"}) 
 }
 else {
-    @:[ @Html.ActionLink("Log On", "Login", "Account",null,new {@class="btn btn-small"}) ]
+    @:[ @Html.ActionLink("Log On", "Login", "Account",null,new {@class="btn "}) ]
 }

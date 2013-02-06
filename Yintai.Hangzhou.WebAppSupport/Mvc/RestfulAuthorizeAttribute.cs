@@ -21,7 +21,7 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         private static readonly ILog _log;
         private readonly bool _holdon;
         private readonly IUserService _userService;
-        private readonly IAuthenticationService _authorizeService;
+        //private readonly IAuthenticationService _authorizeService;
 
         private UserModel _authUser;
 
@@ -43,7 +43,7 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         {
             this._holdon = holdon;
             _userService = ServiceLocator.Current.Resolve<IUserService>();
-            _authorizeService = ServiceLocator.Current.Resolve<IAuthenticationService>();
+            //_authorizeService = ServiceLocator.Current.Resolve<IAuthenticationService>();
         }
 
         static RestfulAuthorizeAttribute()

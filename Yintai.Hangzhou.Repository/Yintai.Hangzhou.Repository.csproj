@@ -31,9 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="LinqKit">
       <HintPath>..\_dll\LinqKit.dll</HintPath>
@@ -69,7 +69,6 @@
     <Compile Include="Contract\ILikeRepository.cs" />
     <Compile Include="Contract\IOutSiteCustomerRepository.cs" />
     <Compile Include="Contract\IPointRepository.cs" />
-    <Compile Include="Contract\IProductBulkRepository.cs" />
     <Compile Include="Contract\IProductRepository.cs" />
     <Compile Include="Contract\IPromotionProductRelationRepository.cs" />
     <Compile Include="Contract\IPromotionRelations.cs" />
@@ -91,7 +90,6 @@
     <Compile Include="Contract\IVUserRepository.cs" />
     <Compile Include="Contract\IVUserRoleRepository.cs" />
     <Compile Include="Impl\BrandRepository.cs" />
-    <Compile Include="Impl\ProductBulkRepository.cs" />
     <Compile Include="Impl\PromotionProductRelation.cs" />
     <Compile Include="Impl\SeedRepository.cs" />
     <Compile Include="Impl\SpecialTopicProductRelationRepository.cs" />

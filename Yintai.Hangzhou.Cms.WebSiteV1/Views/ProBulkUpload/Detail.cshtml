@@ -1,110 +1,129 @@
-﻿@model Yintai.Hangzhou.Data.Models.ProductUploadInfo
+﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductUploadInfo
 
 @{
     ViewBag.Title = "详情";
 }
 
+<h2>详情</h2>
+
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-@section PageBread
-{
-    <ul class="breadcrumb">
-        <li>@Html.ActionLink("批量导入", "Display", "ProBulkUpload", new {id=Model.GroupId },null)<span class="divider">/</span></li>
-        <li class="active">商品详情</li>
-    </ul>
-}
+
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
     <fieldset>
-        <div class="span12">       
-             <legend>@ViewBag.Title</legend>
+        <legend>ProductUploadInfo</legend>
 
-        </div>
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.ItemCode)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.ItemCode)
             @Html.ValidationMessageFor(model => model.ItemCode)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.Title)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.Title)
             @Html.ValidationMessageFor(model => model.Title)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.Descrip)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.Descrip)
             @Html.ValidationMessageFor(model => model.Descrip)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.DescripOfPromotion)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.DescripOfPromotion)
             @Html.ValidationMessageFor(model => model.DescripOfPromotion)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.DescripOfPromotionBeginDate)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.DescripOfPromotionBeginDate)
             @Html.ValidationMessageFor(model => model.DescripOfPromotionBeginDate)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.DescripOfPromotionEndDate)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.DescripOfPromotionEndDate)
             @Html.ValidationMessageFor(model => model.DescripOfPromotionEndDate)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.Brand)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.Brand)
             @Html.ValidationMessageFor(model => model.Brand)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.Tag)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.Tag)
             @Html.ValidationMessageFor(model => model.Tag)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.Price)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.Price)
             @Html.ValidationMessageFor(model => model.Price)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.Store)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.Store)
             @Html.ValidationMessageFor(model => model.Store)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.PromotionIds)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.PromotionIds)
             @Html.ValidationMessageFor(model => model.PromotionIds)
         </div>
 
-        <div class="span4">
+        <div class="editor-label">
             @Html.LabelFor(model => model.SubjectIds)
+        </div>
+        <div class="editor-field">
             @Html.EditorFor(model => model.SubjectIds)
             @Html.ValidationMessageFor(model => model.SubjectIds)
         </div>
 
-        <div class="span4">
-            @Html.HiddenFor(model => model.GroupId)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SessionU)
         </div>
-         <div class="row">
-            @Html.HiddenFor(model => model.Id)
-        </div>
-
-        <div class="span4 form-action">
-            <button class="btn btn-success">保存</button>
-            @Html.ActionLink("删除","DeleteItem","ProBulkUpload",new {id=Model.Id,groupId=Model.GroupId},new {@class="btn btn-danger"})
-            
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SessionU)
+            @Html.ValidationMessageFor(model => model.SessionU)
         </div>
 
+        <p>
+            <input type="submit" value="Save" />
+        </p>
     </fieldset>
 }
 
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

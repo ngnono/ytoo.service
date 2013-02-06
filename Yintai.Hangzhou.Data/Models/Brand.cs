@@ -16,6 +16,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string Logo { get; set; }
         public string WebSite { get; set; }
         public int Status { get; set; }
+        public string Group { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -16,16 +16,18 @@ namespace Yintai.Hangzhou.Repository.Impl
     public class ProductRepository : RepositoryBase<ProductEntity, int>, IProductRepository
     {
         private readonly ISpecialTopicProductRelationRepository _specialTopicProductRelationRepository;
+        private readonly IPromotionProductRelationRepository _promotionProductRelationRepository;
 
-        public ProductRepository(ISpecialTopicProductRelationRepository specialTopicProductRelationRepository)
+        public ProductRepository(IPromotionProductRelationRepository promotionProductRelationRepository, ISpecialTopicProductRelationRepository specialTopicProductRelationRepository)
         {
             _specialTopicProductRelationRepository = specialTopicProductRelationRepository;
+            _promotionProductRelationRepository = promotionProductRelationRepository;
         }
 
         #region methods
 
         /// <summary>
-        /// 
+        /// 获取商品Ids
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -39,6 +41,23 @@ namespace Yintai.Hangzhou.Repository.Impl
             var s = new List<int> { id.Value };
 
             return GetTopicRelationIds(s);
+        }
+
+        /// <summary>
+        /// 获取商品Ids
+        /// </summary>
+        /// <param name="promotionId"></param>
+        /// <returns></returns>
+        private List<int?> GetPromotionRelationIds(int? promotionId)
+        {
+            if (promotionId == null || promotionId.Value < 1)
+            {
+                return new List<int?>(0);
+            }
+
+            var entities = _promotionProductRelationRepository.GetList(promotionId.Value);
+
+            return entities.Select(v => v.ProdId).Distinct().ToList();
         }
 
         /// <summary>
@@ -124,6 +143,29 @@ namespace Yintai.Hangzhou.Repository.Impl
             if (productFilter.TopicId != null && productFilter.TopicId > 0)
             {
                 pids = GetTopicRelationIds(productFilter.TopicId);
+            }
+
+            if (productFilter.PromotionId != null && productFilter.PromotionId > 0)
+            {
+                var ids = GetPromotionRelationIds(productFilter.PromotionId);
+
+                if (ids != null && ids.Count > 0)
+                {
+                    if (pids == null)
+                    {
+                        pids = new List<int>(ids.Count);
+                    }
+
+                    foreach (var id in ids)
+                    {
+                        pids.Add(id ?? 0);
+                    }
+                }
+            }
+
+            if (pids != null)
+            {
+                pids = pids.Distinct().Where(v => v > 0).ToList();
             }
 
             return Filter(productFilter.DataStatus, productFilter.Timestamp, productFilter.TagIds,

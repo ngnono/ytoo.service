@@ -42,7 +42,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
     public class PassHelper
     {
-        private const string IosUrlSchemesPre = "ytfs://";
+        // private const string IosUrlSchemesPre = "ytfs://";
 
         //private readonly ICouponDataService _couponDataService;
         //private readonly IStoreDataService _storeDataService;
@@ -72,7 +72,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     CouponId = couponId,
                     Method = DefineRestfulMethod.Get,
                     Token = null,
-                    Version = null
+                    Client_Version = null
                 });
 
             if (coupon != null && coupon.IsSuccess && coupon.Data != null)
@@ -91,30 +91,30 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         /// <returns></returns>
         public byte[] GetPass(HttpContextBase context, CouponInfoResponse coupponInfo)
         {
-           
             var generator = new PassGenerator();
 
-            var request = new CouponPassGeneratorRequest();
-            request.Identifier = "pass.com.aosca.coupon";
-            request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"].Replace(" ", String.Empty);
-            request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
-            request.SerialNumber = coupponInfo.Id.ToString(CultureInfo.InvariantCulture);
+            var request = new CouponPassGeneratorRequest
+                {
+                    Identifier = "pass.com.aosca.coupon",
+                    CertThumbprint =
+                        ConfigurationManager.AppSettings["PassBookCertificateThumbprint"].Replace(" ", String.Empty),
+                    CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine,
+                    SerialNumber = coupponInfo.Id.ToString(CultureInfo.InvariantCulture),
+                    Description = coupponInfo.ProductDescription,
+                    OrganizationName = "喜欢银泰",
+                    TeamIdentifier = "QFDPQMKGT8",
+                    BackgroundColor = "rgb(229,1,80)",
+                    ForegroundColor = "rgb(255,255,255)",
+                    LabelColor = "rgb(255,255,255)",
+                    AssociatedStoreIdentifiers = new List<int>(1)
+                        {
+                            ConfigManager.AppleAppid
+                        }
+                };
             //被隐藏
-            request.Description = coupponInfo.ProductDescription;
-            request.OrganizationName = "喜欢银泰";
-            request.TeamIdentifier = "QFDPQMKGT8";
-
-
-            request.BackgroundColor = "rgb(229,1,80)";// "#e50150";
-            request.ForegroundColor = "rgb(255,255,255)";
-           request.LabelColor = "rgb(255,255,255)";
 
 
             //TODO:???修改 返回应用使用
-              request.AssociatedStoreIdentifiers = new List<int>(1)
-               {
-                   ConfigManager.AppleAppid
-               };
 
             //var returnAppUrlSchemes = IosUrlSchemesPre + coupponInfo.User_Id.ToString(CultureInfo.InvariantCulture);
 
@@ -184,7 +184,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             byte[] generatedPass = generator.Generate(request);
 
             return generatedPass;
-            
+
             //return null;
         }
 

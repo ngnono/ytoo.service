@@ -30,6 +30,11 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(1024);
 
+            this.Property(t => t.Group)
+                .IsRequired()
+                .IsFixedLength()
+                .HasMaxLength(1);
+
             // Table & Column Mappings
             this.ToTable("Brand");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -43,6 +48,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Logo).HasColumnName("Logo");
             this.Property(t => t.WebSite).HasColumnName("WebSite");
             this.Property(t => t.Status).HasColumnName("Status");
+            this.Property(t => t.Group).HasColumnName("Group");
         }
     }
 }

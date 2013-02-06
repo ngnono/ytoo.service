@@ -593,6 +593,11 @@ namespace Yintai.Hangzhou.Repository.Impl
             return base.Get(v => ids.Any(s => s == v.Id) && v.Status == (int)DataStatus.Normal).ToList();
         }
 
+        public List<PromotionEntity> GetList(List<int> ids, DataStatus? dataStatus, PromotionFilterMode? filterMode)
+        {
+            return base.Get(Filter(dataStatus, new DateTimeRangeInfo { EndDateTime = DateTime.Now }, null, null, null)).ToList();
+        }
+
         private static PromotionEntity ConvertEntity(IDataRecord record)
         {
             if (record == null)
@@ -621,7 +626,9 @@ namespace Yintai.Hangzhou.Repository.Impl
                                 Store_Id = Int32.Parse(record["Store_Id"].ToString()),
                                 RecommendUser = Int32.Parse(record["RecommendUser"].ToString()),
                                 Tag_Id = Int32.Parse(record["Tag_Id"].ToString()),
-                                IsTop = Boolean.Parse(record["IsTop"].ToString())
+                                IsTop = Boolean.Parse(record["IsTop"].ToString()),
+                                IsProdBindable = DBNull.Value == record["IsProdBindable"] ? new Nullable<bool>() : Boolean.Parse(record["IsProdBindable"].ToString()),
+                                PublicationLimit = DBNull.Value == record["PublicationLimit"] ? new Nullable<int>() : Int32.Parse(record["PublicationLimit"].ToString()),
                             };
 
             return model;

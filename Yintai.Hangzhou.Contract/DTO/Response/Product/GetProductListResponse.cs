@@ -5,6 +5,7 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.DTO.Response.Brand;
 using Yintai.Hangzhou.Contract.DTO.Response.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Response.Customer;
+using Yintai.Hangzhou.Contract.DTO.Response.Promotion;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 using Yintai.Hangzhou.Contract.DTO.Response.Store;
 using Yintai.Hangzhou.Contract.DTO.Response.Tag;
@@ -151,14 +152,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Product
         [DataMember(Name = "resources")]
         public List<ResourceInfoResponse> ResourceInfoResponses { get; set; }
 
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
-
->>>>>>> edit create coupon logic
->>>>>>> 3054968bf9d0c0d79ede151efa7ff13f4379c369
         [DataMember(Name = "likecount")]
         public int LikeCount { get; set; }
 
@@ -195,5 +188,11 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Product
         /// </summary>
         [DataMember(Name = "isreceived")]
         public bool CurrentUserIsReceived { get; set; }
+
+        /// <summary>
+        /// 活动
+        /// </summary>
+        [DataMember(Name = "promotions")]
+        public List<PromotionInfo> Promotions { get; set; }
     }
 }

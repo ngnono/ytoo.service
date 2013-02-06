@@ -5,7 +5,6 @@ using Yintai.Hangzhou.Contract.DTO.Response.Favorite;
 using Yintai.Hangzhou.Contract.Favorite;
 using Yintai.Hangzhou.Contract.Request.Favorite;
 using Yintai.Hangzhou.Repository.Contract;
-using Yintai.Hangzhou.Service.Manager;
 
 namespace Yintai.Hangzhou.Service
 {

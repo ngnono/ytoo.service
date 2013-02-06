@@ -23,7 +23,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteTest.Util
         private string _filePath;
         private string _Session_Key = "probulksession";
         private ProBulkUploadController _context;
-        private Hangzhou.Data.Models.YintaiHzhouContext _dbContext;
+        private Hangzhou.Data.Models.YintaiHangzhouContext _dbContext;
         private IResourceService _resourceService;
         private static Dictionary<string, Type> cols = new Dictionary<string, Type>() { 
                { "name",typeof(string)},
@@ -47,7 +47,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteTest.Util
         public ProUploadService(string filePath,ProBulkUploadController context)
         {
             this._filePath = filePath;
-            _dbContext = new Data.Models.YintaiHzhouContext();
+            _dbContext = new Data.Models.YintaiHangzhouContext();
             _context = context;
             _resourceService = ServiceLocator.Current.Resolve<IResourceService>();
         }

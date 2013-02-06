@@ -40,14 +40,14 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
     {
         string Method { get; set; }
 
-        string Version { get; set; }
+        string Client_Version { get; set; }
     }
 
     [Serializable]
     public abstract class BaseRequest : IRestfulRequest
     {
         public string Method { get; set; }
-        public string Version { get; set; }
+        public string Client_Version { get; set; }
     }
 
     [DataContract]

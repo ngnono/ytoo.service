@@ -55,6 +55,10 @@
         </th>
         <th>IsTop
         </th>
+        <th>是否有商品
+        </th>
+        <th>发行量
+        </th>
         <th>Status
         </th>
         <th>CreatedUser
@@ -111,6 +115,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsTop)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsProdBindable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PublicationLimit)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)

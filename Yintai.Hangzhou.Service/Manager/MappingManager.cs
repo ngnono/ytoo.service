@@ -31,6 +31,7 @@ using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Hangzhou.Service.Contract;
 
 namespace Yintai.Hangzhou.Service.Manager
 {
@@ -1685,14 +1686,29 @@ namespace Yintai.Hangzhou.Service.Manager
 
     public abstract class BaseMappingManager
     {
+        #region fields
+
         private readonly IResourceRepository _resourceRepository;
+        private readonly IPromotionProductRelationRepository _pprRepository;
+
+
         private static readonly DateTime Min = new DateTime(1900, 1, 1);
         private static readonly DateTime Max = new DateTime(2079, 1, 1);
+
+        #endregion
+
+        #region .ctor
 
         protected BaseMappingManager()
         {
             _resourceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
+            _pprRepository = ServiceLocator.Current.Resolve<IPromotionProductRelationRepository>();
+
         }
+
+        #endregion
+
+        #region methods
 
         /// <summary>
         ///  datetime 1753-01-01到9999-12-31 00:00:00 到 23:59:59.997 3.33毫秒
@@ -1752,6 +1768,32 @@ namespace Yintai.Hangzhou.Service.Manager
         {
             return _resourceRepository.GetList((int)sourceType, ids);
         }
+
+        protected List<int> GetPromotionidsForRelation(List<int> productids)
+        {
+            var entities = _pprRepository.GetList4Product(productids);
+
+            if (entities == null || entities.Count == 0)
+            {
+                return new List<int>(0);
+            }
+
+            return entities.Select(v => v.ProId ?? 0).Distinct().ToList();
+        }
+
+        protected List<Promotion2ProductEntity> GetPromotionForRelation(List<int> productids)
+        {
+            var entities = _pprRepository.GetList4Product(productids);
+
+            if (entities == null || entities.Count == 0)
+            {
+                return new List<Promotion2ProductEntity>(0);
+            }
+
+            return entities;
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -2459,9 +2501,39 @@ namespace Yintai.Hangzhou.Service.Manager
             return target;
         }
 
+        public PromotionInfo PromotionInfoMapping(PromotionEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<PromotionEntity, PromotionInfo>(source);
+
+            return target;
+        }
+
+        public PromotionInfoResponse PromotionInfoResponseMapping(PromotionEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<PromotionEntity, PromotionInfoResponse>(source);
+
+            return target;
+        }
+
+
         public PromotionInfoResponse PromotionResponseMapping(PromotionEntity source, CoordinateInfo coordinateInfo, List<int> brandIds, List<ResourceInfoResponse> resourceInfoResponses, StoreInfoResponse storeInfoResponse, ShowCustomerInfoResponse showCustomerInfoResponse)
         {
-            var target = Mapper.Map<PromotionEntity, PromotionInfoResponse>(source);
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = PromotionInfoResponseMapping(source);
 
             if (showCustomerInfoResponse != null)
             {
@@ -2586,6 +2658,46 @@ namespace Yintai.Hangzhou.Service.Manager
         public IEnumerable<PromotionInfoResponse> PromotionResponseMapping(List<PromotionEntity> source)
         {
             return PromotionResponseMapping(source, null);
+        }
+
+        private List<PromotionInfo> GetPromotionInfos4V(List<int> ids)
+        {
+            if (ids == null || ids.Count == 0)
+            {
+                return new List<PromotionInfo>(0);
+            }
+
+            var entities = _promotionRepository.GetList(ids, DataStatus.Normal, PromotionFilterMode.NotTheEnd);
+
+            if (entities == null || entities.Count == 0)
+            {
+                return new List<PromotionInfo>(0);
+            }
+
+            return PromotionInfoMapping(entities);
+        }
+
+        private List<PromotionInfo> PromotionInfoMapping(ICollection<PromotionEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return new List<PromotionInfo>(0);
+            }
+
+            var result = new List<PromotionInfo>(source.Count);
+
+            foreach (var item in source)
+            {
+                var target = PromotionInfoMapping(item);
+
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+
+            }
+
+            return result;
         }
 
         #endregion
@@ -2989,6 +3101,35 @@ namespace Yintai.Hangzhou.Service.Manager
             return list;
         }
 
+        public GroupStructInfoResponse<BrandInfoResponse> BrandInfoResponse4GroupMapping(List<BrandEntity> source)
+        {
+            if (source == null || source.Count == 0)
+            {
+                return null;
+            }
+
+            var list = new GroupStructInfoResponse<BrandInfoResponse>();
+            foreach (var s in source)
+            {
+                var r = BrandInfoResponseMapping(s);
+
+                if (r != null)
+                {
+                    var key =  r.Group;
+                    if (list.ContainsKey(key))
+                    {
+                        list[key].Add(r);
+                    }
+                    else
+                    {
+                        list.Add(key, new List<BrandInfoResponse> { r });
+                    }
+                }
+            }
+
+            return list;
+        }
+
         public BrandEntity BrandEntityMapping(BrandInfoRequest source)
         {
             if (source == null)
@@ -3209,11 +3350,12 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <param name="showCustomerInfo"></param>
         /// <param name="tagInfoResponse"></param>
         /// <param name="resourceInfoResponses"></param>
+        /// <param name="promotions"></param>
         /// <returns></returns>
         public ProductInfoResponse ProductInfoResponseMapping(ProductEntity source, BrandInfoResponse brandInfo,
                                                                      StoreInfoResponse storeInfo,
                                                                      ShowCustomerInfoResponse showCustomerInfo,
-                                                                     TagInfoResponse tagInfoResponse, List<ResourceInfoResponse> resourceInfoResponses)
+                                                                     TagInfoResponse tagInfoResponse, List<ResourceInfoResponse> resourceInfoResponses, List<PromotionInfo> promotions = null)
         {
             if (source == null)
             {
@@ -3227,6 +3369,7 @@ namespace Yintai.Hangzhou.Service.Manager
             target.RecommendUserInfoResponse = showCustomerInfo;
             target.TagInfoResponse = tagInfoResponse;
             target.ResourceInfoResponses = resourceInfoResponses;
+            target.Promotions = promotions;
 
             return target;
         }
@@ -3243,8 +3386,11 @@ namespace Yintai.Hangzhou.Service.Manager
             var ruser = ShowCustomerInfoResponseMapping(_customerRepository.GetItem(source.RecommendUser));
             var tag = TagInfoResponseMapping(_tagRepository.GetItem(source.Tag_Id));
             var resources = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, source.Id));
+            var pprs = GetPromotionForRelation(new List<int>(1) { source.Id });
 
-            return ProductInfoResponseMapping(source, brand, store, ruser, tag, resources.ToList());
+            var promotions = GetPromotionInfos4V(pprs.Select(v => v.ProId ?? 0).ToList());
+
+            return ProductInfoResponseMapping(source, brand, store, ruser, tag, resources.ToList(), promotions);
         }
 
         public IEnumerable<ProductInfoResponse> ProductInfoResponseMapping(List<ProductEntity> source)
@@ -3260,18 +3406,24 @@ namespace Yintai.Hangzhou.Service.Manager
             var stores = StoreResponseMapping(_storeRepository.GetListByIds(source.Select(v => v.Store_Id).Distinct().ToList())).ToList();
             var rusers = ShowCustomerInfoResponseMapping(_customerRepository.GetListByIds(source.Select(v => v.RecommendUser).Distinct().ToList())).ToList();
             var tags = TagInfoResponseMapping(_tagRepository.GetListByIds(source.Select(v => v.Tag_Id).Distinct().ToList())).ToList();
-            var resources =
-                ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, source.Select(v => v.Id).ToList())).ToList();
+            var ids = source.Select(v => v.Id).ToList();
+            var resources = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, ids)).ToList();
 
-            foreach (var s in source)
+            var pprs = GetPromotionForRelation(ids);
+
+            var promotions = GetPromotionInfos4V(pprs.Select(v => v.ProId ?? 0).ToList());
+
+            foreach (var item in source)
             {
-                if (s == null)
+                if (item == null)
                 {
                     continue;
                 }
 
-                var s1 = s;
-                var target = ProductInfoResponseMapping(s, brands.FirstOrDefault(v => v.Id == s.Brand_Id), stores.FirstOrDefault(v => v.Id == s.Store_Id), rusers.FirstOrDefault(v => v.Id == s.RecommendUser), tags.FirstOrDefault(v => v.Id == s.Tag_Id), resources.Where(v => v.SourceId == s1.Id).ToList());
+                var pids = pprs.Where(v => v.ProdId == item.Id).Select(v => v.ProId).Distinct().ToList();
+                var ps = promotions.Where(v => pids.Any(s => s == v.Id)).ToList();
+
+                var target = ProductInfoResponseMapping(item, brands.FirstOrDefault(v => v.Id == item.Brand_Id), stores.FirstOrDefault(v => v.Id == item.Store_Id), rusers.FirstOrDefault(v => v.Id == item.RecommendUser), tags.FirstOrDefault(v => v.Id == item.Tag_Id), resources.Where(v => v.SourceId == item.Id).ToList(), ps);
                 if (target == null)
                 {
                     continue;

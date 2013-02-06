@@ -52,12 +52,11 @@ namespace Yintai.Hangzhou.WebSupport.Configuration
             return (T)t;
         }
 
-        [System.Obsolete("请使用Yintai.Hangzhou.Service.Manager同名方法")]
         public static int AppleAppid
         {
             get
             {
-                var t = Yintai.Hangzhou.Service.Manager.ConfigManager.GetAppleAppId();
+                var t = Service.Manager.ConfigManager.GetAppleAppId();
 
                 int i;
                 Int32.TryParse(t, out i);

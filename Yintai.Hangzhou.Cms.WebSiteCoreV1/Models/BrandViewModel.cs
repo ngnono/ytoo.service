@@ -44,6 +44,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [StringLength(1024, MinimumLength = 0)]
         public string WebSite { get; set; }
 
+        [Required]
+        [Display(Name = "显示分组")]
+        [StringLength(1, MinimumLength = 1)]
+        public string Group { get; set; }
+
         [Display(Name = "状态")]
         public int Status { get; set; }
         [Display(Name = "创建人")]
