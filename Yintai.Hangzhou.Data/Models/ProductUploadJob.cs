@@ -9,6 +9,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<System.DateTime> InDate { get; set; }
         public Nullable<int> InUser { get; set; }
         public string FileName { get; set; }
+        public Nullable<int> Status { get; set; }
 
         #region Overrides of BaseEntity
 

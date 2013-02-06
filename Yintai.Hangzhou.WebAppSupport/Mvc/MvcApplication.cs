@@ -25,6 +25,15 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         }
     }
 
+
+    public class WebApiTestApplication : MvcApplication
+    {
+        public WebApiTestApplication()
+            : base("Yintai.Hangzhou.Tools.ApiTest.Controllers")
+        {
+        }
+    }
+
     public class WebApiApplication : MvcApplication
     {
         public WebApiApplication()

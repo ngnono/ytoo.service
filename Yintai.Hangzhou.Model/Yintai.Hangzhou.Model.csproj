@@ -56,9 +56,11 @@
     <Compile Include="Enums\LikeType.cs" />
     <Compile Include="Enums\MathMethod.cs" />
     <Compile Include="Enums\ResourceSortOrder.cs" />
+    <Compile Include="Enums\SpecialTopicOrder.cs" />
     <Compile Include="Enums\StoreSortOrder.cs" />
     <Compile Include="Enums\TagSortOrder.cs" />
     <Compile Include="Enums\UserRole.cs" />
+    <Compile Include="Filters\ProductFilter.cs" />
     <Compile Include="UserAccountModel.cs" />
     <Compile Include="WebSiteUser.cs" />
     <Compile Include="Enums\CouponSortOrder.cs" />

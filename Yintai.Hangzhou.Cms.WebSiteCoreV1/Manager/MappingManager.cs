@@ -701,6 +701,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             source.Logo = source.Logo ?? String.Empty;
             source.WebSite = source.WebSite ?? String.Empty;
 
+            source.CreatedDate = EntityDateTime(source.CreatedDate);
+            source.UpdatedDate = EntityDateTime(source.UpdatedDate);
+
+
             return source;
         }
 
@@ -712,8 +716,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             }
 
             var target = Mapper.Map<BrandViewModel, BrandEntity>(source);
-            target.CreatedDate = DateTime.Now;
-            target.UpdatedDate = DateTime.Now;
+            source.CreatedDate = EntityDateTime(source.CreatedDate);
+            source.UpdatedDate = EntityDateTime(source.UpdatedDate);
 
             return BrandEntityCheck(target);
         }
@@ -795,8 +799,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             }
 
             var target = Mapper.Map<ProductViewModel, ProductEntity>(source);
-            target.CreatedDate = DateTime.Now;
-            target.UpdatedDate = DateTime.Now;
+            target.CreatedDate = EntityDateTime(source.CreatedDate);
+            target.UpdatedDate = EntityDateTime(source.UpdatedDate);
 
             return ProductEntityCheck(target);
         }
@@ -850,6 +854,108 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             var resouces = ResourceViewMapping(GetListResourceEntities(SourceType.Product, source.Id)).ToList();
 
             return ProductViewMapping(source, resouces);
+        }
+
+        #endregion
+
+        #region SpecialTopic
+
+        public SpecialTopicEntity SpecialTopicEntityMapping(SpecialTopicEntity source, SpecialTopicEntity target)
+        {
+            var result = Mapper.Map(source, target);
+
+            return SpecialTopicEntityCheck(result);
+        }
+
+        /// <summary>
+        /// 检查 entity 为 null的情况
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        private SpecialTopicEntity SpecialTopicEntityCheck(SpecialTopicEntity source)
+        {
+            source.Description = source.Description ?? String.Empty;
+            source.Name = source.Name ?? String.Empty;
+            source.CreatedDate = EntityDateTime(source.CreatedDate);
+            source.UpdatedDate = EntityDateTime(source.UpdatedDate);
+
+            return source;
+        }
+
+        public SpecialTopicEntity SpecialTopicEntityMapping(SpecialTopicViewModel source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<SpecialTopicViewModel, SpecialTopicEntity>(source);
+
+            target.CreatedDate = EntityDateTime(source.CreatedDate);
+            target.UpdatedDate = EntityDateTime(source.UpdatedDate);
+
+            return SpecialTopicEntityCheck(target);
+        }
+
+        public SpecialTopicViewModel SpecialTopicViewMapping(SpecialTopicEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var resouces = ResourceViewMapping(GetListResourceEntities(SourceType.SpecialTopic, source.Id)).ToList();
+
+            return SpecialTopicViewMapping(source, resouces);
+        }
+
+        private SpecialTopicViewModel SpecialTopicViewMapping(SpecialTopicEntity source,
+                                                              List<ResourceViewModel> resourceViewModels)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<SpecialTopicEntity, SpecialTopicViewModel>(source);
+            target.Resources = resourceViewModels;
+
+            return target;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public IEnumerable<SpecialTopicViewModel> SpecialTopicViewMapping(List<SpecialTopicEntity> source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var list = new List<SpecialTopicViewModel>(source.Count);
+            var ids = source.Select(v => v.Id).ToList();
+            var resoucres = ResourceViewMapping(GetListResourceEntities(SourceType.SpecialTopic, ids)).ToList();
+
+            foreach (var item in source)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                var r = resoucres.Where(v => v.SourceId == item.Id).ToList();
+
+                var target = SpecialTopicViewMapping(item, r);
+                if (target != null)
+                {
+                    list.Add(target);
+                }
+            }
+
+            return list;
         }
 
         #endregion

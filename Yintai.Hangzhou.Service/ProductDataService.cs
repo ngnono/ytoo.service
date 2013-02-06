@@ -2,17 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Yintai.Architecture.Common.Caching;
-using Yintai.Architecture.Common.Helper;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Product;
 using Yintai.Hangzhou.Contract.DTO.Response.Product;
-using Yintai.Hangzhou.Contract.DTO.Response.Tag;
 using Yintai.Hangzhou.Contract.Product;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.Service.Manager;
@@ -75,6 +74,11 @@ namespace Yintai.Hangzhou.Service
 
             int totalCount;
             int? ruserId;
+            List<int> tagIds = null;
+            if (request.TagId != null)
+            {
+                tagIds = new List<int> { request.TagId.Value };
+            }
 
             if (request.UserModel == null)
             {
@@ -85,8 +89,20 @@ namespace Yintai.Hangzhou.Service
                 ruserId = request.UserModel.Id;
             }
 
+            var filter = new ProductFilter
+                {
+                    BrandId = request.BrandId,
+                    DataStatus = DataStatus.Normal,
+                    ProductName = null,
+                    RecommendUser = ruserId,
+                    TagIds = tagIds,
+                    Timestamp = request.Timestamp,
+                    TopicId = request.TopicId,
+                    PromotionId = request.PromotionId
+                };
+
             var produtEntities = _productRepository.GetPagedList(request.PagerRequest, out totalCount,
-                request.ProductSortOrder, request.Timestamp, request.TagId, ruserId, request.BrandId);
+                request.ProductSortOrder, filter);
 
             var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
             {
@@ -105,8 +121,29 @@ namespace Yintai.Hangzhou.Service
             }
             int totalCount;
 
-            var entities = _productRepository.GetPagedList(request.PagerRequest, out totalCount, ProductSortOrder.Default,
-                                                 request.Timestamp, request.TagId, null, request.BrandId);
+            List<int> tagIds = null;
+            if (request.TagId != null)
+            {
+                tagIds = new List<int> { request.TagId.Value };
+            }
+
+            var filter = new ProductFilter
+            {
+                BrandId = request.BrandId,
+                DataStatus = DataStatus.Normal,
+                ProductName = null,
+                RecommendUser = null,
+                TagIds = tagIds,
+                Timestamp = request.Timestamp,
+                TopicId = request.TopicId,
+                PromotionId = request.PromotionId
+            };
+
+            var entities = _productRepository.GetPagedList(request.PagerRequest, out totalCount,
+                request.ProductSortOrder, filter);
+
+            //var entities = _productRepository.GetPagedList(request.PagerRequest, out totalCount, ProductSortOrder.Default,
+            //                                     request.Timestamp, request.TagId, null, request.BrandId);
 
             var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
             {
@@ -410,9 +447,9 @@ namespace Yintai.Hangzhou.Service
             _favoriteService.Del(favorentity);
             //del product share count
             product.FavoriteCount--;
-            this._productRepository.Update(product);
+            _productRepository.Update(product);
 
-            return GetProductInfo(new GetProductInfoRequest()
+            return GetProductInfo(new GetProductInfoRequest
                 {
                     CurrentAuthUser = request.AuthUser,
                     ProductId = request.ProductId

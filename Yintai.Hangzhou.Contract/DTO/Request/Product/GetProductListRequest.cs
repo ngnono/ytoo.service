@@ -27,6 +27,16 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Product
         private int? _tagId;
 
         /// <summary>
+        /// 专题
+        /// </summary>
+        public int? TopicId { get; set; }
+
+        /// <summary>
+        /// 活动Id
+        /// </summary>
+        public int? PromotionId { get; set; }
+
+        /// <summary>
         /// 当小于1时 默认为全部
         /// </summary>
         [DataMember(Name = "tagid")]
@@ -108,6 +118,16 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Product
         }
 
         public int Sort { get; set; }
+
+        /// <summary>
+        /// 专题
+        /// </summary>
+        public int? TopicId { get; set; }
+
+        /// <summary>
+        /// 活动Id
+        /// </summary>
+        public int? PromotionId { get; set; }
 
         public ProductSortOrder ProductSortOrder
         {

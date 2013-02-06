@@ -92,6 +92,7 @@
     <Compile Include="PointDataService.cs" />
     <Compile Include="ItemsDataService.cs" />
     <Compile Include="ShareDataService.cs" />
+    <Compile Include="SpecialTopicDataService.cs" />
     <Compile Include="StoreDataService.cs" />
     <Compile Include="LikeDataService.cs" />
     <Compile Include="Manager\MappingManager.cs" />

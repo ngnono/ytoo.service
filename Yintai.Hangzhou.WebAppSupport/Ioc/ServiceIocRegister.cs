@@ -14,6 +14,7 @@ using Yintai.Hangzhou.Contract.Product;
 using Yintai.Hangzhou.Contract.ProductComplex;
 using Yintai.Hangzhou.Contract.Promotion;
 using Yintai.Hangzhou.Contract.Share;
+using Yintai.Hangzhou.Contract.SpecialTopic;
 using Yintai.Hangzhou.Contract.Store;
 using Yintai.Hangzhou.Contract.Tag;
 using Yintai.Hangzhou.Service;
@@ -46,6 +47,8 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
 
             Current.Register<IFeedbackDataService, FeedbackDataService>();
             Current.Register<IItemsDataService, ItemsDataService>();
+
+            Current.Register<ISpecialTopicDataService, SpecialTopicDataService>();
 
             //service
             Current.Register<Service.Contract.IResourceService, ResourceService>();

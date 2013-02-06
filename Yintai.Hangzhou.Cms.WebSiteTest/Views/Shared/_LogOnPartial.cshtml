@@ -1,0 +1,14 @@
+﻿@if(Request.IsAuthenticated) {
+    <div class="pull-right">
+    <text>Welcome <strong>@User.Identity.Name</strong>!
+    [ @Html.ActionLink("Log Off", "LogOff", "Account") ]</text>
+    </div>
+} else {
+    using(Html.BeginForm("LogOn", "Account", FormMethod.Post, new { @class= "navbar-form pull-right" })) 
+    {
+              <input class="span2" type="text" placeholder="用户名"/>
+              <input class="span2" type="password" placeholder="密码"/>
+              <button type="submit" class="btn">登陆</button>
+    }
+}
+

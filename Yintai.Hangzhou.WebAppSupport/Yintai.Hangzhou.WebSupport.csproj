@@ -45,9 +45,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\EFTracingProvider.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -71,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binder\BrandModelBinder.cs" />
+    <Compile Include="Binder\SpecialTopicModelBinder.cs" />
     <Compile Include="Binder\FeedbackModelBinder.cs" />
     <Compile Include="Binder\CommentModelBinder.cs" />
     <Compile Include="Binder\PagerRequestBinder.cs" />
@@ -83,6 +89,7 @@
     <Compile Include="Binder\TagModlBinder.cs" />
     <Compile Include="Binder\UserModelBinder.cs" />
     <Compile Include="Configuration\ConfigManager.cs" />
+    <Compile Include="Helper\EnumExtension.cs" />
     <Compile Include="Ioc\BaseIocRegister.cs" />
     <Compile Include="Ioc\ConfigIocRegister.cs" />
     <Compile Include="Ioc\IIocRegister.cs" />

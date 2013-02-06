@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "商品管理";
+}
+
+<div class="span4">
+    <h2>新建商品</h2>
+    <p>创建单个商品.</p>
+    <p>@Html.ActionLink("创建","Create",null,new {@class = "btn"})</p>
+</div>
+<div class="span4">
+    <h2>批量上传</h2>
+    <p>批量导入商品信息，同时也导入商品图片信息。 </p>
+    <p><span>@Html.ActionLink("上传","Display","ProBulkUpload",null,new {@class = "btn"})</span>
+        <span>@Html.ActionLink("历史","List","ProBulkUpload",null,new {@class = "btn"})</span>
+    </p>
+</div>
+<div class="span4">
+    <h2>商品查询</h2>
+    <p>查询商品信息。 </p>
+    <p>@Html.ActionLink("查询","List",null,new {@class = "btn"})</p>
+</div>
+

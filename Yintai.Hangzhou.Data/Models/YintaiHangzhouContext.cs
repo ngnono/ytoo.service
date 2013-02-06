@@ -11,7 +11,7 @@ using Yintai.Hangzhou.Data.Models.Mapping;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class YintaiHangzhouContext : DbContext , Architecture.Common.Data.EF.IUnitOfWork
+    public partial class YintaiHangzhouContext : DbContext, Architecture.Common.Data.EF.IUnitOfWork
     {
         private static readonly Architecture.Common.Logger.ILog _log;
 
@@ -21,14 +21,16 @@ namespace Yintai.Hangzhou.Data.Models
             _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
         }
 
-		public YintaiHangzhouContext()
+
+        public YintaiHangzhouContext()
             : base("Name=YintaiHangzhouContext")
-		{
-		}
+        {
+        }
+
 
         #region ef tracing
 
-		public YintaiHangzhouContext(string nameOrConnectionString)
+        public YintaiHangzhouContext(string nameOrConnectionString)
             : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
         {
         }
@@ -36,7 +38,7 @@ namespace Yintai.Hangzhou.Data.Models
         public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
             : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
         {
-			var ctx = ((IObjectContextAdapter)this).ObjectContext;
+            var ctx = ((IObjectContextAdapter)this).ObjectContext;
 
             this.ObjectContext = ctx;
 
@@ -56,7 +58,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         #endregion
 
-		#region Tracing Extensions
+        #region Tracing Extensions
 
         private ObjectContext ObjectContext { get; set; }
 
@@ -115,18 +117,30 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<FeedbackEntity> Feedbacks { get; set; }
         public DbSet<GroupEntity> Groups { get; set; }
         public DbSet<LikeEntity> Likes { get; set; }
-        public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
         public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
+
+        public DbSet<ProductTagRelationEntity> ProductTagRelations { get; set; }
+
+        public DbSet<ProductStageEntity> ProductStages { get; set; }
+        public DbSet<ProductUploadJobEntity> ProductUploadJobs { get; set; }
+
         public DbSet<PromotionEntity> Promotions { get; set; }
         public DbSet<PromotionBrandRelationEntity> PromotionBrandRelations { get; set; }
+        public DbSet<Ref_EnumerationEntity> Ref_Enumeration { get; set; }
+        public DbSet<Ref_EnumerationMemberEntity> Ref_EnumerationMember { get; set; }
         public DbSet<RemindEntity> Reminds { get; set; }
         public DbSet<ResourceEntity> Resources { get; set; }
+        public DbSet<ResourceStageEntity> ResourceStages { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
+        public DbSet<SeedEntity> Seeds { get; set; }
         public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
+        public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
+        public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
         public DbSet<StoreEntity> Stores { get; set; }
         public DbSet<TagEntity> Tags { get; set; }
+        public DbSet<tb_SeedEntity> tb_Seed { get; set; }
         public DbSet<TimeSeedEntity> TimeSeeds { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<UserAccountEntity> UserAccounts { get; set; }
@@ -152,18 +166,30 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new FeedbackEntityMap());
             modelBuilder.Configurations.Add(new GroupEntityMap());
             modelBuilder.Configurations.Add(new LikeEntityMap());
-            modelBuilder.Configurations.Add(new NotificationLogEntityMap());
             modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());
             modelBuilder.Configurations.Add(new ProductEntityMap());
+
+            modelBuilder.Configurations.Add(new ProductTagRelationEntityMap());
+
+            modelBuilder.Configurations.Add(new ProductStageEntityMap());
+            modelBuilder.Configurations.Add(new ProductUploadJobEntityMap());
+
             modelBuilder.Configurations.Add(new PromotionEntityMap());
             modelBuilder.Configurations.Add(new PromotionBrandRelationEntityMap());
+            modelBuilder.Configurations.Add(new Ref_EnumerationEntityMap());
+            modelBuilder.Configurations.Add(new Ref_EnumerationMemberEntityMap());
             modelBuilder.Configurations.Add(new RemindEntityMap());
             modelBuilder.Configurations.Add(new ResourceEntityMap());
+            modelBuilder.Configurations.Add(new ResourceStageEntityMap());
             modelBuilder.Configurations.Add(new RoleEntityMap());
+            modelBuilder.Configurations.Add(new SeedEntityMap());
             modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
+            modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
+            modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());
             modelBuilder.Configurations.Add(new StoreEntityMap());
             modelBuilder.Configurations.Add(new TagEntityMap());
+            modelBuilder.Configurations.Add(new tb_SeedEntityMap());
             modelBuilder.Configurations.Add(new TimeSeedEntityMap());
             modelBuilder.Configurations.Add(new UserEntityMap());
             modelBuilder.Configurations.Add(new UserAccountEntityMap());
@@ -173,12 +199,13 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new VUserRoleEntityMap());
         }
 
-		public override int SaveChanges()
-		{
-			var c =  base.SaveChanges();
+        public override int SaveChanges()
+        {
+            var c = base.SaveChanges();
 
-		
-			return c;
-		}
+
+            return c;
+        }
+
     }
 }

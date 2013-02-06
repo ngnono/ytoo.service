@@ -33,7 +33,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public int SourceId { get; set; }
 
         [Required]
+<<<<<<< HEAD
         [Range(0, Int32.MaxValue)]
+=======
+<<<<<<< HEAD
+       // [Range(0, Int32.MaxValue)]
+=======
+        [Range(0, Int32.MaxValue)]
+>>>>>>> edit create coupon logic
+>>>>>>> 3054968bf9d0c0d79ede151efa7ff13f4379c369
         public int SourceType { get; set; }
 
         [Required]

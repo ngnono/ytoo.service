@@ -151,7 +151,14 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Product
         [DataMember(Name = "resources")]
         public List<ResourceInfoResponse> ResourceInfoResponses { get; set; }
 
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> edit create coupon logic
+>>>>>>> 3054968bf9d0c0d79ede151efa7ff13f4379c369
         [DataMember(Name = "likecount")]
         public int LikeCount { get; set; }
 

@@ -1,1 +1,1 @@
-﻿<%@ Application Inherits="Yintai.Hangzhou.WebSupport.Mvc.WebApiApplication" Language="C#" %>
+﻿<%@ Application Inherits="Yintai.Hangzhou.WebSupport.Mvc.WebApiTestApplication" Language="C#" %>
