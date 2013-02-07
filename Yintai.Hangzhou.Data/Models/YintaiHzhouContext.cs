@@ -193,5 +193,11 @@ namespace Yintai.Hangzhou.Data.Models
 
 			return c;
 		}
+
+        protected override void Dispose(bool disposing)
+        {
+            System.Diagnostics.Debug.WriteLine("context closed");
+            base.Dispose(disposing);
+        }
     }
 }
