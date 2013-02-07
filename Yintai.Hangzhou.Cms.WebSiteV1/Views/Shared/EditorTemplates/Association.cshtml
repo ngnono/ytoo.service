@@ -1,0 +1,35 @@
+﻿@model object
+@using  Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
+@{
+    var clientId = @Html.ClientId<object>(model => model);
+    var pams = ViewData.ModelMetadata.AdditionalValues;
+    string controlName = pams.ContainsKey("controller")? (string)pams["controller"] : "user";
+    string actionName = pams.ContainsKey("action") ? (string)pams["action"] : "AutoComplete";
+    string displayName = pams.ContainsKey("displayfield") ? (string)pams["displayfield"] : "Name";
+    string searchName = pams.ContainsKey("searchfield") ? (string)pams["searchfield"] : "name";
+}
+<script>
+    $(document).ready(function () {
+        $("#@clientId").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action(actionName, controlName)',
+                    dataType: "json",
+                    data: {
+                        @searchName: request.term
+                    },
+                    success: function (data) {
+                        response(
+                            $.map(eval(data), function (item) {
+                                return {
+                                    label: item['@displayName']
+                                };
+                            })
+                        );
+                    }
+                });
+            }
+        });
+    });
+</script>
+<input id="@clientId" name="@clientId" value="@(ViewData.TemplateInfo.FormattedModelValue)"/>
