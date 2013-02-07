@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Web.Mvc;
 
 namespace Yintai.Hangzhou.Data.Models
 {
@@ -40,12 +41,24 @@ namespace Yintai.Hangzhou.Data.Models
         [DataType(DataType.DateTime)]
         public DateTime? DescripOfPromotionEndDate { get; set; }
         [DisplayName("品牌名")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller","brand")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
         public string Brand { get; set; }
         [DisplayName("Tag名")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "tag")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
         public string Tag { get; set; }
         [DisplayName("价格")]
         public decimal? Price { get; set; }
         [DisplayName("实体店名")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "store")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
         public string Store { get; set; }
         [DisplayName("绑定促销IDs")]
         public string PromotionIds { get; set; }

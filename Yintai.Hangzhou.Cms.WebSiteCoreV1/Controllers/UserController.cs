@@ -181,5 +181,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             return View("Success");
         }
+        [HttpGet]
+        public virtual JsonResult AutoComplete(string name)
+        {
+            return Json(new [] {new{Name=string.Empty} }
+                , JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -3,4 +3,4 @@
     System.Linq.Expressions.Expression<Func<DateTime,DateTime>> ex = model => model;
     string clientId = ViewData.TemplateInfo.GetFullHtmlFieldId(ExpressionHelper.GetExpressionText(ex));  
  }
-<input type="text" class="datetimepicker" id="@clientId" name="@clientId" value="@(Model.HasValue?Model.Value.ToString("yyyy-mm-dd hh:mm:ss"):"")" />
+<input type="text" class="datetimepicker" id="@clientId" name="@clientId" value="@(ViewData.TemplateInfo.FormattedModelValue)" />
