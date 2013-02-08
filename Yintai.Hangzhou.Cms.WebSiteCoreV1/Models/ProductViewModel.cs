@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
 
@@ -32,6 +34,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "名称")]
         public string Name { get; set; }
 
+        [DisplayName("品牌")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "brand")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Id")]
         [Range(0, Int32.MaxValue)]
         [Required]
         [Display(Name = "品牌Id")]
@@ -53,11 +61,26 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "优惠信息")]
         public string Favorable { get; set; }
 
+
+        [DisplayName("店铺")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "store")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Id")]
         [Required]
         [Range(0, Int32.MaxValue)]
         [Display(Name = "店铺Id")]
         public int Store_Id { get; set; }
 
+
+
+        [DisplayName("tag名")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "tag")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Id")]
         [Range(0, Int32.MaxValue)]
         [Display(Name = "Tag_Id")]
         public int Tag_Id { get; set; }
