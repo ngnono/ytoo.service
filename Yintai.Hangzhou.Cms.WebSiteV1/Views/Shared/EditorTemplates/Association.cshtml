@@ -1,35 +1,59 @@
 ﻿@model object
 @using  Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 @{
-    var clientId = @Html.ClientId<object>(model => model);
+    var searchClientId = Html.ClientId<object>(model => model);
     var pams = ViewData.ModelMetadata.AdditionalValues;
     string controlName = pams.ContainsKey("controller")? (string)pams["controller"] : "user";
     string actionName = pams.ContainsKey("action") ? (string)pams["action"] : "AutoComplete";
     string displayName = pams.ContainsKey("displayfield") ? (string)pams["displayfield"] : "Name";
     string searchName = pams.ContainsKey("searchfield") ? (string)pams["searchfield"] : "name";
+    bool isMultiple = pams.ContainsKey("multiple") ? bool.Parse((string)pams["multiple"]) : false;
+    string valueName = pams.ContainsKey("valuefield") ? (string)pams["valuefield"] : displayName;
+
 }
 <script>
     $(document).ready(function () {
-        $("#@clientId").autocomplete({
-            source: function (request, response) {
+        $("#@searchClientId").autocomplete({
+            source: function (request, response) {  
                 $.ajax({
                     url: '@Url.Action(actionName, controlName)',
                     dataType: "json",
                     data: {
-                        @searchName: request.term
+                        @(searchName): request.term.split(/,\s*/).pop()    
                     },
                     success: function (data) {
                         response(
                             $.map(eval(data), function (item) {
                                 return {
-                                    label: item['@displayName']
+                                    label: item['@displayName'],
+                                    value: item['@valueName']
                                 };
                             })
                         );
                     }
                 });
             }
+            @if(isMultiple) {
+       <text>
+            ,focus: function() {
+                // prevent value inserted on focus
+                return false;
+            }
+            ,select: function( event, ui ) {
+                var terms =this.value.split(/,\s*/);
+                // remove the current input
+                terms.pop();
+                // add the selected item
+                terms.push(ui.item.value );
+                // add placeholder to get the comma-and-space at the end
+                terms.push( "" );
+                this.value = terms.join( "," );
+                return false;
+            }
+       </text>   
+      }
+           
         });
     });
 </script>
-<input id="@clientId" name="@clientId" value="@(ViewData.TemplateInfo.FormattedModelValue)"/>
+<input id="@searchClientId" name="@searchClientId" value="@(ViewData.TemplateInfo.FormattedModelValue)"/>

@@ -61,8 +61,20 @@ namespace Yintai.Hangzhou.Data.Models
         [AdditionalMetadata("searchfield", "name")]
         public string Store { get; set; }
         [DisplayName("绑定促销IDs")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "promotion")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("valuefield", "Id")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("multiple", "true")]
         public string PromotionIds { get; set; }
         [DisplayName("绑定主题IDs")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "specialtopic")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("valuefield", "Id")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("multiple","true")]
         public string SubjectIds { get; set; }
         public int Id { get; set; }
         public int GroupId { get; set; }

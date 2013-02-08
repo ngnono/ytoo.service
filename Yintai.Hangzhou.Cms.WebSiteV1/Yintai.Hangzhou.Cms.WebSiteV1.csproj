@@ -148,6 +148,7 @@
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\loading.gif" />
     <Content Include="Content\img\progressbar.gif" />
+    <Content Include="Content\img\loading_16x16.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -291,6 +292,7 @@
     <Content Include="Content\uploadify\uploadify-cancel.png" />
     <Content Include="Content\uploadify\uploadify.css" />
     <Content Include="Content\uploadify\uploadify.swf" />
+    <Content Include="Content\website.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Configurations\appSettings.config">

@@ -68,6 +68,11 @@ namespace Yintai.Hangzhou.Repository.Impl
             return base.GetAll().ToList();
         }
 
+        public IEnumerable<TEntity> AutoComplete(string name)
+        {
+            return base.GetAll();
+        }
+
         #endregion
 
         /// <summary>

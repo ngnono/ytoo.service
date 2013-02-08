@@ -167,6 +167,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             return Success("/" + RouteData.Values["controller"] + "/" + RouteData.Values["action"]);
         }
-
+        [HttpGet]
+        public override JsonResult AutoComplete(string name)
+        {
+            return Json(_promotionRepository.AutoComplete(name).Where(entity => string.IsNullOrEmpty(name) ? true : entity.Name.StartsWith(name.Trim())).Take(10)
+                , JsonRequestBehavior.AllowGet);
+        }
     }
 }

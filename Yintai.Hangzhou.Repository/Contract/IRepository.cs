@@ -50,5 +50,12 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="key"></param>
         /// <returns></returns>
         TEntity GetItem(TKey key);
+
+        /// <summary>
+        /// Autocomplete interface
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> AutoComplete(string query);
     }
 }
