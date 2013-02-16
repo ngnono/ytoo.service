@@ -11,7 +11,7 @@ using Yintai.Hangzhou.Data.Models.Mapping;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class YintaiHangzhouContext : DbContext, Architecture.Common.Data.EF.IUnitOfWork
+    public partial class YintaiHangzhouContext : DbContext
     {
         private static readonly Architecture.Common.Logger.ILog _log;
 
@@ -21,14 +21,31 @@ namespace Yintai.Hangzhou.Data.Models
             _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
         }
 
-		public YintaiHangzhouContext()
-            : base("Name=YintaiHangzhouContext")
-		{
-		}
+        /// <summary>
+        /// 正式环境使用，无跟踪
+        /// </summary>
+        public YintaiHangzhouContext()
+            : this("Name=YintaiHangzhouContext", "v1")
+        {
+        }
+
+        /// <summary>
+        /// 正式环境使用，无跟踪
+        /// </summary>
+        /// <param name="nameOrConnectionString"></param>
+        /// <param name="version"></param>
+        public YintaiHangzhouContext(string nameOrConnectionString, string version)
+            : base(nameOrConnectionString)
+        {
+        }
 
         #region ef tracing
 
-		public YintaiHangzhouContext(string nameOrConnectionString)
+        /// <summary>
+        /// 测试时OR 需要SQL 跟踪时  使用
+        /// </summary>
+        /// <param name="nameOrConnectionString"></param>
+        public YintaiHangzhouContext(string nameOrConnectionString)
             : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
         {
         }
@@ -36,7 +53,7 @@ namespace Yintai.Hangzhou.Data.Models
         public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
             : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
         {
-			var ctx = ((IObjectContextAdapter)this).ObjectContext;
+            var ctx = ((IObjectContextAdapter)this).ObjectContext;
 
             this.ObjectContext = ctx;
 
@@ -56,7 +73,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         #endregion
 
-		#region Tracing Extensions
+        #region Tracing Extensions
 
         private ObjectContext ObjectContext { get; set; }
 
@@ -187,12 +204,12 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new VUserRoleEntityMap());
         }
 
-		public override int SaveChanges()
-		{
-			var c =  base.SaveChanges();
+        public override int SaveChanges()
+        {
+            var c = base.SaveChanges();
 
-			return c;
-		}
+            return c;
+        }
         protected override void Dispose(bool disposing)
         {
             System.Diagnostics.Debug.WriteLine("context closed");

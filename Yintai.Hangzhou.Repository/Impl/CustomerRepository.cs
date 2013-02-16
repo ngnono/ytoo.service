@@ -14,6 +14,11 @@ namespace Yintai.Hangzhou.Repository.Impl
 {
     public class CustomerRepository : RepositoryBase<UserEntity, int>, ICustomerRepository
     {
+        public CustomerRepository()
+        {
+        }
+
+
         #region methods
 
         /// <summary>

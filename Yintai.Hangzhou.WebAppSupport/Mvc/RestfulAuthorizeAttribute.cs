@@ -20,7 +20,6 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         private UserIdSessionData _sessionData;
         private static readonly ILog _log;
         private readonly bool _holdon;
-        private readonly IUserService _userService;
         //private readonly IAuthenticationService _authorizeService;
 
         private UserModel _authUser;
@@ -42,7 +41,6 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         public RestfulAuthorizeAttribute(bool holdon)
         {
             this._holdon = holdon;
-            _userService = ServiceLocator.Current.Resolve<IUserService>();
             //_authorizeService = ServiceLocator.Current.Resolve<IAuthenticationService>();
         }
 
@@ -152,7 +150,7 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
 
             if (_sessionData != null)
             {
-                this._authUser = _userService.Get(Int32.Parse(_sessionData.UserId));
+                this._authUser = ServiceLocator.Current.Resolve<IUserService>().Get(Int32.Parse(_sessionData.UserId));
                 if (this._authUser == null)
                 {
                     filterContext.Result = new RestfulResult

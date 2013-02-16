@@ -11,7 +11,7 @@ using Yintai.Hangzhou.Data.Models.Mapping;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class YintaiHzhouContext : DbContext , Architecture.Common.Data.EF.IUnitOfWork
+    public partial class YintaiHzhouContext : DbContext
     {
         private static readonly Architecture.Common.Logger.ILog _log;
 

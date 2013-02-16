@@ -14,11 +14,9 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
     {
         private WebSiteUser _webSiteUser;
         private static readonly ILog _log;
-        private readonly IAuthenticationService _authenticationService;
 
         public AdminAuthorizeAttribute()
         {
-            _authenticationService = ServiceLocator.Current.Resolve<IAuthenticationService>();
         }
 
         static AdminAuthorizeAttribute()
@@ -65,6 +63,8 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         {
             //获取SessionKey
             //var token = httpContext.Request[Define.Token];
+
+            var _authenticationService = ServiceLocator.Current.Resolve<IAuthenticationService>();
 
             if (!_authenticationService.Islogged(httpContext))
             {

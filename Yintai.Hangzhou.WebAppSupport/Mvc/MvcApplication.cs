@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web.Mvc.Routes;
 using Yintai.Architecture.Framework.ServiceLocation;
@@ -56,6 +57,20 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
             : this(String.Empty)
         {
 
+        }
+
+        public void Application_EndRequest(Object sender, EventArgs e)
+        {
+            IUnitOfWork unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
+            unit.Commit();
+            unit.Dispose();
+        }
+
+        public void Application_Error(Object sender, EventArgs e)
+        {
+            IUnitOfWork unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
+            unit.Dispose();
+            //don't forget to treat the error here
         }
 
         protected MvcApplication(string defaultControllerNamespace)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
+using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Framework.ServiceLocation;
 using System.Configuration;
 using Microsoft.Practices.Unity.Configuration;
@@ -36,6 +37,11 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
         public object GetService(Type serviceType)
         {
             if (typeof(IController).IsAssignableFrom(serviceType))
+            {
+                return ChildContainer.Resolve(serviceType);
+            }
+
+            if (typeof (IUnitOfWork).IsAssignableFrom(serviceType))
             {
                 return ChildContainer.Resolve(serviceType);
             }

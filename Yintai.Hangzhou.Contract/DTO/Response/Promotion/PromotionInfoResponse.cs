@@ -84,7 +84,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Promotion
         [DataMember(Name = "promotionuserid")]
         public int RecommendUser { get; set; }
 
-
         [IgnoreDataMember]
         public int PromotionSourceType { get; set; }
 
@@ -108,13 +107,34 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Promotion
 
         [DataMember(Name = "isproductbinded")]
         public Nullable<bool> IsProdBindable { get; set; }
-    }
 
+        [DataMember(Name = "limitcount")]
+        public Nullable<int> PublicationLimit { get; set; }
+
+        [DataMember(Name = "ispublication")]
+        public bool IsPublication
+        {
+            get
+            {
+                if (PublicationLimit == null || PublicationLimit == -1)
+                {
+                    return true;
+                }
+
+                if (PublicationLimit > InvolvedCount)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            set { }
+        }
+    }
 
     [DataContract]
     public class PromotionInfoResponse : PromotionInfo
     {
-
         [DataMember(Name = "promotionuser")]
         public ShowCustomerInfoResponse ShowCustomer { get; set; }
 

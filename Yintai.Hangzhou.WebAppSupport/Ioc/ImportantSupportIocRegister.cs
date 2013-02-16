@@ -13,7 +13,6 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IControllerActivator, CustomControllerActivator>();
             Current.Register<IDependencyResolver, IocDependencyResolver>();
             Current.RegisterSingleton<ILog, Log4NetLog>();
-            //Current.RegisterSingleton<ILog, ConsoleLog>();
         }
 
         #endregion
