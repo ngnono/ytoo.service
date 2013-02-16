@@ -436,6 +436,7 @@
     <Content Include="Views\ProBulkUpload\Detail.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Association.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ResourceAssociation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ResourceViewModel>
+@using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
+@{
+    var searchClientId = Html.ClientId<object>(model => model);
+
+}
+@if (this.Model != null && Model.Count() > 0)
+{
+    <legend>资源：</legend>
+    <table>
+        @foreach (var re in Model)
+        {
+            <tr>
+                <div class="display-label">SourceType</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.SourceType)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.Name)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.Name)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.ExtName)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.ExtName)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.Domain)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.Domain)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.IsDefault)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.IsDefault)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.SortOrder)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.SortOrder)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.Type)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.Type)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.Size)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.Size)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.Width)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.Width)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.Height)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.Height)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.ContentSize)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.ContentSize)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model=>re.Status)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => re.Status)
+    </div>
+
+    <div class="display-label">
+        资源
+    </div>
+    <div class="display-field">
+        @if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+        {
+            <img src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120X0" />
+        }
+    </div>
+            </tr>
+        }
+
+        <tr>
+            <td></td>
+            <td>@Html.ActionLink("AddRrsource", "Create", "Resource", new
+                                {
+                                    sid = this.Model.Id,
+                                    stype = (int)Yintai.Hangzhou.Model.Enums.SourceType.Product
+                                })</td>
+        </tr>
+    </table>
+}
