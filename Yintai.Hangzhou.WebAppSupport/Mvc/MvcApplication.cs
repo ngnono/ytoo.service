@@ -64,12 +64,16 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
             IUnitOfWork unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
             unit.Commit();
             unit.Dispose();
+
+            //PerRequestUnityServiceLocator.DisposeOfChildContainer();
         }
 
         public void Application_Error(Object sender, EventArgs e)
         {
             IUnitOfWork unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
             unit.Dispose();
+
+           // PerRequestUnityServiceLocator.DisposeOfChildContainer();
             //don't forget to treat the error here
         }
 

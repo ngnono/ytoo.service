@@ -6,6 +6,7 @@ using Yintai.Architecture.Common.Web.Mvc.Controllers;
 using Yintai.Architecture.Framework.Mapping;
 using Yintai.Hangzhou.Contract.Comment;
 using Yintai.Hangzhou.Contract.DTO.Request.Comment;
+using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
@@ -33,10 +34,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Create(CommentCreateRequest request, int? authuid)
+        public ActionResult Create(CommentCreateRequest request, int? authuid , UserModel authUser)
         {
             request.Content = UrlDecode(request.Content);
             request.AuthUid = authuid.Value;
+            request.AuthUser = authUser;
 
             return new RestfulResult { Data = this._commentDataService.Create(request) };
         }
@@ -47,16 +49,18 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Destroy(CommentDestroyRequest request, int? authuid)
+        public ActionResult Destroy(CommentDestroyRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUid = authuid.Value;
+            request.AuthUser = authUser;
             return new RestfulResult { Data = this._commentDataService.Destroy(request) };
         }
 
         [RestfulAuthorize]
-        public ActionResult Update(CommentUpdateRequest request, int? authuid)
+        public ActionResult Update(CommentUpdateRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUid = authuid.Value;
+            request.AuthUser = authUser;
             request.Content = UrlDecode(request.Content);
 
             return new RestfulResult { Data = this._commentDataService.Update(request) };

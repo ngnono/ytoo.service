@@ -2660,6 +2660,11 @@ namespace Yintai.Hangzhou.Service.Manager
             return PromotionResponseMapping(source, null);
         }
 
+        /// <summary>
+        /// 验证正常的活动
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
         private List<PromotionInfo> GetPromotionInfos4V(List<int> ids)
         {
             if (ids == null || ids.Count == 0)
@@ -2986,56 +2991,83 @@ namespace Yintai.Hangzhou.Service.Manager
                 return new FavoriteCollectionResponse(new PagerRequest(1, 1)) { Favorites = new List<FavoriteInfoResponse>(0) };
             }
 
-            var storeids = source.Select(v => v.Store_Id).Distinct().Where(v => v != 0);
+            //var storeids = source.Select(v => v.Store_Id).Distinct().Where(v => v != 0);
             //var dic = new Dictionary<int, List<int>>();
             var ms = source.Where(v => v.FavoriteSourceType == (int)SourceType.Promotion).Select(s => s.FavoriteSourceId).Distinct().ToList();
             var ps = source.Where(v => v.FavoriteSourceType == (int)SourceType.Product).Select(s => s.FavoriteSourceId).Distinct().ToList();
 
-            var stores = StoreResponseMapping(_storeRepository.GetListByIds(storeids.ToList()), coordinateInfo).ToList();
+            //var stores = StoreResponseMapping(_storeRepository.GetListByIds(storeids.ToList()), coordinateInfo).ToList();
             var promotions = _promotionRepository.GetList(ms);
             var products = _productRepository.GetList(ps);
 
-            var productResource = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, ps)).ToList();
-            var msresource = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Promotion, ms)).ToList();
+            var items = ItemsInfoResponseMapping(products, promotions).ToList();
+
+            var t = new List<FavoriteInfoResponse>(items.Count);
+            foreach (var i in items)
+            {
+                var a = Mapper.Map<ItemsInfoResponse, FavoriteInfoResponse>(i);
+                a.FavoriteSourceId = i.Id;
+                a.FavoriteSourceName = i.Name;
+                a.FavoriteSourceType = i.SourceType;
+                var r = source.FirstOrDefault(v => v.FavoriteSourceId == i.Id && v.FavoriteSourceType == i.SourceType);
+
+                a.Id = r == null ? 0 : r.Id;
+                a.StoreId = i.Store_Id;
+                t.Add(a);
+            }
+
 
             //TODO: 产品这个需要优化
             var result = new FavoriteCollectionResponse(new PagerRequest(1, source.Count), source.Count)
             {
-                Favorites = new List<FavoriteInfoResponse>(source.Count)
+                Favorites = t
             };
-            foreach (var s in source)
-            {
-                //var n = String.Empty;
-                FavoriteInfoResponse response = null;
-                switch (s.FavoriteSourceType)
-                {
-                    case (int)SourceType.Promotion:
-                        var p = promotions.FirstOrDefault(v => v.Id == s.FavoriteSourceId);
-                        response = FavoriteInfoResponseMapping(s, p);
-
-                        response.Resources = p == null ? new List<ResourceInfoResponse>(0) : msresource.Where(v => v.SourceId == p.Id && v.SourceType == (int)SourceType.Promotion).ToList();
-                        break;
-                    case (int)SourceType.Product:
-                        var t = products.FirstOrDefault(v => v.Id == s.FavoriteSourceId);
-                        response = FavoriteInfoResponseMapping(s, t);
-
-                        response.Resources = t == null ? new List<ResourceInfoResponse>(0) :
-                            productResource.Where(v => v.SourceId == t.Id && v.SourceType == (int)SourceType.Product).ToList();
-
-                        break;
-                }
-
-                if (response != null)
-                {
-                    var store = stores.SingleOrDefault(v => v.Id == s.Store_Id);
-                    response.Store = store;
-                    response.StoreId = store == null ? 0 : store.Id;
-
-                    result.Favorites.Add(response);
-                }
-            }
 
             return result;
+
+            ////pp rs
+
+            //var productResource = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, ps)).ToList();
+            //var msresource = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Promotion, ms)).ToList();
+
+            ////TODO: 产品这个需要优化
+            //var result = new FavoriteCollectionResponse(new PagerRequest(1, source.Count), source.Count)
+            //{
+            //    Favorites = new List<FavoriteInfoResponse>(source.Count)
+            //};
+            //foreach (var s in source)
+            //{
+            //    //var n = String.Empty;
+            //    FavoriteInfoResponse response = null;
+            //    switch (s.FavoriteSourceType)
+            //    {
+            //        case (int)SourceType.Promotion:
+            //            var p = promotions.FirstOrDefault(v => v.Id == s.FavoriteSourceId);
+            //            response = FavoriteInfoResponseMapping(s, p);
+
+            //            response.Resources = p == null ? new List<ResourceInfoResponse>(0) : msresource.Where(v => v.SourceId == p.Id && v.SourceType == (int)SourceType.Promotion).ToList();
+            //            break;
+            //        case (int)SourceType.Product:
+            //            var t = products.FirstOrDefault(v => v.Id == s.FavoriteSourceId);
+            //            response = FavoriteInfoResponseMapping(s, t);
+
+            //            response.Resources = t == null ? new List<ResourceInfoResponse>(0) :
+            //                productResource.Where(v => v.SourceId == t.Id && v.SourceType == (int)SourceType.Product).ToList();
+
+            //            break;
+            //    }
+
+            //    if (response != null)
+            //    {
+            //        var store = stores.SingleOrDefault(v => v.Id == s.Store_Id);
+            //        response.Store = store;
+            //        response.StoreId = store == null ? 0 : store.Id;
+
+            //        result.Favorites.Add(response);
+            //    }
+            //}
+
+            //return result;
         }
 
         /// <summary>
@@ -3115,7 +3147,7 @@ namespace Yintai.Hangzhou.Service.Manager
 
                 if (r != null)
                 {
-                    var key =  r.Group;
+                    var key = r.Group;
                     if (list.ContainsKey(key))
                     {
                         list[key].Add(r);
@@ -3548,14 +3580,24 @@ namespace Yintai.Hangzhou.Service.Manager
 
             var dresources = new List<ResourceInfoResponse>();
             var mresources = new List<ResourceInfoResponse>();
+            //promotionids
+            List<Promotion2ProductEntity> pprs = null;
 
             if (productEntities != null)
             {
                 storeIds.AddRange(productEntities.Select(v => v.Store_Id));
                 var productIds = productEntities.Select(v => v.Id).Distinct().ToList();
 
+                //pp rs
+                pprs = GetPromotionForRelation(productIds);
+
                 dresources.AddRange(ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, productIds)));
             }
+            else
+            {
+                pprs = new List<Promotion2ProductEntity>(0);
+            }
+
             if (promotionEntities != null)
             {
                 storeIds.AddRange(promotionEntities.Select(v => v.Store_Id));
@@ -3568,14 +3610,21 @@ namespace Yintai.Hangzhou.Service.Manager
 
             var store = StoreResponseMapping(_storeRepository.GetListByIds(storeIds)).ToList();
 
+            //查 p
+            var tt = pprs.Select(v => v.ProId ?? 0).Distinct().ToList();
+            var pinfo = GetPromotionInfos4V(tt);
+
             var result = new List<ItemsInfoResponse>();
 
             if (productEntities != null)
             {
                 foreach (var item in productEntities)
                 {
+                    var t = pprs.Where(v => v.ProdId == item.Id).Select(v => v.ProId);
+                    var p = pinfo.Where(v => t.Any(s => s == v.Id)).ToList();
+
                     var target = ItemsInfoResponseMapping(item, store.SingleOrDefault(v => v.Id == item.Store_Id),
-                                                          dresources.Where(v => v.SourceId == item.Id).ToList());
+                                                          dresources.Where(v => v.SourceId == item.Id).ToList(), p);
 
                     result.Add(target);
                 }
@@ -3597,22 +3646,38 @@ namespace Yintai.Hangzhou.Service.Manager
 
         private static ItemsInfoResponse ItemsInfoResponseMapping(ProductEntity source, StoreInfoResponse store, List<ResourceInfoResponse> resources)
         {
+            return ItemsInfoResponseMapping(source, store, resources, null);
+        }
+
+        private static ItemsInfoResponse ItemsInfoResponseMapping(ProductEntity source, StoreInfoResponse store, List<ResourceInfoResponse> resources, List<PromotionInfo> promotionInfos)
+        {
             var target = Mapper.Map<ProductEntity, ItemsInfoResponse>(source);
 
             target.SType = SourceType.Product;
             target.Store = store;
             target.Resources = resources;
+            target.Promotions = promotionInfos;
 
             return target;
         }
 
-        private static ItemsInfoResponse ItemsInfoResponseMapping(PromotionEntity source, StoreInfoResponse store, List<ResourceInfoResponse> resources)
+        private ItemsInfoResponse ItemsInfoResponseMapping(PromotionEntity source, StoreInfoResponse store, List<ResourceInfoResponse> resources)
+        {
+            return ItemsInfoResponseMapping(source, store, resources, null);
+        }
+
+        private static ItemsInfoResponse ItemsInfoResponseMapping(PromotionEntity source, StoreInfoResponse store, List<ResourceInfoResponse> resources, PromotionInfo info)
         {
             var target = Mapper.Map<PromotionEntity, ItemsInfoResponse>(source);
 
             target.SType = SourceType.Promotion;
             target.Store = store;
             target.Resources = resources;
+
+            if (info != null)
+            {
+                target.Promotions = new List<PromotionInfo> { info };
+            }
 
             return target;
         }

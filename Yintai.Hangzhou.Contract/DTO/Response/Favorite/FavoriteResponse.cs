@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Contract.DTO.Response.Promotion;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 using Yintai.Hangzhou.Contract.DTO.Response.Store;
 using Yintai.Hangzhou.Contract.Response;
@@ -51,6 +52,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Favorite
 
         [DataMember(Name = "resources")]
         public List<ResourceInfoResponse> Resources { get; set; }
+
+        [DataMember(Name = "promotions")]
+        public List<PromotionInfo> Promotions { get; set; }
     }
 
     [DataContract]
