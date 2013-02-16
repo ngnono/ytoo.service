@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
@@ -72,9 +74,17 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "参与（领取优惠券）数")]
         public int InvolvedCount { get; set; }
 
+        [DisplayName("店铺")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "store")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Id")]
         [Range(0, Int32.MaxValue)]
         [Display(Name = "店铺")]
         public int Store_Id { get; set; }
+
+
         [Range(0, Int32.MaxValue)]
         [Display(Name = "Tag")]
         public int Tag_Id { get; set; }

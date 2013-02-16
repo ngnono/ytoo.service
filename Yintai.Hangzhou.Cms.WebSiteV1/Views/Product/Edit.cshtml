@@ -93,8 +93,9 @@
                                     <img src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120X0" />
                                 }
                             </td>
-                            <td><a href="javascript:void(0)" onclick="delResource(@re.Id)">Del</a>
-                                <a href="javascript:void(0)" onclick="UpdateResource(@re.Id)">Update</a>
+                            <td>
+
+                                @Html.ActionLink("Del", "Delete", "Resource", new { id = re.Id }, new { target = "_blank" })
                             </td>
                         </tr>
                     }
@@ -103,9 +104,9 @@
                         <td></td>
                         <td>@Html.ActionLink("AddRrsource", "Create", "Resource", new
                                 {
-                                    sid = this.Model.Id,
-                                    stype = (int)Yintai.Hangzhou.Model.Enums.SourceType.Product
-                                })</td>
+                                    SourceId = this.Model.Id,
+                                    SourceType = (int)Yintai.Hangzhou.Model.Enums.SourceType.Product
+                                },null)</td>
                     </tr>
                 </table>
             }

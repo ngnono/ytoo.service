@@ -6,7 +6,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "欢迎光临 Yintai Hangzhou CMS。版本： V.entityframework.1 版后台";
+            ViewBag.Message = "欢迎光临 Yintai Hangzhou CMS。版本： 1.0.0.1 版后台";
 
             return View();
         }

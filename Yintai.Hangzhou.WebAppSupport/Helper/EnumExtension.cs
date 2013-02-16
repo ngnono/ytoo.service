@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.WebSupport.Helper
 {
     public static class EnumExtension
     {
+        /// <summary>
+        /// 用的时候       @Html.DropDownListFor(model => model.ExpertIsWork, Consts.YesNo.是.ToSelectList(0))
+        /// </summary>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="enumObj"></param>
+        /// <param name="selected"></param>
+        /// <returns></returns>
         public static SelectList ToSelectList<TEnum>(this TEnum enumObj, int selected)
         {
             try
@@ -22,9 +28,14 @@ namespace Yintai.Hangzhou.WebSupport.Helper
             {
                 return new SelectList(new List<string> { "转换枚举类型到列表时出现错误" }, selected);
             }
-        }//用的时候       @Html.DropDownListFor(model => model.ExpertIsWork, Consts.YesNo.是.ToSelectList(0))
+        }
 
-
+        /// <summary>
+        /// 用的时候       @Html.DropDownListFor(model => model.ExpertIsWork, Consts.YesNo.是.ToSelectList(0))
+        /// </summary>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="enumObj"></param>
+        /// <returns></returns>
         public static SelectList ToSelectList<TEnum>(this TEnum enumObj)
         {
             try
@@ -42,8 +53,6 @@ namespace Yintai.Hangzhou.WebSupport.Helper
             {
                 return new SelectList(new List<string> { "转换枚举类型到列表时出现错误" });
             }
-        }//用的时候       @Html.DropDownListFor(model => model.ExpertIsWork, Consts.YesNo.是.ToSelectList(0))
+        }
     }
-
-
 }

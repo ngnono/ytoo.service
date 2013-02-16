@@ -1,4 +1,6 @@
-﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.PromotionViewModel
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.WebSupport.Helper
+@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.PromotionViewModel
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -143,7 +145,7 @@
             @Html.LabelFor(model => model.Status)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Status)
+            @Html.DropDownListFor(model => model.Status, DataStatus.Default.ToSelectList(), "請選擇")
             @Html.ValidationMessageFor(model => model.Status)
         </div>
         <p>
