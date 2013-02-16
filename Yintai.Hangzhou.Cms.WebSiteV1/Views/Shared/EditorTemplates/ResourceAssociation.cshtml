@@ -81,15 +81,16 @@
         }
     </div>
             </tr>
-        }
+        
 
         <tr>
             <td></td>
             <td>@Html.ActionLink("AddRrsource", "Create", "Resource", new
                                 {
-                                    sid = this.Model.Id,
+                                    sid = re.Id,
                                     stype = (int)Yintai.Hangzhou.Model.Enums.SourceType.Product
                                 })</td>
         </tr>
+        }
     </table>
 }
