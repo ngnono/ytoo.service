@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
 using Yintai.Architecture.Common.Caching;
 using Yintai.Architecture.Common.Models;
-using Yintai.Architecture.Common.Web;
 using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Product;
@@ -219,70 +217,17 @@ namespace Yintai.Hangzhou.Service
             request.RSourceType = request.AuthUser.Level == UserLevel.Daren
                                               ? RecommendSourceType.Daren
                                               : RecommendSourceType.StoreManager;
-<<<<<<< HEAD
-            using (var ts = new TransactionScope())
-            {
-                //判断当前用户是否是 管理员或者 level 是达人？
-                var entity = _productRepository.Insert(MappingManager.ProductEntityMapping(request));
-                //处理 图片
-                //处理文件上传
-                if (request.Files != null && request.Files.Count > 0)
-                {
-                    _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
-                }
-                ts.Complete();
-                return new ExecuteResult<ProductInfoResponse>(MappingManager.ProductInfoResponseMapping(entity));
-=======
 
             //判断当前用户是否是 管理员或者 level 是达人？
-            var inEntity = MappingManager.ProductEntityMapping(request);
-
-            if (request.Files != null && request.Files.Count > 0)
-            {
-                foreach (string f in request.Files)
-                {
-                    if (request.Files[f].HasFile())
-                    {
-                        inEntity.IsHasImage = true;
-
-                        break;
-                    }
-                }
-            }
-
-            var entity = _productRepository.Insert(inEntity);
+            var entity = _productRepository.Insert(MappingManager.ProductEntityMapping(request));
             //处理 图片
             //处理文件上传
             if (request.Files != null && request.Files.Count > 0)
             {
-                List<ResourceEntity> list = null;
-                try
-                {
-                    list = _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex);
-
-                    //DEL 上传的产品
-
-                    _productRepository.Delete(entity);
-
-                    throw;
-                }
-
-                if (list == null || list.Count == 0)
-                {
-                    //set ishasimage
-                    if (entity.IsHasImage)
-                    {
-                        _productRepository.SetIsHasImage(entity.Id, false, DataStatus.Default, request.AuthUid,
-                                    "set ishasimage false");
-                    }
-                }
->>>>>>> c897f6e34b951ef7fef1d45b32d1478e8940e728
+                _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
             }
-            
+
+            return new ExecuteResult<ProductInfoResponse>(MappingManager.ProductInfoResponseMapping(entity));
         }
 
         public ExecuteResult<ProductInfoResponse> UpdateProduct(UpdateProductRequest request)
@@ -434,7 +379,9 @@ namespace Yintai.Hangzhou.Service
                 });
 
             //+1
-            product = _productRepository.SetCount(ProductCountType.ShareCount, product.Id, 1);
+            product.ShareCount++;
+
+            _productRepository.Update(product);
 
             return new ExecuteResult<ProductInfoResponse>(MappingManager.ProductInfoResponseMapping(product));
         }
@@ -470,7 +417,9 @@ namespace Yintai.Hangzhou.Service
                 });
 
             //+1
-            product = _productRepository.SetCount(ProductCountType.FavoriteCount, product.Id, 1);
+            product.FavoriteCount++;
+
+            _productRepository.Update(product);
             //TODO:没有更新当前的isfavorite
             var response = MappingManager.ProductInfoResponseMapping(product);
 
@@ -504,16 +453,14 @@ namespace Yintai.Hangzhou.Service
             //del shoucang
             _favoriteService.Del(favorentity);
             //del product share count
-            product = _productRepository.SetCount(ProductCountType.FavoriteCount, product.Id, -1);
+            product.FavoriteCount--;
+            _productRepository.Update(product);
 
-            var response = MappingManager.ProductInfoResponseMapping(product);
-
-            if (request.AuthUser != null)
-            {
-                response = IsR(response, request.AuthUser, product.Id);
-            }
-
-            return new ExecuteResult<ProductInfoResponse>(response);
+            return GetProductInfo(new GetProductInfoRequest
+                {
+                    CurrentAuthUser = request.AuthUser,
+                    ProductId = request.ProductId
+                });
         }
 
         public ExecuteResult<ProductInfoResponse> CreateCoupon(CreateCouponProductRequest request)
@@ -579,7 +526,8 @@ namespace Yintai.Hangzhou.Service
             }
 
             //+1
-            product = _productRepository.SetCount(ProductCountType.InvolvedCount, product.Id, 1);
+            product.InvolvedCount++;
+            _productRepository.Update(product);
 
             var response = MappingManager.ProductInfoResponseMapping(product);
             response.CouponCodeResponse = coupon.Data;

@@ -28,10 +28,23 @@ namespace <#= code.EscapeNamespace(efHost.Namespace) #>
             _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
         }
 
-		public <#= efHost.EntityContainer.Name #>()
-			: base("Name=<#= efHost.EntityContainer.Name #>")
-		{
-		}
+		/// <summary>
+        /// 正式环境使用，无跟踪
+        /// </summary>
+        public <#= efHost.EntityContainer.Name #>()
+            : this("Name=<#= efHost.EntityContainer.Name #>", "v1")
+        {
+        }
+
+        /// <summary>
+        /// 正式环境使用，无跟踪
+        /// </summary>
+        /// <param name="nameOrConnectionString"></param>
+        /// <param name="version"></param>
+        public <#= efHost.EntityContainer.Name #>(string nameOrConnectionString, string version)
+            : base(nameOrConnectionString)
+        {
+        }
 
         #region ef tracing
 

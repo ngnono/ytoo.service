@@ -255,6 +255,29 @@ namespace Yintai.Hangzhou.Repository.Impl
             }
         }
 
+        public ProductEntity SetIsHasImage(int entityId, bool hasImage, DataStatus dataStatus, int updateUser, string des)
+        {
+            var parames = new List<SqlParameter>
+                {
+                    new SqlParameter("@IsHasImage", hasImage),
+                    new SqlParameter("@Id", entityId),
+                    new SqlParameter("@UpdatedDate", DateTime.Now),
+                    new SqlParameter("@UpdatedUser", updateUser),
+                    new SqlParameter("@Status", (int)dataStatus),
+                };
+
+            const string sql = "UPDATE [dbo].[Product] SET [IsHasImage] = @IsHasImage, [UpdatedUser] = @UpdatedUser ,[UpdatedDate] = @UpdatedDate , [Status]= @Status WHERE Id = @Id;";
+
+            var i = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnection(), CommandType.Text, sql, parames.ToArray());
+
+            if (i > 0)
+            {
+                return GetItem(entityId);
+            }
+
+            return null;
+        }
+
         public List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter)
         {
             return
@@ -265,6 +288,49 @@ namespace Yintai.Hangzhou.Repository.Impl
         public override ProductEntity GetItem(int key)
         {
             return base.Find(key);
+        }
+
+        private ProductEntity SetCount(int id, int count, string fieldName)
+        {
+            var parames = new List<SqlParameter>
+                {
+                    new SqlParameter("@Count", count),
+                    new SqlParameter("@Id", id),
+                };
+
+            var sql = String.Format("UPDATE [dbo].[Product] SET [{0}] = [{0}] + @Count WHERE [Id] = @Id;", fieldName);
+
+            var i = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnection(), CommandType.Text, sql, parames.ToArray());
+
+            if (i > 0)
+            {
+                return GetItem(id);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public ProductEntity SetCount(ProductCountType countType, int id, int count)
+        {
+            string t;
+            switch (countType)
+            {
+                case ProductCountType.FavoriteCount:
+                    t = "FavoriteCount";
+                    break;
+                case ProductCountType.InvolvedCount:
+                    t = "InvolvedCount";
+                    break;
+                case ProductCountType.ShareCount:
+                    t = "ShareCount";
+                    break;
+                default:
+                    return GetItem(id);
+            }
+
+            return SetCount(id, count, t);
         }
     }
 }

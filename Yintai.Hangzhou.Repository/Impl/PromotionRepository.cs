@@ -261,7 +261,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         /// <param name="recommendUser"></param>
         /// <param name="tagids"></param>
         /// <returns></returns>
-        private static Expression<Func<PromotionEntity, bool>> Filter(DataStatus? dataStatus, DateTimeRangeInfo rangeInfo, Timestamp timestamp, int? recommendUser, List<int> tagids)
+        private static Expression<Func<PromotionEntity, bool>> Filter(DataStatus? dataStatus, DateTimeRangeInfo rangeInfo, Timestamp timestamp, int? recommendUser, List<int> tagids, PromotionFilterMode? filterMode = null)
         {
             var filter = PredicateBuilder.True<PromotionEntity>();
 
@@ -316,9 +316,26 @@ namespace Yintai.Hangzhou.Repository.Impl
                 }
             }
 
+            if (filterMode != null)
+            {
+                switch (filterMode)
+                {
+                    case PromotionFilterMode.InProgress:
+                        if (rangeInfo != null && rangeInfo.EndDateTime != null)
+                        {
+                            filter = filter.And(v => v.StartDate > DateTime.Now);
+                        }
+                        else
+                        {
+                            filter = filter.And(v => v.StartDate > DateTime.Now && v.EndDate < DateTime.Now);
+                        }
+
+                        break;
+                }
+            }
+
             return filter;
         }
-
 
         #endregion
 
@@ -348,6 +365,52 @@ namespace Yintai.Hangzhou.Repository.Impl
         {
             return GetPagedList(pagerRequest, out totalCount, sortOrder, dateTimeRangeInfo, coordinateInfo, timestamp,
                                 recommendUser, PromotionFilterMode.Default);
+        }
+
+        private PromotionEntity SetCount(int id, int count, string fieldName)
+        {
+            var parames = new List<SqlParameter>
+                {
+                    new SqlParameter("@Count", count),
+                    new SqlParameter("@Id", id),
+                };
+
+            var sql = String.Format("UPDATE [dbo].[Promotion] SET [{0}] = [{0}] + @Count WHERE [Id] = @Id;", fieldName);
+
+            var i = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnection(), CommandType.Text, sql, parames.ToArray());
+
+            if (i > 0)
+            {
+                return GetItem(id);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public PromotionEntity SetCount(PromotionCountType countType, int id, int count)
+        {
+            string t;
+            switch (countType)
+            {
+                case PromotionCountType.FavoriteCount:
+                    t = "FavoriteCount";
+                    break;
+                case PromotionCountType.InvolvedCount:
+                    t = "InvolvedCount";
+                    break;
+                case PromotionCountType.LikeCount:
+                    t = "LikeCount";
+                    break;
+                case PromotionCountType.ShareCount:
+                    t = "ShareCount";
+                    break;
+                default:
+                    return GetItem(id);
+            }
+
+            return SetCount(id, count, t);
         }
 
         public List<PromotionEntity> GetPagedListForSearch(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder,
@@ -595,7 +658,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public List<PromotionEntity> GetList(List<int> ids, DataStatus? dataStatus, PromotionFilterMode? filterMode)
         {
-            return base.Get(Filter(dataStatus, new DateTimeRangeInfo { EndDateTime = DateTime.Now }, null, null, null)).ToList();
+            return base.Get(Filter(dataStatus, new DateTimeRangeInfo { EndDateTime = DateTime.Now }, null, null, null, filterMode)).ToList();
         }
 
         private static PromotionEntity ConvertEntity(IDataRecord record)

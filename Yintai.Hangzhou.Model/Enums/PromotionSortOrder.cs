@@ -22,7 +22,13 @@ namespace Yintai.Hangzhou.Model.Enums
         /// <summary>
         /// 未结束
         /// </summary>
-        NotTheEnd = 3
+        [System.Obsolete("不建议使用")]
+        NotTheEnd = 3,
+
+        /// <summary>
+        /// 进行中
+        /// </summary>
+        InProgress = 4
     }
 
     public enum PromotionSortOrder

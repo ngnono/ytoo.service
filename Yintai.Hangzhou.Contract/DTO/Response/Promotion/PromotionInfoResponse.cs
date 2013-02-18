@@ -116,17 +116,25 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Promotion
         {
             get
             {
-                if (PublicationLimit == null || PublicationLimit == -1)
+                if (PublicationLimit != null && PublicationLimit != -1)
                 {
-                    return true;
+                    if (InvolvedCount >= PublicationLimit)
+                    {
+                        return false;
+                    }
+                }
+                //time
+                if (StartDate > DateTime.Now)
+                {
+                    return false;
                 }
 
-                if (PublicationLimit > InvolvedCount)
+                if (EndDate < DateTime.Now)
                 {
-                    return true;
+                    return false;
                 }
 
-                return false;
+                return true;
             }
             set { }
         }

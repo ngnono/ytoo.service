@@ -17,14 +17,27 @@ namespace Yintai.Hangzhou.Data.Models
 
         static YintaiHzhouContext()
         {
-            Database.SetInitializer<YintaiHangzhouContext>(null);
+            Database.SetInitializer<YintaiHzhouContext>(null);
             _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
         }
 
-		public YintaiHzhouContext()
-            : base("Name=YintaiHangzhouContext")
-		{
-		}
+		/// <summary>
+        /// 正式环境使用，无跟踪
+        /// </summary>
+        public YintaiHzhouContext()
+            : this("Name=YintaiHzhouContext", "v1")
+        {
+        }
+
+        /// <summary>
+        /// 正式环境使用，无跟踪
+        /// </summary>
+        /// <param name="nameOrConnectionString"></param>
+        /// <param name="version"></param>
+        public YintaiHzhouContext(string nameOrConnectionString, string version)
+            : base(nameOrConnectionString)
+        {
+        }
 
         #region ef tracing
 
@@ -144,6 +157,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+			Configuration.AutoDetectChangesEnabled = false;
             // 移除复数表名的契约
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
@@ -194,7 +208,7 @@ namespace Yintai.Hangzhou.Data.Models
 			return c;
 		}
 
-        protected override void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
         {
             System.Diagnostics.Debug.WriteLine("context closed");
             base.Dispose(disposing);
