@@ -87,9 +87,9 @@
             <td></td>
             <td>@Html.ActionLink("AddRrsource", "Create", "Resource", new
                                 {
-                                    sid = re.Id,
-                                    stype = (int)Yintai.Hangzhou.Model.Enums.SourceType.Product
-                                })</td>
+                                    SourceId = re.Id,
+                                    SourceType = (int)Yintai.Hangzhou.Model.Enums.SourceType.Product
+                                },null)</td>
         </tr>
         }
     </table>
