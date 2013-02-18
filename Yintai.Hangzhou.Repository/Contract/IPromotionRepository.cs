@@ -8,6 +8,15 @@ namespace Yintai.Hangzhou.Repository.Contract
     public interface IPromotionRepository : IRepository<PromotionEntity, int>
     {
         /// <summary>
+        /// set
+        /// </summary>
+        /// <param name="countType"></param>
+        /// <param name="id"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        PromotionEntity SetCount(PromotionCountType countType,  int id, int count);
+
+        /// <summary>
         /// 查
         /// </summary>
         /// <param name="pagerRequest">分页</param>

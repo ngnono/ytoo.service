@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+﻿using System.Runtime.Serialization;
 using Yintai.Hangzhou.Contract.Response;
 
 namespace Yintai.Hangzhou.Contract.DTO.Response.Tag
@@ -18,5 +14,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Tag
 
         [DataMember(Name = "description")]
         public string Description { get; set; }
+
+        [DataMember(Name = "sortorder")]
+        public int SortOrder { get; set; }
     }
 }

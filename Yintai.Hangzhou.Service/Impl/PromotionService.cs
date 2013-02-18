@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;

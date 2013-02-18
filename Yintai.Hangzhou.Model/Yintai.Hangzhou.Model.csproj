@@ -55,6 +55,7 @@
     <Compile Include="Enums\Gender.cs" />
     <Compile Include="Enums\LikeType.cs" />
     <Compile Include="Enums\MathMethod.cs" />
+    <Compile Include="Enums\PromotionCountType.cs" />
     <Compile Include="Enums\ResourceSortOrder.cs" />
     <Compile Include="Enums\SpecialTopicOrder.cs" />
     <Compile Include="Enums\StoreSortOrder.cs" />

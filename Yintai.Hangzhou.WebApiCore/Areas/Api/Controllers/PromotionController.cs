@@ -190,7 +190,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         }
 
         [RestfulAuthorize]
-        [HttpPost]
+        // [HttpPost]
         public RestfulResult Coupon(FormCollection formCollection, PromotionCouponCreateRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUid = authuid.Value;
@@ -200,7 +200,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 var result =
                 this._promotionDataService.CreateCoupon(request);
 
-                if (request.IsPass == 1 && result.Data.CouponCodeResponse != null)
+                if (request.IsPass == 1 && result.Data != null && result.Data.CouponCodeResponse != null)
                 {
                     var code = result.Data.CouponCodeResponse;
                     result.Data.CouponCodeResponse.Pass = _passHelper.GetPass(ControllerContext.HttpContext, code.Id,
@@ -262,6 +262,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             return t ? new RestfulResult { Data = this._promotionDataService.DestroyPromotion(request) } : new RestfulResult { Data = new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "您没有权限删除其他用户的活动" } };
         }
-    
+
     }
 }

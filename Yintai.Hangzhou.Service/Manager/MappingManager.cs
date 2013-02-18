@@ -2672,14 +2672,33 @@ namespace Yintai.Hangzhou.Service.Manager
                 return new List<PromotionInfo>(0);
             }
 
-            var entities = _promotionRepository.GetList(ids, DataStatus.Normal, PromotionFilterMode.NotTheEnd);
+            var entities = _promotionRepository.GetList(ids, DataStatus.Normal, PromotionFilterMode.InProgress);
 
             if (entities == null || entities.Count == 0)
             {
                 return new List<PromotionInfo>(0);
             }
 
-            return PromotionInfoMapping(entities);
+            var n = new List<PromotionEntity>(entities.Count);
+            foreach (var entity in entities)
+            {
+                if (entity.StartDate > DateTime.Now)
+                {
+                    continue;
+                }
+
+                if (entity.PublicationLimit != null && entity.PublicationLimit > 0)
+                {
+                    if (entity.PublicationLimit <= entity.InvolvedCount)
+                    {
+                        continue;
+                    }
+                }
+
+                n.Add(entity);
+            }
+
+            return PromotionInfoMapping(n);
         }
 
         private List<PromotionInfo> PromotionInfoMapping(ICollection<PromotionEntity> source)

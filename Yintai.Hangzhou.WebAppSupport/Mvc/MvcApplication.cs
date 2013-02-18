@@ -61,19 +61,34 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
 
         public void Application_EndRequest(Object sender, EventArgs e)
         {
-            IUnitOfWork unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
-            unit.Commit();
-            unit.Dispose();
+            try
+            {
+                var unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
+                unit.Commit();
+                unit.Dispose();
+            }
+            catch
+            {
+
+            }
+
+
 
             //PerRequestUnityServiceLocator.DisposeOfChildContainer();
         }
 
         public void Application_Error(Object sender, EventArgs e)
         {
-            IUnitOfWork unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
-            unit.Dispose();
+            try
+            {
+                var unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
+                unit.Dispose();
+            }
+            catch
+            {
+            }
 
-           // PerRequestUnityServiceLocator.DisposeOfChildContainer();
+            // PerRequestUnityServiceLocator.DisposeOfChildContainer();
             //don't forget to treat the error here
         }
 
@@ -90,6 +105,20 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         public void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+
+            routes.IgnoreRoute("{*alljs}", new { alljs = @".*\.js(/.*)?" });
+            routes.IgnoreRoute("{*allcss}", new { allcss = @".*\.css(/.*)?" });
+            routes.IgnoreRoute("{*alljpg}", new { alljpg = @".*\.jpg(/.*)?" });
+            routes.IgnoreRoute("{*allgif}", new { allgif = @".*\.gif(/.*)?" });
+            routes.IgnoreRoute("{*allpng}", new { allpng = @".*\.png(/.*)?" });
+
+            routes.IgnoreRoute("{*allxls}", new { allxls = @".*\.xls(/.*)?" });
+            //routes.IgnoreRoute("{*PRO_UPLOAD_TMPxls}", new { PRO_UPLOAD_TMPxls = @"(.*/)?PRO_UPLOAD_TMP.xls(/.*)?" });
+
+            routes.IgnoreRoute("{*robotstxt}", new { robotstxt = @"(.*/)?robots.txt(/.*)?" });
+            routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
+
             routes.RouteExistingFiles = false;
 
             routes.MapLowerCaseUrlRoute(

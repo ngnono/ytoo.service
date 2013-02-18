@@ -217,9 +217,37 @@
     <Folder Include="fileupload\video\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\dotnet-passbook-master\Passbook.Generator\Passbook.Generator.csproj">
+      <Project>{cec0a9ce-3250-410f-9469-38eef0f9c8b6}</Project>
+      <Name>Passbook.Generator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
+      <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
+      <Name>Yintai.Hangzhou.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
+      <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>
+      <Name>Yintai.Hangzhou.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
+      <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
+      <Name>Yintai.Hangzhou.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Repository\Yintai.Hangzhou.Repository.csproj">
+      <Project>{82be109a-483e-40bf-98b8-a555bca86111}</Project>
+      <Name>Yintai.Hangzhou.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Service\Yintai.Hangzhou.Service.csproj">
+      <Project>{193902dc-242c-4dba-b173-ee154e813c4b}</Project>
+      <Name>Yintai.Hangzhou.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.WebApiCore\Yintai.Hangzhou.WebApiCore.csproj">
       <Project>{9ebd5d9a-f4dc-4a75-8348-bce676c5c795}</Project>
       <Name>Yintai.Hangzhou.WebApiCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.WebAppSupport\Yintai.Hangzhou.WebSupport.csproj">
+      <Project>{a2e82216-56cc-45bf-b671-db8cc464d573}</Project>
+      <Name>Yintai.Hangzhou.WebSupport</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
@@ -244,7 +272,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>38190</DevelopmentServerPort>
+          <DevelopmentServerPort>18511</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

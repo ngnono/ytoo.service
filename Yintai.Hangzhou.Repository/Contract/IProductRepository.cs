@@ -8,6 +8,8 @@ namespace Yintai.Hangzhou.Repository.Contract
 {
     public interface IProductRepository : IRepository<ProductEntity, int>
     {
+        ProductEntity SetCount(ProductCountType countType, int id, int count);
+
         /// <summary>
         /// 分页
         /// </summary>
@@ -50,6 +52,17 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="updateUser"></param>
         /// <returns></returns>
         ProductEntity SetSortOrder(ProductEntity entity, int sortOrder, int updateUser);
+
+        /// <summary>
+        /// SetSortOrder
+        /// </summary>
+        /// <param name="entityId"></param>
+        /// <param name="hasImage"></param>
+        /// <param name="dataStatus"></param>
+        /// <param name="updateUser"></param>
+        /// <param name="des">说明</param>
+        /// <returns></returns>
+        ProductEntity SetIsHasImage(int entityId, bool hasImage, DataStatus dataStatus, int updateUser, string des);
 
         /// <summary>
         /// 分页

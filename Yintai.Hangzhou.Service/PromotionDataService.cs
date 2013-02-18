@@ -330,16 +330,14 @@ namespace Yintai.Hangzhou.Service
                                              });
 
             var promotionEntity = _promotionRepository.GetItem(shareEntity.SourceId);
-            promotionEntity.ShareCount = promotionEntity.ShareCount + 1;
+            //TODO
+            promotionEntity = _promotionRepository.SetCount(PromotionCountType.ShareCount, promotionEntity.Id, 1);
 
-            _promotionRepository.Update(promotionEntity);
+            var re = MappingManager.PromotionResponseMapping(promotionEntity, request.CoordinateInfo);
 
-            return GetPromotionInfo(new GetPromotionInfoRequest
-                                 {
-                                     Promotionid = shareEntity.SourceId,
-                                     Lat = request.Lat,
-                                     Lng = request.Lng
-                                 });
+            re = IsR(re, request.AuthUser, request.AuthUser.Id);
+
+            return new ExecuteResult<PromotionInfoResponse> { Data = re };
         }
 
         /// <summary>
@@ -361,7 +359,7 @@ namespace Yintai.Hangzhou.Service
                 return new ExecuteResult<PromotionInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "您已经添加过收藏了" };
             }
 
-            favorEntity = _favoriteService.Create(new FavoriteEntity
+            _favoriteService.Create(new FavoriteEntity
                                                               {
                                                                   CreatedDate = DateTime.Now,
                                                                   CreatedUser = request.AuthUid,
@@ -373,17 +371,13 @@ namespace Yintai.Hangzhou.Service
                                                                   Store_Id = promotionEntity.Store_Id
                                                               });
 
-            promotionEntity.FavoriteCount++;
+            //TODO
+            promotionEntity = _promotionRepository.SetCount(PromotionCountType.FavoriteCount, promotionEntity.Id, 1);
 
-            _promotionRepository.Update(promotionEntity);
+            var re = MappingManager.PromotionResponseMapping(promotionEntity, request.CoordinateInfo);
+            re = IsR(re, request.AuthUser, request.AuthUser.Id);
 
-            return GetPromotionInfo(new GetPromotionInfoRequest
-            {
-                Promotionid = favorEntity.FavoriteSourceId,
-                CurrentAuthUser = request.AuthUser,
-                Lat = request.Lat,
-                Lng = request.Lng
-            });
+            return new ExecuteResult<PromotionInfoResponse> { Data = re };
         }
 
         public ExecuteResult<PromotionInfoResponse> DestroyFavor(PromotionFavorDestroyRequest request)
@@ -402,17 +396,13 @@ namespace Yintai.Hangzhou.Service
 
             _favoriteService.Del(favorEntity);
 
-            promotionEntity.FavoriteCount--;
+            //TODO
+            promotionEntity = _promotionRepository.SetCount(PromotionCountType.FavoriteCount, promotionEntity.Id, -1);
 
-            _promotionRepository.Update(promotionEntity);
+            var re = MappingManager.PromotionResponseMapping(promotionEntity, request.CoordinateInfo);
+            re = IsR(re, request.AuthUser, request.AuthUser.Id);
 
-            return GetPromotionInfo(new GetPromotionInfoRequest
-            {
-                Promotionid = promotionEntity.Id,
-                CurrentAuthUser = request.AuthUser,
-                Lat = request.Lat,
-                Lng = request.Lng
-            });
+            return new ExecuteResult<PromotionInfoResponse> { Data = re };
         }
 
         /// <summary>
@@ -450,11 +440,13 @@ namespace Yintai.Hangzhou.Service
                 return new ExecuteResult<PromotionInfoResponse>(null) { Message = coupon.Message, StatusCode = coupon.StatusCode };
             }
 
-            promotionEntity.InvolvedCount = promotionEntity.InvolvedCount + 1;
-            _promotionRepository.Update(promotionEntity);
+            //TODO
+            promotionEntity = _promotionRepository.SetCount(PromotionCountType.InvolvedCount, promotionEntity.Id, 1);
 
             var re = MappingManager.PromotionResponseMapping(promotionEntity);
             re.CouponCodeResponse = coupon.Data;
+
+            re = IsR(re, request.AuthUser, request.AuthUser.Id);
 
             return new ExecuteResult<PromotionInfoResponse> { Data = re };
         }
