@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.WebSupport.Mvc;
+using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 {
@@ -121,7 +122,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             HttpContextBase context = ControllerContext.HttpContext;
             UploadFile(context);
             ProductUploadInfo[] array = new ProUploadService(_fileFullPath, this).Stage().ToArray<ProductUploadInfo>();
-            return Json(array);
+            return Json(array).EnsureContentType(context.Request);
         }
         [HttpPost]
         public JsonResult UploadImage()
@@ -131,7 +132,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             HttpContextBase context = ControllerContext.HttpContext;
             UploadFile(context);
 
-            return Json(new ProUploadService(_fileFullPath, this).ImageStage().ToArray());
+            return Json(new ProUploadService(_fileFullPath, this).ImageStage().ToArray()).EnsureContentType(context.Request);
         }
 
         private bool EnsureJobIdContext()

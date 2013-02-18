@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Coupon;
@@ -470,57 +471,60 @@ namespace Yintai.Hangzhou.Service
             //如果是达人，需要上传storeId,如果是店长，那么取店长所属的store
             // promotionSourceType == RecommendSourceType.Daren ? request.StoreId : request.AuthUser.Store_Id;
             var storeId = request.StoreId < 1 ? request.AuthUser.Store_Id : request.StoreId;
-            var promotionEntity = _promotionRepository.Insert(new PromotionEntity
-                {
-                    CreatedDate = DateTime.Now,
-                    CreatedUser = request.AuthUid,
-                    Description = request.Description,
-                    EndDate = request.EndDate,
-                    FavoriteCount = 0,
-                    InvolvedCount = 0,
-                    LikeCount = 0,
-                    Name = request.Name,
-                    RecommendSourceId = request.RecommendUser == null ? request.AuthUid : request.RecommendUser.Value,
-                    RecommendSourceType = (int)promotionSourceType,
-                    ShareCount = 0,
-                    StartDate = request.StartDate,
-                    Status = 1,
-                    Store_Id = storeId ?? 0,
-                    UpdatedDate = DateTime.Now,
-                    UpdatedUser = request.AuthUid,
-                    RecommendUser = request.RecommendUser == null ? request.AuthUid : request.RecommendUser.Value,
-                    Tag_Id = request.TagId ?? 0
-                });
-            //处理 图片
-            //处理文件上传
-            if (request.Files != null && request.Files.Count > 0)
+            using (var ts = new TransactionScope())
             {
-                _resourceService.Save(request.Files, request.AuthUid, 0, promotionEntity.Id, SourceType.Promotion);
-            }
-
-            //处理品牌关系
-            if (request.Brands.Length > 0)
-            {
-                var b = request.Brands.Distinct().Where(v => v > 0).ToList();
-                var list = new List<PromotionBrandRelationEntity>(b.Count);
-                foreach (var item in b)
+                var promotionEntity = _promotionRepository.Insert(new PromotionEntity
+                    {
+                        CreatedDate = DateTime.Now,
+                        CreatedUser = request.AuthUid,
+                        Description = request.Description,
+                        EndDate = request.EndDate,
+                        FavoriteCount = 0,
+                        InvolvedCount = 0,
+                        LikeCount = 0,
+                        Name = request.Name,
+                        RecommendSourceId = request.RecommendUser == null ? request.AuthUid : request.RecommendUser.Value,
+                        RecommendSourceType = (int)promotionSourceType,
+                        ShareCount = 0,
+                        StartDate = request.StartDate,
+                        Status = 1,
+                        Store_Id = storeId ?? 0,
+                        UpdatedDate = DateTime.Now,
+                        UpdatedUser = request.AuthUid,
+                        RecommendUser = request.RecommendUser == null ? request.AuthUid : request.RecommendUser.Value,
+                        Tag_Id = request.TagId ?? 0
+                    });
+                //处理 图片
+                //处理文件上传
+                if (request.Files != null && request.Files.Count > 0)
                 {
-                    list.Add(new PromotionBrandRelationEntity
-                        {
-                            Brand_Id = item,
-                            CreatedDate = DateTime.Now,
-                            Promotion_Id = promotionEntity.Id
-                        });
+                    _resourceService.Save(request.Files, request.AuthUid, 0, promotionEntity.Id, SourceType.Promotion);
                 }
 
-                _promotionBrandRelationRepository.BatchInsert(list);
-            }
-
-            return GetPromotionInfo(new GetPromotionInfoRequest
+                //处理品牌关系
+                if (request.Brands.Length > 0)
                 {
-                    Promotionid = promotionEntity.Id,
-                    CurrentAuthUser = request.AuthUser
-                });
+                    var b = request.Brands.Distinct().Where(v => v > 0).ToList();
+                    var list = new List<PromotionBrandRelationEntity>(b.Count);
+                    foreach (var item in b)
+                    {
+                        list.Add(new PromotionBrandRelationEntity
+                            {
+                                Brand_Id = item,
+                                CreatedDate = DateTime.Now,
+                                Promotion_Id = promotionEntity.Id
+                            });
+                    }
+
+                    _promotionBrandRelationRepository.BatchInsert(list);
+                }
+                ts.Complete();
+                return GetPromotionInfo(new GetPromotionInfoRequest
+                    {
+                        Promotionid = promotionEntity.Id,
+                        CurrentAuthUser = request.AuthUser
+                    });
+            }
         }
 
         public ExecuteResult<PromotionInfoResponse> UpdatePromotion(UpdatePromotionRequest request)

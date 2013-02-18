@@ -602,7 +602,9 @@ namespace Yintai.Hangzhou.Service.Manager
                         {
                             width = image.Width;
                             height = image.Height;
+                           
                         }
+                        fileHR.Seek(0, SeekOrigin.Begin);
                         fileInfor.Width = width;
                         fileInfor.Height = height;
 

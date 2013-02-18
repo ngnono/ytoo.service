@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using Yintai.Architecture.Common.Caching;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.Coupon;
@@ -217,17 +218,20 @@ namespace Yintai.Hangzhou.Service
             request.RSourceType = request.AuthUser.Level == UserLevel.Daren
                                               ? RecommendSourceType.Daren
                                               : RecommendSourceType.StoreManager;
-
-            //判断当前用户是否是 管理员或者 level 是达人？
-            var entity = _productRepository.Insert(MappingManager.ProductEntityMapping(request));
-            //处理 图片
-            //处理文件上传
-            if (request.Files != null && request.Files.Count > 0)
+            using (var ts = new TransactionScope())
             {
-                _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
+                //判断当前用户是否是 管理员或者 level 是达人？
+                var entity = _productRepository.Insert(MappingManager.ProductEntityMapping(request));
+                //处理 图片
+                //处理文件上传
+                if (request.Files != null && request.Files.Count > 0)
+                {
+                    _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
+                }
+                ts.Complete();
+                return new ExecuteResult<ProductInfoResponse>(MappingManager.ProductInfoResponseMapping(entity));
             }
-
-            return new ExecuteResult<ProductInfoResponse>(MappingManager.ProductInfoResponseMapping(entity));
+            
         }
 
         public ExecuteResult<ProductInfoResponse> UpdateProduct(UpdateProductRequest request)
