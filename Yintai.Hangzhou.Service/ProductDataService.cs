@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
 using Yintai.Architecture.Common.Caching;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web;
@@ -99,16 +98,16 @@ namespace Yintai.Hangzhou.Service
             }
 
             var filter = new ProductFilter
-                {
-                    BrandId = request.BrandId,
-                    DataStatus = DataStatus.Normal,
-                    ProductName = null,
-                    RecommendUser = ruserId,
-                    TagIds = tagIds,
-                    Timestamp = request.Timestamp,
-                    TopicId = request.TopicId,
-                    PromotionId = request.PromotionId
-                };
+            {
+                BrandId = request.BrandId,
+                DataStatus = DataStatus.Normal,
+                ProductName = null,
+                RecommendUser = ruserId,
+                TagIds = tagIds,
+                Timestamp = request.Timestamp,
+                TopicId = request.TopicId,
+                PromotionId = request.PromotionId
+            };
 
             var produtEntities = _productRepository.GetPagedList(request.PagerRequest, out totalCount,
                 request.ProductSortOrder, filter);
@@ -219,20 +218,6 @@ namespace Yintai.Hangzhou.Service
             request.RSourceType = request.AuthUser.Level == UserLevel.Daren
                                               ? RecommendSourceType.Daren
                                               : RecommendSourceType.StoreManager;
-<<<<<<< HEAD
-            using (var ts = new TransactionScope())
-            {
-                //判断当前用户是否是 管理员或者 level 是达人？
-                var entity = _productRepository.Insert(MappingManager.ProductEntityMapping(request));
-                //处理 图片
-                //处理文件上传
-                if (request.Files != null && request.Files.Count > 0)
-                {
-                    _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
-                }
-                ts.Complete();
-                return new ExecuteResult<ProductInfoResponse>(MappingManager.ProductInfoResponseMapping(entity));
-=======
 
             //判断当前用户是否是 管理员或者 level 是达人？
             var inEntity = MappingManager.ProductEntityMapping(request);
@@ -280,9 +265,9 @@ namespace Yintai.Hangzhou.Service
                                     "set ishasimage false");
                     }
                 }
->>>>>>> c897f6e34b951ef7fef1d45b32d1478e8940e728
             }
-            
+
+            return new ExecuteResult<ProductInfoResponse>(MappingManager.ProductInfoResponseMapping(entity));
         }
 
         public ExecuteResult<ProductInfoResponse> UpdateProduct(UpdateProductRequest request)
@@ -419,19 +404,19 @@ namespace Yintai.Hangzhou.Service
             }
 
             _shareService.Create(new ShareHistoryEntity
-                {
-                    CreatedDate = DateTime.Now,
-                    CreatedUser = request.AuthUid,
-                    Description = request.Description,
-                    Name = request.Name,
-                    ShareTo = (int)request.OsiteType,
-                    SourceId = request.ProductId,
-                    SourceType = (int)SourceType.Product,
-                    Stauts = 1,
-                    User_Id = request.AuthUid,
-                    UpdatedDate = DateTime.Now,
-                    UpdatedUser = request.AuthUid
-                });
+            {
+                CreatedDate = DateTime.Now,
+                CreatedUser = request.AuthUid,
+                Description = request.Description,
+                Name = request.Name,
+                ShareTo = (int)request.OsiteType,
+                SourceId = request.ProductId,
+                SourceType = (int)SourceType.Product,
+                Stauts = 1,
+                User_Id = request.AuthUid,
+                UpdatedDate = DateTime.Now,
+                UpdatedUser = request.AuthUid
+            });
 
             //+1
             product = _productRepository.SetCount(ProductCountType.ShareCount, product.Id, 1);
@@ -458,16 +443,16 @@ namespace Yintai.Hangzhou.Service
             }
 
             _favoriteService.Create(new FavoriteEntity
-                {
-                    CreatedDate = DateTime.Now,
-                    CreatedUser = request.AuthUid,
-                    Description = String.Empty,
-                    FavoriteSourceId = product.Id,
-                    FavoriteSourceType = (int)SourceType.Product,
-                    Status = 1,
-                    User_Id = request.AuthUid,
-                    Store_Id = product.Store_Id
-                });
+            {
+                CreatedDate = DateTime.Now,
+                CreatedUser = request.AuthUid,
+                Description = String.Empty,
+                FavoriteSourceId = product.Id,
+                FavoriteSourceType = (int)SourceType.Product,
+                Status = 1,
+                User_Id = request.AuthUid,
+                Store_Id = product.Store_Id
+            });
 
             //+1
             product = _productRepository.SetCount(ProductCountType.FavoriteCount, product.Id, 1);
@@ -540,15 +525,15 @@ namespace Yintai.Hangzhou.Service
                 }
 
                 var pr = _promotionDataService.CreateCoupon(new PromotionCouponCreateRequest
-                    {
-                        AuthUid = request.AuthUid,
-                        AuthUser = request.AuthUser,
-                        Client_Version = request.Client_Version,
-                        IsPass = request.IsPass,
-                        Method = request.Method,
-                        PromotionId = request.PromotionId ?? 0,
-                        Token = request.Token
-                    });
+                {
+                    AuthUid = request.AuthUid,
+                    AuthUser = request.AuthUser,
+                    Client_Version = request.Client_Version,
+                    IsPass = request.IsPass,
+                    Method = request.Method,
+                    PromotionId = request.PromotionId ?? 0,
+                    Token = request.Token
+                });
 
                 if (pr.IsSuccess && pr.Data != null && pr.Data.CouponCodeResponse != null)
                 {
