@@ -28,7 +28,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         }
 
         [RestfulRoleAuthorize(UserRole.Admin | UserRole.Manager, UserLevel.Daren)]
-        [HttpPost]
+
         public RestfulResult Create(FormCollection formCollection, CreatePromotionRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUid = authuid.Value;

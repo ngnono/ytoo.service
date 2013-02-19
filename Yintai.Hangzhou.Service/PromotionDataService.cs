@@ -463,6 +463,7 @@ namespace Yintai.Hangzhou.Service
             //如果是达人，需要上传storeId,如果是店长，那么取店长所属的store
             // promotionSourceType == RecommendSourceType.Daren ? request.StoreId : request.AuthUser.Store_Id;
             var storeId = request.StoreId < 1 ? request.AuthUser.Store_Id : request.StoreId;
+            int pid = 0;
             using (var ts = new TransactionScope())
             {
                 var promotionEntity = _promotionRepository.Insert(new PromotionEntity
@@ -487,6 +488,7 @@ namespace Yintai.Hangzhou.Service
                         Tag_Id = request.TagId ?? 0,
                         IsTop = false
                     });
+                pid = promotionEntity.Id;
                 //处理 图片
                 //处理文件上传
                 if (request.Files != null && request.Files.Count > 0)
@@ -512,12 +514,14 @@ namespace Yintai.Hangzhou.Service
                     _promotionBrandRelationRepository.BatchInsert(list);
                 }
                 ts.Complete();
-                return GetPromotionInfo(new GetPromotionInfoRequest
-                    {
-                        Promotionid = promotionEntity.Id,
-                        CurrentAuthUser = request.AuthUser
-                    });
+              
             }
+
+            return GetPromotionInfo(new GetPromotionInfoRequest
+            {
+                Promotionid = pid,
+                CurrentAuthUser = request.AuthUser
+            });
         }
 
         public ExecuteResult<PromotionInfoResponse> UpdatePromotion(UpdatePromotionRequest request)

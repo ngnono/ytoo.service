@@ -2155,7 +2155,11 @@ namespace Yintai.Hangzhou.Service.Manager
             //var target = Mapper.Map<UserEntity, UserModel>(source);
 
             //这步可以判断
-            var store = StoreModelMapping(_storeRepository.GetItem(source.Store_Id));
+            StoreModel store = null;
+            //if (source.Store_Id > 0)
+            //{
+                store = StoreModelMapping(_storeRepository.GetItem(source.Store_Id));
+            //}
             //modelAccount
             var accounts = UserAccountMapping(_userAccountRepository.GetUserAccount(source.Id)).ToList();
             //roles
