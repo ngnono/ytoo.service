@@ -323,6 +323,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\PublishProfiles\Hangzhou.Cms.pubxml" />
+    <None Include="Properties\PublishProfiles\victor.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\bootstrap-image-gallery.min.js" />

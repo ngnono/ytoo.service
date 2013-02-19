@@ -206,6 +206,7 @@
     </Content>
     <None Include="Properties\PublishProfiles\HangzhouV45.pubxml" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
+    <None Include="Properties\PublishProfiles\victor.pubxml" />
     <None Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
