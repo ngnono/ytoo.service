@@ -134,20 +134,8 @@
                                 <img src="@String.Concat(re.Domain, re.Name, "_240x0.jpg")" alt="240X0" />
                             }
                         </td>
-                        <td><a href="javascript:void(0)" onclick="delResource(@re.Id)">Del</a>
-                            <a href="javascript:void(0)" onclick="UpdateResource(@re.Id)">Update</a>
-                        </td>
                     </tr>
                 }
-
-                <tr>
-                    <td></td>
-                    <td>@Html.ActionLink("AddRrsource", "Create", "Resource", new
-                                {
-                                    sid = this.Model.Id,
-                                    stype = (int)Yintai.Hangzhou.Model.Enums.SourceType.Product
-                                })</td>
-                </tr>
             </table>
         }
     </div>
