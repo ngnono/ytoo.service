@@ -59,32 +59,32 @@
     <div>
         @if (this.Model.Resources != null && Model.Resources.Count > 0)
         {
-            <table style="border: 0;">
-                @foreach (var re in Model.Resources)
-                {
-                    <tr>
-                        <td>
-                            @if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
-                            {
-                        
-                                <img src="@String.Concat(re.Domain, re.Name, "_630x0.jpg")" alt="630x0" />
-                            }
-                        </td>
-                        <td><a href="javascript:void(0)" onclick="delResource(@re.Id)">Del</a>
-                            <a href="javascript:void(0)" onclick="UpdateResource(@re.Id)">Update</a>
-                        </td>
-                    </tr>
-                }
-
-                <tr>
-                    <td></td>
-                    <td>@Html.ActionLink("AddRrsource", "Create", "Resource", new
+           <table style="border: 0;">
+                    @foreach (var re in Model.Resources)
+                    {
+                        <tr>
+                            <td>
+                                @if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
                                 {
-                                    sid = this.Model.Id,
-                                    stype = (int)Yintai.Hangzhou.Model.Enums.SourceType.SpecialTopic
-                                })</td>
-                </tr>
-            </table>
+                        
+                                    <img src="@String.Concat(re.Domain, re.Name, "_630x0.jpg")" alt="630x0" />
+                                }
+                            </td>
+                            <td>
+
+                                @Html.ActionLink("Del", "Delete", "Resource", new { id = re.Id }, new { target = "_blank" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>@Html.ActionLink("AddRrsource", "Create", "Resource", new
+                                {
+                                    SourceId = this.Model.Id,
+                                    SourceType = (int)Yintai.Hangzhou.Model.Enums.SourceType.SpecialTopic
+                                }, null)</td>
+                        </tr>
+                    }
+                </table>
         }
     </div>
 </fieldset>
