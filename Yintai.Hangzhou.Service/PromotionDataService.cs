@@ -484,7 +484,8 @@ namespace Yintai.Hangzhou.Service
                         UpdatedDate = DateTime.Now,
                         UpdatedUser = request.AuthUid,
                         RecommendUser = request.RecommendUser == null ? request.AuthUid : request.RecommendUser.Value,
-                        Tag_Id = request.TagId ?? 0
+                        Tag_Id = request.TagId ?? 0,
+                        IsTop = false
                     });
                 //处理 图片
                 //处理文件上传

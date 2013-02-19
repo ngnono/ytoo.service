@@ -3366,6 +3366,10 @@ namespace Yintai.Hangzhou.Service.Manager
             target.UpdatedDate = DateTime.Now;
             target.UpdatedUser = source.AuthUid;
             target.Status = (int)DataStatus.Normal;
+            target.Name = CheckString(target.Name);
+            target.Description = CheckString(target.Description);
+            target.Favorable = CheckString(target.Favorable);
+            target.RecommendedReason = CheckString(target.RecommendedReason);
 
             return target;
         }

@@ -271,6 +271,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Product
 
         [DataMember]
         public int TagId { get; set; }
+
+        public bool IsHasImage { get; set; }
+
+        public int SortOrder { get; set; }
     }
 
     [DataContract]
