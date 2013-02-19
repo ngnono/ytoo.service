@@ -45,7 +45,7 @@ namespace Yintai.Hangzhou.WebSupport.Helper
 
                 var values = from TEnum e in Enum.GetValues(typeof(TEnum))
                              select
-                                 new SelectListItem { Value = (Convert.ToInt32(e).ToString(CultureInfo.InvariantCulture)), Text = e.ToString(), Selected = e.ToString() == name };
+                                 new SelectListItem { Value = (Convert.ToInt32(e).ToString(CultureInfo.InvariantCulture)), Text = e.ToString(), Selected = String.Compare(e.ToString(), name, StringComparison.OrdinalIgnoreCase) == 0 };
 
                 return new SelectList(values, "Value", "Text");
             }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Cms.WebSiteCoreV1.Dto.Resource;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
@@ -50,7 +51,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             var v = new ResourceCollectionViewModel(request, totalCount) { Resources = vo.ToList() };
 
-            return View("List", v);
+            var dto = new ListDto
+                {
+                    ResourceCollectionViewModel = v,
+                    Sort = sort,
+                    SourceId = sourceId,
+                    SourceType = sourceType
+                };
+
+            return View("List", dto);
         }
 
         public ActionResult Details(int? id, [FetchResource(KeyName = "id")]ResourceEntity entity)

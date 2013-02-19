@@ -29,8 +29,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "名称")]
         public string Name { get; set; }
 
-        [Required]
-        [StringLength(16, MinimumLength = 1)]
+        [StringLength(16, MinimumLength = 0)]
         [Display(Name = "副名称")]
         public string EnglishName { get; set; }
 
@@ -45,7 +44,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public string WebSite { get; set; }
 
         [Required]
-        [Display(Name = "显示分组")]
+        [Display(Name = "列表索引")]
         [StringLength(1, MinimumLength = 1)]
         public string Group { get; set; }
 

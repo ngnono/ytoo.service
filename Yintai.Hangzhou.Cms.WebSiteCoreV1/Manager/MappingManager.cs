@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.Mapping;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Manager;
 using System.Linq;
 using MM = Yintai.Hangzhou.Service.Manager.MappingManagerV2;
@@ -817,6 +819,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
 
             var resoucres = ResourceViewMapping(GetListResourceEntities(SourceType.Product, ids)).ToList();
 
+
             foreach (var item in source)
             {
                 var r = resoucres.Where(v => v.SourceId == item.Id).ToList();
@@ -831,7 +834,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             return list;
         }
 
-        private static ProductViewModel ProductViewMapping(ProductEntity source, List<ResourceViewModel> resourceViewModels)
+        private static ProductViewModel ProductViewMapping(ProductEntity source, List<ResourceViewModel> resourceViewModels, List<int> topicIds = null, List<int> promotionIds = null)
         {
             if (source == null)
             {
@@ -840,6 +843,18 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
 
             var target = Mapper.Map<ProductEntity, ProductViewModel>(source);
             target.Resources = resourceViewModels;
+
+            if (topicIds != null && topicIds.Count > 0)
+            {
+                var t = String.Join(",", topicIds);
+                target.TopicIds = t;
+            }
+
+            if (promotionIds != null && promotionIds.Count > 0)
+            {
+                var t = String.Join(",", promotionIds);
+                target.PromotionIds = t;
+            }
 
             return target;
         }
@@ -852,8 +867,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             }
 
             var resouces = ResourceViewMapping(GetListResourceEntities(SourceType.Product, source.Id)).ToList();
+            var t = ServiceLocator.Current.Resolve<ISpecialTopicProductRelationRepository>().GetListByProduct(source.Id);
+            var tids = t.Select(v => v.SpecialTopic_Id).Distinct().ToList();
+            var p = ServiceLocator.Current.Resolve<IPromotionProductRelationRepository>().GetList4Product(new List<int> { source.Id });
+            var pids = p.Select(v => v.ProId ?? 0).Distinct().ToList();
 
-            return ProductViewMapping(source, resouces);
+            return ProductViewMapping(source, resouces, tids, pids);
         }
 
         #endregion

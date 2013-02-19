@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using Yintai.Architecture.Common.Data.EF;
@@ -13,7 +14,7 @@ namespace Yintai.Hangzhou.Repository.Impl
     {
         #region methods
 
-        private static Expression<Func<Promotion2ProductEntity, bool>> Filter(DataStatus? dataStatus, int? promotionId, ICollection<int> productids)
+        private static Expression<Func<Promotion2ProductEntity, bool>> Filter(DataStatus? dataStatus, int? promotionId, IEnumerable<int> productids)
         {
             var filter = PredicateBuilder.True<Promotion2ProductEntity>();
 
@@ -22,12 +23,12 @@ namespace Yintai.Hangzhou.Repository.Impl
                 filter = filter.And(v => v.Status == (int)dataStatus);
             }
 
-            if (promotionId != null && promotionId.Value > 0)
+            if (promotionId != null)
             {
                 filter = filter.And(v => v.ProId == promotionId.Value);
             }
 
-            if (productids != null && productids.Count > 0)
+            if (productids != null)
             {
                 filter = filter.And(v => productids.Any(s => s == v.ProdId));
             }
@@ -65,6 +66,11 @@ namespace Yintai.Hangzhou.Repository.Impl
             {
                 return false;
             }
+        }
+
+        public void DeletedByProduct(int productId)
+        {
+            base.Delete(Filter(DataStatus.Normal, null, new int[] { productId }));
         }
     }
 }

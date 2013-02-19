@@ -1,4 +1,5 @@
-﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ResourceViewModel
+﻿@using Yintai.Hangzhou.Model.Enums
+@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ResourceViewModel
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -100,7 +101,18 @@
     <div class="display-field">
         @if (Model.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
         {
-            <img src="@String.Concat(Model.Domain, Model.Name, "_120x0.jpg")" alt="120X0" />
+                            switch ((SourceType)Model.SourceType)
+                    {
+                        case SourceType.CustomerPortrait:
+                <img src="@String.Concat(Model.Domain, Model.Name, "_50x50.jpg")" alt="50X50" />
+                            break;
+                        case SourceType.SpecialTopic:
+                <img src="@String.Concat(Model.Domain, Model.Name, "_315x0.jpg")" alt="315x0" />
+                            break;
+                        default:
+                <img src="@String.Concat(Model.Domain, Model.Name, "_120x0.jpg")" alt="120X0" />
+                            break;
+                    }
         }
     </div>
 </fieldset>

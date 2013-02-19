@@ -161,12 +161,29 @@
             @Html.ValidationMessageFor(model => model.RecommendSourceId)
         </div>*@
 
+
         <div class="editor-label">
             @Html.LabelFor(model => model.Status)
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.Status, DataStatus.Default.ToSelectList(), "請選擇")
+            @Html.DropDownListFor(model => model.Status, ((DataStatus) Model.Status).ToSelectList(), "請選擇")
             @Html.ValidationMessageFor(model => model.Status)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TopicIds)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.TopicIds)
+            @Html.ValidationMessageFor(model => model.TopicIds)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PromotionIds)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PromotionIds)
+            @Html.ValidationMessageFor(model => model.PromotionIds)
         </div>
 
         <p>

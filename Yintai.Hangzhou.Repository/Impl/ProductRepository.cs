@@ -86,7 +86,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         private static Expression<Func<ProductEntity, bool>> Filter(DataStatus? dataStatus, Timestamp timestamp,
                                                                        ICollection<int> tagid,
-                                                                       int? recommendUser, int? brandId = null, List<int> productIds = null)
+                                                                       int? recommendUser, int? brandId = null, List<int> productIds = null, string productName = null)
         {
             var filter = PredicateBuilder.True<ProductEntity>();
 
@@ -129,6 +129,11 @@ namespace Yintai.Hangzhou.Repository.Impl
                 filter = filter.And(v => productIds.Any(s => s == v.Id));
             }
 
+            if (productName != null)
+            {
+                filter = filter.And(v => v.Name.StartsWith(productName));
+            }
+
             return filter;
         }
 
@@ -143,6 +148,11 @@ namespace Yintai.Hangzhou.Repository.Impl
             if (productFilter.TopicId != null && productFilter.TopicId > 0)
             {
                 pids = GetTopicRelationIds(productFilter.TopicId);
+                //特殊处理处理
+                if (pids == null || pids.Count == 0)
+                {
+                    pids = new List<int> { -1 };
+                }
             }
 
             if (productFilter.PromotionId != null && productFilter.PromotionId > 0)
@@ -161,15 +171,23 @@ namespace Yintai.Hangzhou.Repository.Impl
                         pids.Add(id ?? 0);
                     }
                 }
+                else
+                {
+                    //特殊处理处理
+                    if (pids == null || pids.Count == 0)
+                    {
+                        pids = new List<int> { -2 };
+                    }
+                }
             }
 
             if (pids != null)
             {
-                pids = pids.Distinct().Where(v => v > 0).ToList();
+                pids = pids.Distinct().ToList();
             }
 
             return Filter(productFilter.DataStatus, productFilter.Timestamp, productFilter.TagIds,
-                          productFilter.RecommendUser, productFilter.BrandId, pids);
+                          productFilter.RecommendUser, productFilter.BrandId, pids, productFilter.ProductName);
         }
 
         /// <summary>

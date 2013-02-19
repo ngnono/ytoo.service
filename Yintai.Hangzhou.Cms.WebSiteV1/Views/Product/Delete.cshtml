@@ -1,5 +1,4 @@
 ﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductViewModel
-
 @{
     ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -105,10 +104,27 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.RecommendSourceId)
     </div>
+
+    <div class="display-label">
+        @Html.LabelFor(model => model.TopicIds)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TopicIds)
+    </div>
+
+    <div class="display-label">
+        @Html.LabelFor(model => model.PromotionIds)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PromotionIds)
+    </div>
+
 </fieldset>
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     <p>
-        <input type="submit" value="Delete" /> |
+        <input type="submit" value="Delete" />
+        |
         @Html.ActionLink("Back to List", "List")
     </p>
 }

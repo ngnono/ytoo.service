@@ -109,6 +109,26 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "推荐来源Id")]
         public int RecommendSourceId { get; set; }
 
+        [Display(Name = "专题")]
+        [DisplayName("专题Ids")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "specialtopic")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Id")]
+        [AdditionalMetadata("multiple", "true")]
+        public string TopicIds { get; set; }
+
+        [Display(Name = "活动")]
+        [DisplayName("活动Ids")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "promotion")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Id")]
+        [AdditionalMetadata("multiple", "true")]
+        public string PromotionIds { get; set; }
+
         [Display(Name = "状态")]
         public int Status { get; set; }
         [Display(Name = "创建人")]

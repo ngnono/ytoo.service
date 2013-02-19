@@ -43,5 +43,18 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="specialTopicIds">ids</param>
         /// <returns></returns>
         List<SpecialTopicProductRelationEntity> GetList(List<int> specialTopicIds);
+
+        /// <summary>
+        /// 获取列表
+        /// </summary>
+        /// <param name="productId">productId</param>
+        /// <returns></returns>
+        List<SpecialTopicProductRelationEntity> GetListByProduct(int productId);
+
+        /// <summary>
+        /// del
+        /// </summary>
+        /// <param name="productId"></param>
+        void DeleteByProductId(int productId);
     }
 }

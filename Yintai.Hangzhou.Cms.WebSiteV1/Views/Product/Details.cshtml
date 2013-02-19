@@ -1,5 +1,4 @@
 ﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductViewModel
-
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -104,41 +103,56 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.RecommendSourceId)
     </div>
-    
-    
-     <div>
-            @if (this.Model.Resources != null && Model.Resources.Count > 0)
-            {
-                <table style="border: 0;">
-                    @foreach (var re in Model.Resources)
-                    {
-                        <tr>
-                            <td>
-                                @if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
-                                {
-                        
-                                    <img src="@String.Concat(re.Domain, re.Name, "_240x0.jpg")" alt="240X0" />
-                                }
-                            </td>
-                            <td><a href="javascript:void(0)" onclick="delResource(@re.Id)">Del</a>
-                                <a href="javascript:void(0)" onclick="UpdateResource(@re.Id)">Update</a>
-                            </td>
-                        </tr>
-                    }
 
+
+    <div class="display-label">
+        @Html.LabelFor(model => model.TopicIds)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TopicIds)
+    </div>
+
+    <div class="display-label">
+        @Html.LabelFor(model => model.PromotionIds)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PromotionIds)
+    </div>
+
+
+    <div>
+        @if (this.Model.Resources != null && Model.Resources.Count > 0)
+        {
+            <table style="border: 0;">
+                @foreach (var re in Model.Resources)
+                {
                     <tr>
-                        <td></td>
-                        <td>@Html.ActionLink("AddRrsource", "Create", "Resource", new
+                        <td>
+                            @if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                            {
+                        
+                                <img src="@String.Concat(re.Domain, re.Name, "_240x0.jpg")" alt="240X0" />
+                            }
+                        </td>
+                        <td><a href="javascript:void(0)" onclick="delResource(@re.Id)">Del</a>
+                            <a href="javascript:void(0)" onclick="UpdateResource(@re.Id)">Update</a>
+                        </td>
+                    </tr>
+                }
+
+                <tr>
+                    <td></td>
+                    <td>@Html.ActionLink("AddRrsource", "Create", "Resource", new
                                 {
                                     sid = this.Model.Id,
                                     stype = (int)Yintai.Hangzhou.Model.Enums.SourceType.Product
                                 })</td>
-                    </tr>
-                </table>
-            }
-        </div>
+                </tr>
+            </table>
+        }
+    </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "List")
 </p>

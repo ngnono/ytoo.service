@@ -29,7 +29,7 @@
             @Html.LabelFor(model => model.SourceType)
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.SourceType, SourceType.Default.ToSelectList(), "請選擇")
+            @Html.DropDownListFor(model => model.SourceType, Model == null ? SourceType.Default.ToSelectList() : ((SourceType)Model.SourceType).ToSelectList(), "請選擇")
             @Html.ValidationMessageFor(model => model.SourceType)
         </div>
 
