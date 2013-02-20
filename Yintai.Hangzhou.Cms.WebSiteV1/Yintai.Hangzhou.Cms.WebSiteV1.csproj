@@ -312,7 +312,9 @@
     <Content Include="Configurations\appSettings.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configurations\Log4Net.config" />
+    <Content Include="Configurations\Log4Net.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Configurations\unity.config" />
     <Content Include="Content\ProTemplate\PRO_UPLOAD_TMP.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

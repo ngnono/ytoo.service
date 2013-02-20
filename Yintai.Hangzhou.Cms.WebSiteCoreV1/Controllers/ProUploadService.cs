@@ -157,6 +157,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 entity.InDate = DateTime.Now;
                 entity.UploadGroupId = jobId;
                 _productRepService.Insert<ResourceStageEntity>(entity);
+                DeleteTempFile();
                 yield return new ImageUploadInfo()
                 {
                     ItemCode = entity.ItemCode
@@ -197,7 +198,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         private object mapCellValueToStrongType<T>(ICell cell)
         {
             object finalValue = default(T);
-            if (cell == null)
+            if (cell == null ||
+                cell.CellType == CellType.BLANK)
                 return DBNull.Value;
             switch (cell.CellType)
             {
