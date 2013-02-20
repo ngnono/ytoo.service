@@ -1,4 +1,6 @@
 ﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
+@using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 @model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductCollectionViewModel
 @{
     ViewBag.Title = "List";
@@ -14,33 +16,44 @@
 
 <div>
     <form action="/@url">
-        <label for="name">产品名称</label>
-        <input name="name" type="text" />
-
-        <label for="recommenduser">推荐人</label>
-        <input name="recommenduser" type="text" />
-
-        <label for="brandid">品牌Id</label>
-        <input name="brandid" type="text" />
-
-        <label for="tagid">tagId</label>
-        <input name="tagid" type="text" />
-
-        <label for="promotionid">promotionid</label>
-        <input name="promotionid" type="text" />
-
-        <label for="topicid">topicid</label>
-        <input name="topicid" type="text" />
-
-        <label for="status">status</label>
-        <input name="status" type="text" value="1" />
-
-        <input type="submit" value="查询" />
+        <div class="span4">
+            <label for="name">产品名称</label>   
+            <input name="name" type="text"/>  
+        </div>
+        <div class="span4">
+            <label for="recommenduser">推荐人</label>
+           <input name="recommendUser" type="text" />
+        </div>
+        <div class="span4">
+            <label for="brandid">品牌Id</label>
+          <input name="brandId" type="text" />
+        </div>
+        <div class="span4">
+            <label for="tagid">tagId</label>
+           <input name="tagId" type="text" />
+        </div>
+        <div class="span4">
+            <label for="promotionid">promotionid</label>
+            <input name="promotionId" type="text" />
+        </div>
+        <div class="span4">
+            <label for="topicid">topicid</label>
+            <input name="topicId" type="text" />
+        </div>
+        <div class="span4">
+            <label for="status">status</label>
+            <input name="status" type="text" value="1" />
+        </div>
+        <div class="span4">
+            <input type="submit" value="查询" class="btn btn-primary" />
+        </div>
     </form>
 </div>
 
 <table>
     <tr>
+        <th>图片</th>
+        <th>操作</th>
         <th>Id</th>
         <th>Name
         </th>
@@ -82,13 +95,31 @@
         </th>
         <th>SortOrder
         </th>
-        <th></th>
-        <th></th>
+
     </tr>
 
     @foreach (var item in Model.Products)
     {
         <tr>
+            <td>
+                @if (item.Resources != null && item.Resources.Count > 0)
+                {
+                    foreach (var re in item.Resources)
+                    {
+                        if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                        {
+                    <img src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120X0" />
+                        }
+                    }
+                }
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+                @Html.ActionLink("ViewImage", "List", "Resource", new { sourceType = (int)SourceType.Product, sourceid = item.Id }, null)
+            </td>
             <td>@Html.DisplayFor(modelItem => item.Id)</td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -152,25 +183,7 @@
 
                 <input type="button" id="runSsorder" value="editOrder" onclick="setOrder(@item.Id);" />
             </td>
-            <td>
-                @if (item.Resources != null && item.Resources.Count > 0)
-                {
-                    foreach (var re in item.Resources)
-                    {
-                        if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
-                        {
-                    <img src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120X0" />
-                        }
-                    }
-                }
-            </td>
 
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                @Html.ActionLink("ViewImage", "List", "Resource", new { sourceType = (int)SourceType.Product, sourceid = item.Id }, null)
-            </td>
         </tr>
     }
 

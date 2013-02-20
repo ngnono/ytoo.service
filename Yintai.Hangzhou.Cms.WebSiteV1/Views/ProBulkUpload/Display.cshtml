@@ -1,7 +1,7 @@
 ﻿@model Yintai.Hangzhou.Data.Models.ProductUploadJob
 ﻿@{
     ViewBag.Title = "批量商品上传";
- 
+    bool isPublished = Model!=null && Model.Status == Yintai.Hangzhou.Data.Models.ProUploadStatus.ProductsOnLive;
 }
 @section PageCssSection
 {
@@ -38,12 +38,16 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab">第一步：上传商品信息</a></li>
         <li><a href="#tab2" data-toggle="tab">第二步：上传图片信息</a></li>
+        @if (!isPublished)
+        {
         <li><a href="#tab3" data-toggle="tab">第三步：数据校验</a></li>
         <li><a href="#tab4" data-toggle="tab">第四步：发布</a></li>
+        }
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab1">
             <form id="fileupload1" action="@Url.Action("Upload")" method="POST" enctype="multipart/form-data">
+                @if (!isPublished) {
                 <div class="row fileupload-buttonbar">
                     <div class="span7">
                         <!-- The fileinput-button span is used to style the file input field as button -->
@@ -61,19 +65,21 @@
                         </div>
                     </div>
                 </div>
+                }
                 <!-- The loading indicator is shown during image processing -->
                 <div class="fileupload-loading"></div>
 
-                <table class="table table-bordered table-condensed table-striped" data-provides="rowlink">
+                <table class="table table-condensed table-striped" data-provides="rowlink">
 
                     <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
                     </tbody>
                 </table>
                 <!-- The table listing the result -->
 
-                <table class="table table-bordered table-condensed table-striped" data-provides="rowlink">
+                <table class="table table-condensed table-striped" data-provides="rowlink">
 
                     <tbody class="files-result" data-toggle="modal-gallery" data-target="#modal-gallery">
+                        @if (ViewBag.UploadedProducts!=null && ((IEnumerable<Yintai.Hangzhou.Data.Models.ProductUploadInfo>)ViewBag.UploadedProducts).Count()>0) {
                         <tr>
                             <th>商品编码</th>
                             <th>商品名称</th>
@@ -89,6 +95,7 @@
                             <th>绑定主题IDs</th>
                             <th></th>
                         </tr>
+                        }
                         @foreach (var item in ViewBag.UploadedProducts)
                         {
                             <tr class="template-download">
@@ -104,8 +111,10 @@
                                 <td class="name"><span>@item.Store</span></td>
                                 <td class="name"><span>@item.PromotionIds</span></td>
                                 <td class="name"><span>@item.SubjectIds</span></td>
-                                <td class="name"><span><a href="@Url.Action("detail")?uiid=@item.Id&groupid=@item.GroupId" class="btn">编辑</a></span></td>
-
+                                @if (!isPublished)
+                                {
+                                    <td class="name"><span><a href="@Url.Action("detail")?uiid=@item.Id&groupid=@item.GroupId" class="btn">编辑</a></span></td>
+                                }
                             </tr> 
                         }
                     </tbody>
@@ -116,6 +125,8 @@
         </div>
         <div class="tab-pane" id="tab2">
             <form id="fileupload-img" action="@Url.Action("UploadImage")" method="POST" enctype="multipart/form-data">
+                @if (!isPublished)
+                {
                 <div class="row fileupload-buttonbar">
                     <div class="alert alert-info span7">
                         <h4>图片名称规则:</h4>
@@ -147,17 +158,17 @@
                         </div>
                     </div>
                 </div>
+                }
                 <!-- The loading indicator is shown during image processing -->
                 <div class="fileupload-loading"></div>
-                <table class="table table-bordered table-condensed table-striped" data-provides="rowlink">
-
+                <table class="table table-condensed table-striped" data-provides="rowlink">
                     <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
                     </tbody>
                 </table>
                 <!-- The table listing the  -->
-                <table class="table table-bordered table-condensed table-striped" data-provides="rowlink">
+                <table class="table table-condensed table-striped" data-provides="rowlink">
 
-                    <tbody class="files-result" data-toggle="modal-gallery" data-target="#modal-gallery">
+                    <tbody class="files-result" data-toggle="modal-gallery" data-target="#modal-gallery">       
                         <tr>
                             <th>商品编码</th>
                             <th>图片名称</th>

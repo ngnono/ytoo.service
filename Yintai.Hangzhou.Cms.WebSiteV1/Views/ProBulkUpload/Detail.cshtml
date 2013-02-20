@@ -99,12 +99,13 @@
             @Html.HiddenFor(model => model.Id)
         </div>
 
-        <div class="span4 form-action">
-            <button class="btn btn-success">保存</button>
-            @Html.ActionLink("删除","DeleteItem","ProBulkUpload",new {id=Model.Id,groupId=Model.GroupId},new {@class="btn btn-danger"})
-            
-        </div>
+       
 
     </fieldset>
+     <div class="span8 form-action">
+            <button class="btn btn-success">保存</button>
+            @Html.ActionLink("删除","DeleteItem","ProBulkUpload",new {id=Model.Id,groupId=Model.GroupId},new {@class="btn btn-danger"})
+            @Html.ActionLink("返回", "Display", "ProBulkUpload", new {id=Model.GroupId },new {@class="btn btn-primary"})
+     </div>
 }
 

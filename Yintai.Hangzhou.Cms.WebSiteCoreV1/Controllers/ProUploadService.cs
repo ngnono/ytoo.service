@@ -249,6 +249,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                     var row = (HSSFRow)rows.Current;
                     DataRow dr = dt.NewRow();
                     int i = 0;
+                    var itemCode = mapCellValueToStrongType<string>(row.GetCell(0));
+                    if (itemCode is DBNull ||
+                        itemCode.ToString().Trim().Length == 0)
+                        continue;
                     dr[i++] = mapCellValueToStrongType<string>(row.GetCell(1));
                     dr[i++] = mapCellValueToStrongType<string>(row.GetCell(7));
                     dr[i++] = mapCellValueToStrongType<string>(row.GetCell(2));
@@ -265,6 +269,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                     dr[i++] = jobId;
                     dr[i++] = DateTime.Now;
                     dr[i++] = ProUploadStatus.ProductsOnStage;
+                   
                     dt.Rows.Add(dr);
                 }
             }
