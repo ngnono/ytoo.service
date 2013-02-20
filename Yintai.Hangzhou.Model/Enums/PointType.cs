@@ -33,8 +33,8 @@ namespace Yintai.Hangzhou.Model.Enums
         Reward = 4,
 
         /// <summary>
-        /// 消费
+        /// 消费 这个是扣除的 是负的
         /// </summary>
-        Consumption
+        Consumption = 5
     }
 }

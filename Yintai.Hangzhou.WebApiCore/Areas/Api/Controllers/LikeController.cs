@@ -21,7 +21,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         }
 
         [RestfulAuthorize]
-        [HttpPost]
+        //[HttpPost]
         public RestfulResult Create(FormCollection formCollection, LikeCreateRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUid = authuid.Value;

@@ -33,5 +33,13 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="sourceType"></param>
         /// <returns></returns>
         int Get4Count(int sourceId, SourceType sourceType);
+
+        /// <summary>
+        /// 获取用户的优惠券数
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        int GetUserCouponCount(int userId, CouponBusinessStatus status);
     }
 }

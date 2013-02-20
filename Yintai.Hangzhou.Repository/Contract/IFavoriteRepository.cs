@@ -10,6 +10,14 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="sourceType"></param>
+        /// <returns></returns>
+        int GetUserFavorCount(int userId, SourceType? sourceType);
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="userid"></param>
         /// <param name="sourceType"></param>
         /// <param name="sourceid"></param>

@@ -6,6 +6,7 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Promotion;
+using Yintai.Hangzhou.Contract.DTO.Response.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Response.Promotion;
 using Yintai.Hangzhou.Contract.Promotion;
 using Yintai.Hangzhou.Data.Models;
@@ -315,25 +316,36 @@ namespace Yintai.Hangzhou.Service
         /// <returns></returns>
         public ExecuteResult<PromotionInfoResponse> CreateShare(PromotionShareCreateRequest request)
         {
-            var shareEntity = _shareService.Create(new ShareHistoryEntity
-                                             {
-                                                 CreatedDate = DateTime.Now,
-                                                 CreatedUser = request.AuthUid,
-                                                 Description = request.Description,
-                                                 Name = request.Name,
-                                                 ShareTo = request.OutSiteType,
-                                                 SourceId = request.Promotionid,
-                                                 SourceType = (int)SourceType.Promotion,
-                                                 Stauts = 1,
-                                                 User_Id = request.AuthUid,
-                                                 UpdatedDate = DateTime.Now,
-                                                 UpdatedUser = request.AuthUid
-                                             });
+            var promotionEntity = _promotionRepository.GetItem(request.Promotionid);
 
-            var promotionEntity = _promotionRepository.GetItem(shareEntity.SourceId);
-            //TODO
-            promotionEntity = _promotionRepository.SetCount(PromotionCountType.ShareCount, promotionEntity.Id, 1);
+            if (promotionEntity == null)
+            {
+                return new ExecuteResult<PromotionInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "活动不存在" };
+            }
 
+            using (var ts = new TransactionScope())
+            {
+                _shareService.Create(new ShareHistoryEntity
+                    {
+                        CreatedDate = DateTime.Now,
+                        CreatedUser = request.AuthUid,
+                        Description = request.Description,
+                        Name = request.Name,
+                        ShareTo = request.OutSiteType,
+                        SourceId = request.Promotionid,
+                        SourceType = (int)SourceType.Promotion,
+                        Stauts = 1,
+                        User_Id = request.AuthUid,
+                        UpdatedDate = DateTime.Now,
+                        UpdatedUser = request.AuthUid
+                    });
+
+
+                //TODO
+                promotionEntity = _promotionRepository.SetCount(PromotionCountType.ShareCount, promotionEntity.Id, 1);
+
+                ts.Complete();
+            }
             var re = MappingManager.PromotionResponseMapping(promotionEntity, request.CoordinateInfo);
 
             re = IsR(re, request.AuthUser, request.AuthUser.Id);
@@ -361,16 +373,16 @@ namespace Yintai.Hangzhou.Service
             }
 
             _favoriteService.Create(new FavoriteEntity
-                                                              {
-                                                                  CreatedDate = DateTime.Now,
-                                                                  CreatedUser = request.AuthUid,
-                                                                  Description = String.Empty,
-                                                                  FavoriteSourceId = promotionEntity.Id,
-                                                                  FavoriteSourceType = (int)SourceType.Promotion,
-                                                                  Status = 1,
-                                                                  User_Id = request.AuthUid,
-                                                                  Store_Id = promotionEntity.Store_Id
-                                                              });
+                {
+                    CreatedDate = DateTime.Now,
+                    CreatedUser = request.AuthUid,
+                    Description = String.Empty,
+                    FavoriteSourceId = promotionEntity.Id,
+                    FavoriteSourceType = (int)SourceType.Promotion,
+                    Status = 1,
+                    User_Id = request.AuthUid,
+                    Store_Id = promotionEntity.Store_Id
+                });
 
             //TODO
             promotionEntity = _promotionRepository.SetCount(PromotionCountType.FavoriteCount, promotionEntity.Id, 1);
@@ -419,26 +431,33 @@ namespace Yintai.Hangzhou.Service
                 return new ExecuteResult<PromotionInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
 
+            //有限制，没下载，就报错的
             var str = _promotionService.Verification(promotionEntity);
             if (!String.IsNullOrEmpty(str))
             {
                 return new ExecuteResult<PromotionInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = str };
             }
 
-            var coupon = _couponDataService.CreateCoupon(new CouponCouponRequest
-                                                                  {
-                                                                      AuthUid = request.AuthUid,
-                                                                      SourceId = request.PromotionId,
-                                                                      SourceType = (int)SourceType.Promotion,
-                                                                      Token = request.Token,
-                                                                      AuthUser = request.AuthUser,
-                                                                      Method = request.Method,
-                                                                      Client_Version = request.Client_Version
-                                                                  });
+            ExecuteResult<CouponCodeResponse> coupon = null;
+
+            coupon = _couponDataService.CreateCoupon(new CouponCouponRequest
+                {
+                    AuthUid = request.AuthUid,
+                    SourceId = request.PromotionId,
+                    SourceType = (int)SourceType.Promotion,
+                    Token = request.Token,
+                    AuthUser = request.AuthUser,
+                    Method = request.Method,
+                    Client_Version = request.Client_Version
+                });
 
             if (!coupon.IsSuccess)
             {
-                return new ExecuteResult<PromotionInfoResponse>(null) { Message = coupon.Message, StatusCode = coupon.StatusCode };
+                return new ExecuteResult<PromotionInfoResponse>(null)
+                    {
+                        Message = coupon.Message,
+                        StatusCode = coupon.StatusCode
+                    };
             }
 
             //TODO
@@ -514,7 +533,7 @@ namespace Yintai.Hangzhou.Service
                     _promotionBrandRelationRepository.BatchInsert(list);
                 }
                 ts.Complete();
-              
+
             }
 
             return GetPromotionInfo(new GetPromotionInfoRequest

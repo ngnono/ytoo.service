@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
@@ -11,20 +12,23 @@ namespace Yintai.Hangzhou.Repository.Impl
 {
     public class FavoriteRepository : RepositoryBase<FavoriteEntity, int>, IFavoriteRepository
     {
-        private static Expression<Func<FavoriteEntity, bool>> GetFiller(int userId, SourceType sourceType)
+        private static Expression<Func<FavoriteEntity, bool>> GetFiller(int? userId, SourceType? sourceType, DataStatus? dataStatus)
         {
-            Expression<Func<FavoriteEntity, bool>> filter = null;
-            switch (sourceType)
+            var filter = PredicateBuilder.True<FavoriteEntity>();
+
+            if (dataStatus != null)
             {
-                case SourceType.Product:
-                    filter = v => v.User_Id == userId && v.FavoriteSourceType == (int)SourceType.Product && v.Status == 1;
-                    break;
-                case SourceType.Promotion:
-                    filter = v => v.User_Id == userId && v.FavoriteSourceType == (int)SourceType.Promotion && v.Status == 1;
-                    break;
-                default:
-                    filter = v => v.User_Id == userId && v.Status == 1;
-                    break;
+                filter = filter.And(v => v.Status == (int)dataStatus.Value);
+            }
+
+            if (sourceType != null)
+            {
+                filter = filter.And(v => v.FavoriteSourceType == (int)sourceType);
+            }
+
+            if (userId != null)
+            {
+                filter = filter.And(v => v.User_Id == userId.Value);
             }
 
             return filter;
@@ -56,6 +60,11 @@ namespace Yintai.Hangzhou.Repository.Impl
             return base.Find(key);
         }
 
+        public int GetUserFavorCount(int userId, SourceType? sourceType)
+        {
+            return base.Get(GetFiller(userId, sourceType, DataStatus.Normal)).Count();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -75,6 +84,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         /// <summary>
         /// 分页
         /// </summary>
+        /// <param name="userid"></param>
         /// <param name="pagerRequest"></param>
         /// <param name="totalCount"></param>
         /// <param name="sortOrder"> </param>
@@ -83,7 +93,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         public List<FavoriteEntity> GetPagedList(int userid, PagerRequest pagerRequest, out int totalCount, FavoriteSortOrder sortOrder, SourceType sourceType)
         {
             return
-                base.Get(GetFiller(userid, sourceType), out totalCount, pagerRequest.PageIndex, pagerRequest.PageSize,
+                base.Get(GetFiller(userid, sourceType, DataStatus.Normal), out totalCount, pagerRequest.PageIndex, pagerRequest.PageSize,
                          GetSort(sortOrder)).ToList();
         }
 

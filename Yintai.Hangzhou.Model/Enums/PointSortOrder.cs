@@ -7,6 +7,8 @@ namespace Yintai.Hangzhou.Model.Enums
 {
     public enum PointSortOrder
     {
-        Default = 0
+        Default = 0,
+
+        CreatedDateDesc = 1
     }
 }

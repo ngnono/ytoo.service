@@ -234,6 +234,16 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
                 SaveT(entity.Id, StringsToInts(vo.TopicIds, ","));
                 SaveP(entity.Id, StringsToInts(vo.PromotionIds, ","));
+                if (vo.PromotionIds != null && vo.PromotionIds.Any())
+                {
+                    //true
+                //TODO:
+                }
+                else
+                {
+                    //false
+                }
+
 
                 ts.Complete();
             }

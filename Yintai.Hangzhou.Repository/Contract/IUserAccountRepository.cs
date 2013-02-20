@@ -29,6 +29,14 @@ namespace Yintai.Hangzhou.Repository.Contract
         List<UserAccountEntity> GetListByUserIds(List<int> userIds);
 
         /// <summary>
+        /// 设置
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="accountType"></param>
+        /// <param name="amount"></param>
+        void SetAmount(int userId, AccountType accountType, decimal amount);
+
+        /// <summary>
         /// 账户加操作
         /// </summary>
         /// <param name="userId"></param>

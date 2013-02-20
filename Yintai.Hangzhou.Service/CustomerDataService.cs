@@ -232,7 +232,7 @@ namespace Yintai.Hangzhou.Service
             }
 
             var result = new ExecuteResult<CustomerInfoResponse>();
-            var response = MappingManager.CustomerInfoResponseMapping(userModel);
+            var response = MappingManager.CustomerInfoResponseMappingForReadCount(userModel);
             result.Data = response;
 
             return result;

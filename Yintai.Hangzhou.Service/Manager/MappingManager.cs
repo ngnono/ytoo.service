@@ -31,7 +31,6 @@ using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
-using Yintai.Hangzhou.Service.Contract;
 
 namespace Yintai.Hangzhou.Service.Manager
 {
@@ -1703,7 +1702,6 @@ namespace Yintai.Hangzhou.Service.Manager
         {
             _resourceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
             _pprRepository = ServiceLocator.Current.Resolve<IPromotionProductRelationRepository>();
-
         }
 
         #endregion
@@ -1813,6 +1811,11 @@ namespace Yintai.Hangzhou.Service.Manager
         private readonly IVUserRoleRepository _vUserRoleRepository;
         private readonly IProductRepository _productRepository;
         private readonly IPromotionBrandRelationRepository _promotionBrandRelationRepository;
+        private readonly ILikeRepository _likeRepository;
+        private readonly ICouponRepository _couponRepository;
+        private readonly IFavoriteRepository _favoriteRepository;
+        private readonly IPointRepository _pointRepository;
+
 
         #endregion
 
@@ -1831,6 +1834,10 @@ namespace Yintai.Hangzhou.Service.Manager
             _vUserRoleRepository = ServiceLocator.Current.Resolve<IVUserRoleRepository>();
             _productRepository = ServiceLocator.Current.Resolve<IProductRepository>();
             _promotionBrandRelationRepository = ServiceLocator.Current.Resolve<IPromotionBrandRelationRepository>();
+            _likeRepository = ServiceLocator.Current.Resolve<ILikeRepository>();
+            _couponRepository = ServiceLocator.Current.Resolve<ICouponRepository>();
+            _favoriteRepository = ServiceLocator.Current.Resolve<IFavoriteRepository>();
+            _pointRepository = ServiceLocator.Current.Resolve<IPointRepository>();
         }
 
         #endregion
@@ -1998,6 +2005,91 @@ namespace Yintai.Hangzhou.Service.Manager
         }
 
         /// <summary>
+        /// DTO  转换 重新获取COUNT 并且更新 ACCOUNT
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public CustomerInfoResponse CustomerInfoResponseMappingForReadCount(UserModel source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<UserModel, CustomerInfoResponse>(source);
+            if (target == null)
+            {
+                return null;
+            }
+
+            //Read data
+            //1.关注
+            //2.粉丝
+            //3.优惠券
+            //4.收藏的商品
+            //5.分享到外站的商品
+            //6.积分
+
+            var ilikeCount = _likeRepository.GetILikeCount(source.Id);
+            var likeMeCount = _likeRepository.GetLikeMeCount(source.Id);
+            var couponCount = _couponRepository.GetUserCouponCount(source.Id, CouponBusinessStatus.UnExpired);
+            var favorCount = _favoriteRepository.GetUserFavorCount(source.Id, null);
+            //var shareCount = 
+            //目前无扣分 有扣分时候再说
+            var pointSumZ = _pointRepository.GetUserPointSum(source.Id, new List<PointType>
+                {
+                    PointType.BeConsumption,
+                    PointType.Default,
+                    PointType.InviteConsumption,
+                    PointType.Register,
+                    PointType.Reward
+                });
+            var pointSumF = _pointRepository.GetUserPointSum(source.Id, new List<PointType>
+                {
+                    PointType.Consumption
+                });
+
+            //注意是否为负的可能
+            var pointSum = pointSumZ - pointSumF;
+
+            if (target.ILikeCount != ilikeCount)
+            {
+                target.ILikeCount = ilikeCount;
+                //up
+                _userAccountRepository.SetAmount(source.Id, AccountType.IlikeCount, ilikeCount);
+            }
+
+            if (target.LikeMeCount != likeMeCount)
+            {
+                target.LikeMeCount = likeMeCount;
+                _userAccountRepository.SetAmount(source.Id, AccountType.LikeMeCount, likeMeCount);
+            }
+
+            if (target.CouponCount != couponCount)
+            {
+                target.CouponCount = couponCount;
+                _userAccountRepository.SetAmount(source.Id, AccountType.Coupon, couponCount);
+            }
+
+            if (target.FavorCount != favorCount)
+            {
+                target.FavorCount = favorCount;
+                _userAccountRepository.SetAmount(source.Id, AccountType.FavorCount, favorCount);
+            }
+
+            if (target.PointCount != pointSum)
+            {
+                target.PointCount = pointSum;
+                _userAccountRepository.SetAmount(source.Id, AccountType.Point, pointSum);
+            }
+
+            target.Token = GetToken(source);
+            target.AppId = ConfigManager.GetAppleAppId();
+
+            return target;
+        }
+
+        /// <summary>
         /// DTO  转换
         /// </summary>
         /// <param name="source"></param>
@@ -2156,10 +2248,10 @@ namespace Yintai.Hangzhou.Service.Manager
 
             //这步可以判断
             StoreModel store = null;
-            //if (source.Store_Id > 0)
-            //{
+            if (source.Store_Id > 0)
+            {
                 store = StoreModelMapping(_storeRepository.GetItem(source.Store_Id));
-            //}
+            }
             //modelAccount
             var accounts = UserAccountMapping(_userAccountRepository.GetUserAccount(source.Id)).ToList();
             //roles

@@ -50,7 +50,7 @@ namespace Yintai.Hangzhou.Service.Impl
             {
                 //验证优惠券领取数
                 var c = _couponService.GetCouponCount(promotionEntity.Id, SourceType.Promotion);
-                if (promotionEntity.PublicationLimit >= c)
+                if (promotionEntity.PublicationLimit <= c)
                 {
                     return "活动优惠码已售罄";
                 }

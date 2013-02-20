@@ -22,9 +22,16 @@ namespace Yintai.Hangzhou.Repository.Impl
             {
                 switch (businessStatus)
                 {
-                    //
-                    case CouponBusinessStatus.Normal:
+                    case CouponBusinessStatus.All:
+                        break;
+                    case CouponBusinessStatus.Expired:
+                        filter = filter.And(v => v.ValidEndDate > DateTime.Now);
+                        break;
+                    case CouponBusinessStatus.UnExpired:
+                        filter = filter.And(v => v.ValidEndDate > DateTime.Now);
+                        break;
                     case CouponBusinessStatus.Default:
+                    case CouponBusinessStatus.Normal:
                     default:
                         filter = filter.And(v => v.ValidEndDate > DateTime.Now);
                         break;
@@ -134,6 +141,11 @@ namespace Yintai.Hangzhou.Repository.Impl
         public int Get4Count(int sourceId, SourceType sourceType)
         {
             return base.Get(Filter(null, DataStatus.Normal, sourceType, sourceId, null)).Count();
+        }
+
+        public int GetUserCouponCount(int userId, CouponBusinessStatus status)
+        {
+            return base.Get(Filter(status, null, null, 0, userId)).Count();
         }
 
         #endregion

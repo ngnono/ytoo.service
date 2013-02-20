@@ -69,6 +69,16 @@ namespace Yintai.Hangzhou.Repository.Impl
             return base.Find(key);
         }
 
+        public int GetILikeCount(int userId)
+        {
+            return base.Get(v => v.LikeUserId == userId).Count();
+        }
+
+        public int GetLikeMeCount(int userId)
+        {
+            return base.Get(v => v.LikedUserId == userId).Count();
+        }
+
         public LikeEntity GetItem(int likeuserid, int likeduserid)
         {
             return base.Get(v => v.LikeUserId == likeuserid && v.LikedUserId == likeduserid).FirstOrDefault();

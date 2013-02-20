@@ -26,5 +26,13 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="sortOrder"></param>
         /// <returns></returns>
         List<PointHistoryEntity> GetPagedList(PagerRequest request, out int totalCount, PointSortOrder sortOrder);
+
+        /// <summary>
+        /// 积分类型
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="pointType"></param>
+        /// <returns></returns>
+        int GetUserPointSum(int userId, List<PointType> pointType);
     }
 }

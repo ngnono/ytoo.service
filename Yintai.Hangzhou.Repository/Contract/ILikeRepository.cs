@@ -11,6 +11,20 @@ namespace Yintai.Hangzhou.Repository.Contract
     public interface ILikeRepository : IRepository<LikeEntity, int>
     {
         /// <summary>
+        /// 获取我喜欢数
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        int GetILikeCount(int userId);
+
+        /// <summary>
+        /// 获取喜欢我数
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        int GetLikeMeCount(int userId);
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="likeuserid">发出喜欢(关注)人的Id</param>
