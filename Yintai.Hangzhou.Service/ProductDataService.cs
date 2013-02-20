@@ -4,6 +4,7 @@ using System.Linq;
 using Yintai.Architecture.Common.Caching;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Product;
@@ -518,10 +519,24 @@ namespace Yintai.Hangzhou.Service
             ExecuteResult<CouponCodeResponse> coupon;
             if (request.Client_Version != "1.0")
             {
-                //判断
-                if (!_promotionService.Exists(request.PromotionId ?? 0, request.ProductId))
+                if (request.PromotionId == null || request.PromotionId.Value < 1)
                 {
-                    return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "当前商品没有参加该活动" };
+                    //获取商品关联的活动
+                    var promotionEntity = _promotionService.GetFristNormalForProductId(product.Id);
+                    if (promotionEntity == null)
+                    {
+                        return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "当前商品没有参加活动" };
+                    }
+
+                    request.PromotionId = promotionEntity.Id;
+                }
+                else
+                {
+                    //判断
+                    if (!_promotionService.Exists(request.PromotionId ?? 0, request.ProductId))
+                    {
+                        return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "当前商品没有参加该活动" };
+                    }
                 }
 
                 var pr = _promotionDataService.CreateCoupon(new PromotionCouponCreateRequest

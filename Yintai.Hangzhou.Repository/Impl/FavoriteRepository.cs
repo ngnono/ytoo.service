@@ -21,7 +21,7 @@ namespace Yintai.Hangzhou.Repository.Impl
                 filter = filter.And(v => v.Status == (int)dataStatus.Value);
             }
 
-            if (sourceType != null)
+            if (sourceType != null && sourceType.Value != SourceType.Default)
             {
                 filter = filter.And(v => v.FavoriteSourceType == (int)sourceType);
             }

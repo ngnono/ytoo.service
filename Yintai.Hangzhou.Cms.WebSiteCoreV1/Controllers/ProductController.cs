@@ -5,6 +5,7 @@ using System.Linq;
 using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
@@ -175,8 +176,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
         private void SaveP(int pId, IEnumerable<int> promotionList)
         {
+            //TODO:BUG
             if (promotionList == null)
             {
+                //
+                
                 _pprRepository.DeletedByProduct(pId);
 
                 return;
@@ -200,6 +204,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                     ProdId = pId,
                     ProId = i
                 });
+
+                //true
+                ServiceLocator.Current.Resolve<IPromotionRepository>().SetIsProd(i, true);
             }
         }
 
@@ -208,10 +215,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         {
             if (entity == null || !ModelState.IsValid)
             {
-                ModelState.AddModelError("", "参数验证失败.");
+                ModelState.AddModelError(String.Empty, "参数验证失败.");
                 return View(vo);
             }
-
 
             var newEntity = MappingManager.ProductViewMapping(vo);
             newEntity.CreatedUser = entity.CreatedUser;
@@ -234,16 +240,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
                 SaveT(entity.Id, StringsToInts(vo.TopicIds, ","));
                 SaveP(entity.Id, StringsToInts(vo.PromotionIds, ","));
-                if (vo.PromotionIds != null && vo.PromotionIds.Any())
-                {
-                    //true
-                //TODO:
-                }
-                else
-                {
-                    //false
-                }
-
 
                 ts.Complete();
             }

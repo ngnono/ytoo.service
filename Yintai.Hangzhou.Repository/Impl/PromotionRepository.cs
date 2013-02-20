@@ -416,6 +416,23 @@ namespace Yintai.Hangzhou.Repository.Impl
             return SetCount(id, count, t);
         }
 
+        public int SetIsProd(int id, bool? isProd)
+        {
+            var parames = new List<SqlParameter>
+                {
+                    new SqlParameter("@IsProdBindable", isProd),
+                    new SqlParameter("@Id", id),
+                };
+
+            var sql = @"UPDATE [dbo].[Promotion]
+SET    [IsProdBindable] = @IsProdBindable
+WHERE  [Id] = @Id";
+
+            var i = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnection(), CommandType.Text, sql, parames.ToArray());
+
+            return i;
+        }
+
         public List<PromotionEntity> GetPagedListForSearch(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder,
                                           DateTimeRangeInfo dateTimeRangeInfo, CoordinateInfo coordinateInfo, Timestamp timestamp,
                                           int? recommendUser, PromotionFilterMode? filterMode, string promotionName, List<int> tagids,

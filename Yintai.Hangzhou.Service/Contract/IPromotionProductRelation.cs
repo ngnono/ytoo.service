@@ -36,5 +36,12 @@ namespace Yintai.Hangzhou.Service.Contract
         /// <param name="promotionId"></param>
         /// <returns>错误信息</returns>
         string Verification(int promotionId);
+
+        /// <summary>
+        /// 获取第一个 可发行的活动
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        PromotionEntity GetFristNormalForProductId(int productId);
     }
 }

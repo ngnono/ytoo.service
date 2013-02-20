@@ -127,7 +127,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         }
 
         [RestfulAuthorize]
-        [HttpPost]
+        //[HttpPost]
         public ActionResult Coupon(CreateCouponProductRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUid = authuid.Value;

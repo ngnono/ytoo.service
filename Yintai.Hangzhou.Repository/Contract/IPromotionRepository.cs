@@ -14,7 +14,15 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="id"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        PromotionEntity SetCount(PromotionCountType countType,  int id, int count);
+        PromotionEntity SetCount(PromotionCountType countType, int id, int count);
+
+        /// <summary>
+        /// set
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="isProd"></param>
+        /// <returns></returns>
+        int SetIsProd(int id, bool? isProd);
 
         /// <summary>
         /// 查

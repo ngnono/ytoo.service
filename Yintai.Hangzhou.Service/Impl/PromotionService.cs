@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
+using System.Linq;
 
 namespace Yintai.Hangzhou.Service.Impl
 {
@@ -62,6 +64,35 @@ namespace Yintai.Hangzhou.Service.Impl
         public string Verification(int promotionId)
         {
             return Verification(Get(promotionId));
+        }
+
+        public PromotionEntity GetFristNormalForProductId(int productId)
+        {
+            var es = this._pprRepository.GetList4Product(new List<int>(1) {productId});
+
+            if (es == null || es.Count == 0)
+            {
+                return null;
+            }
+
+            var entities = _promotionRepository.GetList(es.Select(v => v.ProId ?? 0).Distinct().ToList(),
+                                                        DataStatus.Normal, PromotionFilterMode.InProgress);
+
+            if (entities == null || entities.Count == 0)
+            {
+                return null;
+            }
+
+            foreach (var entity in entities)
+            {
+                var t = Verification(entity);
+                if (String.IsNullOrEmpty(t))
+                {
+                    return entity;
+                }
+            }
+
+            return null;
         }
     }
 }

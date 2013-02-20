@@ -21,11 +21,23 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         }
 
         protected CmsV1Application(string defaultControllerNamespace)
+            : base("Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers")
         {
             _controller = defaultControllerNamespace;
         }
-    }
 
+        protected override void RegisterRoutesC(RouteCollection routes)
+        {
+            routes.MapLowerCaseUrlRoute(
+"Default_Page", // Route name
+"{controller}/{action}/{page}", // URL with parameters
+new { controller = "Home", action = "Index", id = 0, page = 1 } // Parameter defaults
+, new { action = @".*List", page = @"\d*" } //正则列表页结尾 list
+, new[] { _controller }
+);
+
+        }
+    }
 
     public class WebApiTestApplication : MvcApplication
     {
@@ -105,8 +117,6 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         public void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-
             routes.IgnoreRoute("{*alljs}", new { alljs = @".*\.js(/.*)?" });
             routes.IgnoreRoute("{*allcss}", new { allcss = @".*\.css(/.*)?" });
             routes.IgnoreRoute("{*alljpg}", new { alljpg = @".*\.jpg(/.*)?" });
@@ -121,13 +131,7 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
 
             routes.RouteExistingFiles = false;
 
-            routes.MapLowerCaseUrlRoute(
-                "Default_Page", // Route name
-                "{controller}/{action}/{page}", // URL with parameters
-                new { controller = "Home", action = "Index", id = 0, page = 1 } // Parameter defaults
-                , new { action = @".*List", page = @"\d*" } //正则列表页结尾 list
-                , new[] { _controller }
-            );
+            RegisterRoutesC(routes);
 
             routes.MapLowerCaseUrlRoute(
                 "Default", // Route name
@@ -135,6 +139,10 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional }// Parameter defaults
                 , new[] { _controller }
             );
+        }
+
+        protected virtual void RegisterRoutesC(RouteCollection routes)
+        {
         }
 
         protected void Application_Start()
@@ -151,7 +159,6 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
 
         protected virtual void CApplication_Start()
         {
-
         }
 
         /// <summary>
