@@ -1,11 +1,15 @@
 ﻿@using Yintai.Hangzhou.Model.Enums
 @using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 @using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
+@using Yintai.Hangzhou.WebSupport.Helper
 @model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductCollectionViewModel
 @{
     ViewBag.Title = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var url = String.IsNullOrWhiteSpace(Model.UL) ? String.Format("{0}/{1}", ViewContext.RouteData.Values["controller"].ToString().ToLower(), "list") : Model.UL.ToLower();
+
+    int sort;
+    Int32.TryParse(Request.QueryString["sort"], out sort);
 }
 
 <h2>List</h2>
@@ -17,20 +21,20 @@
 <div>
     <form action="/@url">
         <div class="span4">
-            <label for="name">产品名称</label>   
-            <input name="name" type="text"/>  
+            <label for="name">产品名称</label>
+            <input name="name" type="text" />
         </div>
         <div class="span4">
             <label for="recommenduser">推荐人</label>
-           <input name="recommendUser" type="text" />
+            <input name="recommendUser" type="text" />
         </div>
         <div class="span4">
             <label for="brandid">品牌Id</label>
-          <input name="brandId" type="text" />
+            <input name="brandId" type="text" />
         </div>
         <div class="span4">
             <label for="tagid">tagId</label>
-           <input name="tagId" type="text" />
+            <input name="tagId" type="text" />
         </div>
         <div class="span4">
             <label for="promotionid">promotionid</label>
@@ -44,6 +48,11 @@
             <label for="status">status</label>
             <input name="status" type="text" value="1" />
         </div>
+        <div class="span4">
+            <label for="sort">排序方式</label>
+            @Html.DropDownList("sort", ProductSortOrder.CreatedDateDesc.ToSelectList(sort < 1 ? (int)ProductSortOrder.CreatedDateDesc : sort))
+        </div>
+
         <div class="span4">
             <input type="submit" value="查询" class="btn btn-primary" />
         </div>

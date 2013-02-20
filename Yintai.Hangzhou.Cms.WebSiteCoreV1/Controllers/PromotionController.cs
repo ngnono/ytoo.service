@@ -31,7 +31,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult List(PagerRequest request, int? sort, string name, int? recommendUser, int? tagId)
         {
             int totalCount;
-            var sortOrder = (PromotionSortOrder)(sort ?? 0);
+            var sortOrder = (PromotionSortOrder)(sort ?? (int)PromotionSortOrder.CreatedDateDesc);
 
             List<PromotionEntity> data;
 

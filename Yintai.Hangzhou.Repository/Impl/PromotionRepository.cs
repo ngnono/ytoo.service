@@ -41,7 +41,7 @@ namespace Yintai.Hangzhou.Repository.Impl
             switch (sort)
             {
                 case PromotionSortOrder.CreatedDateDesc:
-                    orderBy = v => v.OrderByDescending(s => s.IsTop).ThenByDescending(s => s.CreatedDate);
+                    orderBy = v => v.OrderByDescending(s => s.CreatedDate);
                     break;
                 case PromotionSortOrder.Near:
                     break;
@@ -237,7 +237,6 @@ namespace Yintai.Hangzhou.Repository.Impl
             }
         }
 
-
         /// <summary>
         /// 过滤
         /// </summary>
@@ -251,7 +250,6 @@ namespace Yintai.Hangzhou.Repository.Impl
             return Filter(dataStatus, rangeInfo, timestamp, recommendUser, null);
         }
 
-
         /// <summary>
         /// 过滤
         /// </summary>
@@ -261,7 +259,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         /// <param name="recommendUser"></param>
         /// <param name="tagids"></param>
         /// <returns></returns>
-        private static Expression<Func<PromotionEntity, bool>> Filter(DataStatus? dataStatus, DateTimeRangeInfo rangeInfo, Timestamp timestamp, int? recommendUser, List<int> tagids, PromotionFilterMode? filterMode = null)
+        private static Expression<Func<PromotionEntity, bool>> Filter(DataStatus? dataStatus, DateTimeRangeInfo rangeInfo, Timestamp timestamp, int? recommendUser, List<int> tagids, PromotionFilterMode? filterMode = null, List<int> ids = null)
         {
             var filter = PredicateBuilder.True<PromotionEntity>();
 
@@ -323,15 +321,20 @@ namespace Yintai.Hangzhou.Repository.Impl
                     case PromotionFilterMode.InProgress:
                         if (rangeInfo != null && rangeInfo.EndDateTime != null)
                         {
-                            filter = filter.And(v => v.StartDate > DateTime.Now);
+                            filter = filter.And(v => v.StartDate < DateTime.Now);
                         }
                         else
                         {
-                            filter = filter.And(v => v.StartDate > DateTime.Now && v.EndDate < DateTime.Now);
+                            filter = filter.And(v => v.StartDate < DateTime.Now && v.EndDate > DateTime.Now);
                         }
 
                         break;
                 }
+            }
+
+            if (ids != null && ids.Count > 0)
+            {
+                filter = filter.And(v => ids.Any(s => s == v.Id));
             }
 
             return filter;
@@ -658,7 +661,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public List<PromotionEntity> GetList(List<int> ids, DataStatus? dataStatus, PromotionFilterMode? filterMode)
         {
-            return base.Get(Filter(dataStatus, new DateTimeRangeInfo { EndDateTime = DateTime.Now }, null, null, null, filterMode)).ToList();
+            return base.Get(Filter(dataStatus, new DateTimeRangeInfo { EndDateTime = DateTime.Now }, null, null, null, filterMode, ids)).ToList();
         }
 
         private static PromotionEntity ConvertEntity(IDataRecord record)

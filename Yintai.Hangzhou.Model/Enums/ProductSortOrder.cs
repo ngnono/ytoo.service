@@ -15,6 +15,6 @@ namespace Yintai.Hangzhou.Model.Enums
         /// <summary>
         /// 创建时间倒序
         /// </summary>
-        CreatedDateDesc,
+        CreatedDateDesc = 1,
     }
 }

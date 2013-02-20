@@ -38,7 +38,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult List(PagerRequest request, int? sort, string name, int? recommendUser, int? tagId, int? brandId, int? topicId, int? promotionId, int? status)
         {
             int totalCount;
-            var sortOrder = (ProductSortOrder)(sort ?? 0);
+            var sortOrder = (ProductSortOrder)(sort ?? (int)ProductSortOrder.CreatedDateDesc);
 
             List<int> tag = null;
             if (tagId != null)

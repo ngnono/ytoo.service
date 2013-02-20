@@ -201,6 +201,8 @@ namespace Yintai.Hangzhou.Repository.Impl
             switch (sort)
             {
                 case ProductSortOrder.CreatedDateDesc:
+                    order = v => v.OrderByDescending(s => s.CreatedDate);
+                    break;
                 case ProductSortOrder.Default:
                 default:
                     order = v => v.OrderByDescending(s => s.SortOrder).ThenByDescending(s => s.CreatedDate);
