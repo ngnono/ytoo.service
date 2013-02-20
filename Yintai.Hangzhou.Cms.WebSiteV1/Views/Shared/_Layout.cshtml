@@ -42,24 +42,30 @@
                 <a class="brand" href="#">CMS V1.0</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
+                        <li>@Html.ActionLink("首页", "Index", "Home")</li>
                         <li>@Html.ActionLink("商品管理", "Index", "Product")</li>
-                        <li>@Html.ActionLink("Brand", "Index", "Brand")</li>
-                        <li>@Html.ActionLink("Promotion", "Index", "Promotion")</li>
-                        <li>@Html.ActionLink("Store", "Index", "Store")</li>
-                        <li>@Html.ActionLink("Tag", "Index", "Tag")</li>
-                        <li>@Html.ActionLink("SpecialTopic", "Index", "SpecialTopic")</li>
+                        <li>@Html.ActionLink("促销管理", "Index", "Promotion")</li>
+                        <li>@Html.ActionLink("专题管理", "Index", "SpecialTopic")</li>
+                        <li>@Html.ActionLink("图片管理", "Index", "Resource")</li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">更多 <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">用户管理<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                                <li>@Html.ActionLink("About", "About", "Home")</li>
-                                <li>@Html.ActionLink("Feedback", "Index", "Feedback")</li>
-                                <li>@Html.ActionLink("Point", "Index", "Point")</li>
-                                <li>@Html.ActionLink("Resource", "Index", "Resource")</li>
-                                <li>@Html.ActionLink("Customer", "Index", "Customer")</li>
-                                <li>@Html.ActionLink("Comment", "Index", "Comment")</li>
+                                <li>@Html.ActionLink("用户信息", "Index", "Customer")</li>
+                                <li>@Html.ActionLink("积分", "Index", "Point")</li>
+                                <li>@Html.ActionLink("评论", "Index", "Comment")</li>
+                                <li>@Html.ActionLink("反馈", "Index", "Feedback")</li>
+                                
                             </ul>
                         </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">配置信息<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("品牌维护", "Index", "Brand")</li>
+                                <li>@Html.ActionLink("实体店维护", "Index", "Store")</li>
+                                <li>@Html.ActionLink("Tag维护", "Index", "Tag")</li>
+                             </ul>
+                        </li>     
+                        
 
                     </ul>
                 </div>

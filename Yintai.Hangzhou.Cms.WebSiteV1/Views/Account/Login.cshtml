@@ -9,26 +9,24 @@
 </hgroup>
 
 <section id="loginForm">
-<h2>Use a local account to log in.</h2>
-@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
+@using (Html.BeginForm(null, null, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
     <fieldset>
-        <legend>Log in Form</legend>
-        <ol>
-            <li>
-                @Html.LabelFor(m => m.UserName)
-                @Html.TextBoxFor(m => m.UserName)
+        <legend>登陆框</legend>
+        <div class="control-group">
+                @Html.TextBoxFor(m => m.UserName, new { placeholder="登陆名"})
                 @Html.ValidationMessageFor(m => m.UserName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.Password)
-                @Html.PasswordFor(m => m.Password)
+            </div>
+        <div class="control-group">
+                @Html.PasswordFor(m => m.Password, new { placeholder="密码"})
                 @Html.ValidationMessageFor(m => m.Password)
-            </li>
-        </ol>
-        <input type="submit" value="Log in" />
+            </div>
+        <div class="control-group">
+        <input type="submit" value="Log in" class="btn btn-primary" />
+            </div>
     </fieldset>
 }
 </section>

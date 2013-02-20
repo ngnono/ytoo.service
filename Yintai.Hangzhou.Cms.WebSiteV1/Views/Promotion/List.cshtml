@@ -28,6 +28,8 @@
 </div>
 <table>
     <tr>
+         <th>图片</th>
+        <th>操作</th>
         <th>Id</th>
         <th>Name
         </th>
@@ -69,13 +71,32 @@
         </th>
         <th>UpdatedUser
         </th>
-        <th></th>
-        <th></th>
+
     </tr>
 
     @foreach (var item in Model.Promotions)
     {
         <tr>
+             <td>
+                @if (item.Resources != null && item.Resources.Count > 0)
+                {
+                    foreach (var re in item.Resources)
+                    {
+                        if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                        {
+                    <img src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120X0" />
+                        }
+                    }
+                }
+
+
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("ViewImage", "List", "Resource", new { sourceType = (int)SourceType.Promotion, sourceid = item.Id }, null)
+            </td>
             <td>@Html.DisplayFor(modelItem => item.Id)</td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -137,26 +158,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.UpdatedUser)
             </td>
-            <td>
-                @if (item.Resources != null && item.Resources.Count > 0)
-                {
-                    foreach (var re in item.Resources)
-                    {
-                        if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
-                        {
-                    <img src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120X0" />
-                        }
-                    }
-                }
-
-
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                @Html.ActionLink("ViewImage", "List", "Resource", new { sourceType = (int)SourceType.Promotion, sourceid = item.Id }, null)
-            </td>
+           
         </tr>
     }
 
