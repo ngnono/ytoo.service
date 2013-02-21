@@ -44,6 +44,9 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <returns></returns>
         List<SpecialTopicProductRelationEntity> GetList(List<int> specialTopicIds);
 
+
+        IQueryable<SpecialTopicProductRelationEntity> GetList4Linq(List<int> ids);
+
         /// <summary>
         /// 获取列表
         /// </summary>

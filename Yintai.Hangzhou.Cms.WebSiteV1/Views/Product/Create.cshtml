@@ -87,6 +87,13 @@
             @Html.ValidationMessageFor(model => model.Status)
         </div>
 
+        <div class="editor-label">
+            @Html.LabelFor(model => model.RecommendUser)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RecommendUser)
+            @Html.ValidationMessageFor(model => model.RecommendUser)
+        </div>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.TopicIds)

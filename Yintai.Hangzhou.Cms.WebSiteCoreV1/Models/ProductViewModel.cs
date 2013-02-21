@@ -97,6 +97,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "参与（领取优惠券）数")]
         public int InvolvedCount { get; set; }
 
+        [Required]
+        [DisplayName("推荐人")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "Customer")]
+        [AdditionalMetadata("displayfield", "Nickname")]
+        [AdditionalMetadata("searchfield", "Nickname")]
+        [AdditionalMetadata("valuefield", "Id")]
         [Range(0, Int32.MaxValue)]
         [Display(Name = "推荐人")]
         public int RecommendUser { get; set; }

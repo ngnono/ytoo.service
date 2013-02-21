@@ -180,7 +180,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             if (promotionList == null)
             {
                 //
-                
+
                 _pprRepository.DeletedByProduct(pId);
 
                 return;
@@ -228,8 +228,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             newEntity.ShareCount = entity.ShareCount;
 
             newEntity.UpdatedDate = DateTime.Now;
-            newEntity.UpdatedUser = base.CurrentUser.CustomerId;
-            newEntity.RecommendUser = entity.RecommendUser;
+            newEntity.UpdatedUser = CurrentUser.CustomerId;
+            newEntity.RecommendUser = vo.RecommendUser;
 
             MappingManager.ProductEntityMapping(newEntity, entity);
 

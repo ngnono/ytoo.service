@@ -48,9 +48,19 @@ namespace Yintai.Hangzhou.Repository.Impl
             return base.Get(Filter(DataStatus.Normal, promotionId, null)).ToList();
         }
 
+        public IQueryable<Promotion2ProductEntity> GetListByPromotionLinq(int promotionId)
+        {
+            return base.Get(Filter(DataStatus.Normal, promotionId, null));
+        }
+
         public List<Promotion2ProductEntity> GetList4Product(List<int> productids)
         {
-            return base.Get(Filter(DataStatus.Normal, null, productids)).ToList();
+            return GetListByProduct4Linq(productids).ToList();
+        }
+
+        public IQueryable<Promotion2ProductEntity> GetListByProduct4Linq(List<int> productids)
+        {
+            return base.Get(Filter(DataStatus.Normal, null, productids));
         }
 
         public bool Exists(int promotionid, int productid)

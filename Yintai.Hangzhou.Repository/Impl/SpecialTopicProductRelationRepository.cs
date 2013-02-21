@@ -33,6 +33,10 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         #endregion
 
+        public IQueryable<SpecialTopicProductRelationEntity> GetList4Linq(List<int> ids)
+        {
+            return base.Get(v => ids.Any(s => s == v.SpecialTopic_Id) && v.Status == (int)DataStatus.Normal);
+        }
 
         public override SpecialTopicProductRelationEntity GetItem(int key)
         {
@@ -46,7 +50,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public List<SpecialTopicProductRelationEntity> GetList(List<int> ids)
         {
-            return base.Get(v => ids.Any(s => s == v.SpecialTopic_Id) && v.Status == (int)DataStatus.Normal).ToList();
+            return GetList4Linq(ids).ToList();
         }
 
         public List<SpecialTopicProductRelationEntity> GetListByProduct(int productId)

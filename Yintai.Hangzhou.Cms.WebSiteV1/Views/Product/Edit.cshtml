@@ -137,14 +137,14 @@
             @Html.ValidationMessageFor(model => model.InvolvedCount)
         </div>*@
 
-        @* <div class="editor-label">
+        <div class="editor-label">
             @Html.LabelFor(model => model.RecommendUser)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.RecommendUser)
             @Html.ValidationMessageFor(model => model.RecommendUser)
         </div>
-
+        @* 
         <div class="editor-label">
             @Html.LabelFor(model => model.RecommendSourceType)
         </div>
@@ -166,7 +166,7 @@
             @Html.LabelFor(model => model.Status)
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.Status, ((DataStatus) Model.Status).ToSelectList(), "請選擇")
+            @Html.DropDownListFor(model => model.Status, ((DataStatus)Model.Status).ToSelectList(), "請選擇")
             @Html.ValidationMessageFor(model => model.Status)
         </div>
 

@@ -21,7 +21,7 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         }
 
         protected CmsV1Application(string defaultControllerNamespace)
-            : base("Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers")
+            : base(defaultControllerNamespace)
         {
             _controller = defaultControllerNamespace;
         }

@@ -157,5 +157,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             return Success("/" + RouteData.Values["controller"] + "/" + RouteData.Values["action"]);
         }
+
+        [HttpGet]
+        public override JsonResult AutoComplete(string name)
+        {
+            return Json(_customerRepository.AutoComplete(name).Where(entity => entity.UserLevel != (int)UserLevel.User && entity.UserLevel != (int)UserLevel.None)
+            .Where(entity => String.IsNullOrEmpty(name) ? true : (entity.Nickname.StartsWith(name.Trim()) || entity.Mobile.StartsWith(name.Trim())))
+            .Take(10)
+                , JsonRequestBehavior.AllowGet);
+        }
     }
 }

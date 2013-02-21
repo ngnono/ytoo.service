@@ -60,6 +60,18 @@ namespace Yintai.Hangzhou.Repository.Impl
             return entities.Select(v => v.ProdId).Distinct().ToList();
         }
 
+        private IEnumerable<Promotion2ProductEntity> GetListByPromotion4Linq(int id)
+        {
+            return _promotionProductRelationRepository.GetListByPromotionLinq(id);
+        }
+
+        private IEnumerable<SpecialTopicProductRelationEntity> GetTopicRelationIds4Linq(int id)
+        {
+            var s = new List<int> { id };
+
+            return _specialTopicProductRelationRepository.GetList4Linq(s);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -73,6 +85,9 @@ namespace Yintai.Hangzhou.Repository.Impl
             }
 
             var entitys = _specialTopicProductRelationRepository.GetList(ids);
+
+
+
 
             if (entitys == null || entitys.Count == 0)
             {
@@ -139,52 +154,52 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         private Expression<Func<ProductEntity, bool>> Filter(ProductFilter productFilter)
         {
-            if (productFilter == null)
-            {
-                return null;
-            }
+            //if (productFilter == null)
+            //{
+            //    return null;
+            //}
 
             List<int> pids = null;
-            if (productFilter.TopicId != null && productFilter.TopicId > 0)
-            {
-                pids = GetTopicRelationIds(productFilter.TopicId);
-                //特殊处理处理
-                if (pids == null || pids.Count == 0)
-                {
-                    pids = new List<int> { -1 };
-                }
-            }
+            //if (productFilter.TopicId != null && productFilter.TopicId > 0)
+            //{
+            //    pids = GetTopicRelationIds(productFilter.TopicId);
+            //    //特殊处理处理
+            //    if (pids == null || pids.Count == 0)
+            //    {
+            //        pids = new List<int> { -1 };
+            //    }
+            //}
 
-            if (productFilter.PromotionId != null && productFilter.PromotionId > 0)
-            {
-                var ids = GetPromotionRelationIds(productFilter.PromotionId);
+            //if (productFilter.PromotionId != null && productFilter.PromotionId > 0)
+            //{
+            //    var ids = GetPromotionRelationIds(productFilter.PromotionId);
 
-                if (ids != null && ids.Count > 0)
-                {
-                    if (pids == null)
-                    {
-                        pids = new List<int>(ids.Count);
-                    }
+            //    if (ids != null && ids.Count > 0)
+            //    {
+            //        if (pids == null)
+            //        {
+            //            pids = new List<int>(ids.Count);
+            //        }
 
-                    foreach (var id in ids)
-                    {
-                        pids.Add(id ?? 0);
-                    }
-                }
-                else
-                {
-                    //特殊处理处理
-                    if (pids == null || pids.Count == 0)
-                    {
-                        pids = new List<int> { -2 };
-                    }
-                }
-            }
+            //        foreach (var id in ids)
+            //        {
+            //            pids.Add(id ?? 0);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        //特殊处理处理
+            //        if (pids == null || pids.Count == 0)
+            //        {
+            //            pids = new List<int> { -2 };
+            //        }
+            //    }
+            //}
 
-            if (pids != null)
-            {
-                pids = pids.Distinct().ToList();
-            }
+            //if (pids != null)
+            //{
+            //    pids = pids.Distinct().ToList();
+            //}
 
             return Filter(productFilter.DataStatus, productFilter.Timestamp, productFilter.TagIds,
                           productFilter.RecommendUser, productFilter.BrandId, pids, productFilter.ProductName);
@@ -300,9 +315,33 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter)
         {
-            return
-               base.Get(Filter(productFilter), out totalCount, pagerRequest.PageIndex, pagerRequest.PageSize, GetOrder(sortOrder))
-                   .ToList();
+            var linq = base.Get(Filter(productFilter));
+            //var linq = base.Get(Filter(productFilter), out totalCount, pagerRequest.PageIndex, pagerRequest.PageSize,
+            //                    GetOrder(sortOrder));
+
+            if (productFilter.TopicId != null)
+            {
+                linq = linq.Join(GetTopicRelationIds4Linq(productFilter.TopicId.Value), r => r.Id, v => v.Product_Id,
+                          (r, v) => r);
+            }
+
+            if (productFilter.PromotionId != null)
+            {
+
+                linq = linq.Join(GetListByPromotion4Linq(productFilter.PromotionId.Value), r => r.Id, v => v.ProdId,
+          (r, v) => r);
+            }
+
+            var resetSet = linq;
+            var orderBy = GetOrder(sortOrder);
+            resetSet = orderBy != null ? orderBy(resetSet).AsQueryable() : resetSet.AsQueryable();
+            totalCount = resetSet.Count();
+
+            var skipCount = (pagerRequest.PageIndex - 1) * pagerRequest.PageSize;
+
+            resetSet = skipCount == 0 ? resetSet.Take(pagerRequest.PageSize) : resetSet.Skip(skipCount).Take(pagerRequest.PageSize);
+
+            return resetSet.ToList();
         }
 
         public override ProductEntity GetItem(int key)
