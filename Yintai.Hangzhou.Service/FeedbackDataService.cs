@@ -36,7 +36,7 @@ namespace Yintai.Hangzhou.Service
                      User_Id = request.AuthUid
                  });
 
-            return new ExecuteResult() { StatusCode = StatusCode.Success, Message = "ok" };
+            return new ExecuteResult() { StatusCode = StatusCode.Success, Message = "感谢您的意见反馈，我们会尽快处理。谢谢！" };
         }
     }
 }
