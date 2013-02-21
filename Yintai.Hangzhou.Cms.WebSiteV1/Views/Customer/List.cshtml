@@ -24,6 +24,8 @@
 
 <table>
     <tr>
+        <th>图片</th>
+        <th>操作</th>
         <th>Id
         </th>
         <th>Name
@@ -74,13 +76,27 @@
         </th>
         <th>UpdatedUser
         </th>
-        <th></th>
-        <th></th>
+
     </tr>
 
     @foreach (var item in Model.Customers)
     {
         <tr>
+             <td>
+                @if (!String.IsNullOrWhiteSpace(item.Logo))
+                {
+                    <div class="img-thumnail">
+                    <img src="@String.Concat(item.Logo, "_50x50.jpg")" alt="50X50" />
+                     </div>
+                }
+
+
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
@@ -156,19 +172,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.UpdatedUser)
             </td>
-            <td>
-                @if (!String.IsNullOrWhiteSpace(item.Logo))
-                {
-                    <img src="@String.Concat(item.Logo, "_50x50.jpg")" alt="50X50" />
-                }
-
-
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
+           
         </tr>
     }
 

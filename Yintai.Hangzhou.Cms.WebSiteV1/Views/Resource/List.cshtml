@@ -19,6 +19,8 @@
 </p>
 <table>
     <tr>
+                <th></th>
+        <th></th>
         <th>SourceId
         </th>
         <th>SourceType
@@ -53,13 +55,35 @@
         </th>
         <th>UpdatedUser
         </th>
-        <th></th>
-        <th></th>
+
     </tr>
 
     @foreach (var item in Model.ResourceCollectionViewModel.Resources)
     {
         <tr>
+            <td>@if (item.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                {
+                    <div class="thumnail">
+                    @switch ((SourceType)item.SourceType)
+                    {
+                        case SourceType.CustomerPortrait:
+                <img src="@String.Concat(item.Domain, item.Name, "_50x50.jpg")" alt="50X50" />
+                            break;
+                        case SourceType.SpecialTopic:
+                <img src="@String.Concat(item.Domain, item.Name, "_315x0.jpg")" alt="315x0" />
+                            break;
+                        default:
+                <img src="@String.Concat(item.Domain, item.Name, "_120x0.jpg")" alt="120X0" />
+                            break;
+                    }
+                    </div>
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SourceId)
             </td>
@@ -113,28 +137,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.UpdatedUser)
             </td>
-            <td>@if (item.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
-                {
 
-                    switch ((SourceType)item.SourceType)
-                    {
-                        case SourceType.CustomerPortrait:
-                <img src="@String.Concat(item.Domain, item.Name, "_50x50.jpg")" alt="50X50" />
-                            break;
-                        case SourceType.SpecialTopic:
-                <img src="@String.Concat(item.Domain, item.Name, "_315x0.jpg")" alt="315x0" />
-                            break;
-                        default:
-                <img src="@String.Concat(item.Domain, item.Name, "_120x0.jpg")" alt="120X0" />
-                            break;
-                    }
-                }
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
         </tr>
    
     }

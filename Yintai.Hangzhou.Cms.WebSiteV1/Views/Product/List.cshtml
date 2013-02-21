@@ -113,13 +113,15 @@
             <td>
                 @if (item.Resources != null && item.Resources.Count > 0)
                 {
-                    foreach (var re in item.Resources)
+                    <div class="img-thumnail">
+                    @foreach (var re in item.Resources)
                     {
                         if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
                         {
-                    <img src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120X0" />
+                    <img src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" class="img-rounded" style="width:120px" alt="120X0" />
                         }
                     }
+                   </div>
                 }
             </td>
 
