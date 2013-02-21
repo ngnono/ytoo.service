@@ -68,6 +68,8 @@ $(function () {
     });
 
     $('#fileupload-img').fileupload('option', {
+        sequentialUploads: true,
+        limitConcurrentUploads: 1,
         maxFileSize: 500000000,
         resizeMaxWidth: 1920,
         resizeMaxHeight: 1200,

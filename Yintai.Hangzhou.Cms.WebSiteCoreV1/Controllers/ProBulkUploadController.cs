@@ -144,7 +144,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         {
             var statuses = new List<FilesStatus>();
             var headers = context.Request.Headers;
-
+            UploadWholeFile(context, statuses);
+            /*
             if (string.IsNullOrEmpty(headers["X-File-Name"]))
             {
                 UploadWholeFile(context, statuses);
@@ -153,7 +154,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             {
                 UploadPartialFile(headers["X-File-Name"], context, statuses);
             }
-
+            */
         }
 
         // Upload partial file
