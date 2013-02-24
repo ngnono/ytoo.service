@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuratons\ConfigManager.cs" />
+    <Compile Include="Contract\IAdminAccessRightRepository.cs" />
     <Compile Include="Contract\IBrandRepository.cs" />
     <Compile Include="Contract\ICommentRepository.cs" />
     <Compile Include="Contract\ICouponRepository.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Contract\IVerifyCodeRepository.cs" />
     <Compile Include="Contract\IVUserRepository.cs" />
     <Compile Include="Contract\IVUserRoleRepository.cs" />
+    <Compile Include="Impl\AdminAccessRightRepository.cs" />
     <Compile Include="Impl\BrandRepository.cs" />
     <Compile Include="Impl\ProductBulkRepository.cs" />
     <Compile Include="Impl\PromotionProductRelation.cs" />
@@ -131,7 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
-      <Project>{B07CEC69-B35A-4435-9E83-D7AD4E1F236E}</Project>
+      <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>
       <Name>Yintai.Hangzhou.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">

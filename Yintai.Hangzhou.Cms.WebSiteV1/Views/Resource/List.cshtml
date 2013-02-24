@@ -11,16 +11,16 @@
 
     @if (Model.SourceType != null && Model.SourceId != null)
     {
-        @Html.ActionLink(" * Create This Type Resource", "Create", new { SourceId = Model.SourceId, SourceType = (int)Model.SourceType }, null)
+        @Html.ActionLink2(" * Create This Type Resource", "Create", new { SourceId = Model.SourceId, SourceType = (int)Model.SourceType }, null)
         <br />
     }
 
-    @Html.ActionLink("Create New Resource", "Create")
+    @Html.ActionLink2("Create New Resource", "Create")
 </p>
 <table>
     <tr>
-                <th></th>
-        <th></th>
+         <th>图片</th>
+        <th>操作</th>
         <th>SourceId
         </th>
         <th>SourceType
@@ -80,9 +80,9 @@
                 }
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink2("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink2("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink2("Delete", "Delete", new { id = item.Id })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SourceId)

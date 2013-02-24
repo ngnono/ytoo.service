@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
+using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Model.Filters;

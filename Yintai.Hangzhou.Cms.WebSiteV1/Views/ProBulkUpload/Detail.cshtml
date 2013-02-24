@@ -9,7 +9,7 @@
 @section PageBread
 {
     <ul class="breadcrumb">
-        <li>@Html.ActionLink("批量导入", "Display", "ProBulkUpload", new {id=Model.GroupId },null)<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("批量导入", "Display", "ProBulkUpload", new {id=Model.GroupId },null)<span class="divider">/</span></li>
         <li class="active">商品详情</li>
     </ul>
 }
@@ -104,8 +104,8 @@
     </fieldset>
      <div class="span8 form-action">
             <button class="btn btn-success">保存</button>
-            @Html.ActionLink("删除","DeleteItem","ProBulkUpload",new {id=Model.Id,groupId=Model.GroupId},new {@class="btn btn-danger"})
-            @Html.ActionLink("返回", "Display", "ProBulkUpload", new {id=Model.GroupId },new {@class="btn btn-primary"})
+            @Html.ActionLink2("删除","DeleteItem","ProBulkUpload",new {id=Model.Id,groupId=Model.GroupId},new {@class="btn btn-danger"})
+            @Html.ActionLink2("返回", "Display", "ProBulkUpload", new {id=Model.GroupId },new {@class="btn btn-primary"})
      </div>
 }
 

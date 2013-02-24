@@ -11,21 +11,21 @@ using Yintai.Hangzhou.Data.Models.Mapping;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class YintaiHzhouContext : DbContext
+    public partial class YintaiHangzhouContext: DbContext
     {
         private static readonly Architecture.Common.Logger.ILog _log;
 
-        static YintaiHzhouContext()
+        static YintaiHangzhouContext()
         {
-            Database.SetInitializer<YintaiHzhouContext>(null);
+            Database.SetInitializer<YintaiHangzhouContext>(null);
             _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
         }
 
-		/// <summary>
+        /// <summary>
         /// 正式环境使用，无跟踪
         /// </summary>
-        public YintaiHzhouContext()
-            : this("Name=YintaiHzhouContext", "v1")
+        public YintaiHangzhouContext()
+            : this("Name=YintaiHangzhouContext", "v1")
         {
         }
 
@@ -34,22 +34,22 @@ namespace Yintai.Hangzhou.Data.Models
         /// </summary>
         /// <param name="nameOrConnectionString"></param>
         /// <param name="version"></param>
-        public YintaiHzhouContext(string nameOrConnectionString, string version)
+        public YintaiHangzhouContext(string nameOrConnectionString, string version)
             : base(nameOrConnectionString)
         {
         }
 
         #region ef tracing
 
-		public YintaiHzhouContext(string nameOrConnectionString)
+        public YintaiHangzhouContext(string nameOrConnectionString)
             : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
         {
         }
 
-        public YintaiHzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
+        public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
             : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
         {
-			var ctx = ((IObjectContextAdapter)this).ObjectContext;
+            var ctx = ((IObjectContextAdapter)this).ObjectContext;
 
             this.ObjectContext = ctx;
 
@@ -69,7 +69,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         #endregion
 
-		#region Tracing Extensions
+        #region Tracing Extensions
 
         private ObjectContext ObjectContext { get; set; }
 
@@ -119,6 +119,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         #endregion
 
+        public DbSet<AdminAccessRightEntity> AdminAccessRights { get; set; }
         public DbSet<BrandEntity> Brands { get; set; }
         public DbSet<CommentEntity> Comments { get; set; }
         public DbSet<CouponHistoryEntity> CouponHistories { get; set; }
@@ -141,6 +142,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<ResourceEntity> Resources { get; set; }
         public DbSet<ResourceStageEntity> ResourceStages { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
+        public DbSet<RoleAccessRightEntity> RoleAccessRights { get; set; }
         public DbSet<SeedEntity> Seeds { get; set; }
         public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
         public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
@@ -157,13 +159,14 @@ namespace Yintai.Hangzhou.Data.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-			Configuration.AutoDetectChangesEnabled = false;
+            Configuration.AutoDetectChangesEnabled = false;
             // 移除复数表名的契约
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
             // 防止黑幕交易 要不然每次都要访问 EdmMetadata这个表 EF4.1后可注释
             modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
 
+            modelBuilder.Configurations.Add(new AdminAccessRightEntityMap());
             modelBuilder.Configurations.Add(new BrandEntityMap());
             modelBuilder.Configurations.Add(new CommentEntityMap());
             modelBuilder.Configurations.Add(new CouponHistoryEntityMap());
@@ -186,6 +189,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new ResourceEntityMap());
             modelBuilder.Configurations.Add(new ResourceStageEntityMap());
             modelBuilder.Configurations.Add(new RoleEntityMap());
+            modelBuilder.Configurations.Add(new RoleAccessRightEntityMap());
             modelBuilder.Configurations.Add(new SeedEntityMap());
             modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
@@ -201,14 +205,14 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new VUserRoleEntityMap());
         }
 
-		public override int SaveChanges()
-		{
-			var c =  base.SaveChanges();
+        public override int SaveChanges()
+        {
+            var c = base.SaveChanges();
 
-			return c;
-		}
+            return c;
+        }
 
-		protected override void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             System.Diagnostics.Debug.WriteLine("context closed");
             base.Dispose(disposing);

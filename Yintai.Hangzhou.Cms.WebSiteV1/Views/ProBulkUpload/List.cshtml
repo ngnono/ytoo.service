@@ -6,7 +6,7 @@
 @section PageBread
 {
     <ul class="breadcrumb">
-        <li>@Html.ActionLink("商品管理", "Index", "Product")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("商品管理", "Index", "Product")<span class="divider">/</span></li>
         <li class="active">@ViewBag.Title</li>
     </ul>
 }
@@ -39,12 +39,12 @@
                 <ul class="dropdown-menu">
                     @if (item.Status != Yintai.Hangzhou.Data.Models.ProUploadStatus.ProductsOnLive)
                     {
-                     <li>@Html.ActionLink("Edit", "Display", "ProBulkUpload", new { id = item.JobId }, null)</li>
-                     <li>@Html.ActionLink("Delete", "Delete", "ProBulkUpload", new { id = item.JobId }, null)</li>
+                     <li>@Html.ActionLink2("Edit", "Display", "ProBulkUpload", new { id = item.JobId }, null)</li>
+                     <li>@Html.ActionLink2("Delete", "Delete", "ProBulkUpload", new { id = item.JobId }, null)</li>
                     }
                     else
                     {
-                     <li>@Html.ActionLink("详情", "Display", "ProBulkUpload", new { id = item.JobId }, null)</li>    
+                     <li>@Html.ActionLink2("详情", "Display", "ProBulkUpload", new { id = item.JobId }, null)</li>    
                     }
                 </ul>
                 </div>

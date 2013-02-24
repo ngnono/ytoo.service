@@ -56,14 +56,9 @@ namespace Yintai.Hangzhou.Model
                     return UserRole.None;
                 }
 
-                var ur = UserRole.User;
+                var ur = UserRole.None;
                 foreach (var item in UserRoles)
                 {
-                    if (UserRole.User == item)
-                    {
-                        continue;
-                    }
-
                     ur = ur | item;
                 }
 

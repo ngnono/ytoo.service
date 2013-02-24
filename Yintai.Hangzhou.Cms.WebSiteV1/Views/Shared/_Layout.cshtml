@@ -1,15 +1,19 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var controller = (Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers.UserController)ViewContext.Controller;
+    bool canBulkPublish = controller.HasRightForAction("ProBulkUpload", "Display");   
+ }
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>@ViewBag.Title</title>
     <link href="@Url.Content("~/Content/Bootstrap/bootstrap.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/Bootstrap/bootstrap-responsive.css")" rel="stylesheet" type="text/css"/>
-    <link href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/themes/base/jquery-ui-timepicker-addon.css")" rel="stylesheet" type="text/css"/>
     <link href="@Url.Content("~/Content/website.css")" rel="stylesheet" type="text/css"/>
-    <script src="http://code.jquery.com/jquery-1.8.3.js" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery-ui-1.10.1.min.js")" type="text/javascript" ></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js" type="text/javascript" ></script>
     <script src="@Url.Content("~/Scripts/jquery-ui-timepicker-addon.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
@@ -42,27 +46,28 @@
                 <a class="brand" href="#">CMS V1.0</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li>@Html.ActionLink("首页", "Index", "Home")</li>
-                        <li>@Html.ActionLink("商品管理", "Index", "Product")</li>
-                        <li>@Html.ActionLink("促销管理", "Index", "Promotion")</li>
-                        <li>@Html.ActionLink("专题管理", "Index", "SpecialTopic")</li>
-                        <li>@Html.ActionLink("图片管理", "Index", "Resource")</li>
+                        <li>@Html.ActionLink2("首页", "Index", "Home")</li>
+                        <li>@Html.ActionLink2("商品管理", "Index", "Product")</li>
+                        <li>@Html.ActionLink2("促销管理", "Index", "Promotion")</li>
+                        <li>@Html.ActionLink2("专题管理", "Index", "SpecialTopic")</li>
+                        <li>@Html.ActionLink2("图片管理", "Index", "Resource")</li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">用户管理<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("用户信息", "Index", "Customer")</li>
-                                <li>@Html.ActionLink("积分", "Index", "Point")</li>
-                                <li>@Html.ActionLink("评论", "Index", "Comment")</li>
-                                <li>@Html.ActionLink("反馈", "Index", "Feedback")</li>
+                                <li>@Html.ActionLink2("用户信息", "Index", "Customer")</li>
+                                <li>@Html.ActionLink2("积分", "Index", "Point")</li>
+                                <li>@Html.ActionLink2("评论", "Index", "Comment")</li>
+                                <li>@Html.ActionLink2("反馈", "Index", "Feedback")</li>
                                 
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">配置信息<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("品牌维护", "Index", "Brand")</li>
-                                <li>@Html.ActionLink("实体店维护", "Index", "Store")</li>
-                                <li>@Html.ActionLink("Tag维护", "Index", "Tag")</li>
+                                <li>@Html.ActionLink2("品牌维护", "Index", "Brand")</li>
+                                <li>@Html.ActionLink2("实体店维护", "Index", "Store")</li>
+                                <li>@Html.ActionLink2("Tag维护", "Index", "Tag")</li>
+                                <li>@Html.ActionLink2("权限管理", "Index", "Role")</li>
                              </ul>
                         </li>     
                         
@@ -77,7 +82,6 @@
         </div>
         <div class="container">@RenderSection("PageBread", false)</div>
     </div>
-
     <div class="container">
 
         <div class="row">

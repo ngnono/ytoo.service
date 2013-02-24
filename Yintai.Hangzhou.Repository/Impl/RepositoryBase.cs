@@ -11,6 +11,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 {
     public abstract class RepositoryBase<TEntity, TKey> : EFRepository<TEntity>, IRepository<TEntity, TKey> where TEntity : BaseEntity
     {
+        private DbContext _innerContext;
         //提供IOC注入方式接口
         /// <summary>
         /// EF构造
@@ -21,14 +22,16 @@ namespace Yintai.Hangzhou.Repository.Impl
         {
         }
 
-        //测试用
-        protected RepositoryBase()
-            : this(ServiceLocator.Current.Resolve<DbContext>())
+        protected RepositoryBase():this(ServiceLocator.Current.Resolve<DbContext>())
         {
-            //this.DbContext = new MyFinancialEntities();
         }
 
-        //public DbContext Context { get; private set; }
+        protected DbContext Context { get {
+            if (_innerContext == null)
+                _innerContext = ServiceLocator.Current.Resolve<DbContext>();
+            return _innerContext;
+            
+        } }
 
         #region IRepository<TEntity, TKey> 成员
 

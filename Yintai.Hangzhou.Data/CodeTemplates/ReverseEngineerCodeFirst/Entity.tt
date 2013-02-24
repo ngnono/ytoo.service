@@ -21,13 +21,13 @@ namespace <#= code.EscapeNamespace(efHost.Namespace) #>
     if (collectionNavigations.Any())
     {
 #>
-        public <#= code.Escape(efHost.EntityType) #>()
+        public <#= code.Escape(efHost.EntityType) #>Entity()
         {
 <#
         foreach (var navProperty in collectionNavigations)
         {
 #>
-            this.<#= code.Escape(navProperty) #> = new List<<#= code.Escape(navProperty.ToEndMember.GetEntityType()) #>>();
+            this.<#= code.Escape(navProperty) #> = new List<<#= code.Escape(navProperty.ToEndMember.GetEntityType()) #>Entity>();
 <#
         }
 #>
@@ -48,13 +48,13 @@ namespace <#= code.EscapeNamespace(efHost.Namespace) #>
         if (navProperty.ToEndMember.RelationshipMultiplicity == RelationshipMultiplicity.Many)
         {
 #>
-        public virtual ICollection<<#= code.Escape(navProperty.ToEndMember.GetEntityType()) #>> <#= code.Escape(navProperty) #> { get; set; }
+        public virtual ICollection<<#= code.Escape(navProperty.ToEndMember.GetEntityType()) #>Entity> <#= code.Escape(navProperty) #> { get; set; }
 <#
         }
         else
         {
 #>
-        public virtual <#= code.Escape(navProperty.ToEndMember.GetEntityType()) #> <#= code.Escape(navProperty) #> { get; set; }
+        public virtual <#= code.Escape(navProperty.ToEndMember.GetEntityType()) #>Entity <#= code.Escape(navProperty) #> { get; set; }
 <#
         }
     }

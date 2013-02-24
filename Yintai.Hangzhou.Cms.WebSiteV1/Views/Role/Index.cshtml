@@ -1,0 +1,20 @@
+﻿@{
+
+}
+<div class="span4">
+    <h2>角色管理</h2>
+    <p>用户角色管理模块</p>
+    <p>@Html.ActionLink2("进入","List",null,new {@class = "btn"})</p>
+</div>
+<div class="span4">
+    <h2>权限管理</h2>
+    <p>后台系统所有权限维护 </p>
+    <p><span>@Html.ActionLink2("进入","RightList",null,new {@class = "btn"})</span>
+    </p>
+</div>
+
+<div class="span4">
+    <h2>用户授权</h2>
+    <p>对用户进行角色分配</p>
+    <p>@Html.ActionLink2("进入","AuthorizeUser",null,new {@class = "btn"})</p>
+</div>

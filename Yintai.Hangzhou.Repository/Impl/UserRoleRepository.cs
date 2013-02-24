@@ -22,5 +22,17 @@ namespace Yintai.Hangzhou.Repository.Impl
         {
             return base.Get(v => v.User_Id == userId && v.Status == (int)DataStatus.Normal).ToList();
         }
+
+
+
+        public IEnumerable<RoleEntity> FindRolesByUserId(int p)
+        {
+            var result = from ru in Context.Set<UserRoleEntity>()
+                         where ru.User_Id == p
+                         from r in Context.Set<RoleEntity>()
+                         where ru.Role_Id == r.Id
+                         select r;
+            return result;
+        }
     }
 }

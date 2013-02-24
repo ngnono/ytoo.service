@@ -56,7 +56,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<Service.Contract.IResourceService, ResourceService>();
             Current.Register<IShareService, ShareService>();
             Current.Register<IUserService, UserService>();
-
+            Current.Register<IUserRightService, UserRightService>();
             Current.Register<MappingManagerV2, MappingManagerV2>();
         }
 

@@ -107,7 +107,6 @@
     <Compile Include="Ioc\ServiceIocRegister.cs" />
     <Compile Include="Ioc\UnfinishedIocRegister.cs" />
     <Compile Include="Ioc\PerRequestUnityServiceLocator.cs" />
-    <Compile Include="Mvc\AdminAuthorizeAttribute.cs" />
     <Compile Include="Mvc\MvcApplication.cs" />
     <Compile Include="Mvc\RestfulAuthorizeAttribute.cs" />
     <Compile Include="Mvc\RestfulRoleAuthorizeAttribute.cs" />

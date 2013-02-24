@@ -71,6 +71,7 @@
     <Compile Include="Contract\IPromotionProductRelation.cs" />
     <Compile Include="Contract\IRemindService.cs" />
     <Compile Include="Contract\IShareService.cs" />
+    <Compile Include="Contract\IUserRightService.cs" />
     <Compile Include="FeedbackDataService.cs" />
     <Compile Include="Impl\AuthenticationService.cs" />
     <Compile Include="Impl\CouponService.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="FavoriteDataService.cs" />
     <Compile Include="GroupDataService.cs" />
     <Compile Include="Impl\ShareService.cs" />
+    <Compile Include="Impl\UserRightService.cs" />
     <Compile Include="Impl\UserService.cs" />
     <Compile Include="Manager\CacheKeyManager.cs" />
     <Compile Include="Manager\ConfigManager.cs" />

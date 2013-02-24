@@ -10,7 +10,7 @@
 <h2>List</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink2("Create New", "Create")
 </p>
 <div>
     <form action="/@url">
@@ -93,9 +93,9 @@
 
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink2("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink2("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink2("Delete", "Delete", new { id = item.Id })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)

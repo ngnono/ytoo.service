@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
+using System.Web.Routing;
+using Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 {
@@ -14,6 +17,73 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
         public static string ClientId<TModel>(this HtmlHelper helper, Expression<Func<TModel, TModel>> ex)
         {
             return helper.ViewData.TemplateInfo.GetFullHtmlFieldId(ExpressionHelper.GetExpressionText(ex));
+        }
+
+        public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName)
+        {
+            return htmlHelper.ActionLink2(linkText, actionName, null, new RouteValueDictionary(), new RouteValueDictionary());
+        }
+
+        public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName, object routeValues)
+        {
+            return htmlHelper.ActionLink2(linkText, actionName, null, new RouteValueDictionary(routeValues), new RouteValueDictionary());
+        }
+
+        public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName, RouteValueDictionary routeValues)
+        {
+            return htmlHelper.ActionLink2(linkText, actionName, null, routeValues, new RouteValueDictionary());
+        }
+
+        public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName)
+        {
+            return htmlHelper.ActionLink2(linkText, actionName, controllerName, new RouteValueDictionary(), new RouteValueDictionary());
+        }
+
+        public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName, object routeValues, object htmlAttributes)
+        {
+            return htmlHelper.ActionLink2(linkText, actionName, null, new RouteValueDictionary(routeValues), HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
+        }
+
+        public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName, RouteValueDictionary routeValues, IDictionary<string, object> htmlAttributes)
+        {
+            return htmlHelper.ActionLink2(linkText, actionName, null, routeValues, htmlAttributes);
+        }
+
+        public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, object routeValues, object htmlAttributes)
+        {
+            return htmlHelper.ActionLink2(linkText, actionName, controllerName, new RouteValueDictionary(routeValues), HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
+        }
+
+        public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, RouteValueDictionary routeValues, IDictionary<string, object> htmlAttributes)
+        {
+            var controller = htmlHelper.ViewContext.Controller as UserController;
+            if (controller != null &&
+                !controller.HasRightForAction(controllerName, actionName))
+            {
+                return HtmlCustomHelper.GenerateNonAuthorizeHtml();
+            }
+            return htmlHelper.ActionLink(linkText, actionName, controllerName, routeValues, htmlAttributes);
+        }
+
+        public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, string protocol, string hostName, string fragment, object routeValues, object htmlAttributes)
+        {
+            return htmlHelper.ActionLink2(linkText, actionName, controllerName, protocol, hostName, fragment, new RouteValueDictionary(routeValues), HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
+        }
+
+        public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, string protocol, string hostName, string fragment, RouteValueDictionary routeValues, IDictionary<string, object> htmlAttributes)
+        { 
+            
+            var controller = htmlHelper.ViewContext.Controller as UserController;
+            if (controller != null &&
+                !controller.HasRightForAction(controllerName, actionName))
+            {
+                return HtmlCustomHelper.GenerateNonAuthorizeHtml();
+            }
+            return htmlHelper.ActionLink(linkText, actionName, controllerName, protocol, hostName, fragment, routeValues, htmlAttributes);
+        }
+        private static MvcHtmlString GenerateNonAuthorizeHtml()
+        {
+            return MvcHtmlString.Create(string.Empty);
         }
     }
     public static class HtmlHelperFactoryExtensions

@@ -1,0 +1,10 @@
+﻿@{
+    bool isPostSuccess = ViewBag.IsUpdateSuccess ?? false;   
+}
+@if (isPostSuccess)
+{ 
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        保存成功！
+    </div>
+}

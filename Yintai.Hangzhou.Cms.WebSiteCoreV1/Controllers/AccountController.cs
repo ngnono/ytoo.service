@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
+using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
@@ -36,8 +37,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 }
                 else
                 {
+
                     //写认证
-                    base.SetAuthorize(new WebSiteUser(userModel.Name, userModel.Id, userModel.Nickname));
+                    base.SetAuthorize(new WebSiteUser(userModel.Name, userModel.Id, userModel.Nickname,userModel.UserRole));
 
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                 && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
@@ -57,7 +59,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         ////
         //// POST: /Account/LogOff
 
-        [AdminAuthorize]
         public ActionResult LogOff()
         {
             base.Signout();

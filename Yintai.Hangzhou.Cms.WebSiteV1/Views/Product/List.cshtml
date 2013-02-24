@@ -15,7 +15,7 @@
 <h2>List</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink2("Create New", "Create")
 </p>
 
 <div>
@@ -126,10 +126,10 @@
             </td>
 
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                @Html.ActionLink("ViewImage", "List", "Resource", new { sourceType = (int)SourceType.Product, sourceid = item.Id }, null)
+                @Html.ActionLink2("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink2("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink2("Delete", "Delete", new { id = item.Id }) |
+                @Html.ActionLink2("ViewImage", "List", "Resource", new { sourceType = (int)SourceType.Product, sourceid = item.Id }, null)
             </td>
             <td>@Html.DisplayFor(modelItem => item.Id)</td>
             <td>

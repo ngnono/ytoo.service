@@ -66,12 +66,21 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
         {
             get
             {
-                var childContainer = HttpContext.Current.Items[HttpContextKey] as IUnityContainer;
-
-                if (childContainer == null)
+                bool needCreate = false;
+                IUnityContainer childContainer = null;
+                if (HttpContext.Current != null)
                 {
-                    HttpContext.Current.Items[HttpContextKey] = childContainer = _container.CreateChildContainer();
+                    var cachedContainer = HttpContext.Current.Items[HttpContextKey];
+
+                    if (cachedContainer is IUnityContainer)
+                        childContainer = HttpContext.Current.Items[HttpContextKey] as IUnityContainer;
+                    if (cachedContainer == null || childContainer == null)
+                        needCreate = true;
                 }
+               
+                if (needCreate)
+                    HttpContext.Current.Items[HttpContextKey] = childContainer = _container.CreateChildContainer();
+                
 
                 return childContainer;
             }

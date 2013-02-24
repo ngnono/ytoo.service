@@ -8,5 +8,7 @@ namespace Yintai.Hangzhou.Repository.Contract
         List<UserRoleEntity> GetListByRoleId(int roleId);
 
         List<UserRoleEntity> GetListByUserId(int userId);
+
+        IEnumerable<RoleEntity> FindRolesByUserId(int p);
     }
 }

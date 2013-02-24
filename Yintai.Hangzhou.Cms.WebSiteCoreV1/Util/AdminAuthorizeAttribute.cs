@@ -5,10 +5,11 @@ using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
 using Yintai.Architecture.Framework.ServiceLocation;
+using Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Service.Contract;
 
-namespace Yintai.Hangzhou.WebSupport.Mvc
+namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 {
     public class AdminAuthorizeAttribute : AuthorizeAttribute
     {
@@ -91,40 +92,60 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
                 return false;
             }
 
-            // Session过期
-            //if (_sessionData.Expired)
-            //{
-            //    httpContext.Response.StatusCode = 402;
-            //    //httpContext.Response.SubStatusCode = 2;
-
-            //    return false;
-            //}
-
-            //TODO:可以通过ActionDescriptor获取参数的类型，这里约定好就可以了，没有必要去那样做
-
-
-            //var output = 0;
-
-            //int.TryParse(_sessionData.UserId, out output);
-
-            ////// 设置参数userId的值
-            ////httpContext.Request.
-            //httpContext.Request.RequestContext.RouteData.Values.Add(Define.AuthUserId, output.ToString(CultureInfo.InvariantCulture));
-            //httpContext.Request.Params.Add(Define.AuthUserId, output.ToString(CultureInfo.InvariantCulture));
-
             return true;
         }
 
-        protected override bool AuthorizeCore(System.Web.HttpContextBase httpContext)
-        {
-            return ExecAuthorizeCore(httpContext);
-        }
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            base.OnAuthorization(filterContext);
+            //base.OnAuthorization(filterContext);
+            //override authorization logic here
+            DoAuthorization(filterContext);
 
             ExecOnAuthorization(filterContext);
+        }
+
+        protected virtual void DoAuthorization(AuthorizationContext filterContext)
+        {
+            var httpContext = filterContext.HttpContext;
+            var _authenticationService = ServiceLocator.Current.Resolve<IAuthenticationService>();
+
+            if (!_authenticationService.Islogged(httpContext))
+            {
+                httpContext.Response.StatusCode = 400;
+                return;
+            }
+
+            //验证用户信息
+            try
+            {
+                _webSiteUser = _authenticationService.GetCurrentUser(httpContext);
+            }
+            catch (Exception ex)
+            {
+                _log.Error(String.Format("{0}获取websiteuser失败,Ex.M{1},Ex.S{2} ", httpContext.User.Identity.Name, ex.Message, ex.StackTrace));
+            }
+
+            // 解密失败返回结果
+            if (_webSiteUser == null)
+            {
+                httpContext.Response.StatusCode = 401;
+                //httpContext.Response.SubStatusCode = 1;
+
+                return;
+            }
+            //authorize
+            string controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
+            string actionNae = filterContext.ActionDescriptor.ActionName;
+            UserController currentController = filterContext.Controller as UserController;
+            if (currentController == null)
+                return;
+            if (!currentController.HasRightForAction(controllerName, actionNae))
+            {
+                httpContext.Response.StatusCode = 401;
+                return;
+            }
+
         }
 
     }

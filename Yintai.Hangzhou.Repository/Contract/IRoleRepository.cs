@@ -12,5 +12,19 @@ namespace Yintai.Hangzhou.Repository.Contract
         List<RoleEntity> GetListByIds(List<int> ids);
 
         List<RoleEntity> GetList();
+
+        IEnumerable<RoleEntity> LoadAllEagerly();
+
+        RoleEntity UpdateWithRights(RoleEntity roleEntity);
+
+        void InsertWithUserRelation(int User, string[] p);
+
+        void DeleteRolesOfUserId(int Id);
+
+        void UpdateWithUserRelation(int User, string[] p);
+
+        IEnumerable<UserEntity> FindAllUsersHavingRoles();
+
+        IEnumerable<AdminAccessRightEntity> LoadAllRights();
     }
 }

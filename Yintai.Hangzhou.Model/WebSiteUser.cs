@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Model
 {
@@ -22,11 +24,12 @@ namespace Yintai.Hangzhou.Model
         /// The customer id.
         /// </param>
         /// <param name="nickName">昵称</param>
-        public WebSiteUser(string loginName, int customerId, string nickName)
+        public WebSiteUser(string loginName, int customerId, string nickName,UserRole role)
         {
             this.LoginName = loginName;
             this.CustomerId = customerId;
             this.NickName = nickName;
+            Role = role;
         }
 
         /// <summary>
@@ -40,5 +43,8 @@ namespace Yintai.Hangzhou.Model
         public int CustomerId { get; set; }
 
         public string NickName { get; set; }
+
+        public UserRole Role { get; set; }
+ 
     }
 }

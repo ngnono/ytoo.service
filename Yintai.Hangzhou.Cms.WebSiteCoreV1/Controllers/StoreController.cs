@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
+using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;

@@ -195,13 +195,13 @@ namespace <#= code.EscapeNamespace(efHost.Namespace) #>
             if (mappingSchemaName == "dbo" || string.IsNullOrWhiteSpace(mappingSchemaName))
             {
 #>
-                        m.ToTable("<#= mappingTableName #>");
+                        m.ToTable("<#= mappingTableName #>Entity");
 <#
             }
             else
             {
 #>
-                        m.ToTable("<#= mappingTableName #>", "<#= mappingSchemaName #>");
+                        m.ToTable("<#= mappingTableName #>Entity", "<#= mappingSchemaName #>");
 <#
             }
 #>

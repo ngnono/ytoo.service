@@ -4,10 +4,10 @@
         <a class="btn btn-primary " href="#"><i class="icon-user icon-white"></i>@selfController.CurrentUser.LoginName</a>
         <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
         <ul class="dropdown-menu">
-            <li>@Html.ActionLink("注销", "LogOff", "Account")</li>
+            <li>@Html.ActionLink2("注销", "LogOff", "Account")</li>
         </ul>
     </span>
 }
 else {
-    @:[ @Html.ActionLink("Log On", "Login", "Account",null,new {@class="btn btn-small"}) ]
+    @:[ @Html.ActionLink2("Log On", "Login", "Account",null,new {@class="btn btn-small"}) ]
 }

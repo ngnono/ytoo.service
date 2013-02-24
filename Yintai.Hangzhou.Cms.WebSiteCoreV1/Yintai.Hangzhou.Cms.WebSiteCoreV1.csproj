@@ -84,6 +84,7 @@
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SpecialTopicController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\TagController.cs" />
@@ -93,7 +94,9 @@
     <Compile Include="Dto\Resource\ListDto.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Manager\MappingManager.cs" />
+    <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\FilesStatus.cs" />
+    <Compile Include="Models\RoleRightViewModel.cs" />
     <Compile Include="Models\SpecialTopicViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\PointViewModel.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="Models\StoreViewModel.cs" />
     <Compile Include="Models\TagViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\AdminAuthorizeAttribute.cs" />
     <Compile Include="Util\EnumHelper.cs" />
     <Compile Include="Util\HtmlCustomHelper.cs" />
   </ItemGroup>

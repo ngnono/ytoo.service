@@ -69,12 +69,12 @@
                             </td>
                             <td>
 
-                                @Html.ActionLink("Del", "Delete", "Resource", new { id = re.Id }, new { target = "_blank" })
+                                @Html.ActionLink2("Del", "Delete", "Resource", new { id = re.Id }, new { target = "_blank" })
                             </td>
                         </tr>
                         <tr>
                             <td></td>
-                            <td>@Html.ActionLink("AddRrsource", "Create", "Resource", new
+                            <td>@Html.ActionLink2("AddRrsource", "Create", "Resource", new
                                 {
                                     SourceId = this.Model.Id,
                                     SourceType = (int)Yintai.Hangzhou.Model.Enums.SourceType.SpecialTopic
@@ -86,6 +86,6 @@
         </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink2("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink2("Back to List", "Index")
 </p>
