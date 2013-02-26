@@ -91,6 +91,7 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Dto\Product\ListDto.cs" />
     <Compile Include="Dto\Resource\ListDto.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Manager\MappingManager.cs" />

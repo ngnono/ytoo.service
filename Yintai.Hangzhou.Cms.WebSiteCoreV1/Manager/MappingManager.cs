@@ -818,13 +818,16 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             var ids = source.Select(v => v.Id).ToList();
 
             var resoucres = ResourceViewMapping(GetListResourceEntities(SourceType.Product, ids)).ToList();
-
+            var ppr = GetPromotionForRelation(ids);
+            var ptr = GetTopicRelationByProduct4Entities(ids);
 
             foreach (var item in source)
             {
                 var r = resoucres.Where(v => v.SourceId == item.Id).ToList();
+                var pp = ppr.Where(v => (v.ProdId ?? 0) == item.Id).Select(v => v.ProId ?? 0).Distinct().ToList();
+                var pt = ptr.Where(v => v.Product_Id == item.Id).Select(v => v.SpecialTopic_Id).Distinct().ToList();
 
-                var target = ProductViewMapping(item, r);
+                var target = ProductViewMapping(item, r, pt, pp);
                 if (target != null)
                 {
                     list.Add(target);
@@ -834,7 +837,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             return list;
         }
 
-        private static ProductViewModel ProductViewMapping(ProductEntity source, List<ResourceViewModel> resourceViewModels, List<int> topicIds = null, List<int> promotionIds = null)
+        private static ProductViewModel ProductViewMapping(ProductEntity source, List<ResourceViewModel> resourceViewModels, IReadOnlyCollection<int> topicIds = null, IReadOnlyCollection<int> promotionIds = null)
         {
             if (source == null)
             {

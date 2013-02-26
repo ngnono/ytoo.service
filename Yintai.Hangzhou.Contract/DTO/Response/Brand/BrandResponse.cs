@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Yintai.Hangzhou.Contract.Response;
+using System.Linq;
 
 namespace Yintai.Hangzhou.Contract.DTO.Response.Brand
 {
@@ -91,10 +92,13 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Brand
         protected Dictionary<string, List<T>> InternalValues { get; set; }
 
         [DataMember(Name = "values")]
-        public IEnumerable<GroupStructItemInfoResponse<T>> Values {
+        public IEnumerable<GroupStructItemInfoResponse<T>> Values
+        {
             get
             {
-                foreach (var key in InternalValues.Keys)
+                var sortKeys = InternalValues.Keys.OrderBy(v => v);
+
+                foreach (var key in sortKeys)
                 {
                     yield return new GroupStructItemInfoResponse<T>
                         {
@@ -104,7 +108,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Brand
                 }
             }
 
-            set { } 
+            set { }
         }
     }
 

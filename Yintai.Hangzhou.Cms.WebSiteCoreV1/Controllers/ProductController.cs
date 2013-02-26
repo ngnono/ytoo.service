@@ -6,6 +6,7 @@ using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.ServiceLocation;
+using Yintai.Hangzhou.Cms.WebSiteCoreV1.Dto.Product;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
@@ -13,7 +14,6 @@ using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
-using Yintai.Hangzhou.WebSupport.Mvc;
 using MappingManager = Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager.MappingManager;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
@@ -37,34 +37,36 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return View();
         }
 
-        public ActionResult List(PagerRequest request, int? sort, string name, int? recommendUser, int? tagId, int? brandId, int? topicId, int? promotionId, int? status)
+        public ActionResult List(PagerRequest request, SearchParamsRequest searchParams)
         {
             int totalCount;
-            var sortOrder = (ProductSortOrder)(sort ?? (int)ProductSortOrder.CreatedDateDesc);
-
+            searchParams.SortOrder = (ProductSortOrder)(searchParams.Sort ?? (int)ProductSortOrder.CreatedDateDesc);
+            searchParams.DataStatus = searchParams.DataStatus ?? DataStatus.Normal;
             List<int> tag = null;
-            if (tagId != null)
+            if (searchParams.TagId != null)
             {
-                tag = new List<int>(tagId.Value);
+                tag = new List<int> { searchParams.TagId.Value };
             }
 
-            var data = _productRepository.GetPagedList(request, out totalCount, sortOrder, new ProductFilter
+            var data = _productRepository.GetPagedList(request, out totalCount, searchParams.SortOrder.Value, new ProductFilter
                 {
-                    BrandId = brandId,
-                    DataStatus = status == null ? new DataStatus?() : (DataStatus)status,
-                    ProductName = name,
-                    PromotionId = promotionId,
-                    RecommendUser = recommendUser,
+                    BrandId = searchParams.BrandId,
+                    DataStatus = searchParams.DataStatus,
+                    ProductName = searchParams.Name,
+                    PromotionId = searchParams.PromotionId,
+                    RecommendUser = searchParams.RecommendUser,
                     TagIds = tag,
                     Timestamp = null,
-                    TopicId = topicId
+                    TopicId = searchParams.TopicId
                 });
 
             var vo = MappingManager.ProductViewMapping(data);
 
             var v = new ProductCollectionViewModel(request, totalCount) { Products = vo.ToList() };
 
-            return View("List", v);
+            var dto = new ListDto(searchParams) { Collection = v };
+
+            return View("List", dto);
         }
 
         public ActionResult Details(int? id, [FetchProduct(KeyName = "id")]ProductEntity entity)
@@ -117,15 +119,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             if (ModelState.IsValid)
             {
                 var entity = MappingManager.ProductViewMapping(vo);
-                entity.CreatedUser = base.CurrentUser.CustomerId;
-                entity.UpdatedUser = base.CurrentUser.CustomerId;
+                entity.CreatedUser = CurrentUser.CustomerId;
+                entity.UpdatedUser = CurrentUser.CustomerId;
                 entity.Status = (int)DataStatus.Normal;
                 entity.CreatedDate = DateTime.Now;
                 entity.UpdatedDate = DateTime.Now;
 
                 using (var ts = new TransactionScope())
                 {
-                    entity = this._productRepository.Insert(entity);
+                    entity = _productRepository.Insert(entity);
                     SaveT(entity.Id, StringsToInts(vo.TopicIds, ","));
                     SaveP(entity.Id, StringsToInts(vo.PromotionIds, ","));
 
@@ -154,7 +156,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 {
                     r1.Status = (int)DataStatus.Deleted;
                     r1.UpdatedDate = DateTime.Now;
-                    r1.UpdatedUser = base.CurrentUser.CustomerId;
+                    r1.UpdatedUser = CurrentUser.CustomerId;
 
                     _stprRepository.Delete(r1);
                 }
@@ -162,15 +164,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             foreach (var i in topicList)
             {
-                _stprRepository.Insert(new SpecialTopicProductRelationEntity()
+                _stprRepository.Insert(new SpecialTopicProductRelationEntity
                 {
                     CreatedDate = DateTime.Now,
-                    CreatedUser = base.CurrentUser.CustomerId,
+                    CreatedUser = CurrentUser.CustomerId,
                     Product_Id = pId,
                     SpecialTopic_Id = i,
                     Status = (int)DataStatus.Normal,
                     UpdatedDate = DateTime.Now,
-                    UpdatedUser = base.CurrentUser.CustomerId
+                    UpdatedUser = CurrentUser.CustomerId
                 });
             }
         }
@@ -181,7 +183,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             if (promotionList == null)
             {
                 //
-
                 _pprRepository.DeletedByProduct(pId);
 
                 return;
@@ -197,9 +198,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 }
             }
 
+            var p = ServiceLocator.Current.Resolve<IPromotionRepository>();
             foreach (var i in promotionList)
             {
-                _pprRepository.Insert(new Promotion2ProductEntity()
+                _pprRepository.Insert(new Promotion2ProductEntity
                 {
                     Status = (int)DataStatus.Normal,
                     ProdId = pId,
@@ -207,7 +209,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 });
 
                 //true
-                ServiceLocator.Current.Resolve<IPromotionRepository>().SetIsProd(i, true);
+                p.SetIsProd(i, true);
             }
         }
 
@@ -223,7 +225,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             var newEntity = MappingManager.ProductViewMapping(vo);
             newEntity.CreatedUser = entity.CreatedUser;
             newEntity.CreatedDate = entity.CreatedDate;
-            newEntity.Status = entity.Status;
+            //newEntity.Status = entity.Status;
             newEntity.InvolvedCount = entity.InvolvedCount;
             newEntity.FavoriteCount = entity.FavoriteCount;
             newEntity.ShareCount = entity.ShareCount;
@@ -278,7 +280,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.UpdatedUser = CurrentUser.CustomerId;
             entity.Status = (int)DataStatus.Deleted;
 
-            this._productRepository.Delete(entity);
+            _productRepository.Delete(entity);
 
 
             return Success("/" + RouteData.Values["controller"] + "/" + RouteData.Values["action"]);
