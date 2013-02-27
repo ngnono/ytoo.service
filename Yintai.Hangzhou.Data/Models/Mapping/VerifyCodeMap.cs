@@ -31,6 +31,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.VerifyMode).HasColumnName("VerifyMode");
             this.Property(t => t.VerifySource).HasColumnName("VerifySource");
             this.Property(t => t.Status).HasColumnName("Status");
+		Init();
         }
+
+		partial void Init();
     }
 }

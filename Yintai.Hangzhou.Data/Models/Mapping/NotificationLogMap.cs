@@ -26,6 +26,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Message).HasColumnName("Message");
             this.Property(t => t.InDate).HasColumnName("InDate");
             this.Property(t => t.Status).HasColumnName("Status");
+		Init();
         }
+
+		partial void Init();
     }
 }

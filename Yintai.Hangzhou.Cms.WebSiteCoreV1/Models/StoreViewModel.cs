@@ -24,16 +24,19 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "地址")]
         public string Location { get; set; }
         [Required]
-        [RegularExpression(@"(^(\d{3,4}-)?\d{7,8})$|(1[0-9]{10})")]
+        [RegularExpression(@"(^(\d{3,4}-)?\d{7,8})$|(1[0-9]{9})")]
         [Display(Name = "电话")]
         public string Tel { get; set; }
 
         [Range(typeof(decimal), "-180.000000", "180.000000")]
         [Display(Name = "经度")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:n6}")]
         public decimal Longitude { get; set; }
 
         [Display(Name = "纬度")]
         [Range(typeof(decimal), "-90.000000", "90.000000")]
+        [UIHint("Decimal")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:n6}")]
         public decimal Latitude { get; set; }
 
         [Display(Name = "集团Id")]

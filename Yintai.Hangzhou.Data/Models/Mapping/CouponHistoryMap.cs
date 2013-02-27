@@ -29,6 +29,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.FromPromotion).HasColumnName("FromPromotion");
             this.Property(t => t.ValidStartDate).HasColumnName("ValidStartDate");
             this.Property(t => t.ValidEndDate).HasColumnName("ValidEndDate");
+		Init();
         }
+
+		partial void Init();
     }
 }

@@ -42,6 +42,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.IsTop).HasColumnName("IsTop");
             this.Property(t => t.IsProdBindable).HasColumnName("IsProdBindable");
             this.Property(t => t.PublicationLimit).HasColumnName("PublicationLimit");
+		Init();
         }
+
+		partial void Init();
     }
 }

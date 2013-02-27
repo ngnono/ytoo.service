@@ -48,6 +48,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.RecommendSourceType).HasColumnName("RecommendSourceType");
             this.Property(t => t.SortOrder).HasColumnName("SortOrder");
             this.Property(t => t.IsHasImage).HasColumnName("IsHasImage");
+		Init();
         }
+
+		partial void Init();
     }
 }

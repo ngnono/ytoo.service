@@ -25,6 +25,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .WithMany(t => t.RoleAccessRights)
                 .HasForeignKey(d => d.RoleId);
 
+		Init();
         }
+
+		partial void Init();
     }
 }

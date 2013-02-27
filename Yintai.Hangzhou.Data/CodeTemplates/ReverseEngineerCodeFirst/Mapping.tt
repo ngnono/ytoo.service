@@ -263,6 +263,9 @@ namespace <#= code.EscapeNamespace(efHost.Namespace) #>
 <#
         }
 #>
+		Init();
         }
+
+		partial void Init();
     }
 }

@@ -29,6 +29,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.SourceType).HasColumnName("SourceType");
             this.Property(t => t.ReplyUser).HasColumnName("ReplyUser");
             this.Property(t => t.ReplyId).HasColumnName("ReplyId");
+		Init();
         }
+
+		partial void Init();
     }
 }

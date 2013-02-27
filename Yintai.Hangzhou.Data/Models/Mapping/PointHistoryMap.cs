@@ -33,6 +33,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
             this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
             this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
+		Init();
         }
+
+		partial void Init();
     }
 }

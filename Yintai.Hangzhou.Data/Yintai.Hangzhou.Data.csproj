@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
+    <Compile Include="Partials\StoreEntityMap.cs" />
     <Compile Include="Models\AdminAccessRight.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Models\VUser.cs" />
     <Compile Include="Models\VUserRole.cs" />
     <Compile Include="Models\YintaiHangzhouContext..cs" />
+    <Compile Include="Models\YintaiHzhouContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
