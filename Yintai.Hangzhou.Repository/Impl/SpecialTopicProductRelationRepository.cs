@@ -38,6 +38,11 @@ namespace Yintai.Hangzhou.Repository.Impl
             return base.Get(v => ids.Any(s => s == v.SpecialTopic_Id) && v.Status == (int)DataStatus.Normal);
         }
 
+        public IQueryable<SpecialTopicProductRelationEntity> GetListByProduct4Linq(List<int> productIds)
+        {
+            return base.Get(v => productIds.Any(s => s == v.Product_Id) && v.Status == (int)DataStatus.Normal);
+        }
+
         public override SpecialTopicProductRelationEntity GetItem(int key)
         {
             return base.Find(key);

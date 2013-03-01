@@ -477,6 +477,10 @@
       <Project>{2616c563-f250-4f28-a742-afb43d219ab4}</Project>
       <Name>Yintai.Hangzhou.Cms.WebSiteCoreV1</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
+      <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
+      <Name>Yintai.Hangzhou.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.WebAppSupport\Yintai.Hangzhou.WebSupport.csproj">
       <Project>{a2e82216-56cc-45bf-b671-db8cc464d573}</Project>
       <Name>Yintai.Hangzhou.WebSupport</Name>

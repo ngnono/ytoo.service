@@ -181,7 +181,7 @@ namespace Yintai.Hangzhou.Service
                         CreatedDate = DateTime.Now,
                         CreatedUser = request.AuthUid,
                         Description = String.Empty,
-                        Name = "恭喜您注册成功获得100积分",
+                        Name = "恭喜您注册成功获得100积点",
                         PointSourceId = 0,
                         PointSourceType = (int)PointSourceType.System,
                         Status = (int)DataStatus.Normal,

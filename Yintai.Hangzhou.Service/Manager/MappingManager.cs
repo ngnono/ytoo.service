@@ -1689,6 +1689,7 @@ namespace Yintai.Hangzhou.Service.Manager
 
         private readonly IResourceRepository _resourceRepository;
         private readonly IPromotionProductRelationRepository _pprRepository;
+        private readonly ISpecialTopicProductRelationRepository _stprRepository;
 
 
         private static readonly DateTime Min = new DateTime(1900, 1, 1);
@@ -1702,6 +1703,7 @@ namespace Yintai.Hangzhou.Service.Manager
         {
             _resourceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
             _pprRepository = ServiceLocator.Current.Resolve<IPromotionProductRelationRepository>();
+            _stprRepository = ServiceLocator.Current.Resolve<ISpecialTopicProductRelationRepository>();
         }
 
         #endregion
@@ -1789,6 +1791,23 @@ namespace Yintai.Hangzhou.Service.Manager
             }
 
             return entities;
+        }
+
+        protected List<SpecialTopicProductRelationEntity> GetTopicRelationByProduct4Entities(List<int> productids)
+        {
+            if (productids == null)
+            {
+                return new List<SpecialTopicProductRelationEntity>(0);
+            }
+
+            var entities = _stprRepository.GetListByProduct4Linq(productids);
+
+            if (entities == null)
+            {
+                return new List<SpecialTopicProductRelationEntity>(0);
+            }
+
+            return entities.ToList();
         }
 
         #endregion
@@ -3262,7 +3281,7 @@ namespace Yintai.Hangzhou.Service.Manager
 
                 if (r != null)
                 {
-                    var key = r.Group;
+                    var key = String.IsNullOrWhiteSpace(r.Group) ? "#" : r.Group.ToUpper();
                     if (list.ContainsKey(key))
                     {
                         list[key].Add(r);

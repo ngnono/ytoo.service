@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -22,10 +21,10 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         private readonly string _controller;
         private const string CMS_ROLERIGHT_MAP_KEY = "CMS_ROLESRIGHT_MAP";
         private const string CMS_RIGHT_MAP_KEY = "CMS_RIGHT_MAP";
+
         protected CmsV1Application()
             : this("Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers")
         {
-
         }
 
         protected CmsV1Application(string defaultControllerNamespace)
@@ -43,7 +42,6 @@ new { controller = "Home", action = "Index", id = 0, page = 1 } // Parameter def
 , new { action = @".*List", page = @"\d*" } //正则列表页结尾 list
 , new[] { _controller }
 );
-
         }
         protected override void CApplication_Start()
         {
@@ -69,7 +67,7 @@ new { controller = "Home", action = "Index", id = 0, page = 1 } // Parameter def
                     ,
                     Description = rr.Description
                     ,
-                    Name = rr.Description
+                    Name = rr.Name
                     ,
                     Status = rr.Status
                     ,
@@ -84,20 +82,26 @@ new { controller = "Home", action = "Index", id = 0, page = 1 } // Parameter def
                                             ,
                                             RoleId = right.RoleId
                                             ,
-                                            AdminAccessRight = new AdminAccessRightEntity() { 
-                                                 ControllName = right.AdminAccessRight.ControllName
-                                                 ,ActionName = right.AdminAccessRight.ActionName
-                                                 ,Id = right.AdminAccessRight.Id
+                                            AdminAccessRight = new AdminAccessRightEntity()
+                                            {
+                                                ControllName = right.AdminAccessRight.ControllName
+                                                ,
+                                                ActionName = right.AdminAccessRight.ActionName
+                                                ,
+                                                Id = right.AdminAccessRight.Id
                                             }
                                         }).ToList()
                 });
             }
             foreach (var r in userRightService.LoaddAllRights())
             {
-                rightsMap.Add(new AdminAccessRightEntity() { 
-                     Id = r.Id
-                     , ActionName = r.ActionName
-                     , ControllName = r.ControllName
+                rightsMap.Add(new AdminAccessRightEntity()
+                {
+                    Id = r.Id
+                    ,
+                    ActionName = r.ActionName
+                    ,
+                    ControllName = r.ControllName
                 });
             }
             HttpRuntime.Cache.Add(CMS_ROLERIGHT_MAP_KEY
@@ -109,25 +113,34 @@ new { controller = "Home", action = "Index", id = 0, page = 1 } // Parameter def
                 , Cache.NoAbsoluteExpiration
                 , TimeSpan.FromMinutes(20)
                 , CacheItemPriority.Normal
-                , new CacheItemRemovedCallback((key, value, reason) => {
+                , new CacheItemRemovedCallback((key, value, reason) =>
+                {
                     this.PreLoadRolesRightMap();
                 }));
-           
+
         }
-        public static CmsV1Application Current { get {
-            return HttpContext.Current.ApplicationInstance as CmsV1Application;
-        } }
-        public List<RoleEntity> RoleRightMap { get {
-            object map = HttpRuntime.Cache.Get(CMS_ROLERIGHT_MAP_KEY);
-            if (map == null)
+        public static CmsV1Application Current
+        {
+            get
             {
-                PreLoadRolesRightMap();
-                map = HttpRuntime.Cache.Get(CMS_ROLERIGHT_MAP_KEY);
+                return HttpContext.Current.ApplicationInstance as CmsV1Application;
             }
-            var roles = (map as object[])[0];
-            return roles as List<RoleEntity>;
-            
-        } }
+        }
+        public List<RoleEntity> RoleRightMap
+        {
+            get
+            {
+                object map = HttpRuntime.Cache.Get(CMS_ROLERIGHT_MAP_KEY);
+                if (map == null)
+                {
+                    PreLoadRolesRightMap();
+                    map = HttpRuntime.Cache.Get(CMS_ROLERIGHT_MAP_KEY);
+                }
+                var roles = (map as object[])[0];
+                return roles as List<RoleEntity>;
+
+            }
+        }
         public List<AdminAccessRightEntity> RightsMap
         {
             get
@@ -197,8 +210,8 @@ new { controller = "Home", action = "Index", id = 0, page = 1 } // Parameter def
 
         public void Application_Error(Object sender, EventArgs e)
         {
-                var unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
-                if (unit !=null )
+            var unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
+            if (unit != null)
                 unit.Dispose();
         }
 

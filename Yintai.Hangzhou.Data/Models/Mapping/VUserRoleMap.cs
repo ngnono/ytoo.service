@@ -34,6 +34,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Role_Name).HasColumnName("Role_Name");
             this.Property(t => t.Role_Description).HasColumnName("Role_Description");
             this.Property(t => t.Role_Val).HasColumnName("Role_Val");
+		Init();
         }
+
+		partial void Init();
     }
 }
