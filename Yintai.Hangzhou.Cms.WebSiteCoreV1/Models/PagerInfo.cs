@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Routing;
@@ -75,6 +76,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         {
             get { return HttpContext.Current.Request.Url.Query; }
             set { }
+        }
+
+        /// <summary>
+        /// query
+        /// </summary>
+        [IgnoreDataMember]
+        public NameValueCollection QueryCollection
+        {
+            get { return HttpContext.Current.Request.QueryString; }
         }
 
         /// <summary>

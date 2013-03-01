@@ -35,12 +35,8 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         #region IRepository<TEntity, TKey> 成员
 
-        TEntity IRepository<TEntity, TKey>.Create()
-        {
-            return base.Create();
-        }
 
-        void IRepository<TEntity, TKey>.Update(TEntity entity)
+        public override void Update(TEntity entity)
         {
             base.Update(entity);
 
@@ -51,17 +47,17 @@ namespace Yintai.Hangzhou.Repository.Impl
             //return entity;
         }
 
-        TEntity IRepository<TEntity, TKey>.Insert(TEntity entity)
+        public override TEntity Insert(TEntity entity)
         {
             return base.Insert(entity);
         }
 
-        void IRepository<TEntity, TKey>.Delete(TEntity entity)
+        public override void Delete(TEntity entity)
         {
             base.Delete(entity);
         }
 
-        TEntity IRepository<TEntity, TKey>.Find(params object[] keyValues)
+        public override TEntity Find(params object[] keyValues)
         {
             return base.Find(keyValues);
         }

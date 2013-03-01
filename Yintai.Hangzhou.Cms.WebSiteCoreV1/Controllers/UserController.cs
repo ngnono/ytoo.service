@@ -186,6 +186,18 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             return View("Success");
         }
+        protected JsonResult SuccessResponse()
+        {
+            return Json(new { 
+                 Success = true
+            });
+        }
+        protected JsonResult FailResponse()
+        {
+            return Json(new { 
+                Success = false
+            });
+        }
         public bool HasRightForCurrentAction()
         {
             object action = RouteData.Values["action"];

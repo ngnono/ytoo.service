@@ -1,91 +1,68 @@
 ﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.SpecialTopicViewModel
 @{
-    ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "专题详情";
 }
 
-<h2>Details</h2>
+<h2>@ViewBag.Title</h2>
 
 <fieldset>
-    <legend>SpecialTopicViewModel</legend>
-
-    <div class="display-label">Id</div>
+    <div class="display-label">专题编码</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Id)
     </div>
 
-    <div class="display-label">Name</div>
+    <div class="display-label">专题名</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Name)
     </div>
 
-    <div class="display-label">Description</div>
+    <div class="display-label">描述</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)
     </div>
 
-    <div class="display-label">Type</div>
+
+    <div class="display-label">状态</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Type)
+        @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)Model.Status).ToFriendlyString())
     </div>
 
-    <div class="display-label">Status</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Status)
-    </div>
-
-    <div class="display-label">CreatedUser</div>
+    <div class="display-label">创建用户</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.CreatedUser)
     </div>
 
-    <div class="display-label">CreatedDate</div>
+    <div class="display-label">创建时间</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.CreatedDate)
     </div>
 
-    <div class="display-label">UpdatedDate</div>
+    <div class="display-label">更新时间</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.UpdatedDate)
     </div>
 
-    <div class="display-label">UpdatedUser</div>
+    <div class="display-label">更新用户</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.UpdatedUser)
     </div>
-            <div>
-            @if (this.Model.Resources != null && Model.Resources.Count > 0)
+    <div class="display-label">图片</div>
+    <div class="display-field">
+        @if (this.Model.Resources != null && Model.Resources.Count > 0)
+        {
+            var re = Model.Resources[0];
+            if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
             {
-         <table style="border: 0;">
-                    @foreach (var re in Model.Resources)
-                    {
-                        <tr>
-                            <td>
-                                @if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
-                                {
                         
-                                    <img src="@String.Concat(re.Domain, re.Name, "_630x0.jpg")" alt="630x0" />
-                                }
-                            </td>
-                            <td>
-
-                                @Html.ActionLink2("Del", "Delete", "Resource", new { id = re.Id }, new { target = "_blank" })
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>@Html.ActionLink2("AddRrsource", "Create", "Resource", new
-                                {
-                                    SourceId = this.Model.Id,
-                                    SourceType = (int)Yintai.Hangzhou.Model.Enums.SourceType.SpecialTopic
-                                }, null)</td>
-                        </tr>
-                    }
-                </table>
+            <img width="120" src="@String.Concat(re.Domain, re.Name, "_630x0.jpg")" alt="630x0" />
             }
-        </div>
+
+        }
+    </div>
+    <div>
+    </div>
 </fieldset>
 <p>
-    @Html.ActionLink2("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink2("Back to List", "Index")
+    @Html.ActionLink2("编辑", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
 </p>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -54,4 +55,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
     }
+    public class SpecialTopicListSearchOption
+    {
+        [Display(Name="专题名")]
+        public string Name { get; set; }
+        [Display(Name="状态")]
+        public DataStatus? Status { get; set; }
+        [Display(Name="排序")]
+        public GenricOrder? OrderBy { get; set; }
+    }
+
+   
 }

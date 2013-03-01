@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 namespace Yintai.Hangzhou.Model.Enums
 {
     /// <summary>
@@ -9,14 +11,17 @@ namespace Yintai.Hangzhou.Model.Enums
         /// <summary>
         /// 已删除（逻辑删除）
         /// </summary>
+        [Description("删除")]
         Deleted = -1,
         /// <summary>
         /// 默认状态
         /// </summary>
+        [Description("未上架")]
         Default = 0,
         /// <summary>
         /// 正常状态
         /// </summary>
+        [Description("已上架")]
         Normal = 1,
 
         //#region  业务状态

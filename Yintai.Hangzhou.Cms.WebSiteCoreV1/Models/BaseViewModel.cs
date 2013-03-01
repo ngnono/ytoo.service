@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,5 +22,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
             return Mapper.Map<TSource, T>(entity);
         }
 
+    }
+
+    public enum GenricOrder
+    {
+        [Description("创建时间")]
+        OrderByCreateDate = 0,
+        [Description("创建用户")]
+        OrderByCreateUser = 1,
+        [Description("名称")]
+        OrderByName = 2
     }
 }
