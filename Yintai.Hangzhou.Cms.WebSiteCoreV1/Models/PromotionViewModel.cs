@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -102,15 +103,33 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
 
-        [Display(Name = "置顶")]
+        [Display(Name = "是否置顶")]
         public bool IsTop { get; set; }
 
-        [Display(Name = "是否有商品")]
+        [Display(Name = "能否绑定商品")]
         public Nullable<bool> IsProdBindable { get; set; }
 
         [Display(Name = "发行量（不填或-1视为不限制）")]
         public Nullable<int> PublicationLimit { get; set; }
 
         public List<ResourceViewModel> Resources { get; set; }
+    }
+
+    public class PromotionListSearchOption
+    {
+        [Display(Name = "活动名称")]
+        public string Name { get; set; }
+        [Display(Name = "状态")]
+        public DataStatus? Status { get; set; }
+        [Display(Name = "排序")]
+        public GenricOrder? OrderBy { get; set; }
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "store")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Name")]
+        [Display(Name="门店")]
+        public string Store { get; set; }
+
     }
 }

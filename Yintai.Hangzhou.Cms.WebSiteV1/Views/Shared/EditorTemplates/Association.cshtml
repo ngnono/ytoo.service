@@ -2,6 +2,7 @@
 @using  Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 @{
     var searchClientId = Html.ClientId<object>(model => model);
+    
     var pams = ViewData.ModelMetadata.AdditionalValues;
     string controlName = pams.ContainsKey("controller")? (string)pams["controller"] : "user";
     string actionName = pams.ContainsKey("action") ? (string)pams["action"] : "AutoComplete";
@@ -9,6 +10,7 @@
     string searchName = pams.ContainsKey("searchfield") ? (string)pams["searchfield"] : "name";
     bool isMultiple = pams.ContainsKey("multiple") ? bool.Parse((string)pams["multiple"]) : false;
     string valueName = pams.ContainsKey("valuefield") ? (string)pams["valuefield"] : displayName;
+    bool showPlaceHold = string.Compare(valueName,"id",true)==0;
 
 }
 <script>
@@ -56,4 +58,4 @@
         });
     });
 </script>
-<input id="@searchClientId" name="@searchClientId" value="@(ViewData.TemplateInfo.FormattedModelValue)" placeholder="可输入名字选择id"/>
+<input id="@searchClientId" class="text-box" type="text" name="@searchClientId" value="@(ViewData.TemplateInfo.FormattedModelValue)" placeholder="@(showPlaceHold?"可输入名字选择编码":"")"/>

@@ -46,6 +46,8 @@ namespace Yintai.Hangzhou.Repository.Contract
                                                     PromotionFilterMode? filterMode, string promotionName,
                                                     List<int> tagids, int? brandId);
 
+
+
         /// <summary>
         /// 分页
         /// </summary>

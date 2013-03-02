@@ -36,15 +36,6 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
 
         public object GetService(Type serviceType)
         {
-            if (typeof(IController).IsAssignableFrom(serviceType))
-            {
-                return ChildContainer.Resolve(serviceType);
-            }
-
-            if (typeof (IUnitOfWork).IsAssignableFrom(serviceType))
-            {
-                return ChildContainer.Resolve(serviceType);
-            }
 
             return IsRegistered(serviceType) ? ChildContainer.Resolve(serviceType) : null;
         }

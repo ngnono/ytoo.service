@@ -462,6 +462,7 @@
     <Content Include="Views\Role\CreateAuthorize.cshtml" />
     <Content Include="Views\Role\EditAuthorize.cshtml" />
     <Content Include="Views\SpecialTopic\Index.cshtml" />
+    <Content Include="Views\Promotion\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -17,6 +17,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
         public static string ClientId<TModel>(this HtmlHelper helper, Expression<Func<TModel, TModel>> ex)
         {
             return helper.ViewData.TemplateInfo.GetFullHtmlFieldId(ExpressionHelper.GetExpressionText(ex));
+           
         }
 
         public static MvcHtmlString ActionLink2(this HtmlHelper htmlHelper, string linkText, string actionName)

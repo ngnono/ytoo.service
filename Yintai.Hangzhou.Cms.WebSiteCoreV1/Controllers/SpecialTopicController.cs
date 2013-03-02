@@ -36,10 +36,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return View();
         }
 
-        public ActionResult List(PagerRequest request, int? sort,SpecialTopicListSearchOption search)
+        public ActionResult List(PagerRequest request,SpecialTopicListSearchOption search)
         {
             int totalCount;
-            var sortOrder = (SpecialTopicSortOrder)(sort ?? 0);
             var data = _specialTopicRepository.Get(e => (string.IsNullOrEmpty(search.Name) || e.Name.ToLower().StartsWith(search.Name.ToLower()))
                                                       && (!search.Status.HasValue || e.Status == (int)search.Status.Value)
                                                       && e.Status!=(int)DataStatus.Deleted

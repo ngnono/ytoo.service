@@ -24,7 +24,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
         }
 
         #region
-
+        public static T MapCommon<T>(T source)
+        {
+           return Mapper.Map<T, T>(source);
+        }
+        public static TT MapCommon<T,TT>(T source)
+        {
+            return Mapper.Map<T, TT>(source);
+        }
         #endregion
 
         #region user

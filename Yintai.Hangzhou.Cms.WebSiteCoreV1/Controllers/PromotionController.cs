@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager;
@@ -10,6 +11,7 @@ using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
@@ -19,42 +21,64 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
     public class PromotionController : UserController
     {
         private readonly IPromotionRepository _promotionRepository;
-        public PromotionController(IPromotionRepository promotionRepository)
+        private IStoreRepository _storeRepository;
+        private ITagRepository _tagRepository;
+        private IResourceService _resourceService;
+        public PromotionController(IPromotionRepository promotionRepository
+            ,IStoreRepository storeRepository
+            ,ITagRepository tagRepository
+            ,IResourceService resourceService)
         {
             this._promotionRepository = promotionRepository;
+            _storeRepository = storeRepository;
+            _tagRepository = tagRepository;
+            _resourceService = resourceService;
         }
 
-        public ActionResult Index(PagerRequest request, int? sort, string name, int? recommendUser, int? tagId)
+        public ActionResult Index()
         {
-            return List(request, sort, name, recommendUser, tagId);
+            return View();
         }
 
-        public ActionResult List(PagerRequest request, int? sort, string name, int? recommendUser, int? tagId)
+        public ActionResult List(PagerRequest request,PromotionListSearchOption search)
         {
             int totalCount;
-            var sortOrder = (PromotionSortOrder)(sort ?? (int)PromotionSortOrder.CreatedDateDesc);
+            var storeList = new List<int>();
+            if (!string.IsNullOrEmpty(search.Store))
+                storeList = _storeRepository.Get(s => s.Name.StartsWith(search.Store)).Select(s=>s.Id).ToList();
+ 
+            var data = _promotionRepository.Get(e => (string.IsNullOrEmpty(search.Name) || e.Name.ToLower().StartsWith(search.Name.ToLower()))
+                                                     && (!search.Status.HasValue || e.Status == (int)search.Status.Value)
+                                                     && e.Status != (int)DataStatus.Deleted
+                                                     && (string.IsNullOrEmpty(search.Store) || storeList.Any(m=>m==e.Store_Id))
+                                               , out totalCount
+                                               , request.PageIndex
+                                               , request.PageSize
+                                               , e =>
+                                               {
+                                                   if (!search.OrderBy.HasValue)
+                                                       return e.OrderByDescending(o => o.CreatedDate);
+                                                   else
+                                                   {
+                                                       switch (search.OrderBy.Value)
+                                                       {
+                                                           case GenricOrder.OrderByCreateUser:
+                                                               return e.OrderByDescending(o => o.CreatedUser);
+                                                           case GenricOrder.OrderByName:
+                                                               return e.OrderByDescending(o => o.Name);
+                                                           case GenricOrder.OrderByCreateDate:
+                                                           default:
+                                                               return e.OrderByDescending(o => o.CreatedDate);
 
-            List<PromotionEntity> data;
+                                                       }
+                                                   }
+                                               });
+            
 
-            List<int> tag = null;
-            if (tagId != null)
-            {
-                tag = new List<int>(tagId.Value);
-            }
-
-            if (!String.IsNullOrWhiteSpace(name) || recommendUser != null || tagId != null)
-            {
-                data = _promotionRepository.GetPagedListForSearch(request, out totalCount, sortOrder, null, null, null, recommendUser, null, name, tag, null);
-            }
-            else
-            {
-                data = _promotionRepository.GetPagedList(request, out totalCount, sortOrder, null, null, null, null);
-            }
-
-            var vo = MappingManager.PromotionViewMapping(data);
+            var vo = MappingManager.PromotionViewMapping(data.ToList());
 
             var v = new PromotionCollectionViewModel(request, totalCount) { Promotions = vo.ToList() };
-
+            ViewBag.SearchOptions = search;
             return View("List", v);
         }
 
@@ -75,20 +99,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         {
             return View();
         }
-
-        public ActionResult Delete(int? id, [FetchPromotion(KeyName = "id")]PromotionEntity entity)
-        {
-            if (id == null || entity == null)
-            {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View();
-            }
-
-            var vo = MappingManager.PromotionViewMapping(entity);
-
-            return View(vo);
-        }
-
+        
+       
         public ActionResult Edit(int? id, [FetchPromotion(KeyName = "id")]PromotionEntity entity)
         {
             if (id == null || entity == null)
@@ -110,11 +122,22 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 var entity = MappingManager.PromotionEntityMapping(vo);
                 entity.CreatedUser = base.CurrentUser.CustomerId;
                 entity.UpdatedUser = base.CurrentUser.CustomerId;
-                entity.Status = (int)DataStatus.Normal;
+                entity.RecommendSourceId = CurrentUser.CustomerId;
+                entity.RecommendSourceType = (int)RecommendSourceType.Default;
+                entity.RecommendUser = CurrentUser.CustomerId;
+                entity.Status = (int)DataStatus.Default;
+                using (TransactionScope ts = new TransactionScope())
+                {
 
-                entity = this._promotionRepository.Insert(entity);
+                    entity = this._promotionRepository.Insert(entity);
+                    var ids = _resourceService.Save(ControllerContext.HttpContext.Request.Files
+                        , CurrentUser.CustomerId
+                        , -1, entity.Id
+                        , SourceType.Promotion);
+                    ts.Complete();
+                }
 
-                return Success("/" + RouteData.Values["controller"] + "/edit/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+                return RedirectToAction("List");
             }
 
             return View(vo);
@@ -129,45 +152,54 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 return View(vo);
             }
 
-            var newEntity = MappingManager.PromotionEntityMapping(vo);
-            newEntity.CreatedUser = entity.CreatedUser;
-            newEntity.CreatedDate = entity.CreatedDate;
-            newEntity.Status = entity.Status;
-            newEntity.InvolvedCount = entity.InvolvedCount;
-            newEntity.FavoriteCount = entity.FavoriteCount;
-            newEntity.ShareCount = entity.ShareCount;
-            newEntity.LikeCount = entity.LikeCount;
-            newEntity.UpdatedDate = DateTime.Now;
-            newEntity.UpdatedUser = base.CurrentUser.CustomerId;
-            newEntity.RecommendUser = entity.RecommendUser;
-            newEntity.RecommendSourceId = entity.RecommendSourceId;
-            newEntity.RecommendSourceType = entity.RecommendSourceType;
 
-            MappingManager.PromotionEntityMapping(newEntity, entity);
-
-            this._promotionRepository.Update(entity);
-
-
-            return Success("/" + RouteData.Values["controller"] + "/details/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedUser = base.CurrentUser.CustomerId;
+            entity.Store_Id = vo.Store_Id;
+            entity.Status = vo.Status;
+            entity.IsProdBindable = vo.IsProdBindable;
+            entity.IsTop = vo.IsTop;
+            entity.Name = vo.Name;
+            entity.PublicationLimit = vo.PublicationLimit;
+            entity.StartDate = vo.StartDate;
+            entity.EndDate = vo.EndDate;
+            entity.Description = vo.Description;
+            using (TransactionScope ts = new TransactionScope())
+            {
+                this._promotionRepository.Update(entity);
+                if (ControllerContext.HttpContext.Request.Files.Count > 0)
+                {
+                    this._resourceService.Save(ControllerContext.HttpContext.Request.Files
+                          , CurrentUser.CustomerId
+                        , -1, entity.Id
+                        , SourceType.Promotion);
+                }
+                ts.Complete();
+            }
+            return RedirectToAction("List");
         }
 
         [HttpPost]
-        public ActionResult Delete(FormCollection formCollection, [FetchPromotion(KeyName = "id")]PromotionEntity entity)
+        public JsonResult Delete( [FetchPromotion(KeyName = "id")]PromotionEntity entity)
         {
-            if (entity == null)
+            try
             {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View();
+
+                entity.UpdatedDate = DateTime.Now;
+                entity.UpdatedUser = CurrentUser.CustomerId;
+                entity.Status = (int)DataStatus.Deleted;
+
+                this._promotionRepository.Update(entity);
+                return SuccessResponse();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                return FailResponse();
             }
 
-            entity.UpdatedDate = DateTime.Now;
-            entity.UpdatedUser = CurrentUser.CustomerId;
-            entity.Status = (int)DataStatus.Deleted;
-
-            this._promotionRepository.Delete(entity);
-
-            return Success("/" + RouteData.Values["controller"] + "/" + RouteData.Values["action"]);
         }
+      
         [HttpGet]
         public override JsonResult AutoComplete(string name)
         {

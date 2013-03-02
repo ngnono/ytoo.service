@@ -1,116 +1,107 @@
 ﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.PromotionViewModel
 @{
-    ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "促销详情";
 }
-
-<h2>Details</h2>
-
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("促销管理", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<h2>@ViewBag.Title</h2>
 <fieldset>
-    <legend>PromotionViewModel</legend>
-
-    <div class="display-label">Name</div>
+    <div class="display-label">@Html.LabelFor(model => model.Name)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Name)
     </div>
 
-    <div class="display-label">Description</div>
+    <div class="display-label">@Html.LabelFor(model => model.Description)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)
     </div>
 
-    <div class="display-label">StartDate</div>
+    <div class="display-label">@Html.LabelFor(model => model.StartDate)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.StartDate)
     </div>
 
-    <div class="display-label">EndDate</div>
+    <div class="display-label">@Html.LabelFor(model => model.EndDate)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.EndDate)
     </div>
 
-    <div class="display-label">RecommendSourceId</div>
+    <div class="display-label">@Html.LabelFor(model => model.RecommendUser)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.RecommendSourceId)
+        <a href="@Url.Action("Details", "Customer", new { id = Model.RecommendUser })">
+            @Html.DisplayFor(model => model.RecommendUser)
+        </a>
     </div>
 
-    <div class="display-label">RecommendSourceType</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.RecommendSourceType)
-    </div>
-
-    <div class="display-label">RecommendUser</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.RecommendUser)
-    </div>
-
-    <div class="display-label">LikeCount</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.LikeCount)
-    </div>
-
-    <div class="display-label">FavoriteCount</div>
+    <div class="display-label">@Html.LabelFor(model => model.FavoriteCount)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.FavoriteCount)
     </div>
 
-    <div class="display-label">ShareCount</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.ShareCount)
-    </div>
-
-    <div class="display-label">InvolvedCount</div>
+    <div class="display-label">@Html.LabelFor(model => model.InvolvedCount)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.InvolvedCount)
     </div>
 
-    <div class="display-label">Store_Id</div>
+    <div class="display-label">@Html.LabelFor(model => model.Store_Id)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Store_Id)
+        <a href="@Url.Action("Details", "Store", new { id = Model.Store_Id })">
+            @Html.DisplayFor(model => model.Store_Id)
+        </a>
     </div>
 
 
-    <div class="display-label">IsTop</div>
+    <div class="display-label">@Html.LabelFor(model => model.IsTop)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.IsTop)
     </div>
 
-    <div class="display-label">IsProdBindable</div>
+    <div class="display-label">@Html.LabelFor(model => model.IsProdBindable)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.IsProdBindable)
     </div>
 
-    <div class="display-label">PublicationLimit</div>
+    <div class="display-label">@Html.LabelFor(model => model.PublicationLimit)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.PublicationLimit)
     </div>
 
-    <div class="display-label">Status</div>
+    <div class="display-label">@Html.LabelFor(model => model.Status)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Status)
+        @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)Model.Status).ToFriendlyString())
     </div>
 
-    <div class="display-label">CreatedUser</div>
+    <div class="display-label">@Html.LabelFor(model => model.CreatedUser)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.CreatedUser)
     </div>
 
-    <div class="display-label">CreatedDate</div>
+    <div class="display-label">@Html.LabelFor(model => model.CreatedDate)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.CreatedDate)
     </div>
-
-    <div class="display-label">UpdatedDate</div>
+    <div class="display-label">图片</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.UpdatedDate)
-    </div>
+        @if (this.Model.Resources != null && Model.Resources.Count > 0)
+        {
+            foreach (var re in Model.Resources)
+            {
+                if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                {
+                        
+            <img width="60" src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120x0" />
+                }
+            }
 
-    <div class="display-label">UpdatedUser</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.UpdatedUser)
+        }
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink2("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink2("Back to List", "Index")
+    @Html.ActionLink2("编辑", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
 </p>

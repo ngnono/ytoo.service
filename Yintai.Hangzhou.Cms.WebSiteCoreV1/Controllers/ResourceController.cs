@@ -210,6 +210,26 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             return Success("/" + RouteData.Values["controller"] + "/" + RouteData.Values["action"]);
         }
+        [HttpPost]
+        public JsonResult DeleteAjax([FetchResource(KeyName = "id")]ResourceEntity entity)
+        {
+            if (entity == null)
+                return FailResponse();
+            try
+            {
+                entity.UpdatedDate = DateTime.Now;
+                entity.UpdatedUser = CurrentUser.CustomerId;
+                entity.Status = (int)DataStatus.Deleted;
+
+                this._resourceRepository.Delete(entity);
+                return SuccessResponse();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                return FailResponse();
+            }
+        }
 
         [HttpPost]
         public ActionResult SetOrder(FormCollection formCollection, [FetchResource(KeyName = "id")]ResourceEntity entity, int? order)
