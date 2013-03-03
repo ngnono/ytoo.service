@@ -5,8 +5,7 @@
     ViewBag.Title = "促销列表";
     PromotionListSearchOption search = ViewBag.SearchOptions;
     HtmlHelper<PromotionListSearchOption> searchModelHelper = Html.HtmlHelperFor<PromotionListSearchOption>();
-    int sort;
-    Int32.TryParse(Request.QueryString["sort"], out sort);
+
 }
 @section PageBread
 {

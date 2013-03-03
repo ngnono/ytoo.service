@@ -2,19 +2,19 @@
 @using Yintai.Hangzhou.WebSupport.Helper
 @model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductViewModel
 @{
-    ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "创建商品";
 }
-
-<h2>Create</h2>
-
-
-@using (Html.BeginForm())
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("商品管理", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>ProductViewModel</legend>
-
         <div class="editor-label">
             @Html.LabelFor(model => model.Name)
         </div>
@@ -35,7 +35,7 @@
             @Html.LabelFor(model => model.Description)
         </div>
         <div class="editor-field">
-            @Html.TextArea("description", Model == null ? String.Empty : Model.Description)
+            @Html.TextArea("Description", Model == null ? String.Empty : Model.Description)
             @Html.ValidationMessageFor(model => model.Description)
         </div>
 
@@ -51,16 +51,16 @@
             @Html.LabelFor(model => model.RecommendedReason)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.RecommendedReason)
+            @Html.TextArea("RecommendedReason", Model == null ? String.Empty : Model.RecommendedReason)
             @Html.ValidationMessageFor(model => model.RecommendedReason)
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Favorable)
+            @Html.LabelFor(model => model.SortOrder)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Favorable)
-            @Html.ValidationMessageFor(model => model.Favorable)
+            @Html.EditorFor(model => model.SortOrder)
+            @Html.ValidationMessageFor(model => model.SortOrder)
         </div>
 
         <div class="editor-label">
@@ -77,14 +77,6 @@
         <div class="editor-field">
             @Html.EditorFor(model => model.Tag_Id)
             @Html.ValidationMessageFor(model => model.Tag_Id)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Status)
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.Status, DataStatus.Normal.ToSelectList(1), "請選擇")
-            @Html.ValidationMessageFor(model => model.Status)
         </div>
 
         <div class="editor-label">
@@ -110,16 +102,23 @@
             @Html.EditorFor(model => model.PromotionIds)
             @Html.ValidationMessageFor(model => model.PromotionIds)
         </div>
-
+    <div class="editor-label-required">
+            选择商品图片
+        </div>
+        <div class="editor-field">
+            <ul>
+                <li>
+            <input type="file" id="file1" name="file1" /></li>
+            <li><input type="file" id="file2" name="file2" /></li>
+            <li><input type="file" id="file3" name="file3" /></li>
+           </ul>
+        </div>
         <p>
-            <input type="submit" value="Create" />
+             <input type="submit" value="创建" class="btn btn-primary" />
+             @Html.ActionLink2("返回列表", "List", null, new { @class="btn"})
         </p>
-    </fieldset>
 }
 
-<div>
-    @Html.ActionLink2("Back to List", "List")
-</div>
 
 @section HeaderScripts
 {

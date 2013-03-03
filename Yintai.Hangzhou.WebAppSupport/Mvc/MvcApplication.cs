@@ -190,31 +190,7 @@ new { controller = "Home", action = "Index", id = 0, page = 1 } // Parameter def
 
         }
 
-        public void Application_EndRequest(Object sender, EventArgs e)
-        {
-            try
-            {
-                var unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
-                unit.Commit();
-                unit.Dispose();
-            }
-            catch
-            {
-
-            }
-
-
-
-            //PerRequestUnityServiceLocator.DisposeOfChildContainer();
-        }
-
-        public void Application_Error(Object sender, EventArgs e)
-        {
-            var unit = ServiceLocator.Current.Resolve<IUnitOfWork>();
-            if (unit != null)
-                unit.Dispose();
-        }
-
+     
         protected MvcApplication(string defaultControllerNamespace)
         {
             _controller = defaultControllerNamespace;

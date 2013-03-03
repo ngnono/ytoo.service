@@ -391,5 +391,80 @@ namespace Yintai.Hangzhou.Repository.Impl
 
             return SetCount(id, count, t);
         }
+
+
+        public IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount, string name
+            , DataStatus? status, string store, string topic, string tag, ProductSortOrder? sort, string brand, int? user)
+        {
+            var linq = base.Get(p=>(string.IsNullOrEmpty(name) || p.Name.StartsWith(name)) &&
+                (!user.HasValue || p.CreatedUser==user.Value) &&
+                (!status.HasValue || p.Status== (int)status.Value) &&
+                p.Status != (int)DataStatus.Deleted);
+
+            if (!string.IsNullOrEmpty(topic) &&
+                topic.Trim().Length>0)
+            {
+                linq = (from p in linq
+                        from ps in Context.Set<SpecialTopicProductRelationEntity>()
+                        where ps.Product_Id == p.Id
+                        from s in Context.Set<SpecialTopicEntity>()
+                        where s.Name.StartsWith(topic) && s.Id == ps.SpecialTopic_Id
+                        select p);
+            }
+
+            if (!string.IsNullOrEmpty(store) &&
+                 store.Trim().Length > 0)
+            {
+                linq = (from p in linq
+                        from ps in Context.Set<StoreEntity>()
+                        where ps.Id == p.Store_Id
+                            && ps.Name.StartsWith(store) 
+                        select p);
+            }
+            if (!string.IsNullOrEmpty(brand) &&
+     brand.Trim().Length > 0)
+            {
+                linq = (from p in linq
+                        from ps in Context.Set<BrandEntity>()
+                        where ps.Id == p.Brand_Id
+                            && ps.Name.StartsWith(brand)
+                        select p);
+            }
+            if (!string.IsNullOrEmpty(tag) &&
+    tag.Trim().Length > 0)
+            {
+                linq = (from p in linq
+                        from ps in Context.Set<TagEntity>()
+                        where ps.Id == p.Tag_Id
+                            && ps.Name.StartsWith(tag)
+                        select p);
+            }
+
+            Func<IQueryable<ProductEntity>, IOrderedQueryable<ProductEntity>> orderBy = (IQueryable<ProductEntity> e) =>
+            {
+                if (!sort.HasValue)
+                    return e.OrderByDescending(o => o.CreatedDate);
+                else
+                {
+                    switch (sort.Value)
+                    {
+                        case ProductSortOrder.CreatedUserDesc:
+                            return e.OrderByDescending(o => o.CreatedUser);
+                        case ProductSortOrder.CreatedDateDesc:
+                        default:
+                            return e.OrderByDescending(o => o.CreatedDate);
+
+                    }
+                }
+            };
+            linq = orderBy(linq);
+            totalCount = linq.Count();
+
+            var skipCount = (pageIndex - 1) * pageSize;
+
+            linq = skipCount == 0 ? linq.Take(pageSize) : linq.Skip(skipCount).Take(pageSize);
+
+            return linq;
+        }
     }
 }

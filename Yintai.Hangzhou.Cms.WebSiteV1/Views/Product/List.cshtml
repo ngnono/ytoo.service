@@ -1,111 +1,166 @@
 ﻿@using Yintai.Hangzhou.Model.Enums
 @using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 @using Yintai.Hangzhou.WebSupport.Helper
-@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Dto.Product.ListDto
+@model ProductCollectionViewModel
 @{
-    ViewBag.Title = "List";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var url = String.IsNullOrWhiteSpace(Model.Collection.UL) ? String.Format("{0}/{1}", ViewContext.RouteData.Values["controller"].ToString().ToLower(), "list") : Model.Collection.UL.ToLower();
+    ViewBag.Title = "商品列表";
+    ProductListSearchOption search = ViewBag.SearchOptions;
+    HtmlHelper<ProductListSearchOption> searchModelHelper = Html.HtmlHelperFor<ProductListSearchOption>();
+
 }
 
-<h2>List</h2>
+@section PageJsSection {
+    <script>
+        $(function () {
+            $("a[id^='delete']").click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var itemId = $(this).attr("data-rightId");
+                $("#delete-dialog").dialog({
+                    resizable: false,
+                    height: 140,
+                    modal: true,
+                    buttons: {
+                        "删除": function () {
+                            $(this).dialog("close");
+                            $.ajax({
+                                type: "POST",
+                                url: "@(Url.Action("Delete"))",
+                                data: {
+                                    id: itemId
+                                },
+                                success: function (data) {
+                                    if (data["Success"] == true) {
+                                        self.parents("tr:first").remove();
+                                    }
+                                    else {
+                                        alert('删除失败！');
+                                    }
+                                },
+                                error: function (data, textStatus, jqXHR) {
+                                    alert('删除失败！');
+                                }
 
-<p>
-    @Html.ActionLink2("Create New", "Create")
-</p>
+                            });
+                        },
+                        "取消": function () {
+                            $(this).dialog("close");
+                        }
+                    }
 
-<div>
-    <form action="/@url">
+                });
+            });
+        });
+    </script>
+}
+
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("商品管理", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("List", "Product", FormMethod.Get, new { @class = "form-horizontal searchForm-border" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="row">
         <div class="span4">
-            <label for="name">产品名称</label>
-            <input name="name" type="text" value="@Model.SearchParams.Name" />
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Name)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Name)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.OrderBy)</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<ProductSortOrder>())
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Brand)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Brand)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Topic)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Topic)
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
         </div>
         <div class="span4">
-            <label for="recommendUser">推荐人</label>
-            <input name="recommendUser" type="text" value="@Model.SearchParams.RecommendUser" />
-        </div>
-        <div class="span4">
-            <label for="brandId">品牌Id</label>
-            <input name="brandId" type="text" value="@Model.SearchParams.BrandId" />
-        </div>
-        <div class="span4">
-            <label for="tagId">tagId</label>
-            <input name="tagId" type="text" value="@Model.SearchParams.TagId" />
-        </div>
-        <div class="span4">
-            <label for="promotionId">promotionid</label>
-            <input name="promotionId" type="text" value="@Model.SearchParams.PromotionId" />
-        </div>
-        <div class="span4">
-            <label for="topicId">topicid</label>
-            <input name="topicId" type="text" value="@Model.SearchParams.TopicId" />
-        </div>
-        <div class="span4">
-            @Html.Label("status")
-            @Html.DropDownList("status", DataStatus.Normal.ToSelectList(Model.SearchParams.Status ?? (int)DataStatus.Normal), "請選擇")
-        </div>
-        <div class="span4">
-            <label for="sort">排序方式</label>
-            @Html.DropDownList("sort", ProductSortOrder.CreatedDateDesc.ToSelectList(Model.SearchParams.Sort ?? (int)(ProductSortOrder.CreatedDateDesc)), "請選擇")
+            <div class="control-group">
+                <label class="control-label" for="Name">状态</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.Status, EnumHelper.DisplayList<DataStatus>())
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Store)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(model => search.Store)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Tag)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(model => search.Tag)
+                </div>
+            </div>
+                        <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.User)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(model => search.User)
+                </div>
+            </div>
         </div>
 
-        <div class="span4">
-            <input type="submit" value="查询" class="btn btn-primary" />
-        </div>
-    </form>
-</div>
-
+    </div>
+}
 <table>
     <tr>
         <th>图片</th>
         <th>操作</th>
-        <th>Id</th>
-        <th>Name
+        <th>商品代码</th>
+        <th>名称
         </th>
-        <th>活动</th>
-        <th>专题</th>
-        <th>Brand_Id
+        <th>活动代码</th>
+        <th>专题代码</th>
+        <th>品牌代码
         </th>
-        <th>Description
+        <th>描述
         </th>
-        <th>CreatedDate
+        <th>创建时间
         </th>
-        <th>CreatedUser
+        <th>创建用户
         </th>
-        <th>UpdatedDate
+        <th>价格
         </th>
-        <th>UpdatedUser
+        <th>推荐理由
         </th>
-        <th>Price
+        <th>状态
         </th>
-        <th>RecommendedReason
+        <th>门店代码
         </th>
-        <th>Favorable
+        <th>分类代码
         </th>
-        <th>Status
+        <th>收藏数
         </th>
-        <th>Store_Id
-        </th>
-        <th>Tag_Id
-        </th>
-        <th>FavoriteCount
-        </th>
-        <th>ShareCount
-        </th>
-        <th>InvolvedCount
-        </th>
-        <th>RecommendUser
-        </th>
-        <th>RecommendSourceType
-        </th>
-        <th>RecommendSourceId
-        </th>
-        <th>SortOrder
+        <th>优先级
         </th>
 
     </tr>
 
-    @foreach (var item in Model.Collection.Products)
+    @foreach (var item in Model.Products)
     {
         <tr>
             <td>
@@ -116,7 +171,9 @@
                         {
                             if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
                             {
-                            <img src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" class="img-rounded" style="width:120px" alt="120X0" />
+                            <a href="@Url.Action("details", "resource", new { id = re.Id })">
+                                <img width="60" src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" class="img-rounded" style="width:120px" alt="120X0" />
+                            </a>
                             }
                         }
                     </div>
@@ -124,10 +181,18 @@
             </td>
 
             <td>
-                @Html.ActionLink2("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink2("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink2("Delete", "Delete", new { id = item.Id }) |
-                @Html.ActionLink2("ViewImage", "List", "Resource", new { sourceType = (int)SourceType.Product, sourceid = item.Id }, null)
+                <div class="btn-group">
+                    <button class="btn btn-small">操作</button>
+                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id },new {@class="btn"})</li>
+                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id }, new { @class="btn"}) </li>
+                        <li> <a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
+                    </ul>
+
+                </div>
             </td>
             <td>@Html.DisplayFor(modelItem => item.Id)</td>
             <td>
@@ -152,51 +217,27 @@
                 @Html.DisplayFor(modelItem => item.CreatedUser)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UpdatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedUser)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RecommendedReason)
             </td>
+
             <td>
-                @Html.DisplayFor(modelItem => item.Favorable)
+                @Html.Label("", ((DataStatus)item.Status).ToFriendlyString())
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @Html.ActionLink(item.Store_Id.ToString(), "Details", "Store", new { id = item.Store_Id }, null)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Store_Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tag_Id)
+                @Html.ActionLink(item.Tag_Id.ToString(), "Details", "Tag", new { id = item.Tag_Id }, null)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FavoriteCount)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShareCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InvolvedCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecommendUser)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecommendSourceType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecommendSourceId)
-            </td>
-            <td>
-                <input type="text" id="@String.Format("ssorder_{0}", item.Id)" value="@Html.DisplayFor(modelItem => item.SortOrder)"/>
 
-                <input type="button" id="runSsorder" value="editOrder" onclick="setOrder(@item.Id);" />
+            <td>
+               @Html.DisplayFor(model=>item.SortOrder)
             </td>
 
         </tr>
@@ -204,33 +245,7 @@
 
 </table>
 
-@Html.Partial("PagerPartialView", this.Model.Collection)
-
-@section HeaderStyles
-{
-    <link href="@Url.Content("~/content/themes/webget/easyui/default/easyui.css")"  rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/content/themes/webget/easyui/icon.css")" rel="stylesheet" type="text/css" />
-}
-
-@section HeaderScripts
-{
-    <script src="@Url.Content("~/Scripts/widget/jquery.easyui.min.js")" type="text/javascript"></script>
-}
-
-@section FooterScripts
-{
-    <script type="text/javascript">
-
-        function setOrder(id) {
-            var o = $('#ssorder_' + id).val();
-            var data = 'id=' + id + '&order=' + o;
-            $.post('@String.Format("/{0}/{1}", ViewContext.RouteData.Values["controller"].ToString().ToLower(), "setorder")', data, function(msg) {
-                if (msg.IsSuccess) {
-                    alert('更新成功');
-                } else {
-                    alert(msg.Message);
-                }
-            }, 'JSON');
-        }
-    </script>
-}
+@Html.Partial("PagerPartialView", Model)
+<div class="hide" id="delete-dialog" title="删除商品">
+    <p>您确认要删除该条商品吗？</p>
+</div>

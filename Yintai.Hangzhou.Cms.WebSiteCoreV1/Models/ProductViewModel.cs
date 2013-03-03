@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -26,7 +27,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
     public class ProductViewModel : BaseViewModel
     {
         [Key]
-        [Display(Name = "Id")]
+        [Display(Name = "商品代码")]
         public int Id { get; set; }
 
         [Required]
@@ -42,11 +43,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [AdditionalMetadata("valuefield", "Id")]
         [Range(0, Int32.MaxValue)]
         [Required]
-        [Display(Name = "品牌Id")]
+        [Display(Name = "品牌代码")]
         public int Brand_Id { get; set; }
 
         [StringLength(140, MinimumLength = 0)]
-        [Display(Name = "说明")]
+        [Display(Name = "商品描述")]
         public string Description { get; set; }
 
         [RegularExpression(RegularDefine.Money, ErrorMessage = "只能输入金额,1~2位小数")]
@@ -70,19 +71,19 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [AdditionalMetadata("valuefield", "Id")]
         [Required]
         [Range(0, Int32.MaxValue)]
-        [Display(Name = "店铺Id")]
+        [Display(Name = "店铺代码")]
         public int Store_Id { get; set; }
 
 
 
-        [DisplayName("tag名")]
+        [DisplayName("分类名")]
         [UIHint("Association")]
         [AdditionalMetadata("controller", "tag")]
         [AdditionalMetadata("displayfield", "Name")]
         [AdditionalMetadata("searchfield", "name")]
         [AdditionalMetadata("valuefield", "Id")]
         [Range(0, Int32.MaxValue)]
-        [Display(Name = "Tag_Id")]
+        [Display(Name = "分类代码")]
         public int Tag_Id { get; set; }
 
         [Range(0, Int32.MaxValue)]
@@ -105,7 +106,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [AdditionalMetadata("searchfield", "Nickname")]
         [AdditionalMetadata("valuefield", "Id")]
         [Range(0, Int32.MaxValue)]
-        [Display(Name = "推荐人")]
+        [Display(Name = "推荐人代码")]
         public int RecommendUser { get; set; }
 
         [Range(0, Int32.MaxValue)]
@@ -113,11 +114,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public int RecommendSourceType { get; set; }
 
         [Range(0, Int32.MaxValue)]
-        [Display(Name = "推荐来源Id")]
+        [Display(Name = "推荐来源代码")]
         public int RecommendSourceId { get; set; }
 
-        [Display(Name = "专题")]
-        [DisplayName("专题Ids")]
+        [DisplayName("专题代码(s)")]
         [UIHint("Association")]
         [AdditionalMetadata("controller", "specialtopic")]
         [AdditionalMetadata("displayfield", "Name")]
@@ -127,7 +127,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public string TopicIds { get; set; }
 
         [Display(Name = "活动")]
-        [DisplayName("活动Ids")]
+        [DisplayName("活动代码(s)")]
         [UIHint("Association")]
         [AdditionalMetadata("controller", "promotion")]
         [AdditionalMetadata("displayfield", "Name")]
@@ -152,8 +152,48 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "资源")]
         public List<ResourceViewModel> Resources { get; set; }
 
-        [Display(Name = "排序值")]
+        [Display(Name = "优先级")]
         [Range(0, Int32.MaxValue)]
         public int SortOrder { get; set; }
+    }
+    public class ProductListSearchOption
+    {
+        [Display(Name = "商品名称")]
+        public string Name { get; set; }
+        [Display(Name = "状态")]
+        public DataStatus? Status { get; set; }
+        [Display(Name = "排序")]
+        public ProductSortOrder? OrderBy { get; set; }
+        [Display(Name="创建人代码")]
+        public int? User { get; set; }
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "store")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Name")]
+        [Display(Name = "门店")]
+        public string Store { get; set; }
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "tag")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Name")]
+        [Display(Name = "分类")]
+        public string Tag { get; set; }
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "brand")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Name")]
+        [Display(Name = "品牌")]
+        public string Brand { get; set; }
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "specialtopic")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Name")]
+        [Display(Name = "专题")]
+        public string Topic { get; set; }
+
     }
 }

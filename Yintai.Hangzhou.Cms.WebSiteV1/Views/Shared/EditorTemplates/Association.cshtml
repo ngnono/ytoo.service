@@ -2,7 +2,7 @@
 @using  Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 @{
     var searchClientId = Html.ClientId<object>(model => model);
-    
+    var searchClientName =ViewData.TemplateInfo.HtmlFieldPrefix;
     var pams = ViewData.ModelMetadata.AdditionalValues;
     string controlName = pams.ContainsKey("controller")? (string)pams["controller"] : "user";
     string actionName = pams.ContainsKey("action") ? (string)pams["action"] : "AutoComplete";
@@ -58,4 +58,4 @@
         });
     });
 </script>
-<input id="@searchClientId" class="text-box" type="text" name="@searchClientId" value="@(ViewData.TemplateInfo.FormattedModelValue)" placeholder="@(showPlaceHold?"可输入名字选择编码":"")"/>
+<input id="@searchClientId" class="text-box" type="text" name="@searchClientName" value="@(ViewData.TemplateInfo.FormattedModelValue)" placeholder="@(showPlaceHold?"可输入名字选择编码":"")"/>

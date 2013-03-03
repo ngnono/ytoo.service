@@ -1,11 +1,11 @@
 ﻿@model  Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.LoginViewModel
 
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "登陆";
 }
 
 <hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
+    <h1>@ViewBag.Title</h1>
 </hgroup>
 
 <section id="loginForm">
@@ -25,7 +25,7 @@
                 @Html.ValidationMessageFor(m => m.Password)
             </div>
         <div class="control-group">
-        <input type="submit" value="Log in" class="btn btn-primary" />
+        <input type="submit" value="登陆" class="btn btn-primary" />
             </div>
     </fieldset>
 }

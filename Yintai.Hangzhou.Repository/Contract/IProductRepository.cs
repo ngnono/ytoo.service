@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
@@ -73,5 +74,7 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="productFilter">过滤选项</param>
         /// <returns></returns>
         List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter);
+
+        IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount, string name, DataStatus? status, string store, string topic, string tag, ProductSortOrder? sort, string brand, int? user);
     }
 }

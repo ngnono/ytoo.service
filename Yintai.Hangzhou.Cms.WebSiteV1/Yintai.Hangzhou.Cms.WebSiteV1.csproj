@@ -346,13 +346,9 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\website.js" />
-    <Content Include="Scripts\widget\jquery.easyui.min.js" />
-    <Content Include="Scripts\widget\jquery.query.js" />
-    <Content Include="Scripts\widget\jquery.uploadify.min.js" />
     <Content Include="Content\themes\webget\uploadify\uploadify-cancel.png" />
     <Content Include="Content\themes\webget\uploadify\uploadify.css" />
     <Content Include="Content\themes\webget\uploadify\uploadify.swf" />
-    <Content Include="Scripts\widget\swfobject.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -368,9 +364,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Account\ChangePassword.cshtml" />
-    <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />

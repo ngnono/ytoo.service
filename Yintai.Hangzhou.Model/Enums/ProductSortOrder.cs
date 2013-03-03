@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -10,11 +11,19 @@ namespace Yintai.Hangzhou.Model.Enums
         /// <summary>
         /// 默认
         /// </summary>
+        [Description("默认")]
         Default = 0,
 
         /// <summary>
         /// 创建时间倒序
         /// </summary>
+        [Description("创建时间")]
         CreatedDateDesc = 1,
+        /// <summary>
+        /// 创建时间倒序
+        /// </summary>
+        [Description("创建用户")]
+        CreatedUserDesc = 2
+
     }
 }
