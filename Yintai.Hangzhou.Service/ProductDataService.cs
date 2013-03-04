@@ -235,7 +235,11 @@ namespace Yintai.Hangzhou.Service
                     }
                 }
             }
-
+            if (!inEntity.IsHasImage)
+                return new ExecuteResult<ProductInfoResponse>(null) { 
+                     StatusCode = StatusCode.ClientError
+                     ,Message="没有图片信息"
+                };
             var entity = _productRepository.Insert(inEntity);
             //处理 图片
             //处理文件上传

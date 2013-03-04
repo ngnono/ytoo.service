@@ -39,7 +39,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult List(PagerRequest request,SpecialTopicListSearchOption search)
         {
             int totalCount;
-            var data = _specialTopicRepository.Get(e => (string.IsNullOrEmpty(search.Name) || e.Name.ToLower().StartsWith(search.Name.ToLower()))
+            var data = _specialTopicRepository.Get(e =>(!search.PId.HasValue || e.Id== search.PId.Value)
+                                                       && (string.IsNullOrEmpty(search.Name) || e.Name.ToLower().StartsWith(search.Name.ToLower()))
                                                       && (!search.Status.HasValue || e.Status == (int)search.Status.Value)
                                                       && e.Status!=(int)DataStatus.Deleted
                                                 , out totalCount

@@ -75,6 +75,8 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <returns></returns>
         List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter);
 
-        IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount, string name, DataStatus? status, string store, string topic, string tag, ProductSortOrder? sort, string brand, int? user);
+        IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount
+            ,int?id, string name, DataStatus? status, string store, string topic, string tag
+            , ProductSortOrder? sort, string brand, int? user,string promotion);
     }
 }

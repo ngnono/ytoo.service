@@ -23,7 +23,10 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.Brand_Id)
     </div>
-
+        <div class="display-label">@Html.LabelFor(model => model.BrandName)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.BrandName)
+    </div>
     <div class="display-label">@Html.LabelFor(model => model.Description)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)
@@ -58,12 +61,18 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.Store_Id)
     </div>
-
+        <div class="display-label">@Html.LabelFor(model => model.StoreName)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.StoreName)
+    </div>
     <div class="display-label"> @Html.LabelFor(model => model.Tag_Id)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Tag_Id)
     </div>
-
+        <div class="display-label"> @Html.LabelFor(model => model.TagName)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TagName)
+    </div>
     <div class="display-label"> @Html.LabelFor(model => model.FavoriteCount)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.FavoriteCount)
@@ -90,24 +99,48 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.TopicIds)
     </div>
-
+        <div class="display-label">
+        @Html.LabelFor(model => model.TopicName)
+    </div>
+    <div class="display-field">
+        <ul>
+            @foreach (var topic in Model.TopicName)
+            {
+                <li>
+                    @Html.Label("", topic)
+                </li>
+            }
+        </ul>
+    </div>
     <div class="display-label">
         @Html.LabelFor(model => model.PromotionIds)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.PromotionIds)
     </div>
-
+        <div class="display-label">
+        @Html.LabelFor(model => model.PromotionName)
+    </div>
+    <div class="display-field">
+        <ul>
+            @foreach (var pro in Model.PromotionName)
+            {
+                <li>
+                    @Html.Label("", pro)
+                </li>
+            }
+        </ul>
+    </div>
  <div class="display-label">图片</div>
     <div class="display-field">
-        @if (this.Model.Resources != null && Model.Resources.Count > 0)
+        @if (this.Model.Resources != null && Model.Resources.Count() > 0)
         {
             foreach (var re in Model.Resources)
             {
                 if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
                 {
                         
-            <img width="60" src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120x0" />
+            <img width="120" src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120x0" />
                 }
             }
 

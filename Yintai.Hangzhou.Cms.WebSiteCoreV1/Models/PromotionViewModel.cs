@@ -117,6 +117,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 
     public class PromotionListSearchOption
     {
+        [Display(Name = "活动代码")]
+        public int? PId { get; set; }
         [Display(Name = "活动名称")]
         public string Name { get; set; }
         [Display(Name = "状态")]

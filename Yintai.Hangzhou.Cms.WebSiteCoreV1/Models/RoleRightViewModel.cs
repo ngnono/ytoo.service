@@ -35,7 +35,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         {
            if (typeof(RoleEntity).IsAssignableFrom(typeof(T)))
             {
+
                 var entity = base.ToEntity<RoleViewModel, RoleEntity>();
+                if (this.RoleRightDisplay != null)
                 entity.RoleAccessRights = (from right in this.RoleRightDisplay
                                            select new RoleAccessRightEntity()
                                            {

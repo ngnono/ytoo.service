@@ -393,10 +393,14 @@ namespace Yintai.Hangzhou.Repository.Impl
         }
 
 
-        public IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount, string name
-            , DataStatus? status, string store, string topic, string tag, ProductSortOrder? sort, string brand, int? user)
+        public IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount
+            , int? id
+            , string name
+            , DataStatus? status, string store, string topic, string tag, ProductSortOrder? sort
+            , string brand, int? user,string promotion)
         {
-            var linq = base.Get(p=>(string.IsNullOrEmpty(name) || p.Name.StartsWith(name)) &&
+            var linq = base.Get(p=> (!id.HasValue || p.Id == id.Value) &&
+                (string.IsNullOrEmpty(name) || p.Name.StartsWith(name)) &&
                 (!user.HasValue || p.CreatedUser==user.Value) &&
                 (!status.HasValue || p.Status== (int)status.Value) &&
                 p.Status != (int)DataStatus.Deleted);
@@ -439,7 +443,16 @@ namespace Yintai.Hangzhou.Repository.Impl
                             && ps.Name.StartsWith(tag)
                         select p);
             }
-
+            if (!string.IsNullOrEmpty(promotion) &&
+                promotion.Trim().Length > 0)
+            {
+                linq = (from p in linq
+                        from ps in Context.Set<Promotion2ProductEntity>()
+                        where ps.ProdId == p.Id
+                        from s in Context.Set<PromotionEntity>()
+                        where s.Name.StartsWith(promotion) && s.Id == ps.ProId
+                        select p);
+            }
             Func<IQueryable<ProductEntity>, IOrderedQueryable<ProductEntity>> orderBy = (IQueryable<ProductEntity> e) =>
             {
                 if (!sort.HasValue)

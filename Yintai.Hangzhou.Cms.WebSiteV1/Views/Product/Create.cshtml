@@ -79,13 +79,6 @@
             @Html.ValidationMessageFor(model => model.Tag_Id)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.RecommendUser)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.RecommendUser)
-            @Html.ValidationMessageFor(model => model.RecommendUser)
-        </div>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.TopicIds)
@@ -114,7 +107,7 @@
            </ul>
         </div>
         <p>
-             <input type="submit" value="创建" class="btn btn-primary" />
+            <button id="btnSubmit" type="button" value="创建" class="btn btn-primary" data-loading-text="正在创建...">创建</button>
              @Html.ActionLink2("返回列表", "List", null, new { @class="btn"})
         </p>
 }

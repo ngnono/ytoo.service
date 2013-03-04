@@ -67,6 +67,12 @@
     @Html.ValidationSummary(true)
     <div class="row">
         <div class="span4">
+                        <div class="control-group">
+                <label class="control-label" for="Name">活动代码</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.PId)
+                </div>
+            </div>
             <div class="control-group">
                 <label class="control-label" for="Name">活动名称</label>
                 <div class="controls">
@@ -163,9 +169,19 @@
 
             </td>
             <td>
-                @Html.ActionLink2("编辑", "Edit", new { id = item.Id }, new { @class = "btn" })
-                @Html.ActionLink2("详情", "Details", new { id = item.Id }, new { @class = "btn" })
-                 <a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a>
+                <div class="btn-group">
+                <button class="btn btn-small">操作</button>
+                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id })</li>
+                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id }) </li>
+                        <li><a  href="@string.Format("{0}?search.promotion={1}",Url.Action("List","Product"),item.Name)">查看商品</a></li>
+                        <li><a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
+                        
+                    </ul>
+                </div>
             </td>
             <td>@Html.DisplayFor(modelItem => item.Id)</td>
             <td>

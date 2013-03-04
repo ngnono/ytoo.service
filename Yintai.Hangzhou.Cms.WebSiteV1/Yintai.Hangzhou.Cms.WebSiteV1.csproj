@@ -386,7 +386,6 @@
     <Content Include="Views\Brand\Details.cshtml" />
     <Content Include="Views\Brand\Delete.cshtml" />
     <Content Include="Views\Brand\Edit.cshtml" />
-    <Content Include="Views\Product\Success.cshtml" />
     <Content Include="Views\Brand\Success.cshtml" />
     <Content Include="Views\Tag\Create.cshtml" />
     <Content Include="Views\Tag\Delete.cshtml" />

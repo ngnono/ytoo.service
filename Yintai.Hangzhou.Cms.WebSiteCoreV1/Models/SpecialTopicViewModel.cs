@@ -57,6 +57,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
     }
     public class SpecialTopicListSearchOption
     {
+        [Display(Name="专题代码")]
+        public int? PId { get; set; }
         [Display(Name="专题名")]
         public string Name { get; set; }
         [Display(Name="状态")]

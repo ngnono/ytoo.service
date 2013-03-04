@@ -187,14 +187,18 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                                               typeof(ActionResult).IsAssignableFrom(method.ReturnType))
                                         .Distinct(new MethodInfoComparer()))
                 {
-                    yield return new AdminAccessRightEntity()
-                    {
-                        Id = id++
-                        ,
-                        ControllName = controller.Name.Replace("Controller", string.Empty)
-                        ,
-                        ActionName = action.Name
-                    };
+                    if (controller.GetCustomAttribute<AdminAuthorizeAttribute>() != null ||
+                        action.GetCustomAttribute<AdminAuthorizeAttribute>(false) != null)
+                        yield return new AdminAccessRightEntity()
+                        {
+                            Id = id++
+                            ,
+                            ControllName = controller.Name.Replace("Controller", string.Empty)
+                            ,
+                            ActionName = action.Name
+                        };
+                    else
+                        continue;
                 }
             }
             yield break;

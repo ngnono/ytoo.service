@@ -35,7 +35,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "名称")]
         public string Name { get; set; }
 
-        [DisplayName("品牌")]
         [UIHint("Association")]
         [AdditionalMetadata("controller", "brand")]
         [AdditionalMetadata("displayfield", "Name")]
@@ -46,6 +45,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "品牌代码")]
         public int Brand_Id { get; set; }
 
+        [Display(Name = "品牌")]
+        public string BrandName { get; set; }
+
         [StringLength(140, MinimumLength = 0)]
         [Display(Name = "商品描述")]
         public string Description { get; set; }
@@ -54,7 +56,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "价格")]
         public decimal Price { get; set; }
 
-        [StringLength(140, MinimumLength = 0)]
+        [StringLength(140, MinimumLength = 1)]
+        [Required]
         [Display(Name = "推荐理由")]
         public string RecommendedReason { get; set; }
 
@@ -63,7 +66,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public string Favorable { get; set; }
 
 
-        [DisplayName("店铺")]
         [UIHint("Association")]
         [AdditionalMetadata("controller", "store")]
         [AdditionalMetadata("displayfield", "Name")]
@@ -74,9 +76,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "店铺代码")]
         public int Store_Id { get; set; }
 
+        [Display(Name = "店铺")]
+        public string StoreName { get; set; }
 
-
-        [DisplayName("分类名")]
         [UIHint("Association")]
         [AdditionalMetadata("controller", "tag")]
         [AdditionalMetadata("displayfield", "Name")]
@@ -85,6 +87,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Range(0, Int32.MaxValue)]
         [Display(Name = "分类代码")]
         public int Tag_Id { get; set; }
+
+        [Display(Name = "分类")]
+        public string TagName { get; set; }
 
         [Range(0, Int32.MaxValue)]
         [Display(Name = "收藏数")]
@@ -117,7 +122,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "推荐来源代码")]
         public int RecommendSourceId { get; set; }
 
-        [DisplayName("专题代码(s)")]
+        [Display(Name="专题代码(s)")]
         [UIHint("Association")]
         [AdditionalMetadata("controller", "specialtopic")]
         [AdditionalMetadata("displayfield", "Name")]
@@ -125,9 +130,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [AdditionalMetadata("valuefield", "Id")]
         [AdditionalMetadata("multiple", "true")]
         public string TopicIds { get; set; }
+        [Display(Name="专题名")]
+        public IEnumerable<string> TopicName { get; set; }
 
-        [Display(Name = "活动")]
-        [DisplayName("活动代码(s)")]
+        [Display(Name="活动代码(s)")]
         [UIHint("Association")]
         [AdditionalMetadata("controller", "promotion")]
         [AdditionalMetadata("displayfield", "Name")]
@@ -135,11 +141,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [AdditionalMetadata("valuefield", "Id")]
         [AdditionalMetadata("multiple", "true")]
         public string PromotionIds { get; set; }
+        [Display(Name="促销名")]
+        public IEnumerable<string> PromotionName { get; set; }
 
         [Display(Name = "状态")]
         public int Status { get; set; }
-        [Display(Name = "创建人")]
+        [Display(Name = "创建人编码")]
         public int CreatedUser { get; set; }
+        [Display(Name = "创建人")]
+        public string CreateUserName { get; set; }
         [Display(Name = "创建日期")]
         [DataType(DataType.DateTime)]
         public System.DateTime CreatedDate { get; set; }
@@ -150,7 +160,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public int UpdatedUser { get; set; }
 
         [Display(Name = "资源")]
-        public List<ResourceViewModel> Resources { get; set; }
+        public IEnumerable<ResourceViewModel> Resources { get; set; }
 
         [Display(Name = "优先级")]
         [Range(0, Int32.MaxValue)]
@@ -158,6 +168,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
     }
     public class ProductListSearchOption
     {
+        [Display(Name="商品代码")]
+        public int? PId {get;set;}
         [Display(Name = "商品名称")]
         public string Name { get; set; }
         [Display(Name = "状态")]
@@ -194,6 +206,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [AdditionalMetadata("valuefield", "Name")]
         [Display(Name = "专题")]
         public string Topic { get; set; }
+
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "promotion")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Name")]
+        [Display(Name = "促销")]
+        public string Promotion { get; set; }
 
     }
 }

@@ -53,6 +53,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 request.PageIndex
                 , request.PageSize
                 , out totalCount
+                , search.PId
                 , search.Name
                 , search.Status
                 , search.Store
@@ -61,10 +62,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 , search.OrderBy
                 , search.Brand
                 , search.User
+                ,search.Promotion
                 );
            
 
-            var vo = MappingManager.ProductViewMapping(data.ToList());
+            var vo = MappingManager.ProductViewMapping(data);
 
             var v = new ProductCollectionViewModel(request, totalCount) { Products = vo.ToList() };
             ViewBag.SearchOptions = search;
@@ -112,6 +114,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 entity.CreatedUser = CurrentUser.CustomerId;
                 entity.UpdatedUser = CurrentUser.CustomerId;
                 entity.CreatedDate = DateTime.Now;
+                entity.RecommendUser = CurrentUser.CustomerId;
+                entity.RecommendSourceId = entity.RecommendUser;
+                entity.RecommendSourceType = (int)RecommendSourceType.Default;
                 entity.UpdatedDate = DateTime.Now;
                 entity.Status = (int)DataStatus.Default;
                 using (var ts = new TransactionScope())
@@ -126,7 +131,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                     ts.Complete();
                 }
 
-                return RedirectToAction("List");
+                return RedirectToAction("Edit", new {id=@entity.Id });
             }
 
             return View(vo);
@@ -214,8 +219,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 return View(vo);
             }
 
-            
-
             entity.UpdatedDate = DateTime.Now;
             entity.UpdatedUser = CurrentUser.CustomerId;
             entity.Name = vo.Name;
@@ -246,7 +249,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 ts.Complete();
             }
 
-            return RedirectToAction("List");
+            return RedirectToAction("Edit",new {id=vo.Id});
         }
 
         private IEnumerable<int> StringsToInts(string str, string spit)

@@ -23,7 +23,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             _m = new MM();
         }
 
-        #region
+        #region Common
         public static T MapCommon<T>(T source)
         {
            return Mapper.Map<T, T>(source);
@@ -32,8 +32,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
         {
             return Mapper.Map<T, TT>(source);
         }
+        private TField DefaultIfEmpty<TSource,TField>(TSource source,Func<TSource,TField> expression)
+        {
+            if (source!=null)
+               return expression(source);
+           return default(TField);
+        }
         #endregion
-
         #region user
 
         public UserEntity UserEntityMapping(UserEntity source, UserEntity target)
@@ -814,75 +819,113 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             return ProductEntityCheck(target);
         }
 
-        public IEnumerable<ProductViewModel> ProductViewMapping(List<ProductEntity> source)
+        public IEnumerable<ProductViewModel> ProductViewMapping(IEnumerable<ProductEntity> source)
         {
-            if (source == null || source.Count == 0)
+            //modify to use the late binding 
+            if (source == null || source.Count() == 0)
             {
                 return new List<ProductViewModel>(0);
             }
-
-            var list = new List<ProductViewModel>(source.Count);
-            var ids = source.Select(v => v.Id).ToList();
-
-            var resoucres = ResourceViewMapping(GetListResourceEntities(SourceType.Product, ids)).ToList();
-            var ppr = GetPromotionForRelation(ids);
-            var ptr = GetTopicRelationByProduct4Entities(ids);
-
-            foreach (var item in source)
-            {
-                var r = resoucres.Where(v => v.SourceId == item.Id).ToList();
-                var pp = ppr.Where(v => (v.ProdId ?? 0) == item.Id).Select(v => v.ProId ?? 0).Distinct().ToList();
-                var pt = ptr.Where(v => v.Product_Id == item.Id).Select(v => v.SpecialTopic_Id).Distinct().ToList();
-
-                var target = ProductViewMapping(item, r, pt, pp);
-                if (target != null)
-                {
-                    list.Add(target);
-                }
-            }
-
-            return list;
+            var result = from p in source
+                         join s in _storeRepository.GetAll() on p.Store_Id equals s.Id into ps
+                         from ps1 in ps.DefaultIfEmpty()
+                         join b in _brandRepository.GetAll() on p.Brand_Id equals b.Id into pb
+                         from pb1 in pb.DefaultIfEmpty()
+                         join u in _customerRepository.GetAll() on p.CreatedUser equals u.Id into pu
+                         from pu1 in pu.DefaultIfEmpty()
+                         join t in _tagRepository.GetAll() on p.Tag_Id equals t.Id into pt
+                         from pt1 in pt.DefaultIfEmpty()
+                         let pros = (from pro in _promotionRepository.GetAll()
+                                    join p2p in _pprRepository.GetAll() on pro.Id equals p2p.ProId 
+                                    where p2p.ProdId == p.Id
+                                    select pro).ToList()
+                        let tops = (from st in _specialTopicRepository.GetAll()
+                                           join p2t in _stprRepository.GetAll() on st.Id equals p2t.SpecialTopic_Id
+                                    where p2t.Product_Id == p.Id
+                                     select st).ToList()
+                       let res =  (from r in (from r in _resourceRepository.GetAll()
+                                           where r.SourceType == (int)SourceType.Product
+                                           && r.SourceId == p.Id
+                                           select r).ToList()
+                                    select ResourceViewMapping(r))
+                         select new ProductViewModel() { 
+                             Brand_Id = p.Brand_Id
+                             , BrandName = pb1==null?string.Empty:pb1.Name
+                             , CreatedDate = p.CreatedDate
+                             , CreatedUser = p.CreatedUser
+                             , CreateUserName = pu1==null?string.Empty:pu1.Nickname
+                             , Description = p.Description
+                             , Favorable = p.Favorable
+                             , FavoriteCount = p.FavoriteCount
+                             , Id = p.Id
+                             , InvolvedCount = p.InvolvedCount
+                             , Name = p.Name
+                             , Price = p.Price
+                             , RecommendedReason = p.RecommendedReason
+                             , RecommendSourceId = p.RecommendSourceId
+                             , RecommendSourceType = p.RecommendSourceType
+                             , RecommendUser = p.RecommendUser
+                             , ShareCount = p.ShareCount
+                             , SortOrder = p.SortOrder
+                             , Status = p.Status
+                             , Store_Id = p.Store_Id
+                             , Tag_Id = p.Tag_Id
+                             , StoreName = ps1==null?string.Empty:ps1.Name
+                             , TagName = pt1==null?string.Empty:pt1.Name
+                             , UpdatedDate = p.UpdatedDate
+                             , UpdatedUser = p.UpdatedUser
+                             , PromotionName = from pro in pros
+                                               select pro.Name
+                            ,
+                             PromotionIds = string.Join(",",(from pro in pros
+                                            select pro.Id.ToString()).ToArray())
+                            , TopicName = from top in tops
+                                          select top.Name
+                            , TopicIds = string.Join(",",(from top in tops
+                                                              select top.Id.ToString()).ToArray())
+                            , Resources = res
+                         };
+          
+            return result;
         }
-
-        private static ProductViewModel ProductViewMapping(ProductEntity source, List<ResourceViewModel> resourceViewModels, IReadOnlyCollection<int> topicIds = null, IReadOnlyCollection<int> promotionIds = null)
-        {
-            if (source == null)
-            {
-                return null;
-            }
-
-            var target = Mapper.Map<ProductEntity, ProductViewModel>(source);
-            target.Resources = resourceViewModels;
-
-            if (topicIds != null && topicIds.Count > 0)
-            {
-                var t = String.Join(",", topicIds);
-                target.TopicIds = t;
-            }
-
-            if (promotionIds != null && promotionIds.Count > 0)
-            {
-                var t = String.Join(",", promotionIds);
-                target.PromotionIds = t;
-            }
-
-            return target;
-        }
-
         public ProductViewModel ProductViewMapping(ProductEntity source)
         {
             if (source == null)
             {
                 return null;
             }
+            var productVM = Mapper.Map<ProductEntity, ProductViewModel>(source);
+            productVM.BrandName = DefaultIfEmpty<BrandEntity,string>(_brandRepository.Find(productVM.Brand_Id),o=>o.Name);
+            productVM.TagName = DefaultIfEmpty<TagEntity, string>(_tagRepository.Find(productVM.Tag_Id), o => o.Name);
+            productVM.StoreName = DefaultIfEmpty<StoreEntity,string>(_storeRepository.Find(productVM.Store_Id),o=>o.Name);
+            productVM.CreateUserName = DefaultIfEmpty<UserEntity,string>(_customerRepository.Find(productVM.CreatedUser),o=>o.Nickname);
 
-            var resouces = ResourceViewMapping(GetListResourceEntities(SourceType.Product, source.Id)).ToList();
-            var t = ServiceLocator.Current.Resolve<ISpecialTopicProductRelationRepository>().GetListByProduct(source.Id);
-            var tids = t.Select(v => v.SpecialTopic_Id).Distinct().ToList();
-            var p = ServiceLocator.Current.Resolve<IPromotionProductRelationRepository>().GetList4Product(new List<int> { source.Id });
-            var pids = p.Select(v => v.ProId ?? 0).Distinct().ToList();
+            var pros = (from pro in _promotionRepository.GetAll()
+                        join p2p in _pprRepository.GetAll() on pro.Id equals p2p.ProId
+                        where p2p.ProdId == productVM.Id
+                        select pro).ToList();
+            var tops = (from st in _specialTopicRepository.GetAll()
+                        join p2t in _stprRepository.GetAll() on st.Id equals p2t.SpecialTopic_Id
+                        where p2t.Product_Id == productVM.Id
+                        select st).ToList();
+            var res = from r in
+                          (from r in _resourceRepository.GetAll()
+                           where r.SourceType == (int)SourceType.Product
+                           && r.SourceId == productVM.Id
+                           select r).ToList()
+                      select ResourceViewMapping(r);
+            productVM.Resources = res;
+            productVM.TopicIds = string.Join(",", (from t in tops
+                                                   select t.Id).ToArray());
+            productVM.TopicName = from t in tops
+                                  select t.Name;
+            productVM.PromotionIds = string.Join(",", (from p in pros
+                                                       select p.Id).ToArray());
+            productVM.PromotionName = from p in pros
+                                      select p.Name;
 
-            return ProductViewMapping(source, resouces, tids, pids);
+
+            return productVM;
         }
 
         #endregion

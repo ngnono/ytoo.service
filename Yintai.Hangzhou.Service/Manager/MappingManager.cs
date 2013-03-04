@@ -1687,9 +1687,16 @@ namespace Yintai.Hangzhou.Service.Manager
     {
         #region fields
 
-        private readonly IResourceRepository _resourceRepository;
-        private readonly IPromotionProductRelationRepository _pprRepository;
-        private readonly ISpecialTopicProductRelationRepository _stprRepository;
+        protected IResourceRepository _resourceRepository;
+        protected IPromotionProductRelationRepository _pprRepository;
+        protected ISpecialTopicProductRelationRepository _stprRepository;
+        protected IStoreRepository _storeRepository;
+        protected ITagRepository _tagRepository;
+        protected ISpecialTopicRepository _specialTopicRepository;
+        protected IPromotionRepository _promotionRepository;
+        protected IBrandRepository _brandRepository;
+        protected ICustomerRepository _customerRepository;
+        protected IProductRepository _productRepository;
 
 
         private static readonly DateTime Min = new DateTime(1900, 1, 1);
@@ -1704,6 +1711,13 @@ namespace Yintai.Hangzhou.Service.Manager
             _resourceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
             _pprRepository = ServiceLocator.Current.Resolve<IPromotionProductRelationRepository>();
             _stprRepository = ServiceLocator.Current.Resolve<ISpecialTopicProductRelationRepository>();
+            _storeRepository = ServiceLocator.Current.Resolve<IStoreRepository>();
+            _tagRepository = ServiceLocator.Current.Resolve<ITagRepository>();
+            _specialTopicRepository = ServiceLocator.Current.Resolve<ISpecialTopicRepository>();
+            _promotionRepository = ServiceLocator.Current.Resolve<IPromotionRepository>();
+            _brandRepository = ServiceLocator.Current.Resolve<IBrandRepository>();
+            _customerRepository = ServiceLocator.Current.Resolve<ICustomerRepository>();
+            _productRepository = ServiceLocator.Current.Resolve<IProductRepository>();
         }
 
         #endregion

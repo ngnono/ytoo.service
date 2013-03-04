@@ -62,11 +62,17 @@
     </ul>
 }
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("List", "Product", FormMethod.Get, new { @class = "form-horizontal searchForm-border" }))
+@using (Html.BeginForm("List", "Product", FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
 {
     @Html.ValidationSummary(true)
     <div class="row">
         <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.PId)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.PId)
+                </div>
+            </div>
             <div class="control-group">
                 <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Name)</label>
                 <div class="controls">
@@ -80,6 +86,25 @@
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Tag)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(model => search.Tag)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.User)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(model => search.User)
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="control-group">
                 <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Brand)</label>
                 <div class="controls">
                     @searchModelHelper.EditorFor(m => search.Brand)
@@ -92,12 +117,11 @@
                 </div>
             </div>
             <div class="control-group">
-                <div class="control-label">
-                    <button type="submit" class="btn">查询</button>
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Promotion)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Promotion)
                 </div>
             </div>
-        </div>
-        <div class="span4">
             <div class="control-group">
                 <label class="control-label" for="Name">状态</label>
                 <div class="controls">
@@ -108,18 +132,6 @@
                 <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Store)</label>
                 <div class="controls">
                     @searchModelHelper.EditorFor(model => search.Store)
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Tag)</label>
-                <div class="controls">
-                    @searchModelHelper.EditorFor(model => search.Tag)
-                </div>
-            </div>
-                        <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.User)</label>
-                <div class="controls">
-                    @searchModelHelper.EditorFor(model => search.User)
                 </div>
             </div>
         </div>
@@ -133,9 +145,9 @@
         <th>商品代码</th>
         <th>名称
         </th>
-        <th>活动代码</th>
-        <th>专题代码</th>
-        <th>品牌代码
+        <th>活动</th>
+        <th>专题</th>
+        <th>品牌
         </th>
         <th>描述
         </th>
@@ -149,9 +161,9 @@
         </th>
         <th>状态
         </th>
-        <th>门店代码
+        <th>门店
         </th>
-        <th>分类代码
+        <th>分类
         </th>
         <th>收藏数
         </th>
@@ -164,7 +176,8 @@
     {
         <tr>
             <td>
-                @if (item.Resources != null && item.Resources.Count > 0)
+              
+                @if (item.Resources != null && item.Resources.Count() > 0)
                 {
                     <div class="img-thumnail">
                         @foreach (var re in item.Resources)
@@ -187,9 +200,9 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id },new {@class="btn"})</li>
-                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id }, new { @class="btn"}) </li>
-                        <li> <a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
+                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id })</li>
+                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id }) </li>
+                        <li><a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
                     </ul>
 
                 </div>
@@ -199,13 +212,23 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PromotionIds)
+                <ul>
+                    @foreach (var topic in item.PromotionName)
+                    { 
+                        <li>@Html.Label("", topic)</li>
+                    }
+                </ul>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TopicIds)
+                <ul>
+                    @foreach (var topic in item.TopicName)
+                    { 
+                        <li>@Html.Label("", topic)</li>
+                    }
+                </ul>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Brand_Id)
+                @Html.DisplayFor(modelItem => item.BrandName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
@@ -214,7 +237,7 @@
                 @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedUser)
+                @Html.DisplayFor(modelItem => item.CreateUserName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
@@ -227,17 +250,17 @@
                 @Html.Label("", ((DataStatus)item.Status).ToFriendlyString())
             </td>
             <td>
-                @Html.ActionLink(item.Store_Id.ToString(), "Details", "Store", new { id = item.Store_Id }, null)
+                @Html.DisplayFor(modelItem => item.StoreName)
             </td>
             <td>
-                @Html.ActionLink(item.Tag_Id.ToString(), "Details", "Tag", new { id = item.Tag_Id }, null)
+                @Html.DisplayFor(m=>item.TagName) 
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FavoriteCount)
             </td>
 
             <td>
-               @Html.DisplayFor(model=>item.SortOrder)
+                @Html.DisplayFor(model => item.SortOrder)
             </td>
 
         </tr>

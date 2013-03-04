@@ -47,7 +47,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             if (!string.IsNullOrEmpty(search.Store))
                 storeList = _storeRepository.Get(s => s.Name.StartsWith(search.Store)).Select(s=>s.Id).ToList();
  
-            var data = _promotionRepository.Get(e => (string.IsNullOrEmpty(search.Name) || e.Name.ToLower().StartsWith(search.Name.ToLower()))
+            var data = _promotionRepository.Get(e => (!search.PId.HasValue || e.Id== search.PId.Value)
+                                                     && (string.IsNullOrEmpty(search.Name) || e.Name.ToLower().StartsWith(search.Name.ToLower()))
                                                      && (!search.Status.HasValue || e.Status == (int)search.Status.Value)
                                                      && e.Status != (int)DataStatus.Deleted
                                                      && (string.IsNullOrEmpty(search.Store) || storeList.Any(m=>m==e.Store_Id))
