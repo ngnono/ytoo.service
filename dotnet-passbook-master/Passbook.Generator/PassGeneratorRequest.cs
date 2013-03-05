@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Xml;
+using Newtonsoft.Json;
 using Passbook.Generator.Fields;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,8 @@ namespace Passbook.Generator
         /// Required. Display name of the organization that originated and signed the pass.
         /// </summary>
         public string OrganizationName { get; set; }
+
+        public DateTime? RelevantDate { get; set; }
 
         /// <summary>
         /// 
@@ -252,6 +255,14 @@ namespace Passbook.Generator
                 writer.WriteEndArray();
             }
 
+            if (request.RelevantDate != null)
+            {
+                writer.WritePropertyName("relevantDate");
+
+                var iso8601DateTime =
+            XmlConvert.ToString(request.RelevantDate.Value, XmlDateTimeSerializationMode.Local);
+                writer.WriteValue(iso8601DateTime);
+            }
         }
 
         private void WriteUrls(JsonWriter writer, PassGeneratorRequest request)

@@ -13,10 +13,9 @@ namespace Passbook.Generator.Fields
 
         public double Latitude { get; set; }
 
-        public int Altitude { get; set; }
+        public int? Altitude { get; set; }
 
         public string RelevantText { get; set; }
-
 
         internal void Write(JsonWriter writer)
         {
@@ -30,13 +29,17 @@ namespace Passbook.Generator.Fields
             writer.WritePropertyName("latitude");
             writer.WriteValue(this.Latitude);
 
+            if (Altitude != null)
+            {
+                writer.WritePropertyName("altitude");
+                writer.WriteValue(this.Altitude);
+            }
 
-            writer.WritePropertyName("altitude");
-            writer.WriteValue(this.Altitude);
-
-
-            writer.WritePropertyName("relevantText");
-            writer.WriteValue(this.RelevantText);
+            if (!String.IsNullOrEmpty(RelevantText))
+            {
+                writer.WritePropertyName("relevantText");
+                writer.WriteValue(this.RelevantText);
+            }
 
             writer.WriteEndObject();
         }

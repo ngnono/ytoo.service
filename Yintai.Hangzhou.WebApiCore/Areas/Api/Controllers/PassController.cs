@@ -21,6 +21,7 @@ using Yintai.Hangzhou.Contract.DTO.Response.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Response.Store;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.WebSupport.Configuration;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
@@ -163,6 +164,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
 
             //有效期
+            request.RelevantDate = coupponInfo.ValidEndDate;
             request.AddSecondaryField(new DateField("secondary1", "有效期", coupponInfo.ValidStartDate, FieldDateTimeStyle.PKDateStyleLong, FieldDateTimeStyle.PKDateStyleNone));
             //
             request.AddSecondaryField(new StandardField("secondary2", String.Empty, "-"));
@@ -178,8 +180,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
                 request.AddBackField(new StandardField("address", "地址", store.Location));
                 request.AddBackField(new StandardField("ad2", "联系电话", store.Tel));
-            }
 
+                request.Locations = new List<Location>()
+                    {
+                        new Location()
+                            {
+                                Latitude = store.Latitude,
+                                Longitude = store.Longitude,
+                                RelevantText = store.Name
+                            }
+                    };
+            }
 
             byte[] generatedPass = generator.Generate(request);
 
@@ -253,16 +264,18 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _passHelper = new PassHelper(brandDataService);
         }
 
-        public ActionResult Create22(PassCreateRequest request, int? authuid, UserModel authUser)
+
+        // [RestfulAuthorize]
+        public ActionResult Create22(PassCreateRequest request, [FetchUser(KeyName = "userid")]UserModel showUser)
         {
             var result =
                 this._couponDataService.Get(new CouponInfoGetRequest()
                 {
-                    AuthUid = 26,
-                    CouponCode = "00700028",
-                    CouponId = 326,
+                    AuthUid = showUser.Id,
+                    CouponCode = request.CouponCode,
+                    CouponId = request.CouponId,
                     Token = request.Token,
-                    AuthUser = authUser
+                    AuthUser = showUser
                 });
 
             if (result.IsSuccess && result.Data != null)
