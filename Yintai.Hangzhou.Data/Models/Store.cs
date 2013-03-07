@@ -20,6 +20,9 @@ namespace Yintai.Hangzhou.Data.Models
         public int Status { get; set; }
         public int Region_Id { get; set; }
         public int StoreLevel { get; set; }
+        public Nullable<decimal> GpsLat { get; set; }
+        public Nullable<decimal> GpsLng { get; set; }
+        public Nullable<decimal> GpsAlt { get; set; }
 
         #region Overrides of BaseEntity
 

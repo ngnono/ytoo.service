@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 using Yintai.Hangzhou.Contract.Response;
@@ -61,5 +62,14 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Store
 
         [DataMember(Name = "resources")]
         public List<ResourceInfoResponse> ResourceInfoResponses { get; set; }
+
+        [IgnoreDataMember]
+        public Nullable<double> GpsLat { get; set; }
+
+        [IgnoreDataMember]
+        public Nullable<double> GpsLng { get; set; }
+
+        [IgnoreDataMember]
+        public Nullable<double> GpsAlt { get; set; }
     }
 }

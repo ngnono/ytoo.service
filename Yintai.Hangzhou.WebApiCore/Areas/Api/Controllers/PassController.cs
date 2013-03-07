@@ -164,7 +164,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
 
             //有效期
-            request.RelevantDate = coupponInfo.ValidEndDate;
+            //request.RelevantDate = coupponInfo.ValidEndDate;
+            //request.IsRelative = true;
             request.AddSecondaryField(new DateField("secondary1", "有效期", coupponInfo.ValidStartDate, FieldDateTimeStyle.PKDateStyleLong, FieldDateTimeStyle.PKDateStyleNone));
             //
             request.AddSecondaryField(new StandardField("secondary2", String.Empty, "-"));
@@ -180,16 +181,25 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
                 request.AddBackField(new StandardField("address", "地址", store.Location));
                 request.AddBackField(new StandardField("ad2", "联系电话", store.Tel));
+                var relevantest = String.Format("您附近的{0}正在做促销，详情进店查看", store.Name);
+                request.Locations.Add(
+                    new Location
+                        {
+                            Latitude = store.Latitude,
+                            Longitude = store.Longitude,
+                            RelevantText = relevantest
+                        });
 
-                request.Locations = new List<Location>()
-                    {
-                        new Location()
-                            {
-                                Latitude = store.Latitude,
-                                Longitude = store.Longitude,
-                                RelevantText = store.Name
-                            }
-                    };
+                if (store.GpsLat != null && store.GpsLng != null)
+                {
+                    request.Locations.Add(new Location
+                        {
+                            Altitude = store.GpsAlt,
+                            Latitude = store.GpsLat.Value,
+                            Longitude = store.GpsLng.Value,
+                            RelevantText = relevantest
+                        });
+                }
             }
 
             byte[] generatedPass = generator.Generate(request);

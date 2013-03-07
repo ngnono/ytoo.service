@@ -1,3 +1,5 @@
+using System;
+
 namespace Yintai.Hangzhou.Model
 {
     public class StoreModel
@@ -21,5 +23,10 @@ namespace Yintai.Hangzhou.Model
         public RegionModel Region { get; set; }
 
         public GroupModel Group { get; set; }
+
+
+        public Nullable<decimal> GpsLat { get; set; }
+        public Nullable<decimal> GpsLng { get; set; }
+        public Nullable<decimal> GpsAlt { get; set; }
     }
 }

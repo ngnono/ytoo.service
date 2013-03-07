@@ -7,6 +7,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
         {
             this.Property(t => t.Longitude).HasPrecision(10, 6);
             this.Property(t => t.Latitude).HasPrecision(10, 6);
+
+            this.Property(t => t.GpsLat).HasPrecision(10, 6);
+            this.Property(t => t.GpsLng).HasPrecision(10, 6);
+            this.Property(t => t.GpsAlt).HasPrecision(8, 2);
         }
     }
 }

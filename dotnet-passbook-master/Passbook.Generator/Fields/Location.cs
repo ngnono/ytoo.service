@@ -13,7 +13,7 @@ namespace Passbook.Generator.Fields
 
         public double Latitude { get; set; }
 
-        public int? Altitude { get; set; }
+        public double? Altitude { get; set; }
 
         public string RelevantText { get; set; }
 
@@ -32,7 +32,7 @@ namespace Passbook.Generator.Fields
             if (Altitude != null)
             {
                 writer.WritePropertyName("altitude");
-                writer.WriteValue(this.Altitude);
+                writer.WriteValue(this.Altitude.Value);
             }
 
             if (!String.IsNullOrEmpty(RelevantText))

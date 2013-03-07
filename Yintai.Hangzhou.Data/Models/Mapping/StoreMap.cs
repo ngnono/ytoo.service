@@ -43,6 +43,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.Region_Id).HasColumnName("Region_Id");
             this.Property(t => t.StoreLevel).HasColumnName("StoreLevel");
+            this.Property(t => t.GpsLat).HasColumnName("GpsLat");
+            this.Property(t => t.GpsLng).HasColumnName("GpsLng");
+            this.Property(t => t.GpsAlt).HasColumnName("GpsAlt");
 		Init();
         }
 

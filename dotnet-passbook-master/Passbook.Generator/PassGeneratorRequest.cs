@@ -17,7 +17,7 @@ namespace Passbook.Generator
             this.AuxiliaryFields = new List<Field>();
             this.BackFields = new List<Field>();
             this.Images = new Dictionary<PassbookImage, byte[]>();
-            this.Locations = new List<Location>(1);
+            this.Locations = new List<Location>(2);
         }
 
         #region Standard Keys
@@ -48,6 +48,8 @@ namespace Passbook.Generator
         public string OrganizationName { get; set; }
 
         public DateTime? RelevantDate { get; set; }
+
+        public bool? IsRelative { get; set; }
 
         /// <summary>
         /// 
@@ -258,11 +260,18 @@ namespace Passbook.Generator
             if (request.RelevantDate != null)
             {
                 writer.WritePropertyName("relevantDate");
-
+                //writer.WriteValue(request.RelevantDate.Value.ToString("yyyy-MM-ddTHH:mmZ"));
                 var iso8601DateTime =
             XmlConvert.ToString(request.RelevantDate.Value, XmlDateTimeSerializationMode.Local);
                 writer.WriteValue(iso8601DateTime);
             }
+
+            if (request.IsRelative != null)
+            {
+                writer.WritePropertyName("isRelative");
+                writer.WriteValue(request.IsRelative);
+            }
+
         }
 
         private void WriteUrls(JsonWriter writer, PassGeneratorRequest request)
