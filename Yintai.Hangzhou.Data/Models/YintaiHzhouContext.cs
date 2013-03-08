@@ -121,6 +121,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         public DbSet<AdminAccessRightEntity> AdminAccessRights { get; set; }
         public DbSet<BrandEntity> Brands { get; set; }
+        public DbSet<CardEntity> Cards { get; set; }
         public DbSet<CommentEntity> Comments { get; set; }
         public DbSet<CouponHistoryEntity> CouponHistories { get; set; }
         public DbSet<DeviceLogEntity> DeviceLogs { get; set; }
@@ -168,6 +169,7 @@ namespace Yintai.Hangzhou.Data.Models
 
             modelBuilder.Configurations.Add(new AdminAccessRightEntityMap());
             modelBuilder.Configurations.Add(new BrandEntityMap());
+            modelBuilder.Configurations.Add(new CardEntityMap());
             modelBuilder.Configurations.Add(new CommentEntityMap());
             modelBuilder.Configurations.Add(new CouponHistoryEntityMap());
             modelBuilder.Configurations.Add(new DeviceLogEntityMap());

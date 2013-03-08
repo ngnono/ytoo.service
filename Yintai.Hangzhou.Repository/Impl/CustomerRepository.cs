@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using Yintai.Architecture.Common.Data.EF;
@@ -141,6 +143,23 @@ namespace Yintai.Hangzhou.Repository.Impl
             }
 
             return base.Get(f, out totalCount, pagerRequest.PageIndex, pagerRequest.PageSize, OrderBy(sortOrder)).ToList();
+        }
+
+        public int SetLoginDate(int userId, DateTime dateTime)
+        {
+            var parames = new List<SqlParameter>
+                {
+                    new SqlParameter("@LastLoginDate", dateTime),
+                    new SqlParameter("@Id", userId),
+                };
+
+            const string sql = @"UPDATE [dbo].[User]
+SET    [LastLoginDate] = @LastLoginDate
+WHERE  Id = @Id;";
+
+            var i = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnection(), CommandType.Text, sql, parames.ToArray());
+
+            return i;
         }
 
         public override void Delete(object id)

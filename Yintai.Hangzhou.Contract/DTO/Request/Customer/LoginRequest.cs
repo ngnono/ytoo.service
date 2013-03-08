@@ -2,6 +2,7 @@
 using System.Web;
 using Yintai.Architecture.Common;
 using Yintai.Hangzhou.Model;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Contract.DTO.Request.Customer
 {
@@ -106,6 +107,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Customer
         public string OutsiteNickname { get; set; }
 
         public int OutsiteType { get; set; }
+
+        public OutsiteType OsType
+        {
+            get { return (OutsiteType)OutsiteType; }
+            set { OutsiteType = (int)value; }
+        }
 
         /// <summary>
         /// 外展用户头像地址（有带商榷，是否符合我们系统的图片规格等因素）

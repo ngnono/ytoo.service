@@ -74,6 +74,14 @@ namespace Yintai.Architecture.ImageTool.Configurations
             set { base["rootFolder"] = value; }
         }
 
+        [ConfigurationProperty("type", IsRequired = false)]
+        public string Type
+        {
+            get { return (String)base["type"]; }
+            set { base["type"] = value; }
+        }
+
+
         [ConfigurationProperty("", IsDefaultCollection = true)]
         public ThumbElementCollection ThumbCollection
         {

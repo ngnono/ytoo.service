@@ -45,5 +45,12 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <returns></returns>
         List<UserEntity> GetPagedListForNickName(PagerRequest pagerRequest, out int totalCount,
                                        CustomerSortOrder sortOrder, string nickName, string mobile);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="dateTime"></param>
+        int SetLoginDate(int userId, DateTime dateTime);
     }
 }

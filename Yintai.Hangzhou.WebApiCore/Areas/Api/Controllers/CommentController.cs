@@ -33,12 +33,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._commentDataService.GetListRefresh(refresh) };
         }
 
+        [HttpPost]
         [RestfulAuthorize]
         public ActionResult Create(CommentCreateRequest request, int? authuid , UserModel authUser)
         {
             request.Content = UrlDecode(request.Content);
             request.AuthUid = authuid.Value;
             request.AuthUser = authUser;
+            request.Files = Request.Files;
 
             return new RestfulResult { Data = this._commentDataService.Create(request) };
         }
@@ -48,6 +50,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._commentDataService.Detail(request) };
         }
 
+        [HttpPost]
         [RestfulAuthorize]
         public ActionResult Destroy(CommentDestroyRequest request, int? authuid, UserModel authUser)
         {
@@ -56,6 +59,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._commentDataService.Destroy(request) };
         }
 
+        [HttpPost]
         [RestfulAuthorize]
         public ActionResult Update(CommentUpdateRequest request, int? authuid, UserModel authUser)
         {

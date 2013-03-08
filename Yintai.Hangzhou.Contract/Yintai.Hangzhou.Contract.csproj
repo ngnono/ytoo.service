@@ -52,9 +52,11 @@
   <ItemGroup>
     <Compile Include="Apns\IApnsDataService.cs" />
     <Compile Include="Brand\IBrandDataService.cs" />
+    <Compile Include="Card\ICardDataService.cs" />
     <Compile Include="Comment\ICommentDataService.cs" />
     <Compile Include="Coupon\ICouponDataService.cs" />
     <Compile Include="Customer\ICustomerDataService.cs" />
+    <Compile Include="DTO\Request\Card\BindingRequest.cs" />
     <Compile Include="DTO\Request\Coupon\CouponRequest.cs" />
     <Compile Include="DTO\Request\Feedback\FeedbackCreateRequest.cs" />
     <Compile Include="DTO\Request\Point\GetPointInfoRequest.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="DTO\Request\Pass\PassCreateRequest.cs" />
     <Compile Include="DTO\Request\Share\ShareRequest.cs" />
     <Compile Include="DTO\Request\Store\StoreRequest.cs" />
+    <Compile Include="DTO\Response\Card\CardInfoResponse.cs" />
     <Compile Include="DTO\Response\Comment\CommentCollectionResponse.cs" />
     <Compile Include="DTO\Response\Device\DeviceInfoResponse.cs" />
     <Compile Include="DTO\Response\BaseResponse.cs" />

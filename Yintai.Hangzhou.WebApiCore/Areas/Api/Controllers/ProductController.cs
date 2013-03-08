@@ -97,6 +97,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._productDataService.UpdateProduct(request) };
         }
 
+        [HttpPost]
         [RestfulAuthorize]
         public ActionResult Favor(CreateFavorProductRequest request, int? authuid, UserModel authUser)
         {
@@ -127,7 +128,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         }
 
         [RestfulAuthorize]
-        //[HttpPost]
+        [HttpPost]
         public ActionResult Coupon(CreateCouponProductRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUid = authuid.Value;

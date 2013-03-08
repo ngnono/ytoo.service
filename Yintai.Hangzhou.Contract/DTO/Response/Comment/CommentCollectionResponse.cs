@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.DTO.Response.Customer;
+using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 using Yintai.Hangzhou.Contract.Response;
 
 namespace Yintai.Hangzhou.Contract.DTO.Response.Comment
@@ -68,5 +69,11 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Comment
 
         [DataMember(Name = "replycustomer_nickname")]
         public string ReplyUserNickname { get; set; }
+
+        /// <summary>
+        /// 资源
+        /// </summary>
+        [DataMember(Name = "resources")]
+        public List<ResourceInfoResponse> ResourceInfoResponses { get; set; }
     }
 }

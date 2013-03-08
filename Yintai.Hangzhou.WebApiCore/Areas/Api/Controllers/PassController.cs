@@ -275,26 +275,26 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         }
 
 
-        // [RestfulAuthorize]
-        public ActionResult Create22(PassCreateRequest request, [FetchUser(KeyName = "userid")]UserModel showUser)
-        {
-            var result =
-                this._couponDataService.Get(new CouponInfoGetRequest()
-                {
-                    AuthUid = showUser.Id,
-                    CouponCode = request.CouponCode,
-                    CouponId = request.CouponId,
-                    Token = request.Token,
-                    AuthUser = showUser
-                });
+        //// [RestfulAuthorize]
+        //public ActionResult Create22(PassCreateRequest request, [FetchUser(KeyName = "userid")]UserModel showUser)
+        //{
+        //    var result =
+        //        this._couponDataService.Get(new CouponInfoGetRequest()
+        //        {
+        //            AuthUid = showUser.Id,
+        //            CouponCode = request.CouponCode,
+        //            CouponId = request.CouponId,
+        //            Token = request.Token,
+        //            AuthUser = showUser
+        //        });
 
-            if (result.IsSuccess && result.Data != null)
-            {
-                return Coupon(ControllerContext, result.Data);
-            }
+        //    if (result.IsSuccess && result.Data != null)
+        //    {
+        //        return Coupon(ControllerContext, result.Data);
+        //    }
 
-            return new RestfulResult() { Data = result };
-        }
+        //    return new RestfulResult() { Data = result };
+        //}
 
 
 

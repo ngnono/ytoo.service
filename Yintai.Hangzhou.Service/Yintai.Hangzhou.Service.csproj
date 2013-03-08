@@ -35,6 +35,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
@@ -62,6 +63,7 @@
     <Compile Include="BaseService.cs" />
     <Compile Include="BrandDataService.cs" />
     <Compile Include="CommentDataService.cs" />
+    <Compile Include="Contract\Apis\IGroupCardService.cs" />
     <Compile Include="Contract\IApnsService.cs" />
     <Compile Include="Contract\IAuthenticationService.cs" />
     <Compile Include="Contract\ICouponService.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Contract\IShareService.cs" />
     <Compile Include="Contract\IUserRightService.cs" />
     <Compile Include="FeedbackDataService.cs" />
+    <Compile Include="Impl\Apis\GroupCardService.cs" />
     <Compile Include="Impl\AuthenticationService.cs" />
     <Compile Include="Impl\CouponService.cs" />
     <Compile Include="Impl\FavoriteService.cs" />

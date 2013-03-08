@@ -119,9 +119,14 @@ namespace Yintai.Hangzhou.Service
                 return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
 
+            if (request.OsType == OutsiteType.None)
+            {
+                return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
+            }
+
             int userId;
 
-            var outsiteEntity = _outSiteCustomerRepository.GetItem(request.OutsiteUid, request.OutsiteType);
+            var outsiteEntity = _outSiteCustomerRepository.GetItem(request.OutsiteUid, (int)request.OsType);
             if (outsiteEntity == null)
             {
                 //没有这个用户
@@ -157,14 +162,12 @@ namespace Yintai.Hangzhou.Service
                 var tmp = _outSiteCustomerRepository.Insert(new OutsiteUserEntity
                                                            {
                                                                CreatedDate = DateTime.Now,
-                                                               CreatedUser = 0,
+                                                               CreatedUser = utmp.Id,
                                                                Description = String.Empty,
                                                                LastLoginDate = DateTime.Now,
                                                                AssociateUserId = utmp.Id,
-                                                               OutsiteType =
-                                                                   (int)
-                                                                   EnumExtension.Parser<OutsiteType>(request.OutsiteType),
-                                                               Status = 1,
+                                                               OutsiteType = (int)request.OsType,
+                                                               Status = (int)DataStatus.Normal,
                                                                OutsiteUserId = request.OutsiteUid
                                                            });
 
@@ -173,9 +176,8 @@ namespace Yintai.Hangzhou.Service
                     return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.InternalServerError, Message = "2创建用户失败" };
                 }
 
-
                 //TODO:增加积分
-                _pointService.Insert(new PointHistoryEntity()
+                _pointService.Insert(new PointHistoryEntity
                     {
                         Amount = 100,
                         CreatedDate = DateTime.Now,
@@ -197,16 +199,10 @@ namespace Yintai.Hangzhou.Service
             }
             else
             {
-                //更新登录时间
-                //outsiteEntity.LastLoginDate = DateTime.Now;
-                //this._outSiteCustomerRepository.Update(outsiteEntity);
-                //var siteUserEntity = this._customerRepository.GetItem(outsiteEntity.AssociateUserId);
-                //siteUserEntity.LastLoginDate = DateTime.Now;
-                //this._customerRepository.Update(siteUserEntity);
-
                 userId = outsiteEntity.AssociateUserId;
+                //更新登录时间
+                _customerRepository.SetLoginDate(userId, DateTime.Now);
             }
-
 
             return GetUserInfo(new GetUserInfoRequest
                 {

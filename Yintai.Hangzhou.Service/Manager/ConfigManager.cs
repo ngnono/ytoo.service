@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
 
 namespace Yintai.Hangzhou.Service.Manager
 {
@@ -11,15 +9,17 @@ namespace Yintai.Hangzhou.Service.Manager
         private const string _AppleAppId = "appleappid";
         private const string _ResourceDomain = "resourcedomain";
         private const string _Domain = "domain";
-
+        private const string _GroupCradKey = "jtapis_key";
+        private const string _GroupCradInfoUrl = "jtapis_cardinfo";
+        private const string _GroupCradQueryPointUrl = "jtapis_cardscore";
 
         private static readonly string _domainPath = AppDomain.CurrentDomain.BaseDirectory;
-        private static readonly string _imageUpload = System.Configuration.ConfigurationManager.AppSettings["resourceimagedomain"];
-        private static readonly string _soundUpload = System.Configuration.ConfigurationManager.AppSettings["resourcesounddomain"];
-        private static readonly string _videoUpload = System.Configuration.ConfigurationManager.AppSettings["resourcevideodomain"];
-        private static readonly string _defUpload = System.Configuration.ConfigurationManager.AppSettings["resourcedefdomain"];
+        private static readonly string _imageUpload = ConfigurationManager.AppSettings["resourceimagedomain"];
+        private static readonly string _soundUpload = ConfigurationManager.AppSettings["resourcesounddomain"];
+        private static readonly string _videoUpload = ConfigurationManager.AppSettings["resourcevideodomain"];
+        private static readonly string _defUpload = ConfigurationManager.AppSettings["resourcedefdomain"];
 
-        private static readonly string _resourcedomain = System.Configuration.ConfigurationManager.AppSettings["resourcedomain"];
+        private static readonly string _resourcedomain = ConfigurationManager.AppSettings["resourcedomain"];
 
         /// <summary>
         /// image
@@ -111,6 +111,21 @@ namespace Yintai.Hangzhou.Service.Manager
         public static string Domain
         {
             get { return GetAppConfigParamsValue(_Domain); }
+        }
+
+        public static string GetGroupCardKey()
+        {
+            return GetAppConfigParamsValue(_GroupCradKey);
+        }
+
+        public static string GetGroupCardInfoUrl()
+        {
+            return GetAppConfigParamsValue(_GroupCradInfoUrl);
+        }
+
+        public static string GetGroupCardQueryScoreUrl()
+        {
+            return GetAppConfigParamsValue(_GroupCradQueryPointUrl);
         }
     }
 }

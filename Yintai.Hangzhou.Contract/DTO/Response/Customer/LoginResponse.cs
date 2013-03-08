@@ -133,5 +133,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
         /// </summary>
         [DataMember(Name = "appid")]
         public string AppId { get; set; }
+
+        [DataMember(Name = "isbindcard")]
+        public bool IsBindCard { get; set; }
     }
 }

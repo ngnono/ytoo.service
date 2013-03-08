@@ -1,4 +1,5 @@
-﻿using Yintai.Hangzhou.Model.Enums;
+﻿using System.Web;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Contract.DTO.Request.Comment
 {
@@ -57,6 +58,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Comment
         public string Content { get; set; }
 
         public int ReplyUser { get; set; }
+
+        public HttpFileCollectionBase Files { get; set; }
     }
 
     public class CommentDetailRequest : AuthRequest

@@ -78,6 +78,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         /// 如果 为-1 标识未认证，登录用户的IDauthuid
         /// </summary>
         [DataMember(Name = "authuid")]
+        [System.Obsolete("建议使用AuthUser 对象")]
         public int AuthUid
         {
             get;

@@ -132,11 +132,12 @@
     <Content Include="favicon.ico" />
     <Content Include="fileupload\img\loading.gif" />
     <Content Include="Global.asax" />
+    <Content Include="Icons\coupon\icon.png" />
     <Content Include="Icons\coupon\logo.png" />
     <Content Include="Icons\NewFolder1\icon.png" />
     <Content Include="Icons\NewFolder1\logo.png" />
     <Content Include="Icons\NewFolder1\strip.png" />
-    <Content Include="Icons\coupon\icon.png" />
+    <Content Include="Icons\coupon\icon2.png" />
     <Content Include="Icons\NewFolder1\strip%402x.png" />
     <Content Include="Icons\Event\background%402x.png" />
     <Content Include="Icons\Event\background.png" />

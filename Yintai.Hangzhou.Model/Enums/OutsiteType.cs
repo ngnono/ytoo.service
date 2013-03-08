@@ -17,8 +17,19 @@ namespace Yintai.Hangzhou.Model.Enums
     {
         None = 0,
 
-        Weibo = 1,
+        /// <summary>
+        /// sina 微博
+        /// </summary>
+        SinaWeibo = 1,
 
-        QQ = 2
+        /// <summary>
+        /// QQ微博
+        /// </summary>
+        Qqt = 2,
+
+        /// <summary>
+        ///  QQ
+        /// </summary>
+        Qq = 3,
     }
 }
