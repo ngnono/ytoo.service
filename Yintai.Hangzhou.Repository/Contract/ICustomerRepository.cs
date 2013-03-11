@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
@@ -52,5 +50,12 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="userId"></param>
         /// <param name="dateTime"></param>
         int SetLoginDate(int userId, DateTime dateTime);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="binded"></param>
+        int SetCardBinded(int userId, bool? binded);
     }
 }

@@ -59,6 +59,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Logo).HasColumnName("Logo");
             this.Property(t => t.Description).HasColumnName("Description");
             this.Property(t => t.Gender).HasColumnName("Gender");
+            this.Property(t => t.IsCardBinded).HasColumnName("IsCardBinded");
 		Init();
         }
 

@@ -14,6 +14,13 @@ namespace Yintai.Hangzhou.Contract.Card
         ExecuteResult<CardInfoResponse> Binding(BindingRequest request);
 
         /// <summary>
+        /// bind
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        ExecuteResult<CardInfoResponse> UnBinding(BindingRequest request);
+
+        /// <summary>
         /// get info
         /// </summary>
         /// <param name="request"></param>

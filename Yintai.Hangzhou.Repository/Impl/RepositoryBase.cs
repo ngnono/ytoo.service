@@ -79,6 +79,9 @@ namespace Yintai.Hangzhou.Repository.Impl
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public abstract TEntity GetItem(TKey key);
+        public virtual TEntity GetItem(TKey key)
+        {
+            return base.Find(key);
+        }
     }
 }

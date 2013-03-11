@@ -15,6 +15,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(128);
 
+            this.Property(t => t.CardProfile)
+                .IsRequired();
+
             // Table & Column Mappings
             this.ToTable("Card");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -26,6 +29,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
             this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
             this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
+            this.Property(t => t.CardProfile).HasColumnName("CardProfile");
 		Init();
         }
 

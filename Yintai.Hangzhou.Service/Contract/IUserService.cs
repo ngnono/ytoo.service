@@ -183,5 +183,8 @@ namespace Yintai.Hangzhou.Service.Contract
         /// <param name="authUserId"></param>
         /// <returns></returns>
         UserModel UserRoleDeleted(int userId, UserRole userRole, int authUserId);
+
+
+        void SetCardBinder(int userId, bool? binded);
     }
 }
