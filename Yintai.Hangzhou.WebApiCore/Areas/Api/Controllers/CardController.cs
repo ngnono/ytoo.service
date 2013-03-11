@@ -36,7 +36,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._cardDataService.UnBinding(request) };
         }
 
-        [HttpPost]
         public RestfulResult Detail(GetCardInfoRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUser = authUser;

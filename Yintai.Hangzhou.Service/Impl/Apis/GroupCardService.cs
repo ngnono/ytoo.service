@@ -248,7 +248,7 @@ namespace Yintai.Hangzhou.Service.Impl.Apis
         {
             var root = new XElement("vipCard",
                                     new XElement("cardno", GetGroupCardEncryptString(request.CardNo)),
-                                    new XElement("passwd", GetMd5Hash(request.Passwd)));
+                                    new XElement("passwd", GetMd5Hash(request.Passwd).ToUpper()));
             var postData = root.ToString(SaveOptions.DisableFormatting);
 
             var body = OpenUrl(ConfigManager.GetGroupCardInfoUrl(), "POST", null, "application/xml", null, postData, null);
