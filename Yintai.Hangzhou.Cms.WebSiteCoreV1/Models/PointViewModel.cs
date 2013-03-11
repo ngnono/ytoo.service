@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
@@ -23,11 +24,17 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
     public class PointViewModel : BaseViewModel
     {
         [Key]
+        [Display(Name="流水号")]
         public int Id { get; set; }
 
         [Range(0, Int32.MaxValue)]
         [Required]
-        [Display(Name = "用户ID")]
+        [Display(Name = "用户代码")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "customer")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Id")]
         public int User_Id { get; set; }
 
         [Range(double.MinValue, double.MaxValue)]

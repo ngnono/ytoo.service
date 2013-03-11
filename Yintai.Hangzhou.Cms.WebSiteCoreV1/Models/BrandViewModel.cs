@@ -22,6 +22,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
     public class BrandViewModel : BaseViewModel
     {
         [Key]
+        [Display(Name="品牌代码")]
         public int Id { get; set; }
 
         [Required]
@@ -40,7 +41,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [StringLength(1024, MinimumLength = 0)]
         public string Logo { get; set; }
 
+        [Required]
         [StringLength(1024, MinimumLength = 0)]
+        [Display(Name="网站")]
         public string WebSite { get; set; }
 
         [Required]

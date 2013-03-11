@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager;
@@ -12,6 +13,7 @@ using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
@@ -21,14 +23,17 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
     public class StoreController : UserController
     {
         private readonly IStoreRepository _storeRepository;
-        public StoreController(IStoreRepository storeRepository)
+        private IResourceService _resouceService;
+        public StoreController(IStoreRepository storeRepository
+            ,IResourceService resourceService)
         {
             this._storeRepository = storeRepository;
+            _resouceService = resourceService;
         }
 
         public ActionResult Index(PagerRequest request, int? sort)
         {
-            return List(request, sort);
+            return List(request,sort);
         }
 
         public ActionResult List(PagerRequest request, int? sort)
@@ -62,19 +67,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return View();
         }
 
-        public ActionResult Delete(int? id, [FetchStore(KeyName = "id")]StoreEntity entity)
-        {
-            if (id == null || entity == null)
-            {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View();
-            }
-
-            var vo = MappingManager.StoreViewMapping(entity);
-
-            return View(vo);
-        }
-
+   
         public ActionResult Edit(int? id, [FetchStore(KeyName = "id")]StoreEntity entity)
         {
             if (id == null || entity == null)
@@ -97,10 +90,18 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 entity.CreatedUser = base.CurrentUser.CustomerId;
                 entity.UpdatedUser = base.CurrentUser.CustomerId;
                 entity.Status = (int)DataStatus.Normal;
+                using (var ts = new TransactionScope())
+                {
+                    entity = this._storeRepository.Insert(entity);
+                    _resouceService.Save(ControllerContext.HttpContext.Request.Files
+                        , entity.CreatedUser
+                        , 0
+                        , entity.Id
+                        , SourceType.StoreLogo);
+                    ts.Complete();
+                }
 
-                entity = this._storeRepository.Insert(entity);
-
-                return Success("/" + RouteData.Values["controller"] + "/edit/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+                return RedirectToAction("Edit",new {id=entity.Id});
             }
 
             return View(vo);
@@ -115,26 +116,29 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 return View(vo);
             }
 
-            var newEntity = MappingManager.StoreEntityMapping(vo);
-            newEntity.CreatedUser = entity.CreatedUser;
-            newEntity.CreatedDate = entity.CreatedDate;
-            newEntity.Status = entity.Status;
-
-            MappingManager.StoreEntityMapping(newEntity, entity);
+            entity.GpsAlt = vo.GpsAlt;
+            entity.GpsLat = vo.GpsLat;
+            entity.GpsLng = vo.GpsLng;
+            entity.Latitude = vo.Latitude;
+            entity.Longitude = vo.Longitude;
+            entity.Name = vo.Name;
+            entity.Tel = vo.Tel;
+            entity.Description = vo.Description;
+            entity.Longitude = vo.Longitude;
 
             this._storeRepository.Update(entity);
 
 
-            return Success("/" + RouteData.Values["controller"] + "/details/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+            return RedirectToAction("details",new {id=entity.Id});
         }
 
         [HttpPost]
-        public ActionResult Delete(FormCollection formCollection, [FetchStore(KeyName = "id")]StoreEntity entity)
+        public JsonResult Delete([FetchStore(KeyName = "id")]StoreEntity entity)
         {
             if (entity == null)
             {
                 ModelState.AddModelError("", "参数验证失败.");
-                return View();
+                return FailResponse();
             }
 
             entity.UpdatedDate = DateTime.Now;
@@ -143,7 +147,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             this._storeRepository.Delete(entity);
 
-            return Success("/" + RouteData.Values["controller"] + "/" + RouteData.Values["action"]);
+            return SuccessResponse();
         }
         [HttpGet]
         public override JsonResult AutoComplete(string name)

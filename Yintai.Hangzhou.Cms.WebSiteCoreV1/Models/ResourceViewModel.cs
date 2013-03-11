@@ -26,14 +26,17 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
     public class ResourceViewModel : BaseViewModel
     {
         [Key]
+        [Display(Name="资源代码")]
         public int Id { get; set; }
 
         [Required]
         [Range(0, Int32.MaxValue)]
+        [Display(Name="来源代码")]
         public int SourceId { get; set; }
 
         [Required]
        // [Range(0, Int32.MaxValue)]
+        [Display(Name = "来源类型")]
         public int SourceType { get; set; }
 
         [Required]

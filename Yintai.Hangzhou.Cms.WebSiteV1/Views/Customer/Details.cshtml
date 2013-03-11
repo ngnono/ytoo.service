@@ -1,132 +1,98 @@
 ﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.CustomerViewModel
 @{
-    ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "用户详情";
 }
-
-<h2>Details</h2>
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("用户管理", "Index")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("用户列表", "List")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<h2>@ViewBag.Title</h2>
 
 <fieldset>
-    <legend>CustomerViewModel</legend>
-
-    <div class="display-label">Name</div>
+    <div class="display-label">@Html.LabelFor(m => m.Name)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Name)
     </div>
 
-    <div class="display-label">Password</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Password)
-    </div>
-
-    <div class="display-label">Nickname</div>
+    <div class="display-label">@Html.LabelFor(m => m.Nickname)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Nickname)
     </div>
 
-    <div class="display-label">LastLoginDate</div>
+    <div class="display-label">@Html.LabelFor(m => m.LastLoginDate)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.LastLoginDate)
     </div>
 
-    <div class="display-label">Mobile</div>
+    <div class="display-label">@Html.LabelFor(m => m.Mobile)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Mobile)
     </div>
 
-    <div class="display-label">EMail</div>
+    <div class="display-label">@Html.LabelFor(m => m.EMail)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.EMail)
     </div>
 
-    <div class="display-label">UserLevel</div>
+    <div class="display-label">@Html.LabelFor(m => m.UserLevel)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.UserLevel)
+        @Html.Label("", ((Yintai.Hangzhou.Model.Enums.UserLevel)Model.UserLevel).ToFriendlyString())
     </div>
 
-    <div class="display-label">Store_Id</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Store_Id)
-    </div>
 
-    <div class="display-label">Region_Id</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Region_Id)
-    </div>
-
-    <div class="display-label">Logo</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Logo)
-    </div>
-
-    <div class="display-label">Description</div>
+    <div class="display-label">@Html.LabelFor(m => m.Description)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)
     </div>
 
-    <div class="display-label">Gender</div>
+    <div class="display-label">@Html.LabelFor(m => m.Gender)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Gender)
+        @Html.Label("", ((Yintai.Hangzhou.Model.Enums.GenderType)Model.Gender).ToFriendlyString())
     </div>
 
-    <div class="display-label">ILikeCount</div>
+    <div class="display-label">@Html.LabelFor(m => m.ILikeCount)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.ILikeCount)
     </div>
 
-    <div class="display-label">LikeMeCount</div>
+    <div class="display-label">@Html.LabelFor(m => m.LikeMeCount)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.LikeMeCount)
     </div>
 
-    <div class="display-label">FavorCount</div>
+    <div class="display-label">@Html.LabelFor(m => m.FavorCount)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.FavorCount)
     </div>
 
-    <div class="display-label">CouponCount</div>
+    <div class="display-label">@Html.LabelFor(m => m.CouponCount)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.CouponCount)
     </div>
 
-    <div class="display-label">PointCount</div>
+    <div class="display-label">@Html.LabelFor(m => m.PointCount)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.PointCount)
     </div>
 
-    <div class="display-label">ConsumptionCount</div>
+    <div class="display-label">@Html.LabelFor(m => m.Status)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.ConsumptionCount)
+        @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)Model.Status).ToFriendlyString())
     </div>
 
-    <div class="display-label">ShareCount</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.ShareCount)
-    </div>
 
-    <div class="display-label">Status</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Status)
-    </div>
-
-    <div class="display-label">CreatedUser</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreatedUser)
-    </div>
-
-    <div class="display-label">CreatedDate</div>
+    <div class="display-label">@Html.LabelFor(m => m.CreatedDate)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.CreatedDate)
     </div>
 
-    <div class="display-label">UpdatedDate</div>
+    <div class="display-label">@Html.LabelFor(m => m.UpdatedDate)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.UpdatedDate)
-    </div>
-
-    <div class="display-label">UpdatedUser</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.UpdatedUser)
     </div>
 
     <div class="display-label">头像</div>
@@ -139,6 +105,7 @@
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink2("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink2("Back to List", "Index")
+    @Html.ActionLink2("编辑", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
 </p>
+

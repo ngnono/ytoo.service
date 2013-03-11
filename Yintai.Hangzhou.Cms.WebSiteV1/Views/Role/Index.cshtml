@@ -1,5 +1,12 @@
 ﻿@{
-
+    ViewBag.Title = "权限管理";
+ }
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("配置管理", "Index","Configuration")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
 }
 <div class="span4">
     <h2>角色管理</h2>

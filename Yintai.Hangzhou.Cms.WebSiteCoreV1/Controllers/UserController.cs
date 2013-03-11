@@ -251,4 +251,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 , JsonRequestBehavior.AllowGet);
         }
     }
+    [AdminAuthorize]
+    public class ConfigurationController : UserController
+    {
+        public ActionResult Index()
+        {
+            return View();
+        }
+    }   
 }

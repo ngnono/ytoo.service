@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager;
@@ -9,6 +10,7 @@ using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
@@ -18,9 +20,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
     public class BrandController : UserController
     {
         private readonly IBrandRepository _brandRepository;
-        public BrandController(IBrandRepository brandRepository)
+        private IResourceService _resourceService;
+        private IResourceRepository _resourceRepository;
+        public BrandController(IBrandRepository brandRepository
+            ,IResourceService resourceService
+            ,IResourceRepository resourceRepository)
         {
             this._brandRepository = brandRepository;
+            _resourceService = resourceService;
+            _resourceRepository = resourceRepository;
         }
 
         public ActionResult Index(PagerRequest request, int? sort)
@@ -96,10 +104,28 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 entity.Status = (int)DataStatus.Normal;
                 entity.CreatedDate = DateTime.Now;
                 entity.UpdatedDate = DateTime.Now;
+                using (TransactionScope ts = new TransactionScope())
+                {
 
-                entity = this._brandRepository.Insert(entity);
+                    entity = this._brandRepository.Insert(entity);
+                    if (ControllerContext.HttpContext.Request.Files.Count > 0)
+                    {
+                        var resources = _resourceService.Save(ControllerContext.HttpContext.Request.Files
+                            , CurrentUser.CustomerId
+                            , -1, entity.Id
+                            , SourceType.BrandLogo);
+                        if (resources != null &&
+                            resources.Count() > 0)
+                        {
+                            entity.Logo = resources[0].AbsoluteUrl;
+                            _brandRepository.Update(entity);
 
-                return Success("/" + RouteData.Values["controller"] + "/edit/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+                        }
+                    }
+                    ts.Complete();
+                    return RedirectToAction("Details", new { id = entity.Id });
+                }
+
             }
 
             return View(vo);
@@ -114,28 +140,50 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 return View(vo);
             }
 
-            var newEntity = MappingManager.BrandEntityMapping(vo);
-            newEntity.CreatedUser = entity.CreatedUser;
-            newEntity.CreatedDate = entity.CreatedDate;
-            newEntity.Status = entity.Status;
-            newEntity.UpdatedDate = DateTime.Now;
-            newEntity.UpdatedUser = base.CurrentUser.CustomerId;
+            entity.Name = vo.Name;
+            entity.Group = vo.Group;
+            entity.WebSite = vo.WebSite;
+            entity.Description = vo.Description;
+            entity.EnglishName = vo.EnglishName;
+            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedUser = CurrentUser.CustomerId;
+            using (var ts = new TransactionScope())
+            {
 
-            MappingManager.BrandEntityMapping(newEntity, entity);
+                if (ControllerContext.HttpContext.Request.Files.Count > 0)
+                {
+                    var oldImage = _resourceRepository.Get(r => r.SourceType == (int)SourceType.BrandLogo &&
+                         r.SourceId == entity.Id).FirstOrDefault();
+                    if (oldImage != null)
+                        _resourceService.Del(oldImage.Id);
+                    var resources = this._resourceService.Save(ControllerContext.HttpContext.Request.Files
+                           , CurrentUser.CustomerId
+                         , -1, entity.Id
+                         , SourceType.BrandLogo);
+                    if (resources != null &&
+                        resources.Count() > 0)
+                    {
+                        entity.Logo = resources[0].AbsoluteUrl;
+                    }
 
-            this._brandRepository.Update(entity);
+                }
+                _brandRepository.Update(entity);
+
+                ts.Complete();
 
 
-            return Success("/" + RouteData.Values["controller"] + "/details/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+            }
+            return RedirectToAction("Details", new { id = entity.Id });
+           
         }
 
         [HttpPost]
-        public ActionResult Delete(FormCollection formCollection, [FetchBrand(KeyName = "id")]BrandEntity entity)
+        public JsonResult Delete([FetchBrand(KeyName = "id")]BrandEntity entity)
         {
             if (entity == null)
             {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View();
+                
+                return FailResponse();
             }
 
             entity.UpdatedDate = DateTime.Now;
@@ -144,7 +192,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             this._brandRepository.Delete(entity);
 
-            return Success("/" + RouteData.Values["controller"] + "/" + RouteData.Values["action"]);
+            return SuccessResponse();
         }
         [HttpGet]
         public override JsonResult AutoComplete(string name)

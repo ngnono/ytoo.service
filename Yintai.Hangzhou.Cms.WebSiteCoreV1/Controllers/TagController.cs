@@ -59,18 +59,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return View();
         }
 
-        public ActionResult Delete(int? id, [FetchTag(KeyName = "id")]TagEntity entity)
-        {
-            if (id == null || entity == null)
-            {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View();
-            }
-
-            var vo = MappingManager.TagViewMapping(entity);
-
-            return View(vo);
-        }
 
         public ActionResult Edit(int? id, [FetchTag(KeyName = "id")]TagEntity entity)
         {
@@ -97,7 +85,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
                 entity = this._tagRepository.Insert(entity);
 
-                return Success("/" + RouteData.Values["controller"] + "/edit/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+                return RedirectToAction("Details", new { id = entity.Id });
             }
 
             return View(vo);
@@ -112,26 +100,22 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 return View(vo);
             }
 
-            var newEntity = MappingManager.TagEntityMapping(vo);
-            newEntity.CreatedUser = entity.CreatedUser;
-            newEntity.CreatedDate = entity.CreatedDate;
-            newEntity.Status = entity.Status;
-
-            MappingManager.TagEntityMapping(newEntity, entity);
-
+            entity.Description = vo.Description;
+            entity.Name = vo.Name;
+            entity.SortOrder = vo.SortOrder;
+            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedUser = CurrentUser.CustomerId;
             this._tagRepository.Update(entity);
-
-
-            return Success("/" + RouteData.Values["controller"] + "/details/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+            return RedirectToAction("Details", new { id = entity.Id });
         }
 
         [HttpPost]
-        public ActionResult Delete(FormCollection formCollection, [FetchTag(KeyName = "id")]TagEntity entity)
+        public JsonResult Delete([FetchTag(KeyName = "id")]TagEntity entity)
         {
             if (entity == null)
             {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View();
+              
+                return FailResponse();
             }
 
             entity.UpdatedDate = DateTime.Now;
@@ -140,7 +124,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             this._tagRepository.Delete(entity);
 
-            return Success("/" + RouteData.Values["controller"] + "/" + RouteData.Values["action"]);
+            return SuccessResponse();
         }
         [HttpGet]
         public override JsonResult AutoComplete(string name)

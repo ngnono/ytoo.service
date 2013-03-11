@@ -24,7 +24,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 
     public class CustomerViewModel : BaseViewModel
     {
+        
         [Key]
+        [Display(Name="用户代码")]
         public int Id { get; set; }
 
         [Required]
@@ -34,9 +36,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 
         [Required]
         [StringLength(1024, MinimumLength = 6)]
+        [DataType(DataType.Password)]
         [Display(Name = "密码")]
         public string Password { get; set; }
 
+        [Required]
         [StringLength(32, MinimumLength = 0)]
         [Display(Name = "昵称")]
         public string Nickname { get; set; }
@@ -45,10 +49,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [DataType(DataType.DateTime)]
         public DateTime LastLoginDate { get; set; }
 
+        [Required]
         [StringLength(32, MinimumLength = 0)]
         [Display(Name = "手机号")]
         public string Mobile { get; set; }
 
+        [Required]
         [StringLength(64, MinimumLength = 0)]
         [Display(Name = "邮箱")]
         public string EMail { get; set; }
@@ -69,6 +75,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [StringLength(1024, MinimumLength = 0)]
         public string Logo { get; set; }
 
+        [Required]
         [Display(Name = "说明")]
         [StringLength(1024, MinimumLength = 0)]
         public string Description { get; set; }
@@ -128,26 +135,31 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         /// <summary>
         /// 我喜欢
         /// </summary>
+        [Display(Name = "关注数")]
         public int ILikeCount { get; set; }
 
         /// <summary>
         /// 喜欢我
         /// </summary>
+        [Display(Name = "被关注数")]
         public int LikeMeCount { get; set; }
 
         /// <summary>
         /// 收藏数
         /// </summary>
+        [Display(Name = "收藏数")]
         public int FavorCount { get; set; }
 
         /// <summary>
         /// 优惠码数
         /// </summary>
+        [Display(Name = "优惠码数")]
         public int CouponCount { get; set; }
 
         /// <summary>
         /// 积分数
         /// </summary>
+        [Display(Name = "积分数")]
         public int PointCount { get; set; }
 
         /// <summary>
@@ -173,5 +185,20 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public System.DateTime UpdatedDate { get; set; }
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
+    }
+    public class CustomerListSearchOption
+    {
+        [Display(Name = "用户代码")]
+        public int? PId { get; set; }
+        [Display(Name = "用户名称")]
+        public string Name { get; set; }
+        [Display(Name = "手机号")]
+        public string Mobile { get; set; }
+        [Display(Name = "邮箱名")]
+        public string Email { get; set; }
+        [Display(Name = "排序")]
+        public GenricOrder? OrderBy { get; set; }
+      
+
     }
 }

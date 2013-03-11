@@ -249,7 +249,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 ts.Complete();
             }
 
-            return RedirectToAction("Edit",new {id=vo.Id});
+            return RedirectToAction("Details",new {id=vo.Id});
         }
 
         private IEnumerable<int> StringsToInts(string str, string spit)
@@ -269,7 +269,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return pi;
         }
         [HttpPost]
-        public JsonResult Delete([FetchPromotion(KeyName = "id")]ProductEntity entity)
+        public JsonResult Delete([FetchProduct(KeyName = "id")]ProductEntity entity)
         {
             try
             {
@@ -290,30 +290,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         }
      
 
-        [HttpPost]
-        public ActionResult SetOrder(FormCollection formCollection, [FetchProduct(KeyName = "id")]ProductEntity entity, int? order)
-        {
-            var jsonR = new JsonResult();
-
-            if (order == null || entity == null)
-            {
-                jsonR.Data = new ExecuteResult { Message = "参数错误", StatusCode = StatusCode.ClientError };
-            }
-            else
-            {
-                var t = _productRepository.SetSortOrder(entity, order.Value, CurrentUser.CustomerId);
-
-                if (t != null)
-                {
-                    jsonR.Data = new ExecuteResult { Message = "OK", StatusCode = StatusCode.Success };
-                }
-                else
-                {
-                    jsonR.Data = new ExecuteResult { Message = "返回为空", StatusCode = StatusCode.UnKnow };
-                }
-            }
-
-            return jsonR;
-        }
+     
     }
 }

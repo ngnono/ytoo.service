@@ -39,6 +39,23 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:n6}")]
         public decimal Latitude { get; set; }
 
+        [Range(typeof(decimal), "-180.000000", "180.000000")]
+        [Display(Name = "GPS经度")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:n6}")]
+        public decimal? GpsLng { get; set; }
+
+        [Display(Name = "GPS纬度")]
+        [Range(typeof(decimal), "-90.000000", "90.000000")]
+        [UIHint("Decimal")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:n6}")]
+        public decimal? GpsLat { get; set; }
+
+        [Display(Name = "GPS海拨")]
+        [UIHint("Decimal")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:n6}")]
+        public decimal? GpsAlt { get; set; }
+
+
         [Display(Name = "集团Id")]
         [Range(0, Int32.MaxValue)]
         public int Group_Id { get; set; }

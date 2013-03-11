@@ -1,98 +1,86 @@
 ﻿@using Yintai.Hangzhou.Model.Enums
 @model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ResourceViewModel
 @{
-    ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "资源详情";
 }
 
-<h2>Details</h2>
+<h2>@ViewBag.Title</h2>
 
 <fieldset>
-    <legend>ResourceViewModel</legend>
-
-    <div class="display-label">SourceId</div>
+    <div class="display-label">@Html.LabelFor(m=>m.SourceId)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.SourceId)
     </div>
 
-    <div class="display-label">SourceType</div>
+    <div class="display-label">@Html.LabelFor(m=>m.SourceType)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.SourceType)
+         @Html.Label("", ((Yintai.Hangzhou.Model.Enums.SourceType)Model.SourceType).ToFriendlyString())
     </div>
 
-    <div class="display-label">Name</div>
+    <div class="display-label">@Html.LabelFor(m=>m.Name)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Name)
     </div>
 
-    <div class="display-label">ExtName</div>
+    <div class="display-label">@Html.LabelFor(m=>m.ExtName)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.ExtName)
     </div>
 
-    <div class="display-label">Domain</div>
+    <div class="display-label">@Html.LabelFor(m=>m.Domain)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Domain)
     </div>
 
-    <div class="display-label">IsDefault</div>
+    <div class="display-label">@Html.LabelFor(m=>m.IsDefault)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.IsDefault)
     </div>
 
-    <div class="display-label">SortOrder</div>
+    <div class="display-label">@Html.LabelFor(m=>m.SortOrder)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.SortOrder)
     </div>
 
-    <div class="display-label">Type</div>
+    <div class="display-label">@Html.LabelFor(m=>m.Type)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Type)
+         @Html.Label("", ((Yintai.Architecture.Common.Models.ResourceType)Model.Type).ToFriendlyString())
     </div>
 
-    <div class="display-label">Size</div>
+    <div class="display-label">@Html.LabelFor(m=>m.Size)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Size)
     </div>
 
-    <div class="display-label">Width</div>
+    <div class="display-label">@Html.LabelFor(m=>m.Width)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Width)
     </div>
 
-    <div class="display-label">Height</div>
+    <div class="display-label">@Html.LabelFor(m=>m.Height)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Height)
     </div>
 
-    <div class="display-label">ContentSize</div>
+    <div class="display-label">@Html.LabelFor(m=>m.ContentSize)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.ContentSize)
     </div>
 
-    <div class="display-label">Status</div>
+    <div class="display-label">@Html.LabelFor(m=>m.Status)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Status)
+         @Html.Label("", ((DataStatus)Model.Status).ToFriendlyString())
     </div>
 
-    <div class="display-label">CreatedUser</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreatedUser)
-    </div>
 
-    <div class="display-label">CreatedDate</div>
+    <div class="display-label">@Html.LabelFor(m=>m.CreatedDate)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.CreatedDate)
     </div>
 
-    <div class="display-label">UpdatedDate</div>
+    <div class="display-label">@Html.LabelFor(m=>m.UpdatedDate)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.UpdatedDate)
-    </div>
-
-    <div class="display-label">UpdatedUser</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.UpdatedUser)
     </div>
 
     <div class="display-label">
@@ -117,6 +105,6 @@
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink2("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink2("Back to List", "Index")
+    @Html.ActionLink2("修改", "Edit", new { id = Model.Id }, new {@class="btn"}) 
+    @Html.ActionLink2("列表", "Index", null, new { @class="btn"})
 </p>

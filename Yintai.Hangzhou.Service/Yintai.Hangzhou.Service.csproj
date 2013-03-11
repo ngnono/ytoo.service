@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -111,6 +112,10 @@
     <Compile Include="TagDataService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
+      <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
+      <Name>com.intime.fashion.common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11F8922E-2EEB-4229-BA7C-1D44843C4EDA}</Project>
       <Name>Yintai.Hangzhou.Contract</Name>
@@ -128,7 +133,9 @@
       <Name>Yintai.Hangzhou.Repository</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Fakes Include="Fakes\com.intime.fashion.common.fakes" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

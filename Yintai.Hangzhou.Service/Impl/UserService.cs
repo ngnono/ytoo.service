@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.intime.fashion.common;
+using System;
 using System.Linq;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
@@ -62,13 +63,14 @@ namespace Yintai.Hangzhou.Service.Impl
 
         public UserModel Get(string userName, string password)
         {
-            var entity = _customerRepository.GetItem(userName, password);
+            var entity = _customerRepository.Get(m=>m.Name == userName).FirstOrDefault();
 
             if (entity == null)
             {
                 return null;
             }
-
+            if (!SecurityHelper.CheckEqual(password, entity.Password))
+                return null;
             return _mapping.UserModelMapping(entity);
             // return MappingManager.UserModelMapping(entity);
         }

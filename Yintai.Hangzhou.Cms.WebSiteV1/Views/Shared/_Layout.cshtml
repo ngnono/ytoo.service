@@ -50,34 +50,14 @@
                         <li>@Html.ActionLink2("商品管理", "Index", "Product")</li>
                         <li>@Html.ActionLink2("促销管理", "Index", "Promotion")</li>
                         <li>@Html.ActionLink2("专题管理", "Index", "SpecialTopic")</li>
-                        
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">用户管理<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink2("用户信息", "Index", "Customer")</li>
-                                <li>@Html.ActionLink2("积分", "Index", "Point")</li>
-                                <li>@Html.ActionLink2("评论", "Index", "Comment")</li>
-                                <li>@Html.ActionLink2("反馈", "Index", "Feedback")</li>
-                                
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">配置信息<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink2("图片管理", "Index", "Resource")</li>
-                                <li>@Html.ActionLink2("品牌维护", "Index", "Brand")</li>
-                                <li>@Html.ActionLink2("实体店维护", "Index", "Store")</li>
-                                <li>@Html.ActionLink2("Tag维护", "Index", "Tag")</li>
-                                <li>@Html.ActionLink2("权限管理", "Index", "Role")</li>
-                             </ul>
-                        </li>     
+                        <li>@Html.ActionLink2("用户管理", "Index", "Customer")</li>
+                        <li>@Html.ActionLink2("配置管理", "Index", "Configuration")</li>   
                         
 
                     </ul>
                 </div>
                 @Html.Partial("_LogOnPartial")
 
-                <!--/.nav-collapse -->
             </div>
 
         </div>
