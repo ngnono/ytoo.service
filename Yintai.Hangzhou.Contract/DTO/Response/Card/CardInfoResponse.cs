@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
+using Yintai.Architecture.Common;
 using Yintai.Hangzhou.Contract.Response;
 
 namespace Yintai.Hangzhou.Contract.DTO.Response.Card
@@ -17,34 +15,45 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Card
         public string CardNo { get; set; }
 
         [DataMember(Name = "amount")]
-        public Decimal? Amount { get; set; }
-
-        private DateTime? _lastDate;
-
-        [DataMember(Name = "lastdate")]
-        public DateTime? LastDate
+        public int Amount
         {
-            get { return _lastDate; }
-            set { _lastDate = value; }
+            get { return Point == null ? 0 : (int)Point.Value; }
+            set { }
         }
 
         [IgnoreDataMember]
-        public int Type { get; set; }
+        public decimal? Point { get; set; }
+
+        [DataMember(Name = "lastdate")]
+        public string LastDateStr
+        {
+            get { return LastDate == null ? String.Empty : LastDate.Value.ToString(Define.DateDefaultFormat); }
+            set { }
+        }
 
         [IgnoreDataMember]
+        public DateTime? LastDate { get; set; }
+
+        [DataMember(Name = "lvl")]
+        public string CardLvl { get; set; }
+
+        [DataMember(Name = "type")]
+        public string CardType { get; set; }
+
+        [DataMember(Name = "userid")]
         public int User_Id { get; set; }
 
         [IgnoreDataMember]
         public int Status { get; set; }
 
         [IgnoreDataMember]
-        public System.DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         [IgnoreDataMember]
         public int CreatedUser { get; set; }
 
         [IgnoreDataMember]
-        public System.DateTime UpdatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
 
         [IgnoreDataMember]
         public int UpdatedUser { get; set; }

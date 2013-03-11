@@ -14,6 +14,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int CreatedUser { get; set; }
         public System.DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
+        public string CardProfile { get; set; }
 
         #region Overrides of BaseEntity
 

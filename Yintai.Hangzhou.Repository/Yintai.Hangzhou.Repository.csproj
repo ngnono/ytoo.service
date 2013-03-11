@@ -61,6 +61,7 @@
     <Compile Include="Configuratons\ConfigManager.cs" />
     <Compile Include="Contract\IAdminAccessRightRepository.cs" />
     <Compile Include="Contract\IBrandRepository.cs" />
+    <Compile Include="Contract\ICardRepository.cs" />
     <Compile Include="Contract\ICommentRepository.cs" />
     <Compile Include="Contract\ICouponRepository.cs" />
     <Compile Include="Contract\IDeviceLogsRepository.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Contract\IVUserRoleRepository.cs" />
     <Compile Include="Impl\AdminAccessRightRepository.cs" />
     <Compile Include="Impl\BrandRepository.cs" />
+    <Compile Include="Impl\CardRepository.cs" />
     <Compile Include="Impl\ProductBulkRepository.cs" />
     <Compile Include="Impl\PromotionProductRelation.cs" />
     <Compile Include="Impl\SeedRepository.cs" />

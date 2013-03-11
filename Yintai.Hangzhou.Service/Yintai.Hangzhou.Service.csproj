@@ -63,6 +63,7 @@
     <Compile Include="ApnsDataService.cs" />
     <Compile Include="BaseService.cs" />
     <Compile Include="BrandDataService.cs" />
+    <Compile Include="CardDataService.cs" />
     <Compile Include="CommentDataService.cs" />
     <Compile Include="Contract\Apis\IGroupCardService.cs" />
     <Compile Include="Contract\IApnsService.cs" />

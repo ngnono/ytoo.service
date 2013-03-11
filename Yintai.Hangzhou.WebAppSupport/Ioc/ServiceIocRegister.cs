@@ -1,5 +1,6 @@
 using Yintai.Hangzhou.Contract.Apns;
 using Yintai.Hangzhou.Contract.Brand;
+using Yintai.Hangzhou.Contract.Card;
 using Yintai.Hangzhou.Contract.Comment;
 using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.Customer;
@@ -16,7 +17,9 @@ using Yintai.Hangzhou.Contract.Store;
 using Yintai.Hangzhou.Contract.Tag;
 using Yintai.Hangzhou.Service;
 using Yintai.Hangzhou.Service.Contract;
+using Yintai.Hangzhou.Service.Contract.Apis;
 using Yintai.Hangzhou.Service.Impl;
+using Yintai.Hangzhou.Service.Impl.Apis;
 using Yintai.Hangzhou.Service.Manager;
 
 namespace Yintai.Hangzhou.WebSupport.Ioc
@@ -58,6 +61,9 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IUserService, UserService>();
             Current.Register<IUserRightService, UserRightService>();
             Current.Register<MappingManagerV2, MappingManagerV2>();
+
+            Current.Register<ICardDataService, CardDataService>();
+            Current.RegisterSingleton<IGroupCardService, GroupCardService>();
         }
 
         #endregion

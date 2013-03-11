@@ -51,6 +51,8 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IPromotionProductRelationRepository, PromotionProductRelationRepository>();
             Current.Register<IProductBulkRepository, ProductBulkRepository>();
             Current.Register<IAdminAccessRightRepository, AdminAccessRightRepository>();
+
+            Current.Register<ICardRepository, CardRepository>();
         }
 
         #endregion

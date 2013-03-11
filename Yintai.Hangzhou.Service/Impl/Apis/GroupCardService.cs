@@ -4,13 +4,15 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml;
+using System.Xml.Linq;
 using Yintai.Architecture.Framework.Extension;
 using Yintai.Hangzhou.Service.Contract.Apis;
 using Yintai.Hangzhou.Service.Manager;
 
 namespace Yintai.Hangzhou.Service.Impl.Apis
 {
-    internal class GroupCardService : BaseService, IGroupCardService
+    public class GroupCardService : BaseService, IGroupCardService
     {
         private readonly byte[] _key = Encoding.UTF8.GetBytes(ConfigManager.GetGroupCardKey());
 
@@ -46,20 +48,18 @@ namespace Yintai.Hangzhou.Service.Impl.Apis
             }
         }
 
-        private static string OpenUrl(string url, string method, string ua, string ct, Dictionary<string, string> queryParams, string enc)
+        private static string OpenUrl(string url, string method, string ua, string ct, Dictionary<string, string> queryParams, string postdata, string enc)
         {
             HttpWebResponse response;
-            if (method.Equals("GET"))
-            {
-                if (queryParams != null)
-                {
-                    if (url.IndexOf("?", StringComparison.Ordinal) == -1)
-                    {
-                        url = url + "?";
-                    }
 
-                    url = url + EQueryParams(queryParams);
+            if (queryParams != null)
+            {
+                if (url.IndexOf("?", StringComparison.Ordinal) == -1)
+                {
+                    url = url + "?";
                 }
+
+                url = url + EQueryParams(queryParams);
             }
 
             var request = (HttpWebRequest)WebRequest.Create(url);
@@ -76,13 +76,23 @@ namespace Yintai.Hangzhou.Service.Impl.Apis
 
             request.ReadWriteTimeout = 10000;
 
-            //if (method.Equals("POST"))
-            //{
-            //    if (queryParams != null)
-            //    {
+            if (method.Equals("POST"))
+            {
+                if (postdata != null)
+                {
+                    var bytes = Encoding.ASCII.GetBytes(postdata);
+                    request.ContentLength = bytes.Length;
 
-            //    }
-            //}
+                    //Get Stream object
+                    var objRequestStream = request.GetRequestStream();
+
+                    //Writes a sequence of bytes to the current stream
+                    objRequestStream.Write(bytes, 0, bytes.Length);
+
+                    //Close stream
+                    objRequestStream.Close();
+                }
+            }
 
             try
             {
@@ -160,7 +170,7 @@ namespace Yintai.Hangzhou.Service.Impl.Apis
 
             if (sb.Length > 0)
             {
-                sb.Remove(sb.Length, 1);
+                sb.Remove(sb.Length - 1, 1);
             }
             else
             {
@@ -170,29 +180,64 @@ namespace Yintai.Hangzhou.Service.Impl.Apis
             return sb.ToString();
         }
 
-        ///   <summary>
-        ///   给一个字符串进行MD5加密
-        ///   </summary>
-        ///   <param   name="input">待加密字符串</param>
-        ///   <returns>加密后的字符串</returns>
-        public static string MD5Encrypt(string input)
+        // Hash an input string and return the hash as
+        // a 32 character hexadecimal string.
+        static string GetMd5Hash(string input)
         {
-            MD5 md5 = new MD5CryptoServiceProvider();
+            //return input;
 
-            var result = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
+            // Create a new instance of the MD5CryptoServiceProvider object.
+            MD5 md5Hasher = MD5.Create();
 
-            return Encoding.UTF8.GetString(result);
+            // Convert the input string to a byte array and compute the hash.
+            byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(input));
+
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            md5Hasher.Clear();
+            md5Hasher.Dispose();
+
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
+        }
+
+        // Verify a hash against a string.
+        static bool VerifyMd5Hash(string input, string hash)
+        {
+            // Hash the input.
+            string hashOfInput = GetMd5Hash(input);
+
+            // Create a StringComparer an comare the hashes.
+            StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+
+            if (0 == comparer.Compare(hashOfInput, hash))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         #endregion
 
         public GroupCardPointResult GetPoint(GroupCardPointRequest request)
         {
-            var body = OpenUrl(ConfigManager.GetGroupCardQueryScoreUrl(), "GET", null, null,
-                               new Dictionary<string, string>
-                                   {
-                                       {"cardno", GetGroupCardEncryptString(request.CardNo)}
-                                   }, null);
+            var root = new XElement("vipCard",
+                        new XElement("cardno", GetGroupCardEncryptString(request.CardNo)));
+            var postData = root.ToString(SaveOptions.DisableFormatting);
+
+            var body = OpenUrl(ConfigManager.GetGroupCardQueryScoreUrl(), "POST", null, "application/xml", null, postData, null);
 
             var result = JsonExtension.FromJson<GroupCardPointResult>(body);
 
@@ -201,12 +246,12 @@ namespace Yintai.Hangzhou.Service.Impl.Apis
 
         public GroupCardInfoResult GetInfo(GroupCardInfoRequest request)
         {
-            var body = OpenUrl(ConfigManager.GetGroupCardInfoUrl(), "GET", null, null,
-                   new Dictionary<string, string>
-                                   {
-                                       {"cardno", GetGroupCardEncryptString(request.CardNo)},
-                                       {"passwd",MD5Encrypt(request.Passwd)}
-                                   }, null);
+            var root = new XElement("vipCard",
+                                    new XElement("cardno", GetGroupCardEncryptString(request.CardNo)),
+                                    new XElement("passwd", GetMd5Hash(request.Passwd).ToUpper()));
+            var postData = root.ToString(SaveOptions.DisableFormatting);
+
+            var body = OpenUrl(ConfigManager.GetGroupCardInfoUrl(), "POST", null, "application/xml", null, postData, null);
 
             var result = JsonExtension.FromJson<GroupCardInfoResult>(body);
 

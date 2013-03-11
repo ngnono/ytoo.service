@@ -1,22 +1,34 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Yintai.Hangzhou.Service.Contract.Apis
 {
-    internal interface IGroupCardService
+    public interface IGroupCardService
     {
         GroupCardPointResult GetPoint(GroupCardPointRequest request);
 
         GroupCardInfoResult GetInfo(GroupCardInfoRequest request);
     }
 
+    [DataContract(Name = "vipCard")]
+    public abstract class GroupCardRequest
+    {
+    }
+
+    [DataContract(Name = "vipCard")]
     public class GroupCardInfoRequest
     {
+        [DataMember(Name = "cardno")]
         public string CardNo { get; set; }
+
+        [DataMember(Name = "passwd")]
         public string Passwd { get; set; }
     }
 
+    [DataContract(Name = "vipCard")]
     public class GroupCardPointRequest
     {
+        [DataMember(Name = "cardno")]
         public string CardNo { get; set; }
     }
 
@@ -38,7 +50,14 @@ namespace Yintai.Hangzhou.Service.Contract.Apis
         public string Desc { get; set; }
 
         [DataMember(Name = "Point")]
-        public int Point { get; set; }
+        public decimal Point { get; set; }
+    }
+
+    public enum GroupCardRetType
+    {
+        Default = 0,
+
+        Ok = 1
     }
 
     [DataContract]
@@ -46,6 +65,13 @@ namespace Yintai.Hangzhou.Service.Contract.Apis
     {
         [DataMember(Name = "Ret")]
         public int Ret { get; set; }
+
+        [IgnoreDataMember]
+        public GroupCardRetType RetType
+        {
+            get { return (GroupCardRetType)Ret; }
+            set { }
+        }
 
         [DataMember(Name = "Desc")]
         public string Desc { get; set; }

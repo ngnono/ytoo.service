@@ -241,6 +241,11 @@ namespace Yintai.Hangzhou.Service.Impl
             //return MappingManager.UserModelMapping(user);
         }
 
+        public void SetCardBinder(int userId, bool? binded)
+        {
+            _customerRepository.SetCardBinded(userId, binded);
+        }
+
         public void AddFover(int userId, int foverCount, int updateUserId)
         {
             AddCount(userId, AccountType.FavorCount, foverCount, updateUserId);

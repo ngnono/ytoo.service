@@ -162,6 +162,23 @@ WHERE  Id = @Id;";
             return i;
         }
 
+        public int SetCardBinded(int userId, bool? binded)
+        {
+            var parames = new List<SqlParameter>
+                {
+                    new SqlParameter("@IsCardBinded", binded),
+                    new SqlParameter("@UserId", userId),
+                };
+
+            const string sql = @"UPDATE [dbo].[User]
+SET    [IsCardBinded] = @IsCardBinded
+WHERE  Id = @UserId;";
+
+            var i = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnection(), CommandType.Text, sql, parames.ToArray());
+
+            return i;
+        }
+
         public override void Delete(object id)
         {
 

@@ -135,6 +135,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
         public string AppId { get; set; }
 
         [DataMember(Name = "isbindcard")]
-        public bool IsBindCard { get; set; }
+        public bool? IsCardBinded { get; set; }
     }
 }

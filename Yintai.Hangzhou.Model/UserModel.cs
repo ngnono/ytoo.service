@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Model.Enums;
-using System.Linq;
 
 namespace Yintai.Hangzhou.Model
 {
@@ -100,5 +99,7 @@ namespace Yintai.Hangzhou.Model
         /// 分享数
         /// </summary>
         public int ShareCount { get; set; }
+
+        public bool? IsCardBinded { get; set; }
     }
 }

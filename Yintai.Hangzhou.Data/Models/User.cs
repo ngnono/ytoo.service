@@ -23,6 +23,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string Logo { get; set; }
         public string Description { get; set; }
         public byte Gender { get; set; }
+        public Nullable<bool> IsCardBinded { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -14,6 +14,7 @@ using Yintai.Hangzhou.Contract.DTO.Request.Store;
 using Yintai.Hangzhou.Contract.DTO.Request.Tag;
 using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Contract.DTO.Response.Brand;
+using Yintai.Hangzhou.Contract.DTO.Response.Card;
 using Yintai.Hangzhou.Contract.DTO.Response.Comment;
 using Yintai.Hangzhou.Contract.DTO.Response.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Response.Customer;
@@ -3897,6 +3898,21 @@ namespace Yintai.Hangzhou.Service.Manager
 
         #endregion
 
+        #region card
+
+        public CardInfoResponse CardInfoResponseMapping(CardEntity source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<CardEntity, CardInfoResponse>(source);
+
+            return target;
+        }
+
+        #endregion
     }
     // */ 
 }
