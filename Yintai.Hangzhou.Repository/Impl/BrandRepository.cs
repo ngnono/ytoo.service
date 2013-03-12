@@ -75,5 +75,10 @@ namespace Yintai.Hangzhou.Repository.Impl
         {
             return base.Get(Filler(DataStatus.Normal), out totalCount, pagerRequest.PageIndex, pagerRequest.PageSize, OrderBy(sortOrder)).ToList();
         }
+
+        public IEnumerable<BrandEntity> Get(DataStatus? status)
+        {
+            return base.Get(Filler(status));
+        }
     }
 }

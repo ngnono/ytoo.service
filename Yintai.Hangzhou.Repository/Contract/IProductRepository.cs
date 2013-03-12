@@ -19,6 +19,22 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="sortOrder">排序方式</param>
         /// <param name="timestamp">时间戳 </param>
         /// <param name="productName">产品名称</param>
+        /// <param name="brandName">品牌名</param>
+        /// <param name="recommendUser">推荐人</param>
+        /// <param name="tagids">Tag ids</param>
+        /// <param name="brandId">品牌Id</param>
+        /// <param name="dataStatus"></param>
+        /// <returns></returns>
+        IEnumerable<ProductEntity> Search(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, Timestamp timestamp, string productName, string brandName, int? recommendUser, List<int> tagids, int? brandId,DataStatus? dataStatus);
+
+        /// <summary>
+        /// 分页
+        /// </summary>
+        /// <param name="pagerRequest">page</param>
+        /// <param name="totalCount">记录数</param>
+        /// <param name="sortOrder">排序方式</param>
+        /// <param name="timestamp">时间戳 </param>
+        /// <param name="productName">产品名称</param>
         /// <param name="recommendUser">推荐人</param>
         /// <param name="tagids">Tag ids</param>
         /// <param name="brandId">品牌Id</param>
@@ -76,7 +92,7 @@ namespace Yintai.Hangzhou.Repository.Contract
         List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter);
 
         IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount
-            ,int?id, string name, DataStatus? status, string store, string topic, string tag
-            , ProductSortOrder? sort, string brand, int? user,string promotion);
+            , int? id, string name, DataStatus? status, string store, string topic, string tag
+            , ProductSortOrder? sort, string brand, int? user, string promotion);
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Model.Filters;
@@ -229,6 +230,31 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         #endregion
 
+        public IEnumerable<ProductEntity> Search(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, Timestamp timestamp,
+                                  string productName, string brandName, int? recommendUser, List<int> tagids, int? brandId, DataStatus? dataStatus)
+        {
+            var filter = Filter(dataStatus, timestamp, tagids, recommendUser, brandId);
+
+            if (!String.IsNullOrWhiteSpace(productName))
+            {
+                filter = filter.And(v => v.Name.Contains(productName));
+            }
+
+            totalCount = 0;
+
+            var p = base.Get(filter).Take(pagerRequest.PageSize);
+
+            if (!String.IsNullOrEmpty(brandName))
+            {
+                var b = (ServiceLocator.Current.Resolve<IBrandRepository>().Get(DataStatus.Normal) as IQueryable<BrandEntity>).Where(v => v.Name.Contains(brandName) || v.EnglishName.Contains(brandName));
+                var r = p.Join(b, v => v.Brand_Id, j => j.Id, (v, j) => v);
+
+                return r;
+            }
+
+            return p;
+        }
+
         public List<ProductEntity> GetPagedListForSearch(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, Timestamp timestamp,
                                         string productName, int? recommendUser, List<int> tagids, int? brandId)
         {
@@ -397,16 +423,16 @@ namespace Yintai.Hangzhou.Repository.Impl
             , int? id
             , string name
             , DataStatus? status, string store, string topic, string tag, ProductSortOrder? sort
-            , string brand, int? user,string promotion)
+            , string brand, int? user, string promotion)
         {
-            var linq = base.Get(p=> (!id.HasValue || p.Id == id.Value) &&
+            var linq = base.Get(p => (!id.HasValue || p.Id == id.Value) &&
                 (string.IsNullOrEmpty(name) || p.Name.StartsWith(name)) &&
-                (!user.HasValue || p.CreatedUser==user.Value) &&
-                (!status.HasValue || p.Status== (int)status.Value) &&
+                (!user.HasValue || p.CreatedUser == user.Value) &&
+                (!status.HasValue || p.Status == (int)status.Value) &&
                 p.Status != (int)DataStatus.Deleted);
 
             if (!string.IsNullOrEmpty(topic) &&
-                topic.Trim().Length>0)
+                topic.Trim().Length > 0)
             {
                 linq = (from p in linq
                         from ps in Context.Set<SpecialTopicProductRelationEntity>()
@@ -422,7 +448,7 @@ namespace Yintai.Hangzhou.Repository.Impl
                 linq = (from p in linq
                         from ps in Context.Set<StoreEntity>()
                         where ps.Id == p.Store_Id
-                            && ps.Name.StartsWith(store) 
+                            && ps.Name.StartsWith(store)
                         select p);
             }
             if (!string.IsNullOrEmpty(brand) &&

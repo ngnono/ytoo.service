@@ -35,5 +35,7 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="sortOrder">排序方式</param>
         /// <returns></returns>
         List<BrandEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, BrandSortOrder sortOrder);
+
+        IEnumerable<BrandEntity> Get(DataStatus? status);
     }
 }
