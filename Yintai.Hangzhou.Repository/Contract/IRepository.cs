@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
 
@@ -27,5 +28,9 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="query"></param>
         /// <returns></returns>
         IEnumerable<TEntity> AutoComplete(string query);
+        /// <summary>
+        /// Context should open to utilize the iquerable feature
+        /// </summary>
+        DbContext Context { get; }
     }
 }

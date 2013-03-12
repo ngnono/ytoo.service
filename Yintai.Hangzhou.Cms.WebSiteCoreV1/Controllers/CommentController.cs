@@ -10,6 +10,7 @@ using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.WebSupport.Mvc;
@@ -20,33 +21,101 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
     public class CommentController : UserController
     {
         private readonly ICommentRepository _commentRepository;
-        public CommentController(ICommentRepository commentRepository)
+        private ICustomerRepository _customerRepository;
+        private IProductRepository _productRepository;
+        private IPromotionRepository _promotionRepository;
+        private IResourceRepository _resourceRepository;
+        public CommentController(ICommentRepository commentRepository
+            ,ICustomerRepository customerRepository
+            ,IPromotionRepository promotionRepository
+            ,IProductRepository productRepository
+            ,IResourceRepository resourceRepository)
         {
             this._commentRepository = commentRepository;
+            _customerRepository = customerRepository;
+            _productRepository = productRepository;
+            _promotionRepository = promotionRepository;
+            _resourceRepository = resourceRepository;
         }
 
-        public ActionResult Index(PagerRequest request, int? sort, int? sourceId, int? sourceType, int? userId)
+        public ActionResult Index(PagerRequest request, CommentSearchOption search)
         {
-            return List(request, sort, sourceId, sourceType, userId);
+            return List(request, search);
         }
 
-        public ActionResult List(PagerRequest request, int? sort, int? sourceId, int? sourceType, int? userId)
+        public ActionResult List(PagerRequest request, CommentSearchOption search)
         {
             int totalCount;
-            var sortOrder = (CommentSortOrder)(sort ?? 0);
+            var data = _commentRepository.Search(request.PageIndex
+                , request.PageSize
+                ,out totalCount
+                ,search);
+            var resourceQuerable = _commentRepository.Context.Set<ResourceEntity>().AsQueryable();
+            var vo =
+                     from u in _commentRepository.Context.Set<UserEntity>()
+                     from p in data
+                     where p.User_Id == u.Id
+                     let commentResource =
+                            (from r in resourceQuerable
+                             where r.SourceId == p.Id && p.SourceType == (int)SourceType.Comment
+                             select new ResourceViewModel
+                             {
+                                 Domain = r.Domain,
+                                 Name = r.Name,
+                                 Id = r.Id,
+                                 ExtName = r.ExtName,
+                                 Type = r.Type
+                             }).FirstOrDefault()
+                     let sourceResource =
+                            (from r in resourceQuerable
+                             where r.SourceId == p.SourceId && r.SourceType == p.SourceType
+                             select new ResourceViewModel
+                             {
+                                 Domain = r.Domain,
+                                 Name = r.Name,
+                                 Id = r.Id,
+                                 ExtName = r.ExtName,
+                                 Type = r.Type
+                             }).FirstOrDefault()
+                     select new CommentViewModel
+                     {
+                         CommentResource =commentResource
+                         ,
+                         SourceResource = sourceResource 
+                         ,
+                         Content = p.Content
+                         ,
+                         CreatedDate = p.CreatedDate
+                         ,
+                         CreatedUser = p.CreatedUser
+                         ,
+                         Id = p.Id
+                         ,
+                         ReplyId = p.ReplyId
+                         ,
+                         ReplyUser = p.ReplyUser
+                         ,
+                         SourceId = p.SourceId
+                         ,
+                         SourceType = p.SourceType
+                         ,
+                         Status = p.Status
+                         ,
+                         UpdatedDate = p.UpdatedDate
+                         ,
+                         UpdatedUser = p.UpdatedUser
+                         ,
+                         User_Id = p.User_Id
+                         ,
+                         CommentUser = new CustomerViewModel
+                         {
+                             Id = u.Id,
+                             Name = u.Name,
+                             Nickname = u.Nickname
 
-            List<CommentEntity> data;
+                         }
+                     };
 
-            if (sourceId != null || sourceType != null || userId != null)
-            {
-                data = _commentRepository.GetPagedList(request, out totalCount, sortOrder, sourceId, EnumExtension.Parser<SourceType>(sourceType ?? 0), userId);
-            }
-            else
-            {
-                data = _commentRepository.GetPagedList(request, out totalCount, sortOrder);
-            }
-
-            var vo = MappingManager.CommentViewMapping(data);
 
             var v = new CommentCollectionViewModel(request, totalCount) { Comments = vo.ToList() };
 
@@ -66,9 +135,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return View(vo);
         }
 
-        public ActionResult Create()
+        public ActionResult Create(int? commentid,[FetchComment(KeyName = "commentId")]CommentEntity comment)
         {
-            return View();
+            if (comment == null)
+                RedirectToAction("List");
+
+            return View(new CommentViewModel { 
+                 ReplyId = comment.Id
+            });
         }
 
         public ActionResult Delete(int? id, [FetchComment(KeyName = "id")]CommentEntity entity)
@@ -84,66 +158,81 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return View(vo);
         }
 
-        public ActionResult Edit(int? id, [FetchComment(KeyName = "id")]CommentEntity entity)
-        {
-            if (id == null || entity == null)
-            {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View();
-            }
-
-            var vo = MappingManager.CommentViewMapping(entity);
-
-            return View(vo);
-        }
-
+       
         [HttpPost]
         public ActionResult Create(FormCollection formCollection, CommentViewModel vo)
         {
             if (ModelState.IsValid)
             {
+                
+                var targetEntity = _commentRepository.Find(c => c.Id == vo.ReplyId);
+                if (targetEntity ==null)
+                {
+                    ModelState.AddModelError(string.Empty,"没有指定回复的评论");
+                    return View(vo);
+                }
                 var entity = MappingManager.CommentEntityMapping(vo);
-                entity.CreatedUser = base.CurrentUser.CustomerId;
-                entity.UpdatedUser = base.CurrentUser.CustomerId;
+                entity.ReplyUser = targetEntity.CreatedUser;
+                entity.CreatedUser = CurrentUser.CustomerId;
+                entity.CreatedDate = DateTime.Now;
                 entity.Status = (int)DataStatus.Normal;
+                entity.SourceId = targetEntity.SourceId;
+                entity.SourceType = targetEntity.SourceType;
+                entity.User_Id = CurrentUser.CustomerId;
+                entity.UpdatedUser = CurrentUser.CustomerId;
+                entity.UpdatedDate = DateTime.Now;
 
                 entity = this._commentRepository.Insert(entity);
 
-                return Success("/" + RouteData.Values["controller"] + "/edit/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+                return RedirectToAction("Details", new {id= entity.Id });
             }
 
             return View(vo);
         }
 
         [HttpPost]
-        public ActionResult Edit(FormCollection formCollection, [FetchComment(KeyName = "id")]CommentEntity entity, CommentViewModel vo)
-        {
-            if (entity == null || !ModelState.IsValid)
-            {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View(vo);
-            }
-
-            var newEntity = MappingManager.CommentEntityMapping(vo);
-            newEntity.CreatedUser = entity.CreatedUser;
-            newEntity.CreatedDate = entity.CreatedDate;
-            newEntity.Status = entity.Status;
-
-            MappingManager.CommentEntityMapping(newEntity, entity);
-
-            this._commentRepository.Update(entity);
-
-
-            return Success("/" + RouteData.Values["controller"] + "/details/" + entity.Id.ToString(CultureInfo.InvariantCulture));
-        }
-
-        [HttpPost]
-        public ActionResult Delete(FormCollection formCollection, [FetchComment(KeyName = "id")]CommentEntity entity)
+        public JsonResult OffLine([FetchComment(KeyName = "id")]CommentEntity entity)
         {
             if (entity == null)
             {
                 ModelState.AddModelError("", "参数验证失败.");
-                return View();
+                return FailResponse();
+            }
+
+            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedUser = CurrentUser.CustomerId;
+            entity.Status = (int)DataStatus.Default;
+
+            this._commentRepository.Update(entity);
+
+            return SuccessResponse();
+        }
+        [HttpPost]
+        public JsonResult OnLine([FetchComment(KeyName = "id")]CommentEntity entity)
+        {
+            if (entity == null)
+            {
+                ModelState.AddModelError("", "参数验证失败.");
+                return FailResponse();
+            }
+
+            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedUser = CurrentUser.CustomerId;
+            entity.Status = (int)DataStatus.Normal;
+
+            this._commentRepository.Update(entity);
+
+            return SuccessResponse();
+        }
+      
+
+        [HttpPost]
+        public JsonResult Delete([FetchComment(KeyName = "id")]CommentEntity entity)
+        {
+            if (entity == null)
+            {
+                ModelState.AddModelError("", "参数验证失败.");
+                return FailResponse();
             }
 
             entity.UpdatedDate = DateTime.Now;
@@ -152,7 +241,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             this._commentRepository.Delete(entity);
 
-            return Success("/" + RouteData.Values["controller"] + "/" + RouteData.Values["action"]);
+            return SuccessResponse();
         }
 
     }

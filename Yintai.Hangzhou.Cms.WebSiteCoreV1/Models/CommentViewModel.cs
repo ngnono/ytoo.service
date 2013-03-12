@@ -34,17 +34,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public string Content { get; set; }
 
         [Range(0, Int32.MaxValue)]
-        [Required]
         [Display(Name = "发表评论人")]
         public int User_Id { get; set; }
 
         [Range(0, Int32.MaxValue)]
-        [Required]
         [Display(Name = "来源Id")]
         public int SourceId { get; set; }
 
         [Range(0, Int32.MaxValue)]
-        [Required]
         [Display(Name = "来源类型")]
         public int SourceType { get; set; }
 
@@ -67,5 +64,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public System.DateTime UpdatedDate { get; set; }
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
+
+        public ResourceViewModel SourceResource { get; set; }
+        public ResourceViewModel CommentResource { get; set; }
+        public CustomerViewModel CommentUser { get; set; }
+
     }
+   
 }

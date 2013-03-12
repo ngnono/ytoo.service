@@ -63,6 +63,8 @@
     <Compile Include="Enums\StoreSortOrder.cs" />
     <Compile Include="Enums\TagSortOrder.cs" />
     <Compile Include="Enums\UserRole.cs" />
+    <Compile Include="Filters\CommentSearchOption.cs" />
+    <Compile Include="Filters\GenericOrder.cs" />
     <Compile Include="Filters\ProductFilter.cs" />
     <Compile Include="UserAccountModel.cs" />
     <Compile Include="WebSiteUser.cs" />

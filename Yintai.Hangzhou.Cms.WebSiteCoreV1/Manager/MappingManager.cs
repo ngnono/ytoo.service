@@ -433,6 +433,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             }
 
             var target = Mapper.Map<CommentEntity, CommentViewModel>(source);
+            target.CommentUser = MapCommon<UserEntity, CustomerViewModel>(_customerRepository.GetItem(source.User_Id));
 
             return target;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager;
@@ -8,6 +9,7 @@ using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
@@ -26,18 +28,44 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             _userService = userService;
         }
 
-        public ActionResult Index(PagerRequest request, int? sort)
+        public ActionResult Index(PagerRequest request, PointListSearchOption search)
         {
-            return List(request, sort);
+            return List(request, search);
         }
 
-        public ActionResult List(PagerRequest request, int? sort)
+        public ActionResult List(PagerRequest request, PointListSearchOption search)
         {
             int totalCount;
-            var sortOrder = (PointSortOrder)(sort ?? 0);
+            var data = _pointRepository.Get(e => (!search.UId.HasValue || e.User_Id == search.UId.Value)
+                                                  && e.Status != (int)DataStatus.Deleted
+                                                  && (!search.PSourceType.HasValue || e.PointSourceType == (int)search.PSourceType.Value)
+                                                  && (!search.PSourceId.HasValue || e.PointSourceId == (int)search.PSourceId.Value)
+                                                  && (!search.PType.HasValue || e.Type == (int)search.PType.Value)
 
-            var data = _pointRepository.GetPagedList(request, out totalCount, sortOrder);
-            var vo = MappingManager.PointViewMapping(data);
+                                            , out totalCount
+                                            , request.PageIndex
+                                            , request.PageSize
+                                            , e =>
+                                            {
+                                                if (!search.OrderBy.HasValue)
+                                                    return e.OrderByDescending(o => o.CreatedDate);
+                                                else
+                                                {
+                                                    switch (search.OrderBy.Value)
+                                                    {
+                                                        case GenericOrder.OrderByCreateUser:
+                                                            return e.OrderByDescending(o => o.CreatedUser);
+                                                        case GenericOrder.OrderByName:
+                                                            return e.OrderByDescending(o => o.Name);
+                                                        case GenericOrder.OrderByCreateDate:
+                                                        default:
+                                                            return e.OrderByDescending(o => o.CreatedDate);
+
+                                                    }
+                                                }
+                                            });
+            
+            var vo = MappingManager.PointViewMapping(data.ToList());
 
             var v = new PointCollectionViewModel(request, totalCount) { Points = vo.ToList() };
 
@@ -62,32 +90,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return View();
         }
 
-        public ActionResult Delete(int? id, [FetchPoint(KeyName = "id")]PointHistoryEntity entity)
-        {
-            if (id == null || entity == null)
-            {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View();
-            }
-
-            var vo = MappingManager.PointViewMapping(entity);
-
-            return View(vo);
-        }
-
-        public ActionResult Edit(int? id, [FetchPoint(KeyName = "id")]PointHistoryEntity entity)
-        {
-            if (id == null || entity == null)
-            {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View();
-            }
-
-            var vo = MappingManager.PointViewMapping(entity);
-
-            return View(vo);
-        }
-
         [HttpPost]
         public ActionResult Create(FormCollection formCollection, PointViewModel vo)
         {
@@ -97,11 +99,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 entity.CreatedUser = base.CurrentUser.CustomerId;
                 entity.UpdatedUser = base.CurrentUser.CustomerId;
                 entity.Status = (int)DataStatus.Normal;
-
-                entity = this._pointRepository.Insert(entity);
-                //需要关联到 用户账户
-                try
+                using (var ts = new TransactionScope())
                 {
+                    entity = this._pointRepository.Insert(entity);
+
                     if (vo.Amount > 0)
                     {
                         _userService.AddPoint(vo.User_Id, (int)vo.Amount, base.CurrentUser.CustomerId);
@@ -110,95 +111,42 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                     {
                         _userService.SubPoint(vo.User_Id, (int)vo.Amount, base.CurrentUser.CustomerId);
                     }
-                }
-                catch (Exception ex)
-                {
-                    //回滚
-
-                    this._pointRepository.Delete(entity);
-
-                    throw;
+                    ts.Complete();
                 }
 
-                return Success("/" + RouteData.Values["controller"] + "/edit/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+                return RedirectToAction("Details", new { id = entity.Id });
             }
 
             return View(vo);
         }
 
+     
         [HttpPost]
-        public ActionResult Edit(FormCollection formCollection, [FetchPoint(KeyName = "id")]PointHistoryEntity entity, PointViewModel vo)
-        {
-            if (entity == null || !ModelState.IsValid)
-            {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View(vo);
-            }
-
-            if ((int)entity.Amount != (int)vo.Amount)
-            {
-                ModelState.AddModelError("", "参数验证失败.数量不能修改，请删除后重新添加");
-                return View(vo);
-            }
-
-            var newEntity = MappingManager.PointHistoryEntityMapping(vo);
-            newEntity.CreatedUser = entity.CreatedUser;
-            newEntity.CreatedDate = entity.CreatedDate;
-            newEntity.Status = entity.Status;
-
-            MappingManager.PointHistoryEntityMapping(newEntity, entity);
-
-            this._pointRepository.Update(entity);
-
-            return Success("/" + RouteData.Values["controller"] + "/details/" + entity.Id.ToString(CultureInfo.InvariantCulture));
-        }
-
-        [HttpPost]
-        public ActionResult Delete(FormCollection formCollection, [FetchPoint(KeyName = "id")]PointHistoryEntity entity)
+        public JsonResult Delete([FetchPoint(KeyName = "id")]PointHistoryEntity entity)
         {
             if (entity == null)
             {
-                ModelState.AddModelError("", "参数验证失败.");
-                return View();
+                return FailResponse();
             }
 
-
-            if (entity.Amount > 0)
+            using (var ts = new TransactionScope())
             {
-                _userService.SubPoint(entity.User_Id, (int)entity.Amount, base.CurrentUser.CustomerId);
-            }
-            else
-            {
-                _userService.AddPoint(entity.User_Id, (int)entity.Amount, base.CurrentUser.CustomerId);
-            }
-
-            entity.UpdatedDate = DateTime.Now;
-            entity.UpdatedUser = CurrentUser.CustomerId;
-            entity.Status = (int)DataStatus.Deleted;
-
-            try
-            {
-                _pointRepository.Delete(entity);
-            }
-            catch (Exception ex)
-            {
-                //回滚
-
                 if (entity.Amount > 0)
-                {
-                    _userService.AddPoint(entity.User_Id, (int)entity.Amount, base.CurrentUser.CustomerId);
-                }
-                else
                 {
                     _userService.SubPoint(entity.User_Id, (int)entity.Amount, base.CurrentUser.CustomerId);
                 }
+                else
+                {
+                    _userService.AddPoint(entity.User_Id, (int)entity.Amount, base.CurrentUser.CustomerId);
+                }
 
-                throw;
+                entity.UpdatedDate = DateTime.Now;
+                entity.UpdatedUser = CurrentUser.CustomerId;
+                entity.Status = (int)DataStatus.Deleted;
+                _pointRepository.Delete(entity);
+                ts.Complete();
             }
-
-
-
-            return Success("/" + RouteData.Values["controller"] + "/" + RouteData.Values["action"]);
+            return SuccessResponse();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
@@ -79,5 +80,8 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="updateUser"></param>
         /// <returns></returns>
         CommentEntity LogicallyDeleted(int commentId, int updateUser);
+
+
+        IQueryable<CommentEntity> Search(int pageIndex, int pageSize, out int totalCount, Model.Filters.CommentSearchOption search);
     }
 }

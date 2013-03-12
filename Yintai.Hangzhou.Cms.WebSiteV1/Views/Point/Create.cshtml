@@ -6,7 +6,7 @@
 @section PageBread
 {
     <ul class="breadcrumb">
-        <li>@Html.ActionLink2("用户管理", "Index","Configuration")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("用户管理", "Index")<span class="divider">/</span></li>
         <li>@Html.ActionLink2("积分管理", "Index")<span class="divider">/</span></li>
         <li class="active">@ViewBag.Title</li>
     </ul>
@@ -39,7 +39,7 @@
             @Html.LabelFor(model => model.Type)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Type)
+            @Html.DropDownListFor(model => model.Type, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Enums.PointType>())
             @Html.ValidationMessageFor(model => model.Type)
         </div>
 
@@ -59,28 +59,9 @@
             @Html.ValidationMessageFor(model => model.Description)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.PointSourceId)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.PointSourceId)
-            @Html.ValidationMessageFor(model => model.PointSourceId)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.PointSourceType)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.PointSourceType)
-            @Html.ValidationMessageFor(model => model.PointSourceType)
-        </div>
-
         <p>
-            <input type="submit" value="Create" />
+             <input type="submit" value="创建" class="btn btn-primary" />
+            @Html.ActionLink2("返回列表", "List", null, new { @class="btn"})
         </p>
     </fieldset>
 }
-
-<div>
-    @Html.ActionLink2("Back to List", "Index")
-</div>

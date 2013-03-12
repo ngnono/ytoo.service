@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -197,7 +198,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "邮箱名")]
         public string Email { get; set; }
         [Display(Name = "排序")]
-        public GenricOrder? OrderBy { get; set; }
+        public GenericOrder? OrderBy { get; set; }
       
 
     }

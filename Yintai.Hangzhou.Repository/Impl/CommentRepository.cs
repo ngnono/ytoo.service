@@ -6,6 +6,7 @@ using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.Repository.Impl
@@ -154,6 +155,97 @@ namespace Yintai.Hangzhou.Repository.Impl
             base.Update(entity);
 
             return entity;
+        }
+
+
+        public IQueryable<CommentEntity> Search(int pageIndex, int pageSize, out int totalCount, Model.Filters.CommentSearchOption search)
+        {
+            var linq = Context.Set<CommentEntity>().Where(p => (!search.ProductId.HasValue ||
+                                                   (p.SourceId == search.ProductId.Value && p.SourceType == (int)SourceType.Product))
+                                           && (!search.PromotionId.HasValue ||
+                                                   (p.SourceId == search.PromotionId.Value && p.SourceType == (int)SourceType.Promotion))
+                                           && p.Status != (int)DataStatus.Deleted);
+
+            if (!string.IsNullOrEmpty(search.CommentUserName) &&
+                search.CommentUserName.Trim().Length > 0)
+            {
+                linq = (from p in linq
+                        from ps in Context.Set<UserEntity>()
+                        where ps.Id == p.CreatedUser &&
+                           (ps.Name.StartsWith(search.CommentUserName) || ps.Nickname.StartsWith(search.CommentUserName))
+                        select p);
+            }
+
+            if (!string.IsNullOrEmpty(search.CreateUserName) &&
+                 search.CreateUserName.Trim().Length > 0)
+            {
+                linq = from p in linq
+                       let prods = (from prod in Context.Set<ProductEntity>()
+                                    join c in Context.Set<UserEntity>() on prod.CreatedUser equals c.Id
+                                    where c.Nickname.StartsWith(search.CreateUserName)
+                                     && prod.Id == p.SourceId
+                                     && p.SourceType == (int)SourceType.Product
+                                    select prod)
+                       let pros = (from pro in Context.Set<PromotionEntity>()
+                                   join c in Context.Set<UserEntity>() on pro.CreatedUser equals c.Id
+                                   where
+                                    c.Nickname.StartsWith(search.CreateUserName)
+                                    && pro.Id == p.SourceId
+                                    && p.SourceType == (int)SourceType.Promotion
+                                   select pro)
+                       where prods.Any()
+                              ||
+                              pros.Any()
+                       select p;
+            }
+            if (search.CreateUserId.HasValue)
+            {
+                linq = from p in linq
+                       let prods = (from prod in Context.Set<ProductEntity>()
+                                    join c in Context.Set<UserEntity>() on prod.CreatedUser equals c.Id
+                                    where c.Id == search.CreateUserId.Value
+                                     && prod.Id == p.SourceId
+                                     && p.SourceType == (int)SourceType.Product
+                                    select prod)
+                       let pros = (from pro in Context.Set<PromotionEntity>()
+                                   join c in Context.Set<UserEntity>() on pro.CreatedUser equals c.Id
+                                   where
+                                    c.Id == search.CreateUserId.Value
+                                    && pro.Id == p.SourceId
+                                    && p.SourceType == (int)SourceType.Promotion
+                                   select pro)
+                       where prods.Any()
+                              ||
+                              pros.Any()
+                       select p;
+            }
+
+            Func<IQueryable<CommentEntity>, IOrderedQueryable<CommentEntity>> orderBy = (IQueryable<CommentEntity> e) =>
+            {
+                if (!search.OrderBy.HasValue)
+                    return e.OrderByDescending(o => o.CreatedDate);
+                else
+                {
+                    switch (search.OrderBy.Value)
+                    {
+                        case GenericOrder.OrderByCreateUser:
+                            return e.OrderByDescending(o => o.CreatedUser);
+                        case GenericOrder.OrderByName:
+                            return e.OrderByDescending(o => o.Content);
+                        default:
+                            return e.OrderByDescending(o => o.CreatedDate);
+
+                    }
+                }
+            };
+            linq = orderBy(linq);
+            totalCount = linq.Count();
+
+            var skipCount = (pageIndex - 1) * pageSize;
+
+            linq = skipCount == 0 ? linq.Take(pageSize) : linq.Skip(skipCount).Take(pageSize);
+            return linq;
+
         }
     }
 }

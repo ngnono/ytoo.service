@@ -10,6 +10,7 @@ using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
@@ -63,11 +64,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                                                    {
                                                        switch (search.OrderBy.Value)
                                                        {
-                                                           case GenricOrder.OrderByCreateUser:
+                                                           case GenericOrder.OrderByCreateUser:
                                                                return e.OrderByDescending(o => o.CreatedUser);
-                                                           case GenricOrder.OrderByName:
+                                                           case GenericOrder.OrderByName:
                                                                return e.OrderByDescending(o => o.Name);
-                                                           case GenricOrder.OrderByCreateDate:
+                                                           case GenericOrder.OrderByCreateDate:
                                                            default:
                                                                return e.OrderByDescending(o => o.CreatedDate);
 

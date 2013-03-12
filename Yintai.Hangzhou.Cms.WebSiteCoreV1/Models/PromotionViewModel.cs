@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -124,7 +125,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "状态")]
         public DataStatus? Status { get; set; }
         [Display(Name = "排序")]
-        public GenricOrder? OrderBy { get; set; }
+        public GenericOrder? OrderBy { get; set; }
         [UIHint("Association")]
         [AdditionalMetadata("controller", "store")]
         [AdditionalMetadata("displayfield", "Name")]

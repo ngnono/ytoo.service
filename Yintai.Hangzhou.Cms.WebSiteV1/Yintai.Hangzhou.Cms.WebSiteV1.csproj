@@ -400,9 +400,7 @@
     <Content Include="Views\Promotion\Edit.cshtml" />
     <Content Include="Views\Promotion\List.cshtml" />
     <Content Include="Views\Comment\Create.cshtml" />
-    <Content Include="Views\Comment\Delete.cshtml" />
     <Content Include="Views\Comment\Details.cshtml" />
-    <Content Include="Views\Comment\Edit.cshtml" />
     <Content Include="Views\Comment\List.cshtml" />
     <Content Include="Views\Feedback\Create.cshtml" />
     <Content Include="Views\Feedback\Delete.cshtml" />
@@ -415,9 +413,7 @@
     <Content Include="Views\Resource\Edit.cshtml" />
     <Content Include="Views\Resource\List.cshtml" />
     <Content Include="Views\Point\Create.cshtml" />
-    <Content Include="Views\Point\Delete.cshtml" />
     <Content Include="Views\Point\Details.cshtml" />
-    <Content Include="Views\Point\Edit.cshtml" />
     <Content Include="Views\Point\List.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />
     <Content Include="Views\Customer\Details.cshtml" />

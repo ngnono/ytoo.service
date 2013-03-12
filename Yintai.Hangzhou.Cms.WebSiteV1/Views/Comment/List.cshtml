@@ -1,113 +1,259 @@
 ﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.CommentCollectionViewModel
+@using Yintai.Hangzhou.Model.Filters
 @{
-    ViewBag.Title = "List";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var url = String.IsNullOrWhiteSpace(Model.UL) ? String.Format("{0}/{1}", ViewContext.RouteData.Values["controller"].ToString().ToLower(), "list") : Model.UL.ToLower();
+    ViewBag.Title = "评论列表";
+    CommentSearchOption search = ViewBag.SearchOptions;
+    HtmlHelper<CommentSearchOption> searchModelHelper = Html.HtmlHelperFor<CommentSearchOption>();
+
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("用户管理", "Index","Customer")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
 }
 
-<h2>List</h2>
+@section PageJsSection {
+    <script>
+        $(function () {
+            $("a[id^='delete']").click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var itemId = $(this).attr("data-rightId");
+                $("#delete-dialog").dialog({
+                    resizable: false,
+                    height: 140,
+                    modal: true,
+                    buttons: {
+                        "删除": function () {
+                            $(this).dialog("close");
+                            $.ajax({
+                                type: "POST",
+                                url: "@(Url.Action("Delete"))",
+                                data: {
+                                    id: itemId
+                                },
+                                success: function (data) {
+                                    if (data["Success"] == true) {
+                                        self.parents("tr:first").remove();
+                                    }
+                                    else {
+                                        alert('删除失败！');
+                                    }
+                                },
+                                error: function (data, textStatus, jqXHR) {
+                                    alert('删除失败！');
+                                }
 
-<p>
-    @Html.ActionLink2("Create New", "Create")
-</p>
-<div>
-    <form action="/@url">
-        <label for="name">产品名称</label>
-        <input name="name" type="text" />
+                            });
+                        },
+                        "取消": function () {
+                            $(this).dialog("close");
+                        }
+                    }
 
-        <label for="recommenduser">推荐人</label>
-        <input name="recommenduser" type="text" />
+                });
+            });
+            $("a[id^='online']").click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var itemId = $(this).attr("data-rightId");
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("OnLine"))",
+                                data: {
+                                    id: itemId
+                                },
+                                success: function (data) {
+                                    if (data["Success"] == true) {
+                                        self.parents("tr:first").find("td[id='comment_status']").html("上线");
+                                    }
+                                    else {
+                                        alert('操作失败！');
+                                    }
+                                },
+                                error: function (data, textStatus, jqXHR) {
+                                    alert('操作失败！');
+                                }
 
-        <label for="brandid">品牌Id</label>
-        <input name="brandid" type="text" />
+                 });
+            });
+            $("a[id^='offline']").click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var itemId = $(this).attr("data-rightId");
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("OffLine"))",
+                    data: {
+                        id: itemId
+                    },
+                    success: function (data) {
+                        if (data["Success"] == true) {
+                            self.parents("tr:first]").find("td[id='comment_status']").html("下线");
+                        }
+                        else {
+                            alert('操作失败！');
+                        }
+                    },
+                    error: function (data, textStatus, jqXHR) {
+                        alert('操作失败！');
+                    }
 
-        <label for="tagid">tagId</label>
-        <input name="tagid" type="text" />
+                });
+             });
+        });
+    </script>
+}
 
-        <input type="submit" value="查询" />
-    </form>
-</div>
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("List", null, FormMethod.Get, new { @class = "form-horizontal searchForm-border" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="span4">
+                        <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m=>m.CommentUserName)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.CommentUserName)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m=>m.CreateUserName)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.CreateUserName)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m=>m.OrderBy)</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<GenericOrder>())
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m=>m.ProductId)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m=>search.ProductId)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m=>m.PromotionId)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(model => search.PromotionId)
+                </div>
+            </div>
+        </div>
+        
+    </div>
+}
 <table>
     <tr>
-        <th>Content
+        <th>图片
         </th>
-        <th>User_Id
+        <th>操作</th>
+        <th>来源
         </th>
-        <th>SourceId
+        <th>来源代码
         </th>
-        <th>SourceType
+        <th>评论内容
         </th>
-        <th>ReplyUser
+        <th>评论语音</th>
+                <th>是否回复评论</th>
+        <th>评论人
         </th>
-        <th>ReplyId
+
+        <th>评论时间
         </th>
-        <th>Status
+         <th>状态
         </th>
-        <th>CreatedUser
-        </th>
-        <th>CreatedDate
-        </th>
-        <th>UpdatedDate
-        </th>
-        <th>UpdatedUser
-        </th>
-        <th></th>
+
+
     </tr>
 
     @foreach (var item in Model.Comments)
     {
         <tr>
             <td>
+                 @if (item.SourceResource != null)
+                {
+                    <div>
+                        @if(item.SourceType == (int)Yintai.Hangzhou.Model.Enums.SourceType.Product) {
+                            <a href="@Url.Action("Details", "Product", new { id = item.Id })">
+                                <img width="60" src="@String.Concat(item.SourceResource.Domain, item.SourceResource.Name, "_120x0.jpg")" alt="120X0" />
+                            </a>
+                        } else {
+                             <a href="@Url.Action("Details", "Promotion", new { id = item.Id })">
+                                <img width="60" src="@String.Concat(item.SourceResource.Domain, item.SourceResource.Name, "_120x0.jpg")" alt="120X0" />
+                            </a>
+                        }
+                    </div>
+                }
+
+            </td>
+            <td>
+                 <div class="btn-group">
+                <button class="btn btn-small">操作</button>
+                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink2("回复", "Create", new { commentId = item.Id })</li>
+                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id }) </li>
+                        @if (item.Status == (int)Yintai.Hangzhou.Model.Enums.DataStatus.Default) { 
+                        <li><a href="#" data-rightId="@item.Id" class="btn" id="online@(item.Id)">上线</a></li>
+                        }
+                        else
+                        { 
+                             <li><a href="#" data-rightId="@item.Id" class="btn" id="offline@(item.Id)">下线</a></li>
+                        }
+                        <li><a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
+                        
+                    </ul>
+                </div>
+            </td>
+            <td>
+                @Html.Label("", ((Yintai.Hangzhou.Model.Enums.SourceType)item.SourceType).ToFriendlyString())
+            </td>
+              <td>
+               @Html.DisplayFor(m=> item.SourceId)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Content)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User_Id)
+                @if (item.CommentResource!=null) {
+                <a href="@string.Concat(item.CommentResource.Domain,item.CommentResource.Name,".mp3")">"<i class="icon-play"></i>
+                    </a>
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SourceId)
+                @if (item.ReplyId != 0) { 
+                    <a href="@Url.Action("Details",new {id=item.ReplyId})">是</a>
+                } else
+                {
+                    <p>否</p>
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SourceType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReplyUser)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReplyId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedUser)
+                @Html.DisplayFor(modelItem => item.CommentUser.Nickname)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedUser)
-            </td>
-            <td>
-                @Html.ActionLink2("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink2("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink2("Delete", "Delete", new { id = item.Id })
+                       <td id="comment_status">
+                @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)item.Status).ToFriendlyString())
             </td>
         </tr>
     }
 
 </table>
 @Html.Partial("PagerPartialView", Model)
-
-@section HeaderStyles
-{
-    <link href="@Url.Content("~/content/themes/webget/easyui/default/easyui.css")"  rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/content/themes/webget/easyui/icon.css")" rel="stylesheet" type="text/css" />
-}
-
-@section HeaderScripts
-{
-    <script src="@Url.Content("~/Scripts/widget/jquery.easyui.min.js")" type="text/javascript"></script>
-}

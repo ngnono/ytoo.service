@@ -24,13 +24,5 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 
     }
 
-    public enum GenricOrder
-    {
-        [Description("创建时间")]
-        OrderByCreateDate = 0,
-        [Description("创建用户")]
-        OrderByCreateUser = 1,
-        [Description("名称")]
-        OrderByName = 2
-    }
+    
 }

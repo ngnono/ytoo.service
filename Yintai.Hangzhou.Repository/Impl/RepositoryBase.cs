@@ -26,7 +26,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         {
         }
 
-        protected DbContext Context { get {
+        public DbContext Context { get {
             if (_innerContext == null)
                 _innerContext = ServiceLocator.Current.Resolve<DbContext>();
             return _innerContext;
