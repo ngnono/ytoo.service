@@ -97,5 +97,12 @@ namespace Yintai.Hangzhou.Contract.Product
         /// <param name="request"></param>
         /// <returns></returns>
         ExecuteResult<ProductInfoResponse> CreateCoupon(CreateCouponProductRequest request);
+
+        /// <summary>
+        /// 创建优惠卷
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        ExecuteResult<ProductCollectionResponse> Search(SearchProductRequest request);
     }
 }

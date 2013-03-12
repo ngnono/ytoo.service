@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
@@ -212,6 +213,48 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             return t ? new RestfulResult { Data = this._productDataService.DestroyProduct(request) } : new RestfulResult { Data = new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "您没有权限操作他人的商品" } };
         }
+
+        public ActionResult Search(SearchProductRequest request)
+        {
+            request.K = UrlDecode(request.K);
+
+            if (!ProcessSqlStr(request.K))
+            {
+                request.K = String.Empty;
+            }
+
+            return new RestfulResult { Data = this._productDataService.Search(request) };
+        }
+
+        #region 防止sql注入式攻击(可用于UI层控制）
+        ///
+        /// 判断字符串中是否有SQL攻击代码，by fangbo.yu 2008.07.18
+        /// 
+        /// 传入用户提交数据
+        /// true-安全；false-有注入攻击现有；
+        public bool ProcessSqlStr(string inputString)
+        {
+            const string sqlStr = @"and|or|exec|execute|insert|select|delete|update|alter|create|drop|count|\*|chr|char|asc|mid|substring|master|truncate|declare|xp_cmdshell|restore|backup|net +user|net +localgroup +administrators";
+            try
+            {
+                if (!String.IsNullOrEmpty(inputString))
+                {
+                    const string strRegex = @"\b(" + sqlStr + @")\b";
+                    var regex = new Regex(strRegex, RegexOptions.IgnoreCase);
+                    //string s = Regex.Match(inputString).Value; 
+                    if (regex.IsMatch(inputString))
+                        return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
 
         //[RestfulRoleAuthorize(UserRole.Admin | UserRole.Manager | UserRole.Operators, UserLevel.Daren)]
         //[HttpGet]

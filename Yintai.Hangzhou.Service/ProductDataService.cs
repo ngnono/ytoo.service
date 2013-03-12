@@ -4,7 +4,6 @@ using System.Linq;
 using Yintai.Architecture.Common.Caching;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web;
-using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Product;
@@ -236,9 +235,11 @@ namespace Yintai.Hangzhou.Service
                 }
             }
             if (!inEntity.IsHasImage)
-                return new ExecuteResult<ProductInfoResponse>(null) { 
-                     StatusCode = StatusCode.ClientError
-                     ,Message="没有图片信息"
+                return new ExecuteResult<ProductInfoResponse>(null)
+                {
+                    StatusCode = StatusCode.ClientError
+                    ,
+                    Message = "没有图片信息"
                 };
             var entity = _productRepository.Insert(inEntity);
             //处理 图片
@@ -594,6 +595,33 @@ namespace Yintai.Hangzhou.Service
             }
 
             return new ExecuteResult<ProductInfoResponse>(response);
+        }
+
+        public ExecuteResult<ProductCollectionResponse> Search(SearchProductRequest request)
+        {
+            if (request == null)
+            {
+                return new ExecuteResult<ProductCollectionResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
+            }
+
+            request.Page = 1;
+            request.Pagesize = 40;
+
+            int totalCount;
+            var pn = (request.T == null || request.T == 1) ? request.K : String.Empty;
+            var bn = (request.T != null && request.T == 2) ? request.K : String.Empty;
+            var produtEntities = _productRepository.Search(request.PagerRequest, out totalCount, ProductSortOrder.Default, null,
+                                                   pn, bn, null, null, null, DataStatus.Normal).ToList();
+            totalCount = produtEntities.Count;
+
+            var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
+            {
+                Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()
+            };
+
+            var result = new ExecuteResult<ProductCollectionResponse> { Data = response };
+
+            return result;
         }
     }
 }

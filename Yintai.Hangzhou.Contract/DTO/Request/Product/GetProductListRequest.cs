@@ -390,4 +390,19 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Product
         public int? PromotionId { get; set; }
         public int IsPass { get; set; }
     }
+
+    public class SearchProductRequest : ListRequest
+    {
+        public string K { get; set; }
+
+        public int? T { get; set; }
+
+        public int? Sort { get; set; }
+
+        public ProductSortOrder SortOrder
+        {
+            get { return Sort == null ? ProductSortOrder.Default : (ProductSortOrder)Sort; }
+            set { }
+        }
+    }
 }
