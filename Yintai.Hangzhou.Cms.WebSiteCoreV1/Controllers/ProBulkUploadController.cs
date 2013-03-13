@@ -9,6 +9,7 @@ using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.WebSupport.Mvc;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
+using Yintai.Architecture.Common.Models;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 {
@@ -55,9 +56,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             SetGroupIdIfNeed(id);
             return View(job);
         }
-        public ActionResult List()
+        public ActionResult List(PagerRequest request)
         {
-            return View(new ProUploadService(this).JobList());
+            int totalCount;
+            var jobs = new ProUploadService(this).JobList(request.PageIndex,request.PageSize,out totalCount);
+            return View(new Pager<ProductUploadJob>(request,totalCount){
+                 Data = jobs
+            });
         }
         public ActionResult Delete(int? id)
         {
@@ -111,6 +116,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             var valResult = new ProUploadService(this).Validate();
             return PartialView("_ValidatePartial", valResult);
         }
+  
         public PartialViewResult Publish()
         {
             var pubResult = new ProUploadService(this).Publish().ToArray();

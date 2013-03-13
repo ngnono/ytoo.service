@@ -3,6 +3,8 @@ using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using System.Linq;
 using Yintai.Hangzhou.WebSupport.Configuration;
+using Yintai.Architecture.Framework.ServiceLocation;
+using Yintai.Architecture.Common.Logger;
 
 namespace Yintai.Hangzhou.WebSupport.Binder
 {
@@ -62,10 +64,11 @@ namespace Yintai.Hangzhou.WebSupport.Binder
                 String.IsNullOrEmpty(area) ? controllerContext.RouteData.Values["controller"] : String.Concat(area, "_", controllerContext.RouteData.Values["controller"]),
                 controllerContext.RouteData.Values["action"]).ToLower();
             var pageSizeValueInConfig = ConfigManager.GetParamsValueOrDefault(pageSizeKeyInConfig, String.Empty);
-            int pageSize;
+            int pageSize = 10;
             if (!Int32.TryParse(pageSizeValueInConfig, out pageSize))
             {
-                throw new Exception(String.Format("miss config item of pagesize ,name:{0}", pageSizeKeyInConfig));
+                ServiceLocator.Current.Resolve<ILog>().Warn(
+                    String.Format("miss config item of pagesize ,name:{0}", pageSizeKeyInConfig));
             }
 
             return new PagerRequest(pageNumber, pageSize);

@@ -2,55 +2,46 @@
 
 @{
     ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+   }
+
+<h2>@ViewBag.Title</h2>
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("分类列表", "List")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
 }
-
-<h2>Details</h2>
-
 <fieldset>
-    <legend>TagViewModel</legend>
 
-    <div class="display-label">Name</div>
+    <div class="display-label">@Html.LabelFor(m=>m.Name)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Name)
     </div>
 
-    <div class="display-label">Description</div>
+    <div class="display-label">@Html.LabelFor(m=>m.Description)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)
     </div>
 
-    <div class="display-label">SortOrder</div>
+    <div class="display-label">@Html.LabelFor(m=>m.SortOrder)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.SortOrder)
     </div>
 
-    <div class="display-label">Status</div>
+    <div class="display-label">@Html.LabelFor(m=>m.Status)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Status)
+       @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)Model.Status).ToFriendlyString())
     </div>
 
-    <div class="display-label">CreatedDate</div>
+    <div class="display-label">@Html.LabelFor(m=>m.CreatedDate)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.CreatedDate)
     </div>
 
-    <div class="display-label">UpdatedDate</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.UpdatedDate)
-    </div>
-
-    <div class="display-label">UpdatedUser</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.UpdatedUser)
-    </div>
-
-    <div class="display-label">CreatedUser</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreatedUser)
-    </div>
+    
 </fieldset>
 <p>
-    @Html.ActionLink2("Edit", "Edit", new { id=Model.Id }) |
-    @Html.ActionLink2("Back to List", "Index")
+    @Html.ActionLink2("修改", "Edit", new { id = Model.Id }, new { @class="btn"}) 
+   @Html.ActionLink2("返回", "List", null, new { @class="btn"}) 
 </p>

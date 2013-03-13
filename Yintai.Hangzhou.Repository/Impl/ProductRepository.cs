@@ -420,72 +420,69 @@ namespace Yintai.Hangzhou.Repository.Impl
 
 
         public IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount
-            , int? id
-            , string name
-            , DataStatus? status, string store, string topic, string tag, ProductSortOrder? sort
-            , string brand, int? user, string promotion)
+            , ProductSearchOption search)
         {
-            var linq = base.Get(p => (!id.HasValue || p.Id == id.Value) &&
-                (string.IsNullOrEmpty(name) || p.Name.StartsWith(name)) &&
-                (!user.HasValue || p.CreatedUser == user.Value) &&
-                (!status.HasValue || p.Status == (int)status.Value) &&
+            var linq = base.Get(p => (!search.PId.HasValue || p.Id == search.PId.Value) &&
+                (string.IsNullOrEmpty(search.Name) || p.Name.StartsWith(search.Name)) &&
+                (!search.User.HasValue || p.CreatedUser == search.User.Value) &&
+                (!search.Status.HasValue || p.Status == (int)search.Status.Value) &&
                 p.Status != (int)DataStatus.Deleted);
 
-            if (!string.IsNullOrEmpty(topic) &&
-                topic.Trim().Length > 0)
+            if (!string.IsNullOrEmpty(search.Topic) &&
+                search.Topic.Trim().Length > 0)
             {
                 linq = (from p in linq
                         from ps in Context.Set<SpecialTopicProductRelationEntity>()
                         where ps.Product_Id == p.Id
                         from s in Context.Set<SpecialTopicEntity>()
-                        where s.Name.StartsWith(topic) && s.Id == ps.SpecialTopic_Id
+                        where s.Name.StartsWith(search.Topic) && s.Id == ps.SpecialTopic_Id
                         select p);
             }
 
-            if (!string.IsNullOrEmpty(store) &&
-                 store.Trim().Length > 0)
+            if (!string.IsNullOrEmpty(search.Store) &&
+                 search.Store.Trim().Length > 0)
             {
                 linq = (from p in linq
                         from ps in Context.Set<StoreEntity>()
                         where ps.Id == p.Store_Id
-                            && ps.Name.StartsWith(store)
+                            && ps.Name.StartsWith(search.Store)
                         select p);
             }
-            if (!string.IsNullOrEmpty(brand) &&
-     brand.Trim().Length > 0)
+            if (!string.IsNullOrEmpty(search.Brand) &&
+     search.Brand.Trim().Length > 0)
             {
                 linq = (from p in linq
                         from ps in Context.Set<BrandEntity>()
                         where ps.Id == p.Brand_Id
-                            && ps.Name.StartsWith(brand)
+                            && ps.Name.StartsWith(search.Brand)
                         select p);
             }
-            if (!string.IsNullOrEmpty(tag) &&
-    tag.Trim().Length > 0)
+            if (!string.IsNullOrEmpty(search.Tag) &&
+    search.Tag.Trim().Length > 0)
             {
                 linq = (from p in linq
                         from ps in Context.Set<TagEntity>()
                         where ps.Id == p.Tag_Id
-                            && ps.Name.StartsWith(tag)
+                            && ps.Name.StartsWith(search.Tag)
                         select p);
             }
-            if (!string.IsNullOrEmpty(promotion) &&
-                promotion.Trim().Length > 0)
+            if (!string.IsNullOrEmpty(search.Promotion) &&
+                search.Promotion.Trim().Length > 0)
             {
                 linq = (from p in linq
                         from ps in Context.Set<Promotion2ProductEntity>()
                         where ps.ProdId == p.Id
                         from s in Context.Set<PromotionEntity>()
-                        where s.Name.StartsWith(promotion) && s.Id == ps.ProId
+                        where s.Name.StartsWith(search.Promotion) && s.Id == ps.ProId
                         select p);
             }
             Func<IQueryable<ProductEntity>, IOrderedQueryable<ProductEntity>> orderBy = (IQueryable<ProductEntity> e) =>
             {
-                if (!sort.HasValue)
+                if (!search.OrderBy.HasValue)
                     return e.OrderByDescending(o => o.CreatedDate);
                 else
                 {
-                    switch (sort.Value)
+                    switch (search.OrderBy.Value)
                     {
                         case ProductSortOrder.CreatedUserDesc:
                             return e.OrderByDescending(o => o.CreatedUser);

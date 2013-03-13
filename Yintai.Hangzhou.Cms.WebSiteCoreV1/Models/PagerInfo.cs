@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Runtime.Serialization;
 using System.Web;
@@ -94,5 +95,18 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public string UL { get; set; }
 
         #endregion
+    }
+    public class Pager<T> :PagerInfo
+    {
+        public Pager(PagerRequest request): base(request)
+        {
+        }
+
+        public Pager(PagerRequest request, int totalCount)
+            : base(request, totalCount)
+        {
+        }
+
+        public IEnumerable<T> Data { get; set; }
     }
 }

@@ -1,11 +1,12 @@
 ﻿@using Yintai.Hangzhou.Model.Enums
 @using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 @using Yintai.Hangzhou.WebSupport.Helper
+@using Yintai.Hangzhou.Model.Filters
 @model ProductCollectionViewModel
 @{
     ViewBag.Title = "商品列表";
-    ProductListSearchOption search = ViewBag.SearchOptions;
-    HtmlHelper<ProductListSearchOption> searchModelHelper = Html.HtmlHelperFor<ProductListSearchOption>();
+    ProductSearchOptionViewModel search = ViewBag.SearchOptions??new ProductSearchOptionViewModel();
+    HtmlHelper<ProductSearchOptionViewModel> searchModelHelper = Html.HtmlHelperFor<ProductSearchOptionViewModel>();
 
 }
 

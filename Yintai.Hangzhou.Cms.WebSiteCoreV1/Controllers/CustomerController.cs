@@ -168,7 +168,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.Name = vo.Name;
             entity.Nickname = vo.Nickname;
             if (string.Compare(vo.Password, entity.Password, false) != 0)
-                entity.Password = SecurityHelper.ComputeHash(entity.Password);
+                entity.Password = SecurityHelper.ComputeHash(vo.Password);
             entity.UpdatedDate = DateTime.Now;
            entity.UpdatedUser = CurrentUser.CustomerId;
             entity.UserLevel = vo.UserLevel;

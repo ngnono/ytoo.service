@@ -46,23 +46,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return View();
         }
 
-        public ActionResult List(ProductListSearchOption search,PagerRequest request)
+        public ActionResult List(ProductSearchOptionViewModel search, PagerRequest request)
         {
             int totalCount;
             IQueryable<ProductEntity> data = _productRepository.Search(
                 request.PageIndex
                 , request.PageSize
                 , out totalCount
-                , search.PId
-                , search.Name
-                , search.Status
-                , search.Store
-                , search.Topic
-                , search.Tag
-                , search.OrderBy
-                , search.Brand
-                , search.User
-                ,search.Promotion
+                , MappingManager.MapCommon<ProductSearchOptionViewModel,ProductSearchOption>(search)
                 );
            
 

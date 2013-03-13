@@ -24,7 +24,7 @@
        
     </tr>
     }
-    <tr><td colspan="3"><@Html.ActionLink2("查看发布商品", "List", "Product", new {sort = (int)Yintai.Hangzhou.Model.Enums.ProductSortOrder.CreatedDateDesc }, new { @class = "btn btnprimary" })
+    <tr><td colspan="3">@Html.ActionLink2("查看发布商品", "List", "Product", new {sort = (int)Yintai.Hangzhou.Model.Enums.ProductSortOrder.CreatedDateDesc }, new { @class = "btn btnprimary" })
      @Html.ActionLink2("继续发布","Display",null,new{ @class="btn btnprimary"})</td>
         </tr>
 } else {

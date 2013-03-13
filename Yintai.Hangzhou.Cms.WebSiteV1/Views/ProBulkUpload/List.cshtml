@@ -1,4 +1,4 @@
-@model IEnumerable<Yintai.Hangzhou.Data.Models.ProductUploadJob>
+@model Pager<Yintai.Hangzhou.Data.Models.ProductUploadJob>
 @using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 @{
     ViewBag.Title = "批量导入历史";
@@ -10,7 +10,7 @@
         <li class="active">@ViewBag.Title</li>
     </ul>
 }
-<div class="span5">
+<div class="span12">
 <legend>@ViewBag.Title</legend>
 <table class="table table-bordered table-condensed table-striped">
     <tr>
@@ -21,7 +21,7 @@
         <th>状态</th>
         <th>操作</th>
     </tr>
-    @foreach (var item in Model)
+    @foreach (var item in Model.Data)
     {
         <tr>
             <td>
@@ -56,3 +56,4 @@
 
 </table>
 </div>
+@Html.Partial("PagerPartialView", Model)

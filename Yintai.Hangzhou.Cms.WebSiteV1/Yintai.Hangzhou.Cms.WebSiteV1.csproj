@@ -454,7 +454,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\themes\webget\easyui\NewFolder1\" />
     <Folder Include="Content\themes\webget\easyui\NewFolder2\" />
-    <Folder Include="ProBulkTmp\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

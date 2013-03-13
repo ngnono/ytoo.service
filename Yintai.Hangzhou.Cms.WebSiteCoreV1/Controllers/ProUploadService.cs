@@ -298,18 +298,22 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
 
 
-        internal IEnumerable<ProductUploadJob> JobList()
+        internal IEnumerable<ProductUploadJob> JobList(int pageIndex, int pageSize, out int totalCount)
         {
-            return from j in _productRepService.List<ProductUploadJobEntity>(e => e.InUser == _context.CurrentUser.CustomerId)
+            var linq =  from j in _productRepService.List<ProductUploadJobEntity>(e => e.InUser == _context.CurrentUser.CustomerId)
                    orderby j.InDate descending
-                   select new ProductUploadJob()
-                   {
-                       JobId = j.Id
-                       ,
-                       InDate = j.InDate
-                       ,
-                       Status = j.Status.HasValue ? (ProUploadStatus)j.Status.Value : ProUploadStatus.ProductsOnDisk
-                   };
+                        select new ProductUploadJob()
+                        {
+                            JobId = j.Id
+                            ,
+                            InDate = j.InDate
+                            ,
+                            Status = j.Status.HasValue ? (ProUploadStatus)j.Status.Value : ProUploadStatus.ProductsOnDisk
+                        };
+            totalCount = linq.Count();
+            return linq.Skip(pageIndex > 1 ? (pageIndex-1) * pageSize : 0).Take(pageSize);
+
+                   
         }
 
         internal void Delete(int p)

@@ -44,13 +44,8 @@
                 <a href="@string.Format(queryFormat, Model.Index + 1)" >&raquo;</a>
             }
         </li>
+        <li><span>@string.Format("{0}/{1}",Model.Index,Model.TotalPaged)</span></li>
     </ul>
+    
 </div>
 }
-
-<script type="text/javascript">
-    function pager(page, size) {
-
-        window.location.href = '/@url' + '/' + page + '@Html.Raw(Model.Query)';
-    }
-</script>

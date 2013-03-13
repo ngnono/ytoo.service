@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -165,18 +166,19 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "优先级")]
         [Range(0, Int32.MaxValue)]
         public int SortOrder { get; set; }
+    
     }
-    public class ProductListSearchOption
+    public class ProductSearchOptionViewModel 
     {
-        [Display(Name="商品代码")]
-        public int? PId {get;set;}
+        [Display(Name = "商品代码")]
+        public int? PId { get; set; }
         [Display(Name = "商品名称")]
         public string Name { get; set; }
         [Display(Name = "状态")]
         public DataStatus? Status { get; set; }
         [Display(Name = "排序")]
         public ProductSortOrder? OrderBy { get; set; }
-        [Display(Name="创建人代码")]
+        [Display(Name = "创建人代码")]
         public int? User { get; set; }
         [UIHint("Association")]
         [AdditionalMetadata("controller", "store")]
@@ -214,6 +216,5 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [AdditionalMetadata("valuefield", "Name")]
         [Display(Name = "促销")]
         public string Promotion { get; set; }
-
     }
 }
