@@ -608,8 +608,8 @@ namespace Yintai.Hangzhou.Service
             request.Pagesize = 40;
 
             int totalCount;
-            var pn = (request.T == null || request.T == 1) ? request.K : String.Empty;
-            var bn = (request.T != null && request.T == 2) ? request.K : String.Empty;
+            var pn = request.K;
+            var bn = request.K;
             var produtEntities = _productRepository.Search(request.PagerRequest, out totalCount, ProductSortOrder.Default, null,
                                                    pn, bn, null, null, null, DataStatus.Normal).ToList();
             totalCount = produtEntities.Count;

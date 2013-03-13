@@ -242,17 +242,18 @@ namespace Yintai.Hangzhou.Repository.Impl
 
             totalCount = 0;
 
-            var p = base.Get(filter).Take(pagerRequest.PageSize);
+            var p1 = base.Get(filter).Take(pagerRequest.PageSize);
 
             if (!String.IsNullOrEmpty(brandName))
             {
+                var p2 = base.Get(Filter(dataStatus, timestamp, tagids, recommendUser, brandId));
                 var b = (ServiceLocator.Current.Resolve<IBrandRepository>().Get(DataStatus.Normal) as IQueryable<BrandEntity>).Where(v => v.Name.Contains(brandName) || v.EnglishName.Contains(brandName));
-                var r = p.Join(b, v => v.Brand_Id, j => j.Id, (v, j) => v);
+                var r = p2.Join(b, v => v.Brand_Id, j => j.Id, (v, j) => v).Take(pagerRequest.PageSize);
 
-                return r;
+                return r.Union(p1).Take(pagerRequest.PageSize);
             }
 
-            return p;
+            return p1;
         }
 
         public List<ProductEntity> GetPagedListForSearch(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, Timestamp timestamp,

@@ -27,14 +27,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._cardDataService.Binding(request) };
         }
 
-        [HttpPost]
-        public RestfulResult UnBind(BindingRequest request, int? authuid, UserModel authUser)
-        {
-            request.AuthUser = authUser;
-            request.AuthUid = authuid.Value;
+        //[HttpPost]
+        //public RestfulResult UnBind(BindingRequest request, int? authuid, UserModel authUser)
+        //{
+        //    request.AuthUser = authUser;
+        //    request.AuthUid = authuid.Value;
 
-            return new RestfulResult { Data = this._cardDataService.UnBinding(request) };
-        }
+        //    return new RestfulResult { Data = this._cardDataService.UnBinding(request) };
+        //}
 
         public RestfulResult Detail(GetCardInfoRequest request, int? authuid, UserModel authUser)
         {
