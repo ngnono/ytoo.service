@@ -116,6 +116,9 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<CardInfoResponse> UnBinding(BindingRequest request)
         {
+
+            throw new NotSupportedException("不支持该方法");
+
             if (request == null || request.AuthUser == null)
             {
                 return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
@@ -140,7 +143,7 @@ namespace Yintai.Hangzhou.Service
                 var delEntity = _cardRepository.GetItem(entity.Id);
                 delEntity.UpdatedDate = DateTime.Now;
                 delEntity.UpdatedUser = request.AuthUser.Id;
-                delEntity.Status = (int) DataStatus.Deleted;
+                delEntity.Status = (int)DataStatus.Deleted;
 
                 _cardRepository.Delete(delEntity);
 
