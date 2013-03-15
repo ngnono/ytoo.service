@@ -117,8 +117,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             }
 
             var target = Mapper.Map<CustomerViewModel, UserModel>(source);
-            target.CreatedDate = DateTime.Now;
-            target.UpdatedDate = DateTime.Now;
 
             return UserModelCheck(target);
         }
@@ -131,8 +129,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             }
 
             var target = Mapper.Map<UserModel, CustomerViewModel>(source);
-            target.CreatedDate = DateTime.Now;
-            target.UpdatedDate = DateTime.Now;
 
             return target;
         }
