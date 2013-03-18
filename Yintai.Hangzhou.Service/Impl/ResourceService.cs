@@ -197,7 +197,7 @@ namespace Yintai.Hangzhou.Service.Impl
 
             //图片没有做物理删除
 
-
+        
 
             _resourceRepository.Delete(entity);
 

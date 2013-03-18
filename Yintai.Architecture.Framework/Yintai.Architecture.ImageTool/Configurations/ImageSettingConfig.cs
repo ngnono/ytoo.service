@@ -75,9 +75,9 @@ namespace Yintai.Architecture.ImageTool.Configurations
         }
 
         [ConfigurationProperty("type", IsRequired = false)]
-        public string Type
+        public int Type
         {
-            get { return (String)base["type"]; }
+            get { return (Int32)base["type"]; }
             set { base["type"] = value; }
         }
 

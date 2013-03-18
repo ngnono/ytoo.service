@@ -17,7 +17,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
         public CommentController(ICommentDataService commentDataService)
         {
-            this._commentDataService = commentDataService;
+            _commentDataService = commentDataService;
         }
 
         public ActionResult List(CommentListRequest request)
@@ -66,6 +66,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             request.AuthUid = authuid.Value;
             request.AuthUser = authUser;
             request.Content = UrlDecode(request.Content);
+            request.Files = Request.Files;
 
             return new RestfulResult { Data = this._commentDataService.Update(request) };
         }

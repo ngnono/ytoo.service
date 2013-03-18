@@ -72,6 +72,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Comment
         public int CommentId { get; set; }
 
         public string Content { get; set; }
+
+        public HttpFileCollectionBase Files { get; set; }
     }
 
     public class CommentDestroyRequest : AuthRequest

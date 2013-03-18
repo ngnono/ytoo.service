@@ -22,6 +22,7 @@ namespace Yintai.Architecture.ImageTool.Impl
 
         private static readonly HashSet<string> Pexts = new HashSet<string>(new[] { "bmp", "pcx", "tiff", "gif", "jpeg", "jpg", "tga", "exif", "fpx", "svg", "psd", "cdr", "pcd", "dxf", "ufo", "eps", "png" });
 
+
         private ImageSettingConfig _imageSetting;
         private ImageElement _imageElement;
         private string _fileFolder = String.Empty;
@@ -30,6 +31,13 @@ namespace Yintai.Architecture.ImageTool.Impl
 
         #region methods
 
+        private void SaveAudio(string oName)
+        {
+            var oFullName = oName;
+            var tFullName = oName.Substring(0, oName.IndexOf(FileTempExt, System.StringComparison.Ordinal)) + ".mp3";
+
+            AudioService.Current.Compression(oFullName, tFullName);
+        }
 
         private FileMessage GetFileName(string key, int fileSize, string clientFilePath, string contentType, out string fileKey, out string fileExt, string[] userFolders)
         {
@@ -170,6 +178,13 @@ namespace Yintai.Architecture.ImageTool.Impl
                     }
                 }
 
+                if (_imageElement.Type == 2)
+                {
+                    SaveAudio(filePath);
+
+                    return;
+                }
+
                 if (Pexts.Contains(request.FileExt, StringComparer.OrdinalIgnoreCase) && !_imageElement.AsNormalFile)
                 {
 
@@ -268,6 +283,13 @@ namespace Yintai.Architecture.ImageTool.Impl
                         request.FileData.Dispose();
                     }
 
+                }
+
+                if (_imageElement.Type == 2)
+                {
+                    SaveAudio(filePath);
+
+                    return new ThumbnailInfo();
                 }
 
                 if (Pexts.Contains(request.FileExt, StringComparer.OrdinalIgnoreCase) && !_imageElement.AsNormalFile)
@@ -465,6 +487,11 @@ namespace Yintai.Architecture.ImageTool.Impl
         {
             try
             {
+                if (dateList == null)
+                {
+                    return DeleteFileInternal(key, fileNameList, userFolders);
+                }
+
                 return DeleteFileInternal(key, fileNameList, dateList, userFolders);
             }
             catch (Exception ex)
@@ -489,6 +516,25 @@ namespace Yintai.Architecture.ImageTool.Impl
             return false;
         }
 
+        private bool DeleteFileInternal(string key, string[] fileNameList, string[] userFolders)
+        {
+            //整理成文件名，
+
+            List<string> dateList = new List<string>(fileNameList.Length);
+            List<string> fileNames = new List<string>(fileNameList.Length);
+
+            foreach (var fileName in fileNames)
+            {
+                var pos = fileName.LastIndexOf(@"\");
+                var f = fileName.Substring(pos + 1, fileName.Length - pos);
+                fileNames.Add(f);
+                var posi = fileName.IndexOf(@"\");
+                var d = fileName.Substring(posi + 1, 8);
+                dateList.Add(d);
+            }
+
+            return DeleteFileInternal(key, fileNames.ToArray(), dateList.ToArray(), userFolders);
+        }
 
         private bool DeleteFileInternal(string key, string[] fileNameList, string[] dateList, string[] userFolders)
         {
@@ -544,10 +590,10 @@ namespace Yintai.Architecture.ImageTool.Impl
                     {
                         fileSubFolder = fileSubFolder.Replace("{Year}", dateList[i].Substring(0, 4)).Replace("{Month}", ToLongTime(Int32.Parse(dateList[i].Substring(4, 2)))).Replace("{Day}", ToLongTime(Int32.Parse(dateList[i].Substring(6, 2))));
                     }
-                    else
-                    {
-                        fileSubFolder = fileSubFolder.Replace("{Year}", DateTime.Now.Year.ToString()).Replace("{Month}", ToLongTime(DateTime.Now.Month)).Replace("{Day}", ToLongTime(DateTime.Now.Day));
-                    }
+                    //else
+                    //{
+                    //    fileSubFolder = fileSubFolder.Replace("{Year}", DateTime.Now.Year.ToString()).Replace("{Month}", ToLongTime(DateTime.Now.Month)).Replace("{Day}", ToLongTime(DateTime.Now.Day));
+                    //}
 
 
                     currentDirectory = Path.Combine(_fileFolder, fileSubFolder);

@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Configurations\ImageSettingConfig.cs" />
     <Compile Include="Contract\IImageService.cs" />
+    <Compile Include="Core\AudioService.cs" />
     <Compile Include="Impl\ImageService.cs" />
     <Compile Include="Core\Thumbnail.cs" />
     <Compile Include="Models\Exif\Exif.cs" />

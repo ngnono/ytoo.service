@@ -56,6 +56,9 @@ namespace Yintai.Hangzhou.Model.Enums
         /// 专题
         /// </summary>
         [Description("专题")]
-        SpecialTopic = 9
+        SpecialTopic = 9,
+
+        [Description("评论语音")]
+        CommentAudio = 10
     }
 }

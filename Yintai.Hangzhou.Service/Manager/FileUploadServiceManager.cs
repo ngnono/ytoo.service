@@ -464,11 +464,11 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <param name="fileCollection">文件集合</param>
         /// <param name="AutoSize">允许上传的集合大小</param>
         /// <returns></returns>
-        public static List<FileInfo> UploadFileCollection(string key, HttpFileCollection fileCollection, int autoSize)
+        public static List<FileInfor> UploadFileCollection(string key, HttpFileCollection fileCollection, int autoSize)
         {
             HttpFileCollectionBase obj = new HttpFileCollectionWrapper(fileCollection);
 
-            return UploadFileCollection(key, fileCollection, autoSize);
+            return UploadFileCollection(key, obj, autoSize);
         }
 
         /// <summary>
@@ -479,11 +479,11 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <param name="autoSize"></param>
         /// <param name="thumbnailInfoes"></param>
         /// <returns></returns>
-        public static List<FileInfo> UploadFileCollectionAndReturnInfo(string key, HttpFileCollection fileCollection, int autoSize, out IList<ThumbnailInfo> thumbnailInfoes)
+        public static List<FileInfor> UploadFileCollectionAndReturnInfo(string key, HttpFileCollection fileCollection, int autoSize, out IList<ThumbnailInfo> thumbnailInfoes)
         {
             HttpFileCollectionBase obj = new HttpFileCollectionWrapper(fileCollection);
 
-            return UploadFileCollectionAndReturnInfo(key, fileCollection, autoSize, out thumbnailInfoes);
+            return UploadFileCollectionAndReturnInfo(key, obj, autoSize, out thumbnailInfoes);
         }
 
         /// <summary>
@@ -602,7 +602,7 @@ namespace Yintai.Hangzhou.Service.Manager
                         {
                             width = image.Width;
                             height = image.Height;
-                           
+
                         }
                         fileHR.Seek(0, SeekOrigin.Begin);
                         fileInfor.Width = width;
@@ -624,6 +624,13 @@ namespace Yintai.Hangzhou.Service.Manager
             {
                 return f;
             }
+        }
+
+        internal static bool DeletedFile(string[] fileNameList)
+        {
+            var client = _imageService;
+
+            return client.DeleteNormalFile(fileNameList);
         }
     }
 }

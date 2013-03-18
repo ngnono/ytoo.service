@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Transactions;
 using Yintai.Architecture.Common.Models;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Contract.Comment;
 using Yintai.Hangzhou.Contract.DTO.Request.Comment;
 using Yintai.Hangzhou.Contract.DTO.Response.Comment;
@@ -42,35 +44,46 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<CommentInfoResponse> Create(CommentCreateRequest request)
         {
-            var entity = this._commentRepository.Insert(new CommentEntity
-                {
-                    Content = request.Content,
-                    CreatedDate = DateTime.Now,
-                    CreatedUser = request.AuthUid,
-                    ReplyUser = request.ReplyUser,
-                    SourceId = request.SourceId,
-                    SourceType = (int)request.SType,
-                    Status = 1,
-                    UpdatedDate = DateTime.Now,
-                    UpdatedUser = request.AuthUid,
-                    User_Id = request.AuthUid
-                });
+            CommentEntity entity;
+            using (var ts = new TransactionScope())
+            {
+                entity = _commentRepository.Insert(new CommentEntity
+                   {
+                       Content = request.Content,
+                       CreatedDate = DateTime.Now,
+                       CreatedUser = request.AuthUid,
+                       ReplyUser = request.ReplyUser,
+                       SourceId = request.SourceId,
+                       SourceType = (int)request.SType,
+                       Status = 1,
+                       UpdatedDate = DateTime.Now,
+                       UpdatedUser = request.AuthUid,
+                       User_Id = request.AuthUid
+                   });
 
-            //插入一个提醒
-            _remindService.Insert(new RemindEntity
-                {
-                    CreatedDate = DateTime.Now,
-                    CreatedUser = request.AuthUid,
-                    IsRemind = false,
-                    RemindUser = request.AuthUid,
-                    SourceId = entity.Id,
-                    Stauts = (int)DataStatus.Default,
-                    Type = (int)SourceType.Comment,
-                    UpdatedDate = DateTime.Now,
-                    UpdatedUser = request.AuthUid,
-                    User_Id = entity.ReplyUser
-                });
+                //插入一个提醒
+                _remindService.Insert(new RemindEntity
+                    {
+                        CreatedDate = DateTime.Now,
+                        CreatedUser = request.AuthUid,
+                        IsRemind = false,
+                        RemindUser = request.AuthUid,
+                        SourceId = entity.Id,
+                        Stauts = (int)DataStatus.Default,
+                        Type = (int)SourceType.Comment,
+                        UpdatedDate = DateTime.Now,
+                        UpdatedUser = request.AuthUid,
+                        User_Id = entity.ReplyUser
+                    });
 
+                //处理文件上传
+                if (request.Files != null && request.Files.Count > 0)
+                {
+                    ServiceLocator.Current.Resolve<IResourceService>().Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.CommentAudio);
+                }
+
+                ts.Complete();
+            }
 
             return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity));
         }
@@ -84,7 +97,7 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<CommentInfoResponse> Update(CommentUpdateRequest request)
         {
-            var entity = this._commentRepository.GetItem(request.CommentId);
+            var entity = _commentRepository.GetItem(request.CommentId);
             if (entity == null)
             {
                 return new ExecuteResult<CommentInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "评论不存在" };
@@ -99,7 +112,29 @@ namespace Yintai.Hangzhou.Service
             entity.UpdatedDate = DateTime.Now;
             entity.UpdatedUser = request.AuthUid;
 
-            this._commentRepository.Update(entity);
+            using (var ts = new TransactionScope())
+            {
+                _commentRepository.Update(entity);
+
+                //删除以前的语音
+                //处理文件上传
+                if (request.Files != null && request.Files.Count > 0)
+                {
+                    var r = ServiceLocator.Current.Resolve<IResourceService>();
+                    var commentResources = r.Get(entity.Id, SourceType.CommentAudio);
+
+                    var list = r.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.CommentAudio);
+                    if (list != null && list.Count > 0)
+                    {
+                        foreach (var rs in commentResources)
+                        {
+                            r.Del(rs.Id);
+                        }
+                    }
+                }
+
+                ts.Complete();
+            }
 
             return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity));
         }
@@ -117,7 +152,20 @@ namespace Yintai.Hangzhou.Service
                 return new ExecuteResult<CommentInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "您没有权限删除其他人的评论" };
             }
 
-            this._commentRepository.Delete(entity);
+            using (var ts = new TransactionScope())
+            {
+                var r = ServiceLocator.Current.Resolve<IResourceService>();
+                var commentResources = r.Get(entity.Id, SourceType.CommentAudio);
+
+                foreach (var rs in commentResources)
+                {
+                    r.Del(rs.Id);
+                }
+
+                _commentRepository.Delete(entity);
+
+                ts.Complete();
+            }
 
             return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity));
         }
