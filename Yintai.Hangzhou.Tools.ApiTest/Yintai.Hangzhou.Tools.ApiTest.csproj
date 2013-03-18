@@ -112,6 +112,7 @@
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
+    <Compile Include="Controllers\TestCommentController.cs" />
     <Compile Include="Controllers\TestCouponController.cs" />
     <Compile Include="Controllers\TestCustomerController.cs" />
     <Compile Include="Controllers\TestProductController.cs" />
@@ -193,6 +194,10 @@
     <Content Include="Configurations\unity.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Configurations\imageSetting.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="readme.txt" />
     <Content Include="Views\TestPromotion\Create.cshtml" />
     <Content Include="Views\Image\Index.cshtml" />
@@ -200,6 +205,7 @@
     <Content Include="Views\TestCustomer\Create.cshtml" />
     <Content Include="Views\TestCoupon\Index.cshtml" />
     <Content Include="Views\TestCoupon\Create.cshtml" />
+    <Content Include="Views\TestComment\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -2744,10 +2744,10 @@ namespace Yintai.Hangzhou.Service.Manager
 
         public IEnumerable<PromotionInfoResponse> PromotionResponseMapping(List<PromotionEntity> source, CoordinateInfo coordinateInfo)
         {
-           // var userIds = source.Select(v => v.RecommendUser).Where(v => v > 0).Distinct();
+            // var userIds = source.Select(v => v.RecommendUser).Where(v => v > 0).Distinct();
 
-           // var users = _customerRepository.GetListByIds(userIds.ToList());
-          //  var responseUser = ShowCustomerInfoResponseMapping(users).ToList();
+            // var users = _customerRepository.GetListByIds(userIds.ToList());
+            //  var responseUser = ShowCustomerInfoResponseMapping(users).ToList();
             var storeids = source.Select(v => v.Store_Id).Where(v => v > 0).Distinct();
             var stores = _storeRepository.GetListByIds(storeids.ToList());
             var storeResponse = StoreResponseMapping(stores, coordinateInfo).ToList();
@@ -2755,7 +2755,7 @@ namespace Yintai.Hangzhou.Service.Manager
             var ids = source.Select(v => v.Id).ToList();
 
             var resource = GetListResourceEntities(SourceType.Promotion, ids);
-          //  var brandR = _promotionBrandRelationRepository.GetList(ids);
+            //  var brandR = _promotionBrandRelationRepository.GetList(ids);
 
             List<ResourceInfoResponse> resourceResponse = null;
             if (resource != null)
@@ -2766,13 +2766,13 @@ namespace Yintai.Hangzhou.Service.Manager
             foreach (var entity in source)
             {
                 var entity1 = entity;
-               // var b = brandR.Where(v => v.Promotion_Id == entity1.Id).Select(v => v.Brand_Id).ToList();
+                // var b = brandR.Where(v => v.Promotion_Id == entity1.Id).Select(v => v.Brand_Id).ToList();
                 var r = resourceResponse == null
                             ? new List<ResourceInfoResponse>(0)
                             : resourceResponse.Where(v => v.SourceId == entity1.Id).ToList();
                 var s = storeResponse.FirstOrDefault(v => v.Id == entity.Store_Id);
-               // var u = responseUser.FirstOrDefault(v => v.Id == entity.RecommendUser);
-               // var target = PromotionResponseMapping(entity, coordinateInfo, b, r, s, u);
+                // var u = responseUser.FirstOrDefault(v => v.Id == entity.RecommendUser);
+                // var target = PromotionResponseMapping(entity, coordinateInfo, b, r, s, u);
                 var target = PromotionResponseMapping(entity, coordinateInfo, null, r, s, null);
                 if (target == null)
                 {
@@ -3356,11 +3356,13 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <param name="source"></param>
         /// <param name="userEntities"></param>
         /// <returns></returns>
-        public CommentInfoResponse CommentInfoResponseMapping(CommentEntity source, List<UserEntity> userEntities)
+        public CommentInfoResponse CommentInfoResponseMapping(CommentEntity source, List<UserEntity> userEntities, List<ResourceInfoResponse> resource)
         {
             var target = Mapper.Map<CommentEntity, CommentInfoResponse>(source);
             //找两个用户，当前发评论的用户，被回复的用户
             var userResponses = ShowCustomerInfoResponseMapping(userEntities).ToList();
+
+            target.ResourceInfoResponses = resource;
 
             var user = userResponses.FirstOrDefault(v => v.Id == target.User_Id);
             var replyUser = userResponses.FirstOrDefault(v => v.Id == target.ReplyUser);
@@ -3382,8 +3384,9 @@ namespace Yintai.Hangzhou.Service.Manager
             var uids = new List<int>(2) { source.User_Id, source.ReplyUser };
 
             var users = _customerRepository.GetListByIds(uids.Where(v => v != 0).Distinct().ToList());
+            var resourec = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.CommentAudio, source.Id));
 
-            return CommentInfoResponseMapping(source, users);
+            return CommentInfoResponseMapping(source, users, resourec.ToList());
         }
 
         public IEnumerable<CommentInfoResponse> CommentInfoResponseMapping(List<CommentEntity> source)
@@ -3399,14 +3402,14 @@ namespace Yintai.Hangzhou.Service.Manager
             users.AddRange(source.Select(v => v.ReplyUser));
 
             var uids = users.Distinct().Where(v => v != 0);
-
+            var resources = ResourceInfoResponsesMapping(base.GetListResourceEntities(SourceType.CommentAudio, source.Select(v => v.Id).ToList()));
             var userEntities = _customerRepository.GetListByIds(uids.ToList());
 
             var target = new List<CommentInfoResponse>(source.Count);
 
             foreach (var s in source)
             {
-                var t = CommentInfoResponseMapping(s, userEntities);
+                var t = CommentInfoResponseMapping(s, userEntities, resources.Where(v => v.SourceId == s.Id).ToList());
 
                 if (t != null)
                 {
@@ -3587,16 +3590,16 @@ namespace Yintai.Hangzhou.Service.Manager
 
             var list = new List<ProductInfoResponse>(source.Count);
 
-           // var brands = BrandInfoResponseMapping(_brandRepository.GetListByIds(source.Select(v => v.Brand_Id).Distinct().ToList())).ToList();
-           // var stores = StoreResponseMapping(_storeRepository.GetListByIds(source.Select(v => v.Store_Id).Distinct().ToList())).ToList();
-           // var rusers = ShowCustomerInfoResponseMapping(_customerRepository.GetListByIds(source.Select(v => v.RecommendUser).Distinct().ToList())).ToList();
-           // var tags = TagInfoResponseMapping(_tagRepository.GetListByIds(source.Select(v => v.Tag_Id).Distinct().ToList())).ToList();
+            // var brands = BrandInfoResponseMapping(_brandRepository.GetListByIds(source.Select(v => v.Brand_Id).Distinct().ToList())).ToList();
+            // var stores = StoreResponseMapping(_storeRepository.GetListByIds(source.Select(v => v.Store_Id).Distinct().ToList())).ToList();
+            // var rusers = ShowCustomerInfoResponseMapping(_customerRepository.GetListByIds(source.Select(v => v.RecommendUser).Distinct().ToList())).ToList();
+            // var tags = TagInfoResponseMapping(_tagRepository.GetListByIds(source.Select(v => v.Tag_Id).Distinct().ToList())).ToList();
             var ids = source.Select(v => v.Id).ToList();
             var resources = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, ids)).ToList();
 
-           // var pprs = GetPromotionForRelation(ids);
+            // var pprs = GetPromotionForRelation(ids);
 
-           // var promotions = GetPromotionInfos4V(pprs.Select(v => v.ProId ?? 0).ToList());
+            // var promotions = GetPromotionInfos4V(pprs.Select(v => v.ProId ?? 0).ToList());
 
             foreach (var item in source)
             {
@@ -3605,11 +3608,11 @@ namespace Yintai.Hangzhou.Service.Manager
                     continue;
                 }
 
-              //  var pids = pprs.Where(v => v.ProdId == item.Id).Select(v => v.ProId).Distinct().ToList();
-              //  var ps = promotions.Where(v => pids.Any(s => s == v.Id)).ToList();
+                //  var pids = pprs.Where(v => v.ProdId == item.Id).Select(v => v.ProId).Distinct().ToList();
+                //  var ps = promotions.Where(v => pids.Any(s => s == v.Id)).ToList();
 
-              //  var target = ProductInfoResponseMapping(item, brands.FirstOrDefault(v => v.Id == item.Brand_Id), stores.FirstOrDefault(v => v.Id == item.Store_Id), rusers.FirstOrDefault(v => v.Id == item.RecommendUser), tags.FirstOrDefault(v => v.Id == item.Tag_Id), resources.Where(v => v.SourceId == item.Id).ToList(), ps);
-              var target = ProductInfoResponseMapping(item,null,null,null,null,resources,null);
+                //  var target = ProductInfoResponseMapping(item, brands.FirstOrDefault(v => v.Id == item.Brand_Id), stores.FirstOrDefault(v => v.Id == item.Store_Id), rusers.FirstOrDefault(v => v.Id == item.RecommendUser), tags.FirstOrDefault(v => v.Id == item.Tag_Id), resources.Where(v => v.SourceId == item.Id).ToList(), ps);
+                var target = ProductInfoResponseMapping(item, null, null, null, null, resources, null);
                 if (target == null)
                 {
                     continue;

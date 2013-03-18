@@ -8,7 +8,8 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Architecture.ImageClient;
 using Yintai.Architecture.ImageTool.Contract;
-using Yintai.Architecture.ImageTool.Models;
+﻿using Yintai.Architecture.ImageTool.Impl;
+﻿using Yintai.Architecture.ImageTool.Models;
 
 namespace Yintai.Hangzhou.Service.Manager
 {
@@ -200,30 +201,12 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <returns></returns>
         private static FileMessage SaveSound(HttpPostedFileBase postedFile, FileUploadMessage fileUploadMessage)
         {
+            var client = _imageService;
+            client.UploadFile(fileUploadMessage);
+            fileUploadMessage.FileData.Close();
+            fileUploadMessage.FileData.Dispose();
 
-            throw new NotImplementedException("SaveSound");
-            //var fileName = fileUploadMessage.FileName + fileUploadMessage.FileExt;
-            //try
-            //{
-            //    Directory.CreateDirectory(UploadFileConfigManager.GetPhysicalSoundPath());
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.Error(ex);
-            //    return FileMessage.UnknowError;
-            //}
-
-            //try
-            //{
-            //    postedFile.SaveAs(Path.Combine(UploadFileConfigManager.GetPhysicalSoundPath(), fileName));
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.Error(ex);
-            //    return FileMessage.UnknowError;
-            //}
-
-            //return FileMessage.Success;
+            return FileMessage.Success;
         }
 
         /// <summary>
@@ -625,12 +608,13 @@ namespace Yintai.Hangzhou.Service.Manager
             }
         }
 
-        internal static bool DeletedFile(string[] fileNameList)
+        internal static bool DeletedFile(string key, string[] fileNameList, string[] userFolders)
         {
             var client = _imageService;
 
-            return client.DeleteNormalFile(fileNameList);
+            return client.DeleteFile(key, fileNameList, null, userFolders);
         }
+
     }
 }
 
