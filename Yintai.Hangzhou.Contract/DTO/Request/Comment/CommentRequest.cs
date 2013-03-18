@@ -72,8 +72,11 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Comment
         public int CommentId { get; set; }
 
         public string Content { get; set; }
+<<<<<<< HEAD
 
         public HttpFileCollectionBase Files { get; set; }
+=======
+>>>>>>> nglocal
     }
 
     public class CommentDestroyRequest : AuthRequest
