@@ -59,6 +59,8 @@ namespace Yintai.Hangzhou.Model.Enums
         SpecialTopic = 9,
 
         [Description("∆¿¬€”Ô“Ù")]
-        CommentAudio = 10
+        CommentAudio = 10,
+
+        BannerPromotion = 11
     }
 }

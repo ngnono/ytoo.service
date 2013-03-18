@@ -24,6 +24,13 @@ namespace Yintai.Hangzhou.Contract.Promotion
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        ExecuteResult<PromotionCollectionResponse> GetPromotionForBanner(GetPromotionBannerListRequest request);
+
+        /// <summary>
+        /// 获取促销列表
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         ExecuteResult<PromotionCollectionResponse> GetPromotionList(GetPromotionListRequest request);
 
         /// <summary>
@@ -102,5 +109,7 @@ namespace Yintai.Hangzhou.Contract.Promotion
         /// <param name="request"></param>
         /// <returns></returns>
         ExecuteResult<PromotionInfoResponse> CreateCoupon(PromotionCouponCreateRequest request);
+
+
     }
 }

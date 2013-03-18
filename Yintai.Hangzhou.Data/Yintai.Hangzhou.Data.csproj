@@ -82,7 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
+    <Compile Include="Models\Banner.cs" />
     <Compile Include="Models\Card.cs" />
+    <Compile Include="Models\Mapping\BannerMap.cs" />
     <Compile Include="Models\Mapping\CardMap.cs" />
     <Compile Include="Partials\ResourceEntity.cs" />
     <Compile Include="Partials\StoreEntityMap.cs" />

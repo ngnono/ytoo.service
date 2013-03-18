@@ -75,6 +75,11 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         #region Implementation of IResourceRepository
 
+        public IQueryable<ResourceEntity> Get(DataStatus? dataStatus, SourceType? sourceType)
+        {
+            return base.Get(Filter(dataStatus, sourceType, null));
+        }
+
         /// <summary>
         /// 根据id查找相应的资源
         /// </summary>

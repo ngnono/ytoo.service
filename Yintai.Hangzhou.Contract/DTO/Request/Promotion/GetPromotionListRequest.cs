@@ -8,6 +8,29 @@ using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Contract.DTO.Request.Promotion
 {
+    public class GetPromotionBannerListRequest : BaseRequest
+    {
+        public int Page { get; set; }
+
+        public int Pagesize { get; set; }
+
+        public int Sort { get; set; }
+
+        public double Lng { get; set; }
+
+        public double Lat { get; set; }
+
+        public CoordinateInfo CoordinateInfo
+        {
+            get { return new CoordinateInfo(Lng, Lat); }
+        }
+
+        public PromotionSortOrder SortOrder
+        {
+            get { return EnumExtension.Parser<PromotionSortOrder>(Sort); }
+        }
+    }
+
     /// <summary>
     /// CLR Version: 4.0.30319.269
     /// NameSpace: Yintai.Hangzhou.Contract.Request.Promotion

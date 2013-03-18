@@ -2688,6 +2688,66 @@ namespace Yintai.Hangzhou.Service.Manager
             return target;
         }
 
+        public List<PromotionInfoResponse> PromotionResponseMapping(IQueryable<PromotionEntity> source,
+                                                                    CoordinateInfo coordinateInfo)
+        {
+            //JOIN DIANPU
+            var storeRepository = ServiceLocator.Current.Resolve<IStoreRepository>();
+            var resouceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
+            var sp = source.Join(storeRepository.Get(DataStatus.Normal), p => p.Store_Id, f => f.Id, (p, f) =>
+                    new
+                        {
+                            P = p,
+                            S = f
+                        }
+                );
+
+            var rsp = sp.Join(resouceRepository.Get(DataStatus.Normal, SourceType.BannerPromotion),
+                              p => p.P.Id, f => f.SourceId, (p, f) => new
+                                  {
+                                      P = p.P,
+                                      S = p.S,
+                                      R = f
+                                  }).DefaultIfEmpty().ToList();
+
+            var target = new Dictionary<int, PromotionInfoResponse>();
+
+            foreach (var item in rsp)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                var r = ResourceInfoResponsesMapping(item.R);
+
+                if (target.Keys.Contains(item.P.Id))
+                {
+                    if (r == null)
+                    {
+                        continue;
+                    }
+
+                    target[item.P.Id].ResourceInfoResponses.Add(r);
+                }
+                else
+                {
+                    var store = StoreResponseMapping(item.S, coordinateInfo);
+
+                    var t = PromotionResponseMapping(item.P, coordinateInfo, null, new List<ResourceInfoResponse> { r }, store, null);
+                    if (t.ResourceInfoResponses == null)
+                    {
+                        t.ResourceInfoResponses = new List<ResourceInfoResponse>();
+                    }
+
+                    target.Add(item.P.Id, t);
+                }
+
+            }
+
+            return target.Values.ToList();
+        }
+
         /// <summary>
         /// 需要计算 距离
         /// </summary>

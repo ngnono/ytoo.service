@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
@@ -7,6 +8,8 @@ namespace Yintai.Hangzhou.Repository.Contract
 {
     public interface IPromotionRepository : IRepository<PromotionEntity, int>
     {
+        IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, Timestamp timestamp, PromotionFilterMode? filterMode, DataStatus? dataStatus, bool? hasBanner);
+
         /// <summary>
         /// set
         /// </summary>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
@@ -7,6 +8,8 @@ namespace Yintai.Hangzhou.Repository.Contract
 {
     public interface IStoreRepository : IRepository<StoreEntity, int>
     {
+        IQueryable<StoreEntity> Get(DataStatus? dataStatus);
+
         /// <summary>
         /// 获取指定ID 的 店铺
         /// </summary>

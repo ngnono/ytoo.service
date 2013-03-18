@@ -120,6 +120,7 @@ namespace Yintai.Hangzhou.Data.Models
         #endregion
 
         public DbSet<AdminAccessRightEntity> AdminAccessRights { get; set; }
+        public DbSet<BannerEntity> Banners { get; set; }
         public DbSet<BrandEntity> Brands { get; set; }
         public DbSet<CardEntity> Cards { get; set; }
         public DbSet<CommentEntity> Comments { get; set; }

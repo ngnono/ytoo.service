@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
@@ -29,6 +30,13 @@ namespace Yintai.Hangzhou.Repository.Impl
         #endregion
 
         #region methods
+
+        private static IOrderedQueryable<PromotionEntity> OrderBy(IQueryable<PromotionEntity> e, PromotionSortOrder sort)
+        {
+            var order = OrderBy(sort);
+
+            return order(e);
+        }
 
         /// <summary>
         /// 排序
@@ -329,6 +337,25 @@ namespace Yintai.Hangzhou.Repository.Impl
                         }
 
                         break;
+                    case PromotionFilterMode.NotTheEnd:
+                        if (rangeInfo != null)
+                        {
+                            if (rangeInfo.EndDateTime != null)
+                            {
+                                filter = filter.And(v => v.EndDate > rangeInfo.EndDateTime);
+                            }
+
+                            if (rangeInfo.StartDateTime != null)
+                            {
+                                filter = filter.And(v => v.StartDate > rangeInfo.StartDateTime);
+                            }
+                        }
+                        else
+                        {
+                            filter = filter.And(v => v.EndDate > DateTime.Now);
+                        }
+
+                        break;
                 }
             }
 
@@ -390,6 +417,29 @@ namespace Yintai.Hangzhou.Repository.Impl
             {
                 return null;
             }
+        }
+
+        public IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, Timestamp timestamp, PromotionFilterMode? filterMode, DataStatus? dataStatus, bool? hasBanner)
+        {
+            var linq = base.Get(Filter(dataStatus, null, timestamp, null, null, filterMode, null));
+
+            if (hasBanner != null && hasBanner.Value)
+            {
+                var banners = ServiceLocator.Current.Resolve<IBannerRepository>()
+                              .Get(null, SourceType.Promotion, DataStatus.Normal);
+
+                linq = linq.Join(banners, p => p.Id, f => f.SourceId, (p, f) => p);
+            }
+
+            totalCount = linq.Count();
+
+            var skipCount = (pagerRequest.PageIndex - 1) * pagerRequest.PageSize;
+
+            linq = skipCount == 0 ? linq.Take(pagerRequest.PageSize) : linq.Skip(skipCount).Take(pagerRequest.PageSize);
+
+            linq = OrderBy(linq, sortOrder);
+
+            return linq;
         }
 
         public PromotionEntity SetCount(PromotionCountType countType, int id, int count)
