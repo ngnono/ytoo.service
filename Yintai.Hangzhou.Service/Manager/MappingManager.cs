@@ -2708,7 +2708,7 @@ namespace Yintai.Hangzhou.Service.Manager
                                       P = p.P,
                                       S = p.S,
                                       R = f
-                                  }).DefaultIfEmpty().ToList();
+                                  }).DefaultIfEmpty();
 
             var target = new Dictionary<int, PromotionInfoResponse>();
 

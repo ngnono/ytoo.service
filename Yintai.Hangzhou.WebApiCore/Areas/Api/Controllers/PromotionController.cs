@@ -38,9 +38,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             request.Description = UrlDecode(request.Description);
             request.Name = UrlDecode(request.Name);
 
-            var result = this._promotionDataService.CreatePromotion(request);
+            var result = _promotionDataService.CreatePromotion(request);
 
-            return new RestfulResult() { Data = result };
+            return new RestfulResult { Data = result };
+        }
+
+        public RestfulResult Banner(GetPromotionBannerListRequest request)
+        {
+            var result = _promotionDataService.GetPromotionForBanner(request);
+
+            return new RestfulResult { Data = result };
         }
 
         public RestfulResult List(GetPromotionListRequest request, int? authuid, UserModel authUser)
