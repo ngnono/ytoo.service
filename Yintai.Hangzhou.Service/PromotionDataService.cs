@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
 using Yintai.Architecture.Common.Models;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Promotion;
@@ -64,6 +65,27 @@ namespace Yintai.Hangzhou.Service
         }
 
         #region Implementation of IPromotionService
+
+        public ExecuteResult<PromotionCollectionResponse> GetPromotionForBanner(GetPromotionBannerListRequest request)
+        {
+            var page = new PagerRequest(request.Page, request.Pagesize, 40);
+
+            int totalCount;
+            var entities = this._promotionRepository.Get(page, out totalCount, request.SortOrder, null, PromotionFilterMode.NotTheEnd,
+                                          DataStatus.Normal, true);
+
+            var response = MappingManager.PromotionResponseMapping(entities, request.CoordinateInfo);
+
+
+            var result = new ExecuteResult<PromotionCollectionResponse>();
+            var collection = new PromotionCollectionResponse(page, totalCount)
+            {
+                Promotions = response.ToList()
+            };
+            result.Data = collection;
+
+            return result;
+        }
 
         /// <summary>
         /// 注意获取最新接口的调用方式

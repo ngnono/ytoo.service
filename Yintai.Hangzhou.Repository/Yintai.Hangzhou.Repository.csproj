@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Configuratons\ConfigManager.cs" />
     <Compile Include="Contract\IAdminAccessRightRepository.cs" />
+    <Compile Include="Contract\IBannerRepository.cs" />
     <Compile Include="Contract\IBrandRepository.cs" />
     <Compile Include="Contract\ICardRepository.cs" />
     <Compile Include="Contract\ICommentRepository.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Contract\IVUserRepository.cs" />
     <Compile Include="Contract\IVUserRoleRepository.cs" />
     <Compile Include="Impl\AdminAccessRightRepository.cs" />
+    <Compile Include="Impl\BannerRepository.cs" />
     <Compile Include="Impl\BrandRepository.cs" />
     <Compile Include="Impl\CardRepository.cs" />
     <Compile Include="Impl\ProductBulkRepository.cs" />

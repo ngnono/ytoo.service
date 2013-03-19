@@ -51,6 +51,11 @@ namespace Yintai.Hangzhou.Repository.Impl
             return base.Find(key);
         }
 
+        public IQueryable<StoreEntity> Get(DataStatus? dataStatus)
+        {
+            return base.Get(Filler(dataStatus));
+        }
+
         /// <summary>
         /// 获取指定ID 的 店铺
         /// </summary>

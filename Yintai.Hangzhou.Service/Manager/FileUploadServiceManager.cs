@@ -8,7 +8,8 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Architecture.ImageClient;
 using Yintai.Architecture.ImageTool.Contract;
-using Yintai.Architecture.ImageTool.Models;
+﻿using Yintai.Architecture.ImageTool.Impl;
+﻿using Yintai.Architecture.ImageTool.Models;
 
 namespace Yintai.Hangzhou.Service.Manager
 {
@@ -200,30 +201,12 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <returns></returns>
         private static FileMessage SaveSound(HttpPostedFileBase postedFile, FileUploadMessage fileUploadMessage)
         {
+            var client = _imageService;
+            client.UploadFile(fileUploadMessage);
+            fileUploadMessage.FileData.Close();
+            fileUploadMessage.FileData.Dispose();
 
-            throw new NotImplementedException("SaveSound");
-            //var fileName = fileUploadMessage.FileName + fileUploadMessage.FileExt;
-            //try
-            //{
-            //    Directory.CreateDirectory(UploadFileConfigManager.GetPhysicalSoundPath());
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.Error(ex);
-            //    return FileMessage.UnknowError;
-            //}
-
-            //try
-            //{
-            //    postedFile.SaveAs(Path.Combine(UploadFileConfigManager.GetPhysicalSoundPath(), fileName));
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.Error(ex);
-            //    return FileMessage.UnknowError;
-            //}
-
-            //return FileMessage.Success;
+            return FileMessage.Success;
         }
 
         /// <summary>
@@ -464,19 +447,11 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <param name="fileCollection">文件集合</param>
         /// <param name="AutoSize">允许上传的集合大小</param>
         /// <returns></returns>
-<<<<<<< HEAD
         public static List<FileInfor> UploadFileCollection(string key, HttpFileCollection fileCollection, int autoSize)
         {
             HttpFileCollectionBase obj = new HttpFileCollectionWrapper(fileCollection);
 
             return UploadFileCollection(key, obj, autoSize);
-=======
-        public static List<FileInfo> UploadFileCollection(string key, HttpFileCollection fileCollection, int autoSize)
-        {
-            HttpFileCollectionBase obj = new HttpFileCollectionWrapper(fileCollection);
-
-            return UploadFileCollection(key, fileCollection, autoSize);
->>>>>>> nglocal
         }
 
         /// <summary>
@@ -487,19 +462,11 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <param name="autoSize"></param>
         /// <param name="thumbnailInfoes"></param>
         /// <returns></returns>
-<<<<<<< HEAD
         public static List<FileInfor> UploadFileCollectionAndReturnInfo(string key, HttpFileCollection fileCollection, int autoSize, out IList<ThumbnailInfo> thumbnailInfoes)
         {
             HttpFileCollectionBase obj = new HttpFileCollectionWrapper(fileCollection);
 
             return UploadFileCollectionAndReturnInfo(key, obj, autoSize, out thumbnailInfoes);
-=======
-        public static List<FileInfo> UploadFileCollectionAndReturnInfo(string key, HttpFileCollection fileCollection, int autoSize, out IList<ThumbnailInfo> thumbnailInfoes)
-        {
-            HttpFileCollectionBase obj = new HttpFileCollectionWrapper(fileCollection);
-
-            return UploadFileCollectionAndReturnInfo(key, fileCollection, autoSize, out thumbnailInfoes);
->>>>>>> nglocal
         }
 
         /// <summary>
@@ -618,11 +585,6 @@ namespace Yintai.Hangzhou.Service.Manager
                         {
                             width = image.Width;
                             height = image.Height;
-<<<<<<< HEAD
-
-=======
-                           
->>>>>>> nglocal
                         }
                         fileHR.Seek(0, SeekOrigin.Begin);
                         fileInfor.Width = width;
@@ -645,16 +607,14 @@ namespace Yintai.Hangzhou.Service.Manager
                 return f;
             }
         }
-<<<<<<< HEAD
 
-        internal static bool DeletedFile(string[] fileNameList)
+        internal static bool DeletedFile(string key, string[] fileNameList, string[] userFolders)
         {
             var client = _imageService;
 
-            return client.DeleteNormalFile(fileNameList);
+            return client.DeleteFile(key, fileNameList, null, userFolders);
         }
-=======
->>>>>>> nglocal
+
     }
 }
 

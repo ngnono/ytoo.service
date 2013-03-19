@@ -29,6 +29,7 @@ namespace Yintai.Architecture.Common.Models
                     ,{"audio/wav","wav"}
                     ,{"audio/x-ms-wma","wma"}
                     ,{"audio/basic","snd" }
+                    ,{"audio/x-m4a","m4a"}
                 };
 
             Video = new Dictionary<string, string>
@@ -190,7 +191,8 @@ namespace Yintai.Architecture.Common.Models
                         {"mp3", "audio/mp3"},
                         {"wav", "audio/wav"},
                         {"wma", "audio/x-ms-wma"},
-                        {"snd", "audio/basic"}
+                        {"snd", "audio/basic"},
+                        {"m4a","audio/x-m4a"}
                     };
 
 

@@ -136,6 +136,8 @@ namespace Yintai.Hangzhou.Service.Impl
                 }
                 else
                 {
+                    Logger.Error(fileuploadResult);
+
                     continue;
                 }
 
@@ -155,7 +157,7 @@ namespace Yintai.Hangzhou.Service.Impl
         /// <param name="file"></param>
         /// <param name="sourceType"></param>
         /// <returns></returns>
-        public FileInfor SaveStage(FileInfo file,int createUser, SourceType sourceType)
+        public FileInfor SaveStage(FileInfo file, int createUser, SourceType sourceType)
         {
             if (file == null)
                 return null;
@@ -195,15 +197,17 @@ namespace Yintai.Hangzhou.Service.Impl
                 return null;
             }
 
-            //图片没有做物理删除
+            var s = (SourceType)entity.SourceType;
 
-        
+            String[] uf = GetFolder(entity.SourceId, s);
+
+            //图片没有做物理删除
+            FileUploadServiceManager.DeletedFile(s.ToString().ToLower(), new string[] { entity.Name }, uf);
 
             _resourceRepository.Delete(entity);
 
             return entity;
         }
-
 
         /*
 

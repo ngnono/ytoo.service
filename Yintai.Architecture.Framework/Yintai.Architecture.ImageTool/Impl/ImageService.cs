@@ -523,10 +523,10 @@ namespace Yintai.Architecture.ImageTool.Impl
             List<string> dateList = new List<string>(fileNameList.Length);
             List<string> fileNames = new List<string>(fileNameList.Length);
 
-            foreach (var fileName in fileNames)
+            foreach (var fileName in fileNameList)
             {
                 var pos = fileName.LastIndexOf(@"\");
-                var f = fileName.Substring(pos + 1, fileName.Length - pos);
+                var f = fileName.Substring(pos + 1);
                 fileNames.Add(f);
                 var posi = fileName.IndexOf(@"\");
                 var d = fileName.Substring(posi + 1, 8);

@@ -21,7 +21,6 @@ using Yintai.Hangzhou.Contract.DTO.Response.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Response.Store;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
-using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.WebSupport.Configuration;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
@@ -96,14 +95,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             var request = new CouponPassGeneratorRequest
                 {
-                    Identifier = "pass.com.aosca.coupon",
+                    Identifier = ConfigurationManager.AppSettings["Identifier"],
                     CertThumbprint =
                         ConfigurationManager.AppSettings["PassBookCertificateThumbprint"].Replace(" ", String.Empty),
                     CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine,
                     SerialNumber = coupponInfo.Id.ToString(CultureInfo.InvariantCulture),
                     Description = coupponInfo.ProductDescription,
-                    OrganizationName = "喜欢银泰",
-                    TeamIdentifier = "QFDPQMKGT8",
+                    OrganizationName = ConfigurationManager.AppSettings["OrganizationName"],
+                    TeamIdentifier = ConfigurationManager.AppSettings["TeamIdentifier"],
                     BackgroundColor = "rgb(229,1,80)",
                     ForegroundColor = "rgb(255,255,255)",
                     LabelColor = "rgb(255,255,255)",
@@ -274,30 +273,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _passHelper = new PassHelper(brandDataService);
         }
 
-
-        //// [RestfulAuthorize]
-        //public ActionResult Create22(PassCreateRequest request, [FetchUser(KeyName = "userid")]UserModel showUser)
-        //{
-        //    var result =
-        //        this._couponDataService.Get(new CouponInfoGetRequest()
-        //        {
-        //            AuthUid = showUser.Id,
-        //            CouponCode = request.CouponCode,
-        //            CouponId = request.CouponId,
-        //            Token = request.Token,
-        //            AuthUser = showUser
-        //        });
-
-        //    if (result.IsSuccess && result.Data != null)
-        //    {
-        //        return Coupon(ControllerContext, result.Data);
-        //    }
-
-        //    return new RestfulResult() { Data = result };
-        //}
-
-
-
         [RestfulAuthorize]
         [HttpPost]
         public ActionResult Create(PassCreateRequest request, int? authuid, UserModel authUser)
@@ -320,87 +295,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = result };
         }
 
-        //internal static byte[] GetPass(ControllerContext context, int couponId, string couponCode, string couponName, string couponDescription, CoordinateInfo coordinateInfo, string returnAppUrlSchemes)
-        //{
-        //    PassGenerator generator = new PassGenerator();
-
-        //    CouponPassGeneratorRequest request = new CouponPassGeneratorRequest();
-        //    request.Identifier = "pass.com.aosca.fashion";
-        //    request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"].Replace(" ", String.Empty);
-        //    request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
-        //    request.SerialNumber = couponId.ToString(CultureInfo.InvariantCulture);
-        //    //被隐藏
-        //    request.Description = couponDescription;
-        //    request.OrganizationName = "fara inc";
-        //    request.TeamIdentifier = "VM9DY9H897";
-        //    request.LogoText = "银泰百货";//couponName;
-        //    request.BackgroundColor = "rgb(229,1,80)";// "#e50150";
-        //    request.ForegroundColor = "rgb(255,255,255)";
-        //    //TODO:???修改 返回应用使用
-        //    request.AssociatedStoreIdentifiers = new List<int>(1)
-        //       {
-        //           452703031
-        //       };
-
-        //    if (!String.IsNullOrWhiteSpace(returnAppUrlSchemes))
-        //    {
-        //        //request.AddBackField(new StandardField("return app", "请点击下面链接返回应用", "lafasogroupbuy://test"));
-        //        request.AddBackField(new StandardField("return app", "请点击下面链接返回应用", returnAppUrlSchemes));
-        //    }
-        //    //request.Locale = "zh";
-
-        //    // override icon and icon retina
-        //    //request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(context.HttpContext.Server.MapPath("~/Icons/icon.png")));
-        //    request.Images.Add(PassbookImage.IconRetina, System.IO.File.ReadAllBytes(context.HttpContext.Server.MapPath("~/Icons/coupon/icon@2x.png")));
-
-
-        //    //request.Images.Add(PassbookImage.Strip, System.IO.File.ReadAllBytes(context.HttpContext.Server.MapPath("~/Icons/Strip.png")));
-        //    request.Images.Add(PassbookImage.StripRetina, System.IO.File.ReadAllBytes(context.HttpContext.Server.MapPath("~/Icons/coupon/strip@2x.png")));
-
-        //    //request.Images.Add(PassbookImage.Logo, System.IO.File.ReadAllBytes(context.HttpContext.Server.MapPath("~/Icons/logo.png")));
-        //    request.Images.Add(PassbookImage.LogoRetina, System.IO.File.ReadAllBytes(context.HttpContext.Server.MapPath("~/Icons/coupon/logo@2x.png")));
-
-        //    request.AddBarCode(couponCode, BarcodeType.PKBarcodeFormatPDF417, "iso-8859-1" /*"UTF-8"*/, couponCode);
-        //    request.SuppressStripeShine = false;
-
-
-        //    //if (coordinateInfo != null)
-        //    //{
-        //    //    request.Locations.Add(new Location()
-        //    //    {
-        //    //        Altitude = 0,
-        //    //        RelevantText = String.Empty,
-        //    //        Latitude = coordinateInfo.Latitude,
-        //    //        Longitude = coordinateInfo.Longitude
-        //    //    });
-        //    //}
-
-        //    byte[] generatedPass = generator.Generate(request);
-
-        //    return generatedPass;
-        //}
-
-        //[System.Obsolete("该方法已经过期请使用新的重载方法")]
-        //internal static byte[] GetPass(ControllerContext context, int couponId, string couponCode, string couponName, string couponDescription, CoordinateInfo coordinateInfo)
-        //{
-        //    //TODO:PASS
-        //    return GetPass(context, couponId, couponCode, couponName, couponDescription, coordinateInfo,
-        //            IosUrlSchemesPre);
-        //}
-
-        //internal static byte[] GetPass(ControllerContext context, int couponId, string couponCode, string couponName, string couponDescription, CoordinateInfo coordinateInfo, int userId)
-        //{
-        //    //TODO:PASS
-        //    return GetPass(context, couponId, couponCode, couponName, couponDescription, coordinateInfo,
-        //            IosUrlSchemesPre + userId.ToString(CultureInfo.InvariantCulture));
-        //}
-
-        //internal ActionResult Coupon(int couponId, string couponCode, string couponName, string couponDescription, CoordinateInfo coordinateInfo, int userId)
-        //{
-        //    var generatedPass = GetPass(ControllerContext, couponId, couponCode, couponName, couponDescription, coordinateInfo, userId);
-
-        //    return new FileContentResultV2(generatedPass, "application/vnd.apple.pkpass", DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture) + ".pkpass");
-        //}
 
         private ActionResult Coupon(ControllerContext controllerContext, CouponInfoResponse couponInfoResponse)
         {
