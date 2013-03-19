@@ -16,9 +16,4 @@ namespace Yintai.Hangzhou.Data.Models
             }
         }
     }
-
-    public partial class PromotionEntity
-    {
-        public int? Banner_Id { get; set; }
-    }
 }
