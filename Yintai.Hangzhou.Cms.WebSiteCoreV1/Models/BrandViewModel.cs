@@ -41,7 +41,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [StringLength(1024, MinimumLength = 0)]
         public string Logo { get; set; }
 
-        [Required]
         [StringLength(1024, MinimumLength = 0)]
         [Display(Name="网站")]
         public string WebSite { get; set; }

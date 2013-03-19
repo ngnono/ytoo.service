@@ -58,7 +58,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public decimal Price { get; set; }
 
         [StringLength(140, MinimumLength = 1)]
-        [Required]
         [Display(Name = "推荐理由")]
         public string RecommendedReason { get; set; }
 

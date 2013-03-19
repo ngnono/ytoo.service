@@ -105,6 +105,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 entity.CreatedUser = CurrentUser.CustomerId;
                 entity.UpdatedUser = CurrentUser.CustomerId;
                 entity.CreatedDate = DateTime.Now;
+                entity.RecommendedReason = entity.RecommendedReason ?? string.Empty;
                 entity.RecommendUser = CurrentUser.CustomerId;
                 entity.RecommendSourceId = entity.RecommendUser;
                 entity.RecommendSourceType = (int)RecommendSourceType.Default;
@@ -214,7 +215,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.UpdatedUser = CurrentUser.CustomerId;
             entity.Name = vo.Name;
             entity.Price = vo.Price;
-            entity.RecommendedReason = vo.RecommendedReason;
+            entity.RecommendedReason = vo.RecommendedReason??string.Empty;
             entity.SortOrder = vo.SortOrder;
             entity.Price = vo.Price;
             entity.Status = vo.Status;

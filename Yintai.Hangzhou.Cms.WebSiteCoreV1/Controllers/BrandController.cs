@@ -101,6 +101,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 var entity = MappingManager.BrandEntityMapping(vo);
                 entity.CreatedUser = base.CurrentUser.CustomerId;
                 entity.UpdatedUser = base.CurrentUser.CustomerId;
+                entity.WebSite = vo.WebSite ?? string.Empty;
                 entity.Status = (int)DataStatus.Normal;
                 entity.CreatedDate = DateTime.Now;
                 entity.UpdatedDate = DateTime.Now;
@@ -142,7 +143,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             entity.Name = vo.Name;
             entity.Group = vo.Group;
-            entity.WebSite = vo.WebSite;
+            entity.WebSite = vo.WebSite??string.Empty;
             entity.Description = vo.Description;
             entity.EnglishName = vo.EnglishName;
             entity.UpdatedDate = DateTime.Now;
