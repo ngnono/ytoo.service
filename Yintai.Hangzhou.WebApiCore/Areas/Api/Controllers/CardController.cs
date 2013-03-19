@@ -19,12 +19,21 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         }
 
         [HttpPost]
+        public RestfulResult Bind(FormCollection formCollection, BindingRequest request, int? authuid, UserModel authUser)
+        {
+            request.AuthUser = authUser;
+            request.AuthUid = authuid.Value;
+
+            return new RestfulResult { Data = _cardDataService.Binding(request) };
+        }
+
+        [HttpGet]
         public RestfulResult Bind(BindingRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUser = authUser;
             request.AuthUid = authuid.Value;
 
-            return new RestfulResult { Data = this._cardDataService.Binding(request) };
+            return new RestfulResult { Data = _cardDataService.Binding(request) };
         }
 
         //[HttpPost]
