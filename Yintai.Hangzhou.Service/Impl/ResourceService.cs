@@ -114,8 +114,8 @@ namespace Yintai.Hangzhou.Service.Impl
                         SortOrder = count,
                         SourceId = sourceId,
                         SourceType = (int)sourceType,
-                        Status = 1,
-                        Type = (int)ResourceType.Image,
+                        Status = (int)DataStatus.Normal,
+                        Type = (int)fileInfor.ResourceType,
                         UpdatedDate = DateTime.Now,
                         UpdatedUser = createdUid,
                         Domain = String.Empty

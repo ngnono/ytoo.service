@@ -169,6 +169,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
 
             modelBuilder.Configurations.Add(new AdminAccessRightEntityMap());
+            modelBuilder.Configurations.Add(new BannerEntityMap());
             modelBuilder.Configurations.Add(new BrandEntityMap());
             modelBuilder.Configurations.Add(new CardEntityMap());
             modelBuilder.Configurations.Add(new CommentEntityMap());
