@@ -16,7 +16,6 @@ namespace com.intime.jobscheduler.Job
         public int Status { get; set; }
         public int FavoriteCount { get; set; }
         public ESStore Store { get; set; }
-        public ESTag Tag { get; set; }
         public bool IsTop { get; set; }
         public virtual IEnumerable<ESResource> Resource { get; set; }
 

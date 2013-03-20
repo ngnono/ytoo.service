@@ -19,8 +19,8 @@ namespace com.intime.jobscheduler.Job
             JobDataMap data = context.JobDetail.JobDataMap;
             var esUrl = data.GetString("eshost");
             var esIndex = data.GetString("defaultindex");
-            var benchDate = data.ContainsKey("benchdate") ? data.GetDateTimeValue("benchdate") : DateTime.Today;
-            benchDate = benchDate<new DateTime(2013,1,1)?DateTime.Today:benchDate;
+            var benchDate = data.ContainsKey("benchdate") ? data.GetDateTimeValue("benchdate") : DateTime.Today.AddDays(-1);
+            benchDate = benchDate<new DateTime(2013,1,1)?DateTime.Today.AddDays(-1):benchDate;
             var client = new ElasticClient(new ConnectionSettings(esUrl,9200)
                                     .SetDefaultIndex(esIndex)
                                     .SetMaximumAsyncConnections(10));
@@ -48,7 +48,6 @@ namespace com.intime.jobscheduler.Job
             {
                 var prods = from p in db.Promotions
                             join s in db.Stores on p.Store_Id equals s.Id
-                            join t in db.Tags on p.Tag_Id equals t.Id
                             where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
                             let resource = (from r in db.Resources
                                            where r.SourceId == p.Id
@@ -68,18 +67,15 @@ namespace com.intime.jobscheduler.Job
                                 FavoriteCount = p.FavoriteCount,
                                 IsTop = p.IsTop,
                                 Status = p.Status,
-                                Tag = new ESTag()
-                                {
-                                    Name = t.Name,
-                                    Description = t.Description
-                                },
                                 Store = new ESStore()
                                 {
                                     Name = s.Name,
                                     Description = s.Description,
-                                    Location = s.Location,
-                                    Longitude = s.Longitude,
-                                    Latitude = s.Latitude,
+                                    Address = s.Location,
+                                    Location = new Location{
+                                         Lon = s.Longitude,
+                                         Lat = s.Latitude
+                                    },
                                     GpsAlt = s.GpsAlt,
                                     GpsLat = s.GpsLat,
                                     GpsLng = s.GpsLng,
@@ -89,6 +85,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
+                client.MapFromAttributes<ESPromotion>();
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -154,9 +151,11 @@ namespace com.intime.jobscheduler.Job
                                 {
                                     Name = s.Name,
                                     Description = s.Description,
-                                    Location = s.Location,
-                                    Longitude = s.Longitude,
-                                    Latitude = s.Latitude,
+                                    Address = s.Location,
+                                    Location = new Location{
+                                         Lon = s.Longitude,
+                                         Lat = s.Latitude
+                                    },
                                     GpsAlt = s.GpsAlt,
                                     GpsLat = s.GpsLat,
                                     GpsLng = s.GpsLng,
@@ -172,6 +171,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
+                client.MapFromAttributes<ESProduct>();
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
