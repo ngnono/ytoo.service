@@ -3641,6 +3641,61 @@ namespace Yintai.Hangzhou.Service.Manager
             return ProductInfoResponseMapping(source, brand, store, ruser, tag, resources.ToList(), promotions);
         }
 
+        public IEnumerable<ProductInfoResponse> ProductInfoResponseMapping(IEnumerable<ProductEntity> source)
+        {
+            if (source == null)
+            {
+                return new List<ProductInfoResponse>(0);
+            }
+
+            var linq = source as IQueryable<ProductEntity>;
+
+            var rp = linq.Join(_resourceRepository.Get(DataStatus.Normal, SourceType.Product),
+                  p => p.Id, f => f.SourceId, (p, f) => new
+                  {
+                      P = p,
+                      R = f
+                  }).DefaultIfEmpty();
+            
+
+
+            var dic = new Dictionary<int, ProductInfoResponse>();
+
+            foreach (var item in rp)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                ProductInfoResponse target;
+                if (dic.TryGetValue(item.P.Id, out target))
+                {
+                    if (item.R != null)
+                    {
+                        target.ResourceInfoResponses.Add(ResourceInfoResponsesMapping(item.R));
+                    }
+                }
+                else
+                {
+                    target = ProductInfoResponseMapping(item.P, null, null, null, null, new List<ResourceInfoResponse> { ResourceInfoResponsesMapping(item.R) }, null);
+                    dic.Add(item.P.Id, target);
+                }
+            }
+
+            var result = dic.Values.ToList();
+
+            foreach (var item in result)
+            {
+                if (item.ResourceInfoResponses.Count > 1)
+                {
+                    item.ResourceInfoResponses = item.ResourceInfoResponses.OrderByDescending(v => v.SortOrder).ToList();
+                }
+            }
+
+            return result;
+        }
+
         public IEnumerable<ProductInfoResponse> ProductInfoResponseMapping(List<ProductEntity> source)
         {
             if (source == null || source.Count == 0)

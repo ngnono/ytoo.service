@@ -608,12 +608,8 @@ namespace Yintai.Hangzhou.Service
             request.Pagesize = 40;
 
             int totalCount;
-            var pn = request.K;
-            var bn = request.K;
             var produtEntities = _productRepository.Search(request.PagerRequest, out totalCount, ProductSortOrder.Default, null,
-                                                   pn, bn, null, null, null, DataStatus.Normal).ToList();
-            totalCount = produtEntities.Count;
-
+                                                   request.K, request.K, null, null, null, DataStatus.Normal);
             var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
             {
                 Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()

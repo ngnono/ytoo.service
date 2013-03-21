@@ -9,6 +9,10 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+<<<<<<< HEAD
+=======
+using Yintai.Hangzhou.Model.Filters;
+>>>>>>> nglocal
 using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.Repository.Impl
@@ -421,9 +425,26 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, Timestamp timestamp, PromotionFilterMode? filterMode, DataStatus? dataStatus, bool? hasBanner)
         {
+<<<<<<< HEAD
             var linq = base.Get(Filter(dataStatus, null, timestamp, null, null, filterMode, null));
 
             if (hasBanner != null && hasBanner.Value)
+=======
+            return Get(pagerRequest, out  totalCount, sortOrder, new PromotionFilter
+                {
+                    DataStatus = dataStatus,
+                    FilterMode = filterMode,
+                    HasBanner = hasBanner,
+                    Timestamp = timestamp
+                });
+        }
+
+        public IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, PromotionFilter filter)
+        {
+            var linq = base.Get(Filter(filter.DataStatus, null, filter.Timestamp, null, null, filter.FilterMode, null));
+
+            if (filter.HasBanner != null && filter.HasBanner.Value)
+>>>>>>> nglocal
             {
                 var banners = ServiceLocator.Current.Resolve<IBannerRepository>()
                               .Get(null, SourceType.Promotion, DataStatus.Normal);
@@ -431,6 +452,14 @@ namespace Yintai.Hangzhou.Repository.Impl
                 linq = linq.Join(banners, p => p.Id, f => f.SourceId, (p, f) => p);
             }
 
+<<<<<<< HEAD
+=======
+            if (filter.HasProduct != null && filter.HasProduct.Value)
+            {
+                //var products = base.Context<Promotion2ProductEntity>().
+            }
+
+>>>>>>> nglocal
             totalCount = linq.Count();
 
             var skipCount = (pagerRequest.PageIndex - 1) * pagerRequest.PageSize;
