@@ -9,6 +9,7 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.Repository.Impl
@@ -421,14 +422,30 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, Timestamp timestamp, PromotionFilterMode? filterMode, DataStatus? dataStatus, bool? hasBanner)
         {
-            var linq = base.Get(Filter(dataStatus, null, timestamp, null, null, filterMode, null));
+            return Get(pagerRequest, out  totalCount, sortOrder, new PromotionFilter
+                {
+                    DataStatus = dataStatus,
+                    FilterMode = filterMode,
+                    HasBanner = hasBanner,
+                    Timestamp = timestamp
+                });
+        }
 
-            if (hasBanner != null && hasBanner.Value)
+        public IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, PromotionFilter filter)
+        {
+            var linq = base.Get(Filter(filter.DataStatus, null, filter.Timestamp, null, null, filter.FilterMode, null));
+
+            if (filter.HasBanner != null && filter.HasBanner.Value)
             {
                 var banners = ServiceLocator.Current.Resolve<IBannerRepository>()
                               .Get(null, SourceType.Promotion, DataStatus.Normal);
 
                 linq = linq.Join(banners, p => p.Id, f => f.SourceId, (p, f) => p);
+            }
+
+            if (filter.HasProduct != null && filter.HasProduct.Value)
+            {
+                //var products = base.Context<Promotion2ProductEntity>().
             }
 
             totalCount = linq.Count();

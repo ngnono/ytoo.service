@@ -14,7 +14,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 {
     public class ResourceRepository : RepositoryBase<ResourceEntity, int>, IResourceRepository
     {
-        #region
+        #region methods
 
         private static Expression<Func<ResourceEntity, bool>> Filter(DataStatus? dataStatus, SourceType? sourceType, IEnumerable<int> sourceidList)
         {
@@ -77,7 +77,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public IQueryable<ResourceEntity> Get(DataStatus? dataStatus, SourceType? sourceType)
         {
-            return base.Get(Filter(dataStatus, sourceType, null));
+            return base.Get(Filter(dataStatus, sourceType, null), GetOrder(ResourceSortOrder.Default));
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         /// <returns></returns>
         public List<ResourceEntity> GetList(List<int> ids)
         {
-            return base.Get(v => ids.Any(s => s == v.Id)).ToList();
+            return base.Get(v => ids.Any(s => s == v.Id), GetOrder(ResourceSortOrder.Default)).ToList();
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         public List<ResourceEntity> GetList(int sourceType, int sourceid)
         {
             return
-                base.Get(v => v.Status == 1 && v.SourceId == sourceid && v.SourceType == sourceType, v => v.OrderBy(s => s.SortOrder)).
+                base.Get(v => v.Status == 1 && v.SourceId == sourceid && v.SourceType == sourceType, GetOrder(ResourceSortOrder.Default)).
                     ToList();
         }
 
@@ -111,7 +111,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         /// <returns></returns>
         public List<ResourceEntity> GetList(int sourceType, List<int> sourceIds)
         {
-            return base.Get(v => v.Status == 1 && v.SourceType == sourceType && sourceIds.Any(s => s == v.SourceId)).ToList();
+            return base.Get(v => v.Status == 1 && v.SourceType == sourceType && sourceIds.Any(s => s == v.SourceId), GetOrder(ResourceSortOrder.Default)).ToList();
         }
 
         public List<ResourceEntity> Insert(List<ResourceEntity> entities)
