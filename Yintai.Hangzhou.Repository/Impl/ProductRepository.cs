@@ -340,7 +340,13 @@ namespace Yintai.Hangzhou.Repository.Impl
             return null;
         }
 
-        public List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter)
+        public List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount,
+                                                ProductSortOrder sortOrder, ProductFilter productFilter)
+        {
+            return Get(pagerRequest, out totalCount, sortOrder, productFilter).ToList();
+        }
+
+        public IQueryable<ProductEntity> Get(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter)
         {
             var linq = base.Get(Filter(productFilter));
             //var linq = base.Get(Filter(productFilter), out totalCount, pagerRequest.PageIndex, pagerRequest.PageSize,
@@ -368,7 +374,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
             resetSet = skipCount == 0 ? resetSet.Take(pagerRequest.PageSize) : resetSet.Skip(skipCount).Take(pagerRequest.PageSize);
 
-            return resetSet.ToList();
+            return resetSet;
         }
 
         public override ProductEntity GetItem(int key)

@@ -91,6 +91,16 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <returns></returns>
         List<ProductEntity> GetPagedList(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter);
 
+        /// <summary>
+        /// 分页
+        /// </summary>
+        /// <param name="pagerRequest">page</param>
+        /// <param name="totalCount">记录数</param>
+        /// <param name="sortOrder">排序方式</param>
+        /// <param name="productFilter">过滤选项</param>
+        /// <returns></returns>
+        IQueryable<ProductEntity> Get(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter);
+
         IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount,
             ProductSearchOption search);
     }

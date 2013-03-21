@@ -34,6 +34,15 @@ namespace Yintai.Hangzhou.Service.Manager
             return CacheDateSecond;
         }
 
+        public static int ProductSearchKey(out string key, string mark)
+        {
+            const string productKeyPre4Info = ProductKeyPre + "_sch";
+
+            key = String.Concat(productKeyPre4Info, "_" + mark);
+
+            return CacheDateSecond;
+        }
+
         public static int TagAllKey(out string key)
         {
             const string tagKeyPre4All = TagKeyPre + "_all";
