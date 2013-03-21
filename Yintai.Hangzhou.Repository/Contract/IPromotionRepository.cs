@@ -3,10 +3,9 @@ using System.Linq;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
-<<<<<<< HEAD
-=======
+
 using Yintai.Hangzhou.Model.Filters;
->>>>>>> nglocal
+
 
 namespace Yintai.Hangzhou.Repository.Contract
 {
@@ -14,11 +13,9 @@ namespace Yintai.Hangzhou.Repository.Contract
     {
         IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, Timestamp timestamp, PromotionFilterMode? filterMode, DataStatus? dataStatus, bool? hasBanner);
 
-<<<<<<< HEAD
-=======
+
         IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, PromotionFilter filter);
 
->>>>>>> nglocal
         /// <summary>
         /// set
         /// </summary>
