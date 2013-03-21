@@ -268,7 +268,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         /// <param name="recommendUser"></param>
         /// <param name="tagids"></param>
         /// <returns></returns>
-        private static Expression<Func<PromotionEntity, bool>> Filter(DataStatus? dataStatus, DateTimeRangeInfo rangeInfo, Timestamp timestamp, int? recommendUser, List<int> tagids, PromotionFilterMode? filterMode = null, List<int> ids = null)
+        private static Expression<Func<PromotionEntity, bool>> Filter(DataStatus? dataStatus, DateTimeRangeInfo rangeInfo, Timestamp timestamp, int? recommendUser, List<int> tagids, PromotionFilterMode? filterMode = null, List<int> ids = null, bool? hasProduct = null)
         {
             var filter = PredicateBuilder.True<PromotionEntity>();
 
@@ -365,6 +365,11 @@ namespace Yintai.Hangzhou.Repository.Impl
                 filter = filter.And(v => ids.Any(s => s == v.Id));
             }
 
+            if (hasProduct != null)
+            {
+                filter = filter.And(v => v.IsProdBindable == hasProduct);
+            }
+
             return filter;
         }
 
@@ -431,9 +436,9 @@ namespace Yintai.Hangzhou.Repository.Impl
                 });
         }
 
-        public IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, PromotionFilter filter)
+        public IQueryable<PromotionEntity> Get(PromotionFilter filter)
         {
-            var linq = base.Get(Filter(filter.DataStatus, null, filter.Timestamp, null, null, filter.FilterMode, null));
+            var linq = base.Get(Filter(filter.DataStatus, null, filter.Timestamp, null, null, filter.FilterMode, null, filter.HasProduct));
 
             if (filter.HasBanner != null && filter.HasBanner.Value)
             {
@@ -443,11 +448,12 @@ namespace Yintai.Hangzhou.Repository.Impl
                 linq = linq.Join(banners, p => p.Id, f => f.SourceId, (p, f) => p);
             }
 
-            if (filter.HasProduct != null && filter.HasProduct.Value)
-            {
-                //var products = base.Context<Promotion2ProductEntity>().
-            }
+            return linq;
+        }
 
+        public IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, PromotionFilter filter)
+        {
+            var linq = Get(filter);
 
             totalCount = linq.Count();
 

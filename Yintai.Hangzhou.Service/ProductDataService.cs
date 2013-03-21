@@ -109,7 +109,7 @@ namespace Yintai.Hangzhou.Service
                 PromotionId = request.PromotionId
             };
 
-            var produtEntities = _productRepository.GetPagedList(request.PagerRequest, out totalCount,
+            var produtEntities = _productRepository.Get(request.PagerRequest, out totalCount,
                 request.ProductSortOrder, filter);
 
             var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
@@ -607,15 +607,47 @@ namespace Yintai.Hangzhou.Service
             request.Page = 1;
             request.Pagesize = 40;
 
-            int totalCount;
-            var produtEntities = _productRepository.Search(request.PagerRequest, out totalCount, ProductSortOrder.Default, null,
-                                                   request.K, request.K, null, null, null, DataStatus.Normal);
-            var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
+            if (String.IsNullOrWhiteSpace(request.K))
             {
-                Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()
-            };
+                return GetProductList(new GetProductListRequest
+                    {
+                        Page = 1,
+                        Pagesize = 40
+                    });
+            }
 
-            var result = new ExecuteResult<ProductCollectionResponse> { Data = response };
+            if (request.K.Length > 20)
+            {
+                request.K = request.K.Substring(0, 20);
+            }
+
+            string cacheKey;
+            var s = CacheKeyManager.ProductSearchKey(out cacheKey, request.K);
+
+            var r = CachingHelper.Get(
+              delegate(out ProductCollectionResponse data)
+              {
+                  var objData = CachingHelper.Get(cacheKey);
+                  data = (objData == null) ? null : (ProductCollectionResponse)objData;
+
+                  return objData != null;
+              },
+              () =>
+              {
+                  int totalCount;
+                  var produtEntities = _productRepository.Search(request.PagerRequest, out totalCount, ProductSortOrder.Default, null,
+                                                         request.K, request.K, null, null, null, DataStatus.Normal);
+                  var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
+                  {
+                      Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()
+                  };
+
+                  return response;
+              },
+              data =>
+              CachingHelper.Insert(cacheKey, data, s));
+
+            var result = new ExecuteResult<ProductCollectionResponse> { Data = r };
 
             return result;
         }

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Model.Enums;
 
@@ -24,5 +27,24 @@ namespace Yintai.Hangzhou.Model.Filters
         /// 活动Id
         /// </summary>
         public int? PromotionId { get; set; }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            if (DataStatus != null)
+            {
+                sb.AppendFormat("ds_", DataStatus);
+            }
+
+            if (!String.IsNullOrWhiteSpace(ProductName))
+            {
+                sb.AppendFormat("pn_", ProductName);
+            }
+
+
+
+            return sb.ToString();
+        }
     }
 }

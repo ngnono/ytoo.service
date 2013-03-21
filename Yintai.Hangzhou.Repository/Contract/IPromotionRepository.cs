@@ -13,6 +13,7 @@ namespace Yintai.Hangzhou.Repository.Contract
     {
         IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, Timestamp timestamp, PromotionFilterMode? filterMode, DataStatus? dataStatus, bool? hasBanner);
 
+        IQueryable<PromotionEntity> Get(PromotionFilter filter);
 
         IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, PromotionFilter filter);
 

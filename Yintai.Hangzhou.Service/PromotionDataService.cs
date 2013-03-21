@@ -74,13 +74,13 @@ namespace Yintai.Hangzhou.Service
             var entities = this._promotionRepository.Get(page, out totalCount, request.SortOrder, null, PromotionFilterMode.NotTheEnd,
                                           DataStatus.Normal, true);
 
-            var response = MappingManager.PromotionResponseMapping(entities, request.CoordinateInfo);
+            var response = MappingManager.PromotionResponseMapping(entities, request.CoordinateInfo, true);
 
 
             var result = new ExecuteResult<PromotionCollectionResponse>();
             var collection = new PromotionCollectionResponse(page, totalCount)
             {
-                Promotions = response.ToList()
+                Promotions = response
             };
             result.Data = collection;
 
@@ -185,7 +185,7 @@ namespace Yintai.Hangzhou.Service
             var result = new ExecuteResult<PromotionCollectionResponse>();
             var collection = new PromotionCollectionResponse(pageRequest, totalCount)
                                  {
-                                     Promotions = response.ToList()
+                                     Promotions = response
                                  };
             result.Data = collection;
 
