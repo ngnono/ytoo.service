@@ -210,7 +210,7 @@ namespace Yintai.Architecture.ImageTool.Core
                 info.OriginalImageFullName = System.IO.Path.GetFullPath(info.OriginalImageFullName);
                 info.SaveImageFullName = System.IO.Path.GetFullPath(info.SaveImageFullName);
 
-                if (info.Height == null || info.Height.Value > 0)
+                if (info.Height == null || info.Height.Value == 0)
                 {
                     Make(info.ImageQuality, info.OriginalImageFullName, info.SaveImageFullName, info.Width ?? 0);
                 }
