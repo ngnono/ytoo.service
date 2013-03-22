@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace Yintai.Architecture.Common.Models
 {
@@ -209,6 +211,20 @@ namespace Yintai.Architecture.Common.Models
             {
                 this._pageIndex = value < 1 ? 1 : value;
             }
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb.Append("[pagerequest:");
+
+            sb.AppendFormat("pi_{0}|", PageIndex.ToString(CultureInfo.InvariantCulture));
+            sb.AppendFormat("ps_{0}", PageSize.ToString(CultureInfo.InvariantCulture));
+
+            sb.Append("]");
+
+            return sb.ToString();
         }
     }
 }
