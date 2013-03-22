@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
+using Yintai.Architecture.Common.Caching;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Request.Promotion;
 using Yintai.Hangzhou.Contract.DTO.Response.Coupon;
+using Yintai.Hangzhou.Contract.DTO.Response.Product;
 using Yintai.Hangzhou.Contract.DTO.Response.Promotion;
 using Yintai.Hangzhou.Contract.Promotion;
 using Yintai.Hangzhou.Data.Models;
@@ -15,6 +17,7 @@ using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
+using Yintai.Hangzhou.Service.Manager;
 
 namespace Yintai.Hangzhou.Service
 {
@@ -69,44 +72,84 @@ namespace Yintai.Hangzhou.Service
         public ExecuteResult<PromotionCollectionResponse> GetPromotionForBanner(GetPromotionBannerListRequest request)
         {
             var page = new PagerRequest(request.Page, request.Pagesize, 40);
+            var innerKey = String.Format("{0}_{1}_{2}_{3}", page.ToString(), request.SortOrder, PromotionFilterMode.NotTheEnd, String.Format("{0},{1}", request.CoordinateInfo.Latitude, request.CoordinateInfo.Longitude));
+            string cacheKey;
 
-            int totalCount;
-            var entities = this._promotionRepository.Get(page, out totalCount, request.SortOrder, null, PromotionFilterMode.NotTheEnd,
-                                          DataStatus.Normal, true);
+            var s = CacheKeyManager.PromotionBannerKey(out cacheKey, innerKey);
 
-            var response = MappingManager.PromotionResponseMapping(entities, request.CoordinateInfo, true);
+            var r = CachingHelper.Get(
+              delegate(out PromotionCollectionResponse data)
+              {
+                  var objData = CachingHelper.Get(cacheKey);
+                  data = (objData == null) ? null : (PromotionCollectionResponse)objData;
 
+                  return objData != null;
+              },
+              () =>
+              {
+                  int totalCount;
+                  var entities = _promotionRepository.Get(page, out totalCount, request.SortOrder, null, PromotionFilterMode.NotTheEnd,
+                                DataStatus.Normal, true);
 
-            var result = new ExecuteResult<PromotionCollectionResponse>();
-            var collection = new PromotionCollectionResponse(page, totalCount)
-            {
-                Promotions = response
-            };
-            result.Data = collection;
+                  var response = new PromotionCollectionResponse(page, totalCount)
+                  {
+                      Promotions = MappingManager.PromotionResponseMapping(entities, request.CoordinateInfo, true)
+                  };
+
+                  return response;
+              },
+              data =>
+              CachingHelper.Insert(cacheKey, data, s));
+
+            var result = new ExecuteResult<PromotionCollectionResponse> { Data = r };
 
             return result;
         }
 
-        /// <summary>
-        /// 注意获取最新接口的调用方式
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public ExecuteResult<PromotionCollectionResponse> GetPromotionList(GetPromotionListRequest request)
+        private PromotionCollectionResponse GetList(PagerRequest pagerRequest, Timestamp timestamp, PromotionSortOrder sortOrder, CoordinateInfo coordinateInfo)
         {
-            var pageRequest = new PagerRequest(request.Page, request.Pagesize);
-            var timestamp = new Timestamp { TsType = TimestampType.Old, Ts = DateTime.Parse(request.RefreshTs) };
+            var innerKey = String.Format("{0}_{1}_{2}_{3}", pagerRequest.ToString(), sortOrder,
+                                  timestamp.ToString(), String.Format("{0},{1}", coordinateInfo.Latitude, coordinateInfo.Longitude));
+            string cacheKey;
+            var s = CacheKeyManager.PromotionListKey(out cacheKey, innerKey);
 
-            int totalCount;
+            var r = CachingHelper.Get(
+              delegate(out PromotionCollectionResponse data)
+              {
+                  var objData = CachingHelper.Get(cacheKey);
+                  data = (objData == null) ? null : (PromotionCollectionResponse)objData;
+
+                  return objData != null;
+              },
+              () =>
+              {
+                  int totalCount;
+                  var entitys = Get(pagerRequest, timestamp, sortOrder, coordinateInfo, out totalCount);
+
+                  var response = new PromotionCollectionResponse(pagerRequest, totalCount)
+                  {
+                      Promotions = MappingManager.PromotionResponseMapping(entitys, coordinateInfo)
+                  };
+
+                  return response;
+              },
+              data =>
+              CachingHelper.Insert(cacheKey, data, s));
+
+            return r;
+        }
+
+        private List<PromotionEntity> Get(PagerRequest pageRequest, Timestamp timestamp, PromotionSortOrder sortOrder, CoordinateInfo coordinateInfo, out int totalCount)
+        {
             List<PromotionEntity> entitys;
 
-            switch (request.SortOrder)
+            switch (sortOrder)
             {
                 case PromotionSortOrder.Near:
                     //先找 店铺地理位置，找到并且有促销的店铺
                     //根据店铺筛出商品
                     entitys = _promotionRepository.GetPagedList(pageRequest.PageIndex, pageRequest.PageSize, out totalCount,
-                                                           (int)request.SortOrder, request.Lng, request.Lat, timestamp);
+                                                           (int)sortOrder, coordinateInfo.Longitude, coordinateInfo.Latitude, timestamp);
                     break;
                 case PromotionSortOrder.New:
                     /*查询逻辑
@@ -119,120 +162,11 @@ namespace Yintai.Hangzhou.Service
 
                     //1
                     entitys = _promotionRepository.GetPagedList(pageRequest, out totalCount, PromotionSortOrder.New, new DateTimeRangeInfo
-                        {
-                            StartDateTime = DateTime.Now,
-                            EndDateTime = DateTime.Now
-
-                        }, new CoordinateInfo(request.Lng, request.Lat), timestamp, null, PromotionFilterMode.New);
-
-                    var t = pageRequest.PageIndex * pageRequest.PageSize;
-
-                    var e2Size = 0;
-                    var e2Index = 1;
-                    List<PromotionEntity> e2;
-                    var e2Count = 0;
-                    var c = t - totalCount;
-                    int? skipCount = null;
-                    if (c <= 0)
-                    {
-                        e2Index = 1;
-                        e2Size = 0;
-                    }
-                    else if (c > 0 && c < pageRequest.PageSize)
-                    {
-                        //1
-                        e2Index = 1;
-                        e2Size = c;
-                    }
-                    else
-                    {
-                        e2Index = (int)Math.Ceiling(c / (double)pageRequest.PageSize);
-                        e2Size = pageRequest.PageSize;
-
-                        if (e2Index > 1)
-                        {
-                            skipCount = c - (e2Index - 1) * e2Size + (pageRequest.PageSize * (e2Index - 2));
-                        }
-                    }
-
-                    var p2 = new PagerRequest(e2Index, e2Size);
-
-                    e2 = _promotionRepository.GetPagedList(p2, out e2Count, PromotionSortOrder.New, new DateTimeRangeInfo()
                     {
                         StartDateTime = DateTime.Now,
                         EndDateTime = DateTime.Now
 
-                    }, new CoordinateInfo(request.Lng, request.Lat), timestamp, null, PromotionFilterMode.BeginStart, skipCount);
-
-                    if (e2.Count != 0 && e2Size != 0)
-                    {
-                        entitys.AddRange(e2);
-                    }
-
-                    //总记录数
-                    totalCount = totalCount + e2Count;
-                    //entitys = _promotionRepository.GetPagedList(pageRequest.PageIndex, pageRequest.PageSize,
-                    //                    out totalCount, (int)request.SortOrder, timestamp);
-                    break;
-                default:
-                    entitys = _promotionRepository.GetPagedList(pageRequest.PageIndex, pageRequest.PageSize,
-                                                             out totalCount, (int)request.SortOrder, timestamp);
-                    break;
-            }
-
-            var response = MappingManager.PromotionResponseMapping(entitys, request.CoordinateInfo);
-
-            var result = new ExecuteResult<PromotionCollectionResponse>();
-            var collection = new PromotionCollectionResponse(pageRequest, totalCount)
-                                 {
-                                     Promotions = response
-                                 };
-            result.Data = collection;
-
-            return result;
-
-        }
-
-        /// <summary>
-        /// 刷新接口
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public ExecuteResult<PromotionCollectionResponse> GetPromotionListForRefresh(GetPromotionListForRefresh request)
-        {
-            var timestamp = new Timestamp { TsType = TimestampType.New, Ts = DateTime.Parse(request.RefreshTs) };
-
-            //List<PromotionEntity> entitys = request.SortOrder == PromotionSortOrder.Near ? _promotionRepository.GetList(request.PagerRequest.PageSize, (int)request.SortOrder, request.Lng, request.Lat, timestamp) : _promotionRepository.GetList(request.PagerRequest.PageSize, (int)request.SortOrder, timestamp);
-
-            List<PromotionEntity> entitys;
-            var pageRequest = request.PagerRequest;
-
-            switch (request.SortOrder)
-            {
-                case PromotionSortOrder.Near:
-                    //先找 店铺地理位置，找到并且有促销的店铺
-                    //根据店铺筛出商品
-
-                    entitys = _promotionRepository.GetList(request.PagerRequest.PageSize, (int)request.SortOrder,
-                                                           request.Lng, request.Lat, timestamp);
-                    break;
-                case PromotionSortOrder.New:
-                    /*查询逻辑
-                     * 1.今天开始的活动
-                     * 2.以前开始，今天还自进行的活动
-                     * 3.即将开始的活动，时间升序 24小时内的
-                     * 
-                     * logic 例 size40 
-                     */
-
-                    //1
-                    var totalCount = 0;
-                    entitys = _promotionRepository.GetPagedList(pageRequest, out totalCount, PromotionSortOrder.New, new DateTimeRangeInfo
-                    {
-                        StartDateTime = DateTime.Now,
-                        EndDateTime = DateTime.Now
-
-                    }, new CoordinateInfo(request.Lng, request.Lat), timestamp, null, PromotionFilterMode.New);
+                    }, coordinateInfo, timestamp, null, PromotionFilterMode.New);
 
                     var t = pageRequest.PageIndex * pageRequest.PageSize;
 
@@ -270,8 +204,7 @@ namespace Yintai.Hangzhou.Service
                     {
                         StartDateTime = DateTime.Now,
                         EndDateTime = DateTime.Now
-
-                    }, new CoordinateInfo(request.Lng, request.Lat), timestamp, null, PromotionFilterMode.BeginStart, skipCount);
+                    }, coordinateInfo, timestamp, null, PromotionFilterMode.BeginStart, skipCount);
 
                     if (e2.Count != 0 && e2Size != 0)
                     {
@@ -279,32 +212,48 @@ namespace Yintai.Hangzhou.Service
                     }
 
                     //总记录数
-                    //totalCount = totalCount + e2Count;
+                    totalCount = totalCount + e2Count;
                     //entitys = _promotionRepository.GetPagedList(pageRequest.PageIndex, pageRequest.PageSize,
                     //                    out totalCount, (int)request.SortOrder, timestamp);
                     break;
                 default:
-                    entitys = _promotionRepository.GetList(request.PagerRequest.PageSize, (int)request.SortOrder,
-                                       timestamp);
+                    entitys = _promotionRepository.GetPagedList(pageRequest.PageIndex, pageRequest.PageSize,
+                                                             out totalCount, (int)sortOrder, timestamp);
                     break;
             }
 
+            return entitys;
+        }
 
+        /// <summary>
+        /// 注意获取最新接口的调用方式
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ExecuteResult<PromotionCollectionResponse> GetPromotionList(GetPromotionListRequest request)
+        {
+            var pageRequest = new PagerRequest(request.Page, request.Pagesize);
+            var timestamp = new Timestamp { TsType = TimestampType.Old, Ts = DateTime.Parse(request.RefreshTs) };
 
+            var response = GetList(pageRequest, timestamp, request.SortOrder, request.CoordinateInfo);
 
+            var result = new ExecuteResult<PromotionCollectionResponse> { Data = response };
 
+            return result;
+        }
 
+        /// <summary>
+        /// 刷新接口
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public ExecuteResult<PromotionCollectionResponse> GetPromotionListForRefresh(GetPromotionListForRefresh request)
+        {
+            var timestamp = new Timestamp { TsType = TimestampType.New, Ts = DateTime.Parse(request.RefreshTs) };
 
+            var response = GetList(request.PagerRequest, timestamp, request.SortOrder, request.CoordinateInfo);
 
-
-            var response = MappingManager.PromotionResponseMapping(entitys, request.CoordinateInfo);
-
-            var result = new ExecuteResult<PromotionCollectionResponse>();
-            var collection = new PromotionCollectionResponse(request.PagerRequest, entitys.Count())
-            {
-                Promotions = response.ToList()
-            };
-            result.Data = collection;
+            var result = new ExecuteResult<PromotionCollectionResponse> { Data = response };
 
             return result;
         }

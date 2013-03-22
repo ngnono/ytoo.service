@@ -16,8 +16,72 @@ namespace Yintai.Hangzhou.Service.Manager
         private const string StoreKeyPre = ApiDataServiceKeyPre + "_store";
         private const string BrandKeyPre = ApiDataServiceKeyPre + "_brand";
         private const string PromotionKeyPre = ApiDataServiceKeyPre + "_pro";
+        private const string TopicKeyPre = ApiDataServiceKeyPre + "_topic";
 
-        private const int CacheDateSecond = 60;
+        private static readonly int CacheDateSecond;
+        private static readonly int CacheSeed;
+
+        static CacheKeyManager()
+        {
+            CacheSeed = ConfigManager.GetCacheSeed();
+
+            if (CacheSeed < 0)
+            {
+                CacheSeed = 0;
+            }
+
+            CacheDateSecond = 60 * CacheSeed;
+        }
+
+
+        #region pro
+
+        public static int PromotionInfoKey(out string key, string mark)
+        {
+            const string keypre = PromotionKeyPre + "_info";
+
+            key = String.Concat(keypre, "_" + mark);
+
+            return CacheDateSecond;
+        }
+
+        public static int PromotionBannerKey(out string key, string mark)
+        {
+            const string keypre = PromotionKeyPre + "_banner";
+
+            key = String.Concat(keypre, "_" + mark);
+
+            return CacheDateSecond;
+        }
+
+        public static int PromotionListKey(out string key, string mark)
+        {
+            const string keypre = PromotionKeyPre + "_ls";
+
+            key = String.Concat(keypre, "_" + mark);
+
+            return CacheDateSecond;
+        }
+
+        #endregion
+
+        public static int TopicListKey(out string key, string mark)
+        {
+            const string keypre = TopicKeyPre + "_ls";
+
+            key = String.Concat(keypre, "_" + mark);
+
+            return CacheDateSecond;
+        }
+
+        public static int TopicInfoKey(out string key, string mark)
+        {
+            const string keypre = TopicKeyPre + "_info";
+
+            key = String.Concat(keypre, "_" + mark);
+
+            return CacheDateSecond;
+        }
 
         /// <summary>
         /// 产品详情 key
@@ -64,14 +128,7 @@ namespace Yintai.Hangzhou.Service.Manager
         {
             const string keyPre4All = StoreKeyPre + "_all";
 
-            if (info == null)
-            {
-                key = keyPre4All;
-            }
-            else
-            {
-                key = String.Format("{0}_{1}_{2}", keyPre4All, info.Longitude, info.Latitude);
-            }
+            key = info == null ? keyPre4All : String.Format("{0}_{1}_{2}", keyPre4All, info.Longitude, info.Latitude);
 
             return CacheDateSecond;
         }

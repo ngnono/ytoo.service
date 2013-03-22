@@ -21,6 +21,13 @@ namespace Yintai.Hangzhou.Service.Manager
 
         private static readonly string _resourcedomain = ConfigurationManager.AppSettings["resourcedomain"];
 
+        public static int GetCacheSeed()
+        {
+            var t = GetAppConfigParamsValueOrDefault("cacheseedfactory", "1");
+
+            return Int32.Parse(t);
+        }
+
         /// <summary>
         /// image
         /// </summary>
@@ -72,26 +79,14 @@ namespace Yintai.Hangzhou.Service.Manager
             return ConfigurationManager.AppSettings[key];
         }
 
-        private static object GetParamsObjectValue(string key)
+        private static string GetAppConfigParamsValueOrDefault(string key, string def)
         {
             if (ConfigurationManager.AppSettings.AllKeys.Contains(key))
             {
                 return GetAppConfigParamsValue(key);
             }
 
-            return null;
-        }
-
-        private static T GetParamsValueOrDefault<T>(string key, T defaultValue)
-        {
-            var t = GetParamsObjectValue(key);
-
-            if (t == null)
-            {
-                return defaultValue;
-            }
-
-            return (T)t;
+            return def;
         }
 
         #endregion

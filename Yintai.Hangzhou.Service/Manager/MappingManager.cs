@@ -3699,7 +3699,7 @@ namespace Yintai.Hangzhou.Service.Manager
                 {
                     Pro = PromotionInfoMapping(v.Pro),
                     v.Rel
-                });
+                }).ToList();
 
             var dic = new Dictionary<int, ProductInfoResponse>();
 
@@ -3733,7 +3733,7 @@ namespace Yintai.Hangzhou.Service.Manager
             {
                 if (item.ResourceInfoResponses.Count > 1)
                 {
-                    item.ResourceInfoResponses = item.ResourceInfoResponses.OrderByDescending(v => v.SortOrder).ToList();
+                    item.ResourceInfoResponses = item.ResourceInfoResponses.OrderBy(v => v.SortOrder).ToList();
                 }
             }
 
