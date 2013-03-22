@@ -17,6 +17,7 @@ namespace Yintai.Hangzhou.Service.Manager
         private const string BrandKeyPre = ApiDataServiceKeyPre + "_brand";
         private const string PromotionKeyPre = ApiDataServiceKeyPre + "_pro";
         private const string TopicKeyPre = ApiDataServiceKeyPre + "_topic";
+        private const string ItemsKeyPre = ApiDataServiceKeyPre + "_items";
 
         private static readonly int CacheDateSecond;
         private static readonly int CacheSeed;
@@ -33,14 +34,13 @@ namespace Yintai.Hangzhou.Service.Manager
             CacheDateSecond = 60 * CacheSeed;
         }
 
-
         #region pro
 
         public static int PromotionInfoKey(out string key, string mark)
         {
             const string keypre = PromotionKeyPre + "_info";
 
-            key = String.Concat(keypre, "_" + mark);
+            key = String.Concat(keypre, "_", mark);
 
             return CacheDateSecond;
         }
@@ -49,7 +49,7 @@ namespace Yintai.Hangzhou.Service.Manager
         {
             const string keypre = PromotionKeyPre + "_banner";
 
-            key = String.Concat(keypre, "_" + mark);
+            key = String.Concat(keypre, "_", mark);
 
             return CacheDateSecond;
         }
@@ -58,18 +58,20 @@ namespace Yintai.Hangzhou.Service.Manager
         {
             const string keypre = PromotionKeyPre + "_ls";
 
-            key = String.Concat(keypre, "_" + mark);
+            key = String.Concat(keypre, "_", mark);
 
             return CacheDateSecond;
         }
 
         #endregion
 
+        #region topic
+
         public static int TopicListKey(out string key, string mark)
         {
             const string keypre = TopicKeyPre + "_ls";
 
-            key = String.Concat(keypre, "_" + mark);
+            key = String.Concat(keypre, "_", mark);
 
             return CacheDateSecond;
         }
@@ -78,10 +80,12 @@ namespace Yintai.Hangzhou.Service.Manager
         {
             const string keypre = TopicKeyPre + "_info";
 
-            key = String.Concat(keypre, "_" + mark);
+            key = String.Concat(keypre, "_", mark);
 
             return CacheDateSecond;
         }
+
+        #endregion
 
         /// <summary>
         /// 产品详情 key
@@ -93,7 +97,7 @@ namespace Yintai.Hangzhou.Service.Manager
         {
             const string keypre = ProductKeyPre + "_info";
 
-            key = String.Concat(keypre, "_" + id.ToString(CultureInfo.InvariantCulture));
+            key = String.Concat(keypre, "_", id.ToString(CultureInfo.InvariantCulture));
 
             return CacheDateSecond;
         }
@@ -102,7 +106,7 @@ namespace Yintai.Hangzhou.Service.Manager
         {
             const string keypre = ProductKeyPre + "_sch";
 
-            key = String.Concat(keypre, "_" + mark);
+            key = String.Concat(keypre, "_", mark);
 
             return CacheDateSecond;
         }
@@ -111,7 +115,7 @@ namespace Yintai.Hangzhou.Service.Manager
         {
             const string keypre = ProductKeyPre + "_ls";
 
-            key = String.Concat(keypre, "_" + mark);
+            key = String.Concat(keypre, "_", mark);
 
             return CacheDateSecond;
         }
@@ -124,6 +128,8 @@ namespace Yintai.Hangzhou.Service.Manager
             return CacheDateSecond;
         }
 
+        #region store
+
         public static int StoreAllKey(CoordinateInfo info, out string key)
         {
             const string keyPre4All = StoreKeyPre + "_all";
@@ -132,6 +138,19 @@ namespace Yintai.Hangzhou.Service.Manager
 
             return CacheDateSecond;
         }
+
+        public static int StoreInfoKey(out string key, string mark)
+        {
+            const string keypre = StoreKeyPre + "_info";
+
+            key = String.Concat(keypre, "_", mark);
+
+            return CacheDateSecond;
+        }
+
+        #endregion
+
+        #region brand
 
         public static int BrandAllKey(out string key)
         {
@@ -150,5 +169,20 @@ namespace Yintai.Hangzhou.Service.Manager
 
             return CacheDateSecond;
         }
+
+        #endregion
+
+        #region items
+
+        public static int ItemsListKey(out string key,string mark)
+        {
+            const string keypre = ItemsKeyPre + "_ls";
+
+            key = String.Concat(keypre, "_", mark);
+
+            return CacheDateSecond;
+        }
+
+        #endregion
     }
 }

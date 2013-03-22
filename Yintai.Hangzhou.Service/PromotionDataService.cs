@@ -265,17 +265,36 @@ namespace Yintai.Hangzhou.Service
         /// <returns></returns>
         public ExecuteResult<PromotionInfoResponse> GetPromotionInfo(GetPromotionInfoRequest request)
         {
-            var entity = _promotionRepository.GetItem(request.Promotionid);
+            var innerKey = String.Format("{0}_{1}", request.Promotionid, String.Format("{0},{1}", request.CoordinateInfo.Latitude, request.CoordinateInfo.Longitude));
+            string cacheKey;
 
-            var response = MappingManager.PromotionResponseMapping(entity, request.CoordinateInfo);
+            var s = CacheKeyManager.PromotionInfoKey(out cacheKey, innerKey);
 
-            if (request.CurrentAuthUser != null && entity != null)
+            var r = CachingHelper.Get(
+              delegate(out PromotionInfoResponse data)
+              {
+                  var objData = CachingHelper.Get(cacheKey);
+                  data = (objData == null) ? null : (PromotionInfoResponse)objData;
+
+                  return objData != null;
+              },
+              () =>
+              {
+                  var entity = _promotionRepository.GetItem(request.Promotionid);
+                  var response = MappingManager.PromotionResponseMapping(entity, request.CoordinateInfo);
+
+                  return response;
+              },
+              data =>
+              CachingHelper.Insert(cacheKey, data, s));
+
+            if (request.CurrentAuthUser != null && r != null)
             {
                 // «∑Ò ’≤ÿ
-                response = IsR(response, request.CurrentAuthUser, entity.Id);
+                r = IsR(r, request.CurrentAuthUser, r.Id);
             }
 
-            var result = new ExecuteResult<PromotionInfoResponse>(response);
+            var result = new ExecuteResult<PromotionInfoResponse>(r);
 
             return result;
         }

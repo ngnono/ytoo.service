@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Yintai.Architecture.Common.Caching;
 using Yintai.Architecture.Common.Helper;
@@ -32,9 +33,31 @@ namespace Yintai.Hangzhou.Service
         /// <returns></returns>
         public ExecuteResult<StoreInfoResponse> GetStore(StoreRequest request)
         {
-            var entity = this._storeRepsitory.GetItem(request.StoreId);
+            var innerkey = request.StoreId.ToString(CultureInfo.InvariantCulture);
+            string cacheKey;
+            var s = CacheKeyManager.StoreInfoKey(out cacheKey, innerkey);
+            var r = CachingHelper.Get(
+                delegate(out StoreInfoResponse data)
+                {
+                    var objData = CachingHelper.Get(cacheKey);
+                    data = (objData == null) ? null : (StoreInfoResponse)objData;
 
-            var result = new ExecuteResult<StoreInfoResponse>(MappingManager.StoreResponseMapping(entity));
+                    return objData != null;
+                },
+                () =>
+                {
+                    var entity = _storeRepsitory.GetItem(request.StoreId);
+                    var response = MappingManager.StoreResponseMapping(entity);
+
+                    return response;
+                },
+                data =>
+                CachingHelper.Insert(cacheKey, data, s));
+
+            var result = new ExecuteResult<StoreInfoResponse>
+                {
+                    Data = r
+                };
 
             return result;
         }
