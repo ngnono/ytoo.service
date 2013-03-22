@@ -7,15 +7,15 @@ namespace Yintai.Hangzhou.Service.Manager
     /// <summary>
     /// cache key
     /// </summary>
-    public partial class CacheKeyManager
+    public class CacheKeyManager
     {
         //公司名_项目名_功能名_小功能_方法名_参数
         private const string ApiDataServiceKeyPre = "yt_hz_api_ds";
-        private const string ProductKeyPre = ApiDataServiceKeyPre + "_sku";
+        private const string ProductKeyPre = ApiDataServiceKeyPre + "_prod";
         private const string TagKeyPre = ApiDataServiceKeyPre + "_tag";
         private const string StoreKeyPre = ApiDataServiceKeyPre + "_store";
         private const string BrandKeyPre = ApiDataServiceKeyPre + "_brand";
-
+        private const string PromotionKeyPre = ApiDataServiceKeyPre + "_pro";
 
         private const int CacheDateSecond = 60;
 
@@ -27,18 +27,27 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <returns>cache second</returns>
         public static int ProductInfoKey(int id, out string key)
         {
-            const string productKeyPre4Info = ProductKeyPre + "_info";
+            const string keypre = ProductKeyPre + "_info";
 
-            key = String.Concat(productKeyPre4Info, "_" + id.ToString(CultureInfo.InvariantCulture));
+            key = String.Concat(keypre, "_" + id.ToString(CultureInfo.InvariantCulture));
 
             return CacheDateSecond;
         }
 
         public static int ProductSearchKey(out string key, string mark)
         {
-            const string productKeyPre4Info = ProductKeyPre + "_sch";
+            const string keypre = ProductKeyPre + "_sch";
 
-            key = String.Concat(productKeyPre4Info, "_" + mark);
+            key = String.Concat(keypre, "_" + mark);
+
+            return CacheDateSecond;
+        }
+
+        public static int ProductListKey(out string key, string mark)
+        {
+            const string keypre = ProductKeyPre + "_ls";
+
+            key = String.Concat(keypre, "_" + mark);
 
             return CacheDateSecond;
         }
