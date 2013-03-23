@@ -3,6 +3,9 @@
 @model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.ProductViewModel
 @{
     ViewBag.Title = "编辑商品";
+    var returnUrl = Request.Params["returnUrl"];
+    bool isCustomizeReturn = returnUrl!=null && Url.IsLocalUrl(returnUrl.ToString());
+   
 }
 @section PageBread
 {
@@ -63,7 +66,7 @@
     </script>
 }
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Edit", "Product",new { returnUrl = returnUrl}, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary(true)
         <div class="editor-label">
@@ -187,7 +190,12 @@
         </div>
         <p>
              <input type="submit" value="保存" class="btn btn-primary" />
+            @if (isCustomizeReturn) {
+                <a href="@Html.Raw(returnUrl.ToString())" class="btn">返回</a>
+            }
+            else {
              @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
+            }
         </p>
 }
 <div class="hide" id="delete-dialog" title="删除图片">

@@ -241,7 +241,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 ts.Complete();
             }
 
-            return RedirectToAction("Details",new {id=vo.Id});
+            return RedirectToAction2(() => {
+                return RedirectToAction("Details", new { id = vo.Id }); 
+            });
         }
 
         private IEnumerable<int> StringsToInts(string str, string spit)

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Model.Filters;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -62,5 +63,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public System.DateTime UpdatedDate { get; set; }
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
+    }
+    public class BrandListSearchOption
+    {
+        [Display(Name = "品牌代码")]
+        public int? PId { get; set; }
+        [Display(Name = "品牌名称")]
+        public string Name { get; set; }
+        [Display(Name = "排序")]
+        public GenericOrder? OrderBy { get; set; }
+       
     }
 }

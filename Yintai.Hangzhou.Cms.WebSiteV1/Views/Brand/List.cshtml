@@ -1,8 +1,8 @@
 ﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.BrandCollectionViewModel
 @{
     ViewBag.Title = "品牌列表";
-    CustomerListSearchOption search = ViewBag.SearchOptions;
-    HtmlHelper<CustomerListSearchOption> searchModelHelper = Html.HtmlHelperFor<CustomerListSearchOption>();
+    BrandListSearchOption search = ViewBag.SearchOptions;
+    HtmlHelper<BrandListSearchOption> searchModelHelper = Html.HtmlHelperFor<BrandListSearchOption>();
 
 }
 
@@ -63,6 +63,42 @@
 <p>
 @Html.ActionLink2("新建", "Create", null, new { @class="btn btn-primary"})
     </p>
+
+@using (Html.BeginForm("List", null, FormMethod.Get, new { @class = "form-horizontal searchForm-border" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="span4">
+                        <div class="control-group">
+                <label class="control-label" for="Name">品牌代码</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.PId)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">活动名称</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Name)
+                </div>
+            </div>
+           
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="Name">排序</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Filters.GenericOrder>())
+                </div>
+            </div>
+        </div>
+        
+    </div>
+}
 <table>
     <tr>
         <th>操作</th>

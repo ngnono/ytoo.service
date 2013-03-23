@@ -48,6 +48,9 @@ namespace Yintai.Hangzhou.Repository.Impl
             Func<IQueryable<ResourceEntity>, IOrderedQueryable<ResourceEntity>> order = null;
             switch (sort)
             {
+                case ResourceSortOrder.CreateDate:
+                    order = v => v.OrderByDescending(s => s.CreatedDate);
+                    break;
                 case ResourceSortOrder.Default:
                 default:
                     order = v => v.OrderBy(s => s.SourceType).ThenBy(s => s.SourceId).ThenBy(s => s.SortOrder);

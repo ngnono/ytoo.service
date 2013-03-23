@@ -7,6 +7,7 @@ namespace Yintai.Hangzhou.Model.Enums
 {
     public enum ResourceSortOrder
     {
-        Default = 0
+        Default = 0,
+        CreateDate =1
     }
 }

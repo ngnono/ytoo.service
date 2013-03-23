@@ -198,6 +198,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 Success = false
             });
         }
+        protected ActionResult RedirectToAction2(Func<ActionResult> nextaction)
+        {
+                var url = ControllerContext.RequestContext.HttpContext.Request.Params["returnUrl"];
+                if (url != null)
+                    return Redirect(url.ToString());
+                return nextaction();
+        }
+
+
         public bool HasRightForCurrentAction()
         {
             object action = RouteData.Values["action"];

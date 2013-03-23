@@ -37,7 +37,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult List(PagerRequest request, int? sort, SourceType? sourceType, int? sourceId)
         {
             int totalCount;
-            var sortOrder = (ResourceSortOrder)(sort ?? 0);
+            var sortOrder = sort ==null?ResourceSortOrder.CreateDate:(ResourceSortOrder)sort.Value;
 
             List<ResourceEntity> data;
             if (sourceType == null)
@@ -117,10 +117,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return View("Create", vo);
         }
 
-        //private ActionResult Create()
-        //{
-        //    return View("Create");
-        //}
 
         public ActionResult Delete(int? id, [FetchResource(KeyName = "id")]ResourceEntity entity)
         {
@@ -171,26 +167,25 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult Edit(FormCollection formCollection, [FetchResource(KeyName = "id")]ResourceEntity entity, ResourceViewModel vo)
         {
 
-            ModelState.AddModelError("", "暂不支持该方法.");
-            return View(vo);
-
             if (entity == null || !ModelState.IsValid)
             {
                 ModelState.AddModelError("", "参数验证失败.");
                 return View(vo);
             }
 
-            var newEntity = MappingManager.ResourceEntityMapping(vo);
-            newEntity.CreatedUser = entity.CreatedUser;
-            newEntity.CreatedDate = entity.CreatedDate;
-            newEntity.Status = entity.Status;
-
-            MappingManager.ResourceEntityMapping(newEntity, entity);
-
+            entity.SourceId = vo.SourceId;
+            entity.SourceType = vo.SourceType;
+            entity.Name = vo.Name;
+            entity.ExtName = vo.ExtName;
+            entity.Domain = vo.Domain;
+            entity.IsDefault = vo.IsDefault;
+            entity.SortOrder = vo.SortOrder;
+            entity.Type = vo.Type;
+            entity.UpdatedDate = DateTime.Now;
             _resourceRepository.Update(entity);
 
 
-            return Success("/" + RouteData.Values["controller"] + "/details/" + entity.Id.ToString(CultureInfo.InvariantCulture));
+            return RedirectToAction("Details", new { id = entity.Id });
         }
 
         [HttpPost]

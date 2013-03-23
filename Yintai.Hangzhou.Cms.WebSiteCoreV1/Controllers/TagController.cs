@@ -100,7 +100,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 return View(vo);
             }
 
-            entity.Description = vo.Description;
+            entity.Description = vo.Description??string.Empty;
             entity.Name = vo.Name;
             entity.SortOrder = vo.SortOrder;
             entity.UpdatedDate = DateTime.Now;

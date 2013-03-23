@@ -9,6 +9,7 @@ using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
@@ -31,18 +32,40 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             _resourceRepository = resourceRepository;
         }
 
-        public ActionResult Index(PagerRequest request, int? sort)
+        public ActionResult Index(PagerRequest request, BrandListSearchOption search, int? sort)
         {
-            return List(request, sort);
+            return List(request,search, sort);
         }
 
-        public ActionResult List(PagerRequest request, int? sort)
+        public ActionResult List(PagerRequest request,BrandListSearchOption search, int? sort)
         {
             int totalCount;
-            var sortOrder = (BrandSortOrder)(sort ?? 0);
+            var data = _brandRepository.Get(e => (!search.PId.HasValue || e.Id == search.PId.Value)
+                                                   && (string.IsNullOrEmpty(search.Name) || e.Name.ToLower().StartsWith(search.Name.ToLower()))
+                                                   && e.Status != (int)DataStatus.Deleted
+                                             , out totalCount
+                                             , request.PageIndex
+                                             , request.PageSize
+                                             , e =>
+                                             {
+                                                 if (!search.OrderBy.HasValue)
+                                                     return e.OrderByDescending(o => o.CreatedDate);
+                                                 else
+                                                 {
+                                                     switch (search.OrderBy.Value)
+                                                     {
+                                                         case GenericOrder.OrderByCreateUser:
+                                                             return e.OrderByDescending(o => o.CreatedUser);
+                                                         case GenericOrder.OrderByName:
+                                                             return e.OrderByDescending(o => o.Name);
+                                                         case GenericOrder.OrderByCreateDate:
+                                                         default:
+                                                             return e.OrderByDescending(o => o.CreatedDate);
 
-            var data = _brandRepository.GetPagedList(request, out totalCount, sortOrder);
-            var vo = MappingManager.BrandViewMapping(data);
+                                                     }
+                                                 }
+                                             });
+            var vo = MappingManager.BrandViewMapping(data.ToList());
 
             var v = new BrandCollectionViewModel(request, totalCount) { Brands = vo.ToList() };
 
