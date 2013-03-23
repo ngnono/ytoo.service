@@ -9,6 +9,7 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.Repository.Impl
@@ -267,7 +268,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         /// <param name="recommendUser"></param>
         /// <param name="tagids"></param>
         /// <returns></returns>
-        private static Expression<Func<PromotionEntity, bool>> Filter(DataStatus? dataStatus, DateTimeRangeInfo rangeInfo, Timestamp timestamp, int? recommendUser, List<int> tagids, PromotionFilterMode? filterMode = null, List<int> ids = null)
+        private static Expression<Func<PromotionEntity, bool>> Filter(DataStatus? dataStatus, DateTimeRangeInfo rangeInfo, Timestamp timestamp, int? recommendUser, List<int> tagids, PromotionFilterMode? filterMode = null, List<int> ids = null, bool? hasProduct = null)
         {
             var filter = PredicateBuilder.True<PromotionEntity>();
 
@@ -364,6 +365,11 @@ namespace Yintai.Hangzhou.Repository.Impl
                 filter = filter.And(v => ids.Any(s => s == v.Id));
             }
 
+            if (hasProduct != null)
+            {
+                filter = filter.And(v => v.IsProdBindable == hasProduct);
+            }
+
             return filter;
         }
 
@@ -421,15 +427,33 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, Timestamp timestamp, PromotionFilterMode? filterMode, DataStatus? dataStatus, bool? hasBanner)
         {
-            var linq = base.Get(Filter(dataStatus, null, timestamp, null, null, filterMode, null));
+            return Get(pagerRequest, out  totalCount, sortOrder, new PromotionFilter
+                {
+                    DataStatus = dataStatus,
+                    FilterMode = filterMode,
+                    HasBanner = hasBanner,
+                    Timestamp = timestamp
+                });
+        }
 
-            if (hasBanner != null && hasBanner.Value)
+        public IQueryable<PromotionEntity> Get(PromotionFilter filter)
+        {
+            var linq = base.Get(Filter(filter.DataStatus, null, filter.Timestamp, null, null, filter.FilterMode, null, filter.HasProduct));
+
+            if (filter.HasBanner != null && filter.HasBanner.Value)
             {
                 var banners = ServiceLocator.Current.Resolve<IBannerRepository>()
                               .Get(null, SourceType.Promotion, DataStatus.Normal);
 
                 linq = linq.Join(banners, p => p.Id, f => f.SourceId, (p, f) => p);
             }
+
+            return linq;
+        }
+
+        public IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, PromotionFilter filter)
+        {
+            var linq = Get(filter);
 
             totalCount = linq.Count();
 

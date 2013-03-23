@@ -31,6 +31,7 @@ using Yintai.Hangzhou.Contract.DTO.Response.Tag;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.Service.Manager
@@ -2688,13 +2689,21 @@ namespace Yintai.Hangzhou.Service.Manager
             return target;
         }
 
-        public List<PromotionInfoResponse> PromotionResponseMapping(IQueryable<PromotionEntity> source,
-                                                                    CoordinateInfo coordinateInfo)
+        public List<PromotionInfoResponse> PromotionResponseMapping(IEnumerable<PromotionEntity> source,
+                                                                    CoordinateInfo coordinateInfo, bool? isBanner)
         {
             //JOIN DIANPU
+            var linq = source as
+            IQueryable<PromotionEntity>;
+
+            if (linq == null)
+            {
+                return PromotionResponseMapping(source as List<PromotionEntity>, coordinateInfo);
+            }
+
             var storeRepository = ServiceLocator.Current.Resolve<IStoreRepository>();
             var resouceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
-            var sp = source.Join(storeRepository.Get(DataStatus.Normal), p => p.Store_Id, f => f.Id, (p, f) =>
+            var sp = linq.Join(storeRepository.Get(DataStatus.Normal), p => p.Store_Id, f => f.Id, (p, f) =>
                     new
                         {
                             P = p,
@@ -2702,7 +2711,18 @@ namespace Yintai.Hangzhou.Service.Manager
                         }
                 );
 
-            var rsp = sp.Join(resouceRepository.Get(DataStatus.Normal, SourceType.BannerPromotion),
+            SourceType sourceType;
+
+            if (isBanner != null && isBanner.Value)
+            {
+                sourceType = SourceType.BannerPromotion;
+            }
+            else
+            {
+                sourceType = SourceType.Promotion;
+            }
+
+            var rsp = sp.Join(resouceRepository.Get(DataStatus.Normal, sourceType),
                               p => p.P.Id, f => f.SourceId, (p, f) => new
                                   {
                                       P = p.P,
@@ -2802,7 +2822,7 @@ namespace Yintai.Hangzhou.Service.Manager
             return PromotionResponseMapping(source, null);
         }
 
-        public IEnumerable<PromotionInfoResponse> PromotionResponseMapping(List<PromotionEntity> source, CoordinateInfo coordinateInfo)
+        public List<PromotionInfoResponse> PromotionResponseMapping(List<PromotionEntity> source, CoordinateInfo coordinateInfo)
         {
             // var userIds = source.Select(v => v.RecommendUser).Where(v => v > 0).Distinct();
 
@@ -3641,6 +3661,85 @@ namespace Yintai.Hangzhou.Service.Manager
             return ProductInfoResponseMapping(source, brand, store, ruser, tag, resources.ToList(), promotions);
         }
 
+        public IEnumerable<ProductInfoResponse> ProductInfoResponseMapping(IEnumerable<ProductEntity> source)
+        {
+            if (source == null)
+            {
+                return new List<ProductInfoResponse>(0);
+            }
+
+            var linq = source as IQueryable<ProductEntity>;
+
+            if (linq == null)
+            {
+                return ProductInfoResponseMapping(source as List<ProductEntity>);
+            }
+
+            var rp = linq.Join(_resourceRepository.Get(DataStatus.Normal, SourceType.Product),
+                  p => p.Id, f => f.SourceId, (p, f) => new
+                  {
+                      P = p,
+                      R = f
+                  }).DefaultIfEmpty().ToList();
+            var rl = linq.Join(_pprRepository.Get(DataStatus.Normal), p => p.Id, f => f.ProdId, (p, f) => f);
+            var pp = rl.Join(_promotionRepository.Get(new PromotionFilter
+                {
+                    DataStatus = DataStatus.Normal,
+                    FilterMode = PromotionFilterMode.InProgress,
+                    HasProduct = true
+                }), p => p.ProId, f => f.Id, (p, f) =>
+               new
+                   {
+                       Pro = f,
+                       Rel = p
+                   }
+        ).ToList();
+
+            var ppR = pp.Select(v => new
+                {
+                    Pro = PromotionInfoMapping(v.Pro),
+                    v.Rel
+                }).ToList();
+
+            var dic = new Dictionary<int, ProductInfoResponse>();
+
+            foreach (var item in rp)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                ProductInfoResponse target;
+                if (dic.TryGetValue(item.P.Id, out target))
+                {
+                    if (item.R != null)
+                    {
+                        target.ResourceInfoResponses.Add(ResourceInfoResponsesMapping(item.R));
+                    }
+                }
+                else
+                {
+                    var pros = ppR.Where(v => v.Rel.ProdId == item.P.Id).Select(v => v.Pro).ToList();
+
+                    target = ProductInfoResponseMapping(item.P, null, null, null, null, new List<ResourceInfoResponse> { ResourceInfoResponsesMapping(item.R) }, pros);
+                    dic.Add(item.P.Id, target);
+                }
+            }
+
+            var result = dic.Values.ToList();
+
+            foreach (var item in result)
+            {
+                if (item.ResourceInfoResponses.Count > 1)
+                {
+                    item.ResourceInfoResponses = item.ResourceInfoResponses.OrderBy(v => v.SortOrder).ToList();
+                }
+            }
+
+            return result;
+        }
+
         public IEnumerable<ProductInfoResponse> ProductInfoResponseMapping(List<ProductEntity> source)
         {
             if (source == null || source.Count == 0)
@@ -3657,9 +3756,9 @@ namespace Yintai.Hangzhou.Service.Manager
             var ids = source.Select(v => v.Id).ToList();
             var resources = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, ids)).ToList();
 
-            // var pprs = GetPromotionForRelation(ids);
+            var pprs = GetPromotionForRelation(ids);
 
-            // var promotions = GetPromotionInfos4V(pprs.Select(v => v.ProId ?? 0).ToList());
+            var promotions = GetPromotionInfos4V(pprs.Select(v => v.ProId ?? 0).ToList());
 
             foreach (var item in source)
             {
@@ -3668,11 +3767,11 @@ namespace Yintai.Hangzhou.Service.Manager
                     continue;
                 }
 
-                //  var pids = pprs.Where(v => v.ProdId == item.Id).Select(v => v.ProId).Distinct().ToList();
-                //  var ps = promotions.Where(v => pids.Any(s => s == v.Id)).ToList();
+                var pids = pprs.Where(v => v.ProdId == item.Id).Select(v => v.ProId).Distinct().ToList();
+                var ps = promotions.Where(v => pids.Any(s => s == v.Id)).ToList();
 
                 //  var target = ProductInfoResponseMapping(item, brands.FirstOrDefault(v => v.Id == item.Brand_Id), stores.FirstOrDefault(v => v.Id == item.Store_Id), rusers.FirstOrDefault(v => v.Id == item.RecommendUser), tags.FirstOrDefault(v => v.Id == item.Tag_Id), resources.Where(v => v.SourceId == item.Id).ToList(), ps);
-                var target = ProductInfoResponseMapping(item, null, null, null, null, resources, null);
+                var target = ProductInfoResponseMapping(item, null, null, null, null, resources.Where(v => v.SourceId == item.Id).ToList(), ps);
                 if (target == null)
                 {
                     continue;

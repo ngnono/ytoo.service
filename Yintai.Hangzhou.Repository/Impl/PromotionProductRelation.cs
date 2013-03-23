@@ -53,6 +53,11 @@ namespace Yintai.Hangzhou.Repository.Impl
             return base.Get(Filter(DataStatus.Normal, promotionId, null));
         }
 
+        public IQueryable<Promotion2ProductEntity> Get(DataStatus status)
+        {
+            return base.Get(Filter(DataStatus.Normal, null, null));
+        }
+
         public List<Promotion2ProductEntity> GetList4Product(List<int> productids)
         {
             return GetListByProduct4Linq(productids).ToList();
