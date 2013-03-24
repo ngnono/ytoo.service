@@ -9,5 +9,8 @@ namespace com.intime.jobscheduler
     {
         public string Name { get; set; }
         public string Domain { get; set; }
+        public int SortOrder { get; set; }
+        public bool IsDefault { get; set; }
+        public int Type { get; set; }
     }
 }

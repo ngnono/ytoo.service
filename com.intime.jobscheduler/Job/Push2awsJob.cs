@@ -54,7 +54,10 @@ namespace com.intime.jobscheduler.Job
                                            && r.SourceType == 2
                                            select new ESResource() { 
                                              Domain = r.Domain,
-                                             Name = r.Name
+                                             Name = r.Name,
+                                             SortOrder = r.SortOrder,
+                                             IsDefault = r.IsDefault,
+                                             Type= r.Type
                                            })
                             select new ESPromotion()
                             {
@@ -131,7 +134,10 @@ namespace com.intime.jobscheduler.Job
                                            select new ESResource()
                                            {
                                                Domain = r.Domain,
-                                               Name = r.Name
+                                               Name = r.Name,
+                                               SortOrder = r.SortOrder,
+                                               IsDefault = r.IsDefault,
+                                               Type = r.Type
                                            })
                             select new ESProduct()
                             {

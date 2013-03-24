@@ -167,8 +167,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.Name = vo.Name;
             entity.Group = vo.Group;
             entity.WebSite = vo.WebSite??string.Empty;
-            entity.Description = vo.Description;
-            entity.EnglishName = vo.EnglishName;
+            entity.Description = vo.Description??string.Empty;
+            entity.EnglishName = vo.EnglishName??string.Empty;
             entity.UpdatedDate = DateTime.Now;
             entity.UpdatedUser = CurrentUser.CustomerId;
             using (var ts = new TransactionScope())
