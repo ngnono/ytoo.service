@@ -64,11 +64,12 @@ namespace Yintai.Hangzhou.WebSupport.Binder
                 String.IsNullOrEmpty(area) ? controllerContext.RouteData.Values["controller"] : String.Concat(area, "_", controllerContext.RouteData.Values["controller"]),
                 controllerContext.RouteData.Values["action"]).ToLower();
             var pageSizeValueInConfig = ConfigManager.GetParamsValueOrDefault(pageSizeKeyInConfig, String.Empty);
-            int pageSize = 10;
+            int pageSize ;
             if (!Int32.TryParse(pageSizeValueInConfig, out pageSize))
             {
                 ServiceLocator.Current.Resolve<ILog>().Warn(
                     String.Format("miss config item of pagesize ,name:{0}", pageSizeKeyInConfig));
+                pageSize = 10;
             }
 
             return new PagerRequest(pageNumber, pageSize);

@@ -12,5 +12,7 @@ namespace com.intime.jobscheduler
         public int SortOrder { get; set; }
         public bool IsDefault { get; set; }
         public int Type { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
     }
 }

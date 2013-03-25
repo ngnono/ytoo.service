@@ -1,0 +1,52 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.WebSupport.Helper
+@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.BannerViewModel
+@{
+    ViewBag.Title = "新建广告";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("促销管理", "Index","Promotion")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("广告列表", "Index","Brand")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Create", "Banner", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SourceId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SourceId)
+            @Html.ValidationMessageFor(model => model.SourceId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SortOrder)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SortOrder)
+            @Html.ValidationMessageFor(model => model.SortOrder)
+        </div>
+
+        
+        <div class="editor-label-required">
+            选择广告图片
+        </div>
+        <div class="editor-field">
+            <ul>
+                <li>
+            <input type="file" id="file1" name="file1" /></li>
+                </ul>
+        </div>
+        <p>
+             <input type="submit" value="创建" class="btn btn-primary" />
+             @Html.ActionLink2("返回列表", "List", null, new { @class="btn"})
+        </p>
+}
+

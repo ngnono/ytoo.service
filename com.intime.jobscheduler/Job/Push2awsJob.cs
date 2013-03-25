@@ -20,7 +20,7 @@ namespace com.intime.jobscheduler.Job
             var esUrl = data.GetString("eshost");
             var esIndex = data.GetString("defaultindex");
             var benchDate = data.ContainsKey("benchdate") ? data.GetDateTimeValue("benchdate") : DateTime.Today.AddDays(-1);
-            benchDate = benchDate<new DateTime(2013,1,1)?DateTime.Today.AddDays(-1):benchDate;
+            //benchDate = benchDate<new DateTime(2013,1,1)?DateTime.Today.AddDays(-1):benchDate;
             var client = new ElasticClient(new ConnectionSettings(esUrl,9200)
                                     .SetDefaultIndex(esIndex)
                                     .SetMaximumAsyncConnections(10));
@@ -57,7 +57,9 @@ namespace com.intime.jobscheduler.Job
                                              Name = r.Name,
                                              SortOrder = r.SortOrder,
                                              IsDefault = r.IsDefault,
-                                             Type= r.Type
+                                             Type = r.Type,
+                                             Width = r.Width,
+                                             Height = r.Height
                                            })
                             select new ESPromotion()
                             {
@@ -137,7 +139,9 @@ namespace com.intime.jobscheduler.Job
                                                Name = r.Name,
                                                SortOrder = r.SortOrder,
                                                IsDefault = r.IsDefault,
-                                               Type = r.Type
+                                               Type = r.Type,
+                                               Width = r.Width,
+                                               Height = r.Height
                                            })
                             select new ESProduct()
                             {
