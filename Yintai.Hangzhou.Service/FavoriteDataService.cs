@@ -1,10 +1,13 @@
 using System;
+using Yintai.Architecture.Common.Caching;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.DTO.Request.Favorite;
 using Yintai.Hangzhou.Contract.DTO.Response.Favorite;
 using Yintai.Hangzhou.Contract.Favorite;
 using Yintai.Hangzhou.Contract.Request.Favorite;
+using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Hangzhou.Service.Manager;
 
 namespace Yintai.Hangzhou.Service
 {
@@ -14,10 +17,55 @@ namespace Yintai.Hangzhou.Service
 
         public FavoriteDataService(IFavoriteRepository favoriteRepository)
         {
-            this._favoriteRepository = favoriteRepository;
+            _favoriteRepository = favoriteRepository;
         }
 
         #region
+
+        private FavoriteCollectionResponse Get(float version, int userId, PagerRequest pagerRequest, CoordinateInfo coordinate, FavoriteSortOrder sortOrder, SourceType sourceType)
+        {
+            var innerKey = String.Format("{0}_{1}_{2}_{3}_{4}_{5}", version, pagerRequest,
+                                  coordinate, sortOrder, sourceType, userId);
+            string cacheKey;
+            var s = CacheKeyManager.FavorListKey(out cacheKey, innerKey);
+
+            var r = CachingHelper.Get(
+              delegate(out FavoriteCollectionResponse data)
+              {
+                  var objData = CachingHelper.Get(cacheKey);
+                  data = (objData == null) ? null : (FavoriteCollectionResponse)objData;
+
+                  return objData != null;
+              },
+              () =>
+              {
+                  FavoriteCollectionResponse response;
+                  int totalCount;
+                  if (version >= 2.1)
+                  {
+                      var entitys = _favoriteRepository.Get(userId, pagerRequest, out totalCount, sortOrder, sourceType);
+
+                      var list = MappingManager.FavoriteCollectionResponseMapping(entitys, coordinate);
+
+                      response = new FavoriteCollectionResponse(pagerRequest, totalCount) { Favorites = list };
+                  }
+                  else
+                  {
+                      var entitys = _favoriteRepository.GetPagedList(userId, pagerRequest, out totalCount, sortOrder, sourceType);
+
+                      response = MappingManager.FavoriteCollectionResponseMapping(entitys, coordinate);
+                      response.Index = pagerRequest.PageIndex;
+                      response.Size = pagerRequest.PageSize;
+                      response.TotalCount = totalCount;
+                  }
+
+                  return response;
+              },
+              data =>
+              CachingHelper.Insert(cacheKey, data, s));
+
+            return r;
+        }
 
         /// <summary>
         /// 获取收藏列表
@@ -27,8 +75,6 @@ namespace Yintai.Hangzhou.Service
         private ExecuteResult<FavoriteCollectionResponse> GetFavoriteList(FavoriteListRequest request)
         {
             var pagerRequest = new PagerRequest(request.Page, request.PageSize);
-            int totalCount;
-            var entitys = this._favoriteRepository.GetPagedList(request.UserModel.Id, pagerRequest, out totalCount, request.SortOrder, request.SType);
 
             CoordinateInfo coordinate = null;
             if (request.Lng > 0 || request.Lng < 0)
@@ -36,10 +82,8 @@ namespace Yintai.Hangzhou.Service
                 coordinate = new CoordinateInfo(request.Lng, request.Lat);
             }
 
-            var response = MappingManager.FavoriteCollectionResponseMapping(entitys, coordinate);
-            response.Index = pagerRequest.PageIndex;
-            response.Size = pagerRequest.PageSize;
-            response.TotalCount = totalCount;
+            var response = Get(request.Version, request.UserModel.Id, pagerRequest, coordinate,
+                                                      request.SortOrder, request.SType);
 
             return new ExecuteResult<FavoriteCollectionResponse>(response);
         }
@@ -82,7 +126,7 @@ namespace Yintai.Hangzhou.Service
         /// <returns></returns>
         public ExecuteResult Destroy(FavoriteDestroyRequest request)
         {
-            var favorEntity = this._favoriteRepository.GetItem(request.FavoriteId);
+            var favorEntity = _favoriteRepository.GetItem(request.FavoriteId);
             if (favorEntity == null)
             {
                 return new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "没有找到该产品" };

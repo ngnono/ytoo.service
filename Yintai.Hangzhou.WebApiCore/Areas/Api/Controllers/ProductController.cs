@@ -228,7 +228,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
         #region 防止sql注入式攻击(可用于UI层控制）
         ///
-        /// 判断字符串中是否有SQL攻击代码，by fangbo.yu 2008.07.18
+        /// 判断字符串中是否有SQL攻击代码
         /// 
         /// 传入用户提交数据
         /// true-安全；false-有注入攻击现有；

@@ -25,7 +25,7 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="brandId">品牌Id</param>
         /// <param name="dataStatus"></param>
         /// <returns></returns>
-        IEnumerable<ProductEntity> Search(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, Timestamp timestamp, string productName, string brandName, int? recommendUser, List<int> tagids, int? brandId,DataStatus? dataStatus);
+        IQueryable<ProductEntity> Search(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, Timestamp timestamp, string productName, string brandName, int? recommendUser, List<int> tagids, int? brandId, DataStatus? dataStatus);
 
         /// <summary>
         /// 分页
@@ -101,6 +101,13 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <returns></returns>
         IQueryable<ProductEntity> Get(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, ProductFilter productFilter);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sortOrder">排序方式</param>
+        /// <param name="productFilter">过滤选项</param>
+        /// <returns></returns>
+        IQueryable<ProductEntity> Get(ProductSortOrder? sortOrder, ProductFilter productFilter);
 
         IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount,
             ProductSearchOption search);

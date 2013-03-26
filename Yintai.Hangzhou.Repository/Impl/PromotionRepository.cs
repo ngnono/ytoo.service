@@ -270,15 +270,36 @@ namespace Yintai.Hangzhou.Repository.Impl
         /// <returns></returns>
         private static Expression<Func<PromotionEntity, bool>> Filter(DataStatus? dataStatus, DateTimeRangeInfo rangeInfo, Timestamp timestamp, int? recommendUser, List<int> tagids, PromotionFilterMode? filterMode = null, List<int> ids = null, bool? hasProduct = null)
         {
+            return Filter(
+                new PromotionFilter
+                    {
+                        DataStatus = dataStatus,
+                        DateTimeRangeInfo = rangeInfo,
+                        Timestamp = timestamp,
+                        RecommendUser = recommendUser,
+                        FilterMode = filterMode,
+                        HasProduct = hasProduct,
+                        Ids = ids,
+                        TagIds = tagids
+                    }
+                );
+        }
+
+        /// <summary>
+        /// 过滤
+        /// </summary>
+        /// <returns></returns>
+        private static Expression<Func<PromotionEntity, bool>> Filter(PromotionFilter promotionFilter)
+        {
             var filter = PredicateBuilder.True<PromotionEntity>();
 
-            if (dataStatus != null)
+            if (promotionFilter.DataStatus != null)
             {
-                filter = filter.And(v => v.Status == (int)dataStatus.Value);
+                filter = filter.And(v => v.Status == (int)promotionFilter.DataStatus.Value);
             }
 
             //TODO: 这块值得商榷
-            if (rangeInfo != null)
+            if (promotionFilter.DateTimeRangeInfo != null)
             {
                 //开始时间必须大于当前时间，才叫开始
                 //if (rangeInfo.StartDateTime != null)
@@ -286,49 +307,49 @@ namespace Yintai.Hangzhou.Repository.Impl
                 //    filter = filter.And(v => v.StartDate >= rangeInfo.StartDateTime);
                 //}
 
-                if (rangeInfo.EndDateTime != null)
+                if (promotionFilter.DateTimeRangeInfo.EndDateTime != null)
                 {
-                    filter = filter.And(v => v.EndDate > rangeInfo.EndDateTime);
+                    filter = filter.And(v => v.EndDate > promotionFilter.DateTimeRangeInfo.EndDateTime);
                 }
             }
 
-            if (timestamp != null)
+            if (promotionFilter.Timestamp != null)
             {
-                switch (timestamp.TsType)
+                switch (promotionFilter.Timestamp.TsType)
                 {
                     case TimestampType.New:
-                        filter = filter.And(v => v.UpdatedDate >= timestamp.Ts);
+                        filter = filter.And(v => v.UpdatedDate >= promotionFilter.Timestamp.Ts);
                         break;
                     case TimestampType.Old:
                     default:
-                        filter = filter.And(v => v.UpdatedDate < timestamp.Ts);
+                        filter = filter.And(v => v.UpdatedDate < promotionFilter.Timestamp.Ts);
                         break;
                 }
             }
 
-            if (recommendUser != null)
+            if (promotionFilter.RecommendUser != null)
             {
-                filter = filter.And(v => v.RecommendUser == recommendUser.Value);
+                filter = filter.And(v => v.RecommendUser == promotionFilter.RecommendUser.Value);
             }
 
-            if (tagids != null && tagids.Count > 0)
+            if (promotionFilter.TagIds != null && promotionFilter.TagIds.Count > 0)
             {
-                if (tagids.Count == 1)
+                if (promotionFilter.TagIds.Count == 1)
                 {
-                    filter = filter.And(v => v.Tag_Id == tagids[0]);
+                    filter = filter.And(v => v.Tag_Id == promotionFilter.TagIds[0]);
                 }
                 else
                 {
-                    filter = filter.Or(v => tagids.Any(s => s == v.Tag_Id));
+                    filter = filter.Or(v => promotionFilter.TagIds.Any(s => s == v.Tag_Id));
                 }
             }
 
-            if (filterMode != null)
+            if (promotionFilter.FilterMode != null)
             {
-                switch (filterMode)
+                switch (promotionFilter.FilterMode)
                 {
                     case PromotionFilterMode.InProgress:
-                        if (rangeInfo != null && rangeInfo.EndDateTime != null)
+                        if (promotionFilter.DateTimeRangeInfo != null && promotionFilter.DateTimeRangeInfo.EndDateTime != null)
                         {
                             filter = filter.And(v => v.StartDate < DateTime.Now);
                         }
@@ -339,16 +360,16 @@ namespace Yintai.Hangzhou.Repository.Impl
 
                         break;
                     case PromotionFilterMode.NotTheEnd:
-                        if (rangeInfo != null)
+                        if (promotionFilter.DateTimeRangeInfo != null)
                         {
-                            if (rangeInfo.EndDateTime != null)
+                            if (promotionFilter.DateTimeRangeInfo.EndDateTime != null)
                             {
-                                filter = filter.And(v => v.EndDate > rangeInfo.EndDateTime);
+                                filter = filter.And(v => v.EndDate > promotionFilter.DateTimeRangeInfo.EndDateTime);
                             }
 
-                            if (rangeInfo.StartDateTime != null)
+                            if (promotionFilter.DateTimeRangeInfo.StartDateTime != null)
                             {
-                                filter = filter.And(v => v.StartDate > rangeInfo.StartDateTime);
+                                filter = filter.And(v => v.StartDate > promotionFilter.DateTimeRangeInfo.StartDateTime);
                             }
                         }
                         else
@@ -360,14 +381,14 @@ namespace Yintai.Hangzhou.Repository.Impl
                 }
             }
 
-            if (ids != null && ids.Count > 0)
+            if (promotionFilter.Ids != null && promotionFilter.Ids.Count > 0)
             {
-                filter = filter.And(v => ids.Any(s => s == v.Id));
+                filter = filter.And(v => promotionFilter.Ids.Any(s => s == v.Id));
             }
 
-            if (hasProduct != null)
+            if (promotionFilter.HasProduct != null)
             {
-                filter = filter.And(v => v.IsProdBindable == hasProduct);
+                filter = filter.And(v => v.IsProdBindable == promotionFilter.HasProduct);
             }
 
             return filter;
@@ -438,7 +459,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public IQueryable<PromotionEntity> Get(PromotionFilter filter)
         {
-            var linq = base.Get(Filter(filter.DataStatus, null, filter.Timestamp, null, null, filter.FilterMode, null, filter.HasProduct));
+            var linq = base.Get(Filter(filter.DataStatus, null, filter.Timestamp, filter.RecommendUser, null, filter.FilterMode, null, filter.HasProduct));
 
             if (filter.HasBanner != null && filter.HasBanner.Value)
             {
