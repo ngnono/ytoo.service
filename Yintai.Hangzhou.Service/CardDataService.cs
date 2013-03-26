@@ -108,7 +108,7 @@ namespace Yintai.Hangzhou.Service
                         Client_Version = request.Client_Version,
                         Method = request.Method,
                         Token = request.Token
-                    });
+                    }, "恭喜您绑定成功");
             }
 
             return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "银泰卡号或密码错" };
@@ -155,7 +155,13 @@ namespace Yintai.Hangzhou.Service
             return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.Success, Message = "解除绑定成功" };
         }
 
-        public ExecuteResult<CardInfoResponse> GetInfo(GetCardInfoRequest request)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="okMessage"></param>
+        /// <returns></returns>
+        private ExecuteResult<CardInfoResponse> GetInfo(GetCardInfoRequest request, string okMessage)
         {
             if (request == null || request.AuthUser == null)
             {
@@ -177,9 +183,9 @@ namespace Yintai.Hangzhou.Service
             var entity = entities[0];
 
             var pointResult = _groupCardService.GetPoint(new GroupCardPointRequest
-                {
-                    CardNo = entity.CardNo
-                });
+            {
+                CardNo = entity.CardNo
+            });
 
             var cardProfile = JsonExtension.FromJson_<CardProfile>(entity.CardProfile);
 
@@ -196,10 +202,22 @@ namespace Yintai.Hangzhou.Service
                     Id = entity.Id
                 };
 
-                return new ExecuteResult<CardInfoResponse>(response);
+                var result = new ExecuteResult<CardInfoResponse>(response);
+
+                if (!String.IsNullOrEmpty(okMessage))
+                {
+                    result.Message = okMessage;
+                }
+
+                return result;
             }
 
             return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.InternalServerError, Message = String.Concat("查询积分失败,", pointResult.Desc) };
+        }
+
+        public ExecuteResult<CardInfoResponse> GetInfo(GetCardInfoRequest request)
+        {
+            return GetInfo(request, null);
         }
     }
 }

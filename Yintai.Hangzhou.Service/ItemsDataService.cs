@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Yintai.Architecture.Common.Caching;
@@ -7,6 +9,7 @@ using Yintai.Hangzhou.Contract.DTO.Request.ProductComplex;
 using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Contract.ProductComplex;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Manager;
 
@@ -23,19 +26,39 @@ namespace Yintai.Hangzhou.Service
             _promotionRepository = promotionRepository;
         }
 
-        private ItemsCollectionResponse Get(PagerRequest pagerRequest, Timestamp timestamp, int userid)
+        private ItemsCollectionResponse Get(float version, PagerRequest pagerRequest, Timestamp timestamp, int userid)
         {
             var pager = new PagerRequest(pagerRequest.PageIndex, pagerRequest.PageSize, pagerRequest.PageSize * 2);
 
             int total1, total2;
-            var productList = _productRepository.GetPagedList(pager, out total1, ProductSortOrder.CreatedDateDesc,
-                                                                   timestamp, null, userid, null);
+            IEnumerable<ItemsInfoResponse> infolist;
 
-            var promotionList = _promotionRepository.GetPagedList(pager, out total2, PromotionSortOrder.CreatedDateDesc, null, null, null, userid);
+            if (version >= 2.1)
+            {
+                var productList = _productRepository.Get(pager, out total1, ProductSortOrder.CreatedDateDesc, new ProductFilter
+                    {
+                        Timestamp = timestamp,
+                        RecommendUser = userid
+                    });
 
-            var d = MappingManager.ItemsInfoResponseMapping(productList, promotionList);
+                var promotionList = _promotionRepository.Get(pager, out total2, PromotionSortOrder.CreatedDateDesc, new PromotionFilter
+                    {
+                        RecommendUser = userid
+                    });
 
-            var data = d.OrderByDescending(v => v.CreatedDate).Take(pagerRequest.PageSize).ToList();
+                infolist = MappingManager.ItemsInfoResponseMapping(productList, promotionList, null, false);
+            }
+            else
+            {
+                var productList = _productRepository.GetPagedList(pager, out total1, ProductSortOrder.CreatedDateDesc,
+                                                          timestamp, null, userid, null);
+
+                var promotionList = _promotionRepository.GetPagedList(pager, out total2, PromotionSortOrder.CreatedDateDesc, null, null, null, userid);
+
+                infolist = MappingManager.ItemsInfoResponseMapping(productList, promotionList);
+            }
+
+            var data = infolist.OrderByDescending(v => v.CreatedDate).Take(pagerRequest.PageSize).ToList();
 
             var reponse = new ItemsCollectionResponse(pagerRequest, total1 + total2) { Items = data };
 
@@ -44,7 +67,7 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<ItemsCollectionResponse> GetProductList(GetItemsListRequest request)
         {
-            var innerkey = String.Format("{0}_{1}_{2}", request.PagerRequest.ToString(), request.Timestamp.ToString(), request.UserModel.Id.ToString(CultureInfo.InvariantCulture));
+            var innerkey = String.Format("{0}_{1}_{2}_{3}", request.PagerRequest.ToString(), request.Timestamp.ToString(), request.UserModel.Id.ToString(CultureInfo.InvariantCulture), request.Version >= 2.1);
             string cacheKey;
             var s = CacheKeyManager.StoreInfoKey(out cacheKey, innerkey);
             var r = CachingHelper.Get(
@@ -55,7 +78,7 @@ namespace Yintai.Hangzhou.Service
 
                     return objData != null;
                 },
-                () => Get(request.PagerRequest, request.Timestamp, request.UserModel.Id),
+                () => Get(request.Version, request.PagerRequest, request.Timestamp, request.UserModel.Id),
                 data =>
                 CachingHelper.Insert(cacheKey, data, s));
 

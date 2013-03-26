@@ -2644,6 +2644,18 @@ namespace Yintai.Hangzhou.Service.Manager
             return target;
         }
 
+        public PromotionInfo PromotionInfoMapping(PromotionInfoResponse source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            var target = Mapper.Map<PromotionInfoResponse, PromotionInfo>(source);
+
+            return target;
+        }
+
         public PromotionInfoResponse PromotionInfoResponseMapping(PromotionEntity source)
         {
             if (source == null)
@@ -2689,17 +2701,16 @@ namespace Yintai.Hangzhou.Service.Manager
             return target;
         }
 
-        public List<PromotionInfoResponse> PromotionResponseMapping(IEnumerable<PromotionEntity> source,
+        public List<PromotionInfoResponse> PromotionResponseMapping(IQueryable<PromotionEntity> source,
                                                                     CoordinateInfo coordinateInfo, bool? isBanner)
         {
             //JOIN DIANPU
-            var linq = source as
-            IQueryable<PromotionEntity>;
-
-            if (linq == null)
+            if (source == null)
             {
-                return PromotionResponseMapping(source as List<PromotionEntity>, coordinateInfo);
+                return new List<PromotionInfoResponse>(0);
             }
+
+            var linq = source;
 
             var storeRepository = ServiceLocator.Current.Resolve<IStoreRepository>();
             var resouceRepository = ServiceLocator.Current.Resolve<IResourceRepository>();
@@ -3212,6 +3223,101 @@ namespace Yintai.Hangzhou.Service.Manager
             return target;
         }
 
+        public List<FavoriteInfoResponse> FavoriteCollectionResponseMapping(IQueryable<FavoriteEntity> source,
+                                                                                   CoordinateInfo coordinateInfo)
+        {
+            if (source == null)
+            {
+                return new List<FavoriteInfoResponse>(0);
+            }
+
+            var linq = source;
+
+            var prolist = _promotionRepository.Get(new PromotionFilter
+                {
+                    DataStatus = DataStatus.Normal,
+                });
+            var prodList = _productRepository.Get(null, new ProductFilter
+                {
+                    DataStatus = DataStatus.Normal,
+                });
+
+            var linqPro = linq.Where(v => v.FavoriteSourceType == (int)SourceType.Promotion)
+                              .Join(prolist, p => p.FavoriteSourceId,
+                                    f => f.Id,
+                                    (p, f) =>
+                                    new
+                                        {
+                                            Favor = p,
+                                            Pro = f
+                                        }
+                );
+            var linqProd = linq.Where(v => v.FavoriteSourceType == (int)SourceType.Product)
+                              .Join(prodList, p => p.FavoriteSourceId,
+                                    f => f.Id,
+                                    (p, f) =>
+                                                                        new
+                                                                        {
+                                                                            Favor = p,
+                                                                            Prod = f
+                                                                        }
+                );
+
+            var itemRepoonse = ItemsInfoResponseMapping(linqProd.Select(v => v.Prod), linqPro.Select(v => v.Pro), coordinateInfo, false);
+
+            //sort
+            //itemRepoonse = itemRepoonse.OrderByDescending(v => v.CreatedDate);
+            var s = source.ToDictionary(v => String.Concat(v.FavoriteSourceId, "_", v.FavoriteSourceType), v => v);
+            var list = FavoriteInfoResponseMapping(itemRepoonse,s);
+
+            return list.OrderByDescending(v => v.CreatedDate).ToList();
+        }
+
+        public List<FavoriteInfoResponse> FavoriteInfoResponseMapping(IEnumerable<ItemsInfoResponse> source, Dictionary<string, FavoriteEntity> favoriteEntities)
+        {
+            if (source == null)
+            {
+                return new List<FavoriteInfoResponse>(0);
+            }
+
+            var result = new List<FavoriteInfoResponse>();
+
+            foreach (var item in source)
+            {
+                var target = new FavoriteInfoResponse
+                    {
+                        CreatedDate = item.CreatedDate,
+                        CreatedUser = item.CreatedUser,
+                        Description = String.Empty,
+                        FavoriteSourceId = item.Id,
+                        FavoriteSourceName = item.Name,
+                        FavoriteSourceType = item.SourceType,
+                        Id = -1,
+                        Promotions = item.Promotions,
+                        Resources = item.Resources,
+                        Status = (int)DataStatus.Normal,
+                        Store = item.Store,
+                        StoreId = item.Store_Id,
+                        User_Id = item.User_Id
+                    };
+
+                FavoriteEntity entity;
+                favoriteEntities.TryGetValue(String.Concat(target.FavoriteSourceId, "_", target.FavoriteSourceType),
+                                             out entity);
+                if (entity != null)
+                {
+                    target.Id = entity.Id;
+                    target.CreatedDate = entity.CreatedDate;
+                    target.CreatedUser = entity.CreatedUser;
+                    target.Description = entity.Description;
+                }
+
+                result.Add(target);
+            }
+
+            return result;
+        }
+
         public FavoriteCollectionResponse FavoriteCollectionResponseMapping(List<FavoriteEntity> source,
                                                                                    CoordinateInfo coordinateInfo)
         {
@@ -3661,19 +3767,14 @@ namespace Yintai.Hangzhou.Service.Manager
             return ProductInfoResponseMapping(source, brand, store, ruser, tag, resources.ToList(), promotions);
         }
 
-        public IEnumerable<ProductInfoResponse> ProductInfoResponseMapping(IEnumerable<ProductEntity> source)
+        public IEnumerable<ProductInfoResponse> ProductInfoResponseMapping(IQueryable<ProductEntity> source)
         {
             if (source == null)
             {
                 return new List<ProductInfoResponse>(0);
             }
 
-            var linq = source as IQueryable<ProductEntity>;
-
-            if (linq == null)
-            {
-                return ProductInfoResponseMapping(source as List<ProductEntity>);
-            }
+            var linq = source;
 
             var rp = linq.Join(_resourceRepository.Get(DataStatus.Normal, SourceType.Product),
                   p => p.Id, f => f.SourceId, (p, f) => new
@@ -3977,6 +4078,32 @@ namespace Yintai.Hangzhou.Service.Manager
             return target;
         }
 
+        private static ItemsInfoResponse ItemsInfoResponseMapping(ProductInfoResponse productInfoResponse)
+        {
+            var target = Mapper.Map<ProductInfoResponse, ItemsInfoResponse>(productInfoResponse);
+
+            target.SType = SourceType.Product;
+            target.Store = productInfoResponse.StoreInfoResponse;
+            target.Resources = productInfoResponse.ResourceInfoResponses;
+            target.Promotions = productInfoResponse.Promotions;
+
+            return target;
+        }
+
+        private ItemsInfoResponse ItemsInfoResponseMapping(PromotionInfoResponse source)
+        {
+            var target = Mapper.Map<PromotionInfoResponse, ItemsInfoResponse>(source);
+
+            target.SType = SourceType.Promotion;
+            target.Store = source.StoreInfoResponse;
+            target.Resources = source.ResourceInfoResponses;
+
+            var info = PromotionInfoMapping(source);
+            target.Promotions = new List<PromotionInfo> { info };
+
+            return target;
+        }
+
         private ItemsInfoResponse ItemsInfoResponseMapping(PromotionEntity source, StoreInfoResponse store, List<ResourceInfoResponse> resources)
         {
             return ItemsInfoResponseMapping(source, store, resources, null);
@@ -3997,6 +4124,44 @@ namespace Yintai.Hangzhou.Service.Manager
 
             return target;
         }
+
+        public IEnumerable<ItemsInfoResponse> ItemsInfoResponseMapping(IQueryable<ProductEntity> productEntities,
+                                                                        IQueryable<PromotionEntity> promotionEntities, CoordinateInfo coordinateInfo, bool? hasBanner)
+        {
+            if (productEntities == null && promotionEntities == null)
+            {
+                return new List<ItemsInfoResponse>(0);
+            }
+
+            var linqProResponse = PromotionResponseMapping(promotionEntities, coordinateInfo, hasBanner).ToList();
+            var linqProdResponse = ProductInfoResponseMapping(productEntities).ToList();
+
+
+            var result = new List<ItemsInfoResponse>();
+
+            if (productEntities != null)
+            {
+                foreach (var item in linqProdResponse)
+                {
+                    var target = ItemsInfoResponseMapping(item);
+                    result.Add(target);
+                }
+            }
+
+            if (promotionEntities != null)
+            {
+                foreach (var item in linqProResponse)
+                {
+                    var target = ItemsInfoResponseMapping(item);
+
+                    result.Add(target);
+                }
+            }
+
+            //排序
+            return result;
+        }
+
 
         #endregion
 

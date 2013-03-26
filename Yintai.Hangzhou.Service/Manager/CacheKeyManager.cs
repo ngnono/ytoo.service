@@ -18,6 +18,7 @@ namespace Yintai.Hangzhou.Service.Manager
         private const string PromotionKeyPre = ApiDataServiceKeyPre + "_pro";
         private const string TopicKeyPre = ApiDataServiceKeyPre + "_topic";
         private const string ItemsKeyPre = ApiDataServiceKeyPre + "_items";
+        private const string FavorKeyPre = ApiDataServiceKeyPre + "_favor";
 
         private static readonly int CacheDateSecond;
         private static readonly int CacheSeed;
@@ -33,6 +34,25 @@ namespace Yintai.Hangzhou.Service.Manager
 
             CacheDateSecond = 60 * CacheSeed;
         }
+
+        #region favor
+
+        /// <summary>
+        /// 产品详情 key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="mark"></param>
+        /// <returns>cache second</returns>
+        public static int FavorListKey(out string key, string mark)
+        {
+            const string keypre = FavorKeyPre + "_ls";
+
+            key = String.Concat(keypre, "_", mark);
+
+            return CacheDateSecond;
+        }
+
+        #endregion
 
         #region pro
 
