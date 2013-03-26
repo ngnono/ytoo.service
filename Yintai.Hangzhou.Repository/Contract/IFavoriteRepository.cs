@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
@@ -7,6 +8,9 @@ namespace Yintai.Hangzhou.Repository.Contract
 {
     public interface IFavoriteRepository : IRepository<FavoriteEntity, int>
     {
+        IQueryable<FavoriteEntity> Get(int userid, PagerRequest pagerRequest, out int totalCount,
+                                       FavoriteSortOrder sortOrder, SourceType sourceType);
+
         /// <summary>
         /// 
         /// </summary>

@@ -60,6 +60,14 @@ namespace Yintai.Hangzhou.Repository.Impl
             return base.Find(key);
         }
 
+        public IQueryable<FavoriteEntity> Get(int userid, PagerRequest pagerRequest, out int totalCount, FavoriteSortOrder sortOrder,
+                              SourceType sourceType)
+        {
+            return base.Get(GetFiller(userid, sourceType, DataStatus.Normal), out totalCount, pagerRequest.PageIndex,
+                            pagerRequest.PageSize,
+                            GetSort(sortOrder));
+        }
+
         public int GetUserFavorCount(int userId, SourceType? sourceType)
         {
             return base.Get(GetFiller(userId, sourceType, DataStatus.Normal)).Count();
@@ -92,9 +100,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         /// <returns></returns>
         public List<FavoriteEntity> GetPagedList(int userid, PagerRequest pagerRequest, out int totalCount, FavoriteSortOrder sortOrder, SourceType sourceType)
         {
-            return
-                base.Get(GetFiller(userid, sourceType, DataStatus.Normal), out totalCount, pagerRequest.PageIndex, pagerRequest.PageSize,
-                         GetSort(sortOrder)).ToList();
+            return Get(userid, pagerRequest, out totalCount, sortOrder, sourceType).ToList();
         }
 
         #endregion

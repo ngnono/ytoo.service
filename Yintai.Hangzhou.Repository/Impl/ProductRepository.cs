@@ -230,7 +230,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         #endregion
 
-        public IEnumerable<ProductEntity> Search(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, Timestamp timestamp,
+        public IQueryable<ProductEntity> Search(PagerRequest pagerRequest, out int totalCount, ProductSortOrder sortOrder, Timestamp timestamp,
                                   string productName, string brandName, int? recommendUser, List<int> tagids, int? brandId, DataStatus? dataStatus)
         {
             var filter = Filter(dataStatus, timestamp, tagids, recommendUser, brandId);
@@ -375,6 +375,19 @@ namespace Yintai.Hangzhou.Repository.Impl
             resetSet = skipCount == 0 ? resetSet.Take(pagerRequest.PageSize) : resetSet.Skip(skipCount).Take(pagerRequest.PageSize);
 
             return resetSet;
+        }
+
+        public IQueryable<ProductEntity> Get(ProductSortOrder? sortOrder, ProductFilter productFilter)
+        {
+            var linq = base.Get(Filter(productFilter));
+
+            if (sortOrder != null)
+            {
+                var orderBy = GetOrder(sortOrder.Value);
+                linq = orderBy != null ? orderBy(linq).AsQueryable() : linq.AsQueryable();
+            }
+
+            return linq;
         }
 
         public override ProductEntity GetItem(int key)

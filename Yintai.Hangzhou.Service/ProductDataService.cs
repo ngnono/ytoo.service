@@ -638,6 +638,8 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<ProductCollectionResponse> Search(SearchProductRequest request)
         {
+            return new ExecuteResult<ProductCollectionResponse>(null) { StatusCode = StatusCode.ClientError, Message = "不支持该方法" };
+
             if (request == null)
             {
                 return new ExecuteResult<ProductCollectionResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };

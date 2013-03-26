@@ -48,6 +48,31 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
     {
         public string Method { get; set; }
         public string Client_Version { get; set; }
+
+        public float Version
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(Client_Version))
+                {
+                    return 0;
+                }
+
+                var pos = Client_Version.IndexOf(".", StringComparison.Ordinal);
+
+                if (pos <= 0)
+                {
+                    return Single.Parse(Client_Version);
+                }
+
+                var c = Client_Version.Replace(".", String.Empty);
+
+                var t = c.Insert(pos, ".");
+
+                return Single.Parse(t);
+            }
+            set { }
+        }
     }
 
     [DataContract]

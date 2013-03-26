@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -186,8 +187,10 @@ namespace Yintai.Architecture.Common.Web.Mvc
             #region 进行签名验证
 
             const string os = "iphone";
-            //根据os获取不同的appkey
-            var appkey = ConfigManager.GetAppkey(os);
+            var ver = GetFloatVersion(clientVersion);
+
+            string appkey = ConfigManager.GetAppkey(ver >= 2.1 ? String.Concat(os, (ver).ToString("F2")) : os);
+
             var vList = new Dictionary<string, string> { { Define.ClientVersion, HttpUtility.UrlDecode(clientVersion, Encoding.UTF8) }, { Define.Uid, HttpUtility.UrlDecode(uid, Encoding.UTF8) } };
 
             var builder = new StringBuilder();
@@ -211,6 +214,27 @@ namespace Yintai.Architecture.Common.Web.Mvc
             }
 
             #endregion
+        }
+
+        private static float GetFloatVersion(string Client_Version)
+        {
+            if (String.IsNullOrWhiteSpace(Client_Version))
+            {
+                return 0;
+            }
+
+            var pos = Client_Version.IndexOf(".", StringComparison.Ordinal);
+
+            if (pos <= 0)
+            {
+                return Single.Parse(Client_Version);
+            }
+
+            var c = Client_Version.Replace(".", String.Empty);
+
+            var t = c.Insert(pos, ".");
+
+            return Single.Parse(t);
         }
 
         private static bool ValidateDispatch(ActionExecutingContext context)
