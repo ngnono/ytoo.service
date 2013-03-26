@@ -823,6 +823,95 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             {
                 return new List<ProductViewModel>(0);
             }
+            var linq = source.Join(_productRepository.Context.Set<StoreEntity>(), o => o.Store_Id, i => i.Id, (o, i) => new { P = o, S = i })
+                .Join(_productRepository.Context.Set<BrandEntity>(), o => o.P.Brand_Id, i => i.Id, (o, i) => new { P = o.P, S = o.S, B = i })
+                .Join(_productRepository.Context.Set<UserEntity>(), o => o.P.CreatedUser, i => i.Id, (o, i) => new { P = o.P, S = o.S, B = o.B, C = i })
+                .Join(_productRepository.Context.Set<TagEntity>(), o => o.P.Tag_Id, i => i.Id, (o, i) => new { P = o.P, S = o.S, B = o.B, C = o.C, T = i })
+                .GroupJoin(_productRepository.Context.Set<PromotionEntity>().Join(_pprRepository.GetAll(),
+                                                        o => o.Id,
+                                                        i => i.ProId,
+                                                        (o, i) => new { Pro = o, ProR = i }),
+                            o => o.P.Id,
+                            i => i.ProR.ProdId,
+                            (o, i) => new { P = o.P, S = o.S, B = o.B, C = o.C, T = o.T, Pro = i })
+                 .GroupJoin(_productRepository.Context.Set<SpecialTopicEntity>().Join(_stprRepository.GetAll(), o => o.Id, i => i.SpecialTopic_Id, (o, i) => new { Spe = o, SpeR = i }),
+                            o => o.P.Id,
+                            i => i.SpeR.Product_Id,
+                            (o, i) => new { P = o.P, S = o.S, B = o.B, C = o.C, T = o.T, Pro = o.Pro, Spe = i })
+                 .GroupJoin(_productRepository.Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product), o => o.P.Id, i => i.SourceId
+                            , (o, i) => new { P = o.P, S = o.S, B = o.B, C = o.C, T = o.T, Pro = o.Pro, Spe = o.Spe,R = i });
+            var result = from l in linq.ToList()
+                         let p =l.P
+                         let res = from r in l.R
+                                   select ResourceViewMapping(r)
+                        
+                         select new ProductViewModel()
+                         {
+                             Brand_Id = p.Brand_Id
+                             ,
+                             BrandName = l.B.Name
+                             ,
+                             CreatedDate = p.CreatedDate
+                             ,
+                             CreatedUser = p.CreatedUser
+                             ,
+                             CreateUserName = l.C.Nickname
+                             ,
+                             Description = p.Description
+                             ,
+                             Favorable = p.Favorable
+                             ,
+                             FavoriteCount = p.FavoriteCount
+                             ,
+                             Id = p.Id
+                             ,
+                             InvolvedCount = p.InvolvedCount
+                             ,
+                             Name = p.Name
+                             ,
+                             Price = p.Price
+                             ,
+                             RecommendedReason = p.RecommendedReason
+                             ,
+                             RecommendSourceId = p.RecommendSourceId
+                             ,
+                             RecommendSourceType = p.RecommendSourceType
+                             ,
+                             RecommendUser = p.RecommendUser
+                             ,
+                             ShareCount = p.ShareCount
+                             ,
+                             SortOrder = p.SortOrder
+                             ,
+                             Status = p.Status
+                             ,
+                             Store_Id = p.Store_Id
+                             ,
+                             Tag_Id = p.Tag_Id
+                             ,
+                             StoreName = l.S.Name
+                             ,
+                             TagName = l.T.Name
+                             ,
+                             UpdatedDate = p.UpdatedDate
+                             ,
+                             UpdatedUser = p.UpdatedUser
+                             ,
+                             PromotionName = from pro in l.Pro
+                                             select pro.Pro.Name
+                             ,
+                             PromotionIds = string.Join(",", (from pro in l.Pro
+                                                              select pro.Pro.Id.ToString()).ToArray())
+                             ,
+                             TopicName = from top in l.Spe
+                                         select top.Spe.Name
+                             ,
+                             TopicIds = string.Join(",", (from top in l.Spe
+                                                          select top.Spe.Id.ToString()).ToArray())
+                             ,
+                             Resources = res
+                         };
+            /*
             var result = from p in source
                          join s in _storeRepository.GetAll() on p.Store_Id equals s.Id into ps
                          from ps1 in ps.DefaultIfEmpty()
@@ -882,7 +971,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
                                                               select top.Id.ToString()).ToArray())
                             , Resources = res
                          };
-          
+          */
             return result;
         }
         public ProductViewModel ProductViewMapping(ProductEntity source)

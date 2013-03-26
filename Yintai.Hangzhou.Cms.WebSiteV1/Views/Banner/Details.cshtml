@@ -42,7 +42,7 @@
 
     <div class="display-label">@Html.LabelFor(model => model.Status)</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Status)
+        @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)Model.Status).ToFriendlyString())
     </div>
 
     <div class="display-label">图片</div>

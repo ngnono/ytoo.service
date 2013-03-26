@@ -453,6 +453,7 @@
     <Content Include="Views\Banner\Create.cshtml" />
     <Content Include="Views\Banner\Edit.cshtml" />
     <Content Include="Views\Banner\Details.cshtml" />
+    <Content Include="Views\Customer\Card.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

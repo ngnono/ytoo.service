@@ -66,7 +66,7 @@
         @Html.LabelFor(model => model.UserLevel)
     </div>
     <div class="editor-field">
-        @Html.DropDownListFor(model => model.UserLevel, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Enums.UserLevel>()))
+        @Html.DropDownListFor(model => model.UserLevel, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Enums.UserLevel>())
             @Html.ValidationMessageFor(model => model.UserLevel)
     </div>
     <div class="editor-label">

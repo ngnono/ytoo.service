@@ -188,10 +188,25 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
          
             using (TransactionScope ts = new TransactionScope())
             {
-                this._bannerRepo.Update(entity);
+                _bannerRepo.Update(entity);
                 if (ControllerContext.HttpContext.Request.Files.Count > 0)
                 {
-                    this._resourceSer.Save(ControllerContext.HttpContext.Request.Files
+                    foreach (string fileName in ControllerContext.HttpContext.Request.Files)
+                    {
+                        var file = ControllerContext.HttpContext.Request.Files[fileName];
+                        if (file == null || file.ContentLength == 0)
+                            continue;
+                        //remove existing resource
+                        var resourceParts = fileName.Split('_');
+                        if (resourceParts.Length > 1)
+                        {
+                            int resourceId = int.Parse(resourceParts[1]);
+                            _resourceSer.Del(resourceId);
+                        }
+
+                    }
+                    //add new resource
+                    _resourceSer.Save(ControllerContext.HttpContext.Request.Files
                           , CurrentUser.CustomerId
                         , -1, entity.Id
                         , SourceType.BannerPromotion);

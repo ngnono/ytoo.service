@@ -64,12 +64,12 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
                     var cachedContainer = HttpContext.Current.Items[HttpContextKey];
 
                     if (cachedContainer is IUnityContainer)
+                    {
                         childContainer = HttpContext.Current.Items[HttpContextKey] as IUnityContainer;
-                    if (cachedContainer == null || childContainer == null)
-                        needCreate = true;
+                    }
                 }
                
-                if (needCreate)
+                if (childContainer == null)
                     HttpContext.Current.Items[HttpContextKey] = childContainer = _container.CreateChildContainer();
                 
 

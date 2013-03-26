@@ -162,6 +162,7 @@ namespace Yintai.Hangzhou.Data.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Configuration.AutoDetectChangesEnabled = false;
+            
             // 移除复数表名的契约
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 

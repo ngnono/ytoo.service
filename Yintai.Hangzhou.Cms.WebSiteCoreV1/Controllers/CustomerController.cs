@@ -28,13 +28,16 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         private readonly ICustomerRepository _customerRepository;
         private IResourceService _resourceService;
         private IResourceRepository _resourceRepository;
+        private ICardRepository _cardRepo;
         public CustomerController(ICustomerRepository customerRepository
             ,IResourceService resourceService
-            ,IResourceRepository resourceRepository)
+            ,IResourceRepository resourceRepository
+            ,ICardRepository cardRepo)
         {
             _customerRepository = customerRepository;
             _resourceService = resourceService;
             _resourceRepository = resourceRepository;
+            _cardRepo = cardRepo;
         }
 
         public ActionResult Index(PagerRequest request, int? sort, string mobile, string nickName)
@@ -81,6 +84,37 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             var v = new CustomerCollectionViewModel(request, totalCount) { Customers = vo.ToList() };
 
             return View("List", v);
+        }
+        public ActionResult Card(PagerRequest request, CardSearchOption search)
+        {
+            int totalCount;
+            var data = _cardRepo.Get(e => (!search.UserId.HasValue || e.User_Id== search.UserId.Value)
+                                                    && e.Status != (int)DataStatus.Deleted
+                                              , out totalCount
+                                              , request.PageIndex
+                                              , request.PageSize
+                                              , e =>
+                                              {
+                                                  if (!search.OrderBy.HasValue)
+                                                      return e.OrderByDescending(o => o.CreatedDate);
+                                                  else
+                                                  {
+                                                      switch (search.OrderBy.Value)
+                                                      {
+                                                          case GenericOrder.OrderByCreateUser:
+                                                              return e.OrderByDescending(o => o.CreatedUser);
+                                                          case GenericOrder.OrderByCreateDate:
+                                                          default:
+                                                              return e.OrderByDescending(o => o.CreatedDate);
+
+                                                      }
+                                                  }
+                                              });
+
+
+            var v = new Pager<CardEntity>(request, totalCount) { Data = data.ToList() };
+
+            return View("Card", v);
         }
 
         public ActionResult Details(int? id, [FetchUser(KeyName = "id")]UserModel entity)

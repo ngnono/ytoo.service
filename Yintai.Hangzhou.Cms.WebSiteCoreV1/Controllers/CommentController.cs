@@ -50,6 +50,60 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 , request.PageSize
                 ,out totalCount
                 ,search);
+           var linqResult = data.Join(_commentRepository.Context.Set<UserEntity>(),
+                o => o.User_Id,
+                i => i.Id,
+                (o, i) => new { C = o, U = i })
+                .GroupJoin(_commentRepository.Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Comment),
+                o => o.C.Id,
+                i => i.SourceId,
+                (o, i) => new { C = o.C, U = o.U, CR = i })
+                .GroupJoin(_commentRepository.Context.Set<ResourceEntity>(),
+                o => new { o.C.SourceId, o.C.SourceType },
+                i => new { i.SourceId, i.SourceType },
+                (o, i) => new { C = o.C, U = o.U, CR = o.CR, PR = i });
+           var vo = from l in linqResult.ToList()
+                    let p = l.C
+                    let u = l.U
+                    select new CommentViewModel
+                    {
+                        CommentResource = MappingManager.ResourceViewMapping(l.CR.FirstOrDefault())
+                        ,
+                        SourceResource = MappingManager.ResourceViewMapping(l.PR.FirstOrDefault())
+                        ,
+                        Content = p.Content
+                        ,
+                        CreatedDate = p.CreatedDate
+                        ,
+                        CreatedUser = p.CreatedUser
+                        ,
+                        Id = p.Id
+                        ,
+                        ReplyId = p.ReplyId
+                        ,
+                        ReplyUser = p.ReplyUser
+                        ,
+                        SourceId = p.SourceId
+                        ,
+                        SourceType = p.SourceType
+                        ,
+                        Status = p.Status
+                        ,
+                        UpdatedDate = p.UpdatedDate
+                        ,
+                        UpdatedUser = p.UpdatedUser
+                        ,
+                        User_Id = p.User_Id
+                        ,
+                        CommentUser = new CustomerViewModel
+                        {
+                            Id = u.Id,
+                            Name = u.Name,
+                            Nickname = u.Nickname
+
+                        }
+                    };
+            /*
             var resourceQuerable = _commentRepository.Context.Set<ResourceEntity>().AsQueryable();
             var vo =
                      from u in _commentRepository.Context.Set<UserEntity>()
@@ -115,7 +169,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
                          }
                      };
-
+            */
 
             var v = new CommentCollectionViewModel(request, totalCount) { Comments = vo.ToList() };
 

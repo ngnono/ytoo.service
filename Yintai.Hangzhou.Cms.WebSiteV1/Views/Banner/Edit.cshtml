@@ -98,29 +98,32 @@
         <div class="editor-field">
             @if (this.Model.Resource != null)
             {
+                var re = Model.Resource;
                 <table>
                         <tr>
                             <td>
-                                @if (Model.Resource.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                                @if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
                                 {
                         
-                                    <img width="120" src="@String.Concat(Model.Resource.Domain, Model.Resource.Name, "_320x44.jpg")" alt="120x0" />
+                                    <img width="120" src="@String.Concat(re.Domain, re.Name, "_320x44.jpg")" alt="320x0" />
                                 }
                             </td>
-                            <td><button id="deleteresource-@Model.Resource.Id" data-rightId="@Model.Resource.Id" type="button" class="btn btn-danger" value="@Model.Resource.Id">删除</button>
-                                <button id="addresource" type="button" class="btn">增加</button>
-                            </td>
-                          
+                            <td><label>替换为 =&gt;</label></td>
+                            <td >
+                                <input type="file" name="files_@(re.Id)" />
+                            </td>  
                          </tr>
+
                 </table>
-            } else
+            }
+            else
             {
-                <input type="file" name="file1" />
+             <input type="file" id="files" name="files" />
             }
         </div>
         <p>
              <input type="submit" value="保存" class="btn btn-primary" />
-             @Html.ActionLink2("返回列表", "List", null, new { @class="btn"})
+             @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
         </p>
 }
 

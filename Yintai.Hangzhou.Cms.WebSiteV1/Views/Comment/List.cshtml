@@ -187,11 +187,11 @@
                 {
                     <div>
                         @if(item.SourceType == (int)Yintai.Hangzhou.Model.Enums.SourceType.Product) {
-                            <a href="@Url.Action("Details", "Product", new { id = item.Id })">
+                            <a href="@Url.Action("Details", "Product", new { id = item.SourceId })">
                                 <img width="60" src="@String.Concat(item.SourceResource.Domain, item.SourceResource.Name, "_120x0.jpg")" alt="120X0" />
                             </a>
                         } else {
-                             <a href="@Url.Action("Details", "Promotion", new { id = item.Id })">
+                             <a href="@Url.Action("Details", "Promotion", new { id = item.SourceId })">
                                 <img width="60" src="@String.Concat(item.SourceResource.Domain, item.SourceResource.Name, "_120x0.jpg")" alt="120X0" />
                             </a>
                         }
