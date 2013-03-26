@@ -85,15 +85,15 @@ namespace Yintai.Hangzhou.Service
             var favorEntity = this._favoriteRepository.GetItem(request.FavoriteId);
             if (favorEntity == null)
             {
-                return new ExecuteResult() { StatusCode = StatusCode.ClientError, Message = "没有找到该产品" };
+                return new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "没有找到该产品" };
             }
 
             if (favorEntity.User_Id != request.AuthUid)
             {
-                return new ExecuteResult() { StatusCode = StatusCode.ClientError, Message = "您没有权限删除他人的收藏" };
+                return new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "您没有权限删除他人的收藏" };
             }
 
-            this._favoriteRepository.Delete(favorEntity);
+            _favoriteRepository.Delete(favorEntity);
 
             return new ExecuteResult();
         }
