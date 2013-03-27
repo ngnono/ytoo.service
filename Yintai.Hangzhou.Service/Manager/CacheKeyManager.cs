@@ -19,6 +19,7 @@ namespace Yintai.Hangzhou.Service.Manager
         private const string TopicKeyPre = ApiDataServiceKeyPre + "_topic";
         private const string ItemsKeyPre = ApiDataServiceKeyPre + "_items";
         private const string FavorKeyPre = ApiDataServiceKeyPre + "_favor";
+        private const string HotWordKeyPre = ApiDataServiceKeyPre + "_hotword";
 
         private static readonly int CacheDateSecond;
         private static readonly int CacheSeed;
@@ -34,6 +35,25 @@ namespace Yintai.Hangzhou.Service.Manager
 
             CacheDateSecond = 60 * CacheSeed;
         }
+
+        #region hotword
+
+        /// <summary>
+        /// 产品详情 key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="mark"></param>
+        /// <returns>cache second</returns>
+        public static int HotWordCollectionKey(out string key, string mark)
+        {
+            const string keypre = HotWordKeyPre + "_collection";
+
+            key = String.Concat(keypre, "_", mark);
+
+            return CacheDateSecond;
+        }
+
+        #endregion
 
         #region favor
 

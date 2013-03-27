@@ -55,6 +55,8 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<ICardRepository, CardRepository>();
 
             Current.Register<IBannerRepository, BannerRepository>();
+
+            Current.Register<IHotWordRepository, HotWordRepository>();
         }
 
         #endregion

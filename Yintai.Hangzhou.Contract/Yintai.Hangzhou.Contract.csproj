@@ -78,6 +78,7 @@
     <Compile Include="DTO\Response\Brand\BrandResponse.cs" />
     <Compile Include="DTO\Response\Coupon\CouponInfoResponse.cs" />
     <Compile Include="DTO\Response\Device\DeviceLogInfoResponse.cs" />
+    <Compile Include="DTO\Response\HotKey\HotWordResponse.cs" />
     <Compile Include="DTO\Response\ItemsInfoResponse.cs" />
     <Compile Include="DTO\Response\ItemsCollectionResponse.cs" />
     <Compile Include="DTO\Response\PagerInfoResponse.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Favorite\IFavoriteDataService.cs" />
     <Compile Include="Feedback\IFeedbackDataService.cs" />
     <Compile Include="Group\Group.cs" />
+    <Compile Include="HotWord\HotwordDataService.cs" />
     <Compile Include="Like\ILikeDataService.cs" />
     <Compile Include="Point\IPointDataService.cs" />
     <Compile Include="ProductComplex\IProductComplexDataService.cs" />

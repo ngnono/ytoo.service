@@ -6,6 +6,7 @@ using Yintai.Hangzhou.Contract.Coupon;
 using Yintai.Hangzhou.Contract.Customer;
 using Yintai.Hangzhou.Contract.Favorite;
 using Yintai.Hangzhou.Contract.Feedback;
+using Yintai.Hangzhou.Contract.HotWord;
 using Yintai.Hangzhou.Contract.Like;
 using Yintai.Hangzhou.Contract.Point;
 using Yintai.Hangzhou.Contract.Product;
@@ -64,6 +65,8 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
 
             Current.Register<ICardDataService, CardDataService>();
             Current.RegisterSingleton<IGroupCardService, GroupCardService>();
+
+            Current.Register<IHotwordDataService, HotwordDataService>();
         }
 
         #endregion
