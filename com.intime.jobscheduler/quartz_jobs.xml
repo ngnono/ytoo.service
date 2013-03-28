@@ -44,6 +44,66 @@
         <cron-expression>1 * * * * ?</cron-expression>
       </cron>
     </trigger>
+    <job>
+      <name>Push2awsIncre</name>
+      <group>Fashion</group>
+      <description>push production, promotion info to aws every 5 mins</description>
+      <job-type>com.intime.jobscheduler.Job.Push2awsIncreJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>eshost</key>
+          <value>ec2-46-137-197-113.ap-southeast-1.compute.amazonaws.com</value>
+        </entry>
+        <entry>
+          <key>defaultindex</key>
+          <value>intime</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>Every5mins</name>
+        <group>Fashion</group>
+        <description>every 5 mins</description>
+        <job-name>Push2awsIncre</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>30 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <job>
+      <name>ApnsNotification</name>
+      <group>Fashion</group>
+      <description>push promotion start today to apples</description>
+      <job-type>com.intime.jobscheduler.Job.ApnsNotificationJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>p12</key>
+          <value>cert\sandbox.p12</value>
+        </entry>
+        <entry>
+          <key>password</key>
+          <value>123456</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>NoonDaily</name>
+        <group>Fashion</group>
+        <description>every 12:00</description>
+        <job-name>ApnsNotification</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 12 * * * ?</cron-expression>
+      </cron>
+    </trigger>
 
   </schedule>
 

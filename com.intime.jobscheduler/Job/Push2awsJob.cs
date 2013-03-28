@@ -15,12 +15,11 @@ namespace com.intime.jobscheduler.Job
     {
         public void Execute(IJobExecutionContext context)
         {
-            ILog log = LogManager.GetLogger(typeof(Push2awsJob));
+            ILog log = LogManager.GetLogger(this.GetType());
             JobDataMap data = context.JobDetail.JobDataMap;
             var esUrl = data.GetString("eshost");
             var esIndex = data.GetString("defaultindex");
-            var benchDate = data.ContainsKey("benchdate") ? data.GetDateTimeValue("benchdate") : DateTime.Today.AddDays(-1);
-            //benchDate = benchDate<new DateTime(2013,1,1)?DateTime.Today.AddDays(-1):benchDate;
+            var benchDate = BenchDate(context) ;
             var client = new ElasticClient(new ConnectionSettings(esUrl,9200)
                                     .SetDefaultIndex(esIndex)
                                     .SetMaximumAsyncConnections(10));
@@ -35,10 +34,14 @@ namespace com.intime.jobscheduler.Job
             IndexPros(client,benchDate);
   
         }
-
+        protected virtual DateTime BenchDate(IJobExecutionContext context)
+        {
+            var data = context.JobDetail.JobDataMap;
+             return data.ContainsKey("benchdate") ? data.GetDateTimeValue("benchdate") : DateTime.Today.AddDays(-1);
+        }
         private void IndexPros(ElasticClient client,DateTime benchDate)
         {
-            ILog log = LogManager.GetLogger(typeof(Push2awsJob));
+            ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
             int size = 100;
             int successCount = 0;
@@ -72,8 +75,10 @@ namespace com.intime.jobscheduler.Job
                                 FavoriteCount = p.FavoriteCount,
                                 IsTop = p.IsTop,
                                 Status = p.Status,
+                                CreateUserId = p.CreatedUser,
                                 Store = new ESStore()
                                 {
+                                    Id = s.Id,
                                     Name = s.Name,
                                     Description = s.Description,
                                     Address = s.Location,
@@ -117,7 +122,7 @@ namespace com.intime.jobscheduler.Job
 
         private void IndexProds(ElasticClient client,DateTime benchDate)
         {
-            ILog log = LogManager.GetLogger(typeof(Push2awsJob));
+            ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
             int successCount = 0;
             int size = 100;
@@ -131,18 +136,39 @@ namespace com.intime.jobscheduler.Job
                             join t in db.Tags on p.Tag_Id equals t.Id
                             where p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate
                             let resource = (from r in db.Resources
-                                           where r.SourceId == p.Id
-                                           && r.SourceType == 1
-                                           select new ESResource()
-                                           {
-                                               Domain = r.Domain,
-                                               Name = r.Name,
-                                               SortOrder = r.SortOrder,
-                                               IsDefault = r.IsDefault,
-                                               Type = r.Type,
-                                               Width = r.Width,
-                                               Height = r.Height
-                                           })
+                                            where r.SourceId == p.Id
+                                            && r.SourceType == 1
+                                            select new ESResource()
+                                            {
+                                                Domain = r.Domain,
+                                                Name = r.Name,
+                                                SortOrder = r.SortOrder,
+                                                IsDefault = r.IsDefault,
+                                                Type = r.Type,
+                                                Width = r.Width,
+                                                Height = r.Height
+                                            })
+                            let specials = from psp in db.SpecialTopicProductRelations
+                                            where psp.Product_Id == p.Id 
+                                            join sp in db.SpecialTopics on psp.SpecialTopic_Id equals sp.Id
+                                            select new ESSpecialTopic
+                                            {
+                                                Id = sp.Id,
+                                                Name = sp.Name,
+                                                Description = sp.Description
+                                            }
+                            let promotions = from ppr in db.Promotion2Product
+                                             where ppr.ProdId == p.Id
+                                             join pro in db.Promotions on ppr.ProId equals pro.Id
+                                             select new ESPromotion { 
+                                                Id = pro.Id,
+                                                Name = pro.Name,
+                                                Description = pro.Description,
+                                                CreatedDate = p.CreatedDate,
+                                                StartDate = pro.StartDate,
+                                                EndDate = pro.EndDate,
+                                                Status = pro.Status
+                                             }
                             select new ESProduct()
                             {
                                 Id = p.Id,
@@ -152,19 +178,24 @@ namespace com.intime.jobscheduler.Job
                                 Price = p.Price,
                                 RecommendedReason = p.RecommendedReason,
                                 Status = p.Status,
+                                CreateUserId = p.CreatedUser,
+                                SortOrder = p.SortOrder,
                                 Tag = new ESTag()
                                 {
+                                    Id = t.Id,
                                     Name = t.Name,
                                     Description = t.Description
                                 },
                                 Store = new ESStore()
                                 {
+                                    Id =  s.Id,
                                     Name = s.Name,
                                     Description = s.Description,
                                     Address = s.Location,
-                                    Location = new Location{
-                                         Lon = s.Longitude,
-                                         Lat = s.Latitude
+                                    Location = new Location
+                                    {
+                                        Lon = s.Longitude,
+                                        Lat = s.Latitude
                                     },
                                     GpsAlt = s.GpsAlt,
                                     GpsLat = s.GpsLat,
@@ -173,11 +204,14 @@ namespace com.intime.jobscheduler.Job
                                 },
                                 Brand = new ESBrand()
                                 {
+                                    Id = b.Id,
                                     Name = b.Name,
                                     Description = b.Description,
                                     EngName = b.EnglishName
                                 },
-                                Resource = resource
+                                Resource = resource,
+                                SpecialTopic = specials,
+                                Promotion = promotions
                             };
 
                 int totalCount = prods.Count();

@@ -12,7 +12,8 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-    <PublishUrl>publish\</PublishUrl>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>D:\Project\publish\job\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -22,10 +23,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.1</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -49,6 +50,24 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>EEF4D24E0EB509D6FABE869098D0DD22771010BF</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>com.intime.jobscheduler_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
@@ -86,6 +105,21 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PushSharp.Android">
+      <HintPath>..\packages\PushSharp.2.0.1.0\lib\net40\PushSharp.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Apple">
+      <HintPath>..\packages\PushSharp.2.0.1.0\lib\net40\PushSharp.Apple.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Core">
+      <HintPath>..\packages\PushSharp.2.0.1.0\lib\net40\PushSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Windows">
+      <HintPath>..\packages\PushSharp.2.0.1.0\lib\net40\PushSharp.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.WindowsPhone">
+      <HintPath>..\packages\PushSharp.2.0.1.0\lib\net40\PushSharp.WindowsPhone.dll</HintPath>
+    </Reference>
     <Reference Include="Quartz">
       <HintPath>..\packages\Quartz.2.1.2\lib\net40\Quartz.dll</HintPath>
     </Reference>
@@ -113,9 +147,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Job\ApnsNotificationJob.cs" />
+    <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="model\ESBrand.cs" />
     <Compile Include="model\ESProduct.cs" />
     <Compile Include="model\ESResource.cs" />
+    <Compile Include="model\ESSpecialTopic.cs" />
     <Compile Include="model\ESStore.cs" />
     <Compile Include="model\ESTag.cs" />
     <Compile Include="model\ESPromotion.cs" />
@@ -133,6 +170,12 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="cert\production.p12">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="cert\sandbox.p12">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="deploy\installer.bat" />
     <None Include="deploy\uninstaller.bat" />
     <None Include="log4net.config">
@@ -141,6 +184,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\app.manifest" />
     <None Include="quartz_jobs.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -173,6 +217,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

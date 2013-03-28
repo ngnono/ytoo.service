@@ -14,9 +14,13 @@ namespace com.intime.jobscheduler.Job
         public decimal Price { get; set; }
         public string RecommendedReason { get; set; }
         public int Status { get; set; }
-        public ESStore Store { get; set; }
+        public ESStore Store { get; set; }  
         public ESTag Tag { get; set; }
         public ESBrand Brand { get; set; }
+        public int SortOrder { get; set; }
         public virtual IEnumerable<ESResource> Resource { get; set; }
+        public IEnumerable<ESPromotion> Promotion { get; set; }
+        public IEnumerable<ESSpecialTopic> SpecialTopic { get; set; }
+        public int CreateUserId { get; set; }
     }
 }

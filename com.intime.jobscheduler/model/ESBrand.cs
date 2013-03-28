@@ -7,6 +7,7 @@ namespace com.intime.jobscheduler.Job
 {
     class ESBrand
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string EngName { get; set; }
         public string Description { get; set; }

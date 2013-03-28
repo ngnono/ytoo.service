@@ -18,6 +18,7 @@ namespace com.intime.jobscheduler.Job
         public ESStore Store { get; set; }
         public bool IsTop { get; set; }
         public virtual IEnumerable<ESResource> Resource { get; set; }
+        public int CreateUserId { get; set; }
 
     }
 }
