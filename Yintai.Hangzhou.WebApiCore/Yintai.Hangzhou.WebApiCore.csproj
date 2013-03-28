@@ -62,6 +62,7 @@
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\CardController.cs" />
     <Compile Include="Areas\Api\Controllers\CommentController.cs" />
+    <Compile Include="Areas\Api\Controllers\HotWordController.cs" />
     <Compile Include="Areas\Api\Controllers\TopicController.cs" />
     <Compile Include="Areas\Api\Controllers\CouponController.cs" />
     <Compile Include="Areas\Api\Controllers\DeviceController.cs" />

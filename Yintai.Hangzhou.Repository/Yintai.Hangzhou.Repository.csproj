@@ -69,6 +69,7 @@
     <Compile Include="Contract\IDeviceTokenRepository.cs" />
     <Compile Include="Contract\IFavoriteRepository.cs" />
     <Compile Include="Contract\IFeedbackRepository.cs" />
+    <Compile Include="Contract\IHotWordRepository.cs" />
     <Compile Include="Contract\ILikeRepository.cs" />
     <Compile Include="Contract\IOutSiteCustomerRepository.cs" />
     <Compile Include="Contract\IPointRepository.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Impl\BannerRepository.cs" />
     <Compile Include="Impl\BrandRepository.cs" />
     <Compile Include="Impl\CardRepository.cs" />
+    <Compile Include="Impl\HotWordRepository.cs" />
     <Compile Include="Impl\ProductBulkRepository.cs" />
     <Compile Include="Impl\PromotionProductRelation.cs" />
     <Compile Include="Impl\SeedRepository.cs" />

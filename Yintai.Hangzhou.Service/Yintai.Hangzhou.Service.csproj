@@ -78,6 +78,7 @@
     <Compile Include="Contract\IShareService.cs" />
     <Compile Include="Contract\IUserRightService.cs" />
     <Compile Include="FeedbackDataService.cs" />
+    <Compile Include="HotwordDataService.cs" />
     <Compile Include="Impl\Apis\GroupCardService.cs" />
     <Compile Include="Impl\AuthenticationService.cs" />
     <Compile Include="Impl\CouponService.cs" />

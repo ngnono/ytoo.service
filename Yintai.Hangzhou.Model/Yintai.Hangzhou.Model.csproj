@@ -52,6 +52,7 @@
     <Compile Include="Enums\BrandSortOrder.cs" />
     <Compile Include="Enums\BusinessStatus.cs" />
     <Compile Include="Enums\CardType.cs" />
+    <Compile Include="Enums\HotWordType.cs" />
     <Compile Include="Enums\CouponBusinessStatus.cs" />
     <Compile Include="Enums\CustomerSortOrder.cs" />
     <Compile Include="Enums\FeedbackSortOrder.cs" />

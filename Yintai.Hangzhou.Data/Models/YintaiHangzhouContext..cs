@@ -119,6 +119,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         #endregion
 
+        #region code reverse
         public DbSet<AdminAccessRightEntity> AdminAccessRights { get; set; }
         public DbSet<BannerEntity> Banners { get; set; }
         public DbSet<BrandEntity> Brands { get; set; }
@@ -130,6 +131,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<FavoriteEntity> Favorites { get; set; }
         public DbSet<FeedbackEntity> Feedbacks { get; set; }
         public DbSet<GroupEntity> Groups { get; set; }
+        public DbSet<HotWordEntity> HotWords { get; set; }
         public DbSet<LikeEntity> Likes { get; set; }
         public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
         public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
@@ -162,7 +164,6 @@ namespace Yintai.Hangzhou.Data.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Configuration.AutoDetectChangesEnabled = false;
-            
             // 移除复数表名的契约
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
@@ -180,6 +181,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new FavoriteEntityMap());
             modelBuilder.Configurations.Add(new FeedbackEntityMap());
             modelBuilder.Configurations.Add(new GroupEntityMap());
+            modelBuilder.Configurations.Add(new HotWordEntityMap());
             modelBuilder.Configurations.Add(new LikeEntityMap());
             modelBuilder.Configurations.Add(new NotificationLogEntityMap());
             modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
@@ -209,6 +211,8 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new VUserEntityMap());
             modelBuilder.Configurations.Add(new VUserRoleEntityMap());
         }
+
+        #endregion
 
         public override int SaveChanges()
         {
