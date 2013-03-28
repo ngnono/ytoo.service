@@ -11,5 +11,8 @@ namespace com.intime.jobscheduler
         public string Name { get; set; }
         public string Description { get; set; }
         public int Status { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int CreateUser { get; set; }
+        public IEnumerable<ESResource> Resource { get; set; }
     }
 }
