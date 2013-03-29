@@ -30,12 +30,170 @@ namespace com.intime.jobscheduler.Job
                     esUrl, connectionStatus.Error.OriginalException.Message));
                 return;
             }
+            IndexBrand(client, benchDate);
+            IndexStore(client, benchDate);
+            IndexTag(client, benchDate);
             IndexProds(client, benchDate);
             IndexPros(client,benchDate);
             IndexSpecialTopic(client, benchDate);
   
         }
 
+        private void IndexTag(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = from p in db.Tags
+                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                            select new ESTag()
+                            {
+                                Id = p.Id,
+                                Name = p.Name,
+                                Description = p.Description,
+                                Status = p.Status,
+                                SortOrder = p.SortOrder
+
+                            };
+
+                int totalCount = prods.Count();
+                client.MapFromAttributes<ESTag>();
+                while (cursor < totalCount)
+                {
+                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
+                    if (!result.IsValid)
+                    {
+                        foreach (var item in result.Items)
+                        {
+                            if (item.OK)
+                                successCount++;
+                            else
+                                log.Info(string.Format("id index failed:{0}", item.Id));
+                        }
+                    }
+                    else
+                        successCount += result.Items.Count();
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} tags in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+
+        }
+
+        private void IndexStore(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = from s in db.Stores
+                            where (s.CreatedDate >= benchDate || s.UpdatedDate >= benchDate)
+                            select new ESStore()
+                            {
+                                Id = s.Id,
+                                Name = s.Name,
+                                Description = s.Description,
+                                Address = s.Location,
+                                Location = new Location
+                                {
+                                    Lon = s.Longitude,
+                                    Lat = s.Latitude
+                                },
+                                GpsAlt = s.GpsAlt,
+                                GpsLat = s.GpsLat,
+                                GpsLng = s.GpsLng,
+                                Tel = s.Tel
+
+                            };
+
+                int totalCount = prods.Count();
+                client.MapFromAttributes<ESStore>();
+                while (cursor < totalCount)
+                {
+                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
+                    if (!result.IsValid)
+                    {
+                        foreach (var item in result.Items)
+                        {
+                            if (item.OK)
+                                successCount++;
+                            else
+                                log.Info(string.Format("id index failed:{0}", item.Id));
+                        }
+                    }
+                    else
+                        successCount += result.Items.Count();
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} stores in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+
+        }
+
+        private void IndexBrand(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = from p in db.Brands
+                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                            select new ESBrand()
+                            {
+                                Id = p.Id,
+                                Name = p.Name,
+                                Description = p.Description,
+                                Status = p.Status
+            
+                            };
+
+                int totalCount = prods.Count();
+                client.MapFromAttributes<ESBrand>();
+                while (cursor < totalCount)
+                {
+                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
+                    if (!result.IsValid)
+                    {
+                        foreach (var item in result.Items)
+                        {
+                            if (item.OK)
+                                successCount++;
+                            else
+                                log.Info(string.Format("id index failed:{0}", item.Id));
+                        }
+                    }
+                    else
+                        successCount += result.Items.Count();
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} brands in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+
+        }
+
+     
         private void IndexSpecialTopic(ElasticClient client, DateTime benchDate)
         {
             ILog log = LogManager.GetLogger(this.GetType());

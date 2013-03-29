@@ -13,6 +13,7 @@ namespace com.intime.jobscheduler.Job
         public string Description { get; set; }
         public string Address { get; set; }
         public string Tel { get; set; }
+        public int Status { get; set; }
         [ElasticProperty(Type=FieldType.geo_point)]
         public Location Location { get; set; }
         public Nullable<decimal> GpsLat { get; set; }
