@@ -209,7 +209,7 @@ namespace Yintai.Hangzhou.Service.Manager
             return FileMessage.Success;
         }
 
-<<<<<<< HEAD
+
         /// <summary>
         /// 
         /// </summary>
@@ -246,40 +246,10 @@ namespace Yintai.Hangzhou.Service.Manager
             return FileMessage.ExtError;
         }
 
-=======
->>>>>>> nglocal
         #endregion
 
         #region 文件上传
 
-        /// <summary>
-        /// 文件上传
-        /// </summary>
-        /// <param name="postedFile">上传的文件对象</param>
-        /// <param name="key">服务端配置索引名</param>
-        /// <param name="fileInfor">文件上传后返回的信息对象</param>
-        /// <returns></returns>
-        public static FileMessage UploadFile(HttpPostedFile postedFile, string key, out FileInfor fileInfor)
-        {
-            HttpPostedFileBase obj = new HttpPostedFileWrapper(postedFile);
-
-            return UploadFile(obj, key, out fileInfor);
-        }
-
-        /// <summary>
-        /// 上传文件并返回缩略图大小
-        /// </summary>
-        /// <param name="postedFile">上传的文件对象</param>
-        /// <param name="key">服务端配置索引名</param>
-        /// <param name="fileInfor">文件上传后返回的信息对象</param>
-        /// <param name="thumbnailInfo">缩略图信息</param>
-        /// <returns></returns>
-        public static FileMessage UploadFileAndReturnInfo(HttpPostedFile postedFile, string key, out FileInfor fileInfor, out ThumbnailInfo thumbnailInfo)
-        {
-            HttpPostedFileBase obj = new HttpPostedFileWrapper(postedFile);
-
-            return UploadFileAndReturnInfo(obj, key, out fileInfor, out thumbnailInfo);
-        }
 
         /// <summary>
         /// 文件上传
@@ -297,32 +267,22 @@ namespace Yintai.Hangzhou.Service.Manager
             string fileExt;
             fileInfor = new FileInfor();
 
-<<<<<<< HEAD
+
             FileMessage f = client.GetFileNameByUser(key, postedFile.ContentLength, postedFile.FileName, postedFile.ContentType, out fileKey, out fileExt, userFolder);
 
             if (f == FileMessage.Success)
             {
-=======
-            LoggerManager.Current().Warn("key:" + key + ",filename:" + postedFile.FileName + ",contype:" + postedFile.ContentType);
-
-            FileMessage f = client.GetFileNameByUser(key, postedFile.ContentLength, postedFile.FileName, postedFile.ContentType, out fileKey, out fileExt, userFolder);
 
 
-            LoggerManager.Current().Warn(f);
-            if (f == FileMessage.Success)
-            {
-
->>>>>>> nglocal
                 fileInfor.FileName = fileKey;
                 fileInfor.FileSize = postedFile.ContentLength;
                 fileInfor.FileExtName = fileExt;
                 fileInfor.ResourceType = ContentType.GetResourceType(fileExt);
 
-<<<<<<< HEAD
-=======
+
                 LoggerManager.Current().Warn("fileKey:" + fileKey + ",ext:" + fileExt + ",retype:" + fileInfor.ResourceType);
 
->>>>>>> nglocal
+
                 try
                 {
                     if (postedFile.InputStream.CanRead)
@@ -338,11 +298,6 @@ namespace Yintai.Hangzhou.Service.Manager
                         {
                             case ResourceType.Sound:
                                 return SaveSound(postedFile, inValue);
-<<<<<<< HEAD
-                            case ResourceType.Video:
-                                return SaveVideo(postedFile, inValue);
-=======
->>>>>>> nglocal
                         }
                         //byte[] content = new byte[postedFile.ContentLength + 1];
                         //postedFile.InputStream.Read(content, 0, postedFile.ContentLength);
@@ -432,11 +387,6 @@ namespace Yintai.Hangzhou.Service.Manager
                         {
                             case ResourceType.Sound:
                                 return SaveSound(postedFile, inValue);
-<<<<<<< HEAD
-                            case ResourceType.Video:
-                                return SaveVideo(postedFile, inValue);
-=======
->>>>>>> nglocal
                         }
 
                         int width, height;

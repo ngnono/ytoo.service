@@ -12,7 +12,7 @@ namespace Yintai.Architecture.AudioTool
             var a = new AutioTools();
 
             var e = Path.GetFullPath(@"C:\ffmpeg\bin\ffmpeg.exe");
-            var i = Path.GetFullPath("D:/v/6685be86-d7f7-4cb9-a6c5-2a723d999380.mp3");
+            var i = Path.GetFullPath("6685be86-d7f7-4cb9-a6c5-2a723d999380_original.m4a");
 
             var duration = a.GetLength(e, i);
 

@@ -37,6 +37,8 @@ namespace Yintai.Architecture.ImageTool.Impl
             var tFullName = oName.Substring(0, oName.IndexOf(FileTempExt, System.StringComparison.Ordinal)) + ".mp3";
 
             AudioService.Current.Compression(oFullName, tFullName);
+
+            AudioService.Current.
         }
 
         private FileMessage GetFileName(string key, int fileSize, string clientFilePath, string contentType, out string fileKey, out string fileExt, string[] userFolders)
