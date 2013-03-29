@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -69,6 +70,42 @@ namespace Yintai.Architecture.ImageTool.Core
             }
         }
 
+        private static string CallProcessAndReturn(string exePath, string fileArgs)
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                Arguments = fileArgs,
+                FileName = exePath,
+                UseShellExecute = false,
+                CreateNoWindow = false,
+                RedirectStandardOutput = true
+            };
+
+            string result;
+            using (var exeProcess = Process.Start(startInfo))//Process.Start(System.IO.Path.Combine(pathImageMagick,appImageMagick),fileArgs))
+            {
+                using (StreamReader errorreader = exeProcess.StandardError)
+                {
+                    result = errorreader.ReadToEnd();
+                }
+
+                exeProcess.WaitForExit();
+                exeProcess.Close();
+            }
+
+            return result;
+        }
+
+        private static string ConvertDuration(string str)
+        {
+            if (!string.IsNullOrEmpty(str))
+            {
+                return str.Substring(str.IndexOf("Duration: ", System.StringComparison.Ordinal) + ("Duration: ").Length, ("00:00:00").Length);
+            }
+
+            return String.Empty;
+        }
+
         #endregion
 
         public void Compression(string originalFullName, string targetFullName)
@@ -78,6 +115,23 @@ namespace Yintai.Architecture.ImageTool.Core
             var fileArgs = sbFileArgs.ToString();
 
             CallProcess(_compressExePath, fileArgs);
+        }
+
+        public TimeSpan GetDuration(string originalFullName)
+        {
+            var sbFileArgs = new StringBuilder()
+   .AppendFormat(" -i {0}", originalFullName);
+            var fileArgs = sbFileArgs.ToString();
+
+
+            var result = ConvertDuration(CallProcessAndReturn(_compressExePath, fileArgs));
+
+            if (String.IsNullOrEmpty(result))
+            {
+                return TimeSpan.Parse(result);
+            }
+
+            return new TimeSpan(0);
         }
     }
 }

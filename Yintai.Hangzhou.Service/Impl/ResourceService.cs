@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Web;
-using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web;
 using Yintai.Architecture.ImageTool.Models;
 using Yintai.Hangzhou.Data.Models;
@@ -62,6 +61,53 @@ namespace Yintai.Hangzhou.Service.Impl
 
         #endregion
 
+
+        private ResourceEntity InnerSave(HttpPostedFileBase files, string key, int sourceId, SourceType sourceType, int createdUid, int count, int defaultNum)
+        {
+            FileInfor fileInfor;
+            var fileuploadResult = FileUploadServiceManager.UploadFile(files, key, out fileInfor, GetFolder(sourceId, sourceType));
+            if (fileuploadResult == FileMessage.Success)
+            {
+                var entity = InnerSave(createdUid, count == defaultNum, fileInfor, count, sourceId, sourceType);
+
+                return entity;
+            }
+            else
+            {
+                Logger.Error(fileuploadResult);
+
+                return null;
+            }
+        }
+
+        private ResourceEntity InnerSave(int userid, bool isdefault, FileInfor fileInfor, int sortOrder, int sourceId, SourceType sourceType)
+        {
+
+            //存储到数据库
+            var entity = new ResourceEntity
+            {
+                CreatedDate = DateTime.Now,
+                CreatedUser = userid,
+                IsDefault = isdefault,
+                Name = fileInfor.FileName, //+ "." + fileInfor.FileExtName,//这里要注意
+                ExtName = fileInfor.FileExtName,
+                Width = fileInfor.Width,
+                Height = fileInfor.Height,
+                ContentSize = fileInfor.FileSize,
+                Size = fileInfor.Width.ToString(CultureInfo.InvariantCulture) + "x" + fileInfor.Height.ToString(CultureInfo.InvariantCulture),
+                SortOrder = sortOrder,
+                SourceId = sourceId,
+                SourceType = (int)sourceType,
+                Status = (int)DataStatus.Normal,
+                Type = (int)fileInfor.ResourceType,
+                UpdatedDate = DateTime.Now,
+                UpdatedUser = userid,
+                Domain = String.Empty
+            };
+
+            return entity;
+        }
+
         /// <summary>
         /// 存储
         /// </summary>
@@ -93,53 +139,38 @@ namespace Yintai.Hangzhou.Service.Impl
                  *  4.返回
                 //*/
                 FileInfor fileInfor;
+                FileMessage fileuploadResult;
+                //注意声音
 
-                var fileuploadResult = FileUploadServiceManager.UploadFile(files[upload], sourceType.ToString().ToLower(),
-                                                            out fileInfor, GetFolder(sourceId, sourceType));
+                var fileExt = files[upload].FileName.Substring(files[upload].FileName.LastIndexOf(".", System.StringComparison.Ordinal) + 1).ToLower();
 
-                if (fileuploadResult == FileMessage.Success)
+                switch (sourceType)
                 {
-                    //存储到数据库
-                    var entity = new ResourceEntity
-                    {
-                        CreatedDate = DateTime.Now,
-                        CreatedUser = createdUid,
-                        IsDefault = count == defaultNum,
-                        Name = fileInfor.FileName, //+ "." + fileInfor.FileExtName,//这里要注意
-                        ExtName = fileInfor.FileExtName,
-                        Width = fileInfor.Width,
-                        Height = fileInfor.Height,
-                        ContentSize = fileInfor.FileSize,
-                        Size = fileInfor.Width.ToString(CultureInfo.InvariantCulture) + "x" + fileInfor.Height.ToString(CultureInfo.InvariantCulture),
-                        SortOrder = count,
-                        SourceId = sourceId,
-                        SourceType = (int)sourceType,
-                        Status = (int)DataStatus.Normal,
-                        Type = (int)fileInfor.ResourceType,
-                        UpdatedDate = DateTime.Now,
-                        UpdatedUser = createdUid,
-                        Domain = String.Empty
-                    };
-                    //switch (fileInfor.ResourceType)
-                    //{
-                    //    case ResourceType.Image:
-                    //        //entity.Domain = ConfigManager.GetHttpApiImagePath();
-                    //        break;
-                    //    case ResourceType.Sound:
-                    //        //entity.Domain = UploadFileConfigManager.GetHttpApiSoundPath();
-                    //        break;
-                    //    case ResourceType.Video:
-                    //        break;
-                    //}
+                    case SourceType.Product:
+                    case SourceType.Promotion:
+                        Logger.Warn("switch:" + upload + " ext:" + fileExt + ",ct:" + files[upload].ContentType);
+                        if (files[upload].ContentType.IndexOf("audio/x-m4a", StringComparison.OrdinalIgnoreCase) > -1 || fileExt.IndexOf("m4a", System.StringComparison.OrdinalIgnoreCase) > -1 || upload.LastIndexOf("audio", StringComparison.OrdinalIgnoreCase) > -1)
+                        {
+                            Logger.Warn("RUN");
+                            var entity2 = InnerSave(files[upload], (sourceType.ToString() + "audio").ToLower(), sourceId, sourceType, createdUid,
+          count, defaultNum);
 
+                            if (entity2 != null)
+                                list.Add(entity2);
+
+                            continue;
+                        }
+                        break;
+                    default:
+
+                        break;
+                }
+
+                var entity = InnerSave(files[upload], sourceType.ToString().ToLower(), sourceId, sourceType, createdUid,
+count, defaultNum);
+
+                if (entity != null)
                     list.Add(entity);
-                }
-                else
-                {
-                    Logger.Error(fileuploadResult);
-
-                    continue;
-                }
 
                 count++;
             }

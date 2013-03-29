@@ -8,9 +8,14 @@ namespace Yintai.Hangzhou.Repository.Contract
 {
     public interface IResourceRepository : IRepository<ResourceEntity, int>
     {
+<<<<<<< HEAD
 
         IQueryable<ResourceEntity> Get(DataStatus? dataStatus, SourceType? sourceType);
             
+=======
+        IQueryable<ResourceEntity> Get(DataStatus? dataStatus, SourceType? sourceType);
+
+>>>>>>> nglocal
         /// <summary>
         /// 根据id查找相应的资源
         /// </summary>

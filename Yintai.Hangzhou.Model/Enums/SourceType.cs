@@ -61,6 +61,10 @@ namespace Yintai.Hangzhou.Model.Enums
         [Description("∆¿¬€”Ô“Ù")]
         CommentAudio = 10,
 
-        BannerPromotion = 11
+        BannerPromotion = 11,
+
+        //ProductAudio = 12,
+
+        //PromotionAudio = 13
     }
 }

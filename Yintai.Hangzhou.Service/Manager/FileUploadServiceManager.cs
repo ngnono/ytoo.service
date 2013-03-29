@@ -209,6 +209,7 @@ namespace Yintai.Hangzhou.Service.Manager
             return FileMessage.Success;
         }
 
+<<<<<<< HEAD
         /// <summary>
         /// 
         /// </summary>
@@ -245,6 +246,8 @@ namespace Yintai.Hangzhou.Service.Manager
             return FileMessage.ExtError;
         }
 
+=======
+>>>>>>> nglocal
         #endregion
 
         #region 文件上传
@@ -294,15 +297,32 @@ namespace Yintai.Hangzhou.Service.Manager
             string fileExt;
             fileInfor = new FileInfor();
 
+<<<<<<< HEAD
             FileMessage f = client.GetFileNameByUser(key, postedFile.ContentLength, postedFile.FileName, postedFile.ContentType, out fileKey, out fileExt, userFolder);
 
             if (f == FileMessage.Success)
             {
+=======
+            LoggerManager.Current().Warn("key:" + key + ",filename:" + postedFile.FileName + ",contype:" + postedFile.ContentType);
+
+            FileMessage f = client.GetFileNameByUser(key, postedFile.ContentLength, postedFile.FileName, postedFile.ContentType, out fileKey, out fileExt, userFolder);
+
+
+            LoggerManager.Current().Warn(f);
+            if (f == FileMessage.Success)
+            {
+
+>>>>>>> nglocal
                 fileInfor.FileName = fileKey;
                 fileInfor.FileSize = postedFile.ContentLength;
                 fileInfor.FileExtName = fileExt;
                 fileInfor.ResourceType = ContentType.GetResourceType(fileExt);
 
+<<<<<<< HEAD
+=======
+                LoggerManager.Current().Warn("fileKey:" + fileKey + ",ext:" + fileExt + ",retype:" + fileInfor.ResourceType);
+
+>>>>>>> nglocal
                 try
                 {
                     if (postedFile.InputStream.CanRead)
@@ -318,8 +338,11 @@ namespace Yintai.Hangzhou.Service.Manager
                         {
                             case ResourceType.Sound:
                                 return SaveSound(postedFile, inValue);
+<<<<<<< HEAD
                             case ResourceType.Video:
                                 return SaveVideo(postedFile, inValue);
+=======
+>>>>>>> nglocal
                         }
                         //byte[] content = new byte[postedFile.ContentLength + 1];
                         //postedFile.InputStream.Read(content, 0, postedFile.ContentLength);
@@ -409,8 +432,11 @@ namespace Yintai.Hangzhou.Service.Manager
                         {
                             case ResourceType.Sound:
                                 return SaveSound(postedFile, inValue);
+<<<<<<< HEAD
                             case ResourceType.Video:
                                 return SaveVideo(postedFile, inValue);
+=======
+>>>>>>> nglocal
                         }
 
                         int width, height;
