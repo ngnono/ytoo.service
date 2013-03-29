@@ -68,7 +68,11 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Comment
         public int ReplyUser { get; set; }
 
         [DataMember(Name = "replycustomer_nickname")]
-        public string ReplyUserNickname { get; set; }
+        public string ReplyUserNickname
+        {
+            get { return Content; }
+            set { }
+        }
 
         /// <summary>
         /// 资源

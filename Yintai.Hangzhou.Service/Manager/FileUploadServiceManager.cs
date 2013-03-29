@@ -209,42 +209,6 @@ namespace Yintai.Hangzhou.Service.Manager
             return FileMessage.Success;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="postedFile"></param>
-        /// <param name="fileUploadMessage"></param>
-        /// <returns></returns>
-        private static FileMessage SaveVideo(HttpPostedFileBase postedFile, FileUploadMessage fileUploadMessage)
-        {
-            throw new NotImplementedException("SaveVideo");
-        }
-
-        /// <summary>
-        /// 存储文件
-        /// </summary>
-        /// <param name="postedFile"></param>
-        /// <param name="resourceType"></param>
-        /// <param name="fileUploadMessage"></param>
-        /// <returns></returns>
-        private static FileMessage Save(HttpPostedFileBase postedFile, ResourceType resourceType, FileUploadMessage fileUploadMessage, out int width, out int height)
-        {
-            width = height = 0;
-            switch (resourceType)
-            {
-                case ResourceType.Image:
-                    return SaveImage(postedFile, fileUploadMessage, out  width, out height);
-                case ResourceType.Sound:
-                    return SaveSound(postedFile, fileUploadMessage);
-                case ResourceType.Video:
-                    return SaveVideo(postedFile, fileUploadMessage);
-                default:
-                    break;
-            }
-
-            return FileMessage.ExtError;
-        }
-
         #endregion
 
         #region 文件上传
@@ -294,14 +258,21 @@ namespace Yintai.Hangzhou.Service.Manager
             string fileExt;
             fileInfor = new FileInfor();
 
+            LoggerManager.Current().Warn("key:" + key + ",filename:" + postedFile.FileName + ",contype:" + postedFile.ContentType);
+
             FileMessage f = client.GetFileNameByUser(key, postedFile.ContentLength, postedFile.FileName, postedFile.ContentType, out fileKey, out fileExt, userFolder);
 
+
+            LoggerManager.Current().Warn(f);
             if (f == FileMessage.Success)
             {
+
                 fileInfor.FileName = fileKey;
                 fileInfor.FileSize = postedFile.ContentLength;
                 fileInfor.FileExtName = fileExt;
                 fileInfor.ResourceType = ContentType.GetResourceType(fileExt);
+
+                LoggerManager.Current().Warn("fileKey:" + fileKey + ",ext:" + fileExt + ",retype:" + fileInfor.ResourceType);
 
                 try
                 {
@@ -318,8 +289,6 @@ namespace Yintai.Hangzhou.Service.Manager
                         {
                             case ResourceType.Sound:
                                 return SaveSound(postedFile, inValue);
-                            case ResourceType.Video:
-                                return SaveVideo(postedFile, inValue);
                         }
                         //byte[] content = new byte[postedFile.ContentLength + 1];
                         //postedFile.InputStream.Read(content, 0, postedFile.ContentLength);
@@ -409,8 +378,6 @@ namespace Yintai.Hangzhou.Service.Manager
                         {
                             case ResourceType.Sound:
                                 return SaveSound(postedFile, inValue);
-                            case ResourceType.Video:
-                                return SaveVideo(postedFile, inValue);
                         }
 
                         int width, height;

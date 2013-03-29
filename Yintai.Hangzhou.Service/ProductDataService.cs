@@ -285,10 +285,11 @@ namespace Yintai.Hangzhou.Service
             //处理文件上传
             if (request.Files != null && request.Files.Count > 0)
             {
-                List<ResourceEntity> list = null;
+                List<ResourceEntity> listImage = null;
                 try
                 {
-                    list = _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
+                    listImage = _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
+                    
                 }
                 catch (Exception ex)
                 {
@@ -301,7 +302,7 @@ namespace Yintai.Hangzhou.Service
                     throw;
                 }
 
-                if (list == null || list.Count == 0)
+                if (listImage == null || listImage.Count == 0)
                 {
                     //set ishasimage
                     if (entity.IsHasImage)
