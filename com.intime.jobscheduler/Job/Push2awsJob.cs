@@ -162,8 +162,8 @@ namespace com.intime.jobscheduler.Job
                                 Id = p.Id,
                                 Name = p.Name,
                                 Description = p.Description,
-                                Status = p.Status
-            
+                                Status = p.Status,
+                                Group = p.Group
                             };
 
                 int totalCount = prods.Count();

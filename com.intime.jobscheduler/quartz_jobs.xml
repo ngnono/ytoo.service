@@ -28,7 +28,7 @@
         </entry>
         <entry>
           <key>benchdate</key>
-          <value>2013/2/1</value>
+          <value>2013/1/1</value>
         </entry>
       </job-data-map>
     </job>
@@ -41,7 +41,7 @@
         <job-name>Push2aws</job-name>
         <job-group>Fashion</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
-        <cron-expression>2 * * * * ?</cron-expression>
+        <cron-expression>0 2 * * * ?</cron-expression>
       </cron>
     </trigger>
     <job>
@@ -71,7 +71,7 @@
         <job-name>Push2awsIncre</job-name>
         <job-group>Fashion</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
-        <cron-expression>30 * * * * ?</cron-expression>
+        <cron-expression>0 5 * * * ?</cron-expression>
       </cron>
     </trigger>
     <job>
@@ -101,7 +101,7 @@
         <job-name>ApnsNotification</job-name>
         <job-group>Fashion</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
-        <cron-expression>0 12 * * * ?</cron-expression>
+        <cron-expression>0 0 12 * * ?</cron-expression>
       </cron>
     </trigger>
 

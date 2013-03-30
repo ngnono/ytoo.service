@@ -506,6 +506,8 @@ namespace Yintai.Hangzhou.Repository.Impl
                     {
                         case ProductSortOrder.CreatedUserDesc:
                             return e.OrderByDescending(o => o.CreatedUser);
+                        case ProductSortOrder.SortOrderDesc:
+                            return e.OrderByDescending(o => o.SortOrder).ThenByDescending(o => o.CreatedDate);
                         case ProductSortOrder.CreatedDateDesc:
                         default:
                             return e.OrderByDescending(o => o.CreatedDate);

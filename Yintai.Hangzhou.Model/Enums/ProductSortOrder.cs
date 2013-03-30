@@ -23,7 +23,13 @@ namespace Yintai.Hangzhou.Model.Enums
         /// 创建时间倒序
         /// </summary>
         [Description("创建用户")]
-        CreatedUserDesc = 2
+        CreatedUserDesc = 2,
+
+         /// <summary>
+        ///优先级排序
+        /// </summary>
+        [Description("优先级")]
+        SortOrderDesc = 3
 
     }
 }
