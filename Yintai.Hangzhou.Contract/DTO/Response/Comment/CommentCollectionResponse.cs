@@ -70,8 +70,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Comment
         [DataMember(Name = "replycustomer_nickname")]
         public string ReplyUserNickname
         {
-            get { return Content; }
-            set { }
+            get;
+            set;
         }
 
         /// <summary>
