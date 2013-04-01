@@ -189,7 +189,7 @@ namespace Yintai.Architecture.Common.Web.Mvc
             const string os = "iphone";
             var ver = GetFloatVersion(clientVersion);
 
-            string appkey = ConfigManager.GetAppkey(ver >= 2.1 ? String.Concat(os, (ver).ToString("F2")) : os);
+            string appkey = ConfigManager.GetAppkey(ver > 2.09 ? (os + (ver).ToString("F2")) : os);
 
             var vList = new Dictionary<string, string> { { Define.ClientVersion, HttpUtility.UrlDecode(clientVersion, Encoding.UTF8) }, { Define.Uid, HttpUtility.UrlDecode(uid, Encoding.UTF8) } };
 

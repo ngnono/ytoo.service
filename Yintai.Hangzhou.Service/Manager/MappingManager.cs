@@ -2185,9 +2185,9 @@ namespace Yintai.Hangzhou.Service.Manager
 
             var list = new List<ProductInfoResponse>(source.Count);
 
-            // var brands = BrandInfoResponseMapping(_brandRepository.GetListByIds(source.Select(v => v.Brand_Id).Distinct().ToList())).ToList();
-            // var stores = StoreResponseMapping(_storeRepository.GetListByIds(source.Select(v => v.Store_Id).Distinct().ToList())).ToList();
-            // var rusers = ShowCustomerInfoResponseMapping(_customerRepository.GetListByIds(source.Select(v => v.RecommendUser).Distinct().ToList())).ToList();
+            var brands = BrandInfoResponseMapping(_brandRepository.GetListByIds(source.Select(v => v.Brand_Id).Distinct().ToList())).ToList();
+            var stores = StoreResponseMapping(_storeRepository.GetListByIds(source.Select(v => v.Store_Id).Distinct().ToList())).ToList();
+            var rusers = ShowCustomerInfoResponseMapping(_customerRepository.GetListByIds(source.Select(v => v.RecommendUser).Distinct().ToList())).ToList();
             // var tags = TagInfoResponseMapping(_tagRepository.GetListByIds(source.Select(v => v.Tag_Id).Distinct().ToList())).ToList();
             var ids = source.Select(v => v.Id).ToList();
             var resources = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.Product, ids)).ToList();
@@ -2206,8 +2206,8 @@ namespace Yintai.Hangzhou.Service.Manager
                 var pids = pprs.Where(v => v.ProdId == item.Id).Select(v => v.ProId).Distinct().ToList();
                 var ps = promotions.Where(v => pids.Any(s => s == v.Id)).ToList();
 
-                //  var target = ProductInfoResponseMapping(item, brands.FirstOrDefault(v => v.Id == item.Brand_Id), stores.FirstOrDefault(v => v.Id == item.Store_Id), rusers.FirstOrDefault(v => v.Id == item.RecommendUser), tags.FirstOrDefault(v => v.Id == item.Tag_Id), resources.Where(v => v.SourceId == item.Id).ToList(), ps);
-                var target = ProductInfoResponseMapping(item, null, null, null, null, resources.Where(v => v.SourceId == item.Id).ToList(), ps);
+                var target = ProductInfoResponseMapping(item, brands.FirstOrDefault(v => v.Id == item.Brand_Id), stores.FirstOrDefault(v => v.Id == item.Store_Id), rusers.FirstOrDefault(v => v.Id == item.RecommendUser), null, resources.Where(v => v.SourceId == item.Id).ToList(), ps);
+                //var target = ProductInfoResponseMapping(item, null, null, null, null, resources.Where(v => v.SourceId == item.Id).ToList(), ps);
                 if (target == null)
                 {
                     continue;

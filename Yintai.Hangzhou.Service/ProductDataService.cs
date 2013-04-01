@@ -124,15 +124,31 @@ namespace Yintai.Hangzhou.Service
               () =>
               {
                   int totalCount;
-                  var produtEntities = _productRepository.Get(request.PagerRequest, out totalCount,
-                      request.ProductSortOrder, filter);
 
-                  var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
+                  if (request.Version > 2.09)
                   {
-                      Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()
-                  };
+                      var produtEntities = _productRepository.Get(request.PagerRequest, out totalCount,
+                     request.ProductSortOrder, filter);
 
-                  return response;
+                      var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
+                      {
+                          Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()
+                      };
+
+                      return response;
+                  }
+                  else
+                  {
+                      var p = _productRepository.GetPagedList(request.PagerRequest, out totalCount,
+                                                              request.ProductSortOrder, filter);
+                      var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
+                      {
+                          Products = MappingManager.ProductInfoResponseMapping(p).ToList()
+                      };
+
+                      return response;
+                  }
+
               },
               data =>
               CachingHelper.Insert(cacheKey, data, s));
@@ -289,7 +305,7 @@ namespace Yintai.Hangzhou.Service
                 try
                 {
                     listImage = _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
-                    
+
                 }
                 catch (Exception ex)
                 {
