@@ -22,7 +22,6 @@ namespace Yintai.Architecture.ImageTool.Impl
 
         private static readonly HashSet<string> Pexts = new HashSet<string>(new[] { "bmp", "pcx", "tiff", "gif", "jpeg", "jpg", "tga", "exif", "fpx", "svg", "psd", "cdr", "pcd", "dxf", "ufo", "eps", "png" });
 
-
         private ImageSettingConfig _imageSetting;
         private ImageElement _imageElement;
         private string _fileFolder = String.Empty;
@@ -31,13 +30,38 @@ namespace Yintai.Architecture.ImageTool.Impl
 
         #region methods
 
-        private void SaveAudio(string oName)
+        //private void SaveAudio(string oName)
+        //{
+        //    SaveAudioAndReturnDuration(oName, false);
+        //}
+
+        private TimeSpan SaveAudioAndReturnDuration(string oName, bool isReturnDuration)
         {
             var oFullName = oName;
             var tFullName = oName.Substring(0, oName.IndexOf(FileTempExt, System.StringComparison.Ordinal)) + ".mp3";
 
             AudioService.Current.Compression(oFullName, tFullName);
+
+            if (isReturnDuration)
+            {
+                try
+                {
+                    var d = AudioService.Current.GetDuration(tFullName);
+                    Log.Warn("n:" + tFullName + ",d:" + d.TotalSeconds);
+                    return d;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+
+                    throw;
+                }
+
+            }
+
+            return TimeSpan.Zero;
         }
+
 
         private FileMessage GetFileName(string key, int fileSize, string clientFilePath, string contentType, out string fileKey, out string fileExt, string[] userFolders)
         {
@@ -180,9 +204,21 @@ namespace Yintai.Architecture.ImageTool.Impl
 
                 if (_imageElement.Type == 2)
                 {
-                    SaveAudio(filePath);
+                    var timeSpan = SaveAudioAndReturnDuration(filePath, true);
+
+                    var t = new ThumbnailInfo
+                    {
+                        Sizes =
+                            new Dictionary<string, ImageSize>(1)
+                                    {
+                                        {
+                                            request.KeyName, new ImageSize(0, 0, Int64.Parse(timeSpan.TotalSeconds.ToString("F0")))
+                                        }
+                                    }
+                    };
 
                     return;
+                    //return t;
                 }
 
                 if (Pexts.Contains(request.FileExt, StringComparer.OrdinalIgnoreCase) && !_imageElement.AsNormalFile)
@@ -287,9 +323,21 @@ namespace Yintai.Architecture.ImageTool.Impl
 
                 if (_imageElement.Type == 2)
                 {
-                    SaveAudio(filePath);
+                    var timeSpan = SaveAudioAndReturnDuration(filePath, true);
 
-                    return new ThumbnailInfo();
+                    Log.Warn(timeSpan.TotalSeconds);
+                    var t = new ThumbnailInfo
+                        {
+                            Sizes =
+                                new Dictionary<string, ImageSize>(1)
+                                    {
+                                        {
+                                            request.KeyName, new ImageSize(0, 0, Int64.Parse(timeSpan.TotalSeconds.ToString("F0")))
+                                        }
+                                    }
+                        };
+
+                    return t;
                 }
 
                 if (Pexts.Contains(request.FileExt, StringComparer.OrdinalIgnoreCase) && !_imageElement.AsNormalFile)

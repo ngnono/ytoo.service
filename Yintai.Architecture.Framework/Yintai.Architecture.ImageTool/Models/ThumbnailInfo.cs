@@ -27,6 +27,8 @@ namespace Yintai.Architecture.ImageTool.Models
         /// </summary>
         [MessageBodyMember]
         public IDictionary<string, ImageSize> Sizes;
+
+
     }
 
     /// <summary>
@@ -50,10 +52,24 @@ namespace Yintai.Architecture.ImageTool.Models
         [DataMember]
         public int Height;
 
+        /// <summary>
+        /// 长度（影片 长度 单位：秒）
+        /// </summary>
+        [MessageHeader(MustUnderstand = true)]
+        [DataMember]
+        public long Length;
+
         public ImageSize(int w, int h)
         {
             Width = w;
             Height = h;
+        }
+
+        public ImageSize(int w, int h, long l)
+        {
+            Width = w;
+            Height = h;
+            Length = l;
         }
     }
 }

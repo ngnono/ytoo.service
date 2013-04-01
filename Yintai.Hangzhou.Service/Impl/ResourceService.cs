@@ -148,10 +148,10 @@ namespace Yintai.Hangzhou.Service.Impl
                 {
                     case SourceType.Product:
                     case SourceType.Promotion:
-                        Logger.Warn("switch:" + upload + " ext:" + fileExt + ",ct:" + files[upload].ContentType);
+                        //Logger.Warn("switch:" + upload + " ext:" + fileExt + ",ct:" + files[upload].ContentType);
                         if (files[upload].ContentType.IndexOf("audio/x-m4a", StringComparison.OrdinalIgnoreCase) > -1 || fileExt.IndexOf("m4a", System.StringComparison.OrdinalIgnoreCase) > -1 || upload.LastIndexOf("audio", StringComparison.OrdinalIgnoreCase) > -1)
                         {
-                            Logger.Warn("RUN");
+                            //Logger.Warn("RUN");
                             var entity2 = InnerSave(files[upload], (sourceType.ToString() + "audio").ToLower(), sourceId, sourceType, createdUid,
           count, defaultNum);
 

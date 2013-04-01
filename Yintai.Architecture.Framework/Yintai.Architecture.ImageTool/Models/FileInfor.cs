@@ -44,5 +44,10 @@ namespace Yintai.Architecture.ImageTool.Models
         /// 资源类型
         /// </summary>
         public ResourceType ResourceType { get; set; }
+
+        /// <summary>
+        /// 长度（秒为单位）
+        /// </summary>
+        public long Length { get; set; }
     }
 }

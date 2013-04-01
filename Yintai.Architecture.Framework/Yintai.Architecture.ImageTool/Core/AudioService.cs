@@ -72,25 +72,23 @@ namespace Yintai.Architecture.ImageTool.Core
 
         private static string CallProcessAndReturn(string exePath, string fileArgs)
         {
-            var startInfo = new ProcessStartInfo
-            {
-                Arguments = fileArgs,
-                FileName = exePath,
-                UseShellExecute = false,
-                CreateNoWindow = false,
-                RedirectStandardOutput = true
-            };
-
             string result;
-            using (var exeProcess = Process.Start(startInfo))//Process.Start(System.IO.Path.Combine(pathImageMagick,appImageMagick),fileArgs))
+            using (var pro = new Process())
             {
-                using (StreamReader errorreader = exeProcess.StandardError)
+                pro.StartInfo.UseShellExecute = false;
+                pro.StartInfo.ErrorDialog = false;
+                pro.StartInfo.RedirectStandardError = true;
+
+                pro.StartInfo.FileName = exePath;
+                pro.StartInfo.Arguments = fileArgs;
+
+                pro.Start();
+                using (var errorreader = pro.StandardError)
                 {
+                    pro.WaitForExit();
+
                     result = errorreader.ReadToEnd();
                 }
-
-                exeProcess.WaitForExit();
-                exeProcess.Close();
             }
 
             return result;
@@ -100,7 +98,7 @@ namespace Yintai.Architecture.ImageTool.Core
         {
             if (!string.IsNullOrEmpty(str))
             {
-                return str.Substring(str.IndexOf("Duration: ", System.StringComparison.Ordinal) + ("Duration: ").Length, ("00:00:00").Length);
+                return str.Substring(str.IndexOf("Duration: ", StringComparison.Ordinal) + ("Duration: ").Length, ("00:00:00").Length);
             }
 
             return String.Empty;
@@ -120,18 +118,17 @@ namespace Yintai.Architecture.ImageTool.Core
         public TimeSpan GetDuration(string originalFullName)
         {
             var sbFileArgs = new StringBuilder()
-   .AppendFormat(" -i {0}", originalFullName);
+   .AppendFormat(" -i {0}", Path.GetFullPath(originalFullName));
             var fileArgs = sbFileArgs.ToString();
-
 
             var result = ConvertDuration(CallProcessAndReturn(_compressExePath, fileArgs));
 
-            if (String.IsNullOrEmpty(result))
+            if (!String.IsNullOrEmpty(result))
             {
                 return TimeSpan.Parse(result);
             }
 
-            return new TimeSpan(0);
+            return TimeSpan.Zero;
         }
     }
 }

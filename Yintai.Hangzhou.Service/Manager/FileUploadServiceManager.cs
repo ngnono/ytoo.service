@@ -10,6 +10,7 @@ using Yintai.Architecture.ImageClient;
 using Yintai.Architecture.ImageTool.Contract;
 ﻿using Yintai.Architecture.ImageTool.Impl;
 ﻿using Yintai.Architecture.ImageTool.Models;
+using System.Linq;
 
 namespace Yintai.Hangzhou.Service.Manager
 {
@@ -196,54 +197,30 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <summary>
         /// 存储声音文件
         /// </summary>
-        /// <param name="postedFile"></param>
+
         /// <param name="fileUploadMessage"></param>
         /// <returns></returns>
-        private static FileMessage SaveSound(HttpPostedFileBase postedFile, FileUploadMessage fileUploadMessage)
+        private static FileMessage SaveSound(FileUploadMessage fileUploadMessage, out long Length)
         {
             var client = _imageService;
-            client.UploadFile(fileUploadMessage);
+            var t = client.UploadFileAndReturnInfo(fileUploadMessage);
+            Length = 0;
+            if (t != null)
+            {
+                if (t.Sizes != null)
+                {
+                    ImageSize v;
+                    if (t.Sizes.TryGetValue(fileUploadMessage.KeyName, out v))
+                    {
+                        Length = v.Length;
+                    }
+                }
+            }
+
             fileUploadMessage.FileData.Close();
             fileUploadMessage.FileData.Dispose();
 
             return FileMessage.Success;
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="postedFile"></param>
-        /// <param name="fileUploadMessage"></param>
-        /// <returns></returns>
-        private static FileMessage SaveVideo(HttpPostedFileBase postedFile, FileUploadMessage fileUploadMessage)
-        {
-            throw new NotImplementedException("SaveVideo");
-        }
-
-        /// <summary>
-        /// 存储文件
-        /// </summary>
-        /// <param name="postedFile"></param>
-        /// <param name="resourceType"></param>
-        /// <param name="fileUploadMessage"></param>
-        /// <returns></returns>
-        private static FileMessage Save(HttpPostedFileBase postedFile, ResourceType resourceType, FileUploadMessage fileUploadMessage, out int width, out int height)
-        {
-            width = height = 0;
-            switch (resourceType)
-            {
-                case ResourceType.Image:
-                    return SaveImage(postedFile, fileUploadMessage, out  width, out height);
-                case ResourceType.Sound:
-                    return SaveSound(postedFile, fileUploadMessage);
-                case ResourceType.Video:
-                    return SaveVideo(postedFile, fileUploadMessage);
-                default:
-                    break;
-            }
-
-            return FileMessage.ExtError;
         }
 
         #endregion
@@ -267,21 +244,14 @@ namespace Yintai.Hangzhou.Service.Manager
             string fileExt;
             fileInfor = new FileInfor();
 
-
             FileMessage f = client.GetFileNameByUser(key, postedFile.ContentLength, postedFile.FileName, postedFile.ContentType, out fileKey, out fileExt, userFolder);
 
             if (f == FileMessage.Success)
             {
-
-
                 fileInfor.FileName = fileKey;
                 fileInfor.FileSize = postedFile.ContentLength;
                 fileInfor.FileExtName = fileExt;
                 fileInfor.ResourceType = ContentType.GetResourceType(fileExt);
-
-
-                LoggerManager.Current().Warn("fileKey:" + fileKey + ",ext:" + fileExt + ",retype:" + fileInfor.ResourceType);
-
 
                 try
                 {
@@ -297,7 +267,11 @@ namespace Yintai.Hangzhou.Service.Manager
                         switch (fileInfor.ResourceType)
                         {
                             case ResourceType.Sound:
-                                return SaveSound(postedFile, inValue);
+                                long length;
+                                var t = SaveSound(inValue, out  length);
+                                fileInfor.Length = length;
+                                fileInfor.Width = (int)length;
+                                return t;
                         }
                         //byte[] content = new byte[postedFile.ContentLength + 1];
                         //postedFile.InputStream.Read(content, 0, postedFile.ContentLength);
@@ -349,7 +323,7 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <param name="fileInfor">文件上传后返回的信息对象</param>
         /// <param name="thumbnailInfo">缩略图信息</param>
         /// <returns></returns>
-        public static FileMessage UploadFileAndReturnInfo(HttpPostedFileBase postedFile, string key, out FileInfor fileInfor, out ThumbnailInfo thumbnailInfo)
+        public static FileMessage UploadFileAndReturnInfo(HttpPostedFileBase postedFile, string key, out FileInfor fileInfor, string[] userFolder, out ThumbnailInfo thumbnailInfo)
         {
             var client = _imageService;
             string fileKey;
@@ -357,8 +331,7 @@ namespace Yintai.Hangzhou.Service.Manager
             fileInfor = new FileInfor();
             thumbnailInfo = new ThumbnailInfo();
 
-
-            FileMessage f = client.GetFileName(key, postedFile.ContentLength, postedFile.FileName, postedFile.ContentType, out fileKey, out fileExt);
+            FileMessage f = client.GetFileNameByUser(key, postedFile.ContentLength, postedFile.FileName, postedFile.ContentType, out fileKey, out fileExt, userFolder);
 
             if (f == FileMessage.Success)
             {
@@ -366,7 +339,6 @@ namespace Yintai.Hangzhou.Service.Manager
                 fileInfor.FileSize = postedFile.ContentLength;
                 fileInfor.FileExtName = fileExt;
                 fileInfor.ResourceType = ContentType.GetResourceType(fileExt);
-
 
                 try
                 {
@@ -386,7 +358,14 @@ namespace Yintai.Hangzhou.Service.Manager
                         switch (fileInfor.ResourceType)
                         {
                             case ResourceType.Sound:
-                                return SaveSound(postedFile, inValue);
+                                long length;
+                                var t = SaveSound(inValue, out  length);
+                                fileInfor.Length = length;
+                                fileInfor.Width = (int)length;
+
+                                LoggerManager.Current().Warn(fileInfor.Width);
+
+                                return t;
                         }
 
                         int width, height;
@@ -507,7 +486,7 @@ namespace Yintai.Hangzhou.Service.Manager
 
                 FileInfor fileInfor;
                 ThumbnailInfo info;
-                var f = UploadFileAndReturnInfo(fileCollection[i], key, out fileInfor, out info);
+                var f = UploadFileAndReturnInfo(fileCollection[i], key, out fileInfor, new string[0], out info);
                 if (f == FileMessage.Success)
                 {
                     autoSize -= fileCollection[i].ContentLength;

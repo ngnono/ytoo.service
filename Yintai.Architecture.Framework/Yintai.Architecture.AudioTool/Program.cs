@@ -12,7 +12,7 @@ namespace Yintai.Architecture.AudioTool
             var a = new AutioTools();
 
             var e = Path.GetFullPath(@"C:\ffmpeg\bin\ffmpeg.exe");
-            var i = Path.GetFullPath("6685be86-d7f7-4cb9-a6c5-2a723d999380_original.m4a");
+            var i = Path.GetFullPath(@"d:\55384dd8-cef7-4a1b-a631-b715048d05e6.mp3");
 
             var duration = a.GetLength(e, i);
 
@@ -98,7 +98,7 @@ namespace Yintai.Architecture.AudioTool
 
                 pro.Start();
                 System.IO.StreamReader errorreader = pro.StandardError;
-                pro.WaitForExit(1000);
+                pro.WaitForExit();
 
                 string result = errorreader.ReadToEnd();
                 if (!string.IsNullOrEmpty(result))
