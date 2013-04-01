@@ -152,13 +152,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 entity.SortOrder = vo.SortOrder;
                 
                 entity.Status = (int)DataStatus.Default;
+                
                 using (TransactionScope ts = new TransactionScope())
                 {
 
                     entity = this._bannerRepo.Insert(entity);
                     var ids = _resourceSer.Save(ControllerContext.HttpContext.Request.Files
                         , CurrentUser.CustomerId
-                        , -1, entity.Id
+                        , -1, vo.SourceId //souurceId 请使用 promotionid
                         , SourceType.BannerPromotion);
                     ts.Complete();
                 }
@@ -208,7 +209,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                     //add new resource
                     _resourceSer.Save(ControllerContext.HttpContext.Request.Files
                           , CurrentUser.CustomerId
-                        , -1, entity.Id
+                        , -1, entity.SourceId //souurceId 请使用 promotionid
                         , SourceType.BannerPromotion);
                 }
                 ts.Complete();
