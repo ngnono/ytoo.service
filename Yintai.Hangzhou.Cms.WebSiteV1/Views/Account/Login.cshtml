@@ -15,7 +15,6 @@
     @Html.ValidationSummary(true)
 
     <fieldset>
-        <legend>登陆框</legend>
         <div class="control-group">
                 @Html.TextBoxFor(m => m.UserName, new { placeholder="登陆名"})
                 @Html.ValidationMessageFor(m => m.UserName)

@@ -35,8 +35,79 @@ namespace com.intime.jobscheduler.Job
             IndexTag(client, benchDate);
             IndexProds(client, benchDate);
             IndexPros(client,benchDate);
+            IndexBanner(client, benchDate);
             IndexSpecialTopic(client, benchDate);
   
+        }
+
+        private void IndexBanner(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = from p in db.Banners
+                            join pro in db.Promotions on p.SourceId equals pro.Id
+                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                                && p.SourceType == 2
+                            let resource = (from r in db.Resources
+                                            where r.SourceId == p.Id
+                                            && r.SourceType == 11
+                                            select new ESResource()
+                                            {
+                                                Domain = r.Domain,
+                                                Name = r.Name,
+                                                SortOrder = r.SortOrder,
+                                                IsDefault = r.IsDefault,
+                                                Type = r.Type,
+                                                Width = r.Width,
+                                                Height = r.Height
+                                            })
+                            
+                            select new ESBanner()
+                            {
+                                Id = p.Id,
+                                SortOrder = p.SortOrder,
+                                CreatedDate = p.CreatedDate,
+                                Status = p.Status,
+                                SourceType = p.SourceType,
+                                Promotion = new ESPromotion()
+                                {
+                                    Id = pro.Id
+                                  
+                                },
+                                Resource = resource
+                            };
+
+                int totalCount = prods.Count();
+                client.MapFromAttributes<ESBanner>();
+                while (cursor < totalCount)
+                {
+                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
+                    if (!result.IsValid)
+                    {
+                        foreach (var item in result.Items)
+                        {
+                            if (item.OK)
+                                successCount++;
+                            else
+                                log.Info(string.Format("id index failed:{0}", item.Id));
+                        }
+                    }
+                    else
+                        successCount += result.Items.Count();
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} banners in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+
         }
 
         private void IndexTag(ElasticClient client, DateTime benchDate)
