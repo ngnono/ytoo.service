@@ -1877,13 +1877,22 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <param name="source"></param>
         /// <param name="userEntities"></param>
         /// <returns></returns>
-        public CommentInfoResponse CommentInfoResponseMapping(CommentEntity source, List<UserEntity> userEntities, List<ResourceInfoResponse> resource)
+        public CommentInfoResponse CommentInfoResponseMapping(CommentEntity source, List<UserEntity> userEntities, List<ResourceInfoResponse> resource, float currentVer)
         {
             var target = Mapper.Map<CommentEntity, CommentInfoResponse>(source);
             //找两个用户，当前发评论的用户，被回复的用户
             var userResponses = ShowCustomerInfoResponseMapping(userEntities).ToList();
 
             target.ResourceInfoResponses = resource;
+
+            if (currentVer < 2.1)
+            {
+                //
+                if (target.ResourceInfoResponses != null && target.ResourceInfoResponses.Count > 0)
+                {
+                    target.Content = "系统提示：“下载最新版本，参与语音互动！”";
+                }
+            }
 
             var user = userResponses.FirstOrDefault(v => v.Id == target.User_Id);
             var replyUser = userResponses.FirstOrDefault(v => v.Id == target.ReplyUser);
@@ -1894,7 +1903,7 @@ namespace Yintai.Hangzhou.Service.Manager
             return target;
         }
 
-        public CommentInfoResponse CommentInfoResponseMapping(CommentEntity source)
+        public CommentInfoResponse CommentInfoResponseMapping(CommentEntity source, float currentVer)
         {
             if (source == null)
             {
@@ -1907,10 +1916,10 @@ namespace Yintai.Hangzhou.Service.Manager
             var users = _customerRepository.GetListByIds(uids.Where(v => v != 0).Distinct().ToList());
             var resourec = ResourceInfoResponsesMapping(GetListResourceEntities(SourceType.CommentAudio, source.Id));
 
-            return CommentInfoResponseMapping(source, users, resourec.ToList());
+            return CommentInfoResponseMapping(source, users, resourec.ToList(), currentVer);
         }
 
-        public IEnumerable<CommentInfoResponse> CommentInfoResponseMapping(List<CommentEntity> source)
+        public IEnumerable<CommentInfoResponse> CommentInfoResponseMapping(List<CommentEntity> source, float currentVer)
         {
             if (source == null || source.Count == 0)
             {
@@ -1930,7 +1939,7 @@ namespace Yintai.Hangzhou.Service.Manager
 
             foreach (var s in source)
             {
-                var t = CommentInfoResponseMapping(s, userEntities, resources.Where(v => v.SourceId == s.Id).ToList());
+                var t = CommentInfoResponseMapping(s, userEntities, resources.Where(v => v.SourceId == s.Id).ToList(), currentVer);
 
                 if (t != null)
                 {
