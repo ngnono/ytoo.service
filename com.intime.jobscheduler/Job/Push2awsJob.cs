@@ -114,7 +114,9 @@ namespace com.intime.jobscheduler.Job
                                 GpsAlt = s.GpsAlt,
                                 GpsLat = s.GpsLat,
                                 GpsLng = s.GpsLng,
-                                Tel = s.Tel
+                                Tel = s.Tel,
+                                Status = s.Status
+
 
                             };
 
