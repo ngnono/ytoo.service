@@ -59,25 +59,16 @@ namespace Yintai.Architecture.Common.Data.EF
             _log = LoggerManager.Current();
         }
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="context">传入CmsContext</param>
-        protected EFRepository(DbContext context)
-            : this(context, ServiceLocator.Current.Resolve<IUnitOfWork>())
-        {
-        }
-
+      
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="context">传入CmsContext</param>
         /// <param name="unitOfWork"></param>
-        protected EFRepository(DbContext context, IUnitOfWork unitOfWork)
+        protected EFRepository(DbContext context)
         {
-            _unitOfWork = unitOfWork;
-            _context = GetContext(_unitOfWork, context);
-            _dbset = GetContext(_unitOfWork, context).Set<T>();
+            _context = context;
+            _dbset = _context.Set<T>();
         }
 
         #endregion

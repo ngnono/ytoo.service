@@ -41,7 +41,7 @@
         <job-name>Push2aws</job-name>
         <job-group>Fashion</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
-        <cron-expression>5 * * * * ?</cron-expression>
+        <cron-expression>0 0 0 * * ?</cron-expression>
       </cron>
     </trigger>
     <job>
@@ -71,7 +71,7 @@
         <job-name>Push2awsIncre</job-name>
         <job-group>Fashion</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
-        <cron-expression>0 5 * * * ?</cron-expression>
+        <cron-expression>0 0/5 * * * ?</cron-expression>
       </cron>
     </trigger>
     <job>
