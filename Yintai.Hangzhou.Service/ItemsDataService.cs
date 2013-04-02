@@ -33,7 +33,7 @@ namespace Yintai.Hangzhou.Service
             int total1, total2;
             IEnumerable<ItemsInfoResponse> infolist;
 
-            if (version >= 2.1)
+            if (version > 2.09)
             {
                 var productList = _productRepository.Get(pager, out total1, ProductSortOrder.CreatedDateDesc, new ProductFilter
                     {

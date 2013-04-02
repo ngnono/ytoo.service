@@ -34,7 +34,7 @@ namespace Yintai.Hangzhou.Service
             var result = new ExecuteResult<CommentCollectionResponse>();
             var response = new CommentCollectionResponse(request.PagerRequest, totalCount)
                 {
-                    Comments = MappingManager.CommentInfoResponseMapping(data).ToList()
+                    Comments = MappingManager.CommentInfoResponseMapping(data, request.Version).ToList()
                 };
 
             result.Data = response;
@@ -85,14 +85,14 @@ namespace Yintai.Hangzhou.Service
                 ts.Complete();
             }
 
-            return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity));
+            return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity, request.Version));
         }
 
         public ExecuteResult<CommentInfoResponse> Detail(CommentDetailRequest request)
         {
             var entity = this._commentRepository.GetItem(request.CommentId);
 
-            return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity));
+            return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity, request.Version));
         }
 
         public ExecuteResult<CommentInfoResponse> Update(CommentUpdateRequest request)
@@ -136,7 +136,7 @@ namespace Yintai.Hangzhou.Service
                 ts.Complete();
             }
 
-            return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity));
+            return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity, request.Version));
         }
 
         public ExecuteResult<CommentInfoResponse> Destroy(CommentDestroyRequest request)
@@ -167,7 +167,7 @@ namespace Yintai.Hangzhou.Service
                 ts.Complete();
             }
 
-            return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity));
+            return new ExecuteResult<CommentInfoResponse>(MappingManager.CommentInfoResponseMapping(entity, request.Version));
         }
 
         public ExecuteResult<CommentCollectionResponse> GetListRefresh(CommentRefreshRequest request)
@@ -178,7 +178,7 @@ namespace Yintai.Hangzhou.Service
             var result = new ExecuteResult<CommentCollectionResponse>();
             var response = new CommentCollectionResponse(request.PagerRequest)
             {
-                Comments = MappingManager.CommentInfoResponseMapping(data).ToList()
+                Comments = MappingManager.CommentInfoResponseMapping(data, request.Version).ToList()
             };
             result.Data = response;
 
