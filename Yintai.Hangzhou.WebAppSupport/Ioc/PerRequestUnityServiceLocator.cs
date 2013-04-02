@@ -57,7 +57,6 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
         {
             get
             {
-                bool needCreate = false;
                 IUnityContainer childContainer = null;
                 if (HttpContext.Current != null)
                 {
@@ -70,7 +69,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
                 }
                
                 if (childContainer == null)
-                    HttpContext.Current.Items[HttpContextKey] = childContainer = _container.CreateChildContainer();
+                    childContainer = _container ;
                 
 
                 return childContainer;

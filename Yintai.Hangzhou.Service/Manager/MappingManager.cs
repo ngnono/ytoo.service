@@ -1148,7 +1148,7 @@ namespace Yintai.Hangzhou.Service.Manager
                 _resourceRepository.Get(
                     v =>
                     v.Status == (int)DataStatus.Normal && v.SourceId == source.Id &&
-                    (int)SourceType.Promotion == v.SourceType).ToList();
+                    (int)SourceType.Promotion == v.SourceType).OrderByDescending(r=>r.SortOrder).ToList();
 
             resourceInfoResponses = ResourceInfoResponsesMapping(resource).ToList();
 

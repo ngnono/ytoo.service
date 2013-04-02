@@ -159,7 +159,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                     entity = this._bannerRepo.Insert(entity);
                     var ids = _resourceSer.Save(ControllerContext.HttpContext.Request.Files
                         , CurrentUser.CustomerId
-                        , -1, vo.Id
+                        , -1, entity.Id
                         , SourceType.BannerPromotion);
                     ts.Complete();
                 }
