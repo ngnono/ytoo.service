@@ -67,20 +67,8 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<ItemsCollectionResponse> GetProductList(GetItemsListRequest request)
         {
-            var innerkey = String.Format("{0}_{1}_{2}_{3}", request.PagerRequest.ToString(), request.Timestamp.ToString(), request.UserModel.Id.ToString(CultureInfo.InvariantCulture), request.Version >= 2.1);
-            string cacheKey;
-            var s = CacheKeyManager.StoreInfoKey(out cacheKey, innerkey);
-            var r = CachingHelper.Get(
-                delegate(out ItemsCollectionResponse data)
-                {
-                    var objData = CachingHelper.Get(cacheKey);
-                    data = (objData == null) ? null : (ItemsCollectionResponse)objData;
+            var r = Get(request.Version, request.PagerRequest, request.Timestamp, request.UserModel.Id);
 
-                    return objData != null;
-                },
-                () => Get(request.Version, request.PagerRequest, request.Timestamp, request.UserModel.Id),
-                data =>
-                CachingHelper.Insert(cacheKey, data, s));
 
             var result = new ExecuteResult<ItemsCollectionResponse>
             {

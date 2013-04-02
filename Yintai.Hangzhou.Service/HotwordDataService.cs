@@ -22,53 +22,36 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<HotWordCollectionResponse> GetCollection()
         {
-            string cacheKey;
-            var innerKey = DateTime.Now.ToString("yy-M-d H");
-            var s = CacheKeyManager.HotWordCollectionKey(out cacheKey, innerKey);
 
-            var r = CachingHelper.Get(
-              delegate(out HotWordCollectionResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (HotWordCollectionResponse)objData;
+            var response = new HotWordCollectionResponse();
+            var groupEntities = _repository.Get(v => v.Status == (int)DataStatus.Normal).Select(v => new
+            {
+                v.Word,
+                v.Type,
+                v.SortOrder
+            }).GroupBy(v => v.Type).ToList();
 
-                  return objData != null;
-              },
-              () =>
-              {
-                  var response = new HotWordCollectionResponse();
-                  var groupEntities = _repository.Get(v => v.Status == (int)DataStatus.Normal).Select(v => new
-                  {
-                      v.Word,
-                      v.Type,
-                      v.SortOrder
-                  }).GroupBy(v => v.Type).ToList();
+            var words = groupEntities.Where(v => v.Key == (int)HotWordType.Words).ToList();
+            var brands = groupEntities.Where(v => v.Key == (int)HotWordType.BrandStruct).ToList();
 
-                  var words = groupEntities.Where(v => v.Key == (int)HotWordType.Words).ToList();
-                  var brands = groupEntities.Where(v => v.Key == (int)HotWordType.BrandStruct).ToList();
+            if (words.Count > 0)
+            {
+                var t = words[0].OrderByDescending(v => v.SortOrder).Select(v => v.Word).ToList();
+                response.Words = t;
+            }
 
-                  if (words.Count > 0)
-                  {
-                      var t = words[0].OrderByDescending(v => v.SortOrder).Select(v => v.Word).ToList();
-                      response.Words = t;
-                  }
+            if (brands.Count > 0)
+            {
+                var t = brands[0].OrderByDescending(v => v.SortOrder).Select(v => JsonExtension.FromJson<BrandWordsInfo>(v.Word)).ToList();
 
-                  if (brands.Count > 0)
-                  {
-                      var t = brands[0].OrderByDescending(v => v.SortOrder).Select(v => JsonExtension.FromJson<BrandWordsInfo>(v.Word)).ToList();
+                if (t.Count > 0)
+                {
+                    response.BrandWords = t;
+                }
+            }
 
-                      if (t.Count > 0)
-                      {
-                          response.BrandWords = t;
-                      }
-                  }
 
-                  return response;
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
-
-            var result = new ExecuteResult<HotWordCollectionResponse> { Data = r };
+            var result = new ExecuteResult<HotWordCollectionResponse> { Data = response };
 
             return result;
         }

@@ -39,24 +39,8 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<List<BrandInfoResponse>> GetAll(BrandAllRequest request)
         {
-            string cacheKey;
-            var s = CacheKeyManager.BrandAllKey(out cacheKey);
-
-            var r = CachingHelper.Get(
-                delegate(out List<BrandInfoResponse> data)
-                {
-                    var objData = CachingHelper.Get(cacheKey);
-                    data = (objData == null) ? null : (List<BrandInfoResponse>)objData;
-
-                    return objData != null;
-                },
-                () =>
-                {
-                    var entities = _brandRepository.GetListForAll();
-                    return MappingManager.BrandInfoResponseMapping(entities).ToList();
-                },
-                data =>
-                CachingHelper.Insert(cacheKey, data, s));
+            var entities = _brandRepository.GetListForAll();
+            var r = MappingManager.BrandInfoResponseMapping(entities).ToList();
 
             return new ExecuteResult<List<BrandInfoResponse>>(r);
 
@@ -84,24 +68,10 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<GroupStructInfoResponse<BrandInfoResponse>> GetAll4Group(BrandAllRequest request)
         {
-            string cacheKey;
-            var s = CacheKeyManager.BrandAll4GroupKey(out cacheKey);
 
-            var r = CachingHelper.Get(
-                delegate(out GroupStructInfoResponse<BrandInfoResponse> data)
-                {
-                    var objData = CachingHelper.Get(cacheKey);
-                    data = (objData == null) ? null : (GroupStructInfoResponse<BrandInfoResponse>)objData;
+            var entities = _brandRepository.GetListForAll();
+            var r = MappingManager.BrandInfoResponse4GroupMapping(entities);
 
-                    return objData != null;
-                },
-                () =>
-                {
-                    var entities = _brandRepository.GetListForAll();
-                    return MappingManager.BrandInfoResponse4GroupMapping(entities);
-                },
-                data =>
-                CachingHelper.Insert(cacheKey, data, s));
 
             return new ExecuteResult<GroupStructInfoResponse<BrandInfoResponse>>(r);
         }

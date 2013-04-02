@@ -4,225 +4,225 @@ using Yintai.Architecture.Common.Models;
 
 namespace Yintai.Hangzhou.Service.Manager
 {
-    /// <summary>
-    /// cache key
-    /// </summary>
-    public class CacheKeyManager
-    {
-        //公司名_项目名_功能名_小功能_方法名_参数
-        private const string ApiDataServiceKeyPre = "yt_hz_api_ds";
-        private const string ProductKeyPre = ApiDataServiceKeyPre + "_prod";
-        private const string TagKeyPre = ApiDataServiceKeyPre + "_tag";
-        private const string StoreKeyPre = ApiDataServiceKeyPre + "_store";
-        private const string BrandKeyPre = ApiDataServiceKeyPre + "_brand";
-        private const string PromotionKeyPre = ApiDataServiceKeyPre + "_pro";
-        private const string TopicKeyPre = ApiDataServiceKeyPre + "_topic";
-        private const string ItemsKeyPre = ApiDataServiceKeyPre + "_items";
-        private const string FavorKeyPre = ApiDataServiceKeyPre + "_favor";
-        private const string HotWordKeyPre = ApiDataServiceKeyPre + "_hotword";
+    ///// <summary>
+    ///// cache key
+    ///// </summary>
+    //public class CacheKeyManager
+    //{
+    //    //公司名_项目名_功能名_小功能_方法名_参数
+    //    private const string ApiDataServiceKeyPre = "yt_hz_api_ds";
+    //    private const string ProductKeyPre = ApiDataServiceKeyPre + "_prod";
+    //    private const string TagKeyPre = ApiDataServiceKeyPre + "_tag";
+    //    private const string StoreKeyPre = ApiDataServiceKeyPre + "_store";
+    //    private const string BrandKeyPre = ApiDataServiceKeyPre + "_brand";
+    //    private const string PromotionKeyPre = ApiDataServiceKeyPre + "_pro";
+    //    private const string TopicKeyPre = ApiDataServiceKeyPre + "_topic";
+    //    private const string ItemsKeyPre = ApiDataServiceKeyPre + "_items";
+    //    private const string FavorKeyPre = ApiDataServiceKeyPre + "_favor";
+    //    private const string HotWordKeyPre = ApiDataServiceKeyPre + "_hotword";
 
-        private static readonly int CacheDateSecond;
-        private static readonly int CacheSeed;
+    //    private static readonly int CacheDateSecond;
+    //    private static readonly int CacheSeed;
 
-        static CacheKeyManager()
-        {
-            CacheSeed = ConfigManager.GetCacheSeed();
+    //    static CacheKeyManager()
+    //    {
+    //        CacheSeed = ConfigManager.GetCacheSeed();
 
-            if (CacheSeed < 0)
-            {
-                CacheSeed = 0;
-            }
+    //        if (CacheSeed < 0)
+    //        {
+    //            CacheSeed = 0;
+    //        }
 
-            CacheDateSecond = 60 * CacheSeed;
-        }
+    //        CacheDateSecond = 60 * CacheSeed;
+    //    }
 
-        #region hotword
+    //    #region hotword
 
-        /// <summary>
-        /// 产品详情 key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="mark"></param>
-        /// <returns>cache second</returns>
-        public static int HotWordCollectionKey(out string key, string mark)
-        {
-            const string keypre = HotWordKeyPre + "_collection";
+    //    /// <summary>
+    //    /// 产品详情 key
+    //    /// </summary>
+    //    /// <param name="key"></param>
+    //    /// <param name="mark"></param>
+    //    /// <returns>cache second</returns>
+    //    public static int HotWordCollectionKey(out string key, string mark)
+    //    {
+    //        const string keypre = HotWordKeyPre + "_collection";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        #endregion
+    //    #endregion
 
-        #region favor
+    //    #region favor
 
-        /// <summary>
-        /// 产品详情 key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="mark"></param>
-        /// <returns>cache second</returns>
-        public static int FavorListKey(out string key, string mark)
-        {
-            const string keypre = FavorKeyPre + "_ls";
+    //    /// <summary>
+    //    /// 产品详情 key
+    //    /// </summary>
+    //    /// <param name="key"></param>
+    //    /// <param name="mark"></param>
+    //    /// <returns>cache second</returns>
+    //    public static int FavorListKey(out string key, string mark)
+    //    {
+    //        const string keypre = FavorKeyPre + "_ls";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        #endregion
+    //    #endregion
 
-        #region pro
+    //    #region pro
 
-        public static int PromotionInfoKey(out string key, string mark)
-        {
-            const string keypre = PromotionKeyPre + "_info";
+    //    public static int PromotionInfoKey(out string key, string mark)
+    //    {
+    //        const string keypre = PromotionKeyPre + "_info";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        public static int PromotionBannerKey(out string key, string mark)
-        {
-            const string keypre = PromotionKeyPre + "_banner";
+    //    public static int PromotionBannerKey(out string key, string mark)
+    //    {
+    //        const string keypre = PromotionKeyPre + "_banner";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        public static int PromotionListKey(out string key, string mark)
-        {
-            const string keypre = PromotionKeyPre + "_ls";
+    //    public static int PromotionListKey(out string key, string mark)
+    //    {
+    //        const string keypre = PromotionKeyPre + "_ls";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        #endregion
+    //    #endregion
 
-        #region topic
+    //    #region topic
 
-        public static int TopicListKey(out string key, string mark)
-        {
-            const string keypre = TopicKeyPre + "_ls";
+    //    public static int TopicListKey(out string key, string mark)
+    //    {
+    //        const string keypre = TopicKeyPre + "_ls";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        public static int TopicInfoKey(out string key, string mark)
-        {
-            const string keypre = TopicKeyPre + "_info";
+    //    public static int TopicInfoKey(out string key, string mark)
+    //    {
+    //        const string keypre = TopicKeyPre + "_info";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        #endregion
+    //    #endregion
 
-        /// <summary>
-        /// 产品详情 key
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="key"></param>
-        /// <returns>cache second</returns>
-        public static int ProductInfoKey(int id, out string key)
-        {
-            const string keypre = ProductKeyPre + "_info";
+    //    /// <summary>
+    //    /// 产品详情 key
+    //    /// </summary>
+    //    /// <param name="id"></param>
+    //    /// <param name="key"></param>
+    //    /// <returns>cache second</returns>
+    //    public static int ProductInfoKey(int id, out string key)
+    //    {
+    //        const string keypre = ProductKeyPre + "_info";
 
-            key = String.Concat(keypre, "_", id.ToString(CultureInfo.InvariantCulture));
+    //        key = String.Concat(keypre, "_", id.ToString(CultureInfo.InvariantCulture));
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        public static int ProductSearchKey(out string key, string mark)
-        {
-            const string keypre = ProductKeyPre + "_sch";
+    //    public static int ProductSearchKey(out string key, string mark)
+    //    {
+    //        const string keypre = ProductKeyPre + "_sch";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        public static int ProductListKey(out string key, string mark)
-        {
-            const string keypre = ProductKeyPre + "_ls";
+    //    public static int ProductListKey(out string key, string mark)
+    //    {
+    //        const string keypre = ProductKeyPre + "_ls";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        public static int TagAllKey(out string key)
-        {
-            const string tagKeyPre4All = TagKeyPre + "_all";
-            key = tagKeyPre4All;
+    //    public static int TagAllKey(out string key)
+    //    {
+    //        const string tagKeyPre4All = TagKeyPre + "_all";
+    //        key = tagKeyPre4All;
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        #region store
+    //    #region store
 
-        public static int StoreAllKey(CoordinateInfo info, out string key)
-        {
-            const string keyPre4All = StoreKeyPre + "_all";
+    //    public static int StoreAllKey(CoordinateInfo info, out string key)
+    //    {
+    //        const string keyPre4All = StoreKeyPre + "_all";
 
-            key = info == null ? keyPre4All : String.Format("{0}_{1}_{2}", keyPre4All, info.Longitude, info.Latitude);
+    //        key = info == null ? keyPre4All : String.Format("{0}_{1}_{2}", keyPre4All, info.Longitude, info.Latitude);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        public static int StoreInfoKey(out string key, string mark)
-        {
-            const string keypre = StoreKeyPre + "_info";
+    //    public static int StoreInfoKey(out string key, string mark)
+    //    {
+    //        const string keypre = StoreKeyPre + "_info";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        #endregion
+    //    #endregion
 
-        #region brand
+    //    #region brand
 
-        public static int BrandAllKey(out string key)
-        {
-            const string keyPre4All = BrandKeyPre + "_all";
+    //    public static int BrandAllKey(out string key)
+    //    {
+    //        const string keyPre4All = BrandKeyPre + "_all";
 
-            key = keyPre4All;
+    //        key = keyPre4All;
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        public static int BrandAll4GroupKey(out string key)
-        {
-            const string keyPre4All = BrandKeyPre + "_all4group";
+    //    public static int BrandAll4GroupKey(out string key)
+    //    {
+    //        const string keyPre4All = BrandKeyPre + "_all4group";
 
-            key = keyPre4All;
+    //        key = keyPre4All;
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        #endregion
+    //    #endregion
 
-        #region items
+    //    #region items
 
-        public static int ItemsListKey(out string key,string mark)
-        {
-            const string keypre = ItemsKeyPre + "_ls";
+    //    public static int ItemsListKey(out string key,string mark)
+    //    {
+    //        const string keypre = ItemsKeyPre + "_ls";
 
-            key = String.Concat(keypre, "_", mark);
+    //        key = String.Concat(keypre, "_", mark);
 
-            return CacheDateSecond;
-        }
+    //        return CacheDateSecond;
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 }

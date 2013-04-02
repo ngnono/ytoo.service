@@ -42,23 +42,10 @@ namespace Yintai.Hangzhou.Service
             }
 
 
-            string cacheKey;
-            var s = CacheKeyManager.TagAllKey(out cacheKey);
-            var r = CachingHelper.Get(
-                delegate(out List<TagInfoResponse> data)
-                {
-                    var objData = CachingHelper.Get(cacheKey);
-                    data = (objData == null) ? null : (List<TagInfoResponse>)objData;
 
-                    return objData != null;
-                },
-                () =>
-                {
-                    var entities = _tagRepository.GetListForAll();
-                    return MappingManager.TagInfoResponseMapping(entities).ToList();
-                },
-                data =>
-                CachingHelper.Insert(cacheKey, data, s));
+            var entities = _tagRepository.GetListForAll();
+            var r = MappingManager.TagInfoResponseMapping(entities).ToList();
+
 
             return new ExecuteResult<List<TagInfoResponse>>(r);
 

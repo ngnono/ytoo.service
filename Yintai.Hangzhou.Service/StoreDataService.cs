@@ -33,30 +33,14 @@ namespace Yintai.Hangzhou.Service
         /// <returns></returns>
         public ExecuteResult<StoreInfoResponse> GetStore(StoreRequest request)
         {
-            var innerkey = request.StoreId.ToString(CultureInfo.InvariantCulture);
-            string cacheKey;
-            var s = CacheKeyManager.StoreInfoKey(out cacheKey, innerkey);
-            var r = CachingHelper.Get(
-                delegate(out StoreInfoResponse data)
-                {
-                    var objData = CachingHelper.Get(cacheKey);
-                    data = (objData == null) ? null : (StoreInfoResponse)objData;
 
-                    return objData != null;
-                },
-                () =>
-                {
-                    var entity = _storeRepsitory.GetItem(request.StoreId);
-                    var response = MappingManager.StoreResponseMapping(entity);
+            var entity = _storeRepsitory.GetItem(request.StoreId);
+            var response = MappingManager.StoreResponseMapping(entity);
 
-                    return response;
-                },
-                data =>
-                CachingHelper.Insert(cacheKey, data, s));
 
             var result = new ExecuteResult<StoreInfoResponse>
                 {
-                    Data = r
+                    Data = response
                 };
 
             return result;
@@ -64,23 +48,10 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<List<StoreInfoResponse>> GetAll(StoreGetAllRequest request)
         {
-            string cacheKey;
-            var s = CacheKeyManager.StoreAllKey(request.CoordinateInfo, out cacheKey);
-            var r = CachingHelper.Get(
-                delegate(out List<StoreInfoResponse> data)
-                {
-                    var objData = CachingHelper.Get(cacheKey);
-                    data = (objData == null) ? null : (List<StoreInfoResponse>)objData;
 
-                    return objData != null;
-                },
-                () =>
-                {
-                    var entities = _storeRepsitory.GetListForAll();
-                    return MappingManager.StoreResponseMapping(entities, request.CoordinateInfo).ToList();
-                },
-                data =>
-                CachingHelper.Insert(cacheKey, data, s));
+            var entities = _storeRepsitory.GetListForAll();
+            var r = MappingManager.StoreResponseMapping(entities, request.CoordinateInfo).ToList();
+
 
             return new ExecuteResult<List<StoreInfoResponse>>(r);
 

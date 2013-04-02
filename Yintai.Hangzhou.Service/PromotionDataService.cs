@@ -72,71 +72,35 @@ namespace Yintai.Hangzhou.Service
         public ExecuteResult<PromotionCollectionResponse> GetPromotionForBanner(GetPromotionBannerListRequest request)
         {
             var page = new PagerRequest(request.Page, request.Pagesize, 40);
-            var innerKey = String.Format("{0}_{1}_{2}_{3}", page.ToString(), request.SortOrder, PromotionFilterMode.NotTheEnd, String.Format("{0},{1}", request.CoordinateInfo.Latitude, request.CoordinateInfo.Longitude));
-            string cacheKey;
 
-            var s = CacheKeyManager.PromotionBannerKey(out cacheKey, innerKey);
+            int totalCount;
+            var entities = _promotionRepository.Get(page, out totalCount, request.SortOrder, null, PromotionFilterMode.NotTheEnd,
+                          DataStatus.Normal, true);
 
-            var r = CachingHelper.Get(
-              delegate(out PromotionCollectionResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (PromotionCollectionResponse)objData;
+            var response = new PromotionCollectionResponse(page, totalCount)
+            {
+                Promotions = MappingManager.PromotionResponseMapping(entities, request.CoordinateInfo, true)
+            };
 
-                  return objData != null;
-              },
-              () =>
-              {
-                  int totalCount;
-                  var entities = _promotionRepository.Get(page, out totalCount, request.SortOrder, null, PromotionFilterMode.NotTheEnd,
-                                DataStatus.Normal, true);
 
-                  var response = new PromotionCollectionResponse(page, totalCount)
-                  {
-                      Promotions = MappingManager.PromotionResponseMapping(entities, request.CoordinateInfo, true)
-                  };
-
-                  return response;
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
-
-            var result = new ExecuteResult<PromotionCollectionResponse> { Data = r };
+            var result = new ExecuteResult<PromotionCollectionResponse> { Data = response };
 
             return result;
         }
 
         private PromotionCollectionResponse GetList(PagerRequest pagerRequest, Timestamp timestamp, PromotionSortOrder sortOrder, CoordinateInfo coordinateInfo)
         {
-            var innerKey = String.Format("{0}_{1}_{2}_{3}", pagerRequest.ToString(), sortOrder,
-                                  timestamp.ToString(), String.Format("{0},{1}", coordinateInfo.Latitude, coordinateInfo.Longitude));
-            string cacheKey;
-            var s = CacheKeyManager.PromotionListKey(out cacheKey, innerKey);
 
-            var r = CachingHelper.Get(
-              delegate(out PromotionCollectionResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (PromotionCollectionResponse)objData;
+            int totalCount;
+            var entitys = Get(pagerRequest, timestamp, sortOrder, coordinateInfo, out totalCount);
 
-                  return objData != null;
-              },
-              () =>
-              {
-                  int totalCount;
-                  var entitys = Get(pagerRequest, timestamp, sortOrder, coordinateInfo, out totalCount);
+            var response = new PromotionCollectionResponse(pagerRequest, totalCount)
+            {
+                Promotions = MappingManager.PromotionResponseMapping(entitys, coordinateInfo)
+            };
 
-                  var response = new PromotionCollectionResponse(pagerRequest, totalCount)
-                  {
-                      Promotions = MappingManager.PromotionResponseMapping(entitys, coordinateInfo)
-                  };
 
-                  return response;
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
-
-            return r;
+            return response;
         }
 
         private List<PromotionEntity> Get(PagerRequest pageRequest, Timestamp timestamp, PromotionSortOrder sortOrder, CoordinateInfo coordinateInfo, out int totalCount)
@@ -265,36 +229,19 @@ namespace Yintai.Hangzhou.Service
         /// <returns></returns>
         public ExecuteResult<PromotionInfoResponse> GetPromotionInfo(GetPromotionInfoRequest request)
         {
-            var innerKey = String.Format("{0}_{1}", request.Promotionid, String.Format("{0},{1}", request.CoordinateInfo.Latitude, request.CoordinateInfo.Longitude));
-            string cacheKey;
 
-            var s = CacheKeyManager.PromotionInfoKey(out cacheKey, innerKey);
+            var entity = _promotionRepository.GetItem(request.Promotionid);
+            var response = MappingManager.PromotionResponseMapping(entity, request.CoordinateInfo);
 
-            var r = CachingHelper.Get(
-              delegate(out PromotionInfoResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (PromotionInfoResponse)objData;
 
-                  return objData != null;
-              },
-              () =>
-              {
-                  var entity = _promotionRepository.GetItem(request.Promotionid);
-                  var response = MappingManager.PromotionResponseMapping(entity, request.CoordinateInfo);
 
-                  return response;
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
-
-            if (request.CurrentAuthUser != null && r != null)
+            if (request.CurrentAuthUser != null && response != null)
             {
                 // «∑Ò ’≤ÿ
-                r = IsR(r, request.CurrentAuthUser, r.Id);
+                response = IsR(response, request.CurrentAuthUser, response.Id);
             }
 
-            var result = new ExecuteResult<PromotionInfoResponse>(r);
+            var result = new ExecuteResult<PromotionInfoResponse>(response);
 
             return result;
         }

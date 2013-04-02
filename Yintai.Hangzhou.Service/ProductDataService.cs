@@ -108,50 +108,34 @@ namespace Yintai.Hangzhou.Service
                 PromotionId = request.PromotionId
             };
 
-            var innerKey = String.Format("{0}_{1}_{2}", request.PagerRequest.ToString(), request.ProductSortOrder,
-                                  filter.ToString());
-            string cacheKey;
-            var s = CacheKeyManager.ProductListKey(out cacheKey, innerKey);
+            ProductCollectionResponse r;
+            int totalCount;
 
-            var r = CachingHelper.Get(
-              delegate(out ProductCollectionResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (ProductCollectionResponse)objData;
+            if (request.Version > 2.09)
+            {
+                var produtEntities = _productRepository.Get(request.PagerRequest, out totalCount,
+               request.ProductSortOrder, filter);
 
-                  return objData != null;
-              },
-              () =>
-              {
-                  int totalCount;
+                var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
+                {
+                    Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()
+                };
 
-                  if (request.Version > 2.09)
-                  {
-                      var produtEntities = _productRepository.Get(request.PagerRequest, out totalCount,
-                     request.ProductSortOrder, filter);
+                r = response;
+            }
+            else
+            {
+                var p = _productRepository.GetPagedList(request.PagerRequest, out totalCount,
+                                                        request.ProductSortOrder, filter);
+                var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
+                {
+                    Products = MappingManager.ProductInfoResponseMapping(p).ToList()
+                };
 
-                      var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
-                      {
-                          Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()
-                      };
+                r = response;
+            }
 
-                      return response;
-                  }
-                  else
-                  {
-                      var p = _productRepository.GetPagedList(request.PagerRequest, out totalCount,
-                                                              request.ProductSortOrder, filter);
-                      var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
-                      {
-                          Products = MappingManager.ProductInfoResponseMapping(p).ToList()
-                      };
 
-                      return response;
-                  }
-
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
 
             var result = new ExecuteResult<ProductCollectionResponse> { Data = r };
 
@@ -183,34 +167,16 @@ namespace Yintai.Hangzhou.Service
                 PromotionId = request.PromotionId
             };
 
-            var innerKey = String.Format("{0}_{1}_{2}", request.PagerRequest.ToString(), request.ProductSortOrder,
-                                  filter.ToString());
-            string cacheKey;
-            var s = CacheKeyManager.ProductListKey(out cacheKey, innerKey);
 
-            var r = CachingHelper.Get(
-              delegate(out ProductCollectionResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (ProductCollectionResponse)objData;
+            int totalCount;
+            var produtEntities = _productRepository.Get(request.PagerRequest, out totalCount,
+                request.ProductSortOrder, filter);
 
-                  return objData != null;
-              },
-              () =>
-              {
-                  int totalCount;
-                  var produtEntities = _productRepository.Get(request.PagerRequest, out totalCount,
-                      request.ProductSortOrder, filter);
+            var r = new ProductCollectionResponse(request.PagerRequest, totalCount)
+            {
+                Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()
+            };
 
-                  var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
-                  {
-                      Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()
-                  };
-
-                  return response;
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
 
             var result = new ExecuteResult<ProductCollectionResponse> { Data = r };
 
@@ -224,29 +190,11 @@ namespace Yintai.Hangzhou.Service
                 return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
 
-            //var entity = _productRepository.GetItem(request.ProductId);
 
-            //var response = MappingManager.ProductInfoResponseMapping(entity);
+            var entity = _productRepository.GetItem(request.ProductId);
 
-            string cacheKey;
-            var s = CacheKeyManager.ProductInfoKey(request.ProductId, out cacheKey);
+            var r = MappingManager.ProductInfoResponseMapping(entity);
 
-            var r = CachingHelper.Get(
-              delegate(out ProductInfoResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (ProductInfoResponse)objData;
-
-                  return objData != null;
-              },
-              () =>
-              {
-                  var entity = _productRepository.GetItem(request.ProductId);
-
-                  return MappingManager.ProductInfoResponseMapping(entity);
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
 
             if (r != null && request.CurrentAuthUser != null)
             {
@@ -656,58 +604,6 @@ namespace Yintai.Hangzhou.Service
         public ExecuteResult<ProductCollectionResponse> Search(SearchProductRequest request)
         {
             return new ExecuteResult<ProductCollectionResponse>(null) { StatusCode = StatusCode.ClientError, Message = "不支持该方法" };
-
-            if (request == null)
-            {
-                return new ExecuteResult<ProductCollectionResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
-            }
-
-            request.Page = 1;
-            request.Pagesize = 40;
-
-            if (String.IsNullOrWhiteSpace(request.K))
-            {
-                return GetProductList(new GetProductListRequest
-                    {
-                        Page = 1,
-                        Pagesize = 40
-                    });
-            }
-
-            if (request.K.Length > 20)
-            {
-                request.K = request.K.Substring(0, 20);
-            }
-
-            string cacheKey;
-            var s = CacheKeyManager.ProductSearchKey(out cacheKey, request.K);
-
-            var r = CachingHelper.Get(
-              delegate(out ProductCollectionResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (ProductCollectionResponse)objData;
-
-                  return objData != null;
-              },
-              () =>
-              {
-                  int totalCount;
-                  var produtEntities = _productRepository.Search(request.PagerRequest, out totalCount, ProductSortOrder.Default, null,
-                                                         request.K, request.K, null, null, null, DataStatus.Normal);
-                  var response = new ProductCollectionResponse(request.PagerRequest, totalCount)
-                  {
-                      Products = MappingManager.ProductInfoResponseMapping(produtEntities).ToList()
-                  };
-
-                  return response;
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
-
-            var result = new ExecuteResult<ProductCollectionResponse> { Data = r };
-
-            return result;
         }
     }
 }

@@ -24,21 +24,7 @@ namespace Yintai.Hangzhou.Service
 
         private FavoriteCollectionResponse Get(float version, int userId, PagerRequest pagerRequest, CoordinateInfo coordinate, FavoriteSortOrder sortOrder, SourceType sourceType)
         {
-            var innerKey = String.Format("{0}_{1}_{2}_{3}_{4}_{5}", version, pagerRequest,
-                                  coordinate, sortOrder, sourceType, userId);
-            string cacheKey;
-            var s = CacheKeyManager.FavorListKey(out cacheKey, innerKey);
-
-            var r = CachingHelper.Get(
-              delegate(out FavoriteCollectionResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (FavoriteCollectionResponse)objData;
-
-                  return objData != null;
-              },
-              () =>
-              {
+           
                   FavoriteCollectionResponse response;
                   int totalCount;
                   if (version >= 2.1)
@@ -60,11 +46,6 @@ namespace Yintai.Hangzhou.Service
                   }
 
                   return response;
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
-
-            return r;
         }
 
         /// <summary>

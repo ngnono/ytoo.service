@@ -23,37 +23,23 @@ namespace Yintai.Hangzhou.Service
 
         private ExecuteResult<SpecialTopicCollectionResponse> Get(PagerRequest pagerRequest, SpecialTopicSortOrder sortOrder, Timestamp timestamp)
         {
-            var innerKey = String.Format("{0}_{1}_{2}", pagerRequest.ToString(), sortOrder,
-                                 timestamp.ToString());
-            string cacheKey;
-            var s = CacheKeyManager.TopicListKey(out cacheKey, innerKey);
 
-            var r = CachingHelper.Get(
-              delegate(out SpecialTopicCollectionResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (SpecialTopicCollectionResponse)objData;
 
-                  return objData != null;
-              },
-              () =>
-              {
-                  int totalCount;
 
-                  var data = _specialTopicRepository.GetPagedList(pagerRequest, out totalCount, sortOrder,
-                                                                  timestamp);
+            int totalCount;
 
-                  var response = new SpecialTopicCollectionResponse(pagerRequest, totalCount)
-                  {
-                      SpecialTopics = MappingManager.SpecialTopicInfoResponseMapping(data).ToList()
-                  };
+            var data = _specialTopicRepository.GetPagedList(pagerRequest, out totalCount, sortOrder,
+                                                            timestamp);
 
-                  return response;
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
+            var response = new SpecialTopicCollectionResponse(pagerRequest, totalCount)
+            {
+                SpecialTopics = MappingManager.SpecialTopicInfoResponseMapping(data).ToList()
+            };
 
-            var result = new ExecuteResult<SpecialTopicCollectionResponse> { Data = r };
+
+
+
+            var result = new ExecuteResult<SpecialTopicCollectionResponse> { Data = response };
 
             return result;
         }
@@ -70,29 +56,15 @@ namespace Yintai.Hangzhou.Service
 
         public ExecuteResult<SpecialTopicInfoResponse> GetInfo(GetSpecialTopicInfoRequest request)
         {
-            var innerKey = request.TopicId.ToString(CultureInfo.InvariantCulture);
-            string cacheKey;
-            var s = CacheKeyManager.TopicInfoKey(out cacheKey, innerKey);
 
-            var r = CachingHelper.Get(
-              delegate(out SpecialTopicInfoResponse data)
-              {
-                  var objData = CachingHelper.Get(cacheKey);
-                  data = (objData == null) ? null : (SpecialTopicInfoResponse)objData;
 
-                  return objData != null;
-              },
-              () =>
-              {
-                  var data = _specialTopicRepository.GetItem(request.TopicId);
-                  var response = MappingManager.SpecialTopicInfoResponseMapping(data);
+            var data = _specialTopicRepository.GetItem(request.TopicId);
+            var response = MappingManager.SpecialTopicInfoResponseMapping(data);
 
-                  return response;
-              },
-              data =>
-              CachingHelper.Insert(cacheKey, data, s));
 
-            var result = new ExecuteResult<SpecialTopicInfoResponse>(r);
+
+
+            var result = new ExecuteResult<SpecialTopicInfoResponse>(response);
 
             return result;
         }
