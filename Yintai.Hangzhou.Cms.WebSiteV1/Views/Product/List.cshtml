@@ -63,7 +63,7 @@
     </ul>
 }
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("List", "Product", FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
+@using (Html.BeginForm("List", "Product", new { page = 0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
 {
     @Html.ValidationSummary(true)
     <div class="row">

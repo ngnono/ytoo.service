@@ -62,7 +62,7 @@
 <p>
     @Html.ActionLink2("新增积分", "Create", null, new { @class="btn btn-primary"})
 </p>
-@using (Html.BeginForm("List", "Point", FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
+@using (Html.BeginForm("List", "Point", new { page = 0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
 {
     @Html.ValidationSummary(true)
     <div class="row">

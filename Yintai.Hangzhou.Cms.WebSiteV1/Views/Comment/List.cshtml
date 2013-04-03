@@ -109,7 +109,7 @@
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("List", null, FormMethod.Get, new { @class = "form-horizontal searchForm-border" }))
+@using (Html.BeginForm("List", null, new { page = 0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border" }))
 {
     @Html.ValidationSummary(true)
     <div class="row">

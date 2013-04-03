@@ -63,7 +63,7 @@
 
 <h2>@ViewBag.Title</h2>
 <p>
-@Html.ActionLink2("新建", "Create", null, new { @class="btn btn-primary"})
+@Html.ActionLink2("新建", "Create", new {page=0 }, null, new { @class="btn btn-primary"})
     </p>
 @using (Html.BeginForm("List", null, FormMethod.Get, new { @class = "form-horizontal searchForm-border" }))
 {

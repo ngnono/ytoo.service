@@ -122,7 +122,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.UpdatedUser = CurrentUser.CustomerId;
             entity.Status = (int)DataStatus.Deleted;
 
-            this._tagRepository.Delete(entity);
+            this._tagRepository.Update(entity);
 
             return SuccessResponse();
         }

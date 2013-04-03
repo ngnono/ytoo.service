@@ -145,7 +145,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.UpdatedUser = CurrentUser.CustomerId;
             entity.Status = (int)DataStatus.Deleted;
 
-            this._storeRepository.Delete(entity);
+            this._storeRepository.Update(entity);
 
             return SuccessResponse();
         }

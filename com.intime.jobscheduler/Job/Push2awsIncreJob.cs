@@ -10,7 +10,9 @@ namespace com.intime.jobscheduler.Job
         protected override DateTime BenchDate(Quartz.IJobExecutionContext context)
         {
             //every 5mins, figure out new create/updated products, promotions
-            return DateTime.Now.AddMinutes(-5);
+            var dataMap = context.JobDetail.JobDataMap;
+            int intervalMins =  dataMap.ContainsKey("interval") ? dataMap.GetIntValue("interval") : 5;
+            return DateTime.Now.AddMinutes(-intervalMins);
         }
     }
 }

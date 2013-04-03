@@ -67,6 +67,7 @@
     <Compile Include="Enums\UserRole.cs" />
     <Compile Include="Filters\BannerSearchOption.cs" />
     <Compile Include="Filters\CardSearchOption.cs" />
+    <Compile Include="Filters\HotwordSearchOption.cs" />
     <Compile Include="Filters\PromotionFilter.cs" />
     <Compile Include="Filters\CommentSearchOption.cs" />
     <Compile Include="Filters\GenericOrder.cs" />

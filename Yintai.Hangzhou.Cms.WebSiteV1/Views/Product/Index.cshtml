@@ -3,19 +3,19 @@
     var controller = (Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers.UserController)ViewContext.Controller;
 }
 
-<div class="span3">
+<div class="span2">
     <h2>新建商品</h2>
     <p>创建单个商品.</p>
     <p>@Html.ActionLink2("创建","Create",null,new {@class = "btn"})</p>
 </div>
-<div class="span3">
+<div class="span2">
     <h2>批量上传</h2>
-    <p>批量导入商品信息，同时也导入商品图片信息。 </p>
+    <p>批量导入商品信息。 </p>
     <p>@Html.ActionLink2("上传","Display","ProBulkUpload",null,new {@class = "btn"})
         @Html.ActionLink2("历史","List","ProBulkUpload",null,new {@class = "btn"})
     </p>
 </div>
-<div class="span3">
+<div class="span2">
     <h2>商品维护</h2>
     <p>维护商品信息。 </p>
     <p>@Html.ActionLink2("维护","List",null,new {@class = "btn"})</p>
@@ -25,4 +25,8 @@
     <p>查询商品信息。 </p>
     <p>@Html.ActionLink2("查询","List",null,new {@class = "btn"})</p>
 </div>
-
+<div class="span2">
+    <h2>关键词维护</h2>
+    <p>维护搜索关键词。 </p>
+    <p>@Html.ActionLink2("进入","List","Hotword",null,new {@class = "btn"})</p>
+</div>
