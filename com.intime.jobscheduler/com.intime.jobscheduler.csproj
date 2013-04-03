@@ -151,6 +151,7 @@
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="model\ESBanner.cs" />
     <Compile Include="model\ESBrand.cs" />
+    <Compile Include="model\ESHotword.cs" />
     <Compile Include="model\ESProduct.cs" />
     <Compile Include="model\ESResource.cs" />
     <Compile Include="model\ESSpecialTopic.cs" />

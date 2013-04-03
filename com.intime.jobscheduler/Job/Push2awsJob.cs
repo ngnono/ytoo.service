@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Yintai.Hangzhou.Data.Models;
+using Newtonsoft.Json;
 
 namespace com.intime.jobscheduler.Job
 {
@@ -31,6 +32,7 @@ namespace com.intime.jobscheduler.Job
                 return;
             }
             IndexBrand(client, benchDate);
+            IndexHotwork(client, benchDate);
             IndexStore(client, benchDate);
             IndexTag(client, benchDate);
             IndexProds(client, benchDate);
@@ -38,6 +40,57 @@ namespace com.intime.jobscheduler.Job
             IndexBanner(client, benchDate);
             IndexSpecialTopic(client, benchDate);
   
+        }
+
+        private void IndexHotwork(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var words = from p in db.HotWords
+                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                            select p;
+                var prods = from p in words.ToList()
+                            select new ESHotword()
+                            {
+                                Id = p.Id,
+                                SortOrder = p.SortOrder,
+                                Status = p.Status,
+                                Type = p.Type,
+                                Word = p.Type==1?p.Word:JsonConvert.DeserializeObject<dynamic>(p.Word).name,
+                                BrandId = p.Type==1?0:JsonConvert.DeserializeObject<dynamic>(p.Word).id
+                            };
+
+                int totalCount = prods.Count();
+                client.MapFromAttributes<ESHotword>();
+                while (cursor < totalCount)
+                {
+                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
+                    if (!result.IsValid)
+                    {
+                        foreach (var item in result.Items)
+                        {
+                            if (item.OK)
+                                successCount++;
+                            else
+                                log.Info(string.Format("id index failed:{0}", item.Id));
+                        }
+                    }
+                    else
+                        successCount += result.Items.Count();
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} hotwords in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+
         }
 
         private void IndexBanner(ElasticClient client, DateTime benchDate)
