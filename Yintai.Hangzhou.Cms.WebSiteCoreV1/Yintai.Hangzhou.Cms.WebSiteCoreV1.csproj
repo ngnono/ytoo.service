@@ -40,6 +40,9 @@
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\_dll\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NPOI">
       <HintPath>..\packages\NPOI.1.2.5\lib\net40\NPOI.dll</HintPath>
     </Reference>
@@ -77,6 +80,7 @@
     <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\HotwordController.cs" />
     <Compile Include="Controllers\PointController.cs" />
     <Compile Include="Controllers\ProBulkUploadController.cs" />
     <Compile Include="Controllers\ProUploadError.cs" />
@@ -99,6 +103,7 @@
     <Compile Include="Models\BannerViewModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\FilesStatus.cs" />
+    <Compile Include="Models\HotwordViewModel.cs" />
     <Compile Include="Models\RoleRightViewModel.cs" />
     <Compile Include="Models\SpecialTopicViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
