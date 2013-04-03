@@ -244,6 +244,7 @@ namespace Yintai.Hangzhou.Service
                     ,
                     Message = "没有图片信息"
                 };
+            inEntity.SortOrder = 0;
             var entity = _productRepository.Insert(inEntity);
             //处理 图片
             //处理文件上传

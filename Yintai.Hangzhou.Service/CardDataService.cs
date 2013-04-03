@@ -62,10 +62,10 @@ namespace Yintai.Hangzhou.Service
             {
                 if (entity.User_Id != request.AuthUser.Id)
                 {
-                    return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "该卡已经被绑定" };
+                    return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "该会员卡已经被绑定" };
                 }
 
-                return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "您已经绑定过该卡" };
+                return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "您已经绑定过该会员卡" };
             }
 
             var result = _groupCardService.GetInfo(new GroupCardInfoRequest
@@ -108,10 +108,10 @@ namespace Yintai.Hangzhou.Service
                         Client_Version = request.Client_Version,
                         Method = request.Method,
                         Token = request.Token
-                    }, "恭喜您绑定成功");
+                    }, "恭喜您绑定会员卡成功");
             }
 
-            return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "银泰卡号或密码错" };
+            return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "会员卡号或密码错" };
         }
 
         public ExecuteResult<CardInfoResponse> UnBinding(BindingRequest request)
@@ -172,7 +172,7 @@ namespace Yintai.Hangzhou.Service
 
             if (entities.Count == 0)
             {
-                return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "你还没有绑定银泰卡，请您先绑定" };
+                return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "你还没有绑定会员卡，请您先绑定" };
             }
 
             if (entities.Count > 1)
