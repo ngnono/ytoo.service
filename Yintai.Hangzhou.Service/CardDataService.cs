@@ -108,7 +108,7 @@ namespace Yintai.Hangzhou.Service
                         Client_Version = request.Client_Version,
                         Method = request.Method,
                         Token = request.Token
-                    }, "恭喜您绑定成功");
+                    }, "恭喜您绑定会员卡成功");
             }
 
             return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "会员卡号或密码错" };
