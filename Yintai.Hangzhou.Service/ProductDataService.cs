@@ -331,9 +331,9 @@ namespace Yintai.Hangzhou.Service
 
             entity.UpdatedDate = DateTime.Now;
             entity.UpdatedUser = request.AuthUid;
-            entity.Status = (int)DataStatus.Normal;
+            entity.Status = (int)DataStatus.Deleted;
 
-            _productRepository.Delete(entity);
+            _productRepository.Update(entity);
 
             return new ExecuteResult<ProductInfoResponse>(MappingManager.ProductInfoResponseMapping(entity));
         }

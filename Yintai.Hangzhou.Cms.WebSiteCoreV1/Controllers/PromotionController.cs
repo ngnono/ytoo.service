@@ -207,6 +207,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         {
             return Json(_promotionRepository.AutoComplete(name).Where(entity => entity.IsProdBindable.HasValue && entity.IsProdBindable.Value)
             .Where(entity => string.IsNullOrEmpty(name) ? true : entity.Name.StartsWith(name.Trim()))
+            .Where(e=>e.Status!=(int)DataStatus.Deleted)
             .Take(10)
                 , JsonRequestBehavior.AllowGet);
         }

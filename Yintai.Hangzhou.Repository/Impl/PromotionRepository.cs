@@ -479,10 +479,11 @@ namespace Yintai.Hangzhou.Repository.Impl
             totalCount = linq.Count();
 
             var skipCount = (pagerRequest.PageIndex - 1) * pagerRequest.PageSize;
+            linq = OrderBy(linq, sortOrder);
 
             linq = skipCount == 0 ? linq.Take(pagerRequest.PageSize) : linq.Skip(skipCount).Take(pagerRequest.PageSize);
 
-            linq = OrderBy(linq, sortOrder);
+
 
             return linq;
         }

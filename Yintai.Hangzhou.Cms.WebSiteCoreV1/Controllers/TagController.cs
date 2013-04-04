@@ -129,7 +129,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         [HttpGet]
         public override JsonResult AutoComplete(string name)
         {
-            return Json(_tagRepository.AutoComplete(name).Where(entity => string.IsNullOrEmpty(name) ? true : entity.Name.StartsWith(name.Trim())).Take(10)
+            return Json(_tagRepository.AutoComplete(name).Where(entity => entity.Status != (int)DataStatus.Deleted && 
+                                    (string.IsNullOrEmpty(name) ? true : entity.Name.StartsWith(name.Trim()))).Take(10)
                 ,JsonRequestBehavior.AllowGet);
         }
     }
