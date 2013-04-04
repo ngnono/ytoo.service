@@ -292,7 +292,8 @@ namespace Yintai.Hangzhou.Repository.Impl
         private static Expression<Func<PromotionEntity, bool>> Filter(PromotionFilter promotionFilter)
         {
             var filter = PredicateBuilder.True<PromotionEntity>();
-
+            //always exclude deleted record
+            filter = filter.And(v => v.Status != (int)DataStatus.Deleted);
             if (promotionFilter.DataStatus != null)
             {
                 filter = filter.And(v => v.Status == (int)promotionFilter.DataStatus.Value);

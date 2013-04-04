@@ -105,7 +105,8 @@ namespace Yintai.Hangzhou.Repository.Impl
                                                                        int? recommendUser, int? brandId = null, List<int> productIds = null, string productName = null)
         {
             var filter = PredicateBuilder.True<ProductEntity>();
-
+            //always exclude deleted 
+            filter = filter.And(v => v.Status != (int)DataStatus.Deleted);
             if (dataStatus != null)
             {
                 filter = filter.And(v => v.Status == (int)dataStatus);
@@ -124,7 +125,7 @@ namespace Yintai.Hangzhou.Repository.Impl
                         break;
                 }
             }
-
+            else 
             if (tagid != null && tagid.Count > 0)
             {
                 filter = filter.And(v => tagid.Any(s => s == v.Tag_Id));
