@@ -5,7 +5,7 @@
 @model ProductCollectionViewModel
 @{
     ViewBag.Title = "商品列表";
-    ProductSearchOptionViewModel search = ViewBag.SearchOptions??new ProductSearchOptionViewModel();
+    ProductSearchOptionViewModel search = ViewBag.SearchOptions ?? new ProductSearchOptionViewModel();
     HtmlHelper<ProductSearchOptionViewModel> searchModelHelper = Html.HtmlHelperFor<ProductSearchOptionViewModel>();
 
 }
@@ -135,7 +135,7 @@
                     @searchModelHelper.EditorFor(model => search.Store)
                 </div>
             </div>
-                      
+
         </div>
 
     </div>
@@ -178,7 +178,7 @@
     {
         <tr>
             <td>
-              
+
                 @if (item.Resources != null && item.Resources.Count() > 0)
                 {
                     <div class="img-thumnail">
@@ -202,8 +202,8 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id,returnUrl = Request.RawUrl})</li>
-                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id,returnUrl = Request.RawUrl }) </li>
+                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id, returnUrl = Request.RawUrl })</li>
+                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id, returnUrl = Request.RawUrl }) </li>
                         <li><a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
                     </ul>
 
@@ -234,6 +234,10 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
+                @if (item.Audios != null && item.Audios.Count() > 0)
+                {
+                    @Html.Partial("_AudioPlayer", item.Audios.First())
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
@@ -255,7 +259,7 @@
                 @Html.DisplayFor(modelItem => item.StoreName)
             </td>
             <td>
-                @Html.DisplayFor(m=>item.TagName) 
+                @Html.DisplayFor(m => item.TagName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FavoriteCount)

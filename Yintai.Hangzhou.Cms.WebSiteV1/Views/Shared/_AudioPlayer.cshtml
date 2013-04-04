@@ -1,0 +1,8 @@
+﻿@model ResourceViewModel
+@{
+   var audioId = string.Format("audio_{0}", Model.Id);
+}
+<audio id="@audioId">
+    <source src="@Model.AudioUrl" type="audio/mpeg" />
+</audio>
+<button onclick="document.getElementById('@audioId').play()"><i class="icon-play"></i></button>

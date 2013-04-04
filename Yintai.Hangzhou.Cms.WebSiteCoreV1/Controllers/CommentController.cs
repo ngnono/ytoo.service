@@ -60,7 +60,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                      where p.User_Id == u.Id
                      let commentResource =
                             (from r in resourceQuerable
-                             where r.SourceId == p.Id && p.SourceType == (int)SourceType.Comment
+                             where r.SourceId == p.Id && r.SourceType == (int)SourceType.CommentAudio
                              select r).FirstOrDefault()
                      let sourceResource =
                             (from r in resourceQuerable

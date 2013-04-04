@@ -7,6 +7,7 @@ using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Model.Filters;
+using System.Linq;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -165,6 +166,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "优先级")]
         [Range(0, Int32.MaxValue)]
         public int SortOrder { get; set; }
+
+        public IEnumerable<ResourceViewModel> Audios { get {
+            if (Resources == null)
+                return null;
+            return Resources.Where(r => r.Type == (int)ResourceType.Sound);
+        } }
     
     }
     public class ProductSearchOptionViewModel 

@@ -32,6 +32,10 @@
     <div class="display-label">@Html.LabelFor(model => model.Description)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)
+         @if (Model.Audios != null && Model.Audios.Count() > 0)
+         {
+        @Html.Partial("_AudioPlayer", Model.Audios.First())
+                }
     </div>
 
     <div class="display-label">@Html.LabelFor(model => model.CreatedDate)</div>
@@ -135,7 +139,7 @@
     </div>
  <div class="display-label">图片</div>
     <div class="display-field">
-        @if (this.Model.Resources != null && Model.Resources.Count() > 0)
+        @if (this.Model.Resources != null )
         {
             foreach (var re in Model.Resources)
             {

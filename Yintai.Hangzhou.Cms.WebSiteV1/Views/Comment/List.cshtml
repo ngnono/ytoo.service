@@ -230,15 +230,17 @@
                 @Html.DisplayFor(modelItem => item.Content)
             </td>
             <td>
-                @if (item.CommentResource!=null) {
-                <a href="@string.Concat(item.CommentResource.Domain,item.CommentResource.Name,".mp3")">"<i class="icon-play"></i>
-                    </a>
-                }
+                 @if (item.CommentResource != null)
+                 {
+                      @Html.Partial("_AudioPlayer", item.CommentResource)
+                 }
             </td>
             <td>
-                @if (item.ReplyId != 0) { 
-                    <a href="@Url.Action("Details",new {id=item.ReplyId})">是</a>
-                } else
+                @if (item.ReplyId != 0)
+                { 
+                    <a href="@Url.Action("Details", new { id = item.ReplyId })">是</a>
+                }
+                else
                 {
                     <p>否</p>
                 }
