@@ -2215,7 +2215,7 @@ namespace Yintai.Hangzhou.Service.Manager
                 var pids = pprs.Where(v => v.ProdId == item.Id).Select(v => v.ProId).Distinct().ToList();
                 var ps = promotions.Where(v => pids.Any(s => s == v.Id)).ToList();
 
-                var target = ProductInfoResponseMapping(item, brands.FirstOrDefault(v => v.Id == item.Brand_Id), stores.FirstOrDefault(v => v.Id == item.Store_Id), rusers.FirstOrDefault(v => v.Id == item.RecommendUser), null, resources.Where(v => v.SourceId == item.Id).ToList(), ps);
+                var target = ProductInfoResponseMapping(item, brands.FirstOrDefault(v => v.Id == item.Brand_Id), stores.FirstOrDefault(v => v.Id == item.Store_Id), rusers.FirstOrDefault(v => v.Id == item.RecommendUser), null, resources.Where(v => v.SourceId == item.Id && v.Type==1).ToList(), ps);
                 //var target = ProductInfoResponseMapping(item, null, null, null, null, resources.Where(v => v.SourceId == item.Id).ToList(), ps);
                 if (target == null)
                 {

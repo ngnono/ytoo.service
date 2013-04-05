@@ -125,7 +125,6 @@ namespace Yintai.Hangzhou.Repository.Impl
                         break;
                 }
             }
-            else 
             if (tagid != null && tagid.Count > 0)
             {
                 filter = filter.And(v => tagid.Any(s => s == v.Tag_Id));
