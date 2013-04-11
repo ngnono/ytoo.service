@@ -151,6 +151,7 @@
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="model\ESBanner.cs" />
     <Compile Include="model\ESBrand.cs" />
+    <Compile Include="model\ESComment.cs" />
     <Compile Include="model\ESHotword.cs" />
     <Compile Include="model\ESProduct.cs" />
     <Compile Include="model\ESResource.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="MainJobService.Designer.cs">
       <DependentUpon>MainJobService.cs</DependentUpon>
     </Compile>
+    <Compile Include="model\ESUser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

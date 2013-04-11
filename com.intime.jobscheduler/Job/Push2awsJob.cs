@@ -20,7 +20,9 @@ namespace com.intime.jobscheduler.Job
             JobDataMap data = context.JobDetail.JobDataMap;
             var esUrl = data.GetString("eshost");
             var esIndex = data.GetString("defaultindex");
+            var needRebuild = data.ContainsKey("needrebuild") ? data.GetBooleanValue("needrebuild") : false;
             var benchDate = BenchDate(context) ;
+
             var client = new ElasticClient(new ConnectionSettings(esUrl,9200)
                                     .SetDefaultIndex(esIndex)
                                     .SetMaximumAsyncConnections(10));
@@ -31,6 +33,8 @@ namespace com.intime.jobscheduler.Job
                     esUrl, connectionStatus.Error.OriginalException.Message));
                 return;
             }
+            if (needRebuild)
+                client.DeleteIndex(esIndex);
             IndexBrand(client, benchDate);
             IndexHotwork(client, benchDate);
             IndexStore(client, benchDate);
@@ -39,7 +43,133 @@ namespace com.intime.jobscheduler.Job
             IndexPros(client,benchDate);
             IndexBanner(client, benchDate);
             IndexSpecialTopic(client, benchDate);
-  
+          
+        }
+
+        private void IndexUser(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = from p in db.Users
+                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                            let resource = from r in db.Resources
+                                           where r.SourceId == p.Id && r.SourceType == 10
+                                           select new ESResource()
+                                           {
+                                               Domain = r.Domain,
+                                               Name = r.Name,
+                                               SortOrder = r.SortOrder,
+                                               IsDefault = r.IsDefault,
+                                               Type = r.Type,
+                                               Width = r.Width,
+                                               Height = r.Height
+                                           }
+                            select new ESUser()
+                            {
+                                Id = p.Id,
+                                Status = p.Status,
+                                Thumnail = resource.FirstOrDefault(),
+                                Nickie = p.Nickname,
+                                Level = p.UserLevel
+
+                            };
+
+                int totalCount = prods.Count();
+                client.MapFromAttributes<ESUser>();
+                while (cursor < totalCount)
+                {
+                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
+                    if (!result.IsValid)
+                    {
+                        foreach (var item in result.Items)
+                        {
+                            if (item.OK)
+                                successCount++;
+                            else
+                                log.Info(string.Format("id index failed:{0}", item.Id));
+                        }
+                    }
+                    else
+                        successCount += result.Items.Count();
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} users in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+
+        }
+
+        private void IndexComments(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = from p in db.Comments
+                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                            let resource = from r in db.Resources
+                                           where r.SourceId == p.Id && r.SourceType == 10
+                                           select new ESResource()
+                                            {
+                                                Domain = r.Domain,
+                                                Name = r.Name,
+                                                SortOrder = r.SortOrder,
+                                                IsDefault = r.IsDefault,
+                                                Type = r.Type,
+                                                Width = r.Width,
+                                                Height = r.Height
+                                            }
+                            select new ESComment()
+                            {
+                                Id = p.Id,
+                                Status = p.Status,
+                                Resource = resource,
+                                ParentCommentId = p.ReplyId,
+                                ParentCommentUserId = p.ReplyUser,
+                                SourceId = p.SourceId,
+                                SourceType = p.SourceType,
+                                CreatedDate = p.CreatedDate,
+                                CreateUserId = p.CreatedUser,
+                                TextMsg = p.Content
+                            };
+
+                int totalCount = prods.Count();
+                client.MapFromAttributes<ESComment>();
+                while (cursor < totalCount)
+                {
+                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
+                    if (!result.IsValid)
+                    {
+                        foreach (var item in result.Items)
+                        {
+                            if (item.OK)
+                                successCount++;
+                            else
+                                log.Info(string.Format("id index failed:{0}", item.Id));
+                        }
+                    }
+                    else
+                        successCount += result.Items.Count();
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} comments in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+
         }
 
         private void IndexHotwork(ElasticClient client, DateTime benchDate)
@@ -444,6 +574,7 @@ namespace com.intime.jobscheduler.Job
 
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESPromotion>();
+            
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));

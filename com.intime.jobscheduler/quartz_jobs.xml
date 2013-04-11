@@ -30,6 +30,10 @@
           <key>benchdate</key>
           <value>2013/1/1</value>
         </entry>
+        <entry>
+          <key>needrebuild</key>
+          <value>true</value>
+        </entry>
       </job-data-map>
     </job>
 
@@ -62,7 +66,7 @@
         </entry>
         <entry>
           <key>interval</key>
-          <value>5</value>
+          <value>50</value>
         </entry>
       </job-data-map>
     </job>
@@ -75,7 +79,7 @@
         <job-name>Push2awsIncre</job-name>
         <job-group>Fashion</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
-        <cron-expression>0 0/5 * * * ?</cron-expression>
+        <cron-expression>0 0/50 * * * ?</cron-expression>
       </cron>
     </trigger>
     <job>

@@ -18,7 +18,7 @@ namespace com.intime.jobscheduler.Job
         public ESTag Tag { get; set; }
         public ESBrand Brand { get; set; }
         public int SortOrder { get; set; }
-        public virtual IEnumerable<ESResource> Resource { get; set; }
+        public IEnumerable<ESResource> Resource { get; set; }
         public IEnumerable<ESPromotion> Promotion { get; set; }
         public IEnumerable<ESSpecialTopic> SpecialTopic { get; set; }
         public int CreateUserId { get; set; }
