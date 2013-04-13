@@ -40,28 +40,28 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             var entity =_roleService.Find(Id);
             ViewBag.Rights = _rightService.FindAll();
 
-            return View(new RoleViewModel().FromEntity<RoleEntity,RoleViewModel>(entity));
+            return View(new RoleViewModel().FromEntity<RoleViewModel>(entity));
         }
         public ActionResult AuthorizeUser()
         {
             return View(from user in _roleService.FindAllUsersHavingRoles()
-                        select new UserRoleViewModel().FromEntity<UserEntity, UserRoleViewModel>(user));
+                        select new UserRoleViewModel().FromEntity<UserRoleViewModel>(user));
 
         }
         public ActionResult EditAuthorize(int Id)
         {
             ViewBag.Roles = from role in _roleService.FindAll()
-                            select new RoleViewModel().FromEntity<RoleEntity, RoleViewModel>(role);
-            return View(new UserRoleViewModel().FromEntity<UserEntity,UserRoleViewModel>(_customerService.Find(Id)));
+                            select new RoleViewModel().FromEntity<RoleViewModel>(role);
+            return View(new UserRoleViewModel().FromEntity<UserRoleViewModel>(_customerService.Find(Id)));
         }
         [HttpPost]
         public ActionResult EditAuthorize(int User, ImplicitRightViewModel roles)
         {
             _roleService.UpdateWithUserRelation(User, roles.RoleRightDisplay);
             ViewBag.Roles = from role in _roleService.FindAll()
-                            select new RoleViewModel().FromEntity<RoleEntity, RoleViewModel>(role);
+                            select new RoleViewModel().FromEntity<RoleViewModel>(role);
             ViewBag.IsUpdateSuccess = true;
-            return View(new UserRoleViewModel().FromEntity<UserEntity,UserRoleViewModel>(_customerService.Find(User)));
+            return View(new UserRoleViewModel().FromEntity<UserRoleViewModel>(_customerService.Find(User)));
         }
         public JsonResult DeleteAuthorize(int Id)
         {
@@ -73,7 +73,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult CreateAuthorize()
         {
             ViewBag.Roles = from role in _roleService.FindAll()
-                            select new RoleViewModel().FromEntity<RoleEntity, RoleViewModel>(role);
+                            select new RoleViewModel().FromEntity<RoleViewModel>(role);
             return View();
         }
         [HttpPost]
@@ -81,7 +81,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         {
             _roleService.InsertWithUserRelation(User, roles.RoleRightDisplay);
             ViewBag.Roles = from role in _roleService.FindAll()
-                            select new RoleViewModel().FromEntity<RoleEntity, RoleViewModel>(role);
+                            select new RoleViewModel().FromEntity<RoleViewModel>(role);
             return Redirect("AuthorizeUser");
         }
         public ActionResult Create()
@@ -93,7 +93,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         {
             if (ModelState.IsValid)
             {
-                _roleService.Insert(model.ToEntity<RoleViewModel, RoleEntity>());
+                _roleService.Insert(model.ToEntity<RoleEntity>());
                 return RedirectToAction("List");
             }
             return View(model);
@@ -104,10 +104,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             if (ModelState.IsValid)
             {
                
-                var newEntity =_roleService.UpdateWithRights(entity.ToEntity<RoleViewModel,RoleEntity>());
+                var newEntity =_roleService.UpdateWithRights(entity.ToEntity<RoleEntity>());
                 ViewBag.Rights = _rightService.FindAll();
                 ViewBag.IsUpdateSuccess = true;
-                entity = entity.FromEntity<RoleEntity, RoleViewModel>(newEntity);
+                entity = entity.FromEntity<RoleViewModel>(newEntity);
             }
             return View(entity);
         }

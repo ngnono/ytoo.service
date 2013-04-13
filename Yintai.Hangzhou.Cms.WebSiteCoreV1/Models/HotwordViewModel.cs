@@ -50,9 +50,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
 
-        public override T FromEntity<TSource, T>(TSource entity) 
-        {
-            HotwordViewModel viewModel = base.FromEntity<TSource, T>(entity) as HotwordViewModel;
+        public override T FromEntity<T>(dynamic entity)
+        {         
+            HotwordViewModel viewModel = base.FromEntity<T>(entity as HotWordEntity) as HotwordViewModel;
             if (viewModel.Type == (int)HotWordType.BrandStruct)
             {
                 dynamic brandEntity =JsonConvert.DeserializeObject<dynamic>(viewModel.Word); 
@@ -62,15 +62,16 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
             }
             return viewModel as T;
         }
-        public override T ToEntity<TSource, T>()
+        public override T ToEntity<T>()
         {
-            HotWordEntity entity = base.ToEntity<TSource, T>() as HotWordEntity;
+            HotWordEntity entity = base.ToEntity<T>() as HotWordEntity;
             if (this.Type == (int)HotWordType.BrandStruct)
             {
                 entity.Word = BrandString;
             }
             return entity as T;
         }
+       
         public string BrandString {
             get {
                 return JsonConvert.SerializeObject(new { id = this.BrandId, name = this.BrandName });

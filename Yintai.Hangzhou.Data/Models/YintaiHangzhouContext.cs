@@ -11,21 +11,21 @@ using Yintai.Hangzhou.Data.Models.Mapping;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class YintaiHzhouContext : DbContext
+    public partial class YintaiHangzhouContext : DbContext
     {
         private static readonly Architecture.Common.Logger.ILog _log;
 
-        static YintaiHzhouContext()
+        static YintaiHangzhouContext()
         {
-            Database.SetInitializer<YintaiHzhouContext>(null);
+            Database.SetInitializer<YintaiHangzhouContext>(null);
             _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
         }
 
 		/// <summary>
         /// 正式环境使用，无跟踪
         /// </summary>
-        public YintaiHzhouContext()
-            : this("Name=YintaiHzhouContext", "v1")
+        public YintaiHangzhouContext()
+            : this("Name=YintaiHangzhouContext", "v1")
         {
         }
 
@@ -34,19 +34,19 @@ namespace Yintai.Hangzhou.Data.Models
         /// </summary>
         /// <param name="nameOrConnectionString"></param>
         /// <param name="version"></param>
-        public YintaiHzhouContext(string nameOrConnectionString, string version)
+        public YintaiHangzhouContext(string nameOrConnectionString, string version)
             : base(nameOrConnectionString)
         {
         }
 
         #region ef tracing
 
-		public YintaiHzhouContext(string nameOrConnectionString)
+		public YintaiHangzhouContext(string nameOrConnectionString)
             : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
         {
         }
 
-        public YintaiHzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
+        public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
             : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
         {
 			var ctx = ((IObjectContextAdapter)this).ObjectContext;
@@ -156,6 +156,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<TimeSeedEntity> TimeSeeds { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<UserAccountEntity> UserAccounts { get; set; }
+        public DbSet<UserAuthEntity> UserAuths { get; set; }
         public DbSet<UserRoleEntity> UserRoles { get; set; }
         public DbSet<VerifyCodeEntity> VerifyCodes { get; set; }
         public DbSet<VUserEntity> VUsers { get; set; }
@@ -206,6 +207,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new TimeSeedEntityMap());
             modelBuilder.Configurations.Add(new UserEntityMap());
             modelBuilder.Configurations.Add(new UserAccountEntityMap());
+            modelBuilder.Configurations.Add(new UserAuthEntityMap());
             modelBuilder.Configurations.Add(new UserRoleEntityMap());
             modelBuilder.Configurations.Add(new VerifyCodeEntityMap());
             modelBuilder.Configurations.Add(new VUserEntityMap());
@@ -213,18 +215,5 @@ namespace Yintai.Hangzhou.Data.Models
         }
 
 		#endregion
-
-		public override int SaveChanges()
-		{
-			var c =  base.SaveChanges();
-
-			return c;
-		}
-
-		protected override void Dispose(bool disposing)
-        {
-            System.Diagnostics.Debug.WriteLine("context closed");
-            base.Dispose(disposing);
-        }
     }
 }

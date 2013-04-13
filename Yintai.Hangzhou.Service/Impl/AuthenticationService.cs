@@ -10,41 +10,7 @@ namespace Yintai.Hangzhou.Service.Impl
 {
     public class AuthenticationService : BaseService, IAuthenticationService
     {
-        //public bool WebLogin(string userName, string password)
-        //{
-        //    var model = this._userService.Get(userName, password);
-        //    if (model == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    FormsAuthentication.SetAuthCookie(model.Id.ToString(CultureInfo.InvariantCulture), false);
-
-        //    return true;
-        //}
-
-        //public void WebSignout()
-        //{
-        //    FormsAuthentication.SignOut();
-        //}
-
-        //public UserModel GetWebAuthUser()
-        //{
-        //    var userid = GetWebAuthUserId();
-
-        //    return this._userService.Get(userid);
-        //}
-
-        //public int GetWebAuthUserId()
-        //{
-        //    if (HttpContext.Current.User.Identity.IsAuthenticated)
-        //    {
-        //        throw new ArgumentException("当前用户没有认证");
-        //    }
-
-        //    return Int32.Parse(HttpContext.Current.User.Identity.Name);
-        //}
-
+       
         public void Signout(HttpContextBase httpContext)
         {
             FormsAuthentication.SignOut();
@@ -74,6 +40,12 @@ namespace Yintai.Hangzhou.Service.Impl
             }
 
             return null;
+        }
+        public WebSiteUser CurrentUserFromHttpContext(HttpContext httpContext)
+        {
+            if (!httpContext.User.Identity.IsAuthenticated)
+                return null;
+            return httpContext.User.Identity.Name.FromJson<WebSiteUser>();
         }
 
         public bool Islogged(HttpContextBase httpContext)

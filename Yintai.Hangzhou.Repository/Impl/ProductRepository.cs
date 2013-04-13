@@ -18,11 +18,15 @@ namespace Yintai.Hangzhou.Repository.Impl
     {
         private readonly ISpecialTopicProductRelationRepository _specialTopicProductRelationRepository;
         private readonly IPromotionProductRelationRepository _promotionProductRelationRepository;
+        private IUserAuthRepository _userAuthRepo;
 
-        public ProductRepository(IPromotionProductRelationRepository promotionProductRelationRepository, ISpecialTopicProductRelationRepository specialTopicProductRelationRepository)
+        public ProductRepository(IPromotionProductRelationRepository promotionProductRelationRepository
+            , ISpecialTopicProductRelationRepository specialTopicProductRelationRepository
+            ,IUserAuthRepository userAuthRepo)
         {
             _specialTopicProductRelationRepository = specialTopicProductRelationRepository;
             _promotionProductRelationRepository = promotionProductRelationRepository;
+            _userAuthRepo = userAuthRepo;
         }
 
         #region methods
@@ -438,7 +442,6 @@ namespace Yintai.Hangzhou.Repository.Impl
             return SetCount(id, count, t);
         }
 
-
         public IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount
             , ProductSearchOption search)
         {
@@ -447,6 +450,7 @@ namespace Yintai.Hangzhou.Repository.Impl
                 (!search.User.HasValue || p.CreatedUser == search.User.Value) &&
                 (!search.Status.HasValue || p.Status == (int)search.Status.Value) &&
                 p.Status != (int)DataStatus.Deleted);
+            linq = _userAuthRepo.AuthFilter(linq, search.CurrentUser, search.CurrentUserRole) as IQueryable<ProductEntity>;
 
             if (!string.IsNullOrEmpty(search.Topic) &&
                 search.Topic.Trim().Length > 0)

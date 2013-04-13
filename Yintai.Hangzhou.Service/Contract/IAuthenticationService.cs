@@ -27,6 +27,13 @@ namespace Yintai.Hangzhou.Service.Contract
         WebSiteUser GetCurrentUser(HttpContextBase httpContext);
 
         /// <summary>
+        /// 获取当前用户
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
+        WebSiteUser CurrentUserFromHttpContext(HttpContext httpContext);
+
+        /// <summary>
         /// 是否已登录
         /// </summary>
         /// <param name="httpContext"></param>

@@ -88,6 +88,8 @@
     <Compile Include="Models\Mapping\BannerMap.cs" />
     <Compile Include="Models\Mapping\CardMap.cs" />
     <Compile Include="Models\Mapping\HotWordMap.cs" />
+    <Compile Include="Models\Mapping\UserAuthMap.cs" />
+    <Compile Include="Models\UserAuth.cs" />
     <Compile Include="Partials\ResourceEntity.cs" />
     <Compile Include="Partials\StoreEntityMap.cs" />
     <Compile Include="Models\AdminAccessRight.cs" />
@@ -173,8 +175,7 @@
     <Compile Include="Models\VerifyCode.cs" />
     <Compile Include="Models\VUser.cs" />
     <Compile Include="Models\VUserRole.cs" />
-    <Compile Include="Models\YintaiHangzhouContext..cs" />
-    <Compile Include="Models\YintaiHzhouContext.cs" />
+    <Compile Include="Models\YintaiHangzhouContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

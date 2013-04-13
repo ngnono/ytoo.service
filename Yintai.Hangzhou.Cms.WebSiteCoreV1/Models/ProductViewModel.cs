@@ -8,6 +8,10 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Model.Filters;
 using System.Linq;
+using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Architecture.Framework.ServiceLocation;
+using Yintai.Hangzhou.Service.Contract;
+using System.Web;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -26,7 +30,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public List<ProductViewModel> Products { get; set; }
     }
 
-    public class ProductViewModel : BaseViewModel
+    public class ProductViewModel : BaseViewModel,IValidatableObject
     {
         [Key]
         [Display(Name = "商品代码")]
@@ -172,55 +176,24 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
                 return null;
             return Resources.Where(r => r.Type == (int)ResourceType.Sound);
         } }
-    
-    }
-    public class ProductSearchOptionViewModel 
-    {
-        [Display(Name = "商品代码")]
-        public int? PId { get; set; }
-        [Display(Name = "商品名称")]
-        public string Name { get; set; }
-        [Display(Name = "状态")]
-        public DataStatus? Status { get; set; }
-        [Display(Name = "排序")]
-        public ProductSortOrder? OrderBy { get; set; }
-        [Display(Name = "创建人代码")]
-        public int? User { get; set; }
-        [UIHint("Association")]
-        [AdditionalMetadata("controller", "store")]
-        [AdditionalMetadata("displayfield", "Name")]
-        [AdditionalMetadata("searchfield", "name")]
-        [AdditionalMetadata("valuefield", "Name")]
-        [Display(Name = "门店")]
-        public string Store { get; set; }
-        [UIHint("Association")]
-        [AdditionalMetadata("controller", "tag")]
-        [AdditionalMetadata("displayfield", "Name")]
-        [AdditionalMetadata("searchfield", "name")]
-        [AdditionalMetadata("valuefield", "Name")]
-        [Display(Name = "分类")]
-        public string Tag { get; set; }
-        [UIHint("Association")]
-        [AdditionalMetadata("controller", "brand")]
-        [AdditionalMetadata("displayfield", "Name")]
-        [AdditionalMetadata("searchfield", "name")]
-        [AdditionalMetadata("valuefield", "Name")]
-        [Display(Name = "品牌")]
-        public string Brand { get; set; }
-        [UIHint("Association")]
-        [AdditionalMetadata("controller", "specialtopic")]
-        [AdditionalMetadata("displayfield", "Name")]
-        [AdditionalMetadata("searchfield", "name")]
-        [AdditionalMetadata("valuefield", "Name")]
-        [Display(Name = "专题")]
-        public string Topic { get; set; }
 
-        [UIHint("Association")]
-        [AdditionalMetadata("controller", "promotion")]
-        [AdditionalMetadata("displayfield", "Name")]
-        [AdditionalMetadata("searchfield", "name")]
-        [AdditionalMetadata("valuefield", "Name")]
-        [Display(Name = "促销")]
-        public string Promotion { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            string errorUnAuthorizedDataAccess = "没有授权操作该门店和品牌！";
+            var currentUser = ServiceLocator.Current.Resolve<IAuthenticationService>().CurrentUserFromHttpContext(HttpContext.Current);
+            if (currentUser == null)
+                yield return new ValidationResult(errorUnAuthorizedDataAccess);
+            IUserAuthRepository authRepo = ServiceLocator.Current.Resolve<IUserAuthRepository>();
+            if (currentUser.Role == UserRole.Admin)
+                yield break;
+            if (!authRepo.Get(a=>a.UserId==currentUser.CustomerId)
+                .Any(a=>a.StoreId== this.Store_Id &&
+                         (a.BrandId==0 || a.BrandId == this.Brand_Id)))
+                yield return new ValidationResult(errorUnAuthorizedDataAccess);
+           
+            
+        }
     }
+  
 }

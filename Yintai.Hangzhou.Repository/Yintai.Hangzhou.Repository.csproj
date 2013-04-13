@@ -90,6 +90,7 @@
     <Compile Include="Contract\ITagRepository.cs" />
     <Compile Include="Contract\ITimeSeedRepository.cs" />
     <Compile Include="Contract\IUserAccountRepository.cs" />
+    <Compile Include="Contract\IUserAuthRepository.cs" />
     <Compile Include="Contract\IUserRoleRepository.cs" />
     <Compile Include="Contract\IVerifyCodeRepository.cs" />
     <Compile Include="Contract\IVUserRepository.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Impl\SpecialTopicRepository.cs" />
     <Compile Include="Impl\TagRepository.cs" />
     <Compile Include="Impl\TimeSeedRepository.cs" />
+    <Compile Include="Impl\UserAuthRepository.cs" />
     <Compile Include="Impl\UserRoleRepository.cs" />
     <Compile Include="Impl\VerifyCodeRepository.cs" />
     <Compile Include="Impl\CustomerRepository.cs" />

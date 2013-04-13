@@ -1,9 +1,10 @@
-﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.BrandCollectionViewModel
+﻿@using Yintai.Hangzhou.Model.Filters
+@using Yintai.Hangzhou.Model.Enums
+@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.Pager<UserAuthViewModel>
 @{
-    ViewBag.Title = "品牌列表";
-    BrandListSearchOption search = ViewBag.SearchOptions;
-    HtmlHelper<BrandListSearchOption> searchModelHelper = Html.HtmlHelperFor<BrandListSearchOption>();
-
+    ViewBag.Title = "数据授权列表";
+    UserAuthSearchOption search = ViewBag.SearchOptions ?? new UserAuthSearchOption();
+    HtmlHelper<UserAuthSearchOption> searchModelHelper = Html.HtmlHelperFor<UserAuthSearchOption>();
 }
 
 @section PageJsSection {
@@ -54,34 +55,38 @@
 @section PageBread
 {
     <ul class="breadcrumb">
-        <li>@Html.ActionLink2("配置管理", "Index","Configuration")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("权限管理", "Index", "Role")<span class="divider">/</span></li>
         <li class="active">@ViewBag.Title</li>
     </ul>
 }
 
 <h2>@ViewBag.Title</h2>
 <p>
-@Html.ActionLink2("新建", "Create", null, new { @class="btn btn-primary"})
-    </p>
-
-@using (Html.BeginForm("List", null, FormMethod.Get, new { @class = "form-horizontal searchForm-border" }))
+    @Html.ActionLink2("新建", "Create", null, new { @class = "btn btn-primary" })
+</p>
+@using (Html.BeginForm("List", "UserAuth", new {page=0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
 {
     @Html.ValidationSummary(true)
     <div class="row">
         <div class="span4">
-                        <div class="control-group">
-                <label class="control-label" for="Name">品牌代码</label>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.UserId)</label>
                 <div class="controls">
-                    @searchModelHelper.EditorFor(m => search.PId)
+                    @searchModelHelper.EditorFor(m => search.UserId)
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="Name">活动名称</label>
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.StoreId)</label>
                 <div class="controls">
-                    @searchModelHelper.EditorFor(m => search.Name)
+                    @searchModelHelper.EditorFor(m => search.StoreId)
                 </div>
             </div>
-           
+          <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Type)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Type)
+                </div>
+            </div>
             <div class="control-group">
                 <div class="control-label">
                     <button type="submit" class="btn">查询</button>
@@ -90,48 +95,54 @@
         </div>
         <div class="span4">
             <div class="control-group">
-                <label class="control-label" for="Name">排序</label>
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.BrandId)</label>
                 <div class="controls">
-                    @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Filters.GenericOrder>())
+                    @searchModelHelper.EditorFor(m => search.BrandId)
                 </div>
             </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.OrderBy)</label>
+                <div class="controls">
+                   @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<GenericOrder>())
+               
+                </div>
+            </div>
+           
+                      
         </div>
-        
+
     </div>
 }
 <table>
     <tr>
         <th>操作</th>
-        <th>品牌代码</th>
+        <th>编码</th>
 
-        <th>名称
+        <th>数据类型
         </th>
-        <th>英文名
+        <th>用户代码
         </th>
-        <th>描述
+        <th>用户昵称
         </th>
-        <th>索引字母
+        <th>门店
+        </th>
+        <th>品牌
         </th>
         <th>创建时间
         </th>
-        <th>更新时间
-        </th>
-        <th>网站地址
-        </th>
     </tr>
 
-    @foreach (var item in Model.Brands)
+    @foreach (var item in Model.Data)
     {
         <tr>
             <td>
-              <div class="btn-group">
+                <div class="btn-group">
                     <button class="btn btn-small">操作</button>
                     <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id })</li>
-                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id }) </li>
                         <li><a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
                     </ul>
 
@@ -139,33 +150,27 @@
             </td>
             <td>@Html.DisplayFor(modelItem => item.Id)</td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+               @Html.Label("", ((AuthDataType)item.Type).ToFriendlyString())
+            </td>
+            <td>@Html.DisplayFor(modelItem => item.UserId)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserNick)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EnglishName)
+                @Html.DisplayFor(modelItem => item.StoreName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.BrandName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Group)
-            </td>
-           
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedDate)
-            </td>
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.WebSite)
-            </td>
+
         </tr>
     }
 
 </table>
 @Html.Partial("PagerPartialView", this.Model)
-<div class="hide" id="delete-dialog" title="删除品牌">
-    <p>您确认要删除该条品牌吗？</p>
+<div class="hide" id="delete-dialog" title="删除授权">
+    <p>您确认要删除该条授权吗？</p>
 </div>

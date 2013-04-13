@@ -57,5 +57,9 @@ namespace Yintai.Hangzhou.Model.Filters
         [Display(Name = "促销")]
         public string Promotion { get; set; }
 
+
+        public int CurrentUser { get; set; }
+
+        public UserRole CurrentUserRole { get; set; }
     }
 }

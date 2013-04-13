@@ -25,15 +25,18 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         private IStoreRepository _storeRepository;
         private ITagRepository _tagRepository;
         private IResourceService _resourceService;
+        private IUserAuthRepository _authRepo;
         public PromotionController(IPromotionRepository promotionRepository
             ,IStoreRepository storeRepository
             ,ITagRepository tagRepository
-            ,IResourceService resourceService)
+            ,IResourceService resourceService
+            ,IUserAuthRepository authRepo)
         {
             this._promotionRepository = promotionRepository;
             _storeRepository = storeRepository;
             _tagRepository = tagRepository;
             _resourceService = resourceService;
+            _authRepo = authRepo;
         }
 
         public ActionResult Index()
@@ -47,37 +50,44 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             var storeList = new List<int>();
             if (!string.IsNullOrEmpty(search.Store))
                 storeList = _storeRepository.Get(s => s.Name.StartsWith(search.Store)).Select(s=>s.Id).ToList();
- 
-            var data = _promotionRepository.Get(e => (!search.PId.HasValue || e.Id== search.PId.Value)
+            
+            var linq= _promotionRepository.Get(e => (!search.PId.HasValue || e.Id== search.PId.Value)
                                                      && (string.IsNullOrEmpty(search.Name) || e.Name.ToLower().StartsWith(search.Name.ToLower()))
                                                      && (!search.Status.HasValue || e.Status == (int)search.Status.Value)
                                                      && e.Status != (int)DataStatus.Deleted
-                                                     && (string.IsNullOrEmpty(search.Store) || storeList.Any(m=>m==e.Store_Id))
-                                               , out totalCount
-                                               , request.PageIndex
-                                               , request.PageSize
-                                               , e =>
-                                               {
-                                                   if (!search.OrderBy.HasValue)
-                                                       return e.OrderByDescending(o => o.CreatedDate);
-                                                   else
-                                                   {
-                                                       switch (search.OrderBy.Value)
-                                                       {
-                                                           case GenericOrder.OrderByCreateUser:
-                                                               return e.OrderByDescending(o => o.CreatedUser);
-                                                           case GenericOrder.OrderByName:
-                                                               return e.OrderByDescending(o => o.Name);
-                                                           case GenericOrder.OrderByCreateDate:
-                                                           default:
-                                                               return e.OrderByDescending(o => o.CreatedDate);
+                                                     && (string.IsNullOrEmpty(search.Store) || storeList.Any(m=>m==e.Store_Id)));
+            linq = _authRepo.AuthFilter(linq, CurrentUser.CustomerId, CurrentUser.Role) as IQueryable<PromotionEntity>;
+            Func<IQueryable<PromotionEntity>, IOrderedQueryable<PromotionEntity>> orderBy = (IQueryable<PromotionEntity> e) =>
+           {
+               if (!search.OrderBy.HasValue)
+               {
+                   return e.OrderByDescending(o => o.CreatedDate);
+               }
+               else
+               {
+                   switch (search.OrderBy.Value)
+                   {
+                       case GenericOrder.OrderByCreateUser:
+                           return e.OrderByDescending(o => o.CreatedUser);
+                       case GenericOrder.OrderByName:
+                           return e.OrderByDescending(o => o.Name);
+                       case GenericOrder.OrderByCreateDate:
+                       default:
+                           return e.OrderByDescending(o => o.CreatedDate);
 
-                                                       }
-                                                   }
-                                               });
-            
+                   }
+               }
+           };
+            linq = orderBy(linq);
+            totalCount = linq.Count();
 
-            var vo = MappingManager.PromotionViewMapping(data.ToList());
+            var skipCount = (request.PageIndex - 1) * request.PageSize;
+
+            linq = skipCount == 0 ? linq.Take(request.PageSize) : linq.Skip(skipCount).Take(request.PageSize);
+
+                                            
+
+            var vo = MappingManager.PromotionViewMapping(linq.ToList());
 
             var v = new PromotionCollectionViewModel(request, totalCount) { Promotions = vo.ToList() };
             ViewBag.SearchOptions = search;
@@ -182,6 +192,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         }
 
         [HttpPost]
+        [UserAuthData]
         public JsonResult Delete( [FetchPromotion(KeyName = "id")]PromotionEntity entity)
         {
             try

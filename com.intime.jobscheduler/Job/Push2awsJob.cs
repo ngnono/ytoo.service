@@ -34,7 +34,15 @@ namespace com.intime.jobscheduler.Job
                 return;
             }
             if (needRebuild)
-                client.DeleteIndex(esIndex);
+            {
+                var response = client.DeleteIndex(esIndex);
+                if (response.OK)
+                    log.Info(string.Format("index:{0} is deleted!",esIndex));
+                else
+                {
+                    log.Info("remove index failed");
+                }
+            }
             IndexBrand(client, benchDate);
             IndexHotwork(client, benchDate);
             IndexStore(client, benchDate);

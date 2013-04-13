@@ -4,22 +4,19 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yintai.Architecture.Framework.Mapping;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
     public abstract class BaseViewModel
     {
-        public virtual T ToEntity<TSource,T>() where TSource:BaseViewModel
+        public virtual T ToEntity<T>()
             where T:class
         {
-            TSource source = this as TSource;
-            return Mapper.Map<TSource, T>(source);
+            return AutoMapper.Mapper.DynamicMap<T>(this);
         }
-        public virtual T FromEntity<TSource, T>(TSource entity) where T : BaseViewModel
-            where TSource:class
+        public virtual T FromEntity<T>(dynamic entity) where T : BaseViewModel
         {
-            return Mapper.Map<TSource, T>(entity);
+            return AutoMapper.Mapper.DynamicMap<T>(entity);
         }
 
     }

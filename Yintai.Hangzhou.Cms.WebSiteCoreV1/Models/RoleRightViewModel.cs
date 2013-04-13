@@ -31,13 +31,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public int Val { get; set; }
         public string[] RoleRightDisplay { get; set; }
 
-        public override T ToEntity<TSource, T>()
-        {
-           if (typeof(RoleEntity).IsAssignableFrom(typeof(T)))
-            {
 
-                var entity = base.ToEntity<RoleViewModel, RoleEntity>();
-                if (this.RoleRightDisplay != null)
+        public override T ToEntity<T>()
+        {
+
+            var entity = base.ToEntity<T>() as RoleEntity;
+            if (this.RoleRightDisplay != null)
                 entity.RoleAccessRights = (from right in this.RoleRightDisplay
                                            select new RoleAccessRightEntity()
                                            {
@@ -47,27 +46,17 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
                                               ,
                                                Id = 0
                                            }).ToList();
-                return entity as T;
-            } else
-            {
-                return base.ToEntity<TSource,T>();
-            }
-               
+            return entity as T;
+
         }
-        public override T FromEntity<TSource, T>(TSource entity)
+        public override T FromEntity<T>(dynamic entity)
         {
-            if (typeof(RoleEntity).IsAssignableFrom(typeof(TSource)))
-            {
-                var newEntity = entity as RoleEntity;
-                var roleModel = base.FromEntity<RoleEntity, RoleViewModel>(newEntity);
-                roleModel.RoleRightDisplay = (from right in newEntity.RoleAccessRights
-                                              select right.AccessRightId.ToString()).ToArray();
-                return roleModel as T;
-            }
-            else
-            {
-                return base.FromEntity<TSource, T>(entity);
-            }
+            var newEntity = entity as RoleEntity;
+            var roleModel = base.FromEntity<RoleViewModel>(newEntity);
+            roleModel.RoleRightDisplay = (from right in newEntity.RoleAccessRights
+                                          select right.AccessRightId.ToString()).ToArray();
+            return roleModel as T;
+
         }
     }
 
@@ -83,18 +72,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [AdditionalMetadata("searchfield", "name")]
         [AdditionalMetadata("valuefield", "Id")]
         public UserModel User { get; set; }
-        public override T FromEntity<TSource, T>(TSource entity)
+        public override T FromEntity<T>(dynamic entity)
         {
-           if (typeof(UserEntity).IsAssignableFrom(typeof(TSource)))
-           {
                var newEntity = entity as UserEntity;
                var roleService = ServiceLocator.Current.Resolve<IUserRoleRepository>();
                User =Mapper.Map<UserEntity,UserModel>(newEntity);
                Roles = (from role in roleService.FindRolesByUserId(newEntity.Id)
-                       select new RoleViewModel().FromEntity<RoleEntity, RoleViewModel>(role)).AsEnumerable();
+                       select new RoleViewModel().FromEntity<RoleViewModel>(role)).AsEnumerable();
                return this as T;
-           }
-            return default(T);
         }
         
     }

@@ -15,28 +15,36 @@ using Yintai.Hangzhou.Repository.Contract;
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 {
     [AdminAuthorize]
-    public class HotwordController:UserController
+    public class UserAuthController:UserController
     {
-         private readonly IHotWordRepository _hotwordRepo;
-         private IBrandRepository _brandRepo;
+        private IUserAuthRepository _authRepo;
+        private IStoreRepository _storeRepo;
+        private IBrandRepository _brandRep;
+        private ICustomerRepository _customerRepo;
 
-        public HotwordController(IHotWordRepository hotwordRepo,
-            IBrandRepository brandRepo)
+        public UserAuthController(IUserAuthRepository authRepo
+            ,IStoreRepository storeRepo
+            ,IBrandRepository brandRepo
+            ,ICustomerRepository customerRepo)
         {
-            _hotwordRepo = hotwordRepo;
-            _brandRepo = brandRepo;
+            _authRepo = authRepo;
+            _storeRepo = storeRepo;
+            _brandRep = brandRepo;
+            _customerRepo = customerRepo;
            
         }
-        public ActionResult Index(PagerRequest request,HotwordSearchOption search)
+        public ActionResult Index(PagerRequest request,UserAuthSearchOption search)
         {
             return List(request,search);
         }
 
-        public ActionResult List(PagerRequest request,HotwordSearchOption search)
+        public ActionResult List(PagerRequest request, UserAuthSearchOption search)
         {
             int totalCount;
-            var data = _hotwordRepo.Get(e => (!search.Type.HasValue || e.Type == search.Type.Value)
-                                               && (string.IsNullOrEmpty(search.Word) || e.Word.Contains(search.Word))
+            var data = _authRepo.Get(e => (!search.Type.HasValue || e.Type == search.Type.Value)
+                                            && (!search.BrandId.HasValue || e.BrandId == search.BrandId.Value)
+                                            && (!search.StoreId.HasValue || e.StoreId == search.StoreId.Value)
+                                            && (!search.UserId.HasValue || e.UserId == search.UserId.Value)
                                                && e.Status != (int)DataStatus.Deleted
                                              , out totalCount
                                              , request.PageIndex
@@ -52,7 +60,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                                                          case GenericOrder.OrderByCreateUser:
                                                              return e.OrderByDescending(o => o.CreatedUser);
                                                          case GenericOrder.OrderByName:
-                                                             return e.OrderByDescending(o => o.Word);
                                                          case GenericOrder.OrderByCreateDate:
                                                          default:
                                                              return e.OrderByDescending(o => o.CreatedDate);
@@ -62,10 +69,23 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                                                 
                                              });
 
-            var models = from d in data.ToList()
-                         select new HotwordViewModel().FromEntity<HotwordViewModel>(d);
+            var models =  data.Join(_customerRepo.GetAll(),o=>o.UserId,i=>i.Id,(o,i)=>new {UA=o,U=i})
+                           .Join(_storeRepo.GetAll(),o=>o.UA.StoreId,i=>i.Id,(o,i)=>new {UA=o.UA,U=o.U,S=i})
+                           .GroupJoin(_brandRep.GetAll(),o=>o.UA.BrandId,i=>i.Id,(o,i)=>new {UA=o.UA,U=o.U,S=o.S,B=i.FirstOrDefault()})
+                           .Select(o=>new UserAuthViewModel(){
+                             Id = o.UA.Id
+                             , BrandId = o.UA.BrandId
+                             , StoreId = o.UA.StoreId
+                             , Type = o.UA.Type
+                             , BrandName = o.B.Name
+                             , UserId = o.UA.UserId
+                             ,UserNick = o.U.Nickname
+                             , StoreName = o.S.Name
+                             ,Status = o.UA.Status.Value
+                           });
+                              
 
-            return View("List", new Pager<HotwordViewModel>(request, totalCount) { Data=models});
+            return View("List", new Pager<UserAuthViewModel>(request, totalCount) { Data=models.ToList()});
         }
 
         public ActionResult Create()
@@ -80,30 +100,27 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 ModelState.AddModelError("", "参数验证失败.");
                 return View();
             }
-            var entity = _hotwordRepo.Find(id.Value);
+            var entity = _authRepo.Find(id.Value);
             if (entity == null)
             {
                 throw new ApplicationException("entity not exists!");
             }
 
-            return View(new HotwordViewModel().FromEntity<HotwordViewModel>(entity));
+            return View(new UserAuthViewModel().FromEntity<UserAuthViewModel>(entity));
         }
 
         [HttpPost]
-        public ActionResult Create(FormCollection formCollection, HotwordViewModel vo)
+        public ActionResult Create(FormCollection formCollection, UserAuthViewModel vo)
         {
             if (ModelState.IsValid)
             {
-                if (vo.Type == (int)HotWordType.BrandStruct)
-                {
-                    vo.BrandName = _brandRepo.Find(vo.BrandId).Name;
-                }
-                var entity = vo.ToEntity<HotWordEntity>();
+                if (vo.Type == (int)AuthDataType.Promotion)
+                    vo.BrandId = 0;
+                var entity = vo.ToEntity<UserAuthEntity>();
                 entity.CreatedUser = base.CurrentUser.CustomerId;
                 entity.CreatedDate = DateTime.Now;
-                entity.UpdatedUser = base.CurrentUser.CustomerId;
-                entity.UpdatedDate = DateTime.Now;
-                _hotwordRepo.Insert(entity);
+                entity.Status = (int)DataStatus.Normal;
+                _authRepo.Insert(entity);
                 return RedirectToAction("Edit", new { Id = entity.Id});
             }
 
@@ -111,25 +128,22 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(FormCollection formCollection, HotwordViewModel vo)
+        public ActionResult Edit(FormCollection formCollection, UserAuthViewModel vo)
         {
             if (ModelState.IsValid)
             {
-                var entity = _hotwordRepo.Find(vo.Id);
+                if (vo.Type == (int)AuthDataType.Promotion)
+                    vo.BrandId = 0;
+                var entity = _authRepo.Find(vo.Id);
                 if (entity == null)
                     throw new ApplicationException("entity not exists!");
-                entity.SortOrder = vo.SortOrder;
                 entity.Status = vo.Status;
                 entity.Type = vo.Type;
-                entity.UpdatedDate = DateTime.Now;
-                entity.UpdatedUser = CurrentUser.CustomerId;
-                entity.Word = vo.Word;
-                if (entity.Type == (int)HotWordType.BrandStruct)
-                {
-                    vo.BrandName = _brandRepo.Find(vo.BrandId).Name;
-                    entity.Word = vo.BrandString;
-                }
-                _hotwordRepo.Update(entity);
+                entity.UserId = vo.UserId;
+                entity.StoreId = vo.StoreId;
+                entity.BrandId = vo.BrandId;
+               
+                _authRepo.Update(entity);
                 return RedirectToAction("List");
             }
             return View(vo);
@@ -139,18 +153,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         [HttpPost]
         public JsonResult Delete(int id)
         {
-            var entity = _hotwordRepo.Find(id);
+            var entity = _authRepo.Find(id);
             if (entity == null)
             {
 
                 return FailResponse();
             }
 
-            entity.UpdatedDate = DateTime.Now;
-            entity.UpdatedUser = CurrentUser.CustomerId;
-            entity.Status = (int)DataStatus.Deleted;
-
-            _hotwordRepo.Update(entity);
+            _authRepo.Delete(entity);
             return SuccessResponse();
         }
     }

@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Model.Filters;
+using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Hangzhou.Service.Contract;
+using System.Linq;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -24,7 +29,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public List<PromotionViewModel> Promotions { get; set; }
     }
 
-    public class PromotionViewModel : BaseViewModel
+    public class PromotionViewModel : BaseViewModel,IValidatableObject
     {
         [Key]
         public int Id { get; set; }
@@ -114,6 +119,21 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public Nullable<int> PublicationLimit { get; set; }
 
         public List<ResourceViewModel> Resources { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            string errorUnAuthorizedDataAccess = "没有授权操作该门店促销！";
+            var currentUser = ServiceLocator.Current.Resolve<IAuthenticationService>().CurrentUserFromHttpContext(HttpContext.Current);
+            if (currentUser == null)
+                yield return new ValidationResult(errorUnAuthorizedDataAccess);
+            IUserAuthRepository authRepo = ServiceLocator.Current.Resolve<IUserAuthRepository>();
+            if (currentUser.Role == UserRole.Admin)
+                yield break;
+            if (!authRepo.Get(a=>a.UserId==currentUser.CustomerId)
+                .Any(a=>a.StoreId== this.Store_Id))
+                yield return new ValidationResult(errorUnAuthorizedDataAccess);
+           
+        }
     }
 
     public class PromotionListSearchOption

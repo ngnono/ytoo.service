@@ -191,6 +191,7 @@
     <None Include="Properties\app.manifest" />
     <None Include="quartz_jobs.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,7 @@ using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
+using Yintai.Hangzhou.Model.Filters;
 using MappingManager = Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager.MappingManager;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
@@ -27,18 +28,21 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         private readonly IPromotionProductRelationRepository _pprRepository;
         private IStoreRepository _storeRepository;
         private IResourceService _resourceService;
+        private IUserAuthRepository _userAuthRepo;
 
         public ProductController(IProductRepository productRepository
             , ISpecialTopicProductRelationRepository specialTopicProductRelationRepository
             , IPromotionProductRelationRepository promotionProductRelationRepository
             ,IStoreRepository storeRepository
-            ,IResourceService resourceService)
+            ,IResourceService resourceService
+            ,IUserAuthRepository userAuthRepo)
         {
             _productRepository = productRepository;
             _stprRepository = specialTopicProductRelationRepository;
             _pprRepository = promotionProductRelationRepository;
             _storeRepository = storeRepository;
             _resourceService = resourceService;
+            _userAuthRepo = userAuthRepo;
         }
 
         public ActionResult Index()
@@ -46,14 +50,16 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return View();
         }
 
-        public ActionResult List(ProductSearchOptionViewModel search, PagerRequest request)
+        public ActionResult List(ProductSearchOption search, PagerRequest request)
         {
             int totalCount;
+            search.CurrentUser = CurrentUser.CustomerId;
+            search.CurrentUserRole = CurrentUser.Role;
             IQueryable<ProductEntity> data = _productRepository.Search(
                 request.PageIndex
                 , request.PageSize
                 , out totalCount
-                , MappingManager.MapCommon<ProductSearchOptionViewModel,ProductSearchOption>(search)
+                , MappingManager.MapCommon<ProductSearchOption,ProductSearchOption>(search)
                 );
            
 
@@ -101,6 +107,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 var entity = MappingManager.ProductViewMapping(vo);
                 entity.CreatedUser = CurrentUser.CustomerId;
                 entity.UpdatedUser = CurrentUser.CustomerId;
@@ -263,6 +270,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return pi;
         }
         [HttpPost]
+        [UserAuthData]
         public JsonResult Delete([FetchProduct(KeyName = "id")]ProductEntity entity)
         {
             try

@@ -2,17 +2,52 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Nest;
 
 namespace com.intime.jobscheduler.Job
 {
     class ESPromotion
     {
+        private DateTime _createdDate;
+        private DateTime _startDate;
+        private DateTime _endDate;
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime StartDate { get; set; }
-        public System.DateTime EndDate { get; set; }
+        public System.DateTime CreatedDate
+        {
+            get
+            {
+                return  _createdDate.ToUniversalTime();
+            }
+            set
+            {
+                _createdDate = value;
+            }
+        }
+        public System.DateTime StartDate
+        {
+            get
+            {
+                return  _startDate.ToUniversalTime();
+            }
+            set
+            {
+                _startDate = value;
+            }
+        }
+        public System.DateTime EndDate
+        {
+            get
+            {
+                return  _endDate.ToUniversalTime();
+            }
+            set
+            {
+                _endDate = value;
+            }
+        }
         public int Status { get; set; }
         public int FavoriteCount { get; set; }
         public ESStore Store { get; set; }

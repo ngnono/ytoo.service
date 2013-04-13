@@ -5,8 +5,8 @@
 @model ProductCollectionViewModel
 @{
     ViewBag.Title = "商品列表";
-    ProductSearchOptionViewModel search = ViewBag.SearchOptions ?? new ProductSearchOptionViewModel();
-    HtmlHelper<ProductSearchOptionViewModel> searchModelHelper = Html.HtmlHelperFor<ProductSearchOptionViewModel>();
+    ProductSearchOption search = ViewBag.SearchOptions ?? new ProductSearchOption();
+    HtmlHelper<ProductSearchOption> searchModelHelper = Html.HtmlHelperFor<ProductSearchOption>();
 
 }
 

@@ -459,6 +459,9 @@
     <Content Include="Views\Hotword\Create.cshtml" />
     <Content Include="Views\Hotword\Edit.cshtml" />
     <Content Include="Views\Shared\_AudioPlayer.cshtml" />
+    <Content Include="Views\UserAuth\List.cshtml" />
+    <Content Include="Views\UserAuth\Create.cshtml" />
+    <Content Include="Views\UserAuth\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
