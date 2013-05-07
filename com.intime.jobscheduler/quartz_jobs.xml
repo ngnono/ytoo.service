@@ -9,7 +9,7 @@
   </processing-directives>
 
   <schedule>
-
+<!--
     <job>
       <name>Push2aws</name>
       <group>Fashion</group>
@@ -20,11 +20,11 @@
       <job-data-map>
         <entry>
           <key>eshost</key>
-          <value>ec2-46-137-197-113.ap-southeast-1.compute.amazonaws.com</value>
+          <value>ec2-46-137-197-113.ap-southeast-1.compute.amazonaws.com:9200</value>
         </entry>
         <entry>
           <key>defaultindex</key>
-          <value>intimep</value>
+          <value>intime</value>
         </entry>
         <entry>
           <key>benchdate</key>
@@ -32,7 +32,7 @@
         </entry>
         <entry>
           <key>needrebuild</key>
-          <value>true</value>
+          <value>false</value>
         </entry>
       </job-data-map>
     </job>
@@ -48,6 +48,8 @@
         <cron-expression>0 0 0 * * ?</cron-expression>
       </cron>
     </trigger>
+    
+    -->
     <job>
       <name>Push2awsIncre</name>
       <group>Fashion</group>
@@ -58,7 +60,7 @@
       <job-data-map>
         <entry>
           <key>eshost</key>
-          <value>ec2-46-137-197-113.ap-southeast-1.compute.amazonaws.com</value>
+          <value>http://ec2-46-137-197-113.ap-southeast-1.compute.amazonaws.com:9200</value>
         </entry>
         <entry>
           <key>defaultindex</key>
@@ -66,7 +68,7 @@
         </entry>
         <entry>
           <key>interval</key>
-          <value>50</value>
+          <value>1</value>
         </entry>
       </job-data-map>
     </job>
@@ -79,9 +81,10 @@
         <job-name>Push2awsIncre</job-name>
         <job-group>Fashion</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
-        <cron-expression>0 0/50 * * * ?</cron-expression>
+        <cron-expression>0 0/3 * * * ?</cron-expression>
       </cron>
     </trigger>
+    <!--
     <job>
       <name>ApnsNotification</name>
       <group>Fashion</group>
@@ -112,7 +115,83 @@
         <cron-expression>0 0 12 * * ?</cron-expression>
       </cron>
     </trigger>
+-->
+    <!--
+    <job>
+      <name>ApnsCommonNotification</name>
+      <group>Fashion</group>
+      <description>push common notification every 10 seconds</description>
+      <job-type>com.intime.jobscheduler.Job.ApnsNotificationCommonJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>p12</key>
+          <value>cert\sandbox.p12</value>
+        </entry>
+        <entry>
+          <key>password</key>
+          <value>123456</value>
+        </entry>
+        <entry>
+          <key>intervalofsec</key>
+          <value>6000</value>
+        </entry>
+      </job-data-map>
+    </job>
 
+    <trigger>
+      <cron>
+        <name>Per10Seconds</name>
+        <group>Fashion</group>
+        <description>every 60 seconds</description>
+        <job-name>ApnsCommonNotification</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0/59 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    -->
+<!--
+    <job>
+      <name>PullawsIncre</name>
+      <group>Fashion</group>
+      <description>pull coupon status every 1 hour</description>
+      <job-type>com.intime.jobscheduler.Job.CouponStatusSyncJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>awshost</key>
+          <value>http://localhost:3000/storecoupon/logs</value>
+        </entry>
+        <entry>
+          <key>interval</key>
+          <value>120</value>
+        </entry>
+        <entry>
+          <key>publickey</key>
+          <value>intimedemo</value>
+        </entry>
+        <entry>
+          <key>privatekey</key>
+          <value>b7991360-8a0e-0130-a80d-375b77a2dfbe</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>Every1hr</name>
+        <group>Fashion</group>
+        <description>every 60 mins</description>
+        <job-name>PullawsIncre</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 0/3 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    -->
   </schedule>
 
 </job-scheduling-data>

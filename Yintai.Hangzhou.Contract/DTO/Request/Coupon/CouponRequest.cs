@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using Yintai.Hangzhou.Model.Enums;
 
@@ -33,7 +34,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Coupon
     public class CouponInfoGetListRequest : AuthPagerInfoRequest
     {
         public int? Sort { get; set; }
-
+        [DataMember(Name="type")]
+        public CouponRequestType? Type { get; set; }
         public CouponSortOrder CouponSortOrder
         {
             get { return (CouponSortOrder)(Sort == null ? 0 : Sort.Value); }

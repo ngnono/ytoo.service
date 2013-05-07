@@ -31,22 +31,22 @@ namespace Yintai.Hangzhou.Service.Impl
 
         private void AddCount(int userId, AccountType accountType, int setCount, int updateUserId)
         {
-            var numCount = _userAccountRepository.AddCount(userId, accountType, setCount, updateUserId);
+            //var numCount = _userAccountRepository.AddCount(userId, accountType, setCount, updateUserId);
 
-            if (numCount != 1)
-            {
-                Logger.Warn(String.Format("增加{4}发生影响行数不为1，userid={0},foverCount={1},updateId={2},numCount={3}", userId, setCount, updateUserId, numCount, accountType.ToString()));
-            }
+            //if (numCount != 1)
+            //{
+            //    Logger.Warn(String.Format("增加{4}发生影响行数不为1，userid={0},foverCount={1},updateId={2},numCount={3}", userId, setCount, updateUserId, numCount, accountType.ToString()));
+            //}
         }
 
         private void SubCount(int userId, AccountType accountType, int setCount, int? updateUserId)
         {
-            var numCount = _userAccountRepository.SubCount(userId, accountType, setCount, updateUserId);
+            //var numCount = _userAccountRepository.SubCount(userId, accountType, setCount, updateUserId);
 
-            if (numCount != 1)
-            {
-                Logger.Warn(String.Format("减少{4}发生影响行数不为1，userid={0},foverCount={1},updateId={2},numCount={3}", userId, setCount, updateUserId, numCount, accountType.ToString()));
-            }
+            //if (numCount != 1)
+            //{
+            //    Logger.Warn(String.Format("减少{4}发生影响行数不为1，userid={0},foverCount={1},updateId={2},numCount={3}", userId, setCount, updateUserId, numCount, accountType.ToString()));
+            //}
         }
 
         /// <summary>

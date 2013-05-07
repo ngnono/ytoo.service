@@ -24,16 +24,18 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Customer
 
     public class PortraitRequest : AuthRequest
     {
+        public ThumnImageType? Type { get; set; }
     }
 
     public class UploadLogoRequest : PortraitRequest
     {
-        public UploadLogoRequest(IAuth b)
+        public UploadLogoRequest(PortraitRequest b)
         {
             this.AuthUid = b.AuthUid;
             this.AuthUser = b.AuthUser;
             this.Method = DefineRestfulMethod.Create;
             this.Token = b.Token;
+            this.Type = b.Type.HasValue?b.Type.Value:ThumnImageType.Logo;
         }
 
         public HttpFileCollectionBase Files { get; set; }
@@ -41,12 +43,13 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Customer
 
     public class DestroyLogoRequest : PortraitRequest
     {
-        public DestroyLogoRequest(IAuth b)
+        public DestroyLogoRequest(PortraitRequest b)
         {
             this.AuthUid = b.AuthUid;
             this.AuthUser = b.AuthUser;
             this.Method = DefineRestfulMethod.Destroy;
             this.Token = b.Token;
+            this.Type = b.Type.HasValue ? b.Type.Value : ThumnImageType.Logo;
         }
     }
 

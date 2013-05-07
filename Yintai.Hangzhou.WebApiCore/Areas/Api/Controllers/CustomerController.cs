@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
@@ -6,7 +7,10 @@ using Yintai.Architecture.Common.Web.Mvc.ActionResults;
 using Yintai.Architecture.Common.Web.Mvc.Controllers;
 using Yintai.Hangzhou.Contract.Customer;
 using Yintai.Hangzhou.Contract.DTO.Request.Customer;
+using Yintai.Hangzhou.Contract.DTO.Response.Customer;
 using Yintai.Hangzhou.Model;
+using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
@@ -23,10 +27,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
     public class CustomerController : RestfulController
     {
         private readonly ICustomerDataService _customerService;
+        private ICustomerRepository _customerRepo;
+        private IResourceRepository _resourceRepo;
+        private IUserAccountRepository _useraccountRepo;
 
-        public CustomerController(ICustomerDataService customerService)
+        public CustomerController(ICustomerDataService customerService,
+            ICustomerRepository customerRepo,
+            IResourceRepository resourceRepo,
+            IUserAccountRepository useraccountRepo)
         {
             this._customerService = customerService;
+            _customerRepo = customerRepo;
+            _resourceRepo = resourceRepo;
+            _useraccountRepo = useraccountRepo;
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
@@ -55,16 +68,29 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
 
             }
+           var linq = _customerRepo.Get(u => u.Id == authUser.Id)
+                .GroupJoin(_resourceRepo.Get(r => r.SourceType == (int)SourceType.CustomerThumbBackground),
+                        o => o.Id,
+                        i => i.SourceId,
+                        (o, i) => new { C = o, RB = i })
+                .GroupJoin(_useraccountRepo.Get(ua => ua.Status != (int)DataStatus.Deleted),
+                        o => o.C.Id,
+                        i => i.User_Id,
+                        (o, i) => new { C = o.C, RB = o.RB, UA = i });
+           var response = from l in linq.ToList()
+                          select new CustomerInfoResponse().FromEntity<CustomerInfoResponse>(l.C
+                            , c => {
+                                var bgThum = l.RB.FirstOrDefault();
+                                if (bgThum != null)
+                                {
+                                    c.BackgroundLogo = bgThum.AbsoluteUrl;
+                                }
+                                c.CountsFromEntity(l.UA);
+                            }); ;
 
             return new RestfulResult
             {
-                Data = this._customerService.GetUserInfo(new GetUserInfoRequest
-                    {
-                        AuthUid = request.AuthUid,
-                        Method = request.Method,
-                        AuthUser = request.AuthUser,
-                        Token = request.Token
-                    })
+                Data = new ExecuteResult<CustomerInfoResponse>(response.FirstOrDefault())
             };
         }
 

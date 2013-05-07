@@ -7,7 +7,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Yintai.Hangzhou.Data.Models;
+
 using Newtonsoft.Json;
+using Yintai.Hangzhou.Model.ES;
+using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Model.Enums;
+using com.intime.fashion.common;
 
 namespace com.intime.jobscheduler.Job
 {
@@ -22,8 +27,8 @@ namespace com.intime.jobscheduler.Job
             var esIndex = data.GetString("defaultindex");
             var needRebuild = data.ContainsKey("needrebuild") ? data.GetBooleanValue("needrebuild") : false;
             var benchDate = BenchDate(context) ;
-
-            var client = new ElasticClient(new ConnectionSettings(esUrl,9200)
+            
+            var client = new ElasticClient(new ConnectionSettings(new Uri(esUrl))
                                     .SetDefaultIndex(esIndex)
                                     .SetMaximumAsyncConnections(10));
             ConnectionStatus connectionStatus;
@@ -47,11 +52,231 @@ namespace com.intime.jobscheduler.Job
             IndexHotwork(client, benchDate);
             IndexStore(client, benchDate);
             IndexTag(client, benchDate);
-            IndexProds(client, benchDate);
-            IndexPros(client,benchDate);
+            IndexResource(client, benchDate);
+            IndexProds(client, benchDate,null);
+            IndexPros(client,benchDate,null);
             IndexBanner(client, benchDate);
-            IndexSpecialTopic(client, benchDate);
-          
+            IndexSpecialTopic(client, benchDate,null);
+            IndexStorePromotion(client, benchDate);
+            IndexStorePromotionCode(client, benchDate);
+            IndexPromotionCode(client, benchDate);
+        }
+
+        private void IndexPromotionCode(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = from r in db.CouponHistories
+                            where (r.CreatedDate >= benchDate)
+                            select r;
+
+                int totalCount = prods.Count();
+                while (cursor < totalCount)
+                {
+                    var linq = prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size).ToList();
+                    foreach (var l in linq)
+                    {
+                        try
+                        {
+                            AwsHelper.SendMessage(l.TypeName
+                                , () => l.Composing());
+                            successCount++;
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Info(ex);
+                        }
+                    }
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} promotion codes in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+            
+        }
+
+        private void IndexStorePromotionCode(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = from r in db.StoreCoupons
+                            where (r.CreateDate >= benchDate || r.UpdateDate >= benchDate)
+                            select r;
+
+                int totalCount = prods.Count();
+                while (cursor < totalCount)
+                {
+                    var linq = prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size).ToList();
+                    foreach (var l in linq)
+                    {
+                        try
+                        {
+                            AwsHelper.SendMessage(l.TypeName
+                                , () => l.Composing());
+                            successCount++;
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Info(ex);
+                        }
+                    }
+                   
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} store codes in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+            
+        }
+
+
+        private void IndexStorePromotion(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = from r in db.StorePromotions
+                            where (r.CreateDate >= benchDate || r.UpdateDate >= benchDate)
+                            select r;
+
+                int totalCount = prods.Count();
+                client.MapFromAttributes<ESResource>();
+                while (cursor < totalCount)
+                {
+                    var linq = from l in prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size).ToList()
+                               select new ESStorePromotion().FromEntity<ESStorePromotion>(l);
+                    var result = client.IndexMany(linq);
+                    if (!result.IsValid)
+                    {
+                        foreach (var item in result.Items)
+                        {
+                            if (item.OK)
+                                successCount++;
+                            else
+                                log.Info(string.Format("id index failed:{0}", item.Id));
+                        }
+                    }
+                    else
+                        successCount += result.Items.Count();
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} store promotions in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+            
+        }
+
+        private void IndexResource(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = 100;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = from r in db.Resources
+                            where (r.CreatedDate >= benchDate || r.UpdatedDate >= benchDate)
+                            select new ESResource()
+                            {
+                                Id = r.Id,
+                                Status= r.Status,
+                                Domain = r.Domain,
+                                Name = r.Name,
+                                SortOrder = r.SortOrder,
+                                IsDefault = r.IsDefault,
+                                Type = r.Type,
+                                Width = r.Width,
+                                Height = r.Height,
+                                SourceId = r.SourceId,
+                                SourceType = r.SourceType
+
+                            };
+
+                int totalCount = prods.Count();
+                client.MapFromAttributes<ESResource>();
+                while (cursor < totalCount)
+                {
+                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
+                    if (!result.IsValid)
+                    {
+                        foreach (var item in result.Items)
+                        {
+                            if (item.OK)
+                                successCount++;
+                            else
+                                log.Info(string.Format("id index failed:{0}", item.Id));
+                        }
+                    }
+                    else
+                        successCount += result.Items.Count();
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} resources in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+            //update related source if any affected
+            if (successCount > 0 && CascadPush)
+            {
+                //index related products
+                log.Info("index products affected by related resources ");
+                IndexProds(client, null,
+                    (p, db) =>
+                    {
+                        return p.Where(prod => (from r in db.Resources
+                                                where r.SourceId == prod.Id
+                                                && (r.CreatedDate >= benchDate || r.UpdatedDate >= benchDate)
+                                                && r.SourceType == (int)SourceType.Product
+                                                select r.Id).Any());
+                    });
+                //index related promotions
+                log.Info("index promotions affected by related resources ");
+                IndexPros(client, null,
+                    (p, db) =>
+                    {
+                        return p.Where(prod => (from r in db.Resources
+                                                where r.SourceId == prod.Id
+                                                && (r.CreatedDate >= benchDate || r.UpdatedDate >= benchDate)
+                                                && r.SourceType == (int)SourceType.Promotion
+                                                select r.Id).Any());
+                    });
+                //index related specialtopics
+                log.Info("index specialtopics affected by related resources ");
+                IndexSpecialTopic(client, null,
+                    (p, db) =>
+                    {
+                        return p.Where(prod => (from r in db.Resources
+                                                where r.SourceId == prod.Id
+                                                && (r.CreatedDate >= benchDate || r.UpdatedDate >= benchDate)
+                                                && r.SourceType == (int)SourceType.SpecialTopic
+                                                select r.Id).Any());
+                    });
+            }
         }
 
         private void IndexUser(ElasticClient client, DateTime benchDate)
@@ -457,8 +682,8 @@ namespace com.intime.jobscheduler.Job
 
         }
 
-     
-        private void IndexSpecialTopic(ElasticClient client, DateTime benchDate)
+
+        private void IndexSpecialTopic(ElasticClient client, DateTime? benchDate, Func<IQueryable<SpecialTopicEntity>, YintaiHangzhouContext, IQueryable<SpecialTopicEntity>> whereCondition)
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
@@ -468,8 +693,15 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = from p in db.SpecialTopics
-                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                var linq = db.SpecialTopics.AsQueryable();
+                if (benchDate.HasValue)
+                    linq = linq.Where(p => p.CreatedDate >= benchDate.Value || p.UpdatedDate >= benchDate.Value);
+                else if (whereCondition != null)
+                {
+                    linq = whereCondition(linq, db);
+
+                }
+                var prods = from p in linq
                             let resource = (from r in db.Resources
                                             where r.SourceId == p.Id
                                             && r.SourceType == 9
@@ -518,14 +750,34 @@ namespace com.intime.jobscheduler.Job
             }
             sw.Stop();
             log.Info(string.Format("{0} special topics in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
-
+            if (successCount > 0 && CascadPush)
+            {
+                //index related products
+                log.Info("index products affected by related specialtopic ");
+                IndexProds(client, null,
+                    (p, db) =>
+                    {
+                        return p.Where(prod => (from pro in db.SpecialTopics
+                                                from ppr in db.SpecialTopicProductRelations
+                                                where ppr.SpecialTopic_Id == pro.Id
+                                                && (pro.CreatedDate >= benchDate || pro.UpdatedDate >= benchDate)
+                                                && ppr.Product_Id == prod.Id
+                                                select ppr.Product_Id).Any());
+                    });
+            }
         }
         protected virtual DateTime BenchDate(IJobExecutionContext context)
         {
             var data = context.JobDetail.JobDataMap;
              return data.ContainsKey("benchdate") ? data.GetDateTimeValue("benchdate") : DateTime.Today.AddDays(-1);
         }
-        private void IndexPros(ElasticClient client,DateTime benchDate)
+        protected virtual bool CascadPush
+        {
+            get {
+                return false;
+            }
+        }
+        private void IndexPros(ElasticClient client, DateTime? benchDate, Func<IQueryable<PromotionEntity>, YintaiHangzhouContext, IQueryable<PromotionEntity>> whereCondition)
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
@@ -535,9 +787,16 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = from p in db.Promotions
+                var linq = db.Promotions.AsQueryable();
+                if (benchDate.HasValue)
+                    linq = linq.Where(p => p.CreatedDate >= benchDate.Value || p.UpdatedDate >= benchDate.Value);
+                else if (whereCondition != null)
+                {
+                    linq = whereCondition(linq, db);
+
+                }
+                var prods = from p in linq
                             join s in db.Stores on p.Store_Id equals s.Id
-                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
                             let resource = (from r in db.Resources
                                            where r.SourceId == p.Id
                                            && r.SourceType == 2
@@ -604,10 +863,23 @@ namespace com.intime.jobscheduler.Job
             }
             sw.Stop();
             log.Info(string.Format("{0} promotions in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
-
+            if (successCount > 0 && CascadPush)
+            { 
+                //index related products
+                log.Info("index products affected by related promotions ");
+                IndexProds(client, null,
+                    (p,db) => {
+                        return p.Where(prod => (from pro in db.Promotions
+                                             from ppr in db.Promotion2Product
+                                             where ppr.ProId == pro.Id
+                                             && (pro.CreatedDate >= benchDate || pro.UpdatedDate >= benchDate)
+                                             && ppr.ProdId == prod.Id
+                                             select ppr.ProdId).Any());
+                    });
+            }
         }
 
-        private void IndexProds(ElasticClient client,DateTime benchDate)
+        private void IndexProds(ElasticClient client,DateTime? benchDate,Func<IQueryable<ProductEntity>,YintaiHangzhouContext,IQueryable<ProductEntity>> whereCondition)
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
@@ -617,11 +889,19 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = from p in db.Products
+                var linq = db.Products.AsQueryable();
+                if (benchDate.HasValue)
+                    linq = linq.Where(p => p.CreatedDate >= benchDate.Value || p.UpdatedDate >= benchDate.Value);
+                else if (whereCondition!=null)
+                {
+                    linq = whereCondition(linq, db);
+                   
+                }
+
+                var prods = from p in linq
                             join s in db.Stores on p.Store_Id equals s.Id
                             join b in db.Brands on p.Brand_Id equals b.Id
                             join t in db.Tags on p.Tag_Id equals t.Id
-                            where p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate
                             let resource = (from r in db.Resources
                                             where r.SourceId == p.Id
                                             && r.SourceType == 1
@@ -700,7 +980,6 @@ namespace com.intime.jobscheduler.Job
                                 SpecialTopic = specials,
                                 Promotion = promotions
                             };
-
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESProduct>();
                 while (cursor < totalCount)
@@ -726,5 +1005,6 @@ namespace com.intime.jobscheduler.Job
             log.Info(string.Format("{0} products in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
 
         }
+    
     }
 }

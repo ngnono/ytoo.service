@@ -6,8 +6,9 @@ using System.Text;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class ResourceEntity {
-        public string AbsoluteUrl {
+    public partial class ResourceEntity
+    {
+         public string AbsoluteUrl {
             get {
                 if (string.IsNullOrEmpty(Domain) &&
                     string.IsNullOrEmpty(Name))
@@ -15,5 +16,6 @@ namespace Yintai.Hangzhou.Data.Models
                 return Path.Combine(Domain, Name);
             }
         }
+      
     }
 }

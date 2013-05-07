@@ -40,7 +40,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult List(PagerRequest request,BrandListSearchOption search, int? sort)
         {
             int totalCount;
-            var data = _brandRepository.Get(e => (!search.PId.HasValue || e.Id == search.PId.Value)
+            var linq = _brandRepository.Get(e => (!search.PId.HasValue || e.Id == search.PId.Value)
                                                    && (string.IsNullOrEmpty(search.Name) || e.Name.ToLower().StartsWith(search.Name.ToLower()))
                                                    && e.Status != (int)DataStatus.Deleted
                                              , out totalCount
@@ -65,9 +65,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                                                      }
                                                  }
                                              });
-            var vo = MappingManager.BrandViewMapping(data.ToList());
+            var data = linq.GroupJoin(_resourceRepository.Get(r => r.SourceType == (int)SourceType.BrandLogo),
+                o => o.Id,
+                i => i.SourceId,
+                (o, i) => new { S = o,R = i});
+            var brands = from s in data.ToList()
+                         select new BrandViewModel().FromEntity<BrandViewModel>(s.S,
+                         b => (b as BrandViewModel).Resource= new ResourceViewModel().FromEntity<ResourceViewModel>(s.R.FirstOrDefault()));
 
-            var v = new BrandCollectionViewModel(request, totalCount) { Brands = vo.ToList() };
+            var v = new BrandCollectionViewModel(request, totalCount) { Brands = brands.ToList() };
 
             return View("List", v);
         }
@@ -79,8 +85,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 ModelState.AddModelError("", "参数验证失败.");
                 return View();
             }
-
-            var vo = MappingManager.BrandViewMapping(entity);
+            var vo = new BrandViewModel().FromEntity<BrandViewModel>(entity,
+                        b => b.Resource = new ResourceViewModel().FromEntity<ResourceViewModel>(_resourceRepository.Get(r => r.SourceId == b.Id && r.SourceType == (int)SourceType.BrandLogo).FirstOrDefault()));
 
             return View(vo);
         }
@@ -98,7 +104,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 return View();
             }
 
-            var vo = MappingManager.BrandViewMapping(entity);
+            var vo = new BrandViewModel().FromEntity<BrandViewModel>(entity,
+                       b => b.Resource = new ResourceViewModel().FromEntity<ResourceViewModel>(_resourceRepository.Get(r => r.SourceId == b.Id && r.SourceType == (int)SourceType.BrandLogo).FirstOrDefault()));
+
 
             return View(vo);
         }
@@ -111,7 +119,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 return View();
             }
 
-            var vo = MappingManager.BrandViewMapping(entity);
+            var vo = new BrandViewModel().FromEntity<BrandViewModel>(entity,
+                        b => b.Resource = new ResourceViewModel().FromEntity<ResourceViewModel>(_resourceRepository.Get(r => r.SourceId == b.Id && r.SourceType == (int)SourceType.BrandLogo).FirstOrDefault()));
+
 
             return View(vo);
         }

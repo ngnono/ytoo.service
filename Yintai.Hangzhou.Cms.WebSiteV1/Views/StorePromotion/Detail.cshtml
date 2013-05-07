@@ -1,0 +1,97 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.WebSupport.Helper
+@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.StorePromotionViewModel
+@{
+    ViewBag.Title = "兑换活动详情";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("促销管理", "Index","Promotion")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("兑换列表", "List")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+<h2>@ViewBag.Title</h2>
+<fieldset>
+<div class="display-label">@Html.LabelFor(model => model.Id)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.Id)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.Name)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.Name)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.Description)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.Description)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.Notice)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.Notice)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.InScopeNotice)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.InScopeNotice)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.MinPoints)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.MinPoints)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.UsageNotice)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.UsageNotice)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.ActiveStartDate)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.ActiveStartDate)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.ActiveEndDate)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.ActiveEndDate)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.CouponStartDate)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.CouponStartDate)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.CouponEndDate)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.CouponEndDate)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.Status)</div>
+<div class="display-field">
+    @Html.Label("", ((DataStatus)Model.Status).ToFriendlyString())
+</div>
+<div class="display-label">@Html.LabelFor(model => model.Rules)</div>
+<div class="display-field">
+    <table>
+        @foreach (var rule in Model.Rules)
+        { 
+            <tr>
+                <td>@Html.LabelFor(model => rule.RangeFrom)
+                    @Html.DisplayFor(model => rule.RangeFrom)</td>
+                <td>@Html.LabelFor(model => rule.RangeTo)
+                    @Html.DisplayFor(model => rule.RangeTo)
+                </td>
+                <td>@Html.LabelFor(model => rule.Ratio)
+                    @Html.DisplayFor(model => rule.Ratio)
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div class="display-label">@Html.LabelFor(model => model.CreateDate)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.CreateDate)
+</div>
+<div class="display-label">@Html.LabelFor(model => model.CreateUser)</div>
+<div class="display-field">
+    @Html.DisplayFor(model => model.CreateUser)
+</div>
+    </fieldset>
+<p>
+    @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
+</p>
+
+

@@ -8,6 +8,8 @@ namespace Yintai.Hangzhou.Service.Contract.Apis
         GroupCardPointResult GetPoint(GroupCardPointRequest request);
 
         GroupCardInfoResult GetInfo(GroupCardInfoRequest request);
+
+        GroupExchangeResult Exchange(GroupExchangeRequest request);
     }
 
     [DataContract(Name = "vipCard")]
@@ -31,7 +33,14 @@ namespace Yintai.Hangzhou.Service.Contract.Apis
         [DataMember(Name = "cardno")]
         public string CardNo { get; set; }
     }
-
+    [DataContract(Name = "vipCard")]
+    public class GroupExchangeRequest
+    {
+        [DataMember(Name = "cardno")]
+        public string CardNo { get; set; }
+        [DataMember(Name = "identityno")]
+        public string IdentityNo { get; set; }
+    }
     [DataContract]
     public abstract class GroupCardResult
     {
@@ -81,5 +90,20 @@ namespace Yintai.Hangzhou.Service.Contract.Apis
 
         [DataMember(Name = "Type")]
         public string Type { get; set; }
+    }
+    [DataContract]
+    public class GroupExchangeResult : GroupCardResult
+    {
+        [DataMember(Name = "Success")]
+        public bool Success { get; set; }
+
+        [DataMember(Name = "ErrorCode")]
+        public int ErrorCode { get; set; }
+
+        [DataMember(Name = "Desc")]
+        public string Desc { get; set; }
+
+        [DataMember(Name = "Point")]
+        public decimal Point { get; set; }
     }
 }

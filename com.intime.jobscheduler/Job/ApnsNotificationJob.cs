@@ -17,7 +17,6 @@ namespace com.intime.jobscheduler.Job
     {
         public void Execute(IJobExecutionContext context)
         {
-            ILog log = LogManager.GetLogger(typeof(ApnsNotificationJob));
             JobDataMap data = context.JobDetail.JobDataMap;
             var certFile = data.GetString("p12");
             var certPwd = data.GetString("password");
@@ -34,11 +33,11 @@ namespace com.intime.jobscheduler.Job
             var appleCert = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, certFile));
             push.RegisterAppleService(new ApplePushChannelSettings(appleCert, certPwd));
            
-            QueueNotification(push);
+            QueueNotification(push,context);
             push.StopAllServices();
         }
 
-        private void QueueNotification(PushBroker push)
+        protected virtual void QueueNotification(PushBroker push,IJobExecutionContext context)
         {
             ILog log = LogManager.GetLogger(typeof(ApnsNotificationJob));
             int cursor = 0;
@@ -89,25 +88,25 @@ namespace com.intime.jobscheduler.Job
 
         private void NotificationFailed(object sender, PushSharp.Core.INotification notification, Exception error)
         {
-            ILog log = LogManager.GetLogger(typeof(ApnsNotificationJob));
+            ILog log = LogManager.GetLogger(this.GetType());
             log.Error(error);
         }
 
         private void ServiceException(object sender, Exception error)
         {
-            ILog log = LogManager.GetLogger(typeof(ApnsNotificationJob));
+            ILog log = LogManager.GetLogger(this.GetType());
             log.Error(error);
         }
 
         private void ChannelException(object sender, PushSharp.Core.IPushChannel pushChannel, Exception error)
         {
-            ILog log = LogManager.GetLogger(typeof(ApnsNotificationJob));
+            ILog log = LogManager.GetLogger(this.GetType());
             log.Error(error);
         }
 
         private void NotificationSent(object sender, PushSharp.Core.INotification notification)
         {
-            ILog log = LogManager.GetLogger(typeof(ApnsNotificationJob));
+            ILog log = LogManager.GetLogger(this.GetType());
             log.Info("sent:"+notification);
         }
     }

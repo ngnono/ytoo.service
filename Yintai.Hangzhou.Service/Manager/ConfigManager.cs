@@ -20,6 +20,7 @@ namespace Yintai.Hangzhou.Service.Manager
         private static readonly string _defUpload = ConfigurationManager.AppSettings["resourcedefdomain"];
 
         private static readonly string _resourcedomain = ConfigurationManager.AppSettings["resourcedomain"];
+        private static readonly string _point2GroupRatio = ConfigurationManager.AppSettings["pointratio2group"];
 
         public static int GetCacheSeed()
         {
@@ -121,6 +122,13 @@ namespace Yintai.Hangzhou.Service.Manager
         public static string GetGroupCardQueryScoreUrl()
         {
             return GetAppConfigParamsValue(_GroupCradQueryPointUrl);
+        }
+        public static decimal Point2GroupRatio
+        {
+            get
+            {
+                return decimal.Parse(_point2GroupRatio);
+            }
         }
     }
 }

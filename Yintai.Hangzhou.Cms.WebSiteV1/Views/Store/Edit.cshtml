@@ -15,7 +15,8 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm("Edit", "Store", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
     @Html.ValidationSummary(true)
     <fieldset>
 
@@ -91,7 +92,30 @@
             @Html.EditorFor(model => model.GpsAlt)
             @Html.ValidationMessageFor(model => model.GpsAlt)
         </div>
+        <div class="editor-label">
+            <span>门店图片</span>
+         </div>
+        <div class="editor-field">
+            @if (this.Model.Resources != null && Model.Resources.Count() > 0)
+            {
+                var re = Model.Resources.First();
+                <table>
+                        <tr>
+                            <td>
 
+                                    <img width="120" src="@String.Concat(re.Domain, re.Name, "_630x0.jpg")" alt="630x0" />
+                            </td>
+                            <td><label>替换为 =&gt;</label></td>
+                            <td >
+                                <input type="file" name="files_@(re.Id)" />
+                            </td>  
+                         </tr>
+
+                </table>
+            } else {
+             <input type="file" id="files" name="files" />
+            }
+        </div>
         <p>
             <input type="submit" value="保存" class="btn btn-primary" />
             @Html.ActionLink2("返回列表", "List", null, new { @class="btn"})

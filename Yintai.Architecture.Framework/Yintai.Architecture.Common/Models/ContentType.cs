@@ -21,6 +21,7 @@ namespace Yintai.Architecture.Common.Models
                     ,{"image/png", "png" }
                     ,{"image/jpeg","jpeg"}
                     ,{"image/gif","gif"}
+                    ,{"image/jpg","jpeg"}
                 };
 
             Sound = new Dictionary<string, string>

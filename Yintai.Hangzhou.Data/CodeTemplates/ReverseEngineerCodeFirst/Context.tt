@@ -4,6 +4,8 @@
 
     var efHost = (EfTextTemplateHost)Host;
     var code = new CodeGenerationTools(this);
+	var className = efHost.EntityContainer.Name;
+	className = "YintaiHangzhouContext";
 #>
 using System;
 using System.Data.Entity;
@@ -18,21 +20,21 @@ using <#= code.EscapeNamespace(efHost.MappingNamespace) #>;
 
 namespace <#= code.EscapeNamespace(efHost.Namespace) #>
 {
-    public partial class <#= efHost.EntityContainer.Name #> : DbContext
+    public partial class <#= className #> : DbContext
     {
         private static readonly Architecture.Common.Logger.ILog _log;
 
-        static <#= efHost.EntityContainer.Name #>()
+        static <#= className #>()
         {
-            Database.SetInitializer<<#= efHost.EntityContainer.Name #>>(null);
+            Database.SetInitializer<<#= className #>>(null);
             _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
         }
 
 		/// <summary>
         /// 正式环境使用，无跟踪
         /// </summary>
-        public <#= efHost.EntityContainer.Name #>()
-            : this("Name=<#= efHost.EntityContainer.Name #>", "v1")
+        public <#= className #>()
+            : this("Name=<#= className #>", "v1")
         {
         }
 
@@ -41,19 +43,19 @@ namespace <#= code.EscapeNamespace(efHost.Namespace) #>
         /// </summary>
         /// <param name="nameOrConnectionString"></param>
         /// <param name="version"></param>
-        public <#= efHost.EntityContainer.Name #>(string nameOrConnectionString, string version)
+        public <#= className #>(string nameOrConnectionString, string version)
             : base(nameOrConnectionString)
         {
         }
 
         #region ef tracing
 
-		public <#= efHost.EntityContainer.Name #>(string nameOrConnectionString)
+		public <#= className #>(string nameOrConnectionString)
             : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
         {
         }
 
-        public <#= efHost.EntityContainer.Name #>(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
+        public <#= className #>(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
             : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
         {
 			var ctx = ((IObjectContextAdapter)this).ObjectContext;

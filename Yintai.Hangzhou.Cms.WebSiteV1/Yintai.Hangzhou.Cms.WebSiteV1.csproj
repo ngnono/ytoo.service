@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="EFCachingProvider">
       <HintPath>..\_dll\EFCachingProvider.dll</HintPath>
     </Reference>
@@ -94,7 +97,6 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
@@ -133,8 +135,22 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\d\Yintai.Architecture.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Yintai.Architecture.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\d\Yintai.Architecture.Framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Content\report\demo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>demo.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -462,6 +478,13 @@
     <Content Include="Views\UserAuth\List.cshtml" />
     <Content Include="Views\UserAuth\Create.cshtml" />
     <Content Include="Views\UserAuth\Edit.cshtml" />
+    <Content Include="Views\StorePromotion\List.cshtml" />
+    <Content Include="Views\StorePromotion\Create.cshtml" />
+    <Content Include="Views\StorePromotion\EditorTemplates\StorePromotionViewModel.cshtml" />
+    <Content Include="Views\StorePromotion\EditorTemplates\StorePromotionScopeViewModel.cshtml" />
+    <Content Include="Views\StorePromotion\EditorTemplates\StorePromotionRuleViewModel.cshtml" />
+    <Content Include="Views\StorePromotion\Edit.cshtml" />
+    <Content Include="Views\StorePromotion\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -484,6 +507,15 @@
       <Project>{a2e82216-56cc-45bf-b671-db8cc464d573}</Project>
       <Name>Yintai.Hangzhou.WebSupport</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Content\report\demo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>demo.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

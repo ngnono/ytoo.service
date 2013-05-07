@@ -257,5 +257,15 @@ namespace Yintai.Hangzhou.Service.Impl.Apis
 
             return result;
         }
+
+
+        public GroupExchangeResult Exchange(GroupExchangeRequest request)
+        {
+            //todo: add implementation here
+            return new GroupExchangeResult() {
+                 Success = true,
+                 
+            };
+        }
     }
 }

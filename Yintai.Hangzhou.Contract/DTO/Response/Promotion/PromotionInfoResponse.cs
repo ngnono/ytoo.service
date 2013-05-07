@@ -6,6 +6,7 @@ using Yintai.Hangzhou.Contract.DTO.Response.Coupon;
 using Yintai.Hangzhou.Contract.DTO.Response.Customer;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 using Yintai.Hangzhou.Contract.DTO.Response.Store;
+using Yintai.Hangzhou.Contract.Response;
 
 namespace Yintai.Hangzhou.Contract.DTO.Response.Promotion
 {
@@ -27,7 +28,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Promotion
     }
 
     [DataContract]
-    public class PromotionInfo
+    public class PromotionInfo : BaseResponse
     {
         [DataMember(Name = "id")]
         public int Id { get; set; }

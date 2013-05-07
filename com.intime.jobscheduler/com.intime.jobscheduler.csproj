@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>com.intime.jobscheduler</RootNamespace>
     <AssemblyName>com.intime.jobscheduler</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -38,6 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,6 +48,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -79,9 +81,8 @@
     <Reference Include="Devtalk.EF.CodeFirst">
       <HintPath>..\packages\EFCodeFirst.CreateTablesOnly.1.0.2\lib\Devtalk.EF.CodeFirst.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -100,25 +101,25 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Nest">
-      <HintPath>..\packages\NEST.0.9.21.0\lib\NET4\Nest.dll</HintPath>
+      <HintPath>..\packages\NEST.0.10.0.0\lib\NET4\Nest.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PushSharp.Android">
-      <HintPath>..\packages\PushSharp.2.0.1.0\lib\net40\PushSharp.Android.dll</HintPath>
+      <HintPath>..\packages\PushSharp.2.0.4.0\lib\net40\PushSharp.Android.dll</HintPath>
     </Reference>
     <Reference Include="PushSharp.Apple">
-      <HintPath>..\packages\PushSharp.2.0.1.0\lib\net40\PushSharp.Apple.dll</HintPath>
+      <HintPath>..\packages\PushSharp.2.0.4.0\lib\net40\PushSharp.Apple.dll</HintPath>
     </Reference>
     <Reference Include="PushSharp.Core">
-      <HintPath>..\packages\PushSharp.2.0.1.0\lib\net40\PushSharp.Core.dll</HintPath>
+      <HintPath>..\packages\PushSharp.2.0.4.0\lib\net40\PushSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="PushSharp.Windows">
-      <HintPath>..\packages\PushSharp.2.0.1.0\lib\net40\PushSharp.Windows.dll</HintPath>
+      <HintPath>..\packages\PushSharp.2.0.4.0\lib\net40\PushSharp.Windows.dll</HintPath>
     </Reference>
     <Reference Include="PushSharp.WindowsPhone">
-      <HintPath>..\packages\PushSharp.2.0.1.0\lib\net40\PushSharp.WindowsPhone.dll</HintPath>
+      <HintPath>..\packages\PushSharp.2.0.4.0\lib\net40\PushSharp.WindowsPhone.dll</HintPath>
     </Reference>
     <Reference Include="Quartz">
       <HintPath>..\packages\Quartz.2.1.2\lib\net40\Quartz.dll</HintPath>
@@ -127,6 +128,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -147,18 +150,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Job\ApnsNotificationCommonJob.cs" />
     <Compile Include="Job\ApnsNotificationJob.cs" />
+    <Compile Include="Job\CouponStatusSyncJob.cs" />
     <Compile Include="Job\Push2awsIncreJob.cs" />
-    <Compile Include="model\ESBanner.cs" />
-    <Compile Include="model\ESBrand.cs" />
-    <Compile Include="model\ESComment.cs" />
-    <Compile Include="model\ESHotword.cs" />
-    <Compile Include="model\ESProduct.cs" />
-    <Compile Include="model\ESResource.cs" />
-    <Compile Include="model\ESSpecialTopic.cs" />
-    <Compile Include="model\ESStore.cs" />
-    <Compile Include="model\ESTag.cs" />
-    <Compile Include="model\ESPromotion.cs" />
     <Compile Include="Job\Push2awsJob.cs" />
     <Compile Include="MainJobService.cs">
       <SubType>Component</SubType>
@@ -166,7 +161,6 @@
     <Compile Include="MainJobService.Designer.cs">
       <DependentUpon>MainJobService.cs</DependentUpon>
     </Compile>
-    <Compile Include="model\ESUser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -195,9 +189,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
+      <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
+      <Name>com.intime.fashion.common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
       <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>
       <Name>Yintai.Hangzhou.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
+      <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
+      <Name>Yintai.Hangzhou.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

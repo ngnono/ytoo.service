@@ -1,6 +1,3 @@
 ﻿@model DateTime?
-@{
-    System.Linq.Expressions.Expression<Func<DateTime,DateTime>> ex = model => model;
-    string clientId = ViewData.TemplateInfo.GetFullHtmlFieldId(ExpressionHelper.GetExpressionText(ex));  
- }
-<input type="text" class="datetimepicker" id="@clientId" name="@clientId" value="@(ViewData.TemplateInfo.FormattedModelValue)" />
+
+@Html.TextBoxFor(m => m, new { @class = "datetimepicker" })

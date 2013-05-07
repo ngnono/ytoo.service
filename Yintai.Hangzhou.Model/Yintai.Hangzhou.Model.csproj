@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Yintai.Hangzhou.Model</RootNamespace>
     <AssemblyName>Yintai.Hangzhou.Model</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,10 +31,22 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Nest">
+      <HintPath>..\packages\NEST.0.9.21.0\lib\NET4\Nest.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -57,6 +71,7 @@
     <Compile Include="Enums\BrandSortOrder.cs" />
     <Compile Include="Enums\BusinessStatus.cs" />
     <Compile Include="Enums\CardType.cs" />
+    <Compile Include="Enums\CouponStatus.cs" />
     <Compile Include="Enums\HotWordType.cs" />
     <Compile Include="Enums\CouponBusinessStatus.cs" />
     <Compile Include="Enums\CustomerSortOrder.cs" />
@@ -64,12 +79,26 @@
     <Compile Include="Enums\Gender.cs" />
     <Compile Include="Enums\LikeType.cs" />
     <Compile Include="Enums\MathMethod.cs" />
+    <Compile Include="Enums\NotificationStatus.cs" />
     <Compile Include="Enums\PromotionCountType.cs" />
     <Compile Include="Enums\ResourceSortOrder.cs" />
     <Compile Include="Enums\SpecialTopicOrder.cs" />
+    <Compile Include="Enums\StorePromotionType.cs" />
     <Compile Include="Enums\StoreSortOrder.cs" />
     <Compile Include="Enums\TagSortOrder.cs" />
     <Compile Include="Enums\UserRole.cs" />
+    <Compile Include="ESModel\ESBanner.cs" />
+    <Compile Include="ESModel\ESBrand.cs" />
+    <Compile Include="ESModel\ESComment.cs" />
+    <Compile Include="ESModel\ESHotword.cs" />
+    <Compile Include="ESModel\ESProduct.cs" />
+    <Compile Include="ESModel\ESPromotion.cs" />
+    <Compile Include="ESModel\ESResource.cs" />
+    <Compile Include="ESModel\ESSpecialTopic.cs" />
+    <Compile Include="ESModel\ESStore.cs" />
+    <Compile Include="ESModel\ESStorePromotion.cs" />
+    <Compile Include="ESModel\ESTag.cs" />
+    <Compile Include="ESModel\ESUser.cs" />
     <Compile Include="Filters\BannerSearchOption.cs" />
     <Compile Include="Filters\CardSearchOption.cs" />
     <Compile Include="Filters\HotwordSearchOption.cs" />
@@ -78,6 +107,7 @@
     <Compile Include="Filters\GenericOrder.cs" />
     <Compile Include="Filters\ProductFilter.cs" />
     <Compile Include="Filters\ProductSearchOption.cs" />
+    <Compile Include="Filters\StorePromotionSearchOption.cs" />
     <Compile Include="Filters\UserAuthSearchOption.cs" />
     <Compile Include="UserAccountModel.cs" />
     <Compile Include="WebSiteUser.cs" />

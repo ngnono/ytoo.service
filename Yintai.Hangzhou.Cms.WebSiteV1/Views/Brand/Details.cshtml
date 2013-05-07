@@ -48,7 +48,15 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.UpdatedDate)
     </div>
+     <div class="display-label">图片</div>
+    <div class="display-field">
+        @if (this.Model.Resource != null)
+        {
+            var re = Model.Resource;          
+            <img width="120" src="@String.Concat(re.Domain, re.Name, "_630x0.jpg")" alt="630x0" />
 
+        }
+    </div>
    
 
 </fieldset>

@@ -58,6 +58,10 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
 
             Current.Register<IHotWordRepository, HotWordRepository>();
             Current.Register<IUserAuthRepository, UserAuthRepository>();
+            Current.Register<IStoreCouponsRepository, StoreCouponsRepository>();
+            Current.Register<IStorePromotionRepository, StorePromotionRepository>();
+            Current.Register<IPointOrderRuleRepository, PointOrderRuleRepository>();
+            Current.Register<IStorePromotionScopeRepository, StorePromotionScopeRepository>();
         }
 
         #endregion

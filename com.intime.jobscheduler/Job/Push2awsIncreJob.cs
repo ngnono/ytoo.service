@@ -14,5 +14,12 @@ namespace com.intime.jobscheduler.Job
             int intervalMins =  dataMap.ContainsKey("interval") ? dataMap.GetIntValue("interval") : 5;
             return DateTime.Now.AddMinutes(-intervalMins);
         }
+        protected override bool CascadPush
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }

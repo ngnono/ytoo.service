@@ -1,6 +1,8 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Yintai.Hangzhou.Contract.DTO.Response.Favorite;
 using Yintai.Hangzhou.Contract.Response;
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 
@@ -23,7 +25,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
     }
 
     [DataContract(Name = "userinfo")]
-    public abstract class UserInfoResponse : BaseResponse
+    public  class UserInfoResponse : BaseResponse
     {
         [DataMember(Name = "id")]
         public int Id { get; set; }
@@ -69,6 +71,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
 
         [DataMember(Name = "logo")]
         public string Logo { get; set; }
+
+        [DataMember(Name="logobg")]
+        public string BackgroundLogo { get; set; }
 
         [IgnoreDataMember]
         public UserLevel Level { get; set; }
@@ -120,6 +125,39 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
         /// </summary>
         [DataMember(Name = "sharetotal")]
         public int ShareCount { get; set; }
+
+        public void CountsFromEntity(IEnumerable<UserAccountEntity> entities)
+        {
+            if (entities == null)
+                return;
+            foreach (var item in entities)
+            {
+                switch (item.AccountType)
+                {
+                    case (int)AccountType.ConsumptionCount:
+                        ConsumptionCount = (int)item.Amount;
+                        break;
+                    case (int)AccountType.Coupon:
+                        CouponCount = (int)item.Amount;
+                        break;
+                    case (int)AccountType.FavorCount:
+                        FavorCount = (int)item.Amount;
+                        break;
+                    case (int)AccountType.IlikeCount:
+                        ILikeCount = (int)item.Amount;
+                        break;
+                    case (int)AccountType.LikeMeCount:
+                        LikeMeCount = (int)item.Amount;
+                        break;
+                    case (int)AccountType.Point:
+                        PointCount = (int)item.Amount;
+                        break;
+                    case (int)AccountType.ShareCount:
+                        ShareCount = (int)item.Amount;
+                        break;
+                }
+            }
+        }
     }
 
     [DataContract(Name = "customerinfo")]
@@ -136,5 +174,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
 
         [DataMember(Name = "isbindcard")]
         public bool? IsCardBinded { get; set; }
+
     }
 }

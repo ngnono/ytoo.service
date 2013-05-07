@@ -81,6 +81,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public System.DateTime UpdatedDate { get; set; }
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
+
+        public IEnumerable<ResourceViewModel> Resources { get; set; }
     }
 
     public class StoreCollectionViewModel : PagerInfo, IViewModel

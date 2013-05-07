@@ -10,6 +10,7 @@
     string searchName = pams.ContainsKey("searchfield") ? (string)pams["searchfield"] : "name";
     bool isMultiple = pams.ContainsKey("multiple") ? bool.Parse((string)pams["multiple"]) : false;
     string valueName = pams.ContainsKey("valuefield") ? (string)pams["valuefield"] : displayName;
+    bool isCascad = pams.ContainsKey("iscascad") ? bool.Parse((string)pams["iscascad"]) : false;
     bool showPlaceHold = string.Compare(valueName,"id",true)==0;
 
 }
@@ -56,6 +57,31 @@
       }
            
         });
+        @if(isCascad && showPlaceHold)
+        {
+         <text>
+          $("#@searchClientId").blur(function(){
+             $.ajax({
+                    url: '@Url.Action("detail", controlName)',
+                    dataType: "json",
+                    data: {
+                        id: $(this).val()    
+                    },
+                    success: function (data) {
+                        var myself = $("#@searchClientId");
+                        var newName = '';
+                        if (data)
+                            newName = data['@displayName'];
+                         myself.parent().find("[readonly]").val(newName);   
+                    },
+                 error: function(){
+                     var myself = $("#@searchClientId");
+                     myself.parent().find("[readonly]").val('');   
+                 }
+                });
+          });
+        </text>
+        }
     });
 </script>
-<input id="@searchClientId" class="text-box" type="text" name="@searchClientName" value="@(ViewData.TemplateInfo.FormattedModelValue)" placeholder="@(showPlaceHold?"可输入名字选择编码":"")"/>
+@Html.TextBoxFor(m=>m,new {placeholder=showPlaceHold?"可输入名字选择编码":"", @class="text-box"})

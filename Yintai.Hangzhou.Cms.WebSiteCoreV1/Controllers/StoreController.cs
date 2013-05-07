@@ -12,6 +12,7 @@ using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Util;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
@@ -24,11 +25,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
     {
         private readonly IStoreRepository _storeRepository;
         private IResourceService _resouceService;
+        private IResourceRepository _resourceRepo;
         public StoreController(IStoreRepository storeRepository
-            ,IResourceService resourceService)
+            ,IResourceService resourceService
+            ,IResourceRepository resourceRepo)
         {
             this._storeRepository = storeRepository;
             _resouceService = resourceService;
+            _resourceRepo = resourceRepo;
         }
 
         public ActionResult Index(PagerRequest request, int? sort)
@@ -39,12 +43,38 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ActionResult List(PagerRequest request, int? sort)
         {
             int totalCount;
-            var sortOrder = (StoreSortOrder)(sort ?? 0);
+            var linq = _storeRepository.Get(e => e.Status != (int)DataStatus.Deleted
+                                              , out totalCount
+                                              , request.PageIndex
+                                              , request.PageSize
+                                              , e =>
+                                              {
+                                                  if (!sort.HasValue)
+                                                      return e.OrderByDescending(o => o.CreatedDate);
+                                                  else
+                                                  {
+                                                      switch (sort.Value)
+                                                      {
+                                                          case (int)GenericOrder.OrderByCreateUser:
+                                                              return e.OrderByDescending(o => o.CreatedUser);
+                                                          case (int)GenericOrder.OrderByName:
+                                                              return e.OrderByDescending(o => o.Name);
+                                                          case (int)GenericOrder.OrderByCreateDate:
+                                                          default:
+                                                              return e.OrderByDescending(o => o.CreatedDate);
 
-            var data = _storeRepository.GetPagedList(request, out totalCount, sortOrder);
-            var vo = MappingManager.StoreViewMapping(data);
+                                                      }
+                                                  }
+                                              });
+            var data = linq.GroupJoin(_resourceRepo.Get(r => r.SourceType == (int)SourceType.StoreLogo),
+                            o => o.Id,
+                            i => i.SourceId,
+                            (o, i) => new {S = o,R = i });
+            var stores = from d in data.ToList()
+                         select new StoreViewModel().FromEntity<StoreViewModel>(d.S,
+                         s=>s.Resources = new ResourceViewModel().FromEntities<ResourceViewModel>(d.R));
 
-            var v = new StoreCollectionViewModel(request, totalCount) { Stores = vo.ToList() };
+            var v = new StoreCollectionViewModel(request, totalCount) { Stores = stores.ToList() };
 
             return View("List", v);
         }
@@ -56,9 +86,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 ModelState.AddModelError("", "参数验证失败.");
                 return View();
             }
-
-            var vo = MappingManager.StoreViewMapping(entity);
-
+           
+            var vo = new StoreViewModel().FromEntity<StoreViewModel>(entity
+                ,model=>model.Resources=new ResourceViewModel().FromEntities<ResourceViewModel>(
+                        _resourceRepo.Get(r=>r.SourceId==model.Id 
+                            && r.SourceType == (int)SourceType.StoreLogo).ToList())
+                    );
+            
             return View(vo);
         }
 
@@ -76,7 +110,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 return View();
             }
 
-            var vo = MappingManager.StoreViewMapping(entity);
+            var vo = new StoreViewModel().FromEntity<StoreViewModel>(entity
+               , model => model.Resources = new ResourceViewModel().FromEntities<ResourceViewModel>(
+                       _resourceRepo.Get(r => r.SourceId == model.Id
+                           && r.SourceType == (int)SourceType.StoreLogo).ToList())
+                   );
 
             return View(vo);
         }
@@ -93,11 +131,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 using (var ts = new TransactionScope())
                 {
                     entity = this._storeRepository.Insert(entity);
-                    _resouceService.Save(ControllerContext.HttpContext.Request.Files
-                        , entity.CreatedUser
-                        , 0
-                        , entity.Id
-                        , SourceType.StoreLogo);
+                    if (ControllerContext.HttpContext.Request.Files.Count > 0)
+                    {
+                        _resouceService.Save(ControllerContext.HttpContext.Request.Files
+                            , entity.CreatedUser
+                            , 0
+                            , entity.Id
+                            , SourceType.StoreLogo);
+                    }
                     ts.Complete();
                 }
 
@@ -125,8 +166,34 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.Tel = vo.Tel;
             entity.Description = vo.Description;
             entity.Longitude = vo.Longitude;
+            using (TransactionScope ts = new TransactionScope())
+            {
+                this._storeRepository.Update(entity);
+                if (ControllerContext.HttpContext.Request.Files.Count > 0)
+                {
+                    foreach (string fileName in ControllerContext.HttpContext.Request.Files)
+                    {
+                        var file = ControllerContext.HttpContext.Request.Files[fileName];
+                        if (file == null || file.ContentLength == 0)
+                            continue;
+                        //remove existing resource
+                        var resourceParts = fileName.Split('_');
+                        if (resourceParts.Length > 1)
+                        {
+                            int resourceId = int.Parse(resourceParts[1]);
+                            _resouceService.Del(resourceId);
+                        }
 
-            this._storeRepository.Update(entity);
+                    }
+                    //add new resource
+                    _resouceService.Save(ControllerContext.HttpContext.Request.Files
+                          , CurrentUser.CustomerId
+                        , -1, entity.Id
+                        , SourceType.StoreLogo);
+                }
+                ts.Complete();
+            }
+          
 
 
             return RedirectToAction("details",new {id=entity.Id});
@@ -155,6 +222,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return Json(_storeRepository.AutoComplete(name).Where(entity=>entity.Status!=(int)DataStatus.Deleted && 
                                                                         (string.IsNullOrEmpty(name)?true:entity.Name.StartsWith(name.Trim()))).Take(10)
                 , JsonRequestBehavior.AllowGet);
+        }
+        [OutputCache(NoStore=false,Duration=0)]
+        [HttpGet]
+        public  JsonResult Detail(int id)
+        {
+            return Json(_storeRepository.Find(id),JsonRequestBehavior.AllowGet);
         }
     }
 }

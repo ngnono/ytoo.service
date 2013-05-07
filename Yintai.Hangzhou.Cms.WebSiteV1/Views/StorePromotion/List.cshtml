@@ -1,0 +1,204 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.WebSupport.Helper
+@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.Pager<StorePromotionViewModel>
+@{
+    ViewBag.Title = "线下店券列表";
+    StorePromotionSearchOption search = ViewBag.SearchOptions;
+    HtmlHelper<StorePromotionSearchOption> searchModelHelper = Html.HtmlHelperFor<StorePromotionSearchOption>();
+
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("促销管理", "Index","Promotion")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+@section PageJsSection {
+    <script>
+        $(function () {
+            $("a[id^='delete']").click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var itemId = $(this).attr("data-rightId");
+                $("#delete-dialog").dialog({
+                    resizable: false,
+                    height: 140,
+                    modal: true,
+                    buttons: {
+                        "删除": function () {
+                            $(this).dialog("close");
+                            $.ajax({
+                                type: "POST",
+                                url: "@(Url.Action("Delete"))",
+                                data: {
+                                    id: itemId
+                                },
+                                success: function (data) {
+                                    if (data["Success"] == true) {
+                                        self.parents("tr:first").remove();
+                                    }
+                                    else {
+                                        alert('删除失败！');
+                                    }
+                                },
+                                error: function (data, textStatus, jqXHR) {
+                                    alert('删除失败！');
+                                }
+
+                            });
+                        },
+                        "取消": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+
+                });
+            });
+        });
+    </script>
+}
+
+<h2>@ViewBag.Title</h2>
+<p>
+@Html.ActionLink2("新建", "Create",null,new { @class="btn btn-primary"})
+    </p>
+@using (Html.BeginForm("List", null, new { page = 0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="span4">
+             <div class="control-group">
+                 <label class="control-label pull-left" for="search.Name"> @searchModelHelper.LabelFor(model => search.SId)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.SId)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="search.Name"> @searchModelHelper.LabelFor(model => search.Name)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Name)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="search.SortBy"> @searchModelHelper.LabelFor(model => search.SortBy)</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.SortBy, EnumHelper.DisplayList<GenericOrder>())
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="search.Status"> @searchModelHelper.LabelFor(model => search.Status)</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.Status, EnumHelper.DisplayList<DataStatus>())
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="search.StoreId"> @searchModelHelper.LabelFor(model => search.StoreId)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(model => search.StoreId)
+                </div>
+            </div>
+             <div class="control-group">
+                <label class="control-label" for="search.ActiveStartDate"> @searchModelHelper.LabelFor(model => search.ActiveStartDate)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(model => search.ActiveStartDate)
+                </div>
+            </div>
+             <div class="control-group">
+                <label class="control-label" for="search.ActiveEndDate"> @searchModelHelper.LabelFor(model => search.ActiveEndDate)</label>
+                <div class="controls">
+                     @searchModelHelper.EditorFor(model => search.ActiveEndDate)
+                </div>
+            </div>
+        </div>
+        
+    </div>
+}
+
+<table>
+    <tr>
+        <th>编码</th>
+        <th>操作</th>
+        <th>名称</th>
+        <th>描述
+        </th>
+        <th>兑换开始时间
+        </th>
+        <th>兑换结束时间
+        </th>
+        <th>代金券开始时间
+        </th>
+        <th>代金券结束时间
+        </th>
+        <th>注意事项
+        </th>
+        <th>兑换积点起点
+        </th>
+        <th>使用须知
+        </th>
+        <th>使用范围
+        </th>
+        <th>状态
+        </th>
+         <th>创建用户
+        </th>
+        <th>创建时间
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model.Data)
+    {
+        <tr>
+            <td>
+               @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                <div class="btn-group">
+                <button class="btn btn-small">操作</button>
+                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id })</li>
+                        <li>@Html.ActionLink2("详情", "Detail", new { id = item.Id }) </li>
+                        <li><a  href="@string.Format("{0}?search.storepromotionid={1}",Url.Action("List","StoreCoupon"),item.Id)">查看代金券</a></li>
+                        <li><a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
+                        
+                    </ul>
+                </div>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td> @Html.DisplayFor(modelItem => item.Description)</td>
+            <td> @Html.DisplayFor(modelItem => item.ActiveStartDate)</td>
+            <td> @Html.DisplayFor(modelItem => item.ActiveEndDate)</td>
+            <td> @Html.DisplayFor(modelItem => item.CouponStartDate)</td>
+            <td> @Html.DisplayFor(modelItem => item.CouponEndDate)</td>
+            <td> @Html.DisplayFor(modelItem => item.Notice)</td>
+            <td> @Html.DisplayFor(modelItem => item.MinPoints)</td>
+            <td> @Html.DisplayFor(modelItem => item.UsageNotice)</td>
+            <td> @Html.DisplayFor(modelItem => item.InScopeNotice)</td>
+            <td>
+                @Html.Label("", ((DataStatus)item.Status).ToFriendlyString())
+            </td>
+               <td> @Html.DisplayFor(modelItem => item.CreateUser)</td>
+               <td> @Html.DisplayFor(modelItem => item.CreateDate)</td>
+
+        </tr>
+    }
+
+</table>
+@Html.Partial("PagerPartialView", Model)
+<div class="hide" id="delete-dialog" title="删除兑换">
+    <p>您确认要删除该条兑换吗？</p>
+</div>

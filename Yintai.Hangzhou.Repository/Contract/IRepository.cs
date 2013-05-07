@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
+using System.Linq.Expressions;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
 
@@ -32,5 +35,5 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// Context should open to utilize the iquerable feature
         /// </summary>
         DbContext Context { get; }
-    }
+     }
 }

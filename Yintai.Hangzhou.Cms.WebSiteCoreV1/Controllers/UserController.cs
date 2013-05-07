@@ -21,6 +21,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
         protected UserController()
         {
+            
             Log = ServiceLocator.Current.Resolve<ILog>();
             AuthenticationService = ServiceLocator.Current.Resolve<IAuthenticationService>();
             MappingManager = new MappingManager();
@@ -236,13 +237,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             if ((hasRoles & (int)UserRole.Admin) == (int)UserRole.Admin)
                 return true;
             //check controll+action whether need authorize
-            bool needAuthroize = (from right in CmsV1Application.Current.RightsMap
+            bool needAuthroize = (from right in CMSApplication.Current.RightsMap
                                  select string.Concat(right.ControllName.ToLower()
                                         , right.ActionName.ToLower())
                                  ).Contains(string.Concat(controllName,actionName));
             if (!needAuthroize)
                 return true;
-            var result = (from role in CmsV1Application.Current.RoleRightMap
+            var result = (from role in CMSApplication.Current.RoleRightMap
                           from right in role.RoleAccessRights
                           where (hasRoles & role.Val) == role.Val &&
                                 right.AdminAccessRight!=null && 
@@ -251,6 +252,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                           select new { id = role.Id }
                         ).FirstOrDefault();
             return result != null;
+
 
         }
         [HttpGet]

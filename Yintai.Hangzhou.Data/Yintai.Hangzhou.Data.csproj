@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Yintai.Hangzhou.Data</RootNamespace>
     <AssemblyName>Yintai.Hangzhou.Data</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Devtalk.EF.CodeFirst">
@@ -50,7 +53,7 @@
       <HintPath>..\_dll\EmitMapper.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -88,9 +91,29 @@
     <Compile Include="Models\Mapping\BannerMap.cs" />
     <Compile Include="Models\Mapping\CardMap.cs" />
     <Compile Include="Models\Mapping\HotWordMap.cs" />
+    <Compile Include="Models\Mapping\PointOrderRuleMap.cs" />
+    <Compile Include="Models\Mapping\SectionMap.cs" />
+    <Compile Include="Models\Mapping\StoreCouponMap.cs" />
+    <Compile Include="Models\Mapping\StorePromotionMap.cs" />
+    <Compile Include="Models\Mapping\StorePromotionScopeMap.cs" />
     <Compile Include="Models\Mapping\UserAuthMap.cs" />
+    <Compile Include="Models\PointOrderRule.cs" />
+    <Compile Include="Models\Section.cs" />
+    <Compile Include="Models\StoreCoupon.cs" />
+    <Compile Include="Models\StorePromotion.cs" />
+    <Compile Include="Models\StorePromotionScope.cs" />
     <Compile Include="Models\UserAuth.cs" />
+    <Compile Include="Models\YintaiHzhouContext.cs" />
+    <Compile Include="Partials\CommentEntity.cs" />
+    <Compile Include="Partials\CouponHistoryEntity.cs" />
+    <Compile Include="Partials\FavoriteEntity.cs" />
+    <Compile Include="Partials\IAccountable.cs" />
+    <Compile Include="Partials\INotifyable.cs" />
+    <Compile Include="Partials\ISyncable.cs" />
+    <Compile Include="Partials\LikeEntity.cs" />
+    <Compile Include="Partials\PointHistoryEntity.cs" />
     <Compile Include="Partials\ResourceEntity.cs" />
+    <Compile Include="Partials\StoreCouponEntity.cs" />
     <Compile Include="Partials\StoreEntityMap.cs" />
     <Compile Include="Models\AdminAccessRight.cs" />
     <Compile Include="Models\Brand.cs" />
@@ -175,7 +198,7 @@
     <Compile Include="Models\VerifyCode.cs" />
     <Compile Include="Models\VUser.cs" />
     <Compile Include="Models\VUserRole.cs" />
-    <Compile Include="Models\YintaiHangzhouContext.cs" />
+    <Compile Include="Partials\YintaiHangzhouContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -188,9 +211,21 @@
     <None Include="CodeTemplates\ReverseEngineerCodeFirst\Mapping.tt" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
+      <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
+      <Name>com.intime.fashion.common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
+      <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
+      <Name>Yintai.Hangzhou.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="SQL\YintaiHangzhou.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

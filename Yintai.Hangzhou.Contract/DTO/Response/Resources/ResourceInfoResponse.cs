@@ -2,12 +2,13 @@
 using System.Runtime.Serialization;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.Extension;
+using Yintai.Hangzhou.Contract.Response;
 using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Contract.DTO.Response.Resources
 {
     [DataContract]
-    public class ResourceInfoResponse
+    public class ResourceInfoResponse:BaseResponse
     {
         [DataMember(Name = "id")]
         public int Id { get; set; }

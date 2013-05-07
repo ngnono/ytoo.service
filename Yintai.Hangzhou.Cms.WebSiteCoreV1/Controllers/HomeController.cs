@@ -1,4 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Web.Mvc;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 {
@@ -16,6 +20,21 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             ViewBag.Message = "内容管理平台";
 
             return View();
+        }
+        [Obsolete]
+        public ActionResult Print()
+        { 
+             ReportClass rptH = new ReportClass();
+             rptH.FileName = Server.MapPath("~/Content/report/demo.rpt");
+             List<dynamic> mock = new List<dynamic>();
+                 for (int i=0;i<10;i++) 
+                 {
+                    mock.Add( new {Id = 1,Name="test"});
+                 }
+
+                 rptH.SetDataSource(mock);
+            Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+        return File(stream, "application/pdf");  
         }
     }
 }

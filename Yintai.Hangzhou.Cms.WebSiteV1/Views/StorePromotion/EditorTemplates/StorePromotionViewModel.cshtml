@@ -1,0 +1,132 @@
+﻿@model StorePromotionViewModel 
+@{
+    bool isCreate = ViewContext.RouteData.Values["action"].ToString() == "create";               
+}
+<script>
+    function removeNestedForm(element, container, deleteElement) {
+        $container = $(element).parents(container);
+        $container.find(deleteElement).val(@((int)DataStatus.Deleted));
+                    $container.hide();
+                }
+    function addNestedForm(container, counter, ticks, content) {
+        var nextIndex = $(counter).length;
+        var pattern = new RegExp(ticks, "gi");
+        content = content.replace(pattern, nextIndex);
+        $(container).append(content);
+    }
+</script>
+ @Html.ValidationSummary(false)
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#basic" data-toggle="tab">基本信息</a></li>
+        <li><a href="#scope" data-toggle="tab">使用范围</a></li>
+        <li><a href="#rule" data-toggle="tab">使用规则</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="basic">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Description)
+            </div>
+            <div class="editor-field">
+                @Html.TextArea("description", Model == null ? String.Empty : Model.Description)
+                @Html.ValidationMessageFor(model => model.Description)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ActiveStartDate)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ActiveStartDate)
+                @Html.ValidationMessageFor(model => model.ActiveStartDate)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ActiveEndDate)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ActiveEndDate)
+                @Html.ValidationMessageFor(model => model.ActiveEndDate)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CouponStartDate)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.CouponStartDate)
+                @Html.ValidationMessageFor(model => model.CouponStartDate)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CouponEndDate)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.CouponEndDate)
+                @Html.ValidationMessageFor(model => model.CouponEndDate)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.MinPoints)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.MinPoints)
+                @Html.ValidationMessageFor(model => model.MinPoints)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Notice)
+            </div>
+            <div class="editor-field">
+                @Html.TextArea("Notice", Model == null ? String.Empty : Model.Notice)
+                @Html.ValidationMessageFor(model => model.MinPoints)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.PromotionType)
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model => model.PromotionType, EnumHelper.DisplayList<StorePromotionType>())
+                @Html.ValidationMessageFor(model => model.PromotionType)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.AcceptPointType)
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model => model.AcceptPointType, EnumHelper.DisplayList<StorePromotionPointType>())
+                @Html.ValidationMessageFor(model => model.AcceptPointType)
+            </div>
+            @if (!isCreate)
+            { 
+              <div class="editor-label">
+                @Html.LabelFor(model => model.Status)
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model => model.Status, EnumHelper.DisplayList<DataStatus>())
+                @Html.ValidationMessageFor(model => model.Status)
+            </div>  
+            }
+        </div>
+        <div class="tab-pane" id="scope">
+            <div>
+                <p>
+             @(Html.LinkToAddNestedForm<StorePromotionViewModel,IEnumerable<StorePromotionScopeViewModel>>(model=>model.Scope,"添加",".scopes",".scopes tr","btn"))
+             </p>
+                     </div>    
+            <table class="scopes">
+                 @Html.EditorFor(model=>model.Scope)
+                
+            </table>
+        </div>
+        <div class="tab-pane" id="rule">
+            <div>
+                 <p>
+                   @(Html.LinkToAddNestedForm<StorePromotionViewModel,IEnumerable<StorePromotionRuleViewModel>>(model=>model.Rules,"添加",".rules",".rules tr","btn"))
+               </p>
+                      </div>
+             <table class="rules">
+                 @Html.EditorFor(model=>model.Rules)
+
+            </table>
+  
+        </div>
+    </div>

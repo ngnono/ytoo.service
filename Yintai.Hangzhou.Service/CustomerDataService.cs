@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Transactions;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.Extension;
 using Yintai.Hangzhou.Contract.Customer;
@@ -193,7 +194,7 @@ namespace Yintai.Hangzhou.Service
                         Type = (int)PointType.Register
                     });
 
-                _userService.AddPoint(utmp.Id, 100, utmp.Id);
+               // _userService.AddPoint(utmp.Id, 100, utmp.Id);
 
                 userId = tmp.AssociateUserId;
             }
@@ -343,37 +344,38 @@ namespace Yintai.Hangzhou.Service
                     Message = "您只能上传一张头像"
                 };
             }
-
-            var oldResource = _resourceService.Get(request.AuthUid, SourceType.CustomerPortrait);
-
-            var resourceResult = _resourceService.Save(request.Files, request.AuthUid, 0, request.AuthUid,
-                                                       SourceType.CustomerPortrait);
-
-            if (resourceResult == null || resourceResult.Count == 0)
+            if (!request.Type.HasValue ||
+                request.Type.Value == Hangzhou.Contract.DTO.ThumnImageType.Logo)
             {
-                Logger.Error(String.Format("保存用户LOGO资源文件异常,用户ID={0}", request.AuthUid));
-                return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.InternalServerError, Message = "保存文件异常" };
-            }
+                var oldResource = _resourceService.Get(request.AuthUid, SourceType.CustomerPortrait);
 
-            if (resourceResult.Count != 1)
-            {
-                Logger.Warn(String.Format("用户上传头像为1张时，返回不止一个资源.用户Id={0},资源Id={1}", request.AuthUid, String.Join(",", resourceResult.Select(v => v.Id).ToArray())));
-            }
+                var resourceResult = _resourceService.Save(request.Files, request.AuthUid, 0, request.AuthUid,
+                                                           SourceType.CustomerPortrait);
 
-            //删除旧resource
-            foreach (var item in oldResource)
-            {
-                _resourceService.Del(item.Id);
-            }
+                if (resourceResult == null || resourceResult.Count == 0)
+                {
+                    Logger.Error(String.Format("保存用户LOGO资源文件异常,用户ID={0}", request.AuthUid));
+                    return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.InternalServerError, Message = "保存文件异常" };
+                }
 
-            //update
-            var userentity = _customerRepository.GetItem(request.AuthUid);
-            userentity.Logo = Path.Combine(resourceResult[0].Domain, resourceResult[0].Name);
-            userentity.UpdatedDate = DateTime.Now;
-            userentity.UpdatedUser = request.AuthUid;
-            _customerRepository.Update(userentity);
+                if (resourceResult.Count != 1)
+                {
+                    Logger.Warn(String.Format("用户上传头像为1张时，返回不止一个资源.用户Id={0},资源Id={1}", request.AuthUid, String.Join(",", resourceResult.Select(v => v.Id).ToArray())));
+                }
 
-            return GetUserInfo(new GetUserInfoRequest
+                //删除旧resource
+                foreach (var item in oldResource)
+                {
+                    _resourceService.Del(item.Id);
+                }
+
+                //update
+                var userentity = _customerRepository.GetItem(request.AuthUid);
+                userentity.Logo = Path.Combine(resourceResult[0].Domain, resourceResult[0].Name);
+                userentity.UpdatedDate = DateTime.Now;
+                userentity.UpdatedUser = request.AuthUser.Id;
+                _customerRepository.Update(userentity);
+                return GetUserInfo(new GetUserInfoRequest
                 {
                     AuthUid = request.AuthUid,
                     AuthUser = null,
@@ -381,30 +383,68 @@ namespace Yintai.Hangzhou.Service
                     Token = null,
                     Client_Version = request.Client_Version
                 });
+            }
+            else
+            {
+                string logoBG = string.Empty;
+                using (var ts = new TransactionScope())
+                {
+                    var oldResource = _resourceService.Get(request.AuthUser.Id, SourceType.CustomerThumbBackground).FirstOrDefault();
+                    if (oldResource != null)
+                        _resourceService.Del(oldResource.Id);
+                    var resourceResult = _resourceService.Save(request.Files, request.AuthUser.Id, 0, request.AuthUser.Id,
+                                                               SourceType.CustomerThumbBackground);
+                    if (resourceResult == null || resourceResult.Count == 0)
+                    {
+                        Logger.Error(String.Format("保存用户LOGO资源文件异常,用户ID={0}", request.AuthUser.Id));
+                        return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.InternalServerError, Message = "保存文件异常" };
+                    }
+                    logoBG = resourceResult.First().AbsoluteUrl;
+                    ts.Complete();
+                }
+                
+                var response = new CustomerInfoResponse()
+                {
+                    BackgroundLogo = logoBG
+                };
+                return new ExecuteResult<CustomerInfoResponse>(response);
+            }
+           
         }
 
         public ExecuteResult<CustomerInfoResponse> DestroyLogo(DestroyLogoRequest request)
         {
-            var oldResource = _resourceService.Get(request.AuthUid, SourceType.CustomerPortrait);
-
-            if (oldResource == null || oldResource.Count == 0)
+            if (!request.Type.HasValue ||
+                request.Type.Value == Hangzhou.Contract.DTO.ThumnImageType.Logo)
             {
-                return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "您还没有上传过肖像" };
+                var oldResource = _resourceService.Get(request.AuthUser.Id, SourceType.CustomerPortrait);
+
+                if (oldResource == null || oldResource.Count == 0)
+                {
+                    return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "您还没有上传过肖像" };
+                }
+
+                foreach (var item in oldResource)
+                {
+                    _resourceService.Del(item.Id);
+                }
+
+                return GetUserInfo(new GetUserInfoRequest
+                {
+                    AuthUid = request.AuthUser.Id,
+                    AuthUser = null,
+                    Method = null,
+                    Token = null,
+                    Client_Version = request.Client_Version
+                });
             }
-
-            foreach (var item in oldResource)
+            else
             {
-                _resourceService.Del(item.Id);
+                var oldResource = _resourceService.Get(request.AuthUser.Id, SourceType.CustomerThumbBackground).FirstOrDefault();
+                if (oldResource != null)
+                    _resourceService.Del(oldResource.Id);
+                return new ExecuteResult<CustomerInfoResponse>(null);
             }
-
-            return GetUserInfo(new GetUserInfoRequest
-            {
-                AuthUid = request.AuthUid,
-                AuthUser = null,
-                Method = null,
-                Token = null,
-                Client_Version = request.Client_Version
-            });
         }
 
         public ExecuteResult<CustomerInfoResponse> Update(UpdateCustomerRequest request)

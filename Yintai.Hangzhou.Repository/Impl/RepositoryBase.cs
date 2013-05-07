@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.ServiceLocation;
@@ -56,7 +58,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         {
             base.Delete(entity);
         }
-
+      
         public override TEntity Find(params object[] keyValues)
         {
             return base.Find(keyValues);
@@ -83,5 +85,7 @@ namespace Yintai.Hangzhou.Repository.Impl
         {
             return base.Find(key);
         }
+
+    
     }
 }

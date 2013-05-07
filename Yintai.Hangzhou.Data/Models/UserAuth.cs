@@ -8,11 +8,11 @@ namespace Yintai.Hangzhou.Data.Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public int StoreId { get; set; }
-        public int Type { get; set; }
         public Nullable<int> BrandId { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedUser { get; set; }
+        public int Type { get; set; }
 
         #region Overrides of BaseEntity
 

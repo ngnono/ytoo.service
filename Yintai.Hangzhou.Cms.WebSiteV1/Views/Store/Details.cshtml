@@ -80,7 +80,16 @@
     <div class="display-field">
         @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)Model.Status).ToFriendlyString())
     </div>
+     <div class="display-label">图片</div>
+    <div class="display-field">
+        @if (this.Model.Resources != null && Model.Resources.Count() > 0)
+        {
+            var re = Model.Resources.First();
+                        
+            <img width="120" src="@String.Concat(re.Domain, re.Name, "_630x0.jpg")" alt="630x0" />
 
+        }
+    </div>
 
 </fieldset>
 <p>

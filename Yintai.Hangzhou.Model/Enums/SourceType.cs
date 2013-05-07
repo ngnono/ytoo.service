@@ -62,7 +62,8 @@ namespace Yintai.Hangzhou.Model.Enums
         CommentAudio = 10,
 
         BannerPromotion = 11,
-
+        [Description("”√ªß±≥æ∞Õº")]
+        CustomerThumbBackground = 12
         //ProductAudio = 12,
 
         //PromotionAudio = 13

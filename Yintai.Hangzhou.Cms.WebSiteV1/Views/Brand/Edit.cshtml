@@ -58,7 +58,30 @@
         @Html.EditorFor(model => model.Group)
         @Html.ValidationMessageFor(model => model.Group)
     </div>
-   
+    <div class="editor-label">
+            <span>品牌图片</span>
+         </div>
+        <div class="editor-field">
+            @if (this.Model.Resource != null )
+            {
+                var re = Model.Resource;
+                <table>
+                        <tr>
+                            <td>
+                        
+                                    <img width="120" src="@String.Concat(re.Domain, re.Name, "_630x0.jpg")" alt="630x0" />
+                            </td>
+                            <td><label>替换为 =&gt;</label></td>
+                            <td >
+                                <input type="file" name="files_@(re.Id)" />
+                            </td>  
+                         </tr>
+
+                </table>
+            } else {
+             <input type="file" id="files" name="files" />
+            }
+        </div>
     <p>
         <input type="submit" value="保存" class="btn btn-primary" />
         @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })

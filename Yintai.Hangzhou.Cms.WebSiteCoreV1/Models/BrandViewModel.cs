@@ -63,6 +63,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public System.DateTime UpdatedDate { get; set; }
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
+
+        public ResourceViewModel Resource { get; set; }
     }
     public class BrandListSearchOption
     {

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Service.Manager;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -26,6 +27,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 
     public class ResourceViewModel : BaseViewModel
     {
+        private string _domain;
         [Key]
         [Display(Name="资源代码")]
         public int Id { get; set; }
@@ -50,7 +52,35 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 
         [Required]
         [Display(Name = "域")]
-        public string Domain { get; set; }
+        public string Domain
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(_domain))
+                {
+                    switch ((ResourceType)this.Type)
+                    {
+                        case ResourceType.Image:
+                            _domain = ConfigManager.GetHttpApiImagePath();
+                            break;
+                        case ResourceType.Sound:
+                            _domain = ConfigManager.GetHttpApiSoundPath();
+                            break;
+                        case ResourceType.Video:
+                            _domain = ConfigManager.GetHttpApivideoPath();
+                            break;
+                        case ResourceType.Default:
+                            _domain = ConfigManager.GetHttpApidefPath();
+                            break;
+                    }
+                }
+                return _domain;
+            }
+            set
+            {
+                _domain = value;
+            }
+        }
 
         [Display(Name = "是否默认图片")]
         public bool IsDefault { get; set; }
@@ -91,6 +121,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 
         public string AudioUrl { get {
             return Path.Combine(Domain,Name+".mp3");
-        } }
+        }
+        }
+      
+
     }
 }

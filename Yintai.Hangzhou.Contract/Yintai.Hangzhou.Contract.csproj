@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Yintai.Hangzhou.Contract</RootNamespace>
     <AssemblyName>Yintai.Hangzhou.Contract</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,8 +31,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -58,10 +64,16 @@
     <Compile Include="Customer\ICustomerDataService.cs" />
     <Compile Include="DTO\Request\Card\BindingRequest.cs" />
     <Compile Include="DTO\Request\Coupon\CouponRequest.cs" />
+    <Compile Include="DTO\Request\Coupon\CouponRequestType.cs" />
+    <Compile Include="DTO\Request\ExchangeStoreCouponRequest.cs" />
+    <Compile Include="DTO\Request\ExchangeStoreCouponRuleRequest.cs" />
     <Compile Include="DTO\Request\Feedback\FeedbackCreateRequest.cs" />
+    <Compile Include="DTO\Request\MyCommentListRequest.cs" />
     <Compile Include="DTO\Request\Point\GetPointInfoRequest.cs" />
     <Compile Include="DTO\Request\ProductComplex\GetItemsListRequest.cs" />
     <Compile Include="DTO\Request\SpecialTopic\SpecialTopicRequest.cs" />
+    <Compile Include="DTO\Request\StoreCouponDetailRequest.cs" />
+    <Compile Include="DTO\Request\StoreCouponListRequest.cs" />
     <Compile Include="DTO\Request\Tag\TagRequest.cs" />
     <Compile Include="DTO\Request\Device\DeviceRegisterRequest.cs" />
     <Compile Include="DTO\Request\BaseRequest.cs" />
@@ -78,16 +90,22 @@
     <Compile Include="DTO\Response\Brand\BrandResponse.cs" />
     <Compile Include="DTO\Response\Coupon\CouponInfoResponse.cs" />
     <Compile Include="DTO\Response\Device\DeviceLogInfoResponse.cs" />
+    <Compile Include="DTO\Response\ExchangeStoreCouponResponse.cs" />
+    <Compile Include="DTO\Response\ExchangeStoreCouponRuleResponse.cs" />
     <Compile Include="DTO\Response\HotKey\HotWordResponse.cs" />
     <Compile Include="DTO\Response\ItemsInfoResponse.cs" />
     <Compile Include="DTO\Response\ItemsCollectionResponse.cs" />
+    <Compile Include="DTO\Response\MyCommentInfoResponse.cs" />
     <Compile Include="DTO\Response\PagerInfoResponse.cs" />
     <Compile Include="DTO\Response\Point\PointInfoResponse.cs" />
     <Compile Include="DTO\Response\SpecialTopic\SpecialTopic.cs" />
     <Compile Include="DTO\Response\Promotion\PromotionInfoResponse.cs" />
     <Compile Include="DTO\Response\Resources\ResourceInfoResponse.cs" />
+    <Compile Include="DTO\Response\StoreCouponDetailResponse.cs" />
     <Compile Include="DTO\Response\Store\StoreInfoResponse.cs" />
     <Compile Include="DTO\Response\Tag\TagInfoResponse.cs" />
+    <Compile Include="DTO\Response\TPagerInfoResponse.cs" />
+    <Compile Include="DTO\ThumnImageType.cs" />
     <Compile Include="Favorite\IFavoriteDataService.cs" />
     <Compile Include="Feedback\IFeedbackDataService.cs" />
     <Compile Include="Group\Group.cs" />
@@ -120,10 +138,17 @@
     <Folder Include="Remind\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
+      <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>
+      <Name>Yintai.Hangzhou.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
       <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
       <Name>Yintai.Hangzhou.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

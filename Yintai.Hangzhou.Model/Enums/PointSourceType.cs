@@ -22,6 +22,8 @@ namespace Yintai.Hangzhou.Model.Enums
         /// 集团
         /// </summary>
          [Description("集团")]
-        Group = 3,
+        Group = 3
+
+
     }
 }

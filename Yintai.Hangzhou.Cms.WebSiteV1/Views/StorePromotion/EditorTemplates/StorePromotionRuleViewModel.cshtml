@@ -1,0 +1,17 @@
+﻿@model StorePromotionRuleViewModel
+    <tr>
+        <td>@Html.LabelFor(model => model.RangeFrom)
+            @Html.EditorFor(model => model.RangeFrom)</td>
+        <td>@Html.LabelFor(model=>model.RangeTo)
+            @Html.EditorFor(model=>model.RangeTo)
+        </td>
+         <td>@Html.LabelFor(model=>model.Ratio)
+            @Html.EditorFor(model=>model.Ratio)
+        </td>
+        <td>@Html.HiddenFor(model=>model.Status,new { @class = "mark-for-delete" })
+            @Html.HiddenFor(modek=>Model.Id)
+            <a href="#" onclick="removeNestedForm(this,'tr:first','input.mark-for-delete');" class="btn">删除</a>
+        </td>
+    </tr>
+
+

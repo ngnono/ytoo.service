@@ -6,11 +6,11 @@ namespace Yintai.Hangzhou.Data.Models
     public partial class NotificationLogEntity : Yintai.Architecture.Common.Models.BaseEntity
     {
         public int Id { get; set; }
-        public string DeviceToken { get; set; }
         public Nullable<System.DateTime> NotifyDate { get; set; }
-        public string Message { get; set; }
-        public Nullable<System.DateTime> InDate { get; set; }
         public Nullable<int> Status { get; set; }
+        public Nullable<int> SourceType { get; set; }
+        public Nullable<int> SourceId { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
 
         #region Overrides of BaseEntity
 

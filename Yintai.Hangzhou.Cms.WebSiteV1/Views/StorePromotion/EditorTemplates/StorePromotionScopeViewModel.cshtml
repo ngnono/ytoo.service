@@ -1,0 +1,15 @@
+﻿@model StorePromotionScopeViewModel
+    <tr>
+        <td class="span6">@Html.LabelFor(model => model.StoreId)
+            @Html.EditorFor(model => model.StoreId)
+            @Html.TextBoxFor(model => model.StoreName, new { @readonly="true"})</td>
+        <td class="span4">@Html.LabelFor(model=>model.Excludes)
+            @Html.TextAreaFor(model=>model.Excludes)
+        </td>
+        <td>@Html.HiddenFor(model=>model.Status,new { @class = "mark-for-delete" })
+            @Html.HiddenFor(modek=>Model.Id)
+            <a href="#" onclick="removeNestedForm(this,'tr:first','input.mark-for-delete');" class="btn">删除</a>
+        </td>
+    </tr>
+
+
