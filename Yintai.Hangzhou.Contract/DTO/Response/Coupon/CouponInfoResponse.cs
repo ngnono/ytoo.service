@@ -106,8 +106,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Coupon
         [DataMember(Name = "sourcetype")]
         public int SourceType
         {
-            get { return (int)Stype; }
-            set { Stype = (SourceType)value; }
+            get { return (int)ProductType; }
+            set {  }
         }
 
         [IgnoreDataMember]
@@ -115,6 +115,20 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Coupon
 
         [IgnoreDataMember]
         public int Status { get; set; }
+
+        [DataMember(Name = "status")]
+        public int Status_s
+        {
+            get
+            {
+                if (Status == (int)CouponStatus.Normal
+                    && ValidEndDate < DateTime.Now)
+                    return (int)CouponStatus.Expired;
+                else
+                    return Status;
+            }
+            set { }
+        }
 
         [DataMember(Name = "stroe_id")]
         public int FromStore { get; set; }

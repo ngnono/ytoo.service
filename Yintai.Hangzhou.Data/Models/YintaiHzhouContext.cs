@@ -126,6 +126,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<CardEntity> Cards { get; set; }
         public DbSet<CommentEntity> Comments { get; set; }
         public DbSet<CouponHistoryEntity> CouponHistories { get; set; }
+        public DbSet<CouponLogEntity> CouponLogs { get; set; }
         public DbSet<DeviceLogEntity> DeviceLogs { get; set; }
         public DbSet<DeviceTokenEntity> DeviceTokens { get; set; }
         public DbSet<FavoriteEntity> Favorites { get; set; }
@@ -182,6 +183,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new CardEntityMap());
             modelBuilder.Configurations.Add(new CommentEntityMap());
             modelBuilder.Configurations.Add(new CouponHistoryEntityMap());
+            modelBuilder.Configurations.Add(new CouponLogEntityMap());
             modelBuilder.Configurations.Add(new DeviceLogEntityMap());
             modelBuilder.Configurations.Add(new DeviceTokenEntityMap());
             modelBuilder.Configurations.Add(new FavoriteEntityMap());

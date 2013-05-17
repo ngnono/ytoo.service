@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Yintai.Architecture.Common.Models;
-using Yintai.Architecture.Framework.Mapping;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Cms.WebSiteCoreV1.Models;
 using Yintai.Hangzhou.Data.Models;
@@ -11,6 +10,8 @@ using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Manager;
 using System.Linq;
 using MM = Yintai.Hangzhou.Service.Manager.MappingManagerV2;
+using com.intime.fashion.common;
+using Yintai.Architecture.Framework;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
 {
@@ -816,6 +817,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
             return ProductEntityCheck(target);
         }
 
+        [Obsolete]
         public IEnumerable<ProductViewModel> ProductViewMapping(IEnumerable<ProductEntity> source)
         {
             //modify to use the late binding 
@@ -911,67 +913,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager
                              ,
                              Resources = res
                          };
-            /*
-            var result = from p in source
-                         join s in _storeRepository.GetAll() on p.Store_Id equals s.Id into ps
-                         from ps1 in ps.DefaultIfEmpty()
-                         join b in _brandRepository.GetAll() on p.Brand_Id equals b.Id into pb
-                         from pb1 in pb.DefaultIfEmpty()
-                         join u in _customerRepository.GetAll() on p.CreatedUser equals u.Id into pu
-                         from pu1 in pu.DefaultIfEmpty()
-                         join t in _tagRepository.GetAll() on p.Tag_Id equals t.Id into pt
-                         from pt1 in pt.DefaultIfEmpty()
-                         let pros = (from pro in _promotionRepository.GetAll()
-                                    join p2p in _pprRepository.GetAll() on pro.Id equals p2p.ProId 
-                                    where p2p.ProdId == p.Id
-                                    select pro).ToList()
-                        let tops = (from st in _specialTopicRepository.GetAll()
-                                           join p2t in _stprRepository.GetAll() on st.Id equals p2t.SpecialTopic_Id
-                                    where p2t.Product_Id == p.Id
-                                     select st).ToList()
-                       let res =  (from r in (from r in _resourceRepository.GetAll()
-                                           where r.SourceType == (int)SourceType.Product
-                                           && r.SourceId == p.Id
-                                           select r).ToList()
-                                    select ResourceViewMapping(r))
-                         select new ProductViewModel() { 
-                             Brand_Id = p.Brand_Id
-                             , BrandName = pb1==null?string.Empty:pb1.Name
-                             , CreatedDate = p.CreatedDate
-                             , CreatedUser = p.CreatedUser
-                             , CreateUserName = pu1==null?string.Empty:pu1.Nickname
-                             , Description = p.Description
-                             , Favorable = p.Favorable
-                             , FavoriteCount = p.FavoriteCount
-                             , Id = p.Id
-                             , InvolvedCount = p.InvolvedCount
-                             , Name = p.Name
-                             , Price = p.Price
-                             , RecommendedReason = p.RecommendedReason
-                             , RecommendSourceId = p.RecommendSourceId
-                             , RecommendSourceType = p.RecommendSourceType
-                             , RecommendUser = p.RecommendUser
-                             , ShareCount = p.ShareCount
-                             , SortOrder = p.SortOrder
-                             , Status = p.Status
-                             , Store_Id = p.Store_Id
-                             , Tag_Id = p.Tag_Id
-                             , StoreName = ps1==null?string.Empty:ps1.Name
-                             , TagName = pt1==null?string.Empty:pt1.Name
-                             , UpdatedDate = p.UpdatedDate
-                             , UpdatedUser = p.UpdatedUser
-                             , PromotionName = from pro in pros
-                                               select pro.Name
-                            ,
-                             PromotionIds = string.Join(",",(from pro in pros
-                                            select pro.Id.ToString()).ToArray())
-                            , TopicName = from top in tops
-                                          select top.Name
-                            , TopicIds = string.Join(",",(from top in tops
-                                                              select top.Id.ToString()).ToArray())
-                            , Resources = res
-                         };
-          */
+          
             return result;
         }
         public ProductViewModel ProductViewMapping(ProductEntity source)

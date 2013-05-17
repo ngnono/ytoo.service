@@ -76,20 +76,24 @@
     <Reference Include="WebActivator">
       <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.Common">
-      <HintPath>..\_dll\d\Yintai.Architecture.Common.dll</HintPath>
+    <Reference Include="Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.Framework">
-      <HintPath>..\_dll\d\Yintai.Architecture.Framework.dll</HintPath>
+    <Reference Include="Yintai.Architecture.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
     <Compile Include="Models\Banner.cs" />
     <Compile Include="Models\Card.cs" />
+    <Compile Include="Models\CouponLog.cs" />
     <Compile Include="Models\HotWord.cs" />
     <Compile Include="Models\Mapping\BannerMap.cs" />
     <Compile Include="Models\Mapping\CardMap.cs" />
+    <Compile Include="Models\Mapping\CouponLogMap.cs" />
     <Compile Include="Models\Mapping\HotWordMap.cs" />
     <Compile Include="Models\Mapping\PointOrderRuleMap.cs" />
     <Compile Include="Models\Mapping\SectionMap.cs" />

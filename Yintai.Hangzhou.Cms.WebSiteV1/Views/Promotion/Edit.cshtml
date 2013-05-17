@@ -120,6 +120,16 @@
             @Html.CheckBox("IsProdBindable",Model==null?false:Model.IsProdBindable)
             @Html.ValidationMessageFor(model => model.IsProdBindable)
         </div>
+    <div class="editor-label-flow">
+            <span >是否显示在促销列表：</span>     
+            @Html.CheckBox("IsMain",Model==null?true:Model.IsMain)
+            @Html.ValidationMessageFor(model => model.IsMain)
+        </div>
+        <div class="editor-label-flow">
+            <span >限制每人限领一次：</span>     
+            @Html.CheckBox("IsLimitPerUser",Model==null?true:Model.IsLimitPerUser)
+            @Html.ValidationMessageFor(model => model.IsLimitPerUser)
+        </div>
         
         <div class="editor-label">
             @Html.LabelFor(model => model.PublicationLimit)
@@ -127,6 +137,13 @@
         <div class="editor-field">
             @Html.EditorFor(model => model.PublicationLimit)
             @Html.ValidationMessageFor(model => model.PublicationLimit)
+        </div>
+            <div class="editor-label">
+            @Html.LabelFor(model => model.PublicProCode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PublicProCode)
+            @Html.ValidationMessageFor(model => model.PublicProCode)
         </div>
             <div class="editor-label">
             @Html.LabelFor(model => model.Status)

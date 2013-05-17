@@ -15,7 +15,6 @@ using Yintai.Hangzhou.Model.Filters;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Binder;
-using Yintai.Hangzhou.Model.Filters;
 using MappingManager = Yintai.Hangzhou.Cms.WebSiteCoreV1.Manager.MappingManager;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
@@ -33,9 +32,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
         public ProductController(IProductRepository productRepository
             , ISpecialTopicProductRelationRepository specialTopicProductRelationRepository
             , IPromotionProductRelationRepository promotionProductRelationRepository
-            ,IStoreRepository storeRepository
-            ,IResourceService resourceService
-            ,IUserAuthRepository userAuthRepo)
+            , IStoreRepository storeRepository
+            , IResourceService resourceService
+            , IUserAuthRepository userAuthRepo)
         {
             _productRepository = productRepository;
             _stprRepository = specialTopicProductRelationRepository;
@@ -55,15 +54,94 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             int totalCount;
             search.CurrentUser = CurrentUser.CustomerId;
             search.CurrentUserRole = CurrentUser.Role;
-            IQueryable<ProductEntity> data = _productRepository.Search(
-                request.PageIndex
-                , request.PageSize
-                , out totalCount
-                , MappingManager.MapCommon<ProductSearchOption,ProductSearchOption>(search)
-                );
-           
+            var dbContext = _productRepository.Context;
+            var linq = dbContext.Set<ProductEntity>().Where(p => (!search.PId.HasValue || p.Id == search.PId.Value) &&
+                (string.IsNullOrEmpty(search.Name) || p.Name.StartsWith(search.Name)) &&
+                (!search.User.HasValue || p.CreatedUser == search.User.Value) &&
+                (!search.Status.HasValue || p.Status == (int)search.Status.Value) &&
+                p.Status != (int)DataStatus.Deleted);
+            linq = _userAuthRepo.AuthFilter(linq, search.CurrentUser, search.CurrentUserRole) as IQueryable<ProductEntity>;
+            if (!string.IsNullOrEmpty(search.Topic) &&
+                 search.Topic.Trim().Length > 0)
+            { 
+                linq = linq.Where(p=>(from s in dbContext.Set<SpecialTopicEntity>()
+                                     join ps in dbContext.Set<SpecialTopicProductRelationEntity>() on s.Id equals ps.SpecialTopic_Id 
+                                     where s.Name.StartsWith(search.Topic) && ps.Product_Id == p.Id
+                                      select s).Any());
+            }
+            if (!string.IsNullOrEmpty(search.Promotion) &&
+                search.Promotion.Trim().Length > 0)
+            {
+                linq = linq.Where(p=>(from pr in dbContext.Set<PromotionEntity>()
+                                     join ps in dbContext.Set<Promotion2ProductEntity>() on pr.Id equals ps.ProId
+                                     where pr.Name.StartsWith(search.Promotion) && ps.ProdId == p.Id
+                                      select pr).Any());
 
-            var vo = MappingManager.ProductViewMapping(data);
+            }
+            var linq2 = linq.Join(dbContext.Set<StoreEntity>().Where(s=>string.IsNullOrEmpty(search.Store) || s.Name.StartsWith(search.Store)), o => o.Store_Id, i => i.Id, (o, i) => new { P = o, S = i })
+               .Join(dbContext.Set<BrandEntity>().Where(b=>string.IsNullOrEmpty(search.Brand) || b.Name.StartsWith(search.Brand)), o => o.P.Brand_Id, i => i.Id, (o, i) => new { P = o.P, S = o.S, B = i })
+               .Join(dbContext.Set<UserEntity>(), o => o.P.CreatedUser, i => i.Id, (o, i) => new { P = o.P, S = o.S, B = o.B, C = i })
+               .Join(dbContext.Set<TagEntity>().Where(t=>string.IsNullOrEmpty(search.Tag) || t.Name.StartsWith(search.Tag)), o => o.P.Tag_Id, i => i.Id, (o, i) => new { P = o.P, S = o.S, B = o.B, C = o.C, T = i })
+               .GroupJoin(dbContext.Set<PromotionEntity>().Join(_pprRepository.GetAll(),
+                                                       o => o.Id,
+                                                       i => i.ProId,
+                                                       (o, i) => new { Pro = o, ProR = i }),
+                           o => o.P.Id,
+                           i => i.ProR.ProdId,
+                           (o, i) => new { P = o.P, S = o.S, B = o.B, C = o.C, T = o.T, Pro = i })
+                .GroupJoin(dbContext.Set<SpecialTopicEntity>().Join(_stprRepository.GetAll(), o => o.Id, i => i.SpecialTopic_Id, (o, i) => new { Spe = o, SpeR = i }),
+                           o => o.P.Id,
+                           i => i.SpeR.Product_Id,
+                           (o, i) => new { P = o.P, S = o.S, B = o.B, C = o.C, T = o.T, Pro = o.Pro, Spe = i })
+                .GroupJoin(dbContext.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product), o => o.P.Id, i => i.SourceId
+                           , (o, i) => new { P = o.P, S = o.S, B = o.B, C = o.C, T = o.T, Pro = o.Pro, Spe = o.Spe, R = i });
+
+
+          if (!search.OrderBy.HasValue)
+              linq2 =linq2.OrderByDescending(l=>l.P.CreatedDate);
+          else
+          {
+            switch(search.OrderBy.Value)
+            {
+                case ProductSortOrder.CreatedUserDesc:
+                    linq2 = linq2.OrderByDescending(l=>l.C.Nickname).ThenByDescending(l=>l.P.CreatedDate);
+                    break;
+                case ProductSortOrder.SortOrderDesc:
+                   linq2= linq2.OrderByDescending(l=>l.P.SortOrder).ThenByDescending(l=>l.P.CreatedDate);
+                    break;
+                case ProductSortOrder.SortByBrand:
+                    linq2=linq2.OrderByDescending(l=>l.B.Name).ThenByDescending(l=>l.P.CreatedDate);
+                    break;
+                case ProductSortOrder.CreatedDateDesc:
+                    linq2 = linq2.OrderByDescending(l=>l.P.CreatedDate);
+                    break;
+
+
+            }
+          }           
+           totalCount = linq2.Count();
+
+            var skipCount = (request.PageIndex - 1) * request.PageSize;
+
+            linq2 = skipCount == 0 ? linq2.Take(request.PageSize) : linq2.Skip(skipCount).Take(request.PageSize);
+            
+
+            var vo = from l in linq2.ToList()
+                     select new ProductViewModel().FromEntity<ProductViewModel>(l.P,p=>{
+                         p.StoreName = l.S.Name;
+                         p.TagName = l.T.Name;
+                         p.BrandName = l.B.Name;
+                         p.CreateUserName = l.C.Nickname;
+                         p.PromotionName = from pro in l.Pro
+                                             select pro.Pro.Name;
+                         p.PromotionIds = string.Join(",", (from pro in l.Pro
+                                                              select pro.Pro.Id.ToString()).ToArray());
+                         p.TopicName = from top in l.Spe
+                                         select top.Spe.Name;
+                             p.TopicIds = string.Join(",", (from top in l.Spe
+                                                          select top.Spe.Id.ToString()).ToArray());
+                          p.Resources = l.R.Select(r=>new ResourceViewModel().FromEntity<ResourceViewModel>(r));
+                     });
 
             var v = new ProductCollectionViewModel(request, totalCount) { Products = vo.ToList() };
             ViewBag.SearchOptions = search;
@@ -130,7 +208,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                     ts.Complete();
                 }
 
-                return RedirectToAction("Edit", new {id=@entity.Id });
+                return RedirectToAction("Edit", new { id = @entity.Id });
             }
 
             return View(vo);
@@ -222,13 +300,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.UpdatedUser = CurrentUser.CustomerId;
             entity.Name = vo.Name;
             entity.Price = vo.Price;
-            entity.RecommendedReason = vo.RecommendedReason??string.Empty;
+            entity.RecommendedReason = vo.RecommendedReason ?? string.Empty;
             entity.SortOrder = vo.SortOrder;
             entity.Price = vo.Price;
             entity.Status = vo.Status;
             entity.Store_Id = vo.Store_Id;
             entity.Tag_Id = vo.Tag_Id;
             entity.Brand_Id = vo.Brand_Id;
+            entity.Description = vo.Description;
 
             using (var ts = new TransactionScope())
             {
@@ -248,8 +327,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 ts.Complete();
             }
 
-            return RedirectToAction2(() => {
-                return RedirectToAction("Details", new { id = vo.Id }); 
+            return RedirectToAction2(() =>
+            {
+                return RedirectToAction("Details", new { id = vo.Id });
             });
         }
 
@@ -268,6 +348,69 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             }
 
             return pi;
+        }
+        public PartialViewResult Select(ProductSearchOption search, PagerRequest request)
+        {
+            int totalCount;
+            search.CurrentUser = CurrentUser.CustomerId;
+            search.CurrentUserRole = CurrentUser.Role;
+            var dbContext = _productRepository.Context;
+            var linq = dbContext.Set<ProductEntity>().Where(p => (!search.PId.HasValue || p.Id == search.PId.Value) &&
+                (string.IsNullOrEmpty(search.Name) || p.Name.StartsWith(search.Name)) &&
+                (!search.User.HasValue || p.CreatedUser == search.User.Value) &&
+                (!search.Status.HasValue || p.Status == (int)search.Status.Value) &&
+                p.Status != (int)DataStatus.Deleted);
+            linq = _userAuthRepo.AuthFilter(linq, search.CurrentUser, search.CurrentUserRole) as IQueryable<ProductEntity>;
+            if (!string.IsNullOrEmpty(search.Topic) &&
+                 search.Topic.Trim().Length > 0)
+            {
+                linq = linq.Where(p => (from s in dbContext.Set<SpecialTopicEntity>()
+                                        join ps in dbContext.Set<SpecialTopicProductRelationEntity>() on s.Id equals ps.SpecialTopic_Id
+                                        where s.Name.StartsWith(search.Topic) && ps.Product_Id == p.Id
+                                        select s).Any());
+            }
+            if (!string.IsNullOrEmpty(search.Promotion) &&
+                search.Promotion.Trim().Length > 0)
+            {
+                linq = linq.Where(p => (from pr in dbContext.Set<PromotionEntity>()
+                                        join ps in dbContext.Set<Promotion2ProductEntity>() on pr.Id equals ps.ProId
+                                        where pr.Name.StartsWith(search.Promotion) && ps.ProdId == p.Id
+                                        select pr).Any());
+
+            }
+            var linq2 = linq.Join(dbContext.Set<StoreEntity>().Where(s => string.IsNullOrEmpty(search.Store) || s.Name.StartsWith(search.Store)), o => o.Store_Id, i => i.Id, (o, i) => new { P = o, S = i })
+               .Join(dbContext.Set<BrandEntity>().Where(b => string.IsNullOrEmpty(search.Brand) || b.Name.StartsWith(search.Brand)), o => o.P.Brand_Id, i => i.Id, (o, i) => new { P = o.P, S = o.S, B = i })
+               .Join(dbContext.Set<UserEntity>(), o => o.P.CreatedUser, i => i.Id, (o, i) => new { P = o.P, S = o.S, B = o.B, C = i })
+               .Join(dbContext.Set<TagEntity>().Where(t => string.IsNullOrEmpty(search.Tag) || t.Name.StartsWith(search.Tag)), o => o.P.Tag_Id, i => i.Id, (o, i) => new { P = o.P, S = o.S, B = o.B, C = o.C, T = i })
+                .GroupJoin(dbContext.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product), o => o.P.Id, i => i.SourceId
+                           , (o, i) => new { P = o.P, S = o.S, B = o.B, C = o.C, T = o.T, R = i });
+
+
+            linq2 = linq2.OrderByDescending(l => l.P.CreatedDate);
+           
+            totalCount = linq2.Count();
+
+            var skipCount = (request.PageIndex - 1) * request.PageSize;
+
+            linq2 = skipCount == 0 ? linq2.Take(request.PageSize) : linq2.Skip(skipCount).Take(request.PageSize);
+
+
+            var vo = from l in linq2.ToList()
+                     select new ProductViewModel().FromEntity<ProductViewModel>(l.P, p =>
+                     {
+                         p.StoreName = l.S.Name;
+                         p.TagName = l.T.Name;
+                         p.BrandName = l.B.Name;
+                         p.CreateUserName = l.C.Nickname;
+                        
+                         p.Resources = l.R.Select(r => new ResourceViewModel().FromEntity<ResourceViewModel>(r));
+                     });
+
+           
+
+            var v = new ProductCollectionViewModel(request, totalCount) { Products = vo.ToList() };
+            ViewBag.SearchOptions = search;
+            return PartialView("_Selector", v);
         }
         [HttpPost]
         [UserAuthData]
@@ -290,8 +433,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             }
 
         }
-     
 
-     
+
+
     }
 }

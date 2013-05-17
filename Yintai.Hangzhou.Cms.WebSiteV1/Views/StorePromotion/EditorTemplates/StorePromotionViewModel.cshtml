@@ -74,12 +74,26 @@
                 @Html.EditorFor(model => model.MinPoints)
                 @Html.ValidationMessageFor(model => model.MinPoints)
             </div>
+             <div class="editor-label">
+                @Html.LabelFor(model => model.UnitPerPoints)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.UnitPerPoints)
+                @Html.ValidationMessageFor(model => model.UnitPerPoints)
+            </div>
             <div class="editor-label">
                 @Html.LabelFor(model => model.Notice)
             </div>
             <div class="editor-field">
                 @Html.TextArea("Notice", Model == null ? String.Empty : Model.Notice)
-                @Html.ValidationMessageFor(model => model.MinPoints)
+                @Html.ValidationMessageFor(model => model.Notice)
+            </div>
+                        <div class="editor-label">
+                @Html.LabelFor(model => model.UsageNotice)
+            </div>
+            <div class="editor-field">
+                @Html.TextArea("UsageNotice", Model == null ? String.Empty : Model.UsageNotice)
+                @Html.ValidationMessageFor(model => model.UsageNotice)
             </div>
             <div class="editor-label">
                 @Html.LabelFor(model => model.PromotionType)

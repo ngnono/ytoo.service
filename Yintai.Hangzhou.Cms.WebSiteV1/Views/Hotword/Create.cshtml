@@ -22,16 +22,19 @@
 
         function initTypeChoice() {
             var type = $("#Type").val();
+            var wordinput = $("#lbl_word");
+            var storeinput = $("#lbl_store");
+            var brandinput = $("#lbl_brand");
+            wordinput.hide();
+            storeinput.hide();
+            brandinput.hide();
             if (type == 1) {
-                $("#lbl_word").show();
-                $("#lbl_brand").hide();
+               wordinput.show();
             } else if (type == 2) {
-                $("#lbl_word").hide();
-                $("#lbl_brand").show();
-            } else {
-                $("#lbl_word").hide();
-                $("#lbl_brand").hide();
-            }
+                brandinput.show();
+            } else if (type == 3) {
+                storeinput.show();
+            } 
         }
     </script>
 }
@@ -66,6 +69,15 @@
         <div class="editor-field">
             @Html.EditorFor(model => model.BrandId)
             @Html.ValidationMessageFor(model => model.BrandId)
+        </div>
+    </div>
+        <div id="lbl_store">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.StoreId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.StoreId)
+            @Html.ValidationMessageFor(model => model.StoreId)
         </div>
     </div>
     <p>

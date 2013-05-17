@@ -26,11 +26,27 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int SourceType { get; set; }
 
 
-        [DataMember(Name = "createddate")]
+        [IgnoreDataMember]
         public System.DateTime CreatedDate { get; set; }
 
-        [DataMember(Name = "replyuser")]
-        public UserInfoResponse ReplyUser { get; set; }
+        [DataMember(Name = "createddate")]
+        public string CreatedDate_S
+        {
+            get
+            {
+                return CreatedDate.ToClientTimeFormat();
+            }
+            set { }
+        }
+
+        [DataMember(Name = "commentuser")]
+        public UserInfoResponse CommentUser { get; set; }
+
+        [DataMember(Name = "replyuserid")]
+        public int ReplyUser { get; set; }
+
+        [DataMember(Name = "replyusername")]
+        public string ReplyUserName { get; set; }
 
         [DataMember(Name = "resource")]
         public ResourceInfoResponse Resource { get; set; }

@@ -441,7 +441,7 @@ namespace Yintai.Hangzhou.Repository.Impl
 
             return SetCount(id, count, t);
         }
-
+        [Obsolete]
         public IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount
             , ProductSearchOption search)
         {
@@ -500,6 +500,7 @@ namespace Yintai.Hangzhou.Repository.Impl
                         where s.Name.StartsWith(search.Promotion) && s.Id == ps.ProId
                         select p);
             }
+
             Func<IQueryable<ProductEntity>, IOrderedQueryable<ProductEntity>> orderBy = (IQueryable<ProductEntity> e) =>
             {
                 if (!search.OrderBy.HasValue)
@@ -512,6 +513,7 @@ namespace Yintai.Hangzhou.Repository.Impl
                             return e.OrderByDescending(o => o.CreatedUser);
                         case ProductSortOrder.SortOrderDesc:
                             return e.OrderByDescending(o => o.SortOrder).ThenByDescending(o => o.CreatedDate);
+  
                         case ProductSortOrder.CreatedDateDesc:
                         default:
                             return e.OrderByDescending(o => o.CreatedDate);

@@ -56,7 +56,7 @@ namespace Yintai.Hangzhou.WebSupport.Configuration
         {
             get
             {
-                var t = Service.Manager.ConfigManager.GetAppleAppId();
+                var t = com.intime.fashion.common.ConfigManager.GetAppleAppId();
 
                 int i;
                 Int32.TryParse(t, out i);

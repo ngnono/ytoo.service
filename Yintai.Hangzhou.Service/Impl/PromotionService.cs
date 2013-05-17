@@ -5,6 +5,7 @@ using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
 using System.Linq;
+using Yintai.Hangzhou.Contract.DTO.Request.Promotion;
 
 namespace Yintai.Hangzhou.Service.Impl
 {
@@ -13,12 +14,15 @@ namespace Yintai.Hangzhou.Service.Impl
         private readonly IPromotionProductRelationRepository _pprRepository;
         private readonly IPromotionRepository _promotionRepository;
         private readonly ICouponService _couponService;
+        private ICouponRepository _couponRepo;
 
-        public PromotionService(ICouponService couponService, IPromotionRepository promotionRepository, IPromotionProductRelationRepository pprRepository)
+        public PromotionService(ICouponService couponService, IPromotionRepository promotionRepository, IPromotionProductRelationRepository pprRepository
+            ,ICouponRepository couponRepo)
         {
             _pprRepository = pprRepository;
             _promotionRepository = promotionRepository;
             _couponService = couponService;
+            _couponRepo = couponRepo;
         }
 
         public bool Exists(int promotionid, int productid)
@@ -66,6 +70,21 @@ namespace Yintai.Hangzhou.Service.Impl
             return Verification(Get(promotionId));
         }
 
+        public string Verification(PromotionCouponCreateRequest request)
+        {
+            var promotionEntity = _promotionRepository.GetItem(request.PromotionId);
+            string err = Verification(promotionEntity);
+            if (!string.IsNullOrEmpty(err))
+                return err;
+            if (promotionEntity.IsLimitPerUser.HasValue &&
+                promotionEntity.IsLimitPerUser.Value)
+            {
+                var existCoupon = _couponRepo.Get(c => c.FromPromotion == request.PromotionId && c.User_Id == request.AuthUser.Id && c.Status != (int)DataStatus.Deleted).FirstOrDefault();
+                if (existCoupon != null)
+                    return "该优惠活动每人限领一次，您已经领过了。";
+            }
+            return null;
+        }
         public PromotionEntity GetFristNormalForProductId(int productId)
         {
             var es = this._pprRepository.GetList4Product(new List<int>(1) {productId});

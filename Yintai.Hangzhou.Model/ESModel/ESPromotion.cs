@@ -54,6 +54,7 @@ namespace Yintai.Hangzhou.Model.ES
         public bool IsTop { get; set; }
         public virtual IEnumerable<ESResource> Resource { get; set; }
         public int CreateUserId { get; set; }
-
+        public bool ShowInList { get; set; }
+        public string PublicCode { get; set; }
     }
 }

@@ -254,6 +254,45 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             return SuccessResponse();
         }
 
+        public ActionResult ChangePassword()
+        {
+            if (CurrentUser.CustomerId == 0)
+            {
+                ModelState.AddModelError("", "参数验证失败.");
+                return View();
+            }
+            var vo = new ChangePassViewModel() { Id=CurrentUser.CustomerId};
+            return View(vo);
+        }
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePassViewModel vo)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(vo);
+            }
+            if (vo.Id != CurrentUser.CustomerId)
+            {
+                ModelState.AddModelError("", "无权操作！");
+                return View(vo);
+            }
+
+            var entity = _customerRepository.Find(vo.Id);
+            if (!SecurityHelper.CheckEqual(vo.Password,entity.Password))
+            {
+                ModelState.AddModelError("", "密码错误！");
+                return View(vo);
+            }
+            entity.Password = SecurityHelper.ComputeHash(vo.NewPassword);
+            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedUser = CurrentUser.CustomerId;
+            _customerRepository.Update(entity);
+
+            ViewBag.IsUpdateSuccess = true;
+            return View();
+        }
+
         [HttpGet]
         public override JsonResult AutoComplete(string name)
         {

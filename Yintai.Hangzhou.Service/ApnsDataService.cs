@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.Apns;
 using Yintai.Hangzhou.Contract.DTO.Request.Device;
@@ -23,61 +24,52 @@ namespace Yintai.Hangzhou.Service
         public ExecuteResult<DeviceLogInfoResponse> Register(DeviceRegisterRequest request)
         {
             //记LOG
-            var entity = this._deviceLogsRepository.Insert(new DeviceLogEntity
+            DeviceLogEntity entity = null;
+            bool isInsert = true;
+            var userId = request.AuthUser == null || request.AuthUser.Id <= 0?0:request.AuthUser.Id;
+            if (userId == 0)
+            {
+                if (!string.IsNullOrEmpty(request.UserId))
+                    int.TryParse(request.UserId, out userId);
+                else
+                    int.TryParse(request.Token, out userId);
+            }
+            if (userId > 0)
+            {
+                entity = _deviceLogsRepository.Get(d => d.User_Id == userId).FirstOrDefault();
+                if (entity != null)
                 {
-                    CreatedDate = DateTime.Now,
-                    CreatedUser = request.AuthUid,
-                    DeviceToken = request.DeviceToken,
-                    DeviceUid = request.Uid,
-                    Latitude = Convert.ToDecimal(request.Lat),
-                    Longitude = Convert.ToDecimal(request.Lng),
-                    Status = 1,
-                    Type = 1,
-                    UpdatedDate = DateTime.Now,
-                    UpdatedUser = request.AuthUid,
-                    User_Id = request.AuthUid
-                });
+                    isInsert = false;
+                    entity.Latitude = Convert.ToDecimal(request.Lat);
+                    entity.Longitude = Convert.ToDecimal(request.Lng);
+                    entity.DeviceUid = request.Uid;
+                    entity.DeviceToken = request.DeviceToken;
+                    entity.UpdatedDate = DateTime.Now;
+                    entity.UpdatedUser = userId;
+                    _deviceLogsRepository.Update(entity);
+                }
+ 
+            }
+            if (isInsert)
+            {
+                entity = this._deviceLogsRepository.Insert(new DeviceLogEntity
+                    {
+                        CreatedDate = DateTime.Now,
+                        CreatedUser = userId,
+                        DeviceToken = request.DeviceToken,
+                        DeviceUid = request.Uid,
+                        Latitude = Convert.ToDecimal(request.Lat),
+                        Longitude = Convert.ToDecimal(request.Lng),
+                        Status = 1,
+                        Type = 1,
+                        UpdatedDate = DateTime.Now,
+                        UpdatedUser =userId,
+                        User_Id = userId
+                    });
 
-            ////token表
-            //var entity = this._deviceTokenRepository.GetItemByUserIdToken(request.AuthUid, request.DeviceToken);
+            }
 
-            //if (entity == null)
-            //{
-            //    //注册
-            //    entity = this._deviceTokenRepository.Insert(new DeviceTokenEntity
-            //        {
-            //            CreatedDate = DateTime.Now,
-            //            CreatedUser = request.AuthUid,
-            //            Status = 1,
-            //            Token = request.DeviceToken,
-            //            Type = 1,
-            //            UpdatedDate = DateTime.Now,
-            //            UpdatedUser = request.AuthUid,
-            //            User_Id = request.AuthUid
-            //        });
-            //}
-            //else
-            //{
-            //    entity.UpdatedDate = DateTime.Now;
-            //    entity.UpdatedUser = request.AuthUid;
-
-            //    this._deviceTokenRepository.Update(entity);
-            //    //if (entity.User_Id != request.AuthUid)
-            //    //{
-            //    //    //问题
-            //    //    Logger.Warn(String.Format("在注册Apns时，出现了不同用户相同的token,请求的User{0},已注册的用户{1},Token={2},Id={3}", request.AuthUid, entity.User_Id, entity.Token, entity.Id));
-
-            //    //    return new ExecuteResult<ApnsInfoResponse>(null) { StatusCode = StatusCode.ClientError, "devicetoken重复" };
-            //    //}
-            //    //允许
-
-            //    //if (entity.Token != request.DeviceToken)
-            //    //{
-            //    //    //问题
-            //    //    Logger.Warn(String.Format("在注册Apns时，出现了同用户不同token的情况，请求的用户{0},已注册的token={1},当前的token={2},已注册id={3}", request.AuthUid,entity.Token,request.DeviceToken));
-
-            //    //}
-            //}
+           
 
             return new ExecuteResult<DeviceLogInfoResponse> { Data = MappingManager.DeviceLogInfoResponseMapping(entity) };
         }

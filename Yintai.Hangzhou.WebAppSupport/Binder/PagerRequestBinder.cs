@@ -42,6 +42,7 @@ namespace Yintai.Hangzhou.WebSupport.Binder
             }
 
             string pageNumberRaw;
+
             if (controllerContext.HttpContext.Request.Params["page"] == null &&
                 controllerContext.RouteData.Values["page"] == null)
             {
@@ -49,9 +50,10 @@ namespace Yintai.Hangzhou.WebSupport.Binder
             }
             else
             {
-                pageNumberRaw = controllerContext.HttpContext.Request.HttpMethod.Equals("POST")
-                                       ? controllerContext.HttpContext.Request.Form["page"]
-                                       : controllerContext.RouteData.Values["page"].ToString();
+                if (controllerContext.HttpContext.Request.Params["page"] !=null) 
+                    pageNumberRaw = controllerContext.HttpContext.Request.Params["page"];
+                else
+                    pageNumberRaw = controllerContext.RouteData.Values["page"].ToString();
             }
 
 

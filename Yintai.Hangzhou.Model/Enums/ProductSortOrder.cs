@@ -29,7 +29,9 @@ namespace Yintai.Hangzhou.Model.Enums
         ///优先级排序
         /// </summary>
         [Description("优先级")]
-        SortOrderDesc = 3
+        SortOrderDesc = 3,
 
+        [Description("品牌")]
+        SortByBrand = 4
     }
 }

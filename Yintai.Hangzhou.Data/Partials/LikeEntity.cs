@@ -24,6 +24,7 @@ namespace Yintai.Hangzhou.Data.Models
                 if (likedAccount!= null)
                 {
                     likedAccount.Amount = liked;
+                    likedAccount.UpdatedDate = DateTime.Now;
                     db.Entry(likedAccount).State = System.Data.EntityState.Modified;
                     db.SaveChanges();
                 }
@@ -46,6 +47,7 @@ namespace Yintai.Hangzhou.Data.Models
                 if (account != null)
                 {
                     account.Amount = likes;
+                    account.UpdatedDate = DateTime.Now;
                     db.Entry(account).State = System.Data.EntityState.Modified;
                     db.SaveChanges();
 

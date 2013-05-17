@@ -1,0 +1,46 @@
+﻿@model PromotionCollectionViewModel
+<table class="table table-striped table-bordered">
+    <tr>
+        <th></th>
+        <th>图片</th>
+        <th>促销代码</th>
+        <th>名称
+        </th>
+
+    </tr>
+    @foreach (var item in Model.Promotions)
+    {
+        <tr>
+            <td>
+                @Html.RadioButton("promotion",item.Id)
+            </td>
+            <td>
+
+                @if (item.Resources != null && item.Resources.Count() > 0)
+                {
+                    <div class="img-thumnail">
+                        @foreach (var re in item.Resources)
+                        {
+                            if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                            {
+                            <a href="@Url.Action("details", "resource", new { id = re.Id })">
+                                <img width="60" src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" class="img-rounded" style="width:120px" alt="120X0" />
+                            </a>
+                            }
+                        }
+                    </div>
+                }
+            </td>
+
+          
+            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+        </tr>
+    }
+         </table>
+@{
+    ViewData["ParentTargetId"] = "sel_prom_list";
+  }
+@Html.Partial("_PagerAjaxView", Model)

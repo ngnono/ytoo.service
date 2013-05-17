@@ -33,6 +33,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
             this.Property(t => t.UserId).HasColumnName("UserId");
             this.Property(t => t.Amount).HasColumnName("Amount");
+            this.Property(t => t.StoreId).HasColumnName("StoreId");
 		Init();
         }
 

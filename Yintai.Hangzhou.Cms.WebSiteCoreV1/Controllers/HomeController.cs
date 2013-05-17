@@ -21,7 +21,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
 
             return View();
         }
-        [Obsolete]
+
         public ActionResult Print()
         { 
              ReportClass rptH = new ReportClass();

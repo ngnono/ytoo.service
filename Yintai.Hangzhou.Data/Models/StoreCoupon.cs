@@ -19,6 +19,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<int> UpdateUser { get; set; }
         public Nullable<int> UserId { get; set; }
         public Nullable<decimal> Amount { get; set; }
+        public Nullable<int> StoreId { get; set; }
 
         #region Overrides of BaseEntity
 

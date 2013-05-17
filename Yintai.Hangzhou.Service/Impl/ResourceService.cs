@@ -37,6 +37,8 @@ namespace Yintai.Hangzhou.Service.Impl
             {
                 case SourceType.BrandLogo:
                 case SourceType.CustomerPortrait:
+                case SourceType.CustomerThumbBackground:
+                case SourceType.StoreLogo:
                     var useridstr = sourceId.ToString(CultureInfo.InvariantCulture);
                     var n = String.Empty;
                     if (useridstr.Length < 6)

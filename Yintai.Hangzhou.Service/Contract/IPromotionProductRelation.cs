@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Yintai.Hangzhou.Contract.DTO.Request.Promotion;
 using Yintai.Hangzhou.Data.Models;
 
 namespace Yintai.Hangzhou.Service.Contract
@@ -43,5 +44,12 @@ namespace Yintai.Hangzhou.Service.Contract
         /// <param name="productId"></param>
         /// <returns></returns>
         PromotionEntity GetFristNormalForProductId(int productId);
+
+        /// <summary>
+        /// 验证活动
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>错误信息</returns>
+        string Verification(PromotionCouponCreateRequest request);
     }
 }

@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
@@ -55,6 +57,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "使用规则")]
         public IEnumerable<StorePromotionRuleViewModel> Rules { get; set; }
 
+        [Display(Name="积分兑换单位")]
+        public Nullable<int> UnitPerPoints { get; set; }
+
         public string ComposedScopeNotice
         {
             get
@@ -62,11 +67,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
                 var composed = string.Empty;
                 if (Scope ==null || Scope.Count()<1)
                  return composed;
-                foreach (var s in Scope)
-                {
-                    composed = string.Concat(composed, "|",s.StoreName, "--", s.Excludes);
-                }
-                return composed;
+               return JsonConvert.SerializeObject(Scope.Where(s=>s.Status!=(int)DataStatus.Deleted).Select(s=>new {
+                     storeid = s.StoreId,
+                     storename = s.StoreName,
+                     excludes = s.Excludes
+                }),Formatting.None);
             }
         }
 
@@ -104,7 +109,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name="规则代码")]
         public int Id { get; set; }
         public int StorePromotionId { get; set; }
-        [Display(Name = "积点大于：")]
+        [Display(Name = "积点大于等于：")]
         public Nullable<int> RangeFrom { get; set; }
         [Display(Name = "积点小于：")]
         public Nullable<int> RangeTo { get; set; }

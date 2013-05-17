@@ -23,6 +23,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<int> UpdateUser { get; set; }
         public string UsageNotice { get; set; }
         public string InScopeNotice { get; set; }
+        public Nullable<int> UnitPerPoints { get; set; }
 
         #region Overrides of BaseEntity
 

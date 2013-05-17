@@ -1,10 +1,11 @@
-﻿using System;
+﻿using com.intime.fashion.common;
+using System;
 using System.Runtime.Serialization;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.Extension;
 using Yintai.Hangzhou.Contract.Response;
 using Yintai.Hangzhou.Model.Enums;
-
+using SType = Yintai.Hangzhou.Model.Enums.SourceType;
 namespace Yintai.Hangzhou.Contract.DTO.Response.Resources
 {
     [DataContract]
@@ -26,8 +27,24 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Resources
         [DataMember(Name = "name")]
         public string Name { get; set; }
 
-        [DataMember(Name = "domain")]
+        [IgnoreDataMember]
         public string Domain { get; set; }
+        [DataMember(Name = "domain")]
+        public string Domain_s { get {
+            if (!string.IsNullOrEmpty(Domain))
+                return Domain;
+            switch (Type)
+            { 
+                case (int)ResourceType.Image:
+                    return ConfigManager.GetHttpApiImagePath();
+                case (int)ResourceType.Sound:
+                    return ConfigManager.GetHttpApiSoundPath();
+                case (int)ResourceType.Video:
+                    return ConfigManager.GetHttpApivideoPath();
+                default:
+                    return ConfigManager.GetHttpApidefPath();
+            }
+        } set { } }
         [IgnoreDataMember]
         public int CreatedUser { get; set; }
         [IgnoreDataMember]

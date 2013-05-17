@@ -362,14 +362,8 @@ namespace Yintai.Hangzhou.Service
         /// <returns></returns>
         public ExecuteResult<PromotionInfoResponse> CreateCoupon(PromotionCouponCreateRequest request)
         {
-            var promotionEntity = _promotionRepository.GetItem(request.PromotionId);
-            if (promotionEntity == null)
-            {
-                return new ExecuteResult<PromotionInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
-            }
-
-            //有限制，没下载，就报错的
-            var str = _promotionService.Verification(promotionEntity);
+            
+            var str = _promotionService.Verification(request);
             if (!String.IsNullOrEmpty(str))
             {
                 return new ExecuteResult<PromotionInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = str };
@@ -397,8 +391,8 @@ namespace Yintai.Hangzhou.Service
                     };
             }
 
-            //TODO
-            promotionEntity = _promotionRepository.SetCount(PromotionCountType.InvolvedCount, promotionEntity.Id, 1);
+            var promotionEntity = _promotionRepository.GetItem(request.PromotionId);
+             promotionEntity = _promotionRepository.SetCount(PromotionCountType.InvolvedCount, promotionEntity.Id, 1);
 
             var re = MappingManager.PromotionResponseMapping(promotionEntity);
             re.CouponCodeResponse = coupon.Data;

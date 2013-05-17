@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using Yintai.Architecture.Framework.Mapping;
+using Yintai.Architecture.Framework;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Repository.Contract;
 

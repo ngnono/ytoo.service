@@ -1,3 +1,4 @@
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Repository.Impl;
 
@@ -62,6 +63,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IStorePromotionRepository, StorePromotionRepository>();
             Current.Register<IPointOrderRuleRepository, PointOrderRuleRepository>();
             Current.Register<IStorePromotionScopeRepository, StorePromotionScopeRepository>();
+            Current.Register<ICouponLogRepository, CouponLogRepository>();
         }
 
         #endregion

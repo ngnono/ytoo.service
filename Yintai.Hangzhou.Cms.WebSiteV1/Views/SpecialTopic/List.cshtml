@@ -105,6 +105,8 @@
         </th>
         <th>专题描述
         </th>
+        <th>类型</th>
+        <th>跳转目标</th>
         <th>状态
         </th>
         <th>创建用户Id
@@ -159,6 +161,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                 @Html.Label("", ((SpecialTopicType)item.Type).ToFriendlyString())
+            </td>
+            <td>
+                 @Html.DisplayFor(modelItem=> item.TargetValue)
             </td>
             <td>
                 @Html.Label("", ((DataStatus)item.Status).ToFriendlyString())

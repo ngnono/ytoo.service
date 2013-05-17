@@ -1,4 +1,5 @@
 ﻿using Common.Logging;
+using Newtonsoft.Json;
 using PushSharp;
 using PushSharp.Apple;
 using Quartz;
@@ -9,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace com.intime.jobscheduler.Job
 {
@@ -70,6 +72,7 @@ namespace com.intime.jobscheduler.Job
                                                .ForDeviceToken(device.DeviceToken)
                                                .WithAlert(prods.Name)
                                                .WithBadge(1)
+                                               .WithCustomItem("from",JsonConvert.SerializeObject(new {targettype=(int)PushSourceType.Promotion,targetvalue=prods.Id.ToString()}))
                                                .WithSound("sound.caf"));
                             successCount++;
                         }

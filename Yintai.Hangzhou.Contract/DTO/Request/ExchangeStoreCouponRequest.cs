@@ -9,7 +9,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
     {
         public int StorePromotionId { get; set; }
         public int Points { get; set; }
-        public string IdentiyNo { get; set; }
+        public string IdentityNo { get; set; }
+        public int StoreId { get; set; }
 
     }
 }

@@ -27,6 +27,9 @@ namespace Yintai.Hangzhou.Data.Models
         public bool IsTop { get; set; }
         public Nullable<bool> IsProdBindable { get; set; }
         public Nullable<int> PublicationLimit { get; set; }
+        public Nullable<bool> IsMain { get; set; }
+        public Nullable<bool> IsLimitPerUser { get; set; }
+        public string PublicProCode { get; set; }
 
         #region Overrides of BaseEntity
 

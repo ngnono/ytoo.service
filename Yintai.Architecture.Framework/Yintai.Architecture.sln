@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Architecture.ImageCl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Architecture.ImageTool", "Yintai.Architecture.ImageTool\Yintai.Architecture.ImageTool.csproj", "{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Architecture.AudioTool", "Yintai.Architecture.AudioTool\Yintai.Architecture.AudioTool.csproj", "{1AC6D9BC-D4B9-4FDD-8D7E-0ACD0250C2F5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,10 +31,6 @@ Global
 		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AC6D9BC-D4B9-4FDD-8D7E-0ACD0250C2F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AC6D9BC-D4B9-4FDD-8D7E-0ACD0250C2F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AC6D9BC-D4B9-4FDD-8D7E-0ACD0250C2F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AC6D9BC-D4B9-4FDD-8D7E-0ACD0250C2F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -38,6 +38,17 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "品牌名")]
         public string BrandName { get; set; }
 
+        [Display(Name = "门店代码")]
+        [UIHint("Association")]
+        [AdditionalMetadata("controller", "store")]
+        [AdditionalMetadata("displayfield", "Name")]
+        [AdditionalMetadata("searchfield", "name")]
+        [AdditionalMetadata("valuefield", "Id")]
+        public int? StoreId { get; set; }
+
+        [Display(Name = "门店")]
+        public string StoreName { get; set; }
+
         [Display(Name = "状态")]
         public int Status { get; set; }
         [Display(Name = "创建人")]
@@ -61,6 +72,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
                 viewModel.BrandName = brandEntity.name;
                 viewModel.Word = string.Empty;
             }
+            else if (viewModel.Type == (int)HotWordType.Stores)
+            {
+                dynamic storeEntity = JsonConvert.DeserializeObject<dynamic>(viewModel.Word);
+                viewModel.StoreId = storeEntity.id;
+                viewModel.StoreName = storeEntity.name;
+                viewModel.Word = string.Empty;
+            }
             return viewModel as T;
         }
         public override T ToEntity<T>()
@@ -70,12 +88,23 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
             {
                 entity.Word = BrandString;
             }
+            else if (this.Type == (int)HotWordType.Stores)
+            {
+                entity.Word = StoreString;
+            }
             return entity as T;
         }
        
         public string BrandString {
             get {
                 return JsonConvert.SerializeObject(new { id = this.BrandId, name = this.BrandName });
+            }
+        }
+        public string StoreString
+        {
+            get
+            {
+                return JsonConvert.SerializeObject(new { id = this.StoreId, name = this.StoreName });
             }
         }
     }

@@ -35,17 +35,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
         public override void PopulateFields()
         {
-            //this.AddPrimaryField(new NumberField("discount", "Discount", 0.01m, FieldNumberStyle.PKNumberStylePercent));
-            //this.AddAuxiliaryField(new StandardField("expires", "expires", ""));
+
         }
     }
 
     public class PassHelper
     {
-        // private const string IosUrlSchemesPre = "ytfs://";
 
-        //private readonly ICouponDataService _couponDataService;
-        //private readonly IStoreDataService _storeDataService;
         private readonly IBrandDataService _brandDataService;
         private readonly ICouponDataService _couponDataService;
 
@@ -77,69 +73,41 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             if (coupon != null && coupon.IsSuccess && coupon.Data != null)
             {
-                return GetPass(context, coupon.Data);
+                return GetPass2(context, coupon.Data);
             }
 
             return null;
         }
-
-        /// <summary>
-        ///  生成pass
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="coupponInfo"></param>
-        /// <returns></returns>
-        public byte[] GetPass(HttpContextBase context, CouponInfoResponse coupponInfo)
+     
+        public byte[] GetPass2(HttpContextBase context, CouponInfoResponse coupponInfo)
         {
             var generator = new PassGenerator();
 
             var request = new CouponPassGeneratorRequest
-                {
-                    Identifier = ConfigurationManager.AppSettings["Identifier"],
-                    CertThumbprint =
-                        ConfigurationManager.AppSettings["PassBookCertificateThumbprint"].Replace(" ", String.Empty),
-                    CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine,
-                    SerialNumber = coupponInfo.Id.ToString(CultureInfo.InvariantCulture),
-                    Description = coupponInfo.ProductDescription,
-                    OrganizationName = ConfigurationManager.AppSettings["OrganizationName"],
-                    TeamIdentifier = ConfigurationManager.AppSettings["TeamIdentifier"],
-                    BackgroundColor = "rgb(229,1,80)",
-                    ForegroundColor = "rgb(255,255,255)",
-                    LabelColor = "rgb(255,255,255)",
-                    AssociatedStoreIdentifiers = new List<int>(1)
+            {
+                Identifier = ConfigurationManager.AppSettings["Identifier"],
+                CertThumbprint =
+                    ConfigurationManager.AppSettings["PassBookCertificateThumbprint"].Replace(" ", String.Empty),
+                CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine,
+                SerialNumber = coupponInfo.Id.ToString(CultureInfo.InvariantCulture),
+                Description = coupponInfo.ProductDescription,
+                OrganizationName = ConfigurationManager.AppSettings["OrganizationName"],
+                TeamIdentifier = ConfigurationManager.AppSettings["TeamIdentifier"],
+                BackgroundColor = "rgb(229,1,80)",
+                ForegroundColor = "rgb(255,255,255)",
+                LabelColor = "rgb(255,255,255)",
+                AssociatedStoreIdentifiers = new List<int>(1)
                         {
                             ConfigManager.AppleAppid
                         }
-                };
-            //被隐藏
-
-
-            //TODO:???修改 返回应用使用
-
-            //var returnAppUrlSchemes = IosUrlSchemesPre + coupponInfo.User_Id.ToString(CultureInfo.InvariantCulture);
-
-            //if (!String.IsNullOrWhiteSpace(returnAppUrlSchemes))
-            //{
-            //    //request.AddBackField(new StandardField("return app", "请点击下面链接返回应用", "lafasogroupbuy://test"));
-            //    request.AddBackField(new StandardField("return app", "请点击下面链接返回应用", returnAppUrlSchemes));
-            //}
-
-
-            //request.Locale = "zh";
+            };
+            
 
             // override icon and icon retina
             request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/icon.png")));
-            //request.Images.Add(PassbookImage.IconRetina, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/icon@2x.png")));
-
-
-            //request.Images.Add(PassbookImage.Strip, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/strip.png")));
-            //request.Images.Add(PassbookImage.StripRetina, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/strip@2x.png")));
-
             request.Images.Add(PassbookImage.Logo, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/logo.png")));
-            //request.Images.Add(PassbookImage.LogoRetina, System.IO.File.ReadAllBytes(context.Server.MapPath("~/Icons/coupon/logo@2x.png")));
-
             request.AddBarCode(coupponInfo.CouponId, BarcodeType.PKBarcodeFormatPDF417, "iso-8859-1" /*"UTF-8"*/, coupponInfo.CouponId);
-            request.SuppressStripeShine = false;
+            request.SuppressStripShine = false;
 
             //获取品牌 ，获取 STORE
             var store = GetStore(coupponInfo);
@@ -163,8 +131,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
 
             //有效期
-            //request.RelevantDate = coupponInfo.ValidEndDate;
-            //request.IsRelative = true;
+
             request.AddSecondaryField(new DateField("secondary1", "有效期", coupponInfo.ValidStartDate, FieldDateTimeStyle.PKDateStyleLong, FieldDateTimeStyle.PKDateStyleNone));
             //
             request.AddSecondaryField(new StandardField("secondary2", String.Empty, "-"));
@@ -183,21 +150,20 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 var relevantest = String.Format("您附近的{0}正在做促销，详情进店查看", store.Name);
                 request.Locations.Add(
                     new Location
-                        {
-                            Latitude = store.Latitude,
-                            Longitude = store.Longitude,
-                            RelevantText = relevantest
-                        });
+                    {
+                        Latitude = (double)store.Latitude,
+                        Longitude = (double)store.Longitude,
+                        RelevantText = relevantest
+                    });
 
                 if (store.GpsLat != null && store.GpsLng != null)
                 {
                     request.Locations.Add(new Location
-                        {
-                            Altitude = store.GpsAlt,
-                            Latitude = store.GpsLat.Value,
-                            Longitude = store.GpsLng.Value,
-                            RelevantText = relevantest
-                        });
+                    {
+                        Latitude = (double)store.GpsLat.Value,
+                        Longitude = (double)store.GpsLng.Value,
+                        RelevantText = relevantest
+                    });
                 }
             }
 
@@ -298,7 +264,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
         private ActionResult Coupon(ControllerContext controllerContext, CouponInfoResponse couponInfoResponse)
         {
-            var p = _passHelper.GetPass(controllerContext.HttpContext, couponInfoResponse);
+            var p = _passHelper.GetPass2(controllerContext.HttpContext, couponInfoResponse);
 
             return new FileContentResultV2(p, "application/vnd.apple.pkpass", DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture) + ".pkpass");
         }

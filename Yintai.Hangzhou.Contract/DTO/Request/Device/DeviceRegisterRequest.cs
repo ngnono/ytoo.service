@@ -4,5 +4,7 @@
     {
         public string DeviceToken { get; set; }
         public string Uid { get; set; }
+        public string Token { get; set; }
+        public string UserId { get; set; }
     }
 }

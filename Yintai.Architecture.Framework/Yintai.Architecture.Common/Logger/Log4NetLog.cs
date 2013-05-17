@@ -4,9 +4,6 @@ namespace Yintai.Architecture.Common.Logger
     public class Log4NetLog : ILog
     {
         private static readonly log4net.ILog _error = log4net.LogManager.GetLogger("ExceptionLogger");
-        private static readonly log4net.ILog _info = log4net.LogManager.GetLogger("InfoLogger");
-        private static readonly log4net.ILog _debug = log4net.LogManager.GetLogger("DebugLogger");
-        private static readonly log4net.ILog _warn = log4net.LogManager.GetLogger("WarnLogger");
 
         #region Implementation of ILog
 
@@ -16,7 +13,7 @@ namespace Yintai.Architecture.Common.Logger
         /// <param name="obj"></param>
         public void Info(object obj)
         {
-            _info.Info(obj);
+            _error.Info(obj);
         }
 
         /// <summary>
@@ -34,7 +31,7 @@ namespace Yintai.Architecture.Common.Logger
         /// <param name="obj"></param>
         public void Debug(object obj)
         {
-            _debug.Debug(obj);
+            _error.Debug(obj);
         }
 
         /// <summary>
@@ -43,7 +40,7 @@ namespace Yintai.Architecture.Common.Logger
         /// <param name="obj"></param>
         public void Warn(object obj)
         {
-            _warn.Warn(obj);
+            _error.Warn(obj);
         }
 
         /// <summary>

@@ -138,6 +138,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 entity.RecommendSourceType = (int)RecommendSourceType.Default;
                 entity.RecommendUser = CurrentUser.CustomerId;
                 entity.Status = (int)DataStatus.Default;
+                entity.IsMain = true;
                 using (TransactionScope ts = new TransactionScope())
                 {
 
@@ -176,6 +177,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.StartDate = vo.StartDate;
             entity.EndDate = vo.EndDate;
             entity.Description = vo.Description;
+            entity.IsMain = vo.IsMain;
+            entity.IsLimitPerUser = vo.IsLimitPerUser;
+            entity.PublicProCode = vo.PublicProCode;
             using (TransactionScope ts = new TransactionScope())
             {
                 this._promotionRepository.Update(entity);
@@ -212,7 +216,55 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             }
 
         }
-      
+        public PartialViewResult Select(PromotionListSearchOption search, PagerRequest request)
+        {
+            int totalCount;
+            var storeList = new List<int>();
+            if (!string.IsNullOrEmpty(search.Store))
+                storeList = _storeRepository.Get(s => s.Name.StartsWith(search.Store)).Select(s => s.Id).ToList();
+
+            var linq = _promotionRepository.Get(e => (!search.PId.HasValue || e.Id == search.PId.Value)
+                                                     && (string.IsNullOrEmpty(search.Name) || e.Name.ToLower().StartsWith(search.Name.ToLower()))
+                                                     && (!search.Status.HasValue || e.Status == (int)search.Status.Value)
+                                                     && e.Status != (int)DataStatus.Deleted
+                                                     && (string.IsNullOrEmpty(search.Store) || storeList.Any(m => m == e.Store_Id)));
+            linq = _authRepo.AuthFilter(linq, CurrentUser.CustomerId, CurrentUser.Role) as IQueryable<PromotionEntity>;
+            Func<IQueryable<PromotionEntity>, IOrderedQueryable<PromotionEntity>> orderBy = (IQueryable<PromotionEntity> e) =>
+            {
+                if (!search.OrderBy.HasValue)
+                {
+                    return e.OrderByDescending(o => o.CreatedDate);
+                }
+                else
+                {
+                    switch (search.OrderBy.Value)
+                    {
+                        case GenericOrder.OrderByCreateUser:
+                            return e.OrderByDescending(o => o.CreatedUser);
+                        case GenericOrder.OrderByName:
+                            return e.OrderByDescending(o => o.Name);
+                        case GenericOrder.OrderByCreateDate:
+                        default:
+                            return e.OrderByDescending(o => o.CreatedDate);
+
+                    }
+                }
+            };
+            linq = orderBy(linq);
+            totalCount = linq.Count();
+
+            var skipCount = (request.PageIndex - 1) * request.PageSize;
+
+            linq = skipCount == 0 ? linq.Take(request.PageSize) : linq.Skip(skipCount).Take(request.PageSize);
+
+
+
+            var vo = MappingManager.PromotionViewMapping(linq.ToList());
+
+            var v = new PromotionCollectionViewModel(request, totalCount) { Promotions = vo.ToList() };
+            ViewBag.SearchOptions = search;
+            return PartialView("_Selector", v);
+        }
         [HttpGet]
         public override JsonResult AutoComplete(string name)
         {

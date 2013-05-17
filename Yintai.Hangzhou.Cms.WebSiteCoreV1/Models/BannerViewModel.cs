@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 {
-    public class BannerViewModel
+    public class BannerViewModel:IValidatableObject
     {
         [Display(Name="广告代码")]
         public int Id { get; set; }
@@ -31,6 +32,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
 
         public PromotionViewModel Promotion { get; set; }
         public ResourceViewModel Resource { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Status == (int)DataStatus.Normal && SourceId == 0)
+                yield return new ValidationResult(string.Format("必须设置目标代码！"));
+        }
     }
     public class BannerCollectionViewModel : PagerInfo
     {

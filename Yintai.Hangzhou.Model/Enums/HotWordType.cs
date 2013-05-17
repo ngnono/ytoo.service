@@ -11,6 +11,8 @@ namespace Yintai.Hangzhou.Model.Enums
         [Description("关键词")]
         Words = 1,
         [Description("品牌")]
-        BrandStruct = 2
+        BrandStruct = 2,
+        [Description("门店")]
+        Stores = 3
     }
 }

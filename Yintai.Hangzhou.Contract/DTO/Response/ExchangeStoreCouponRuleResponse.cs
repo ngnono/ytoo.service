@@ -7,6 +7,7 @@ using Yintai.Hangzhou.Contract.Response;
 
 namespace Yintai.Hangzhou.Contract.DTO.Response
 {
+    [DataContract]
     public class ExchangeStoreCouponRuleResponse:BaseResponse
     {
         [DataMember(Name = "amount")]

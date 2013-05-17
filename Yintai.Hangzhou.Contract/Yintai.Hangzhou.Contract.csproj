@@ -37,7 +37,12 @@
     <Reference Include="AutoMapper">
       <HintPath>..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -48,11 +53,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_dll\d\Yintai.Architecture.Common.dll</HintPath>
+      <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
     <Reference Include="Yintai.Architecture.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_dll\d\Yintai.Architecture.Framework.dll</HintPath>
+      <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +67,7 @@
     <Compile Include="Comment\ICommentDataService.cs" />
     <Compile Include="Coupon\ICouponDataService.cs" />
     <Compile Include="Customer\ICustomerDataService.cs" />
+    <Compile Include="DTO\DateTimeExtension.cs" />
     <Compile Include="DTO\Request\Card\BindingRequest.cs" />
     <Compile Include="DTO\Request\Coupon\CouponRequest.cs" />
     <Compile Include="DTO\Request\Coupon\CouponRequestType.cs" />
@@ -138,6 +144,10 @@
     <Folder Include="Remind\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
+      <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
+      <Name>com.intime.fashion.common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
       <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>
       <Name>Yintai.Hangzhou.Data</Name>

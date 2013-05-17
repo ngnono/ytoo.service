@@ -13,6 +13,7 @@ using Yintai.Hangzhou.WebSupport.Mvc;
 using System;
 using Yintai.Hangzhou.Contract.DTO.Response.Product;
 using Yintai.Hangzhou.Contract.DTO.Response.Promotion;
+using Yintai.Hangzhou.Contract.DTO.Response.Store;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 {
@@ -23,16 +24,18 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         private ICouponRepository _couponRepo;
         private IProductRepository _productRepo;
         private IPromotionRepository _promotionRepo;
-
+        private IStoreRepository _storeRepo;
         public CouponController(ICouponDataService couponDataService,
             ICouponRepository couponRepo,
             IPromotionRepository promotionRepo,
-            IProductRepository productRepo)
+            IProductRepository productRepo,
+            IStoreRepository storeRepo)
         {
             this._couponDataService = couponDataService;
             _couponRepo = couponRepo;
             _productRepo = productRepo;
             _promotionRepo = promotionRepo;
+            _storeRepo = storeRepo;
         }
 
         public ActionResult List(CouponInfoGetListRequest request, int? authuid, UserModel authUser)
@@ -58,26 +61,39 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 }
             }
             int totalCount = linq.Count();
-            linq = linq.OrderByDescending(c => c.CreatedDate).Skip(request.Page * request.Pagesize).Take(request.Pagesize);
-            var linq2 = linq.GroupJoin(_productRepo.GetAll(), o => o.FromProduct, i => i.Id, (o, i) => new { C=o,Pd =i })
-                           .GroupJoin(_promotionRepo.GetAll(),o=> o.C.FromPromotion,i=>i.Id,(o,i)=>new {C =o.C,Pd = o.Pd,Pr = i});
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(c => c.CreatedDate).Skip(skipCount).Take(request.Pagesize);
+            var productLinq = _productRepo.GetAll().Join(_storeRepo.GetAll(), o => o.Store_Id, i => i.Id, (o, i) => new { Pd = o, S = i });
+            var promotionLinq = _promotionRepo.GetAll().Join(_storeRepo.GetAll(), o => o.Store_Id, i => i.Id, (o, i) => new { Pr = o, S = i });
+            var linq2 = linq.GroupJoin(productLinq, o => o.FromProduct, i => i.Pd.Id, (o, i) => new { C=o,Pd = i.FirstOrDefault() })
+                           .GroupJoin(promotionLinq, o => o.C.FromPromotion, i => i.Pr.Id, (o, i) => new { C = o.C, Pd = o.Pd, Pr = i.FirstOrDefault() });
             var responseData = from l in linq2.ToList()
                                select new CouponInfoResponse().FromEntity<CouponInfoResponse>(l.C,
                                             c => {
-                                                var prod = l.Pd.FirstOrDefault();
+                                                var prod = l.Pd;
                                                 if (prod != null)
                                                 {
-                                                    c.ProductInfoResponse = new ProductInfoResponse().FromEntity<ProductInfoResponse>(prod);
+                                                    c.ProductInfoResponse = new ProductInfoResponse().FromEntity<ProductInfoResponse>(prod.Pd, p => {
+                                                        p.StoreInfoResponse = new StoreInfoResponse().FromEntity<StoreInfoResponse>(prod.S);
+                                                    });
                                                     c.ProductId = c.ProductInfoResponse.Id;
                                                     c.ProductName = c.ProductInfoResponse.Name;
                                                     c.ProductDescription = c.ProductInfoResponse.Description;
+                                                    c.ProductType = (int)SourceType.Product;
+                                                   
                                                 }
-                                                var pro = l.Pr.FirstOrDefault();
+                                                var pro = l.Pr;
                                                 if (pro != null)
                                                 {
-                                                    c.PromotionInfoResponse = new PromotionInfoResponse().FromEntity<PromotionInfoResponse>(pro);
-                                      
+                                                    c.PromotionInfoResponse = new PromotionInfoResponse().FromEntity<PromotionInfoResponse>(pro.Pr, p => {
+                                                        p.StoreInfoResponse = new StoreInfoResponse().FromEntity<StoreInfoResponse>(pro.S);
+                                                    });
+                                                    c.ProductId = c.PromotionInfoResponse.Id;
+                                                    c.ProductName = c.PromotionInfoResponse.Name;
+                                                    c.ProductDescription = c.PromotionInfoResponse.Description;
+                                                    c.ProductType = (int)SourceType.Promotion;
                                                 }
+                                               
                                             });
             var response = new CouponInfoCollectionResponse(request.PagerRequest,totalCount){
                                  CouponInfoResponses = responseData.ToList()

@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
 using Yintai.Architecture.Common.Web.Mvc.Controllers;
-using Yintai.Architecture.Framework.Mapping;
 using Yintai.Hangzhou.Contract.Comment;
 using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.DTO.Request.Comment;
@@ -17,6 +16,7 @@ using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Architecture.Framework;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 {
@@ -101,36 +101,42 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             request.AuthUser = authUser;
 
             var comments = _commentRepo.Get(c => c.Status != (int)DataStatus.Deleted).OrderByDescending(c => c.CreatedDate)
-                            .GroupJoin(_resourceRepo.Get(r=>r.Status!=(int)DataStatus.Deleted && r.SourceType == (int)SourceType.CommentAudio),
-                                        o=>o.Id,
-                                        i=>i.SourceId,
-                                        (o,i)=>new {C=o,Aud=i.FirstOrDefault()})
-                            .GroupJoin(_customerRepo.Get(cu=>cu.Status!=(int)DataStatus.Deleted),
-                                        o=>o.C.User_Id,
-                                        i=>i.Id,
-                                        (o,i)=> new {C=o.C,Aud=o.Aud,U=i.FirstOrDefault()});
+                            .GroupJoin(_resourceRepo.Get(r => r.Status != (int)DataStatus.Deleted && r.SourceType == (int)SourceType.CommentAudio),
+                                        o => o.Id,
+                                        i => i.SourceId,
+                                        (o, i) => new { C = o, Aud = i.FirstOrDefault() })
+                            .GroupJoin(_customerRepo.Get(cu => cu.Status != (int)DataStatus.Deleted),
+                                        o => o.C.User_Id,
+                                        i => i.Id,
+                                        (o, i) => new { C = o.C, Aud = o.Aud, U = i.FirstOrDefault() })
+                             .GroupJoin(_customerRepo.Get(cu => cu.Status != (int)DataStatus.Deleted),
+                                        o => o.C.ReplyUser,
+                                        i => i.Id,
+                                        (o, i) => new { C = o.C, Aud = o.Aud, U = o.U, RU = i.FirstOrDefault() });
             var dbContext = _commentRepo.Context;
             
             var linq = (from c2 in dbContext.Set<CommentEntity>()
-                        let products = dbContext.Set<ProductEntity>().Where(p=>p.Status!=(int)DataStatus.Deleted && p.CreatedUser ==authUser.Id)
-                        let promotions = dbContext.Set<PromotionEntity>().Where(p=>p.Status!=(int)DataStatus.Deleted && p.CreatedUser == authUser.Id)
+                        let products = dbContext.Set<ProductEntity>().Where(p=>p.Status!=(int)DataStatus.Deleted && p.RecommendUser ==authUser.Id)
+                        let promotions = dbContext.Set<PromotionEntity>().Where(p=>p.Status!=(int)DataStatus.Deleted && p.RecommendUser == authUser.Id)
                         where (c2.User_Id == authUser.Id && c2.Status != (int)DataStatus.Deleted) ||
                                products.Any(p=>c2.SourceId == p.Id && c2.SourceType==(int)SourceType.Product) ||
                                promotions.Any(p=>c2.SourceId == p.Id && c2.SourceType == (int)SourceType.Promotion)
-                             select new { SourceId = c2.SourceId, SourceType = c2.SourceType }).Distinct()
+                         select new { SourceId = c2.SourceId, SourceType = c2.SourceType }).Distinct()
                            .GroupJoin(comments,
                                 o => new { SourceType = o.SourceType, SourceId = o.SourceId },
                                 i => new { SourceType = i.C.SourceType, SourceId = i.C.SourceId },
                                 (o, i) => new { SourceType = o.SourceType, SourceId = o.SourceId, Comment = i.FirstOrDefault() });
             int totalCount = linq.Count();
-            linq = linq.OrderByDescending(c => c.Comment.C.CreatedDate).Skip(request.Page * request.Pagesize).Take(request.Pagesize);
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(c => c.Comment.C.CreatedDate).Skip(skipCount).Take(request.Pagesize);
              var responseData = from l in linq.ToList()
                                 select new MyCommentInfoResponse().FromEntity<MyCommentInfoResponse>(l.Comment.C,
                                             c =>
                                             {
-                                                c.SourceId = l.SourceId;
-                                                c.SourceType = l.SourceType;
-                                                c.ReplyUser = new UserInfoResponse().FromEntity<UserInfoResponse>(l.Comment.U);
+                                                //c.SourceId = l.SourceId;
+                                               // c.SourceType = l.SourceType;
+                                                c.CommentUser = new UserInfoResponse().FromEntity<UserInfoResponse>(l.Comment.U);
+                                                c.ReplyUserName = l.Comment.RU == null ? string.Empty : l.Comment.RU.Nickname;
                                                 c.Resource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(l.Comment.Aud);
 
                                             });

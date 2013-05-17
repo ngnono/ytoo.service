@@ -44,20 +44,25 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Yintai.Architecture.Common">
-      <HintPath>..\_dll\d\Yintai.Architecture.Common.dll</HintPath>
+      <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
     <Reference Include="Yintai.Architecture.Framework">
-      <HintPath>..\_dll\d\Yintai.Architecture.Framework.dll</HintPath>
+      <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AwsHelper.cs" />
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="GroupServiceHelper.cs" />
     <Compile Include="SecurityHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

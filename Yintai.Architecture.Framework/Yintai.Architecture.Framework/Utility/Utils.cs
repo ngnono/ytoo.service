@@ -47,24 +47,7 @@ namespace Yintai.Architecture.Framework.Utility
             return obj;
         }
 
-        /// <summary>
-        /// 提取Html中的文本
-        /// </summary>
-        /// <param name="html"> </param>
-        /// <returns></returns>
-        public static string ExtractText(string html)
-        {
-            if (html == null) throw new ArgumentNullException("html");
-            try
-            {
-                var text = new HtmlToText();
-                return text.Convert(html);
-            }
-            catch
-            {
-                return string.Empty;
-            }
-        }
+      
     }
 
     /// <summary>

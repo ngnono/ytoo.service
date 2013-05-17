@@ -54,6 +54,7 @@ namespace Yintai.Hangzhou.Data.Models
                 if (account != null)
                 {
                     account.Amount = sumCoupons + sumStoreCoupons;
+                    account.UpdatedDate = DateTime.Now;
                     db.Entry(account).State = System.Data.EntityState.Modified;
                     db.SaveChanges();
 

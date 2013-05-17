@@ -46,6 +46,14 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.UpdatedUser)
     </div>
+        <div class="display-label">@Html.LabelFor(model=>model.Type)</div>
+    <div class="display-field">
+       @Html.Label("", ((Yintai.Hangzhou.Model.Enums.SpecialTopicType)Model.Type).ToFriendlyString())
+    </div>
+            <div class="display-label">@Html.LabelFor(model=>model.TargetValue)</div>
+    <div class="display-field">
+      @Html.DisplayFor(model=>model.TargetValue)
+    </div>
     <div class="display-label">图片</div>
     <div class="display-field">
         @if (this.Model.Resources != null && Model.Resources.Count > 0)

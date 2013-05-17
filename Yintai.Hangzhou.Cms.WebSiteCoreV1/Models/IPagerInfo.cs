@@ -21,5 +21,6 @@
         /// 总记录数
         /// </summary>
         int TotalCount { get; }
+
     }
 }

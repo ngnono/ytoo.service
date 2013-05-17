@@ -58,11 +58,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Yintai.Architecture.Common">
-      <HintPath>..\_dll\d\Yintai.Architecture.Common.dll</HintPath>
+    <Reference Include="Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.Framework">
-      <HintPath>..\_dll\d\Yintai.Architecture.Framework.dll</HintPath>
+    <Reference Include="Yintai.Architecture.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +73,7 @@
     <Compile Include="Enums\BrandSortOrder.cs" />
     <Compile Include="Enums\BusinessStatus.cs" />
     <Compile Include="Enums\CardType.cs" />
+    <Compile Include="Enums\CouponActionType.cs" />
     <Compile Include="Enums\CouponStatus.cs" />
     <Compile Include="Enums\HotWordType.cs" />
     <Compile Include="Enums\CouponBusinessStatus.cs" />
@@ -81,8 +84,10 @@
     <Compile Include="Enums\MathMethod.cs" />
     <Compile Include="Enums\NotificationStatus.cs" />
     <Compile Include="Enums\PromotionCountType.cs" />
+    <Compile Include="Enums\PushSourceType.cs" />
     <Compile Include="Enums\ResourceSortOrder.cs" />
     <Compile Include="Enums\SpecialTopicOrder.cs" />
+    <Compile Include="Enums\SpecialTopicType.cs" />
     <Compile Include="Enums\StorePromotionType.cs" />
     <Compile Include="Enums\StoreSortOrder.cs" />
     <Compile Include="Enums\TagSortOrder.cs" />

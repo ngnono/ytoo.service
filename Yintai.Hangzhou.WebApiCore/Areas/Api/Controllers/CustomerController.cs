@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
 using Yintai.Architecture.Common.Web.Mvc.Controllers;
+using Yintai.Architecture.Framework.Utility;
 using Yintai.Hangzhou.Contract.Customer;
 using Yintai.Hangzhou.Contract.DTO.Request.Customer;
 using Yintai.Hangzhou.Contract.DTO.Response.Customer;
@@ -86,6 +88,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     c.BackgroundLogo = bgThum.AbsoluteUrl;
                                 }
                                 c.CountsFromEntity(l.UA);
+                                c.Token = SessionKeyHelper.Encrypt(authUser.Id.ToString(CultureInfo.InvariantCulture));
                             }); ;
 
             return new RestfulResult

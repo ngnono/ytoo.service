@@ -1,9 +1,11 @@
-﻿using Common.Logging;
+﻿using com.intime.fashion.common;
+using Common.Logging;
 using Newtonsoft.Json;
 using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,33 +20,31 @@ namespace com.intime.jobscheduler.Job
     [DisallowConcurrentExecution]
     public class CouponStatusSyncJob : IJob
     {
-        public async void Execute(IJobExecutionContext context)
+        public void Execute(IJobExecutionContext context)
         {
             ILog log = LogManager.GetLogger(this.GetType());
 
-            var awsHost = ConstructRestRequest(context);
             JobDataMap data = context.JobDetail.JobDataMap;
              var interval = data.ContainsKey("interval") ? data.GetIntValue("interval") : 24 * 60;
             var benchDate = DateTime.Now.AddMinutes(-interval);
-            var client = new HttpClient();
-            var bodydata = JsonConvert.SerializeObject(new
-            {
-                data = new
+            var host = data.GetString("awshost");
+           var public_key = data.GetString("publickey");
+            var private_key = data.GetString("privatekey");
+
+            dynamic jsonResponse = null;
+            AwsHelper.SendHttpMessage(host, new
                 {
-                    benchdate = benchDate.ToString("yyyy-MM-ddThh:mm:ssZ")
-                }
-            });
-            HttpContent requestBody = new StringContent(bodydata);
-            requestBody.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-            var response = await client.PostAsync(awsHost,requestBody);
-            var body = await response.Content.ReadAsStringAsync();
-            var jsonResponse = JsonConvert.DeserializeObject<dynamic>(body);
-            if (jsonResponse == null ||
-                jsonResponse.isSuccessful != true)
+                    benchdate = benchDate.ToUniversalTime().ToString("yyyy-MM-ddThh:mm:ssZ")
+                },public_key,private_key,r=>jsonResponse = r,null);
+
+            if (jsonResponse == null )
             {
-                log.Info("request error" + body);
+                log.Info("request error!" );
                 return;
             }
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 foreach (var dynamicObject in jsonResponse.data)
@@ -62,8 +62,22 @@ namespace com.intime.jobscheduler.Job
                                     coupon.UpdateDate = DateTime.Now;
                                     coupon.UpdateUser = 0;
                                     db.Entry(coupon).State = EntityState.Modified;
+
+                                    db.CouponLogs.Add(new CouponLogEntity()
+                                    {
+                                        ActionType = (int)CouponActionType.Consume,
+                                        BrandNo = dynamicObject.brandno,
+                                        Code = code,
+                                        ConsumeStoreNo = dynamicObject.storeno,
+                                        CreateDate = DateTime.Now,
+                                        CreateUser = 0,
+                                        ReceiptNo = dynamicObject.receiptno,
+                                        Type = 1
+                                    });
                                     db.SaveChanges();
+                                    successCount++;
                                 }
+                               
                                 break;
                             case 2:
                                  var coupon2 = db.CouponHistories.Where(s => s.CouponId == code && s.Status != (int)CouponStatus.Deleted).FirstOrDefault();
@@ -71,7 +85,20 @@ namespace com.intime.jobscheduler.Job
                                 {
                                     coupon2.Status = (int)CouponStatus.Used;
                                     db.Entry(coupon2).State = EntityState.Modified;
+
+                                    db.CouponLogs.Add(new CouponLogEntity()
+                                    {
+                                        ActionType = (int)CouponActionType.Consume,
+                                        BrandNo = dynamicObject.brandno,
+                                        Code = code,
+                                        ConsumeStoreNo = dynamicObject.storeno,
+                                        CreateDate = DateTime.Now,
+                                        CreateUser = 0,
+                                        ReceiptNo = dynamicObject.receiptno,
+                                        Type = 2
+                                    });
                                     db.SaveChanges();
+                                    successCount++;
                                 }
                                 break;
                         }
@@ -83,40 +110,10 @@ namespace com.intime.jobscheduler.Job
 
                 }
             }
+            sw.Stop();
+            log.Info(string.Format("{0} status logs in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
 
         }
-        private string ConstructRestRequest(IJobExecutionContext context)
-        {
-            JobDataMap data = context.JobDetail.JobDataMap;
-            var host = data.GetString("awshost");
-
-                
-            var public_key = data.GetString("publickey");
-            var private_key = data.GetString("privatekey");
-
-            Dictionary<string, string> query = new Dictionary<string, string>();
-            query.Add("key", public_key);
-            query.Add("nonce", new Random(1000).Next().ToString());
-            query.Add("timestamp", DateTime.UtcNow.ToString("yyyy-MM-ddThh:mm:ssZ"));
-            var signingValue = new StringBuilder();
-            var signedValue = string.Empty;
-            foreach (var s in query.Values.ToArray().OrderBy(s => s))
-                signingValue.Append(s);
-            ILog log = LogManager.GetLogger(this.GetType());
-            log.Info(string.Format("signed value:{0}",signingValue.ToString()));
-            using (HMACSHA1 hmac = new HMACSHA1(Encoding.ASCII.GetBytes(private_key)))
-            {
-               var hashValue = hmac.ComputeHash(Encoding.ASCII.GetBytes(signingValue.ToString()));
-               signedValue =Convert.ToBase64String(hashValue);
-               log.Info(signedValue);
-                //signedValue = hashValue.Aggregate(new StringBuilder(), (s, e) => s.AppendFormat("{0:x2}",e), s => s.ToString() );
-            }
-            query.Add("sign",signedValue);
-            var requestUrl = new StringBuilder();
-            requestUrl.Append(host);
-            requestUrl.Append("?");
-            return query.Keys.Aggregate(requestUrl, (s, e) => s.AppendFormat("&{0}={1}", e, HttpUtility.UrlEncode(query[e])), s => s.ToString());
-
-        }
+      
     }
 }

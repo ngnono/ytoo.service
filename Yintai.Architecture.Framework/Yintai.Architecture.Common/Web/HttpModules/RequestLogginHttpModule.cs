@@ -88,7 +88,7 @@ namespace Yintai.Architecture.Common.Web.HttpModules
                 sb.AppendLine();
             }
 
-            _log.Info(sb.ToString());
+            _log.Debug(sb.ToString());
         }
 
         #region helper

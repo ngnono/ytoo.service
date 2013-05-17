@@ -23,7 +23,8 @@ namespace Yintai.Hangzhou.Model.Enums
         /// </summary>
         [Description("有效")]
         Normal = DataStatus.Normal,
-
+        [Description("过期")]
+        Expired = 2,
         [Description("已使用")]
         Used = 10
 

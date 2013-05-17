@@ -118,6 +118,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "发行量（不填或-1视为不限制）")]
         public Nullable<int> PublicationLimit { get; set; }
 
+        [Display(Name = "促销列表显示")]
+        public Nullable<bool> IsMain { get; set; }
+
+        [Display(Name = "限制每人领一张")]
+        public Nullable<bool> IsLimitPerUser { get; set; }
+
+        [Display(Name="公用码")]
+        public string PublicProCode { get; set; }
+
         public List<ResourceViewModel> Resources { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

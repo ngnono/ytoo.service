@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.intime.fashion.common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Hangzhou.Repository.Impl;
 using Yintai.Hangzhou.Service.Contract.Apis;
 using Yintai.Hangzhou.Service.Logic;
 using Yintai.Hangzhou.Service.Manager;
@@ -30,17 +32,23 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         private IStoreCouponsRepository _storecouponRepo;
         private IStorePromotionRepository _storeproRepo;
         private IPointRepository _pointRepo;
+        private IStorePromotionScopeRepository _storeproscopeRepo;
+        private ICouponLogRepository _couponlogRepo;
         public StorePromotionCouponController(ICardRepository cardRepo,
             IGroupCardService groupData,
             IStoreCouponsRepository storecouponRepo,
             IStorePromotionRepository storeproRepo,
-            IPointRepository pointRepo)
+            IPointRepository pointRepo,
+            IStorePromotionScopeRepository storeproscopeRepo,
+            ICouponLogRepository couponlogRepo)
         {
             _cardRepo = cardRepo;
             _groupData = groupData;
             _storecouponRepo = storecouponRepo;
             _storeproRepo = storeproRepo;
             _pointRepo = pointRepo;
+            _storeproscopeRepo = storeproscopeRepo;
+            _couponlogRepo = couponlogRepo;
         }
         [HttpPost]
         [RestfulAuthorize]
@@ -58,10 +66,26 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             {
                 return new RestfulResult
                 {
-                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "兑换积分需大于最小积分限制!" }
+                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "兑换积点需大于最小积点限制!" }
 
                 }; 
             }
+            if (storepromotion.MinPoints.HasValue && storepromotion.UnitPerPoints.HasValue && storepromotion.UnitPerPoints.Value > 0 &&
+                (request.Points % storepromotion.UnitPerPoints) != 0)
+            {
+                return new RestfulResult
+                {
+                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = string.Format("积点需为{0}的整数倍!",storepromotion.UnitPerPoints) }
+
+                };  
+            }
+            var storescope = _storeproscopeRepo.Get(s => s.StorePromotionId == request.StorePromotionId && s.StoreId == request.StoreId && s.Status != (int)DataStatus.Deleted).FirstOrDefault();
+            if (storescope == null)
+                return new RestfulResult
+                {
+                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "门店无效!" }
+
+                };
             var cardInfo = _cardRepo.Get(c => c.User_Id == authUser.Id && c.Status != (int)DataStatus.Deleted).FirstOrDefault();
             if (cardInfo == null)
                 return new RestfulResult { 
@@ -80,7 +104,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "积分不足!" }
 
                 };
-             StoreCouponEntity newCoupon = null;
+            StoreCouponEntity newCoupon = null;
             using (var ts = new TransactionScope())
             { 
                 // step1: create coupon code
@@ -98,26 +122,49 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     ValidStartDate = storepromotion.CouponStartDate,
                     ValidEndDate = storepromotion.CouponEndDate,
                     VipCard = cardInfo.CardNo,
+                    StoreId = request.StoreId,
                     Code = StorePromotionRule.CreateCode(request.StorePromotionId)
                 });
                 // step2: deduce points
                var exchangeResult = _groupData.Exchange(new GroupExchangeRequest(){
                      CardNo = cardInfo.CardNo,
-                      IdentityNo = request.IdentiyNo
+                     IdentityNo = request.IdentityNo
                 });
+                
+               string groupErr;
+               bool isGroupExchangeSuccess = GroupServiceHelper.SendHttpMessage(ConfigManager.GroupHttpUrlExchange,
+                    ConfigManager.GroupHttpPublicKey,
+                    ConfigManager.GroupHttpPrivateKey,
+                    new { 
+                        cardno = cardInfo.CardNo,
+                        amount = request.Points,
+                        identityno = request.IdentityNo.Trim(),
+                        storeno = ConfigManager.AppStoreNoInGroup
+                     },
+                    out groupErr);
+                
                 // step3: commit
-                if (exchangeResult.Success)
+               if (isGroupExchangeSuccess)
+               // if (exchangeResult.Success)
                     ts.Complete();
                 else
                 {
+                    Logger.Info(groupErr);
                      return new RestfulResult
                 {
-                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "积分扣减异常!" }
+                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError,
+                        Message = string.IsNullOrEmpty(groupErr)?"积分扣减异常!":groupErr }
 
                 };
                 }
             }
-            return new RestfulResult { Data = new ExecuteResult<ExchangeStoreCouponResponse>(new ExchangeStoreCouponResponse().FromEntity<ExchangeStoreCouponResponse>(newCoupon)) };
+            return new RestfulResult { Data = new ExecuteResult<ExchangeStoreCouponResponse>(
+                                new ExchangeStoreCouponResponse().FromEntity<ExchangeStoreCouponResponse>(newCoupon,
+                                            s=>{
+                                                s.StoreName = storescope.StoreName;
+                                                s.Exclude = storescope.Excludes;
+
+                                            })) };
         }
         [RestfulAuthorize]
         public ActionResult List(StoreCouponListRequest request, int? authuid, UserModel authUser)
@@ -135,15 +182,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                         linq = linq.Where(c => c.Status == (int)CouponStatus.Used);
                         break;
                     case CouponRequestType.Expired:
-                        linq = linq.Where(c => c.Status != (int)CouponStatus.Used && c.ValidEndDate < DateTime.Now);
+                        linq = linq.Where(c => c.Status != (int)CouponStatus.Used && c.ValidEndDate.HasValue && c.ValidEndDate.Value < DateTime.Now);
                         break;
                     case CouponRequestType.UnUsed:
-                        linq = linq.Where(c => c.Status != (int)CouponStatus.Used && c.ValidEndDate >= DateTime.Now);
+                        linq = linq.Where(c => c.Status != (int)CouponStatus.Used && c.ValidEndDate.HasValue && c.ValidEndDate.Value >= DateTime.Now);
                         break;
                 }
             }
             int totalCount = linq.Count();
-            linq = linq.OrderByDescending(c => c.CreateDate).Skip(request.Page * request.Pagesize).Take(request.Pagesize);
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(c => c.CreateDate).Skip(skipCount).Take(request.Pagesize);
             var linq2 = linq.Join(_storeproRepo.GetAll(), o => o.StorePromotionId, i => i.Id, (o, i) => new { SC = o, SP = i });
                           
             var responseData = from l in linq2.ToList()
@@ -166,14 +214,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             if (request == null)
                 return new RestfulResult { Data = new ExecuteResult<StoreCouponListRequest>(null) };
             var linq = _storecouponRepo.Get(c => c.Id == request.StoreCouponId && c.UserId== authUser.Id && c.Status != (int)CouponStatus.Deleted);
-            var linq2 = linq.Join(_storeproRepo.GetAll(), o => o.StorePromotionId, i => i.Id, (o, i) => new { SC = o, SP = i });
+            var linq2 = linq.Join(_storeproRepo.GetAll(), o => o.StorePromotionId, i => i.Id, (o, i) => new { SC = o, SP = i })
+                            .Join(_storeproscopeRepo.Get(s => s.Status != (int)DataStatus.Deleted), o => new { o.SC.StorePromotionId, o.SC.StoreId }, i => new { i.StorePromotionId, i.StoreId }, (o, i) => new { SC=o.SC,SP=o.SP,SS=i}); ;
                            
             var responseData = from l in linq2.ToList()
                                select new StoreCouponDetailResponse().FromEntity<StoreCouponDetailResponse>(l.SC,
                                             c =>
                                             {
                                                 c.Promotion = new StorePromotionDetailResponse().FromEntity<StorePromotionDetailResponse>(l.SP);
-                                              
+                                                c.StoreName = l.SS.StoreName;
+                                                c.Exclude = l.SS.Excludes;
+
                                             });
             return new RestfulResult { Data = new ExecuteResult<StoreCouponDetailResponse>(responseData.FirstOrDefault()) };
         }
@@ -182,14 +233,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         public ActionResult Void(StoreCouponDetailRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUser = authUser;
-            var coupon = _storecouponRepo.Get(sp => sp.Id == request.StoreCouponId && sp.Status!=(int)CouponStatus.Used && sp.ValidEndDate >= DateTime.Now).FirstOrDefault();
+            var coupon = _storecouponRepo.Get(sp => sp.Id == request.StoreCouponId && sp.UserId.Value == authUser.Id && sp.Status!=(int)CouponStatus.Used && sp.ValidEndDate >= DateTime.Now).FirstOrDefault();
             if (coupon == null)
                 return new RestfulResult
                 {
-                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "代金券已失效!" }
+                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "代金券已失效或使用!" }
 
                 };
-
+           
             using (var ts = new TransactionScope())
             {
                 // step1: void coupon
@@ -202,7 +253,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     CreatedDate = DateTime.Now,
                     CreatedUser = authUser.Id,
                     Description = "取消代金券退回积分",
-                    Name = "取消代金券",
+                    Name = string.Format("取消代金券,返回{0}",ConfigManager.Point2GroupRatio * coupon.Points.Value),
                     PointSourceId = request.StoreCouponId,
                     PointSourceType = (int)PointSourceType.Group,
                     Status = (int)DataStatus.Normal,
@@ -213,9 +264,30 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     Amount = ConfigManager.Point2GroupRatio * coupon.Points.Value
 
                 });
+
+                //step3: insert coupon log
+               _couponlogRepo.Insert(new CouponLogEntity()
+               {
+                   ActionType = (int)CouponActionType.Void,
+                   Code = coupon.Code,
+                   CreateDate = DateTime.Now,
+                   CreateUser = authUser.Id,
+                   Type = (int)CouponType.StorePromotion
+               });
                
+                 // step4: void action should call aws service directly to check the real time coupon status
+               string message = string.Empty;
+                bool isVoidSuccess = AwsHelper.SendHttpMessage(ConfigManager.AwsHttpUrlVoidCoupon,
+                        new {
+                          code = coupon.Code  
+                        },
+                        ConfigManager.AwsHttpPublicKey,
+                        ConfigManager.AwsHttpPrivateKey,
+                        r => message = r.message,
+                        null);
+
                 // step3: commit
-               if (newPoint != null)
+               if (newPoint != null && isVoidSuccess)
                {
                    ts.Complete();
                }

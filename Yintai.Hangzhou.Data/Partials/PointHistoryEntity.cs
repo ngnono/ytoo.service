@@ -20,6 +20,7 @@ namespace Yintai.Hangzhou.Data.Models
                if (account != null)
                {
                    account.Amount = sumPoints > 0 ? sumPoints : 0;
+                   account.UpdatedDate = DateTime.Now;
                    db.Entry(account).State = System.Data.EntityState.Modified;
                    db.SaveChanges();
 

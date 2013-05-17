@@ -50,9 +50,6 @@
     <Reference Include="EmitMapper">
       <HintPath>..\_dll\EmitMapper.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\_dll\HtmlAgilityPack.dll</HintPath>
-    </Reference>
     <Reference Include="LinqKit">
       <HintPath>..\_dll\LinqKit.dll</HintPath>
     </Reference>
@@ -68,9 +65,6 @@
     <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\_dll\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
@@ -219,10 +213,6 @@
     <Folder Include="fileupload\video\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\dotnet-passbook-master\Passbook.Generator\Passbook.Generator.csproj">
-      <Project>{cec0a9ce-3250-410f-9469-38eef0f9c8b6}</Project>
-      <Name>Passbook.Generator</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
       <Name>Yintai.Hangzhou.Contract</Name>
@@ -274,7 +264,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>1303</DevelopmentServerPort>
+          <DevelopmentServerPort>62564</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8080</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

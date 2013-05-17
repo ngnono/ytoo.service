@@ -198,6 +198,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.CouponStartDate = vo.CouponStartDate;
             entity.CouponEndDate = vo.CouponEndDate;
             entity.MinPoints = vo.MinPoints;
+            entity.UnitPerPoints = vo.UnitPerPoints;
             entity.Notice = vo.Notice;
             entity.Status = vo.Status;
             entity.UsageNotice = vo.UsageNotice;

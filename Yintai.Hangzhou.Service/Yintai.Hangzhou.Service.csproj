@@ -49,17 +49,21 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Yintai.Architecture.Common">
-      <HintPath>..\_dll\d\Yintai.Architecture.Common.dll</HintPath>
+    <Reference Include="Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.Framework">
-      <HintPath>..\_dll\d\Yintai.Architecture.Framework.dll</HintPath>
+    <Reference Include="Yintai.Architecture.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.ImageClient">
-      <HintPath>..\_dll\d\Yintai.Architecture.ImageClient.dll</HintPath>
+    <Reference Include="Yintai.Architecture.ImageClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\Yintai.Architecture.ImageClient.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.ImageTool">
-      <HintPath>..\_dll\d\Yintai.Architecture.ImageTool.dll</HintPath>
+    <Reference Include="Yintai.Architecture.ImageTool, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\Yintai.Architecture.ImageTool.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -101,7 +105,6 @@
     <Compile Include="Impl\UserService.cs" />
     <Compile Include="Logic\StorePromotionRule.cs" />
     <Compile Include="Manager\CacheKeyManager.cs" />
-    <Compile Include="Manager\ConfigManager.cs" />
     <Compile Include="Manager\FileUploadServiceManager.cs" />
     <Compile Include="Manager\UploadFileConfigManager.cs" />
     <Compile Include="PointDataService.cs" />

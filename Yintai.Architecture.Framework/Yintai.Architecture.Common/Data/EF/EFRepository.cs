@@ -9,8 +9,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Common.Models;
-using Yintai.Architecture.Framework.Mapping;
 using Yintai.Architecture.Framework.ServiceLocation;
+using Yintai.Architecture.Framework;
 
 namespace Yintai.Architecture.Common.Data.EF
 {

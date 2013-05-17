@@ -37,10 +37,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Store
         public int UpdatedUser { get; set; }
 
         [DataMember(Name = "lng")]
-        public double Longitude { get; set; }
+        public decimal Longitude { get; set; }
 
         [DataMember(Name = "lat")]
-        public double Latitude { get; set; }
+        public decimal Latitude { get; set; }
 
         [IgnoreDataMember]
         public int Group_Id { get; set; }
@@ -58,18 +58,18 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Store
         /// 距离 单位 米
         /// </summary>
         [DataMember(Name = "distance")]
-        public double Distance { get; set; }
+        public decimal Distance { get; set; }
 
         [DataMember(Name = "resources")]
         public List<ResourceInfoResponse> ResourceInfoResponses { get; set; }
 
         [IgnoreDataMember]
-        public Nullable<double> GpsLat { get; set; }
+        public Nullable<decimal> GpsLat { get; set; }
 
         [IgnoreDataMember]
-        public Nullable<double> GpsLng { get; set; }
+        public Nullable<decimal> GpsLng { get; set; }
 
         [IgnoreDataMember]
-        public Nullable<double> GpsAlt { get; set; }
+        public Nullable<decimal> GpsAlt { get; set; }
     }
 }

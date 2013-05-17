@@ -1,0 +1,69 @@
+﻿@using System.Linq
+@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.PagerInfo
+@{
+    var controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    var actionName = ViewContext.RouteData.Values["action"].ToString();
+    var queryStrings = ViewContext.RequestContext.HttpContext.Request.Params;
+   var selectValues = queryStrings.AllKeys.Where(q => q.StartsWith("search."));
+   IDictionary<string,object> routeValueDic=  selectValues
+                            .ToDictionary(p=>p,p=>queryStrings[p] as object);
+    var ajaxOptions = new AjaxOptions()
+    {
+        HttpMethod = "Get",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = ViewData["ParentTargetId"].ToString(),
+          
+    };
+   
+  
+    var startIndex = Model.Index - 3 <= 1 ? 1 : Model.Index - 3;
+    var endIndex = Model.Index + 3 >= Model.TotalPaged ? Model.TotalPaged : Model.Index + 3;
+}
+@if (Model.IsPaged)
+{
+    <div class="pagination pagination-centered">
+        <ul>
+
+            <li>
+                @if (Model.Index <= 1)
+                { 
+                    <span class="disabled">&laquo;</span>
+                }
+                else
+                {
+                    routeValueDic["page"] = (Model.Index-1) as object;
+                    @Ajax.ActionLink("<",null,null,new RouteValueDictionary(routeValueDic), ajaxOptions,null)
+                }
+            </li>
+            @for (int i = startIndex; i <= endIndex; i++)
+            {
+                routeValueDic["page"] = i.ToString() as object;
+                <li>
+                    @if (i == Model.Index)
+                    { 
+                        <span>@i</span>
+                    }
+                    else
+                    {
+                        @Ajax.ActionLink(i.ToString(), null,null,new RouteValueDictionary(routeValueDic), ajaxOptions,null)
+                   
+                    }
+                </li>
+            }
+            <li>
+                @if (Model.Index >= Model.TotalPaged)
+                { 
+                    <span class="disabled">&raquo;</span>
+                }
+                else
+                {
+                     routeValueDic["page"] = (Model.Index+1) as object;
+                    @Ajax.ActionLink(">",null,null,new RouteValueDictionary(routeValueDic), ajaxOptions,null)
+                   
+                }
+            </li>
+            <li><span>@string.Format("{0}/{1}", Model.Index, Model.TotalPaged)</span></li>
+        </ul>
+
+    </div>
+}

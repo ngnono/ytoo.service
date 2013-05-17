@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using com.intime.fashion.common;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Runtime.Serialization;
 using Yintai.Hangzhou.Contract.DTO.Response.Favorite;
 using Yintai.Hangzhou.Contract.Response;
@@ -69,11 +73,39 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
         [DataMember(Name = "region_id")]
         public int Region_Id { get; set; }
 
-        [DataMember(Name = "logo")]
+        [IgnoreDataMember]
         public string Logo { get; set; }
 
-        [DataMember(Name="logobg")]
+        [DataMember(Name = "logo")]
+        public string Logo_s
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Logo))
+                    return string.Empty;
+                if (Logo.StartsWith("http://"))
+                    return Logo;
+                return Path.Combine(ConfigManager.GetHttpApiImagePath(),
+                    Logo);
+
+            }
+            set { }
+        }
+
+
+        [IgnoreDataMember]
         public string BackgroundLogo { get; set; }
+
+        [DataMember(Name = "logobg")]
+        public string BackgroundLogo_s { get {
+            if (string.IsNullOrEmpty(BackgroundLogo))
+                return string.Empty;
+            if (BackgroundLogo.StartsWith("http://"))
+                return BackgroundLogo;
+            return Path.Combine(ConfigManager.GetHttpApiImagePath(),
+                BackgroundLogo);
+
+        } set { } }
 
         [IgnoreDataMember]
         public UserLevel Level { get; set; }

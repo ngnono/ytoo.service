@@ -14,5 +14,7 @@ namespace Yintai.Hangzhou.Model.ES
         public DateTime CreatedDate { get; set; }
         public int CreateUser { get; set; }
         public IEnumerable<ESResource> Resource { get; set; }
+        public int Type { get; set; }
+        public string TargetValue { get; set; }
     }
 }

@@ -67,6 +67,8 @@ namespace Yintai.Hangzhou.Model.ES
         public Nullable<int> CreateUser { get; set; }
         public string UsageNotice { get; set; }
         public string InScopeNotice { get; set; }
+        public string ExchangeRule { get; set; }
+        public int UnitPerPoints { get; set; }
 
         public  T FromEntity<T>(dynamic entity) where T : class
         {

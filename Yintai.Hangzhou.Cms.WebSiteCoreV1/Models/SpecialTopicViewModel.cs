@@ -22,7 +22,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public List<SpecialTopicViewModel> SpecialTopics { get; set; }
     }
 
-    public class SpecialTopicViewModel : BaseViewModel
+    public class SpecialTopicViewModel : BaseViewModel, IValidatableObject
     {
         [Key]
         public int Id { get; set; }
@@ -40,6 +40,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "类型")]
         public int Type { get; set; }
 
+        [Display(Name = "跳转目标")]
+        public string TargetValue { get; set; }
+
 
         public List<ResourceViewModel> Resources { get; set; }
 
@@ -55,18 +58,38 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         public DateTime UpdatedDate { get; set; }
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (this.Status == (int)DataStatus.Normal)
+            {
+                switch (this.Type)
+                {
+                    case (int)SpecialTopicType.Product:
+                    case (int)SpecialTopicType.Promotion:
+                    case (int)SpecialTopicType.Url:
+                        if (string.IsNullOrEmpty(TargetValue))
+                            yield return new ValidationResult("跳转目标没有设置！");
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+
+        }
     }
     public class SpecialTopicListSearchOption
     {
-        [Display(Name="专题代码")]
+        [Display(Name = "专题代码")]
         public int? PId { get; set; }
-        [Display(Name="专题名")]
+        [Display(Name = "专题名")]
         public string Name { get; set; }
-        [Display(Name="状态")]
+        [Display(Name = "状态")]
         public DataStatus? Status { get; set; }
-        [Display(Name="排序")]
+        [Display(Name = "排序")]
         public GenericOrder? OrderBy { get; set; }
     }
 
-   
+
 }

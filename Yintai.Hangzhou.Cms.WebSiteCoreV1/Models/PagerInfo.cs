@@ -94,6 +94,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [IgnoreDataMember]
         public string UL { get; set; }
 
+
         #endregion
     }
     public class Pager<T> :PagerInfo

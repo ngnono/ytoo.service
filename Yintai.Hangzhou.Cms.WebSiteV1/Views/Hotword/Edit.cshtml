@@ -22,16 +22,18 @@
 
         function initTypeChoice() {
             var type = $("#Type").val();
-
+            var wordinput = $("#lbl_word");
+            var storeinput = $("#lbl_store");
+            var brandinput = $("#lbl_brand");
+            wordinput.hide();
+            storeinput.hide();
+            brandinput.hide();
             if (type == 1) {
-                $("#lbl_word").show();
-                $("#lbl_brand").hide();
+                wordinput.show();
             } else if (type == 2) {
-                $("#lbl_word").hide();
-                $("#lbl_brand").show();
-            } else {
-                $("#lbl_word").hide();
-                $("#lbl_brand").hide();
+                brandinput.show();
+            } else if (type == 3) {
+                storeinput.show();
             }
         }
     </script>
@@ -41,12 +43,12 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
-@using (Html.BeginForm("Edit", "Hotword",FormMethod.Post))
-{
+@using (Html.BeginForm("Edit", "Hotword", FormMethod.Post))
+{ 
     @Html.ValidationSummary(true)
     <div class="editor-label">
-            @Html.LabelFor(model => model.Type)
-        </div>
+        @Html.LabelFor(model => model.Type)
+    </div>
     <div class="editor-field">
         @Html.DropDownListFor(model => model.Type, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Enums.HotWordType>())
         @Html.ValidationMessageFor(model => model.Type)
@@ -69,6 +71,15 @@
             @Html.ValidationMessageFor(model => model.BrandId)
         </div>
     </div>
+    <div id="lbl_store">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.StoreId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.StoreId)
+            @Html.ValidationMessageFor(model => model.StoreId)
+        </div>
+    </div>
     <div class="editor-label">
         @Html.LabelFor(model => model.SortOrder)
     </div>
@@ -76,9 +87,9 @@
         @Html.EditorFor(model => model.SortOrder)
         @Html.ValidationMessageFor(model => model.SortOrder)
     </div>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Status)
-        </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Status)
+    </div>
     <div class="editor-field">
         @Html.DropDownListFor(model => model.Status, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Enums.DataStatus>())
         @Html.ValidationMessageFor(model => model.Status)
@@ -86,5 +97,6 @@
     <p>
         <input type="submit" value="保存" class="btn btn-primary" />
         @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
+
     </p>
 }

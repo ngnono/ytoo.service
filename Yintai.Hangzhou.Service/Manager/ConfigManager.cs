@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 
 namespace Yintai.Hangzhou.Service.Manager
@@ -22,6 +23,16 @@ namespace Yintai.Hangzhou.Service.Manager
         private static readonly string _resourcedomain = ConfigurationManager.AppSettings["resourcedomain"];
         private static readonly string _point2GroupRatio = ConfigurationManager.AppSettings["pointratio2group"];
 
+        private static readonly string _awshttppublickey = ConfigurationManager.AppSettings["awshttppublickey"];
+        private static readonly string _awshttpprivatekey = ConfigurationManager.AppSettings["awshttpprivatekey"];
+        private static readonly string _awshttphost = ConfigurationManager.AppSettings["awshttphost"];
+        private static readonly string _awshttpaction_voidcoupon = ConfigurationManager.AppSettings["awshttpaction_voidcoupon"];
+
+        private static readonly string _grouphttppublickey = ConfigurationManager.AppSettings["grouphttppublickey"];
+        private static readonly string _grouphttpprivatekey = ConfigurationManager.AppSettings["grouphttpprivatekey"];
+        private static readonly string _grouphttphost = ConfigurationManager.AppSettings["grouphttphost"];
+        private static readonly string _grouphttpaction_exchange = ConfigurationManager.AppSettings["grouphttpaction_exchange"];
+        private static string _appStoreNoInGroup = ConfigurationManager.AppSettings["appstorenoingroup"];
         public static int GetCacheSeed()
         {
             var t = GetAppConfigParamsValueOrDefault("cacheseedfactory", "1");
@@ -128,6 +139,55 @@ namespace Yintai.Hangzhou.Service.Manager
             get
             {
                 return decimal.Parse(_point2GroupRatio);
+            }
+        }
+        public static string AwsHttpPublicKey
+        {
+            get
+            {
+                return _awshttppublickey;
+            }
+        }
+        public static string AwsHttpPrivateKey
+        {
+            get
+            {
+                return _awshttpprivatekey;
+            }
+        }
+        public static string AwsHttpUrlVoidCoupon
+        {
+            get
+            {
+                return Path.Combine(_awshttphost,_awshttpaction_voidcoupon);
+            }
+        }
+        public static string GroupHttpPublicKey
+        {
+            get
+            {
+                return _grouphttppublickey;
+            }
+        }
+        public static string GroupHttpPrivateKey
+        {
+            get
+            {
+                return _grouphttpprivatekey;
+            }
+        }
+        public static string GroupHttpUrlExchange
+        {
+            get
+            {
+                return Path.Combine(_grouphttphost, _grouphttpaction_exchange);
+            }
+        }
+        public static string AppStoreNoInGroup
+        {
+            get
+            {
+                return _appStoreNoInGroup;
             }
         }
     }

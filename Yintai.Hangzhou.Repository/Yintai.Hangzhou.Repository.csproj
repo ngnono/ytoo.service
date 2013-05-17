@@ -52,11 +52,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_dll\d\Yintai.Architecture.Common.dll</HintPath>
+      <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
     <Reference Include="Yintai.Architecture.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_dll\d\Yintai.Architecture.Framework.dll</HintPath>
+      <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +66,7 @@
     <Compile Include="Contract\IBrandRepository.cs" />
     <Compile Include="Contract\ICardRepository.cs" />
     <Compile Include="Contract\ICommentRepository.cs" />
+    <Compile Include="Contract\ICouponLogRepository.cs" />
     <Compile Include="Contract\ICouponRepository.cs" />
     <Compile Include="Contract\IDeviceLogsRepository.cs" />
     <Compile Include="Contract\IDeviceTokenRepository.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Impl\BannerRepository.cs" />
     <Compile Include="Impl\BrandRepository.cs" />
     <Compile Include="Impl\CardRepository.cs" />
+    <Compile Include="Impl\CouponLogRepository.cs" />
     <Compile Include="Impl\HotWordRepository.cs" />
     <Compile Include="Impl\PointOrderRuleRepository.cs" />
     <Compile Include="Impl\ProductBulkRepository.cs" />

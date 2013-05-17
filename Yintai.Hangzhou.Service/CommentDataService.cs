@@ -45,6 +45,12 @@ namespace Yintai.Hangzhou.Service
         public ExecuteResult<CommentInfoResponse> Create(CommentCreateRequest request)
         {
             CommentEntity entity;
+            if ((request.Files == null || request.Files.Count == 0) &&
+                string.IsNullOrEmpty(request.Content))
+            {
+                return new ExecuteResult<CommentInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "没有评论内容！" };
+
+            }
             using (var ts = new TransactionScope())
             {
                 entity = _commentRepository.Insert(new CommentEntity

@@ -11,7 +11,7 @@ using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.Repository.Impl
 {
-    public abstract class RepositoryBase<TEntity, TKey> : EFRepository<TEntity>, IRepository<TEntity, TKey> where TEntity : BaseEntity
+    public class RepositoryBase<TEntity, TKey> : EFRepository<TEntity>, IRepository<TEntity, TKey> where TEntity : BaseEntity
     {
         private DbContext _innerContext;
         //提供IOC注入方式接口

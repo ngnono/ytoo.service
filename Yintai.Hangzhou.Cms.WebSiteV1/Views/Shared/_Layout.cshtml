@@ -7,8 +7,8 @@
 <head>
     <meta charset="utf-8" />
     <title>@ViewBag.Title</title>
- <link href="@Url.Content("~/Content/Bootstrap/bootstrap.min.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/Bootstrap/bootstrap-responsive.css")" rel="stylesheet" type="text/css"/>
+ <link href="@Url.Content("~/Content/Bootstrap/css/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Bootstrap/css/bootstrap-responsive.css")" rel="stylesheet" type="text/css"/>
     <link href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/themes/base/jquery-ui-timepicker-addon.css")" rel="stylesheet" type="text/css"/>
     <link href="@Url.Content("~/Content/website.css")" rel="stylesheet" type="text/css"/>
@@ -18,7 +18,7 @@
     <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/modernizr-2.5.3.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/bootstrap.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/Bootstrap/js/bootstrap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/website.js")" type="text/javascript"></script>
     @RenderSection("HeaderScripts", false)
     <style type="text/css">
@@ -52,7 +52,7 @@
                         <li>@Html.ActionLink2("专题管理", "Index", "SpecialTopic")</li>
                         <li>@Html.ActionLink2("用户管理", "Index", "Customer")</li>
                         <li>@Html.ActionLink2("配置管理", "Index", "Configuration")</li>   
-                        
+                        <li>@Html.ActionLink2("报表管理", "Index", "Report")</li>   
 
                     </ul>
                 </div>

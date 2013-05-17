@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.intime.fashion.common;
+using System;
 using System.IO;
 
 namespace Yintai.Hangzhou.Service.Manager

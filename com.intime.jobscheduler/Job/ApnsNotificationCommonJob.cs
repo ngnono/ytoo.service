@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Newtonsoft.Json;
 using PushSharp;
 using PushSharp.Apple;
 using Quartz;
@@ -83,7 +84,7 @@ namespace com.intime.jobscheduler.Job
                                                .ForDeviceToken(device.Token)
                                                .WithAlert("新评论...")
                                                .WithBadge(1)
-                                               .WithCustomItem("from","comment")
+                                               .WithCustomItem("from",JsonConvert.SerializeObject(new {targettype=(int)PushSourceType.SelfComment,targetvalue=""}))
                                                .WithSound("sound.caf"));
                                           successCount++;
                                     }

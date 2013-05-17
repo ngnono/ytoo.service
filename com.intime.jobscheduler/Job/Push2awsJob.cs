@@ -155,16 +155,22 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = from r in db.StorePromotions
-                            where (r.CreateDate >= benchDate || r.UpdateDate >= benchDate)
-                            select r;
+                var prods = db.StorePromotions.Where(r=> r.CreateDate >= benchDate || r.UpdateDate >= benchDate)
+                            .GroupJoin(db.PointOrderRules.Where(r=>r.Status!=(int)DataStatus.Deleted),o=>o.Id,i=>i.StorePromotionId,
+                                    (o,i)=>new {S=o,R = i});
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESResource>();
+                client.MapFromAttributes<ESStorePromotion>();
                 while (cursor < totalCount)
                 {
-                    var linq = from l in prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size).ToList()
-                               select new ESStorePromotion().FromEntity<ESStorePromotion>(l);
+                    var linq = from l in prods.OrderByDescending(p => p.S.Id).Skip(cursor).Take(size).ToList()
+                               select new ESStorePromotion().FromEntity<ESStorePromotion>(l.S, s => { 
+                                    s.ExchangeRule = JsonConvert.SerializeObject(l.R.Select(r=>new {
+                                        rangefrom=r.RangeFrom,
+                                        rangeto = r.RangeTo,
+                                        ratio = r.Ratio
+                                    }));
+                               });
                     var result = client.IndexMany(linq);
                     if (!result.IsValid)
                     {
@@ -586,6 +592,19 @@ namespace com.intime.jobscheduler.Job
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var prods = from s in db.Stores
+                            let resource = (from r in db.Resources
+                                            where r.SourceId == s.Id
+                                            && r.SourceType == (int)SourceType.StoreLogo
+                                            select new ESResource()
+                                            {
+                                                Domain = r.Domain,
+                                                Name = r.Name,
+                                                SortOrder = r.SortOrder,
+                                                IsDefault = r.IsDefault,
+                                                Type = r.Type,
+                                                Width = r.Width,
+                                                Height = r.Height
+                                            })
                             where (s.CreatedDate >= benchDate || s.UpdatedDate >= benchDate)
                             select new ESStore()
                             {
@@ -602,8 +621,8 @@ namespace com.intime.jobscheduler.Job
                                 GpsLat = s.GpsLat,
                                 GpsLng = s.GpsLng,
                                 Tel = s.Tel,
-                                Status = s.Status
-
+                                Status = s.Status,
+                                Resource = resource
 
                             };
 
@@ -723,7 +742,9 @@ namespace com.intime.jobscheduler.Job
                                 Status = p.Status,
                                 CreatedDate = p.CreatedDate,
                                 CreateUser = p.CreatedUser,
-                                Resource = resource
+                                Resource = resource,
+                                Type = p.Type,
+                                TargetValue =  p.TargetValue
                             };
 
                 int totalCount = prods.Count();
@@ -836,7 +857,9 @@ namespace com.intime.jobscheduler.Job
                                     GpsLng = s.GpsLng,
                                     Tel = s.Tel
                                 },
-                                Resource = resource
+                                Resource = resource,
+                               ShowInList = p.IsMain.HasValue?p.IsMain.Value:true,
+                               PublicCode = p.PublicProCode
                             };
 
                 int totalCount = prods.Count();

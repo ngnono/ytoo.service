@@ -4,6 +4,7 @@
         <a class="btn btn-primary " href="#"><i class="icon-user icon-white"></i>@selfController.CurrentUser.LoginName</a>
         <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
         <ul class="dropdown-menu">
+            <li>@Html.ActionLink("修改密码", "ChangePassword", "Customer")</li>
             <li>@Html.ActionLink2("注销", "LogOff", "Account")</li>
         </ul>
     </span>

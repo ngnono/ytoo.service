@@ -1,10 +1,11 @@
-﻿using System;
+﻿using com.intime.fashion.common;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Yintai.Architecture.Common.Helper;
 using Yintai.Architecture.Common.Models;
-using Yintai.Architecture.Framework.Mapping;
+using Yintai.Architecture.Framework;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Architecture.Framework.Utility;
 using Yintai.Hangzhou.Contract.DTO.Request.Brand;
@@ -117,12 +118,12 @@ namespace Yintai.Hangzhou.Service.Manager
         /// <param name="coordinateInfo1"></param>
         /// <param name="coordinateInfo2"></param>
         /// <returns></returns>
-        protected static double Distance(CoordinateInfo coordinateInfo1, CoordinateInfo coordinateInfo2)
+        protected static decimal Distance(CoordinateInfo coordinateInfo1, CoordinateInfo coordinateInfo2)
         {
             var d = CoordinatePositioningHelper.GetDistance(coordinateInfo1,
                                                     coordinateInfo2);
 
-            return d * 1000;
+            return Convert.ToDecimal(d * 1000);
         }
 
         protected List<ResourceEntity> GetListResourceEntities(SourceType sourceType, int sourceId)
@@ -810,7 +811,7 @@ namespace Yintai.Hangzhou.Service.Manager
 
             var target = Mapper.Map<StoreEntity, StoreInfoResponse>(source);
 
-            target.Distance = Distance(coordinateInfo, new CoordinateInfo(target.Longitude, target.Latitude));
+            target.Distance = Distance(coordinateInfo, new CoordinateInfo((double)target.Longitude, (double)target.Latitude));
 
             return target;
         }
@@ -822,7 +823,7 @@ namespace Yintai.Hangzhou.Service.Manager
                 return source;
             }
 
-            source.Distance = Distance(coordinateInfo, new CoordinateInfo(source.Longitude, source.Latitude));
+            source.Distance = Distance(coordinateInfo, new CoordinateInfo((double)source.Longitude, (double)source.Latitude));
 
             return source;
         }

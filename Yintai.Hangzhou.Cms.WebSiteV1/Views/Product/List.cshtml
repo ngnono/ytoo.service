@@ -67,76 +67,88 @@
 {
     @Html.ValidationSummary(true)
     <div class="row">
-        <div class="span4">
+        <div class="span2">
             <div class="control-group">
                 <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.PId)</label>
                 <div class="controls">
-                    @searchModelHelper.EditorFor(m => search.PId)
+                    @searchModelHelper.TextBoxFor(m => search.PId, new { @class = "span1" })
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Name)</label>
                 <div class="controls">
-                    @searchModelHelper.EditorFor(m => search.Name)
+                    @searchModelHelper.TextBoxFor(m => search.Name, new { @class = "span1" })
                 </div>
             </div>
-            <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.OrderBy)</label>
-                <div class="controls">
-                    @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<ProductSortOrder>())
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Tag)</label>
-                <div class="controls">
-                    @searchModelHelper.EditorFor(model => search.Tag)
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.User)</label>
-                <div class="controls">
-                    @searchModelHelper.EditorFor(model => search.User)
-                </div>
-            </div>
+
             <div class="control-group">
                 <div class="control-label">
                     <button type="submit" class="btn">查询</button>
                 </div>
             </div>
         </div>
-        <div class="span4">
+        <div class="span2">
             <div class="control-group">
                 <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Brand)</label>
                 <div class="controls">
-                    @searchModelHelper.EditorFor(m => search.Brand)
+                    @searchModelHelper.TextBoxFor(m => search.Brand, new { @class = "span1" })
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Topic)</label>
                 <div class="controls">
-                    @searchModelHelper.EditorFor(m => search.Topic)
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Promotion)</label>
-                <div class="controls">
-                    @searchModelHelper.EditorFor(m => search.Promotion)
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="Name">状态</label>
-                <div class="controls">
-                    @searchModelHelper.DropDownListFor(m => search.Status, EnumHelper.DisplayList<DataStatus>())
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Store)</label>
-                <div class="controls">
-                    @searchModelHelper.EditorFor(model => search.Store)
+                    @searchModelHelper.TextBoxFor(m => search.Topic, new { @class = "span1" })
                 </div>
             </div>
 
+
         </div>
+        <div class="span3">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.OrderBy)</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<ProductSortOrder>(), new { @class = "span2" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="Name">状态</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.Status, EnumHelper.DisplayList<DataStatus>(), new { @class = "span2" })
+                </div>
+            </div>
+        </div>
+        <div class="span2">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Tag)</label>
+                <div class="controls">
+                    @searchModelHelper.TextBoxFor(model => search.Tag, new { @class = "span1" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Store)</label>
+                <div class="controls">
+                    @searchModelHelper.TextBoxFor(model => search.Store, new { @class = "span1" })
+                </div>
+            </div>
+        </div>
+        <div class="span2">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Promotion)</label>
+                <div class="controls">
+                    @searchModelHelper.TextBoxFor(m => search.Promotion, new { @class = "span1" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.User)</label>
+                <div class="controls">
+                    @searchModelHelper.TextBoxFor(model => search.User, new { @class = "span1" })
+                </div>
+            </div>
+        </div>
+
 
     </div>
 }

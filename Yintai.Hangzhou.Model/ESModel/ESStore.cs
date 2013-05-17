@@ -19,7 +19,7 @@ namespace Yintai.Hangzhou.Model.ES
         public Nullable<decimal> GpsLat { get; set; }
         public Nullable<decimal> GpsLng { get; set; }
         public Nullable<decimal> GpsAlt { get; set; }
-
+        public IEnumerable<ESResource> Resource { get; set; }
     }
 
     public class Location

@@ -70,6 +70,11 @@
             @Html.CheckBox("IsProdBindable",Model==null?false:Model.IsProdBindable)
             @Html.ValidationMessageFor(model => model.IsProdBindable)
         </div>
+           <div class="editor-label-flow">
+            <span >限制每人限领一次：</span>     
+            @Html.CheckBox("IsLimitPerUser",Model==null?false:Model.IsLimitPerUser)
+            @Html.ValidationMessageFor(model => model.IsLimitPerUser)
+        </div>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.PublicationLimit)
@@ -78,6 +83,7 @@
             @Html.EditorFor(model => model.PublicationLimit)
             @Html.ValidationMessageFor(model => model.PublicationLimit)
         </div>
+
         <div class="editor-label-required">
             选择促销图片
         </div>

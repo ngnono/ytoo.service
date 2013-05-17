@@ -5,10 +5,15 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Framework.ServiceLocation;
 
@@ -33,6 +38,63 @@ namespace com.intime.fashion.common
                 Logger.Debug("completed one message sync");
             });
            
+        }
+
+        public static bool SendHttpMessage(string url, object requestData, string publickey, string privatekey, Action<dynamic> successCallback,Action<dynamic> failCallback)
+        {
+            
+            if (string.IsNullOrEmpty(url))
+                throw new ArgumentException("url is empty");
+            if (string.IsNullOrEmpty(publickey) || string.IsNullOrEmpty(privatekey))
+                throw new ArgumentException("private/public key is empty");
+
+            var requestbody =JsonConvert.SerializeObject(new
+            {
+                data = requestData
+            });
+            string requestUrl = ConstructAwsHttpRequestUrl(url, publickey, privatekey);
+            var client = WebRequest.CreateHttp(requestUrl);
+            client.ContentType="application/json";
+            client.Method = "Post";
+            using(var request = client.GetRequestStream())
+            using (var streamWriter = new StreamWriter(request))
+            {
+                streamWriter.Write(requestbody);
+            }
+            StringBuilder sb = new StringBuilder();
+            using (var response = client.GetResponse())
+            {
+                var body = response.GetResponseStream();
+                using (var streamReader = new StreamReader(body, Encoding.UTF8))
+                {
+                    Char[] read = new Char[256];
+                    // Reads 256 characters at a time.    
+                    int count = streamReader.Read(read, 0, 256);
+                    while (count > 0)
+                    {
+                        // Dumps the 256 characters on a string and displays the string to the console.
+                        sb.Append(read);
+                        count = streamReader.Read(read, 0, 256);
+                    }
+                }
+            }
+            var jsonResponse = JsonConvert.DeserializeObject<dynamic>(sb.ToString());
+
+            if (jsonResponse != null &&
+                jsonResponse.isSuccessful == true)
+            {
+                if (successCallback != null) 
+                successCallback(jsonResponse);
+                return true;
+            }
+            else
+            {
+                if (failCallback != null)
+                failCallback(jsonResponse);
+                return false;
+            }
+
+
         }
 
         private static void EnsureQueue()
@@ -70,6 +132,33 @@ namespace com.intime.fashion.common
             get {
                 return ServiceLocator.Current.Resolve<ILog>();
             }
+        }
+
+        private static string ConstructAwsHttpRequestUrl(string host,string publickey,string privatekey)
+        {
+
+            Dictionary<string, string> query = new Dictionary<string, string>();
+            query.Add("key", publickey);
+            query.Add("nonce", new Random(1000).Next().ToString());
+            query.Add("timestamp", DateTime.UtcNow.ToString("yyyy-MM-ddThh:mm:ssZ"));
+            var signingValue = new StringBuilder();
+            var signedValue = string.Empty;
+            foreach (var s in query.Values.ToArray().OrderBy(s => s))
+                signingValue.Append(s);
+            Logger.Info(string.Format("signed value:{0}", signingValue.ToString()));
+            using (HMACSHA1 hmac = new HMACSHA1(Encoding.ASCII.GetBytes(privatekey)))
+            {
+                var hashValue = hmac.ComputeHash(Encoding.ASCII.GetBytes(signingValue.ToString()));
+                signedValue = Convert.ToBase64String(hashValue);
+                Logger.Info(signedValue);
+               
+            }
+            query.Add("sign", signedValue);
+            var requestUrl = new StringBuilder();
+            requestUrl.Append(host);
+            requestUrl.Append("?");
+            return query.Keys.Aggregate(requestUrl, (s, e) => s.AppendFormat("&{0}={1}", e, HttpUtility.UrlEncode(query[e])), s => s.ToString());
+
         }
     }
 }

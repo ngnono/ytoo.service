@@ -110,9 +110,10 @@
         </th>
         <th>关键词
         </th>
-        <th>品牌代码
-        </th>
+
         <th>品牌名
+        </th>
+        <th>门店名
         </th>
         <th>状态
         </th>
@@ -146,10 +147,10 @@
                 @Html.DisplayFor(modelItem => item.Word)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BrandId)
+                @Html.DisplayFor(modelItem => item.BrandName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BrandName)
+                @Html.DisplayFor(modelItem => item.StoreName)
             </td>
             <td>
                 @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)item.Status).ToFriendlyString())

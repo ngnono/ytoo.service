@@ -50,6 +50,7 @@
     </trigger>
     
     -->
+    <!--
     <job>
       <name>Push2awsIncre</name>
       <group>Fashion</group>
@@ -84,6 +85,7 @@
         <cron-expression>0 0/3 * * * ?</cron-expression>
       </cron>
     </trigger>
+    -->
     <!--
     <job>
       <name>ApnsNotification</name>
@@ -192,6 +194,78 @@
       </cron>
     </trigger>
     -->
+  <job>
+      <name>RebateExpireCouponPointsEveryMidNight</name>
+      <group>Fashion</group>
+      <description>rebate expired coupon every 2am</description>
+      <job-type>com.intime.jobscheduler.Job.ExpireStoreCouponReturnPointsJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>awsexpireurl</key>
+          <value>http://localhost:3000/storecoupon/void</value>
+        </entry>
+        <entry>
+          <key>publickey</key>
+          <value>intimedemo</value>
+        </entry>
+        <entry>
+          <key>privatekey</key>
+          <value>b7991360-8a0e-0130-a80d-375b77a2dfbe</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>1AM</name>
+        <group>Fashion</group>
+        <description>1am every day</description>
+        <job-name>RebateExpireCouponPointsEveryMidNight</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 0 1 * * ?</cron-expression>
+      </cron>
+    </trigger>
+   <job>
+      <name>ConvertAppPoints2Group</name>
+      <group>Fashion</group>
+      <description>convert app points to group 2am</description>
+      <job-type>com.intime.jobscheduler.Job.PointsFromApp2GroupJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>pointconverturl</key>
+          <value>http://guide.intime.com.cn:8008/intimers/api/o2o/convert</value>
+        </entry>
+        <entry>
+          <key>publickey</key>
+          <value>test</value>
+        </entry>
+        <entry>
+          <key>privatekey</key>
+          <value>test</value>
+        </entry>
+         <entry>
+          <key>minpoints</key>
+          <value>100</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>2AM</name>
+        <group>Fashion</group>
+        <description>2am every day</description>
+        <job-name>ConvertAppPoints2Group</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0/3 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
   </schedule>
 
 </job-scheduling-data>

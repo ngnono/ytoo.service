@@ -65,12 +65,18 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.IsProdBindable)
     </div>
-
+        <div class="display-label">@Html.LabelFor(model => model.IsMain)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsMain)
+    </div>
     <div class="display-label">@Html.LabelFor(model => model.PublicationLimit)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.PublicationLimit)
     </div>
-
+        <div class="display-label">@Html.LabelFor(model => model.PublicProCode)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PublicProCode)
+    </div>
     <div class="display-label">@Html.LabelFor(model => model.Status)</div>
     <div class="display-field">
         @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)Model.Status).ToFriendlyString())

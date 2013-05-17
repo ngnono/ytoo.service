@@ -19,12 +19,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
     {
          private readonly IHotWordRepository _hotwordRepo;
          private IBrandRepository _brandRepo;
+         private IStoreRepository _storeRepo;
 
         public HotwordController(IHotWordRepository hotwordRepo,
-            IBrandRepository brandRepo)
+            IBrandRepository brandRepo,
+            IStoreRepository storeRepo)
         {
             _hotwordRepo = hotwordRepo;
             _brandRepo = brandRepo;
+            _storeRepo = storeRepo;
            
         }
         public ActionResult Index(PagerRequest request,HotwordSearchOption search)
@@ -98,6 +101,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 {
                     vo.BrandName = _brandRepo.Find(vo.BrandId).Name;
                 }
+                else if (vo.Type == (int)HotWordType.Stores)
+                {
+                    vo.StoreName = _storeRepo.Find(vo.StoreId).Name;
+                }
                 var entity = vo.ToEntity<HotWordEntity>();
                 entity.CreatedUser = base.CurrentUser.CustomerId;
                 entity.CreatedDate = DateTime.Now;
@@ -128,6 +135,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                 {
                     vo.BrandName = _brandRepo.Find(vo.BrandId).Name;
                     entity.Word = vo.BrandString;
+                }
+                else if (entity.Type == (int)HotWordType.Stores)
+                {
+                   vo.StoreName = _storeRepo.Find(vo.StoreId).Name;
+                    entity.Word = vo.StoreString;
                 }
                 _hotwordRepo.Update(entity);
                 return RedirectToAction("List");

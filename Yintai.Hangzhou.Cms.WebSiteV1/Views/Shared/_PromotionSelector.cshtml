@@ -1,0 +1,57 @@
+﻿@{
+    PromotionListSearchOption search = ViewBag.SearchOptions ?? new PromotionListSearchOption();
+    HtmlHelper<PromotionListSearchOption> searchModelHelper = Html.HtmlHelperFor<PromotionListSearchOption>();
+    var selectorContainerId = ViewData["PromotionSelectorContainer"].ToString(); 
+}
+<script>
+    $(document).ready(function () {
+        $("#sel_prom_done").click(function () {
+            var selectedid = $("#sel_prom_list").find("input:checked").val()
+            if (selectedid) {
+                $("#@selectorContainerId").val(selectedid);
+                $("#prom_selector").modal('hide');
+            }
+        });
+    });
+</script>
+<div id="prom_selector" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-body">
+        @using (Ajax.BeginForm("Select", "Promotion", new { page = 0 }, new AjaxOptions() { HttpMethod = "Post", LoadingElementId="i_prom_refresh", UpdateTargetId = "sel_prom_list", InsertionMode = InsertionMode.Replace }, new { @class = "form-horizontal searchForm-border small-labels" }))
+        {
+            <div class="row">
+                <div class="span2">
+                    <div class="control-group">
+                        <label class="control-label " for="Name">@searchModelHelper.LabelFor(m => search.Name)</label>
+                        <div class="controls">
+                            @searchModelHelper.TextBoxFor(m => search.Name, new { @class = "span1" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="control-label">
+                            <button type="submit" class="btn">查询</button>
+                            <div class="hide" id="i_prom_refresh">
+                                <img src="@Url.Content("~/Content/img/loading_16x16.gif")" />
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="control-group">
+                        <label class="control-label " for="Name">@searchModelHelper.LabelFor(m => search.Store)</label>
+                        <div class="controls">
+                            @searchModelHelper.TextBoxFor(model => search.Store, new { @class = "span1" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+        <div id="sel_prom_list">
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn primary" id="sel_prom_done">选择</button>
+        <button class="btn" data-dismiss="modal" id="sel_prom_close">关闭</button>
+    </div>
+</div>
