@@ -19,54 +19,63 @@ namespace Yintai.Hangzhou.Data.Models
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var likedAccount = db.UserAccounts.Where(ua => ua.AccountType == (int)AccountType.LikeMeCount && ua.User_Id == LikedUserId && ua.Status != (int)DataStatus.Deleted).FirstOrDefault();
-                var liked = db.Likes.Where(p => p.LikedUserId == userId && p.Status != (int)DataStatus.Deleted).Count();
-                if (likedAccount!= null)
-                {
-                    likedAccount.Amount = liked;
-                    likedAccount.UpdatedDate = DateTime.Now;
-                    db.Entry(likedAccount).State = System.Data.EntityState.Modified;
-                    db.SaveChanges();
-                }
-                else
-                {
-                    db.UserAccounts.Add(new UserAccountEntity()
-                    {
-                        AccountType = (int)AccountType.LikeMeCount,
-                        Amount = liked,
-                        User_Id = LikedUserId,
-                        Status = (int)DataStatus.Normal,
-                        CreatedDate = DateTime.Now,
-                        CreatedUser = LikedUserId,
-                        UpdatedDate = DateTime.Now,
-                        UpdatedUser = LikedUserId
-                    });
-                }
-                var account = db.UserAccounts.Where(ua => ua.AccountType == (int)AccountType.IlikeCount && ua.User_Id == userId && ua.Status != (int)DataStatus.Deleted).FirstOrDefault();
-                var likes = db.Likes.Where(p => p.LikeUserId == userId && p.Status != (int)DataStatus.Deleted).Count();
-                if (account != null)
-                {
-                    account.Amount = likes;
-                    account.UpdatedDate = DateTime.Now;
-                    db.Entry(account).State = System.Data.EntityState.Modified;
-                    db.SaveChanges();
-
-                }
-                else
-                {
-                    db.UserAccounts.Add(new UserAccountEntity()
-                    {
-                        AccountType = (int)AccountType.IlikeCount,
-                        Amount = likes,
-                        User_Id = userId,
-                        Status = (int)DataStatus.Normal,
-                        CreatedDate = DateTime.Now,
-                        CreatedUser = userId,
-                        UpdatedDate = DateTime.Now,
-                        UpdatedUser = userId
-                    });
-                }
+                updateILike(db, LikeUserId);
+                updateLikeMe(db, LikedUserId);
             }
+        }
+
+        private void updateLikeMe(YintaiHangzhouContext db, int accountId)
+        {
+            var likedAccount = db.UserAccounts.Where(ua => ua.AccountType == (int)AccountType.LikeMeCount && ua.User_Id == accountId && ua.Status != (int)DataStatus.Deleted).FirstOrDefault();
+            var liked = db.Likes.Where(p => p.LikedUserId == accountId && p.Status != (int)DataStatus.Deleted).Count();
+            if (likedAccount != null)
+            {
+                likedAccount.Amount = liked;
+                likedAccount.UpdatedDate = DateTime.Now;
+                db.Entry(likedAccount).State = System.Data.EntityState.Modified;
+                db.SaveChanges();
+            }
+            else
+            {
+                db.UserAccounts.Add(new UserAccountEntity()
+                {
+                    AccountType = (int)AccountType.LikeMeCount,
+                    Amount = liked,
+                    User_Id = accountId,
+                    Status = (int)DataStatus.Normal,
+                    CreatedDate = DateTime.Now,
+                    CreatedUser = accountId,
+                    UpdatedDate = DateTime.Now,
+                    UpdatedUser = accountId
+                });
+            }
+        }
+        private void updateILike(YintaiHangzhouContext db, int accountId)
+        {
+            var account = db.UserAccounts.Where(ua => ua.AccountType == (int)AccountType.IlikeCount && ua.User_Id == accountId && ua.Status != (int)DataStatus.Deleted).FirstOrDefault();
+            var likes = db.Likes.Where(p => p.LikeUserId == accountId && p.Status != (int)DataStatus.Deleted).Count();
+            if (account != null)
+            {
+                account.Amount = likes;
+                account.UpdatedDate = DateTime.Now;
+                db.Entry(account).State = System.Data.EntityState.Modified;
+                db.SaveChanges();
+
+            }
+            else
+            {
+                db.UserAccounts.Add(new UserAccountEntity()
+                {
+                    AccountType = (int)AccountType.IlikeCount,
+                    Amount = likes,
+                    User_Id = accountId,
+                    Status = (int)DataStatus.Normal,
+                    CreatedDate = DateTime.Now,
+                    CreatedUser = accountId,
+                    UpdatedDate = DateTime.Now,
+                    UpdatedUser = accountId
+                });
+            } 
         }
     }
 }

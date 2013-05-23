@@ -145,12 +145,12 @@ namespace com.intime.fashion.common
             var signedValue = string.Empty;
             foreach (var s in query.Values.ToArray().OrderBy(s => s))
                 signingValue.Append(s);
-            Logger.Info(string.Format("signed value:{0}", signingValue.ToString()));
+            Logger.Debug(string.Format("signed value:{0}", signingValue.ToString()));
             using (HMACSHA1 hmac = new HMACSHA1(Encoding.ASCII.GetBytes(privatekey)))
             {
                 var hashValue = hmac.ComputeHash(Encoding.ASCII.GetBytes(signingValue.ToString()));
                 signedValue = Convert.ToBase64String(hashValue);
-                Logger.Info(signedValue);
+                Logger.Debug(signedValue);
                
             }
             query.Add("sign", signedValue);

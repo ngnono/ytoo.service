@@ -529,10 +529,10 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>demo.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Content\report\productsdaterangereport.rpt">
+    <Content Include="Content\report\productsdaterangereport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>productsdaterangereport.cs</LastGenOutput>
-    </EmbeddedResource>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />

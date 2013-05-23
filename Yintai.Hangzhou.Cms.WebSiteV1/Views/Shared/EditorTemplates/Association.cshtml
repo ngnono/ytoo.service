@@ -12,7 +12,12 @@
     string valueName = pams.ContainsKey("valuefield") ? (string)pams["valuefield"] : displayName;
     bool isCascad = pams.ContainsKey("iscascad") ? bool.Parse((string)pams["iscascad"]) : false;
     bool showPlaceHold = string.Compare(valueName,"id",true)==0;
-
+    string htmlClass = "text-box";
+    if (ViewData["class"] !=null)
+    {
+        htmlClass = ViewData["class"].ToString();
+    }
+    
 }
 <script>
     $(document).ready(function () {
@@ -84,4 +89,4 @@
         }
     });
 </script>
-@Html.TextBoxFor(m=>m,new {placeholder=showPlaceHold?"可输入名字选择编码":"", @class="text-box"})
+@Html.TextBoxFor(m=>m,new {placeholder=showPlaceHold?"可输入名字选择编码":"", @class=htmlClass})

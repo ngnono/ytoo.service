@@ -5,6 +5,7 @@ using System.Configuration;
 using System.IO;
 using System.Runtime.Serialization;
 using Yintai.Hangzhou.Contract.DTO.Response.Favorite;
+using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 using Yintai.Hangzhou.Contract.Response;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
@@ -96,7 +97,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
         [IgnoreDataMember]
         public string BackgroundLogo { get; set; }
 
-        [DataMember(Name = "logobg")]
+        [IgnoreDataMember]
         public string BackgroundLogo_s { get {
             if (string.IsNullOrEmpty(BackgroundLogo))
                 return string.Empty;
@@ -106,6 +107,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
                 BackgroundLogo);
 
         } set { } }
+        [DataMember(Name = "logobg")]
+        public ResourceInfoResponse BackgroundLogo_r
+        {
+            get;
+            set;
+        }
 
         [IgnoreDataMember]
         public UserLevel Level { get; set; }

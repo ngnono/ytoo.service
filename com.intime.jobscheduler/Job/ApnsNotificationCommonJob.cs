@@ -53,14 +53,16 @@ namespace com.intime.jobscheduler.Job
                                    var comment = db.Comments.Find(l.SourceId);
                                     if (comment == null)
                                         continue;
-                                    var relatedComments = db.Comments.Where(c=>c.SourceType == comment.SourceType && c.SourceId == comment.SourceId)
+                                    var relatedComments = db.Comments.Where(c=>c.SourceType == comment.SourceType 
+                                                                    && c.SourceId == comment.SourceId
+                                                                    && c.User_Id != comment.User_Id)
                                                            .Join(db.DeviceLogs.Where(d=>d.User_Id>0),
                                                                 o=>o.User_Id,
                                                                 i=>i.User_Id,
                                                                 (o,i)=>new {Token = i.DeviceToken}).ToList();
                                     if (comment.SourceType == (int)SourceType.Product)
                                     {
-                                        var product = db.Products.Where(p => p.Id == comment.SourceId)
+                                        var product = db.Products.Where(p => p.Id == comment.SourceId && p.RecommendUser!=comment.User_Id)
                                                         .Join(db.DeviceLogs.Where(d=>d.User_Id>0),
                                                                 o=>o.CreatedUser,
                                                                 i=>i.User_Id,
@@ -70,7 +72,7 @@ namespace com.intime.jobscheduler.Job
                                     }
                                     else if (comment.SourceType == (int)SourceType.Promotion)
                                     {
-                                        var promotion = db.Promotions.Where(p => p.Id == comment.SourceId)
+                                        var promotion = db.Promotions.Where(p => p.Id == comment.SourceId && p.RecommendUser != comment.User_Id)
                                                         .Join(db.DeviceLogs.Where(d => d.User_Id > 0),
                                                                 o => o.CreatedUser,
                                                                 i => i.User_Id,
@@ -84,7 +86,7 @@ namespace com.intime.jobscheduler.Job
                                                .ForDeviceToken(device.Token)
                                                .WithAlert("新评论...")
                                                .WithBadge(1)
-                                               .WithCustomItem("from",JsonConvert.SerializeObject(new {targettype=(int)PushSourceType.SelfComment,targetvalue=""}))
+                                               .WithCustomItem("from",JsonConvert.SerializeObject(new {targettype=(int)PushSourceType.SelfComment,targetvalue=comment.SourceId}))
                                                .WithSound("sound.caf"));
                                           successCount++;
                                     }

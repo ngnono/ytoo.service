@@ -73,7 +73,7 @@ namespace Yintai.Hangzhou.Data.Models
         private IEnumerable<dynamic> ParseEntityAccountTriggered()
         {
             foreach (var entry in this.ObjectContext.ObjectStateManager
-                                   .GetObjectStateEntries(EntityState.Added | EntityState.Modified))
+                                   .GetObjectStateEntries(EntityState.Added | EntityState.Modified |EntityState.Deleted))
             {
                 if (entry.Entity is IAccountable)
                 {

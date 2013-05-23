@@ -125,7 +125,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                            .GroupJoin(comments,
                                 o => new { SourceType = o.SourceType, SourceId = o.SourceId },
                                 i => new { SourceType = i.C.SourceType, SourceId = i.C.SourceId },
-                                (o, i) => new { SourceType = o.SourceType, SourceId = o.SourceId, Comment = i.FirstOrDefault() });
+                                (o, i) => new { SourceType = o.SourceType, SourceId = o.SourceId, Comment = i.OrderByDescending(c=>c.C.CreatedDate).FirstOrDefault() });
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
             linq = linq.OrderByDescending(c => c.Comment.C.CreatedDate).Skip(skipCount).Take(request.Pagesize);

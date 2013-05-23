@@ -126,6 +126,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             {
                 var entity = MappingManager.StoreEntityMapping(vo);
                 entity.CreatedUser = base.CurrentUser.CustomerId;
+                entity.UpdatedDate = DateTime.Now;
                 entity.UpdatedUser = base.CurrentUser.CustomerId;
                 entity.Status = (int)DataStatus.Normal;
                 using (var ts = new TransactionScope())
@@ -166,6 +167,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
             entity.Tel = vo.Tel;
             entity.Description = vo.Description;
             entity.Longitude = vo.Longitude;
+            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedUser = CurrentUser.CustomerId;
             using (TransactionScope ts = new TransactionScope())
             {
                 this._storeRepository.Update(entity);

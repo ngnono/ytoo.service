@@ -18,7 +18,7 @@
     </ul>
 }
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("ProductByBrand", "Report", new { page = 0 }, FormMethod.Post, new { @class = "form-horizontal searchForm-border " }))
+@using (Html.BeginForm("ProductByBrand", "Report", FormMethod.Post, new { @class = "form-horizontal searchForm-border " }))
 {
     @Html.ValidationSummary(false)
     <div class="row">
@@ -85,4 +85,3 @@
 
 </table>
 
-@Html.Partial("PagerPartialView", Model)

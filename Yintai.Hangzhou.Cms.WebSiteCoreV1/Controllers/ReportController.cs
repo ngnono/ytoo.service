@@ -68,13 +68,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Controllers
                                                      (!option.ToDate.HasValue || p.CreatedDate < option.ToDate.Value))
                  .Join(dbContext.Set<StoreEntity>(), o => o.Store_Id, i => i.Id, (o, i) => new { P = o, S = i })
                  .Join(dbContext.Set<BrandEntity>(), o => o.P.Brand_Id, i => i.Id, (o, i) => new { P = o.P, S = o.S, B = i })
-                 .GroupBy(l => new { l.P.Store_Id, l.S.Name, l.P.Brand_Id, SName = l.B.Name });
+                 .GroupBy(l => new { l.P.Store_Id, l.S.Name, l.P.Brand_Id, BName = l.B.Name });
             return linq.Select(l => new ProductByBrandReportViewModel()
             {
                 BrandId = l.Key.Brand_Id,
-                BrandName = l.Key.Name,
+                BrandName = l.Key.BName,
                 StoreId = l.Key.Store_Id,
-                StoreName = l.Key.SName,
+                StoreName = l.Key.Name,
                 Products = l.Count()
 
             }).OrderByDescending(l=>l.Products);

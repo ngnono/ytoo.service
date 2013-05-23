@@ -8,6 +8,7 @@ using Yintai.Architecture.Framework.Extension;
 using Yintai.Hangzhou.Contract.Customer;
 using Yintai.Hangzhou.Contract.DTO.Request.Customer;
 using Yintai.Hangzhou.Contract.DTO.Response.Customer;
+using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
@@ -386,7 +387,7 @@ namespace Yintai.Hangzhou.Service
             }
             else
             {
-                string logoBG = string.Empty;
+                ResourceInfoResponse logoBG =null;
                 using (var ts = new TransactionScope())
                 {
                     var oldResource = _resourceService.Get(request.AuthUser.Id, SourceType.CustomerThumbBackground).FirstOrDefault();
@@ -399,13 +400,13 @@ namespace Yintai.Hangzhou.Service
                         Logger.Error(String.Format("保存用户LOGO资源文件异常,用户ID={0}", request.AuthUser.Id));
                         return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.InternalServerError, Message = "保存文件异常" };
                     }
-                    logoBG = resourceResult.First().AbsoluteUrl;
+                    logoBG = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(resourceResult.First());
                     ts.Complete();
                 }
                 
                 var response = new CustomerInfoResponse()
                 {
-                    BackgroundLogo = logoBG
+                    BackgroundLogo_r = logoBG
                 };
                 return new ExecuteResult<CustomerInfoResponse>(response);
             }

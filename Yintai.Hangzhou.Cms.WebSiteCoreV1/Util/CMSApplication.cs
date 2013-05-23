@@ -34,7 +34,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Util
 "Default_Page", // Route name
 "{controller}/{action}/{page}", // URL with parameters
 new { controller = "Home", action = "Index", id = 0, page = 1 } // Parameter defaults
-, new { action = @".*", page = @"\d*" } //正则列表页结尾 list
+, new { action = @"(list|card|index)", page = @"\d*" } //正则列表页结尾 list
 , new[] { _controller }
 );
         }

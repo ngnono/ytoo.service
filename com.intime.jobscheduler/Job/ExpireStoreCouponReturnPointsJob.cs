@@ -28,12 +28,13 @@ namespace com.intime.jobscheduler.Job
             int cursor = 0;
             int successCount = 0;
             int size = 100;
+            DateTime fromDate =  DateTime.Today.AddDays(-1);
             Stopwatch sw = new Stopwatch();
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                       var coupons = from p in db.StoreCoupons
-                                  where p.ValidEndDate >= DateTime.Today.AddDays(-1) && p.ValidEndDate < DateTime.Today
+                                  where p.ValidEndDate >=fromDate && p.ValidEndDate < DateTime.Today
                                     && p.Status == (int)CouponStatus.Normal
                                    select p;
                            
