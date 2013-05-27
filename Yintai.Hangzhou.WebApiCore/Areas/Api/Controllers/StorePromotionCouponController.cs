@@ -300,7 +300,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                    };
                }
             }
-            return new RestfulResult { Data = new ExecuteResult<ExchangeStoreCouponResponse>(new ExchangeStoreCouponResponse().FromEntity<ExchangeStoreCouponResponse>(coupon)) };
+            return new RestfulResult
+            {
+                Data = new ExecuteResult { StatusCode = StatusCode.Success, Message = "取消代金券成功，积点将于1个工作日后返回会员卡账户!" }
+
+            };
         }
     }
 }

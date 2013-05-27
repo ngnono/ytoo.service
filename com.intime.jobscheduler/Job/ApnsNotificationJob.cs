@@ -54,7 +54,7 @@ namespace com.intime.jobscheduler.Job
                 var prods = (from p in db.Promotions
                             where (p.StartDate >= startDate && p.StartDate < endDate)
                             && p.Status == 1
-                             select p).FirstOrDefault();
+                             select p).OrderByDescending(p=>p.IsTop).ThenByDescending(p=>p.CreatedDate).FirstOrDefault();
                 if (prods != null)
                 {
                     var devices = (from d in db.DeviceLogs

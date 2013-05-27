@@ -20,6 +20,8 @@ namespace Yintai.Hangzhou.Model.Enums
         [Description("只做为显示")]
         DisplayOnly = 4,
         [Description("跳转链接")]
-        Url = 5
+        Url = 5,
+        [Description("积点列表")]
+        PointList =6
     }
 }
