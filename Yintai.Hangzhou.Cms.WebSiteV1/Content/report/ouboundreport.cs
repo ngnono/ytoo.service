@@ -16,14 +16,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Content.report {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class demo : ReportClass {
+    public class ouboundreport : ReportClass {
         
-        public demo() {
+        public ouboundreport() {
         }
         
         public override string ResourceName {
             get {
-                return "demo.rpt";
+                return "ouboundreport.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Content.report {
         
         public override string FullResourceName {
             get {
-                return "Yintai.Hangzhou.Cms.WebSiteV1.Content.report.demo.rpt";
+                return "Yintai.Hangzhou.Cms.WebSiteV1.Content.report.ouboundreport.rpt";
             }
             set {
                 // Do nothing
@@ -90,17 +90,25 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Content.report {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.Shared.IParameterField Parameter_brandid {
+        public CrystalDecisions.Shared.IParameterField Parameter_Operator {
             get {
                 return this.DataDefinition.ParameterFields[0];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_Notice {
+            get {
+                return this.DataDefinition.ParameterFields[1];
             }
         }
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class Cacheddemo : Component, ICachedReport {
+    public class Cachedouboundreport : Component, ICachedReport {
         
-        public Cacheddemo() {
+        public Cachedouboundreport() {
         }
         
         [Browsable(false)]
@@ -137,7 +145,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Content.report {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            demo rpt = new demo();
+            ouboundreport rpt = new ouboundreport();
             rpt.Site = this.Site;
             return rpt;
         }

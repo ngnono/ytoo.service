@@ -8,7 +8,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
         public SectionEntityMap()
         {
             // Primary Key
-            this.HasKey(t => t.ContactPhone);
+            this.HasKey(t => t.Id);
 
             // Properties
             this.Property(t => t.Location)
@@ -19,7 +19,11 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(50);
 
             this.Property(t => t.ContactPerson)
-                .HasMaxLength(50);
+                .HasMaxLength(20);
+
+            this.Property(t => t.Name)
+                .IsRequired()
+                .HasMaxLength(200);
 
             // Table & Column Mappings
             this.ToTable("Section");
@@ -33,6 +37,8 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
             this.Property(t => t.ContactPerson).HasColumnName("ContactPerson");
+            this.Property(t => t.Name).HasColumnName("Name");
+            this.Property(t => t.Id).HasColumnName("Id");
 		Init();
         }
 

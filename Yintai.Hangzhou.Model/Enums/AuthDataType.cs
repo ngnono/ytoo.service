@@ -12,5 +12,7 @@ namespace Yintai.Hangzhou.Model.Enums
         Product = 1,
         [Description("促销")]
         Promotion = 2,
+        [Description("订单")]
+        Order = 3,
     }
 }

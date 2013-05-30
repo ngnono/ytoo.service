@@ -14,7 +14,9 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<int> CreateUser { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateUser { get; set; }
-        public byte[] ContactPerson { get; set; }
+        public string ContactPerson { get; set; }
+        public string Name { get; set; }
+        public int Id { get; set; }
 
         #region Overrides of BaseEntity
 
@@ -23,7 +25,7 @@ namespace Yintai.Hangzhou.Data.Models
         /// </summary>
         public override object EntityId
         {       
-                get { return ContactPhone; }
+                get { return Id; }
  
         }
 

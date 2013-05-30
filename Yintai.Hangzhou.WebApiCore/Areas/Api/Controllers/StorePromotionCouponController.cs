@@ -162,7 +162,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 new ExchangeStoreCouponResponse().FromEntity<ExchangeStoreCouponResponse>(newCoupon,
                                             s=>{
                                                 s.StoreName = storescope.StoreName;
-                                                s.Exclude = storescope.Excludes;
+                                                s.Exclude = storepromotion.Notice;
 
                                             })) };
         }

@@ -1,1 +1,1 @@
-﻿<%@ Application Inherits="Yintai.Hangzhou.Cms.WebSiteCoreV1.Util.CMSApplication" Language="C#" %>
+﻿<%@ Application Inherits="Yintai.Hangzhou.Cms.WebSiteV1.Util.CMSApplication" Language="C#" %>

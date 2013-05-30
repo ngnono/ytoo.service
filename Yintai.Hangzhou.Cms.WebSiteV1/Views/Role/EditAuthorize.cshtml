@@ -1,4 +1,4 @@
-﻿@model Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.UserRoleViewModel
+﻿@model Yintai.Hangzhou.Cms.WebSiteV1.Models.UserRoleViewModel
 
 @using (Html.BeginForm())
 {
@@ -20,7 +20,7 @@
             </div>
             <div id="collapseone" class="accordion-body collapse in">
                 <div class="accordion-inner">
-                        @foreach (Yintai.Hangzhou.Cms.WebSiteCoreV1.Models.RoleViewModel role in ViewBag.Roles)
+                        @foreach (Yintai.Hangzhou.Cms.WebSiteV1.Models.RoleViewModel role in ViewBag.Roles)
                         {
                             bool hasRole = Model.Roles.FirstOrDefault(e => e.Id == role.Id) != null;
                         <div class="span3">

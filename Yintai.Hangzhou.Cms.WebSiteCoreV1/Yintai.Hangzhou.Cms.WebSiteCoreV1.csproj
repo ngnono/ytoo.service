@@ -101,6 +101,7 @@
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HotwordController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PointController.cs" />
     <Compile Include="Controllers\ProBulkUploadController.cs" />
     <Compile Include="Controllers\ProUploadError.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Models\ChangePassViewModel.cs" />
     <Compile Include="Models\FilesStatus.cs" />
     <Compile Include="Models\HotwordViewModel.cs" />
+    <Compile Include="Models\OrderViewModel.cs" />
     <Compile Include="Models\ProductByBrandReportViewModel.cs" />
     <Compile Include="Models\ReportByProductBrandOption.cs" />
     <Compile Include="Models\RoleRightViewModel.cs" />

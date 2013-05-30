@@ -124,6 +124,8 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<BannerEntity> Banners { get; set; }
         public DbSet<BrandEntity> Brands { get; set; }
         public DbSet<CardEntity> Cards { get; set; }
+        public DbSet<CategoryPropertyEntity> CategoryProperties { get; set; }
+        public DbSet<CategoryPropertyValueEntity> CategoryPropertyValues { get; set; }
         public DbSet<CommentEntity> Comments { get; set; }
         public DbSet<CouponHistoryEntity> CouponHistories { get; set; }
         public DbSet<CouponLogEntity> CouponLogs { get; set; }
@@ -133,12 +135,19 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<FeedbackEntity> Feedbacks { get; set; }
         public DbSet<GroupEntity> Groups { get; set; }
         public DbSet<HotWordEntity> HotWords { get; set; }
+        public DbSet<InboundPackageEntity> InboundPackages { get; set; }
         public DbSet<LikeEntity> Likes { get; set; }
         public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<OrderItemEntity> OrderItems { get; set; }
+        public DbSet<OrderLogEntity> OrderLogs { get; set; }
+        public DbSet<OutboundEntity> Outbounds { get; set; }
+        public DbSet<OutboundItemEntity> OutboundItems { get; set; }
         public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
         public DbSet<PointOrderRuleEntity> PointOrderRules { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<ProductPropertyValueEntity> ProductPropertyValues { get; set; }
         public DbSet<ProductStageEntity> ProductStages { get; set; }
         public DbSet<ProductUploadJobEntity> ProductUploadJobs { get; set; }
         public DbSet<PromotionEntity> Promotions { get; set; }
@@ -147,11 +156,14 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<RemindEntity> Reminds { get; set; }
         public DbSet<ResourceEntity> Resources { get; set; }
         public DbSet<ResourceStageEntity> ResourceStages { get; set; }
+        public DbSet<RMAEntity> RMAs { get; set; }
+        public DbSet<RMAItemEntity> RMAItems { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
         public DbSet<RoleAccessRightEntity> RoleAccessRights { get; set; }
         public DbSet<SectionEntity> Sections { get; set; }
         public DbSet<SeedEntity> Seeds { get; set; }
         public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
+        public DbSet<ShipViaEntity> ShipVias { get; set; }
         public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
         public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
         public DbSet<StoreEntity> Stores { get; set; }
@@ -181,6 +193,8 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new BannerEntityMap());
             modelBuilder.Configurations.Add(new BrandEntityMap());
             modelBuilder.Configurations.Add(new CardEntityMap());
+            modelBuilder.Configurations.Add(new CategoryPropertyEntityMap());
+            modelBuilder.Configurations.Add(new CategoryPropertyValueEntityMap());
             modelBuilder.Configurations.Add(new CommentEntityMap());
             modelBuilder.Configurations.Add(new CouponHistoryEntityMap());
             modelBuilder.Configurations.Add(new CouponLogEntityMap());
@@ -190,12 +204,19 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new FeedbackEntityMap());
             modelBuilder.Configurations.Add(new GroupEntityMap());
             modelBuilder.Configurations.Add(new HotWordEntityMap());
+            modelBuilder.Configurations.Add(new InboundPackageEntityMap());
             modelBuilder.Configurations.Add(new LikeEntityMap());
             modelBuilder.Configurations.Add(new NotificationLogEntityMap());
+            modelBuilder.Configurations.Add(new OrderEntityMap());
+            modelBuilder.Configurations.Add(new OrderItemEntityMap());
+            modelBuilder.Configurations.Add(new OrderLogEntityMap());
+            modelBuilder.Configurations.Add(new OutboundEntityMap());
+            modelBuilder.Configurations.Add(new OutboundItemEntityMap());
             modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());
             modelBuilder.Configurations.Add(new PointOrderRuleEntityMap());
             modelBuilder.Configurations.Add(new ProductEntityMap());
+            modelBuilder.Configurations.Add(new ProductPropertyValueEntityMap());
             modelBuilder.Configurations.Add(new ProductStageEntityMap());
             modelBuilder.Configurations.Add(new ProductUploadJobEntityMap());
             modelBuilder.Configurations.Add(new PromotionEntityMap());
@@ -204,11 +225,14 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new RemindEntityMap());
             modelBuilder.Configurations.Add(new ResourceEntityMap());
             modelBuilder.Configurations.Add(new ResourceStageEntityMap());
+            modelBuilder.Configurations.Add(new RMAEntityMap());
+            modelBuilder.Configurations.Add(new RMAItemEntityMap());
             modelBuilder.Configurations.Add(new RoleEntityMap());
             modelBuilder.Configurations.Add(new RoleAccessRightEntityMap());
             modelBuilder.Configurations.Add(new SectionEntityMap());
             modelBuilder.Configurations.Add(new SeedEntityMap());
             modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
+            modelBuilder.Configurations.Add(new ShipViaEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());
             modelBuilder.Configurations.Add(new StoreEntityMap());

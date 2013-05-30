@@ -31,6 +31,14 @@ namespace Yintai.Hangzhou.Repository.Impl
                             .Any(a => a.StoreId == q.Store_Id)
                        select q;
             }
+            else if (query is IQueryable<OrderEntity>)
+            {
+                return from q in (query as IQueryable<OrderEntity>)
+                       where Context.Set<UserAuthEntity>().Where(a => a.UserId == userId && a.Type == (int)AuthDataType.Order)
+                            .Any(a => a.StoreId == q.StoreId &&
+                                a.BrandId==0 || a.BrandId == q.BrandId)
+                       select q;
+            }
           
             return query;
         }

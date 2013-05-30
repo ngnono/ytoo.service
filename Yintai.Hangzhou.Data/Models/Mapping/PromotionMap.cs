@@ -18,6 +18,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Description)
                 .IsRequired();
 
+            this.Property(t => t.PublicProCode)
+                .HasMaxLength(50);
+
             // Table & Column Mappings
             this.ToTable("Promotion");
             this.Property(t => t.Id).HasColumnName("Id");

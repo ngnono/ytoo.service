@@ -698,7 +698,20 @@ namespace com.intime.jobscheduler.Job
             }
             sw.Stop();
             log.Info(string.Format("{0} brands in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
-
+             //update related source if any affected
+            if (successCount > 0 && CascadPush)
+            {
+                //index related products
+                log.Info("index products affected by related brands ");
+                IndexProds(client, null,
+                    (p, db) =>
+                    {
+                        return p.Where(prod => (from r in db.Brands
+                                                where (r.CreatedDate >= benchDate || r.UpdatedDate >= benchDate)
+                                                && r.Id == prod.Brand_Id
+                                                select r.Id).Any());
+                    });
+            }
         }
 
 

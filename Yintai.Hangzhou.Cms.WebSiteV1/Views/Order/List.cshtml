@@ -1,0 +1,142 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.Cms.WebSiteV1.Util
+@using Yintai.Hangzhou.WebSupport.Helper
+@using Yintai.Hangzhou.Model.Filters
+@model Pager<OrderViewModel>
+@{
+    ViewBag.Title = "订单列表";
+    OrderSearchOption search = ViewBag.SearchOptions ?? new OrderSearchOption();
+    HtmlHelper<OrderSearchOption> searchModelHelper = Html.HtmlHelperFor<OrderSearchOption>();
+
+}
+
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("订单管理", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("List", "Order", new { page = 0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="span2">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.OrderNo)</label>
+                <div class="controls">
+                    @searchModelHelper.TextBoxFor(m => search.OrderNo, new { @class = "span1" })
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.CustomerId)</label>
+                <div class="controls">
+                    @searchModelHelper.TextBoxFor(m => search.CustomerId, new { @class = "span1" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="span3">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Brand)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Brand, new { @class="span1"})
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Store)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Store, new { @class="span1"})
+                </div>
+            </div>
+
+
+        </div>
+        <div class="span3">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.FromDate)</label>
+                <div class="controls">
+                     @searchModelHelper.EditorFor(m => search.FromDate, new { @class="span1"})
+                </div>
+            </div>
+                        <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.ToDate)</label>
+                <div class="controls">
+                     @searchModelHelper.EditorFor(m => search.ToDate, new { @class="span1"})
+                </div>
+            </div>
+           
+        </div>
+        <div class="span3">
+             <div class="control-group">
+                <label class="control-label" for="Name">状态</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.Status, EnumHelper.DisplayList<OrderStatus>(), new { @class = "span2" })
+                </div>
+            </div>
+        </div>
+      
+
+
+    </div>
+}
+<table>
+    <tr>
+        <th>操作</th>
+        <th>订单号</th>
+        <th>订单状态
+        </th>
+        <th>订单金额</th>
+        <th>门店</th>
+        <th>订购人
+        </th>
+        <th>订购人编码
+        </th>
+        <th>支付方式</th>
+        <th>配送方式</th>
+        <th>创建时间
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Data)
+    {
+        <tr>
+           
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-small">操作</button>
+                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id, returnUrl = Request.RawUrl })</li>
+                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id, returnUrl = Request.RawUrl }) </li>
+                        
+                    </ul>
+
+                </div>
+            </td>
+            <td>@Html.DisplayFor(modelItem => item.OrderNo)</td>
+            <td>
+                @Html.Label("", ((OrderStatus)item.Status).ToFriendlyString())
+            </td>
+                        <td>@Html.DisplayFor(modelItem => item.TotalAmount)</td>
+                        <td>@Html.DisplayFor(modelItem => item.StoreName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Customer.Nickname)</td>
+             <td>@Html.DisplayFor(modelItem => item.CustomerId)</td>
+             <td>@Html.DisplayFor(modelItem => item.PaymentMethodName)</td>
+             <td>@Html.DisplayFor(modelItem => item.ShippingViaMethod.Name)</td>
+           <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
+
+        </tr>
+    }
+
+</table>
+
+@Html.Partial("PagerPartialView", Model)

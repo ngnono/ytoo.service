@@ -1,0 +1,226 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteV1.Models.OrderViewModel
+@{
+    ViewBag.Title = "订单详情";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("订单管理", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+<h2>@ViewBag.Title</h2>
+<p>
+    @if (Model.CanChangeStoreItem)
+    {
+        @Html.ActionLink2("确认专柜商品", "ChangeStoreItem", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    }
+    @if (Model.CanPrint)
+    { 
+         @Html.ActionLink2("打印订单", "PrintOrder", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    }
+
+    @if (Model.CanPreparePack)
+    { 
+         @Html.ActionLink2("准备打包", "PreparePack", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    }
+    @if (Model.CanPrintShipping)
+    { 
+         @Html.ActionLink2("打印发货单", "PrintShipping", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    }
+    @if (Model.CanShipping)
+    { 
+         @Html.ActionLink2("发货", "Shipping", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    }
+    @if (Model.CanChangeReceived)
+    { 
+         @Html.ActionLink2("签收", "Received", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    }
+        @if (Model.CanChangeReject)
+    { 
+         @Html.ActionLink2("拒收", "Reject", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    }
+    @if (Model.CanConvert2Sale)
+    { 
+         @Html.ActionLink2("转化为销售", "Convert2Sale", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    }
+        @if (Model.CanPrintSales)
+    { 
+         @Html.ActionLink2("打印销售单", "PrintSales", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    }
+    @if (Model.CanVoid)
+    { 
+        <a href="#voidConfirm" role="button" class="btn" data-toggle="modal">作废</a>     
+    }
+
+    @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
+</p>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#basic" data-toggle="tab">订单信息</a></li>
+    <li><a href="#detail" data-toggle="tab">订单明细</a></li>
+    <li><a href="#log" data-toggle="tab">订单日志</a></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <fieldset>
+
+            <div class="display-label">@Html.LabelFor(model => model.OrderNo)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.OrderNo)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.Customer)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.Customer.Nickname)
+            </div>
+            <div class="display-label">@Html.LabelFor(model => model.TotalAmount)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.TotalAmount)
+            </div>
+            <div class="display-label">@Html.LabelFor(model => model.StoreName)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.StoreName)
+
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.NeedInvoice)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.NeedInvoice)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.InvoiceSubject)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.InvoiceSubject)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.InvoiceDetail)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.InvoiceDetail)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.PaymentMethodName)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.PaymentMethodName)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.Status)</div>
+            <div class="display-field">
+                @Html.Label("", ((Yintai.Hangzhou.Model.Enums.OrderStatus)Model.Status).ToFriendlyString())
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ShippingFee)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ShippingFee)
+            </div>
+            <div class="display-label">@Html.LabelFor(model => model.ShippingAddress)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ShippingAddress) @Html.DisplayFor(model => model.ShippingZipCode)
+            </div>
+            <div class="display-label">@Html.LabelFor(model => model.ShippingContactPerson)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ShippingContactPerson)
+            </div>
+            <div class="display-label">@Html.LabelFor(model => model.ShippingContactPhone)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ShippingContactPhone)
+            </div>
+            <div class="display-label">@Html.LabelFor(model => model.ShippingViaMethod)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ShippingViaMethod.Name)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ShippingNo)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ShippingZipCode)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.CreateDate)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.CreateDate)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.UpdateDate)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.UpdateDate)
+            </div>
+
+
+        </fieldset>
+    </div>
+    <div class="tab-pane" id="detail">
+        <table>
+            <tr>
+                <th>商品图片</th>
+                <th>商品编号</th>
+                <th>订购描述
+                </th>
+                <th>单价</th>
+                <th>数量</th>
+                <th>总额
+                </th>
+                <th>专柜商品编码
+                </th>
+                <th>专柜商品描述</th>
+
+            </tr>
+
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@if (item.ProductResource != null)
+                        {
+            
+                        <img width="120" src="@String.Concat(item.ProductResource.Domain, item.ProductResource.Name, "_120x0.jpg")" alt="120x0" />
+                        }
+                    </td>
+                    <td>@Html.LabelFor(model => item.ProductId)</td>
+                    <td>@Html.LabelFor(model => item.ProductDesc)</td>
+                    <td>@Html.LabelFor(model => item.ItemPrice)</td>
+                    <td>@Html.LabelFor(model => item.Quantity)</td>
+                    <td>@Html.LabelFor(model => item.ExtendPrice)</td>
+                    <td>@Html.LabelFor(model => item.StoreItemNo)</td>
+                    <td>@Html.LabelFor(model => item.StoreItemDesc)</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="tab-pane" id="log">
+        <table>
+            <tr>
+                <th>订单号</th>
+                <th>操作用户</th>
+                <th>操作时间
+                </th>
+                <th>操作描述</th>
+
+            </tr>
+
+            @foreach (var item in Model.Logs)
+            {
+                <tr>
+
+                    <td>@Html.LabelFor(model => item.OrderNo)</td>
+                    <td>@Html.LabelFor(model => item.CustomerId)</td>
+                    <td>@Html.LabelFor(model => item.CreateDate)</td>
+                    <td>@Html.LabelFor(model => item.Operation)</td>
+                </tr>
+            }
+        </table>
+
+    </div>
+</div>
+
+<div id="voidConfirm" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">确认作废？</h3>
+  </div>
+  <div class="modal-body">
+    <p>确认作废该订单吗，一旦作废，订单就会立即失效。</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      @Html.ActionLink2("确认", "Void", new { OrderNo = Model.OrderNo }, new {@class="btn btn-primary" })
+  </div>
+</div>

@@ -1,3 +1,9 @@
 ﻿@model DateTime?
-
-@Html.TextBoxFor(m => m, new { @class = "datetimepicker" })
+@{
+    string htmlClass = "datetimepicker ";
+    if (ViewData["class"] != null)
+    {
+        htmlClass += ViewData["class"].ToString();
+    }
+    }
+@Html.TextBoxFor(m => m, new { @class = htmlClass })
