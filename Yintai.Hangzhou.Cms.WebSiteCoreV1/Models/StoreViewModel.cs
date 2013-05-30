@@ -15,12 +15,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "名称")]
         public string Name { get; set; }
 
-        [StringLength(256, MinimumLength = 0)]
         [Display(Name = "说明")]
         public string Description { get; set; }
 
         [Required]
-        [StringLength(256, MinimumLength = 1)]
         [Display(Name = "地址")]
         public string Location { get; set; }
         [Required]

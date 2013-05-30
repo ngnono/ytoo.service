@@ -35,7 +35,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteCoreV1.Models
         [Display(Name = "副名称")]
         public string EnglishName { get; set; }
 
-        [StringLength(256, MinimumLength = 0)]
         [Display(Name = "说明")]
         public string Description { get; set; }
 
