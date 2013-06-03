@@ -42,10 +42,12 @@
       <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -75,8 +77,11 @@
     <Compile Include="DTO\Request\ExchangeStoreCouponRuleRequest.cs" />
     <Compile Include="DTO\Request\Feedback\FeedbackCreateRequest.cs" />
     <Compile Include="DTO\Request\MyCommentListRequest.cs" />
+    <Compile Include="DTO\Request\OrderRequest.cs" />
+    <Compile Include="DTO\Request\PaymentModel.cs" />
     <Compile Include="DTO\Request\Point\GetPointInfoRequest.cs" />
     <Compile Include="DTO\Request\ProductComplex\GetItemsListRequest.cs" />
+    <Compile Include="DTO\Request\ShippingAddressModel.cs" />
     <Compile Include="DTO\Request\SpecialTopic\SpecialTopicRequest.cs" />
     <Compile Include="DTO\Request\StoreCouponDetailRequest.cs" />
     <Compile Include="DTO\Request\StoreCouponListRequest.cs" />
@@ -102,6 +107,7 @@
     <Compile Include="DTO\Response\ItemsInfoResponse.cs" />
     <Compile Include="DTO\Response\ItemsCollectionResponse.cs" />
     <Compile Include="DTO\Response\MyCommentInfoResponse.cs" />
+    <Compile Include="DTO\Response\OrderResponse.cs" />
     <Compile Include="DTO\Response\PagerInfoResponse.cs" />
     <Compile Include="DTO\Response\Point\PointInfoResponse.cs" />
     <Compile Include="DTO\Response\SpecialTopic\SpecialTopic.cs" />

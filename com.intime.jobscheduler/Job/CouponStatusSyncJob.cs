@@ -52,20 +52,28 @@ namespace com.intime.jobscheduler.Job
                     try
                     {
                         string code = dynamicObject.code;
+                        int? status = dynamicObject.status;
+                        CouponStatus targetStatus = CouponStatus.Used;
+                        CouponActionType targetActionType = CouponActionType.Consume;
+                        if (status.HasValue && status.Value == -1)
+                        {
+                            targetStatus = CouponStatus.Normal;
+                            targetActionType = CouponActionType.Rebate;
+                        }
                         switch ((int)dynamicObject.coupontype)
                         {
                             case 1:
                                 var coupon = db.StoreCoupons.Where(s => s.Code == code && s.Status != (int)CouponStatus.Deleted).FirstOrDefault();
                                 if (coupon != null)
                                 {
-                                    coupon.Status = (int)CouponStatus.Used;
+                                    coupon.Status = (int)targetStatus;
                                     coupon.UpdateDate = DateTime.Now;
                                     coupon.UpdateUser = 0;
                                     db.Entry(coupon).State = EntityState.Modified;
 
                                     db.CouponLogs.Add(new CouponLogEntity()
                                     {
-                                        ActionType = (int)CouponActionType.Consume,
+                                        ActionType = (int)targetActionType,
                                         BrandNo = dynamicObject.brandno,
                                         Code = code,
                                         ConsumeStoreNo = dynamicObject.storeno,
@@ -83,12 +91,12 @@ namespace com.intime.jobscheduler.Job
                                  var coupon2 = db.CouponHistories.Where(s => s.CouponId == code && s.Status != (int)CouponStatus.Deleted).FirstOrDefault();
                                  if (coupon2 != null)
                                 {
-                                    coupon2.Status = (int)CouponStatus.Used;
+                                    coupon2.Status = (int)targetStatus;
                                     db.Entry(coupon2).State = EntityState.Modified;
 
                                     db.CouponLogs.Add(new CouponLogEntity()
                                     {
-                                        ActionType = (int)CouponActionType.Consume,
+                                        ActionType = (int)targetActionType,
                                         BrandNo = dynamicObject.brandno,
                                         Code = code,
                                         ConsumeStoreNo = dynamicObject.storeno,

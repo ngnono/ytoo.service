@@ -39,15 +39,8 @@ namespace com.intime.fashion.common
                 var body = response.GetResponseStream();
                 using (var streamReader = new StreamReader(body, Encoding.UTF8))
                 {
-                    Char[] read = new Char[256];
-                    // Reads 256 characters at a time.    
-                    int count = streamReader.Read(read, 0, 256);
-                    while (count > 0)
-                    {
-                        // Dumps the 256 characters on a string and displays the string to the console.
-                        sb.Append(read);
-                        count = streamReader.Read(read, 0, 256);
-                    }
+                    
+                        sb.Append(streamReader.ReadToEnd());
                 }
             }
             var jsonResponse = JsonConvert.DeserializeObject<dynamic>(sb.ToString());

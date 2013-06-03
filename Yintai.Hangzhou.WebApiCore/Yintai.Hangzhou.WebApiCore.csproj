@@ -102,6 +102,7 @@
     <Compile Include="Areas\Api\Controllers\ShareController.cs" />
     <Compile Include="Areas\Api\Controllers\StoreController.cs" />
     <Compile Include="Areas\Api\Controllers\TagController.cs" />
+    <Compile Include="ControllerExtension.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

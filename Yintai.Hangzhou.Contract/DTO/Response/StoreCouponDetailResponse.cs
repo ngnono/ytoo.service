@@ -76,6 +76,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
     [DataContract]
     public class StorePromotionDetailResponse : BaseResponse
     {
+        private IEnumerable<StorePromotionScopeDetailResponse> _inScopeS;
         [DataMember(Name = "name")]
         public string Name { get; set; }
         [DataMember(Name = "description")]
@@ -115,18 +116,29 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         {
             get
             {
-            IEnumerable<dynamic> jsons = JsonConvert.DeserializeObject(InScopeNotice) as IEnumerable<dynamic>;
-            foreach (var json in  jsons)
-            {
-                yield return new StorePromotionScopeDetailResponse
+                if (_inScopeS != null)
                 {
-                    StoreId = json.storeid,
-                    StoreName = json.storename,
-                    Excludes = json.excludes
-                };
-            }
+                    foreach (var scope in _inScopeS)
+                        yield return scope;
+                    yield break;
+                }
+                else
+                {
+                    IEnumerable<dynamic> jsons = JsonConvert.DeserializeObject(InScopeNotice) as IEnumerable<dynamic>;
+                    foreach (var json in jsons)
+                    {
+                        yield return new StorePromotionScopeDetailResponse
+                        {
+                            StoreId = json.storeid,
+                            StoreName = json.storename,
+                            Excludes = json.excludes
+                        };
+                    }
+                }
 
-        } set { } }
+        } set {
+            _inScopeS = value;
+        } }
     }
     [DataContract]
     public class StorePromotionScopeDetailResponse : BaseResponse

@@ -10,7 +10,8 @@ namespace Yintai.Hangzhou.Model.Enums
     {
         Create = 1,
         Consume =2,
-        Void = 3
+        Void = 3,
+        Rebate = 4
     }
     public enum CouponType
     {

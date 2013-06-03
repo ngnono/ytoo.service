@@ -221,7 +221,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                select new StoreCouponDetailResponse().FromEntity<StoreCouponDetailResponse>(l.SC,
                                             c =>
                                             {
-                                                c.Promotion = new StorePromotionDetailResponse().FromEntity<StorePromotionDetailResponse>(l.SP);
+                                                c.Promotion = new StorePromotionDetailResponse().FromEntity<StorePromotionDetailResponse>(l.SP, sp => {
+                                                    sp.InScopeNotice_S = new[] { new StorePromotionScopeDetailResponse(){
+                                                         Excludes = l.SS.Excludes,
+                                                         StoreName = l.SS.StoreName
+                                                    }};
+                                                });
                                                 c.StoreName = l.SS.StoreName;
                                                 c.Exclude = l.SS.Excludes;
 

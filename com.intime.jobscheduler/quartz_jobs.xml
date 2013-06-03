@@ -173,7 +173,7 @@
         </entry>
         <entry>
           <key>publickey</key>
-          <value>intimedemo</value>
+          <value>intimedemo2</value>
         </entry>
         <entry>
           <key>privatekey</key>
@@ -194,6 +194,7 @@
       </cron>
     </trigger>
     -->
+<!--
   <job>
       <name>RebateExpireCouponPointsEveryMidNight</name>
       <group>Fashion</group>
@@ -264,6 +265,33 @@
         <job-group>Fashion</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
         <cron-expression>0/3 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    -->
+    <job>
+      <name>AccountSyncDaily</name>
+      <group>Fashion</group>
+      <description>account point sync daily</description>
+      <job-type>com.intime.jobscheduler.Job.AccountSyncJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>benchdate</key>
+          <value>2013-05-30</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>3AM</name>
+        <group>Fashion</group>
+        <description>3am every day</description>
+        <job-name>AccountSyncDaily</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0/30 * * * * ?</cron-expression>
       </cron>
     </trigger>
   </schedule>

@@ -152,6 +152,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Job\AccountSyncJob.cs" />
     <Compile Include="Job\ApnsNotificationCommonJob.cs" />
     <Compile Include="Job\ApnsNotificationJob.cs" />
     <Compile Include="Job\CouponStatusSyncJob.cs" />

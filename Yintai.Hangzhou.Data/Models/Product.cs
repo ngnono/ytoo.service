@@ -27,6 +27,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int RecommendSourceType { get; set; }
         public int SortOrder { get; set; }
         public bool IsHasImage { get; set; }
+        public decimal? UnitPrice { get; set; }
 
         #region Overrides of BaseEntity
 
