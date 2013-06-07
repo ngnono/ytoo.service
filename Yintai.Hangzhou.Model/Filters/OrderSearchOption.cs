@@ -39,7 +39,7 @@ namespace Yintai.Hangzhou.Model.Filters
 
         public int CurrentUser { get; set; }
 
-        public UserRole CurrentUserRole { get; set; }
+        public int CurrentUserRole { get; set; }
 
     }
 }

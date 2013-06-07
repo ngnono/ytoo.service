@@ -170,6 +170,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<StoreCouponEntity> StoreCoupons { get; set; }
         public DbSet<StorePromotionEntity> StorePromotions { get; set; }
         public DbSet<StorePromotionScopeEntity> StorePromotionScopes { get; set; }
+        public DbSet<StoreRealEntity> StoreReals { get; set; }
         public DbSet<TagEntity> Tags { get; set; }
         public DbSet<TimeSeedEntity> TimeSeeds { get; set; }
         public DbSet<UserEntity> Users { get; set; }
@@ -239,6 +240,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new StoreCouponEntityMap());
             modelBuilder.Configurations.Add(new StorePromotionEntityMap());
             modelBuilder.Configurations.Add(new StorePromotionScopeEntityMap());
+            modelBuilder.Configurations.Add(new StoreRealEntityMap());
             modelBuilder.Configurations.Add(new TagEntityMap());
             modelBuilder.Configurations.Add(new TimeSeedEntityMap());
             modelBuilder.Configurations.Add(new UserEntityMap());

@@ -115,6 +115,7 @@
     <Compile Include="Models\Mapping\StoreCouponMap.cs" />
     <Compile Include="Models\Mapping\StorePromotionMap.cs" />
     <Compile Include="Models\Mapping\StorePromotionScopeMap.cs" />
+    <Compile Include="Models\Mapping\StoreRealMap.cs" />
     <Compile Include="Models\Mapping\UserAuthMap.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Models\StoreCoupon.cs" />
     <Compile Include="Models\StorePromotion.cs" />
     <Compile Include="Models\StorePromotionScope.cs" />
+    <Compile Include="Models\StoreReal.cs" />
     <Compile Include="Models\UserAuth.cs" />
     <Compile Include="Models\YintaiHzhouContext.cs" />
     <Compile Include="Partials\CommentEntity.cs" />

@@ -91,7 +91,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._productDataService.GetProductInfo(request) };
         }
 
-        [RestfulRoleAuthorize(UserRole.Admin | UserRole.Manager, UserLevel.Daren)]
+        [RestfulRoleAuthorize(UserRole.Admin, UserLevel.Daren)]
         [HttpPost]
         public ActionResult Create(CreateProductRequest request, int? authuid, UserModel authUser)
         {
@@ -197,7 +197,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._productDataService.GetProductList(request) };
         }
 
-        [RestfulRoleAuthorize(UserRole.Admin | UserRole.Manager | UserRole.Operators, UserLevel.Daren)]
+        [RestfulRoleAuthorize(UserRole.Admin , UserLevel.Daren)]
         [HttpPost]
         public ActionResult Destroy(FormCollection formCollection, DestroyProductRequest request, int? authuid, UserModel authUser, [FetchProduct(KeyName = "productid", IsCanMissing = true)]ProductEntity entity)
         {
@@ -211,24 +211,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             //运营 管理员权限的用户才可以删除他人的商品
             var t = false;
             //3
-            if (((authUser.UserRole & UserRole.Admin) != 0) || (authUser.UserRole & UserRole.Operators) != 0)
+            if (((authUser.UserRole & (int)UserRole.Admin) != 0) )
             {
                 t = true;
             }
             else
             {
-                //2
-                if ((authUser.UserRole & UserRole.Manager) != 0)
-                {
-                    t = true;
-                }
-                else
-                {
                     if (authUser.Id == entity.RecommendUser && (authUser.Level & UserLevel.Daren) != 0)
                     {
                         t = true;
                     }
-                }
             }
             request.AuthUid = authuid.Value;
             request.AuthUser = authUser;

@@ -27,7 +27,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _passHelper = new PassHelper(brandDataService);
         }
 
-        [RestfulRoleAuthorize(UserRole.Admin | UserRole.Manager, UserLevel.Daren)]
+        [RestfulRoleAuthorize(UserRole.Admin, UserLevel.Daren)]
         [HttpPost]
         public RestfulResult Create(FormCollection formCollection, CreatePromotionRequest request, int? authuid, UserModel authUser)
         {
@@ -110,76 +110,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult() { Data = new ExecuteResult() { StatusCode = StatusCode.ClientError, Message = "方法错误" } };
         }
 
-        //[RestfulAuthorize]
-        //[HttpGet]
-        //public RestfulResult Favor(PromotionFavorCreateRequest request, int? authuid, UserModel authUser)
-        //{
-        //    request.AuthUid = authuid.Value;
-        //    request.AuthUser = authUser;
-
-        //    if (System.String.Compare(request.Method, DefineRestfulMethod.Destroy, System.StringComparison.OrdinalIgnoreCase) == 0)
-        //    {
-        //        return new RestfulResult
-        //        {
-        //            Data = this._promotionDataService.DestroyFavor(new PromotionFavorDestroyRequest(request))
-        //        };
-        //    }
-        //    //default
-        //    if (String.IsNullOrWhiteSpace(request.Method))
-        //    {
-        //        return new RestfulResult
-        //        {
-        //            Data = this._promotionDataService.CreateFavor(new PromotionFavorCreateRequest(request))
-        //        };
-        //    }
-
-        //    return new RestfulResult() { Data = new ExecuteResult() { StatusCode = StatusCode.ClientError, Message = "方法错误" } };
-        //}
-
-        //[HttpGet]
-        //[RestfulAuthorize]
-        //public RestfulResult Share(PromotionShareCreateRequest request, int? authuid, UserModel authUser)
-        //{
-        //    request.AuthUid = authuid.Value;
-        //    request.AuthUser = authUser;
-        //    request.Description = UrlDecode(request.Description);
-        //    request.Name = UrlDecode(request.Name);
-
-        //    return new RestfulResult
-        //    {
-        //        Data = this._promotionDataService.CreateShare(request)
-        //    };
-        //}
-
-        //[RestfulAuthorize]
-        //[HttpGet]
-        //public RestfulResult Coupon(PromotionCouponCreateRequest request, int? authuid, UserModel authUser)
-        //{
-        //    request.AuthUid = authuid.Value;
-        //    request.AuthUser = authUser;
-        //    if (System.String.Compare(request.Method, DefineRestfulMethod.Create, System.StringComparison.OrdinalIgnoreCase) == 0)
-        //    {
-        //        var result =
-        //        this._promotionDataService.CreateCoupon(request);
-
-        //        if (request.IsPass == 1 && result.Data.CouponCodeResponse != null)
-        //        {
-        //            result.Data.CouponCodeResponse.Pass = PassController.GetPass(ControllerContext, result.Data.CouponCodeResponse.Id,
-        //                                                                         result.Data.CouponCodeResponse.CouponId,
-        //                                                                         result.Data.CouponCodeResponse
-        //                                                                               .ProductName,
-        //                                                                         result.Data.CouponCodeResponse
-        //                                                                               .ProductDescription, null, result.Data.CouponCodeResponse.User_Id);
-        //        }
-
-        //        return new RestfulResult
-        //        {
-        //            Data = result
-        //        };
-        //    }
-
-        //    return new RestfulResult { Data = new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "参数错误" } };
-        //}
+      
 
         [HttpPost]
         [RestfulAuthorize]
@@ -231,7 +162,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "参数错误" } };
         }
 
-        [RestfulRoleAuthorize(UserRole.Admin | UserRole.Manager | UserRole.Operators, UserLevel.Daren)]
+        [RestfulRoleAuthorize(UserRole.Admin, UserLevel.Daren)]
         [HttpPost]
         public ActionResult Destroy(DestroyPromotionRequest request, int? authuid, UserModel authUser, [FetchPromotion(KeyName = "promotionid", IsCanMissing = true)]PromotionEntity entity)
         {
@@ -245,24 +176,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             //运营 管理员权限的用户才可以删除他人的商品
             var t = false;
             //3
-            if (((authUser.UserRole & UserRole.Admin) != 0) || (authUser.UserRole & UserRole.Operators) != 0)
+            if ((authUser.UserRole & (int)UserRole.Admin) != 0)
             {
                 t = true;
             }
             else
             {
-                //2
-                if ((authUser.UserRole & UserRole.Manager) != 0)
-                {
-                    t = true;
-                }
-                else
-                {
+               
                     if (authUser.Id == entity.RecommendUser && (authUser.Level & UserLevel.Daren) != 0)
                     {
                         t = true;
                     }
-                }
             }
             request.AuthUid = authuid.Value;
             request.AuthUser = authUser;

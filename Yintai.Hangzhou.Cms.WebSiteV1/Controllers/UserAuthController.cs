@@ -70,17 +70,18 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                                              });
 
             var models =  data.Join(_customerRepo.GetAll(),o=>o.UserId,i=>i.Id,(o,i)=>new {UA=o,U=i})
-                           .Join(_storeRepo.GetAll(),o=>o.UA.StoreId,i=>i.Id,(o,i)=>new {UA=o.UA,U=o.U,S=i})
+                           .GroupJoin(_storeRepo.GetAll(),o=>o.UA.StoreId,i=>i.Id,(o,i)=>new {UA=o.UA,U=o.U,S=i.FirstOrDefault()})
                            .GroupJoin(_brandRep.GetAll(),o=>o.UA.BrandId,i=>i.Id,(o,i)=>new {UA=o.UA,U=o.U,S=o.S,B=i.FirstOrDefault()})
+                           .ToList()
                            .Select(o=>new UserAuthViewModel(){
                              Id = o.UA.Id
                              , BrandId = o.UA.BrandId
                              , StoreId = o.UA.StoreId
                              , Type = o.UA.Type
-                             , BrandName = o.B.Name
+                             , BrandName = o.B==null?"所有":o.B.Name
                              , UserId = o.UA.UserId
                              ,UserNick = o.U.Nickname
-                             , StoreName = o.S.Name
+                             , StoreName = o.S == null ? "所有" : o.S.Name
                              ,Status = o.UA.Status.Value
                            });
                               

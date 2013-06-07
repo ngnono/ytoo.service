@@ -41,21 +41,21 @@ namespace Yintai.Hangzhou.Model
         /// </summary>
         public List<UserAccountModel> Accounts { get; set; }
 
-        public List<UserRole> UserRoles { get; set; }
+        public List<int> UserRoles { get; set; }
 
         /// <summary>
         /// 用户角色
         /// </summary>
-        public UserRole UserRole
+        public int UserRole
         {
             get
             {
                 if (UserRoles == null || UserRoles.Count == 0)
                 {
-                    return UserRole.None;
+                    return (int)Yintai.Hangzhou.Model.Enums.UserRole.None;
                 }
 
-                var ur = UserRole.None;
+                var ur = (int)Yintai.Hangzhou.Model.Enums.UserRole.None;
                 foreach (var item in UserRoles)
                 {
                     ur = ur | item;

@@ -5,10 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Hangzhou.Cms.WebSiteV1.Models;
 using Yintai.Hangzhou.Cms.WebSiteV1.Util;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
@@ -58,6 +60,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         public ActionResult EditAuthorize(int User, ImplicitRightViewModel roles)
         {
             _roleService.UpdateWithUserRelation(User, roles.RoleRightDisplay);
+
             ViewBag.Roles = from role in _roleService.FindAll()
                             select new RoleViewModel().FromEntity<RoleViewModel>(role);
             ViewBag.IsUpdateSuccess = true;
@@ -86,15 +89,21 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         }
         public ActionResult Create()
         {
-            return View();
+            ViewBag.Rights = _rightService.FindAll();
+            return View(new RoleViewModel());
         }
         [HttpPost]
         public ActionResult Create(RoleViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _roleService.Insert(model.ToEntity<RoleEntity>());
-                return RedirectToAction("List");
+                var toEntity = model.ToEntity<RoleEntity>();
+                toEntity.CreatedDate = DateTime.Now;
+                toEntity.CreatedUser = CurrentUser.CustomerId;
+                toEntity.Status = (int)DataStatus.Normal;
+                    var newEntity = _roleService.Insert(toEntity);
+
+                    return RedirectToAction("Edit", new { id = newEntity.Id });
             }
             return View(model);
         }

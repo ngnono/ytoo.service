@@ -542,7 +542,7 @@ namespace Yintai.Hangzhou.Service.Manager
         }
 
         private static UserModel UserModelMapping(UserEntity source, StoreModel storeModel,
-                                          List<UserAccountModel> userAccountModels, List<UserRole> userRoles)
+                                          List<UserAccountModel> userAccountModels, List<int> userRoles)
         {
             if (source == null)
             {
@@ -718,18 +718,18 @@ namespace Yintai.Hangzhou.Service.Manager
 
         #region vuserRoles
 
-        public static List<UserRole> UserRolesMapping(List<VUserRoleEntity> source)
+        public static List<int> UserRolesMapping(List<VUserRoleEntity> source)
         {
             if (source == null || source.Count == 0)
             {
-                return new List<UserRole>(0);
+                return new List<int>(0);
             }
 
-            var list = new List<UserRole>(source.Count);
+            var list = new List<int>(source.Count);
             //var dic = new Dictionary<UserRole, bool>(source.Count);
             foreach (var item in source)
             {
-                var target = (UserRole)item.Role_Val;
+                var target = item.Role_Val;
 
                 list.Add(target);
             }

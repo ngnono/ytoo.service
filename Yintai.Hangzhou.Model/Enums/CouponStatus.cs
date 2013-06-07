@@ -11,7 +11,7 @@ namespace Yintai.Hangzhou.Model.Enums
         /// <summary>
         /// 已删除（逻辑删除）
         /// </summary>
-        [Description("删除")]
+        [Description("取消")]
         Deleted = DataStatus.Deleted,
         /// <summary>
         /// 默认状态
@@ -21,7 +21,7 @@ namespace Yintai.Hangzhou.Model.Enums
         /// <summary>
         /// 正常状态
         /// </summary>
-        [Description("有效")]
+        [Description("领取未使用")]
         Normal = DataStatus.Normal,
         [Description("过期")]
         Expired = 2,

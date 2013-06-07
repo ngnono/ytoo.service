@@ -32,15 +32,37 @@
             @Html.EditorFor(model => model.Val)
             @Html.ValidationMessageFor(model => model.Val)
         </div>
+        </div>
+        <div class="accordion span12" id="accordion-rights">
+            <div class="accordion-group">
+                <div class="accordiong-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rights" href="#collapseone">选择权限
+                    </a>
+                </div>
+                <div id="collapseone" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        @foreach (Yintai.Hangzhou.Data.Models.AdminAccessRightEntity right in ViewBag.Rights)
+                        {
+                            bool hasRight = Model.RoleRightDisplay != null && Model.RoleRightDisplay.FirstOrDefault(e => int.Parse(e) == right.Id) != null;
+                            <div class="span3">
+                                <label>
+                                    <input type="checkbox" name="RoleRightDisplay" value="@right.Id" @Html.Raw(hasRight ? "checked" : "") /><span> @string.Format("{0}\\{1}", right.ControllName, right.ActionName)</span>
+                                </label>
+                            </div>
+                       
 
-        <p>
-            <input type="submit" value="创建" />
-        </p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+       <div class="span8 form-action">
+        <button class="btn btn-success">保存</button>
+        @Html.ActionLink2("返回", "List", null, new { @class = "btn btn-primary" })
     </div>
+
 }
 
-<div class="span12 form-action">
-    <button class="btn btn-success">保存</button>
-    @Html.ActionLink2("返回", "List", null, new { @class = "btn btn-primary" })
-</div>
+
 

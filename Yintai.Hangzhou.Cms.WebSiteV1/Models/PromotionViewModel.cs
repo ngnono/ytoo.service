@@ -136,10 +136,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
             if (currentUser == null)
                 yield return new ValidationResult(errorUnAuthorizedDataAccess);
             IUserAuthRepository authRepo = ServiceLocator.Current.Resolve<IUserAuthRepository>();
-            if (currentUser.Role == UserRole.Admin)
+            if (currentUser.Role == (int)UserRole.Admin)
                 yield break;
             if (!authRepo.Get(a=>a.UserId==currentUser.CustomerId)
-                .Any(a=>a.StoreId== this.Store_Id))
+                .Any(a=>a.StoreId==0 || a.StoreId== this.Store_Id))
                 yield return new ValidationResult(errorUnAuthorizedDataAccess);
            
         }

@@ -183,6 +183,18 @@
       <DependentUpon>rmareport.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Content\report\storecouponsequencereport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>storecouponsequencereport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Content\report\storecouponusagereport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>storecouponusagereport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
@@ -201,9 +213,12 @@
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\SectionController.cs" />
     <Compile Include="Controllers\SpecialTopicController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
+    <Compile Include="Controllers\StoreCouponReportController.cs" />
     <Compile Include="Controllers\StorePromotionController.cs" />
+    <Compile Include="Controllers\StoreRealController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\UserAuthController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -229,11 +244,14 @@
     <Compile Include="Models\ProductByBrandReportViewModel.cs" />
     <Compile Include="Models\ProductViewModel.cs" />
     <Compile Include="Models\PromotionViewModel.cs" />
+    <Compile Include="Models\PropertyValueViewModel.cs" />
     <Compile Include="Models\ReportByProductBrandOption.cs" />
     <Compile Include="Models\ResourceViewModel.cs" />
     <Compile Include="Models\RoleRightViewModel.cs" />
     <Compile Include="Models\SectionViewModel.cs" />
     <Compile Include="Models\SpecialTopicViewModel.cs" />
+    <Compile Include="Models\StoreCouponSequenceViewModel.cs" />
+    <Compile Include="Models\StoreCouponUsageViewModel.cs" />
     <Compile Include="Models\StorePromotionViewModel.cs" />
     <Compile Include="Models\StoreViewModel.cs" />
     <Compile Include="Models\TagViewModel.cs" />
@@ -245,6 +263,7 @@
     <Compile Include="Util\DateTimeExtension.cs" />
     <Compile Include="Util\EnumHelper.cs" />
     <Compile Include="Util\HtmlCustomHelper.cs" />
+    <Compile Include="Util\JsonExtension.cs" />
     <Compile Include="Util\UserAuthDataAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -600,6 +619,14 @@
     <Content Include="Views\Order\ChangeStoreItem.cshtml" />
     <Content Include="Views\Order\Shipping.cshtml" />
     <Content Include="Views\Order\Reject.cshtml" />
+    <Content Include="Views\Report\StoreCouponUsage.cshtml" />
+    <Content Include="Views\Section\List.cshtml" />
+    <Content Include="Views\Section\Create.cshtml" />
+    <Content Include="Views\Section\Edit.cshtml" />
+    <Content Include="Views\Section\Details.cshtml" />
+    <Content Include="Views\PropertyValue\List.cshtml" />
+    <Content Include="Views\PropertyValue\Create.cshtml" />
+    <Content Include="Views\StoreCouponReport\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -656,6 +683,14 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rmareport.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="Content\report\storecouponusagereport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>storecouponusagereport.cs</LastGenOutput>
+    </Content>
+    <Content Include="Content\report\storecouponsequencereport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>storecouponsequencereport.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />

@@ -15,7 +15,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(50);
 
             this.Property(t => t.Excludes)
-                .HasMaxLength(200);
+                .HasMaxLength(2000);
 
             // Table & Column Mappings
             this.ToTable("StorePromotionScope");

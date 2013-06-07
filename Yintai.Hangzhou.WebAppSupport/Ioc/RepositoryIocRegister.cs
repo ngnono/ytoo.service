@@ -64,6 +64,13 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IPointOrderRuleRepository, PointOrderRuleRepository>();
             Current.Register<IStorePromotionScopeRepository, StorePromotionScopeRepository>();
             Current.Register<ICouponLogRepository, CouponLogRepository>();
+            Current.Register<IOrderItemRepository, OrderItemRepository>();
+            Current.Register<IOrderRepository, OrderRepository>();
+            Current.Register<IOrderLogRepository, OrderLogRepository>();
+            Current.Register<IOutboundRepository, OutboundRepository>();
+            Current.Register<ISectionRepository, SectionRepository>();
+            Current.Register<IInboundPackRepository, InboundPackageRepository>();
+            Current.Register<IStoreRealRepository, StoreRealRepository>();
         }
 
         #endregion

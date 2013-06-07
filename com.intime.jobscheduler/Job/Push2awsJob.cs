@@ -114,7 +114,7 @@ namespace com.intime.jobscheduler.Job
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var prods = from r in db.StoreCoupons
-                            where (r.CreateDate >= benchDate || r.UpdateDate >= benchDate)
+                            where (r.CreateDate >= benchDate)
                             select r;
 
                 int totalCount = prods.Count();

@@ -38,7 +38,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Util
                 return;
             }
             IUserAuthRepository authRepo = ServiceLocator.Current.Resolve<IUserAuthRepository>();
-            if (currentUser.Role == UserRole.Admin)
+            if (currentUser.Role == (int)UserRole.Admin)
                 return;
             if (currentController is ProductController)
             {  

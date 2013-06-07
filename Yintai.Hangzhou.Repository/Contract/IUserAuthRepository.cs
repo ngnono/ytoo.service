@@ -9,7 +9,7 @@ namespace Yintai.Hangzhou.Repository.Contract
 {
     public interface IUserAuthRepository : IRepository<UserAuthEntity, int>
     {
-        IQueryable<dynamic> AuthFilter(IQueryable<dynamic> query, int userId, UserRole userRole);
+        IQueryable<dynamic> AuthFilter(IQueryable<dynamic> query, int userId, int userRole);
 
     }
 }

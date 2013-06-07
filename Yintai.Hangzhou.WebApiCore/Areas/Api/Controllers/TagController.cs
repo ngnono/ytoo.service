@@ -50,7 +50,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._tagDataService.GetRefresh(request) };
         }
 
-        [RestfulRoleAuthorize(UserRole.Admin | UserRole.Manager)]
+        [RestfulRoleAuthorize(UserRole.Admin)]
         [HttpPost]
         public RestfulResult Create(TagCreateRequest request, int? authuid)
         {
@@ -61,7 +61,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._tagDataService.Create(request) };
         }
 
-        [RestfulRoleAuthorize(UserRole.Admin|UserRole.Manager)]
+        [RestfulRoleAuthorize(UserRole.Admin)]
         [HttpPost]
         public RestfulResult Update(TagUpdateRequest request, int? authuid)
         {

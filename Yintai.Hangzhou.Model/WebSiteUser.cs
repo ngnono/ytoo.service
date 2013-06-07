@@ -24,7 +24,7 @@ namespace Yintai.Hangzhou.Model
         /// The customer id.
         /// </param>
         /// <param name="nickName">昵称</param>
-        public WebSiteUser(string loginName, int customerId, string nickName,UserRole role)
+        public WebSiteUser(string loginName, int customerId, string nickName,int role)
         {
             this.LoginName = loginName;
             this.CustomerId = customerId;
@@ -44,7 +44,7 @@ namespace Yintai.Hangzhou.Model
 
         public string NickName { get; set; }
 
-        public UserRole Role { get; set; }
+        public int Role { get; set; }
  
     }
 }

@@ -16,6 +16,7 @@ namespace Yintai.Hangzhou.Data.Models
         public decimal ExtendPrice { get; set; }
         public System.DateTime CreateDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public decimal UnitPrice { get; set; }
 
         #region Overrides of BaseEntity
 

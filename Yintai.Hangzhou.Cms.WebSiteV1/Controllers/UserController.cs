@@ -14,6 +14,7 @@ using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Cms.WebSiteV1.Util;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
+using CrystalDecisions.Shared;
 
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 {
@@ -110,30 +111,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
         }
 
-        /// <summary>
-        /// 禁止直接使用HttpContext
-        /// </summary>
-        //[Obsolete]
-        //public new HttpContextBase HttpContext
-        //{
-        //    get
-        //    {
-        //        throw new NotSupportedException("禁止直接使用HttpContext");
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 禁止直接使用 ControllerContext.
-        ///// </summary>
-        ////[Obsolete]
-        //public new ControllerContext ControllerContext
-        //{
-        //    get
-        //    {
-        //        throw new NotSupportedException("禁止直接使用ControllerContext");
-        //    }
-        //}
-
+       
         /// <summary>
         /// 根据Ajax请求切换对应视图
         /// </summary>
@@ -210,14 +188,24 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         }
         protected ActionResult RenderReport(string reportName, Action<ReportClass> reportCallback)
         {
+            return RenderReport(reportName, reportCallback,ExportFormatType.PortableDocFormat );
+        }
+        protected ActionResult RenderReport(string reportName, Action<ReportClass> reportCallback,ExportFormatType format)
+        {
             ReportClass rptH = new ReportClass();
             rptH.FileName = Server.MapPath(string.Format("~/Content/report/{0}.rpt", reportName));
             reportCallback(rptH);
 
-            Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-            return File(stream, "application/pdf");
+            Stream stream = rptH.ExportToStream(format);
+            var contentype = "application/pdf";
+            switch (format)
+            { 
+                case ExportFormatType.Excel:
+                    contentype = "application/vnd.ms-excel";
+                    break;
+            }
+            return File(stream, contentype);
         }
-
         public bool HasRightForCurrentAction()
         {
             object action = RouteData.Values["action"];

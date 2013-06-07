@@ -31,9 +31,10 @@ namespace Yintai.Hangzhou.Data.Models
                     code = linq.Code,
                     amount = linq.Amount,
                     userid = linq.UserId,
-                    validstartdate = linq.ValidStartDate,
-                    validenddate = linq.ValidEndDate,
-                    vipcard = linq.VipCard
+                    validstartdate = linq.ValidStartDate.GetValueOrDefault().ToUniversalTime(),
+                    validenddate = linq.ValidEndDate.GetValueOrDefault().ToUniversalTime(),
+                    vipcard = linq.VipCard,
+                    lastupdate = linq.UpdateDate.GetValueOrDefault().ToUniversalTime()
 
                 };
             }

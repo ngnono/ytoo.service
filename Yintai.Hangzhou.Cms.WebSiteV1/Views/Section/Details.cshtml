@@ -1,0 +1,50 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteV1.Models.SectionViewModel
+@{
+    ViewBag.Title = "专柜详情";
+}
+
+<h2>@ViewBag.Title</h2>
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("专柜列表", "List")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<fieldset>
+    <div class="display-label">@Html.LabelFor(model => model.Name)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model => model.Location)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Location)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model => model.StoreId)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Store.Name)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model => model.BrandId)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Brand.Name)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model => model.ContactPerson)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContactPerson)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(model => model.ContactPhone)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContactPhone)
+    </div>
+
+
+</fieldset>
+<p>
+    @Html.ActionLink2("修改", "Edit", new { id = Model.Id }, new { @class="btn"}) 
+   @Html.ActionLink2("返回", "List", null, new { @class="btn"}) 
+</p>

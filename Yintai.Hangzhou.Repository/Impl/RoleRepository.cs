@@ -42,6 +42,9 @@ namespace Yintai.Hangzhou.Repository.Impl
         public RoleEntity UpdateWithRights(RoleEntity roleEntity)
         {
             var updatingEntity = Find(roleEntity.Id);
+            updatingEntity.Name = roleEntity.Name;
+            updatingEntity.Val = roleEntity.Val;
+
             ICollection<RoleAccessRightEntity> oldRights = updatingEntity.RoleAccessRights;
             List<RoleAccessRightEntity> toDeleted = oldRights.Except(roleEntity.RoleAccessRights, new RoleAccessRightEntityComparer()).ToList();
             //deleted

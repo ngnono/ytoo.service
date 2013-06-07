@@ -170,7 +170,6 @@
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id })</li>
                         <li>@Html.ActionLink2("详情", "Detail", new { id = item.Id }) </li>
-                        <li><a  href="@string.Format("{0}?search.storepromotionid={1}",Url.Action("List","StoreCoupon"),item.Id)">查看代金券</a></li>
                         <li><a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
                         
                     </ul>

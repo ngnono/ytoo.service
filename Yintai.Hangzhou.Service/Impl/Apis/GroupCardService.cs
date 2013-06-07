@@ -75,33 +75,30 @@ namespace Yintai.Hangzhou.Service.Impl.Apis
                 request.ContentType = ct;
             }
 
-            request.ReadWriteTimeout = 10000;
-
-            if (method.Equals("POST"))
-            {
-                if (postdata != null)
-                {
-                    var bytes = Encoding.ASCII.GetBytes(postdata);
-                    request.ContentLength = bytes.Length;
-
-                    //Get Stream object
-                    var objRequestStream = request.GetRequestStream();
-
-                    //Writes a sequence of bytes to the current stream
-                    objRequestStream.Write(bytes, 0, bytes.Length);
-
-                    //Close stream
-                    objRequestStream.Close();
-                }
-            }
-
+  
             try
             {
+                if (method.Equals("POST"))
+                {
+                    if (postdata != null)
+                    {
+                        //var bytes = Encoding.ASCII.GetBytes(postdata);
+                       // request.ContentLength = bytes.Length;
+
+                        using (var objRequestStream = request.GetRequestStream())
+                        using (var streamWriter = new StreamWriter(objRequestStream))
+                        {
+                            
+                            streamWriter.Write(postdata);
+                        }
+                    }
+                }
                 response = (HttpWebResponse)request.GetResponse();
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
+                Logger.Error(string.Format("exception postdata:{0}",postdata));
 
                 throw;
             }

@@ -154,7 +154,7 @@
       </cron>
     </trigger>
     -->
-<!--
+
     <job>
       <name>PullawsIncre</name>
       <group>Fashion</group>
@@ -165,19 +165,19 @@
       <job-data-map>
         <entry>
           <key>awshost</key>
-          <value>http://localhost:3000/storecoupon/logs</value>
+          <value>http://stage.youhuiin.com/storecoupon/logs</value>
         </entry>
         <entry>
           <key>interval</key>
-          <value>120</value>
+          <value>3</value>
         </entry>
         <entry>
           <key>publickey</key>
-          <value>intimedemo2</value>
+          <value>intimedemo</value>
         </entry>
         <entry>
           <key>privatekey</key>
-          <value>b7991360-8a0e-0130-a80d-375b77a2dfbe</value>
+          <value>f71b5770-8a15-0130-9079-1231400034f3</value>
         </entry>
       </job-data-map>
     </job>
@@ -193,7 +193,7 @@
         <cron-expression>0 0/3 * * * ?</cron-expression>
       </cron>
     </trigger>
-    -->
+
 <!--
   <job>
       <name>RebateExpireCouponPointsEveryMidNight</name>
@@ -268,6 +268,7 @@
       </cron>
     </trigger>
     -->
+    <!--
     <job>
       <name>AccountSyncDaily</name>
       <group>Fashion</group>
@@ -294,6 +295,7 @@
         <cron-expression>0/30 * * * * ?</cron-expression>
       </cron>
     </trigger>
+    -->
   </schedule>
 
 </job-scheduling-data>

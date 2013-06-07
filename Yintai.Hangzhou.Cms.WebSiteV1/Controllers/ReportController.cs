@@ -10,6 +10,7 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Cms.WebSiteV1.Models;
 using Yintai.Hangzhou.Cms.WebSiteV1.Util;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
@@ -44,6 +45,36 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             ViewBag.SearchOptions = search;
             return View(v);
         }
+        public ActionResult StoreCouponUsage()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult StoreCouponUsage(PagerRequest request, StoreCouponUsageOption search)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.SearchOptions = search;
+                return View();
+            }
+            var prods = searchCouponLog(search);
+            var v = new Pager<StoreCouponUsageViewModel>(request, prods.Count()) { Data = prods.ToList() };
+            ViewBag.SearchOptions = search;
+            return View(v);
+        }
+
+        private IEnumerable<StoreCouponUsageViewModel> searchCouponLog(StoreCouponUsageOption search)
+        {
+            var dbContext = _productRepo.Context;
+            return dbContext.Set<CouponLogEntity>().Where(p => p.Type == (int)CouponType.StorePromotion && p.Code == search.Code)
+                .GroupJoin(dbContext.Set<StoreRealEntity>(),o=>o.ConsumeStoreNo,i=>i.StoreNo,(o,i)=>new {C=o,S=i.FirstOrDefault()})
+                .OrderByDescending(c=>c.C.Id)
+                .ToList()
+                .Select(l => new StoreCouponUsageViewModel().FromEntity<StoreCouponUsageViewModel>(l.C,p=>{
+                    p.StoreName = l.S == null ? string.Empty : l.S.Name;
+                }));
+
+        }
         public ActionResult Download(string reportname, ReportByProductBrandOption search)
         {
             ReportClass rptH = new ReportClass();
@@ -55,6 +86,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 
             Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
             return File(stream, "application/pdf");
+        }
+        public ActionResult DownloadSCU(string reportname, StoreCouponUsageOption search)
+        {
+            return RenderReport(reportname, r => {
+                r.SetDataSource(searchCouponLog(search).ToList());
+            });
         }
 
         private string ReportPath(string reportname)

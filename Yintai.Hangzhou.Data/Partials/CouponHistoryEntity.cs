@@ -31,8 +31,8 @@ namespace Yintai.Hangzhou.Data.Models
                     code = linq.CouponId,
                     amount = 0m,
                     userid = linq.User_Id,
-                    validstartdate = linq.ValidStartDate,
-                    validenddate = linq.ValidEndDate,
+                    validstartdate = linq.ValidStartDate.ToUniversalTime(),
+                    validenddate = linq.ValidEndDate.ToUniversalTime(),
                     vipcard = 0
 
                 };

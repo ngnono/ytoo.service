@@ -20,7 +20,7 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
         /// </summary>
         /// <param name="userLevel">用户等级(如何用户为管理员也不会通过,必须是用户权限)</param>
         public RestfulRoleAuthorizeAttribute(UserLevel userLevel)
-            : this(UserRole.User, userLevel)
+            : this(UserRole.None, userLevel)
         {
         }
 
@@ -69,7 +69,7 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
 
             foreach (var ur in AuthUser.UserRoles)
             {
-                if (((_userRole & ur) != 0))
+                if ((((int)_userRole & ur) != 0))
                 {
                     _hasRoleAuthorize = true;
                     break;

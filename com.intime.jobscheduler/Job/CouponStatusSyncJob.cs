@@ -34,7 +34,7 @@ namespace com.intime.jobscheduler.Job
             dynamic jsonResponse = null;
             AwsHelper.SendHttpMessage(host, new
                 {
-                    benchdate = benchDate.ToUniversalTime().ToString("yyyy-MM-ddThh:mm:ssZ")
+                    benchdate = benchDate.ToUniversalTime()
                 },public_key,private_key,r=>jsonResponse = r,null);
 
             if (jsonResponse == null )
@@ -53,6 +53,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         string code = dynamicObject.code;
                         int? status = dynamicObject.status;
+                        DateTime opeDate = dynamicObject.created_at;
                         CouponStatus targetStatus = CouponStatus.Used;
                         CouponActionType targetActionType = CouponActionType.Consume;
                         if (status.HasValue && status.Value == -1)
@@ -67,7 +68,7 @@ namespace com.intime.jobscheduler.Job
                                 if (coupon != null)
                                 {
                                     coupon.Status = (int)targetStatus;
-                                    coupon.UpdateDate = DateTime.Now;
+                                    coupon.UpdateDate = opeDate.ToLocalTime();
                                     coupon.UpdateUser = 0;
                                     db.Entry(coupon).State = EntityState.Modified;
 
@@ -77,7 +78,7 @@ namespace com.intime.jobscheduler.Job
                                         BrandNo = dynamicObject.brandno,
                                         Code = code,
                                         ConsumeStoreNo = dynamicObject.storeno,
-                                        CreateDate = DateTime.Now,
+                                        CreateDate = opeDate.ToLocalTime(),
                                         CreateUser = 0,
                                         ReceiptNo = dynamicObject.receiptno,
                                         Type = 1
@@ -100,7 +101,7 @@ namespace com.intime.jobscheduler.Job
                                         BrandNo = dynamicObject.brandno,
                                         Code = code,
                                         ConsumeStoreNo = dynamicObject.storeno,
-                                        CreateDate = DateTime.Now,
+                                        CreateDate = opeDate.ToLocalTime(),
                                         CreateUser = 0,
                                         ReceiptNo = dynamicObject.receiptno,
                                         Type = 2

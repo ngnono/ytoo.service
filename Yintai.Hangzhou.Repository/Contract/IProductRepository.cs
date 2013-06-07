@@ -108,8 +108,5 @@ namespace Yintai.Hangzhou.Repository.Contract
         /// <param name="productFilter">过滤选项</param>
         /// <returns></returns>
         IQueryable<ProductEntity> Get(ProductSortOrder? sortOrder, ProductFilter productFilter);
-
-        IQueryable<ProductEntity> Search(int pageIndex, int pageSize, out int totalCount,
-            ProductSearchOption search);
     }
 }

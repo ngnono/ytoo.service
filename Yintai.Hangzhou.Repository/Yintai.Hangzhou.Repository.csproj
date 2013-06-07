@@ -105,6 +105,7 @@
     <Compile Include="Contract\IStoreCouponsRepository.cs" />
     <Compile Include="Contract\IStorePromotionRepository.cs" />
     <Compile Include="Contract\IStorePromotionScopeRepository.cs" />
+    <Compile Include="Contract\IStoreRealRepository.cs" />
     <Compile Include="Contract\IStoreRepository.cs" />
     <Compile Include="Contract\ITagRepository.cs" />
     <Compile Include="Contract\ITimeSeedRepository.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Impl\StoreCouponsRepository.cs" />
     <Compile Include="Impl\StorePromotionRepository.cs" />
     <Compile Include="Impl\StorePromotionScopeRepository.cs" />
+    <Compile Include="Impl\StoreRealRepository.cs" />
     <Compile Include="Impl\TagRepository.cs" />
     <Compile Include="Impl\TimeSeedRepository.cs" />
     <Compile Include="Impl\UserAuthRepository.cs" />
