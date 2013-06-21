@@ -107,7 +107,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
             : base(request, totalCount)
         {
         }
-
+        [DataMember]
         public IEnumerable<T> Data { get; set; }
     }
 }

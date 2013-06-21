@@ -78,6 +78,15 @@ namespace Yintai.Hangzhou.Data.Models
         public string SubjectIds { get; set; }
         public int Id { get; set; }
         public int GroupId { get; set; }
+        public IEnumerable<ProductPropertyStageEntity> Properties { get; set; }
+        public string PropertiesDisplay { get {
+            if (Properties == null)
+                return string.Empty;
+           return Properties.OrderBy(p => p.PropertyDesc).Aggregate(new StringBuilder(),
+                (s, v) => s.AppendFormat("{0}:{1} ", v.PropertyDesc, v.ValueDesc),
+                s => s.ToString());
+
+        } }
 
     }
     public class ProductUploadJob

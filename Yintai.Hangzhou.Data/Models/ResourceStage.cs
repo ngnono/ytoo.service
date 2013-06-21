@@ -18,6 +18,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<System.DateTime> InDate { get; set; }
         public int Status { get; set; }
         public Nullable<int> UploadGroupId { get; set; }
+        public Nullable<bool> IsDimension { get; set; }
 
         #region Overrides of BaseEntity
 

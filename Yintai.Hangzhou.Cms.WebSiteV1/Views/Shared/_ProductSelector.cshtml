@@ -16,59 +16,65 @@
 </script>
 <div id="pro_selector" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-body">
-        @using (Ajax.BeginForm("Select", "Product", new { page = 0 }, new AjaxOptions() { HttpMethod = "Post", LoadingElementId="i_pro_refresh", UpdateTargetId = "sel_pro_list", InsertionMode = InsertionMode.Replace }, new { @class = "form-horizontal searchForm-border small-labels" }))
-{
+        @using (Ajax.BeginForm("Select", "Product", new { page = 0 }, new AjaxOptions() { HttpMethod = "Post", LoadingElementId = "i_pro_refresh", UpdateTargetId = "sel_pro_list", InsertionMode = InsertionMode.Replace }, new { @class = "form-horizontal searchForm-border small-labels" }))
+        {
             <div class="row">
                 <div class="span2">
                     <div class="control-group">
                         <label class="control-label " for="Name">@Html.LabelFor(m => search.Name)</label>
                         <div class="controls">
-                            @Html.TextBoxFor(m=>search.Name,new { @class="span1"})
-                           
+                            @Html.TextBoxFor(m => search.Name, new { @class = "span1" })
+
                         </div>
                     </div>
+                </div>
+                <div class="span2">
                     <div class="control-group">
                         <label class="control-label " for="Name">@Html.LabelFor(m => search.Tag)</label>
                         <div class="controls">
-                            @Html.TextBoxFor(model => search.Tag, new { @class="span1"})
+                            @Html.EditorFor(model => search.Tag, new { @class = "span1" })
                         </div>
                     </div>
-                     <div class="control-group">
+                </div>
+                <div class="span2">
+
+
+                    <div class="control-group">
+                        <label class="control-label " for="Name">@Html.LabelFor(m => search.Brand)</label>
+                        <div class="controls">
+                            @Html.EditorFor(m => search.Brand, new { @class = "span1" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="control-group">
+                        <label class="control-label " for="Name">@Html.LabelFor(m => search.Store)</label>
+                        <div class="controls">
+                            @Html.EditorFor(model => search.Store, new { @class = "span1" })
+                        </div>
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="control-group">
                         <div class="control-label">
                             <button type="submit" class="btn">查询</button>
                             <div class="hide" id="i_pro_refresh">
                                 <img src="@Url.Content("~/Content/img/loading_16x16.gif")" />
-                             </div>
-                          
-                        </div>
-                    </div>
-               </div>
-                <div class="span2">
+                            </div>
 
-
-                     <div class="control-group">
-                        <label class="control-label " for="Name">@Html.LabelFor(m => search.Brand)</label>
-                        <div class="controls">
-                            @Html.TextBoxFor(m => search.Brand, new { @class="span1"})
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label " for="Name">@Html.LabelFor(m => search.Store)</label>
-                        <div class="controls">
-                            @Html.TextBoxFor(model => search.Store, new { @class="span1"})
-                        </div>
-                    </div>
-                   </div>                    
-                   
                 </div>
-                }
-        <div id="sel_pro_list">
 
+
+            </div>
+        }
+        <div id="sel_pro_list">
         </div>
 
-            </div>
-            <div class="modal-footer">
-                <button class="btn primary" id="sel_pro_done">选择</button>
-                <button class="btn" data-dismiss="modal" id="sel_pro_close">关闭</button>
-            </div>
     </div>
+    <div class="modal-footer">
+        <button class="btn primary" id="sel_pro_done">选择</button>
+        <button class="btn" data-dismiss="modal" id="sel_pro_close">关闭</button>
+    </div>
+</div>

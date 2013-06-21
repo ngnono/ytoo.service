@@ -1,0 +1,17 @@
+﻿@model TagPropertyValueViewModel
+<tr>
+    <td>@Html.LabelFor(model => model.PropertyDesc)
+        @Html.EditorFor(model => model.PropertyDesc)</td>
+    <td>@Html.LabelFor(model => model.ValueDesc)
+        @Html.EditorFor(model => model.ValueDesc)
+    </td>
+    <td>@Html.LabelFor(model => model.SortOrder)
+        @Html.EditorFor(model => model.SortOrder)
+    </td>
+    <td>@Html.HiddenFor(model => model.Status, new { @class = "mark-for-delete" })
+        @Html.HiddenFor(modek => Model.ValueId)
+        <a href="#" onclick="removeNestedForm(this,'tr:first','input.mark-for-delete');" class="btn">删除</a>
+    </td>
+</tr>
+
+

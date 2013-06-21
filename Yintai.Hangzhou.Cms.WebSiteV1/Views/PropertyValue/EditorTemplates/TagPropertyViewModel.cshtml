@@ -1,0 +1,47 @@
+﻿@model TagPropertyViewModel 
+@{
+    bool isCreate = ViewContext.RouteData.Values["action"].ToString() == "create";               
+}
+<script>
+    function removeNestedForm(element, container, deleteElement) {
+        $container = $(element).parents(container);
+        $container.find(deleteElement).val(@((int)DataStatus.Deleted));
+        $container.hide();
+    }
+    function addNestedForm(container, counter, ticks, content) {
+        var nextIndex = $(counter).length;
+        var pattern = new RegExp(ticks, "gi");
+        content = content.replace(pattern, nextIndex);
+        $(container).append(content);
+    }
+</script>
+@Html.ValidationSummary(false)
+<div class="editor-label">
+    @Html.LabelFor(model => model.CategoryId)
+</div>
+<div class="editor-field">
+    @if (isCreate)
+    {
+    @Html.EditorFor(model => model.CategoryId)
+    @Html.ValidationMessageFor(model => model.CategoryId)
+    }
+    else
+    {
+        @Html.TextBoxFor(model => model.CategoryName, new {@readonly=true})
+        @Html.HiddenFor(model=>model.CategoryId)
+    }
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Values)
+</div>
+<div class="editor-field">
+    <p>
+        @(Html.LinkToAddNestedForm<TagPropertyViewModel, IEnumerable<TagPropertyValueViewModel>>(model => model.Values, "添加", ".scopes", ".scopes tr", "btn"))
+    </p>
+</div>
+<table class="scopes">
+    @Html.EditorFor(model => model.Values)
+
+</table>
+

@@ -1,0 +1,19 @@
+﻿@model ConfirmStoreItemViewModel 
+<table>
+    <tr>
+        <th>商品图片</th>
+        <th>商品编号</th>
+        <th>订购描述
+        </th>
+        <th>单价</th>
+        <th>数量</th>
+        <th>总额
+        </th>
+        <th>专柜商品编码
+        </th>
+        <th>专柜商品描述</th>
+
+    </tr>
+    @Html.EditorFor(model => model.Items)
+
+</table>

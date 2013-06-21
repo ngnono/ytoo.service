@@ -124,8 +124,10 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<BannerEntity> Banners { get; set; }
         public DbSet<BrandEntity> Brands { get; set; }
         public DbSet<CardEntity> Cards { get; set; }
+        public DbSet<CardBlackEntity> CardBlacks { get; set; }
         public DbSet<CategoryPropertyEntity> CategoryProperties { get; set; }
         public DbSet<CategoryPropertyValueEntity> CategoryPropertyValues { get; set; }
+        public DbSet<CityEntity> Cities { get; set; }
         public DbSet<CommentEntity> Comments { get; set; }
         public DbSet<CouponHistoryEntity> CouponHistories { get; set; }
         public DbSet<CouponLogEntity> CouponLogs { get; set; }
@@ -144,9 +146,12 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<OutboundEntity> Outbounds { get; set; }
         public DbSet<OutboundItemEntity> OutboundItems { get; set; }
         public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
+        public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
         public DbSet<PointOrderRuleEntity> PointOrderRules { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<ProductPropertyEntity> ProductProperties { get; set; }
+        public DbSet<ProductPropertyStageEntity> ProductPropertyStages { get; set; }
         public DbSet<ProductPropertyValueEntity> ProductPropertyValues { get; set; }
         public DbSet<ProductStageEntity> ProductStages { get; set; }
         public DbSet<ProductUploadJobEntity> ProductUploadJobs { get; set; }
@@ -158,11 +163,13 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<ResourceStageEntity> ResourceStages { get; set; }
         public DbSet<RMAEntity> RMAs { get; set; }
         public DbSet<RMAItemEntity> RMAItems { get; set; }
+        public DbSet<RMALogEntity> RMALogs { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
         public DbSet<RoleAccessRightEntity> RoleAccessRights { get; set; }
         public DbSet<SectionEntity> Sections { get; set; }
         public DbSet<SeedEntity> Seeds { get; set; }
         public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
+        public DbSet<ShippingAddressEntity> ShippingAddresses { get; set; }
         public DbSet<ShipViaEntity> ShipVias { get; set; }
         public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
         public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
@@ -178,6 +185,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<UserAuthEntity> UserAuths { get; set; }
         public DbSet<UserRoleEntity> UserRoles { get; set; }
         public DbSet<VerifyCodeEntity> VerifyCodes { get; set; }
+        public DbSet<WXReplyEntity> WXReplies { get; set; }
         public DbSet<VUserEntity> VUsers { get; set; }
         public DbSet<VUserRoleEntity> VUserRoles { get; set; }
 
@@ -194,8 +202,10 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new BannerEntityMap());
             modelBuilder.Configurations.Add(new BrandEntityMap());
             modelBuilder.Configurations.Add(new CardEntityMap());
+            modelBuilder.Configurations.Add(new CardBlackEntityMap());
             modelBuilder.Configurations.Add(new CategoryPropertyEntityMap());
             modelBuilder.Configurations.Add(new CategoryPropertyValueEntityMap());
+            modelBuilder.Configurations.Add(new CityEntityMap());
             modelBuilder.Configurations.Add(new CommentEntityMap());
             modelBuilder.Configurations.Add(new CouponHistoryEntityMap());
             modelBuilder.Configurations.Add(new CouponLogEntityMap());
@@ -214,9 +224,12 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new OutboundEntityMap());
             modelBuilder.Configurations.Add(new OutboundItemEntityMap());
             modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
+            modelBuilder.Configurations.Add(new PaymentMethodEntityMap());
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());
             modelBuilder.Configurations.Add(new PointOrderRuleEntityMap());
             modelBuilder.Configurations.Add(new ProductEntityMap());
+            modelBuilder.Configurations.Add(new ProductPropertyEntityMap());
+            modelBuilder.Configurations.Add(new ProductPropertyStageEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyValueEntityMap());
             modelBuilder.Configurations.Add(new ProductStageEntityMap());
             modelBuilder.Configurations.Add(new ProductUploadJobEntityMap());
@@ -228,11 +241,13 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new ResourceStageEntityMap());
             modelBuilder.Configurations.Add(new RMAEntityMap());
             modelBuilder.Configurations.Add(new RMAItemEntityMap());
+            modelBuilder.Configurations.Add(new RMALogEntityMap());
             modelBuilder.Configurations.Add(new RoleEntityMap());
             modelBuilder.Configurations.Add(new RoleAccessRightEntityMap());
             modelBuilder.Configurations.Add(new SectionEntityMap());
             modelBuilder.Configurations.Add(new SeedEntityMap());
             modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
+            modelBuilder.Configurations.Add(new ShippingAddressEntityMap());
             modelBuilder.Configurations.Add(new ShipViaEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());
@@ -248,6 +263,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new UserAuthEntityMap());
             modelBuilder.Configurations.Add(new UserRoleEntityMap());
             modelBuilder.Configurations.Add(new VerifyCodeEntityMap());
+            modelBuilder.Configurations.Add(new WXReplyEntityMap());
             modelBuilder.Configurations.Add(new VUserEntityMap());
             modelBuilder.Configurations.Add(new VUserRoleEntityMap());
         }

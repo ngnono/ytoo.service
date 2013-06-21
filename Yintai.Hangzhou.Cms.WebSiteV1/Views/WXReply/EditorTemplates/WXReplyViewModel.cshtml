@@ -1,0 +1,31 @@
+﻿@model WXReplyViewModel 
+@{
+    bool isCreate = ViewContext.RouteData.Values["action"].ToString() == "create";               
+}
+@Html.ValidationSummary(false)
+
+<div class="editor-label">
+            @Html.LabelFor(model => model.MatchKey)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.MatchKey)
+            @Html.ValidationMessageFor(model => model.MatchKey)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ReplyMsg)
+        </div>
+        <div class="editor-field">
+            @Html.TextArea("ReplyMsg", Model == null ? String.Empty : Model.ReplyMsg, new { @rows=10})
+            @Html.ValidationMessageFor(model => model.ReplyMsg)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Status)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Status, EnumHelper.DisplayList<DataStatus>())
+            @Html.ValidationMessageFor(model => model.Status)
+        </div>
+
+

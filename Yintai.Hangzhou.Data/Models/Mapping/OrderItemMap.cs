@@ -8,18 +8,12 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
         public OrderItemEntityMap()
         {
             // Primary Key
-            this.HasKey(t => new { t.Id, t.OrderNo, t.ProductId, t.ProductDesc, t.Quantity, t.ItemPrice, t.ExtendPrice, t.BrandId, t.StoreId, t.CreateUser, t.CreateDate, t.UpdateUser, t.UpdateDate, t.Status });
+            this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
             this.Property(t => t.OrderNo)
                 .IsRequired()
                 .HasMaxLength(20);
-
-            this.Property(t => t.ProductId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             this.Property(t => t.ProductDesc)
                 .IsRequired()
@@ -30,30 +24,6 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
 
             this.Property(t => t.StoreItemDesc)
                 .HasMaxLength(200);
-
-            this.Property(t => t.Quantity)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.ItemPrice)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.ExtendPrice)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.BrandId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.StoreId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.CreateUser)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.UpdateUser)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.Status)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             // Table & Column Mappings
             this.ToTable("OrderItem");

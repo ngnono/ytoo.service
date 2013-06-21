@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
+using Yintai.Architecture.Framework.ServiceLocation;
+using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
 {
@@ -33,6 +37,20 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public System.DateTime UpdatedDate { get; set; }
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
+
+        public static IEnumerable<SelectListItem> ToSelectItems()
+        {
+            var tagRepo = ServiceLocator.Current.Resolve<ITagRepository>();
+            foreach (var tag in tagRepo.Get(t=>t.Status!=(int)DataStatus.Deleted))
+            {
+                yield return new SelectListItem
+                {
+                    Text =tag.Name
+                    ,
+                    Value = (tag.Id).ToString()
+                };
+            }
+        }
     }
 
     public class TagCollectionViewModel : PagerInfo, IViewModel

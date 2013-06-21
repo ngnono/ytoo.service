@@ -160,6 +160,7 @@
     <Compile Include="Job\PointsFromApp2GroupJob.cs" />
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="Job\Push2awsJob.cs" />
+    <Compile Include="Job\Push2mysqlJob.cs" />
     <Compile Include="MainJobService.cs">
       <SubType>Component</SubType>
     </Compile>

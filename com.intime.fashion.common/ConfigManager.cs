@@ -190,5 +190,12 @@ namespace com.intime.fashion.common
                 return _appStoreNoInGroup;
             }
         }
+        public static string RMAPolicy
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["rmapolicy"];
+            }
+        }
     }
 }

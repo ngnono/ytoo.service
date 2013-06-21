@@ -1,0 +1,10 @@
+﻿@{
+    var message = ViewBag.Message;
+}
+@if(!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        @message
+    </div>
+}

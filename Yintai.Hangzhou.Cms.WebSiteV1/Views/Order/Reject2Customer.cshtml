@@ -1,0 +1,78 @@
+﻿@model RMAViewModel
+@{
+    ViewBag.Title = "退回客户";
+    string orderNo = ViewBag.OrderNo;
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("订单管理", "Index")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("订单详情", "Details", new { OrderNo = orderNo })<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Reject2Customer", "Order", null, FormMethod.Post))
+{
+    @Html.ValidationSummary(false)
+    <div class="well row">
+        <div class="span5">
+            <div class="widget stacked">
+                <div class="widget-header">
+                    <h3>退货信息</h3>
+                </div>
+                <div class="widget-content">
+                    <div class="span2">
+                        @Html.LabelFor(model => model.OrderNo)
+                        @Html.TextBoxFor(model => model.OrderNo, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.RMANo)
+                        @Html.TextBoxFor(model => model.RMANo, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Reason)
+                        @Html.TextAreaFor(model => model.Reason, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.RMAAmount)
+                        @Html.TextBoxFor(model => model.RMAAmount, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Status)
+                        @Html.TextBox("Status_Show", ((Yintai.Hangzhou.Model.Enums.RMAStatus)Model.Status).ToFriendlyString(), new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.CreateDate)
+                        @Html.TextBoxFor(model => model.CreateDate, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.CreateUser)
+                        @Html.TextBoxFor(model => model.CreateUser, new { @class = "span2", @readonly = true })
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="span5">
+            <div class="widget stacked">
+                <div class="widget-header">
+                    <h3>退回客户理由</h3>
+                </div>
+                <div class="widget-content">
+                    <div class="span5">
+                        @Html.LabelFor(model => model.RejectReason)
+                        @Html.TextAreaFor(model => model.RejectReason, new { @class = "span4"})
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+      <div class="form-actions">
+        <input type="submit" value="保存" class="btn btn-primary" />
+        @Html.ActionLink2("返回订单", "Details", new { OrderNo = orderNo}, new { @class = "btn" })
+ </div>
+}

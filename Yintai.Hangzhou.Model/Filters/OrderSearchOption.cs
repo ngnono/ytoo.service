@@ -15,9 +15,9 @@ namespace Yintai.Hangzhou.Model.Filters
         public string OrderNo { get; set; }
         [Display(Name = "订购人编号")]
         public int? CustomerId { get; set; }
-        [Display(Name = "查询开始时间")]
+        [Display(Name = "开始时间")]
         public DateTime? FromDate { get; set; }
-        [Display(Name = "查询结束时间")]
+        [Display(Name = "结束时间")]
         public DateTime? ToDate { get; set; }
         [Display(Name="订单状态")]
         public OrderStatus? Status { get; set; }

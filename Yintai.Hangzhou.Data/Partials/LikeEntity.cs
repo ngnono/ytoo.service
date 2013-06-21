@@ -33,7 +33,7 @@ namespace Yintai.Hangzhou.Data.Models
                 likedAccount.Amount = liked;
                 likedAccount.UpdatedDate = DateTime.Now;
                 db.Entry(likedAccount).State = System.Data.EntityState.Modified;
-                db.SaveChanges();
+
             }
             else
             {
@@ -49,6 +49,7 @@ namespace Yintai.Hangzhou.Data.Models
                     UpdatedUser = accountId
                 });
             }
+            db.SaveChanges();
         }
         private void updateILike(YintaiHangzhouContext db, int accountId)
         {

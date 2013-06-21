@@ -10,6 +10,9 @@ using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Hangzhou.Cms.WebSiteV1.Util;
+using Yintai.Hangzhou.Service.Contract;
+using System.Web;
 
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
 {
@@ -51,6 +54,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public System.DateTime CreateDate { get; set; }
         [Display(Name = "创建用户编码")]
         public int CreateUser { get; set; }
+        [Display(Name="更新日期")]
         public System.DateTime UpdateDate { get; set; }
         public int UpdateUser { get; set; }
         [Display(Name = "运单号")]
@@ -68,33 +72,28 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [Display(Name = "商品明细")]
         public IEnumerable<OrderItemViewModel> Items { get; set; }
 
+        public string StatusName {
+            get {
+                return ((OrderStatus)Status).ToFriendlyString();
+            }
+        }
+
         public IEnumerable<OrderLogViewModel> Logs { get; set; }
+
+        public IEnumerable<RMAViewModel> RMAs { get; set; }
 
         public bool CanVoid { get {
             return Status == (int)OrderStatus.Create ||
                 Status == (int)OrderStatus.CustomerConfirmed ||
                 Status == (int)OrderStatus.AgentConfirmed;
         } }
-        public bool CanChange
-        {
-            get
-            {
-                return Status == (int)OrderStatus.Create ||
-                    Status == (int)OrderStatus.CustomerConfirmed ||
-                    Status == (int)OrderStatus.AgentConfirmed ||
-                    Status == (int)OrderStatus.PreparePack;
-            }
-        }
+       
 
         public bool CanChangeStoreItem { get {
             return Status == (int)OrderStatus.Create ||
                 Status == (int)OrderStatus.AgentConfirmed;
         } }
 
-        public bool CanPreparePack { get {
-            return Status == (int)OrderStatus.CustomerConfirmed;
-               
-        } }
 
         public bool CanShipping { get {
             return Status == (int)OrderStatus.PreparePack;
@@ -105,24 +104,27 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         } }
 
         public bool CanPrintShipping { get {
-            return Status == (int)OrderStatus.PreparePack;
+            return Status == (int)OrderStatus.OrderPrinted;
         } }
 
         public bool CanChangeReceived { get {
             return Status == (int)OrderStatus.Shipped;
         } }
 
-        public bool CanConvert2Sale { get {
-            return Status == (int)OrderStatus.CustomerReceived;
-        } }
-
         public bool CanPrintSales { get {
             return Status == (int)OrderStatus.CustomerReceived;
         } }
 
+        public bool CanRebate {
+            get
+            {
+                return Status == (int)OrderStatus.Convert2Sales;
+            }
+        }
+
         public static IEnumerable<SelectListItem> SelectedShipping { get {
             var shipping = ServiceLocator.Current.Resolve<IShippViaRepository>();
-           return shipping.Get(s => s.Status != (int)DataStatus.Deleted).Select(s=>new SelectListItem() { 
+           return shipping.Get(s => s.Status != (int)DataStatus.Deleted).ToList().Select(s=>new SelectListItem() { 
              Text = s.Name,
               Value = s.Id.ToString()
            });
@@ -141,7 +143,60 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
             }
         }
 
-        public bool CanChangeReject { get; set; }
+        public bool CanChangeReject { get {
+            return Status == (int)OrderStatus.Shipped;
+        } }
+
+        public bool CanCreateOffRMA { get {
+            if (Status == (int)OrderStatus.Convert2Sales &&
+                (RMAs == null || !RMAs.Any(r => r.Status == (int)RMAStatus.Created || r.Status==(int)RMAStatus.PrintRMA||r.Status==(int)RMAStatus.Reject2Customer)))
+                return true;
+            return false;
+        } }
+
+        public bool CanPrintRMA { get {
+            if (RMAs != null && RMAs.Any(r => r.Status == (int)RMAStatus.Created))
+                return true;
+            return false;
+        }}
+
+        public bool CanVoidRMA { get {
+            if (RMAs != null && RMAs.Any(r => r.Status == (int)RMAStatus.Created))
+                return true;
+            return false;
+        } }
+
+        public RMAViewModel FirstActiveRMA { get {
+            if (RMAs == null)
+                return null;
+            return RMAs.Where(r => r.Status != (int)RMAStatus.Void).OrderByDescending(r => r.CreateDate).First();
+        } }
+
+        public string ShippingViaMethod_Name { get; set; }
+
+        public static bool IsAuthorized(int storeId, int brandId,out string error)
+        { 
+            string errorUnAuthorizedDataAccess = "没有授权操作该订单！";
+            error = string.Empty;
+            var currentUser = ServiceLocator.Current.Resolve<IAuthenticationService>().CurrentUserFromHttpContext(HttpContext.Current);
+            if (currentUser == null)
+            {
+                error =errorUnAuthorizedDataAccess;
+                return false;
+            }
+            IUserAuthRepository authRepo = ServiceLocator.Current.Resolve<IUserAuthRepository>();
+            if (currentUser.Role == (int)UserRole.Admin)
+                return true;
+            if (!authRepo.Get(a => a.UserId == currentUser.CustomerId)
+                .Any(a => a.StoreId == 0 || (a.StoreId == storeId &&
+                         (a.BrandId == 0 || a.BrandId == brandId))))
+            {
+                error = errorUnAuthorizedDataAccess;
+                return false;
+            }
+            return true;
+
+        }
     }
 
     public class OrderItemViewModel : BaseViewModel,IValidatableObject
@@ -212,7 +267,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [Display(Name = "配送方式")]
         public int ShippingVia { get; set; }
         [Display(Name = "运单号")]
+        [Required]
         public string ShippingNo { get; set; }
 
     }
+
+    public class ConfirmStoreItemViewModel
+    {
+        public IEnumerable<OrderItemViewModel> Items { get; set; }
+    }
+
 }

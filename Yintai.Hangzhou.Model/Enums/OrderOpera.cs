@@ -10,6 +10,7 @@ namespace Yintai.Hangzhou.Model.Enums
     {
         FromCustomer = 0,
         FromOperator =1,
-        FromSystem =2
+        FromSystem =2,
+        CustomerReceived = 3
     }
 }

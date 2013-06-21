@@ -1,0 +1,18 @@
+﻿@model OrderItemViewModel 
+<tr>
+    <td>@if (Model.ProductResource != null)
+        {
+            
+        <img width="120" src="@String.Concat(Model.ProductResource.Domain, Model.ProductResource.Name, "_120x0.jpg")" alt="120x0" />
+        }
+        @Html.HiddenFor(model => model.Id)
+    </td>
+    <td>@Html.TextBoxFor(model => model.ProductId, new { @readonly = true, @class = "span1" })</td>
+    <td>@Html.TextBoxFor(model => model.ProductDesc, new { @readonly = true, @class = "span1" })</td>
+    <td>@Html.TextBoxFor(model => model.ItemPrice, new { @readonly = true, @class = "span1" })</td>
+    <td>@Html.TextBoxFor(model => model.Quantity, new { @readonly = true, @class = "span1" })</td>
+    <td>@Html.TextBoxFor(model => model.ExtendPrice, new { @readonly = true, @class = "span1" })</td>
+    <td>@Html.EditorFor(model => model.StoreItemNo)</td>
+    <td>@Html.EditorFor(model => model.StoreItemDesc)</td>
+</tr>
+

@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="APIApplication.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Api\Controllers\AddressController.cs" />
     <Compile Include="Areas\Api\Controllers\CardController.cs" />
     <Compile Include="Areas\Api\Controllers\CommentController.cs" />
     <Compile Include="Areas\Api\Controllers\HotWordController.cs" />

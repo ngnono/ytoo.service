@@ -124,6 +124,7 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
             }
 
             // Session过期
+#if !DEBUG
             if (_sessionData != null && _sessionData.Expired && !_holdon)
             {
                 filterContext.Result = new RestfulResult
@@ -137,7 +138,7 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
 
                 return;
             }
-
+#endif
             //TODO:可以通过ActionDescriptor获取参数的类型，这里约定好就可以了，没有必要去那样做
 
 

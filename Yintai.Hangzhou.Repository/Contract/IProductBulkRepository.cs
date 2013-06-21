@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -33,5 +34,9 @@ namespace Yintai.Hangzhou.Repository.Contract
         void Update<T>(T entity) where T:BaseEntity;
 
         void Delete<T>(int id) where T:BaseEntity;
+
+        void BulkInsertProduct(System.Data.DataTable dt, System.Data.DataTable propertyDt, int jobId, IEnumerable<string> cols,IEnumerable<string> pcols);
+
+        DbContext Context { get; }
     }
 }

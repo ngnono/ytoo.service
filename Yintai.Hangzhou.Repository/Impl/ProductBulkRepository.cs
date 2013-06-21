@@ -76,7 +76,24 @@ namespace Yintai.Hangzhou.Repository.Impl
             jobEntity.Status = (int)ProUploadStatus.ProductsOnStage;
             _context.SaveChanges();
         }
-
+        public void BulkInsertProduct(System.Data.DataTable dt, System.Data.DataTable propertyDt, int jobId, IEnumerable<string> cols, IEnumerable<string> pcols)
+        {
+            using (SqlConnection destinationConnection = new SqlConnection(ConfigurationManager.ConnectionStrings[CONNECT_STRING].ConnectionString))
+            {
+                using (var bulkCopy = new SqlBulkCopy(destinationConnection))
+                {
+                    foreach (var col in pcols)
+                    {
+                        bulkCopy.ColumnMappings.Add(col, col);
+                    }
+                    bulkCopy.DestinationTableName = "dbo.ProductPropertyStage";
+                    destinationConnection.Open();
+                    bulkCopy.WriteToServer(propertyDt);
+                }
+            }
+            BulkInsertProduct(dt, jobId, cols);
+           
+        }
         public IEnumerable<ProductPublishResult> Publish(int customerId, int jobId)
         {
             using (var unWrapContext = new YintaiHangzhouContext())
@@ -128,5 +145,9 @@ namespace Yintai.Hangzhou.Repository.Impl
             _context.Set<T>().Remove(entity);
             _context.SaveChanges();
         }
+
+        public DbContext Context { get {
+            return _context;
+        } }
     }
 }

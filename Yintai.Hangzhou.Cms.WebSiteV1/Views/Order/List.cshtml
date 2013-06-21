@@ -2,12 +2,10 @@
 @using Yintai.Hangzhou.Cms.WebSiteV1.Util
 @using Yintai.Hangzhou.WebSupport.Helper
 @using Yintai.Hangzhou.Model.Filters
-@model Pager<OrderViewModel>
+@model OrderSearchOption
 @{
     ViewBag.Title = "订单列表";
-    OrderSearchOption search = ViewBag.SearchOptions ?? new OrderSearchOption();
-    HtmlHelper<OrderSearchOption> searchModelHelper = Html.HtmlHelperFor<OrderSearchOption>();
-
+    var detailUrl = string.Format("<a href='{0}?orderNo={1}'>{1}</a>", Url.Action("details"), "#: OrderNo#");
 }
 
 @section PageBread
@@ -17,22 +15,106 @@
         <li class="active">@ViewBag.Title</li>
     </ul>
 }
-<h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("List", "Order", new { page = 0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
+@section PageJsSection
 {
-    @Html.ValidationSummary(true)
+    <script>
+        var orderDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url:"@Url.Action("listp")",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        @foreach(var property in typeof(OrderSearchOption)
+                            .GetProperties(System.Reflection.BindingFlags.Public
+                                        | System.Reflection.BindingFlags.Instance))
+                        {
+                             @(string.Format("{0}",property.Name))<text>:
+                                function(){ return $("#@(property.Name)").val()},
+                            </text> 
+                        }
+                    }
+                }
+            },
+             pageSize: 10,
+             serverPaging: true,
+             schema:{
+                 data: "Data",
+                 model: {
+                     fields:{
+                         CreateDate: {type: "date"}
+                     }},
+               total:"TotalCount",
+              
+             }
+         });    
+        $(document).ready(function () {
+            $("form:first").submit(function(){
+                orderDataSource.read();
+                return false;
+            });
+            $("#grid").kendoGrid({
+                dataSource: orderDataSource,
+                sortable: false,
+                autoBind: false,
+                pageable: {
+                    messages: {
+                        display:"{0} - {1} of {2} 记录",
+                        empty: "没有记录！",
+                    }
+                },
+                columns:[{
+                    field:"OrderNo",
+                    title:"订单号",
+                    template: "@Html.Raw(detailUrl)"
+                },{
+                    field:"StatusName",
+                    title:"状态"
+                },{
+                    field:"TotalAmount",
+                    title:"订单金额"
+                },{
+                    field:"StoreName",
+                    title:"门店"
+                },{
+                    field:"Customer.Nickname",
+                    title:"订购人"
+                },{
+                    field:"CustomerId",
+                    title:"订购人编码"
+                },{
+                    field:"PaymentMethodName",
+                    title:"支付方式"
+                },{
+                    field:"ShippingViaMethod_Name",
+                    title:"配送方式"}
+                ,{
+                    field:"CreateDate",
+                    title:"创建时间",
+                    format:"{0:MM/dd/yyyy HH:mm:ss}"
+                }]
+               
+            });
+        });
+      
+    </script>
+    }
+@using (Html.BeginForm("List",null,FormMethod.Post,
+        new { @class = "form-horizontal searchForm-border small-labels" }))
+{
+    @Html.ValidationSummary(false)
     <div class="row">
         <div class="span2">
             <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.OrderNo)</label>
+                <label class="control-label" for="Name">@Html.LabelFor(m => Model.OrderNo)</label>
                 <div class="controls">
-                    @searchModelHelper.TextBoxFor(m => search.OrderNo, new { @class = "span1" })
+                    @Html.TextBoxFor(m => Model.OrderNo, new { @class = "span1" })
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.CustomerId)</label>
+                <label class="control-label" for="Name">@Html.LabelFor(m => Model.CustomerId)</label>
                 <div class="controls">
-                    @searchModelHelper.TextBoxFor(m => search.CustomerId, new { @class = "span1" })
+                    @Html.TextBoxFor(m => Model.CustomerId, new { @class = "span1" })
                 </div>
             </div>
 
@@ -44,15 +126,15 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Brand)</label>
+                <label class="control-label" for="Name">@Html.LabelFor(m => Model.Brand)</label>
                 <div class="controls">
-                    @searchModelHelper.EditorFor(m => search.Brand, new { @class="span1"})
+                    @Html.EditorFor(m => Model.Brand, new { @class = "span2" })
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Store)</label>
+                <label class="control-label" for="Name">@Html.LabelFor(m => Model.Store)</label>
                 <div class="controls">
-                    @searchModelHelper.EditorFor(m => search.Store, new { @class="span1"})
+                    @Html.EditorFor(m => Model.Store, new { @class = "span2" })
                 </div>
             </div>
 
@@ -60,15 +142,15 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.FromDate)</label>
+                <label class="control-label" for="Name">@Html.LabelFor(m => Model.FromDate)</label>
                 <div class="controls">
-                     @searchModelHelper.EditorFor(m => search.FromDate, new { @class="span1"})
+                     @Html.EditorFor(m => Model.FromDate, new { @class = "span2" })
                 </div>
             </div>
                         <div class="control-group">
-                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.ToDate)</label>
+                <label class="control-label" for="Name">@Html.LabelFor(m => Model.ToDate)</label>
                 <div class="controls">
-                     @searchModelHelper.EditorFor(m => search.ToDate, new { @class="span1"})
+                     @Html.EditorFor(m => Model.ToDate, new { @class = "span2" })
                 </div>
             </div>
            
@@ -77,7 +159,7 @@
              <div class="control-group">
                 <label class="control-label" for="Name">状态</label>
                 <div class="controls">
-                    @searchModelHelper.DropDownListFor(m => search.Status, EnumHelper.DisplayList<OrderStatus>(), new { @class = "span2" })
+                    @Html.DropDownListFor(m => Model.Status, EnumHelper.DisplayList<OrderStatus>(), new { @class = "span2" })
                 </div>
             </div>
         </div>
@@ -86,57 +168,7 @@
 
     </div>
 }
-<table>
-    <tr>
-        <th>操作</th>
-        <th>订单号</th>
-        <th>订单状态
-        </th>
-        <th>订单金额</th>
-        <th>门店</th>
-        <th>订购人
-        </th>
-        <th>订购人编码
-        </th>
-        <th>支付方式</th>
-        <th>配送方式</th>
-        <th>创建时间
-        </th>
-    </tr>
+<div class="k-content">
+    <div id="grid"></div>
+</div>
 
-    @foreach (var item in Model.Data)
-    {
-        <tr>
-           
-            <td>
-                <div class="btn-group">
-                    <button class="btn btn-small">操作</button>
-                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id, returnUrl = Request.RawUrl })</li>
-                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id, returnUrl = Request.RawUrl }) </li>
-                        
-                    </ul>
-
-                </div>
-            </td>
-            <td>@Html.DisplayFor(modelItem => item.OrderNo)</td>
-            <td>
-                @Html.Label("", ((OrderStatus)item.Status).ToFriendlyString())
-            </td>
-                        <td>@Html.DisplayFor(modelItem => item.TotalAmount)</td>
-                        <td>@Html.DisplayFor(modelItem => item.StoreName)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Customer.Nickname)</td>
-             <td>@Html.DisplayFor(modelItem => item.CustomerId)</td>
-             <td>@Html.DisplayFor(modelItem => item.PaymentMethodName)</td>
-             <td>@Html.DisplayFor(modelItem => item.ShippingViaMethod.Name)</td>
-           <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
-
-        </tr>
-    }
-
-</table>
-
-@Html.Partial("PagerPartialView", Model)

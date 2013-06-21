@@ -62,6 +62,10 @@
     <div class="display-field">
         @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)Model.Status).ToFriendlyString())
     </div>
+      <div class="display-label"> @Html.LabelFor(model => model.Is4Sale)</div>
+    <div class="display-field">
+        @Html.CheckBox("Is4Sale", Model.Is4Sale ?? false, new { @readonly=true})
+    </div>
 
     <div class="display-label">@Html.LabelFor(model => model.Store_Id)</div>
     <div class="display-field">
@@ -136,6 +140,18 @@
                 </li>
             }
         </ul>
+    </div>
+        <div class="display-label">
+        @Html.LabelFor(model => model.Properties)
+    </div>
+    <div class="display-field">
+        @if (Model.Properties != null)
+        { 
+            <table class="scopes">
+              @Html.DisplayFor(model => model.Properties)
+            </table>
+        }
+       
     </div>
  <div class="display-label">图片</div>
     <div class="display-field">

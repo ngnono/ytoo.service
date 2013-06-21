@@ -21,6 +21,8 @@ using System.Transactions;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Service.Logic;
+using Yintai.Hangzhou.Contract.DTO.Response.Resources;
+using com.intime.fashion.common;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 {
@@ -227,28 +229,18 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             return t ? new RestfulResult { Data = this._productDataService.DestroyProduct(request) } : new RestfulResult { Data = new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "您没有权限操作他人的商品" } };
         }
-
-        public ActionResult Search(SearchProductRequest request)
-        {
-            request.K = UrlDecode(request.K);
-
-            if (!ProcessSqlStr(request.K))
-            {
-                request.K = String.Empty;
-            }
-
-            return new RestfulResult { Data = this._productDataService.Search(request) };
-        }
+       
 
         [RestfulAuthorize]
         [HttpPost]
-        public ActionResult Order(OrderRequest request)
+        public ActionResult Order(OrderRequest request,UserModel authUser)
         {
             if (!ModelState.IsValid)
             {
                 var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
+            request.AuthUser = authUser;
             var productEntity = _productRepo.Find(p=>p.Id==request.OrderModel.ProductId);
             var totalAmount = productEntity.Price * request.OrderModel.Quantity;
             if (totalAmount<=0)
@@ -315,36 +307,79 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
            
         }
 
-        #region 防止sql注入式攻击(可用于UI层控制）
-        ///
-        /// 判断字符串中是否有SQL攻击代码
-        /// 判断字符串中是否有SQL攻击代码
-        /// 
-        /// 传入用户提交数据
-        /// true-安全；false-有注入攻击现有；
-        public bool ProcessSqlStr(string inputString)
+        /// <summary>
+        /// get the purchase detail product info
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="currentAuthUser"></param>
+        /// <returns></returns>
+        public ActionResult Detail4P(GetProductInfo4PRequest request)
         {
-            const string sqlStr = @"and|or|exec|execute|insert|select|delete|update|alter|create|drop|count|\*|chr|char|asc|mid|substring|master|truncate|declare|xp_cmdshell|restore|backup|net +user|net +localgroup +administrators";
-            try
+            if (!ModelState.IsValid)
             {
-                if (!String.IsNullOrEmpty(inputString))
-                {
-                    const string strRegex = @"\b(" + sqlStr + @")\b";
-                    var regex = new Regex(strRegex, RegexOptions.IgnoreCase);
-                    //string s = Regex.Match(inputString).Value; 
-                    if (regex.IsMatch(inputString))
-                        return false;
-                }
+                var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
+                return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
-            catch
-            {
-                return false;
-            }
+            var context = _productRepo.Context;
+            var linq = _productRepo.Get(p => p.Id == request.ProductId && p.Is4Sale.HasValue && p.Is4Sale.Value)
+                       .GroupJoin(context.Set<ResourceEntity>().Where(r => r.Status != (int)DataStatus.Deleted &&
+                                                                           r.SourceType == (int)SourceType.Product &&
+                                                                           r.Type == (int)ResourceType.Image),
+                                   o => o.Id,
+                                   i => i.SourceId,
+                                   (o, i) => new { P = o, R = i.OrderByDescending(r => r.SortOrder).FirstOrDefault() })
+                       .ToList().FirstOrDefault();
 
-            return true;
+            if (linq == null)
+                return this.RenderError(r => r.Message = "产品不存在!");
+            var propertyLinq = context.Set<ProductPropertyEntity>().Where(p => p.ProductId == request.ProductId && p.Status != (int)DataStatus.Deleted)
+                                .GroupJoin(context.Set<ProductPropertyValueEntity>().Where(pv => pv.Status != (int)DataStatus.Deleted),
+                                    o => o.Id,
+                                    i => i.PropertyId,
+                                    (o, i) => new { P = o, PV = i })
+                                .ToList()
+                                .Select(p => new ProductPropertyResponse()
+                                {
+                                    PropertyId = p.P.Id,
+                                    PropertyName = p.P.PropertyDesc,
+                                    Values = p.PV.Select(pv => new ProductPropertyValueReponse()
+                                    {
+                                        ValueId = pv.Id,
+                                        ValueName = pv.ValueDesc
+                                    })
+                                });
+            if (propertyLinq.Count() <= 0)
+                propertyLinq = context.Set<CategoryPropertyEntity>().Where(p => p.CategoryId == linq.P.Tag_Id && p.Status != (int)DataStatus.Deleted)
+                                .GroupJoin(context.Set<CategoryPropertyValueEntity>().Where(pv => pv.Status != (int)DataStatus.Deleted),
+                                    o => o.Id,
+                                    i => i.PropertyId,
+                                    (o, i) => new { P = o, PV = i })
+                                .ToList()
+                                 .Select(p => new ProductPropertyResponse()
+                                 {
+                                     PropertyId = p.P.Id,
+                                     PropertyName = p.P.PropertyDesc,
+                                     Values = p.PV.Select(pv => new ProductPropertyValueReponse()
+                                     {
+                                         ValueId = pv.Id,
+                                         ValueName = pv.ValueDesc
+                                     })
+                                 });
+            var data = new GetProductInfo4PResponse().FromEntity<GetProductInfo4PResponse>(linq.P, res =>
+            {
+                res.Resource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(linq.R);
+                res.Properties = propertyLinq;
+                res.RMAPolicy = ConfigManager.RMAPolicy;
+                res.SupportPayments = context.Set<PaymentMethodEntity>().Where(p => p.Status != (int)DataStatus.Deleted)
+                                .Select(p => new PaymentMethodResponse() { 
+                                     Code = p.Code,
+                                      Name = p.Name
+                                });
+            });
+            return new RestfulResult() { Data = data };
         }
 
-        #endregion
+    
 
 
     }

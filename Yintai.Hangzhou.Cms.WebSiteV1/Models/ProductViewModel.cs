@@ -170,6 +170,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [Display(Name = "优先级")]
         [Range(0, Int32.MaxValue)]
         public int SortOrder { get; set; }
+        [Display(Name="属性")]
+        public IEnumerable<TagPropertyValueViewModel> Properties { get; set; }
+
+        [Display(Name = "可销售")]
+        public bool? Is4Sale { get; set; }
 
         public IEnumerable<ResourceViewModel> Audios { get {
             if (Resources == null)

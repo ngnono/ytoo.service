@@ -80,11 +80,13 @@
     <Compile Include="Contract\IOrderItemRepository.cs" />
     <Compile Include="Contract\IOrderLogRepository.cs" />
     <Compile Include="Contract\IOrderRepository.cs" />
+    <Compile Include="Contract\IOutboundItemRepository.cs" />
     <Compile Include="Contract\IOutboundRepository.cs" />
     <Compile Include="Contract\IOutSiteCustomerRepository.cs" />
     <Compile Include="Contract\IPointOrderRuleRepository.cs" />
     <Compile Include="Contract\IPointRepository.cs" />
     <Compile Include="Contract\IProductBulkRepository.cs" />
+    <Compile Include="Contract\IProductPropertyRepository.cs" />
     <Compile Include="Contract\IProductPropertyValueRepository.cs" />
     <Compile Include="Contract\IProductRepository.cs" />
     <Compile Include="Contract\IPromotionProductRelationRepository.cs" />
@@ -95,11 +97,14 @@
     <Compile Include="Contract\IRepository.cs" />
     <Compile Include="Contract\ICustomerRepository.cs" />
     <Compile Include="Contract\IResourceRepository.cs" />
+    <Compile Include="Contract\IRMAItemRepository.cs" />
+    <Compile Include="Contract\IRMALogRepository.cs" />
     <Compile Include="Contract\IRMARepository.cs" />
     <Compile Include="Contract\IRoleRepository.cs" />
     <Compile Include="Contract\ISectionRepository.cs" />
     <Compile Include="Contract\ISeedRepository.cs" />
     <Compile Include="Contract\IShareRepository.cs" />
+    <Compile Include="Contract\IShippingAddressRepository.cs" />
     <Compile Include="Contract\IShippViaRepository.cs" />
     <Compile Include="Contract\ISpecialTopicRepository.cs" />
     <Compile Include="Contract\IStoreCouponsRepository.cs" />
@@ -115,6 +120,7 @@
     <Compile Include="Contract\IVerifyCodeRepository.cs" />
     <Compile Include="Contract\IVUserRepository.cs" />
     <Compile Include="Contract\IVUserRoleRepository.cs" />
+    <Compile Include="Contract\IWXReplyRepository.cs" />
     <Compile Include="Impl\AdminAccessRightRepository.cs" />
     <Compile Include="Impl\BannerRepository.cs" />
     <Compile Include="Impl\BrandRepository.cs" />
@@ -127,14 +133,19 @@
     <Compile Include="Impl\OrderItemRepository.cs" />
     <Compile Include="Impl\OrderLogRepository.cs" />
     <Compile Include="Impl\OrderRepository.cs" />
+    <Compile Include="Impl\OutboundItemRepository.cs" />
     <Compile Include="Impl\OutboundRepository.cs" />
     <Compile Include="Impl\PointOrderRuleRepository.cs" />
     <Compile Include="Impl\ProductBulkRepository.cs" />
+    <Compile Include="Impl\ProductPropertyRepository.cs" />
     <Compile Include="Impl\ProductPropertyValueRepository.cs" />
     <Compile Include="Impl\PromotionProductRelation.cs" />
+    <Compile Include="Impl\RMAItemRepository.cs" />
+    <Compile Include="Impl\RMALogRepository.cs" />
     <Compile Include="Impl\RMARepository.cs" />
     <Compile Include="Impl\SectionRepository.cs" />
     <Compile Include="Impl\SeedRepository.cs" />
+    <Compile Include="Impl\ShippingAddressRepository.cs" />
     <Compile Include="Impl\ShipViaRepository.cs" />
     <Compile Include="Impl\SpecialTopicProductRelationRepository.cs" />
     <Compile Include="Impl\CommentRepository.cs" />
@@ -169,6 +180,7 @@
     <Compile Include="Impl\UserAccountRepository.cs" />
     <Compile Include="Impl\VUserRepository.cs" />
     <Compile Include="Impl\VUserRoleRepository.cs" />
+    <Compile Include="Impl\WXReplyRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlHelper.cs" />
   </ItemGroup>

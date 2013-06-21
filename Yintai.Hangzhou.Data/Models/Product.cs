@@ -28,6 +28,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int SortOrder { get; set; }
         public bool IsHasImage { get; set; }
         public Nullable<decimal> UnitPrice { get; set; }
+        public Nullable<bool> Is4Sale { get; set; }
 
         #region Overrides of BaseEntity
 

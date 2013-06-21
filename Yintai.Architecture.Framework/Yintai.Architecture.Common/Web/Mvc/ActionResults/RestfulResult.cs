@@ -58,6 +58,7 @@ namespace Yintai.Architecture.Common.Web.Mvc.ActionResults
             }
         }
 
+
         #endregion
     }
 }

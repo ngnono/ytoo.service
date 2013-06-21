@@ -11,12 +11,15 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.HasKey(t => t.Id);
 
             // Properties
+            this.Property(t => t.ValueDesc)
+                .IsRequired()
+                .HasMaxLength(50);
+
             // Table & Column Mappings
             this.ToTable("ProductPropertyValue");
             this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.ProductId).HasColumnName("ProductId");
             this.Property(t => t.PropertyId).HasColumnName("PropertyId");
-            this.Property(t => t.ValueId).HasColumnName("ValueId");
+            this.Property(t => t.ValueDesc).HasColumnName("ValueDesc");
             this.Property(t => t.CreateDate).HasColumnName("CreateDate");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.Status).HasColumnName("Status");

@@ -31,6 +31,21 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.BankCard)
                 .HasMaxLength(50);
 
+            this.Property(t => t.RejectReason)
+                .HasMaxLength(500);
+
+            this.Property(t => t.GiftReason)
+                .HasMaxLength(100);
+
+            this.Property(t => t.InvoiceReason)
+                .HasMaxLength(100);
+
+            this.Property(t => t.RebatePointReason)
+                .HasMaxLength(100);
+
+            this.Property(t => t.PostalFeeReason)
+                .HasMaxLength(100);
+
             // Table & Column Mappings
             this.ToTable("RMA");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -47,6 +62,15 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.BankName).HasColumnName("BankName");
             this.Property(t => t.BankAccount).HasColumnName("BankAccount");
             this.Property(t => t.BankCard).HasColumnName("BankCard");
+            this.Property(t => t.RejectReason).HasColumnName("RejectReason");
+            this.Property(t => t.rebatepostfee).HasColumnName("rebatepostfee");
+            this.Property(t => t.chargepostfee).HasColumnName("chargepostfee");
+            this.Property(t => t.ActualAmount).HasColumnName("ActualAmount");
+            this.Property(t => t.ChargeGiftFee).HasColumnName("ChargeGiftFee");
+            this.Property(t => t.GiftReason).HasColumnName("GiftReason");
+            this.Property(t => t.InvoiceReason).HasColumnName("InvoiceReason");
+            this.Property(t => t.RebatePointReason).HasColumnName("RebatePointReason");
+            this.Property(t => t.PostalFeeReason).HasColumnName("PostalFeeReason");
 		Init();
         }
 

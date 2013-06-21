@@ -8,24 +8,12 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
         public OrderEntityMap()
         {
             // Primary Key
-            this.HasKey(t => new { t.Id, t.OrderNo, t.CustomerId, t.TotalAmount, t.Status, t.PaymentMethodCode, t.CreateDate, t.CreateUser, t.UpdateDate, t.UpdateUser, t.StoreId, t.BrandId });
+            this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
             this.Property(t => t.OrderNo)
                 .IsRequired()
                 .HasMaxLength(20);
-
-            this.Property(t => t.CustomerId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.TotalAmount)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.Status)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             this.Property(t => t.PaymentMethodCode)
                 .IsRequired()
@@ -52,20 +40,8 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.InvoiceDetail)
                 .HasMaxLength(200);
 
-            this.Property(t => t.CreateUser)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.UpdateUser)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
             this.Property(t => t.ShippingNo)
                 .HasMaxLength(50);
-
-            this.Property(t => t.StoreId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.BrandId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             this.Property(t => t.Memo)
                 .HasMaxLength(200);
@@ -97,6 +73,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.StoreId).HasColumnName("StoreId");
             this.Property(t => t.BrandId).HasColumnName("BrandId");
             this.Property(t => t.Memo).HasColumnName("Memo");
+            this.Property(t => t.InvoiceAmount).HasColumnName("InvoiceAmount");
 		Init();
         }
 

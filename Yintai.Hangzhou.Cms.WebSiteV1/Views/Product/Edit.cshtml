@@ -156,6 +156,11 @@
             @Html.DropDownListFor(model => model.Status, EnumHelper.DisplayList<DataStatus>())
             @Html.ValidationMessageFor(model => model.Status)
         </div>
+    <div class="editor-label-flow">  
+            <span >@Html.LabelFor(model=>model.Is4Sale)</span>     
+            @Html.CheckBox("Is4Sale",Model.Is4Sale??false)
+            @Html.ValidationMessageFor(model => model.Is4Sale)
+        </div>
         <div class="editor-label-required">
             选择促销图片
         </div>

@@ -68,9 +68,20 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IOrderRepository, OrderRepository>();
             Current.Register<IOrderLogRepository, OrderLogRepository>();
             Current.Register<IOutboundRepository, OutboundRepository>();
+            Current.Register<IOutboundItemRepository, OutboundItemRepository>();
             Current.Register<ISectionRepository, SectionRepository>();
             Current.Register<IInboundPackRepository, InboundPackageRepository>();
             Current.Register<IStoreRealRepository, StoreRealRepository>();
+            Current.Register<ICategoryPropertyRepository, CategoryPropertyRepository>();
+            Current.Register<ICategoryPropertyValueRepository, CategoryPropertyValueRepository>();
+            Current.Register<IProductPropertyRepository, ProductPropertyRepository>();
+            Current.Register<IProductPropertyValueRepository, ProductPropertyValueRepository>();
+            Current.Register<IWXReplyRepository, WXReplyRepository>();
+            Current.Register<IShippingAddressRepository, ShippingAddressRepository>();
+            Current.Register<IShippViaRepository, ShipViaRepository>();
+            Current.Register<IRMARepository, RMARepository>();
+            Current.Register<IRMALogRepository, RMALogRepository>();
+            Current.Register<IRMAItemRepository, RMAItemRepository>();
         }
 
         #endregion

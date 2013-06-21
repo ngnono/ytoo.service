@@ -75,7 +75,7 @@ namespace com.intime.jobscheduler.Job
                 List<LinqInner> accounts = null;
                 using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
                 {
-                    Query(db, minPoints, acs => accounts = acs.OrderBy(a => a.U.Id).Skip(cursor).Take(size).ToList());
+                    Query(db, minPoints, acs => accounts = acs.OrderBy(a => a.U.Id).Take(size).ToList());
                 }
                 foreach (var account in accounts)
                 {

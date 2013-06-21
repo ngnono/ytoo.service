@@ -37,4 +37,6 @@
         currentText: '现在',
         closeText: '确定'
     });
+   
+    kendo.culture('zh-CN');
 });

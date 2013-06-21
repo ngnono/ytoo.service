@@ -165,10 +165,22 @@
       <DependentUpon>convert2salelistreport.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Content\report\ouboundreport.cs">
+    <Compile Include="Content\report\couponcodeusagereport.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ouboundreport.rpt</DependentUpon>
+      <DependentUpon>couponcodeusagereport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Content\report\CrystalReport1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrystalReport1.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Content\report\outboundreport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>outboundreport.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Content\report\productsdaterangereport.cs">
@@ -199,6 +211,7 @@
     <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
+    <Compile Include="Controllers\CouponCodeReportController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -207,7 +220,9 @@
     <Compile Include="Controllers\PointController.cs" />
     <Compile Include="Controllers\ProBulkUploadController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductPropertyValueController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
+    <Compile Include="Controllers\PropertyValueController.cs" />
     <Compile Include="Controllers\ProUploadError.cs" />
     <Compile Include="Controllers\ProUploadService.cs" />
     <Compile Include="Controllers\ReportController.cs" />
@@ -222,6 +237,7 @@
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\UserAuthController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WXReplyController.cs" />
     <Compile Include="Dto\Product\ListDto.cs" />
     <Compile Include="Dto\Resource\ListDto.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
@@ -231,22 +247,27 @@
     <Compile Include="Models\BrandViewModel.cs" />
     <Compile Include="Models\ChangePassViewModel.cs" />
     <Compile Include="Models\CommentViewModel.cs" />
+    <Compile Include="Models\CouponCodeUsageViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\FilesStatus.cs" />
     <Compile Include="Models\HotwordViewModel.cs" />
     <Compile Include="Models\IPagerInfo.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\Order2SaleReportViewModel.cs" />
     <Compile Include="Models\OrderConfirmReportViewModel.cs" />
+    <Compile Include="Models\OrderShipReportViewModel.cs" />
     <Compile Include="Models\OrderViewModel.cs" />
     <Compile Include="Models\PagerInfo.cs" />
     <Compile Include="Models\PointViewModel.cs" />
     <Compile Include="Models\ProductByBrandReportViewModel.cs" />
+    <Compile Include="Models\ProductPropertyViewModel.cs" />
     <Compile Include="Models\ProductViewModel.cs" />
     <Compile Include="Models\PromotionViewModel.cs" />
-    <Compile Include="Models\PropertyValueViewModel.cs" />
     <Compile Include="Models\ReportByProductBrandOption.cs" />
     <Compile Include="Models\ResourceViewModel.cs" />
+    <Compile Include="Models\RMAReportViewModel.cs" />
+    <Compile Include="Models\RMAViewModel.cs" />
     <Compile Include="Models\RoleRightViewModel.cs" />
     <Compile Include="Models\SectionViewModel.cs" />
     <Compile Include="Models\SpecialTopicViewModel.cs" />
@@ -254,8 +275,10 @@
     <Compile Include="Models\StoreCouponUsageViewModel.cs" />
     <Compile Include="Models\StorePromotionViewModel.cs" />
     <Compile Include="Models\StoreViewModel.cs" />
+    <Compile Include="Models\TagPropertyViewModel.cs" />
     <Compile Include="Models\TagViewModel.cs" />
     <Compile Include="Models\UserAuthViewModel.cs" />
+    <Compile Include="Models\WXReplyViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\AdminAuthorizeAttribute.cs" />
     <Compile Include="Util\BooleanExtension.cs" />
@@ -301,6 +324,371 @@
     <Content Include="Content\img\loading_16x16.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.af-ZA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.af.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.am-ET.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.am.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-AE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-BH.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-DZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-EG.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-IQ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-JO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-KW.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-LB.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-LY.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-MA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-OM.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-QA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-SA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-SY.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-TN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar-YE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ar.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.arn-CL.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.arn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.as-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.as.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.az-Cyrl-AZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.az-Cyrl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.az-Latn-AZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.az-Latn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.az.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ba-RU.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ba.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.be-BY.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.be.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bg-BG.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bg.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bn-BD.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bn-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bo-CN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bo.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.br-FR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.br.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bs-Cyrl-BA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bs-Cyrl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bs-Latn-BA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bs-Latn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.bs.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ca-ES.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ca.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.co-FR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.co.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.cs-CZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.cs.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.cy-GB.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.cy.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.da-DK.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.da.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.de-AT.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.de-CH.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.de-DE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.de-LI.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.de-LU.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.de.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.dsb-DE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.dsb.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.dv-MV.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.dv.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.el-GR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.el.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-029.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-AU.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-BZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-CA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-GB.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-IE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-JM.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-MY.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-NZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-PH.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-SG.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-TT.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-US.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-ZA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en-ZW.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.en.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-AR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-BO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-CL.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-CO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-CR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-DO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-EC.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-ES.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-GT.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-HN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-MX.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-NI.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-PA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-PE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-PR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-PY.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-SV.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-US.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-UY.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es-VE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.es.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.et-EE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.et.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.eu-ES.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.eu.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fa-IR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fa.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fi-FI.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fi.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fil-PH.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fil.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fo-FO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fo.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fr-BE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fr-CA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fr-CH.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fr-FR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fr-LU.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fr-MC.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fr.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fy-NL.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.fy.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ga-IE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ga.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.gd-GB.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.gd.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.gl-ES.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.gl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.gsw-FR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.gsw.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.gu-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.gu.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ha-Latn-NG.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ha-Latn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ha.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.he-IL.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.he.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hi-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hi.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hr-BA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hr-HR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hr.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hsb-DE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hsb.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hu-HU.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hu.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hy-AM.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.hy.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.id-ID.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.id.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ig-NG.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ig.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ii-CN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ii.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.is-IS.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.is.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.it-CH.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.it-IT.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.it.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.iu-Cans-CA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.iu-Cans.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.iu-Latn-CA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.iu-Latn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.iu.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ja-JP.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ja.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ka-GE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ka.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.kk-KZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.kk.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.kl-GL.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.kl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.km-KH.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.km.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.kn-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.kn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ko-KR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ko.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.kok-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.kok.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ky-KG.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ky.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.lb-LU.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.lb.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.lo-LA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.lo.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.lt-LT.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.lt.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.lv-LV.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.lv.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mi-NZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mi.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mk-MK.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mk.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ml-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ml.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mn-Cyrl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mn-MN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mn-Mong-CN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mn-Mong.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.moh-CA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.moh.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mr-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mr.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ms-BN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ms-MY.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ms.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mt-MT.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.mt.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.nb-NO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.nb.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ne-NP.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ne.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.nl-BE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.nl-NL.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.nl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.nn-NO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.nn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.no.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.nso-ZA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.nso.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.oc-FR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.oc.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.or-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.or.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.pa-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.pa.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.pl-PL.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.pl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.prs-AF.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.prs.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ps-AF.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ps.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.pt-BR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.pt-PT.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.pt.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.qut-GT.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.qut.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.quz-BO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.quz-EC.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.quz-PE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.quz.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.rm-CH.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.rm.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ro-RO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ro.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ru-RU.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ru-UA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ru.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.rw-RW.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.rw.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sa-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sa.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sah-RU.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sah.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.se-FI.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.se-NO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.se-SE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.se.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.si-LK.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.si.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sk-SK.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sk.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sl-SI.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sma-NO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sma-SE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sma.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.smj-NO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.smj-SE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.smj.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.smn-FI.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.smn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sms-FI.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sms.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sq-AL.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sq.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr-Cyrl-BA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr-Cyrl-CS.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr-Cyrl-ME.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr-Cyrl-RS.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr-Cyrl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr-Latn-BA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr-Latn-CS.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr-Latn-ME.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr-Latn-RS.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr-Latn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sr.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sv-FI.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sv-SE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sv.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sw-KE.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.sw.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.syr-SY.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.syr.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ta-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ta.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.te-IN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.te.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tg-Cyrl-TJ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tg-Cyrl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tg.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.th-TH.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.th.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tk-TM.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tk.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tn-ZA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tr-TR.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tr.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tt-RU.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tt.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tzm-Latn-DZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tzm-Latn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.tzm.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ug-CN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ug.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.uk-UA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.uk.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ur-PK.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.ur.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.uz-Cyrl-UZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.uz-Cyrl.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.uz-Latn-UZ.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.uz-Latn.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.uz.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.vi-VN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.vi.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.wo-SN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.wo.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.xh-ZA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.xh.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.yo-NG.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.yo.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zh-CHS.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zh-CHT.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zh-CN.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zh-Hans.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zh-Hant.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zh-HK.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zh-MO.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zh-SG.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zh-TW.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zh.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zu-ZA.min.js" />
+    <Content Include="Content\Kendo\js\cultures\kendo.culture.zu.min.js" />
+    <Content Include="Content\Kendo\js\kendo.web.min.js" />
+    <Content Include="Content\Kendo\styles\Bootstrap\editor.png" />
+    <Content Include="Content\Kendo\styles\Bootstrap\imagebrowser.png" />
+    <Content Include="Content\Kendo\styles\Bootstrap\loading-image.gif" />
+    <Content Include="Content\Kendo\styles\Bootstrap\loading.gif" />
+    <Content Include="Content\Kendo\styles\Bootstrap\slider-h.gif" />
+    <Content Include="Content\Kendo\styles\Bootstrap\slider-v.gif" />
+    <Content Include="Content\Kendo\styles\Bootstrap\sprite.png" />
+    <Content Include="Content\Kendo\styles\Bootstrap\sprite_2x.png" />
+    <Content Include="Content\Kendo\styles\kendo.bootstrap.min.css" />
+    <Content Include="Content\Kendo\styles\kendo.common.min.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -627,6 +1015,25 @@
     <Content Include="Views\PropertyValue\List.cshtml" />
     <Content Include="Views\PropertyValue\Create.cshtml" />
     <Content Include="Views\StoreCouponReport\Search.cshtml" />
+    <Content Include="Views\PropertyValue\EditorTemplates\TagPropertyViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TagPropertyValueViewModel.cshtml" />
+    <Content Include="Views\PropertyValue\Edit.cshtml" />
+    <Content Include="Views\ProductPropertyValue\List.cshtml" />
+    <Content Include="Views\ProductPropertyValue\Create.cshtml" />
+    <Content Include="Views\ProductPropertyValue\Edit.cshtml" />
+    <Content Include="Views\ProductPropertyValue\EditorTemplates\ProductPropertyViewModel.cshtml" />
+    <Content Include="Views\WXReply\List.cshtml" />
+    <Content Include="Views\WXReply\Create.cshtml" />
+    <Content Include="Views\WXReply\Edit.cshtml" />
+    <Content Include="Views\WXReply\EditorTemplates\WXReplyViewModel.cshtml" />
+    <Content Include="Views\CouponCodeReport\Search.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\TagPropertyValueViewModel.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Order\EditorTemplates\OrderItemViewModel.cshtml" />
+    <Content Include="Views\Order\EditorTemplates\ConfirmStoreItemViewModel.cshtml" />
+    <Content Include="Views\Order\Reject2Customer.cshtml" />
+    <Content Include="Views\Order\PrintRMA.cshtml" />
+    <Content Include="Views\Shared\_AlertMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -675,9 +1082,17 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>convert2salelistreport.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Content\report\ouboundreport.rpt">
+    <Content Include="Content\report\couponcodeusagereport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>ouboundreport.cs</LastGenOutput>
+      <LastGenOutput>couponcodeusagereport.cs</LastGenOutput>
+    </Content>
+    <EmbeddedResource Include="Content\report\CrystalReport1.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CrystalReport1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Content\report\outboundreport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>outboundreport.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Content\report\rmareport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -711,7 +1126,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>10476</DevelopmentServerPort>
+          <DevelopmentServerPort>37299</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://cmsitoo.yintai.com/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

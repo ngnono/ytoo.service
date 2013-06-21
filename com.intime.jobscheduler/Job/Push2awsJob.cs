@@ -62,6 +62,8 @@ namespace com.intime.jobscheduler.Job
             IndexPromotionCode(client, benchDate);
         }
 
+   
+
         private void IndexPromotionCode(ElasticClient client, DateTime benchDate)
         {
             ILog log = LogManager.GetLogger(this.GetType());

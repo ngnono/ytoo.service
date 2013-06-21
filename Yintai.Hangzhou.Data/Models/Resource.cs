@@ -23,6 +23,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int Height { get; set; }
         public int ContentSize { get; set; }
         public string ExtName { get; set; }
+        public Nullable<bool> IsDimension { get; set; }
 
         #region Overrides of BaseEntity
 

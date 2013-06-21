@@ -30,6 +30,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int StoreId { get; set; }
         public int BrandId { get; set; }
         public string Memo { get; set; }
+        public Nullable<decimal> InvoiceAmount { get; set; }
 
         #region Overrides of BaseEntity
 
@@ -38,9 +39,7 @@ namespace Yintai.Hangzhou.Data.Models
         /// </summary>
         public override object EntityId
         {       
-                get { return new Dictionary<string, object> (12){
-                {"Id",Id}, {"OrderNo",OrderNo}, {"CustomerId",CustomerId}, {"TotalAmount",TotalAmount}, {"Status",Status}, {"PaymentMethodCode",PaymentMethodCode}, {"CreateDate",CreateDate}, {"CreateUser",CreateUser}, {"UpdateDate",UpdateDate}, {"UpdateUser",UpdateUser}, {"StoreId",StoreId}, {"BrandId",BrandId} 
-                };}
+                get { return Id; }
  
         }
 

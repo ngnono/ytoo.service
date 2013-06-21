@@ -175,8 +175,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         }
         protected JsonResult FailResponse()
         {
-            return Json(new { 
-                Success = false
+            return FailResponse(string.Empty);
+        }
+        protected JsonResult FailResponse(string message)
+        {
+            return Json(new
+            {
+                Success = false,
+                Message = message
             });
         }
         protected ActionResult RedirectToAction2(Func<ActionResult> nextaction)

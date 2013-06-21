@@ -27,5 +27,30 @@ namespace Yintai.Hangzhou.Service.Logic
         {
             return 0;
         }
+        public static string CreateShippingCode(string storeId)
+        {
+            var code = string.Concat(string.Format("O{0}{1}",storeId.PadLeft(3,'0'), DateTime.Now.ToString("yyMMdd"))
+                               , DateTime.UtcNow.Ticks.ToString().Reverse().Take(5)
+                                   .Aggregate(new StringBuilder(), (s, e) => s.Append(e), s => s.ToString())
+                                   .PadRight(5, '0'));
+            IOutboundRepository outboundRepo = ServiceLocator.Current.Resolve<IOutboundRepository>();
+            var existingCodes = outboundRepo.Get(c => c.OutboundNo == code && c.CreateDate >= DateTime.Today).Count();
+            if (existingCodes > 0)
+                code = string.Concat(code, (existingCodes + 1).ToString());
+            return code;
+        }
+
+        public static string CreateRMACode()
+        {
+            var code = string.Concat(string.Format("R{0}", DateTime.Now.ToString("yyMMdd"))
+                       , DateTime.UtcNow.Ticks.ToString().Reverse().Take(5)
+                           .Aggregate(new StringBuilder(), (s, e) => s.Append(e), s => s.ToString())
+                           .PadRight(5, '0'));
+            IRMARepository rmadata = ServiceLocator.Current.Resolve<IRMARepository>();
+            var existingCodes = rmadata.Get(c => c.RMANo == code && c.CreateDate >= DateTime.Today).Count();
+            if (existingCodes > 0)
+                code = string.Concat(code, (existingCodes + 1).ToString());
+            return code;
+        }
     }
 }

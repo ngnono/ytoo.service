@@ -952,6 +952,37 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Manager
             productVM.PromotionName = from p in pros
                                       select p.Name;
 
+            productVM.Properties = _productRepository.Context.Set<ProductPropertyValueEntity>()
+                                    .Where(pv=>pv.Status!=(int)DataStatus.Deleted)
+                                    .Join(_productRepository.Context.Set<ProductPropertyEntity>().Where(p=>p.ProductId==productVM.Id && p.Status!=(int)DataStatus.Deleted),
+                                            o=>o.PropertyId,
+                                            i=>i.Id,
+                                            (o,i)=>new {PP=i,PV=o})
+                                    .ToList()
+                                    .Select(p=>new TagPropertyValueViewModel().FromEntity<TagPropertyValueViewModel>(p.PV,pv=>{
+                                        pv.PropertyDesc = p.PP.PropertyDesc;
+                                        pv.PropertyId = p.PP.Id;
+                                        pv.SortOrder = p.PP.SortOrder??0;
+                                        pv.ValueId = p.PV.Id;
+                                    }));
+            if (productVM.Properties == null || productVM.Properties.Count() <= 0)
+            { 
+                productVM.Properties = _productRepository.Context.Set<CategoryPropertyValueEntity>()
+                                .Where(pv=>pv.Status!=(int)DataStatus.Deleted)
+                                .Join(_productRepository.Context.Set<CategoryPropertyEntity>().Where(p=>p.CategoryId == productVM.Tag_Id&& p.Status!=(int)DataStatus.Deleted),
+                                     o=>o.PropertyId,
+                                            i=>i.Id,
+                                            (o,i)=>new {PP=i,PV=o})
+                                 .ToList()
+                                    .Select(p => new TagPropertyValueViewModel().FromEntity<TagPropertyValueViewModel>(p.PV, pv =>
+                                    {
+                                        pv.PropertyDesc = p.PP.PropertyDesc;
+                                        pv.PropertyId = p.PP.Id;
+                                        pv.SortOrder = p.PP.SortOrder;
+                                        pv.ValueId = p.PV.Id;
+                                    }));
+            }
+
 
             return productVM;
         }

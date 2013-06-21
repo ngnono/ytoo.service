@@ -154,7 +154,7 @@
       </cron>
     </trigger>
     -->
-
+<!--
     <job>
       <name>PullawsIncre</name>
       <group>Fashion</group>
@@ -193,7 +193,45 @@
         <cron-expression>0 0/3 * * * ?</cron-expression>
       </cron>
     </trigger>
+-->
+    <job>
+      <name>Push2mysqlIncre</name>
+      <group>Fashion</group>
+      <description>push data to mysql </description>
+      <job-type>com.intime.jobscheduler.Job.Push2mysqlJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>awshost</key>
+          <value>http://localhost:3000/wxmsg/update</value>
+        </entry>
+        <entry>
+          <key>intervalofmin</key>
+          <value>60</value>
+        </entry>
+        <entry>
+          <key>publickey</key>
+          <value>intimedemo</value>
+        </entry>
+        <entry>
+          <key>privatekey</key>
+          <value>f71b5770-8a15-0130-9079-1231400034f3</value>
+        </entry>
+      </job-data-map>
+    </job>
 
+    <trigger>
+      <cron>
+        <name>Every3min</name>
+        <group>Fashion</group>
+        <description>every 3 mins</description>
+        <job-name>Push2mysqlIncre</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 0/3 * * * ?</cron-expression>
+      </cron>
+    </trigger>
 <!--
   <job>
       <name>RebateExpireCouponPointsEveryMidNight</name>

@@ -39,7 +39,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [Display(Name = "名称")]
         public string Name { get; set; }
 
-        [StringLength(256, MinimumLength = 0)]
+        [StringLength(2000,MinimumLength = 0)]
         [Display(Name = "说明")]
         public string Description { get; set; }
 

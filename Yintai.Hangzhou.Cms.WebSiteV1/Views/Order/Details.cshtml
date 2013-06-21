@@ -6,149 +6,227 @@
 {
     <ul class="breadcrumb">
         <li>@Html.ActionLink2("订单管理", "Index")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("订单列表", "List")<span class="divider">/</span></li>
         <li class="active">@ViewBag.Title</li>
     </ul>
 }
+@section PageJsSection
+{
+    <script>
+        function onPrintClose(e) {
+            e.preventDefault();
+            if (confirm('打印报表之后再退出，是否已打印？')) {
+                window.location.reload();
+                return true;
+            }
+            else
+                return false;
+        }
+        function PrintHZ(reportUrl, reportTitle) {
+            var printwin = $("#printwindow");
+            printwin.kendoWindow({
+                content: {
+                    url: reportUrl
+                    },
+                    iframe: true,
+                    close: onPrintClose,
+                    width: "100%",
+                    height: "100%",
+                    modal: true,
+                    title: reportTitle,
 
-<h2>@ViewBag.Title</h2>
-<p>
+                });
+                var kendoWindow = printwin.data("kendoWindow");
+                kendoWindow.open();
+                kendoWindow.center();
+                var printFrame = $("iframe:first")[0];
+                $(printFrame).bind('load', function () {
+                    this.focus();
+                    this.contentWindow.print();
+                });
+
+        }
+        $(document).ready(function () {
+            $("#order").kendoTabStrip({
+                animation: {
+                    open: {
+                        effects: "fadeIn"
+                    }
+                }
+            });
+           
+            $("#printorder").click(function (e) {
+                e.preventDefault();
+                PrintHZ("@Url.Action("PrintOrder",new {OrderNo=Model.OrderNo})", "打印订单");
+                
+            });
+            $("#printship").click(function (e) {
+                e.preventDefault();
+                PrintHZ("@Url.Action("PrintShipping",new {OrderNo=Model.OrderNo})", "打印发货单");
+
+           });
+            $("#printsale").click(function (e) {
+                e.preventDefault();
+                PrintHZ("@Url.Action("PrintSales",new {OrderNo=Model.OrderNo})", "打印销售单");
+
+            });
+           
+        });
+    </script>
+}
+ @Html.Partial("_AlertMessage")
+<div id="printwindow"></div>
+<div class="btn-group">
     @if (Model.CanChangeStoreItem)
     {
-        @Html.ActionLink2("确认专柜商品", "ChangeStoreItem", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+        @Html.ActionLink2("确认专柜商品", "ChangeStoreItem", new { OrderNo = Model.OrderNo }, new { @class = "btn " })
     }
     @if (Model.CanPrint)
     { 
-         @Html.ActionLink2("打印订单", "PrintOrder", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+        @Html.ActionLink2("打印订单", "PrintOrder", new { OrderNo = Model.OrderNo }, new { @class = "btn",@id="printorder" })
     }
 
-    @if (Model.CanPreparePack)
-    { 
-         @Html.ActionLink2("准备打包", "PreparePack", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
-    }
+
     @if (Model.CanPrintShipping)
     { 
-         @Html.ActionLink2("打印发货单", "PrintShipping", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+        @Html.ActionLink2("打印发货单", "PrintShipping", new { OrderNo = Model.OrderNo }, new { @class = "btn",@id="printship" })
     }
     @if (Model.CanShipping)
     { 
-         @Html.ActionLink2("发货", "Shipping", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+        @Html.ActionLink2("发货", "Shipping", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
     }
     @if (Model.CanChangeReceived)
     { 
-         @Html.ActionLink2("签收", "Received", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+        @Html.ActionLink2("签收", "Received", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
     }
-        @if (Model.CanChangeReject)
+    @if (Model.CanChangeReject)
     { 
-         @Html.ActionLink2("拒收", "Reject", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+        @Html.ActionLink2("拒收", "Reject", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
     }
-    @if (Model.CanConvert2Sale)
+
+    @if (Model.CanPrintSales)
     { 
-         @Html.ActionLink2("转化为销售", "Convert2Sale", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+        @Html.ActionLink2("打印销售单", "PrintSales", new { OrderNo = Model.OrderNo }, new { @class = "btn",@id="printsale" })
     }
-        @if (Model.CanPrintSales)
-    { 
-         @Html.ActionLink2("打印销售单", "PrintSales", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
-    }
+
     @if (Model.CanVoid)
     { 
-        <a href="#voidConfirm" role="button" class="btn" data-toggle="modal">作废</a>     
+        <a href="#voidConfirm" role="button" class="btn btn-danger" data-toggle="modal">作废</a>     
     }
 
-    @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
-</p>
-<ul class="nav nav-tabs">
-    <li class="active"><a href="#basic" data-toggle="tab">订单信息</a></li>
-    <li><a href="#detail" data-toggle="tab">订单明细</a></li>
-    <li><a href="#log" data-toggle="tab">订单日志</a></li>
-</ul>
-<div class="tab-content">
-    <div class="tab-pane active" id="basic">
-        <fieldset>
+</div>
+<div id="order">
+    <ul>
+        <li class="k-state-active">订单信息
+        </li>
+        <li>订单明细
+        </li>
+        <li>订单日志
+        </li>
+        <li>退换货
+        </li>
 
-            <div class="display-label">@Html.LabelFor(model => model.OrderNo)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.OrderNo)
+    </ul>
+    <div>
+        <div class="row">
+            <div class="span5">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <h3>订单信息</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="span2">
+                            @Html.LabelFor(model => model.OrderNo)
+                            @Html.TextBoxFor(model => model.OrderNo, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.Customer)
+                            @Html.TextBoxFor(model => model.Customer.Nickname, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.TotalAmount)
+                            @Html.TextBoxFor(model => model.TotalAmount, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.ShippingFee)
+                            @Html.TextBoxFor(model => model.ShippingFee, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.StoreName)
+                            @Html.TextBoxFor(model => model.StoreName, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.PaymentMethodName)
+                            @Html.TextBoxFor(model => model.PaymentMethodName, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.Status)
+                            @Html.TextBox("Status", ((Yintai.Hangzhou.Model.Enums.OrderStatus)Model.Status).ToFriendlyString(), new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.CreateDate)
+                            @Html.TextBoxFor(model => model.CreateDate, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.UpdateDate)
+                            @Html.TextBoxFor(model => model.UpdateDate, new { @class = "span2", @readonly = true })
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="display-label">@Html.LabelFor(model => model.Customer)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.Customer.Nickname)
+            <div class="span5">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <h3>送货地址信息</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="span5">
+                            @Html.LabelFor(model => model.ShippingAddress)
+                            @Html.TextBoxFor(model => model.ShippingAddress, new { @class = "span4", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.ShippingContactPerson)
+                            @Html.TextBoxFor(model => model.ShippingContactPerson, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.ShippingContactPhone)
+                            @Html.TextBoxFor(model => model.ShippingContactPhone, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.ShippingViaMethod)
+                            @Html.TextBoxFor(model => model.ShippingViaMethod.Name, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.ShippingZipCode)
+                            @Html.TextBoxFor(model => model.ShippingZipCode, new { @class = "span2", @readonly = true })
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="display-label">@Html.LabelFor(model => model.TotalAmount)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.TotalAmount)
+            <div class="span5">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <h3>发票信息</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="span2">
+                            @Html.LabelFor(model => model.NeedInvoice)
+                            @Html.CheckBox("NeedInvoice", Model.NeedInvoice ?? false, new { @class = "span2", @disabled = "disabled" })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.InvoiceSubject)
+                            @Html.TextBoxFor(model => model.InvoiceSubject, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.InvoiceDetail)
+                            @Html.TextBoxFor(model => model.InvoiceDetail, new { @class = "span2", @readonly = true })
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="display-label">@Html.LabelFor(model => model.StoreName)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.StoreName)
-
-            </div>
-
-            <div class="display-label">@Html.LabelFor(model => model.NeedInvoice)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.NeedInvoice)
-            </div>
-
-            <div class="display-label">@Html.LabelFor(model => model.InvoiceSubject)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.InvoiceSubject)
-            </div>
-
-            <div class="display-label">@Html.LabelFor(model => model.InvoiceDetail)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.InvoiceDetail)
-            </div>
-
-            <div class="display-label">@Html.LabelFor(model => model.PaymentMethodName)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.PaymentMethodName)
-            </div>
-
-            <div class="display-label">@Html.LabelFor(model => model.Status)</div>
-            <div class="display-field">
-                @Html.Label("", ((Yintai.Hangzhou.Model.Enums.OrderStatus)Model.Status).ToFriendlyString())
-            </div>
-
-            <div class="display-label">@Html.LabelFor(model => model.ShippingFee)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.ShippingFee)
-            </div>
-            <div class="display-label">@Html.LabelFor(model => model.ShippingAddress)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.ShippingAddress) @Html.DisplayFor(model => model.ShippingZipCode)
-            </div>
-            <div class="display-label">@Html.LabelFor(model => model.ShippingContactPerson)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.ShippingContactPerson)
-            </div>
-            <div class="display-label">@Html.LabelFor(model => model.ShippingContactPhone)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.ShippingContactPhone)
-            </div>
-            <div class="display-label">@Html.LabelFor(model => model.ShippingViaMethod)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.ShippingViaMethod.Name)
-            </div>
-
-            <div class="display-label">@Html.LabelFor(model => model.ShippingNo)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.ShippingZipCode)
-            </div>
-
-            <div class="display-label">@Html.LabelFor(model => model.CreateDate)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.CreateDate)
-            </div>
-
-            <div class="display-label">@Html.LabelFor(model => model.UpdateDate)</div>
-            <div class="display-field">
-                @Html.DisplayFor(model => model.UpdateDate)
-            </div>
-
-
-        </fieldset>
+        </div>
     </div>
-    <div class="tab-pane" id="detail">
+    <div>
         <table>
             <tr>
                 <th>商品图片</th>
@@ -174,18 +252,18 @@
                         <img width="120" src="@String.Concat(item.ProductResource.Domain, item.ProductResource.Name, "_120x0.jpg")" alt="120x0" />
                         }
                     </td>
-                    <td>@Html.LabelFor(model => item.ProductId)</td>
-                    <td>@Html.LabelFor(model => item.ProductDesc)</td>
-                    <td>@Html.LabelFor(model => item.ItemPrice)</td>
-                    <td>@Html.LabelFor(model => item.Quantity)</td>
-                    <td>@Html.LabelFor(model => item.ExtendPrice)</td>
-                    <td>@Html.LabelFor(model => item.StoreItemNo)</td>
-                    <td>@Html.LabelFor(model => item.StoreItemDesc)</td>
+                    <td>@Html.DisplayFor(model => item.ProductId)</td>
+                    <td>@Html.DisplayFor(model => item.ProductDesc)</td>
+                    <td>@Html.DisplayFor(model => item.ItemPrice)</td>
+                    <td>@Html.DisplayFor(model => item.Quantity)</td>
+                    <td>@Html.DisplayFor(model => item.ExtendPrice)</td>
+                    <td>@Html.DisplayFor(model => item.StoreItemNo)</td>
+                    <td>@Html.DisplayFor(model => item.StoreItemDesc)</td>
                 </tr>
             }
         </table>
     </div>
-    <div class="tab-pane" id="log">
+    <div>
         <table>
             <tr>
                 <th>订单号</th>
@@ -200,27 +278,74 @@
             {
                 <tr>
 
-                    <td>@Html.LabelFor(model => item.OrderNo)</td>
-                    <td>@Html.LabelFor(model => item.CustomerId)</td>
-                    <td>@Html.LabelFor(model => item.CreateDate)</td>
-                    <td>@Html.LabelFor(model => item.Operation)</td>
+                    <td>@Html.DisplayFor(model => item.OrderNo)</td>
+                    <td>@Html.DisplayFor(model => item.CustomerId)</td>
+                    <td>@Html.DisplayFor(model => item.CreateDate)</td>
+                    <td>@Html.DisplayFor(model => item.Operation)</td>
                 </tr>
             }
         </table>
-
     </div>
+    <div>
+        <div class="btn-group">
+            @if(Model.CanCreateOffRMA)
+            {
+            @Html.ActionLink2("现场退货", "CreateRMA", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
+            }
+            @if(Model.CanPrintRMA)
+            {
+                @Html.ActionLink2("打印退货单", "PrintRMA", new { RMANo = Model.FirstActiveRMA.RMANo}, new { @class = "btn",@id="printrma" })
+                @Html.ActionLink2("退还客户", "Reject2Customer", new { RMANo = Model.FirstActiveRMA.RMANo }, new { @class = "btn" })
+            }
+            @if(Model.CanVoidRMA)
+            {
+            @Html.ActionLink2("作废退货单", "VoidRMA", new { RMANo = Model.FirstActiveRMA.RMANo }, new { @class = "btn btn-danger" })
+            }
+        </div>
+        <table>
+            <tr>
+                <th>退货号</th>
+                <th>申请用户</th>
+                <th>申请时间
+                </th>
+                <th>退货方式</th>
+                <th>状态</th>
+                <th>退货理由</th>
+                <th>退货金额</th>
+                <th>操作用户</th>
+                <th>操作时间</th>
+            </tr>
+
+            @foreach (var item in Model.RMAs)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(model => item.RMANo)</td>
+                    <td>@Html.DisplayFor(model => item.CreateUser)</td>
+                    <td>@Html.DisplayFor(model => item.CreateDate)</td>
+                    <td>@Html.Label("", ((RMAType)item.RMAType).ToFriendlyString())</td>
+                    <td>@Html.Label("", ((RMAStatus)item.Status).ToFriendlyString())</td>
+                    <td>@Html.DisplayFor(model => item.Reason)</td>
+                    <td>@Html.DisplayFor(model => item.RMAAmount)</td>
+                    <td>@Html.DisplayFor(model => item.UpdateUser)</td>
+                    <td>@Html.DisplayFor(model => item.UpdateDate)</td>
+                </tr>
+            }
+        </table>
+    </div>
+
 </div>
 
+
 <div id="voidConfirm" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">确认作废？</h3>
-  </div>
-  <div class="modal-body">
-    <p>确认作废该订单吗，一旦作废，订单就会立即失效。</p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-      @Html.ActionLink2("确认", "Void", new { OrderNo = Model.OrderNo }, new {@class="btn btn-primary" })
-  </div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">确认作废？</h3>
+    </div>
+    <div class="modal-body">
+        <p>确认作废该订单吗，一旦作废，订单就会立即失效。</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        @Html.ActionLink2("确认", "Void", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    </div>
 </div>

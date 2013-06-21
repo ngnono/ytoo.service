@@ -55,6 +55,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         public ActionResult Exchange(ExchangeStoreCouponRequest request, int? authuid, UserModel authUser)
         {
             request.AuthUser = authUser;
+           
             var storepromotion = _storeproRepo.Get(sp => sp.Id == request.StorePromotionId && sp.ActiveStartDate <= DateTime.Now && sp.ActiveEndDate >= DateTime.Now).FirstOrDefault();
             if (storepromotion == null)
                 return new RestfulResult
@@ -91,6 +92,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 return new RestfulResult { 
                     Data =   new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "没有绑定卡！" }
                 };
+            var blackcard = _storeproRepo.Context.Set<CardBlackEntity>().Where(c => c.CardNo == cardInfo.CardNo && c.Status != (int)DataStatus.Deleted).FirstOrDefault();
+            if (blackcard != null)
+            {
+                Logger.Info(string.Format("black card blocked:{0}",cardInfo.CardNo));
+                return new RestfulResult
+                {
+                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "网络错误，请到实体店进行兑换!" }
+
+                };
+            }
             var pointResult =_groupData.GetPoint(new GroupCardPointRequest() { CardNo = cardInfo.CardNo });
             if (pointResult == null)
                 return new RestfulResult

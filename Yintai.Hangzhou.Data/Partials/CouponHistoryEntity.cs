@@ -56,7 +56,7 @@ namespace Yintai.Hangzhou.Data.Models
                     account.Amount = sumCoupons+sumStoreCoupons;
                     account.UpdatedDate = DateTime.Now;
                     db.Entry(account).State = System.Data.EntityState.Modified;
-                    db.SaveChanges();
+
 
                 }
                 else
@@ -73,6 +73,7 @@ namespace Yintai.Hangzhou.Data.Models
                         UpdatedUser = userId
                     });
                 }
+                db.SaveChanges();
             }
         }
     }

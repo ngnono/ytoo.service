@@ -19,6 +19,15 @@ namespace Yintai.Hangzhou.Data.Models
         public string BankName { get; set; }
         public string BankAccount { get; set; }
         public string BankCard { get; set; }
+        public string RejectReason { get; set; }
+        public Nullable<decimal> rebatepostfee { get; set; }
+        public Nullable<decimal> chargepostfee { get; set; }
+        public Nullable<decimal> ActualAmount { get; set; }
+        public decimal? ChargeGiftFee { get; set; }
+        public string GiftReason { get; set; }
+        public string InvoiceReason { get; set; }
+        public string RebatePointReason { get; set; }
+        public string PostalFeeReason { get; set; }
 
         #region Overrides of BaseEntity
 

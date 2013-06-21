@@ -86,9 +86,13 @@
     <Compile Include="Enums\NotificationStatus.cs" />
     <Compile Include="Enums\OrderOpera.cs" />
     <Compile Include="Enums\OrderStatus.cs" />
+    <Compile Include="Enums\OutboundStatus.cs" />
+    <Compile Include="Enums\OutboundType.cs" />
     <Compile Include="Enums\PromotionCountType.cs" />
     <Compile Include="Enums\PushSourceType.cs" />
     <Compile Include="Enums\ResourceSortOrder.cs" />
+    <Compile Include="Enums\RMAStatus.cs" />
+    <Compile Include="Enums\RMAType.cs" />
     <Compile Include="Enums\SpecialTopicOrder.cs" />
     <Compile Include="Enums\SpecialTopicType.cs" />
     <Compile Include="Enums\StorePromotionType.cs" />

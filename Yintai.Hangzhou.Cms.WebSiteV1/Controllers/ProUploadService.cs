@@ -30,10 +30,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                { "name",typeof(string)},
                {"BrandName",typeof(string)},
                { "Description",typeof(string)},
+               { "UnitPrice",typeof(decimal)},
                { "Price",typeof(decimal)},
-               { "DescripOfPromotion",typeof(string)},
-               { "DescripOfProBeginDate", typeof(DateTime)},
-               { "DescripOfProEndDate", typeof(DateTime)},
+               
+             //  { "DescripOfPromotion",typeof(string)},
+              // { "DescripOfProBeginDate", typeof(DateTime)},
+              // { "DescripOfProEndDate", typeof(DateTime)},
                { "InUserId", typeof(int)},
                { "Tag", typeof(string)},
                { "Store",typeof(string)},
@@ -42,8 +44,21 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                { "Subjects", typeof(string)},
                { "UploadGroupId", typeof(int)},
                { "InDate", typeof(DateTime)},
-               { "Status",typeof(int)}
+               { "Status",typeof(int)},
+               { "Is4Sale", typeof(bool)}
             };
+        private static Dictionary<string, Type> propertyCols = new Dictionary<string, Type>() { 
+               { "ItemCode",typeof(string)},
+               {"PropertyDesc",typeof(string)},
+               { "ValueDesc",typeof(string)},
+               { "SortOrder",typeof(int)},
+               { "UploadGroupId",typeof(int)},
+               { "Status", typeof(int)}
+            };
+        internal static string BASIC_SHEET = "基本信息";
+        internal static string  MORE_SHEET = "商品属性";
+        internal static string IS_4SALE_YES = "True";
+        internal static string IS_4SALE_NO = "False";
 
         public ProUploadService(string filePath, ProBulkUploadController context)
         {
@@ -78,37 +93,30 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         {
             if (groupId == null)
                 yield break;
-            foreach (var p in _productRepService.FindUploadsByGroupId(groupId.Value))
+            var context = _productRepService.Context;
+            foreach (var p in context.Set<ProductStageEntity>()
+                            .Where(p=>p.UploadGroupId == groupId.Value)
+                            .GroupJoin(context.Set<ProductPropertyStageEntity>().Where(pp=>pp.UploadGroupId==groupId.Value),
+                                    o=>o.ItemCode,i=>i.ItemCode,(o,i)=>new {P=o,PP=i})
+                            .ToList())
             {
                 yield return new ProductUploadInfo()
                 {
-                    Brand = p.BrandName
-                    ,
-                    Descrip = p.Description
-                    ,
-                    DescripOfPromotion = p.DescripOfPromotion
-                    ,
-                    DescripOfPromotionBeginDate = p.DescripOfProBeginDate
-                    ,
-                    DescripOfPromotionEndDate = p.DescripOfProEndDate
-                    ,
-                    ItemCode = p.ItemCode
-                    ,
-                    Price = p.Price
-                    ,
-                    PromotionIds = p.Promotions
-                    ,
-                    Store = p.Store
-                    ,
-                    Tag = p.Tag
-                    ,
-                    Title = p.name
-                    ,
-                    SubjectIds = p.Subjects
-                    ,
-                    GroupId = p.UploadGroupId.Value
-                    ,
-                    Id = p.id
+                    Brand = p.P.BrandName ,
+                    Descrip = p.P.Description,
+                    DescripOfPromotion = p.P.DescripOfPromotion,
+                    DescripOfPromotionBeginDate = p.P.DescripOfProBeginDate,
+                    DescripOfPromotionEndDate = p.P.DescripOfProEndDate ,
+                    ItemCode = p.P.ItemCode,
+                    Price = p.P.Price,
+                    PromotionIds = p.P.Promotions,
+                    Store = p.P.Store,
+                    Tag = p.P.Tag,
+                    Title = p.P.name,
+                    SubjectIds = p.P.Subjects,
+                    GroupId = p.P.UploadGroupId.Value,
+                    Id = p.P.id,
+                    Properties = p.PP
                 };
             }
         }
@@ -138,12 +146,16 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             FileInfo imageFile = new FileInfo(_filePath);
             int jobId = _context.JobId;
 
-            FileInfor fileInfor = _resourceService.SaveStage(imageFile, 4, SourceType.Product);
+            FileInfor fileInfor = _resourceService.SaveStage(imageFile,_context.CurrentUser.CustomerId, SourceType.Product);
             if (fileInfor != null)
             {
                 var itemNames = Path.GetFileNameWithoutExtension(_filePath).Split('@');
                 int sortOrder = 1;
-                int.TryParse(itemNames.Length > 1 ? itemNames[1] : "1", out sortOrder);
+                bool isDimension = false;
+                if (itemNames.Length > 1 && string.Compare(itemNames[1], "cc", true) == 0)
+                    isDimension = true;
+                else
+                    int.TryParse(itemNames.Length > 1 ? itemNames[1] : "1", out sortOrder);
                 var entity = _productRepService.Entry<ResourceStageEntity>();
                 entity.ContentSize = fileInfor.FileSize;
                 entity.ExtName = fileInfor.FileExtName;
@@ -154,6 +166,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 entity.SortOrder = sortOrder;
                 entity.ItemCode = itemNames[0];
                 entity.InUser = _context.CurrentUser.CustomerId;
+                entity.IsDimension = isDimension;
                 entity.InDate = DateTime.Now;
                 entity.UploadGroupId = jobId;
                 _productRepService.Insert<ResourceStageEntity>(entity);
@@ -233,6 +246,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 jobId = job.Id;
             }
             DataTable dt = new DataTable();
+            DataTable propertyDt = new DataTable();
 
             foreach (var col in cols.Keys)
             {
@@ -240,11 +254,16 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 cols.TryGetValue(col, out colType);
                 dt.Columns.Add(col, colType);
             }
+            foreach (var pcol in propertyCols.Keys)
+            {
+                Type colType;
+                propertyCols.TryGetValue(pcol, out colType);
+                propertyDt.Columns.Add(pcol, colType);
+            }
             using (var file = new FileStream(_filePath, FileMode.Open, FileAccess.Read))
             {
                 hssfWB = new HSSFWorkbook(file);
-                System.Collections.IEnumerator rows = hssfWB.GetSheetAt(0).GetRowEnumerator();
-
+                System.Collections.IEnumerator rows = hssfWB.GetSheet(BASIC_SHEET).GetRowEnumerator();
                 rows.MoveNext();
                 while (rows.MoveNext())
                 {
@@ -256,27 +275,58 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                         itemCode.ToString().Trim().Length == 0)
                         continue;
                     dr[i++] = mapCellValueToStrongType<string>(row.GetCell(1));
-                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(7));
+                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(5));
                     dr[i++] = mapCellValueToStrongType<string>(row.GetCell(2));
-                    dr[i++] = mapCellValueToStrongType<decimal?>(row.GetCell(6));
-                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(3));
-                    dr[i++] = mapCellValueToStrongType<DateTime?>(row.GetCell(4));
-                    dr[i++] = mapCellValueToStrongType<DateTime?>(row.GetCell(5));
+                    dr[i++] = mapCellValueToStrongType<decimal?>(row.GetCell(3));
+                    dr[i++] = mapCellValueToStrongType<decimal?>(row.GetCell(4));
                     dr[i++] = _context.CurrentUser.CustomerId;
+                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(6));
+                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(7));
                     dr[i++] = mapCellValueToStrongType<string>(row.GetCell(8));
-                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(9));
-                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(10));
                     dr[i++] = mapCellValueToStrongType<string>(row.GetCell(0));
-                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(11));
+                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(9));
                     dr[i++] = jobId;
                     dr[i++] = DateTime.Now;
                     dr[i++] = ProUploadStatus.ProductsOnStage;
+                    dr[i++] = mapCellValueToStrongType<bool?>(row.GetCell(10)) ?? false;
                    
                     dt.Rows.Add(dr);
                 }
+                if (hssfWB.NumberOfSheets > 1)
+                {
+                   System.Collections.IEnumerator prows =hssfWB.GetSheet(MORE_SHEET).GetRowEnumerator();
+                   prows.MoveNext();
+                   while (prows.MoveNext())
+                   {
+                       var row = (HSSFRow)prows.Current;
+
+                       var itemCode = mapCellValueToStrongType<string>(row.GetCell(0));
+                       if (itemCode is DBNull ||
+                           itemCode.ToString().Trim().Length == 0)
+                           continue;
+
+                       for (int colIndex = 2; colIndex < 12; colIndex++)
+                       {
+                           DataRow dr = propertyDt.NewRow();
+                           int i = 0;
+                           dr[i++] = itemCode;
+                           dr[i++] = mapCellValueToStrongType<string>(row.GetCell(1));
+                         var colValue = mapCellValueToStrongType<string>(row.GetCell(colIndex));
+                         if (colValue is DBNull ||
+                             colValue.ToString().Trim().Length == 0)
+                             break;
+                         dr[i++] = colValue;
+                         dr[i++] = 0;
+                         dr[i++] = jobId;
+                         dr[i++] = ProUploadStatus.ProductsOnStage;
+                         propertyDt.Rows.Add(dr);
+                       }
+                      
+                   }
+                }
             }
 
-            _productRepService.BulkInsertProduct(dt, jobId, cols.Keys);
+            _productRepService.BulkInsertProduct(dt,propertyDt, jobId, cols.Keys,propertyCols.Keys);
 
             DeleteTempFile();
 

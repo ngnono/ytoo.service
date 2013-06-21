@@ -9,8 +9,10 @@ using Yintai.Architecture.Common.Web.Mvc.Controllers;
 using Yintai.Architecture.Framework.Utility;
 using Yintai.Hangzhou.Contract.Customer;
 using Yintai.Hangzhou.Contract.DTO.Request.Customer;
+using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Contract.DTO.Response.Customer;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
@@ -162,5 +164,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 Data = new ExecuteResult<ShowCustomerInfoResponse>(response.FirstOrDefault())
             };
         }
+
+      
     }
 }

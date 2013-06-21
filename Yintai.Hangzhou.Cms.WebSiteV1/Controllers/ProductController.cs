@@ -157,6 +157,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
 
             var vo = MappingManager.ProductViewMapping(entity);
+            
 
             return View(vo);
         }
@@ -308,6 +309,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             entity.Tag_Id = vo.Tag_Id;
             entity.Brand_Id = vo.Brand_Id;
             entity.Description = vo.Description;
+            entity.Is4Sale = vo.Is4Sale;
 
             using (var ts = new TransactionScope())
             {

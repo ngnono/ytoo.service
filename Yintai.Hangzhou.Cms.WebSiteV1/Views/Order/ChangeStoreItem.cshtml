@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Yintai.Hangzhou.Cms.WebSiteV1.Models.OrderItemViewModel>
+﻿@model ConfirmStoreItemViewModel
 @{
     ViewBag.Title = "确认专柜商品";
     string orderNo = ViewBag.OrderNo;
@@ -16,44 +16,9 @@
 @using (Html.BeginForm("ChangeStoreItem", "Order", new { OrderNo = orderNo}, FormMethod.Post))
 {
     @Html.ValidationSummary(false)
-    <table>
-            <tr>
-                <th>商品图片</th>
-                <th>商品编号</th>
-                <th>订购描述
-                </th>
-                <th>单价</th>
-                <th>数量</th>
-                <th>总额
-                </th>
-                <th>专柜商品编码
-                </th>
-                <th>专柜商品描述</th>
-
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@if (item.ProductResource != null)
-                        {
-            
-                        <img width="120" src="@String.Concat(item.ProductResource.Domain, item.ProductResource.Name, "_120x0.jpg")" alt="120x0" />
-                        }
-                    @Html.HiddenFor(model => item.Id)
-                    </td>
-                    <td>@Html.TextBoxFor(model => item.ProductId, new { @readonly = true })</td>
-                    <td>@Html.TextBoxFor(model => item.ProductDesc, new { @readonly = true })</td>
-                    <td>@Html.TextBoxFor(model => item.ItemPrice, new { @readonly = true })</td>
-                    <td>@Html.TextBoxFor(model => item.Quantity, new { @readonly = true })</td>
-                    <td>@Html.TextBoxFor(model => item.ExtendPrice, new { @readonly = true })</td>
-                    <td>@Html.EditorFor(model => item.StoreItemNo)</td>
-                    <td>@Html.EditorFor(model => item.StoreItemDesc)</td>
-                </tr>
-            }
-        </table>
-}
- <div class="form-actions">
+    @Html.EditorForModel()
+     <div class="form-actions">
         <input type="submit" value="保存" class="btn btn-primary" />
         @Html.ActionLink2("返回订单", "Details", new { OrderNo = orderNo}, new { @class = "btn" })
  </div>
+}

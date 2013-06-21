@@ -30,6 +30,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public decimal UnitPrice { get; set; }
         public decimal ItemPrice { get; set; }
         public decimal ExtendPrice { get; set; }
+        public int ItemId { get; set; }
 
     }
 }
