@@ -41,7 +41,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public Nullable<decimal> rebatepostfee { get; set; }
         public Nullable<decimal> chargepostfee { get; set; }
         public Nullable<decimal> ActualAmount { get {
-            return RMAAmount - chargepostfee ?? 0 + rebatepostfee ?? 0-ChargeGiftFee??0;
+            return RMAAmount - (chargepostfee ?? 0) + (rebatepostfee ?? 0)-(ChargeGiftFee??0);
         } }
         public decimal? ChargeGiftFee { get; set; }
         public string GiftReason { get; set; }

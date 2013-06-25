@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Mvc;
 using System.Xml;
+using Yintai.Architecture.Framework.ServiceLocation;
 
 namespace Yintai.Architecture.Common.Web.Mvc.ActionResults
 {
@@ -19,6 +21,7 @@ namespace Yintai.Architecture.Common.Web.Mvc.ActionResults
         /// </summary>
         public Object Data { get; set; }
 
+       
         #endregion
 
         #region Methods

@@ -55,9 +55,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public string ProductDesc { get {
             if (Properties == null)
                 return string.Empty;
-           return Properties.Aggregate(new StringBuilder(),
+           var description = Properties.Aggregate(new StringBuilder(),
                 (s, p) => s.AppendFormat("{0}:{1},", p.PropertyName, p.ValueName),
                 s => s.ToString());
+           if (description.Length > 0)
+               description = description.TrimEnd(',');
+           return description;
                     
         } }
     }

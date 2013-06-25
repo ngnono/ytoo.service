@@ -39,6 +39,20 @@ namespace Yintai.Hangzhou.Repository.Impl
                                 a.BrandId==0 || a.BrandId == q.BrandId))
                        select q;
             }
+            else if (query is IQueryable<CommentEntity>)
+            {
+                return from q in (query as IQueryable<CommentEntity>)
+                       let productSource = Context.Set<ProductEntity>().Where(p=>p.Id==q.SourceId && q.SourceType==(int)SourceType.Product).FirstOrDefault()
+                       let promotionSource = Context.Set<PromotionEntity>().Where(p=>p.Id==q.SourceId && q.SourceType==(int)SourceType.Promotion).FirstOrDefault()
+                       where (q.SourceType ==(int)SourceType.Product && 
+                                Context.Set<UserAuthEntity>().Where(a => a.UserId == userId && a.Type == (int)AuthDataType.Product)
+                                 .Any(a => a.StoreId == 0 || ( a.StoreId == productSource.Store_Id &&
+                                     a.BrandId == 0 || a.BrandId == productSource.Brand_Id))) ||
+                            (q.SourceType ==(int)SourceType.Promotion &&
+                             Context.Set<UserAuthEntity>().Where(a => a.UserId == userId && a.Type == (int)AuthDataType.Promotion)
+                            .Any(a => a.StoreId == 0 || a.StoreId == promotionSource.Store_Id))
+                       select q;
+            }
           
             return query;
         }

@@ -59,10 +59,10 @@ namespace Yintai.Hangzhou.Service
             switch (request.SType)
             {
                 case SourceType.Promotion:
-                    GetPromotion(request.SourceId, out storeId, out recommendedUserId);
+                    GetPromotion(request.PromotionId, out storeId, out recommendedUserId);
                     break;
                 case SourceType.Product:
-                    GetProduct(request.SourceId, out storeId, out recommendedUserId);
+                    GetProduct(request.ProductId, out storeId, out recommendedUserId);
                     break;
                 default:
                     storeId = 0;
@@ -121,10 +121,6 @@ namespace Yintai.Hangzhou.Service
                 return new ExecuteResult<CouponCodeResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
 
-            if (request.SType == SourceType.Product)
-            {
-                return CreateCoupon4NewBy8W(request);
-            }
 
             /*
              * 8位, 前三位+5位流水
@@ -157,10 +153,10 @@ namespace Yintai.Hangzhou.Service
                 return new ExecuteResult<CouponCodeResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
 
-            var kp = request.SourceId.ToString(CultureInfo.InvariantCulture);
+            var kp = request.PromotionId.ToString(CultureInfo.InvariantCulture);
             var keyPre = kp.Length.ToString(CultureInfo.InvariantCulture) + kp;
 
-            var seed = _seedRepository.Generate("yt.hz.promotion", 9999, request.SourceId);
+            var seed = _seedRepository.Generate("yt.hz.promotion", 9999, request.PromotionId);
             if (seed == -2)
             {
                 return new ExecuteResult<CouponCodeResponse>(null) { StatusCode = StatusCode.ClientError, Message = "已经超出优惠券领取最大值" };
@@ -173,7 +169,7 @@ namespace Yintai.Hangzhou.Service
             var storeId = 0;
             var recommendedUserId = 0;
 
-            var p = GetPromotion(request.SourceId, out storeId, out recommendedUserId);
+            var p = GetPromotion(request.PromotionId, out storeId, out recommendedUserId);
 
             //create coupon
 
@@ -183,184 +179,26 @@ namespace Yintai.Hangzhou.Service
                 CreatedDate = DateTime.Now,
                 CreatedUser = request.AuthUid,
                 FromProduct =
-                    request.SType == SourceType.Product ? request.SourceId : 0,
+                   request.ProductId,
                 FromPromotion =
-                    request.SType == SourceType.Promotion ? request.SourceId : 0,
+                    request.PromotionId,
                 FromStore = storeId,
                 FromUser = recommendedUserId,
                 Id = 0,
                 Status = (int)DataStatus.Normal,
                 User_Id = request.AuthUid,
-                //TODO:修改时间
-                ValidStartDate = p.StartDate,//默认有效期7天
-                ValidEndDate = p.EndDate
+
+                ValidStartDate = p.StartDate,
+                ValidEndDate = p.EndDate,
+                IsLimitOnce = p.IsCodeUseLimit
             });
 
-            //增加用户优惠券数
-            if (coupon != null)
-            {
-                //TODO: 增加用户账户 优惠券 1张
-                _userService.AddCoupon(coupon.User_Id, 1, request.AuthUid);
-            }
+            
 
             return new ExecuteResult<CouponCodeResponse>(MappingManager.CouponCodeResponseMapping(coupon));
         }
 
-        /// <summary>
-        /// 8位code
-        /// </summary>
-        /// <returns></returns>
-        private ExecuteResult<CouponCodeResponse> CreateCoupon4NewBy8W(CouponCouponRequest request)
-        {
-            /*
-             * 8位, 前三位+5位流水
-             * 前三位 当天距离2012/12/31的天数，不足补0
-             * 后5位为自增的流水码 
-             * 99999 超过就不能增加了
-            */
-            var date = DateTime.Now;
-            var c = new DateTime(2012, 12, 31);
-            var timeSpan = date - c;
-            var day = timeSpan.Days;
-
-            if (day > 999)
-            {
-                throw new ArgumentException("天数差超过了999天，请更改算法");
-            }
-
-            var keyPre = UtilHelper.PreFilled(day, 3, '0');
-
-            var timeSeed = this._timeSeedRepository.CreateLimitMaxSeedV2(new TimeSeedEntity
-            {
-                Date = date,
-                Day = date.Day,
-                Hour = date.Hour,
-                Month = date.Month,
-                Year = date.Year
-            }, 99999, keyPre);
-
-
-            if (timeSeed == null)
-            {
-                //超出限制了
-                return new ExecuteResult<CouponCodeResponse>(null)
-                {
-                    StatusCode = StatusCode.InternalServerError,
-                    Message = "超出优惠码限制"
-                };
-            }
-
-            var storeId = 0;
-            var recommendedUserId = 0;
-
-            Get(request, out storeId, out recommendedUserId);
-
-            //create coupon
-            var totay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            var coupon = this._couponRepository.Insert(new CouponHistoryEntity
-            {
-                CouponId = timeSeed.KeySeed,
-                CreatedDate = date,
-                CreatedUser = request.AuthUid,
-                FromProduct =
-                    request.SType == SourceType.Product ? request.SourceId : 0,
-                FromPromotion =
-                    request.SType == SourceType.Promotion ? request.SourceId : 0,
-                FromStore = storeId,
-                FromUser = recommendedUserId,
-                Id = 0,
-                Status = 1,
-                User_Id = request.AuthUid,
-                //TODO:修改时间
-                ValidStartDate = totay,//默认有效期7天
-                ValidEndDate = totay.AddDays(7).AddSeconds(-1)
-            });
-
-            //增加用户优惠券数
-            if (coupon != null)
-            {
-                //TODO: 增加用户账户 优惠券 1张
-                _userService.AddCoupon(coupon.User_Id, 1, request.AuthUid);
-            }
-
-            return new ExecuteResult<CouponCodeResponse>(MappingManager.CouponCodeResponseMapping(coupon));
-        }
-        /*
-
-               /// <summary>
-               /// 创建优惠券
-               /// </summary>
-               /// <param name="request"></param>
-               /// <returns></returns>
-               public ExecuteResult<CouponCodeResponse> CreateCouponOld(CouponCouponRequest request)
-               {
-                   if (request == null)
-                   {
-                       return new ExecuteResult<CouponCodeResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
-                   }
-
-                   var date = DateTime.Now;
-                   //            Coupon的code规则如下：
-                   //                YY+MM+DD+HH+{000}
-                   //                YY: 当天自然年的后两位
-                   //                MM:当天自然年的月份两位
-                   //                Dd：当天自然年的天数两位
-                   //                Hh：当时小时的两位表示
-                   //                {000}: 自增长三位数，如不足三位，左补0
-
-                   //Example:
-                   //                2012/11/23 领取的一个coupon：
-                   //                12112313001
-
-                   var keyPre = date.ToString("yyMMddHH");
-                   //create seedkey;
-                   var timeSeed = this._timeSeedRepository.CreateLimitMaxSeed(new TimeSeedEntity
-                                                                   {
-                                                                       Date = date,
-                                                                       Day = date.Day,
-                                                                       Hour = date.Hour,
-                                                                       Month = date.Month,
-                                                                       Year = date.Year
-                                                                   }, 999, keyPre);
-                   if (timeSeed == null)
-                   {
-                       //超出限制了
-                       return new ExecuteResult<CouponCodeResponse>(null)
-                                  {
-                                      StatusCode = StatusCode.InternalServerError,
-                                      Message = "超出优惠码限制"
-                                  };
-                   }
-
-                   var storeId = 0;
-                   var recommendedUserId = 0;
-
-                   Get(request, out storeId, out recommendedUserId);
-
-                   //create coupon
-                   var coupon = this._couponRepository.Insert(new CouponHistoryEntity
-                                                     {
-                                                         CouponId = timeSeed.KeySeed,
-                                                         CreatedDate = date,
-                                                         CreatedUser = request.AuthUid,
-                                                         FromProduct =
-                                                             request.SType == SourceType.Product ? request.SourceId : 0,
-                                                         FromPromotion =
-                                                             request.SType == SourceType.Promotion ? request.SourceId : 0,
-                                                         FromStore = storeId,
-                                                         FromUser = recommendedUserId,
-                                                         Id = 0,
-                                                         Status = 1,
-                                                         User_Id = request.AuthUid,
-                                                         ValidStartDate = DateTime.Now,//默认有效期7天
-                                                         ValidEndDate = DateTime.Now.AddDays(7)
-                                                     });
-
-                   return new ExecuteResult<CouponCodeResponse>(MappingManager.CouponCodeResponseMapping(coupon));
-               }
-
-               // */
-
+       
         /// <summary>
         /// 获取 COUPON
         /// </summary>

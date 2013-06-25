@@ -74,6 +74,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.BrandId).HasColumnName("BrandId");
             this.Property(t => t.Memo).HasColumnName("Memo");
             this.Property(t => t.InvoiceAmount).HasColumnName("InvoiceAmount");
+            this.Property(t => t.TotalPoints).HasColumnName("TotalPoints");
 		Init();
         }
 

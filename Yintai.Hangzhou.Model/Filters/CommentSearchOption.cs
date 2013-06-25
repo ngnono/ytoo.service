@@ -20,5 +20,11 @@ namespace Yintai.Hangzhou.Model.Filters
             public int? PromotionId { get; set; }
             [Display(Name = "排序")]
             public GenericOrder? OrderBy { get; set; }
+
+
+
+            public int CurrentUser { get; set; }
+
+            public int CurrentUserRole { get; set; }
     }
 }

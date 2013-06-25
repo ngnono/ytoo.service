@@ -15,6 +15,7 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
         public string CardProfile { get; set; }
+        public bool? IsLocked { get; set; }
 
         #region Overrides of BaseEntity
 

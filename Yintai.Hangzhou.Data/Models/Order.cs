@@ -31,6 +31,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int BrandId { get; set; }
         public string Memo { get; set; }
         public Nullable<decimal> InvoiceAmount { get; set; }
+        public int? TotalPoints { get; set; }
 
         #region Overrides of BaseEntity
 

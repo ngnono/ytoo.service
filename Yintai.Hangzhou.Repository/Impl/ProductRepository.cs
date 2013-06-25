@@ -399,47 +399,26 @@ namespace Yintai.Hangzhou.Repository.Impl
             return base.Find(key);
         }
 
-        private ProductEntity SetCount(int id, int count, string fieldName)
-        {
-            var parames = new List<SqlParameter>
-                {
-                    new SqlParameter("@Count", count),
-                    new SqlParameter("@Id", id),
-                };
-
-            var sql = String.Format("UPDATE [dbo].[Product] SET [{0}] = [{0}] + @Count WHERE [Id] = @Id;", fieldName);
-
-            var i = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnection(), CommandType.Text, sql, parames.ToArray());
-
-            if (i > 0)
-            {
-                return GetItem(id);
-            }
-            else
-            {
-                return null;
-            }
-        }
+    
 
         public ProductEntity SetCount(ProductCountType countType, int id, int count)
         {
-            string t;
+            var productEntity = Find(id);
             switch (countType)
             {
                 case ProductCountType.FavoriteCount:
-                    t = "FavoriteCount";
+                    productEntity.FavoriteCount++;
                     break;
                 case ProductCountType.InvolvedCount:
-                    t = "InvolvedCount";
+                    productEntity.InvolvedCount++;
                     break;
                 case ProductCountType.ShareCount:
-                    t = "ShareCount";
+                    productEntity.ShareCount++;
                     break;
-                default:
-                    return GetItem(id);
             }
-
-            return SetCount(id, count, t);
+            productEntity.UpdatedDate = DateTime.Now;
+            Update(productEntity);
+            return productEntity;
         }
      
     }

@@ -11,6 +11,7 @@ namespace Yintai.Hangzhou.Model.Enums
         FromCustomer = 0,
         FromOperator =1,
         FromSystem =2,
-        CustomerReceived = 3
+        CustomerReceived = 3,
+        CustomerVoid = 4
     }
 }

@@ -56,5 +56,10 @@ namespace Yintai.Hangzhou.Model.ES
         public int CreateUserId { get; set; }
         public bool ShowInList { get; set; }
         public string PublicCode { get; set; }
+        public int LikeCount { get; set; }
+        public int ShareCount { get; set; }
+        public int InvolvedCount { get; set; }
+        public bool IsProdBindable { get; set; }
+        public int PublicationLimit { get; set; }
     }
 }

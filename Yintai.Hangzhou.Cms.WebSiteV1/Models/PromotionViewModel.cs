@@ -127,6 +127,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [Display(Name="公用码")]
         public string PublicProCode { get; set; }
 
+        [Display(Name = "优惠码限制使用一次")]
+        public Nullable<bool> IsCodeUseLimit { get; set; }
+
         public List<ResourceViewModel> Resources { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

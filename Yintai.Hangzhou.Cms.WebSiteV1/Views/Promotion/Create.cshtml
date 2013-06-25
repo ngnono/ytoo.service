@@ -75,7 +75,11 @@
             @Html.CheckBox("IsLimitPerUser",Model==null?false:Model.IsLimitPerUser)
             @Html.ValidationMessageFor(model => model.IsLimitPerUser)
         </div>
-
+            <div class="editor-label-flow">
+            <span >优惠码限制使用一次：</span>     
+            @Html.CheckBox("IsCodeUseLimit",Model==null?false:Model.IsCodeUseLimit)
+            @Html.ValidationMessageFor(model => model.IsCodeUseLimit)
+        </div>
         <div class="editor-label">
             @Html.LabelFor(model => model.PublicationLimit)
         </div>

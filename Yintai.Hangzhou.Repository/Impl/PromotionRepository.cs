@@ -425,27 +425,7 @@ namespace Yintai.Hangzhou.Repository.Impl
                                 recommendUser, PromotionFilterMode.Default);
         }
 
-        private PromotionEntity SetCount(int id, int count, string fieldName)
-        {
-            var parames = new List<SqlParameter>
-                {
-                    new SqlParameter("@Count", count),
-                    new SqlParameter("@Id", id),
-                };
-
-            var sql = String.Format("UPDATE [dbo].[Promotion] SET [{0}] = [{0}] + @Count WHERE [Id] = @Id;", fieldName);
-
-            var i = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnection(), CommandType.Text, sql, parames.ToArray());
-
-            if (i > 0)
-            {
-                return GetItem(id);
-            }
-            else
-            {
-                return null;
-            }
-        }
+    
 
         public IQueryable<PromotionEntity> Get(PagerRequest pagerRequest, out int totalCount, PromotionSortOrder sortOrder, Timestamp timestamp, PromotionFilterMode? filterMode, DataStatus? dataStatus, bool? hasBanner)
         {
@@ -491,26 +471,26 @@ namespace Yintai.Hangzhou.Repository.Impl
 
         public PromotionEntity SetCount(PromotionCountType countType, int id, int count)
         {
-            string t;
+            var proEntity = Find(id);
             switch (countType)
             {
                 case PromotionCountType.FavoriteCount:
-                    t = "FavoriteCount";
+                    proEntity.FavoriteCount++;
                     break;
                 case PromotionCountType.InvolvedCount:
-                    t = "InvolvedCount";
+                    proEntity.InvolvedCount++;
                     break;
                 case PromotionCountType.LikeCount:
-                    t = "LikeCount";
+                    proEntity.LikeCount++;
                     break;
                 case PromotionCountType.ShareCount:
-                    t = "ShareCount";
+                    proEntity.ShareCount++;
                     break;
-                default:
-                    return GetItem(id);
             }
-
-            return SetCount(id, count, t);
+            proEntity.UpdatedDate = DateTime.Now;
+            Update(proEntity);
+            return proEntity;
+          
         }
 
         public int SetIsProd(int id, bool? isProd)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using Yintai.Architecture.Common.Caching;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web;
@@ -32,8 +33,13 @@ namespace Yintai.Hangzhou.Service
         private readonly ICouponService _couponService;
         private readonly IPromotionService _promotionService;
         private readonly IPromotionDataService _promotionDataService;
+    private  IPromotionRepository _promotionRepo;
 
-        public ProductDataService(IPromotionDataService promotionDataService, IPromotionService promotionService, ICouponService couponService, IResourceService resourceService, IProductRepository productRepository, IShareService shareService, IFavoriteService favoriteService, ICouponDataService couponDataService)
+
+        public ProductDataService(IPromotionDataService promotionDataService, IPromotionService promotionService,
+            ICouponService couponService, IResourceService resourceService, IProductRepository productRepository, 
+            IShareService shareService, IFavoriteService favoriteService, ICouponDataService couponDataService,
+            IPromotionRepository promotionRepo)
         {
             _promotionDataService = promotionDataService;
             _productRepository = productRepository;
@@ -43,6 +49,7 @@ namespace Yintai.Hangzhou.Service
             _resourceService = resourceService;
             _couponService = couponService;
             _promotionService = promotionService;
+            _promotionRepo = promotionRepo;
         }
 
         private ProductInfoResponse IsR(ProductInfoResponse response, UserModel currentAuthUser, int productId)
@@ -526,13 +533,14 @@ namespace Yintai.Hangzhou.Service
 
             //判断如果是v1.0版本 可以允许创建优惠券。
 
-            ExecuteResult<CouponCodeResponse> coupon;
+            ExecuteResult<CouponCodeResponse> coupon= null;
             if (request.Client_Version != "1.0")
             {
+                //获取商品关联的活动
+                var promotionEntity = _promotionService.GetFristNormalForProductId(product.Id);
                 if (request.PromotionId == null || request.PromotionId.Value < 1)
                 {
-                    //获取商品关联的活动
-                    var promotionEntity = _promotionService.GetFristNormalForProductId(product.Id);
+
                     if (promotionEntity == null)
                     {
                         return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "当前商品没有参加活动" };
@@ -548,58 +556,51 @@ namespace Yintai.Hangzhou.Service
                         return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "当前商品没有参加该活动" };
                     }
                 }
+                using (var ts = new TransactionScope())
+                {
+                    var pr = _couponDataService.CreateCoupon(new CouponCouponRequest
+                    {
+                        AuthUid = request.AuthUser.Id,
+                        PromotionId = promotionEntity.Id,
+                        ProductId = request.ProductId,
+                        SourceType = (int)SourceType.Promotion,
+                        Token = request.Token,
+                        AuthUser = request.AuthUser,
+                        Method = request.Method,
+                        Client_Version = request.Client_Version
+                    });
 
-                var pr = _promotionDataService.CreateCoupon(new PromotionCouponCreateRequest
-                {
-                    AuthUid = request.AuthUid,
-                    AuthUser = request.AuthUser,
-                    Client_Version = request.Client_Version,
-                    IsPass = request.IsPass,
-                    Method = request.Method,
-                    PromotionId = request.PromotionId ?? 0,
-                    Token = request.Token
-                });
+                    if (!pr.IsSuccess)
+                    {
+                        return new ExecuteResult<ProductInfoResponse>(null)
+                        {
+                            Message = coupon.Message,
+                            StatusCode = coupon.StatusCode
+                        };
+                    }
 
-                if (pr.IsSuccess && pr.Data != null && pr.Data.CouponCodeResponse != null)
-                {
-                    coupon = new ExecuteResult<CouponCodeResponse>(pr.Data.CouponCodeResponse);
-                }
-                else
-                {
-                    coupon = new ExecuteResult<CouponCodeResponse>(null) { Message = pr.Message, StatusCode = pr.StatusCode };
+                    promotionEntity = _promotionRepo.SetCount(PromotionCountType.InvolvedCount, promotionEntity.Id, 1);
+         
+                    product = _productRepository.SetCount(ProductCountType.InvolvedCount, product.Id, 1);
+                    ts.Complete();
+                    var response = MappingManager.ProductInfoResponseMapping(product);
+                    response.CouponCodeResponse = coupon.Data;
+
+                    if (request.AuthUser != null)
+                    {
+                        response = IsR(response, request.AuthUser, product.Id);
+                    }
+
+                    return new ExecuteResult<ProductInfoResponse>(response);
+
+
                 }
             }
             else
             {
-                coupon = _couponDataService.CreateCoupon(new CouponCouponRequest
-                {
-                    AuthUid = request.AuthUid,
-                    SourceId = product.Id,
-                    SourceType = (int)SourceType.Product,
-                    Token = request.Token,
-                    AuthUser = request.AuthUser,
-                    Method = request.Method,
-                    Client_Version = request.Client_Version
-                });
+                return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
-
-            if (!coupon.IsSuccess)
-            {
-                return new ExecuteResult<ProductInfoResponse>(null) { Message = coupon.Message, StatusCode = coupon.StatusCode };
-            }
-
-            //+1
-            product = _productRepository.SetCount(ProductCountType.InvolvedCount, product.Id, 1);
-
-            var response = MappingManager.ProductInfoResponseMapping(product);
-            response.CouponCodeResponse = coupon.Data;
-
-            if (request.AuthUser != null)
-            {
-                response = IsR(response, request.AuthUser, product.Id);
-            }
-
-            return new ExecuteResult<ProductInfoResponse>(response);
+            
         }
 
         public ExecuteResult<ProductCollectionResponse> Search(SearchProductRequest request)

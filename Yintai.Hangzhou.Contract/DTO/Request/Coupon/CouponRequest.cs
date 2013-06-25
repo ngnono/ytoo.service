@@ -9,7 +9,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Coupon
 {
     public class CouponCouponRequest : AuthRequest
     {
-        public int SourceId { get; set; }
+        public int ProductId { get; set; }
+
+        public int PromotionId { get; set; }
 
         public int SourceType { get; set; }
 

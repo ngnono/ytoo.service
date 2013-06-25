@@ -47,6 +47,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         public ActionResult List(PagerRequest request, CommentSearchOption search)
         {
             int totalCount;
+            search.CurrentUser = CurrentUser.CustomerId;
+            search.CurrentUserRole = CurrentUser.Role;
             var data = _commentRepository.Search(request.PageIndex
                 , request.PageSize
                 , out totalCount

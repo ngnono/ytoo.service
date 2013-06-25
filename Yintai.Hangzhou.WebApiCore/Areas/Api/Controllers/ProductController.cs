@@ -35,13 +35,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         private IOrderItemRepository _orderItemRepo;
         private IOrderLogRepository _orderLogRepo;
         private IProductRepository _productRepo;
+        private IFavoriteRepository _favoriteRepo;
+        private IPromotionRepository _promotionRepo;
 
         public ProductController(IProductDataService productDataService, 
             IBrandDataService brandDataService,
             IOrderRepository orderRepo,
             IOrderItemRepository orderItemRepo,
             IOrderLogRepository orderLogRepo,
-            IProductRepository productRepo)
+            IProductRepository productRepo,
+            IFavoriteRepository favoriteRepo,
+            IPromotionRepository promotionRepo)
         {
             _productDataService = productDataService;
             _passHelper = new PassHelper(brandDataService);
@@ -49,6 +53,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _orderItemRepo = orderItemRepo;
             _orderLogRepo = orderLogRepo;
             _productRepo = productRepo;
+            _favoriteRepo = favoriteRepo;
+            _promotionRepo = promotionRepo;
 
         }
 
@@ -167,15 +173,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     var code = result.Data.CouponCodeResponse;
                     result.Data.CouponCodeResponse.Pass = _passHelper.GetPass(ControllerContext.HttpContext, code.Id,
                                                                               code.CouponId, code.User_Id);
-                    //result.Data.CouponCodeResponse.Pass = _passHelper.GetPass(ControllerContext,)
-
-                    //result.Data.CouponCodeResponse.Pass = PassController.GetPass(ControllerContext, result.Data.CouponCodeResponse.Id,
-                    //                                                             result.Data.CouponCodeResponse.CouponId,
-                    //                                                             result.Data.CouponCodeResponse
-                    //                                                                   .ProductName,
-                    //                                                             result.Data.CouponCodeResponse
-                    //                                                                   .ProductDescription, null, result.Data.CouponCodeResponse.User_Id);
-
+                   
                 }
 
                 return new RestfulResult
@@ -270,7 +268,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     UpdateDate = DateTime.Now,
                     UpdateUser = request.AuthUser.Id,
                     TotalAmount = totalAmount,
-                    OrderNo = orderNo
+                    OrderNo = orderNo,
+                    TotalPoints =0
 
                 });
                 _orderItemRepo.Insert(new OrderItemEntity()
@@ -281,6 +280,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     ItemPrice = productEntity.Price,
                     OrderNo = orderNo,
                     ProductId = productEntity.Id,
+                    ProductName = productEntity.Name,
                     Quantity = request.OrderModel.Quantity,
                     Status = (int)DataStatus.Normal,
                     StoreId = productEntity.Store_Id,
@@ -288,7 +288,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     UpdateDate = DateTime.Now,
                     UpdateUser = request.AuthUser.Id,
                     ExtendPrice = productEntity.Price * request.OrderModel.Quantity,
-                    ProductDesc = request.OrderModel.ProductDesc
+                    ProductDesc = request.OrderModel.ProductDesc,
+                    Points = 0
 
 
                 });
@@ -368,6 +369,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var data = new GetProductInfo4PResponse().FromEntity<GetProductInfo4PResponse>(linq.P, res =>
             {
                 res.Resource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(linq.R);
+                var dimensionEntity = Context.Set<ResourceEntity>().Where(r => r.Status == (int)DataStatus.Normal &&
+                                    r.IsDimension.HasValue &&
+                                    r.IsDimension.Value == true &&
+                                    r.SourceId == linq.P.Id).FirstOrDefault();
+                if (dimensionEntity!=null)
+                    res.DimensionResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(dimensionEntity);
                 res.Properties = propertyLinq;
                 res.RMAPolicy = ConfigManager.RMAPolicy;
                 res.SupportPayments = context.Set<PaymentMethodEntity>().Where(p => p.Status != (int)DataStatus.Deleted)
@@ -379,8 +386,58 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult() { Data = data };
         }
 
-    
+        /// <summary>
+        /// get the operations available to current user for this product.
+        /// operations includes:
+        /// 1. if can get coupon
+        /// 2. if favored
+        /// </summary>
+        /// <param name="authUser"></param>
+        /// <returns></returns>
+        public ActionResult AvailOperations(GetProductInfoRequest request,[FetchRestfulAuthUserAttribute(IsCanMissing = true, KeyName = Define.Token)] UserModel authUser)
+        {
+            //是否收藏
+            bool isFavored = false;
+            bool ifCanCoupon = false;
+            var withUserId = (authUser != null || authUser.Id > 0);
+            if (withUserId)
+            {
+               isFavored = _favoriteRepo.Get(f => f.User_Id == authUser.Id && f.FavoriteSourceType == (int)SourceType.Product && f.FavoriteSourceId == request.ProductId && f.Status != (int)DataStatus.Deleted).Any();
+            }
 
-
+            var dbContext = Context;
+            var linq = dbContext.Set<Promotion2ProductEntity>().Where(pp => pp.ProdId == request.ProductId && pp.Status != (int)DataStatus.Deleted)
+                .Join(dbContext.Set<PromotionEntity>().Where(p => p.Status == (int)DataStatus.Normal && p.EndDate > DateTime.Now),
+                        o => o.ProId,
+                        i => i.Id,
+                        (o, i) => new { Pro = i })
+                 .ToList();
+           ifCanCoupon =  linq.Any(l => {
+               bool hadGetCoupon = false;
+               if (withUserId)
+               {
+                   hadGetCoupon= dbContext.Set<CouponHistoryEntity>().Where(c => c.User_Id == authUser.Id && c.FromPromotion == l.Pro.Id).Any();
+               }
+                if (l.Pro.PublicationLimit == null || l.Pro.PublicationLimit == -1)
+                {
+                   return  (!hadGetCoupon) || 
+                                  (hadGetCoupon && (!l.Pro.IsLimitPerUser.HasValue ||l.Pro.IsLimitPerUser.Value==false));
+                }
+                else
+                {
+                    return l.Pro.InvolvedCount < l.Pro.PublicationLimit &&
+                                 (!hadGetCoupon || (hadGetCoupon && (!l.Pro.IsLimitPerUser.HasValue || l.Pro.IsLimitPerUser.Value == false)));
+                }
+               
+           });
+           return new RestfulResult()
+           {
+               Data = new GetAvailOperationsResponse() { 
+                 IsFavored = isFavored,
+                  IfCanCoupon = ifCanCoupon
+               }
+           };
+     
+        }
     }
 }

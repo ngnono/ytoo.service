@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using System.Linq;
 using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
@@ -13,6 +14,7 @@ using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.WebSupport.Mvc;
+using Yintai.Hangzhou.Contract.DTO.Response;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 {
@@ -192,6 +194,62 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             request.AuthUser = authUser;
 
             return t ? new RestfulResult { Data = this._promotionDataService.DestroyPromotion(request) } : new RestfulResult { Data = new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "您没有权限删除其他用户的活动" } };
+        }
+
+        /// <summary>
+        /// get the operations available to current user for this promotion.
+        /// operations includes:
+        /// 1. if can get coupon
+        /// 2. if favored
+        /// </summary>
+        /// <param name="authUser"></param>
+        /// <returns></returns>
+        public ActionResult AvailOperations(GetPromotionInfoRequest request, [FetchRestfulAuthUserAttribute(IsCanMissing = true, KeyName = Define.Token)] UserModel authUser)
+        {
+            
+            bool isFavored = false;
+            bool ifCanCoupon = false;
+            var withUserId = (authUser != null || authUser.Id > 0);
+            if (withUserId)
+            {
+                isFavored = Context.Set<FavoriteEntity>().Where(f => f.User_Id == authUser.Id && f.FavoriteSourceType == (int)SourceType.Promotion && f.FavoriteSourceId == request.Promotionid && f.Status != (int)DataStatus.Deleted).Any();
+            }
+
+            var linq = Context.Set<PromotionEntity>().Where(p => p.Status == (int)DataStatus.Normal && p.EndDate > DateTime.Now && p.Id == request.Promotionid).FirstOrDefault();
+            if (linq == null)
+                return new RestfulResult()
+                {
+                    Data = new GetAvailOperationsResponse() {
+                         IfCanCoupon = false,
+                          IsFavored = false
+                }};
+                bool hadGetCoupon = false;
+                if (withUserId)
+                {
+                    hadGetCoupon = Context.Set<CouponHistoryEntity>().Where(c => c.User_Id == authUser.Id && c.FromPromotion == linq.Id).Any();
+  
+                }
+                if (linq.PublicationLimit == null || linq.PublicationLimit == -1)
+                {
+                   ifCanCoupon =  (!hadGetCoupon) || 
+                                  (hadGetCoupon && (!linq.IsLimitPerUser.HasValue ||linq.IsLimitPerUser.Value==false));
+                }
+                else
+                {
+                    ifCanCoupon = linq.InvolvedCount < linq.PublicationLimit &&
+                                 (!hadGetCoupon || (hadGetCoupon && (!linq.IsLimitPerUser.HasValue || linq.IsLimitPerUser.Value == false)));
+                }
+
+          
+            return new RestfulResult()
+            {
+                Data = new GetAvailOperationsResponse()
+                {
+                    IsFavored = isFavored,
+                    IfCanCoupon = ifCanCoupon
+                }
+            };
+
         }
     }
 }

@@ -180,6 +180,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             entity.IsMain = vo.IsMain;
             entity.IsLimitPerUser = vo.IsLimitPerUser;
             entity.PublicProCode = vo.PublicProCode;
+            entity.IsCodeUseLimit = vo.IsCodeUseLimit;
             using (TransactionScope ts = new TransactionScope())
             {
                 this._promotionRepository.Update(entity);

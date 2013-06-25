@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Model.Filters;
@@ -165,7 +166,8 @@ namespace Yintai.Hangzhou.Repository.Impl
                                            && (!search.PromotionId.HasValue ||
                                                    (p.SourceId == search.PromotionId.Value && p.SourceType == (int)SourceType.Promotion))
                                            && p.Status != (int)DataStatus.Deleted);
-
+            var userAuthRepo = ServiceLocator.Current.Resolve<IUserAuthRepository>();
+            linq = userAuthRepo.AuthFilter(linq, search.CurrentUser, search.CurrentUserRole) as IQueryable<CommentEntity>;
             if (!string.IsNullOrEmpty(search.CommentUserName) &&
                 search.CommentUserName.Trim().Length > 0)
             {

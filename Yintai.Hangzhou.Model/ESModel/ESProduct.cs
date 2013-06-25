@@ -7,10 +7,19 @@ namespace Yintai.Hangzhou.Model.ES
 {
     public class ESProduct
     {
+        private DateTime _createdDate;
         public int Id { get; set; }
         public string Name {get;set;}
         public string Description { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate
+        {
+            get {
+                return _createdDate.ToUniversalTime();
+            }
+            set
+            {
+            _createdDate = value;
+        } }
         public decimal Price { get; set; }
         public string RecommendedReason { get; set; }
         public int Status { get; set; }
@@ -22,5 +31,11 @@ namespace Yintai.Hangzhou.Model.ES
         public IEnumerable<ESPromotion> Promotion { get; set; }
         public IEnumerable<ESSpecialTopic> SpecialTopic { get; set; }
         public int CreateUserId { get; set; }
+        public bool Is4Sale { get; set; }
+        public decimal? UnitPrice { get; set; }
+        public int FavoriteCount { get; set; }
+        public int ShareCount { get; set; }
+        public int InvolvedCount { get; set; }
+        public int RecommendUserId { get; set; }
     }
 }

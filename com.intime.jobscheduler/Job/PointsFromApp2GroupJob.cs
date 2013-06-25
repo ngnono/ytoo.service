@@ -32,6 +32,7 @@ namespace com.intime.jobscheduler.Job
                              && p.Status == (int)DataStatus.Normal
                              && p.Amount >= minPoints
                              && c.CardNo.Length > 0
+                             && (!c.IsLocked.HasValue || c.IsLocked.Value==false)
                            select new LinqInner()
                            {
                                U = p,

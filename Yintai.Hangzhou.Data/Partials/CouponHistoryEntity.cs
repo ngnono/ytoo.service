@@ -33,7 +33,8 @@ namespace Yintai.Hangzhou.Data.Models
                     userid = linq.User_Id,
                     validstartdate = linq.ValidStartDate.ToUniversalTime(),
                     validenddate = linq.ValidEndDate.ToUniversalTime(),
-                    vipcard = 0
+                    vipcard = 0,
+                    islimitonce = linq.IsLimitOnce??false
 
                 };
             }

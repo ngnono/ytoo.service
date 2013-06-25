@@ -52,6 +52,7 @@ namespace com.intime.jobscheduler.Job
             IndexHotwork(client, benchDate);
             IndexStore(client, benchDate);
             IndexTag(client, benchDate);
+            IndexUser(client, benchDate);
             IndexResource(client, benchDate);
             IndexProds(client, benchDate,null);
             IndexPros(client,benchDate,null);
@@ -863,9 +864,10 @@ namespace com.intime.jobscheduler.Job
                                     Name = s.Name,
                                     Description = s.Description,
                                     Address = s.Location,
-                                    Location = new Location{
-                                         Lon = s.Longitude,
-                                         Lat = s.Latitude
+                                    Location = new Location
+                                    {
+                                        Lon = s.Longitude,
+                                        Lat = s.Latitude
                                     },
                                     GpsAlt = s.GpsAlt,
                                     GpsLat = s.GpsLat,
@@ -873,8 +875,13 @@ namespace com.intime.jobscheduler.Job
                                     Tel = s.Tel
                                 },
                                 Resource = resource,
-                               ShowInList = p.IsMain.HasValue?p.IsMain.Value:true,
-                               PublicCode = p.PublicProCode
+                                ShowInList = p.IsMain.HasValue ? p.IsMain.Value : true,
+                                PublicCode = p.PublicProCode,
+                                InvolvedCount = p.InvolvedCount,
+                                IsProdBindable = p.IsProdBindable ?? false,
+                                LikeCount = p.LikeCount,
+                                PublicationLimit = p.PublicationLimit ?? -1,
+                                ShareCount = p.ShareCount
                             };
 
                 int totalCount = prods.Count();
@@ -993,7 +1000,7 @@ namespace com.intime.jobscheduler.Job
                                 },
                                 Store = new ESStore()
                                 {
-                                    Id =  s.Id,
+                                    Id = s.Id,
                                     Name = s.Name,
                                     Description = s.Description,
                                     Address = s.Location,
@@ -1016,7 +1023,13 @@ namespace com.intime.jobscheduler.Job
                                 },
                                 Resource = resource,
                                 SpecialTopic = specials,
-                                Promotion = promotions
+                                Promotion = promotions,
+                                Is4Sale = p.Is4Sale ?? false,
+                                UnitPrice = p.UnitPrice,
+                                FavoriteCount = p.FavoriteCount,
+                                InvolvedCount = p.InvolvedCount,
+                                ShareCount = p.ShareCount,
+                                RecommendUserId = p.RecommendUser
                             };
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESProduct>();

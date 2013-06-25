@@ -132,14 +132,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             //有效期
 
-            request.AddSecondaryField(new DateField("secondary1", "有效期", coupponInfo.ValidStartDate, FieldDateTimeStyle.PKDateStyleLong, FieldDateTimeStyle.PKDateStyleNone));
+            request.AddSecondaryField(new DateField("secondary1", "有效期", coupponInfo.ValidStartDate.ToUniversalTime(), FieldDateTimeStyle.PKDateStyleLong, FieldDateTimeStyle.PKDateStyleNone));
             //
             request.AddSecondaryField(new StandardField("secondary2", String.Empty, "-"));
 
-            request.AddSecondaryField(new DateField("secondary3", String.Empty, coupponInfo.ValidEndDate, FieldDateTimeStyle.PKDateStyleLong, FieldDateTimeStyle.PKDateStyleNone));
+            request.AddSecondaryField(new DateField("secondary3", String.Empty, coupponInfo.ValidEndDate.ToUniversalTime(), FieldDateTimeStyle.PKDateStyleLong, FieldDateTimeStyle.PKDateStyleNone));
 
             request.AddBackField(new StandardField("back info1", coupponInfo.ProductName, coupponInfo.ProductDescription));
-            request.AddBackField(new StandardField("back info2", "有效期", String.Format("{0} - {1}", coupponInfo.ValidStartDate.ToString("yyyy-M-d"), coupponInfo.ValidEndDate.ToString("yyyy-M-d"))));
+            request.AddBackField(new StandardField("back info2", "有效期", String.Format("{0} - {1}", coupponInfo.ValidStartDate.ToUniversalTime().ToString("yyyy-M-d"), coupponInfo.ValidEndDate.ToUniversalTime().ToString("yyyy-M-d"))));
 
             if (store != null)
             {

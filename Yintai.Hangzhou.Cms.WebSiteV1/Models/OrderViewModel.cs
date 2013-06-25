@@ -77,6 +77,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
                 return ((OrderStatus)Status).ToFriendlyString();
             }
         }
+        public string RMAStatusName {
+            get {
+                if (RMAs == null ||RMAs.Count()<=0)
+                    return string.Empty;
+                return ((RMAStatus)RMAs.First().Status).ToFriendlyString();
+            }
+        }
 
         public IEnumerable<OrderLogViewModel> Logs { get; set; }
 
@@ -85,7 +92,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public bool CanVoid { get {
             return Status == (int)OrderStatus.Create ||
                 Status == (int)OrderStatus.CustomerConfirmed ||
-                Status == (int)OrderStatus.AgentConfirmed;
+                Status == (int)OrderStatus.AgentConfirmed||
+                Status==(int)OrderStatus.OrderPrinted;
         } }
        
 
@@ -167,7 +175,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         } }
 
         public RMAViewModel FirstActiveRMA { get {
-            if (RMAs == null)
+            if (RMAs == null||RMAs.Count()==0)
                 return null;
             return RMAs.Where(r => r.Status != (int)RMAStatus.Void).OrderByDescending(r => r.CreateDate).First();
         } }

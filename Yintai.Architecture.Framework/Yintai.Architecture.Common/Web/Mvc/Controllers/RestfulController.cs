@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
 using Yintai.Architecture.Common.Web.Mvc.Attributes;
+using Yintai.Architecture.Framework.ServiceLocation;
 
 namespace Yintai.Architecture.Common.Web.Mvc.Controllers
 {
@@ -26,6 +28,13 @@ namespace Yintai.Architecture.Common.Web.Mvc.Controllers
         public static string UrlDecode(string encodeString)
         {
             return String.IsNullOrWhiteSpace(encodeString) ? String.Empty : HttpUtility.UrlDecode(encodeString);
+        }
+        public DbContext Context
+        {
+            get
+            {
+                return ServiceLocator.Current.Resolve<DbContext>();
+            }
         }
     }
 }

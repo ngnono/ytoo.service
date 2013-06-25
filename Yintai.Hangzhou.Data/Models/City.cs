@@ -11,6 +11,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<int> ParentId { get; set; }
         public int Status { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public string ZipCode { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -30,6 +30,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
             this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
             this.Property(t => t.CardProfile).HasColumnName("CardProfile");
+            this.Property(t => t.IsLocked).HasColumnName("IsLocked");
 		Init();
         }
 

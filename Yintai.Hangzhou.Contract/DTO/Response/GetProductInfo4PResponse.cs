@@ -51,8 +51,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string RMAPolicy { get; set; }
         [DataMember(Name="supportpayments")]
         public IEnumerable<PaymentMethodResponse> SupportPayments { get; set; }
-
+        [DataMember(Name="resource")]
         public ResourceInfoResponse Resource { get; set; }
+        [DataMember(Name = "dimension")]
+        public ResourceInfoResponse DimensionResource { get; set; }
        
     }
     [DataContract]

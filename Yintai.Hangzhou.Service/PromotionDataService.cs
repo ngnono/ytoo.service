@@ -370,36 +370,40 @@ namespace Yintai.Hangzhou.Service
             }
 
             ExecuteResult<CouponCodeResponse> coupon = null;
-
-            coupon = _couponDataService.CreateCoupon(new CouponCouponRequest
-                {
-                    AuthUid = request.AuthUid,
-                    SourceId = request.PromotionId,
-                    SourceType = (int)SourceType.Promotion,
-                    Token = request.Token,
-                    AuthUser = request.AuthUser,
-                    Method = request.Method,
-                    Client_Version = request.Client_Version
-                });
-
-            if (!coupon.IsSuccess)
+            using (var ts = new TransactionScope())
             {
-                return new ExecuteResult<PromotionInfoResponse>(null)
+                coupon = _couponDataService.CreateCoupon(new CouponCouponRequest
                     {
-                        Message = coupon.Message,
-                        StatusCode = coupon.StatusCode
-                    };
+                        AuthUid = request.AuthUid,
+                        PromotionId = request.PromotionId,
+                        ProductId = 0,
+                        SourceType = (int)SourceType.Promotion,
+                        Token = request.Token,
+                        AuthUser = request.AuthUser,
+                        Method = request.Method,
+                        Client_Version = request.Client_Version
+                    });
+
+                if (!coupon.IsSuccess)
+                {
+                    return new ExecuteResult<PromotionInfoResponse>(null)
+                        {
+                            Message = coupon.Message,
+                            StatusCode = coupon.StatusCode
+                        };
+                }
+
+                var promotionEntity = _promotionRepository.GetItem(request.PromotionId);
+                promotionEntity = _promotionRepository.SetCount(PromotionCountType.InvolvedCount, promotionEntity.Id, 1);
+
+                ts.Complete();
+                var re = MappingManager.PromotionResponseMapping(promotionEntity);
+                re.CouponCodeResponse = coupon.Data;
+
+                re = IsR(re, request.AuthUser, request.AuthUser.Id);
+
+                return new ExecuteResult<PromotionInfoResponse> { Data = re };
             }
-
-            var promotionEntity = _promotionRepository.GetItem(request.PromotionId);
-             promotionEntity = _promotionRepository.SetCount(PromotionCountType.InvolvedCount, promotionEntity.Id, 1);
-
-            var re = MappingManager.PromotionResponseMapping(promotionEntity);
-            re.CouponCodeResponse = coupon.Data;
-
-            re = IsR(re, request.AuthUser, request.AuthUser.Id);
-
-            return new ExecuteResult<PromotionInfoResponse> { Data = re };
         }
 
         /// <summary>

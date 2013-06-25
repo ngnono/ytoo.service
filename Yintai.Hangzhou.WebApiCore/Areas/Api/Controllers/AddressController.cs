@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
 using Yintai.Architecture.Common.Web.Mvc.Controllers;
 using Yintai.Hangzhou.Contract.DTO.Request;
@@ -32,7 +33,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         /// <param name="authUser"></param>
         /// <returns></returns>
         [RestfulAuthorize]
-        public RestfulResult Detail(UserModel authUser)
+        public RestfulResult My(UserModel authUser)
         {
             var linq = _customerRepo.Context.Set<ShippingAddressEntity>()
                  .Where(s => s.Status != (int)DataStatus.Deleted && s.UserId == authUser.Id)
@@ -42,6 +43,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult()
             {
                 Data = new PagerInfoResponse<SelfAddressResponse>(null, linq.Count()) { Items = linq.ToList() }
+            };
+
+        }
+
+        [RestfulAuthorize]
+        public ActionResult Details(GetAddressDetailRequest request, UserModel authUser)
+        {
+            var linq = Context.Set<ShippingAddressEntity>()
+                    .Where(s => s.Id == request.Id && s.UserId == authUser.Id).FirstOrDefault();
+            if (linq == null)
+                return this.RenderError(m => m.Message = "地址错误！");
+             
+            var result = new SelfAddressResponse().FromEntity<SelfAddressResponse>(linq);
+            return new RestfulResult()
+            {
+                Data = new ExecuteResult<SelfAddressResponse>(result)
             };
 
         }
@@ -85,6 +102,37 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _shippingRepo.Delete(addressEntity);
 
             return this.RenderSuccess(null);
+        }
+
+        [RestfulAuthorize]
+        [HttpPost]
+        public ActionResult Edit(CreateAddressRequest request, UserModel authUser)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
+                return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
+            }
+            var linq = Context.Set<ShippingAddressEntity>()
+                    .Where(s => s.Id == request.Id && s.UserId == authUser.Id).FirstOrDefault();
+            if (linq == null)
+                return this.RenderError(m => m.Message = "地址错误！");
+            linq.ShippingProvinceId = request.ShippingProvinceId;
+            linq.ShippingProvince = request.ShippingProvince;
+            linq.ShippingZipCode = request.ShippingZipCode;
+            linq.ShippingContactPhone = request.ShippingContactPhone;
+            linq.ShippingContactPerson = request.ShippingContactPerson;
+            linq.ShippingCityId = request.ShippingCityId;
+            linq.ShippingCity = request.ShippingCity;
+            linq.ShippingAddress1 = request.ShippingAddress;
+            _shippingRepo.Update(linq);
+
+            var result = new SelfAddressResponse().FromEntity<SelfAddressResponse>(linq);
+            return new RestfulResult()
+            {
+                Data = new ExecuteResult<SelfAddressResponse>(result)
+            };
+
         }
     }
 }

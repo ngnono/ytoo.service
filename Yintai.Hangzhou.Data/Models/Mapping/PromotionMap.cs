@@ -48,6 +48,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.IsMain).HasColumnName("IsMain");
             this.Property(t => t.IsLimitPerUser).HasColumnName("IsLimitPerUser");
             this.Property(t => t.PublicProCode).HasColumnName("PublicProCode");
+            this.Property(t => t.IsCodeUseLimit).HasColumnName("IsCodeUseLimit");
 		Init();
         }
 
