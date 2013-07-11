@@ -182,6 +182,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public System.DateTime UpdatedDate { get; set; }
         [Display(Name = "修改人")]
         public int UpdatedUser { get; set; }
+
+        public string LogoUrl { get {
+            if (string.IsNullOrEmpty(Logo))
+                return string.Empty;
+            return string.Concat(Logo, "_50x50.jpg");
+        } }
     }
     public class CustomerListSearchOption
     {

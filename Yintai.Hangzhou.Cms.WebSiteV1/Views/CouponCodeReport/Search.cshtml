@@ -51,6 +51,14 @@
             
 
         </div>
+        <div class="span3">
+              <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => search.Status)</label>
+                <div class="controls">
+                    @Html.DropDownListFor(m => search.Status, EnumHelper.DisplayList<CouponStatus>(), new { @class = "span2" })
+                </div>
+            </div>
+        </div>
        
         <div class="span2">
             
@@ -76,9 +84,14 @@
         <th>用户昵称</th>
         <th>用户手机
         </th>
-        <th>优惠码
+         <th>券状态
         </th>
-       
+        <th>券门店
+        </th>
+        <th>小票号
+        </th>
+        <th>优惠码
+        </th>   
     </tr>
     @if (Model != null)
     {
@@ -93,7 +106,10 @@
             <td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
           <td>@Html.DisplayFor(modelItem => item.CustomerNick)</td>
             <td>@Html.DisplayFor(modelItem => item.CustomerPhone)</td>
-                       <td>@Html.DisplayFor(modelItem => item.Code)</td>
+            <td> @Html.Label("", ((CouponStatus)item.Status).ToFriendlyString())</td>
+            <td>@Html.DisplayFor(modelItem => item.StoreName)</td>
+            <td>@Html.DisplayFor(modelItem => item.ReceiptNo)</td>
+             <td>@Html.DisplayFor(modelItem => item.Code)</td>
         </tr>
         }
     }

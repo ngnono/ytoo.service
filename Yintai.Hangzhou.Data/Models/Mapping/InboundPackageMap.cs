@@ -8,28 +8,16 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
         public InboundPackageEntityMap()
         {
             // Primary Key
-            this.HasKey(t => new { t.Id, t.SourceNo, t.SourceType, t.ShippingVia, t.ShippingNo, t.CreateDate, t.CreateUser });
+            this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
             this.Property(t => t.SourceNo)
                 .IsRequired()
                 .HasMaxLength(20);
 
-            this.Property(t => t.SourceType)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.ShippingVia)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
             this.Property(t => t.ShippingNo)
                 .IsRequired()
                 .HasMaxLength(50);
-
-            this.Property(t => t.CreateUser)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             // Table & Column Mappings
             this.ToTable("InboundPackage");

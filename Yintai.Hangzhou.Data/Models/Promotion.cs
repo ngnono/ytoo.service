@@ -30,7 +30,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<bool> IsMain { get; set; }
         public Nullable<bool> IsLimitPerUser { get; set; }
         public string PublicProCode { get; set; }
-        public bool? IsCodeUseLimit { get; set; }
+        public Nullable<bool> IsCodeUseLimit { get; set; }
 
         #region Overrides of BaseEntity
 

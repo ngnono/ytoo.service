@@ -57,19 +57,34 @@
            
             $("#printorder").click(function (e) {
                 e.preventDefault();
+                if (!confirm('确认打印订单？')) {
+                    return;
+                }
                 PrintHZ("@Url.Action("PrintOrder",new {OrderNo=Model.OrderNo})", "打印订单");
                 
             });
             $("#printship").click(function (e) {
                 e.preventDefault();
+                if (!confirm('确认打印发货单？')) {
+                    return;
+                }
                 PrintHZ("@Url.Action("PrintShipping",new {OrderNo=Model.OrderNo})", "打印发货单");
 
            });
             $("#printsale").click(function (e) {
                 e.preventDefault();
+                if (!confirm('确认打印销售单？')) {
+                    return;
+                }
                 PrintHZ("@Url.Action("PrintSales",new {OrderNo=Model.OrderNo})", "打印销售单");
             });
-          
+            $("#btnReceive").click(function (e) {
+               
+                if (!confirm('确认用户已签收？')) {
+                    return false;
+                }
+                return true;
+           });
 
         });
     </script>
@@ -79,34 +94,34 @@
 <div class="btn-group">
     @if (Model.CanChangeStoreItem)
     {
-        @Html.ActionLink2("确认专柜商品", "ChangeStoreItem", new { OrderNo = Model.OrderNo }, new { @class = "btn " })
+        @Html.ActionLink2("确认专柜商品", "ChangeStoreItem", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
     }
     @if (Model.CanPrint)
     { 
-        @Html.ActionLink2("打印订单", "PrintOrder", new { OrderNo = Model.OrderNo }, new { @class = "btn",@id="printorder" })
+        @Html.ActionLink2("打印订单", "PrintOrder", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary",@id="printorder" })
     }
 
 
     @if (Model.CanPrintShipping)
     { 
-        @Html.ActionLink2("打印发货单", "PrintShipping", new { OrderNo = Model.OrderNo }, new { @class = "btn",@id="printship" })
+        @Html.ActionLink2("打印发货单", "PrintShipping", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary",@id="printship" })
     }
     @if (Model.CanShipping)
     { 
-        @Html.ActionLink2("发货", "Shipping", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
+        @Html.ActionLink2("发货", "Shipping", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
     }
     @if (Model.CanChangeReceived)
     { 
-        @Html.ActionLink2("签收", "Received", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
+        @Html.ActionLink2("签收", "Received", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary",@id="btnReceive" })
     }
     @if (Model.CanChangeReject)
     { 
-        @Html.ActionLink2("拒收", "Reject", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
+        @Html.ActionLink2("拒收", "Reject", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
     }
 
     @if (Model.CanPrintSales)
     { 
-        @Html.ActionLink2("打印销售单", "PrintSales", new { OrderNo = Model.OrderNo }, new { @class = "btn",@id="printsale" })
+        @Html.ActionLink2("打印销售单", "PrintSales", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary",@id="printsale" })
     }
 
     @if (Model.CanVoid)
@@ -163,6 +178,11 @@
                             @Html.LabelFor(model => model.Status)
                             @Html.TextBox("Status", ((Yintai.Hangzhou.Model.Enums.OrderStatus)Model.Status).ToFriendlyString(), new { @class = "span2", @readonly = true })
                         </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.Memo)
+                             @Html.TextBoxFor(model => model.Memo, new { @class = "span2", @readonly = true })
+                        </div>
+
                         <div class="span2">
                             @Html.LabelFor(model => model.CreateDate)
                             @Html.TextBoxFor(model => model.CreateDate, new { @class = "span2", @readonly = true })
@@ -249,7 +269,7 @@
                     <td>@if (item.ProductResource != null)
                         {
             
-                        <img width="120" src="@String.Concat(item.ProductResource.Domain, item.ProductResource.Name, "_120x0.jpg")" alt="120x0" />
+                        <img width="120" src="@item.ProductResource.ProductImgUrl_120" alt="120x0" />
                         }
                     </td>
                     <td>@Html.DisplayFor(model => item.ProductId)</td>
@@ -309,6 +329,7 @@
                 <th>申请用户</th>
                 <th>申请时间
                 </th>
+                <th>联系电话</th>
                 <th>退货方式</th>
                 <th>状态</th>
                 <th>退货理由</th>
@@ -323,6 +344,7 @@
                     <td>@Html.DisplayFor(model => item.RMANo)</td>
                     <td>@Html.DisplayFor(model => item.CreateUser)</td>
                     <td>@Html.DisplayFor(model => item.CreateDate)</td>
+                    <td>@Html.DisplayFor(model=>item.ContactPhone)</td>
                     <td>@Html.Label("", ((RMAType)item.RMAType).ToFriendlyString())</td>
                     <td>@Html.Label("", ((RMAStatus)item.Status).ToFriendlyString())</td>
                     <td>@Html.DisplayFor(model => item.Reason)</td>

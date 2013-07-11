@@ -13,6 +13,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public string BankName { get; set; }
         public string BankAccount { get; set; }
         public string BankCard { get; set; }
+        public string ContactPhone { get; set; }
        
     }
 }

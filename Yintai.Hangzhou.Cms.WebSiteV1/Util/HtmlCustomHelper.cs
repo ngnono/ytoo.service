@@ -128,7 +128,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Util
             return MvcHtmlString.Create(a.ToString(TagRenderMode.Normal));
         }
 
+        public static MvcHtmlString Captcha(this HtmlHelper htmlHelper)
+        {
+          
 
+            var html = Recaptcha.RecaptchaControlMvc.GenerateCaptcha(htmlHelper,null,"clean");
+            return MvcHtmlString.Create(html);
+        }
     }
     public static class HtmlHelperFactoryExtensions
     {

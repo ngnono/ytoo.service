@@ -17,7 +17,17 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string OrderNo { get; set; }
         [DataMember(Name = "totalamount")]
         public decimal TotalAmount { get; set; }
-        [IgnoreDataMember]
+
+        [DataMember(Name="totalpoints")]
+        public int TotalPoints {get;set;}
+        [DataMember(Name = "totalfee")]
+        public decimal TotalFee {get;set;}
+        [DataMember(Name = "extendprice")]
+        public decimal ExtendPrice {get{
+            return TotalAmount;
+        }}
+
+        [DataMember(Name="statust")]
         public int Status { get; set; }
          [DataMember(Name = "createdate")]
         public System.DateTime CreateDate { get; set; }
@@ -73,7 +83,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
           [DataMember(Name = "canrma")]
         public bool CanRMA {
             get {
-                return Status == (int)OrderStatus.Convert2Sales;
+                return Status == (int)OrderStatus.Convert2Sales &&
+                        (RMAs==null || !RMAs.Any(r=>new int[]{(int)RMAStatus.Created,(int)RMAStatus.PackageReceived,(int)RMAStatus.PrintRMA}.Any(status=>status==r.Status)));
             }
         }
 
@@ -137,6 +148,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string BankAccount { get; set; }
         [DataMember(Name = "bankcard")]
         public string BankCard { get; set; }
+        [DataMember(Name = "reason")]
+        public string Reason { get; set; }
         [DataMember(Name = "rejectreason")]
         public string RejectReason { get; set; }
         [DataMember(Name = "rebatepostfee")]

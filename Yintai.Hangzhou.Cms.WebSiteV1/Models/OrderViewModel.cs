@@ -69,6 +69,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public CustomerViewModel Customer { get; set; }
         [Display(Name = "配送方式")]
         public ShipViaEntity ShippingViaMethod { get; set; }
+        [Display(Name="备注")]
+        public string Memo { get; set; }
         [Display(Name = "商品明细")]
         public IEnumerable<OrderItemViewModel> Items { get; set; }
 

@@ -2034,6 +2034,7 @@ namespace Yintai.Hangzhou.Service.Manager
             target.Description = CheckString(target.Description);
             target.Favorable = CheckString(target.Favorable);
             target.RecommendedReason = CheckString(target.RecommendedReason);
+            
 
             return target;
         }

@@ -1,4 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Web;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Model;
@@ -281,6 +283,17 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Product
     public class CreateProductRequest : ProductInfoRequest
     {
         public HttpFileCollectionBase Files { get; set; }
+        public string Property { get; set; }
+        public string Dimension { get; set; }
+        public decimal? UnitPrice { get; set; }
+        public bool? Is4Sale { get; set; }
+        public IEnumerable<TagPropertyModel> PropertyModel
+        {
+            get
+            {
+                return JsonConvert.DeserializeObject<IEnumerable<TagPropertyModel>>(Property);
+            }
+        }
     }
 
     [DataContract]

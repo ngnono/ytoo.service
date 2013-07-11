@@ -15,6 +15,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(100);
 
+            this.Property(t => t.ZipCode)
+                .HasMaxLength(20);
+
             // Table & Column Mappings
             this.ToTable("City");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -24,6 +27,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.ZipCode).HasColumnName("ZipCode");
+            this.Property(t => t.IsCity).HasColumnName("IsCity");
 		Init();
         }
 

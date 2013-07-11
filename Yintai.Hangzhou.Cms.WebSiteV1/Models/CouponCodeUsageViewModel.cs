@@ -14,6 +14,32 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public DateTime CreateDate { get; set; }
         public string CustomerNick { get; set; }
         public string CustomerPhone { get; set; }
+        public string ReceiptNo
+        {
+            get
+            {
+                if (Logs == null)
+                    return string.Empty;
+                var log = Logs.FirstOrDefault();
+                if (log == null)
+                    return string.Empty;
+                return log.ReceiptNo;
+            }
+        }
+        public string StoreName
+        {
+            get {
+                if (Logs == null)
+                    return string.Empty;
+                var log = Logs.FirstOrDefault();
+                if (log == null)
+                    return string.Empty;
+                return log.StoreName;
+            }
+        }
+        public int Status { get; set; }
+        public IEnumerable<CouponLogViewModel> Logs { get; set; }
+
        
     }
     public class CouponUsageOption
@@ -24,8 +50,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public DateTime? CreateDateFrom { get; set; }
         [Display(Name = "领券时间<")]
         public DateTime? CreateDateTo { get; set; }
-       
-
+        [Display(Name="状态")]
+        public int? Status { get; set; }
 
     }
 }

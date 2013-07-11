@@ -12,6 +12,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int Status { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public string ZipCode { get; set; }
+        public Nullable<bool> IsCity { get; set; }
 
         #region Overrides of BaseEntity
 

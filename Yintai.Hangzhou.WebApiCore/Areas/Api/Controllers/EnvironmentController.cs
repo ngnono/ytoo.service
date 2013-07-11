@@ -36,7 +36,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var result = Context.Set<PaymentMethodEntity>().Where(p => p.Status == (int)DataStatus.Normal)
                         .ToList()
                        .Select(p => new PaymentResponse().FromEntity<PaymentResponse>(p));
-            var response = new PagerInfoResponse<PaymentResponse>(null, result.Count())
+            var response = new PagerInfoResponse<PaymentResponse>(new PagerRequest(), result.Count())
             {
                 Items = result.ToList()
             };
@@ -50,24 +50,51 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         public ActionResult SupportShipments()
         {
             var linq = Context.Set<CityEntity>().Where(p => p.Status == (int)DataStatus.Normal && p.IsProvince == true)
-                        .GroupJoin(Context.Set<CityEntity>().Where(p => p.Status == (int)DataStatus.Normal && p.IsProvince == false),
+                        .GroupJoin(Context.Set<CityEntity>().Where(p => p.Status == (int)DataStatus.Normal && p.IsCity.HasValue && p.IsCity.Value == true)
+                                   .GroupJoin(Context.Set<CityEntity>().Where(p => p.Status == (int)DataStatus.Normal && p.IsProvince == false && p.IsCity.Value == false),
+                                            o => o.Id,
+                                            i => i.ParentId,
+                                            (o, i) => new { C=o,D =i}),
                                 o => o.Id,
-                                i => i.ParentId,
+                                i => i.C.ParentId,
                                 (o, i) => new { P = o, C = i });
             var result = linq.ToList()
                         .Select(l => new GetShipCityDetailResponse().FromEntity<GetShipCityDetailResponse>(l.P, r => {
                             r.ProvinceName = l.P.Name;
                             r.Cities = l.C.Select(c => new ShipCityModel() { 
-                                 Id = c.Id,
-                                  CityName = c.Name,
-                                  ZipCode = c.ZipCode
+                                 Id = c.C.Id,
+                                 CityName = c.C.Name,
+                                 Districts = c.D.Select(d=>new ShipDistrictModel(){
+                                     Id = d.Id,
+                                      DistrictName = d.Name,
+                                       ZipCode = d.ZipCode
+                                 })
                             });
                         }));
-            var response = new PagerInfoResponse<GetShipCityDetailResponse>(null, result.Count())
+            var response = new PagerInfoResponse<GetShipCityDetailResponse>(new PagerRequest(), result.Count())
             {
                 Items = result.ToList()
             };
             return new RestfulResult { Data = new ExecuteResult<PagerInfoResponse<GetShipCityDetailResponse>>(response) };
+        }
+        /// <summary>
+        /// return all preconfigured messages
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Messages() {
+            var linq = Context.Set<ConfigMsgEntity>()
+                    .Where(c => c.Channel == "iphone")
+                    .ToList()
+                    .Select(l => new GetMessageDetailReponse() { 
+                         Key =l.MKey,
+                         Message = l.Message
+                    });
+           
+            var response = new PagerInfoResponse<GetMessageDetailReponse>(new PagerRequest(), linq.Count())
+            {
+                Items = linq.ToList()
+            };
+            return new RestfulResult { Data = new ExecuteResult<PagerInfoResponse<GetMessageDetailReponse>>(response) };
         }
     }
 }

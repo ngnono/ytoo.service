@@ -310,6 +310,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             entity.Brand_Id = vo.Brand_Id;
             entity.Description = vo.Description;
             entity.Is4Sale = vo.Is4Sale;
+            entity.UnitPrice = vo.UnitPrice;
 
             using (var ts = new TransactionScope())
             {

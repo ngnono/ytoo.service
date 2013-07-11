@@ -396,12 +396,12 @@ namespace Yintai.Hangzhou.Service
                 var promotionEntity = _promotionRepository.GetItem(request.PromotionId);
                 promotionEntity = _promotionRepository.SetCount(PromotionCountType.InvolvedCount, promotionEntity.Id, 1);
 
-                ts.Complete();
+            
                 var re = MappingManager.PromotionResponseMapping(promotionEntity);
                 re.CouponCodeResponse = coupon.Data;
 
                 re = IsR(re, request.AuthUser, request.AuthUser.Id);
-
+                ts.Complete();
                 return new ExecuteResult<PromotionInfoResponse> { Data = re };
             }
         }

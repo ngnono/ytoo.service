@@ -15,7 +15,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int Id { get; set; }
         [DataMember(Name="provincename")]
         public string ProvinceName { get; set; }
-        [DataMember(Name="cities")]
+        [DataMember(Name="items")]
         public IEnumerable<ShipCityModel> Cities {get;set;}
     }
     [DataContract]
@@ -25,7 +25,17 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int Id { get; set; }
         [DataMember(Name="cityname")]
         public string CityName { get; set; }
-        [DataMember(Name = "zipcode")]
+        [DataMember(Name="items")]
+        public IEnumerable<ShipDistrictModel> Districts { get; set; }
+    }
+    [DataContract]
+    public class ShipDistrictModel
+    {
+        [DataMember(Name = "districtid")]
+        public int Id { get; set; }
+        [DataMember(Name = "districtname")]
+        public string DistrictName { get; set; }
+        [DataMember(Name="zipcode")]
         public string ZipCode { get; set; }
     }
 }

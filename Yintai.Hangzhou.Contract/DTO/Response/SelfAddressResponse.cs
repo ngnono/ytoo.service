@@ -31,10 +31,16 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int? ShippingCityId { get; set; }
         [DataMember(Name = "shippingcity")]
         public string ShippingCity { get; set; }
+        [DataMember(Name = "shippingdistrictid")]
+        public int ShippingDistrictId { get; set; }
+        [DataMember(Name = "shippingdistrict")]
+        public string ShippingDistrictName { get; set; }
         [DataMember(Name = "displayaddress")]
         public string DisplayAddress { get {
-            return string.Concat(ShippingProvince ?? string.Empty, ShippingCity ?? string.Empty, ShippingAddress1);
-        } }
+            return string.Concat(ShippingProvince ?? string.Empty, ShippingCity ?? string.Empty,ShippingDistrictName??string.Empty, ShippingAddress1);
+        }
+            set { }
+        }
 
     }
 }

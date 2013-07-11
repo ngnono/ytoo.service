@@ -15,6 +15,7 @@ using Yintai.Hangzhou.Cms.WebSiteV1.Util;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
 using CrystalDecisions.Shared;
+using System.Data.Entity;
 
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 {
@@ -211,6 +212,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                     break;
             }
             return File(stream, contentype);
+        }
+        protected DbContext Context
+        {
+            get
+            {
+                return ServiceLocator.Current.Resolve<DbContext>();
+            }
         }
         public bool HasRightForCurrentAction()
         {

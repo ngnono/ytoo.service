@@ -37,5 +37,6 @@ namespace Yintai.Hangzhou.Model.ES
         public int ShareCount { get; set; }
         public int InvolvedCount { get; set; }
         public int RecommendUserId { get; set; }
+        public ESSection Section { get; set; }
     }
 }

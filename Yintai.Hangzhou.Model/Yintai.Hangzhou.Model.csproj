@@ -88,6 +88,7 @@
     <Compile Include="Enums\OrderStatus.cs" />
     <Compile Include="Enums\OutboundStatus.cs" />
     <Compile Include="Enums\OutboundType.cs" />
+    <Compile Include="Enums\PreConfiguration.cs" />
     <Compile Include="Enums\PromotionCountType.cs" />
     <Compile Include="Enums\PushSourceType.cs" />
     <Compile Include="Enums\ResourceSortOrder.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="ESModel\ESProduct.cs" />
     <Compile Include="ESModel\ESPromotion.cs" />
     <Compile Include="ESModel\ESResource.cs" />
+    <Compile Include="ESModel\ESSection.cs" />
     <Compile Include="ESModel\ESSpecialTopic.cs" />
     <Compile Include="ESModel\ESStore.cs" />
     <Compile Include="ESModel\ESStorePromotion.cs" />

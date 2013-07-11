@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Data.Entity;
+using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Mvc;
@@ -30,7 +32,7 @@ namespace Yintai.Architecture.Common.Web.Mvc.ActionResults
         {
             var encoding = Encoding.UTF8;
 
-            var dcs = new DataContractJsonSerializer(Data.GetType());
+           
 
             //application/json text/x-json text/html  text/xml
 
@@ -53,11 +55,23 @@ namespace Yintai.Architecture.Common.Web.Mvc.ActionResults
                     context.HttpContext.Response.ContentType = "text/html; charset=utf-8";
                     break;
             }
-
-            using (XmlWriter writer = JsonReaderWriterFactory.CreateJsonWriter(context.HttpContext.Response.OutputStream, encoding))
+            if (format.ToLower() == Define.Json)
             {
-                dcs.WriteObject(writer, Data);
-                writer.Flush();
+                using (var sw = new StreamWriter(context.HttpContext.Response.OutputStream))
+                {
+                    sw.Write(JsonConvert.SerializeObject(Data));
+                    sw.Flush();
+                }
+            }
+            else
+            {
+                using (XmlWriter writer = JsonReaderWriterFactory.CreateJsonWriter(context.HttpContext.Response.OutputStream, encoding))
+                {
+                     var dcs = new DataContractJsonSerializer(Data.GetType());
+                    
+                     dcs.WriteObject(writer, Data);
+                    writer.Flush();
+                }
             }
         }
 

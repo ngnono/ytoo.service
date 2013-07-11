@@ -11,6 +11,7 @@ namespace Yintai.Hangzhou.Model.Enums
         Default = 0,
         Product = 1,
         Promotion = 2,
-        SelfComment = 3
+        SelfComment = 3,
+        PMessage =4
     }
 }

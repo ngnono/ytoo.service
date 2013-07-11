@@ -153,7 +153,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 o.Logs = _orderLogRepo.Get(l => l.OrderNo == o.OrderNo).OrderByDescending(ol=>ol.CreateDate).ToList().Select(l => new OrderLogViewModel().FromEntity<OrderLogViewModel>(l));
                 o.Items = _orderRepo.Context.Set<OrderItemEntity>().Where(oi => oi.OrderNo == o.OrderNo && oi.Status != (int)DataStatus.Deleted)
                         .ToList()
-                        .Select(oi => new OrderItemViewModel().FromEntity<OrderItemViewModel>(oi));
+                        .Select(oi => new OrderItemViewModel().FromEntity<OrderItemViewModel>(oi, item => {
+                            item.ProductResource = new ResourceViewModel().FromEntity<ResourceViewModel>(Context.Set<ResourceEntity>().Where(r => r.SourceId == item.ProductId
+                                        && r.SourceType == (int)SourceType.Product
+                                        && r.Status != (int)DataStatus.Deleted).OrderByDescending(r => r.SortOrder).FirstOrDefault());
+                        }));
                 o.ShippingViaMethod = _orderRepo.Context.Set<ShipViaEntity>().Where(s => s.Id == o.ShippingVia).FirstOrDefault();
                 o.StoreName = _orderRepo.Context.Set<StoreEntity>().Where(s => s.Id == o.StoreId).FirstOrDefault().Name;
                 o.RMAs = _rmaRepo.Get(r => r.OrderNo == o.OrderNo)
@@ -327,7 +331,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 //step1：update order status
 
              
-                itemEntity.Status = (int)OrderStatus.CustomerConfirmed;
+                itemEntity.Status = (int)OrderStatus.CustomerRejected;
                 itemEntity.UpdateDate = DateTime.Now;
                 itemEntity.UpdateUser = CurrentUser.CustomerId;
                 _orderRepo.Update(itemEntity);
@@ -451,7 +455,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             return RedirectToAction("Details", new { OrderNo = orderNo });
         }
 
-        [HttpPost]
         public ActionResult Void(string orderNo)
         {
             var order = _orderRepo.Get(o => o.OrderNo == orderNo).First();
@@ -691,17 +694,18 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         public ActionResult PrintOrder(string orderNo)
         {
             if (string.IsNullOrEmpty(orderNo))
-                throw new ArgumentNullException("orderNo");
+                return Content("orderNo");
             var confirmModel = _orderRepo.Get(o => o.OrderNo == orderNo).FirstOrDefault();
             if (null == confirmModel)
-                throw new ArgumentException("订单号不存在！");
+                return Content("订单号不存在！");
+            
             var sectionModel = _orderRepo.Context.Set<SectionEntity>().Where(s => s.StoreId == confirmModel.StoreId && s.BrandId == confirmModel.BrandId).FirstOrDefault();
             if (null == sectionModel)
-                throw new ArgumentException("专柜不存在！");
+                return Content("专柜不存在！");
             string errorMsg;
             if (!OrderViewModel.IsAuthorized(confirmModel.StoreId, confirmModel.BrandId, out errorMsg))
             {
-                throw new ArgumentException(errorMsg);
+                return Content(errorMsg);
             }
             var confirmItemsModel = _orderItemRepo.Get(o => o.OrderNo == orderNo && o.Status != (int)DataStatus.Deleted).ToList();
             var result = RenderReport("confirmorderreport", r =>
@@ -753,15 +757,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         public ActionResult PrintShipping(string orderNo)
         {
             if (string.IsNullOrEmpty(orderNo))
-                throw new ArgumentNullException("orderNo");
+                return Content("orderNo");
             var confirmModel = _orderRepo.Get(o => o.OrderNo == orderNo).FirstOrDefault();
             if (null == confirmModel)
-                throw new ArgumentException("订单号不存在！");
+                return Content("订单号不存在！");
             string errorMsg;
             if (!OrderViewModel.IsAuthorized(confirmModel.StoreId, confirmModel.BrandId, out errorMsg))
             {
                 ViewBag.Message = errorMsg;
-                throw new ArgumentException(errorMsg);
+                return Content(errorMsg);
             }
             //step1 :create outbound 
 
@@ -823,10 +827,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 
             var sectionModel = _sectionRepo.Get(s => s.BrandId == confirmModel.BrandId && s.StoreId == confirmModel.StoreId).FirstOrDefault();
             if (null == sectionModel)
-                throw new ArgumentException("专柜不存在！");
+                return Content("专柜不存在！");
 
 
             var confirmItemsModel = _outbounditemRepo.Get(o => o.OutboundNo == outboundModel.OutboundNo).ToList();
+            var configMsgEntity = Context.Set<ConfigMsgEntity>().Where(c => c.Channel == Channels.CMS && c.StoreId == confirmModel.StoreId && c.MKey == FMessages.SHIPPING_NOTICE).FirstOrDefault();
+
             return RenderReport("outboundreport", r =>
            {
 
@@ -840,9 +846,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                                ShippingAddress = outboundModel.ShippingAddress,
                                 ShippingContactPerson = outboundModel.ShippingContactPerson,
                                  ShippingContactPhone = outboundModel.ShippingContactPhone,
-                                  ShippingZipCode = outboundModel.ShippingZipCode,
-                                  //todo: change it to invoice amount later
-                                  InvoiceAmount = confirmModel.TotalAmount,
+                                 ShippingZipCode = outboundModel.ShippingZipCode,
+                                  InvoiceAmount = (confirmModel.NeedInvoice??false)?confirmModel.InvoiceAmount??0m:0m,
                                    InvoiceDetail = confirmModel.InvoiceDetail,
                                     InvoiceSubject = confirmModel.InvoiceSubject,
                                      OutboundNo = outboundModel.OutboundNo
@@ -850,7 +855,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 });
                r.Database.Tables[1]
                    .SetDataSource(confirmItemsModel.Select(i => new OrderShipItemReportViewModel().FromEntity<OrderShipItemReportViewModel>(i)));
-               r.SetParameterValue("Notice", ConfigurationManager.AppSettings["OrderShipNotice"]);
+               r.SetParameterValue("Notice", configMsgEntity==null?string.Empty:configMsgEntity.Message);
                r.SetParameterValue("Operator", CurrentUser.NickName);
            });
 
@@ -863,18 +868,18 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 throw new ArgumentNullException("orderNo");
             var confirmModel = _orderRepo.Get(o => o.OrderNo == orderNo).FirstOrDefault();
             if (null == confirmModel)
-                throw new ArgumentException("订单号不存在！");
+                return Content("订单号不存在！");
 
 
             var sectionModel = _sectionRepo.Get(s => s.BrandId == confirmModel.BrandId && s.StoreId == confirmModel.StoreId).FirstOrDefault();
             if (null == sectionModel)
-                throw new ArgumentException("专柜不存在！");
+                return Content("专柜不存在！");
 
             string errorMsg;
             if (!OrderViewModel.IsAuthorized(confirmModel.StoreId, confirmModel.BrandId, out errorMsg))
             {
                 ViewBag.Message = errorMsg;
-                throw new ArgumentException(errorMsg);
+                return Content(errorMsg);
             }
             var confirmItemsModel = this._orderItemRepo.Get(o => o.OrderNo == orderNo).ToList();
             var result = RenderReport("convert2salelistreport", r =>

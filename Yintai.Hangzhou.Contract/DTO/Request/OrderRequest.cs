@@ -47,8 +47,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
             {
                 if (string.IsNullOrEmpty(InvoiceTitle))
                     yield return new ValidationResult("发票抬头不能为空！");
-                if (string.IsNullOrEmpty(InvoiceDetail))
-                    yield return new ValidationResult("发票明细不能为空！");
             }
         }
 

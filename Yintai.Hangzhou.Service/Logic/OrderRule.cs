@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Contract.DTO.Request;
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.Service.Logic
@@ -51,6 +52,18 @@ namespace Yintai.Hangzhou.Service.Logic
             if (existingCodes > 0)
                 code = string.Concat(code, (existingCodes + 1).ToString());
             return code;
+        }
+
+        public static dynamic ComputeAmount(ProductEntity linq, int quantity)
+        {
+            return new
+            {
+                totalquantity = quantity,
+                totalpoints = 0,
+                totalfee = 0m,
+                extendprice = linq.Price * quantity,
+                totalamount = linq.Price * quantity
+            };
         }
     }
 }

@@ -93,6 +93,7 @@
     <Compile Include="Models\CategoryProperty.cs" />
     <Compile Include="Models\CategoryPropertyValue.cs" />
     <Compile Include="Models\City.cs" />
+    <Compile Include="Models\ConfigMsg.cs" />
     <Compile Include="Models\CouponLog.cs" />
     <Compile Include="Models\HotWord.cs" />
     <Compile Include="Models\InboundPackage.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Models\Mapping\CategoryPropertyMap.cs" />
     <Compile Include="Models\Mapping\CategoryPropertyValueMap.cs" />
     <Compile Include="Models\Mapping\CityMap.cs" />
+    <Compile Include="Models\Mapping\ConfigMsgMap.cs" />
     <Compile Include="Models\Mapping\CouponLogMap.cs" />
     <Compile Include="Models\Mapping\HotWordMap.cs" />
     <Compile Include="Models\Mapping\InboundPackageMap.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Models\Mapping\OutboundItemMap.cs" />
     <Compile Include="Models\Mapping\OutboundMap.cs" />
     <Compile Include="Models\Mapping\PaymentMethodMap.cs" />
+    <Compile Include="Models\Mapping\PMessageMap.cs" />
     <Compile Include="Models\Mapping\PointOrderRuleMap.cs" />
     <Compile Include="Models\Mapping\ProductPropertyMap.cs" />
     <Compile Include="Models\Mapping\ProductPropertyStageMap.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="Models\Outbound.cs" />
     <Compile Include="Models\OutboundItem.cs" />
     <Compile Include="Models\PaymentMethod.cs" />
+    <Compile Include="Models\PMessage.cs" />
     <Compile Include="Models\PointOrderRule.cs" />
     <Compile Include="Models\ProductProperty.cs" />
     <Compile Include="Models\ProductPropertyStage.cs" />
@@ -157,6 +161,7 @@
     <Compile Include="Partials\INotifyable.cs" />
     <Compile Include="Partials\ISyncable.cs" />
     <Compile Include="Partials\LikeEntity.cs" />
+    <Compile Include="Partials\PMessageEntity.cs" />
     <Compile Include="Partials\PointHistoryEntity.cs" />
     <Compile Include="Partials\ResourceEntity.cs" />
     <Compile Include="Partials\StoreCouponEntity.cs" />

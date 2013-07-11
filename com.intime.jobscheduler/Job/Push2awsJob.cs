@@ -301,7 +301,7 @@ namespace com.intime.jobscheduler.Job
                 var prods = from p in db.Users
                             where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
                             let resource = from r in db.Resources
-                                           where r.SourceId == p.Id && r.SourceType == 10
+                                           where r.SourceId == p.Id && r.SourceType == (int)SourceType.CustomerPortrait
                                            select new ESResource()
                                            {
                                                Domain = r.Domain,
@@ -981,6 +981,16 @@ namespace com.intime.jobscheduler.Job
                                                 EndDate = pro.EndDate,
                                                 Status = pro.Status
                                              }
+                            let section = (from section in db.Sections
+                                           where section.BrandId == p.Brand_Id && section.StoreId == p.Store_Id
+                                          select new ESSection(){
+                                              ContactPerson = section.ContactPerson,
+                                               ContactPhone = section.ContactPhone,
+                                                Id = section.Id,
+                                                 Location = section.Location,
+                                                  Name = section.Name,
+                                                   Status = section.Status
+                                          })
                             select new ESProduct()
                             {
                                 Id = p.Id,
@@ -1029,7 +1039,8 @@ namespace com.intime.jobscheduler.Job
                                 FavoriteCount = p.FavoriteCount,
                                 InvolvedCount = p.InvolvedCount,
                                 ShareCount = p.ShareCount,
-                                RecommendUserId = p.RecommendUser
+                                RecommendUserId = p.RecommendUser,
+                                Section=section.FirstOrDefault()
                             };
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESProduct>();

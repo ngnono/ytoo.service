@@ -194,6 +194,7 @@
       </cron>
     </trigger>
 -->
+    <!--
     <job>
       <name>Push2mysqlIncre</name>
       <group>Fashion</group>
@@ -232,6 +233,7 @@
         <cron-expression>0 0/3 * * * ?</cron-expression>
       </cron>
     </trigger>
+    -->
 <!--
   <job>
       <name>RebateExpireCouponPointsEveryMidNight</name>
@@ -264,9 +266,12 @@
         <job-name>RebateExpireCouponPointsEveryMidNight</job-name>
         <job-group>Fashion</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
-        <cron-expression>0 0 1 * * ?</cron-expression>
+        <cron-expression>0 38 12 * * ?</cron-expression>
       </cron>
     </trigger>
+    -->
+
+ <!--
    <job>
       <name>ConvertAppPoints2Group</name>
       <group>Fashion</group>

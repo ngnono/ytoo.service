@@ -129,6 +129,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<CategoryPropertyValueEntity> CategoryPropertyValues { get; set; }
         public DbSet<CityEntity> Cities { get; set; }
         public DbSet<CommentEntity> Comments { get; set; }
+        public DbSet<ConfigMsgEntity> ConfigMsgs { get; set; }
         public DbSet<CouponHistoryEntity> CouponHistories { get; set; }
         public DbSet<CouponLogEntity> CouponLogs { get; set; }
         public DbSet<DeviceLogEntity> DeviceLogs { get; set; }
@@ -147,6 +148,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<OutboundItemEntity> OutboundItems { get; set; }
         public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
         public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
+        public DbSet<PMessageEntity> PMessages { get; set; }
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
         public DbSet<PointOrderRuleEntity> PointOrderRules { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
@@ -207,6 +209,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new CategoryPropertyValueEntityMap());
             modelBuilder.Configurations.Add(new CityEntityMap());
             modelBuilder.Configurations.Add(new CommentEntityMap());
+            modelBuilder.Configurations.Add(new ConfigMsgEntityMap());
             modelBuilder.Configurations.Add(new CouponHistoryEntityMap());
             modelBuilder.Configurations.Add(new CouponLogEntityMap());
             modelBuilder.Configurations.Add(new DeviceLogEntityMap());
@@ -225,6 +228,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new OutboundItemEntityMap());
             modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
             modelBuilder.Configurations.Add(new PaymentMethodEntityMap());
+            modelBuilder.Configurations.Add(new PMessageEntityMap());
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());
             modelBuilder.Configurations.Add(new PointOrderRuleEntityMap());
             modelBuilder.Configurations.Add(new ProductEntityMap());

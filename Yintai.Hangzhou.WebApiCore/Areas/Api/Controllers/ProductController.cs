@@ -117,6 +117,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
         [RestfulAuthorize]
         [HttpPost]
+        [Obsolete]
         public ActionResult Update(UpdateProductRequest request, int? authuid)
         {
             request.AuthUid = authuid.Value;
@@ -268,6 +269,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     UpdateDate = DateTime.Now,
                     UpdateUser = request.AuthUser.Id,
                     TotalAmount = totalAmount,
+                    InvoiceAmount = totalAmount,
                     OrderNo = orderNo,
                     TotalPoints =0
 
@@ -289,6 +291,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     UpdateUser = request.AuthUser.Id,
                     ExtendPrice = productEntity.Price * request.OrderModel.Quantity,
                     ProductDesc = request.OrderModel.ProductDesc,
+                    
                     Points = 0
 
 
@@ -303,7 +306,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     Type = (int)OrderOpera.FromCustomer
                 });
                 ts.Complete();
-                return new RestfulResult() { Data = new OrderResponse().FromEntity<OrderEntity>(orderEntity) };
+                return this.RenderSuccess<OrderResponse>(m => m.Data = new OrderResponse().FromEntity<OrderResponse>(orderEntity));
             }
            
         }
@@ -376,14 +379,37 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 if (dimensionEntity!=null)
                     res.DimensionResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(dimensionEntity);
                 res.Properties = propertyLinq;
-                res.RMAPolicy = ConfigManager.RMAPolicy;
+                var rmaMsg = Context.Set<ConfigMsgEntity>().Where(c=>c.MKey=="O_C_RMAPolicy").FirstOrDefault();
+                res.RMAPolicy = rmaMsg==null?string.Empty:rmaMsg.Message;
                 res.SupportPayments = context.Set<PaymentMethodEntity>().Where(p => p.Status != (int)DataStatus.Deleted)
                                 .Select(p => new PaymentMethodResponse() { 
                                      Code = p.Code,
                                       Name = p.Name
                                 });
             });
-            return new RestfulResult() { Data = data };
+            return this.RenderSuccess<GetProductInfo4PResponse>(m => m.Data = data);
+        }
+
+        /// <summary>
+        /// return the compute order amount
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="currentAuthUser"></param>
+        /// <returns></returns>
+        public ActionResult ComputeAmount(ComputeAmountRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
+                return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
+            }
+            var linq = Context.Set<ProductEntity>().Where(p=>p.Id== request.ProductId).FirstOrDefault();
+            if (linq == null)
+                return this.RenderError(m=>m.Message="商品不存在");
+            dynamic model = OrderRule.ComputeAmount(linq, request.Quantity);
+
+            return this.RenderSuccess<dynamic>(m => m.Data =model);
+ 
         }
 
         /// <summary>
@@ -399,7 +425,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             //是否收藏
             bool isFavored = false;
             bool ifCanCoupon = false;
-            var withUserId = (authUser != null || authUser.Id > 0);
+            var withUserId = (authUser != null && authUser.Id > 0);
             if (withUserId)
             {
                isFavored = _favoriteRepo.Get(f => f.User_Id == authUser.Id && f.FavoriteSourceType == (int)SourceType.Product && f.FavoriteSourceId == request.ProductId && f.Status != (int)DataStatus.Deleted).Any();
@@ -430,14 +456,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 }
                
            });
-           return new RestfulResult()
-           {
-               Data = new GetAvailOperationsResponse() { 
+           return this.RenderSuccess<GetAvailOperationsResponse>(m=>m.Data=new GetAvailOperationsResponse() { 
                  IsFavored = isFavored,
                   IfCanCoupon = ifCanCoupon
-               }
-           };
-     
+               });
+           
         }
     }
 }

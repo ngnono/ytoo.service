@@ -1,0 +1,50 @@
+﻿@model PMessageViewModel
+@{
+    var lastMessages = ViewBag.RecentMsg;
+    ViewBag.Title = "回复私信";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("商品管理", "Index","Product")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("私信列表", "List")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+@if (lastMessages != null)
+{ 
+    foreach(PMessageViewModel msg in lastMessages)
+    {
+    <div class="media">
+        <a class="pull-left" href="#">
+            <img class="media-object" src="@msg.FromUserModel.Logo" data-src="holder.js/50x50">
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading">@msg.FromUserModel.Nickname</h4>
+            <p>@msg.TextMsg</p>
+            <p>@msg.CreateDate</p>
+        </div>
+    </div>
+    }
+}
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TextMsg)
+        </div>
+        <div class="editor-field">
+            @Html.TextArea("TextMsg", Model == null ? String.Empty : Model.TextMsg)
+            @Html.ValidationMessageFor(model => model.TextMsg)
+        </div>
+
+            
+
+      <p>
+          @Html.HiddenFor(model=>model.FromUser)
+           @Html.HiddenFor(model=>model.ToUser)
+           <input type="submit" value="回复" class="btn btn-primary" />
+            @Html.ActionLink2("返回列表", "List", null, new { @class="btn"})
+        </p>
+}
+

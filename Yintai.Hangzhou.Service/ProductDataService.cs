@@ -34,12 +34,16 @@ namespace Yintai.Hangzhou.Service
         private readonly IPromotionService _promotionService;
         private readonly IPromotionDataService _promotionDataService;
     private  IPromotionRepository _promotionRepo;
+    private IProductPropertyRepository _productpropertyRepo;
+    private IProductPropertyValueRepository _productpropertyvalueRepo;
 
 
         public ProductDataService(IPromotionDataService promotionDataService, IPromotionService promotionService,
             ICouponService couponService, IResourceService resourceService, IProductRepository productRepository, 
             IShareService shareService, IFavoriteService favoriteService, ICouponDataService couponDataService,
-            IPromotionRepository promotionRepo)
+            IPromotionRepository promotionRepo,
+            IProductPropertyRepository productpropertyRepo,
+            IProductPropertyValueRepository productpropertyvalueRepo)
         {
             _promotionDataService = promotionDataService;
             _productRepository = productRepository;
@@ -50,6 +54,8 @@ namespace Yintai.Hangzhou.Service
             _couponService = couponService;
             _promotionService = promotionService;
             _promotionRepo = promotionRepo;
+            _productpropertyRepo = productpropertyRepo;
+            _productpropertyvalueRepo = productpropertyvalueRepo;
         }
 
         private ProductInfoResponse IsR(ProductInfoResponse response, UserModel currentAuthUser, int productId)
@@ -231,6 +237,7 @@ namespace Yintai.Hangzhou.Service
 
             //判断当前用户是否是 管理员或者 level 是达人？
             var inEntity = MappingManager.ProductEntityMapping(request);
+            inEntity.Is4Sale = request.Is4Sale;
 
             if (request.Files != null && request.Files.Count > 0)
             {
@@ -252,39 +259,72 @@ namespace Yintai.Hangzhou.Service
                     Message = "没有图片信息"
                 };
             inEntity.SortOrder = 0;
-            var entity = _productRepository.Insert(inEntity);
-            //处理 图片
-            //处理文件上传
-            if (request.Files != null && request.Files.Count > 0)
+            ProductEntity entity = null;
+            using (var ts = new TransactionScope())
             {
-                List<ResourceEntity> listImage = null;
-                try
+                 entity= _productRepository.Insert(inEntity);
+                //insert properties if any
+                if (request.PropertyModel != null)
                 {
-                    listImage = _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
-
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex);
-
-                    //DEL 上传的产品
-
-                    _productRepository.Delete(entity);
-
-                    throw;
-                }
-
-                if (listImage == null || listImage.Count == 0)
-                {
-                    //set ishasimage
-                    if (entity.IsHasImage)
+                    foreach (var property in request.PropertyModel)
                     {
-                        _productRepository.SetIsHasImage(entity.Id, false, DataStatus.Default, request.AuthUid,
-                                    "set ishasimage false");
+                        if (string.IsNullOrEmpty(property.PropertyName))
+                            continue;
+                        var productPropertyEntity = _productpropertyRepo.Insert(new ProductPropertyEntity() {
+                             ProductId = entity.Id,
+                              PropertyDesc = property.PropertyName,
+                               SortOrder = 0,
+                                Status = (int)DataStatus.Normal,
+                                 UpdateDate= DateTime.Now,
+                                  UpdateUser =request.RecommendUser
+                        });
+                        foreach (var value in property.Values)
+                        {
+                            if (string.IsNullOrEmpty(value))
+                                continue;
+                            _productpropertyvalueRepo.Insert(new ProductPropertyValueEntity() { 
+                                 CreateDate = DateTime.Now,
+                                  PropertyId = productPropertyEntity.Id,
+                                   Status = (int)DataStatus.Normal,
+                                    UpdateDate = DateTime.Now,
+                                     ValueDesc = value
+                            });
+                        }
                     }
                 }
-            }
+                //处理 图片
+                //处理文件上传
+                if (request.Files != null && request.Files.Count > 0)
+                {
+                    List<ResourceEntity> listImage = null;
+                    try
+                    {
+                        listImage = _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
+   
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
 
+                        //DEL 上传的产品
+
+                        _productRepository.Delete(entity);
+
+                        throw;
+                    }
+
+                    if (listImage == null || listImage.Count == 0)
+                    {
+                        //set ishasimage
+                        if (entity.IsHasImage)
+                        {
+                            _productRepository.SetIsHasImage(entity.Id, false, DataStatus.Default, request.AuthUid,
+                                        "set ishasimage false");
+                        }
+                    }
+                }
+                ts.Complete();
+            }
             return new ExecuteResult<ProductInfoResponse>(MappingManager.ProductInfoResponseMapping(entity));
         }
 
@@ -582,7 +622,7 @@ namespace Yintai.Hangzhou.Service
                     promotionEntity = _promotionRepo.SetCount(PromotionCountType.InvolvedCount, promotionEntity.Id, 1);
          
                     product = _productRepository.SetCount(ProductCountType.InvolvedCount, product.Id, 1);
-                    ts.Complete();
+                   
                     var response = MappingManager.ProductInfoResponseMapping(product);
                     response.CouponCodeResponse = coupon.Data;
 
@@ -590,7 +630,7 @@ namespace Yintai.Hangzhou.Service
                     {
                         response = IsR(response, request.AuthUser, product.Id);
                     }
-
+                    ts.Complete();
                     return new ExecuteResult<ProductInfoResponse>(response);
 
 

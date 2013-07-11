@@ -124,6 +124,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
             return Path.Combine(Domain,Name+".mp3");
         }
         }
+        public string ProductImgUrl_120 { get {
+            return Path.Combine(Domain, Name+"_120x0.jpg");
+        } }
       
 
     }

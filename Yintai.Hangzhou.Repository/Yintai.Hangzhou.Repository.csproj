@@ -83,6 +83,7 @@
     <Compile Include="Contract\IOutboundItemRepository.cs" />
     <Compile Include="Contract\IOutboundRepository.cs" />
     <Compile Include="Contract\IOutSiteCustomerRepository.cs" />
+    <Compile Include="Contract\IPMessageRepository.cs" />
     <Compile Include="Contract\IPointOrderRuleRepository.cs" />
     <Compile Include="Contract\IPointRepository.cs" />
     <Compile Include="Contract\IProductBulkRepository.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Impl\OrderRepository.cs" />
     <Compile Include="Impl\OutboundItemRepository.cs" />
     <Compile Include="Impl\OutboundRepository.cs" />
+    <Compile Include="Impl\PMessageRepository.cs" />
     <Compile Include="Impl\PointOrderRuleRepository.cs" />
     <Compile Include="Impl\ProductBulkRepository.cs" />
     <Compile Include="Impl\ProductPropertyRepository.cs" />

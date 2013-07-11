@@ -71,7 +71,10 @@ namespace Yintai.Hangzhou.Service.Impl
             if (fileuploadResult == FileMessage.Success)
             {
                 var entity = InnerSave(createdUid, count == defaultNum, fileInfor, count, sourceId, sourceType);
-
+                //set whether current image is product dimension
+                if (sourceType == SourceType.Product &&
+                    files.FileName.Contains("@cc."))
+                    entity.IsDimension = true;
                 return entity;
             }
             else
@@ -104,7 +107,8 @@ namespace Yintai.Hangzhou.Service.Impl
                 Type = (int)fileInfor.ResourceType,
                 UpdatedDate = DateTime.Now,
                 UpdatedUser = userid,
-                Domain = String.Empty
+                Domain = String.Empty,
+                IsDimension = false
             };
 
             return entity;
@@ -142,8 +146,8 @@ namespace Yintai.Hangzhou.Service.Impl
                 //*/
                 FileInfor fileInfor;
                 FileMessage fileuploadResult;
-                //注意声音
-
+                
+                
                 var fileExt = files[upload].FileName.Substring(files[upload].FileName.LastIndexOf(".", System.StringComparison.Ordinal) + 1).ToLower();
 
                 switch (sourceType)

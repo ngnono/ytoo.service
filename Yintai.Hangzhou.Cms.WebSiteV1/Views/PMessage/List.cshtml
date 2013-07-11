@@ -1,0 +1,125 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.Cms.WebSiteV1.Util
+@using Yintai.Hangzhou.WebSupport.Helper
+@using Yintai.Hangzhou.Model.Filters
+@model PMessageSearchOption
+@{
+    ViewBag.Title = "私信列表";
+}
+
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("商品管理", "Index","Product")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+@section PageJsSection
+{
+ 
+    <script>
+        
+        $(document).ready(function () {
+            var orderDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url:"@Url.Action("listp")",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        @foreach(var property in typeof(PMessageSearchOption)
+                            .GetProperties(System.Reflection.BindingFlags.Public
+                                        | System.Reflection.BindingFlags.Instance))
+                        {
+                             @(string.Format("{0}",property.Name))<text>:
+                                function(){ return $("#@(property.Name)").val()},
+                            </text> 
+                        }
+                    }
+                }
+            },
+                pageSize: 10,
+                serverPaging: true,
+                schema:{
+                    data: "Data",
+                    model: {
+                        fields:{
+                            CreateDate: {type: "date"}
+                        }},
+                    total:"TotalCount",
+              
+                }
+            });    
+            $("form:first").submit(function(){
+                orderDataSource.read();
+                return false;
+            });
+            $("#pager").kendoPager({
+                dataSource: orderDataSource,
+                messages: {
+                    display:"{0} - {1} of {2} 记录",
+                    empty: "没有记录！",
+                }
+            });
+            $("#listview").kendoListView({
+                dataSource: orderDataSource,
+                // tempalte:kendo.template($("#template").html()),
+                template: kendo.template($("#msg_template").html()),
+                autoBind:false,
+                dataBound: function(e){
+                    Holder.run();
+                }
+              });
+        });
+      
+    </script>
+    }
+@using (Html.BeginForm("List",null,FormMethod.Post,
+        new { @class = "form-horizontal searchForm-border small-labels" }))
+{
+    @Html.ValidationSummary(false)
+    <div class="row">
+        <div class="span3">
+            <div class="control-group">
+                <label class="control-label" for="FromDate">@Html.LabelFor(m => Model.FromDate)</label>
+                <div class="controls">
+                    @Html.EditorFor(m => Model.FromDate, new { @class = "span2" })
+                </div>
+            </div>
+        </div>
+        <div class="span3">
+            <div class="control-group">
+                <label class="control-label" for="ToDate">@Html.LabelFor(m => Model.ToDate)</label>
+                <div class="controls">
+                    @Html.EditorFor(m => Model.ToDate, new { @class = "span2" })
+                </div>
+            </div>
+        </div>
+        <div class="span3">
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+<div class="k-content">
+    <div id="listview"></div>
+    <div id="pager" class="k-pager-wrap"></div>
+</div>
+ <script type="text/x-kendo-tmpl" id="msg_template">
+    <div class="media">
+      <div class="pull-left">
+         <img class="media-object" src="${OtherUserModel.LogoUrl}" data-src="holder.js/50x50">
+     </div>
+      <div class="media-body">
+           <a href="@string.Format("{0}?fromuser={1}&touser={2}",Url.Action("Reply"),"${StoreUserId}", "${OtherUserId}")">
+             <h4 class="media-heading">${OtherUserModel.Nickname}</h4>
+           </a>
+            <p>${TextMsg}</p>
+            <p>#:kendo.toString(CreateDate,"MM/dd/yyyy HH:mm:ss")#</p>
+       </div>  
+    </div>
+ </script>

@@ -10,7 +10,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             // Primary Key
             this.HasKey(t => t.Id);
 
-           
+            // Properties
             this.Property(t => t.OutboundNo)
                 .IsRequired()
                 .HasMaxLength(20);

@@ -11,7 +11,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
     [DataContract]
     public class OrderResponse:BaseResponse
     {
+        [DataMember(Name="orderno")]
         public string OrderNo { get; set; }
-        public string TotalAmout { get; set; }
+         [DataMember(Name = "totalamount")]
+        public decimal TotalAmount { get; set; }
     }
 }

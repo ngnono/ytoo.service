@@ -25,6 +25,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.StoreItemDesc)
                 .HasMaxLength(200);
 
+            this.Property(t => t.ProductName)
+                .HasMaxLength(200);
+
             // Table & Column Mappings
             this.ToTable("OrderItem");
             this.Property(t => t.Id).HasColumnName("Id");

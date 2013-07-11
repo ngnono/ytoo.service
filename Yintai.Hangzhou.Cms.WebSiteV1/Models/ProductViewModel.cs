@@ -61,6 +61,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [RegularExpression(RegularDefine.Money, ErrorMessage = "只能输入金额,1~2位小数")]
         [Display(Name = "价格")]
         public decimal Price { get; set; }
+        [Display(Name = "原价")]
+        [RegularExpression(RegularDefine.Money, ErrorMessage = "只能输入金额,1~2位小数")]
+        public decimal UnitPrice { get; set; }
 
         [StringLength(140, MinimumLength = 1)]
         [Display(Name = "推荐理由")]

@@ -27,12 +27,12 @@ namespace Yintai.Hangzhou.WebSupport.Binder
             {
                 return null;
             }
-
+#if !DEBUG
             if (userSessionData.Expired)
             {
                 return null;
             }
-
+#endif
             try
             {
                 return this._userService.Get(Int32.Parse(userSessionData.UserId));

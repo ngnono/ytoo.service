@@ -90,7 +90,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         public ActionResult Detail(MyOrderDetailRequest request, UserModel authUser)
         {
             var dbContext = Context;
-            var linq = dbContext.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo && o.CustomerId==authUser.Id)
+            var linq = dbContext.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo && o.CustomerId == authUser.Id)
                         .GroupJoin(dbContext.Set<OrderItemEntity>(),
                             o => o.OrderNo,
                             i => i.OrderNo,
@@ -100,23 +100,25 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             {
                 return this.RenderError(m => m.Message = "订单号不存在");
             }
-            var result = new MyOrderDetailResponse().FromEntity<MyOrderDetailResponse>(linq.O, o => {
+            var result = new MyOrderDetailResponse().FromEntity<MyOrderDetailResponse>(linq.O, o =>
+            {
 
-                o.Product = new MyOrderItemDetailResponse().FromEntity<MyOrderItemDetailResponse>(linq.OI, op => { 
+                o.Product = new MyOrderItemDetailResponse().FromEntity<MyOrderItemDetailResponse>(linq.OI, op =>
+                {
                     op.ProductResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(
                             dbContext.Set<ResourceEntity>()
-                                     .Where(resource=>resource.SourceType==(int)SourceType.Product && resource.SourceId==linq.OI.ProductId&& resource.Type ==(int)ResourceType.Image)
-                                     .OrderByDescending(resource=>resource.SortOrder).FirstOrDefault());
-                    
+                                     .Where(resource => resource.SourceType == (int)SourceType.Product && resource.SourceId == linq.OI.ProductId && resource.Type == (int)ResourceType.Image)
+                                     .OrderByDescending(resource => resource.SortOrder).FirstOrDefault());
+
 
                 });
                 o.ProductResource = o.Product.ProductResource;
-                o.RMAs = dbContext.Set<RMAEntity>().Where(r=>r.OrderNo == o.OrderNo).OrderByDescending(r=>r.CreateDate)
+                o.RMAs = dbContext.Set<RMAEntity>().Where(r => r.OrderNo == o.OrderNo).OrderByDescending(r => r.CreateDate)
                         .ToList()
-                        .Select(r=>new MyRMAResponse().FromEntity<MyRMAResponse>(r));
-                
+                        .Select(r => new MyRMAResponse().FromEntity<MyRMAResponse>(r));
+
             });
-            return new RestfulResult { Data = new ExecuteResult<MyOrderDetailResponse>(result) };
+            return this.RenderSuccess<MyOrderDetailResponse>(r => r.Data=result);
         }
 
         [RestfulAuthorize]
@@ -150,11 +152,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                   CreateUser = authUser.Id,
                    CustomerId = authUser.Id,
                      OrderNo = linq.OrderNo,
-                      Type = (int)OrderOpera.CustomerVoid
+                      Type = (int)OrderOpera.CustomerVoid,
+                       Operation="用户取消订单。"
                });
                ts.Complete();
            }
-            return Detail(request,authUser);
+           return Detail(request,authUser);
         }
 
         [RestfulAuthorize]
@@ -193,7 +196,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                               RMAAmount = orderEntity.TotalAmount,
                                RMAType = (int)RMAType.FromOnline,
                                UpdateDate = DateTime.Now,
-                                UpdateUser = authUser.Id
+                                UpdateUser = authUser.Id,
+                                ContactPhone = request.ContactPhone
                 });
                 _rmaitemRepo.Insert(new RMAItemEntity()
                 {
@@ -217,7 +221,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                      Operation="申请线上退货"
                 });
                 ts.Complete();
-                return new RestfulResult { Data = new ExecuteResult<MyRMAResponse>(new MyRMAResponse().FromEntity<MyRMAResponse>(newRma)) };
+                return this.RenderSuccess<MyRMAResponse>(r => r.Data = new MyRMAResponse().FromEntity<MyRMAResponse>(newRma));
+                
             }
             
         }

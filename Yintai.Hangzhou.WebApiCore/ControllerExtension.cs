@@ -23,17 +23,17 @@ namespace Yintai.Hangzhou.WebApiCore
                 callback(result.Data as ExecuteResult);
             return result;
         }
-        public static ActionResult RenderSuccess(this RestfulController controller, Action<ExecuteResult> callback)
+        public static ActionResult RenderSuccess<T>(this RestfulController controller, Action<ExecuteResult<T>> callback)
         {
             var result = new RestfulResult
             {
-                Data = new ExecuteResult { StatusCode = StatusCode.Success,
+                Data = new ExecuteResult<T> { StatusCode = StatusCode.Success,
                      IsSuccess = true,
                      Message = "操作成功！" }
 
             };
             if (callback != null)
-                callback(result.Data as ExecuteResult);
+                callback(result.Data as ExecuteResult<T>);
             return result;
         }
     }

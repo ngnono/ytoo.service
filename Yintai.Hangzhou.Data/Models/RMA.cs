@@ -23,11 +23,12 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<decimal> rebatepostfee { get; set; }
         public Nullable<decimal> chargepostfee { get; set; }
         public Nullable<decimal> ActualAmount { get; set; }
-        public decimal? ChargeGiftFee { get; set; }
         public string GiftReason { get; set; }
         public string InvoiceReason { get; set; }
         public string RebatePointReason { get; set; }
         public string PostalFeeReason { get; set; }
+        public Nullable<decimal> ChargeGiftFee { get; set; }
+        public string ContactPhone { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -196,7 +196,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
     }
 
     [DataContract]
-    public abstract class PagerInfoRequest : BaseRequest, IPagedRequest
+    public class PagerInfoRequest : BaseRequest, IPagedRequest
     {
         private int _maxPageSize;
 

@@ -38,6 +38,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public string BankCard { get; set; }
         [Display(Name = "不能退货原因")]
         public string RejectReason { get; set; }
+        [Display(Name="联系电话")]
+        public string ContactPhone { get; set; }
         public Nullable<decimal> rebatepostfee { get; set; }
         public Nullable<decimal> chargepostfee { get; set; }
         public Nullable<decimal> ActualAmount { get {

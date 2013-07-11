@@ -40,10 +40,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                  .OrderByDescending(s => s.UpdateDate)
                  .Take(10).ToList()
                  .Select(s => new SelfAddressResponse().FromEntity<SelfAddressResponse>(s));
-            return new RestfulResult()
+            var response = new PagerInfoResponse<SelfAddressResponse>(new PagerRequest(), linq.Count())
             {
-                Data = new PagerInfoResponse<SelfAddressResponse>(null, linq.Count()) { Items = linq.ToList() }
+                Items = linq.ToList()
             };
+            return new RestfulResult { Data = new ExecuteResult<PagerInfoResponse<SelfAddressResponse>>(response) };
 
         }
 
@@ -54,7 +55,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     .Where(s => s.Id == request.Id && s.UserId == authUser.Id).FirstOrDefault();
             if (linq == null)
                 return this.RenderError(m => m.Message = "地址错误！");
-             
+
             var result = new SelfAddressResponse().FromEntity<SelfAddressResponse>(linq);
             return new RestfulResult()
             {
@@ -70,23 +71,25 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
-            var inserted = _shippingRepo.Insert(new ShippingAddressEntity() { 
-                  ShippingAddress1 = request.ShippingAddress,
-                   ShippingCity = request.ShippingCity,
-                   ShippingCityId = request.ShippingCityId,
-                    ShippingContactPerson = request.ShippingContactPerson,
-                     ShippingContactPhone = request.ShippingContactPhone,
-                      ShippingProvince =request.ShippingProvince,
-                      ShippingProvinceId = request.ShippingProvinceId,
-                       ShippingZipCode = request.ShippingZipCode,
-                        Status = (int)DataStatus.Normal,
-                         UpdateDate = DateTime.Now,
-                          UpdateUser = authUser.Id,
-                           UserId = authUser.Id
+            var inserted = _shippingRepo.Insert(new ShippingAddressEntity()
+            {
+                ShippingAddress1 = request.ShippingAddress,
+                ShippingCity = request.ShippingCity,
+                ShippingCityId = request.ShippingCityId,
+                ShippingContactPerson = request.ShippingContactPerson,
+                ShippingContactPhone = request.ShippingContactPhone,
+                ShippingProvince = request.ShippingProvince,
+                ShippingProvinceId = request.ShippingProvinceId,
+                ShippingZipCode = request.ShippingZipCode,
+                ShippingDistrictId = request.ShippingDistrictId,
+                ShippingDistrictName = request.ShippingDistrict,
+                Status = (int)DataStatus.Normal,
+                UpdateDate = DateTime.Now,
+                UpdateUser = authUser.Id,
+                UserId = authUser.Id
             });
-            return new RestfulResult() { 
-                 Data = new SelfAddressResponse().FromEntity<SelfAddressResponse>(inserted)
-            };
+            return this.RenderSuccess<SelfAddressResponse>(R=>R.Data=new SelfAddressResponse().FromEntity<SelfAddressResponse>(inserted));
+            
         }
 
         [RestfulAuthorize]
@@ -95,13 +98,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var addressEntity = _shippingRepo.Get(s => s.Id == request.Id && s.UserId == authUser.Id).FirstOrDefault();
             if (addressEntity == null)
             {
-                return this.RenderError(result => {
+                return this.RenderError(result =>
+                {
                     result.Message = "地址不存在！";
                 });
             }
             _shippingRepo.Delete(addressEntity);
 
-            return this.RenderSuccess(null);
+            return this.RenderSuccess<SelfAddressResponse>(null);
         }
 
         [RestfulAuthorize]
@@ -128,11 +132,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _shippingRepo.Update(linq);
 
             var result = new SelfAddressResponse().FromEntity<SelfAddressResponse>(linq);
-            return new RestfulResult()
-            {
-                Data = new ExecuteResult<SelfAddressResponse>(result)
-            };
-
+            return this.RenderSuccess<SelfAddressResponse>(R => R.Data = result);
+            
+         
         }
     }
 }

@@ -209,7 +209,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             
             bool isFavored = false;
             bool ifCanCoupon = false;
-            var withUserId = (authUser != null || authUser.Id > 0);
+            var withUserId = (authUser != null && authUser.Id > 0);
             if (withUserId)
             {
                 isFavored = Context.Set<FavoriteEntity>().Where(f => f.User_Id == authUser.Id && f.FavoriteSourceType == (int)SourceType.Promotion && f.FavoriteSourceId == request.Promotionid && f.Status != (int)DataStatus.Deleted).Any();
@@ -240,15 +240,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                  (!hadGetCoupon || (hadGetCoupon && (!linq.IsLimitPerUser.HasValue || linq.IsLimitPerUser.Value == false)));
                 }
 
+                return this.RenderSuccess<GetAvailOperationsResponse>(r => r.Data = new GetAvailOperationsResponse()
+                    {
+                        IsFavored = isFavored,
+                        IfCanCoupon = ifCanCoupon
+                    });
           
-            return new RestfulResult()
-            {
-                Data = new GetAvailOperationsResponse()
-                {
-                    IsFavored = isFavored,
-                    IfCanCoupon = ifCanCoupon
-                }
-            };
 
         }
     }

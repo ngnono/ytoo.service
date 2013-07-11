@@ -10,7 +10,6 @@ namespace Yintai.Hangzhou.Service
 
         public MappingManagerV2 MappingManager { get; set; }
 
-
 	//BaseService
         protected BaseService()
         {

@@ -8,7 +8,6 @@ namespace Yintai.Hangzhou.Data.Models
         public int Id { get; set; }
         public string OrderNo { get; set; }
         public int ProductId { get; set; }
-        public string ProductName { get; set; }
         public string ProductDesc { get; set; }
         public string StoreItemNo { get; set; }
         public string StoreItemDesc { get; set; }
@@ -23,7 +22,8 @@ namespace Yintai.Hangzhou.Data.Models
         public int UpdateUser { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public int Status { get; set; }
-        public int? Points { get; set; }
+        public string ProductName { get; set; }
+        public Nullable<int> Points { get; set; }
 
         #region Overrides of BaseEntity
 

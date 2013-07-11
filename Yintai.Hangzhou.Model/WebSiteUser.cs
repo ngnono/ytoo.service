@@ -45,6 +45,10 @@ namespace Yintai.Hangzhou.Model
         public string NickName { get; set; }
 
         public int Role { get; set; }
+
+        public bool IsAdmin { get {
+            return (Role & (int)UserRole.Admin) == (int)UserRole.Admin;
+        } }
  
     }
 }

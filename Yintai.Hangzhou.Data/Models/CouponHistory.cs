@@ -17,7 +17,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int FromPromotion { get; set; }
         public System.DateTime ValidStartDate { get; set; }
         public System.DateTime ValidEndDate { get; set; }
-        public bool? IsLimitOnce { get; set; }
+        public Nullable<bool> IsLimitOnce { get; set; }
 
         #region Overrides of BaseEntity
 

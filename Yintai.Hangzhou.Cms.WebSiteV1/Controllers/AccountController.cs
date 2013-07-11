@@ -4,6 +4,8 @@ using Yintai.Hangzhou.Cms.WebSiteV1.Util;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
+using Recaptcha;
+using PoliteCaptcha;
 
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 {
@@ -26,8 +28,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         //// POST: /Account/Login
 
         [HttpPost]
+       // [ValidateSpamPrevention]
         public ActionResult Login(FormCollection formCollection, LoginViewModel model, string returnUrl)
         {
+            
             if (ModelState.IsValid)
             {
                 var userModel = _userService.Get(model.UserName, model.Password);

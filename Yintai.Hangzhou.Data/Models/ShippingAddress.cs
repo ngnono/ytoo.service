@@ -18,6 +18,8 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<int> ShippingCityId { get; set; }
         public string ShippingProvince { get; set; }
         public string ShippingCity { get; set; }
+        public Nullable<int> ShippingDistrictId { get; set; }
+        public string ShippingDistrictName { get; set; }
 
         #region Overrides of BaseEntity
 

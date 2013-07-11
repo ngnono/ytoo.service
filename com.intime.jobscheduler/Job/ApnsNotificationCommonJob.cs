@@ -47,28 +47,49 @@ namespace com.intime.jobscheduler.Job
                         {
                             try
                             {
-                                if (l.SourceType.Value == (int)SourceType.Comment)
+                                if (l.SourceType.Value == (int)SourceType.PMessage)
+                                {
+                                    var device = db.PMessages.Where(p => p.Id == l.SourceId)
+                                                .Join(db.DeviceLogs, o => o.ToUser, i => i.User_Id, (o, i) => new { 
+                                                    D = i,U=o
+                                                }).FirstOrDefault();
+                                    if (device==null)
+                                        continue;
+                                        push.QueueNotification(new AppleNotification()
+                                               .ForDeviceToken(device.D.DeviceToken)
+                                               .WithAlert("新私信...")
+                                               .WithBadge(1)
+                                               .WithCustomItem("from", JsonConvert.SerializeObject(new { targettype = (int)PushSourceType.PMessage, targetvalue =device.U.FromUser}))
+                                               .WithSound("sound.caf"));
+                                        successCount++;
+                                    
+                                    l.NotifyDate = DateTime.Now;
+                                    l.Status = (int)NotificationStatus.Notified;
+                                    db.Entry(l).State = System.Data.EntityState.Modified;
+                                    db.SaveChanges();
+                                } 
+                                else if (l.SourceType.Value == (int)SourceType.Comment)
                                 {
                                     // if it's comment, always notify all comments owners of this item
-                                   var comment = db.Comments.Find(l.SourceId);
+                                    var comment = db.Comments.Find(l.SourceId);
                                     if (comment == null)
                                         continue;
-                                    var relatedComments = db.Comments.Where(c=>c.SourceType == comment.SourceType 
+                                    var relatedComments = db.Comments.Where(c => c.SourceType == comment.SourceType
                                                                     && c.SourceId == comment.SourceId
                                                                     && c.User_Id != comment.User_Id)
-                                                           .Join(db.DeviceLogs.Where(d=>d.User_Id>0),
-                                                                o=>o.User_Id,
-                                                                i=>i.User_Id,
-                                                                (o,i)=>new {Token = i.DeviceToken}).ToList();
+                                                           .Join(db.DeviceLogs.Where(d => d.User_Id > 0),
+                                                                o => o.User_Id,
+                                                                i => i.User_Id,
+                                                                (o, i) => new { Token = i.DeviceToken }).ToList();
                                     if (comment.SourceType == (int)SourceType.Product)
                                     {
-                                        var product = db.Products.Where(p => p.Id == comment.SourceId && p.RecommendUser!=comment.User_Id)
-                                                        .Join(db.DeviceLogs.Where(d=>d.User_Id>0),
-                                                                o=>o.CreatedUser,
-                                                                i=>i.User_Id,
-                                                                (o,i)=>new {Token = i.DeviceToken}).FirstOrDefault();
+                                        var product = db.Products.Where(p => p.Id == comment.SourceId && p.RecommendUser != comment.User_Id)
+                                                        .Join(db.DeviceLogs.Where(d => d.User_Id > 0),
+                                                                o => o.CreatedUser,
+                                                                i => i.User_Id,
+                                                                (o, i) => new { Token = i.DeviceToken }).FirstOrDefault();
                                         if (product != null)
-                                            relatedComments.Add(new { Token = product.Token});
+                                            relatedComments.Add(new { Token = product.Token });
                                     }
                                     else if (comment.SourceType == (int)SourceType.Promotion)
                                     {
@@ -80,15 +101,15 @@ namespace com.intime.jobscheduler.Job
                                         if (promotion != null)
                                             relatedComments.Add(new { Token = promotion.Token });
                                     }
-                                    foreach(var device in relatedComments.Distinct())
+                                    foreach (var device in relatedComments.Distinct())
                                     {
                                         push.QueueNotification(new AppleNotification()
                                                .ForDeviceToken(device.Token)
                                                .WithAlert("新评论...")
                                                .WithBadge(1)
-                                               .WithCustomItem("from",JsonConvert.SerializeObject(new {targettype=(int)PushSourceType.SelfComment,targetvalue=comment.SourceId}))
+                                               .WithCustomItem("from", JsonConvert.SerializeObject(new { targettype = (int)PushSourceType.SelfComment, targetvalue = comment.SourceId }))
                                                .WithSound("sound.caf"));
-                                          successCount++;
+                                        successCount++;
                                     }
                                     l.NotifyDate = DateTime.Now;
                                     l.Status = (int)NotificationStatus.Notified;

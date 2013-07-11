@@ -71,6 +71,7 @@
     <Compile Include="Customer\ICustomerDataService.cs" />
     <Compile Include="DTO\DateTimeExtension.cs" />
     <Compile Include="DTO\Request\Card\BindingRequest.cs" />
+    <Compile Include="DTO\Request\ComputeAmountRequest.cs" />
     <Compile Include="DTO\Request\Coupon\CouponRequest.cs" />
     <Compile Include="DTO\Request\Coupon\CouponRequestType.cs" />
     <Compile Include="DTO\Request\CreateAddressRequest.cs" />
@@ -79,10 +80,12 @@
     <Compile Include="DTO\Request\ExchangeStoreCouponRuleRequest.cs" />
     <Compile Include="DTO\Request\Feedback\FeedbackCreateRequest.cs" />
     <Compile Include="DTO\Request\GetAddressDetailRequest.cs" />
+    <Compile Include="DTO\Request\GetConversationRequest.cs" />
     <Compile Include="DTO\Request\GetProductInfo4PRequest.cs" />
     <Compile Include="DTO\Request\MyCommentListRequest.cs" />
     <Compile Include="DTO\Request\MyOrderDetailRequest.cs" />
     <Compile Include="DTO\Request\MyOrderRequest.cs" />
+    <Compile Include="DTO\Request\NewPMessageRequest.cs" />
     <Compile Include="DTO\Request\OrderRequest.cs" />
     <Compile Include="DTO\Request\PaymentModel.cs" />
     <Compile Include="DTO\Request\Point\GetPointInfoRequest.cs" />
@@ -92,6 +95,7 @@
     <Compile Include="DTO\Request\SpecialTopic\SpecialTopicRequest.cs" />
     <Compile Include="DTO\Request\StoreCouponDetailRequest.cs" />
     <Compile Include="DTO\Request\StoreCouponListRequest.cs" />
+    <Compile Include="DTO\Request\TagPropertyModel.cs" />
     <Compile Include="DTO\Request\Tag\TagRequest.cs" />
     <Compile Include="DTO\Request\Device\DeviceRegisterRequest.cs" />
     <Compile Include="DTO\Request\BaseRequest.cs" />
@@ -111,6 +115,7 @@
     <Compile Include="DTO\Response\ExchangeStoreCouponResponse.cs" />
     <Compile Include="DTO\Response\ExchangeStoreCouponRuleResponse.cs" />
     <Compile Include="DTO\Response\GetAvailOperationsResponse.cs" />
+    <Compile Include="DTO\Response\GetMessageDetailReponse.cs" />
     <Compile Include="DTO\Response\GetProductInfo4PResponse.cs" />
     <Compile Include="DTO\Response\GetShipCityDetailResponse.cs" />
     <Compile Include="DTO\Response\HotKey\HotWordResponse.cs" />
@@ -118,6 +123,7 @@
     <Compile Include="DTO\Response\ItemsCollectionResponse.cs" />
     <Compile Include="DTO\Response\MyCommentInfoResponse.cs" />
     <Compile Include="DTO\Response\MyOrderDetailResponse.cs" />
+    <Compile Include="DTO\Response\NewPMessageResponse.cs" />
     <Compile Include="DTO\Response\OrderResponse.cs" />
     <Compile Include="DTO\Response\PagerInfoResponse.cs" />
     <Compile Include="DTO\Response\PaymentResponse.cs" />
@@ -128,6 +134,7 @@
     <Compile Include="DTO\Response\Resources\ResourceInfoResponse.cs" />
     <Compile Include="DTO\Response\StoreCouponDetailResponse.cs" />
     <Compile Include="DTO\Response\Store\StoreInfoResponse.cs" />
+    <Compile Include="DTO\Response\TagPropertyDetailResponse.cs" />
     <Compile Include="DTO\Response\Tag\TagInfoResponse.cs" />
     <Compile Include="DTO\Response\TPagerInfoResponse.cs" />
     <Compile Include="DTO\ThumnImageType.cs" />

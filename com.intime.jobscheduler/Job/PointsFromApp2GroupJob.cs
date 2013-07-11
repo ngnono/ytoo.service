@@ -71,12 +71,13 @@ namespace com.intime.jobscheduler.Job
                 Query(db, minPoints, a => totalCount = a.Count());
                 
             }
+            int lastMaxId = 0;
             while (cursor < totalCount)
             {
                 List<LinqInner> accounts = null;
                 using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
                 {
-                    Query(db, minPoints, acs => accounts = acs.OrderBy(a => a.U.Id).Take(size).ToList());
+                    Query(db, minPoints, acs => accounts = acs.Where(a=>a.U.Id>lastMaxId).OrderBy(a => a.U.Id).Take(size).ToList());
                 }
                 foreach (var account in accounts)
                 {
@@ -136,6 +137,7 @@ namespace com.intime.jobscheduler.Job
 
                 }
                 cursor += size;
+                lastMaxId = accounts.Max(a => a.U.Id);
 
             }
             sw.Stop();
