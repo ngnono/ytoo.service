@@ -76,6 +76,8 @@ namespace Yintai.Hangzhou.Data.Models
         [AdditionalMetadata("searchfield", "name")]
         [AdditionalMetadata("multiple","true")]
         public string SubjectIds { get; set; }
+        [DisplayName("专柜货号")]
+        public string UPCCode { get; set; }
         public int Id { get; set; }
         public int GroupId { get; set; }
         public IEnumerable<ProductPropertyStageEntity> Properties { get; set; }

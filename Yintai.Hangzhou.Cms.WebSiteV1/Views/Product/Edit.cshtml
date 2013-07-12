@@ -168,6 +168,13 @@
             @Html.CheckBox("Is4Sale",Model.Is4Sale??false)
             @Html.ValidationMessageFor(model => model.Is4Sale)
         </div>
+    <div class="editor-label">
+            @Html.LabelFor(model => model.UPCCode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UPCCode)
+            @Html.ValidationMessageFor(model => model.UPCCode)
+        </div>
         <div class="editor-label-required">
             选择促销图片
         </div>

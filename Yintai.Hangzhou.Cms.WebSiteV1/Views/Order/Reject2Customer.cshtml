@@ -1,13 +1,12 @@
 ﻿@model RMAViewModel
 @{
     ViewBag.Title = "退回客户";
-    string orderNo = ViewBag.OrderNo;
 }
 @section PageBread
 {
     <ul class="breadcrumb">
         <li>@Html.ActionLink2("订单管理", "Index")<span class="divider">/</span></li>
-        <li>@Html.ActionLink2("订单详情", "Details", new { OrderNo = orderNo })<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("订单详情", "Details", new { OrderNo = Model.OrderNo })<span class="divider">/</span></li>
         <li class="active">@ViewBag.Title</li>
     </ul>
 }
@@ -73,6 +72,6 @@
     </div>
       <div class="form-actions">
         <input type="submit" value="保存" class="btn btn-primary" />
-        @Html.ActionLink2("返回订单", "Details", new { OrderNo = orderNo}, new { @class = "btn" })
+        @Html.ActionLink2("返回订单", "Details", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
  </div>
 }

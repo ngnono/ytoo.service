@@ -56,6 +56,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
 
         [StringLength(140, MinimumLength = 0)]
         [Display(Name = "商品描述")]
+        [Required]
         public string Description { get; set; }
 
         [RegularExpression(RegularDefine.Money, ErrorMessage = "只能输入金额,1~2位小数")]
@@ -178,6 +179,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
 
         [Display(Name = "可销售")]
         public bool? Is4Sale { get; set; }
+        [Display(Name = "专柜货号")]
+        public string UPCCode { get; set; }
 
         public IEnumerable<ResourceViewModel> Audios { get {
             if (Resources == null)
@@ -188,6 +191,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            if (Is4Sale.HasValue && Is4Sale.Value == true && string.IsNullOrEmpty(UPCCode))
+                yield return new ValidationResult("可销售商品必须设置专柜货号");
             string errorUnAuthorizedDataAccess = "没有授权操作该门店和品牌！";
             var currentUser = ServiceLocator.Current.Resolve<IAuthenticationService>().CurrentUserFromHttpContext(HttpContext.Current);
             if (currentUser == null)
@@ -199,8 +204,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
                 .Any(a=>a.StoreId==0 ||(a.StoreId== this.Store_Id &&
                          (a.BrandId==0 || a.BrandId == this.Brand_Id))))
                 yield return new ValidationResult(errorUnAuthorizedDataAccess);
+
            
-            
         }
     }
   

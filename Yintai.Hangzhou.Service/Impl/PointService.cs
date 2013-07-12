@@ -15,7 +15,7 @@ namespace Yintai.Hangzhou.Service.Impl
         }
 
         /// <summary>
-        /// 添加一条积分
+        /// 添加一条积点
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -35,7 +35,7 @@ namespace Yintai.Hangzhou.Service.Impl
             }
             catch (Exception ex)
             {
-                Logger.Warn(String.Format("创建积分失败userid={0},type={1},sourceType={2},Amount={3}", entity.User_Id, entity.Type, entity.PointSourceType, entity.Amount));
+                Logger.Warn(String.Format("创建积点失败userid={0},type={1},sourceType={2},Amount={3}", entity.User_Id, entity.Type, entity.PointSourceType, entity.Amount));
                 Logger.Error(ex);
 
                 return null;

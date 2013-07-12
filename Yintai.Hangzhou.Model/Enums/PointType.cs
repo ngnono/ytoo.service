@@ -41,7 +41,7 @@ namespace Yintai.Hangzhou.Model.Enums
         /// <summary>
         /// 消费 这个是扣除的 是负的
         /// </summary>
-         [Description("使用积分")]
+         [Description("使用积点")]
         Consumption = 5,
 
         [Description("作废代金券")]

@@ -287,6 +287,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Product
         public string Dimension { get; set; }
         public decimal? UnitPrice { get; set; }
         public bool? Is4Sale { get; set; }
+        public string UPCCode { get; set; }
         public IEnumerable<TagPropertyModel> PropertyModel
         {
             get

@@ -33,17 +33,19 @@ namespace Yintai.Hangzhou.Service
         private readonly ICouponService _couponService;
         private readonly IPromotionService _promotionService;
         private readonly IPromotionDataService _promotionDataService;
-    private  IPromotionRepository _promotionRepo;
-    private IProductPropertyRepository _productpropertyRepo;
-    private IProductPropertyValueRepository _productpropertyvalueRepo;
+        private IPromotionRepository _promotionRepo;
+        private IProductPropertyRepository _productpropertyRepo;
+        private IProductPropertyValueRepository _productpropertyvalueRepo;
+        private IProductCode2StoreCodeRepository _productcodemapRepo;
 
 
         public ProductDataService(IPromotionDataService promotionDataService, IPromotionService promotionService,
-            ICouponService couponService, IResourceService resourceService, IProductRepository productRepository, 
+            ICouponService couponService, IResourceService resourceService, IProductRepository productRepository,
             IShareService shareService, IFavoriteService favoriteService, ICouponDataService couponDataService,
             IPromotionRepository promotionRepo,
             IProductPropertyRepository productpropertyRepo,
-            IProductPropertyValueRepository productpropertyvalueRepo)
+            IProductPropertyValueRepository productpropertyvalueRepo,
+            IProductCode2StoreCodeRepository productcodemapRepo)
         {
             _promotionDataService = promotionDataService;
             _productRepository = productRepository;
@@ -56,6 +58,7 @@ namespace Yintai.Hangzhou.Service
             _promotionRepo = promotionRepo;
             _productpropertyRepo = productpropertyRepo;
             _productpropertyvalueRepo = productpropertyvalueRepo;
+            _productcodemapRepo = productcodemapRepo;
         }
 
         private ProductInfoResponse IsR(ProductInfoResponse response, UserModel currentAuthUser, int productId)
@@ -223,6 +226,10 @@ namespace Yintai.Hangzhou.Service
             {
                 return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
+            if (request.Is4Sale.HasValue && request.Is4Sale.Value == true && string.IsNullOrEmpty(request.UPCCode))
+            {
+                return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "可销售商品需要设置专柜货号" };
+            }
 
             if (request.RecommendUser == 0)
             {
@@ -262,7 +269,20 @@ namespace Yintai.Hangzhou.Service
             ProductEntity entity = null;
             using (var ts = new TransactionScope())
             {
-                 entity= _productRepository.Insert(inEntity);
+                entity = _productRepository.Insert(inEntity);
+                //insert product code map
+                if (!string.IsNullOrEmpty(request.UPCCode))
+                {
+                    _productcodemapRepo.Insert(new ProductCode2StoreCodeEntity()
+                    {
+                        ProductId = entity.Id,
+                        Status = (int)DataStatus.Normal,
+                        StoreId = entity.Store_Id,
+                        StoreProductCode = request.UPCCode,
+                        UpdateDate = DateTime.Now,
+                        UpdateUser = request.AuthUser.Id
+                    });
+                }
                 //insert properties if any
                 if (request.PropertyModel != null)
                 {
@@ -270,24 +290,26 @@ namespace Yintai.Hangzhou.Service
                     {
                         if (string.IsNullOrEmpty(property.PropertyName))
                             continue;
-                        var productPropertyEntity = _productpropertyRepo.Insert(new ProductPropertyEntity() {
-                             ProductId = entity.Id,
-                              PropertyDesc = property.PropertyName,
-                               SortOrder = 0,
-                                Status = (int)DataStatus.Normal,
-                                 UpdateDate= DateTime.Now,
-                                  UpdateUser =request.RecommendUser
+                        var productPropertyEntity = _productpropertyRepo.Insert(new ProductPropertyEntity()
+                        {
+                            ProductId = entity.Id,
+                            PropertyDesc = property.PropertyName,
+                            SortOrder = 0,
+                            Status = (int)DataStatus.Normal,
+                            UpdateDate = DateTime.Now,
+                            UpdateUser = request.RecommendUser
                         });
                         foreach (var value in property.Values)
                         {
                             if (string.IsNullOrEmpty(value))
                                 continue;
-                            _productpropertyvalueRepo.Insert(new ProductPropertyValueEntity() { 
-                                 CreateDate = DateTime.Now,
-                                  PropertyId = productPropertyEntity.Id,
-                                   Status = (int)DataStatus.Normal,
-                                    UpdateDate = DateTime.Now,
-                                     ValueDesc = value
+                            _productpropertyvalueRepo.Insert(new ProductPropertyValueEntity()
+                            {
+                                CreateDate = DateTime.Now,
+                                PropertyId = productPropertyEntity.Id,
+                                Status = (int)DataStatus.Normal,
+                                UpdateDate = DateTime.Now,
+                                ValueDesc = value
                             });
                         }
                     }
@@ -300,7 +322,7 @@ namespace Yintai.Hangzhou.Service
                     try
                     {
                         listImage = _resourceService.Save(request.Files, request.AuthUid, 0, entity.Id, SourceType.Product);
-   
+
                     }
                     catch (Exception ex)
                     {
@@ -573,7 +595,7 @@ namespace Yintai.Hangzhou.Service
 
             //判断如果是v1.0版本 可以允许创建优惠券。
 
-            ExecuteResult<CouponCodeResponse> coupon= null;
+            ExecuteResult<CouponCodeResponse> coupon = null;
             if (request.Client_Version != "1.0")
             {
                 //获取商品关联的活动
@@ -620,9 +642,9 @@ namespace Yintai.Hangzhou.Service
                     }
 
                     promotionEntity = _promotionRepo.SetCount(PromotionCountType.InvolvedCount, promotionEntity.Id, 1);
-         
+
                     product = _productRepository.SetCount(ProductCountType.InvolvedCount, product.Id, 1);
-                   
+
                     var response = MappingManager.ProductInfoResponseMapping(product);
                     response.CouponCodeResponse = coupon.Data;
 
@@ -640,7 +662,7 @@ namespace Yintai.Hangzhou.Service
             {
                 return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
-            
+
         }
 
         public ExecuteResult<ProductCollectionResponse> Search(SearchProductRequest request)

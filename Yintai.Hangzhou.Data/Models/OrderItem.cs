@@ -24,6 +24,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int Status { get; set; }
         public string ProductName { get; set; }
         public Nullable<int> Points { get; set; }
+        public string SalesPerson { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -38,6 +38,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Subjects)
                 .HasMaxLength(200);
 
+            this.Property(t => t.UPCCode)
+                .HasMaxLength(50);
+
             // Table & Column Mappings
             this.ToTable("ProductStage");
             this.Property(t => t.id).HasColumnName("id");
@@ -59,6 +62,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.UnitPrice).HasColumnName("UnitPrice");
             this.Property(t => t.Is4Sale).HasColumnName("Is4Sale");
+            this.Property(t => t.UPCCode).HasColumnName("UPCCode");
 		Init();
         }
 

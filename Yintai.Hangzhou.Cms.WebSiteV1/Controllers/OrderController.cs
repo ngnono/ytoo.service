@@ -65,11 +65,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public ActionResult List(OrderSearchOption search, PagerRequest request)
-        {
-            return View(search);
-        }
+
+
         [HttpPost]
         public JsonResult ListP(OrderSearchOption search, PagerRequest request)
         {
@@ -152,11 +149,18 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 o.Customer = new CustomerViewModel().FromEntity<CustomerViewModel>(_customerRepo.Find(o.CustomerId));
                 o.Logs = _orderLogRepo.Get(l => l.OrderNo == o.OrderNo).OrderByDescending(ol=>ol.CreateDate).ToList().Select(l => new OrderLogViewModel().FromEntity<OrderLogViewModel>(l));
                 o.Items = _orderRepo.Context.Set<OrderItemEntity>().Where(oi => oi.OrderNo == o.OrderNo && oi.Status != (int)DataStatus.Deleted)
+                        .GroupJoin(Context.Set<ProductCode2StoreCodeEntity>().Where(pm => pm.Status == (int)DataStatus.Normal),
+                                oi => new { Product = oi.ProductId, Store = oi.StoreId },
+                                i => new { Product = i.ProductId, Store = i.StoreId },
+                                (oi, i) => new { O = oi, StoreCode = i.Select(s=>s.StoreProductCode).FirstOrDefault() }
+                        )
                         .ToList()
-                        .Select(oi => new OrderItemViewModel().FromEntity<OrderItemViewModel>(oi, item => {
+                        .Select(oi => new OrderItemViewModel().FromEntity<OrderItemViewModel>(oi.O, item =>
+                        {
                             item.ProductResource = new ResourceViewModel().FromEntity<ResourceViewModel>(Context.Set<ResourceEntity>().Where(r => r.SourceId == item.ProductId
                                         && r.SourceType == (int)SourceType.Product
-                                        && r.Status != (int)DataStatus.Deleted).OrderByDescending(r => r.SortOrder).FirstOrDefault());
+                                        && r.Status != (int)DataStatus.Deleted).OrderByDescending(r => r.SortOrder).OrderBy(r => r.CreatedDate).FirstOrDefault());
+                            item.UPCCode = oi.StoreCode;
                         }));
                 o.ShippingViaMethod = _orderRepo.Context.Set<ShipViaEntity>().Where(s => s.Id == o.ShippingVia).FirstOrDefault();
                 o.StoreName = _orderRepo.Context.Set<StoreEntity>().Where(s => s.Id == o.StoreId).FirstOrDefault().Name;
@@ -172,6 +176,89 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             });
             return View(model);
         }
+
+        public ActionResult Edit(string orderNo)
+        {
+            var linq = _orderRepo.Get(o => o.OrderNo == orderNo);
+            linq = _userAuthRepo.AuthFilter(linq, CurrentUser.CustomerId, CurrentUser.Role) as IQueryable<OrderEntity>;
+            var order = linq.FirstOrDefault();
+            if (order == null)
+            {
+                throw new ArgumentNullException("orderNo");
+            }
+            var model = new OrderViewModel().FromEntity<OrderViewModel>(order);
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Edit(OrderViewModel model)
+        {
+            ExcludeModelFieldsFromValidate(new string[] {"Items","Customer." });
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var linq = Context.Set<OrderEntity>().Where(o => o.OrderNo == model.OrderNo);
+            linq = _userAuthRepo.AuthFilter(linq, CurrentUser.CustomerId, CurrentUser.Role) as IQueryable<OrderEntity>;
+            var orderEntity = linq.FirstOrDefault();
+            if (orderEntity == null)
+            {
+                ViewBag.Message = "订单不存在";
+                return View(model);
+            }
+            var sb = new StringBuilder();
+            sb.Append("修改订单：");
+            using (var ts = new TransactionScope())
+            {
+                if (orderEntity.ShippingAddress != model.ShippingAddress)
+                {
+                    sb.AppendFormat("原送货地址：{0}", orderEntity.ShippingAddress);
+                    orderEntity.ShippingAddress = model.ShippingAddress;  
+                }
+                if (orderEntity.ShippingContactPerson != model.ShippingContactPerson)
+                {
+                    sb.AppendFormat(",原送货联系人：{0}", orderEntity.ShippingContactPerson);
+                    orderEntity.ShippingContactPerson = model.ShippingContactPerson;
+                }
+                if (orderEntity.ShippingContactPhone != model.ShippingContactPhone)
+                {
+                    sb.AppendFormat(",原联系电话：{0}", orderEntity.ShippingContactPhone);
+                    orderEntity.ShippingContactPhone = model.ShippingContactPhone;
+                }
+                if (orderEntity.ShippingZipCode != model.ShippingZipCode)
+                {
+                    sb.AppendFormat(",原送货地址邮编：{0}", orderEntity.ShippingZipCode);
+                    orderEntity.ShippingZipCode = model.ShippingZipCode;
+                }
+                if (orderEntity.NeedInvoice != model.NeedInvoice)
+                {
+                    sb.AppendFormat(",原是否需要发票：{0}", orderEntity.NeedInvoice);
+                    orderEntity.NeedInvoice = model.NeedInvoice;
+                }
+                if (orderEntity.InvoiceSubject != model.InvoiceSubject)
+                {
+                    sb.AppendFormat(",原发票抬头：{0}", orderEntity.InvoiceSubject);
+                    orderEntity.InvoiceSubject = model.InvoiceSubject;
+                }
+                if (orderEntity.InvoiceDetail != model.InvoiceDetail)
+                {
+                    sb.AppendFormat(",原发票明细：{0}", orderEntity.InvoiceDetail);
+                    orderEntity.InvoiceDetail = model.InvoiceDetail;
+                }
+                _orderRepo.Update(orderEntity);
+                _orderLogRepo.Insert(new OrderLogEntity() { 
+                     CreateDate = DateTime.Now,
+                      CreateUser = CurrentUser.CustomerId,
+                       CustomerId =CurrentUser.CustomerId,
+                        Operation = sb.ToString(),
+                         OrderNo = orderEntity.OrderNo,
+                          Type = (int)OrderOpera.EditOrder
+                });
+                ts.Complete();
+              
+            }
+            return RedirectToAction("Details", new { OrderNo = model.OrderNo});
+        }
+
         public ActionResult ChangeStoreItem(string orderNo)
         {
             var order = _orderRepo.Context.Set<OrderItemEntity>().Where(o => o.OrderNo == orderNo)
@@ -183,6 +270,17 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             model.Items = order.ToList().Select(o => new OrderItemViewModel().FromEntity<OrderItemViewModel>(o.O, p =>
             {
                 p.ProductResource = new ResourceViewModel().FromEntity<ResourceViewModel>(o.R);
+                p.UPCCode = Context.Set<ProductCode2StoreCodeEntity>().Where(pm => pm.StoreId == o.O.StoreId && pm.ProductId == o.O.ProductId && pm.Status != (int)DataStatus.Deleted)
+                            .Select(pm => pm.StoreProductCode).FirstOrDefault();
+                if (string.IsNullOrEmpty(p.StoreItemNo))
+                {
+                    var sectionEntity = Context.Set<SectionEntity>().Where(s => s.StoreId == o.O.StoreId 
+                            && s.BrandId == o.O.BrandId
+                            && s.Status == (int)DataStatus.Normal)
+                                    .FirstOrDefault();
+                    if (sectionEntity != null)
+                        p.StoreItemNo = sectionEntity.StoreCode;
+                }
             }));
             ViewBag.OrderNo = orderNo;
             return View(model);
@@ -195,6 +293,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 foreach (var item in model.Items)
                 {
                     item.ProductResource = new ResourceViewModel().FromEntity<ResourceViewModel>(_orderRepo.Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.SourceId == item.ProductId).FirstOrDefault());
+                    item.UPCCode = Context.Set<ProductCode2StoreCodeEntity>().Where(pm => pm.StoreId == item.StoreId && pm.ProductId == item.ProductId && pm.Status != (int)DataStatus.Deleted)
+                           .Select(pm => pm.StoreProductCode).FirstOrDefault();
                 }
                 ViewBag.OrderNo = orderNo;
                 return View(model);
@@ -214,6 +314,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                     var itemEntity = _orderItemRepo.Find(item.Id);
                     itemEntity.StoreItemNo = item.StoreItemNo;
                     itemEntity.StoreItemDesc = item.StoreItemDesc;
+                    itemEntity.ProductDesc = item.ProductDesc;
+                    itemEntity.SalesPerson = CurrentUser.NickName;
                     itemEntity.UpdateDate = DateTime.Now;
                     itemEntity.UpdateUser = CurrentUser.CustomerId;
                     _orderItemRepo.Update(itemEntity);
@@ -501,7 +603,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         public ActionResult Reject2Customer(RMAViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(model);
+            {
+                return View(new RMAViewModel().FromEntity<RMAViewModel>(_rmaRepo.Get(o => o.RMANo == model.RMANo).FirstOrDefault()));
+            }
             var rmaEntity = _rmaRepo.Get(o => o.RMANo == model.RMANo).FirstOrDefault();
             if (rmaEntity == null)
                 throw new ArgumentException("rmano");
@@ -581,17 +685,16 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 throw new ArgumentException(errorMsg);
             }
             var model = new RMAViewModel().FromEntity<RMAViewModel>(rmaEntity.R, p => {
-                p.Item = new RMAItemViewModel().FromEntity<RMAItemViewModel>(rmaEntity.RI);
+                p.Item = new RMAItemViewModel().FromEntity<RMAItemViewModel>(rmaEntity.RI,pi=>{
+                    pi.SalesPerson = Context.Set<OrderItemEntity>().Where(o => o.OrderNo == rmaEntity.R.OrderNo)
+                                    .Select(o => o.SalesPerson).FirstOrDefault();
+                });
             });
             return View(model);
         }
         [HttpPost]
         public JsonResult PrintRMA(RMAViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return FailResponse(ModelState.First(e => e.Value.Errors.Count() > 0).Value.Errors[0].ErrorMessage);
-            }
             string errorMsg;
             var confirmModel = _orderRepo.Get(o => o.OrderNo == model.OrderNo).FirstOrDefault();
             if (!OrderViewModel.IsAuthorized(confirmModel.StoreId, confirmModel.BrandId, out errorMsg))
@@ -689,6 +792,30 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             return RedirectToAction("details", new { OrderNo = orderNo});
 
 
+        }
+
+        public ActionResult ViewRMA(string rmaNo)
+        {
+            var rmaEntity = _rmaRepo.Get(r => r.RMANo == rmaNo)
+                         .GroupJoin(_rmaitemRepo.Get(ri => ri.RMANo == rmaNo),
+                                  o => o.RMANo,
+                                  i => i.RMANo,
+                                  (o, i) => new { R = o, RI = i.FirstOrDefault() })
+                          .FirstOrDefault();
+            string errorMsg;
+            var orderEntity = _orderRepo.Get(o => o.OrderNo == rmaEntity.R.OrderNo).First();
+            if (!OrderViewModel.IsAuthorized(orderEntity.StoreId, orderEntity.BrandId, out errorMsg))
+            {
+                throw new ArgumentException(errorMsg);
+            }
+            var model = new RMAViewModel().FromEntity<RMAViewModel>(rmaEntity.R, p =>
+            {
+                p.Item = new RMAItemViewModel().FromEntity<RMAItemViewModel>(rmaEntity.RI);
+                p.Logs = Context.Set<RMALogEntity>().Where(rl => rl.RMANo == rmaNo).OrderByDescending(rl => rl.CreateDate)
+                         .ToList()
+                         .Select(rl => new RMALogViewModel().FromEntity<RMALogViewModel>(rl));
+            });
+            return View(model);
         }
         #region Reports to print
         public ActionResult PrintOrder(string orderNo)
@@ -829,7 +956,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             if (null == sectionModel)
                 return Content("专柜不存在！");
 
-
+            var salesPerson = _orderItemRepo.Get(o => o.OrderNo == orderNo).Select(o => o.SalesPerson).FirstOrDefault();
             var confirmItemsModel = _outbounditemRepo.Get(o => o.OutboundNo == outboundModel.OutboundNo).ToList();
             var configMsgEntity = Context.Set<ConfigMsgEntity>().Where(c => c.Channel == Channels.CMS && c.StoreId == confirmModel.StoreId && c.MKey == FMessages.SHIPPING_NOTICE).FirstOrDefault();
 
@@ -840,7 +967,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                     new OrderShipReportViewModel(){                       
                           NeedInvoice = confirmModel.NeedInvoice.ToReportString(),
                            OrderNo = confirmModel.OrderNo,
-                            SecionPerson = sectionModel.ContactPerson,
+                            SecionPerson = salesPerson,
                              SectionName = sectionModel.Name,
                               SectionPhone = sectionModel.ContactPhone,
                                ShippingAddress = outboundModel.ShippingAddress,
@@ -935,6 +1062,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                             rm.UnitPrice = rmaItemEntity.UnitPrice==null?string.Empty:rmaItemEntity.UnitPrice.ToString();
                             rm.ItemPrice = rmaItemEntity.ItemPrice;
                             rm.Quantity = rmaItemEntity.Quantity;
+                            rm.SalesPerson = Context.Set<OrderItemEntity>().Where(o => o.OrderNo == entity.OrderNo).Select(o => o.SalesPerson).FirstOrDefault();
                         })});
                     r.SetParameterValue("Operator", CurrentUser.NickName);
                 });

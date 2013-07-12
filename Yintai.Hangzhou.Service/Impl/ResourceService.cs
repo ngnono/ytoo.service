@@ -1,5 +1,6 @@
 
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -132,7 +133,7 @@ namespace Yintai.Hangzhou.Service.Impl
             }
 
             var list = new List<ResourceEntity>(files.Count);
-            var count = 0;
+            var count = files.Count;
             //检查扩展名
             foreach (string upload in files)
             {
@@ -173,12 +174,11 @@ namespace Yintai.Hangzhou.Service.Impl
                 }
 
                 var entity = InnerSave(files[upload], sourceType.ToString().ToLower(), sourceId, sourceType, createdUid,
-count, defaultNum);
+count--, defaultNum);
 
                 if (entity != null)
                     list.Add(entity);
 
-                count++;
             }
 
             if (list.Count > 0)

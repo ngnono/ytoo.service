@@ -57,7 +57,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [Display(Name = "使用规则")]
         public IEnumerable<StorePromotionRuleViewModel> Rules { get; set; }
 
-        [Display(Name="积分兑换单位")]
+        [Display(Name="积点兑换单位")]
         public Nullable<int> UnitPerPoints { get; set; }
 
         public string ComposedScopeNotice

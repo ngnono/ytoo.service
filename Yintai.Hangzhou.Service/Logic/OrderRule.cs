@@ -12,9 +12,9 @@ namespace Yintai.Hangzhou.Service.Logic
 {
     public class OrderRule
     {
-        public static string CreateCode()
+        public static string CreateCode(int storeId)
         {
-            var code = string.Concat(string.Format("1{0}", DateTime.Now.ToString("yyMMdd"))
+            var code = string.Concat(string.Format("1{0}{1}",storeId.ToString().PadRight(2,'0'), DateTime.Now.ToString("yyMMdd"))
                         , DateTime.UtcNow.Ticks.ToString().Reverse().Take(5)
                             .Aggregate(new StringBuilder(), (s, e) => s.Append(e), s => s.ToString())
                             .PadRight(5, '0'));

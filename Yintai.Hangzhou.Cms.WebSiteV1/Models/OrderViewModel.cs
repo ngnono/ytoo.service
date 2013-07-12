@@ -159,7 +159,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
 
         public bool CanCreateOffRMA { get {
             if (Status == (int)OrderStatus.Convert2Sales &&
-                (RMAs == null || !RMAs.Any(r => r.Status == (int)RMAStatus.Created || r.Status==(int)RMAStatus.PrintRMA||r.Status==(int)RMAStatus.Reject2Customer)))
+                (RMAs == null || !RMAs.Any(r => r.Status == (int)RMAStatus.Created || r.Status==(int)RMAStatus.PrintRMA)))
                 return true;
             return false;
         } }
@@ -176,6 +176,17 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
             return false;
         } }
 
+        public bool CanEdit
+        {
+            get
+            {
+                return new int[] { 
+                    (int)OrderStatus.Create,
+                    (int)OrderStatus.CustomerConfirmed,
+                    (int)OrderStatus.AgentConfirmed
+                }.Any(s => s == Status);
+            }
+        }
         public RMAViewModel FirstActiveRMA { get {
             if (RMAs == null||RMAs.Count()==0)
                 return null;
@@ -207,6 +218,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
             return true;
 
         }
+
+
     }
 
     public class OrderItemViewModel : BaseViewModel,IValidatableObject
@@ -217,6 +230,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public string OrderNo { get; set; }
         [Display(Name = "商品编码")]
         public int ProductId { get; set; }
+        [Display(Name = "显示名称")]
+        public string ProductName { get; set; }
         [Display(Name = "订购描述")]
         public string ProductDesc { get; set; }
         [Display(Name = "专柜商品编码")]
@@ -241,6 +256,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public BrandViewModel Brand { get; set; }
         [Display(Name = "门店")]
         public StoreViewModel Store { get; set; }
+        [Display(Name = "专柜货号")]
+        public string UPCCode { get; set; }
 
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

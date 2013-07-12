@@ -8,7 +8,7 @@ namespace Yintai.Hangzhou.Repository.Contract
     public interface IPointRepository : IRepository<PointHistoryEntity, int>
     {
         /// <summary>
-        /// 积分分页
+        /// 积点分页
         /// </summary>
         /// <param name="request"></param>
         /// <param name="totalCount"></param>
@@ -19,7 +19,7 @@ namespace Yintai.Hangzhou.Repository.Contract
                                               PointSortOrder sortOrder);
 
         /// <summary>
-        /// 积分分页
+        /// 积点分页
         /// </summary>
         /// <param name="request"></param>
         /// <param name="totalCount"></param>
@@ -28,7 +28,7 @@ namespace Yintai.Hangzhou.Repository.Contract
         List<PointHistoryEntity> GetPagedList(PagerRequest request, out int totalCount, PointSortOrder sortOrder);
 
         /// <summary>
-        /// 积分类型
+        /// 积点类型
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="pointType"></param>

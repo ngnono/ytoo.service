@@ -52,6 +52,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public string UnitPrice { get; set; }
         [Display(Name = "购买价")]
         public decimal ItemPrice { get; set; }
+         [Display(Name = "营业员")]
+        public string SalesPerson { get; set; }
 
         public string IsCash { get {
             if (RMAType == (int)Yintai.Hangzhou.Model.Enums.RMAType.FromOffline)

@@ -178,7 +178,7 @@ namespace Yintai.Hangzhou.Service
                     return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.InternalServerError, Message = "2创建用户失败" };
                 }
 
-                //TODO:增加积分
+                //TODO:增加积点
                 _pointService.Insert(new PointHistoryEntity
                     {
                         Amount = 100,

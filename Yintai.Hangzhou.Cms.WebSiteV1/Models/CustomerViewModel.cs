@@ -154,9 +154,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public int CouponCount { get; set; }
 
         /// <summary>
-        /// 积分数
+        /// 积点数
         /// </summary>
-        [Display(Name = "积分数")]
+        [Display(Name = "积点数")]
         public int PointCount { get; set; }
 
         /// <summary>

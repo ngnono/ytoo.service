@@ -982,7 +982,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Manager
                                         pv.ValueId = p.PV.Id;
                                     }));
             }
-
+            productVM.UPCCode = _productRepository.Context.Set<ProductCode2StoreCodeEntity>()
+                                .Where(p => p.ProductId == productVM.Id && p.StoreId == productVM.Store_Id)
+                                .Select(p=>p.StoreProductCode)
+                                .FirstOrDefault();
 
             return productVM;
         }

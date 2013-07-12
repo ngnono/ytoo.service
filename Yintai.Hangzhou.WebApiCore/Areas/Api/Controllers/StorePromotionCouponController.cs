@@ -112,7 +112,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             if (pointResult.Point < request.Points)
                 return new RestfulResult
                 {
-                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "积分不足!" }
+                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "积点不足!" }
 
                 };
             StoreCouponEntity newCoupon = null;
@@ -164,7 +164,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                      return new RestfulResult
                 {
                     Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError,
-                        Message = string.IsNullOrEmpty(groupErr)?"积分扣减异常!":groupErr }
+                        Message = string.IsNullOrEmpty(groupErr)?"积点扣减异常!":groupErr }
 
                 };
                 }
@@ -268,7 +268,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 {
                     CreatedDate = DateTime.Now,
                     CreatedUser = authUser.Id,
-                    Description = "取消代金券退回积分",
+                    Description = "取消代金券退回积点",
                     Name = string.Format("取消代金券,返回{0}",ConfigManager.Point2GroupRatio * coupon.Points.Value),
                     PointSourceId = request.StoreCouponId,
                     PointSourceType = (int)PointSourceType.Group,

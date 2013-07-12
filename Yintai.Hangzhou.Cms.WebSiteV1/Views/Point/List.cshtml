@@ -1,7 +1,7 @@
 ﻿@model Yintai.Hangzhou.Cms.WebSiteV1.Models.PointCollectionViewModel
 
 @{
-    ViewBag.Title = "积分列表";
+    ViewBag.Title = "积点列表";
    PointListSearchOption search = ViewBag.SearchOptions;
    HtmlHelper<PointListSearchOption> searchModelHelper = Html.HtmlHelperFor<PointListSearchOption>();
 
@@ -60,7 +60,7 @@
     </ul>
 }
 <p>
-    @Html.ActionLink2("新增积分", "Create", null, new { @class="btn btn-primary"})
+    @Html.ActionLink2("新增积点", "Create", null, new { @class="btn btn-primary"})
 </p>
 @using (Html.BeginForm("List", "Point", new { page = 0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
 {
@@ -117,10 +117,10 @@
             用户代码
         </th>
         <th>
-            积分数量
+            积点数量
         </th>
         <th>
-            积分类型
+            积点类型
         </th>
         <th>
             标题
@@ -129,10 +129,10 @@
             描述
         </th>
         <th>
-            积分来源代码
+            积点来源代码
         </th>
         <th>
-            积分来源类型
+            积点来源类型
         </th>
         <th>
             状态
@@ -197,6 +197,6 @@
 
 </table>
 @Html.Partial("PagerPartialView", this.Model)
-<div class="hide" id="delete-dialog" title="删除积分">
-    <p>您确认要删除该条积分吗？</p>
+<div class="hide" id="delete-dialog" title="删除积点">
+    <p>您确认要删除该条积点吗？</p>
 </div>

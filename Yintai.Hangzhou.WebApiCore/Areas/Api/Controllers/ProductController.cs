@@ -241,10 +241,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
             request.AuthUser = authUser;
             var productEntity = _productRepo.Find(p=>p.Id==request.OrderModel.ProductId);
-            var totalAmount = productEntity.Price * request.OrderModel.Quantity;
+            dynamic orderAmount = OrderRule.ComputeAmount(productEntity, request.OrderModel.Quantity);
+            var totalAmount = orderAmount.totalamount;
             if (totalAmount<=0)
                 return this.RenderError(r=>r.Message="商品价格信息错误！");
-            var orderNo = OrderRule.CreateCode();
+            var orderNo = OrderRule.CreateCode(productEntity.Store_Id);
+           
             using (var ts = new TransactionScope())
             {
                 var orderEntity = _orderRepo.Insert(new OrderEntity()
@@ -262,7 +264,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     ShippingAddress = request.OrderModel.ShippingAddress.ShippingAddress,
                     ShippingContactPerson = request.OrderModel.ShippingAddress.ShippingContactPerson,
                     ShippingContactPhone = request.OrderModel.ShippingAddress.ShippingContactPhone,
-                    ShippingFee = OrderRule.ComputeFee(request),
+                    ShippingFee = orderAmount.totalfee,
                     ShippingZipCode = request.OrderModel.ShippingAddress.ShippingZipCode,
                     Status = (int)OrderStatus.Create,
                     StoreId = productEntity.Store_Id,
@@ -271,7 +273,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     TotalAmount = totalAmount,
                     InvoiceAmount = totalAmount,
                     OrderNo = orderNo,
-                    TotalPoints =0
+                    TotalPoints = orderAmount.totalpoints
 
                 });
                 _orderItemRepo.Insert(new OrderItemEntity()
@@ -331,7 +333,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                                                            r.Type == (int)ResourceType.Image),
                                    o => o.Id,
                                    i => i.SourceId,
-                                   (o, i) => new { P = o, R = i.OrderByDescending(r => r.SortOrder).FirstOrDefault() })
+                                   (o, i) => new { P = o, R = i.OrderByDescending(r => r.SortOrder).OrderBy(r => r.CreatedDate).FirstOrDefault() })
                        .ToList().FirstOrDefault();
 
             if (linq == null)

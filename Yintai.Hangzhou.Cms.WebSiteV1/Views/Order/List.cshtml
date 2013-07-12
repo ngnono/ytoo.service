@@ -5,7 +5,7 @@
 @model OrderSearchOption
 @{
     ViewBag.Title = "订单列表";
-    var detailUrl = string.Format("<a href='{0}?orderNo={1}'>{1}</a>", Url.Action("details"), "#: OrderNo#");
+    var detailUrl = string.Format("<a target='_blank' href='{0}?orderNo={1}'>{1}</a>", Url.Action("details"), "#: OrderNo#");
 }
 
 @section PageBread
@@ -56,7 +56,7 @@
             $("#grid").kendoGrid({
                 dataSource: orderDataSource,
                 sortable: false,
-                autoBind: false,
+                autoBind: true,
                 pageable: {
                     messages: {
                         display:"{0} - {1} of {2} 记录",

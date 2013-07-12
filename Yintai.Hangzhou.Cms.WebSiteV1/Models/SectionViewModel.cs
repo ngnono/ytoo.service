@@ -37,6 +37,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [Display(Name="专柜名称")]
         [Required]
         public string Name { get; set; }
+        [Display(Name="专柜编码")]
+        public string StoreCode { get; set; }
         [Key]
         public int Id { get; set; }
 

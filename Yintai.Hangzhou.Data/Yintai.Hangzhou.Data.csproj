@@ -115,6 +115,7 @@
     <Compile Include="Models\Mapping\PaymentMethodMap.cs" />
     <Compile Include="Models\Mapping\PMessageMap.cs" />
     <Compile Include="Models\Mapping\PointOrderRuleMap.cs" />
+    <Compile Include="Models\Mapping\ProductCode2StoreCodeMap.cs" />
     <Compile Include="Models\Mapping\ProductPropertyMap.cs" />
     <Compile Include="Models\Mapping\ProductPropertyStageMap.cs" />
     <Compile Include="Models\Mapping\ProductPropertyValueMap.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Models\PaymentMethod.cs" />
     <Compile Include="Models\PMessage.cs" />
     <Compile Include="Models\PointOrderRule.cs" />
+    <Compile Include="Models\ProductCode2StoreCode.cs" />
     <Compile Include="Models\ProductProperty.cs" />
     <Compile Include="Models\ProductPropertyStage.cs" />
     <Compile Include="Models\ProductPropertyValue.cs" />

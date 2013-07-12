@@ -212,7 +212,7 @@ namespace Yintai.Hangzhou.Service
                 return result;
             }
 
-            return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.InternalServerError, Message = String.Concat("查询积分失败,", pointResult.Desc) };
+            return new ExecuteResult<CardInfoResponse>(null) { StatusCode = StatusCode.InternalServerError, Message = String.Concat("查询积点失败,", pointResult.Desc) };
         }
 
         public ExecuteResult<CardInfoResponse> GetInfo(GetCardInfoRequest request)

@@ -181,6 +181,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             { "促销活动编码",new {dataformat=0,width=20}},
             { "专题编码（多个以,分割)",new {dataformat=0,width=20}},
              {"可销售",new {dataformat=2,width=5}},
+             {"专柜货号",new {dataformat=0,width=10}}
             };
             var workbook = new HSSFWorkbook();
             var headerLabelCellStyle = workbook.CreateCellStyle();
@@ -323,10 +324,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                         cell.SetCellType(CellType.STRING);
                         cell.SetCellValue(string.Empty);
                         cell.CellStyle = headerLabelCellStyle;
-                        sheet2.SetColumnWidth(moreCellIndex, 5 * 255);
+                        sheet2.SetColumnWidth(moreCellIndex++, 5 * 255);
                     }
                     //set merge cell for last cell
-                    sheet2.AddMergedRegion(new CellRangeAddress(0,0,2,22));
+                    sheet2.AddMergedRegion(new CellRangeAddress(0,0,2,12));
                     //set constraint
                     DVConstraint codeConstaint = DVConstraint.CreateFormulaListConstraint(string.Format("'{0}'!$A${1}:$A${2}", basicInfoSheetName, 2, 1000));
                     CellRangeAddressList codeaddressList = new CellRangeAddressList(1, 1000, 0, 0);
@@ -344,7 +345,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                     {
                         //set constraint
                         DVConstraint pvConstaint = DVConstraint.CreateFormulaListConstraint(string.Format("INDIRECT($B${0})", i + 1));
-                        CellRangeAddressList pvaddressList = new CellRangeAddressList(i, i, 2, 22);
+                        CellRangeAddressList pvaddressList = new CellRangeAddressList(i, i, 2, 12);
                         HSSFDataValidation pvdataValidation = new HSSFDataValidation(pvaddressList, pvConstaint);
                         pvdataValidation.SuppressDropDownArrow = false;
                         sheet2.AddValidationData(pvdataValidation);

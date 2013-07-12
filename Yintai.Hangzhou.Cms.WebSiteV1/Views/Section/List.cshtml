@@ -111,13 +111,15 @@
 }
 <table>
     <tr>
-        <th>专柜编码</th>
+        <th>编号</th>
         <th>操作</th>
         <th>专柜名称
         </th>
         <th>专柜品牌
         </th>
         <th>专柜门店
+        </th>
+        <th>专柜编码
         </th>
         <th>地址
         </th>
@@ -157,6 +159,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Store.Name)
+            </td>
+             <td>
+                @Html.DisplayFor(modelItem => item.StoreCode)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Location)

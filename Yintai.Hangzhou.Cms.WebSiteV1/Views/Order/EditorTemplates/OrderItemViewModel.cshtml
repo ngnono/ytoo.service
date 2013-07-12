@@ -8,10 +8,12 @@
         @Html.HiddenFor(model => model.Id)
     </td>
     <td>@Html.TextBoxFor(model => model.ProductId, new { @readonly = true, @class = "span1" })</td>
-    <td>@Html.TextBoxFor(model => model.ProductDesc, new { @readonly = true, @class = "span1" })</td>
+    <td>@Html.TextBoxFor(model => model.ProductName, new {@readonly = true,  @class = "span1" })</td>
+    <td>@Html.TextBoxFor(model => model.ProductDesc, new {  @class = "span2" })</td>
     <td>@Html.TextBoxFor(model => model.ItemPrice, new { @readonly = true, @class = "span1" })</td>
     <td>@Html.TextBoxFor(model => model.Quantity, new { @readonly = true, @class = "span1" })</td>
     <td>@Html.TextBoxFor(model => model.ExtendPrice, new { @readonly = true, @class = "span1" })</td>
+    <td>@Html.TextBoxFor(model =>model.UPCCode, new { @readonly = true, @class = "span1" })</td>
     <td>@Html.EditorFor(model => model.StoreItemNo)</td>
     <td>@Html.EditorFor(model => model.StoreItemDesc)</td>
 </tr>

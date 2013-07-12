@@ -69,7 +69,10 @@
     <div class="display-field">
         @Html.CheckBox("Is4Sale", Model.Is4Sale ?? false, new { @readonly=true})
     </div>
-
+    <div class="display-label">@Html.LabelFor(model => model.UPCCode)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UPCCode)
+    </div>
     <div class="display-label">@Html.LabelFor(model => model.Store_Id)</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Store_Id)

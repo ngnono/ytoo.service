@@ -87,6 +87,7 @@
     <Compile Include="Contract\IPointOrderRuleRepository.cs" />
     <Compile Include="Contract\IPointRepository.cs" />
     <Compile Include="Contract\IProductBulkRepository.cs" />
+    <Compile Include="Contract\IProductCode2StoreCodeRepository.cs" />
     <Compile Include="Contract\IProductPropertyRepository.cs" />
     <Compile Include="Contract\IProductPropertyValueRepository.cs" />
     <Compile Include="Contract\IProductRepository.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Impl\PMessageRepository.cs" />
     <Compile Include="Impl\PointOrderRuleRepository.cs" />
     <Compile Include="Impl\ProductBulkRepository.cs" />
+    <Compile Include="Impl\ProductCode2StoreCodeRepository.cs" />
     <Compile Include="Impl\ProductPropertyRepository.cs" />
     <Compile Include="Impl\ProductPropertyValueRepository.cs" />
     <Compile Include="Impl\PromotionProductRelation.cs" />

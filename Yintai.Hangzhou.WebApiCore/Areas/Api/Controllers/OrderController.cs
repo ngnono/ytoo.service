@@ -210,7 +210,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     RMANo = newRma.RMANo,
                     Status = (int)DataStatus.Normal,
                     UnitPrice = orderItemEntity.UnitPrice,
-                    UpdateDate = DateTime.Now
+                    UpdateDate = DateTime.Now,
+                    StoreItem = orderItemEntity.StoreItemNo,
+                    StoreDesc = orderItemEntity.StoreItemDesc
 
                 });
                 _rmalogRepo.Insert(new RMALogEntity

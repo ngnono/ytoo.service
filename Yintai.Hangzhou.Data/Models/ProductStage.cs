@@ -24,6 +24,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<int> Status { get; set; }
         public Nullable<decimal> UnitPrice { get; set; }
         public Nullable<bool> Is4Sale { get; set; }
+        public string UPCCode { get; set; }
 
         #region Overrides of BaseEntity
 

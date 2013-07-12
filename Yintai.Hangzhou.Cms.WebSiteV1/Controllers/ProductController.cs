@@ -28,13 +28,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         private IStoreRepository _storeRepository;
         private IResourceService _resourceService;
         private IUserAuthRepository _userAuthRepo;
+        private IProductCode2StoreCodeRepository _productcodemapRepo;
 
         public ProductController(IProductRepository productRepository
             , ISpecialTopicProductRelationRepository specialTopicProductRelationRepository
             , IPromotionProductRelationRepository promotionProductRelationRepository
             , IStoreRepository storeRepository
             , IResourceService resourceService
-            , IUserAuthRepository userAuthRepo)
+            , IUserAuthRepository userAuthRepo
+            , IProductCode2StoreCodeRepository productcodemapRepo)
         {
             _productRepository = productRepository;
             _stprRepository = specialTopicProductRelationRepository;
@@ -42,6 +44,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             _storeRepository = storeRepository;
             _resourceService = resourceService;
             _userAuthRepo = userAuthRepo;
+            _productcodemapRepo = productcodemapRepo;
         }
 
         public ActionResult Index()
@@ -200,6 +203,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 using (var ts = new TransactionScope())
                 {
                     entity = _productRepository.Insert(entity);
+                    _productcodemapRepo.Insert(new ProductCode2StoreCodeEntity()
+                    {
+                        ProductId = entity.Id,
+                        Status = (int)DataStatus.Normal,
+                        StoreId = entity.Store_Id,
+                        StoreProductCode = vo.UPCCode,
+                        UpdateDate = DateTime.Now,
+                        UpdateUser = CurrentUser.CustomerId
+                    });
                     SaveT(entity.Id, StringsToInts(vo.TopicIds, ","));
                     SaveP(entity.Id, StringsToInts(vo.PromotionIds, ","));
                     _resourceService.Save(ControllerContext.HttpContext.Request.Files
@@ -315,7 +327,42 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             using (var ts = new TransactionScope())
             {
                 _productRepository.Update(entity);
-                //关联关系
+                //persist product code map 2 store code
+                var codemapEntity = _productcodemapRepo.Get(p => p.StoreId == entity.Store_Id && p.ProductId == entity.Id && p.Status != (int)DataStatus.Deleted)
+                                    .FirstOrDefault();
+                if (string.IsNullOrEmpty(vo.UPCCode))
+                {
+                    if (codemapEntity != null)
+                    {
+                        codemapEntity.Status = (int)DataStatus.Deleted;
+                        codemapEntity.UpdateUser = CurrentUser.CustomerId;
+                        codemapEntity.UpdateDate = DateTime.Now;
+                        _productcodemapRepo.Update(codemapEntity);
+                    }
+                }
+                else
+                {
+                    if (codemapEntity != null)
+                    {
+                        codemapEntity.StoreProductCode = vo.UPCCode;
+                        codemapEntity.UpdateUser = CurrentUser.CustomerId;
+                        codemapEntity.UpdateDate = DateTime.Now;
+                        _productcodemapRepo.Update(codemapEntity);
+                    }
+                    else
+                    {
+                        _productcodemapRepo.Insert(new ProductCode2StoreCodeEntity()
+                        {
+                            ProductId = entity.Id,
+                            Status = (int)DataStatus.Normal,
+                            StoreId = entity.Store_Id,
+                            StoreProductCode = vo.UPCCode,
+                            UpdateDate = DateTime.Now,
+                            UpdateUser = CurrentUser.CustomerId
+                        });
+                    }
+                }
+                
 
                 SaveT(entity.Id, StringsToInts(vo.TopicIds, ","));
                 SaveP(entity.Id, StringsToInts(vo.PromotionIds, ","));

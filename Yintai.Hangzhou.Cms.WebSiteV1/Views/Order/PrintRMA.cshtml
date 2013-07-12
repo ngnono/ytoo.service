@@ -73,9 +73,9 @@
          </caption>
         <tr>
             <td>赠品</td>
-            <td colspan="5">@Html.TextBoxFor(model => model.GiftReason, new { @class = "span5", placeholder = "（是否收回，谁收回，还是折现扣回现金，或扣积分）" })</td>
+            <td colspan="5">@Html.TextBoxFor(model => model.GiftReason, new { @class = "span5", placeholder = "（是否收回，谁收回，还是折现扣回现金，或扣积点）" })</td>
             <td>营业员</td>
-            <td></td>
+            <td>@Html.DisplayFor(model=>model.Item.SalesPerson)</td>
             <td>退邮费</td>
             <td>@Html.TextBoxFor(model => model.rebatepostfee)</td>
         </tr>
@@ -83,13 +83,13 @@
             <td>发票</td>
             <td colspan="5">@Html.TextBoxFor(model => model.InvoiceReason, new { @class = "span5", placeholder = "（有无发票，是否收回，不收回理由）" })</td>
             <td>商品编码</td>
-            <td>@Html.DisplayFor(model => model.Item.StoreItemNo)</td>
+            <td>@Html.DisplayFor(model => model.Item.StoreItem)</td>
             <td>收邮费</td>
             <td>@Html.TextBoxFor(model => model.chargepostfee)</td>
         </tr>
             <tr>
-            <td>积分退回</td>
-            <td colspan="5">@Html.TextBoxFor(model => model.RebatePointReason, new { @class = "span5", placeholder = "（积分退回情况，是否退回，不退理由）" })</td>
+            <td>积点退回</td>
+            <td colspan="5">@Html.TextBoxFor(model => model.RebatePointReason, new { @class = "span5", placeholder = "（积点退回情况，是否退回，不退理由）" })</td>
             <td>数量</td>
             <td>@Html.DisplayFor(model => model.Item.Quantity)</td>
             <td>赠品扣款</td>
@@ -116,7 +116,7 @@
               <tr>
             <td>卡号</td>
             <td colspan="5">@Html.DisplayFor(model => model.BankCard)</td>
-            <td>积分支付</td>
+            <td>积点支付</td>
             <td colspan="3">0</td>
 
             

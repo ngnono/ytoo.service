@@ -76,42 +76,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }*/
         }
 
-        /// <summary>
-        /// 禁用 Response
-        /// </summary>
-        [Obsolete]
-        public new HttpResponseBase Response
-        {
-            get
-            {
-                throw new NotSupportedException("禁止直接使用Response");
-            }
-        }
-
-        /// <summary>
-        /// 禁止直接使用Request
-        /// </summary>
-        [Obsolete]
-        public new HttpRequestBase Request
-        {
-            get
-            {
-                throw new NotSupportedException("禁止直接使用Request");
-            }
-        }
-
-        /// <summary>
-        /// 禁止直接使用Session
-        /// </summary>
-        [Obsolete]
-        public new HttpSessionStateBase Session
-        {
-            get
-            {
-                throw new NotSupportedException("禁止直接使用Session");
-            }
-        }
-
+      
+      
        
         /// <summary>
         /// 根据Ajax请求切换对应视图
@@ -213,7 +179,27 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             return File(stream, contentype);
         }
-        protected DbContext Context
+        protected void ExcludeModelFieldsFromValidate(IEnumerable<string> keys)
+        {
+            if (keys == null)
+                return;
+            foreach (var key in keys)
+            {
+                if (key.EndsWith("."))
+                {
+                    var removeKeys = ModelState.Keys.Where(k => k.StartsWith(key)).ToArray();
+                    foreach (var removeKey in removeKeys)
+                    {
+                        ModelState.Remove(removeKey);
+                    }
+                }
+                else
+                {
+                    ModelState.Remove(key);
+                }
+            }
+        }
+        public DbContext Context
         {
             get
             {

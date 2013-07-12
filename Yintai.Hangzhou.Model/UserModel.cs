@@ -86,7 +86,7 @@ namespace Yintai.Hangzhou.Model
         public int CouponCount { get; set; }
 
         /// <summary>
-        /// 积分数
+        /// 积点数
         /// </summary>
         public int PointCount { get; set; }
 

@@ -13,7 +13,7 @@
         Coupon = 1,
 
         /// <summary>
-        /// 积分
+        /// 积点
         /// </summary>
         Point = 2,
 

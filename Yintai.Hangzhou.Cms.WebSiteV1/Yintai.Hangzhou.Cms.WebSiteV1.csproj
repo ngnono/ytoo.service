@@ -1025,6 +1025,8 @@
     <Content Include="Views\Shared\_AlertMessage.cshtml" />
     <Content Include="Views\PMessage\List.cshtml" />
     <Content Include="Views\PMessage\Reply.cshtml" />
+    <Content Include="Views\Order\Edit.cshtml" />
+    <Content Include="Views\Order\ViewRMA.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

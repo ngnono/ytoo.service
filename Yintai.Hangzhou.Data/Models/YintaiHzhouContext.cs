@@ -152,6 +152,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
         public DbSet<PointOrderRuleEntity> PointOrderRules { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<ProductCode2StoreCodeEntity> ProductCode2StoreCode { get; set; }
         public DbSet<ProductPropertyEntity> ProductProperties { get; set; }
         public DbSet<ProductPropertyStageEntity> ProductPropertyStages { get; set; }
         public DbSet<ProductPropertyValueEntity> ProductPropertyValues { get; set; }
@@ -232,6 +233,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());
             modelBuilder.Configurations.Add(new PointOrderRuleEntityMap());
             modelBuilder.Configurations.Add(new ProductEntityMap());
+            modelBuilder.Configurations.Add(new ProductCode2StoreCodeEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyStageEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyValueEntityMap());

@@ -24,6 +24,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public CustomerViewModel FromUserModel { get; set; }
         public CustomerViewModel ToUserModel { get; set; }
         public int FromUser { get; set; }
+        [Display(Name="发送给：")]
         public int ToUser { get; set; }
         public DateTime CreateDate { get; set; }
     }

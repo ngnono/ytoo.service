@@ -12,6 +12,7 @@ namespace Yintai.Hangzhou.Model.Enums
         FromOperator =1,
         FromSystem =2,
         CustomerReceived = 3,
-        CustomerVoid = 4
+        CustomerVoid = 4,
+        EditOrder = 5
     }
 }

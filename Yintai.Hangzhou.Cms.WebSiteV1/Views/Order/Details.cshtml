@@ -123,7 +123,10 @@
     { 
         @Html.ActionLink2("打印销售单", "PrintSales", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary",@id="printsale" })
     }
-
+        @if (Model.CanEdit)
+    { 
+        @Html.ActionLink2("修改订单", "Edit", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
+    }
     @if (Model.CanVoid)
     { 
         <a href="#voidConfirm" role="button" class="btn btn-danger" data-toggle="modal">作废</a>     
@@ -251,13 +254,15 @@
             <tr>
                 <th>商品图片</th>
                 <th>商品编号</th>
+                <th>显示名称</th>
                 <th>订购描述
                 </th>
                 <th>单价</th>
                 <th>数量</th>
                 <th>总额
                 </th>
-                <th>专柜商品编码
+                <th>专柜货号</th>
+                <th>专柜编码
                 </th>
                 <th>专柜商品描述</th>
 
@@ -273,10 +278,12 @@
                         }
                     </td>
                     <td>@Html.DisplayFor(model => item.ProductId)</td>
+                    <td>@Html.DisplayFor(model => item.ProductName)</td>
                     <td>@Html.DisplayFor(model => item.ProductDesc)</td>
                     <td>@Html.DisplayFor(model => item.ItemPrice)</td>
                     <td>@Html.DisplayFor(model => item.Quantity)</td>
                     <td>@Html.DisplayFor(model => item.ExtendPrice)</td>
+                    <td>@Html.DisplayFor(model => item.UPCCode)</td>
                     <td>@Html.DisplayFor(model => item.StoreItemNo)</td>
                     <td>@Html.DisplayFor(model => item.StoreItemDesc)</td>
                 </tr>
@@ -333,7 +340,9 @@
                 <th>退货方式</th>
                 <th>状态</th>
                 <th>退货理由</th>
-                <th>退货金额</th>
+                <th>申请退货金额</th>
+                <th>不能退货原因</th>
+                <th>实际退货金额</th>
                 <th>操作用户</th>
                 <th>操作时间</th>
             </tr>
@@ -341,7 +350,7 @@
             @foreach (var item in Model.RMAs)
             {
                 <tr>
-                    <td>@Html.DisplayFor(model => item.RMANo)</td>
+                    <td>@Html.ActionLink(item.RMANo,"ViewRMA",new {RMANo=item.RMANo})</td>
                     <td>@Html.DisplayFor(model => item.CreateUser)</td>
                     <td>@Html.DisplayFor(model => item.CreateDate)</td>
                     <td>@Html.DisplayFor(model=>item.ContactPhone)</td>
@@ -349,6 +358,8 @@
                     <td>@Html.Label("", ((RMAStatus)item.Status).ToFriendlyString())</td>
                     <td>@Html.DisplayFor(model => item.Reason)</td>
                     <td>@Html.DisplayFor(model => item.RMAAmount)</td>
+                    <td>@Html.DisplayFor(model => item.RejectReason)</td>
+                    <td>@Html.DisplayFor(model => item.ActualAmount)</td>
                     <td>@Html.DisplayFor(model => item.UpdateUser)</td>
                     <td>@Html.DisplayFor(model => item.UpdateDate)</td>
                 </tr>

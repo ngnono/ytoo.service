@@ -22,7 +22,7 @@ namespace Yintai.Hangzhou.Service.Contract
         void SubFover(int userId, int foverCount, int updateUserId);
 
         /// <summary>
-        /// 增加积分
+        /// 增加积点
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="pointCount"></param>
@@ -30,7 +30,7 @@ namespace Yintai.Hangzhou.Service.Contract
         void AddPoint(int userId, int pointCount, int updateUserId);
 
         /// <summary>
-        /// 减少积分
+        /// 减少积点
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="pointCount"></param>

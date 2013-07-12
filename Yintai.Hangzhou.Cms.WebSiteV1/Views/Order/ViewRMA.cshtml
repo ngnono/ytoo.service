@@ -1,0 +1,208 @@
+﻿@model RMAViewModel
+@{
+    ViewBag.Title = "退货单明细";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("订单管理", "Index")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("订单详情", "Details", new { OrderNo = Model.OrderNo })<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+@section PageJsSection
+{
+    <script type="text/javascript">
+     $(document).ready(function () {
+            $("#rma").kendoTabStrip({
+                animation: {
+                    open: {
+                        effects: "fadeIn"
+                    }
+                }
+            });
+     });
+        </script>
+}
+
+<h2>@ViewBag.Title</h2>
+<div id="rma">
+    <ul>
+        <li class="k-state-active">退货单信息
+        </li>
+        <li>退货单日志
+        </li>
+    </ul>
+    <div>
+    <div class="row">
+        <div class="span5">
+            <div class="widget stacked">
+                <div class="widget-header">
+                    <h3>退货申请信息</h3>
+                </div>
+                <div class="widget-content">
+                    <div class="span2">
+                        @Html.LabelFor(model => model.OrderNo)
+                        @Html.TextBoxFor(model => model.OrderNo, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.RMANo)
+                        @Html.TextBoxFor(model => model.RMANo, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Reason)
+                        @Html.TextAreaFor(model => model.Reason, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.RMAAmount)
+                        @Html.TextBoxFor(model => model.RMAAmount, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.RMAType)
+                        @Html.TextBox("RMAType_Show", ((Yintai.Hangzhou.Model.Enums.RMAType)Model.RMAType).ToFriendlyString(), new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Status)
+                        @Html.TextBox("Status_Show", ((Yintai.Hangzhou.Model.Enums.RMAStatus)Model.Status).ToFriendlyString(), new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.RejectReason)
+                        @Html.TextBoxFor(model => model.RejectReason, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.CreateDate)
+                        @Html.TextBoxFor(model => model.CreateDate, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.CreateUser)
+                        @Html.TextBoxFor(model => model.CreateUser, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.BankName)
+                        @Html.TextBoxFor(model => model.BankName, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.BankAccount)
+                        @Html.TextBoxFor(model => model.BankAccount, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.BankCard)
+                        @Html.TextBoxFor(model => model.BankCard, new { @class = "span2", @readonly = true })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span5">
+            <div class="widget stacked">
+                <div class="widget-header">
+                    <h3>退货商品信息</h3>
+                </div>
+                <div class="widget-content">
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Item.ProductId)
+                        @Html.TextBoxFor(model => model.Item.ProductId, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Item.StoreItem)
+                        @Html.TextAreaFor(model => model.Item.StoreItem, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Item.StoreDesc )
+                        @Html.TextBoxFor(model => model.Item.StoreDesc , new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Item.UnitPrice)
+                         @Html.TextBoxFor(model => model.Item.UnitPrice , new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Item.ItemPrice)
+                        @Html.TextBoxFor(model => model.Item.ItemPrice, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Item.Quantity)
+                        @Html.TextBoxFor(model => model.Item.Quantity, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.Item.ExtendPrice)
+                        @Html.TextBoxFor(model => model.Item.ExtendPrice, new { @class = "span2", @readonly = true })
+                    </div>
+                    
+
+                </div>
+            </div>
+        </div>
+        <div class="span5">
+            <div class="widget stacked">
+                <div class="widget-header">
+                    <h3>退货处理信息</h3>
+                </div>
+                <div class="widget-content">
+                    <div class="span2">
+                        @Html.LabelFor(model => model.GiftReason)
+                        @Html.TextBoxFor(model => model.GiftReason, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.InvoiceReason)
+                        @Html.TextBoxFor(model => model.InvoiceReason, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.PostalFeeReason)
+                        @Html.TextAreaFor(model => model.PostalFeeReason, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.RebatePointReason)
+                        @Html.TextBoxFor(model => model.RebatePointReason, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.rebatepostfee)
+                        @Html.TextBoxFor(model => model.rebatepostfee, new { @class = "span2", @readonly = true })
+                    </div>
+                   
+                    <div class="span2">
+                        @Html.LabelFor(model => model.PostalFeeReason)
+                        @Html.TextBoxFor(model => model.PostalFeeReason, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.ChargeGiftFee)
+                        @Html.TextBoxFor(model => model.ChargeGiftFee, new { @class = "span2", @readonly = true })
+                    </div>
+                    <div class="span2">
+                        @Html.LabelFor(model => model.chargepostfee)
+                        @Html.TextBoxFor(model => model.chargepostfee, new { @class = "span2", @readonly = true })
+                    </div>
+                     <div class="span2">
+                        @Html.LabelFor(model => model.ActualAmount)
+                        @Html.TextBoxFor(model => model.ActualAmount, new { @class = "span2", @readonly = true })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+     <div>
+          <table>
+            <tr>
+                <th>退货单号</th>
+                <th>操作用户</th>
+                <th>操作时间
+                </th>
+                <th>操作描述</th>
+
+            </tr>
+
+            @foreach (var item in Model.Logs)
+            {
+                <tr>
+
+                    <td>@Html.DisplayFor(model => item.RMANo)</td>
+                    <td>@Html.DisplayFor(model => item.CreateUser)</td>
+                    <td>@Html.DisplayFor(model => item.CreateDate)</td>
+                    <td>@Html.DisplayFor(model => item.Operation)</td>
+                </tr>
+            }
+        </table>
+     </div>
+</div>
+ <div class="form-actions">
+        @Html.ActionLink2("返回订单", "Details", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
+</div>

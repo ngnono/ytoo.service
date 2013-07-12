@@ -31,7 +31,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
 
         [Range(0, Int32.MaxValue)]
         [Required]
-        [Display(Name = "增加积分用户代码")]
+        [Display(Name = "增加积点用户代码")]
         [UIHint("Association")]
         [AdditionalMetadata("controller", "customer")]
         [AdditionalMetadata("displayfield", "Name")]
@@ -61,7 +61,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [Display(Name = "来源ID")]
         public int PointSourceId { get; set; }
 
-        [Display(Name = "积分来源")]
+        [Display(Name = "积点来源")]
         [Required]
         [Range(0, Int32.MaxValue)]
         public int PointSourceType { get; set; }
@@ -89,11 +89,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [AdditionalMetadata("valuefield", "Id")]
         [Display(Name = "用户代码")]
         public int? UId { get; set; }
-        [Display(Name = "积分类型")]
+        [Display(Name = "积点类型")]
         public PointType? PType { get; set; }
-        [Display(Name = "积分来源")]
+        [Display(Name = "积点来源")]
         public PointSourceType? PSourceType { get; set; }
-        [Display(Name = "积分来源代码")]
+        [Display(Name = "积点来源代码")]
         public int? PSourceId { get; set; }
 
         [Display(Name = "排序")]

@@ -11,14 +11,14 @@ namespace Yintai.Hangzhou.Contract.Point
     public interface IPointDataService
     {
         /// <summary>
-        /// 获取积分详情
+        /// 获取积点详情
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         ExecuteResult<PointInfoResponse> Get(GetPointInfoRequest request);
 
         /// <summary>
-        /// 获取积分列表
+        /// 获取积点列表
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

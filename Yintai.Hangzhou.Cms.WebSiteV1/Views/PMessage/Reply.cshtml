@@ -2,6 +2,7 @@
 @{
     var lastMessages = ViewBag.RecentMsg;
     ViewBag.Title = "回复私信";
+    IEnumerable<SelectListItem> replyList = ViewBag.ReplyList;
 }
 @section PageBread
 {
@@ -11,38 +12,67 @@
         <li class="active">@ViewBag.Title</li>
     </ul>
 }
+<div class="media">
+        <div class="pull-left clearfix">
+            <img class="media-object" src="@Model.FromUserModel.Logo" data-src="holder.js/50x50">
+            <h4 class="media-heading">@Model.FromUserModel.Nickname</h4>
+        </div>
+       <div class="pull-right clearfix">
+            <img class="media-object" src="@Model.ToUserModel.Logo" data-src="holder.js/50x50">
+            <h4 class="media-heading">@Model.ToUserModel.Nickname</h4>
+        </div>
+    </div>
 @if (lastMessages != null)
 { 
     foreach(PMessageViewModel msg in lastMessages)
     {
-    <div class="media">
-        <a class="pull-left" href="#">
-            <img class="media-object" src="@msg.FromUserModel.Logo" data-src="holder.js/50x50">
-        </a>
-        <div class="media-body">
-            <h4 class="media-heading">@msg.FromUserModel.Nickname</h4>
-            <p>@msg.TextMsg</p>
-            <p>@msg.CreateDate</p>
-        </div>
-    </div>
+        if (msg.FromUser==Model.FromUser)
+        {
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="@msg.FromUserModel.Logo" data-src="holder.js/50x50">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading">@msg.FromUserModel.Nickname</h4>
+                    <p>@msg.TextMsg</p>
+                    <p>@msg.CreateDate</p>
+                </div>
+            </div>
+        } else
+        {
+               <div class="media">
+                <a class="pull-right" href="#">
+                    <img class="media-object" src="@msg.FromUserModel.Logo" data-src="holder.js/50x50">
+                </a>
+                <div class="media-body pull-right">
+                    <h4 class="media-heading">@msg.FromUserModel.Nickname</h4>
+                    <p>@msg.TextMsg</p>
+                    <p>@msg.CreateDate</p>
+                </div>
+            </div>  
+        }
     }
 }
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
         <div class="editor-label">
+            @Html.LabelFor(model => model.ToUser)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("ToUser",replyList)
+            @Html.ValidationMessageFor(model => model.ToUser)
+        </div>           
+        <div class="editor-label">
             @Html.LabelFor(model => model.TextMsg)
         </div>
         <div class="editor-field">
             @Html.TextArea("TextMsg", Model == null ? String.Empty : Model.TextMsg)
             @Html.ValidationMessageFor(model => model.TextMsg)
-        </div>
-
-            
+        </div>           
 
       <p>
           @Html.HiddenFor(model=>model.FromUser)
-           @Html.HiddenFor(model=>model.ToUser)
            <input type="submit" value="回复" class="btn btn-primary" />
             @Html.ActionLink2("返回列表", "List", null, new { @class="btn"})
         </p>

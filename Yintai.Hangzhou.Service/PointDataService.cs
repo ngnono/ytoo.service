@@ -31,7 +31,7 @@ namespace Yintai.Hangzhou.Service
 
             if (pointEntity.User_Id != request.AuthUid)
             {
-                return new ExecuteResult<PointInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "您不能使用其他用户的积分" };
+                return new ExecuteResult<PointInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "您不能使用其他用户的积点" };
             }
 
             return new ExecuteResult<PointInfoResponse>(MappingManager.PointInfoResponseMapping(pointEntity));

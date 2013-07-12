@@ -83,6 +83,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IRMALogRepository, RMALogRepository>();
             Current.Register<IRMAItemRepository, RMAItemRepository>();
             Current.Register<IPMessageRepository, PMessageRepository>();
+            Current.Register<IProductCode2StoreCodeRepository, ProductCode2StoreCodeRepository>();
         }
 
         #endregion

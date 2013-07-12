@@ -53,7 +53,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             {
                 return new RestfulResult
                 {
-                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "兑换积分需大于最小积分限制!" }
+                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "兑换积点需大于最小积点限制!" }
 
                 }; 
             }

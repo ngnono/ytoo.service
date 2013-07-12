@@ -45,7 +45,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                { "UploadGroupId", typeof(int)},
                { "InDate", typeof(DateTime)},
                { "Status",typeof(int)},
-               { "Is4Sale", typeof(bool)}
+               { "Is4Sale", typeof(bool)},
+               { "UPCCode", typeof(string)}
             };
         private static Dictionary<string, Type> propertyCols = new Dictionary<string, Type>() { 
                { "ItemCode",typeof(string)},
@@ -116,7 +117,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                     SubjectIds = p.P.Subjects,
                     GroupId = p.P.UploadGroupId.Value,
                     Id = p.P.id,
-                    Properties = p.PP
+                    Properties = p.PP,
+                    UPCCode = p.P.UPCCode
                 };
             }
         }
@@ -150,7 +152,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             if (fileInfor != null)
             {
                 var itemNames = Path.GetFileNameWithoutExtension(_filePath).Split('@');
-                int sortOrder = 1;
+                int sortOrder = 10;
+                //get sort Order
+                var lastResource = _context.Context.Set<ResourceStageEntity>()
+                                    .Where(r => r.UploadGroupId == jobId && r.ItemCode == itemNames[0])
+                                    .OrderByDescending(r=>r.SortOrder)
+                                    .FirstOrDefault();
+                if (lastResource != null)
+                    sortOrder = (lastResource.SortOrder??0) - 1;
                 bool isDimension = false;
                 if (itemNames.Length > 1 && string.Compare(itemNames[1], "cc", true) == 0)
                     isDimension = true;
@@ -289,6 +298,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                     dr[i++] = DateTime.Now;
                     dr[i++] = ProUploadStatus.ProductsOnStage;
                     dr[i++] = mapCellValueToStrongType<bool?>(row.GetCell(10)) ?? false;
+                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(11));
                    
                     dt.Rows.Add(dr);
                 }

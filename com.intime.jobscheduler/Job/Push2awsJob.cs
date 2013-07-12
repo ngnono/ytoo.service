@@ -991,6 +991,10 @@ namespace com.intime.jobscheduler.Job
                                                   Name = section.Name,
                                                    Status = section.Status
                                           })
+                            let upccode = from codemap in db.ProductCode2StoreCode
+                                          where codemap.ProductId==p.Id && codemap.StoreId==p.Store_Id
+                                            && codemap.Status!=(int)DataStatus.Deleted
+                                          select codemap.StoreProductCode
                             select new ESProduct()
                             {
                                 Id = p.Id,
@@ -1040,7 +1044,8 @@ namespace com.intime.jobscheduler.Job
                                 InvolvedCount = p.InvolvedCount,
                                 ShareCount = p.ShareCount,
                                 RecommendUserId = p.RecommendUser,
-                                Section=section.FirstOrDefault()
+                                Section=section.FirstOrDefault(),
+                                UpcCode = upccode.FirstOrDefault()
                             };
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESProduct>();

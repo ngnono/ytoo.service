@@ -1,0 +1,122 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteV1.Models.OrderViewModel
+@{
+    ViewBag.Title = "修改订单";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("订单列表", "List")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("订单详情", "Details", new { OrderNo=Model.OrderNo})<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+ @Html.Partial("_AlertMessage")
+@using (Html.BeginForm("Edit", "Order",FormMethod.Post))
+{
+    @Html.ValidationSummary(false)
+    <div>
+        <div class="row">
+            <div class="span5">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <h3>订单信息</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="span2">
+                            @Html.LabelFor(model => model.OrderNo)
+                            @Html.TextBoxFor(model => model.OrderNo, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.Customer)
+                            @Html.TextBoxFor(model => model.Customer.Nickname, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.TotalAmount)
+                            @Html.TextBoxFor(model => model.TotalAmount, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.ShippingFee)
+                            @Html.TextBoxFor(model => model.ShippingFee, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.StoreName)
+                            @Html.TextBoxFor(model => model.StoreName, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.PaymentMethodName)
+                            @Html.TextBoxFor(model => model.PaymentMethodName, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.Status)
+                            @Html.TextBox("StatusS", ((Yintai.Hangzhou.Model.Enums.OrderStatus)Model.Status).ToFriendlyString(), new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.Memo)
+                             @Html.TextBoxFor(model => model.Memo, new { @class = "span2", @readonly = true })
+                        </div>
+
+                        <div class="span2">
+                            @Html.LabelFor(model => model.CreateDate)
+                            @Html.TextBoxFor(model => model.CreateDate, new { @class = "span2", @readonly = true })
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.UpdateDate)
+                            @Html.TextBoxFor(model => model.UpdateDate, new { @class = "span2", @readonly = true })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="span5">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <h3>送货地址信息</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="span5">
+                            @Html.LabelFor(model => model.ShippingAddress)
+                            @Html.TextBoxFor(model => model.ShippingAddress, new { @class = "span4"})
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.ShippingContactPerson)
+                            @Html.TextBoxFor(model => model.ShippingContactPerson, new { @class = "span2"})
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.ShippingContactPhone)
+                            @Html.TextBoxFor(model => model.ShippingContactPhone, new { @class = "span2"})
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.ShippingZipCode)
+                            @Html.TextBoxFor(model => model.ShippingZipCode, new { @class = "span2"})
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="span5">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <h3>发票信息</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="span2">
+                            @Html.LabelFor(model => model.NeedInvoice)
+                            @Html.CheckBox("NeedInvoice", Model.NeedInvoice ?? false, new { @class = "span2"})
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.InvoiceSubject)
+                            @Html.TextBoxFor(model => model.InvoiceSubject, new { @class = "span2"})
+                        </div>
+                        <div class="span2">
+                            @Html.LabelFor(model => model.InvoiceDetail)
+                            @Html.TextBoxFor(model => model.InvoiceDetail, new { @class = "span2"})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+     <div class="form-actions">
+        <input type="submit" value="保存" class="btn btn-primary" />
+        @Html.ActionLink2("返回订单", "Details", new { OrderNo = Model.OrderNo}, new { @class = "btn" })
+ </div>
+}

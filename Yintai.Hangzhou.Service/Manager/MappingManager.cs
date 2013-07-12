@@ -398,7 +398,7 @@ namespace Yintai.Hangzhou.Service.Manager
             //3.优惠券
             //4.收藏的商品
             //5.分享到外站的商品
-            //6.积分
+            //6.积点
 
             var ilikeCount = _likeRepository.GetILikeCount(source.Id);
             var likeMeCount = _likeRepository.GetLikeMeCount(source.Id);
