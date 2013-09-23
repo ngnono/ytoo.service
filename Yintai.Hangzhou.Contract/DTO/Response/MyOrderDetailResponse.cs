@@ -60,31 +60,22 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name = "memo")]
          public string Memo { get; set; }
         
-        [DataMember(Name = "resource")]
-         public ResourceInfoResponse ProductResource { get; set; }
-        [DataMember(Name="product")]
-        public MyOrderItemDetailResponse Product { get; set; }
+
+        [DataMember(Name="products")]
+        public IEnumerable<MyOrderItemDetailResponse> Products { get; set; }
         [DataMember(Name = "rmas")]
         public IEnumerable<MyRMAResponse> RMAs { get; set; }
-        [DataMember(Name = "totalquantity")]
-        public int TotalQuantity { get {
-            if (Product == null)
-                return 0;
-            return Product.Quantity;
-        } }
+
+     
         [DataMember(Name="canvoid")]
         public bool CanVoid { get {
-           return new int[]{(int)OrderStatus.Create,
-                                        (int)OrderStatus.AgentConfirmed,
-                                        (int)OrderStatus.CustomerConfirmed,
-                                        (int)OrderStatus.CustomerReceived,
-                                        (int)OrderStatus.OrderPrinted}.Any(status => status == Status);
+           return new int[]{(int)OrderStatus.Create}.Any(status => status == Status);
         } }
           [DataMember(Name = "canrma")]
         public bool CanRMA {
             get {
-                return Status == (int)OrderStatus.Convert2Sales &&
-                        (RMAs==null || !RMAs.Any(r=>new int[]{(int)RMAStatus.Created,(int)RMAStatus.PackageReceived,(int)RMAStatus.PrintRMA}.Any(status=>status==r.Status)));
+                return Status == (int)OrderStatus.CustomerReceived &&
+                        (RMAs==null || !RMAs.Any(r=>new int[]{(int)RMAStatus.Created,(int)RMAStatus.CustomerConfirmed,(int)RMAStatus.PackageReceived,(int)RMAStatus.PassConfirmed}.Any(status=>status==r.Status)));
             }
         }
 
@@ -98,7 +89,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string ProductId { get; set; }
         [DataMember(Name = "productname")]
         public string ProductName { get; set; }
-        [DataMember(Name = "properties")]
+         [DataMember(Name = "productdesc")]
         public string ProductDesc { get; set; }
         [DataMember(Name = "itemno")]
         public string StoreItemNo { get; set; }
@@ -110,6 +101,11 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public decimal ItemPrice { get; set; }
         [DataMember(Name="resource")]
          public ResourceInfoResponse ProductResource { get; set; }
+        [DataMember(Name = "skucode")]
+        public string SkuCode { get; set; }
+
+        [DataMember(Name = "properties")]
+        public IEnumerable<TagPropertyDetailResponse> Properties { get; set; }
     }
      [DataContract]
     public class MyRMAResponse : BaseResponse

@@ -226,11 +226,12 @@ namespace Yintai.Hangzhou.Service
             {
                 return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "参数错误" };
             }
+            /*
             if (request.Is4Sale.HasValue && request.Is4Sale.Value == true && string.IsNullOrEmpty(request.UPCCode))
             {
-                return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "可销售商品需要设置专柜货号" };
+                return new ExecuteResult<ProductInfoResponse>(null) { StatusCode = StatusCode.ClientError, Message = "可销售商品需要设置商品货号" };
             }
-
+            */
             if (request.RecommendUser == 0)
             {
                 request.RecommendUser = request.AuthUid;
@@ -278,7 +279,7 @@ namespace Yintai.Hangzhou.Service
                         ProductId = entity.Id,
                         Status = (int)DataStatus.Normal,
                         StoreId = entity.Store_Id,
-                        StoreProductCode = request.UPCCode,
+                        ExPId = int.Parse(request.UPCCode),
                         UpdateDate = DateTime.Now,
                         UpdateUser = request.AuthUser.Id
                     });
@@ -620,7 +621,7 @@ namespace Yintai.Hangzhou.Service
                 }
                 using (var ts = new TransactionScope())
                 {
-                    var pr = _couponDataService.CreateCoupon(new CouponCouponRequest
+                    coupon = _couponDataService.CreateCoupon(new CouponCouponRequest
                     {
                         AuthUid = request.AuthUser.Id,
                         PromotionId = promotionEntity.Id,
@@ -632,7 +633,7 @@ namespace Yintai.Hangzhou.Service
                         Client_Version = request.Client_Version
                     });
 
-                    if (!pr.IsSuccess)
+                    if (!coupon.IsSuccess)
                     {
                         return new ExecuteResult<ProductInfoResponse>(null)
                         {

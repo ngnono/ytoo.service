@@ -39,13 +39,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.common",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.jobscheduler", "com.intime.jobscheduler\com.intime.jobscheduler.csproj", "{0F72CED6-CDD5-4F97-BB8B-CDB54FC1BEF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Architecture.ImageClient", "Yintai.Architecture.Framework\Yintai.Architecture.ImageClient\Yintai.Architecture.ImageClient.csproj", "{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Architecture.ImageTool", "Yintai.Architecture.Framework\Yintai.Architecture.ImageTool\Yintai.Architecture.ImageTool.csproj", "{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Architecture.Framework", "Yintai.Architecture.Framework\Yintai.Architecture.Framework\Yintai.Architecture.Framework.csproj", "{11D4830C-FD83-48B8-96DE-6F51C9C2576C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yintai.Architecture.Common", "Yintai.Architecture.Framework\Yintai.Architecture.Common\Yintai.Architecture.Common.csproj", "{59E0C0A8-622A-498A-AC66-1C9E0588C74C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.data.erp", "com.intime.fashion.data\com.intime.fashion.data.erp.csproj", "{B224C596-53F1-48A6-948F-DF3CD2ACD15D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -177,26 +175,6 @@ Global
 		{0F72CED6-CDD5-4F97-BB8B-CDB54FC1BEF6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0F72CED6-CDD5-4F97-BB8B-CDB54FC1BEF6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0F72CED6-CDD5-4F97-BB8B-CDB54FC1BEF6}.Release|Win32.ActiveCfg = Release|Any CPU
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4}.Release|Win32.ActiveCfg = Release|Any CPU
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Release|Any CPU.Build.0 = Release|Any CPU
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127}.Release|Win32.ActiveCfg = Release|Any CPU
 		{11D4830C-FD83-48B8-96DE-6F51C9C2576C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{11D4830C-FD83-48B8-96DE-6F51C9C2576C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11D4830C-FD83-48B8-96DE-6F51C9C2576C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -217,12 +195,23 @@ Global
 		{59E0C0A8-622A-498A-AC66-1C9E0588C74C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{59E0C0A8-622A-498A-AC66-1C9E0588C74C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{59E0C0A8-622A-498A-AC66-1C9E0588C74C}.Release|Win32.ActiveCfg = Release|Any CPU
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B07CEC69-B35A-4435-9E83-D7AD4E1F236E} = {3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}
+		{B224C596-53F1-48A6-948F-DF3CD2ACD15D} = {3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}
 		{173FF5C0-5631-47AD-AF9E-16442858C080} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
 		{11F8922E-2EEB-4229-BA7C-1D44843C4EDA} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
 		{193902DC-242C-4DBA-B173-EE154E813C4B} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
@@ -236,8 +225,6 @@ Global
 		{93E896A8-D229-4422-B31B-DF2F2403728E} = {32D121FF-079E-402E-9A1E-C1049913BEF9}
 		{0F72CED6-CDD5-4F97-BB8B-CDB54FC1BEF6} = {32D121FF-079E-402E-9A1E-C1049913BEF9}
 		{6992FFB6-C70D-4F8A-A03A-4F663FA370F4} = {E958B8C0-AC89-400A-83F9-BB239A2DCD93}
-		{D9C4AD63-A6A4-4076-9A8C-03EFE93F62B4} = {E958B8C0-AC89-400A-83F9-BB239A2DCD93}
-		{19B4BE47-1AA2-4826-ADDE-068EB1EC4127} = {E958B8C0-AC89-400A-83F9-BB239A2DCD93}
 		{11D4830C-FD83-48B8-96DE-6F51C9C2576C} = {E958B8C0-AC89-400A-83F9-BB239A2DCD93}
 		{59E0C0A8-622A-498A-AC66-1C9E0588C74C} = {E958B8C0-AC89-400A-83F9-BB239A2DCD93}
 	EndGlobalSection

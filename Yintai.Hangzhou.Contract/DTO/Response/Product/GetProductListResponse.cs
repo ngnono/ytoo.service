@@ -75,13 +75,13 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Product
         public int UpdatedUser { get; set; }
 
         /// <summary>
-        /// 价格
+        /// 销售价
         /// </summary>
         [IgnoreDataMember]
         public decimal Price { get; set; }
 
         /// <summary>
-        /// 价格
+        /// 销售价
         /// </summary>
         [DataMember(Name = "price")]
         public string PriceStr

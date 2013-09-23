@@ -153,14 +153,14 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         public ActionResult Edit(int id)
         {
             var entity = _prodpropertyvalRepo.Get(pv => pv.Status != (int)DataStatus.Deleted)
-                        .Join(_prodpropertyRepo.Get(p => p.Status != (int)DataStatus.Deleted && p.ProductId == id), o => o.PropertyId, i => i.Id, (o, i) => new { PV = o, P = i })
-                        .Join(_prodRepo.GetAll(), o => o.P.ProductId, i => i.Id, (o, i) => new { PV = o.PV, P = o.P, T = i });
+                        .Join(_prodpropertyRepo.Get(p => p.Status != (int)DataStatus.Deleted && p.ProductId == id), o => o.PropertyId, i => i.Id, (o, i) => new { PV = o, P = i });
             ProductPropertyViewModel vo = new ProductPropertyViewModel();
+            var prodEntity = _prodRepo.Find(id);
             vo.Values = new List<TagPropertyValueViewModel>();
+            vo.ProductId = prodEntity.Id;
+            vo.ProductName = prodEntity.Name;
             foreach (var l in entity)
             {
-                vo.ProductId = l.P.ProductId;
-                vo.ProductName = l.T.Name;
                 var newValue = new TagPropertyValueViewModel().FromEntity<TagPropertyValueViewModel>(l.PV, p =>
                 {
                     p.PropertyDesc = l.P.PropertyDesc;

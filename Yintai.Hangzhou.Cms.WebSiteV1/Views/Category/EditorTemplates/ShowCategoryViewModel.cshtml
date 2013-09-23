@@ -1,0 +1,15 @@
+﻿@model ShowCategoryViewModel
+    <tr>
+        <td>@Html.LabelFor(model => model.ShowChannel)
+            @Html.DropDownListFor(model => model.ShowChannel,Model.AvailShowChannels)</td>
+        <td>@Html.LabelFor(model=>model.ShowCategoryId)
+            @Html.EditorFor(model => model.ShowCategoryId, new { @class="txtCatId"})
+        </td>
+         <td>@Html.LabelFor(model=>model.ShowCategoryName)
+            @Html.TextBoxFor(model => model.ShowCategoryName, new { @readonly=true})
+        </td>
+        <td>@Html.HiddenFor(model=>model.Status,new { @class = "mark-for-delete" })
+            @Html.HiddenFor(model=>model.Id)
+            <a href="#" onclick="removeNestedForm(this,'tr:first','input.mark-for-delete');" class="btn">删除</a>
+        </td>
+    </tr>

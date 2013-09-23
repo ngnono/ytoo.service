@@ -1,12 +1,8 @@
 ﻿@model  Yintai.Hangzhou.Cms.WebSiteV1.Models.LoginViewModel
-@using PoliteCaptcha
 @{
     ViewBag.Title = "登陆";
 }
-@section PageJsSection
-{
-   @Html.SpamPreventionScript()
- }
+
 <hgroup class="title">
     <h1>@ViewBag.Title</h1>
 </hgroup>
@@ -26,7 +22,6 @@
                 @Html.ValidationMessageFor(m => m.Password)
             </div>
         <div class="control-group">
-         @Html.SpamPreventionFields()
         <input type="submit" value="登陆" class="btn btn-primary" />
     
         </div>

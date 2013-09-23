@@ -78,17 +78,20 @@ namespace Yintai.Hangzhou.Repository.Impl
         }
         public void BulkInsertProduct(System.Data.DataTable dt, System.Data.DataTable propertyDt, int jobId, IEnumerable<string> cols, IEnumerable<string> pcols)
         {
-            using (SqlConnection destinationConnection = new SqlConnection(ConfigurationManager.ConnectionStrings[CONNECT_STRING].ConnectionString))
+            if (propertyDt != null && propertyDt.Rows.Count > 0)
             {
-                using (var bulkCopy = new SqlBulkCopy(destinationConnection))
+                using (SqlConnection destinationConnection = new SqlConnection(ConfigurationManager.ConnectionStrings[CONNECT_STRING].ConnectionString))
                 {
-                    foreach (var col in pcols)
+                    using (var bulkCopy = new SqlBulkCopy(destinationConnection))
                     {
-                        bulkCopy.ColumnMappings.Add(col, col);
+                        foreach (var col in pcols)
+                        {
+                            bulkCopy.ColumnMappings.Add(col, col);
+                        }
+                        bulkCopy.DestinationTableName = "dbo.ProductPropertyStage";
+                        destinationConnection.Open();
+                        bulkCopy.WriteToServer(propertyDt);
                     }
-                    bulkCopy.DestinationTableName = "dbo.ProductPropertyStage";
-                    destinationConnection.Open();
-                    bulkCopy.WriteToServer(propertyDt);
                 }
             }
             BulkInsertProduct(dt, jobId, cols);

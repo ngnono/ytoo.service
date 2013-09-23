@@ -175,4 +175,7 @@ padding-bottom:5px;
   right: 6px;
 }
 
+.k-grid td {
+    word-wrap:break-word;
+}
 

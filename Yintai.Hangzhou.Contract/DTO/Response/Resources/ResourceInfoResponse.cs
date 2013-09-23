@@ -1,4 +1,5 @@
-﻿using com.intime.fashion.common;
+﻿
+using com.intime.fashion.common;
 using System;
 using System.Runtime.Serialization;
 using Yintai.Architecture.Common.Models;

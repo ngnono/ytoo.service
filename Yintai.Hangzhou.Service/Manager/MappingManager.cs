@@ -1067,13 +1067,13 @@ namespace Yintai.Hangzhou.Service.Manager
                 sourceTypes.Add((int)SourceType.Promotion);
             }
 
-            var rsp = sp.Join(resouceRepository.Get(v => v.Status == (int)DataStatus.Normal && sourceTypes.Any(s => s == v.SourceType)),
+            var rsp = sp.GroupJoin(resouceRepository.Get(v => v.Status == (int)DataStatus.Normal && sourceTypes.Any(s => s == v.SourceType)),
                               p => p.P.Id, f => f.SourceId, (p, f) => new
                                   {
                                       P = p.P,
                                       S = p.S,
-                                      R = f
-                                  }).DefaultIfEmpty();
+                                      R = f.OrderByDescending(rf=>rf.SortOrder).FirstOrDefault()
+                                  });
 
             var target = new Dictionary<int, PromotionInfoResponse>();
 
@@ -1099,7 +1099,7 @@ namespace Yintai.Hangzhou.Service.Manager
                 {
                     var store = StoreResponseMapping(item.S, coordinateInfo);
 
-                    var t = PromotionResponseMapping(item.P, coordinateInfo, null, new List<ResourceInfoResponse> { r }, store, null);
+                    var t = PromotionResponseMapping(item.P, coordinateInfo, null,r==null?null:new List<ResourceInfoResponse> { r }, store, null);
                     if (t.ResourceInfoResponses == null)
                     {
                         t.ResourceInfoResponses = new List<ResourceInfoResponse>();
@@ -2023,7 +2023,7 @@ namespace Yintai.Hangzhou.Service.Manager
             {
                 return null;
             }
-
+            
             var target = Mapper.Map<ProductInfoRequest, ProductEntity>(source);
             target.CreatedDate = DateTime.Now;
             target.CreatedUser = source.AuthUid;
@@ -2122,12 +2122,12 @@ namespace Yintai.Hangzhou.Service.Manager
 
             var linq = source;
 
-            var rp = linq.Join(_resourceRepository.Get(DataStatus.Normal, SourceType.Product),
+            var rp = linq.GroupJoin(_resourceRepository.Get(DataStatus.Normal, SourceType.Product),
                   p => p.Id, f => f.SourceId, (p, f) => new
                   {
                       P = p,
-                      R = f
-                  }).DefaultIfEmpty().ToList();
+                      R = f.OrderByDescending(rf=>rf.SortOrder).FirstOrDefault()
+                  }).ToList();
             var rl = linq.Join(_pprRepository.Get(DataStatus.Normal), p => p.Id, f => f.ProdId, (p, f) => f);
             var pp = rl.Join(_promotionRepository.Get(new PromotionFilter
                 {
@@ -2158,18 +2158,19 @@ namespace Yintai.Hangzhou.Service.Manager
                 }
 
                 ProductInfoResponse target;
+                var targetResource = ResourceInfoResponsesMapping(item.R);
                 if (dic.TryGetValue(item.P.Id, out target))
                 {
                     if (item.R != null)
                     {
-                        target.ResourceInfoResponses.Add(ResourceInfoResponsesMapping(item.R));
+                        target.ResourceInfoResponses.Add(targetResource);
                     }
                 }
                 else
                 {
                     var pros = ppR.Where(v => v.Rel.ProdId == item.P.Id).Select(v => v.Pro).ToList();
 
-                    target = ProductInfoResponseMapping(item.P, null, null, null, null, new List<ResourceInfoResponse> { ResourceInfoResponsesMapping(item.R) }, pros);
+                    target = ProductInfoResponseMapping(item.P, null, null, null, null,targetResource==null?null:new List<ResourceInfoResponse> { targetResource }, pros);
                     dic.Add(item.P.Id, target);
                 }
             }
@@ -2178,9 +2179,9 @@ namespace Yintai.Hangzhou.Service.Manager
 
             foreach (var item in result)
             {
-                if (item.ResourceInfoResponses.Count > 1)
+                if (item.ResourceInfoResponses!=null && item.ResourceInfoResponses.Count > 1)
                 {
-                    item.ResourceInfoResponses = item.ResourceInfoResponses.OrderBy(v => v.SortOrder).ToList();
+                    item.ResourceInfoResponses = item.ResourceInfoResponses.OrderByDescending(v => v.SortOrder).ToList();
                 }
             }
 

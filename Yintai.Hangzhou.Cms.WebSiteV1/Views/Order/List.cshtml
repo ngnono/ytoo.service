@@ -66,10 +66,13 @@
                 columns:[{
                     field:"OrderNo",
                     title:"订单号",
-                    template: "@Html.Raw(detailUrl)"
+                    template: "@Html.Raw(detailUrl)",
+                    attributes: {
+                        style: "font-size: 12px;text-align:left;margin-left:0px"
+                    }
                 },{
                     field:"StatusName",
-                    title:"状态"
+                    title:"订单状态"
                 },{
                     field:"RMAStatusName",
                     title:"退货状态"

@@ -129,7 +129,7 @@
     }
     @if (Model.CanVoid)
     { 
-        <a href="#voidConfirm" role="button" class="btn btn-danger" data-toggle="modal">作废</a>     
+        @Html.ActionLink2("作废订单", "Void", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-danger" })
     }
 
 </div>
@@ -141,7 +141,7 @@
         </li>
         <li>订单日志
         </li>
-        <li>退换货
+        <li id="rmatab">退换货
         </li>
 
     </ul>
@@ -257,11 +257,14 @@
                 <th>显示名称</th>
                 <th>订购描述
                 </th>
-                <th>单价</th>
+                <th>门店</th>
+                 <th>品牌</th>
+                <th>吊牌价</th>
+                <th>销售价</th>
                 <th>数量</th>
                 <th>总额
                 </th>
-                <th>专柜货号</th>
+                <th>商品货号</th>
                 <th>专柜编码
                 </th>
                 <th>专柜商品描述</th>
@@ -280,6 +283,10 @@
                     <td>@Html.DisplayFor(model => item.ProductId)</td>
                     <td>@Html.DisplayFor(model => item.ProductName)</td>
                     <td>@Html.DisplayFor(model => item.ProductDesc)</td>
+
+                    <td>@Html.DisplayFor(model => item.Store.Name)</td>
+                    <td>@Html.DisplayFor(model => item.Brand.Name)</td>
+                    <td>@Html.DisplayFor(model => item.UnitPrice)</td>
                     <td>@Html.DisplayFor(model => item.ItemPrice)</td>
                     <td>@Html.DisplayFor(model => item.Quantity)</td>
                     <td>@Html.DisplayFor(model => item.ExtendPrice)</td>
@@ -314,61 +321,10 @@
         </table>
     </div>
     <div>
-        <div class="btn-group">
-            @if(Model.CanCreateOffRMA)
-            {
-            @Html.ActionLink2("现场退货", "CreateRMA", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
-            }
-            @if(Model.CanPrintRMA)
-            {
-                @Html.ActionLink2("打印退货单", "PrintRMA", new { RMANo = Model.FirstActiveRMA.RMANo}, new { @class = "btn",@id="printrma" })
-                @Html.ActionLink2("退还客户", "Reject2Customer", new { RMANo = Model.FirstActiveRMA.RMANo }, new { @class = "btn" })
-               
-            }
-            @if(Model.CanVoidRMA)
-            {
-            @Html.ActionLink2("作废退货单", "VoidRMA", new { RMANo = Model.FirstActiveRMA.RMANo }, new { @class = "btn btn-danger" })
-            }
-        </div>
-        <table>
-            <tr>
-                <th>退货号</th>
-                <th>申请用户</th>
-                <th>申请时间
-                </th>
-                <th>联系电话</th>
-                <th>退货方式</th>
-                <th>状态</th>
-                <th>退货理由</th>
-                <th>申请退货金额</th>
-                <th>不能退货原因</th>
-                <th>实际退货金额</th>
-                <th>操作用户</th>
-                <th>操作时间</th>
-            </tr>
-
-            @foreach (var item in Model.RMAs)
-            {
-                <tr>
-                    <td>@Html.ActionLink(item.RMANo,"ViewRMA",new {RMANo=item.RMANo})</td>
-                    <td>@Html.DisplayFor(model => item.CreateUser)</td>
-                    <td>@Html.DisplayFor(model => item.CreateDate)</td>
-                    <td>@Html.DisplayFor(model=>item.ContactPhone)</td>
-                    <td>@Html.Label("", ((RMAType)item.RMAType).ToFriendlyString())</td>
-                    <td>@Html.Label("", ((RMAStatus)item.Status).ToFriendlyString())</td>
-                    <td>@Html.DisplayFor(model => item.Reason)</td>
-                    <td>@Html.DisplayFor(model => item.RMAAmount)</td>
-                    <td>@Html.DisplayFor(model => item.RejectReason)</td>
-                    <td>@Html.DisplayFor(model => item.ActualAmount)</td>
-                    <td>@Html.DisplayFor(model => item.UpdateUser)</td>
-                    <td>@Html.DisplayFor(model => item.UpdateDate)</td>
-                </tr>
-            }
-        </table>
+      @Html.Partial("_RMAList",Model)
     </div>
 
 </div>
-
 
 <div id="voidConfirm" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
@@ -379,7 +335,7 @@
         <p>确认作废该订单吗，一旦作废，订单就会立即失效。</p>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
         @Html.ActionLink2("确认", "Void", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
     </div>
 </div>

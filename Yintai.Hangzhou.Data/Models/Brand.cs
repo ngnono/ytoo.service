@@ -17,6 +17,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string WebSite { get; set; }
         public int Status { get; set; }
         public string Group { get; set; }
+        public Nullable<int> ChannelBrandId { get; set; }
 
         #region Overrides of BaseEntity
 

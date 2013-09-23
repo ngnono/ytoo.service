@@ -49,6 +49,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ContactPhone)
                 .HasMaxLength(20);
 
+            this.Property(t => t.ShipNo)
+                .HasMaxLength(50);
+
             // Table & Column Mappings
             this.ToTable("RMA");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -75,6 +78,8 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.PostalFeeReason).HasColumnName("PostalFeeReason");
             this.Property(t => t.ChargeGiftFee).HasColumnName("ChargeGiftFee");
             this.Property(t => t.ContactPhone).HasColumnName("ContactPhone");
+            this.Property(t => t.ShipviaId).HasColumnName("ShipviaId");
+            this.Property(t => t.ShipNo).HasColumnName("ShipNo");
 		Init();
         }
 

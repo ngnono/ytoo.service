@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using Yintai.Architecture.Common.Models;
 
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
@@ -53,6 +54,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
             
             return models;
         }
+
+        public IEnumerable<SelectListItem> AvailShowChannels { get {
+            yield return new SelectListItem() { 
+                 Text="喜欢银泰",
+                  Value="C001"
+            };
+        } }
     }
 
     

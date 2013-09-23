@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -121,8 +122,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                          p.Customer = new CustomerViewModel().FromEntity<CustomerViewModel>(l.C);
                          p.StoreName = l.Store.Name;
                          p.ShippingViaMethod_Name = l.S==null?string.Empty:l.S.Name;
-                         if (l.RMA != null)
-                             p.RMAs = l.RMA.OrderByDescending(r=>r.CreateDate).Select(r => new RMAViewModel().FromEntity<RMAViewModel>(r));
+                         p.RMAs = l.RMA.ToList().OrderByDescending(r=>r.CreateDate).Select(r => new RMAViewModel().FromEntity<RMAViewModel>(r));
 
                      });
 
@@ -152,7 +152,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                         .GroupJoin(Context.Set<ProductCode2StoreCodeEntity>().Where(pm => pm.Status == (int)DataStatus.Normal),
                                 oi => new { Product = oi.ProductId, Store = oi.StoreId },
                                 i => new { Product = i.ProductId, Store = i.StoreId },
-                                (oi, i) => new { O = oi, StoreCode = i.Select(s=>s.StoreProductCode).FirstOrDefault() }
+                                (oi, i) => new { O = oi, StoreCode = i.Select(s=>s.ExPId).FirstOrDefault() }
                         )
                         .ToList()
                         .Select(oi => new OrderItemViewModel().FromEntity<OrderItemViewModel>(oi.O, item =>
@@ -160,7 +160,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                             item.ProductResource = new ResourceViewModel().FromEntity<ResourceViewModel>(Context.Set<ResourceEntity>().Where(r => r.SourceId == item.ProductId
                                         && r.SourceType == (int)SourceType.Product
                                         && r.Status != (int)DataStatus.Deleted).OrderByDescending(r => r.SortOrder).OrderBy(r => r.CreatedDate).FirstOrDefault());
-                            item.UPCCode = oi.StoreCode;
+                          //  item.UPCCode = oi.StoreCode;
+                            item.Brand = new BrandViewModel().FromEntity<BrandViewModel>(Context.Set<BrandEntity>().Find(item.BrandId));
+                            item.Store = new StoreViewModel().FromEntity<StoreViewModel>(Context.Set<StoreEntity>().Find(item.StoreId));
                         }));
                 o.ShippingViaMethod = _orderRepo.Context.Set<ShipViaEntity>().Where(s => s.Id == o.ShippingVia).FirstOrDefault();
                 o.StoreName = _orderRepo.Context.Set<StoreEntity>().Where(s => s.Id == o.StoreId).FirstOrDefault().Name;
@@ -270,8 +272,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             model.Items = order.ToList().Select(o => new OrderItemViewModel().FromEntity<OrderItemViewModel>(o.O, p =>
             {
                 p.ProductResource = new ResourceViewModel().FromEntity<ResourceViewModel>(o.R);
-                p.UPCCode = Context.Set<ProductCode2StoreCodeEntity>().Where(pm => pm.StoreId == o.O.StoreId && pm.ProductId == o.O.ProductId && pm.Status != (int)DataStatus.Deleted)
-                            .Select(pm => pm.StoreProductCode).FirstOrDefault();
+               // p.UPCCode = Context.Set<ProductCode2StoreCodeEntity>().Where(pm => pm.StoreId == o.O.StoreId && pm.ProductId == o.O.ProductId && pm.Status != (int)DataStatus.Deleted)
+                //            .Select(pm => pm.ExPId).FirstOrDefault();
+                p.Brand = new BrandViewModel().FromEntity<BrandViewModel>(Context.Set<BrandEntity>().Find(p.BrandId));
+                p.Store = new StoreViewModel().FromEntity<StoreViewModel>(Context.Set<StoreEntity>().Find(p.StoreId));
                 if (string.IsNullOrEmpty(p.StoreItemNo))
                 {
                     var sectionEntity = Context.Set<SectionEntity>().Where(s => s.StoreId == o.O.StoreId 
@@ -293,8 +297,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 foreach (var item in model.Items)
                 {
                     item.ProductResource = new ResourceViewModel().FromEntity<ResourceViewModel>(_orderRepo.Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.SourceId == item.ProductId).FirstOrDefault());
-                    item.UPCCode = Context.Set<ProductCode2StoreCodeEntity>().Where(pm => pm.StoreId == item.StoreId && pm.ProductId == item.ProductId && pm.Status != (int)DataStatus.Deleted)
-                           .Select(pm => pm.StoreProductCode).FirstOrDefault();
+                   // item.UPCCode = Context.Set<ProductCode2StoreCodeEntity>().Where(pm => pm.StoreId == item.StoreId && pm.ProductId == item.ProductId && pm.Status != (int)DataStatus.Deleted)
+                    //       .Select(pm => pm.StoreProductCode).FirstOrDefault();
+                    item.Brand = new BrandViewModel().FromEntity<BrandViewModel>(Context.Set<BrandEntity>().Find(item.BrandId));
+                    item.Store = new StoreViewModel().FromEntity<StoreViewModel>(Context.Set<StoreEntity>().Find(item.StoreId));
                 }
                 ViewBag.OrderNo = orderNo;
                 return View(model);
@@ -559,13 +565,31 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 
         public ActionResult Void(string orderNo)
         {
-            var order = _orderRepo.Get(o => o.OrderNo == orderNo).First();
+            var linq = _orderRepo.Get(o => o.OrderNo == orderNo);
+            linq = _userAuthRepo.AuthFilter(linq, CurrentUser.CustomerId, CurrentUser.Role) as IQueryable<OrderEntity>;
+            var order = linq.FirstOrDefault();
+            if (order == null)
+            {
+                throw new ArgumentNullException("orderNo");
+            }
+            var model = new OrderViewModel().FromEntity<OrderViewModel>(order);
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Void(OrderViewModel orderIn)
+        {
+            ExcludeModelFieldsFromValidate(new string[] { "Items", "Customer." });
+            if (string.IsNullOrEmpty(orderIn.VoidReason))
+            {
+                ModelState.AddModelError("", "必须填写作废原因");
+                return View(orderIn);
+            }
+            var order = _orderRepo.Get(o => o.OrderNo == orderIn.OrderNo).First();
             string errorMsg;
             if (!OrderViewModel.IsAuthorized(order.StoreId, order.BrandId, out errorMsg))
             {
-                ViewBag.OrderNo = orderNo;
                 ViewBag.Message = errorMsg;
-                return RedirectToAction("Details", new { OrderNo = orderNo });
+                return View(orderIn);
             }
             using (var ts = new TransactionScope())
             {
@@ -577,18 +601,17 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 
                 _orderLogRepo.Insert(new OrderLogEntity()
                 {
-                    OrderNo = orderNo,
+                    OrderNo = orderIn.OrderNo,
                     CreateDate = DateTime.Now,
                     CreateUser = CurrentUser.CustomerId,
                     CustomerId = CurrentUser.CustomerId,
-                    Operation = "作废订单。",
+                    Operation = string.Format("作废订单:{0}",orderIn.VoidReason),
                     Type = (int)OrderOpera.FromOperator
                 });
                 ts.Complete();
             }
-            return RedirectToAction("Details", new { OrderNo = orderNo });
+            return RedirectToAction("Details", new { OrderNo = orderIn.OrderNo });
         }
-
         public ActionResult Reject2Customer(string rmano)
         {
             var rmaEntity = _rmaRepo.Get(o => o.RMANo == rmano).FirstOrDefault();
@@ -636,20 +659,19 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             return RedirectToAction("details", new { orderNo = model.OrderNo });
 
         }
-
+        [HttpPost]
         public ActionResult VoidRMA(string rmano)
         {
             var rmaEntity = _rmaRepo.Get(o => o.RMANo == rmano).FirstOrDefault();
             if (rmaEntity == null)
-                throw new ArgumentException("rmano");
+                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, "数据异常");
             if (rmaEntity.Status != (int)RMAStatus.Created)
-                throw new ArgumentException("cannot void!");
+                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, "退货单状态不能取消。");
             string errorMsg;
             var orderEntity = _orderRepo.Get(o => o.OrderNo == rmaEntity.OrderNo).First();
             if (!OrderViewModel.IsAuthorized(orderEntity.StoreId, orderEntity.BrandId, out errorMsg))
             {
-                ViewBag.Message = errorMsg;
-                return RedirectToAction("details", new { orderNo = rmaEntity.OrderNo });
+                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, errorMsg);
             }
             using (var ts = new TransactionScope())
             {
@@ -667,7 +689,21 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 });
                 ts.Complete();
             }
-            return RedirectToAction("details", new { orderNo = rmaEntity.OrderNo });
+
+            var model = new OrderViewModel().FromEntity<OrderViewModel>(orderEntity, o =>
+            {
+                o.RMAs = _rmaRepo.Get(r => r.OrderNo == o.OrderNo)
+                         .GroupJoin(_rmaitemRepo.GetAll(), ou => ou.RMANo, i => i.RMANo, (ou, i) => new { R = ou, RI = i.FirstOrDefault() })
+                         .OrderByDescending(r => r.R.CreateDate)
+                         .ToList()
+                         .Select(r => new RMAViewModel().FromEntity<RMAViewModel>(r.R, rm =>
+                         {
+                             rm.Item = new RMAItemViewModel().FromEntity<RMAItemViewModel>(r.RI);
+                         }));
+
+
+            });
+            return PartialView("_RMAList", model);
         }
 
         public ActionResult PrintRMA(string rmaNo)
@@ -730,6 +766,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             return SuccessResponse();
         }
+        [HttpPost]
         public ActionResult CreateRMA(string orderNo)
         {
             string errorMsg = string.Empty;
@@ -742,12 +779,11 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 errorMsg += "订单已经创建了退货单，请将已有退货单作废，然后再创建！";
             if (!string.IsNullOrEmpty(errorMsg))
             {
-                ViewBag.Message = errorMsg;
-                return RedirectToAction("details", new { OrderNo = orderNo });
+                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, errorMsg);
             }
             if (!OrderViewModel.IsAuthorized(orderEntity.StoreId, orderEntity.BrandId, out errorMsg))
             {
-                throw new ArgumentException(errorMsg);
+                return new HttpStatusCodeResult((int)HttpStatusCode.InternalServerError, errorMsg);
             }
             var orderItemEntity = _orderItemRepo.Get(o => o.Status != (int)DataStatus.Deleted && o.OrderNo == orderNo).FirstOrDefault();
             using (var ts = new TransactionScope())
@@ -789,9 +825,20 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 });
                 ts.Complete();
             }
-            return RedirectToAction("details", new { OrderNo = orderNo});
+            var model = new OrderViewModel().FromEntity<OrderViewModel>(orderEntity, o =>
+            {
+                o.RMAs = _rmaRepo.Get(r => r.OrderNo == o.OrderNo)
+                         .GroupJoin(_rmaitemRepo.GetAll(), ou => ou.RMANo, i => i.RMANo, (ou, i) => new { R = ou, RI = i.FirstOrDefault() })
+                         .OrderByDescending(r => r.R.CreateDate)
+                         .ToList()
+                         .Select(r => new RMAViewModel().FromEntity<RMAViewModel>(r.R, rm =>
+                         {
+                             rm.Item = new RMAItemViewModel().FromEntity<RMAItemViewModel>(r.RI);
+                         }));
 
 
+            });
+            return PartialView("_RMAList", model);
         }
 
         public ActionResult ViewRMA(string rmaNo)

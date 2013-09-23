@@ -53,7 +53,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -71,12 +74,6 @@
     <Reference Include="Yintai.Architecture.Framework">
       <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.ImageClient">
-      <HintPath>..\_dll\Yintai.Architecture.ImageClient.dll</HintPath>
-    </Reference>
-    <Reference Include="Yintai.Architecture.ImageTool">
-      <HintPath>..\_dll\Yintai.Architecture.ImageTool.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binder\BrandModelBinder.cs" />
@@ -93,6 +90,7 @@
     <Compile Include="Binder\TagModlBinder.cs" />
     <Compile Include="Binder\UserModelBinder.cs" />
     <Compile Include="Configuration\ConfigManager.cs" />
+    <Compile Include="Filters\VersionFilter.cs" />
     <Compile Include="Helper\EnumExtension.cs" />
     <Compile Include="Ioc\BaseIocRegister.cs" />
     <Compile Include="Ioc\ConfigIocRegister.cs" />
@@ -135,6 +133,9 @@
       <Project>{193902dc-242c-4dba-b173-ee154e813c4b}</Project>
       <Name>Yintai.Hangzhou.Service</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

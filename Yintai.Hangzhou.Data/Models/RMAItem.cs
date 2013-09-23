@@ -18,6 +18,10 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime UpdateDate { get; set; }
         public int Status { get; set; }
         public Nullable<decimal> UnitPrice { get; set; }
+        public Nullable<int> SizeId { get; set; }
+        public Nullable<int> ColorId { get; set; }
+        public Nullable<int> SizeValueId { get; set; }
+        public Nullable<int> ColorValueId { get; set; }
 
         #region Overrides of BaseEntity
 

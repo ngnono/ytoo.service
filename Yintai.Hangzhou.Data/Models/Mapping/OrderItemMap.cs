@@ -28,6 +28,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ProductName)
                 .HasMaxLength(200);
 
+            this.Property(t => t.SalesPerson)
+                .HasMaxLength(20);
+
             // Table & Column Mappings
             this.ToTable("OrderItem");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -50,6 +53,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ProductName).HasColumnName("ProductName");
             this.Property(t => t.Points).HasColumnName("Points");
             this.Property(t => t.SalesPerson).HasColumnName("SalesPerson");
+            this.Property(t => t.SizeId).HasColumnName("SizeId");
+            this.Property(t => t.ColorId).HasColumnName("ColorId");
+            this.Property(t => t.SizeValueId).HasColumnName("SizeValueId");
+            this.Property(t => t.ColorValueId).HasColumnName("ColorValueId");
 		Init();
         }
 

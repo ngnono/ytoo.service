@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Cms.WebSiteV1.Util;
 
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
 {
@@ -35,6 +37,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
                 if (log == null)
                     return string.Empty;
                 return log.StoreName;
+            }
+        }
+        public string StatusName
+        {
+            get {
+                return ((CouponStatus)Status).ToFriendlyString();
             }
         }
         public int Status { get; set; }

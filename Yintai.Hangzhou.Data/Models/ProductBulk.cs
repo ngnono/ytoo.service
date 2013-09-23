@@ -52,7 +52,7 @@ namespace Yintai.Hangzhou.Data.Models
         [AdditionalMetadata("displayfield", "Name")]
         [AdditionalMetadata("searchfield", "name")]
         public string Tag { get; set; }
-        [DisplayName("价格")]
+        [DisplayName("销售价")]
         public decimal? Price { get; set; }
         [DisplayName("实体店名")]
         [UIHint("Association")]
@@ -76,7 +76,7 @@ namespace Yintai.Hangzhou.Data.Models
         [AdditionalMetadata("searchfield", "name")]
         [AdditionalMetadata("multiple","true")]
         public string SubjectIds { get; set; }
-        [DisplayName("专柜货号")]
+        [DisplayName("商品货号")]
         public string UPCCode { get; set; }
         public int Id { get; set; }
         public int GroupId { get; set; }

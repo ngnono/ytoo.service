@@ -873,8 +873,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Manager
                              ,
                              Price = p.Price
                              ,
-                             RecommendedReason = p.RecommendedReason
-                             ,
                              RecommendSourceId = p.RecommendSourceId
                              ,
                              RecommendSourceType = p.RecommendSourceType
@@ -965,6 +963,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Manager
                                         pv.SortOrder = p.PP.SortOrder??0;
                                         pv.ValueId = p.PV.Id;
                                     }));
+            /*
             if (productVM.Properties == null || productVM.Properties.Count() <= 0)
             { 
                 productVM.Properties = _productRepository.Context.Set<CategoryPropertyValueEntity>()
@@ -982,11 +981,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Manager
                                         pv.ValueId = p.PV.Id;
                                     }));
             }
-            productVM.UPCCode = _productRepository.Context.Set<ProductCode2StoreCodeEntity>()
+             */
+          /*  productVM.UPCCode = _productRepository.Context.Set<ProductCode2StoreCodeEntity>()
                                 .Where(p => p.ProductId == productVM.Id && p.StoreId == productVM.Store_Id)
                                 .Select(p=>p.StoreProductCode)
                                 .FirstOrDefault();
-
+            */
             return productVM;
         }
 

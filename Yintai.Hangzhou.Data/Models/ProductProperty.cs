@@ -12,6 +12,9 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime UpdateDate { get; set; }
         public int UpdateUser { get; set; }
         public Nullable<int> SortOrder { get; set; }
+        public Nullable<bool> IsColor { get; set; }
+        public Nullable<bool> IsSize { get; set; }
+        public Nullable<int> ChannelPropertyId { get; set; }
 
         #region Overrides of BaseEntity
 

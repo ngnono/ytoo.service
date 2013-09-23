@@ -1,0 +1,66 @@
+﻿@model OrderViewModel
+ <div class="btn-group">
+            @if(Model.CanCreateOffRMA)
+            {
+                @Ajax.ActionLink("现场退货", "CreateRMA", new { OrderNo = Model.OrderNo }, new AjaxOptions() { 
+                 HttpMethod="Post",
+                  Confirm="确认要创建现场退货单吗?",
+                   UpdateTargetId="order-4",
+                   InsertionMode= InsertionMode.Replace,
+                   OnFailure="AlertFail",
+                   
+                            
+             } , new { @class = "btn" })
+            }
+            @if(Model.CanPrintRMA)
+            {
+                @Html.ActionLink2("打印退货单", "PrintRMA", new { RMANo = Model.FirstActiveRMA.RMANo}, new { @class = "btn",@id="printrma" })
+                @Html.ActionLink2("退还客户", "Reject2Customer", new { RMANo = Model.FirstActiveRMA.RMANo }, new { @class = "btn" })
+               
+            }
+            @if(Model.CanVoidRMA)
+            {
+                @Ajax.ActionLink("作废退货单", "VoidRMA", new { RMANo = Model.FirstActiveRMA.RMANo}, new AjaxOptions() { 
+                 HttpMethod="Post",
+                  Confirm=string.Format("确认要作废退货单:{0}吗?",Model.FirstActiveRMA.RMANo),
+                   UpdateTargetId="order-4",
+                   InsertionMode= InsertionMode.Replace,
+                    OnFailure="AlertFail"},
+                 new { @class = "btn btn-danger" })
+            }
+        </div>
+        <table class="table table-bordered table-condensed table-striped">
+            <tr>
+                <th>退货号</th>
+                <th>申请用户</th>
+                <th>申请时间
+                </th>
+                <th>联系电话</th>
+                <th>退货方式</th>
+                <th>状态</th>
+                <th>退货理由</th>
+                <th>申请退货金额</th>
+                <th>不能退货原因</th>
+                <th>实际退货金额</th>
+                <th>操作用户</th>
+                <th>操作时间</th>
+            </tr>
+
+            @foreach (var item in Model.RMAs)
+            {
+                <tr>
+                    <td>@Html.ActionLink(item.RMANo,"ViewRMA",new {RMANo=item.RMANo})</td>
+                    <td>@Html.DisplayFor(model => item.CreateUser)</td>
+                    <td>@Html.DisplayFor(model => item.CreateDate)</td>
+                    <td>@Html.DisplayFor(model=>item.ContactPhone)</td>
+                    <td>@Html.Label("", ((RMAType)item.RMAType).ToFriendlyString())</td>
+                    <td>@Html.Label("", ((RMAStatus)item.Status).ToFriendlyString())</td>
+                    <td>@Html.DisplayFor(model => item.Reason)</td>
+                    <td>@Html.DisplayFor(model => item.RMAAmount)</td>
+                    <td>@Html.DisplayFor(model => item.RejectReason)</td>
+                    <td>@Html.DisplayFor(model => item.ActualAmount)</td>
+                    <td>@Html.DisplayFor(model => item.UpdateUser)</td>
+                    <td>@Html.DisplayFor(model => item.UpdateDate)</td>
+                </tr>
+            }
+        </table>

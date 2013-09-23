@@ -40,6 +40,10 @@
         /// <summary>
         /// 分享数
         /// </summary>
-        ShareCount = 7
+        ShareCount = 7,
+
+        OnlineCoupon = 11,
+
+        OfflineCoupon =12
     }
 }

@@ -57,14 +57,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.ImageClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_dll\Yintai.Architecture.ImageClient.dll</HintPath>
-    </Reference>
-    <Reference Include="Yintai.Architecture.ImageTool, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_dll\Yintai.Architecture.ImageTool.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApnsDataService.cs" />
@@ -106,7 +98,9 @@
     <Compile Include="Logic\OrderRule.cs" />
     <Compile Include="Logic\StorePromotionRule.cs" />
     <Compile Include="Manager\CacheKeyManager.cs" />
-    <Compile Include="Manager\FileUploadServiceManager.cs" />
+    <Compile Include="Manager\FileUploadServiceManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Manager\UploadFileConfigManager.cs" />
     <Compile Include="PointDataService.cs" />
     <Compile Include="ItemsDataService.cs" />

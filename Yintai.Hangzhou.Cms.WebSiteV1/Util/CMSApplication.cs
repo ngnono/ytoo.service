@@ -9,7 +9,7 @@ using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
 using Yintai.Architecture.Common.Web.Mvc.Routes;
 using Yintai.Architecture.Framework.ServiceLocation;
-using Recaptcha;
+
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Util
 {
     public class CMSApplication: MvcApplication

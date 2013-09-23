@@ -48,7 +48,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
     {
         public string Method { get; set; }
         public string Client_Version { get; set; }
-
+        public string Channel { get; set; }
         public float Version
         {
             get

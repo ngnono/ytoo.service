@@ -18,17 +18,14 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
                 return JsonConvert.DeserializeObject<OrderRequestModel>(Order);
             }
         }
+       
 
     }
     public class OrderRequestModel:IValidatableObject
     {
-        [Required(ErrorMessage="没有选择产品！")]
-        public int ProductId { get; set; }
-
-        public string Desc { get; set; }
-        [Required(ErrorMessage = "没有选择数量！")]
-        [Range(1,5,ErrorMessage="数量不能超过5个")]
-        public int Quantity { get; set; }
+        [Required]
+        public IEnumerable<OrderProductDetailRequest> Products { get; set; }
+       
         
         public IEnumerable<ProductPropertyValueRequest> Properties { get; set; }
         [Required(ErrorMessage = "送货方式没有选择")]
@@ -50,23 +47,40 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
             }
         }
 
-        public string ProductDesc { get {
+       
+    }
+    public class ProductPropertyValueRequest
+    {
+        public int SizeId { get; set; }
+        public string SizeName { get; set; }
+        public int? SizeValueId { get; set; }
+        public string SizeValueName { get; set; }
+
+        public int ColorId { get; set; }
+        public string ColorName { get; set; }
+        public int? ColorValueId { get; set; }
+        public string ColorValueName { get; set; }
+    }
+    public class OrderProductDetailRequest
+    {
+        public int ProductId { get; set; }
+
+        public string Desc { get; set; }
+        [Required(ErrorMessage = "没有选择数量！")]
+        [Range(1, 5, ErrorMessage = "数量不能超过5个")]
+        public int Quantity { get; set; }
+
+        public ProductPropertyValueRequest Properties { get; set; }
+
+         public string ProductDesc { get {
             if (Properties == null)
                 return string.Empty;
-           var description = Properties.Aggregate(new StringBuilder(),
-                (s, p) => s.AppendFormat("{0}:{1},", p.PropertyName, p.ValueName),
-                s => s.ToString());
+           var description = string.Format("{0}:{1},{2}:{3}", Properties.ColorName, Properties.ColorValueName,Properties.SizeName,Properties.SizeValueName)
+              ;
            if (description.Length > 0)
                description = description.TrimEnd(',');
            return description;
                     
         } }
-    }
-    public class ProductPropertyValueRequest
-    {
-        public int PropertyId { get; set; }
-        public string PropertyName { get; set; }
-        public int? ValueId { get; set; }
-        public string ValueName { get; set; }
     }
 }

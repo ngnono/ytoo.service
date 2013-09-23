@@ -40,3 +40,7 @@
    
     kendo.culture('zh-CN');
 });
+
+function AlertFail(jqXHR, textStatus, errorThrown) {
+    alert(textStatus);
+}

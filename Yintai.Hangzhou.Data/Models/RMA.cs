@@ -29,6 +29,8 @@ namespace Yintai.Hangzhou.Data.Models
         public string PostalFeeReason { get; set; }
         public Nullable<decimal> ChargeGiftFee { get; set; }
         public string ContactPhone { get; set; }
+        public Nullable<int> ShipviaId { get; set; }
+        public string ShipNo { get; set; }
 
         #region Overrides of BaseEntity
 

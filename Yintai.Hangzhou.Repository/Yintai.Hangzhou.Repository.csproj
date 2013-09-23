@@ -65,6 +65,8 @@
     <Compile Include="Contract\IBannerRepository.cs" />
     <Compile Include="Contract\IBrandRepository.cs" />
     <Compile Include="Contract\ICardRepository.cs" />
+    <Compile Include="Contract\ICategoryMapRepository.cs" />
+    <Compile Include="Contract\ICategoryRepository.cs" />
     <Compile Include="Contract\ICategoryPropertyRepository.cs" />
     <Compile Include="Contract\ICategoryPropertyValueRepository.cs" />
     <Compile Include="Contract\ICommentRepository.cs" />
@@ -77,6 +79,7 @@
     <Compile Include="Contract\IHotWordRepository.cs" />
     <Compile Include="Contract\IInboundPackRepository.cs" />
     <Compile Include="Contract\ILikeRepository.cs" />
+    <Compile Include="Contract\IOrder2ExRepository.cs" />
     <Compile Include="Contract\IOrderItemRepository.cs" />
     <Compile Include="Contract\IOrderLogRepository.cs" />
     <Compile Include="Contract\IOrderRepository.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="Contract\IRepository.cs" />
     <Compile Include="Contract\ICustomerRepository.cs" />
     <Compile Include="Contract\IResourceRepository.cs" />
+    <Compile Include="Contract\IRMA2ExRepository.cs" />
     <Compile Include="Contract\IRMAItemRepository.cs" />
     <Compile Include="Contract\IRMALogRepository.cs" />
     <Compile Include="Contract\IRMARepository.cs" />
@@ -127,11 +131,14 @@
     <Compile Include="Impl\BannerRepository.cs" />
     <Compile Include="Impl\BrandRepository.cs" />
     <Compile Include="Impl\CardRepository.cs" />
+    <Compile Include="Impl\CategoryMapRepository.cs" />
+    <Compile Include="Impl\CategoryRepository.cs" />
     <Compile Include="Impl\CategoryPropertyRepository.cs" />
     <Compile Include="Impl\CategoryPropertyValueRepository.cs" />
     <Compile Include="Impl\CouponLogRepository.cs" />
     <Compile Include="Impl\HotWordRepository.cs" />
     <Compile Include="Impl\InboundPackageRepository.cs" />
+    <Compile Include="Impl\Order2ExRepository.cs" />
     <Compile Include="Impl\OrderItemRepository.cs" />
     <Compile Include="Impl\OrderLogRepository.cs" />
     <Compile Include="Impl\OrderRepository.cs" />
@@ -144,6 +151,7 @@
     <Compile Include="Impl\ProductPropertyRepository.cs" />
     <Compile Include="Impl\ProductPropertyValueRepository.cs" />
     <Compile Include="Impl\PromotionProductRelation.cs" />
+    <Compile Include="Impl\RMA2ExRepository.cs" />
     <Compile Include="Impl\RMAItemRepository.cs" />
     <Compile Include="Impl\RMALogRepository.cs" />
     <Compile Include="Impl\RMARepository.cs" />

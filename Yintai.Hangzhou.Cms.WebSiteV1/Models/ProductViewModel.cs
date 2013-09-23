@@ -11,6 +11,7 @@ using System.Linq;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Service.Contract;
+using Yintai.Hangzhou.Cms.WebSiteV1.Util;
 using System.Web;
 
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
@@ -54,21 +55,22 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [Display(Name = "品牌")]
         public string BrandName { get; set; }
 
-        [StringLength(140, MinimumLength = 0)]
+        [StringLength(140, MinimumLength = 1)]
         [Display(Name = "商品描述")]
         [Required]
         public string Description { get; set; }
 
         [RegularExpression(RegularDefine.Money, ErrorMessage = "只能输入金额,1~2位小数")]
-        [Display(Name = "价格")]
+        [Display(Name = "销售价")]
         public decimal Price { get; set; }
-        [Display(Name = "原价")]
+        [Display(Name = "吊牌价")]
         [RegularExpression(RegularDefine.Money, ErrorMessage = "只能输入金额,1~2位小数")]
         public decimal UnitPrice { get; set; }
 
-        [StringLength(140, MinimumLength = 1)]
         [Display(Name = "推荐理由")]
-        public string RecommendedReason { get; set; }
+        public string RecommendedReason { get {
+            return this.Description;
+        } }
 
         [StringLength(140, MinimumLength = 0)]
         [Display(Name = "优惠信息")]
@@ -153,8 +155,13 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         [Display(Name="促销名")]
         public IEnumerable<string> PromotionName { get; set; }
 
-        [Display(Name = "状态")]
+        [Display(Name = "状态值")]
         public int Status { get; set; }
+        [Display(Name = "状态")]
+        public string StatusS { get {
+            return ((DataStatus)Status).ToFriendlyString();
+        } }
+
         [Display(Name = "创建人编码")]
         public int CreatedUser { get; set; }
         [Display(Name = "创建人")]
@@ -179,7 +186,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
 
         [Display(Name = "可销售")]
         public bool? Is4Sale { get; set; }
-        [Display(Name = "专柜货号")]
+        [Display(Name = "商品货号")]
         public string UPCCode { get; set; }
 
         public IEnumerable<ResourceViewModel> Audios { get {
@@ -192,7 +199,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Is4Sale.HasValue && Is4Sale.Value == true && string.IsNullOrEmpty(UPCCode))
-                yield return new ValidationResult("可销售商品必须设置专柜货号");
+                yield return new ValidationResult("可销售商品必须设置商品货号");
             string errorUnAuthorizedDataAccess = "没有授权操作该门店和品牌！";
             var currentUser = ServiceLocator.Current.Resolve<IAuthenticationService>().CurrentUserFromHttpContext(HttpContext.Current);
             if (currentUser == null)

@@ -106,6 +106,7 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL" />
     <Reference Include="PushSharp.Android">
       <HintPath>..\packages\PushSharp.2.0.4.0\lib\net40\PushSharp.Android.dll</HintPath>
     </Reference>
@@ -156,8 +157,17 @@
     <Compile Include="Job\ApnsNotificationCommonJob.cs" />
     <Compile Include="Job\ApnsNotificationJob.cs" />
     <Compile Include="Job\CouponStatusSyncJob.cs" />
+    <Compile Include="Job\Erp\BrandSyncJob.cs" />
+    <Compile Include="Job\Erp\CategorySyncJob.cs" />
+    <Compile Include="Job\Erp\ErpGroupJob.cs" />
+    <Compile Include="Job\Erp\ProductPicSyncJob.cs" />
+    <Compile Include="Job\Erp\ProductPropertySyncJob.cs" />
+    <Compile Include="Job\Erp\ProductSyncJob.cs" />
+    <Compile Include="Job\Erp\StoreSyncJob.cs" />
     <Compile Include="Job\ExpireStoreCouponReturnPointsJob.cs" />
+    <Compile Include="Job\ExternalProductSyncJob.cs" />
     <Compile Include="Job\PointsFromApp2GroupJob.cs" />
+    <Compile Include="Job\Erp\ProductInventorySyncJob.cs" />
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="Job\Push2awsJob.cs" />
     <Compile Include="Job\Push2mysqlJob.cs" />
@@ -199,6 +209,14 @@
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.data\com.intime.fashion.data.erp.csproj">
+      <Project>{b224c596-53f1-48a6-948f-df3cd2acd15d}</Project>
+      <Name>com.intime.fashion.data.erp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
+      <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
+      <Name>Yintai.Hangzhou.Contract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
       <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>
       <Name>Yintai.Hangzhou.Data</Name>
@@ -206,6 +224,10 @@
     <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
       <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
       <Name>Yintai.Hangzhou.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Service\Yintai.Hangzhou.Service.csproj">
+      <Project>{193902dc-242c-4dba-b173-ee154e813c4b}</Project>
+      <Name>Yintai.Hangzhou.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

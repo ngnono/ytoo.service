@@ -29,6 +29,9 @@ namespace Yintai.Hangzhou.Data.Models
         public bool IsHasImage { get; set; }
         public Nullable<decimal> UnitPrice { get; set; }
         public Nullable<bool> Is4Sale { get; set; }
+        public string SkuCode { get; set; }
+        public string BarCode { get; set; }
+        public string MoreDesc { get; set; }
 
         #region Overrides of BaseEntity
 

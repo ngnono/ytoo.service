@@ -292,6 +292,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Request.Product
         {
             get
             {
+                if (string.IsNullOrEmpty(Property))
+                    return null;
                 return JsonConvert.DeserializeObject<IEnumerable<TagPropertyModel>>(Property);
             }
         }

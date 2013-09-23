@@ -24,6 +24,10 @@ namespace Yintai.Hangzhou.Data.Models
         public int ContentSize { get; set; }
         public string ExtName { get; set; }
         public Nullable<bool> IsDimension { get; set; }
+        public Nullable<bool> IsExternal { get; set; }
+        public Nullable<int> ColorId { get; set; }
+        public string ValueId { get; set; }
+        public Nullable<int> ChannelPicId { get; set; }
 
         #region Overrides of BaseEntity
 

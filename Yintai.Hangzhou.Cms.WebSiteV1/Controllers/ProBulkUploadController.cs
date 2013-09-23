@@ -181,7 +181,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             { "促销活动编码",new {dataformat=0,width=20}},
             { "专题编码（多个以,分割)",new {dataformat=0,width=20}},
              {"可销售",new {dataformat=2,width=5}},
-             {"专柜货号",new {dataformat=0,width=10}}
+             {"商品货号",new {dataformat=0,width=10}}
             };
             var workbook = new HSSFWorkbook();
             var headerLabelCellStyle = workbook.CreateCellStyle();
@@ -214,9 +214,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             int tagRowIndex = brandRowIndex;
             var tagLinq = _tagRepo.Get(b => b.Status != (int)DataStatus.Deleted).OrderBy(b => b.Name).Select(b => new { Id = b.Id, Name = b.Name });
-            if (tagId.HasValue)
-                tagLinq=tagLinq.Where(t => t.Id == tagId.Value);
-            foreach (var tag in tagLinq.OrderBy(t=>t.Name))
+            //if (tagId.HasValue)
+            //    tagLinq = tagLinq.Where(t => t.Id == tagId.Value);
+            foreach (var tag in tagLinq.OrderBy(t => t.Name))
             {
                 tagRowIndex = supportFill(tagRowIndex, tag);
             }
@@ -267,91 +267,116 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             storedataValidation.SuppressDropDownArrow = false;
             sheet1.AddValidationData(storedataValidation);
 
-            DVConstraint is4saleConstaint = DVConstraint.CreateExplicitListConstraint(new string[]{ProUploadService.IS_4SALE_YES,ProUploadService.IS_4SALE_NO});
+            DVConstraint is4saleConstaint = DVConstraint.CreateExplicitListConstraint(new string[] { ProUploadService.IS_4SALE_YES, ProUploadService.IS_4SALE_NO });
             CellRangeAddressList is4saleaddressList = new CellRangeAddressList(1, 1000, 10, 10);
             HSSFDataValidation is4saledataValidation = new HSSFDataValidation(is4saleaddressList, is4saleConstaint);
             is4saledataValidation.SuppressDropDownArrow = false;
             sheet1.AddValidationData(is4saledataValidation);
 
             //set sheet2
-            if (tagId.HasValue)
+            //create property value sheet
+            var propertyLinq = _propertyRepo.Get(b => b.Status != (int)DataStatus.Deleted)
+                            .Join(Context.Set<TagEntity>(), o => o.CategoryId, i => i.Id, (o, i) => new { P = o, C = i })
+                            .OrderBy(b => b.P.CategoryId)
+                            .ThenBy(b => b.P.PropertyDesc);
+            int propertyRowIndex = storeRowIndex;
+            foreach (var tag in tagLinq)
             {
-                //create property value sheet
-                int propertyRowIndex = storeRowIndex;
-                var propertyLinq = _propertyRepo.Get(b => b.Status != (int)DataStatus.Deleted && b.CategoryId == tagId.Value).OrderBy(b => b.PropertyDesc).Select(b => new { Id = b.Id, Name = b.PropertyDesc });
-                if (propertyLinq.Count() > 0)
+                var propertyFromIndex = propertyRowIndex;
+                foreach (var property in propertyLinq.Where(p => p.C.Id == tag.Id).Select(p=>new {Id = p.P.Id,Name=p.P.PropertyDesc}))
                 {
-                    foreach (var property in propertyLinq)
+                    propertyRowIndex = supportFill(propertyRowIndex, property);
+                }
+                if (propertyRowIndex > propertyFromIndex)
+                {
+                    var rName = workbook.CreateName();
+                    rName.RefersToFormula = string.Format("'{0}'!$B${1}:$B${2}", supportSheetName, propertyFromIndex + 1, propertyRowIndex);
+                    rName.NameName = tag.Name;
+                }
+                foreach (var property in propertyLinq.Where(p => p.C.Id == tag.Id))
+                {
+                    int valueFromIndex = propertyRowIndex;
+                    foreach (var pvalue in _valueRepo.Get(b => b.Status != (int)DataStatus.Deleted && b.PropertyId == property.P.Id).Select(p => new { Id = p.Id, Name = p.ValueDesc }))
                     {
-                        propertyRowIndex = supportFill(propertyRowIndex, property);
+                        propertyRowIndex = supportFill(propertyRowIndex, pvalue);
                     }
-                    int valueRowIndex = propertyRowIndex;
-                    foreach (var property in propertyLinq)
+                    if (propertyRowIndex > valueFromIndex)
                     {
-                        int fromValueIndex = valueRowIndex;
-                        foreach (var pvalue in _valueRepo.Get(b => b.Status != (int)DataStatus.Deleted && b.PropertyId == property.Id).Select(p => new { Id = p.Id, Name = p.ValueDesc }))
-                        {
-                            valueRowIndex = supportFill(valueRowIndex, pvalue);
-                        }
                         var rName = workbook.CreateName();
-                        rName.RefersToFormula = string.Format("'{0}'!$B${1}:$B${2}", supportSheetName, fromValueIndex + 1, valueRowIndex);
-                        rName.NameName = property.Name;
-                    }
-                    var moreheaderLabels = new Dictionary<string, dynamic>() { 
-                {"商品代码",new {dataformat=2,width=10}},
-                 {"属性名",new {dataformat=2,width=20}},
-                 {"属性值",new {dataformat=2,width=5}}
-                };
-                    var sheet2 = workbook.CreateSheet(moreInfoSheetName);
-                    var morerowFirst = sheet2.CreateRow(0);
-                    int moreCellIndex = 0;
-                    foreach (var key in moreheaderLabels.Keys)
-                    {
-                        var cell = morerowFirst.CreateCell(moreCellIndex++);
-                        cell.SetCellType(CellType.STRING);
-                        cell.SetCellValue(key);
-                        cell.CellStyle = headerLabelCellStyle;
-                        sheet2.SetColumnWidth(moreCellIndex, moreheaderLabels[key].width * 255);
-
-                        var currentCellStyle = workbook.CreateCellStyle();
-                        currentCellStyle.DataFormat = (short)moreheaderLabels[key].dataformat;
-                        sheet2.SetDefaultColumnStyle(moreCellIndex, currentCellStyle);
-
-                    }
-                    for (int i = 3; i < 12; i++)
-                    {
-                        var cell = morerowFirst.CreateCell(i++);
-                        cell.SetCellType(CellType.STRING);
-                        cell.SetCellValue(string.Empty);
-                        cell.CellStyle = headerLabelCellStyle;
-                        sheet2.SetColumnWidth(moreCellIndex++, 5 * 255);
-                    }
-                    //set merge cell for last cell
-                    sheet2.AddMergedRegion(new CellRangeAddress(0,0,2,12));
-                    //set constraint
-                    DVConstraint codeConstaint = DVConstraint.CreateFormulaListConstraint(string.Format("'{0}'!$A${1}:$A${2}", basicInfoSheetName, 2, 1000));
-                    CellRangeAddressList codeaddressList = new CellRangeAddressList(1, 1000, 0, 0);
-                    HSSFDataValidation codedataValidation = new HSSFDataValidation(codeaddressList, codeConstaint);
-                    codedataValidation.SuppressDropDownArrow = false;
-                    sheet2.AddValidationData(codedataValidation);
-
-                    DVConstraint pConstaint = DVConstraint.CreateFormulaListConstraint(string.Format("'{0}'!$B${1}:$B${2}", supportSheetName, storeRowIndex + 1, propertyRowIndex));
-                    CellRangeAddressList paddressList = new CellRangeAddressList(1, 1000, 1, 1);
-                    HSSFDataValidation pdataValidation = new HSSFDataValidation(paddressList, pConstaint);
-                    pdataValidation.SuppressDropDownArrow = false;
-                    sheet2.AddValidationData(pdataValidation);
-
-                    for (int i = 1; i < 1000; i++)
-                    {
-                        //set constraint
-                        DVConstraint pvConstaint = DVConstraint.CreateFormulaListConstraint(string.Format("INDIRECT($B${0})", i + 1));
-                        CellRangeAddressList pvaddressList = new CellRangeAddressList(i, i, 2, 12);
-                        HSSFDataValidation pvdataValidation = new HSSFDataValidation(pvaddressList, pvConstaint);
-                        pvdataValidation.SuppressDropDownArrow = false;
-                        sheet2.AddValidationData(pvdataValidation);
+                        rName.RefersToFormula = string.Format("'{0}'!$B${1}:$B${2}", supportSheetName, valueFromIndex + 1, propertyRowIndex);
+                        rName.NameName = string.Format("{0}_{1}", property.C.Name, property.P.PropertyDesc);
                     }
                 }
             }
+
+            var moreheaderLabels = new Dictionary<string, dynamic>() { 
+                {"商品代码",new {dataformat=0,width=10}},
+                 {"属性名",new {dataformat=0,width=20}},
+                 {"属性值",new {dataformat=0,width=10}}
+                };
+            var sheet2 = workbook.CreateSheet(moreInfoSheetName);
+            var morerowFirst = sheet2.CreateRow(0);
+            int moreCellIndex = 0;
+            foreach (var key in moreheaderLabels.Keys)
+            {
+                var cell = morerowFirst.CreateCell(moreCellIndex);
+                cell.SetCellType(CellType.STRING);
+                cell.SetCellValue(key);
+                cell.CellStyle = headerLabelCellStyle;
+                sheet2.SetColumnWidth(moreCellIndex, moreheaderLabels[key].width * 255);
+
+                var currentCellStyle = workbook.CreateCellStyle();
+                currentCellStyle.DataFormat = (short)moreheaderLabels[key].dataformat;
+                sheet2.SetDefaultColumnStyle(moreCellIndex, currentCellStyle);
+                moreCellIndex++;
+
+            }
+            for (int i = 3; i <= 11; i++)
+            {
+                var cell = morerowFirst.CreateCell(i);
+                cell.SetCellType(CellType.STRING);
+                cell.SetCellValue(string.Empty);
+                cell.CellStyle = headerLabelCellStyle;
+                sheet2.SetColumnWidth(i, 10 * 255);
+            
+            }
+
+
+            //set merge cell for last cell
+            sheet2.AddMergedRegion(new CellRangeAddress(0, 0, 2, 11));
+            //set constraint
+            DVConstraint codeConstaint = DVConstraint.CreateFormulaListConstraint(string.Format("'{0}'!$A${1}:$A${2}", basicInfoSheetName, 2, 1000));
+            CellRangeAddressList codeaddressList = new CellRangeAddressList(1, 1000, 0, 0);
+            HSSFDataValidation codedataValidation = new HSSFDataValidation(codeaddressList, codeConstaint);
+            codedataValidation.SuppressDropDownArrow = false;
+            sheet2.AddValidationData(codedataValidation);
+
+
+
+            for (int i = 1; i < 1000; i++)
+            {
+                //create hide helper cell
+                sheet2.SetArrayFormula(string.Format("VLOOKUP($A${0},'{1}'!$A$1:$L$1000,7,FALSE)&\"_\"&$B${0}",i+1,basicInfoSheetName),
+                            new CellRangeAddress(i,i,12,12));
+                //create hide helper cell
+                sheet2.SetArrayFormula(string.Format("VLOOKUP($A${0},'{1}'!$A$1:$L$1000,7,FALSE)", i + 1, basicInfoSheetName),
+                            new CellRangeAddress(i, i, 13, 13));
+                sheet2.SetColumnHidden(12, true);
+                sheet2.SetColumnHidden(13, true);
+                DVConstraint pConstaint = DVConstraint.CreateFormulaListConstraint(string.Format("INDIRECT($N${0})", i + 1)); // DVConstraint.CreateFormulaListConstraint(string.Format("'{0}'!$B${1}:$B${2}", supportSheetName, storeRowIndex + 1, propertyRowIndex));
+                CellRangeAddressList paddressList = new CellRangeAddressList(i,i, 1, 1);
+                HSSFDataValidation pdataValidation = new HSSFDataValidation(paddressList, pConstaint);
+                pdataValidation.SuppressDropDownArrow = false;
+                sheet2.AddValidationData(pdataValidation);
+                //set constraint
+                DVConstraint pvConstaint = DVConstraint.CreateFormulaListConstraint(string.Format("INDIRECT($M${0})", i + 1));
+                CellRangeAddressList pvaddressList = new CellRangeAddressList(i, i, 2, 11);
+                HSSFDataValidation pvdataValidation = new HSSFDataValidation(pvaddressList, pvConstaint);
+                pvdataValidation.SuppressDropDownArrow = false;
+                sheet2.AddValidationData(pvdataValidation);
+            }
+
+
             workbook.SetActiveSheet(workbook.GetSheetIndex(sheet1));
 
             var ms = new MemoryStream();

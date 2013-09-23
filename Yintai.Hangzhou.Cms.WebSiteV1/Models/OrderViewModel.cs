@@ -86,6 +86,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
                 return ((RMAStatus)RMAs.First().Status).ToFriendlyString();
             }
         }
+        [Display(Name="取消原因")]
+        public string VoidReason { get; set; }
+        public int VoidReasonValue { get; set; }
 
         public IEnumerable<OrderLogViewModel> Logs { get; set; }
 
@@ -190,7 +193,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public RMAViewModel FirstActiveRMA { get {
             if (RMAs == null||RMAs.Count()==0)
                 return null;
-            return RMAs.Where(r => r.Status != (int)RMAStatus.Void).OrderByDescending(r => r.CreateDate).First();
+            return RMAs.Where(r => r.Status != (int)RMAStatus.Void).OrderByDescending(r => r.CreateDate).FirstOrDefault();
         } }
 
         public string ShippingViaMethod_Name { get; set; }
@@ -256,7 +259,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
         public BrandViewModel Brand { get; set; }
         [Display(Name = "门店")]
         public StoreViewModel Store { get; set; }
-        [Display(Name = "专柜货号")]
+        [Display(Name = "商品货号")]
         public string UPCCode { get; set; }
 
 

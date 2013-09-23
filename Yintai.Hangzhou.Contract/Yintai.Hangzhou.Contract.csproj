@@ -45,7 +45,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
@@ -81,15 +83,21 @@
     <Compile Include="DTO\Request\Feedback\FeedbackCreateRequest.cs" />
     <Compile Include="DTO\Request\GetAddressDetailRequest.cs" />
     <Compile Include="DTO\Request\GetConversationRequest.cs" />
+    <Compile Include="DTO\Request\GetFavorListRequest.cs" />
     <Compile Include="DTO\Request\GetProductInfo4PRequest.cs" />
     <Compile Include="DTO\Request\MyCommentListRequest.cs" />
     <Compile Include="DTO\Request\MyOrderDetailRequest.cs" />
     <Compile Include="DTO\Request\MyOrderRequest.cs" />
     <Compile Include="DTO\Request\NewPMessageRequest.cs" />
+    <Compile Include="DTO\Request\OrderPrepareShipRequest.cs" />
     <Compile Include="DTO\Request\OrderRequest.cs" />
+    <Compile Include="DTO\Request\OrderShipRequest.cs" />
     <Compile Include="DTO\Request\PaymentModel.cs" />
     <Compile Include="DTO\Request\Point\GetPointInfoRequest.cs" />
     <Compile Include="DTO\Request\ProductComplex\GetItemsListRequest.cs" />
+    <Compile Include="DTO\Request\RMACheckRequest.cs" />
+    <Compile Include="DTO\Request\RMAConfirmRequest.cs" />
+    <Compile Include="DTO\Request\RMAReceivedRequest.cs" />
     <Compile Include="DTO\Request\RMARequest.cs" />
     <Compile Include="DTO\Request\ShippingAddressModel.cs" />
     <Compile Include="DTO\Request\SpecialTopic\SpecialTopicRequest.cs" />
@@ -128,6 +136,7 @@
     <Compile Include="DTO\Response\PagerInfoResponse.cs" />
     <Compile Include="DTO\Response\PaymentResponse.cs" />
     <Compile Include="DTO\Response\Point\PointInfoResponse.cs" />
+    <Compile Include="DTO\Response\RMAInfoResponse.cs" />
     <Compile Include="DTO\Response\SelfAddressResponse.cs" />
     <Compile Include="DTO\Response\SpecialTopic\SpecialTopic.cs" />
     <Compile Include="DTO\Response\Promotion\PromotionInfoResponse.cs" />
@@ -142,6 +151,14 @@
     <Compile Include="Feedback\IFeedbackDataService.cs" />
     <Compile Include="Group\Group.cs" />
     <Compile Include="HotWord\HotwordDataService.cs" />
+    <Compile Include="Images\Exif\Exif.cs" />
+    <Compile Include="Images\Exif\ExifFileds.cs" />
+    <Compile Include="Images\Exif\Utilities.cs" />
+    <Compile Include="Images\FileInfor.cs" />
+    <Compile Include="Images\FileMessage.cs" />
+    <Compile Include="Images\FileUploadMessage.cs" />
+    <Compile Include="Images\IImageService.cs" />
+    <Compile Include="Images\ThumbnailInfo.cs" />
     <Compile Include="Like\ILikeDataService.cs" />
     <Compile Include="Point\IPointDataService.cs" />
     <Compile Include="ProductComplex\IProductComplexDataService.cs" />

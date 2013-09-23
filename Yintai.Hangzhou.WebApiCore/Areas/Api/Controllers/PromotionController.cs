@@ -215,36 +215,36 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 isFavored = Context.Set<FavoriteEntity>().Where(f => f.User_Id == authUser.Id && f.FavoriteSourceType == (int)SourceType.Promotion && f.FavoriteSourceId == request.Promotionid && f.Status != (int)DataStatus.Deleted).Any();
             }
 
-            var linq = Context.Set<PromotionEntity>().Where(p => p.Status == (int)DataStatus.Normal && p.EndDate > DateTime.Now && p.Id == request.Promotionid).FirstOrDefault();
+            var linq = Context.Set<PromotionEntity>().Where(p => p.Status == (int)DataStatus.Normal && p.Id == request.Promotionid).FirstOrDefault();
             if (linq == null)
-                return new RestfulResult()
-                {
-                    Data = new GetAvailOperationsResponse() {
-                         IfCanCoupon = false,
-                          IsFavored = false
-                }};
-                bool hadGetCoupon = false;
-                if (withUserId)
-                {
-                    hadGetCoupon = Context.Set<CouponHistoryEntity>().Where(c => c.User_Id == authUser.Id && c.FromPromotion == linq.Id).Any();
-  
-                }
-                if (linq.PublicationLimit == null || linq.PublicationLimit == -1)
-                {
-                   ifCanCoupon =  (!hadGetCoupon) || 
-                                  (hadGetCoupon && (!linq.IsLimitPerUser.HasValue ||linq.IsLimitPerUser.Value==false));
-                }
-                else
-                {
-                    ifCanCoupon = linq.InvolvedCount < linq.PublicationLimit &&
-                                 (!hadGetCoupon || (hadGetCoupon && (!linq.IsLimitPerUser.HasValue || linq.IsLimitPerUser.Value == false)));
-                }
-
                 return this.RenderSuccess<GetAvailOperationsResponse>(r => r.Data = new GetAvailOperationsResponse()
-                    {
-                        IsFavored = isFavored,
-                        IfCanCoupon = ifCanCoupon
-                    });
+                {
+                    IsFavored = false,
+                    IfCanCoupon = false
+                });
+
+            bool hadGetCoupon = false;
+            if (withUserId)
+            {
+                hadGetCoupon = Context.Set<CouponHistoryEntity>().Where(c => c.User_Id == authUser.Id && c.FromPromotion == linq.Id).Any();
+
+            }
+            if (linq.PublicationLimit == null || linq.PublicationLimit == -1)
+            {
+                ifCanCoupon = (!hadGetCoupon) ||
+                               (hadGetCoupon && (!linq.IsLimitPerUser.HasValue || linq.IsLimitPerUser.Value == false));
+            }
+            else
+            {
+                ifCanCoupon = linq.InvolvedCount < linq.PublicationLimit &&
+                             (!hadGetCoupon || (hadGetCoupon && (!linq.IsLimitPerUser.HasValue || linq.IsLimitPerUser.Value == false)));
+            }
+            ifCanCoupon = ifCanCoupon && linq.EndDate > DateTime.Now && linq.StartDate <= DateTime.Now;
+            return this.RenderSuccess<GetAvailOperationsResponse>(r => r.Data = new GetAvailOperationsResponse()
+                {
+                    IsFavored = isFavored,
+                    IfCanCoupon = ifCanCoupon
+                });
           
 
         }

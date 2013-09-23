@@ -40,6 +40,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.UnitPrice).HasColumnName("UnitPrice");
+            this.Property(t => t.SizeId).HasColumnName("SizeId");
+            this.Property(t => t.ColorId).HasColumnName("ColorId");
+            this.Property(t => t.SizeValueId).HasColumnName("SizeValueId");
+            this.Property(t => t.ColorValueId).HasColumnName("ColorValueId");
 		Init();
         }
 

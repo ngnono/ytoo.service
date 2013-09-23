@@ -49,9 +49,30 @@ namespace Yintai.Hangzhou.Data.Models
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
+                var offlineAccount = db.UserAccounts.Where(ua => ua.AccountType == (int)AccountType.OfflineCoupon && ua.User_Id == userId && ua.Status != (int)DataStatus.Deleted).FirstOrDefault();
                 var account = db.UserAccounts.Where(ua => ua.AccountType == (int)AccountType.Coupon && ua.User_Id == userId && ua.Status != (int)DataStatus.Deleted).FirstOrDefault();
                 var sumCoupons = db.CouponHistories.Where(p => p.User_Id == userId && p.Status != (int)DataStatus.Deleted && p.ValidEndDate >= DateTime.Now && p.Status != (int)CouponStatus.Used).Count();
                 var sumStoreCoupons = db.StoreCoupons.Where(p => p.UserId == userId && p.Status != (int)DataStatus.Deleted && p.ValidEndDate >= DateTime.Now && p.Status != (int)CouponStatus.Used).Count();
+                if (offlineAccount != null)
+                {
+                    offlineAccount.Amount = sumStoreCoupons;
+                    offlineAccount.UpdatedDate = DateTime.Now;
+                    db.Entry(offlineAccount).State = System.Data.EntityState.Modified;
+                }
+                else
+                {
+                    db.UserAccounts.Add(new UserAccountEntity()
+                    {
+                        AccountType = (int)AccountType.OfflineCoupon,
+                        Amount = sumStoreCoupons,
+                        User_Id = userId,
+                        Status = (int)DataStatus.Normal,
+                        CreatedDate = DateTime.Now,
+                        CreatedUser = userId,
+                        UpdatedDate = DateTime.Now,
+                        UpdatedUser = userId
+                    });
+                }
                 if (account != null)
                 {
                     account.Amount = sumCoupons + sumStoreCoupons;

@@ -51,17 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configurations\ImageSettingConfig.cs" />
-    <Compile Include="Contract\IImageService.cs" />
     <Compile Include="Core\AudioService.cs" />
     <Compile Include="Impl\ImageService.cs" />
     <Compile Include="Core\Thumbnail.cs" />
-    <Compile Include="Models\Exif\Exif.cs" />
-    <Compile Include="Models\Exif\ExifFileds.cs" />
-    <Compile Include="Models\Exif\Utilities.cs" />
-    <Compile Include="Models\FileInfor.cs" />
-    <Compile Include="Models\FileMessage.cs" />
-    <Compile Include="Models\FileUploadMessage.cs" />
-    <Compile Include="Models\ThumbnailInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +65,9 @@
       <Project>{11d4830c-fd83-48b8-96de-6f51c9c2576c}</Project>
       <Name>Yintai.Architecture.Framework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

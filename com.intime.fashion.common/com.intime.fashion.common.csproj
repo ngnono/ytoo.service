@@ -61,8 +61,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AwsHelper.cs" />
-    <Compile Include="ConfigManager.cs" />
+    <Compile Include="ConfigManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EnumExtension.cs" />
+    <Compile Include="ErpServiceHelper.cs" />
     <Compile Include="GroupServiceHelper.cs" />
     <Compile Include="SecurityHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -125,6 +125,8 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<BrandEntity> Brands { get; set; }
         public DbSet<CardEntity> Cards { get; set; }
         public DbSet<CardBlackEntity> CardBlacks { get; set; }
+        public DbSet<CategoryEntity> Categories { get; set; }
+        public DbSet<CategoryMapEntity> CategoryMaps { get; set; }
         public DbSet<CategoryPropertyEntity> CategoryProperties { get; set; }
         public DbSet<CategoryPropertyValueEntity> CategoryPropertyValues { get; set; }
         public DbSet<CityEntity> Cities { get; set; }
@@ -139,20 +141,24 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<GroupEntity> Groups { get; set; }
         public DbSet<HotWordEntity> HotWords { get; set; }
         public DbSet<InboundPackageEntity> InboundPackages { get; set; }
+        public DbSet<InventoryEntity> Inventories { get; set; }
         public DbSet<LikeEntity> Likes { get; set; }
         public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<Order2ExEntity> Order2Ex { get; set; }
         public DbSet<OrderItemEntity> OrderItems { get; set; }
         public DbSet<OrderLogEntity> OrderLogs { get; set; }
         public DbSet<OutboundEntity> Outbounds { get; set; }
         public DbSet<OutboundItemEntity> OutboundItems { get; set; }
         public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
         public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
+        public DbSet<PKeyEntity> PKeys { get; set; }
         public DbSet<PMessageEntity> PMessages { get; set; }
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
         public DbSet<PointOrderRuleEntity> PointOrderRules { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
-        public DbSet<ProductCode2StoreCodeEntity> ProductCode2StoreCode { get; set; }
+        public DbSet<ProductMapEntity> ProductMaps { get; set; }
+        public DbSet<ProductPriceEntity> ProductPrices { get; set; }
         public DbSet<ProductPropertyEntity> ProductProperties { get; set; }
         public DbSet<ProductPropertyStageEntity> ProductPropertyStages { get; set; }
         public DbSet<ProductPropertyValueEntity> ProductPropertyValues { get; set; }
@@ -165,6 +171,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<ResourceEntity> Resources { get; set; }
         public DbSet<ResourceStageEntity> ResourceStages { get; set; }
         public DbSet<RMAEntity> RMAs { get; set; }
+        public DbSet<RMA2ExEntity> RMA2Ex { get; set; }
         public DbSet<RMAItemEntity> RMAItems { get; set; }
         public DbSet<RMALogEntity> RMALogs { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
@@ -206,6 +213,8 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new BrandEntityMap());
             modelBuilder.Configurations.Add(new CardEntityMap());
             modelBuilder.Configurations.Add(new CardBlackEntityMap());
+            modelBuilder.Configurations.Add(new CategoryEntityMap());
+            modelBuilder.Configurations.Add(new CategoryMapEntityMap());
             modelBuilder.Configurations.Add(new CategoryPropertyEntityMap());
             modelBuilder.Configurations.Add(new CategoryPropertyValueEntityMap());
             modelBuilder.Configurations.Add(new CityEntityMap());
@@ -220,20 +229,24 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new GroupEntityMap());
             modelBuilder.Configurations.Add(new HotWordEntityMap());
             modelBuilder.Configurations.Add(new InboundPackageEntityMap());
+            modelBuilder.Configurations.Add(new InventoryEntityMap());
             modelBuilder.Configurations.Add(new LikeEntityMap());
             modelBuilder.Configurations.Add(new NotificationLogEntityMap());
             modelBuilder.Configurations.Add(new OrderEntityMap());
+            modelBuilder.Configurations.Add(new Order2ExEntityMap());
             modelBuilder.Configurations.Add(new OrderItemEntityMap());
             modelBuilder.Configurations.Add(new OrderLogEntityMap());
             modelBuilder.Configurations.Add(new OutboundEntityMap());
             modelBuilder.Configurations.Add(new OutboundItemEntityMap());
             modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
             modelBuilder.Configurations.Add(new PaymentMethodEntityMap());
+            modelBuilder.Configurations.Add(new PKeyEntityMap());
             modelBuilder.Configurations.Add(new PMessageEntityMap());
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());
             modelBuilder.Configurations.Add(new PointOrderRuleEntityMap());
             modelBuilder.Configurations.Add(new ProductEntityMap());
-            modelBuilder.Configurations.Add(new ProductCode2StoreCodeEntityMap());
+            modelBuilder.Configurations.Add(new ProductMapEntityMap());
+            modelBuilder.Configurations.Add(new ProductPriceEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyStageEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyValueEntityMap());
@@ -246,6 +259,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new ResourceEntityMap());
             modelBuilder.Configurations.Add(new ResourceStageEntityMap());
             modelBuilder.Configurations.Add(new RMAEntityMap());
+            modelBuilder.Configurations.Add(new RMA2ExEntityMap());
             modelBuilder.Configurations.Add(new RMAItemEntityMap());
             modelBuilder.Configurations.Add(new RMALogEntityMap());
             modelBuilder.Configurations.Add(new RoleEntityMap());

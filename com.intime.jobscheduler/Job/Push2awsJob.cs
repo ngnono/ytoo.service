@@ -59,94 +59,9 @@ namespace com.intime.jobscheduler.Job
             IndexBanner(client, benchDate);
             IndexSpecialTopic(client, benchDate,null);
             IndexStorePromotion(client, benchDate);
-            IndexStorePromotionCode(client, benchDate);
-            IndexPromotionCode(client, benchDate);
         }
 
    
-
-        private void IndexPromotionCode(ElasticClient client, DateTime benchDate)
-        {
-            ILog log = LogManager.GetLogger(this.GetType());
-            int cursor = 0;
-            int size = 100;
-            int successCount = 0;
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
-            {
-                var prods = from r in db.CouponHistories
-                            where (r.CreatedDate >= benchDate)
-                            select r;
-
-                int totalCount = prods.Count();
-                while (cursor < totalCount)
-                {
-                    var linq = prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size).ToList();
-                    foreach (var l in linq)
-                    {
-                        try
-                        {
-                            AwsHelper.SendMessage(l.TypeName
-                                , () => l.Composing());
-                            successCount++;
-                        }
-                        catch (Exception ex)
-                        {
-                            log.Info(ex);
-                        }
-                    }
-
-                    cursor += size;
-                }
-
-            }
-            sw.Stop();
-            log.Info(string.Format("{0} promotion codes in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
-            
-        }
-
-        private void IndexStorePromotionCode(ElasticClient client, DateTime benchDate)
-        {
-            ILog log = LogManager.GetLogger(this.GetType());
-            int cursor = 0;
-            int size = 100;
-            int successCount = 0;
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
-            {
-                var prods = from r in db.StoreCoupons
-                            where (r.CreateDate >= benchDate)
-                            select r;
-
-                int totalCount = prods.Count();
-                while (cursor < totalCount)
-                {
-                    var linq = prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size).ToList();
-                    foreach (var l in linq)
-                    {
-                        try
-                        {
-                            AwsHelper.SendMessage(l.TypeName
-                                , () => l.Composing());
-                            successCount++;
-                        }
-                        catch (Exception ex)
-                        {
-                            log.Info(ex);
-                        }
-                    }
-                   
-                    cursor += size;
-                }
-
-            }
-            sw.Stop();
-            log.Info(string.Format("{0} store codes in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
-            
-        }
-
 
         private void IndexStorePromotion(ElasticClient client, DateTime benchDate)
         {
@@ -991,10 +906,7 @@ namespace com.intime.jobscheduler.Job
                                                   Name = section.Name,
                                                    Status = section.Status
                                           })
-                            let upccode = from codemap in db.ProductCode2StoreCode
-                                          where codemap.ProductId==p.Id && codemap.StoreId==p.Store_Id
-                                            && codemap.Status!=(int)DataStatus.Deleted
-                                          select codemap.StoreProductCode
+
                             select new ESProduct()
                             {
                                 Id = p.Id,
@@ -1045,7 +957,7 @@ namespace com.intime.jobscheduler.Job
                                 ShareCount = p.ShareCount,
                                 RecommendUserId = p.RecommendUser,
                                 Section=section.FirstOrDefault(),
-                                UpcCode = upccode.FirstOrDefault()
+                                UpcCode = p.SkuCode
                             };
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESProduct>();

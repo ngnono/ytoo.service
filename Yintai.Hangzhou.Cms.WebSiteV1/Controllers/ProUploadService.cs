@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using Yintai.Architecture.Framework.ServiceLocation;
-using Yintai.Architecture.ImageTool.Models;
+using Yintai.Hangzhou.Contract.Images;
 using Yintai.Hangzhou.Cms.WebSiteV1.Controllers;
 using Yintai.Hangzhou.Cms.WebSiteV1.Models;
 using Yintai.Hangzhou.Data.Models;
@@ -58,8 +58,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             };
         internal static string BASIC_SHEET = "基本信息";
         internal static string  MORE_SHEET = "商品属性";
-        internal static string IS_4SALE_YES = "True";
-        internal static string IS_4SALE_NO = "False";
+        internal static string IS_4SALE_YES = "是";
+        internal static string IS_4SALE_NO = "否";
 
         public ProUploadService(string filePath, ProBulkUploadController context)
         {
@@ -153,9 +153,10 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             {
                 var itemNames = Path.GetFileNameWithoutExtension(_filePath).Split('@');
                 int sortOrder = 10;
+                var itemCode = itemNames[0];
                 //get sort Order
                 var lastResource = _context.Context.Set<ResourceStageEntity>()
-                                    .Where(r => r.UploadGroupId == jobId && r.ItemCode == itemNames[0])
+                                    .Where(r => r.UploadGroupId == jobId && r.ItemCode == itemCode)
                                     .OrderByDescending(r=>r.SortOrder)
                                     .FirstOrDefault();
                 if (lastResource != null)
@@ -163,8 +164,6 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 bool isDimension = false;
                 if (itemNames.Length > 1 && string.Compare(itemNames[1], "cc", true) == 0)
                     isDimension = true;
-                else
-                    int.TryParse(itemNames.Length > 1 ? itemNames[1] : "1", out sortOrder);
                 var entity = _productRepService.Entry<ResourceStageEntity>();
                 entity.ContentSize = fileInfor.FileSize;
                 entity.ExtName = fileInfor.FileExtName;
@@ -173,7 +172,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 entity.Height = fileInfor.Height;
                 entity.Size = fileInfor.Width.ToString(CultureInfo.InvariantCulture) + "x" + fileInfor.Height.ToString(CultureInfo.InvariantCulture);
                 entity.SortOrder = sortOrder;
-                entity.ItemCode = itemNames[0];
+                entity.ItemCode = itemCode;
                 entity.InUser = _context.CurrentUser.CustomerId;
                 entity.IsDimension = isDimension;
                 entity.InDate = DateTime.Now;
@@ -297,12 +296,12 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                     dr[i++] = jobId;
                     dr[i++] = DateTime.Now;
                     dr[i++] = ProUploadStatus.ProductsOnStage;
-                    dr[i++] = mapCellValueToStrongType<bool?>(row.GetCell(10)) ?? false;
+                    dr[i++] = mapCellValueToStrongType<string>(row.GetCell(10)).ToString()==IS_4SALE_YES?true:false;
                     dr[i++] = mapCellValueToStrongType<string>(row.GetCell(11));
                    
                     dt.Rows.Add(dr);
                 }
-                if (hssfWB.NumberOfSheets > 1)
+                if (hssfWB.NumberOfSheets > 2)
                 {
                    System.Collections.IEnumerator prows =hssfWB.GetSheet(MORE_SHEET).GetRowEnumerator();
                    prows.MoveNext();

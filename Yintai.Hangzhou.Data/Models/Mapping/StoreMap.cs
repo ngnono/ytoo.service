@@ -26,6 +26,18 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(64);
 
+            this.Property(t => t.RMAAddress)
+                .HasMaxLength(200);
+
+            this.Property(t => t.RMAZipCode)
+                .HasMaxLength(50);
+
+            this.Property(t => t.RMAPerson)
+                .HasMaxLength(10);
+
+            this.Property(t => t.RMAPhone)
+                .HasMaxLength(20);
+
             // Table & Column Mappings
             this.ToTable("Store");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -46,6 +58,11 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.GpsLat).HasColumnName("GpsLat");
             this.Property(t => t.GpsLng).HasColumnName("GpsLng");
             this.Property(t => t.GpsAlt).HasColumnName("GpsAlt");
+            this.Property(t => t.ExStoreId).HasColumnName("ExStoreId");
+            this.Property(t => t.RMAAddress).HasColumnName("RMAAddress");
+            this.Property(t => t.RMAZipCode).HasColumnName("RMAZipCode");
+            this.Property(t => t.RMAPerson).HasColumnName("RMAPerson");
+            this.Property(t => t.RMAPhone).HasColumnName("RMAPhone");
 		Init();
         }
 

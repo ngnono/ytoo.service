@@ -1,0 +1,51 @@
+﻿@model CategoryViewModel 
+@{
+    ViewBag.Title = "CategoryViewModel";
+}
+@section PageJsSection {
+    <script>
+        $(function () {
+            $(".txtCatId").focusout(function () {
+                var channel = $(this).closest('tr').find('ShowChannel').val();
+                var catId = $(this).val();
+                var nameCtr = $(this).closest('tr').find('ShowCategoryName');
+                $.ajax({
+                    url: '@Url.Action("SearchP", "Category")',
+                    dataType: "json",
+                    data: {
+                        'channel': channel,
+                        'catId':catId
+                    },
+                    success: function (data) {
+                        nameCtr.val(data['name']);
+                    }
+                });
+            });
+        });
+
+      
+    </script>
+}
+<div class="editor-label">
+    @Html.LabelFor(model => model.ExCatId)
+</div>
+<div class="editor-field">
+    @Html.TextBoxFor(model => model.ExCatId, new { @readonly = true })
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Name)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Name)
+</div>
+<div>
+    <p>
+        @(Html.LinkToAddNestedForm<CategoryViewModel, IEnumerable<ShowCategoryViewModel>>(model => model.ShowCategories, "添加", ".rules", ".rules tr", "btn"))
+    </p>
+</div>
+<table class="rules">
+    @Html.EditorFor(model => model.ShowCategories)
+
+
+</table>

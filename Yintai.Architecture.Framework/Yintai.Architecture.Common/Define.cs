@@ -74,5 +74,7 @@ namespace Yintai.Architecture.Common
         public const string IsEnableSign = "isenablesign";
 
         public const string IsCloseService = "iscloseservice";
+
+        public const string Channel = "channel";
     }
 }

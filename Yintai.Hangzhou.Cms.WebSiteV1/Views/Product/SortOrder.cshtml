@@ -1,0 +1,309 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.Cms.WebSiteV1.Util
+@using Yintai.Hangzhou.WebSupport.Helper
+@using Yintai.Hangzhou.Model.Filters
+@model ProductSearchOption
+@{
+    ViewBag.Title = "设置优先级";
+
+}
+
+@section PageJsSection {
+    <script type="text/x-kendo-template" id="resource-template">
+        <div class="img-thumnail">
+         # if (!Resources) return;
+            for (var i=0;i<Resources.length;i++) {
+                if (Resources[i].Type!=1)
+                    continue;
+                 #
+                                <img width="60" src="${Resources[i].ProductImgUrl_120}" class="img-rounded" alt="120X0" />
+                  # } #
+        </div>
+    </script>
+    <script type="text/x-kendo-template" id="pro-template">
+        <dl>
+         # if (!PromotionName) return;
+            for (var i=0;i<PromotionName.length;i++) { #
+                      <li>${PromotionName[i]}</li>
+                  # } #
+        </dl>
+    </script>
+        <script type="text/x-kendo-template" id="topic-template">
+        <dl>
+         # if (!TopicName) return;
+            for (var i=0;i<TopicName.length;i++) { #
+                      <li>${TopicName[i]}</li>
+                  # } #
+        </dl>
+    </script>
+    <script>
+        var productDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url:"@Url.Action("sortorderp")",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        @foreach(var property in typeof(ProductSearchOption)
+                            .GetProperties(System.Reflection.BindingFlags.Public
+                                        | System.Reflection.BindingFlags.Instance))
+                        {
+                             @(string.Format("{0}",property.Name))<text>:
+                                function(){ return $("#@(property.Name)").val()},
+                            </text> 
+                        }
+                    }
+                }
+            },
+            pageSize: 20,
+            serverPaging: true,
+            schema:{
+                data: "Products",
+                model: {
+                    fields:{
+                        CreatedDate: {type: "date"}
+                    }},
+                total:"TotalCount",
+              
+            }
+        });    
+        $(document).ready(function () {
+            $("form:first").submit(function(){
+                productDataSource.page(1);
+                productDataSource.read();
+                $("#btnWillSortOrder").addClass("hide");
+                return false;
+            });
+            $("#grid").kendoGrid({
+                dataSource: productDataSource,
+                sortable: false,
+                autoBind: true,
+                dataBound: function(e) {
+                    $("#grid").find(":checkbox").change(function(){
+                        console.log('enter');
+                        if ($("#grid input:checked").length>0)
+                            $("#btnWillSortOrder").removeClass("hide");
+                        else
+                            $("#btnWillSortOrder").addClass("hide");
+                    });;
+                    $("#btnWillSortOrder").addClass("hide");
+                    
+                },
+                pageable: {
+                    messages: {
+                        display:"{0} - {1} of {2} 记录",
+                        empty: "没有记录！",
+                    }
+                },
+                columns:[{
+                    field:"Id",
+                    title:"选择",
+                    template: "<input type='checkbox' id='cb_${Id}'>",
+                },{
+                    field:"Resources",
+                    title:"图片",
+                    template:kendo.template($("#resource-template").html())
+
+                },{
+                    field:"Id",
+                    title:"商品编码",
+                    template:"<a href='@Url.Action("Details")/${Id}' target='_blank'>${Id}</a>"
+                }
+                ,{
+                    field:"名称",
+                    title:"Name",
+
+                },{
+                    field:"PromotionName",
+                    title:"活动",
+                    template:kendo.template($("#pro-template").html())
+                },{
+                    field:"TopicName",
+                    title:"专题",
+                    template:kendo.template($("#topic-template").html())
+                },{
+                    field:"BrandName",
+                    title:"品牌"
+                },{
+                    field:"Description",
+                    title:"描述"
+                },{
+                    field:"CreatedDate",
+                    title:"创建日期",
+                    format:"{0:MM/dd/yyyy HH:mm}"
+                },{
+                    field:"CreateUserName",
+                    title:"创建用户"
+                },{
+                    field:"Price",
+                    title:"销售价"
+                },{
+                    field:"StatusS",
+                    title:"状态"
+                },{
+                    field:"StoreName",
+                    title:"门店"
+                },{
+                    field:"TagName",
+                    title:"分类"
+                },{
+                    field:"SortOrder",
+                    title:"排序值"
+                }]
+               
+            });
+            $("#btnSortOrder").click(function(){                
+                var productIds=[];
+                $("#grid input:checked").each(function(){
+                    var thisId = $(this).attr('id').split('_')[1];
+                    productIds.push(thisId);
+                });
+                var sortValue = $("#txtSortOrder").val();
+                if (!sortValue || productIds.length<1)
+                {
+                    alert("至少选择一个商品并输入排序值！");
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("SortOrder")",
+                    data: {"request":JSON.stringify({products:productIds,sortvalue:sortValue})},
+                    success: function(data){
+                        if (data["Success"] == true) {
+                            $("#soModal").modal("hide");
+                            $("#btnWillSortOrder").addClass("hide");
+                            productDataSource.read();
+
+
+                        } else
+                        {
+                            alert("提交失败");
+                        }
+                    },
+                    dataType: "json"
+                });
+            });
+        });
+      
+    </script>
+}
+
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("商品管理", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<h2>@ViewBag.Title</h2>
+@using(Html.BeginForm("SortOrder", "Product", new { page = 0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
+{
+    @Html.ValidationSummary(false)
+    <div class="row">
+        <div class="span2">
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => m.PId)</label>
+                <div class="controls">
+                    @Html.TextBoxFor(m => m.PId, new { @class = "span1" })
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => m.Name)</label>
+                <div class="controls">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "span1" })
+                </div>
+            </div>
+
+
+        </div>
+        <div class="span2">
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => m.Brand)</label>
+                <div class="controls">
+                    @Html.EditorFor(m => m.Brand, new { @class = "span1" })
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => m.Topic)</label>
+                <div class="controls">
+                    @Html.EditorFor(m => m.Topic, new { @class = "span1" })
+                </div>
+            </div>
+
+
+        </div>
+        <div class="span3">
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => m.OrderBy)</label>
+                <div class="controls">
+                    @Html.DropDownListFor(m => m.OrderBy, EnumHelper.DisplayList<ProductSortOrder>(), new { @class = "span2" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="Name">状态</label>
+                <div class="controls">
+                    @Html.DropDownListFor(m => m.Status, EnumHelper.DisplayList<DataStatus>(), new { @class = "span2" })
+                </div>
+            </div>
+        </div>
+        <div class="span2">
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => m.Tag)</label>
+                <div class="controls">
+                    @Html.EditorFor(model => model.Tag, new { @class = "span1" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => m.Store)</label>
+                <div class="controls">
+                    @Html.EditorFor(model => model.Store, new { @class = "span1" })
+                </div>
+            </div>
+        </div>
+        <div class="span2">
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => m.Promotion)</label>
+                <div class="controls">
+                    @Html.EditorFor(m => m.Promotion, new { @class = "span1" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => m.User)</label>
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.User, new { @class = "span1" })
+                </div>
+            </div>
+        </div>
+        <div class="control-group span2">
+            <div class="control-label">
+                <button type="submit" class="btn">查询</button>
+                <a class="btn btn-primary hide" href="#soModal"  role="button" id="btnWillSortOrder" data-toggle="modal" >修改排序</a>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="k-content">
+    <div id="grid"></div>
+</div>
+<div id="soModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">设置排序值</h3>
+  </div>
+  <div class="modal-body">
+      <div class="control-group">
+          <label class="control-label" for="inputIcon">排序值：</label>
+          <div class="controls">     
+                  <input class="span2" id="txtSortOrder" type="text">
+          </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary" id="btnSortOrder">提交</button>
+  </div>
+</div>

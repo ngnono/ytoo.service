@@ -165,6 +165,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
         [DataMember(Name = "sharetotal")]
         public int ShareCount { get; set; }
 
+        [DataMember(Name = "onlinecoupontotal")]
+        public int OnlineCouponCount { get; set; }
+
+        [DataMember(Name = "offlinecoupontotal")]
+        public int OfflineCouponCount { get; set; }
+
         public void CountsFromEntity(IEnumerable<UserAccountEntity> entities)
         {
             if (entities == null)
@@ -193,6 +199,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
                         break;
                     case (int)AccountType.ShareCount:
                         ShareCount = (int)item.Amount;
+                        break;
+                    case (int)AccountType.OnlineCoupon:
+                        OnlineCouponCount = (int)item.Amount;
+                        break;
+                    case (int)AccountType.OfflineCoupon:
+                        OfflineCouponCount = (int)item.Amount;
                         break;
                 }
             }

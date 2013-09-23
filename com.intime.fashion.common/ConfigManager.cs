@@ -197,5 +197,19 @@ namespace com.intime.fashion.common
                 return ConfigurationManager.AppSettings["rmapolicy"];
             }
         }
+        public static string ErpPrivateKey
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["erpprivatekey"];
+            }
+        }
+        public static string ErpBaseUrl
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["erpbaseurl"];
+            }
+        }
     }
 }

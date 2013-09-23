@@ -13,20 +13,24 @@ namespace Yintai.Hangzhou.Model.Enums
         Create = 0,
         [Description("取消")]
         Void = -10,
+        [Description("已付款")]
+        Paid = 1,
+        [Description("审核通过")]
+        PassConfirmed = 2,
         [Description("专柜已修改")]
-        AgentConfirmed = 1,
+        AgentConfirmed = 11,
         [Description("用户确认")]
-        CustomerConfirmed = 2,
+        CustomerConfirmed = 12,
         [Description("订单已打印")]
-        OrderPrinted = 3,
+        OrderPrinted = 13,
         [Description("发货单已打印")]
-        PreparePack = 4,
+        PreparePack = 14,
         [Description("已发货")]
         Shipped = 5,
         [Description("用户已签收")]
         CustomerReceived = 6,
         [Description("转集团销售")]
-        Convert2Sales = 7,
+        Convert2Sales =17,
         [Description("用户拒收")]
         CustomerRejected = 10
     }

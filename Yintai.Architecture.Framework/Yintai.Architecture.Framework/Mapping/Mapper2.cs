@@ -10,7 +10,7 @@ namespace Yintai.Architecture.Framework
     {
         public static TTarget Map<TSource, TTarget>(TSource source)
         {
-             return AutoMapper.Mapper.DynamicMap<TSource, TTarget>(source);
+             return AutoMapper.Mapper.DynamicMap<TTarget>(source);
         }
         public static TTarget Map<TSource, TTarget>(TSource source, TTarget target)
         {

@@ -6,7 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Web;
 using Yintai.Architecture.Common.Web;
-using Yintai.Architecture.ImageTool.Models;
+using Yintai.Hangzhou.Contract.Images;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;

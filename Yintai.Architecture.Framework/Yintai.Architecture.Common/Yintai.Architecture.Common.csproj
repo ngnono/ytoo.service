@@ -117,18 +117,17 @@
     <Compile Include="Models\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegularDefine.cs" />
+    <Compile Include="Web\Mvc\ActionResults\RestfulResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Web\WebExtension.cs" />
-    <Compile Include="Web\Mvc\ActionResults\RestfulResult.cs" />
     <Compile Include="Web\Mvc\Attributes\ValidParmeterAttribute.cs" />
-    <Compile Include="Web\Mvc\IRequestParameterHandler.cs" />
-    <Compile Include="Web\Mvc\Attributes\DataServiceAttribute.cs" />
     <Compile Include="Web\Mvc\Attributes\DefaultHandleErrorAttribute.cs" />
     <Compile Include="Web\HttpModules\GlobalErrorHandlerModule.cs" />
     <Compile Include="Web\HttpModules\RequestLogginHttpModule.cs" />
     <Compile Include="Web\Mvc\Binders\ModelBinderBase.cs" />
     <Compile Include="Web\Mvc\Binders\UseBinderAttribute.cs" />
     <Compile Include="Web\Mvc\Controllers\BaseController.cs" />
-    <Compile Include="Web\Mvc\Controllers\RestfulController.cs" />
     <Compile Include="Web\Mvc\Controllers\CustomerBaseController.cs" />
     <Compile Include="Web\Mvc\Ioc\IocDependencyResolver.cs" />
     <Compile Include="Web\Mvc\Routes\LowerCaseUrlRoute.cs" />

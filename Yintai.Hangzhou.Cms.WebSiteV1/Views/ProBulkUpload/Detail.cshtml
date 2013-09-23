@@ -34,14 +34,13 @@
 
         <div class="span4">
             @Html.LabelFor(model => model.Descrip)
-            @Html.EditorFor(model => model.Descrip)
+            @Html.TextAreaFor(model => model.Descrip)
             @Html.ValidationMessageFor(model => model.Descrip)
         </div>
 
         <div class="span4">
             @Html.LabelFor(model => model.DescripOfPromotion)
-            @Html.EditorFor(model => model.DescripOfPromotion)
-            @Html.ValidationMessageFor(model => model.DescripOfPromotion)
+            @Html.TextAreaFor(model => model.DescripOfPromotion)
         </div>
 
         <div class="span4">

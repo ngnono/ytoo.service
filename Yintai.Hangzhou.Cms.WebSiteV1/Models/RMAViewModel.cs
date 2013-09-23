@@ -37,7 +37,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
          [Display(Name = "退款卡号")]
         public string BankCard { get; set; }
         [Display(Name = "不能退货原因")]
-        [Required(ErrorMessage="退货原因不能为空")]
+        [Required(ErrorMessage = "不能退货原因不能为空")]
         public string RejectReason { get; set; }
         [Display(Name="联系电话")]
         public string ContactPhone { get; set; }

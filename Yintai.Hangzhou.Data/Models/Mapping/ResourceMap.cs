@@ -27,6 +27,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(16);
 
+            this.Property(t => t.ValueId)
+                .IsFixedLength()
+                .HasMaxLength(10);
+
             // Table & Column Mappings
             this.ToTable("Resources");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -48,6 +52,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ContentSize).HasColumnName("ContentSize");
             this.Property(t => t.ExtName).HasColumnName("ExtName");
             this.Property(t => t.IsDimension).HasColumnName("IsDimension");
+            this.Property(t => t.IsExternal).HasColumnName("IsExternal");
+            this.Property(t => t.ColorId).HasColumnName("ColorId");
+            this.Property(t => t.ValueId).HasColumnName("ValueId");
+            this.Property(t => t.ChannelPicId).HasColumnName("ChannelPicId");
 		Init();
         }
 

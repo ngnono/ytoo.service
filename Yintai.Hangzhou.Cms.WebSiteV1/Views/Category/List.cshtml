@@ -1,0 +1,136 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.Cms.WebSiteV1.Util
+@using Yintai.Hangzhou.WebSupport.Helper
+@using Yintai.Hangzhou.Model.Filters
+@model CategorySearchOption
+@{
+    ViewBag.Title = "商品分类列表";
+    var detailUrl = string.Format("<a target='_blank' href='{0}?id={1}'>{1}</a>", Url.Action("map"), "#: id#");
+}
+
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("配置管理", "Index","Configuration")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+@section PageJsSection
+{
+    <script>
+        var orderDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url:"@Url.Action("listp")",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        @foreach (var property in typeof(CategorySearchOption)
+                            .GetProperties(System.Reflection.BindingFlags.Public
+                                        | System.Reflection.BindingFlags.Instance))
+                        {
+                             @(string.Format("{0}",property.Name))<text>:
+                                function(){ return $("#@(property.Name)").val()},
+                            </text> 
+                        }
+                    }
+                }
+            },
+             pageSize: 10,
+             serverPaging: true,
+             schema:{
+                 data: "Data",
+                 model: {
+                     fields:{
+                         CreateDate: {type: "date"}
+                     }},
+               total:"TotalCount",
+              
+             }
+         });    
+        $(document).ready(function () {
+            $("form:first").submit(function(){
+                orderDataSource.read();
+                return false;
+            });
+            $("#grid").kendoGrid({
+                dataSource: orderDataSource,
+                sortable: false,
+                autoBind: true,
+                pageable: {
+                    messages: {
+                        display:"{0} - {1} of {2} 记录",
+                        empty: "没有记录！",
+                    }
+                },
+                columns:[{
+                    command:{
+                        name:"map",
+                        className:"btn-button",
+                        text:"分类映射",
+                        click:function(e){
+                            var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                            // get the data bound to the current table row
+                            var data = this.dataItem(tr);
+                            var mapUrlTemp = '@Url.Action("map")';
+                            window.open(mapUrlTemp.concat('?id=').concat(data.Id));
+                        }
+                    }
+                  
+                },{
+                    field:"ExCatId",
+                    title:"商品分类编码"
+                },{
+                    field:"Name",
+                    title:"商品分类"
+                }
+                ,{
+                    field:"Channels",
+                    title:"映射渠道"
+                }]
+               
+            });
+        });
+      
+    </script>
+    }
+@using (Html.BeginForm("List",null,FormMethod.Post,
+        new { @class = "form-horizontal searchForm-border small-labels" }))
+{
+    @Html.ValidationSummary(false)
+    <div class="row">
+        <div class="span2">
+            <div class="control-group">
+                <label class="control-label" for="Name">商品分类码</label>
+                <div class="controls">
+                    @Html.TextBoxFor(m => Model.PId, new { @class = "span1" })
+                </div>
+            </div>
+            
+
+          
+        </div>
+        <div class="span3">
+            <div class="control-group">
+                <label class="control-label" for="Name">分类名</label>
+                <div class="controls">
+                    @Html.EditorFor(m => Model.Name, new { @class = "span2" })
+                </div>
+            </div>
+            
+        </div>
+        <div class="span3">
+             <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+           
+        </div>
+      
+    </div>
+}
+<div class="k-content">
+    <div id="grid"></div>
+</div>
+

@@ -7,14 +7,17 @@
         }
         @Html.HiddenFor(model => model.Id)
     </td>
-    <td>@Html.TextBoxFor(model => model.ProductId, new { @readonly = true, @class = "span1" })</td>
-    <td>@Html.TextBoxFor(model => model.ProductName, new {@readonly = true,  @class = "span1" })</td>
+    <td>@Html.DisplayFor(model => model.ProductId, new { @readonly = true, @class = "span1" })</td>
+    <td>@Html.DisplayFor(model => model.ProductName, new {@readonly = true,  @class = "span1" })</td>
     <td>@Html.TextBoxFor(model => model.ProductDesc, new {  @class = "span2" })</td>
-    <td>@Html.TextBoxFor(model => model.ItemPrice, new { @readonly = true, @class = "span1" })</td>
-    <td>@Html.TextBoxFor(model => model.Quantity, new { @readonly = true, @class = "span1" })</td>
-    <td>@Html.TextBoxFor(model => model.ExtendPrice, new { @readonly = true, @class = "span1" })</td>
-    <td>@Html.TextBoxFor(model =>model.UPCCode, new { @readonly = true, @class = "span1" })</td>
-    <td>@Html.EditorFor(model => model.StoreItemNo)</td>
-    <td>@Html.EditorFor(model => model.StoreItemDesc)</td>
+    <td>@Html.DisplayFor(model => model.Store.Name,new { @readonly = true })</td>
+     <td>@Html.DisplayFor(model => model.Brand.Name, new { @readonly = true })</td>
+    <td>@Html.DisplayFor(model => model.UnitPrice, new { @readonly = true })</td>
+    <td>@Html.DisplayFor(model => model.ItemPrice, new { @readonly = true })</td>
+    <td>@Html.DisplayFor(model => model.Quantity, new { @readonly = true })</td>
+    <td>@Html.DisplayFor(model => model.ExtendPrice, new { @readonly = true, @class = "span1" })</td>
+    <td>@Html.DisplayFor(model => model.UPCCode, new { @readonly = true })</td>
+    <td>@Html.TextBoxFor(model => model.StoreItemNo, new { @class = "span1" })</td>
+    <td>@Html.TextBoxFor(model => model.StoreItemDesc, new { @class = "span1" })</td>
 </tr>
 

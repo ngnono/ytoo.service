@@ -14,7 +14,7 @@ namespace com.intime.fashion.common
 {
     public static class GroupServiceHelper
     {
-        public static bool SendHttpMessage(string groupPointConvertUrl, string publickey, string privatekey, dynamic p,out string errorMsg)
+        public static bool SendHttpMessage(string groupPointConvertUrl,string publickey,string privatekey, dynamic p,out string errorMsg)
         {
             errorMsg = string.Empty;
             if (string.IsNullOrEmpty(groupPointConvertUrl))

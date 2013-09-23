@@ -53,7 +53,7 @@ namespace Yintai.Hangzhou.Repository.Impl
                     break;
                 case ResourceSortOrder.Default:
                 default:
-                    order = v => v.OrderBy(s => s.SourceType).ThenBy(s => s.SourceId).ThenBy(s => s.SortOrder);
+                    order = v => v.OrderBy(s => s.SourceType).ThenBy(s => s.SourceId).ThenByDescending(s => s.SortOrder);
                     break;
             }
 

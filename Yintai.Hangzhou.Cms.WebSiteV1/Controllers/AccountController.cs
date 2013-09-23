@@ -4,8 +4,8 @@ using Yintai.Hangzhou.Cms.WebSiteV1.Util;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
-using Recaptcha;
-using PoliteCaptcha;
+
+
 
 namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 {

@@ -12,7 +12,7 @@ namespace Yintai.Hangzhou.WebApiCore
 {
     public static class ControllerExtension
     {
-        public static ActionResult RenderError(this RestfulController controller, Action<ExecuteResult> callback)
+        public static ActionResult RenderError(this BaseController controller, Action<ExecuteResult> callback)
         {
             var result = new RestfulResult
                 {
@@ -23,7 +23,7 @@ namespace Yintai.Hangzhou.WebApiCore
                 callback(result.Data as ExecuteResult);
             return result;
         }
-        public static ActionResult RenderSuccess<T>(this RestfulController controller, Action<ExecuteResult<T>> callback)
+        public static ActionResult RenderSuccess<T>(this BaseController controller, Action<ExecuteResult<T>> callback)
         {
             var result = new RestfulResult
             {

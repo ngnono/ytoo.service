@@ -14,7 +14,7 @@ namespace Yintai.Hangzhou.Service.Logic
     {
         public static string CreateCode(int storeId)
         {
-            var code = string.Concat(string.Format("1{0}{1}",storeId.ToString().PadRight(2,'0'), DateTime.Now.ToString("yyMMdd"))
+            var code = string.Concat(string.Format("1{0}", DateTime.Now.ToString("yyMMdd"))
                         , DateTime.UtcNow.Ticks.ToString().Reverse().Take(5)
                             .Aggregate(new StringBuilder(), (s, e) => s.Append(e), s => s.ToString())
                             .PadRight(5, '0'));
@@ -54,15 +54,40 @@ namespace Yintai.Hangzhou.Service.Logic
             return code;
         }
 
-        public static dynamic ComputeAmount(ProductEntity linq, int quantity)
+        public static OrderComputeResult ComputeAmount(ProductEntity linq, int quantity)
         {
-            return new
+            return new OrderComputeResult() { 
+                 TotalAmount= linq.Price *quantity,
+                  ExtendPrice = linq.Price * quantity,
+                   TotalFee = 0m,
+                    TotalPoints = 0,
+                     TotalQuantity = quantity
+            };
+          
+        }
+
+        public class OrderComputeResult
+        {
+         
+            public int TotalQuantity { get; set; }
+            public int TotalPoints { get; set; }
+            public decimal TotalFee {get;set;}
+            public decimal ExtendPrice {get;set;}
+            public decimal TotalAmount {get;set;}
+             
+        }
+
+
+
+        public static OrderComputeResult ComputeFee()
+        {
+            return new OrderComputeResult()
             {
-                totalquantity = quantity,
-                totalpoints = 0,
-                totalfee = 0m,
-                extendprice = linq.Price * quantity,
-                totalamount = linq.Price * quantity
+                TotalAmount = 0,
+                ExtendPrice = 0,
+                TotalFee = 0m,
+                TotalPoints = 0,
+                TotalQuantity = 0
             };
         }
     }

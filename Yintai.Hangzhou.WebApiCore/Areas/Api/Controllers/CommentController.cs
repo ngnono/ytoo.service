@@ -17,6 +17,7 @@ using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Architecture.Framework;
+using Yintai.Hangzhou.Contract.DTO.Response.Comment;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 {
@@ -46,15 +47,44 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
         public ActionResult List(CommentListRequest request)
         {
-            if (String.IsNullOrEmpty(request.Type) || request.Type.ToLower() != "refresh")
+            var linq = _commentRepo.Get(c => c.Status != (int)DataStatus.Deleted && c.SourceId == request.SourceId && c.SourceType == request.SourceType)
+                           .GroupJoin(_resourceRepo.Get(r => r.Status != (int)DataStatus.Deleted && r.SourceType == (int)SourceType.CommentAudio),
+                                       o => o.Id,
+                                       i => i.SourceId,
+                                       (o, i) => new { C = o, Aud = i })
+                           .GroupJoin(_customerRepo.Get(cu => cu.Status != (int)DataStatus.Deleted),
+                                       o => o.C.User_Id,
+                                       i => i.Id,
+                                       (o, i) => new { C = o.C, Aud = o.Aud, U = i.FirstOrDefault() })
+                            .GroupJoin(_customerRepo.Get(cu => cu.Status != (int)DataStatus.Deleted),
+                                       o => o.C.ReplyUser,
+                                       i => i.Id,
+                                       (o, i) => new { C = o.C, Aud = o.Aud, U = o.U, RU = i.FirstOrDefault() })
+                            .GroupJoin(_commentRepo.Get(cr => cr.Status != (int)DataStatus.Deleted), o => o.C.ReplyId, i => i.Id,
+                                      (o, i) => new { C = o.C, Aud = o.Aud, U = o.U, RU =o.RU,CR=i.FirstOrDefault()});
+            
+            int totalCount = linq.Count();
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(c => c.C.CreatedDate).Skip(skipCount).Take(request.Pagesize);
+            var responseData = from l in linq.ToList()
+                               select new CommentInfoResponse().FromEntity<CommentInfoResponse>(l.C,
+                                           c =>
+                                           {
+                                               c.Customer = new ShowCustomerInfoResponse().FromEntity<ShowCustomerInfoResponse>(l.U);
+                                               if (l.RU !=null)
+                                               {
+                                                   c.ReplyUserNickname = l.RU.Nickname;
+                                                   c.ReplyUser = l.RU.Id;
+                                               }
+                                               c.ResourceInfoResponses=l.Aud.Select(ca=>new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(ca)).ToList();
+
+                                           });
+            var response = new CommentCollectionResponse(request.PagerRequest, totalCount)
             {
-                return new RestfulResult { Data = this._commentDataService.GetList(request) };
-            }
-
-            var refresh = Mapper.Map<CommentListRequest, CommentRefreshRequest>(request);
-            refresh.Timestamp.TsType = TimestampType.New;
-
-            return new RestfulResult { Data = this._commentDataService.GetListRefresh(refresh) };
+               Comments = responseData.ToList()
+            };
+            return this.RenderSuccess<CommentCollectionResponse>(r => r.Data = response);
+                
         }
 
         [HttpPost]

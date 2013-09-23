@@ -24,6 +24,15 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Favorable)
                 .IsRequired();
 
+            this.Property(t => t.SkuCode)
+                .HasMaxLength(50);
+
+            this.Property(t => t.BarCode)
+                .HasMaxLength(100);
+
+            this.Property(t => t.MoreDesc)
+                .HasMaxLength(1000);
+
             // Table & Column Mappings
             this.ToTable("Product");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -50,6 +59,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.IsHasImage).HasColumnName("IsHasImage");
             this.Property(t => t.UnitPrice).HasColumnName("UnitPrice");
             this.Property(t => t.Is4Sale).HasColumnName("Is4Sale");
+            this.Property(t => t.SkuCode).HasColumnName("SkuCode");
+            this.Property(t => t.BarCode).HasColumnName("BarCode");
+            this.Property(t => t.MoreDesc).HasColumnName("MoreDesc");
 		Init();
         }
 

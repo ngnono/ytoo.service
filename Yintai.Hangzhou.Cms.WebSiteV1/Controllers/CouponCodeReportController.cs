@@ -97,6 +97,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                       CustomerNick = l.U.Nickname,
                       PromotionDate = string.Format("{0}-{1}",l.P.StartDate,l.P.EndDate),
                       CreateDate = l.C.CreatedDate,
+                      Status = l.C.Status,
                     Logs = l.CLs.OrderByDescending(cl => cl.CL.CreateDate)
                              .Select(cl => new CouponLogViewModel().FromEntity<CouponLogViewModel>(cl.CL, p =>
                              {

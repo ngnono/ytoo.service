@@ -339,6 +339,37 @@
       </cron>
     </trigger>
     -->
+    <job>
+      <name>ERP-GroupSync</name>
+      <group>Fashion</group>
+      <description>sync erp infos per 5mins</description>
+      <job-type>com.intime.jobscheduler.Job.Erp.ErpGroupJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>isRebuild</key>
+          <value>false</value>
+        </entry>
+        <entry>
+          <key>intervalOfSecs</key>
+          <value>5</value>
+        </entry>
+        
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>ERP-5MINS</name>
+        <group>Fashion</group>
+        <description>every 5 mins</description>
+        <job-name>ERP-GroupSync</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0/30 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
   </schedule>
 
 </job-scheduling-data>

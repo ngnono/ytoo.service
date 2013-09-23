@@ -23,6 +23,11 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<decimal> GpsLat { get; set; }
         public Nullable<decimal> GpsLng { get; set; }
         public Nullable<decimal> GpsAlt { get; set; }
+        public Nullable<int> ExStoreId { get; set; }
+        public string RMAAddress { get; set; }
+        public string RMAZipCode { get; set; }
+        public string RMAPerson { get; set; }
+        public string RMAPhone { get; set; }
 
         #region Overrides of BaseEntity
 
