@@ -149,13 +149,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                 o.Customer = new CustomerViewModel().FromEntity<CustomerViewModel>(_customerRepo.Find(o.CustomerId));
                 o.Logs = _orderLogRepo.Get(l => l.OrderNo == o.OrderNo).OrderByDescending(ol=>ol.CreateDate).ToList().Select(l => new OrderLogViewModel().FromEntity<OrderLogViewModel>(l));
                 o.Items = _orderRepo.Context.Set<OrderItemEntity>().Where(oi => oi.OrderNo == o.OrderNo && oi.Status != (int)DataStatus.Deleted)
-                        .GroupJoin(Context.Set<ProductCode2StoreCodeEntity>().Where(pm => pm.Status == (int)DataStatus.Normal),
-                                oi => new { Product = oi.ProductId, Store = oi.StoreId },
-                                i => new { Product = i.ProductId, Store = i.StoreId },
-                                (oi, i) => new { O = oi, StoreCode = i.Select(s=>s.ExPId).FirstOrDefault() }
-                        )
                         .ToList()
-                        .Select(oi => new OrderItemViewModel().FromEntity<OrderItemViewModel>(oi.O, item =>
+                        .Select(oi => new OrderItemViewModel().FromEntity<OrderItemViewModel>(oi, item =>
                         {
                             item.ProductResource = new ResourceViewModel().FromEntity<ResourceViewModel>(Context.Set<ResourceEntity>().Where(r => r.SourceId == item.ProductId
                                         && r.SourceType == (int)SourceType.Product

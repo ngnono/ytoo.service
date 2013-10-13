@@ -48,17 +48,21 @@
     <Reference Include="System.Data.Entity" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extension\PRO_CLASS_DICT.cs" />
+    <Compile Include="Extension\SUPPLY_MIN_PRICE_MX.cs" />
     <Compile Include="Models\BRAND.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\ErpContext.cs" />
     <Compile Include="Models\Mapping\BRANDMap.cs" />
     <Compile Include="Models\Mapping\PRO_CLASS_DICTMap.cs" />
     <Compile Include="Models\Mapping\PRO_PICTUREMap.cs" />
+    <Compile Include="Models\Mapping\SALE_CODEMap.cs" />
     <Compile Include="Models\Mapping\SHOP_INFOMap.cs" />
     <Compile Include="Models\Mapping\SUPPLY_MIN_PRICEMap.cs" />
     <Compile Include="Models\Mapping\SUPPLY_MIN_PRICE_MXMap.cs" />
     <Compile Include="Models\PRO_CLASS_DICT.cs" />
     <Compile Include="Models\PRO_PICTURE.cs" />
+    <Compile Include="Models\SALE_CODE.cs" />
     <Compile Include="Models\SHOP_INFO.cs" />
     <Compile Include="Models\SUPPLY_MIN_PRICE.cs" />
     <Compile Include="Models\SUPPLY_MIN_PRICE_MX.cs" />

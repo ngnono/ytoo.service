@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Contract.DTO.Request
 {
@@ -37,6 +38,11 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public string InvoiceDetail { get; set; }
         public string Memo { get; set; }
 
+        public int ShippingType { get {
+            if (ShippingAddress == null)
+                return (int)ShipType.Self;
+            return (int)ShipType.TrdParty;
+        } }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -70,12 +76,15 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         [Range(1, 5, ErrorMessage = "数量不能超过5个")]
         public int Quantity { get; set; }
 
+        public int? StoreId { get; set; }
+        public int? SectionId { get; set; }
+
         public ProductPropertyValueRequest Properties { get; set; }
 
          public string ProductDesc { get {
             if (Properties == null)
                 return string.Empty;
-           var description = string.Format("{0}:{1},{2}:{3}", Properties.ColorName, Properties.ColorValueName,Properties.SizeName,Properties.SizeValueName)
+           var description = string.Format("{0}:{1},{2}:{3}", "颜色", Properties.ColorValueName,"尺码",Properties.SizeValueName)
               ;
            if (description.Length > 0)
                description = description.TrimEnd(',');

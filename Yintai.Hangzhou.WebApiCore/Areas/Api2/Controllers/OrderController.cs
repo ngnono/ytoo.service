@@ -41,6 +41,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
                             .Join(Context.Set<OrderEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => i).FirstOrDefault();
             if (orderEntity==null)
                 return this.RenderError(r => r.Message = "订单不存在！");
+            if (orderEntity.Status >= (int)OrderStatus.PreparePack)
+                return this.RenderSuccess<BaseResponse>(null);
             using (var ts = new TransactionScope())
             {
                 orderEntity.Status = (int)OrderStatus.PreparePack;
@@ -51,7 +53,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
                      CreateDate = DateTime.Now,
                       CreateUser =0,
                        CustomerId = orderEntity.CustomerId,
-                        Operation = request.Memo,
+                        Operation = request.Memo??"准备发货",
                          OrderNo = orderEntity.OrderNo,
                           Type = (int)OrderOpera.PrepareShip
                 });
@@ -73,7 +75,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
             var orderEntity = Context.Set<Order2ExEntity>().Where(o => o.ExOrderNo == request.OrderNo)
                             .Join(Context.Set<OrderEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => i)
                             .Join(Context.Set<OrderItemEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => new { O = o, OI = i })
-                            .GroupJoin(Context.Set<ProductCode2StoreCodeEntity>(),o=>o.OI.ProductId,i=>i.ProductId,(o,i)=>new {O=o.O,OI=o.OI,EPId =i.FirstOrDefault()})
+                            .GroupJoin(Context.Set<ProductMapEntity>(),o=>o.OI.ProductId,i=>i.ProductId,(o,i)=>new {O=o.O,OI=o.OI,EPId =i.FirstOrDefault()})
                             .GroupJoin(ppLinq.Where(pp=>pp.PP.IsSize.HasValue && pp.PP.IsSize.Value==true),o=>o.OI.SizeValueId,i=>i.PPV.Id,(o,i)=>new {O=o.O,OI=o.OI,EPId=o.EPId,SId=i.FirstOrDefault()})
                             .GroupJoin(ppLinq.Where(pp=>pp.PP.IsColor.HasValue && pp.PP.IsColor.Value==true),o=>o.OI.ColorValueId,i=>i.PPV.Id,(o,i)=>new {O=o.O,OI=o.OI,EPId=o.EPId,SId=o.SId,CId = i.FirstOrDefault()})
                             ;
@@ -92,7 +94,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
             {
                 var shippedQuantity = haveShippedEntity.Where(l => l.SId.PPV.Id == item.OI.SizeValueId && l.CId.PPV.Id== item.OI.ColorValueId && l.OBI.ProductId == item.OI.ProductId)
                                 .Sum(l => l.OBI.Quantity);
-                var shippingQuantity =  request.Products.Where(l=>l.ProductId== item.EPId.ExPId && l.Properties.ColorValueId==item.CId.PPV.ChannelValueId && l.Properties.SizeValueId== item.SId.PPV.ChannelValueId)
+                var shippingQuantity =  request.Products.Where(l=>l.ProductId== item.EPId.ChannelPId && l.Properties.ColorValueId==item.CId.PPV.ChannelValueId && l.Properties.SizeValueId== item.SId.PPV.ChannelValueId)
                                 .Sum(l=>l.Quantity);
                 if (shippedQuantity + shippingQuantity < item.OI.Quantity)
                 {
@@ -117,7 +119,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
 
                 foreach (var item in request.Products)
                 {
-                    var linq = Context.Set<ProductCode2StoreCodeEntity>().Where(l => l.ExPId == item.ProductId)
+                    var linq = Context.Set<ProductMapEntity>().Where(l => l.ChannelPId == item.ProductId)
                                 .Join(ppLinq, o => o.ProductId, i => i.PP.ProductId, (o, i) => new { P = o, PP = i.PP, PPV = i.PPV });
                     _obiRepo.Insert(new OutboundItemEntity()
                     {
@@ -147,6 +149,75 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
                     });
 
                 }
+                ts.Complete();
+            }
+            return this.RenderSuccess<BaseResponse>(null);
+
+        }
+
+        [HttpPost]
+        public ActionResult Void(OrderVoidRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
+                return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
+            }
+            var orderEntity = Context.Set<Order2ExEntity>().Where(o => o.ExOrderNo == request.OrderNo)
+                             .Join(Context.Set<OrderEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => i).FirstOrDefault();
+            if (orderEntity == null)
+                return this.RenderError(r => r.Message = "订单不存在！");
+            if (orderEntity.Status == (int)OrderStatus.Void)
+                return this.RenderSuccess<BaseResponse>(null);
+            using (var ts = new TransactionScope())
+            {
+                orderEntity.Status = (int)OrderStatus.Void;
+                orderEntity.UpdateDate = request.UpdateTime ?? DateTime.Now;
+                _orderRepo.Update(orderEntity);
+
+                _orderLogRepo.Insert(new OrderLogEntity() { 
+                     CreateDate = request.UpdateTime??DateTime.Now,
+                      CreateUser =0,
+                      CustomerId = 0,
+                       Operation="取消订单",
+                        OrderNo = orderEntity.OrderNo,
+                         Type = (int)OrderOpera.SystemVoid
+                });
+                ts.Complete();
+            }
+            return this.RenderSuccess<BaseResponse>(null);
+
+        }
+
+        [HttpPost]
+        public ActionResult CustomerReject(OrderRejectRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
+                return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
+            }
+            var orderEntity = Context.Set<Order2ExEntity>().Where(o => o.ExOrderNo == request.OrderNo)
+                             .Join(Context.Set<OrderEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => i).FirstOrDefault();
+            if (orderEntity == null)
+                return this.RenderError(r => r.Message = "订单不存在！");
+            if (orderEntity.Status == (int)OrderStatus.CustomerRejected)
+                return this.RenderSuccess<BaseResponse>(null);
+            using (var ts = new TransactionScope())
+            {
+                orderEntity.Status = (int)OrderStatus.CustomerRejected;
+                orderEntity.UpdateDate = request.UpdateTime ?? DateTime.Now;
+                _orderRepo.Update(orderEntity);
+
+                _orderLogRepo.Insert(new OrderLogEntity()
+                {
+                    CreateDate = request.UpdateTime ?? DateTime.Now,
+                    CreateUser = 0,
+                    CustomerId = 0,
+                    Operation = "订单拒收",
+                    OrderNo = orderEntity.OrderNo,
+                    Type = (int)OrderOpera.CustomerReject
+                });
                 ts.Complete();
             }
             return this.RenderSuccess<BaseResponse>(null);

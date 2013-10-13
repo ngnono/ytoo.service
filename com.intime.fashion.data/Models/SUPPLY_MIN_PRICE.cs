@@ -39,6 +39,7 @@ namespace com.intime.fashion.data.erp.Models
         public Nullable<decimal> SHOP_SID { get; set; }
         public string PRO_DESC { get; set; }
         public string BARCODE { get; set; }
+        public virtual SALE_CODE SALE_CODE { get; set; }
         public virtual ICollection<SUPPLY_MIN_PRICE_MX> SUPPLY_MIN_PRICE_MX { get; set; }
     }
 }

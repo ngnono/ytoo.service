@@ -94,6 +94,7 @@
     <Compile Include="Enums\ResourceSortOrder.cs" />
     <Compile Include="Enums\RMAStatus.cs" />
     <Compile Include="Enums\RMAType.cs" />
+    <Compile Include="Enums\ShipType.cs" />
     <Compile Include="Enums\SpecialTopicOrder.cs" />
     <Compile Include="Enums\SpecialTopicType.cs" />
     <Compile Include="Enums\StorePromotionType.cs" />

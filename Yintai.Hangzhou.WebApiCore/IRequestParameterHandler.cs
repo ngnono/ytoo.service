@@ -172,7 +172,6 @@ namespace Yintai.Hangzhou.WebApiCore
         private static void CommonParameterValidate(ActionExecutingContext context)
         {
             var request = context.RequestContext.HttpContext.Request;
-
             var uid = request[Define.Uid];
             if (String.IsNullOrEmpty(uid))
             {

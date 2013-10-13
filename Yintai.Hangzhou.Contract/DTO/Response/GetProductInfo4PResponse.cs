@@ -44,37 +44,51 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name = "originprice")]
         public decimal UnitPrice { get; set; }
 
-        [DataMember(Name="properties")]
-        public IEnumerable<ProductPropertyResponse> Properties { get; set; }
+
+        [DataMember(Name="salecolors")]
+        public IEnumerable<SaleColorPropertyResponse> SaleColors { get; set; }
 
         [DataMember(Name="rmapolicy")]
         public string RMAPolicy { get; set; }
         [DataMember(Name="supportpayments")]
         public IEnumerable<PaymentMethodResponse> SupportPayments { get; set; }
-        [DataMember(Name="resource")]
-        public ResourceInfoResponse Resource { get; set; }
+        
         [DataMember(Name = "dimension")]
         public ResourceInfoResponse DimensionResource { get; set; }
+
+        [DataMember(Name="brandid")]
+        public int BrandId { get; set; }
+        [DataMember(Name = "brandname")]
+        public string BrandName { get; set; }
+        [DataMember(Name = "brand2name")]
+        public string Brand2Name { get; set; }
+        [DataMember(Name="skucode")]
+        public string SkuCode { get; set; }
        
     }
     [DataContract]
-    public class ProductPropertyResponse
+    public class SaleColorPropertyResponse
     {
-        [DataMember(Name="propertyid")]
-        public int PropertyId { get; set; }
-         [DataMember(Name = "propertyname")]
-        public string PropertyName { get; set; }
-         [DataMember(Name = "values")]
-        public IEnumerable<ProductPropertyValueReponse> Values { get; set; }
+        [DataMember(Name="colorid")]
+        public int ColorId { get; set; }
+        [DataMember(Name = "colorname")]
+        public string ColorName { get; set; }
+        [DataMember(Name = "resource")]
+        public ResourceInfoResponse Resource { get; set; }
+        [DataMember(Name = "sizes")]
+        public IEnumerable<SaleSizePropertyResponse> Sizes { get; set; }
     }
     [DataContract]
-    public class ProductPropertyValueReponse
+    public class SaleSizePropertyResponse
     {
-        [DataMember(Name="valueid")]
-        public int ValueId { get; set; }
-        [DataMember(Name="valuename")]
-        public string ValueName { get; set; }
+        [DataMember(Name = "sizeid")]
+        public int SizeId { get; set; }
+        [DataMember(Name = "sizename")]
+        public string SizeName { get; set; }
+        [DataMember(Name="is4sale")]
+        public bool Is4Sale { get; set; }
     }
+   
     [DataContract]
     public class PaymentMethodResponse
     {

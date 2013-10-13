@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Yintai.Architecture.Common;
+using Yintai.Architecture.Common.Logger;
+using Yintai.Architecture.Framework.ServiceLocation;
 
 namespace com.intime.fashion.common
 {
@@ -50,7 +52,17 @@ namespace com.intime.fashion.common
 
                }
            }
-           var jsonResponse = JsonConvert.DeserializeObject<dynamic>(sb.ToString());
+           dynamic jsonResponse = null;
+           try
+           {
+               jsonResponse = JsonConvert.DeserializeObject<dynamic>(sb.ToString());
+           }
+           catch (Exception ex)
+           {
+               Logger.Error(requestUrl);
+               Logger.Error(sb.ToString());
+               throw ex;
+           }
 
            if (jsonResponse != null &&
                jsonResponse.error == string.Empty)
@@ -61,12 +73,20 @@ namespace com.intime.fashion.common
            }
            else
            {
+               Logger.Debug(sb.ToString());
                if (failCallback != null)
                    failCallback(jsonResponse);
                return false;
            }
 
 
+       }
+       private static ILog Logger
+       {
+           get
+           {
+               return ServiceLocator.Current.Resolve<ILog>();
+           }
        }
        private static string ConstructHttpRequestUrl(string host,object data)
        {
@@ -102,7 +122,7 @@ namespace com.intime.fashion.common
            var requestUrl = new StringBuilder();
            requestUrl.Append(host);
            requestUrl.Append("?");
-           return query.Keys.Aggregate(requestUrl, (s, e) => s.AppendFormat("{0}={1}&", e, query[e]), s => s.ToString());
+           return query.Keys.Aggregate(requestUrl, (s, e) => s.AppendFormat("{0}={1}&", e, HttpUtility.UrlEncode(query[e])), s => s.ToString());
 
        }
 

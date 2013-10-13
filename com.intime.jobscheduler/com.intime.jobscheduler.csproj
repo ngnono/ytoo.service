@@ -122,8 +122,9 @@
     <Reference Include="PushSharp.WindowsPhone">
       <HintPath>..\packages\PushSharp.2.0.4.0\lib\net40\PushSharp.WindowsPhone.dll</HintPath>
     </Reference>
-    <Reference Include="Quartz">
-      <HintPath>..\packages\Quartz.2.1.2\lib\net40\Quartz.dll</HintPath>
+    <Reference Include="Quartz, Version=2.2.400.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Quartz.2.2\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -160,9 +161,11 @@
     <Compile Include="Job\Erp\BrandSyncJob.cs" />
     <Compile Include="Job\Erp\CategorySyncJob.cs" />
     <Compile Include="Job\Erp\ErpGroupJob.cs" />
+    <Compile Include="Job\Erp\OrderSyncJob.cs" />
     <Compile Include="Job\Erp\ProductPicSyncJob.cs" />
     <Compile Include="Job\Erp\ProductPropertySyncJob.cs" />
     <Compile Include="Job\Erp\ProductSyncJob.cs" />
+    <Compile Include="Job\Erp\SectionSyncJob.cs" />
     <Compile Include="Job\Erp\StoreSyncJob.cs" />
     <Compile Include="Job\ExpireStoreCouponReturnPointsJob.cs" />
     <Compile Include="Job\ExternalProductSyncJob.cs" />
@@ -192,6 +195,9 @@
     </None>
     <None Include="deploy\installer.bat" />
     <None Include="deploy\uninstaller.bat" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

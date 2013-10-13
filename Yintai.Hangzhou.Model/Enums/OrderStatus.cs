@@ -26,9 +26,9 @@ namespace Yintai.Hangzhou.Model.Enums
         [Description("发货单已打印")]
         PreparePack = 14,
         [Description("已发货")]
-        Shipped = 5,
+        Shipped = 15,
         [Description("用户已签收")]
-        CustomerReceived = 6,
+        CustomerReceived = 16,
         [Description("转集团销售")]
         Convert2Sales =17,
         [Description("用户拒收")]

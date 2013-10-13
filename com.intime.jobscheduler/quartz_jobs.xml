@@ -339,6 +339,7 @@
       </cron>
     </trigger>
     -->
+    <!--
     <job>
       <name>ERP-GroupSync</name>
       <group>Fashion</group>
@@ -349,13 +350,40 @@
       <job-data-map>
         <entry>
           <key>isRebuild</key>
-          <value>false</value>
+          <value>true</value>
         </entry>
         <entry>
           <key>intervalOfSecs</key>
           <value>5</value>
         </entry>
-        
+        <entry>
+          <key>includeStore</key>
+          <value>true</value>
+        </entry>
+        <entry>
+          <key>includeSection</key>
+          <value>true</value>
+        </entry>
+        <entry>
+          <key>includeCat</key>
+          <value>true</value>
+        </entry>
+        <entry>
+          <key>includeBrand</key>
+          <value>true</value>
+        </entry>
+        <entry>
+          <key>includeProd</key>
+          <value>true</value>
+        </entry>
+        <entry>
+          <key>includeInv</key>
+          <value>true</value>
+        </entry>
+        <entry>
+          <key>includePic</key>
+          <value>true</value>
+        </entry>
       </job-data-map>
     </job>
 
@@ -365,6 +393,37 @@
         <group>Fashion</group>
         <description>every 5 mins</description>
         <job-name>ERP-GroupSync</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0/30 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    -->
+    <job>
+      <name>ERP-OrderSync</name>
+      <group>Fashion</group>
+      <description>sync erp infos per 30 seconds</description>
+      <job-type>com.intime.jobscheduler.Job.Erp.OrderSyncJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>isRebuild</key>
+          <value>true</value>
+        </entry>
+        <entry>
+          <key>intervalOfSecs</key>
+          <value>30</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>ERP-Order-30SECS</name>
+        <group>Fashion</group>
+        <description>every 30 seconds</description>
+        <job-name>ERP-OrderSync</job-name>
         <job-group>Fashion</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
         <cron-expression>0/30 * * * * ?</cron-expression>

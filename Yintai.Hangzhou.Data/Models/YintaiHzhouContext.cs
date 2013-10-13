@@ -148,10 +148,12 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<Order2ExEntity> Order2Ex { get; set; }
         public DbSet<OrderItemEntity> OrderItems { get; set; }
         public DbSet<OrderLogEntity> OrderLogs { get; set; }
+        public DbSet<OrderTransactionEntity> OrderTransactions { get; set; }
         public DbSet<OutboundEntity> Outbounds { get; set; }
         public DbSet<OutboundItemEntity> OutboundItems { get; set; }
         public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
         public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
+        public DbSet<PaymentNotifyLogEntity> PaymentNotifyLogs { get; set; }
         public DbSet<PKeyEntity> PKeys { get; set; }
         public DbSet<PMessageEntity> PMessages { get; set; }
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
@@ -236,10 +238,12 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new Order2ExEntityMap());
             modelBuilder.Configurations.Add(new OrderItemEntityMap());
             modelBuilder.Configurations.Add(new OrderLogEntityMap());
+            modelBuilder.Configurations.Add(new OrderTransactionEntityMap());
             modelBuilder.Configurations.Add(new OutboundEntityMap());
             modelBuilder.Configurations.Add(new OutboundItemEntityMap());
             modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
             modelBuilder.Configurations.Add(new PaymentMethodEntityMap());
+            modelBuilder.Configurations.Add(new PaymentNotifyLogEntityMap());
             modelBuilder.Configurations.Add(new PKeyEntityMap());
             modelBuilder.Configurations.Add(new PMessageEntityMap());
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());

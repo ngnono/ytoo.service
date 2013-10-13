@@ -49,7 +49,7 @@ namespace com.intime.jobscheduler.Job.Erp
             int size = 100;
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            while (cursor < Math.Min(totalCount,100))
+            while (cursor < totalCount)
             {
                 List<SUPPLY_MIN_PRICE_MX> oneTimeList = null;
                 DoQuery(whereCondition, products =>

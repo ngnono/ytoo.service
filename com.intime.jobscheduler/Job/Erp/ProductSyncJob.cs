@@ -53,7 +53,7 @@ namespace com.intime.jobscheduler.Job.Erp
             int size = 100;
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            while (cursor < Math.Min(totalCount,100))
+            while (cursor <totalCount)
             {
                 List<SUPPLY_MIN_PRICE> oneTimeList = null;
                 DoQuery(whereCondition, products =>
@@ -62,8 +62,15 @@ namespace com.intime.jobscheduler.Job.Erp
                 });
                 foreach (var product in oneTimeList)
                 {
-                    SyncOne(product);
-                    successCount++;
+                    try
+                    {
+                        SyncOne(product);
+                        successCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Info(ex);
+                    }
                 }
                 cursor += size;
             }
@@ -132,7 +139,7 @@ namespace com.intime.jobscheduler.Job.Erp
                             Brand_Id = brandEntity==null?0:brandEntity.Id,
                              Description = product.PRO_DESC??string.Empty,
                               Is4Sale = false,
-                               Name = product.PRODUCT_NAME??string.Empty,
+                               Name = product.PRODUCT_NAME??string.Format("{0}-{1}",brandEntity.Name,product.PRO_SKU),
                                 UnitPrice = product.ORIGINAL_PRICE??NULL_PRICE,
                                  RecommendedReason = product.PRO_DESC??string.Empty,
                                   RecommendUser = 0,

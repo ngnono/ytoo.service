@@ -130,7 +130,7 @@ namespace com.intime.fashion.common
 
         private static string ConstructAwsHttpRequestUrl(string host,string publickey,string privatekey)
         {
-
+            
             Dictionary<string, string> query = new Dictionary<string, string>();
             query.Add("key", publickey);
             query.Add("nonce", new Random(1000).Next().ToString());

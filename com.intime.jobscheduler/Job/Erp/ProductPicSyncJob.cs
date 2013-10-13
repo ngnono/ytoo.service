@@ -55,7 +55,7 @@ namespace com.intime.jobscheduler.Job.Erp
             int size = 100;
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            while (cursor < Math.Min(totalCount,10))
+            while (cursor < totalCount)
             {
                 List<PRO_PICTURE> oneTimeList = null;
                 DoQuery(whereCondition, products =>
@@ -64,8 +64,16 @@ namespace com.intime.jobscheduler.Job.Erp
                 });
                 foreach (var product in oneTimeList)
                 {
-                    SyncOne(product);
-                    successCount++;
+                    try
+                    {
+                        SyncOne(product);
+                        successCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Info(ex);
+                            
+                    }
                 }
   
                 cursor += size;

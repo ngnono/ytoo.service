@@ -35,6 +35,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
          public string StatusF { get {
              return ((OrderStatus)Status).ToFriendlyString();
          } }
+        [DataMember(Name="paymentcode")]
+        public string PaymentMethodCode { get; set; }
          [DataMember(Name="paymentname")]
          public string PaymentMethodName { get; set; }
         [DataMember(Name = "shippingzipcode")]
@@ -69,12 +71,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
      
         [DataMember(Name="canvoid")]
         public bool CanVoid { get {
-           return new int[]{(int)OrderStatus.Create}.Any(status => status == Status);
+           return new int[]{(int)OrderStatus.Create,(int)OrderStatus.Paid}.Any(status => status == Status);
         } }
           [DataMember(Name = "canrma")]
         public bool CanRMA {
             get {
-                return Status == (int)OrderStatus.CustomerReceived &&
+                return Status == (int)OrderStatus.Shipped &&
                         (RMAs==null || !RMAs.Any(r=>new int[]{(int)RMAStatus.Created,(int)RMAStatus.CustomerConfirmed,(int)RMAStatus.PackageReceived,(int)RMAStatus.PassConfirmed}.Any(status=>status==r.Status)));
             }
         }
@@ -103,6 +105,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
          public ResourceInfoResponse ProductResource { get; set; }
         [DataMember(Name = "skucode")]
         public string SkuCode { get; set; }
+        [DataMember(Name = "colorvalue")]
+        public string ColorValueName { get; set; }
+        [DataMember(Name = "sizevalue")]
+        public string SizeValueName { get; set; }
 
         [DataMember(Name = "properties")]
         public IEnumerable<TagPropertyDetailResponse> Properties { get; set; }

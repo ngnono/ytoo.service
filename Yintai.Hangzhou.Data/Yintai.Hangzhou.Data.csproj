@@ -117,9 +117,11 @@
     <Compile Include="Models\Mapping\OrderItemMap.cs" />
     <Compile Include="Models\Mapping\OrderLogMap.cs" />
     <Compile Include="Models\Mapping\OrderMap.cs" />
+    <Compile Include="Models\Mapping\OrderTransactionMap.cs" />
     <Compile Include="Models\Mapping\OutboundItemMap.cs" />
     <Compile Include="Models\Mapping\OutboundMap.cs" />
     <Compile Include="Models\Mapping\PaymentMethodMap.cs" />
+    <Compile Include="Models\Mapping\PaymentNotifyLogMap.cs" />
     <Compile Include="Models\Mapping\PKeyMap.cs" />
     <Compile Include="Models\Mapping\PMessageMap.cs" />
     <Compile Include="Models\Mapping\PointOrderRuleMap.cs" />
@@ -146,9 +148,11 @@
     <Compile Include="Models\Order2Ex.cs" />
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\OrderLog.cs" />
+    <Compile Include="Models\OrderTransaction.cs" />
     <Compile Include="Models\Outbound.cs" />
     <Compile Include="Models\OutboundItem.cs" />
     <Compile Include="Models\PaymentMethod.cs" />
+    <Compile Include="Models\PaymentNotifyLog.cs" />
     <Compile Include="Models\PKey.cs" />
     <Compile Include="Models\PMessage.cs" />
     <Compile Include="Models\PointOrderRule.cs" />

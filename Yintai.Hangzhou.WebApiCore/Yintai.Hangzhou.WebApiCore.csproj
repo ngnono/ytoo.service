@@ -86,6 +86,7 @@
     <Compile Include="Areas\Api\Controllers\CommentController.cs" />
     <Compile Include="Areas\Api\Controllers\HotWordController.cs" />
     <Compile Include="Areas\Api\Controllers\OrderController.cs" />
+    <Compile Include="Areas\Api\Controllers\PaymentController.cs" />
     <Compile Include="Areas\Api\Controllers\PMessageController.cs" />
     <Compile Include="Areas\Api\Controllers\RMAController.cs" />
     <Compile Include="Areas\Api\Controllers\StorePromotionController.cs" />

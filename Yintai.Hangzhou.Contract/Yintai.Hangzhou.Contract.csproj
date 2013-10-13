@@ -87,11 +87,14 @@
     <Compile Include="DTO\Request\GetProductInfo4PRequest.cs" />
     <Compile Include="DTO\Request\MyCommentListRequest.cs" />
     <Compile Include="DTO\Request\MyOrderDetailRequest.cs" />
+    <Compile Include="DTO\Request\MyOrderPayRequest.cs" />
     <Compile Include="DTO\Request\MyOrderRequest.cs" />
     <Compile Include="DTO\Request\NewPMessageRequest.cs" />
     <Compile Include="DTO\Request\OrderPrepareShipRequest.cs" />
+    <Compile Include="DTO\Request\OrderRejectRequest.cs" />
     <Compile Include="DTO\Request\OrderRequest.cs" />
     <Compile Include="DTO\Request\OrderShipRequest.cs" />
+    <Compile Include="DTO\Request\OrderVoidRequest.cs" />
     <Compile Include="DTO\Request\PaymentModel.cs" />
     <Compile Include="DTO\Request\Point\GetPointInfoRequest.cs" />
     <Compile Include="DTO\Request\ProductComplex\GetItemsListRequest.cs" />

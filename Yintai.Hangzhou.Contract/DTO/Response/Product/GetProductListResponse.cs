@@ -90,7 +90,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Product
             set { }
         }
 
-
+        [DataMember(Name = "originprice")]
+        public decimal UnitPrice { get; set; }
 
         /// <summary>
         /// 推荐理由

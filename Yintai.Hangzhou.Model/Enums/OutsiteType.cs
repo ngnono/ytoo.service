@@ -31,5 +31,7 @@ namespace Yintai.Hangzhou.Model.Enums
         ///  QQ
         /// </summary>
         Qq = 3,
+
+        WX =4
     }
 }

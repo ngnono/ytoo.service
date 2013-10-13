@@ -33,6 +33,9 @@ namespace com.intime.fashion.data.erp.Models.Mapping
             this.Property(t => t.REFUND_LINKER)
                 .HasMaxLength(60);
 
+            this.Property(t => t.REFUND_TEL)
+                .HasMaxLength(60);
+
             this.Property(t => t.SPELL)
                 .HasMaxLength(100);
 

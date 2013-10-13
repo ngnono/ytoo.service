@@ -211,5 +211,7 @@ namespace com.intime.fashion.common
                 return ConfigurationManager.AppSettings["erpbaseurl"];
             }
         }
+
+       
     }
 }

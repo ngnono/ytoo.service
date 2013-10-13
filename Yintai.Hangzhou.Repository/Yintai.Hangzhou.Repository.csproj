@@ -78,6 +78,7 @@
     <Compile Include="Contract\IFeedbackRepository.cs" />
     <Compile Include="Contract\IHotWordRepository.cs" />
     <Compile Include="Contract\IInboundPackRepository.cs" />
+    <Compile Include="Contract\IInventoryRepository.cs" />
     <Compile Include="Contract\ILikeRepository.cs" />
     <Compile Include="Contract\IOrder2ExRepository.cs" />
     <Compile Include="Contract\IOrderItemRepository.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Impl\CouponLogRepository.cs" />
     <Compile Include="Impl\HotWordRepository.cs" />
     <Compile Include="Impl\InboundPackageRepository.cs" />
+    <Compile Include="Impl\InventoryRepository.cs" />
     <Compile Include="Impl\Order2ExRepository.cs" />
     <Compile Include="Impl\OrderItemRepository.cs" />
     <Compile Include="Impl\OrderLogRepository.cs" />

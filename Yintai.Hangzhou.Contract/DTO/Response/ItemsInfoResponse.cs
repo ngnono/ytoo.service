@@ -31,6 +31,15 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name = "productname")]
         public string Name { get; set; }
 
+        [DataMember(Name = "price")]
+        public decimal Price { get; set; }
+
+
+        [DataMember(Name = "originprice")]
+        public decimal UnitPrice { get; set; }
+        [DataMember(Name="likecount")]
+        public int LikeCount { get; set; }
+
         [DataMember(Name = "store_id")]
         public int Store_Id { get; set; }
 

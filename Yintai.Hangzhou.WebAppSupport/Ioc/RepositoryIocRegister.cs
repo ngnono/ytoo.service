@@ -1,3 +1,4 @@
+using Yintai.Architecture.Common.Data.EF;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Repository.Impl;
@@ -87,6 +88,10 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<ICategoryRepository, CategoryRepository>();
             Current.Register<IOrder2ExRepository, Order2ExRepository>();
             Current.Register<IRMA2ExRepository, RMA2ExRepository>();
+            Current.Register<IInventoryRepository, InventoryRepository>();
+
+            Current.Register<IEFRepository<OrderTransactionEntity>, EFRepository<OrderTransactionEntity>>();
+            Current.Register<IEFRepository<PaymentNotifyLogEntity>, EFRepository<PaymentNotifyLogEntity>>();
         }
 
         #endregion

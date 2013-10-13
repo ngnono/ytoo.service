@@ -56,8 +56,15 @@ namespace com.intime.jobscheduler.Job.Erp
                 });
                 foreach(var brand in oneTimeList)
                 {
-                    SyncOne(brand);
-                    successCount++;
+                    try
+                    {
+                        SyncOne(brand);
+                        successCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Info(ex);
+                    }
                 }
                 cursor += size;
             }

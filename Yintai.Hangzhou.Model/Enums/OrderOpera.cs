@@ -16,6 +16,8 @@ namespace Yintai.Hangzhou.Model.Enums
         EditOrder = 5,
         CustomerPay = 6,
         PrepareShip = 7,
-        Shipping
+        Shipping,
+        SystemVoid,
+        CustomerReject
     }
 }

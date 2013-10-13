@@ -5,6 +5,11 @@ namespace com.intime.fashion.data.erp.Models
 {
     public partial class SHOP_INFO
     {
+        public SHOP_INFO()
+        {
+            this.SALE_CODE = new List<SALE_CODE>();
+        }
+
         public decimal SID { get; set; }
         public string SHOP_NAME { get; set; }
         public string SHOP_LINKER { get; set; }
@@ -14,7 +19,7 @@ namespace com.intime.fashion.data.erp.Models
         public string SHOP_ADDR { get; set; }
         public Nullable<int> POSTCODE { get; set; }
         public string REFUND_LINKER { get; set; }
-        public Nullable<decimal> REFUND_TEL { get; set; }
+        public string REFUND_TEL { get; set; }
         public string SPELL { get; set; }
         public Nullable<decimal> OPT_USER_SID { get; set; }
         public string OPT_REAL_NAME { get; set; }
@@ -24,5 +29,6 @@ namespace com.intime.fashion.data.erp.Models
         public Nullable<short> PRICE_UP_BIT { get; set; }
         public Nullable<short> PRINT_BARGAIN { get; set; }
         public string WEB_SITE { get; set; }
+        public virtual ICollection<SALE_CODE> SALE_CODE { get; set; }
     }
 }

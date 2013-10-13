@@ -57,8 +57,15 @@ namespace com.intime.jobscheduler.Job.Erp
                 });
                 foreach (var store in oneTimeList)
                 {
-                    SyncOne(store);
-                    successCount++;
+                    try
+                    {
+                        SyncOne(store);
+                        successCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Info(ex);
+                    }
                 }
                 cursor += size;
             }
@@ -86,8 +93,8 @@ namespace com.intime.jobscheduler.Job.Erp
                         Name = store.SHOP_NAME,
                         RMAAddress = store.SHOP_ADDR,
                         RMAPerson = store.REFUND_LINKER,
-                        RMAPhone = store.REFUND_TEL.ToString(),
-                        RMAZipCode = store.POSTCODE.ToString(),
+                        RMAPhone = store.REFUND_TEL,
+                        RMAZipCode = store.POSTCODE.HasValue?store.POSTCODE.ToString():string.Empty,
                         UpdatedDate = store.OPT_UPDATE_TIME ?? DateTime.Now,
                         UpdatedUser = 0,
                         Status = 1,
@@ -97,8 +104,8 @@ namespace com.intime.jobscheduler.Job.Erp
                 }
                 else
                 {
-                    existStore.RMAZipCode = store.POSTCODE.ToString();
-                    existStore.RMAPhone = store.REFUND_TEL.ToString();
+                    existStore.RMAZipCode = store.POSTCODE.HasValue ? store.POSTCODE.ToString() : string.Empty;
+                    existStore.RMAPhone = store.REFUND_TEL;
                     existStore.RMAAddress = store.SHOP_ADDR;
                     existStore.RMAPerson = store.REFUND_LINKER;
                     existStore.UpdatedDate = store.OPT_UPDATE_TIME ?? DateTime.Now;

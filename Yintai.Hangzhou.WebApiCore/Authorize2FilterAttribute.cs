@@ -14,6 +14,7 @@ namespace Yintai.Hangzhou.WebApiCore
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            
             doAuthorize(filterContext);
         }
 

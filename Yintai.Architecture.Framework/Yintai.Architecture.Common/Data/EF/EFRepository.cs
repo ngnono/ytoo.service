@@ -32,7 +32,7 @@ namespace Yintai.Architecture.Common.Data.EF
     /// Repository
     /// </summary>
     /// <typeparam name="T">泛型实体</typeparam>
-    public abstract class EFRepository<T> : IEFRepository<T> where T : BaseEntity
+    public class EFRepository<T> : IEFRepository<T> where T : BaseEntity
     {
         #region fields
 
@@ -65,7 +65,7 @@ namespace Yintai.Architecture.Common.Data.EF
         /// </summary>
         /// <param name="context">传入CmsContext</param>
         /// <param name="unitOfWork"></param>
-        protected EFRepository(DbContext context)
+        public EFRepository(DbContext context)
         {
             _context = context;
             _dbset = _context.Set<T>();

@@ -40,6 +40,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         private IPromotionRepository _promotionRepo;
         private IOrder2ExRepository _orderexRepo;
         private IRMA2ExRepository _rmaexRepo;
+        private IInventoryRepository _inventoryRepo;
 
         public ProductController(IProductDataService productDataService, 
             IBrandDataService brandDataService,
@@ -50,7 +51,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             IFavoriteRepository favoriteRepo,
             IPromotionRepository promotionRepo,
             IOrder2ExRepository orderexRepo,
-            IRMA2ExRepository rmaexRepo)
+            IRMA2ExRepository rmaexRepo,
+           IInventoryRepository inventoryRepo)
         {
             _productDataService = productDataService;
             _passHelper = new PassHelper(brandDataService);
@@ -62,6 +64,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _promotionRepo = promotionRepo;
             _orderexRepo = orderexRepo;
             _rmaexRepo = rmaexRepo;
+            _inventoryRepo = inventoryRepo;
 
         }
 
@@ -247,187 +250,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
             request.AuthUser = authUser;
-            decimal totalAmount = 0m;
+            return DoOrderCreate(request, authUser);
+
+        }
+
+        [RestfulAuthorize]
+        [HttpPost]
+        public ActionResult Order4BarCode(OrderRequest request, UserModel authUser)
+        {
+            request.AuthUser = authUser;
+            request.Channel = "BarSale";
             
-            foreach (var product in request.OrderModel.Products)
-            { 
-                var productEntity =_productRepo.Find(product.ProductId); 
-                if (productEntity ==null)
-                    return this.RenderError(r=>r.Message=string.Format("{0} 不存在！",productEntity.Id));
-                if (!productEntity.Is4Sale.HasValue || productEntity.Is4Sale.Value==false)
-                    return this.RenderError(r=>r.Message=string.Format("{0} 不能销售！",productEntity.Id));
-                totalAmount += productEntity.Price * product.Quantity;
-            }
+            return DoOrderCreate(request, authUser);
 
-            if (totalAmount<=0)
-                return this.RenderError(r=>r.Message="商品销售价信息错误！");
-
-            
-            var orderNo = OrderRule.CreateCode(0);
-            var otherFee = OrderRule.ComputeFee();
-           
-           var erpOrder =  new { 
-                dealPayType = "TENPAY",
-                lastUpdateTime = DateTime.Now.ToString(ErpServiceHelper.DATE_FORMAT),
-                payTime = string.Empty,
-                recvfeeReturnTime = string.Empty,
-                dealState = "STATE_WG_WAIT_PAY",
-                dealPayFeeCommission = "0",
-                buyerName = authUser.Nickname,
-                sellerConsignmentTime = string.Empty,
-                receiverPostcode = request.OrderModel.ShippingAddress.ShippingZipCode,
-                dealStateDesc = "",
-                buyerRemark = string.Empty,
-                freight = 0,
-                couponFee = "0",
-                comboInfo = string.Empty,
-                dealRateState = "DEAL_RATE_NO_EVAL",
-                totalCash="0",
-                dealNote = request.OrderModel.Memo,
-                dealFlag = string.Empty,
-                dealCode = orderNo,
-                createTime = DateTime.Now.ToString(ErpServiceHelper.DATE_FORMAT),
-                receiverMobile = request.OrderModel.ShippingAddress.ShippingContactPhone,
-                buyerUin = string.Empty,
-                propertymask = string.Empty,
-                receiverPhone = request.OrderModel.ShippingAddress.ShippingContactPhone,
-                receiverName = request.OrderModel.ShippingAddress.ShippingContactPerson,
-                dealEndTime = string.Empty,
-                dealPayFeeTicket = "0",
-                dealNoteType = "UN_LABEL",
-                recvfeeTime = string.Empty,
-                dealPayFeeTotal = totalAmount,
-                ppCodId= string.Empty,
-                availableAction = string.Empty,
-                payReturnTime = string.Empty,
-                receiverAddress = request.OrderModel.ShippingAddress.ShippingAddress,
-                transportType="TRANSPORT_NONE",
-                wuliuId="0",
-                tenpayCode = string.Empty,
-                itemList = new List<dynamic>()
-
-            };
-            using (var ts = new TransactionScope())
-            {
-                var orderEntity = _orderRepo.Insert(new OrderEntity()
-                {
-                    BrandId = 0,
-                    CreateDate = DateTime.Now,
-                    CreateUser = request.AuthUser.Id,
-                    CustomerId = request.AuthUser.Id,
-                    InvoiceDetail = request.OrderModel.InvoiceDetail,
-                    InvoiceSubject = request.OrderModel.InvoiceTitle,
-                    NeedInvoice = request.OrderModel.NeedInvoice,
-                    Memo = request.OrderModel.Memo,
-                    PaymentMethodCode = request.OrderModel.Payment.PaymentCode,
-                    PaymentMethodName = request.OrderModel.Payment.PaymentName,
-                    ShippingAddress = request.OrderModel.ShippingAddress.ShippingAddress,
-                    ShippingContactPerson = request.OrderModel.ShippingAddress.ShippingContactPerson,
-                    ShippingContactPhone = request.OrderModel.ShippingAddress.ShippingContactPhone,
-                    ShippingFee = otherFee.TotalFee,
-                    ShippingZipCode = request.OrderModel.ShippingAddress.ShippingZipCode,
-                    Status = (int)OrderStatus.Create,
-                    StoreId = 0,
-                    UpdateDate = DateTime.Now,
-                    UpdateUser = request.AuthUser.Id,
-                    TotalAmount = totalAmount,
-                    InvoiceAmount = totalAmount,
-                    OrderNo = orderNo,
-                    TotalPoints = otherFee.TotalPoints
-
-                });
-                foreach (var product in request.OrderModel.Products)
-                {
-                    var productEntity = _productRepo.Find(product.ProductId);
-                    var inventoryEntity = Context.Set<InventoryEntity>().Where(pm=>pm.ProductId ==product.ProductId &&pm.PColorId==product.Properties.ColorId && pm.PSizeId == product.Properties.SizeId).FirstOrDefault();
-                    if (inventoryEntity == null)
-                         return this.RenderError(r=>r.Message=string.Format("{0}库存 不存在！",productEntity.Id));
-                    var productSizeEntity = Context.Set<ProductPropertyEntity>().Where(pp => pp.Id == product.Properties.ColorId)
-                                            .Join(Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Id == product.Properties.ColorValueId)
-                                                    , o => o.Id
-                                                    , i => i.PropertyId
-                                                    , (o, i) => new { PP = o, PPV = i }).FirstOrDefault();
-                    var productColorEntity = Context.Set<ProductPropertyEntity>().Where(pp => pp.Id == product.Properties.SizeId)
-                                            .Join(Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Id == product.Properties.SizeValueId)
-                                                    , o => o.Id
-                                                    , i => i.PropertyId
-                                                    , (o, i) => new { PP = o, PPV = i }).FirstOrDefault();
-                    _orderItemRepo.Insert(new OrderItemEntity()
-                    {
-                        BrandId = productEntity.Brand_Id,
-                        CreateDate = DateTime.Now,
-                        CreateUser = request.AuthUser.Id,
-                        ItemPrice = productEntity.Price,
-                        OrderNo = orderNo,
-                        ProductId = productEntity.Id,
-                        ProductName = productEntity.Name,
-                        Quantity = product.Quantity,
-                        Status = (int)DataStatus.Normal,
-                        StoreId = productEntity.Store_Id,
-                        UnitPrice = productEntity.UnitPrice,
-                        UpdateDate = DateTime.Now,
-                        UpdateUser = request.AuthUser.Id,
-                        ExtendPrice = productEntity.Price * product.Quantity,
-                        ProductDesc = product.ProductDesc,
-                        ColorId = productColorEntity==null?0:productColorEntity.PP.Id,
-                        ColorValueId = productColorEntity==null?0:productColorEntity.PPV.Id,
-                        SizeId = productSizeEntity==null?0:productSizeEntity.PP.Id,
-                        SizeValueId = productSizeEntity==null?0:productSizeEntity.PPV.Id,
-                        Points = 0
-
-                    });
-                    erpOrder.itemList.Add(new {
-                        itemName = productEntity.Name,
-                        itemFlag = string.Empty,
-                        itemCode = productEntity.Id.ToString(),
-                        account = string.Empty,
-                        stockAttr=string.Format("{0}:{1}|{2}:{3}",productColorEntity.PP.PropertyDesc,productColorEntity.PPV.ValueDesc,productSizeEntity.PP.PropertyDesc,productSizeEntity.PPV.ValueDesc),
-                        stockLocalCode = string.Empty,
-                        dealSubCode = string.Empty,
-                        itemLocalCode = string.Empty,
-                        refundStateDesc = string.Empty,
-                        itemAdjustPrice = "0",
-                        itemRetailPrice = productEntity.UnitPrice,
-                        tradePropertymask = "256",
-                        itemDealState ="STATE_WG_WAIT_PAY",
-                        refundState = string.Empty,
-                        itemCodeHistory = string.Empty,
-                        itemDealCount = product.Quantity,
-                        skuId = inventoryEntity.ChannelInventoryId,
-                        itemDealPrice = productEntity.Price,
-                        availableAction = string.Empty,
-                        itemDealStateDesc = string.Empty,
-                        itemDiscountFee = "0"
-                    });
-                }
-                _orderLogRepo.Insert(new OrderLogEntity()
-                {
-                    CreateDate = DateTime.Now,
-                    CreateUser = request.AuthUser.Id,
-                    CustomerId = request.AuthUser.Id,
-                    Operation = string.Format("创建订单"),
-                    OrderNo = orderNo,
-                    Type = (int)OrderOpera.FromCustomer
-                });
-                string exOrderNo = string.Empty;
-                bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "DivideOrderToSaleFromJSON", OrdersJSON = erpOrder }, r => exOrderNo = r.order_no
-                    ,null);
-                if (isSuccess)
-                {
-                    _orderexRepo.Insert(new Order2ExEntity() { 
-                         ExOrderNo = exOrderNo,
-                          OrderNo = orderEntity.OrderNo,
-                           UpdateTime = DateTime.Now
-                    });
-                    ts.Complete();
-                    return this.RenderSuccess<OrderResponse>(m => m.Data = new OrderResponse().FromEntity<OrderResponse>(orderEntity));
-                }
-                else
-                {
-                   return this.RenderError(r => r.Message = "失败");
-                }
-            }
-           
         }
 
         /// <summary>
@@ -445,59 +280,20 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
             var context = _productRepo.Context;
             var linq = _productRepo.Get(p => p.Id == request.ProductId && p.Is4Sale.HasValue && p.Is4Sale.Value)
-                       .GroupJoin(context.Set<ResourceEntity>().Where(r => r.Status != (int)DataStatus.Deleted &&
-                                                                           r.SourceType == (int)SourceType.Product &&
-                                                                           r.Type == (int)ResourceType.Image),
-                                   o => o.Id,
-                                   i => i.SourceId,
-                                   (o, i) => new { P = o, R = i.OrderByDescending(r => r.SortOrder).OrderBy(r => r.CreatedDate).FirstOrDefault() })
-                       .ToList().FirstOrDefault();
+                       .GroupJoin(context.Set<BrandEntity>(),o=>o.Brand_Id,i=>i.Id,(o,i)=>new {P=o,B=i.FirstOrDefault()})
+                     .FirstOrDefault();
 
             if (linq == null)
                 return this.RenderError(r => r.Message = "产品不存在!");
-            var propertyLinq = context.Set<ProductPropertyEntity>().Where(p => p.ProductId == request.ProductId && p.Status != (int)DataStatus.Deleted)
-                                .GroupJoin(context.Set<ProductPropertyValueEntity>().Where(pv => pv.Status != (int)DataStatus.Deleted),
-                                    o => o.Id,
-                                    i => i.PropertyId,
-                                    (o, i) => new { P = o, PV = i })
-                                .ToList()
-                                .Select(p => new ProductPropertyResponse()
-                                {
-                                    PropertyId = p.P.Id,
-                                    PropertyName = p.P.PropertyDesc,
-                                    Values = p.PV.Select(pv => new ProductPropertyValueReponse()
-                                    {
-                                        ValueId = pv.Id,
-                                        ValueName = pv.ValueDesc
-                                    })
-                                });
-            if (propertyLinq.Count() <= 0)
-                propertyLinq = context.Set<CategoryPropertyEntity>().Where(p => p.CategoryId == linq.P.Tag_Id && p.Status != (int)DataStatus.Deleted)
-                                .GroupJoin(context.Set<CategoryPropertyValueEntity>().Where(pv => pv.Status != (int)DataStatus.Deleted),
-                                    o => o.Id,
-                                    i => i.PropertyId,
-                                    (o, i) => new { P = o, PV = i })
-                                .ToList()
-                                 .Select(p => new ProductPropertyResponse()
-                                 {
-                                     PropertyId = p.P.Id,
-                                     PropertyName = p.P.PropertyDesc,
-                                     Values = p.PV.Select(pv => new ProductPropertyValueReponse()
-                                     {
-                                         ValueId = pv.Id,
-                                         ValueName = pv.ValueDesc
-                                     })
-                                 });
+           
             var data = new GetProductInfo4PResponse().FromEntity<GetProductInfo4PResponse>(linq.P, res =>
             {
-                res.Resource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(linq.R);
                 var dimensionEntity = Context.Set<ResourceEntity>().Where(r => r.Status == (int)DataStatus.Normal &&
                                     r.IsDimension.HasValue &&
                                     r.IsDimension.Value == true &&
                                     r.SourceId == linq.P.Id).FirstOrDefault();
                 if (dimensionEntity!=null)
                     res.DimensionResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(dimensionEntity);
-                res.Properties = propertyLinq;
                 var rmaMsg = Context.Set<ConfigMsgEntity>().Where(c=>c.MKey=="O_C_RMAPolicy").FirstOrDefault();
                 res.RMAPolicy = rmaMsg==null?string.Empty:rmaMsg.Message;
                 res.SupportPayments = context.Set<PaymentMethodEntity>().Where(p => p.Status != (int)DataStatus.Deleted)
@@ -505,6 +301,30 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                      Code = p.Code,
                                       Name = p.Name
                                 });
+                res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id).GroupBy(pi => pi.PColorId)
+                                .Select(pi => pi.Key)
+                                .Join(Context.Set<ProductPropertyValueEntity>(), o => o, i => i.Id, (o, i) => i)
+                                .GroupJoin(Context.Set<ResourceEntity>().Where(pr => pr.SourceType == (int)SourceType.Product && pr.SourceId == linq.P.Id), o => o.Id, i => i.ColorId, (o, i) => new { C = o, CR = i.FirstOrDefault() })
+                                .ToList().Select(color => new SaleColorPropertyResponse()
+                                {
+                                    ColorId = color.C.Id,
+                                    ColorName = color.C.ValueDesc,
+                                    Resource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(color.CR),
+                                    Sizes = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id && pi.PColorId == color.C.Id)
+                                            .Join(Context.Set<ProductPropertyValueEntity>(),o=>o.PSizeId,i=>i.Id,(o,i)=>new {PI=o,PPV=i}).ToList()
+                                            .Select(pi => new SaleSizePropertyResponse() { 
+                                                 Is4Sale = pi.PI.Amount>0,
+                                                  SizeId=pi.PI.PSizeId,
+                                                   SizeName = pi.PPV.ValueDesc
+                                            })
+
+                                });
+                if (linq.B !=null)
+                {
+                    res.BrandId = linq.B.Id;
+                    res.BrandName = linq.B.Name;
+                    res.Brand2Name = linq.B.EnglishName;
+                }
             });
             return this.RenderSuccess<GetProductInfo4PResponse>(m => m.Data = data);
         }
@@ -586,6 +406,201 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                   IfCanCoupon = ifCanCoupon
                });
            
+        }
+
+
+        private ActionResult DoOrderCreate(OrderRequest request,UserModel authUser)
+        {
+            decimal totalAmount = 0m;
+
+            foreach (var product in request.OrderModel.Products)
+            {
+                var productEntity = _productRepo.Find(product.ProductId);
+                if (productEntity == null)
+                    return this.RenderError(r => r.Message = string.Format("{0} 不存在！", productEntity.Id));
+                if (!productEntity.Is4Sale.HasValue || productEntity.Is4Sale.Value == false)
+                    return this.RenderError(r => r.Message = string.Format("{0} 不能销售！", productEntity.Id));
+                totalAmount += productEntity.Price * product.Quantity;
+            }
+
+            if (totalAmount <= 0)
+                return this.RenderError(r => r.Message = "商品销售价信息错误！");
+
+
+            var orderNo = OrderRule.CreateCode(0);
+            var otherFee = OrderRule.ComputeFee();
+
+            var erpOrder = new
+            {
+                orderSource = request.Channel,
+                dealPayType = request.OrderModel.Payment.PaymentCode,
+                shipType = request.OrderModel.ShippingType,
+                needInvoice = request.OrderModel.NeedInvoice ? 1 : 0,
+                invoiceTitle = request.OrderModel.InvoiceTitle,
+                invoiceMemo = request.OrderModel.InvoiceDetail,
+                orderMemo = request.OrderModel.Memo,
+                lastUpdateTime = DateTime.Now.ToString(ErpServiceHelper.DATE_FORMAT),
+                payTime = string.Empty,
+                recvfeeReturnTime = string.Empty,
+                dealState = "STATE_WG_WAIT_PAY",
+                buyerName = authUser.Nickname,
+                sellerConsignmentTime = string.Empty,
+                receiverPostcode = request.OrderModel.ShippingAddress.ShippingZipCode,
+                freight = 0,
+                couponFee = "0",
+                comboInfo = string.Empty,
+                dealRateState = "DEAL_RATE_NO_EVAL",
+                totalCash = "0",
+                dealNote = request.OrderModel.Memo,
+                dealFlag = string.Empty,
+                dealCode = orderNo,
+                createTime = DateTime.Now.ToString(ErpServiceHelper.DATE_FORMAT),
+                receiverMobile = request.OrderModel.ShippingAddress.ShippingContactPhone,
+
+                receiverPhone = request.OrderModel.ShippingAddress.ShippingContactPhone,
+                receiverName = request.OrderModel.ShippingAddress.ShippingContactPerson,
+
+                dealPayFeeTicket = "0",
+                dealNoteType = "UN_LABEL",
+                recvfeeTime = string.Empty,
+                dealPayFeeTotal = totalAmount,
+                ppCodId = string.Empty,
+
+
+                receiverAddress = request.OrderModel.ShippingAddress.ShippingAddress,
+                transportType = "TRANSPORT_NONE",
+                wuliuId = "0",
+
+                vipCard = string.Empty,
+                itemList = new List<dynamic>()
+
+            };
+            using (var ts = new TransactionScope())
+            {
+                var orderEntity = _orderRepo.Insert(new OrderEntity()
+                {
+                    BrandId = 0,
+                    CreateDate = DateTime.Now,
+                    CreateUser = request.AuthUser.Id,
+                    CustomerId = request.AuthUser.Id,
+                    InvoiceDetail = request.OrderModel.InvoiceDetail,
+                    InvoiceSubject = request.OrderModel.InvoiceTitle,
+                    NeedInvoice = request.OrderModel.NeedInvoice,
+                    Memo = request.OrderModel.Memo,
+                    PaymentMethodCode = request.OrderModel.Payment.PaymentCode,
+                    PaymentMethodName = request.OrderModel.Payment.PaymentName,
+                    ShippingAddress = request.OrderModel.ShippingAddress.ShippingAddress,
+                    ShippingContactPerson = request.OrderModel.ShippingAddress.ShippingContactPerson,
+                    ShippingContactPhone = request.OrderModel.ShippingAddress.ShippingContactPhone,
+                    ShippingFee = otherFee.TotalFee,
+                    ShippingZipCode = request.OrderModel.ShippingAddress.ShippingZipCode,
+                    Status = (int)OrderStatus.Create,
+                    StoreId = 0,
+                    UpdateDate = DateTime.Now,
+                    UpdateUser = request.AuthUser.Id,
+                    TotalAmount = totalAmount,
+                    InvoiceAmount = totalAmount,
+                    OrderNo = orderNo,
+                    TotalPoints = otherFee.TotalPoints
+
+                });
+                foreach (var product in request.OrderModel.Products)
+                {
+                    var productEntity = _productRepo.Find(product.ProductId);
+                    var inventoryEntity = Context.Set<InventoryEntity>().Where(pm => pm.ProductId == product.ProductId && pm.PColorId == product.Properties.ColorValueId && pm.PSizeId == product.Properties.SizeValueId).FirstOrDefault();
+                    if (inventoryEntity == null)
+                        return this.RenderError(r => r.Message = string.Format("{0}库存 不存在！", productEntity.Id));
+                    if (inventoryEntity.Amount < product.Quantity)
+                        return this.RenderError(r => r.Message = string.Format("{0}库存不足！", productEntity.Id));
+                    var productSizeEntity = Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Id == product.Properties.SizeValueId).FirstOrDefault();
+                    var productColorEntity = Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Id == product.Properties.ColorValueId).FirstOrDefault();
+                    _orderItemRepo.Insert(new OrderItemEntity()
+                    {
+                        BrandId = productEntity.Brand_Id,
+                        CreateDate = DateTime.Now,
+                        CreateUser = request.AuthUser.Id,
+                        ItemPrice = productEntity.Price,
+                        OrderNo = orderNo,
+                        ProductId = productEntity.Id,
+                        ProductName = productEntity.Name,
+                        Quantity = product.Quantity,
+                        Status = (int)DataStatus.Normal,
+                        StoreId = productEntity.Store_Id,
+                        UnitPrice = productEntity.UnitPrice,
+                        UpdateDate = DateTime.Now,
+                        UpdateUser = request.AuthUser.Id,
+                        ExtendPrice = productEntity.Price * product.Quantity,
+                        ProductDesc = product.ProductDesc,
+                        ColorId = productColorEntity == null ? 0 : productColorEntity.PropertyId,
+                        ColorValueId = productColorEntity == null ? 0 : productColorEntity.Id,
+                        SizeId = productSizeEntity == null ? 0 : productSizeEntity.PropertyId,
+                        SizeValueId = productSizeEntity == null ? 0 : productSizeEntity.Id,
+                        ColorValueName = productColorEntity == null ? string.Empty : productColorEntity.ValueDesc,
+                        SizeValueName = productSizeEntity == null ? string.Empty : productSizeEntity.ValueDesc,
+                        Points = 0
+
+                    });
+                    inventoryEntity.Amount = inventoryEntity.Amount - product.Quantity;
+                    inventoryEntity.UpdateDate = DateTime.Now;
+                    _inventoryRepo.Update(inventoryEntity);
+                    int? storeId = null;
+                    int? saleCodeId = null;
+                    if (product.StoreId.HasValue && product.StoreId != 0 && product.SectionId.HasValue && product.SectionId != 0)
+                    {
+                        var storeEntity = Context.Set<StoreEntity>().Find(product.StoreId.Value);
+                        storeId = storeEntity.ExStoreId;
+                        var sectionEntity = Context.Set<SectionEntity>().Find(product.SectionId.Value);
+                        saleCodeId = sectionEntity.ChannelSectionId;
+                    }
+                    erpOrder.itemList.Add(new
+                    {
+                        itemName = productEntity.Name,
+                        itemFlag = string.Empty,
+                        itemCode = string.Empty,
+                        account = string.Empty,
+
+                        refundStateDesc = string.Empty,
+                        itemAdjustPrice = "0",
+                        itemRetailPrice = productEntity.UnitPrice,
+                        tradePropertymask = "256",
+                        itemDealState = "STATE_WG_WAIT_PAY",
+
+                        itemDealCount = product.Quantity,
+                        skuId = inventoryEntity.ChannelInventoryId,
+                        itemDealPrice = productEntity.Price,
+
+                        storeId = storeId,
+                        saleCodeSid = saleCodeId
+                    });
+                }
+                _orderLogRepo.Insert(new OrderLogEntity()
+                {
+                    CreateDate = DateTime.Now,
+                    CreateUser = request.AuthUser.Id,
+                    CustomerId = request.AuthUser.Id,
+                    Operation = string.Format("创建订单"),
+                    OrderNo = orderNo,
+                    Type = (int)OrderOpera.FromCustomer
+                });
+                string exOrderNo = string.Empty;
+                bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "DivideOrderToSaleFromJSON", OrdersJSON = erpOrder }, r => exOrderNo = r.order_no
+                    , null);
+                if (isSuccess)
+                {
+                    _orderexRepo.Insert(new Order2ExEntity()
+                    {
+                        ExOrderNo = exOrderNo,
+                        OrderNo = orderEntity.OrderNo,
+                        UpdateTime = DateTime.Now
+                    });
+                    ts.Complete();
+                    return this.RenderSuccess<OrderResponse>(m => m.Data = new OrderResponse().FromEntity<OrderResponse>(orderEntity));
+                }
+                else
+                {
+                    return this.RenderError(r => r.Message = "失败");
+                }
+            }
         }
     }
 }

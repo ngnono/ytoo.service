@@ -71,6 +71,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         {
             get
             {
+                if (this.Size <= 0)
+                    return 0;
                 return (int)Math.Ceiling(this.TotalCount / (double)this.Size);
             }
             set { }
