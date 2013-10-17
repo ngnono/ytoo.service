@@ -69,7 +69,8 @@ namespace com.intime.jobscheduler.Job.Erp
                     }
                     catch (Exception ex)
                     {
-                        log.Info(ex);
+                        log.Error(string.Format("{0} product sync error",product.SID));
+                        log.Error(ex);
                     }
                 }
                 cursor += size;

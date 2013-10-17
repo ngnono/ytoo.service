@@ -65,6 +65,7 @@ namespace com.intime.jobscheduler.Job.Erp
                     }
                     catch (Exception ex)
                     {
+                        log.Error(string.Format("{0} product inventory error", product.SID));
                         log.Error(ex);
                     }
                 }

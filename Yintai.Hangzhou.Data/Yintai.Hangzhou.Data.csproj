@@ -100,6 +100,7 @@
     <Compile Include="Models\HotWord.cs" />
     <Compile Include="Models\InboundPackage.cs" />
     <Compile Include="Models\Inventory.cs" />
+    <Compile Include="Models\JobSuccessHistory.cs" />
     <Compile Include="Models\Mapping\BannerMap.cs" />
     <Compile Include="Models\Mapping\CardBlackMap.cs" />
     <Compile Include="Models\Mapping\CardMap.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Models\Mapping\HotWordMap.cs" />
     <Compile Include="Models\Mapping\InboundPackageMap.cs" />
     <Compile Include="Models\Mapping\InventoryMap.cs" />
+    <Compile Include="Models\Mapping\JobSuccessHistoryMap.cs" />
     <Compile Include="Models\Mapping\Order2ExMap.cs" />
     <Compile Include="Models\Mapping\OrderItemMap.cs" />
     <Compile Include="Models\Mapping\OrderLogMap.cs" />

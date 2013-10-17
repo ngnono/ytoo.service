@@ -12,7 +12,7 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime CreateDate { get; set; }
         public string TransNo { get; set; }
         public bool IsSynced { get; set; }
-        public DateTime? SyncDate { get; set; }
+        public Nullable<System.DateTime> SyncDate { get; set; }
 
         #region Overrides of BaseEntity
 

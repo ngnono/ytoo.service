@@ -59,6 +59,7 @@ namespace com.intime.fashion.common
            }
            catch (Exception ex)
            {
+
                Logger.Error(requestUrl);
                Logger.Error(sb.ToString());
                throw ex;
@@ -74,6 +75,7 @@ namespace com.intime.fashion.common
            else
            {
                Logger.Debug(sb.ToString());
+               Logger.Debug(requestUrl);
                if (failCallback != null)
                    failCallback(jsonResponse);
                return false;
@@ -92,21 +94,7 @@ namespace com.intime.fashion.common
        {
 
            Dictionary<string, string> query = new Dictionary<string, string>();
-         /*
-           query.Add("nonce", new Random(1000).Next().ToString());
-           query.Add("timestamp", DateTime.UtcNow.ToString("yyyy-MM-ddThh:mm:ssZ"));
-           var signingValue = new StringBuilder();
-           var signedValue = string.Empty;
-           foreach (var s in query.Values.ToArray().OrderBy(s => s))
-               signingValue.Append(s);
-           using (HMACSHA1 hmac = new HMACSHA1(Encoding.ASCII.GetBytes(string.Empty)))
-           {
-               var hashValue = hmac.ComputeHash(Encoding.ASCII.GetBytes(signingValue.ToString()));
-               signedValue = Convert.ToBase64String(hashValue);
-
-           }
-           query.Add("sign", signedValue);
-          * */
+        
            if (null != data)
            {
                foreach (var attr in data.GetType().GetProperties(BindingFlags.Instance|BindingFlags.Public))

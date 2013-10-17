@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.intime.fashion.common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,27 +15,11 @@ namespace Yintai.Hangzhou.WebApiCore
     {
         public static ActionResult RenderError(this BaseController controller, Action<ExecuteResult> callback)
         {
-            var result = new RestfulResult
-                {
-                    Data = new ExecuteResult { StatusCode = StatusCode.InternalServerError, Message = "操作失败！" }
-
-                };
-            if (callback != null)
-                callback(result.Data as ExecuteResult);
-            return result;
+            return CommonUtil.RenderError(callback);
         }
         public static ActionResult RenderSuccess<T>(this BaseController controller, Action<ExecuteResult<T>> callback)
         {
-            var result = new RestfulResult
-            {
-                Data = new ExecuteResult<T> { StatusCode = StatusCode.Success,
-                     IsSuccess = true,
-                     Message = "操作成功！" }
-
-            };
-            if (callback != null)
-                callback(result.Data as ExecuteResult<T>);
-            return result;
+            return CommonUtil.RenderSuccess<T>(callback);
         }
     }
 }

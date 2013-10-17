@@ -71,6 +71,7 @@ namespace com.intime.jobscheduler.Job.Erp
                     }
                     catch (Exception ex)
                     {
+                        log.Error(string.Format("{0} product pic sync error", product.SID));
                         log.Info(ex);
                             
                     }

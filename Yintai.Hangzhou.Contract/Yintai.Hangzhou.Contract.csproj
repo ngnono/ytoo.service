@@ -116,6 +116,7 @@
     <Compile Include="DTO\Request\Pass\PassCreateRequest.cs" />
     <Compile Include="DTO\Request\Share\ShareRequest.cs" />
     <Compile Include="DTO\Request\Store\StoreRequest.cs" />
+    <Compile Include="DTO\Request\WxPackageGetRequest.cs" />
     <Compile Include="DTO\Response\Card\CardInfoResponse.cs" />
     <Compile Include="DTO\Response\Comment\CommentCollectionResponse.cs" />
     <Compile Include="DTO\Response\Device\DeviceInfoResponse.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="DTO\Response\TagPropertyDetailResponse.cs" />
     <Compile Include="DTO\Response\Tag\TagInfoResponse.cs" />
     <Compile Include="DTO\Response\TPagerInfoResponse.cs" />
+    <Compile Include="DTO\Response\WxPackageGetResponse.cs" />
     <Compile Include="DTO\ThumnImageType.cs" />
     <Compile Include="Favorite\IFavoriteDataService.cs" />
     <Compile Include="Feedback\IFeedbackDataService.cs" />

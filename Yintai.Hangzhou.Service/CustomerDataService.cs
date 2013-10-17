@@ -216,6 +216,78 @@ namespace Yintai.Hangzhou.Service
                 });
         }
 
+
+
+        public UserEntity OutSiteLogin2(OutSiteLoginRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
+            if (String.IsNullOrWhiteSpace(request.OutsiteUid))
+            {
+                return null;
+            }
+
+            if (request.OsType == OutsiteType.None)
+            {
+                return null;
+            }
+
+            int userId;
+            var outsiteEntity = _outSiteCustomerRepository.GetItem(request.OutsiteUid, (int)request.OsType);
+            if (outsiteEntity == null)
+            {
+                using (var ts = new TransactionScope())
+                {
+                    var utmp = _customerRepository.Insert(new UserEntity
+                    {
+                        CreatedDate = DateTime.Now,
+                        CreatedUser = 0,
+                        EMail = String.Empty,
+                        LastLoginDate = DateTime.Now,
+                        Logo = String.Empty,
+                        Mobile = String.Empty,
+                        Id = 0,
+                        Nickname = request.OutsiteNickname,
+                        Name =
+                            String.Format("__{0}{1}",
+                                          ((int)EnumExtension.Parser<OutsiteType>(request.OutsiteType)).
+                                              ToString(CultureInfo.InvariantCulture), request.OutsiteUid),
+                        Password = Guid.NewGuid().ToString(),
+                        UpdatedDate = DateTime.Now,
+                        Status = (int)DataStatus.Normal,
+                        UserLevel = (int)UserLevel.User,
+                        Description = String.Empty,
+                        Gender = (int)GenderType.Default
+                    });
+
+                    _outSiteCustomerRepository.Insert(new OutsiteUserEntity
+                    {
+                        CreatedDate = DateTime.Now,
+                        CreatedUser = utmp.Id,
+                        Description = String.Empty,
+                        LastLoginDate = DateTime.Now,
+                        AssociateUserId = utmp.Id,
+                        OutsiteType = (int)request.OsType,
+                        Status = (int)DataStatus.Normal,
+                        OutsiteUserId = request.OutsiteUid
+                    });
+                    ts.Complete();
+
+                    return utmp;
+                }
+            }
+            else
+            {
+                userId = outsiteEntity.AssociateUserId;
+                _customerRepository.SetLoginDate(userId, DateTime.Now);
+                return _customerRepository.GetItem(userId);
+            }
+
+           
+        }
         /// <summary>
         /// 获取会员信息
         /// </summary>

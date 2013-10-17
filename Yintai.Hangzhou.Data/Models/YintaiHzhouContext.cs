@@ -142,6 +142,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<HotWordEntity> HotWords { get; set; }
         public DbSet<InboundPackageEntity> InboundPackages { get; set; }
         public DbSet<InventoryEntity> Inventories { get; set; }
+        public DbSet<JobSuccessHistoryEntity> JobSuccessHistories { get; set; }
         public DbSet<LikeEntity> Likes { get; set; }
         public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
@@ -232,6 +233,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new HotWordEntityMap());
             modelBuilder.Configurations.Add(new InboundPackageEntityMap());
             modelBuilder.Configurations.Add(new InventoryEntityMap());
+            modelBuilder.Configurations.Add(new JobSuccessHistoryEntityMap());
             modelBuilder.Configurations.Add(new LikeEntityMap());
             modelBuilder.Configurations.Add(new NotificationLogEntityMap());
             modelBuilder.Configurations.Add(new OrderEntityMap());

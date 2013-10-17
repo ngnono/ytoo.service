@@ -62,8 +62,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name = "memo")]
          public string Memo { get; set; }
         
+       
 
-        [DataMember(Name="products")]
+        [DataMember(Name="products")]   
         public IEnumerable<MyOrderItemDetailResponse> Products { get; set; }
         [DataMember(Name = "rmas")]
         public IEnumerable<MyRMAResponse> RMAs { get; set; }
@@ -109,7 +110,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string ColorValueName { get; set; }
         [DataMember(Name = "sizevalue")]
         public string SizeValueName { get; set; }
-
+        [DataMember(Name = "brandname")]
+        public string BrandName { get; set; }
+        [DataMember(Name = "brand2name")]
+        public string Brand2Name { get; set; }
         [DataMember(Name = "properties")]
         public IEnumerable<TagPropertyDetailResponse> Properties { get; set; }
     }

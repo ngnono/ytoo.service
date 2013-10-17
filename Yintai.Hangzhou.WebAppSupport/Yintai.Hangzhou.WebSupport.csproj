@@ -89,6 +89,7 @@
     <Compile Include="Binder\StoreModelBinder.cs" />
     <Compile Include="Binder\TagModlBinder.cs" />
     <Compile Include="Binder\UserModelBinder.cs" />
+    <Compile Include="Binder\XmlModelBinder.cs" />
     <Compile Include="Configuration\ConfigManager.cs" />
     <Compile Include="Filters\VersionFilter.cs" />
     <Compile Include="Helper\EnumExtension.cs" />

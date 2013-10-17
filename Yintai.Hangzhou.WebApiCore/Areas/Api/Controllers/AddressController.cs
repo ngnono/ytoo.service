@@ -129,6 +129,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             linq.ShippingCityId = request.ShippingCityId;
             linq.ShippingCity = request.ShippingCity;
             linq.ShippingAddress1 = request.ShippingAddress;
+            linq.ShippingDistrictId = request.ShippingDistrictId;
+            linq.ShippingDistrictName = request.ShippingDistrict;
             _shippingRepo.Update(linq);
 
             var result = new SelfAddressResponse().FromEntity<SelfAddressResponse>(linq);

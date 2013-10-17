@@ -12,6 +12,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
     }
     public enum OrderRequestType
     {
+        WaitForPay = 0,
         OnGoing = 1,
         Complete = 2,
         Void = 3

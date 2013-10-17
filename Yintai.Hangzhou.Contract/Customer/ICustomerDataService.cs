@@ -1,6 +1,7 @@
 ﻿using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.DTO.Request.Customer;
 using Yintai.Hangzhou.Contract.DTO.Response.Customer;
+using Yintai.Hangzhou.Data.Models;
 
 namespace Yintai.Hangzhou.Contract.Customer
 {
@@ -19,6 +20,13 @@ namespace Yintai.Hangzhou.Contract.Customer
         /// <param name="request"></param>
         /// <returns></returns>
         ExecuteResult<CustomerInfoResponse> OutSiteLogin(OutSiteLoginRequest request);
+
+        /// <summary>
+        /// 外站用户登录2
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        UserEntity OutSiteLogin2(OutSiteLoginRequest request);
 
         /// <summary>
         /// 获取会员信息

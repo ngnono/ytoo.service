@@ -169,11 +169,13 @@
     <Compile Include="Job\Erp\StoreSyncJob.cs" />
     <Compile Include="Job\ExpireStoreCouponReturnPointsJob.cs" />
     <Compile Include="Job\ExternalProductSyncJob.cs" />
+    <Compile Include="Job\JobType.cs" />
     <Compile Include="Job\PointsFromApp2GroupJob.cs" />
     <Compile Include="Job\Erp\ProductInventorySyncJob.cs" />
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="Job\Push2awsJob.cs" />
     <Compile Include="Job\Push2mysqlJob.cs" />
+    <Compile Include="Job\Wx\NotifyShippingJob.cs" />
     <Compile Include="MainJobService.cs">
       <SubType>Component</SubType>
     </Compile>

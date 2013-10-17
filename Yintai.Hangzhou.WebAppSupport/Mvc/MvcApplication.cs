@@ -105,6 +105,8 @@ namespace Yintai.Hangzhou.WebSupport.Mvc
             DependencyResolver.SetResolver(ServiceLocator.Current.Resolve<IDependencyResolver>());
 
             ModelBinders.Binders.Add(typeof(PagerRequest), ServiceLocator.Current.Resolve<PagerRequestBinder>());
+
+            ModelBinderProviders.BinderProviders.Add(new XmlModelBinderProvider());
         }
     }
 }

@@ -429,6 +429,36 @@
         <cron-expression>0/30 * * * * ?</cron-expression>
       </cron>
     </trigger>
+    <job>
+      <name>WX-ShippingSync</name>
+      <group>Fashion</group>
+      <description>sync erp infos per 5 mins</description>
+      <job-type>com.intime.jobscheduler.Job.Wx.NotifyShippingJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>isRebuild</key>
+          <value>true</value>
+        </entry>
+        <entry>
+          <key>intervalOfSecs</key>
+          <value>600</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>WX-ShippingSync-5MINS</name>
+        <group>Fashion</group>
+        <description>every 5 MINS</description>
+        <job-name>WX-ShippingSync</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0/30 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
   </schedule>
 
 </job-scheduling-data>

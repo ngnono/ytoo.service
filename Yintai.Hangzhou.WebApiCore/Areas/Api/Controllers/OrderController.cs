@@ -31,11 +31,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         private IRMAItemRepository _rmaitemRepo;
         private IRMALogRepository _rmalogRepo;
         private  IRMA2ExRepository _rmaexRepo;
+        private IInventoryRepository _inventoryRepo;
+
         public OrderController(IOrderRepository orderRepo,IOrderLogRepository orderlogRepo,
             IRMARepository rmaRepo,
             IRMAItemRepository rmaitemRepo,
             IRMALogRepository rmalogRepo,
-            IRMA2ExRepository rmaexRepo)
+            IRMA2ExRepository rmaexRepo,
+            IInventoryRepository inventoryRepo)
         {
             _orderlogRepo = orderlogRepo;
             _orderRepo = orderRepo;
@@ -43,19 +46,24 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _rmaitemRepo = rmaitemRepo;
             _rmalogRepo = rmalogRepo;
             _rmaexRepo = rmaexRepo;
+            _inventoryRepo = inventoryRepo;
         }
         [RestfulAuthorize]
         public RestfulResult My(MyOrderRequest request, UserModel authUser)
         {
             var dbContext = Context;
-            var onGoStatus = new int[]{(int)OrderStatus.Create,
+            var onGoStatus = new int[]{
                                         (int)OrderStatus.Paid,
+                                        (int)OrderStatus.PreparePack,
                                         (int)OrderStatus.Shipped,
                                         (int)OrderStatus.PassConfirmed
                 };
             var linq = Context.Set<OrderEntity>().Where(o=>o.CustomerId == authUser.Id);
             switch(request.Type)
             {
+                case OrderRequestType.WaitForPay:
+                    linq = linq.Where(o => o.Status == (int)OrderStatus.Create);
+                    break;
                 case OrderRequestType.OnGoing:
                     linq = linq.Where(o => onGoStatus.Any(status => status == o.Status));
                     break;
@@ -67,13 +75,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     linq = linq.Where(o=>o.Status == (int)OrderStatus.Void);
                     break;
             }
-            var linq2 = linq.GroupJoin(dbContext.Set<OrderItemEntity>().GroupJoin(dbContext.Set<ResourceEntity>().Where(r=>r.SourceType==(int)SourceType.Product &&r.Type==(int)ResourceType.Image),
-                                                     o=>new {P=o.ProductId,PC=o.ColorValueId},
-                                                     i=>new {P=i.SourceId,PC=i.ColorId},
-                                                     (o,i)=>new {OI=o,R=i.OrderByDescending(r=>r.SortOrder).FirstOrDefault()}),
+            var linq2 = linq.GroupJoin(dbContext.Set<OrderItemEntity>().Join(dbContext.Set<BrandEntity>(), o => o.BrandId, i => i.Id, (o, i) => new { OI=o,B=i})
+                                        .GroupJoin(dbContext.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image),
+                                                     o => new { P = o.OI.ProductId, PC = o.OI.ColorValueId },
+                                                     i => new { P = i.SourceId, PC = i.ColorId },
+                                                     (o, i) => new { OI = o.OI,B=o.B, R = i.OrderByDescending(r => r.SortOrder).FirstOrDefault() }),
                                         o => o.OrderNo,
                                         i => i.OI.OrderNo,
-                                        (o, i) => new { O = o, R = i });
+                                        (o, i) => new { O = o, R =i });
 
             int totalCount = linq2.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
@@ -83,6 +92,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     return;
                 o.Products = l.R.Select(oi => new MyOrderItemDetailResponse().FromEntity<MyOrderItemDetailResponse>(oi.OI, product => {
                     product.ProductResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(l.R.FirstOrDefault());
+                    product.BrandName = oi.B.Name;
+                    product.Brand2Name = oi.B.EnglishName;
                 }));
                
             }));
@@ -139,6 +150,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             {
                 return this.RenderError(m => m.Message = "订单号不存在");
             }
+            var itemsEntity = dbContext.Set<OrderItemEntity>().Where(o => o.OrderNo == request.OrderNo).ToList();
             var currentStatus = linq.Status;
            var voidStatus = new int[]{(int)OrderStatus.Create,(int)OrderStatus.Paid,
                (int)OrderStatus.PassConfirmed,
@@ -154,6 +166,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                linq.UpdateUser = authUser.Id;
                _orderRepo.Update(linq);
 
+               foreach (var item in itemsEntity)
+               {
+                   var inventoryEntity = dbContext.Set<InventoryEntity>().Where(i => i.ProductId == item.ProductId && i.PColorId == item.ColorValueId && i.PSizeId == item.SizeValueId).FirstOrDefault();
+                   if (inventoryEntity == null)
+                       continue;
+                   inventoryEntity.Amount += item.Quantity;
+                   _inventoryRepo.Update(inventoryEntity);
+               }
+
                _orderlogRepo.Insert(new OrderLogEntity() {
                  CreateDate = DateTime.Now,
                   CreateUser = authUser.Id,
@@ -162,6 +183,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                       Type = (int)OrderOpera.CustomerVoid,
                        Operation="用户取消订单。"
                });
+               
                bool isSuccess = false;
                if (currentStatus != (int)OrderStatus.Create)
                {
@@ -208,7 +230,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
         [RestfulAuthorize]
      //   [VersionFilter(ShouldGreater="2.3")]
-        private ActionResult Pay(MyOrderPayRequest request, UserModel authUser)
+        public ActionResult Pay(MyOrderPayRequest request, UserModel authUser)
         {
            
             var dbContext = Context;

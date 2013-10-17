@@ -20,5 +20,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
          public string PaymentMethodCode { get; set; }
          [DataMember(Name = "paymentname")]
          public string PaymentMethodName { get; set; }
+        [IgnoreDataMember]
+         public string ExOrderNo { get; set; }
     }
 }
