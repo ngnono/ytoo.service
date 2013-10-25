@@ -8,9 +8,9 @@ namespace com.intime.fashion.common.Wxpay
 {
    public static class DateTimeExtension
     {
-       public static double TicksOfWx(this DateTime date)
+       public static long TicksOfWx(this DateTime date)
        {
-          return date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+          return (long)(date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
        }
     }
   

@@ -10,4 +10,5 @@ namespace com.intime.jobscheduler.Job
     {
         Wx_Shipping = 1
     }
+
 }

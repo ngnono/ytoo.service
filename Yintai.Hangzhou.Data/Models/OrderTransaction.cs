@@ -13,6 +13,9 @@ namespace Yintai.Hangzhou.Data.Models
         public string TransNo { get; set; }
         public bool IsSynced { get; set; }
         public Nullable<System.DateTime> SyncDate { get; set; }
+        public string OutsiteUId { get; set; }
+        public int? OutsiteType { get; set; }
+
 
         #region Overrides of BaseEntity
 

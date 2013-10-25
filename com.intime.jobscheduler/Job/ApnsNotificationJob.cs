@@ -43,7 +43,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(typeof(ApnsNotificationJob));
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             DateTime startDate = DateTime.Today;
             DateTime endDate = startDate.AddDays(1);

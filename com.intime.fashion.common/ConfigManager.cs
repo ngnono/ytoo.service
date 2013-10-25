@@ -212,6 +212,14 @@ namespace com.intime.fashion.common
             }
         }
 
+        public static int VoidOrderRMAReason
+        {
+        get
+            {
+                return int.Parse(ConfigurationManager.AppSettings["VoidOrderRMAReasonId"]);
+            }
+        } 
+
        
     }
 }

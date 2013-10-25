@@ -11,14 +11,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace com.intime.jobscheduler.Job.Erp
 {
     [DisallowConcurrentExecution]
-    class ProductSyncJob:IJob
+    class ProductSyncJob : IJob
     {
-        private const   decimal NULL_PRICE = 99999999.00m;
+        private const decimal NULL_PRICE = 99999999.00m;
         private static string DEFAULT_TAG_ID = ConfigurationManager.AppSettings["ERPSYN_DEFAULT_TAG"];
+        private static int DEFAULT_OWNER_ID = int.Parse(ConfigurationManager.AppSettings["ERPSYN_DEFAULT_USER"]);
 
         private void DoQuery(Expression<Func<SUPPLY_MIN_PRICE, bool>> whereCondition, Action<IQueryable<SUPPLY_MIN_PRICE>> callback)
         {
@@ -50,10 +52,10 @@ namespace com.intime.jobscheduler.Job.Erp
             });
             int cursor = 0;
             int successCount = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            while (cursor <totalCount)
+            while (cursor < totalCount)
             {
                 List<SUPPLY_MIN_PRICE> oneTimeList = null;
                 DoQuery(whereCondition, products =>
@@ -64,12 +66,13 @@ namespace com.intime.jobscheduler.Job.Erp
                 {
                     try
                     {
-                        SyncOne(product);
-                        successCount++;
+                        var isSuccess = SyncOne(product);
+                        if (isSuccess)
+                            successCount++;
                     }
                     catch (Exception ex)
                     {
-                        log.Error(string.Format("{0} product sync error",product.SID));
+                        log.Error(string.Format("{0} product sync error", product.PRODUCT_SID));
                         log.Error(ex);
                     }
                 }
@@ -82,18 +85,18 @@ namespace com.intime.jobscheduler.Job.Erp
 
         }
 
-        private static void  EnsureProductContext(SUPPLY_MIN_PRICE product)
+        private static void EnsureProductContext(SUPPLY_MIN_PRICE product)
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var exBrand = db.Set<BrandEntity>().Where(b => b.ChannelBrandId == product.BRAND_SID).FirstOrDefault();
                 if (null == exBrand)
                 {
-                    using(var erpDb = new ErpContext())
+                    using (var erpDb = new ErpContext())
                     {
                         var brand = erpDb.Set<BRAND>().Find(product.BRAND_SID);
                         if (null != brand)
-                          BrandSyncJob.SyncOne(brand);
+                            BrandSyncJob.SyncOne(brand);
                     }
                 }
                 var exCat = db.Set<CategoryEntity>().Where(c => c.ExCatId == product.PRO_CLASS_SID).FirstOrDefault();
@@ -102,8 +105,8 @@ namespace com.intime.jobscheduler.Job.Erp
                     using (var erpDb = new ErpContext())
                     {
                         var cat = erpDb.Set<PRO_CLASS_DICT>().Find(product.PRO_CLASS_SID);
-                        if (null!= cat)
-                        CategorySyncJob.SyncOne(cat);
+                        if (null != cat)
+                            CategorySyncJob.SyncOne(cat);
                     }
                 }
                 var exStore = db.Set<StoreEntity>().Where(c => c.ExStoreId == product.SHOP_SID).FirstOrDefault();
@@ -118,42 +121,55 @@ namespace com.intime.jobscheduler.Job.Erp
                 }
             }
         }
-       public  static void  SyncOne(SUPPLY_MIN_PRICE product)
+        public static bool SyncOne(SUPPLY_MIN_PRICE product)
         {
             EnsureProductContext(product);
+            if (!product.SHOP_SID.HasValue)
+                return false;
             using (var ts = new TransactionScope())
             {
                 using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
                 {
                     var existProduct = db.Set<ProductMapEntity>().Where(b => b.ChannelPId == product.PRODUCT_SID).FirstOrDefault();
-                    var tagEntity = db.Set<TagEntity>().Join(db.Set<CategoryMapEntity>().Where(cm=>cm.ChannelCatId==product.PRO_CLASS_SID),o=>o.Id,i=>i.CatId,(o,i)=>o)
+                    var tagEntity = db.Set<TagEntity>().Join(db.Set<CategoryMapEntity>().Where(cm => cm.ChannelCatId == product.PRO_CLASS_SID), o => o.Id, i => i.CatId, (o, i) => o)
                                     .FirstOrDefault();
-                    var storeEntity = db.Set<StoreEntity>().Where(s=>s.ExStoreId== product.SHOP_SID).FirstOrDefault();
-                    var brandEntity = db.Set<BrandEntity>().Where(b=>b.ChannelBrandId == product.BRAND_SID).FirstOrDefault();
+            
+                    var storeEntity = db.Set<StoreEntity>().Where(s => s.ExStoreId == product.SHOP_SID).FirstOrDefault();
+                    if (storeEntity == null)
+                    {
+                        Log.Error(string.Format("product sid has no store:{0}", product.PRODUCT_SID));
+                        return false;
+                    }
+                    var brandEntity = db.Set<BrandEntity>().Where(b => b.ChannelBrandId == product.BRAND_SID).FirstOrDefault();
+                    if (brandEntity == null)
+                    {
+                        Log.Error(string.Format("product sid has no brand:{0}", product.PRODUCT_SID));
+                        return false;
+                    }
                     if (existProduct == null)
                     {
                         var newProduct = new ProductEntity()
                         {
                             CreatedDate = DateTime.Now,
-                            CreatedUser = 0,
+                            CreatedUser = DEFAULT_OWNER_ID,
                             SkuCode = product.PRO_SKU,
-                            Brand_Id = brandEntity==null?0:brandEntity.Id,
-                             Description = product.PRO_DESC??string.Empty,
-                              Is4Sale = false,
-                               Name = product.PRODUCT_NAME??string.Format("{0}-{1}",brandEntity.Name,product.PRO_SKU),
-                                UnitPrice = product.ORIGINAL_PRICE??NULL_PRICE,
-                                 RecommendedReason = product.PRO_DESC??string.Empty,
-                                  RecommendUser = 0,
-                                   SortOrder=0,
-                                    Status=1,
-                                     Store_Id = storeEntity==null?0:storeEntity.Id,
-                                      Tag_Id =tagEntity==null?int.Parse(DEFAULT_TAG_ID):tagEntity.Id,
-                                       Price = product.PROMOTION_PRICE??NULL_PRICE,
-                                        UpdatedDate = product.OPT_UPDATE_TIME??DateTime.Now,
-                                         UpdatedUser=0,
-                                          BarCode = product.BARCODE,
-                                          Favorable ="1"
-                                         
+                            Brand_Id = brandEntity == null ? 0 : brandEntity.Id,
+                            Description = product.PRO_DESC ?? string.Empty,
+                            Is4Sale = false,
+                            Name = string.IsNullOrEmpty(product.PRODUCT_NAME)? string.Format("{0}-{1}", brandEntity.Name, product.PRO_SKU):product.PRODUCT_NAME,
+                            UnitPrice = product.ORIGINAL_PRICE ?? NULL_PRICE,
+                            RecommendedReason = product.PRO_DESC ?? string.Empty,
+                            RecommendUser = DEFAULT_OWNER_ID,
+                            SortOrder = 0,
+                            Status = (int)DataStatus.Default,
+                            Store_Id = storeEntity == null ? 0 : storeEntity.Id,
+                            Tag_Id = tagEntity == null ? int.Parse(DEFAULT_TAG_ID) : tagEntity.Id,
+                            Price = product.PROMOTION_PRICE ?? NULL_PRICE,
+                            UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now,
+                            UpdatedUser = DEFAULT_OWNER_ID,
+                            BarCode = product.BARCODE,
+                            Favorable = "1"
+
 
                         };
                         db.Products.Add(newProduct);
@@ -161,11 +177,11 @@ namespace com.intime.jobscheduler.Job.Erp
                         db.ProductMaps.Add(new ProductMapEntity()
                         {
                             Channel = "ERP",
-                             ChannelBrandId = (int)product.BRAND_SID,
-                              ChannelPId = (int)product.PRODUCT_SID,
-                               ChannelCatId = (int)product.PRO_CLASS_SID,
-                                ProductId = newProduct.Id,
-                                 UpdateDate = product.OPT_UPDATE_TIME??DateTime.Now
+                            ChannelBrandId = (int)product.BRAND_SID,
+                            ChannelPId = (int)product.PRODUCT_SID,
+                            ChannelCatId = (int)(product.PRO_CLASS_SID??0m),
+                            ProductId = newProduct.Id,
+                            UpdateDate = product.OPT_UPDATE_TIME ?? DateTime.Now
                         });
                     }
                     else
@@ -173,22 +189,26 @@ namespace com.intime.jobscheduler.Job.Erp
                         var existProductEntity = db.Set<ProductEntity>().Find(existProduct.ProductId);
                         existProductEntity.BarCode = product.BARCODE;
                         existProductEntity.UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now;
-                        existProductEntity.Store_Id = storeEntity==null?0:storeEntity.Id;
-                        existProductEntity.Brand_Id = brandEntity==null?0:brandEntity.Id;
-                        existProductEntity.Tag_Id = tagEntity ==null?int.Parse(DEFAULT_TAG_ID):tagEntity.Id;
+                        existProductEntity.Store_Id = storeEntity == null ? 0 : storeEntity.Id;
+                        existProductEntity.Brand_Id = brandEntity == null ? 0 : brandEntity.Id;
+                        existProductEntity.Tag_Id = tagEntity == null ? int.Parse(DEFAULT_TAG_ID) : tagEntity.Id;
                         existProductEntity.SkuCode = product.PRO_SKU;
-                        existProductEntity.Name = product.PRODUCT_NAME??string.Empty;
-                        existProductEntity.UnitPrice = product.ORIGINAL_PRICE??NULL_PRICE;
-                        existProductEntity.Price =product.PROMOTION_PRICE??NULL_PRICE;
-                        existProductEntity.Description = product.PRO_DESC??string.Empty;
-                        existProductEntity.RecommendedReason = product.PRO_DESC??string.Empty;
-                       
+                        existProductEntity.Name = string.IsNullOrEmpty(product.PRODUCT_NAME) ? string.Format("{0}-{1}", brandEntity.Name, product.PRO_SKU) : product.PRODUCT_NAME;
+                        existProductEntity.UnitPrice = product.ORIGINAL_PRICE ?? NULL_PRICE;
+                        existProductEntity.Price = product.PROMOTION_PRICE ?? NULL_PRICE;
+                        existProductEntity.Description = product.PRO_DESC ?? string.Empty;
+                        existProductEntity.RecommendedReason = product.PRO_DESC ?? string.Empty;
+
                     }
                     db.SaveChanges();
 
                 }
                 ts.Complete();
             }
+            return true;
         }
+        private static ILog Log { get { 
+            return LogManager.GetLogger(typeof(ProductSyncJob));
+        } }
     }
 }

@@ -52,6 +52,12 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ShipNo)
                 .HasMaxLength(50);
 
+            this.Property(t => t.ContactPerson)
+                .HasMaxLength(20);
+
+            this.Property(t => t.MailAddress)
+                .HasMaxLength(500);
+
             // Table & Column Mappings
             this.ToTable("RMA");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -80,6 +86,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ContactPhone).HasColumnName("ContactPhone");
             this.Property(t => t.ShipviaId).HasColumnName("ShipviaId");
             this.Property(t => t.ShipNo).HasColumnName("ShipNo");
+            this.Property(t => t.ContactPerson).HasColumnName("ContactPerson");
+            this.Property(t => t.UserId).HasColumnName("UserId");
+            this.Property(t => t.RMAReason).HasColumnName("RMAReason");
+            this.Property(t => t.MailAddress).HasColumnName("MailAddress");
 		Init();
         }
 

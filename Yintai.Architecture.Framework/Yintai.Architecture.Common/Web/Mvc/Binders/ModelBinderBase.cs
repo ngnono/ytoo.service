@@ -58,20 +58,15 @@ namespace Yintai.Architecture.Common.Web.Mvc.Binders
         {
             var keyForModelId = String.IsNullOrEmpty(this.KeyName) ? this.IdPrefix + bindingContext.ModelName + this.IdSuffix : this.KeyName;
             var v = bindingContext.ValueProvider.GetValue(keyForModelId);
-            if (v == null)
+            if (v==null || String.IsNullOrWhiteSpace(v.AttemptedValue))
             {
                 // 当允许不提供值时则返回 null
                 if (this.IsCanMissing) return null;
                 throw new ArgumentNullException(keyForModelId, "未提供参数");
             }
 
-            var modelId = v.AttemptedValue;
-            if (String.IsNullOrWhiteSpace(modelId))
-            {
-                throw new ArgumentNullException(keyForModelId, String.Format("绑定类型时需要参数{0},但未提供，请检查form,querystring中是否存在", keyForModelId));
-            }
 
-            return this.GetModelInstance(modelId);
+            return this.GetModelInstance(v.AttemptedValue);
         }
 
         /// <summary>

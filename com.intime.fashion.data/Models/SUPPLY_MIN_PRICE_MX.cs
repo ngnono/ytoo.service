@@ -16,6 +16,9 @@ namespace com.intime.fashion.data.erp.Models
         public string PRO_STAN_NAME { get; set; }
         public Nullable<decimal> PRO_COLOR_SID { get; set; }
         public Nullable<decimal> PRO_STAN_SID { get; set; }
+        public Nullable<decimal> OPT_USER_SID { get; set; }
+        public string OPT_REAL_NAME { get; set; }
+        public Nullable<System.DateTime> OPT_UPDATE_TIME { get; set; }
         public virtual SUPPLY_MIN_PRICE SUPPLY_MIN_PRICE { get; set; }
     }
 }

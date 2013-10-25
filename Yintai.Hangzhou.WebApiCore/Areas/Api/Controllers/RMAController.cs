@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.intime.fashion.common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Hangzhou.Service.Logic;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
@@ -27,10 +29,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _rmalogRepo = rmalogRepo;
         }
         [RestfulAuthorize]
-        public ActionResult List(PagerInfoRequest request, UserModel authUser)
+        public ActionResult OrderList(PagerInfoRequest request, UserModel authUser)
         {
             var dbContext = Context;
-            var linq = Context.Set<OrderEntity>().Where(o => o.CustomerId == authUser.Id);
+            var linq = Context.Set<OrderEntity>().Where(o => o.CustomerId == authUser.Id && o.Status == (int)OrderStatus.Shipped);
            
             var linq2 = linq.GroupJoin(dbContext.Set<OrderItemEntity>().GroupJoin(dbContext.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image),
                                                      o => o.ProductId,
@@ -63,6 +65,37 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return this.RenderSuccess<PagerInfoResponse<MyOrderDetailResponse>>(r => r.Data = response);
 
         }
+
+        [RestfulAuthorize]
+        public ActionResult List(PagerInfoRequest request, UserModel authUser)
+        {
+            var linq = Context.Set<RMAEntity>().Where(r => r.UserId == authUser.Id)
+                       .GroupJoin(Context.Set<RMAItemEntity>()
+                                    .GroupJoin(Context.Set<ResourceEntity>().Where(res => res.SourceType == (int)SourceType.Product && res.Type == (int)ResourceType.Image)
+                                    , o => new { Product = o.ProductId, Color = o.ColorId }
+                                    , i => new { Product = i.SourceId, Color = i.ColorId }
+                                    , (o, i) => new { R=o,Res = i.OrderByDescending(res2=>res2.SortOrder).FirstOrDefault()})
+                       , o => o.RMANo, i => i.R.RMANo, (o, i) => new { R = o, RI = i });
+            int totalCount = linq.Count();
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(l => l.R.CreateDate).Skip(skipCount).Take(request.Pagesize);
+            var result = linq.ToList().Select(l => new RMAInfoResponse().FromEntity<RMAInfoResponse>(l.R, o =>
+            {
+                if (l.RI == null)
+                    return;
+                o.CanVoid = RMARule.CanVoid(o.Status);
+                o.Products = l.RI.ToList().Select(oi => new RMAItemInfoResponse().FromEntity<RMAItemInfoResponse>(oi.R, product =>
+                {
+                    product.ProductResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(oi.Res);
+                }));
+               
+            }));
+            var response = new PagerInfoResponse<RMAInfoResponse>(request.PagerRequest, totalCount)
+            {
+                Items = result.ToList()
+            };
+            return this.RenderSuccess<PagerInfoResponse<RMAInfoResponse>>(r => r.Data = response);
+        }
          [RestfulAuthorize]
         public ActionResult Detail(RMAInfoRequest request, UserModel authUser)
         {
@@ -75,15 +108,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                         o=>o.ProductId,
                                         i=>i.SourceId,
                                         (o,i)=>new {R=o,RR=i.OrderByDescending(resource=>resource.SortOrder).FirstOrDefault()});
+                r.CanVoid =  RMARule.CanVoid(r.Status);
+
                 r.Products = rmaItemsEntity.ToList().Select(ri=>new RMAItemInfoResponse().FromEntity<RMAItemInfoResponse>(ri,ritem=>{
                    ritem.ProductResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(ri.RR);
+                    
                 }));
+                
 
             });
             return this.RenderSuccess<RMAInfoResponse>(r=>r.Data = response);
         }
          [RestfulAuthorize]
-         public ActionResult Update(RMAUpdateRequest request, UserModel authUser)
+         private ActionResult Update(RMAUpdateRequest request, UserModel authUser)
          {
              if (!ModelState.IsValid)
              {
@@ -101,12 +138,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
              }
              using(var ts = new TransactionScope())
              {
-                 rmaEntity.BankAccount = request.BankAccount;
-                 rmaEntity.BankCard = request.BankCard;
-                 rmaEntity.BankName =request.BankName;
                  rmaEntity.ContactPhone = request.ContactPhone;
                  rmaEntity.ShipNo = request.ShipViaNo;
                  rmaEntity.ShipviaId = request.ShipVia;
+                 rmaEntity.ContactPerson = request.ContactPerson;
                  rmaEntity.UpdateDate = DateTime.Now;
                  rmaEntity.UpdateUser = authUser.Id;
                  rmaEntity.Status = (int)RMAStatus.CustomerConfirmed;
@@ -116,11 +151,65 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                      CreateDate = DateTime.Now,
                       CreateUser = authUser.Id,
                        RMANo = request.RMANo,
-                        Operation="用户填写银行信息"
+                        Operation="用户填写送货信息"
                  });
+                 //todo: call erp service to update rma
                  ts.Complete();
              }
   
+             return this.RenderSuccess<RMAInfoResponse>(null);
+         }
+
+         public ActionResult Void(RMAInfoRequest request, UserModel authUser)
+         {
+             if (!ModelState.IsValid)
+             {
+                 var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
+                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
+             }
+             var rmaEntity = Context.Set<RMAEntity>().Where(r => r.RMANo == request.RMANo).FirstOrDefault();
+             if (rmaEntity == null)
+             {
+                 return this.RenderError(r => r.Message = "RMANo不存在");
+             }
+           
+             if (!RMARule.CanVoid(rmaEntity.Status))
+             {
+                 return this.RenderError(r => r.Message = "RMA状态不正确");
+             }
+             using (var ts = new TransactionScope())
+             {
+              
+                 rmaEntity.UpdateDate = DateTime.Now;
+                 rmaEntity.UpdateUser = authUser.Id;
+                 rmaEntity.Status = (int)RMAStatus.Void;
+                 _rmaRepo.Update(rmaEntity);
+
+                 _rmalogRepo.Insert(new RMALogEntity()
+                 {
+                     CreateDate = DateTime.Now,
+                     CreateUser = authUser.Id,
+                     RMANo = request.RMANo,
+                     Operation = "取消退货单"
+                 });
+                 // call erp service to void rma
+                 var rmaMap = Context.Set<RMA2ExEntity>().Where(r=>r.RMANo == rmaEntity.RMANo).FirstOrDefault();
+                 if (rmaMap == null || string.IsNullOrEmpty(rmaMap.ExRMA))
+                    ts.Complete();
+                 var erpRma = new List<dynamic>() { new {
+                     Orders_refund_frt_sid = rmaMap.ExRMA,
+                     REAL_NAME = authUser.Nickname,
+                     USER_SID = "0"
+
+                 }};
+                 bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "Cancel_Refund", jsonRefunds = new { Data =erpRma } }, null
+                 , null);
+                 if (isSuccess)
+                    ts.Complete();
+                 else
+                    return this.RenderError(r => r.Message = "退货单取消失败！");
+             }
+
              return this.RenderSuccess<RMAInfoResponse>(null);
          }
     }

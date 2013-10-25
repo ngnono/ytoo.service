@@ -28,6 +28,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
         public RestfulResult Detail(TagGetRequest request)
         {
+            Logger.Debug(string.Format("request channel:{0}", request.Channel));
             return new RestfulResult { Data = this._tagDataService.Get(request) };
         }
 

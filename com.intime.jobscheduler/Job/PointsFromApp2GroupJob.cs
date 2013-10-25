@@ -59,7 +59,7 @@ namespace com.intime.jobscheduler.Job
 
             int cursor = 0;
             int successCount = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int totalCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();

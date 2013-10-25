@@ -24,7 +24,7 @@ namespace com.intime.jobscheduler.Job
             JobDataMap data = context.JobDetail.JobDataMap;
             var interval = data.GetIntValue("intervalofsec");
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             var benchDate = DateTime.Now.AddSeconds(-interval);
             Stopwatch sw = new Stopwatch();

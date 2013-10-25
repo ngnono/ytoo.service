@@ -15,7 +15,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
     public class RMARequest:BaseRequest
     {
         public string OrderNo { get; set; }
-        public string Reason { get; set; }      
+        public string Reason { get; set; }
+        public int RMAReason { get; set; }
         public string BankName { get; set; }
         public string BankAccount { get; set; }
         public string BankCard { get; set; }
@@ -31,14 +32,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         [Required]
         public string RMANo { get; set; }
         [Required]
-        public string BankName { get; set; }
-        [Required]
-        public string BankAccount { get; set; }
-        [Required]
-        public string BankCard { get; set; }
-        [Required]
         public string ContactPhone { get; set; }
-
+        [Required]
+        public string ContactPerson { get; set; }
         public int ShipVia { get; set; }
         public string ShipViaNo { get; set; }
     }

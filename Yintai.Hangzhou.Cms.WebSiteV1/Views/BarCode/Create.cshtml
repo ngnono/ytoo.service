@@ -1,0 +1,217 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.WebSupport.Helper
+@model Yintai.Hangzhou.Cms.WebSiteV1.Models.BarCodeViewModel
+@{
+    ViewBag.Title = "生成二维码";
+    IEnumerable<SelectListItem> stores = ViewBag.Stores;
+    IEnumerable<SelectListItem> packageTypes = ViewBag.Packages;
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("商品管理", "Index", "Product")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+@section PageJsSection
+{
+    <script type="text/javascript">
+        var sectionDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "@Url.Action("sectionlistp")",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        storeId: function () { return $("#StoreId").val(); }
+                    }
+                }
+            },
+            pageSize: 10,
+            serverPaging: true,
+            schema: {
+                data: "Data",
+                total: "TotalCount"
+            }
+        });
+        var productDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '@Url.Action("productlistp")',
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        skucode: function () { return $("#txtSkuCode").val(); },
+                        packagetype: function () { return $('#PackageType').val(); }
+
+                    }
+                }
+            },
+            pageSize: 10,
+            serverPaging: true,
+            schema: {
+                data: "Data",
+                total: "TotalCount",
+
+            }
+        });
+        $(document).ready(function () {
+            $("#product-grid").kendoGrid({
+                dataSource: productDataSource,
+                sortable: false,
+                autoBind: true,
+                pageable: {
+                    messages: {
+                        display: "{0} - {1} of {2} 记录",
+                        empty: "没有记录！",
+                    }
+                },
+                columns: [{
+                    field: "GenerateId",
+                    title: "选择",
+                    template: "<input type='radio' name='product' value='#: PackageType#-#: GenerateId#' />"
+                }, {
+                    field: "Id",
+                    title: "商品编码",
+
+                }, {
+                    field: "Name",
+                    title: "商品名"
+                },
+                {
+                    field: "ColorValueName",
+                    title: "颜色名"
+                }, {
+                    field: "SizeValueName",
+                    title: "尺码"
+                }, {
+                    field: "Price",
+                    title: "价格"
+                }, {
+                    field: "Amount",
+                    title: "库存"
+                }]
+
+            });
+            $("#section-grid").kendoGrid({
+                dataSource: sectionDataSource,
+                sortable: false,
+                autoBind: true,
+                pageable: {
+                    messages: {
+                        display: "{0} - {1} of {2} 记录",
+                        empty: "没有记录！",
+                    }
+                },
+                columns: [{
+                    field: "Id",
+                    title: "选择",
+                    template: "<input type='radio' name='section' value='#: Id#' />"
+                }, {
+                    field: "Id",
+                    title: "专柜编号",
+
+                }, {
+                    field: "Name",
+                    title: "专柜名"
+                }]
+
+            });
+            $("#StoreId").change(function () {
+                sectionDataSource.read();
+            });
+            $("#btnSearch").click(function () {
+                productDataSource.read();
+            });
+            $("#btnCreate").click(function () {
+                var baseUrl = '@Url.Action("Generate")';
+                var storeId = $("#StoreId").val();
+                var sectionId = $("#section-grid").find("input:checked").val();
+                var products = $("#product-grid").find("input:checked").val();
+                
+
+                if (storeId  && sectionId && products) {
+                    var query_string = 'storeId=' + storeId.toString();
+                    var productids = products.split('-');
+                    query_string += '&sectionId=' + sectionId.toString();
+                    query_string += '&packagetype=' + productids[0].toString();
+                    query_string += '&sourceid=' + productids[1].toString();
+                    window.open(baseUrl + '?' + query_string);
+                }
+                else
+                    alert("门店，专柜，商品必须选择！");
+
+            });
+            $("form:first").submit(function () {
+                return false;
+            });
+
+        });
+
+    </script>
+}
+<h2>@ViewBag.Title</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm("Create", "BarCode", FormMethod.Post))
+{
+    @Html.ValidationSummary(false)
+    <div>
+        <div class="row">
+            <div class="span3">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <h3>选择门店</h3>
+                    </div>
+                    <div class="widget-content">
+                        @Html.LabelFor(model => model.StoreId)
+                        @Html.DropDownListFor(model => model.StoreId, stores)
+                    </div>
+                </div>
+            </div>
+            <div class="span8">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <h3>选择专柜</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="k-content">
+                            <div id="section-grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="span12">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <h3>选择商品</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="span4">
+                            @Html.Label("", "商品sku：")
+                            @Html.TextBox("txtSkuCode")
+                        </div>
+                        <div class="span4">
+                            @Html.LabelFor(model => model.PackageType)
+                            @Html.DropDownListFor(model => model.PackageType, packageTypes)
+                        </div>
+                        <div class="span4">
+   
+                                <input id="btnSearch" type="button" class="btn" value="查询" />
+                        </div>
+
+                        <div class="span10">
+                            <div id="product-grid"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="span4">
+                <input type="button" value="生成" id="btnCreate" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}

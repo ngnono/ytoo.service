@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Yintai.Architecture.Common;
 using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Framework.ServiceLocation;
 
@@ -57,8 +58,11 @@ namespace Yintai.Hangzhou.WebApiCore
             }
             if (string.Compare(sign, signedValue, false) != 0)
             {
-                log.Debug(string.Format("input sign:{0} vs correct sign:{1}",sign,signedValue));
+                log.Debug(string.Format("input sign:{0} vs correct sign:{1}", sign, signedValue));
                 throw new ArgumentException("sign not match");
+            }
+            else {
+                filterContext.ActionParameters[Define.Channel] = channel;
             }
 
         }

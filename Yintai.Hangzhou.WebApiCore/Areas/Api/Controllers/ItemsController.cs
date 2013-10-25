@@ -25,7 +25,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _itemsDataService = itemsDataService;
         }
 
-        [RestfulAuthorize(true)]
         public ActionResult List(GetItemsListRequest request, int? authUid, UserModel authUser, [FetchUser(KeyName = "userid", IsCanMissing = true)]UserModel showUser)
         {
             if (showUser == null && authUid == null && authUser == null)
@@ -42,13 +41,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             request.UserModel = showUser ?? authUser;
 
-            var linq = Context.Set<FavoriteEntity>().Where(f => f.FavoriteSourceType == (int)SourceType.Product && f.User_Id == request.UserModel.Id && f.Status != (int)DataStatus.Deleted)
-                 .Join(Context.Set<ProductEntity>(), o => o.FavoriteSourceId, i => i.Id, (o, i) => new { F=o,P=i })
+            var linq = Context.Set<ProductEntity>().Where(f =>f.RecommendUser == request.UserModel.Id && f.Status != (int)DataStatus.Deleted)
                  .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image && r.Status != (int)DataStatus.Deleted)
-                          , o => o.P.Id, i => i.SourceId, (o, i) => new { F=o.F,P = o.P, R = i.OrderByDescending(ri => ri.SortOrder).FirstOrDefault() });
+                          , o => o.Id, i => i.SourceId, (o, i) => new { P = o, R = i.OrderByDescending(ri => ri.SortOrder).FirstOrDefault() });
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
-            linq = linq.OrderByDescending(l => l.F.CreatedDate).Skip(skipCount).Take(request.Pagesize);
+            linq = linq.OrderByDescending(l => l.P.CreatedDate).Skip(skipCount).Take(request.Pagesize);
             var result = linq.ToList().Select(l => new ItemsInfoResponse().FromEntity<ItemsInfoResponse>(l.P, o =>
             {
                 o.SourceType = (int)SourceType.Product;

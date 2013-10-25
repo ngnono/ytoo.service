@@ -52,7 +52,7 @@ namespace com.intime.jobscheduler.Job.Erp
             });
             int cursor = 0;
             int successCount = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             Stopwatch sw = new Stopwatch();
             sw.Start();
             while (cursor < totalCount)
@@ -109,7 +109,7 @@ namespace com.intime.jobscheduler.Job.Erp
                 
         }
 
-        private void EnsureProductContext(PRO_PICTURE product)
+        private bool EnsureProductContext(PRO_PICTURE product)
         {
             using(var erpDb= new ErpContext())
             {
@@ -122,17 +122,24 @@ namespace com.intime.jobscheduler.Job.Erp
                     if (colorEntity == null)
                     {
                         var exProduct = erpDb.Set<SUPPLY_MIN_PRICE_MX>().Where(ep => ep.PRODUCT_SID == product.PRODUCT_SID && ep.PRO_COLOR_SID == product.PRO_COLOR_SID).FirstOrDefault();
-                        ProductPropertySyncJob.SyncOne(exProduct.PRODUCT_SID, exProduct.PRO_STAN_SID ?? 0, exProduct.PRO_STAN_NAME, exProduct.PRO_COLOR_SID ?? 0, exProduct.PRO_COLOR);
+                        if (exProduct == null)
+                        {
+                            Log.Error(string.Format("product sid:{0} has no inventory record for color_sid:{1}",product.PRODUCT_SID,product.PRO_COLOR_SID));
+                            return false;
+                        }
+                        return ProductPropertySyncJob.SyncOne(exProduct.PRODUCT_SID, exProduct.PRO_STAN_SID ?? 0, exProduct.PRO_STAN_NAME, exProduct.PRO_COLOR_SID ?? 0, exProduct.PRO_COLOR);
                     }
          
                 }
              
             }
+            return true;
         }
 
         private void SyncOne(PRO_PICTURE product)
         {
-            EnsureProductContext(product);
+            if (!EnsureProductContext(product))
+                return ;
             var log = LogManager.GetLogger(this.GetType());
             //download remote picture
             string exPicDomain = ConfigurationManager.AppSettings["EXPIC_DOMAIN"];
@@ -180,11 +187,19 @@ namespace com.intime.jobscheduler.Job.Erp
                     });
                     existProduct.IsHasImage = true;
                     existProduct.UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now;
+                    existProduct.Status = (int)DataStatus.Normal;
                     db.SaveChanges();
                 }
             }
 
             File.Delete(filePath);
+        }
+        private static ILog Log
+        {
+            get
+            {
+                return LogManager.GetLogger(typeof(ProductSyncJob));
+            }
         }
     }
 }

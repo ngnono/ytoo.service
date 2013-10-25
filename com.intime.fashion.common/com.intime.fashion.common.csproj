@@ -69,6 +69,7 @@
     <Compile Include="Alipay\AlipayNotify.cs" />
     <Compile Include="Alipay\RSA.cs" />
     <Compile Include="AwsHelper.cs" />
+    <Compile Include="Aws\AwsConfig.cs" />
     <Compile Include="CommonUtil.cs" />
     <Compile Include="ConfigManager.cs">
       <SubType>Code</SubType>
@@ -81,6 +82,7 @@
     <Compile Include="Wxpay\AccessToken.cs" />
     <Compile Include="Wxpay\Extension.cs" />
     <Compile Include="Wxpay\Util.cs" />
+    <Compile Include="Wxpay\WxNativeUrl.cs" />
     <Compile Include="Wxpay\WxNotify.cs" />
     <Compile Include="Wxpay\WxPackage.cs" />
     <Compile Include="Wxpay\WxPayConfig.cs" />

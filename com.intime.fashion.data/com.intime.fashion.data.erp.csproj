@@ -48,8 +48,6 @@
     <Reference Include="System.Data.Entity" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extension\PRO_CLASS_DICT.cs" />
-    <Compile Include="Extension\SUPPLY_MIN_PRICE_MX.cs" />
     <Compile Include="Models\BRAND.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\ErpContext.cs" />

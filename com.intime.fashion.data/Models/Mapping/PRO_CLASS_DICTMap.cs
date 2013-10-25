@@ -45,6 +45,9 @@ namespace com.intime.fashion.data.erp.Models.Mapping
             this.Property(t => t.CLASS_NUM_7)
                 .HasMaxLength(60);
 
+            this.Property(t => t.OPT_REAL_NAME)
+                .HasMaxLength(40);
+
             // Table & Column Mappings
             this.ToTable("PRO_CLASS_DICT", "YINTAIWEB");
             this.Property(t => t.SID).HasColumnName("SID");
@@ -70,6 +73,9 @@ namespace com.intime.fashion.data.erp.Models.Mapping
             this.Property(t => t.CLASS_NUM_6).HasColumnName("CLASS_NUM_6");
             this.Property(t => t.CLASS_NUM_7).HasColumnName("CLASS_NUM_7");
             this.Property(t => t.VERSION).HasColumnName("VERSION");
+            this.Property(t => t.OPT_USER_SID).HasColumnName("OPT_USER_SID");
+            this.Property(t => t.OPT_REAL_NAME).HasColumnName("OPT_REAL_NAME");
+            this.Property(t => t.OPT_UPDATE_TIME).HasColumnName("OPT_UPDATE_TIME");
         }
     }
 }

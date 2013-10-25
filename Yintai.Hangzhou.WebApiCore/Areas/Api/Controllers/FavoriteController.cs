@@ -49,25 +49,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._favoriteDataService.GetFavoriteList(request) };
         }
 
-        public RestfulResult Daren(DarenFavoriteListRequest request, [FetchUser(KeyName = "userid")]UserModel showUser)
-        {
-            if (System.String.Compare(request.Method, DefineRestfulMethod.List, System.StringComparison.OrdinalIgnoreCase) != 0)
-            {
-                return new RestfulResult { Data = new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "方法错误" } };
-            }
-
-            //判断当前被读取的收藏列表的USER，是否是达人or 店长
-
-            if (showUser == null)
-            {
-                return new RestfulResult { Data = new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "user未找到" } };
-            }
-
-            request.UserModel = showUser;
-
-            return new RestfulResult { Data = this._favoriteDataService.GetDarenFavoriteList(request) };
-        }
-
+       
         [RestfulAuthorize]
         public RestfulResult Destroy(FavoriteDestroyRequest request, int? authuid, UserModel authUser)
         {
@@ -85,6 +67,55 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 request.SourceType = (int)SourceType.Product;
             }
             var linq = Context.Set<FavoriteEntity>().Where(p => p.User_Id == authUser.Id && p.FavoriteSourceType == request.SourceType && p.Status != (int)DataStatus.Deleted);
+            if (request.SourceType == (int)SourceType.Product)
+            {
+                var linq2 = linq.Join(Context.Set<ProductEntity>(), o => o.FavoriteSourceId, i => i.Id, (o, i) => new { P = i, F = o })
+                          .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image), o => o.P.Id, i => i.SourceId, (o, i) => new { P = o.P, F = o.F, R = i });
+                int totalCount = linq2.Count();
+                int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+                linq2 = linq2.OrderByDescending(l => l.P.CreatedDate).Skip(skipCount).Take(request.Pagesize);
+
+                return this.RenderSuccess<PagerInfoResponse<ProductInfoResponse>>(r =>
+                {
+                    r.Data = new PagerInfoResponse<ProductInfoResponse>(request.PagerRequest, totalCount)
+                    {
+                        Items = linq2.ToList().Select(l => new ProductInfoResponse().FromEntity<ProductInfoResponse>(l.P, p =>
+                        {
+                            p.ResourceInfoResponses = l.R.OrderByDescending(pr => pr.SortOrder).Select(pr => new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(pr)).ToList();
+                        })).ToList()
+                    };
+                });
+            }
+            else
+            {
+                var linq2 = linq.Join(Context.Set<PromotionEntity>(), o => o.FavoriteSourceId, i => i.Id, (o, i) => new { P = i, F = o })
+                        .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Promotion && r.Type == (int)ResourceType.Image), o => o.P.Id, i => i.SourceId, (o, i) => new { P = o.P, F = o.F, R = i });
+                int totalCount = linq2.Count();
+                int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+                linq2 = linq2.OrderByDescending(l => l.P.CreatedDate).Skip(skipCount).Take(request.Pagesize);
+
+                return this.RenderSuccess<PagerInfoResponse<PromotionInfoResponse>>(r =>
+                {
+                    r.Data = new PagerInfoResponse<PromotionInfoResponse>(request.PagerRequest, totalCount)
+                    {
+                        Items = linq2.ToList().Select(l => new PromotionInfoResponse().FromEntity<PromotionInfoResponse>(l.P, p =>
+                        {
+                            p.ResourceInfoResponses = l.R.OrderByDescending(pr => pr.SortOrder).Select(pr => new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(pr)).ToList();
+                        })).ToList()
+                    };
+                });
+            }
+
+
+        }
+
+        public ActionResult Daren(GetFavorListRequest request,int userId)
+        {
+            if (!(new int[] { (int)SourceType.Product, (int)SourceType.Promotion }).Contains(request.SourceType))
+            {
+                request.SourceType = (int)SourceType.Product;
+            }
+            var linq = Context.Set<FavoriteEntity>().Where(p => p.User_Id == userId && p.FavoriteSourceType == request.SourceType && p.Status != (int)DataStatus.Deleted);
             if (request.SourceType == (int)SourceType.Product)
             {
                 var linq2 = linq.Join(Context.Set<ProductEntity>(), o => o.FavoriteSourceId, i => i.Id, (o, i) => new { P = i, F = o })

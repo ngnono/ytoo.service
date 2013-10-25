@@ -20,6 +20,9 @@ namespace com.intime.fashion.data.erp.Models.Mapping
             this.Property(t => t.PRO_STAN_NAME)
                 .HasMaxLength(100);
 
+            this.Property(t => t.OPT_REAL_NAME)
+                .HasMaxLength(40);
+
             // Table & Column Mappings
             this.ToTable("SUPPLY_MIN_PRICE_MX", "YINTAIWEB");
             this.Property(t => t.SID).HasColumnName("SID");
@@ -33,6 +36,9 @@ namespace com.intime.fashion.data.erp.Models.Mapping
             this.Property(t => t.PRO_STAN_NAME).HasColumnName("PRO_STAN_NAME");
             this.Property(t => t.PRO_COLOR_SID).HasColumnName("PRO_COLOR_SID");
             this.Property(t => t.PRO_STAN_SID).HasColumnName("PRO_STAN_SID");
+            this.Property(t => t.OPT_USER_SID).HasColumnName("OPT_USER_SID");
+            this.Property(t => t.OPT_REAL_NAME).HasColumnName("OPT_REAL_NAME");
+            this.Property(t => t.OPT_UPDATE_TIME).HasColumnName("OPT_UPDATE_TIME");
 
             // Relationships
             this.HasRequired(t => t.SUPPLY_MIN_PRICE)

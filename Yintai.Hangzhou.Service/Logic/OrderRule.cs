@@ -1,12 +1,15 @@
 ﻿using com.intime.fashion.common;
+using com.intime.fashion.common.Aws;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Web.Mvc;
+using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Contract.DTO.Request;
@@ -73,9 +76,6 @@ namespace Yintai.Hangzhou.Service.Logic
             };
           
         }
-
-
-
         public static OrderComputeResult ComputeFee()
         {
             return new OrderComputeResult()
@@ -87,7 +87,6 @@ namespace Yintai.Hangzhou.Service.Logic
                 TotalQuantity = 0
             };
         }
-
         public static RestfulResult Create(OrderRequest request,UserModel authUser,out bool createSuccess)
         {
             createSuccess = false;
@@ -290,6 +289,51 @@ namespace Yintai.Hangzhou.Service.Logic
                     return CommonUtil.RenderError(r => r.Message = "失败");
                 }
             }
+        }
+        public static bool OrderPaid2Erp(OrderTransactionEntity order)
+        {
+            string vipCard = string.Empty;
+            var log = ServiceLocator.Current.Resolve<ILog>();
+            if (order.OutsiteType.HasValue && order.OutsiteType.Value == (int)OutsiteType.WX
+                && !string.IsNullOrEmpty(order.OutsiteUId))
+            {
+                try
+                {
+                    AwsHelper.SendHttpMessage(string.Format("{0}/card/find", AwsConfig.BASE_URL), new
+                    {
+                        uid = order.OutsiteUId
+                    }, AwsConfig.PUBLIC_KEY, AwsConfig.PRIVATE_KEY, r => vipCard = r.data, null);
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex);
+                }
+            }
+            var paymentName = string.Empty;
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var paymentEntity = db.Set<PaymentMethodEntity>().Where(p => p.Code == order.PaymentCode).FirstOrDefault();
+                if (paymentEntity == null)
+                {
+                    log.Error(string.Format("orderno :{1} not support payment code paid:{0}",order.PaymentCode,order.OrderNo));
+                    return false;
+                }
+                paymentName = paymentEntity.Name;
+            }
+            bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "WebOrdersPaid", dealCode = order.OrderNo, PAY_TYPE = order.PaymentCode,PaymentName = paymentName, TRADE_NO = order.TransNo,CardNo=vipCard }, null
+                          , null);
+            if (isSuccess)
+            {
+                using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+                {
+                    order.IsSynced = true;
+                    order.SyncDate = DateTime.Now;
+                    db.Entry(order).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+               
+            }
+            return isSuccess;
         }
 
         public static DbContext Context

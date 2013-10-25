@@ -22,6 +22,7 @@ using Yintai.Hangzhou.Contract.Customer;
 using Yintai.Hangzhou.Contract.DTO.Request.Customer;
 using Yintai.Hangzhou.Service.Logic;
 using Yintai.Hangzhou.Model;
+using com.intime.fashion.common;
 
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
@@ -80,7 +81,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     PaymentContent = JsonConvert.SerializeObject(sPara)
                                 });
 
-                                _orderTranRepo.Insert(new OrderTransactionEntity()
+                                var orderTransaction = _orderTranRepo.Insert(new OrderTransactionEntity()
                                 {
                                     Amount = amount,
                                     OrderNo = out_trade_no,
@@ -107,6 +108,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     });
                                 }
                                 ts.Complete();
+                                //notify sync async
+                                Task.Factory.StartNew(() =>
+                                {
+                                    OrderRule.OrderPaid2Erp(orderTransaction);
+                                });
                             }
                         }
 
@@ -125,7 +131,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
         }
 
-        public ActionResult NotifyWx()
+        public ActionResult NotifyWx(WxNotifyPostRequest request)
         {
             Dictionary<string, string> sPara = GetQueryStringParams();
 
@@ -160,14 +166,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 PaymentContent = JsonConvert.SerializeObject(sPara)
                             });
 
-                            _orderTranRepo.Insert(new OrderTransactionEntity()
+                           var orderTransaction= _orderTranRepo.Insert(new OrderTransactionEntity()
                             {
                                 Amount = amount,
                                 OrderNo = orderEntity.OrderNo,
                                 CreateDate = DateTime.Now,
                                 IsSynced = false,
                                 PaymentCode = WxPayConfig.PaymentCode,
-                                TransNo = trade_no
+                                TransNo = trade_no,
+                                OutsiteType = (int)OutsiteType.WX,
+                                OutsiteUId = request.OpenId
                             });
                             if (orderEntity.Status != (int)OrderStatus.Paid && orderEntity.TotalAmount <= amount)
                             {
@@ -186,8 +194,80 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     OrderNo = orderEntity.OrderNo,
                                     Type = (int)OrderOpera.CustomerPay
                                 });
+                                //notify sync async
+                                Task.Factory.StartNew(() =>
+                                {
+                                    OrderRule.OrderPaid2Erp(orderTransaction);
+                                });
+
                             }
                             ts.Complete();
+
+                        }
+                    }
+
+                }
+                return Content("success");
+
+            }
+            else
+            {
+                return Content("fail");
+            }
+        }
+
+        public ActionResult NotifyWxErp(WxNotifyPostRequest request)
+        {
+            Dictionary<string, string> sPara = GetQueryStringParams();
+
+            if (sPara.Count > 0)
+            {
+                var requestSign = sPara["sign"];
+                sPara.Remove("sign");
+                var notifySigned = Util.NotifySign(sPara);
+
+                if (string.Compare(requestSign, notifySigned, true) != 0)
+                    return Content("fail");
+                //external order no
+                string out_trade_no = sPara["out_trade_no"];
+                string trade_no = sPara["transaction_id"];
+                int trade_status = int.Parse(sPara["trade_state"]);
+                string bank_bill_no = sPara["bank_billno"];
+                var amount = decimal.Parse(sPara["total_fee"]) / 100;
+                if (trade_status == 0)
+                {
+              
+                    var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no && p.PaymentCode == WxPayConfig.PaymentCode).FirstOrDefault();
+
+                    if (paymentEntity == null)
+                    {
+                        using (var ts = new TransactionScope())
+                        {
+                            _paymentNotifyRepo.Insert(new PaymentNotifyLogEntity()
+                            {
+                                CreateDate = DateTime.Now,
+                                OrderNo = out_trade_no,
+                                PaymentCode = WxPayConfig.PaymentCode,
+                                PaymentContent = JsonConvert.SerializeObject(sPara)
+                            });
+
+                           var orderTransaction= _orderTranRepo.Insert(new OrderTransactionEntity()
+                            {
+                                Amount = amount,
+                                OrderNo = out_trade_no,
+                                CreateDate = DateTime.Now,
+                                IsSynced = false,
+                                PaymentCode = WxPayConfig.PaymentCode,
+                                TransNo = trade_no,
+                                OutsiteType = (int)OutsiteType.WX,
+                                OutsiteUId = request.OpenId
+                            });
+                            ts.Complete();
+                            //notify sync async
+                            Task.Factory.StartNew(() =>
+                            {
+                                OrderRule.OrderPaid2Erp(orderTransaction);
+                            });
                         }
                     }
 
@@ -212,13 +292,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var productIds = productId.Split('-');
             if (productIds.Length < 2)
                 return new XmlResult(composePackageError(r => r.RetErrMsg = "商品信息有误！"));
-
-            if (string.Compare(productIds[0], "1", true) == 0)
-                return doOrderPackage(productIds[1], request);
-            else if (string.Compare(productIds[0], "2", true) == 0)
-                return doProductPackage(request);
-            else
-                return new XmlResult(composePackageError(r => r.RetErrMsg = "订单类型有误！"));
+            var packageType = int.Parse(productIds[0]);
+            switch (packageType)
+            { 
+                case (int)WxPackageType.Order:
+                    return doOrderPackage(productIds[1], request);
+                case (int)WxPackageType.Sku:
+                     return doSkuPackage(request);
+                case (int)WxPackageType.Product:
+                     return doProductPackage(request);
+                case (int)WxPackageType.ErpOrder:
+                     return doErpOrderPackage(productIds[1],request);
+                default:
+                    return new XmlResult(composePackageError(r => r.RetErrMsg = "订单类型有误！"));
+            }
+          
+                
         }
 
         private ActionResult doOrderPackage(string orderNo, WxPackageGetRequest request)
@@ -241,12 +330,31 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 TransportFee = Util.Feng4Decimal(orderEntity.O.ShippingFee ?? 0m),
                 SPBill_Create_IP = clientIP(),
                 Time_Start = orderEntity.O.CreateDate.ToString("yyyyMMddHHmmss"),
-                Time_End = orderEntity.O.CreateDate.AddHours(4).ToString("yyyyMMddHHmmss")
+                Time_End = orderEntity.O.CreateDate.AddHours(0.5).ToString("yyyyMMddHHmmss")
 
             }));
         }
-
-        private ActionResult doProductPackage(WxPackageGetRequest request)
+        private ActionResult doErpOrderPackage(string orderNo, WxPackageGetRequest request)
+        {
+           if (string.IsNullOrEmpty(orderNo))
+                return new XmlResult(composePackageError(r => r.RetErrMsg = "订单不存在！"));
+           bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "WebOrderDetail", dealCode = orderNo}, null
+                        , null);
+            if (!isSuccess)
+                return new XmlResult(composePackageError(r => r.RetErrMsg = "订单无法获取！"));
+            dynamic erpOrder = null;
+            return new XmlResult(composePackageSuccess(r => r.Package = new WxPackage()
+            {
+                Body = erpOrder.ProductName,
+                Attach = erpOrder.ProductDesc,
+                OutTradeNo = orderNo,
+                TotalFee = Util.Feng4Decimal(erpOrder.TotalAmount),
+                TransportFee = 0,
+                SPBill_Create_IP = clientIP(),
+                NotifyUrl = WxPayConfig.NOTIFY_ERP_URL
+            }));
+        }
+        private ActionResult doSkuPackage(WxPackageGetRequest request)
         {
             var productIds = request.ProductId.Split('-');
             var productId = int.Parse(productIds[1]);
@@ -275,11 +383,21 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             //step2: create order
             bool isCreateSuccess;
+            var sectionEntity = Context.Set<SectionEntity>().Where(s => s.Id == sectionId)
+                               .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => new { Store = i, Section = o }).FirstOrDefault();
+            StringBuilder additional = new StringBuilder();
+            if (sectionEntity == null)
+                additional.Append(linq.P.Description);
+            else
+                additional.AppendFormat("{0}-{1}-{2}", sectionEntity.Store.Name, sectionEntity.Section.Location, sectionEntity.Section.Name);
             var orderRequestModel = new OrderRequestModel()
             {
                 InvoiceDetail = string.Empty,
                 InvoiceTitle = string.Empty,
                 NeedInvoice = false,
+                ShippingAddress = new ShippingAddressModel(){
+                     ShippingAddress = additional.ToString()
+                },
                 Memo = string.Empty,
                 Payment = new PaymentModel()
                 {
@@ -319,10 +437,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var orderModel = orderCreateResponse.Data as OrderResponse;
             var orderNewEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == orderModel.OrderNo).FirstOrDefault();
             //step3: compose package message
+           
             return new XmlResult(composePackageSuccess(r => r.Package = new WxPackage()
             {
-                Body = linq.P.Name,
-                Attach = linq.P.Description,
+                Body = string.Format("{0}-颜色:{1} 尺码:{2}", linq.P.Name, linq.Color.ValueDesc, linq.Size.ValueDesc),
+                Attach = additional.ToString(),
                 OutTradeNo = orderModel.ExOrderNo,
                 TotalFee = Util.Feng4Decimal(orderNewEntity.TotalAmount),
                 TransportFee = Util.Feng4Decimal(orderNewEntity.ShippingFee ?? 0m),
@@ -333,7 +452,109 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }));
 
         }
+        private ActionResult doProductPackage(WxPackageGetRequest request)
+        {
+            var productIds = request.ProductId.Split('-');
+            var productId = int.Parse(productIds[1]);
+            var storeId = int.Parse(productIds[2]);
+            var sectionId = int.Parse(productIds[3]);
+            var linq = Context.Set<ProductEntity>().Where(p=>p.Id == productId)
+                        .Join(Context.Set<InventoryEntity>(), o => o.Id, i => i.ProductId, (o, i) => new { I = i, P = o })
+                        .Join(Context.Set<ProductPropertyValueEntity>(), o => o.I.PColorId, i => i.Id, (o, i) => new { I = o.I, P = o.P, Color = i })
+                        .Join(Context.Set<ProductPropertyValueEntity>(), o => o.I.PSizeId, i => i.Id, (o, i) => new { I = o.I, P = o.P, Color = o.Color, Size = i })
+                        .OrderByDescending(p=>p.I.Amount).FirstOrDefault();
+            if (linq == null)
+                return new XmlResult(composePackageError(r => r.RetErrMsg = "商品不存在！"));
 
+            if (linq.I.Amount < 1)
+                return new XmlResult(composePackageError(r => r.RetErrMsg = "商品库存不足！"));
+
+            //step1: register user if not exist
+            var userEntity = _customerService.OutSiteLogin2(new OutSiteLoginRequest()
+            {
+                OutsiteNickname = request.OpenId,
+                OutsiteUid = request.OpenId,
+                OutsiteType = (int)OutsiteType.WX
+            });
+            if (userEntity == null)
+                return new XmlResult(composePackageError(r => r.RetErrMsg = "用户信息有误！"));
+
+            //step2: create order
+            bool isCreateSuccess;
+            var sectionEntity = Context.Set<SectionEntity>().Where(s => s.Id == sectionId)
+                               .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => new { Store = i, Section = o }).FirstOrDefault();
+            StringBuilder additional = new StringBuilder();
+            if (sectionEntity == null)
+                additional.Append(linq.P.Description);
+            else
+                additional.AppendFormat("{0}-{1}-{2}", sectionEntity.Store.Name, sectionEntity.Section.Location, sectionEntity.Section.Name);
+            var orderRequestModel = new OrderRequestModel()
+            {
+                InvoiceDetail = string.Empty,
+                InvoiceTitle = string.Empty,
+                NeedInvoice = false,
+                Memo = string.Empty,
+                ShippingAddress = new ShippingAddressModel(){
+                     ShippingAddress = additional.ToString()
+                },
+
+                Payment = new PaymentModel()
+                {
+                    PaymentCode = WxPayConfig.PaymentCode,
+                    PaymentName = WxPayConfig.PaymentName,
+
+                },
+                Products = new List<OrderProductDetailRequest>() { 
+                     new OrderProductDetailRequest(){
+                          ProductId = linq.P.Id,
+                          Desc = linq.P.Description,
+                           Quantity = 1,
+                            SectionId = sectionId,
+                             StoreId = storeId,
+                              Properties = new ProductPropertyValueRequest(){
+                                 ColorValueId = linq.Color.Id,
+                                  ColorValueName = linq.Color.ValueDesc,
+                                   SizeValueId = linq.Size.Id,
+                                    SizeValueName = linq.Size.ValueDesc
+                              }
+                     }
+                }
+
+            };
+            var orderCreateResponse = OrderRule.Create(new OrderRequest()
+            {
+                Order = JsonConvert.SerializeObject(orderRequestModel),
+                Channel = WxPayConfig.ORDER_SOURCE
+            },
+             new UserModel()
+             {
+                 Id = userEntity.Id,
+                 Nickname = userEntity.Nickname
+             }, out isCreateSuccess);
+            if (!isCreateSuccess)
+                return new XmlResult(composePackageError(r => r.RetErrMsg = "订单无法显示！"));
+            var orderModel = orderCreateResponse.Data as OrderResponse;
+            var orderNewEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == orderModel.OrderNo).FirstOrDefault();
+            //step3: compose package message
+           
+            if (sectionEntity == null)
+                additional.Append(linq.P.Description);
+            else
+                additional.AppendFormat("{0}-{1}-{2}", sectionEntity.Store.Name, sectionEntity.Section.Location, sectionEntity.Section.Name);
+            return new XmlResult(composePackageSuccess(r => r.Package = new WxPackage()
+            {
+                Body = string.Format("{0}-颜色:{1} 尺码:{2}",linq.P.Name,linq.Color.ValueDesc,linq.Size.ValueDesc),
+                Attach = additional.ToString(),
+                OutTradeNo = orderModel.ExOrderNo,
+                TotalFee = Util.Feng4Decimal(orderNewEntity.TotalAmount),
+                TransportFee = Util.Feng4Decimal(orderNewEntity.ShippingFee ?? 0m),
+                SPBill_Create_IP = clientIP(),
+                Time_Start = orderNewEntity.CreateDate.ToString("yyyyMMddHHmmss"),
+                Time_End = orderNewEntity.CreateDate.AddHours(4).ToString("yyyyMMddHHmmss")
+
+            }));
+
+        }
         private WxPackageGetResponse composePackageError(Action<WxPackageGetResponse> more)
         {
             var response = new WxPackageGetResponse()

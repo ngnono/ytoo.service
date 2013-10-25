@@ -39,7 +39,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public string Memo { get; set; }
 
         public int ShippingType { get {
-            if (ShippingAddress == null)
+            if (ShippingAddress == null ||ShippingAddress.ShippingZipCode==null)
                 return (int)ShipType.Self;
             return (int)ShipType.TrdParty;
         } }

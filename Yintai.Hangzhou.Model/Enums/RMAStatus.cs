@@ -26,6 +26,7 @@ namespace Yintai.Hangzhou.Model.Enums
         PrintRMA = 14,
         [Description("取消")]
         Void = -10,
-        Reject
+         [Description("审核不通过")]
+        Reject = 15
     }
 }

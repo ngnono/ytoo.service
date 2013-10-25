@@ -36,7 +36,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
                return this.RenderError(r => r.Message = "RMA 不存在");
            var status = (int)RMAStatus.PassConfirmed;
            var operation = "审核通过！";
-           if (!request.IsPass)
+           if (!(request.IsPass))
            {
                status = (int)RMAStatus.Reject;
                operation = "审核不通过！";
@@ -46,7 +46,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
 
                rmaEntity.Status = status;
                rmaEntity.UpdateDate = DateTime.Now;
-               if (!request.IsPass)
+               rmaEntity.MailAddress = request.MailAddress;
+               if (!(request.IsPass))
                    rmaEntity.RejectReason = request.Memo;
                _rmaRepo.Update(rmaEntity);
 
@@ -58,7 +59,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
                });
                ts.Complete();
            }
-           return this.RenderSuccess<BaseResponse>(null);
+           return this.RenderSuccess<dynamic>(r => r.Data = new { mailaddress = request.MailAddress });
        }
 
        [HttpPost]

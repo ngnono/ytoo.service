@@ -24,7 +24,7 @@ namespace com.intime.fashion.common.Wxpay
         }
 
 
-        private static string SHA(string value)
+        public static string SHA(string value)
        {
            byte[] hashData = SHA1.Create().ComputeHash((Encoding.UTF8.GetBytes(value))); 
            var hashText = new StringBuilder();

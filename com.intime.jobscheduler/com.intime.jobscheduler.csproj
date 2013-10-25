@@ -169,6 +169,7 @@
     <Compile Include="Job\Erp\StoreSyncJob.cs" />
     <Compile Include="Job\ExpireStoreCouponReturnPointsJob.cs" />
     <Compile Include="Job\ExternalProductSyncJob.cs" />
+    <Compile Include="Job\JobConfig.cs" />
     <Compile Include="Job\JobType.cs" />
     <Compile Include="Job\PointsFromApp2GroupJob.cs" />
     <Compile Include="Job\Erp\ProductInventorySyncJob.cs" />

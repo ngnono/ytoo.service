@@ -55,15 +55,13 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
          public string InvoiceDetail { get; set; }
         [DataMember(Name = "shippingfee")]
          public Nullable<decimal> ShippingFee { get; set; }
-         [DataMember(Name = "shippingno")]
-         public string ShippingNo { get; set; }
         [DataMember(Name = "shippingvianame")]
          public string ShippingViaName { get; set; }
         [DataMember(Name = "memo")]
          public string Memo { get; set; }
+        [DataMember(Name="ships")]
+        public IEnumerable<MyShipResponse> Outbounds { get; set; }
         
-       
-
         [DataMember(Name="products")]   
         public IEnumerable<MyOrderItemDetailResponse> Products { get; set; }
         [DataMember(Name = "rmas")]
@@ -108,8 +106,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string SkuCode { get; set; }
         [DataMember(Name = "colorvalue")]
         public string ColorValueName { get; set; }
+        [DataMember(Name = "colorvalueid")]
+        public string ColorValueId { get; set; }
         [DataMember(Name = "sizevalue")]
         public string SizeValueName { get; set; }
+        [DataMember(Name = "sizevalueid")]
+        public string SizeValueId { get; set; }
         [DataMember(Name = "brandname")]
         public string BrandName { get; set; }
         [DataMember(Name = "brand2name")]
@@ -132,7 +134,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
                 return ((Yintai.Hangzhou.Model.Enums.RMAType)RMAType).ToFriendlyString();
             }
         }
-        [IgnoreDataMember]
+        [DataMember(Name="statust")]
         public int Status { get; set; }
         [DataMember(Name = "status")]
         public string RMAF
@@ -166,6 +168,15 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public Nullable<decimal> ActualAmount { get; set; }
         [DataMember(Name = "chargegiftfee")]
         public decimal? ChargeGiftFee { get; set; }
+        [DataMember(Name = "mailaddress")]
+        public string MailAddress { get; set; }
 
+    }
+    [DataContract]
+     public class MyShipResponse : BaseResponse {
+        [DataMember(Name="shipvianame")]
+        public string ShipViaName { get; set; }
+        [DataMember(Name = "shipno")]
+        public string ShipNo { get; set; }
     }
 }

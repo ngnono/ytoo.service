@@ -77,6 +77,45 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             };
             return new RestfulResult { Data = new ExecuteResult<PagerInfoResponse<GetShipCityDetailResponse>>(response) };
         }
+
+        /// <summary>
+        /// return all support rma reasons
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SupportRMAReasons()
+        {
+            var linq = Context.Set<RMAReasonEntity>().Where(p => p.Status == (int)DataStatus.Normal)
+                       .Select(l => new RMAReasonResponse { 
+                        Reason = l.Reason,
+                        Id = l.Id
+                       });
+            var response = new PagerInfoResponse<RMAReasonResponse>(new PagerRequest(), linq.Count())
+            {
+                Items = linq.ToList()
+            };
+            return new RestfulResult { Data = new ExecuteResult<PagerInfoResponse<RMAReasonResponse>>(response) };
+        }
+
+        /// <summary>
+        /// return all support ship vias
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SupportShipvias()
+        {
+            
+            var linq = Context.Set<ShipViaEntity>().Where(p => p.Status == (int)DataStatus.Normal)
+                       .Select(l => new ShipViaResponse
+                       {
+                          Name = l.Name,
+                           Id = l.Id,
+                           IsOnline = l.IsOnline??false
+                       });
+            var response = new PagerInfoResponse<ShipViaResponse>(new PagerRequest(), linq.Count())
+            {
+                Items = linq.ToList()
+            };
+            return new RestfulResult { Data = new ExecuteResult<PagerInfoResponse<ShipViaResponse>>(response) };
+        }
         /// <summary>
         /// return all preconfigured messages
         /// </summary>

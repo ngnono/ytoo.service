@@ -16,6 +16,7 @@ namespace com.intime.fashion.common.Wxpay
         public static readonly string PARTER_KEY = ConfigurationManager.AppSettings["WX_PARTER_KEY"];
 
         public static readonly string NOTIFY_URL = ConfigurationManager.AppSettings["WX_NOTIFY_URL"];
+        public static readonly string NOTIFY_ERP_URL = ConfigurationManager.AppSettings["WX_NOTIFY_ERP_URL"];
         public static string PaymentCode
         {
             get
@@ -33,6 +34,13 @@ namespace com.intime.fashion.common.Wxpay
     { 
         Success = 0,
         RequestError = 1
+    }
+    public enum WxPackageType
+    { 
+        Order = 1,
+        Sku = 2,
+        Product = 3,
+        ErpOrder = 4
     }
     public static class WxPaySignMethod
     {

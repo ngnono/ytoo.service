@@ -137,6 +137,7 @@
     <Compile Include="Models\Mapping\RMAItemMap.cs" />
     <Compile Include="Models\Mapping\RMALogMap.cs" />
     <Compile Include="Models\Mapping\RMAMap.cs" />
+    <Compile Include="Models\Mapping\RMAReasonMap.cs" />
     <Compile Include="Models\Mapping\SectionMap.cs" />
     <Compile Include="Models\Mapping\ShippingAddressMap.cs" />
     <Compile Include="Models\Mapping\ShipViaMap.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Models\RMA2Ex.cs" />
     <Compile Include="Models\RMAItem.cs" />
     <Compile Include="Models\RMALog.cs" />
+    <Compile Include="Models\RMAReason.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\ShippingAddress.cs" />
     <Compile Include="Models\ShipVia.cs" />

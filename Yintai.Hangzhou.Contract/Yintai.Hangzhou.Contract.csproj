@@ -116,6 +116,7 @@
     <Compile Include="DTO\Request\Pass\PassCreateRequest.cs" />
     <Compile Include="DTO\Request\Share\ShareRequest.cs" />
     <Compile Include="DTO\Request\Store\StoreRequest.cs" />
+    <Compile Include="DTO\Request\WxNotifyPostRequest.cs" />
     <Compile Include="DTO\Request\WxPackageGetRequest.cs" />
     <Compile Include="DTO\Response\Card\CardInfoResponse.cs" />
     <Compile Include="DTO\Response\Comment\CommentCollectionResponse.cs" />
@@ -141,7 +142,9 @@
     <Compile Include="DTO\Response\PaymentResponse.cs" />
     <Compile Include="DTO\Response\Point\PointInfoResponse.cs" />
     <Compile Include="DTO\Response\RMAInfoResponse.cs" />
+    <Compile Include="DTO\Response\RMAReasonResponse.cs" />
     <Compile Include="DTO\Response\SelfAddressResponse.cs" />
+    <Compile Include="DTO\Response\ShipViaResponse.cs" />
     <Compile Include="DTO\Response\SpecialTopic\SpecialTopic.cs" />
     <Compile Include="DTO\Response\Promotion\PromotionInfoResponse.cs" />
     <Compile Include="DTO\Response\Resources\ResourceInfoResponse.cs" />

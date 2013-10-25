@@ -58,7 +58,7 @@ namespace com.intime.jobscheduler.Job.Erp
             });
             int cursor = 0;
             int successCount = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             Stopwatch sw = new Stopwatch();
             sw.Start();
             while (cursor < totalCount)

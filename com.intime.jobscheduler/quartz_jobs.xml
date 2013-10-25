@@ -339,7 +339,7 @@
       </cron>
     </trigger>
     -->
-    <!--
+
     <job>
       <name>ERP-GroupSync</name>
       <group>Fashion</group>
@@ -350,7 +350,7 @@
       <job-data-map>
         <entry>
           <key>isRebuild</key>
-          <value>true</value>
+          <value>false</value>
         </entry>
         <entry>
           <key>intervalOfSecs</key>
@@ -358,23 +358,23 @@
         </entry>
         <entry>
           <key>includeStore</key>
-          <value>true</value>
+          <value>false</value>
         </entry>
         <entry>
           <key>includeSection</key>
-          <value>true</value>
+          <value>false</value>
         </entry>
         <entry>
           <key>includeCat</key>
-          <value>true</value>
+          <value>false</value>
         </entry>
         <entry>
           <key>includeBrand</key>
-          <value>true</value>
+          <value>false</value>
         </entry>
         <entry>
           <key>includeProd</key>
-          <value>true</value>
+          <value>false</value>
         </entry>
         <entry>
           <key>includeInv</key>
@@ -398,7 +398,8 @@
         <cron-expression>0/30 * * * * ?</cron-expression>
       </cron>
     </trigger>
-    -->
+ 
+    <!--
     <job>
       <name>ERP-OrderSync</name>
       <group>Fashion</group>
@@ -459,6 +460,7 @@
         <cron-expression>0/30 * * * * ?</cron-expression>
       </cron>
     </trigger>
+    -->
   </schedule>
 
 </job-scheduling-data>

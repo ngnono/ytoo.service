@@ -137,6 +137,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                         .ToList()
                         .Select(r => new MyRMAResponse().FromEntity<MyRMAResponse>(r));
 
+                o.Outbounds = dbContext.Set<OutboundEntity>().Where(ob => ob.SourceType == (int)OutboundType.Order && ob.SourceNo == o.OrderNo)
+                              .Join(dbContext.Set<ShipViaEntity>(),ob=>ob.ShippingVia,i=>i.Id,(ob,i)=>new {OB=ob,OS=i})
+                             .ToList().Select(ob => new MyShipResponse() { 
+                                 ShipViaName = ob.OS.Name,
+                                  ShipNo = ob.OB.ShippingNo
+                             });
+
             });
             return this.RenderSuccess<MyOrderDetailResponse>(r => r.Data=result);
         }
@@ -200,6 +207,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                      });
                    var result = DoRMA(new RMARequest() {
                      OrderNo = linq.OrderNo,
+                     RMAReason = ConfigManager.VoidOrderRMAReason,
                       Reason = "取消订单",
                      Products = JsonConvert.SerializeObject(products)
                    }, authUser,false) as RestfulResult;
@@ -262,7 +270,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     Type = (int)OrderOpera.CustomerPay,
                     Operation = "用户支付订单。"
                 });
-                bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "WebOrdersPaid", dealCode = linq.OrderNo,PAY_TYPE=linq.PaymentMethodCode,TRADE_NO=request.PayTransNo },null
+                bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "WebOrdersPaid", dealCode = linq.OrderNo,PAY_TYPE=linq.PaymentMethodCode,PaymentName=string.Empty,CardNo = string.Empty,TRADE_NO=request.PayTransNo },null
                    , null);
                 if (isSuccess)
                 {
@@ -316,6 +324,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 USER_SID = "0",
                 Detail = new List<dynamic>()
             };
+            request.Reason = string.Format("{0}-{1}",dbContext.Set<RMAReasonEntity>().Find(request.RMAReason).Reason,request.Reason??string.Empty);
             using (var ts = new TransactionScope())
             {
                 decimal rmaAmount = 0;
@@ -323,18 +332,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 {
                     RMANo = OrderRule.CreateRMACode(),
                     Reason = request.Reason,
+                    RMAReason = request.RMAReason,
                     Status = (int)RMAStatus.Created,
                     OrderNo = request.OrderNo,
-                    BankAccount = request.BankAccount,
-                    BankCard = request.BankCard,
-                    BankName = request.BankName,
                     CreateDate = DateTime.Now,
                     CreateUser = authUser.Id,
                     RMAAmount = rmaAmount,
                     RMAType = (int)RMAType.FromOnline,
                     UpdateDate = DateTime.Now,
                     UpdateUser = authUser.Id,
-                    ContactPhone = request.ContactPhone
+                    ContactPhone = request.ContactPhone,
+                    UserId = orderEntity.CustomerId
                 });
                 foreach (var rma in request.Products2)
                 {
@@ -384,13 +392,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     Operation = "申请线上退货"
                 });
                 string exRMANo = string.Empty;
-                bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "Agree_Refund", jsonSales = new {Data=new List<dynamic>() { erpRma }} }, null
+                bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "Agree_Refund", jsonSales = new { Data = new List<dynamic>() { erpRma } } }, r => exRMANo = r.orders_refund_frt_sid
                   , null);
                 if (isSuccess)
                 {
                     _rmaexRepo.Insert(new RMA2ExEntity()
                     {
-                        ExRMA = exRMANo,
+                        ExRMA = exRMANo??string.Empty,
                         RMANo = newRma.RMANo,
                         UpdateDate = DateTime.Now
                     });
@@ -404,7 +412,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
         }
 
- 
+        
        
     }
 }

@@ -28,5 +28,8 @@ namespace com.intime.fashion.data.erp.Models
         public string CLASS_NUM_6 { get; set; }
         public string CLASS_NUM_7 { get; set; }
         public Nullable<int> VERSION { get; set; }
+        public Nullable<decimal> OPT_USER_SID { get; set; }
+        public string OPT_REAL_NAME { get; set; }
+        public Nullable<System.DateTime> OPT_UPDATE_TIME { get; set; }
     }
 }

@@ -40,7 +40,7 @@ namespace com.intime.jobscheduler.Job.Wx
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
             int successCount = 0;
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
 
             Stopwatch sw = new Stopwatch();
             sw.Start();

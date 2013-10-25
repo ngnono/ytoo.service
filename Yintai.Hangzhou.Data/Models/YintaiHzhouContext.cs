@@ -177,6 +177,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<RMA2ExEntity> RMA2Ex { get; set; }
         public DbSet<RMAItemEntity> RMAItems { get; set; }
         public DbSet<RMALogEntity> RMALogs { get; set; }
+        public DbSet<RMAReasonEntity> RMAReasons { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
         public DbSet<RoleAccessRightEntity> RoleAccessRights { get; set; }
         public DbSet<SectionEntity> Sections { get; set; }
@@ -268,6 +269,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new RMA2ExEntityMap());
             modelBuilder.Configurations.Add(new RMAItemEntityMap());
             modelBuilder.Configurations.Add(new RMALogEntityMap());
+            modelBuilder.Configurations.Add(new RMAReasonEntityMap());
             modelBuilder.Configurations.Add(new RoleEntityMap());
             modelBuilder.Configurations.Add(new RoleAccessRightEntityMap());
             modelBuilder.Configurations.Add(new SectionEntityMap());

@@ -102,6 +102,7 @@
     <Compile Include="Impl\UserRightService.cs" />
     <Compile Include="Impl\UserService.cs" />
     <Compile Include="Logic\OrderRule.cs" />
+    <Compile Include="Logic\RMARule.cs" />
     <Compile Include="Logic\StorePromotionRule.cs" />
     <Compile Include="Manager\CacheKeyManager.cs" />
     <Compile Include="Manager\FileUploadServiceManager.cs">

@@ -67,7 +67,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -116,7 +116,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -207,7 +207,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -268,7 +268,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -333,7 +333,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -384,7 +384,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -454,7 +454,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -503,7 +503,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -575,7 +575,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -637,7 +637,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -733,7 +733,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -844,7 +844,7 @@ namespace com.intime.jobscheduler.Job
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
             int successCount = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             Stopwatch sw = new Stopwatch();
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))

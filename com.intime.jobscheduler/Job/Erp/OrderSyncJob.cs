@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Service.Logic;
 
 namespace com.intime.jobscheduler.Job.Erp
 {
@@ -22,7 +23,7 @@ namespace com.intime.jobscheduler.Job.Erp
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var accounts = db.Set<OrderTransactionEntity>().Where(ot => ot.IsSynced == false && ot.CreateDate > benchTime);
+                var accounts = db.Set<OrderTransactionEntity>().Where(ot => ot.IsSynced == false);
 
                 if (callback != null)
                     callback(accounts);
@@ -41,7 +42,7 @@ namespace com.intime.jobscheduler.Job.Erp
 
             int cursor = 0;
             int successCount = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int lastCursor = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -56,21 +57,11 @@ namespace com.intime.jobscheduler.Job.Erp
                 {
                     try
                     {          
-                        bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "WebOrdersPaid", dealCode = order.OrderNo,PAY_TYPE=order.PaymentCode,TRADE_NO=order.TransNo },null
-                           , null);
-                        if (isSuccess)
-                        {
-                            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
-                            {
-                                order.IsSynced = true;
-                                order.SyncDate = DateTime.Now;
-                                db.Entry(order).State = EntityState.Modified;
-                                db.SaveChanges();
-                            }
-                            successCount++;
+                        bool isSuccess = OrderRule.OrderPaid2Erp(order);
+                         if (isSuccess)
+                             successCount++;
 
-                        }
-
+                      
                     }
                     catch (Exception ex)
                     {

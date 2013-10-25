@@ -58,6 +58,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public IEnumerable<RMALogResponse> Logs {get;set;}
         [DataMember(Name="mailaddress")]
         public string MailAddress {get;set;}
+        [DataMember(Name = "canvoid")]
+        public bool CanVoid
+        {
+            get;
+            set;
+        }
     }
 
     public class RMAItemInfoResponse : BaseResponse
@@ -80,6 +86,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
          public ResourceInfoResponse ProductResource { get; set; }
         [DataMember(Name = "skucode")]
         public string SkuCode { get; set; }
+        [DataMember(Name = "brandname")]
+        public string BrandName { get; set; }
+        [DataMember(Name = "brand2name")]
+        public string Brand2Name { get; set; }
 
         [DataMember(Name = "properties")]
         public IEnumerable<TagPropertyDetailResponse> Properties { get; set; }

@@ -14,7 +14,6 @@ namespace com.intime.fashion.common.Wxpay
         public string OutTradeNo { get; set; }
         public long TotalFee { get; set; }
         public int FeeType { get { return 1; } }
-        public string NotifyUrl { get { return WxPayConfig.NOTIFY_URL; } }
         public string SPBill_Create_IP { get; set; }
         public string Time_Start { get; set; }
         public string Time_End { get; set; }
@@ -22,6 +21,7 @@ namespace com.intime.fashion.common.Wxpay
         public long ProductFee { get { return TotalFee - TransportFee; } }
         public string GoodsTag { get; set; }
         public string InputCharset { get { return "UTF-8"; } }
+        public string NotifyUrl { get; set; }
 
         public string Encode() {
             var values = new Dictionary<string, dynamic>();
@@ -33,7 +33,7 @@ namespace com.intime.fashion.common.Wxpay
             values.Add("out_trade_no", OutTradeNo);
             values.Add("total_fee", TotalFee);
             values.Add("fee_type", FeeType);
-            values.Add("notify_url", WxPayConfig.NOTIFY_URL);
+            values.Add("notify_url", string.IsNullOrEmpty(NotifyUrl)?WxPayConfig.NOTIFY_URL:NotifyUrl);
             values.Add("spbill_create_ip", SPBill_Create_IP);
             if (!string.IsNullOrEmpty(Time_Start))
                 values.Add("time_start", Time_Start);

@@ -129,6 +129,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="zxing">
+      <HintPath>..\packages\ZXing.Net.0.12.0.0\lib\net40\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation">
+      <HintPath>..\packages\ZXing.Net.0.12.0.0\lib\net40\zxing.presentation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Content\report\confirmorderreport.cs">
@@ -181,6 +187,7 @@
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BannerController.cs" />
+    <Compile Include="Controllers\BarCodeController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
@@ -217,6 +224,7 @@
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Manager\MappingManager.cs" />
     <Compile Include="Models\BannerViewModel.cs" />
+    <Compile Include="Models\BarCodeViewModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\BrandViewModel.cs" />
     <Compile Include="Models\CategoryViewModel.cs" />
@@ -1022,6 +1030,7 @@
     <Content Include="Views\Category\Map.cshtml" />
     <Content Include="Views\Category\EditorTemplates\CategoryViewModel.cshtml" />
     <Content Include="Views\Category\EditorTemplates\ShowCategoryViewModel.cshtml" />
+    <Content Include="Views\BarCode\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -28,7 +28,7 @@ namespace com.intime.jobscheduler.Job
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
             int successCount = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             int totalCount = 0;
             DateTime fromDate =  DateTime.Today.AddDays(-1);
             Stopwatch sw = new Stopwatch();

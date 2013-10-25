@@ -38,7 +38,7 @@ namespace com.intime.jobscheduler.Job.Erp
             var benchTime = DateTime.Now.AddSeconds(-interval);
             Expression<Func<SUPPLY_MIN_PRICE_MX, bool>> whereCondition = null;
             if (!isRebuild)
-                whereCondition = null;// b => b.OPT_UPDATE_TIME >= benchTime;
+                whereCondition = b => b.OPT_UPDATE_TIME >= benchTime;
 
             DoQuery(whereCondition, products =>
             {
@@ -46,7 +46,7 @@ namespace com.intime.jobscheduler.Job.Erp
             });
             int cursor = 0;
             int successCount = 0;
-            int size = 100;
+           int size = JobConfig.DEFAULT_PAGE_SIZE;
             Stopwatch sw = new Stopwatch();
             sw.Start();
             while (cursor < totalCount)
@@ -65,7 +65,7 @@ namespace com.intime.jobscheduler.Job.Erp
                     }
                     catch (Exception ex)
                     {
-                        log.Error(string.Format("{0} product inventory error", product.SID));
+                        log.Error(string.Format("{0} product inventory error", product.PRO_DETAIL_SID));
                         log.Error(ex);
                     }
                 }
@@ -78,28 +78,33 @@ namespace com.intime.jobscheduler.Job.Erp
 
         }
 
-        private static void EnsureProductContext(SUPPLY_MIN_PRICE_MX product)
+        private static bool EnsureProductContext(SUPPLY_MIN_PRICE_MX product)
         {
             bool shouldSyncProduct = false;
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
 
                 var colorEntity = db.Set<ProductPropertyValueEntity>().Where(ppv => ppv.ChannelValueId == product.PRO_COLOR_SID)
-                                    .Join(db.Set<ProductPropertyEntity>().Join(db.Set<ProductMapEntity>().Where(pm => pm.ChannelPId == product.PRODUCT_SID), o => o.ProductId, i => i.ProductId, (o, i) => o),
-                                            o => o.PropertyId, i => i.Id, (o, i) => o).FirstOrDefault();
+                                    .Join(db.Set<ProductPropertyEntity>()
+                                            .Join(db.Set<ProductMapEntity>().Where(pm => pm.ChannelPId == product.PRODUCT_SID), o => o.ProductId, i => i.ProductId, (o, i) => o)
+                                     ,o => o.PropertyId, i => i.Id, (o, i) => o).FirstOrDefault();
                 var sizeEntity = db.Set<ProductPropertyValueEntity>().Where(ppv => ppv.ChannelValueId == product.PRO_STAN_SID)
-                                    .Join(db.Set<ProductPropertyEntity>().Join(db.Set<ProductMapEntity>().Where(pm => pm.ChannelPId == product.PRODUCT_SID), o => o.ProductId, i => i.ProductId, (o, i) => o),
+                                    .Join(db.Set<ProductPropertyEntity>()
+                                            .Join(db.Set<ProductMapEntity>().Where(pm => pm.ChannelPId == product.PRODUCT_SID)
+                                                   , o => o.ProductId, i => i.ProductId, (o, i) => o),
                                             o => o.PropertyId, i => i.Id, (o, i) => o).FirstOrDefault();
                 if (colorEntity == null || sizeEntity == null)
                     shouldSyncProduct = true;
                 
                 if (shouldSyncProduct)
-                    ProductPropertySyncJob.SyncOne(product.PRODUCT_SID, product.PRO_STAN_SID ?? 0, product.PRO_STAN_NAME, product.PRO_COLOR_SID ?? 0, product.PRO_COLOR);
+                   return ProductPropertySyncJob.SyncOne(product.PRODUCT_SID, product.PRO_STAN_SID ?? 0, product.PRO_STAN_NAME, product.PRO_COLOR_SID ?? 0, product.PRO_COLOR);
             }
+            return true;
         }
         public static void SyncOne(SUPPLY_MIN_PRICE_MX product)
         {
-            EnsureProductContext(product);
+            if (!EnsureProductContext(product))
+                return;
             using (var ts = new TransactionScope())
             {
                 using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))

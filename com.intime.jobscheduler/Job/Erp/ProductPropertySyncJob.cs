@@ -1,4 +1,5 @@
 ﻿using com.intime.fashion.data.erp.Models;
+using Common.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,24 @@ namespace com.intime.jobscheduler.Job.Erp
 {
     class ProductPropertySyncJob
     {
-        public static void SyncOne(decimal pid, decimal sizeId,string sizeName, decimal colorId,string colorName)
+        public static bool SyncOne(decimal pid, decimal sizeId,string sizeName, decimal colorId,string colorName)
         {
-            EnsureProductContext(pid);
+            if (!EnsureProductContext(pid))
+                return false;
+            if (sizeId == 0 || colorId == 0)
+            {
+                Log.Error(string.Format("product sid:{0} with empty color sid or size sid",pid));
+                return false;
+            }
+
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var product = db.Set<ProductMapEntity>().Where(p=>p.ChannelPId == pid).FirstOrDefault();
+                if (product == null)
+                    return false; ;
                 var existColor = db.Set<ProductPropertyValueEntity>().Where(b =>b.ChannelValueId == colorId)
-                                .Join(db.Set<ProductPropertyEntity>().Where(pp=>pp.ProductId==product.ProductId),o=>o.PropertyId,i=>i.Id,(o,i)=>o).FirstOrDefault();
+                                .Join(db.Set<ProductPropertyEntity>().Where(pp=>pp.ProductId==product.ProductId),o=>o.PropertyId,i=>i.Id,(o,i)=>o)
+                                .FirstOrDefault();
                 if (existColor == null)
                 {
                     var colorEntity = db.Set<ProductPropertyEntity>().Where(p => p.ProductId == product.ProductId && p.IsColor.HasValue && p.IsColor.Value == true).FirstOrDefault();
@@ -91,9 +102,10 @@ namespace com.intime.jobscheduler.Job.Erp
                 db.SaveChanges();
 
             }
+            return true;
         }
 
-        private static void EnsureProductContext(decimal pid)
+        private static bool EnsureProductContext(decimal pid)
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
@@ -104,10 +116,18 @@ namespace com.intime.jobscheduler.Job.Erp
                     {
                         var exProduct = erpDb.Set<SUPPLY_MIN_PRICE>().Where(ep => ep.PRODUCT_SID == pid).FirstOrDefault();
                         if (null != exProduct)
-                            ProductSyncJob.SyncOne(exProduct);
+                           return ProductSyncJob.SyncOne(exProduct);
                     }
 
                 }
+                return true;
+            }
+        }
+        private static ILog Log
+        {
+            get
+            {
+                return LogManager.GetLogger(typeof(ProductSyncJob));
             }
         }
     }
