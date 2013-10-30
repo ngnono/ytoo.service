@@ -224,6 +224,7 @@ namespace Yintai.Hangzhou.Service.Logic
                         SizeValueId = productSizeEntity == null ? 0 : productSizeEntity.Id,
                         ColorValueName = productColorEntity == null ? string.Empty : productColorEntity.ValueDesc,
                         SizeValueName = productSizeEntity == null ? string.Empty : productSizeEntity.ValueDesc,
+                        StoreItemNo = productEntity.SkuCode,
                         Points = 0
 
                     });
@@ -290,7 +291,7 @@ namespace Yintai.Hangzhou.Service.Logic
                 }
             }
         }
-        public static bool OrderPaid2Erp(OrderTransactionEntity order)
+        public static bool OrderPaid2Erp(OrderTransactionEntity order,bool isOnlinePay = true)
         {
             string vipCard = string.Empty;
             var log = ServiceLocator.Current.Resolve<ILog>();
@@ -320,7 +321,8 @@ namespace Yintai.Hangzhou.Service.Logic
                 }
                 paymentName = paymentEntity.Name;
             }
-            bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "WebOrdersPaid", dealCode = order.OrderNo, PAY_TYPE = order.PaymentCode,PaymentName = paymentName, TRADE_NO = order.TransNo,CardNo=vipCard }, null
+            var paidFunc = isOnlinePay ? "WebOrdersPaid" : "WebSalesPaid";
+            bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = paidFunc, dealCode = order.OrderNo, PAY_TYPE = order.PaymentCode, PaymentName = paymentName, TRADE_NO = order.TransNo, CardNo = vipCard }, null
                           , null);
             if (isSuccess)
             {

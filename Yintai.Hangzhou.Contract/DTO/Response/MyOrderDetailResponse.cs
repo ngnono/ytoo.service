@@ -103,7 +103,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name="resource")]
          public ResourceInfoResponse ProductResource { get; set; }
         [DataMember(Name = "skucode")]
-        public string SkuCode { get; set; }
+        public string SkuCode { get { return StoreItemNo; } }
         [DataMember(Name = "colorvalue")]
         public string ColorValueName { get; set; }
         [DataMember(Name = "colorvalueid")]
@@ -118,6 +118,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string Brand2Name { get; set; }
         [DataMember(Name = "properties")]
         public IEnumerable<TagPropertyDetailResponse> Properties { get; set; }
+
     }
      [DataContract]
     public class MyRMAResponse : BaseResponse

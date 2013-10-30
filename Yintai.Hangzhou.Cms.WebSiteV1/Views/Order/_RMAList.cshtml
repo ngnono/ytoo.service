@@ -1,34 +1,5 @@
 ﻿@model OrderViewModel
- <div class="btn-group">
-            @if(Model.CanCreateOffRMA)
-            {
-                @Ajax.ActionLink("现场退货", "CreateRMA", new { OrderNo = Model.OrderNo }, new AjaxOptions() { 
-                 HttpMethod="Post",
-                  Confirm="确认要创建现场退货单吗?",
-                   UpdateTargetId="order-4",
-                   InsertionMode= InsertionMode.Replace,
-                   OnFailure="AlertFail",
-                   
-                            
-             } , new { @class = "btn" })
-            }
-            @if(Model.CanPrintRMA)
-            {
-                @Html.ActionLink2("打印退货单", "PrintRMA", new { RMANo = Model.FirstActiveRMA.RMANo}, new { @class = "btn",@id="printrma" })
-                @Html.ActionLink2("退还客户", "Reject2Customer", new { RMANo = Model.FirstActiveRMA.RMANo }, new { @class = "btn" })
-               
-            }
-            @if(Model.CanVoidRMA)
-            {
-                @Ajax.ActionLink("作废退货单", "VoidRMA", new { RMANo = Model.FirstActiveRMA.RMANo}, new AjaxOptions() { 
-                 HttpMethod="Post",
-                  Confirm=string.Format("确认要作废退货单:{0}吗?",Model.FirstActiveRMA.RMANo),
-                   UpdateTargetId="order-4",
-                   InsertionMode= InsertionMode.Replace,
-                    OnFailure="AlertFail"},
-                 new { @class = "btn btn-danger" })
-            }
-        </div>
+
         <table class="table table-bordered table-condensed table-striped">
             <tr>
                 <th>退货号</th>

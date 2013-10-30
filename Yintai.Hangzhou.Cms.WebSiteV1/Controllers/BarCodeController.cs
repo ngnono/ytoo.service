@@ -55,14 +55,15 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
         {
             int totalCount;
           
-            var linq = Context.Set<SectionEntity>().Where(s=>s.StoreId ==search.StoreId && s.Status !=(int)DataStatus.Deleted && s.ChannelSectionId.HasValue);
+            var linq = Context.Set<SectionEntity>().Where(s=>s.StoreId ==search.StoreId && s.Status !=(int)DataStatus.Deleted && s.ChannelSectionId.HasValue)
+                      ;
            
 
             totalCount = linq.Count();
 
             var skipCount = (request.PageIndex - 1) * request.PageSize;
 
-            linq = skipCount == 0 ? linq.Take(request.PageSize) : linq.Skip(skipCount).Take(request.PageSize);
+            linq = skipCount == 0 ? linq.OrderBy(l => l.Id).Take(request.PageSize) : linq.OrderBy(l => l.Id).Skip(skipCount).Take(request.PageSize);
 
 
             var vo =  linq.ToList().Select(l=>new SectionViewModel().FromEntity<SectionViewModel>(l));
@@ -83,7 +84,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 
             var skipCount = (request.PageIndex - 1) * request.PageSize;
 
-            linq = skipCount == 0 ? linq.Take(request.PageSize) : linq.Skip(skipCount).Take(request.PageSize);
+            linq = skipCount == 0 ? linq.OrderBy(l => l.P.Id).Take(request.PageSize) : linq.OrderBy(l => l.P.Id).Skip(skipCount).Take(request.PageSize);
 
 
             var vo = new List<dynamic>();

@@ -85,11 +85,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name="resource")]
          public ResourceInfoResponse ProductResource { get; set; }
         [DataMember(Name = "skucode")]
-        public string SkuCode { get; set; }
+        public string SkuCode { get { return StoreItemNo; } }
         [DataMember(Name = "brandname")]
         public string BrandName { get; set; }
         [DataMember(Name = "brand2name")]
         public string Brand2Name { get; set; }
+
 
         [DataMember(Name = "properties")]
         public IEnumerable<TagPropertyDetailResponse> Properties { get; set; }

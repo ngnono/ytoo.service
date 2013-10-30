@@ -27,6 +27,7 @@ using com.intime.fashion.common;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 {
+    [ValidateInput(false)]
     public class PaymentController : Controller
     {
         private IEFRepository<OrderTransactionEntity> _orderTranRepo;
@@ -266,7 +267,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                             //notify sync async
                             Task.Factory.StartNew(() =>
                             {
-                                OrderRule.OrderPaid2Erp(orderTransaction);
+                                OrderRule.OrderPaid2Erp(orderTransaction,false);
                             });
                         }
                     }
@@ -338,17 +339,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         {
            if (string.IsNullOrEmpty(orderNo))
                 return new XmlResult(composePackageError(r => r.RetErrMsg = "订单不存在！"));
-           bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "WebOrderDetail", dealCode = orderNo}, null
-                        , null);
-            if (!isSuccess)
+           dynamic erpOrder = null;
+           bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl
+                            , new { func = "GetSalesInfo", dealCode = orderNo }
+                            ,r=>erpOrder = r.productDetail
+                            , null);
+            if (!isSuccess || erpOrder==null)
                 return new XmlResult(composePackageError(r => r.RetErrMsg = "订单无法获取！"));
-            dynamic erpOrder = null;
+            decimal totalAmount = erpOrder.totalamount;
+            if (totalAmount <=0)
+                return new XmlResult(composePackageError(r => r.RetErrMsg = "订单金额不正确！"));
             return new XmlResult(composePackageSuccess(r => r.Package = new WxPackage()
             {
-                Body = erpOrder.ProductName,
-                Attach = erpOrder.ProductDesc,
+                Body = erpOrder[0].productname,
+                Attach = erpOrder[0].storedesc,
                 OutTradeNo = orderNo,
-                TotalFee = Util.Feng4Decimal(erpOrder.TotalAmount),
+                TotalFee = Util.Feng4Decimal(totalAmount),
                 TransportFee = 0,
                 SPBill_Create_IP = clientIP(),
                 NotifyUrl = WxPayConfig.NOTIFY_ERP_URL

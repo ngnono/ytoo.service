@@ -49,22 +49,23 @@ namespace Yintai.Architecture.Common.Web.HttpModules
                 _log.Error("RequestLogginHttpModule Parameter context is null");
                 return;
             }
-            string form = context.Context.Request.Form.ToJson();
-            string query = context.Context.Request.QueryString.ToJson();
+            var unvalid_request = context.Context.Request.Unvalidated;
+            string form = unvalid_request.Form.ToJson();
+            string query = unvalid_request.QueryString.ToJson();
 
             //logging the Request
             var sb = new StringBuilder();
 
-            sb.AppendFormat("{0} [ {1} ] ", context.Context.Request.Url, DateTime.Now);
+            sb.AppendFormat("{0} [ {1} ] ", unvalid_request.Url, DateTime.Now);
             sb.AppendLine();
 
             sb.AppendLine();
             sb.AppendLine("[ Headers ]");
             sb.AppendLine();
 
-            foreach (string key in context.Context.Request.Headers)
+            foreach (string key in unvalid_request.Headers)
             {
-                sb.AppendFormat("{0} : {1}", key, context.Context.Request.Headers[key]);
+                sb.AppendFormat("{0} : {1}", key, unvalid_request.Headers[key]);
                 sb.AppendLine();
             }
 
@@ -72,9 +73,9 @@ namespace Yintai.Architecture.Common.Web.HttpModules
             sb.AppendLine("[ QueryString ]");
             sb.AppendLine();
 
-            foreach (string key in context.Context.Request.QueryString)
+            foreach (string key in unvalid_request.QueryString)
             {
-                sb.AppendFormat("{0} : {1}", key, context.Context.Request.QueryString[key]);
+                sb.AppendFormat("{0} : {1}", key, unvalid_request.QueryString[key]);
                 sb.AppendLine();
             }
 
@@ -82,9 +83,9 @@ namespace Yintai.Architecture.Common.Web.HttpModules
             sb.AppendLine("[ Form ]");
             sb.AppendLine();
 
-            foreach (string key in context.Context.Request.Form)
+            foreach (string key in unvalid_request.Form)
             {
-                sb.AppendFormat("{0} : {1}", key, context.Context.Request.Form[key]);
+                sb.AppendFormat("{0} : {1}", key, unvalid_request.Form[key]);
                 sb.AppendLine();
             }
 

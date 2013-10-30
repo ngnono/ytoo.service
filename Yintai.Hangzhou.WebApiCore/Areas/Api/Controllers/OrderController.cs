@@ -129,6 +129,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                                         && resource.ColorId == oi.ColorValueId
                                                         && resource.Type == (int)ResourceType.Image)
                                      .OrderByDescending(resource => resource.SortOrder).FirstOrDefault());
+                 
 
 
                 }));

@@ -42,6 +42,7 @@ namespace com.intime.jobscheduler.Job.Erp
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
             var totalCount = 0;
             var benchTime = DateTime.Now.AddSeconds(-interval);
+            
             Expression<Func<SUPPLY_MIN_PRICE, bool>> whereCondition = null;
             if (!isRebuild)
                 whereCondition = b => b.OPT_UPDATE_TIME >= benchTime;

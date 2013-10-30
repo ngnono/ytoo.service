@@ -24,6 +24,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<int> ColorValueId { get; set; }
         public string ColorValueName { get; set; }
         public string SizeValueName { get; set; }
+        public int? BrandId { get; set; }
 
         #region Overrides of BaseEntity
 

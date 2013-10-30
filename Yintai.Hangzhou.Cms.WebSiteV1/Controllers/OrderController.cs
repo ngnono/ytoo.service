@@ -90,29 +90,21 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                     i => i.Id,
                     (o, i) => new { O = o, C = i })
                 .GroupJoin(dbContext.Set<RMAEntity>(),
-                    o=>o.O.OrderNo,
-                    i=>i.OrderNo,
-                    (o,i)=>new {O=o.O,C=o.C,RMA=i})
+                    o => o.O.OrderNo,
+                    i => i.OrderNo,
+                    (o, i) => new { O = o.O, C = o.C, RMA = i })
                 .GroupJoin(dbContext.Set<ShipViaEntity>().Where(s => s.Status != (int)DataStatus.Deleted),
                     o => o.O.ShippingVia,
                     i => i.Id,
-                    (o, i) => new { O = o.O, C = o.C,RMA=o.RMA, S = i.FirstOrDefault() })
-                .GroupJoin(dbContext.Set<StoreEntity>(),
-                    o => o.O.StoreId,
-                    i => i.Id,
-                    (o, i) => new { O = o.O, C = o.C,RMA=o.RMA, S = o.S, Store = i.FirstOrDefault() })
-                .GroupJoin(dbContext.Set<BrandEntity>(),
-                    o => o.O.BrandId,
-                    i => i.Id,
-                    (o, i) => new { O = o.O, C = o.C,RMA=o.RMA, S = o.S, Store = o.Store, Brand = i.FirstOrDefault() }).OrderByDescending(o => o.O.CreateDate)
-                    ;
+                    (o, i) => new { O = o.O, C = o.C, RMA = o.RMA, S = i.FirstOrDefault() });
+              
 
 
             totalCount = linq2.Count();
 
             var skipCount = (request.PageIndex - 1) * request.PageSize;
 
-            var linq3 = skipCount == 0 ? linq2.Take(request.PageSize) : linq2.Skip(skipCount).Take(request.PageSize);
+            var linq3 = skipCount == 0 ? linq2.OrderByDescending(l => l.O.CreateDate).Take(request.PageSize) : linq2.OrderByDescending(l => l.O.CreateDate).Skip(skipCount).Take(request.PageSize);
 
 
             var vo = from l in linq3.ToList()
@@ -120,7 +112,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                      {
                          p.ShippingViaMethod = l.S;
                          p.Customer = new CustomerViewModel().FromEntity<CustomerViewModel>(l.C);
-                         p.StoreName = l.Store.Name;
+                        
                          p.ShippingViaMethod_Name = l.S==null?string.Empty:l.S.Name;
                          p.RMAs = l.RMA.ToList().OrderByDescending(r=>r.CreateDate).Select(r => new RMAViewModel().FromEntity<RMAViewModel>(r));
 
@@ -155,12 +147,9 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
                             item.ProductResource = new ResourceViewModel().FromEntity<ResourceViewModel>(Context.Set<ResourceEntity>().Where(r => r.SourceId == item.ProductId
                                         && r.SourceType == (int)SourceType.Product
                                         && r.Status != (int)DataStatus.Deleted).OrderByDescending(r => r.SortOrder).OrderBy(r => r.CreatedDate).FirstOrDefault());
-                          //  item.UPCCode = oi.StoreCode;
                             item.Brand = new BrandViewModel().FromEntity<BrandViewModel>(Context.Set<BrandEntity>().Find(item.BrandId));
-                            item.Store = new StoreViewModel().FromEntity<StoreViewModel>(Context.Set<StoreEntity>().Find(item.StoreId));
                         }));
                 o.ShippingViaMethod = _orderRepo.Context.Set<ShipViaEntity>().Where(s => s.Id == o.ShippingVia).FirstOrDefault();
-                o.StoreName = _orderRepo.Context.Set<StoreEntity>().Where(s => s.Id == o.StoreId).FirstOrDefault().Name;
                 o.RMAs = _rmaRepo.Get(r => r.OrderNo == o.OrderNo)
                          .GroupJoin(_rmaitemRepo.GetAll(), ou => ou.RMANo, i => i.RMANo, (ou, i) => new { R = ou, RI = i.FirstOrDefault() })
                          .OrderByDescending(r=>r.R.CreateDate)
@@ -173,7 +162,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             });
             return View(model);
         }
-
+        [Obsolete]
         public ActionResult Edit(string orderNo)
         {
             var linq = _orderRepo.Get(o => o.OrderNo == orderNo);
@@ -187,6 +176,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             return View(model);
         }
         [HttpPost]
+        [Obsolete]
         public ActionResult Edit(OrderViewModel model)
         {
             ExcludeModelFieldsFromValidate(new string[] {"Items","Customer." });
@@ -255,7 +245,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             return RedirectToAction("Details", new { OrderNo = model.OrderNo});
         }
-
+         [Obsolete]
         public ActionResult ChangeStoreItem(string orderNo)
         {
             var order = _orderRepo.Context.Set<OrderItemEntity>().Where(o => o.OrderNo == orderNo)
@@ -285,6 +275,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             return View(model);
         }
         [HttpPost]
+        [Obsolete]
         public ActionResult ChangeStoreItem(ConfirmStoreItemViewModel model, string orderNo)
         {
             if (!ModelState.IsValid)
@@ -338,6 +329,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             return RedirectToAction("Details", new { OrderNo = orderNo });
         }
+         [Obsolete]
         public ActionResult Shipping(string orderNo)
         {
             var order = _orderRepo.Context.Set<OrderItemEntity>().Where(o => o.OrderNo == orderNo).FirstOrDefault();
@@ -350,6 +342,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             return View(model);
         }
         [HttpPost]
+        [Obsolete]
         public ActionResult Shipping(OrderViewModel item, string orderNo)
         {
             item.Status = (int)OrderStatus.Shipped;
@@ -402,7 +395,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             return RedirectToAction("Details", new { OrderNo = orderNo });
         }
-
+         [Obsolete]
         public ActionResult Reject(string orderNo)
         {
             var order = _orderRepo.Context.Set<OrderItemEntity>().Where(o => o.OrderNo == orderNo).FirstOrDefault();
@@ -414,6 +407,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             return View(new InboundPackViewModel());
         }
         [HttpPost]
+        [Obsolete]
         public ActionResult Reject(InboundPackViewModel item, string orderNo)
         {
             if (!ModelState.IsValid)
@@ -464,6 +458,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             return RedirectToAction("Details", new { OrderNo = orderNo });
         }
+         [Obsolete]
         public ActionResult PreparePack(string orderNo)
         {
             var orderEntity = _orderRepo.Get(o => o.OrderNo == orderNo).First();
@@ -499,6 +494,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             return RedirectToAction("Details", new { OrderNo = orderNo });
         }
+         [Obsolete]
         public ActionResult Received(string orderNo)
         {
             var orderEntity = _orderRepo.Get(o => o.OrderNo == orderNo).First();
@@ -528,6 +524,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             return RedirectToAction("Details", new { OrderNo = orderNo });
         }
+         [Obsolete]
         public ActionResult Convert2Sale(string orderNo)
         {
             var orderEntity = _orderRepo.Get(o => o.OrderNo == orderNo).First();
@@ -557,7 +554,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             return RedirectToAction("Details", new { OrderNo = orderNo });
         }
-
+         [Obsolete]
         public ActionResult Void(string orderNo)
         {
             var linq = _orderRepo.Get(o => o.OrderNo == orderNo);
@@ -571,6 +568,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             return View(model);
         }
         [HttpPost]
+        [Obsolete]
         public ActionResult Void(OrderViewModel orderIn)
         {
             ExcludeModelFieldsFromValidate(new string[] { "Items", "Customer." });
@@ -607,6 +605,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             }
             return RedirectToAction("Details", new { OrderNo = orderIn.OrderNo });
         }
+         [Obsolete]
         public ActionResult Reject2Customer(string rmano)
         {
             var rmaEntity = _rmaRepo.Get(o => o.RMANo == rmano).FirstOrDefault();
@@ -618,6 +617,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 
         }
         [HttpPost]
+        [Obsolete]
         public ActionResult Reject2Customer(RMAViewModel model)
         {
             if (!ModelState.IsValid)
@@ -655,6 +655,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 
         }
         [HttpPost]
+        [Obsolete]
         public ActionResult VoidRMA(string rmano)
         {
             var rmaEntity = _rmaRepo.Get(o => o.RMANo == rmano).FirstOrDefault();
@@ -700,7 +701,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             });
             return PartialView("_RMAList", model);
         }
-
+         [Obsolete]
         public ActionResult PrintRMA(string rmaNo)
         {
             var rmaEntity = _rmaRepo.Get(r=>r.RMANo == rmaNo)
@@ -724,6 +725,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             return View(model);
         }
         [HttpPost]
+        [Obsolete]
         public JsonResult PrintRMA(RMAViewModel model)
         {
             string errorMsg;
@@ -762,6 +764,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             return SuccessResponse();
         }
         [HttpPost]
+        [Obsolete]
         public ActionResult CreateRMA(string orderNo)
         {
             string errorMsg = string.Empty;
@@ -835,7 +838,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             });
             return PartialView("_RMAList", model);
         }
-
+         [Obsolete]
         public ActionResult ViewRMA(string rmaNo)
         {
             var rmaEntity = _rmaRepo.Get(r => r.RMANo == rmaNo)

@@ -91,48 +91,7 @@
 }
  @Html.Partial("_AlertMessage")
 <div id="printwindow"></div>
-<div class="btn-group">
-    @if (Model.CanChangeStoreItem)
-    {
-        @Html.ActionLink2("确认专柜商品", "ChangeStoreItem", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
-    }
-    @if (Model.CanPrint)
-    { 
-        @Html.ActionLink2("打印订单", "PrintOrder", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary",@id="printorder" })
-    }
 
-
-    @if (Model.CanPrintShipping)
-    { 
-        @Html.ActionLink2("打印发货单", "PrintShipping", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary",@id="printship" })
-    }
-    @if (Model.CanShipping)
-    { 
-        @Html.ActionLink2("发货", "Shipping", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
-    }
-    @if (Model.CanChangeReceived)
-    { 
-        @Html.ActionLink2("签收", "Received", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary",@id="btnReceive" })
-    }
-    @if (Model.CanChangeReject)
-    { 
-        @Html.ActionLink2("拒收", "Reject", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
-    }
-
-    @if (Model.CanPrintSales)
-    { 
-        @Html.ActionLink2("打印销售单", "PrintSales", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary",@id="printsale" })
-    }
-        @if (Model.CanEdit)
-    { 
-        @Html.ActionLink2("修改订单", "Edit", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-primary" })
-    }
-    @if (Model.CanVoid)
-    { 
-        @Html.ActionLink2("作废订单", "Void", new { OrderNo = Model.OrderNo }, new { @class = "btn btn-danger" })
-    }
-
-</div>
 <div id="order">
     <ul>
         <li class="k-state-active">订单信息
@@ -257,7 +216,6 @@
                 <th>显示名称</th>
                 <th>订购描述
                 </th>
-                <th>门店</th>
                  <th>品牌</th>
                 <th>吊牌价</th>
                 <th>销售价</th>
@@ -265,9 +223,6 @@
                 <th>总额
                 </th>
                 <th>商品货号</th>
-                <th>专柜编码
-                </th>
-                <th>专柜商品描述</th>
 
             </tr>
 
@@ -283,16 +238,12 @@
                     <td>@Html.DisplayFor(model => item.ProductId)</td>
                     <td>@Html.DisplayFor(model => item.ProductName)</td>
                     <td>@Html.DisplayFor(model => item.ProductDesc)</td>
-
-                    <td>@Html.DisplayFor(model => item.Store.Name)</td>
                     <td>@Html.DisplayFor(model => item.Brand.Name)</td>
                     <td>@Html.DisplayFor(model => item.UnitPrice)</td>
                     <td>@Html.DisplayFor(model => item.ItemPrice)</td>
                     <td>@Html.DisplayFor(model => item.Quantity)</td>
                     <td>@Html.DisplayFor(model => item.ExtendPrice)</td>
                     <td>@Html.DisplayFor(model => item.UPCCode)</td>
-                    <td>@Html.DisplayFor(model => item.StoreItemNo)</td>
-                    <td>@Html.DisplayFor(model => item.StoreItemDesc)</td>
                 </tr>
             }
         </table>

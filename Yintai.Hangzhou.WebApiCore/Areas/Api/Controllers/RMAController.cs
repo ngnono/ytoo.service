@@ -33,11 +33,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         {
             var dbContext = Context;
             var linq = Context.Set<OrderEntity>().Where(o => o.CustomerId == authUser.Id && o.Status == (int)OrderStatus.Shipped);
-           
-            var linq2 = linq.GroupJoin(dbContext.Set<OrderItemEntity>().GroupJoin(dbContext.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image),
-                                                     o => o.ProductId,
+
+            var linq2 = linq.GroupJoin(dbContext.Set<OrderItemEntity>().Join(dbContext.Set<BrandEntity>(), o => o.BrandId, i => i.Id, (o, i) => new { OI = o, B = i })
+                                        .GroupJoin(dbContext.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image),
+                                                     o => o.OI.ProductId,
                                                      i => i.SourceId,
-                                                     (o, i) => new { OI = o, R = i.OrderByDescending(r => r.SortOrder).FirstOrDefault() }),
+                                                     (o, i) => new { OI = o.OI,B=o.B, R = i.OrderByDescending(r => r.SortOrder).FirstOrDefault() }),
                                         o => o.OrderNo,
                                         i => i.OI.OrderNo,
                                         (o, i) => new { O = o, R = i })
@@ -53,6 +54,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 o.Products = l.R.Select(oi => new MyOrderItemDetailResponse().FromEntity<MyOrderItemDetailResponse>(oi.OI, product =>
                 {
                     product.ProductResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(l.R.FirstOrDefault());
+                    product.BrandName = oi.B.Name;
+                    product.Brand2Name = oi.B.EnglishName;
                 }));
                 o.RMAs = l.RMA.Select(rma => new MyRMAResponse().FromEntity<MyRMAResponse>(rma));
                      
@@ -74,7 +77,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     .GroupJoin(Context.Set<ResourceEntity>().Where(res => res.SourceType == (int)SourceType.Product && res.Type == (int)ResourceType.Image)
                                     , o => new { Product = o.ProductId, Color = o.ColorId }
                                     , i => new { Product = i.SourceId, Color = i.ColorId }
-                                    , (o, i) => new { R=o,Res = i.OrderByDescending(res2=>res2.SortOrder).FirstOrDefault()})
+                                    , (o, i) => new { R = o, Res = i.OrderByDescending(res2 => res2.SortOrder).FirstOrDefault() })
+                                    .GroupJoin(Context.Set<BrandEntity>(), o => o.R.BrandId, i => i.Id, (o, i) => new { R=o.R,Res=o.Res,B=i.FirstOrDefault()})
                        , o => o.RMANo, i => i.R.RMANo, (o, i) => new { R = o, RI = i });
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
@@ -87,6 +91,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 o.Products = l.RI.ToList().Select(oi => new RMAItemInfoResponse().FromEntity<RMAItemInfoResponse>(oi.R, product =>
                 {
                     product.ProductResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(oi.Res);
+                    if (oi.B != null)
+                    {
+                        product.BrandName = oi.B.Name;
+                        product.Brand2Name = oi.B.EnglishName;
+                    }
+
                 }));
                
             }));

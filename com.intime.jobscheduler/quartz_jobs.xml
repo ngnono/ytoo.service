@@ -394,8 +394,8 @@
         <description>every 5 mins</description>
         <job-name>ERP-GroupSync</job-name>
         <job-group>Fashion</job-group>
-        <misfire-instruction>SmartPolicy</misfire-instruction>
-        <cron-expression>0/30 * * * * ?</cron-expression>
+        <misfire-instruction>DoNothing</misfire-instruction>
+        <cron-expression>0 1 1 * * ?</cron-expression>
       </cron>
     </trigger>
  
@@ -461,6 +461,27 @@
       </cron>
     </trigger>
     -->
+    <job>
+      <name>FreeMemory</name>
+      <group>Fashion</group>
+      <description>free memory  per 1 hr</description>
+      <job-type>com.intime.jobscheduler.Job.FreeMemoryJob, com.intime.jobscheduler</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+     
+    </job>
+
+    <trigger>
+      <cron>
+        <name>FreeMemory-1hr</name>
+        <group>Fashion</group>
+        <description>every 1 hr</description>
+        <job-name>FreeMemory</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 0 0/1 * * ?</cron-expression>
+      </cron>
+    </trigger>
   </schedule>
 
 </job-scheduling-data>
