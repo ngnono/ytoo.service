@@ -17,5 +17,23 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string Name { get; set; }
         [DataMember(Name = "iscod")]
         public bool IsCOD { get; set; }
+        [DataMember(Name="supportmobile")]
+        public bool MobAvail { get {
+            if (!AvailChannels.HasValue)
+                return true;
+            return (AvailChannels.Value & 1)==1;
+        } }
+              [DataMember(Name = "supportpc")]
+        public bool PcAvail
+        {
+            get
+            {
+                if (!AvailChannels.HasValue)
+                    return true;
+                return (AvailChannels.Value & 2) == 2;
+            }
+        }
+        [IgnoreDataMember]
+        public int? AvailChannels { get; set; }
     }
 }

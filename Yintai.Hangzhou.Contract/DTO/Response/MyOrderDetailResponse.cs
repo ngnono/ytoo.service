@@ -49,7 +49,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
          public string ShippingContactPhone { get; set; }
         [DataMember(Name = "needinvoice")]
          public Nullable<bool> NeedInvoice { get; set; }
-        [DataMember(Name = "invoicesubject")]
+        [DataMember(Name = "invoicetitle")]
          public string InvoiceSubject { get; set; }
         [DataMember(Name = "invoicedetail")]
          public string InvoiceDetail { get; set; }

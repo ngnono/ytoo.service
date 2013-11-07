@@ -24,31 +24,32 @@ namespace com.intime.fashion.common.Wxpay
         public string NotifyUrl { get; set; }
 
         public string Encode() {
-            var values = new Dictionary<string, dynamic>();
+            var values = new Dictionary<string, string>();
             values.Add("bank_type", "WX");
             values.Add("body", Body);
             if (!string.IsNullOrEmpty(Attach))
                 values.Add("attach", Attach);
-            values.Add("parter", WxPayConfig.PARTER_ID);
+             
+            values.Add("partner", WxPayConfig.PARTER_ID);
             values.Add("out_trade_no", OutTradeNo);
-            values.Add("total_fee", TotalFee);
-            values.Add("fee_type", FeeType);
+            values.Add("total_fee", TotalFee.ToString());
+            values.Add("fee_type", FeeType.ToString());
             values.Add("notify_url", string.IsNullOrEmpty(NotifyUrl)?WxPayConfig.NOTIFY_URL:NotifyUrl);
             values.Add("spbill_create_ip", SPBill_Create_IP);
             if (!string.IsNullOrEmpty(Time_Start))
                 values.Add("time_start", Time_Start);
             if (!string.IsNullOrEmpty(Time_End))
                 values.Add("time_expire", Time_End);
-            values.Add("transport_fee", TransportFee);
-            values.Add("product_fee", ProductFee);
+            values.Add("transport_fee", TransportFee.ToString());
+            values.Add("product_fee", ProductFee.ToString());
             if (!string.IsNullOrEmpty(GoodsTag))
                 values.Add("goods_tag", GoodsTag);
             values.Add("input_charset", InputCharset);
 
-            var signingStr = values.OrderBy(b => b.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}", b.Key, b.Value), s => s.ToString()).TrimEnd('&');
+            var signingStr = values.OrderBy(b => b.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}&", b.Key, b.Value), s => s.ToString()).TrimEnd('&');
             signingStr = string.Format("{0}&key={1}", signingStr, WxPayConfig.PARTER_KEY);
             var signedStr = Util.MD5_Encode(signingStr).ToUpper();
-            var resultStr = values.OrderBy(b => b.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}", b.Key,HttpUtility.UrlEncode(b.Value)), s => s.ToString()).TrimEnd('&');
+            var resultStr = values.OrderBy(b => b.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}&", b.Key,HttpUtility.UrlEncode(b.Value)), s => s.ToString()).TrimEnd('&');
             return string.Format("{0}&sign={1}", resultStr, signedStr);
         }
         

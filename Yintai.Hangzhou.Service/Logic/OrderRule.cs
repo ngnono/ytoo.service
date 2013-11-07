@@ -89,6 +89,7 @@ namespace Yintai.Hangzhou.Service.Logic
         }
         public static RestfulResult Create(OrderRequest request,UserModel authUser,out bool createSuccess)
         {
+            request.AuthUser = authUser;
             createSuccess = false;
             var _productRepo = ServiceLocator.Current.Resolve<IProductRepository>();
             var _orderRepo = ServiceLocator.Current.Resolve<IOrderRepository>();
@@ -300,10 +301,10 @@ namespace Yintai.Hangzhou.Service.Logic
             {
                 try
                 {
-                    AwsHelper.SendHttpMessage(string.Format("{0}/card/find", AwsConfig.BASE_URL), new
+                    AwsHelper.SendHttpMessage(string.Format("{0}card/find", ConfigManager.AwsHost), new
                     {
                         uid = order.OutsiteUId
-                    }, AwsConfig.PUBLIC_KEY, AwsConfig.PRIVATE_KEY, r => vipCard = r.data, null);
+                    }, ConfigManager.AwsHttpPublicKey, ConfigManager.AwsHttpPrivateKey, r => vipCard = r.data, null);
                 }
                 catch (Exception ex)
                 {

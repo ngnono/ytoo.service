@@ -51,7 +51,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name="rmapolicy")]
         public string RMAPolicy { get; set; }
         [DataMember(Name="supportpayments")]
-        public IEnumerable<PaymentMethodResponse> SupportPayments { get; set; }
+        public IEnumerable<PaymentResponse> SupportPayments { get; set; }
         
         [DataMember(Name = "dimension")]
         public ResourceInfoResponse DimensionResource { get; set; }
@@ -89,12 +89,5 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public bool Is4Sale { get; set; }
     }
    
-    [DataContract]
-    public class PaymentMethodResponse
-    {
-        [DataMember(Name="code")]
-        public string Code { get; set; }
-        [DataMember(Name = "name")]
-        public string Name { get; set; }
-    }
+    
 }

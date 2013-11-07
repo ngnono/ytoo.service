@@ -8,11 +8,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
         public ShipViaEntityMap()
         {
             // Primary Key
-            this.HasKey(t => new { t.Id, t.Name, t.Status, t.CreateDate, t.UpdateDate });
+            this.HasKey(t => new { t.Id});
 
-            // Properties
-            this.Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+           
 
             this.Property(t => t.Name)
                 .IsRequired()

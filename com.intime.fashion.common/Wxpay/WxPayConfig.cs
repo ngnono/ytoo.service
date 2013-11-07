@@ -44,6 +44,6 @@ namespace com.intime.fashion.common.Wxpay
     }
     public static class WxPaySignMethod
     {
-        public static readonly string SHA1 = "SHA1";
+        public static readonly string SHA1 = "sha1";
     }
 }

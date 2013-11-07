@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,10 @@ namespace Yintai.Hangzhou.WebSupport.Binder
             ModelBindingContext bindingContext)
         {
             var modelType = bindingContext.ModelType;
-            var serializer = new XmlSerializer(modelType);
-
-            var inputStream = controllerContext.HttpContext.Request.InputStream;
-
-            return serializer.Deserialize(inputStream);
+            var serializer = new XmlSerializer(modelType,new XmlRootAttribute("xml"));
+            var stream = controllerContext.HttpContext.Request.InputStream;
+            stream.Position = 0;
+            return serializer.Deserialize(stream);
         }
     }
     public class XmlModelBinderProvider : IModelBinderProvider

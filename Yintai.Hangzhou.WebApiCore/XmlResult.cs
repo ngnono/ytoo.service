@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Xml;
 using System.Xml.Serialization;
+using Yintai.Architecture.Common.Logger;
+using Yintai.Architecture.Framework.ServiceLocation;
 
 namespace Yintai.Hangzhou.WebApiCore
 {
@@ -49,11 +53,39 @@ namespace Yintai.Hangzhou.WebApiCore
         {
             if (_objectToSerialize != null)
             {
+
                 var xs = (_xmlAttribueOverrides == null) ?
                     new XmlSerializer(_objectToSerialize.GetType()) :
                     new XmlSerializer(_objectToSerialize.GetType(), _xmlAttribueOverrides);
+              
+                StringBuilder builder = new StringBuilder();
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.OmitXmlDeclaration = true;
+                settings.Encoding = Encoding.UTF8;
+                     
+                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+                ns.Add("", "");
                 context.HttpContext.Response.ContentType = "text/xml";
-                xs.Serialize(context.HttpContext.Response.Output, _objectToSerialize);
+
+                var sb = new StringBuilder();
+                using (var stringWriter = XmlWriter.Create(sb, settings))
+                {
+                    xs.Serialize(stringWriter, _objectToSerialize, ns);
+                    Log.Debug(sb.ToString());
+                }
+              
+                using (var stringWriter = XmlWriter.Create(context.HttpContext.Response.OutputStream, settings))
+                {
+                    xs.Serialize(stringWriter, _objectToSerialize,ns);
+                }
+              
+               
+            }
+        }
+        private ILog Log
+        {
+            get {
+                return ServiceLocator.Current.Resolve<ILog>();
             }
         }
     }

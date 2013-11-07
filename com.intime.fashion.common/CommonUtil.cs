@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
+using Yintai.Architecture.Framework.ServiceLocation;
 
 namespace com.intime.fashion.common
 {
@@ -37,5 +39,9 @@ namespace com.intime.fashion.common
                 callback(result.Data as ExecuteResult<T>);
             return result;
         }
+
+        public static ILog Log { get {
+            return ServiceLocator.Current.Resolve<ILog>();
+        } }
     }
 }

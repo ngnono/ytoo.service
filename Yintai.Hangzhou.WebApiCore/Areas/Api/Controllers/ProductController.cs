@@ -298,10 +298,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 var rmaMsg = Context.Set<ConfigMsgEntity>().Where(c=>c.MKey=="O_C_RMAPolicy").FirstOrDefault();
                 res.RMAPolicy = rmaMsg==null?string.Empty:rmaMsg.Message;
                 res.SupportPayments = context.Set<PaymentMethodEntity>().Where(p => p.Status != (int)DataStatus.Deleted)
-                                .Select(p => new PaymentMethodResponse() { 
-                                     Code = p.Code,
-                                      Name = p.Name
-                                });
+                                .ToList()
+                                .Select(p => new PaymentResponse().FromEntity<PaymentResponse>(p));
                 res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id).GroupBy(pi => pi.PColorId)
                                 .Select(pi => pi.Key)
                                 .Join(Context.Set<ProductPropertyValueEntity>(), o => o, i => i.Id, (o, i) => i)

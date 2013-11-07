@@ -76,14 +76,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
             request.ShipNo = request.ShipNo ?? string.Empty;
-            var ppLinq = Context.Set<ProductPropertyEntity>().Join(Context.Set<ProductPropertyValueEntity>(),o=>o.Id,i=>i.PropertyId,(o,i)=>new {PP=o,PPV=i});
+           
             var orderEntity = Context.Set<Order2ExEntity>().Where(o => o.ExOrderNo == request.OrderNo)
                             .Join(Context.Set<OrderEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => i)
                             .Join(Context.Set<OrderItemEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => new { O = o, OI = i })
-                            .GroupJoin(Context.Set<ProductMapEntity>(),o=>o.OI.ProductId,i=>i.ProductId,(o,i)=>new {O=o.O,OI=o.OI,EPId =i.FirstOrDefault()})
-                            .GroupJoin(ppLinq.Where(pp=>pp.PP.IsSize.HasValue && pp.PP.IsSize.Value==true),o=>o.OI.SizeValueId,i=>i.PPV.Id,(o,i)=>new {O=o.O,OI=o.OI,EPId=o.EPId,SId=i.FirstOrDefault()})
-                            .GroupJoin(ppLinq.Where(pp=>pp.PP.IsColor.HasValue && pp.PP.IsColor.Value==true),o=>o.OI.ColorValueId,i=>i.PPV.Id,(o,i)=>new {O=o.O,OI=o.OI,EPId=o.EPId,SId=o.SId,CId = i.FirstOrDefault()})
-                            ;
+                           ;
                             
             if (orderEntity == null)
                 return this.RenderError(r => r.Message = "订单不存在！");
@@ -110,22 +107,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
             bool isAllShipped = true;
             if (!request.ForceShip)
             {
-                var haveShippedEntity = Context.Set<OutboundEntity>().Where(ob => ob.SourceType == (int)OutboundType.Order && ob.SourceNo == request.OrderNo)
+                var haveShipped = Context.Set<OutboundEntity>().Where(ob => ob.SourceType == (int)OutboundType.Order && ob.SourceNo == rawOrderEntity.OrderNo)
                                         .Join(Context.Set<OutboundItemEntity>(), o => o.OutboundNo, i => i.OutboundNo, (o, i) => new { OB = o, OBI = i })
-                                        .GroupJoin(ppLinq.Where(pp => pp.PP.IsColor.HasValue && pp.PP.IsColor.Value == true), o => new { P = o.OBI.ProductId, CId = o.OBI.ColorId ?? 0 }, i => new { P = i.PP.ProductId, CId = i.PPV.Id }, (o, i) => new { OB = o.OB, OBI = o.OBI, CId = i.FirstOrDefault() })
-                                        .GroupJoin(ppLinq.Where(pp => pp.PP.IsSize.HasValue && pp.PP.IsSize.Value == true), o => new { P = o.OBI.ProductId, SId = o.OBI.SizeId ?? 0 }, i => new { P = i.PP.ProductId, SId = i.PPV.Id }, (o, i) => new { OB = o.OB, OBI = o.OBI, CId = o.CId, SId = i.FirstOrDefault() });
+                                        .ToList();
+                var haveShippedQuantity = 0;
+                if (haveShipped != null && haveShipped.Count() > 0)
+                    haveShippedQuantity = haveShipped.Sum(l => l.OBI.Quantity);
+                var totalQuantity = orderEntity.Sum(l => l.OI.Quantity);
 
-                foreach (var item in orderEntity)
+                var shippingQuantity = request.Products.Sum(l => l.Quantity);
+
+                if ((haveShippedQuantity  + shippingQuantity) < totalQuantity)
                 {
-                    var shippedQuantity = haveShippedEntity.Where(l => l.SId.PPV.Id == item.OI.SizeValueId && l.CId.PPV.Id == item.OI.ColorValueId && l.OBI.ProductId == item.OI.ProductId)
-                                    .Sum(l => l.OBI.Quantity);
-                    var shippingQuantity = request.Products.Where(l => l.ProductId == item.EPId.ChannelPId && l.Properties.ColorValueId == item.CId.PPV.ChannelValueId && l.Properties.SizeValueId == item.SId.PPV.ChannelValueId)
-                                    .Sum(l => l.Quantity);
-                    if (shippedQuantity + shippingQuantity < item.OI.Quantity)
-                    {
-                        isAllShipped = false;
-                        break;
-                    }
+                    isAllShipped = false;
                 }
             }
             using (var ts = new TransactionScope())
@@ -169,16 +163,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
                 {
                     foreach (var item in request.Products)
                     {
+                        var ppLinq = Context.Set<ProductPropertyEntity>().Join(Context.Set<ProductPropertyValueEntity>(), o => o.Id, i => i.PropertyId, (o, i) => new { PP = o, PPV = i });
                         var linq = Context.Set<ProductMapEntity>().Where(l => l.ChannelPId == item.ProductId)
                                     .Join(ppLinq, o => o.ProductId, i => i.PP.ProductId, (o, i) => new { P = o, PP = i.PP, PPV = i.PPV });
                         _obiRepo.Insert(new OutboundItemEntity()
                         {
                             CreateDate = DateTime.Now,
-                            ColorId = linq.Where(l => l.PP.IsColor.HasValue && l.PPV.ChannelValueId == item.Properties.ColorValueId).FirstOrDefault().PPV.Id,
+                            ColorId = linq.Where(l => l.PPV.ChannelValueId == item.Properties.ColorValueId).FirstOrDefault().PPV.Id,
                             OutboundNo = obEntity.OutboundNo,
                             ProductId = linq.FirstOrDefault().P.ProductId,
                             Quantity = item.Quantity,
-                            SizeId = linq.Where(l => l.PP.IsSize.HasValue && l.PPV.ChannelValueId == item.Properties.SizeValueId).FirstOrDefault().PPV.Id,
+                            SizeId = linq.Where(l => l.PPV.ChannelValueId == item.Properties.SizeValueId).FirstOrDefault().PPV.Id,
                             UpdateDate = DateTime.Now
                         });
                     }

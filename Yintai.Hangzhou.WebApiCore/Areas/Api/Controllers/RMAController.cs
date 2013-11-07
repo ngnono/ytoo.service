@@ -53,7 +53,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     return;
                 o.Products = l.R.Select(oi => new MyOrderItemDetailResponse().FromEntity<MyOrderItemDetailResponse>(oi.OI, product =>
                 {
-                    product.ProductResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(l.R.FirstOrDefault());
+                    product.ProductResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(oi.R);
                     product.BrandName = oi.B.Name;
                     product.Brand2Name = oi.B.EnglishName;
                 }));

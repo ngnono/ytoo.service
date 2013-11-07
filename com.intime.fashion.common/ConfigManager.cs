@@ -155,6 +155,12 @@ namespace com.intime.fashion.common
                 return _awshttpprivatekey;
             }
         }
+        public static string AwsHost
+        {
+            get {
+                return _awshttphost;
+            }
+        }
         public static string AwsHttpUrlVoidCoupon
         {
             get

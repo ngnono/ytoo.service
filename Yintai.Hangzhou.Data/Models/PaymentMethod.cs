@@ -12,6 +12,7 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime UpdateDate { get; set; }
         public int UpdateUser { get; set; }
         public bool IsCOD { get; set; }
+        public int? AvailChannels { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Web;
 using Yintai.Architecture.Common.Logger;
@@ -50,9 +51,13 @@ namespace Yintai.Architecture.Common.Web.HttpModules
                 return;
             }
             var unvalid_request = context.Context.Request.Unvalidated;
+            
             string form = unvalid_request.Form.ToJson();
             string query = unvalid_request.QueryString.ToJson();
-
+            var rawBody = string.Empty;
+            var sr = new StreamReader(context.Context.Request.InputStream);
+            rawBody = sr.ReadToEnd();
+            context.Context.Request.InputStream.Position = 0;
             //logging the Request
             var sb = new StringBuilder();
 
@@ -88,7 +93,8 @@ namespace Yintai.Architecture.Common.Web.HttpModules
                 sb.AppendFormat("{0} : {1}", key, unvalid_request.Form[key]);
                 sb.AppendLine();
             }
-
+            sb.AppendLine("[ rawbody ]");
+            sb.AppendLine(rawBody);
             _log.Debug(sb.ToString());
         }
 

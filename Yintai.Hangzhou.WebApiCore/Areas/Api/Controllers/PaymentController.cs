@@ -23,6 +23,8 @@ using Yintai.Hangzhou.Contract.DTO.Request.Customer;
 using Yintai.Hangzhou.Service.Logic;
 using Yintai.Hangzhou.Model;
 using com.intime.fashion.common;
+using System.Xml;
+using Yintai.Architecture.Common.Logger;
 
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
@@ -49,7 +51,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _customerService = customerService;
         }
 
-        public ActionResult Notify()
+        public ActionResult Notify2()
         {
             SortedDictionary<string, string> sPara = GetRequestPost();
 
@@ -72,6 +74,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                         var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == out_trade_no).FirstOrDefault();
                         if (paymentEntity == null && orderEntity != null)
                         {
+                            OrderTransactionEntity orderTransaction = null;
                             using (var ts = new TransactionScope())
                             {
                                 _paymentNotifyRepo.Insert(new PaymentNotifyLogEntity()
@@ -82,7 +85,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     PaymentContent = JsonConvert.SerializeObject(sPara)
                                 });
 
-                                var orderTransaction = _orderTranRepo.Insert(new OrderTransactionEntity()
+                                orderTransaction = _orderTranRepo.Insert(new OrderTransactionEntity()
                                 {
                                     Amount = amount,
                                     OrderNo = out_trade_no,
@@ -109,12 +112,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     });
                                 }
                                 ts.Complete();
-                                //notify sync async
-                                Task.Factory.StartNew(() =>
-                                {
-                                    OrderRule.OrderPaid2Erp(orderTransaction);
-                                });
+                               
                             }
+                            //notify sync async
+                            Task.Factory.StartNew(() =>
+                            {
+                                OrderRule.OrderPaid2Erp(orderTransaction);
+                            });
                         }
 
                     }
@@ -132,6 +136,93 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
         }
 
+        public ActionResult Notify()
+        {
+            Dictionary<string, string> sPara = GetRequestPost2();
+
+            if (sPara.Count > 0)
+            {
+                var aliNotify = new Com.Alipay2.Notify();
+                bool verifyResult = aliNotify.VerifyNotify(sPara, Request.Form["sign"]);
+
+                if (verifyResult)
+                {
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(sPara["notify_data"]);
+
+                    string out_trade_no = xmlDoc.SelectSingleNode("/notify/out_trade_no").InnerText;
+                    string trade_no = xmlDoc.SelectSingleNode("/notify/trade_no").InnerText;
+
+                    string trade_status = xmlDoc.SelectSingleNode("/notify/trade_status").InnerText;
+
+                    var amount = decimal.Parse(xmlDoc.SelectSingleNode("/notify/total_fee").InnerText);
+                    if (trade_status == "TRADE_FINISHED")
+                    {
+                        var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no).FirstOrDefault();
+                        var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == out_trade_no).FirstOrDefault();
+                        if (paymentEntity == null && orderEntity != null)
+                        {
+                            OrderTransactionEntity orderTransaction = null;
+                            using (var ts = new TransactionScope())
+                            {
+                                _paymentNotifyRepo.Insert(new PaymentNotifyLogEntity()
+                                {
+                                    CreateDate = DateTime.Now,
+                                    OrderNo = out_trade_no,
+                                    PaymentCode = Config.PaymentCode,
+                                    PaymentContent = JsonConvert.SerializeObject(sPara)
+                                });
+
+                                 orderTransaction = _orderTranRepo.Insert(new OrderTransactionEntity()
+                                {
+                                    Amount = amount,
+                                    OrderNo = out_trade_no,
+                                    CreateDate = DateTime.Now,
+                                    IsSynced = false,
+                                    PaymentCode = Config.PaymentCode,
+                                    TransNo = trade_no
+                                });
+                                if (orderEntity.Status != (int)OrderStatus.Paid && orderEntity.TotalAmount <= amount)
+                                {
+                                    orderEntity.Status = (int)OrderStatus.Paid;
+                                    orderEntity.UpdateDate = DateTime.Now;
+                                    orderEntity.RecAmount = amount;
+                                    _orderRepo.Update(orderEntity);
+
+                                    _orderlogRepo.Insert(new OrderLogEntity()
+                                    {
+                                        CreateDate = DateTime.Now,
+                                        CreateUser = 0,
+                                        CustomerId = orderEntity.CustomerId,
+                                        Operation = "支付订单",
+                                        OrderNo = out_trade_no,
+                                        Type = (int)OrderOpera.CustomerPay
+                                    });
+                                }
+                                ts.Complete();
+                               
+                            }
+                            //notify sync async
+                            Task.Factory.StartNew(() =>
+                            {
+                                OrderRule.OrderPaid2Erp(orderTransaction);
+                            });
+                        }
+
+                    }
+                    return Content("success");
+
+                }
+                else
+                {
+                    return Content("fail");
+                }
+            }
+            else
+            {
+                return Content("无通知参数");
+            }
+        }
         public ActionResult NotifyWx(WxNotifyPostRequest request)
         {
             Dictionary<string, string> sPara = GetQueryStringParams();
@@ -157,6 +248,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
                     if (paymentEntity == null && orderEntity != null)
                     {
+                        OrderTransactionEntity orderTransaction = null; 
                         using (var ts = new TransactionScope())
                         {
                             _paymentNotifyRepo.Insert(new PaymentNotifyLogEntity()
@@ -167,7 +259,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 PaymentContent = JsonConvert.SerializeObject(sPara)
                             });
 
-                           var orderTransaction= _orderTranRepo.Insert(new OrderTransactionEntity()
+                            orderTransaction= _orderTranRepo.Insert(new OrderTransactionEntity()
                             {
                                 Amount = amount,
                                 OrderNo = orderEntity.OrderNo,
@@ -195,15 +287,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     OrderNo = orderEntity.OrderNo,
                                     Type = (int)OrderOpera.CustomerPay
                                 });
-                                //notify sync async
-                                Task.Factory.StartNew(() =>
-                                {
-                                    OrderRule.OrderPaid2Erp(orderTransaction);
-                                });
+                                
 
                             }
                             ts.Complete();
 
+                        }
+                        //notify sync async
+                        if (orderTransaction != null)
+                        {
+                            Task.Factory.StartNew(() =>
+                            {
+                                OrderRule.OrderPaid2Erp(orderTransaction);
+                            });
                         }
                     }
 
@@ -242,6 +338,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
                     if (paymentEntity == null)
                     {
+                        OrderTransactionEntity orderTransaction = null;
                         using (var ts = new TransactionScope())
                         {
                             _paymentNotifyRepo.Insert(new PaymentNotifyLogEntity()
@@ -252,7 +349,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 PaymentContent = JsonConvert.SerializeObject(sPara)
                             });
 
-                           var orderTransaction= _orderTranRepo.Insert(new OrderTransactionEntity()
+                            orderTransaction= _orderTranRepo.Insert(new OrderTransactionEntity()
                             {
                                 Amount = amount,
                                 OrderNo = out_trade_no,
@@ -264,10 +361,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 OutsiteUId = request.OpenId
                             });
                             ts.Complete();
-                            //notify sync async
+                           
+                        }
+                        //notify sync async
+                        if (orderTransaction != null)
+                        {
                             Task.Factory.StartNew(() =>
                             {
-                                OrderRule.OrderPaid2Erp(orderTransaction,false);
+                                OrderRule.OrderPaid2Erp(orderTransaction, false);
                             });
                         }
                     }
@@ -285,9 +386,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         [HttpPost]
         public ActionResult WxPackage(WxPackageGetRequest request)
         {
-            if (request == null)
+            if (request == null )
             {
                 return new XmlResult(composePackageError(r => r.RetErrMsg = "请求数据异常！"));
+            }
+            if (string.Compare(request.ValidSign, request.AppSignature, false) != 0)
+            {
+                Log.Debug(JsonConvert.SerializeObject(request));
+                Log.Debug(request.ValidSign);
+                return new XmlResult(composePackageError(r => r.RetErrMsg = "请求没有授权！"));
             }
             var productId = request.ProductId;
             var productIds = productId.Split('-');
@@ -338,26 +445,42 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         private ActionResult doErpOrderPackage(string orderNo, WxPackageGetRequest request)
         {
            if (string.IsNullOrEmpty(orderNo))
-                return new XmlResult(composePackageError(r => r.RetErrMsg = "订单不存在！"));
+               return new XmlResult(composePackageError(r =>
+               {
+                   r.RetErrMsg = "订单不存在！";
+                   r.TimeStamp = request.TimeStamp + 1;
+               }));
            dynamic erpOrder = null;
            bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl
                             , new { func = "GetSalesInfo", dealCode = orderNo }
-                            ,r=>erpOrder = r.productDetail
+                            ,r=>erpOrder = r
                             , null);
-            if (!isSuccess || erpOrder==null)
-                return new XmlResult(composePackageError(r => r.RetErrMsg = "订单无法获取！"));
+           if (!isSuccess || erpOrder.productDetail == null)
+               return new XmlResult(composePackageError(r =>
+               {
+                   r.RetErrMsg = "订单无法获取！";
+                   r.TimeStamp = request.TimeStamp + 1;
+               }));
             decimal totalAmount = erpOrder.totalamount;
             if (totalAmount <=0)
-                return new XmlResult(composePackageError(r => r.RetErrMsg = "订单金额不正确！"));
-            return new XmlResult(composePackageSuccess(r => r.Package = new WxPackage()
+                return new XmlResult(composePackageError(r =>
+                {
+                    r.RetErrMsg = "订单金额不正确！";
+                    r.TimeStamp = request.TimeStamp + 1;
+                }));
+            return new XmlResult(composePackageSuccess(r =>
             {
-                Body = erpOrder[0].productname,
-                Attach = erpOrder[0].storedesc,
-                OutTradeNo = orderNo,
-                TotalFee = Util.Feng4Decimal(totalAmount),
-                TransportFee = 0,
-                SPBill_Create_IP = clientIP(),
-                NotifyUrl = WxPayConfig.NOTIFY_ERP_URL
+                r.Package = new WxPackage()
+                    {
+                        Body = erpOrder.productDetail[0].productname,
+                        Attach = erpOrder.storedesc,
+                        OutTradeNo = orderNo,
+                        TotalFee = Util.Feng4Decimal(totalAmount),
+                        TransportFee = 0,
+                        SPBill_Create_IP = clientIP(),
+                        NotifyUrl = WxPayConfig.NOTIFY_ERP_URL
+                    };
+                r.TimeStamp = request.TimeStamp + 1;
             }));
         }
         private ActionResult doSkuPackage(WxPackageGetRequest request)
@@ -566,7 +689,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var response = new WxPackageGetResponse()
                 {
                     AppId = WxPayConfig.APP_ID,
-                    TimeStamp = DateTime.Now.TicksOfWx().ToString(),
+                    TimeStamp = DateTime.Now.TicksOfWx(),
                     NonceStr = Util.Nonce(),
                     RetCode = (int)WxPayRetCode.RequestError,
                     RetErrMsg = "信息有误！",
@@ -582,10 +705,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var response = new WxPackageGetResponse()
             {
                 AppId = WxPayConfig.APP_ID,
-                TimeStamp = DateTime.Now.TicksOfWx().ToString(),
+                TimeStamp = DateTime.Now.TicksOfWx(),
                 NonceStr = Util.Nonce(),
                 RetCode = (int)WxPayRetCode.Success,
-                RetErrMsg = string.Empty,
+                RetErrMsg = "ok",
                 SignMethod = WxPaySignMethod.SHA1,
                 Package = null
             };
@@ -620,7 +743,24 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             return sArray;
         }
+        private Dictionary<string, string> GetRequestPost2()
+        {
+            int i = 0;
+            Dictionary<string, string> sArray = new Dictionary<string, string>();
+            NameValueCollection coll;
+            //Load Form variables into NameValueCollection variable.
+            coll = Request.Form;
 
+            // Get names of all forms into a string array.
+            String[] requestItem = coll.AllKeys;
+
+            for (i = 0; i < requestItem.Length; i++)
+            {
+                sArray.Add(requestItem[i], Request.Form[requestItem[i]]);
+            }
+
+            return sArray;
+        }
         private Dictionary<string, string> GetQueryStringParams()
         {
             var requestParams = new Dictionary<string, string>();
@@ -639,5 +779,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 return ServiceLocator.Current.Resolve<DbContext>();
             }
         }
+        private ILog Log { get {
+            return ServiceLocator.Current.Resolve<ILog>();
+        } }
     }
 }
