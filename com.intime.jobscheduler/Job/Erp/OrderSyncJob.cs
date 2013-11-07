@@ -1,4 +1,5 @@
 ﻿using com.intime.fashion.common;
+using com.intime.fashion.common.Wxpay;
 using Common.Logging;
 using Quartz;
 using System;
@@ -56,8 +57,9 @@ namespace com.intime.jobscheduler.Job.Erp
                 foreach (var order in oneTimeList)
                 {
                     try
-                    {          
-                        bool isSuccess = OrderRule.OrderPaid2Erp(order);
+                    {
+                        bool isOnlinePaid = string.Compare(order.PaymentCode, WxPayConfig.PaymentCode, true) != 0;
+                        bool isSuccess = OrderRule.OrderPaid2Erp(order,isOnlinePaid);
                          if (isSuccess)
                              successCount++;
 

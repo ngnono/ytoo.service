@@ -112,8 +112,8 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
             var writer = new BarcodeWriter();
             writer.Format = BarcodeFormat.QR_CODE;
             writer.Options = new ZXing.Common.EncodingOptions() { 
-                 Width=600,
-                 Height = 600,
+                 Width=300,
+                 Height =300,
                   
             };
            

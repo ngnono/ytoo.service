@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 
 namespace com.intime.fashion.common.Wxpay
@@ -25,7 +26,7 @@ namespace com.intime.fashion.common.Wxpay
 
         public static string SHA(string value)
        {
-           //CommonUtil.Log.Debug(string.Format("sha1:{0}", value));
+         //  CommonUtil.Log.Debug(string.Format("sha1:{0}", value));
            byte[] hashData = SHA1.Create().ComputeHash((Encoding.UTF8.GetBytes(value)));
            var hashText = new StringBuilder();
            foreach (byte b in hashData)
@@ -60,5 +61,14 @@ namespace com.intime.fashion.common.Wxpay
             return MD5_Encode(signingStr).ToUpper();
         }
 
+        public static string UrlEncode(string value)
+        {
+            if (value == null)
+                return null;
+            return HttpUtility.UrlEncode(value).Replace("+", "%20");
+        }
+
     }
+
+
 }

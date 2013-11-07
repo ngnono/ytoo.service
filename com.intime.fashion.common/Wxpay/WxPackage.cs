@@ -49,7 +49,7 @@ namespace com.intime.fashion.common.Wxpay
             var signingStr = values.OrderBy(b => b.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}&", b.Key, b.Value), s => s.ToString()).TrimEnd('&');
             signingStr = string.Format("{0}&key={1}", signingStr, WxPayConfig.PARTER_KEY);
             var signedStr = Util.MD5_Encode(signingStr).ToUpper();
-            var resultStr = values.OrderBy(b => b.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}&", b.Key,HttpUtility.UrlEncode(b.Value)), s => s.ToString()).TrimEnd('&');
+            var resultStr = values.OrderBy(b => b.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}&", b.Key,Util.UrlEncode(b.Value)), s => s.ToString()).TrimEnd('&');
             return string.Format("{0}&sign={1}", resultStr, signedStr);
         }
         

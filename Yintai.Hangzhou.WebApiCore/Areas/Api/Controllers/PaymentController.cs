@@ -25,6 +25,7 @@ using Yintai.Hangzhou.Model;
 using com.intime.fashion.common;
 using System.Xml;
 using Yintai.Architecture.Common.Logger;
+using Yintai.Architecture.Common.Models;
 
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
@@ -453,7 +454,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
            dynamic erpOrder = null;
            bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl
                             , new { func = "GetSalesInfo", dealCode = orderNo }
-                            ,r=>erpOrder = r
+                            ,r=>erpOrder = r.Result
                             , null);
            if (!isSuccess || erpOrder.productDetail == null)
                return new XmlResult(composePackageError(r =>
@@ -563,15 +564,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
              }, out isCreateSuccess);
             if (!isCreateSuccess)
                 return new XmlResult(composePackageError(r => r.RetErrMsg = "订单无法显示！"));
-            var orderModel = orderCreateResponse.Data as OrderResponse;
-            var orderNewEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == orderModel.OrderNo).FirstOrDefault();
+            var orderModel = orderCreateResponse.Data as ExecuteResult<OrderResponse>;
+            var orderNewEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == orderModel.Data.OrderNo).FirstOrDefault();
             //step3: compose package message
            
             return new XmlResult(composePackageSuccess(r => r.Package = new WxPackage()
             {
                 Body = string.Format("{0}-颜色:{1} 尺码:{2}", linq.P.Name, linq.Color.ValueDesc, linq.Size.ValueDesc),
                 Attach = additional.ToString(),
-                OutTradeNo = orderModel.ExOrderNo,
+                OutTradeNo = orderModel.Data.ExOrderNo,
                 TotalFee = Util.Feng4Decimal(orderNewEntity.TotalAmount),
                 TransportFee = Util.Feng4Decimal(orderNewEntity.ShippingFee ?? 0m),
                 SPBill_Create_IP = clientIP(),
@@ -662,25 +663,29 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
              }, out isCreateSuccess);
             if (!isCreateSuccess)
                 return new XmlResult(composePackageError(r => r.RetErrMsg = "订单无法显示！"));
-            var orderModel = orderCreateResponse.Data as OrderResponse;
-            var orderNewEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == orderModel.OrderNo).FirstOrDefault();
+            var orderModel = orderCreateResponse.Data as ExecuteResult<OrderResponse>;
+            var orderNewEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == orderModel.Data.OrderNo).FirstOrDefault();
             //step3: compose package message
            
             if (sectionEntity == null)
                 additional.Append(linq.P.Description);
             else
-                additional.AppendFormat("{0}-{1}-{2}", sectionEntity.Store.Name, sectionEntity.Section.Location, sectionEntity.Section.Name);
-            return new XmlResult(composePackageSuccess(r => r.Package = new WxPackage()
+                additional.AppendFormat("{0} {1} {2}", sectionEntity.Store.Name, sectionEntity.Section.Location, sectionEntity.Section.Name);
+            return new XmlResult(composePackageSuccess(r =>
             {
-                Body = string.Format("{0}-颜色:{1} 尺码:{2}",linq.P.Name,linq.Color.ValueDesc,linq.Size.ValueDesc),
-                Attach = additional.ToString(),
-                OutTradeNo = orderModel.ExOrderNo,
-                TotalFee = Util.Feng4Decimal(orderNewEntity.TotalAmount),
-                TransportFee = Util.Feng4Decimal(orderNewEntity.ShippingFee ?? 0m),
-                SPBill_Create_IP = clientIP(),
-                Time_Start = orderNewEntity.CreateDate.ToString("yyyyMMddHHmmss"),
-                Time_End = orderNewEntity.CreateDate.AddHours(4).ToString("yyyyMMddHHmmss")
+                r.Package = new WxPackage()
+                    {
+                        Body = string.Format("{0} {1} {2}", linq.P.Name, linq.Color.ValueDesc, linq.Size.ValueDesc),
+                        Attach = additional.ToString(),
+                        OutTradeNo = orderModel.Data.ExOrderNo,
+                        TotalFee = Util.Feng4Decimal(orderNewEntity.TotalAmount),
+                        TransportFee = Util.Feng4Decimal(orderNewEntity.ShippingFee ?? 0m),
+                        SPBill_Create_IP = clientIP(),
+                        //  Time_Start = orderNewEntity.CreateDate.ToString("yyyyMMddHHmmss"),
+                        // Time_End = orderNewEntity.CreateDate.AddHours(4).ToString("yyyyMMddHHmmss")
 
+                    };
+                r.TimeStamp = request.TimeStamp + 1;
             }));
 
         }
