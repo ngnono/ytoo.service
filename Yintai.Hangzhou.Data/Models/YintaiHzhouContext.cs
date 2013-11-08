@@ -136,6 +136,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<CouponLogEntity> CouponLogs { get; set; }
         public DbSet<DeviceLogEntity> DeviceLogs { get; set; }
         public DbSet<DeviceTokenEntity> DeviceTokens { get; set; }
+        public DbSet<ExOrderEntity> ExOrders { get; set; }
         public DbSet<FavoriteEntity> Favorites { get; set; }
         public DbSet<FeedbackEntity> Feedbacks { get; set; }
         public DbSet<GroupEntity> Groups { get; set; }
@@ -228,6 +229,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new CouponLogEntityMap());
             modelBuilder.Configurations.Add(new DeviceLogEntityMap());
             modelBuilder.Configurations.Add(new DeviceTokenEntityMap());
+            modelBuilder.Configurations.Add(new ExOrderEntityMap());
             modelBuilder.Configurations.Add(new FavoriteEntityMap());
             modelBuilder.Configurations.Add(new FeedbackEntityMap());
             modelBuilder.Configurations.Add(new GroupEntityMap());

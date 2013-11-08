@@ -14,8 +14,8 @@ namespace Yintai.Hangzhou.Data.Models
         public bool IsSynced { get; set; }
         public Nullable<System.DateTime> SyncDate { get; set; }
         public string OutsiteUId { get; set; }
-        public int? OutsiteType { get; set; }
-
+        public Nullable<int> OutsiteType { get; set; }
+        public Nullable<int> OrderType { get; set; }
 
         #region Overrides of BaseEntity
 

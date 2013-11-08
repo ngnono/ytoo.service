@@ -89,7 +89,7 @@ namespace com.intime.jobscheduler.Job.Erp
         private string FetchRemotePic(string url)
         {
             var client = new HttpClient();
-            string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,DateTime.Today.ToString("yyyyMMdd"));
+            string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Tmp",DateTime.Today.ToString("yyyyMMdd"));
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
             var path = string.Format("{0}/{1}.jpg",directory,Guid.NewGuid());

@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace com.intime.jobscheduler.Job
+namespace Yintai.Hangzhou.Model.Enums
 {
-    public enum JobType
+    public enum PaidOrderType
     {
-        Wx_Shipping = 1,
-        Wx_ShippingEx = 2
-
+        Self = 0,
+        Erp = 1,
+        Erp2 = 2
     }
-
 }

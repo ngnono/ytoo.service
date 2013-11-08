@@ -38,18 +38,21 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         private IOrderRepository _orderRepo;
         private IOrderLogRepository _orderlogRepo;
         private ICustomerDataService _customerService;
+        private IEFRepository<ExOrderEntity> _exorderRepo;
 
         public PaymentController(IEFRepository<OrderTransactionEntity> ordTranRepo
             , IEFRepository<PaymentNotifyLogEntity> paynotiRepo
             , IOrderRepository orderRepo
             , IOrderLogRepository orderLogRepo,
-            ICustomerDataService customerService)
+            ICustomerDataService customerService
+            ,IEFRepository<ExOrderEntity> exorderRepo)
         {
             _orderTranRepo = ordTranRepo;
             _paymentNotifyRepo = paynotiRepo;
             _orderRepo = orderRepo;
             _orderlogRepo = orderLogRepo;
             _customerService = customerService;
+            _exorderRepo = exorderRepo;
         }
 
         public ActionResult Notify2()
@@ -71,7 +74,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     var amount = decimal.Parse(Request.Form["total_fee"]);
                     if (Request.Form["trade_status"] == "TRADE_FINISHED")
                     {
-                        var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no).FirstOrDefault();
+                        var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no
+                            && p.PaymentCode == Config.PaymentCode).FirstOrDefault();
                         var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == out_trade_no).FirstOrDefault();
                         if (paymentEntity == null && orderEntity != null)
                         {
@@ -93,7 +97,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     CreateDate = DateTime.Now,
                                     IsSynced = false,
                                     PaymentCode = Config.PaymentCode,
-                                    TransNo = trade_no
+                                    TransNo = trade_no,
+                                    OrderType = (int)PaidOrderType.Self
                                 });
                                 if (orderEntity.Status != (int)OrderStatus.Paid && orderEntity.TotalAmount<=amount)
                                 {
@@ -159,7 +164,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     var amount = decimal.Parse(xmlDoc.SelectSingleNode("/notify/total_fee").InnerText);
                     if (trade_status == "TRADE_FINISHED")
                     {
-                        var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no).FirstOrDefault();
+                        var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no
+                            && p.PaymentCode == Config.PaymentCode).FirstOrDefault();
                         var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == out_trade_no).FirstOrDefault();
                         if (paymentEntity == null && orderEntity != null)
                         {
@@ -181,7 +187,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     CreateDate = DateTime.Now,
                                     IsSynced = false,
                                     PaymentCode = Config.PaymentCode,
-                                    TransNo = trade_no
+                                    TransNo = trade_no,
+                                    OrderType = (int)PaidOrderType.Self
                                 });
                                 if (orderEntity.Status != (int)OrderStatus.Paid && orderEntity.TotalAmount <= amount)
                                 {
@@ -245,7 +252,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 if (trade_status == 0)
                 {
                     var orderEntity = Context.Set<OrderEntity>().Join(Context.Set<Order2ExEntity>().Where(oe => oe.ExOrderNo == out_trade_no), o => o.OrderNo, i => i.OrderNo, (o, i) => o).FirstOrDefault();
-                    var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == orderEntity.OrderNo && p.PaymentCode == WxPayConfig.PaymentCode).FirstOrDefault();
+                    var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == orderEntity.OrderNo 
+                                                && p.PaymentCode == WxPayConfig.PaymentCode 
+                                                && (!p.OrderType.HasValue || p.OrderType.Value==(int)PaidOrderType.Self)).FirstOrDefault();
 
                     if (paymentEntity == null && orderEntity != null)
                     {
@@ -269,7 +278,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 PaymentCode = WxPayConfig.PaymentCode,
                                 TransNo = trade_no,
                                 OutsiteType = (int)OutsiteType.WX,
-                                OutsiteUId = request.OpenId
+                                OutsiteUId = request.OpenId,
+                                 OrderType =(int)PaidOrderType.Self
                             });
                             if (orderEntity.Status != (int)OrderStatus.Paid && orderEntity.TotalAmount <= amount)
                             {
@@ -335,7 +345,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 if (trade_status == 0)
                 {
               
-                    var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no && p.PaymentCode == WxPayConfig.PaymentCode).FirstOrDefault();
+                    var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no
+                        && p.PaymentCode == WxPayConfig.PaymentCode).FirstOrDefault();
 
                     if (paymentEntity == null)
                     {
@@ -359,7 +370,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 PaymentCode = WxPayConfig.PaymentCode,
                                 TransNo = trade_no,
                                 OutsiteType = (int)OutsiteType.WX,
-                                OutsiteUId = request.OpenId
+                                OutsiteUId = request.OpenId,
+                                 OrderType = (int)PaidOrderType.Erp
+                            });
+                            _exorderRepo.Insert(new ExOrderEntity() { 
+                                 ExOrderNo = out_trade_no,
+                                  Amount = amount,
+                                   PaidDate = DateTime.Now,
+                                    PaymentCode = WxPayConfig.PaymentCode,
+                                     OrderType = (int)PaidOrderType.Erp,
+                                      IsShipped = false
                             });
                             ts.Complete();
                            
@@ -453,7 +473,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                }));
            dynamic erpOrder = null;
            bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl
-                            , new { func = "GetSalesInfo", dealCode = orderNo }
+                            , new { func = "GetSalesInfo", sales_sid = orderNo }
                             ,r=>erpOrder = r.Result
                             , null);
            if (!isSuccess || erpOrder.productDetail == null)

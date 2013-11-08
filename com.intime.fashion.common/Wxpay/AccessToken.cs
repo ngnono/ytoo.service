@@ -15,7 +15,7 @@ namespace com.intime.fashion.common.Wxpay
        public long expires_in { get; set; }
        [JsonIgnore]
        public bool IsExpired { get {
-           return CreateDate.AddSeconds(expires_in) >= DateTime.Now;
+           return new DateTime(1970,1,1).AddSeconds(expires_in) >= DateTime.UtcNow;
        } }
        [JsonIgnore]
        public DateTime CreateDate { get; set; }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using com.intime.fashion.common.Erp;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -94,7 +95,24 @@ namespace com.intime.fashion.common
        {
 
            Dictionary<string, string> query = new Dictionary<string, string>();
-        
+
+           query.Add("from", ErpConfig.PUBLIC_KEY);
+           query.Add("nonce", new Random(1000).Next().ToString());
+           query.Add("ts", DateTime.UtcNow.SecondsNow().ToString());
+           var signingValue = new StringBuilder();
+           var signedValue = string.Empty;
+           foreach (var s in query.Values.ToArray().OrderBy(s => s))
+               signingValue.Append(s);
+           Logger.Debug(string.Format("signed value:{0}", signingValue.ToString()));
+           using (HMACSHA1 hmac = new HMACSHA1(Encoding.ASCII.GetBytes(ErpConfig.Private_KEY)))
+           {
+               var hashValue = hmac.ComputeHash(Encoding.ASCII.GetBytes(signingValue.ToString()));
+               signedValue = Convert.ToBase64String(hashValue);
+               Logger.Debug(signedValue);
+
+           }
+           query.Add("sign", signedValue);
+          
            if (null != data)
            {
                foreach (var attr in data.GetType().GetProperties(BindingFlags.Instance|BindingFlags.Public))
@@ -110,7 +128,7 @@ namespace com.intime.fashion.common
            var requestUrl = new StringBuilder();
            requestUrl.Append(host);
            requestUrl.Append("?");
-           return query.Keys.Aggregate(requestUrl, (s, e) => s.AppendFormat("{0}={1}&", e, HttpUtility.UrlEncode(query[e])), s => s.ToString());
+           return query.Keys.Aggregate(requestUrl, (s, e) => s.AppendFormat("{0}={1}&", e, HttpUtility.UrlEncode(query[e])), s => s.ToString().TrimEnd('&'));
 
        }
 

@@ -67,29 +67,25 @@ namespace com.intime.jobscheduler.Job.Wx
                                                     , o => o.OrderNo
                                                     , i => i.OrderNo
                                                     , (o, i) => new { OE = o, OT = i }).FirstOrDefault();
-                                var userEntity = db.Set<OutsiteUserEntity>().Where(u=>u.AssociateUserId==l.CustomerId).FirstOrDefault();
                                 if (linq == null)
                                 {
                                     log.Info(string.Format("order has not transaction:{0}",l.OrderNo));
                                     continue;
                                 }
-                                if (userEntity == null)
-                                {
-                                     log.Info(string.Format("order has no user open id:{0}",l.OrderNo));
-                                    continue;
-                                }
+                             
                                 var requestData = new WxNotify() {
                                      DeliverMsg = "已提货",
                                       DeliverStatus="1",
                                        DeliverTS = DateTime.Now.TicksOfWx().ToString(),
                                         OutTradeNo = linq.OE.ExOrderNo,
-                                         OpenId = userEntity.OutsiteUserId,
+                                         OpenId = linq.OT.OutsiteUId,
                                           TransactionId = linq.OT.TransNo
                                           
                                 };
                                 bool notifyResult = WxServiceHelper.Notify(requestData.EncodedRequest, null, null);
                                 if (notifyResult)
                                 {
+                                    db.SaveChanges();
                                     ts.Complete();
                                     successCount++;
                                 }

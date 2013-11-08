@@ -297,7 +297,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     res.DimensionResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(dimensionEntity);
                 var rmaMsg = Context.Set<ConfigMsgEntity>().Where(c=>c.MKey=="O_C_RMAPolicy").FirstOrDefault();
                 res.RMAPolicy = rmaMsg==null?string.Empty:rmaMsg.Message;
-                res.SupportPayments = context.Set<PaymentMethodEntity>().Where(p => p.Status != (int)DataStatus.Deleted)
+                res.SupportPayments = context.Set<PaymentMethodEntity>().Where(p => p.Status == (int)DataStatus.Normal)
                                 .ToList()
                                 .Select(p => new PaymentResponse().FromEntity<PaymentResponse>(p));
                 res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id).GroupBy(pi => pi.PColorId)

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Web.Mvc;
+using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
 using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.Response;
@@ -23,15 +24,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
         private IOutboundRepository _obRepo;
         private IOutboundItemRepository _obiRepo;
         private IShippViaRepository _shipviaRepo;
+        private IEFRepository<ExOrderEntity> _exorderRepo;
         public OrderController(IOrderRepository orderRepo,IOrderLogRepository orderLogRepo
             ,IOutboundRepository obRepo,IOutboundItemRepository obiRepo
-            ,IShippViaRepository shipviaRepo)
+            ,IShippViaRepository shipviaRepo
+            , IEFRepository<ExOrderEntity> exorderRepo
+            )
         {
             _orderRepo = orderRepo;
             _orderLogRepo = orderLogRepo;
             _obRepo = obRepo;
             _obiRepo = obiRepo;
             _shipviaRepo = shipviaRepo;
+            _exorderRepo = exorderRepo;
         }
         [HttpPost]
         public ActionResult PrepareShip(OrderPrepareShipRequest request)
@@ -81,9 +86,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
                             .Join(Context.Set<OrderEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => i)
                             .Join(Context.Set<OrderItemEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => new { O = o, OI = i })
                            ;
-                            
+
             if (orderEntity == null)
-                return this.RenderError(r => r.Message = "订单不存在！");
+            {
+                //check if it's a pure ex order
+                var exOrderEntity = Context.Set<ExOrderEntity>().Where(o => o.ExOrderNo == request.Sales_Sid).FirstOrDefault();
+                if (exOrderEntity == null)
+                {
+                    return this.RenderError(r => r.Message = "订单不存在！");
+                }
+                if (exOrderEntity.IsShipped.HasValue && exOrderEntity.IsShipped.Value)
+                    return this.RenderSuccess<BaseResponse>(null);
+                exOrderEntity.IsShipped = true;
+                exOrderEntity.ShipDate = DateTime.Now;
+                _exorderRepo.Update(exOrderEntity);
+                return this.RenderSuccess<BaseResponse>(null);
+            }
 
             if (!request.ForceShip && orderEntity.First().O.Status !=(int)OrderStatus.PreparePack)
                 return this.RenderError(r=>r.Message="订单状态不是准备发货");

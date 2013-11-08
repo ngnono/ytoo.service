@@ -8,19 +8,15 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
         public ShipViaEntityMap()
         {
             // Primary Key
-            this.HasKey(t => new { t.Id});
+            this.HasKey(t => t.Id);
 
-           
-
+            // Properties
             this.Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(50);
 
             this.Property(t => t.Url)
                 .HasMaxLength(200);
-
-            this.Property(t => t.Status)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             // Table & Column Mappings
             this.ToTable("ShipVia");

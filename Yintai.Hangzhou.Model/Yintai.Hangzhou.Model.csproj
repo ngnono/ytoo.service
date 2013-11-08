@@ -88,6 +88,7 @@
     <Compile Include="Enums\OrderStatus.cs" />
     <Compile Include="Enums\OutboundStatus.cs" />
     <Compile Include="Enums\OutboundType.cs" />
+    <Compile Include="Enums\PaidOrderType.cs" />
     <Compile Include="Enums\PreConfiguration.cs" />
     <Compile Include="Enums\PromotionCountType.cs" />
     <Compile Include="Enums\PushSourceType.cs" />

@@ -20,9 +20,7 @@ namespace Yintai.Hangzhou.Data.Models
         /// </summary>
         public override object EntityId
         {       
-                get { return new Dictionary<string, object> (5){
-                {"Id",Id}, {"Name",Name}, {"Status",Status}, {"CreateDate",CreateDate}, {"UpdateDate",UpdateDate} 
-                };}
+                get { return Id; }
  
         }
 

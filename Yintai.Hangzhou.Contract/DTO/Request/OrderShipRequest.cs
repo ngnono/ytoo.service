@@ -10,7 +10,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
    public class OrderShipRequest:BaseRequest
     {
        [Required(ErrorMessage="OrderNo 不能为空")]
-       public string OrderNo { get; set; }    
+       public string OrderNo { get; set; }
+       [Required(ErrorMessage = "DealNo 不能为空")]
+       public string Sales_Sid { get; set; }
        public int ShipVia { get; set; }
        [Required(ErrorMessage = "ShipViaName 不能为空")]
        public string ShipViaName { get; set; }
