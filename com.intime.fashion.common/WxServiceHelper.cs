@@ -82,6 +82,40 @@ namespace com.intime.fashion.common
 
 
         }
+
+        public static bool SendMessage(dynamic requestData, Action<dynamic> successCallback, Action<dynamic> failCallback)
+        {
+            var client = new RestClient(WxPayConfig.WEB_SERVICE_BASE);
+            var token = WgServiceHelper.Token;
+            if (token == null)
+            {
+                CommonUtil.Log.Info("token is empty");
+                return false;
+            }
+            var notifyRequest = new RestRequest("cgi-bin/message/template/send?access_token={access_token}", Method.POST);
+            notifyRequest.RequestFormat = DataFormat.Json;
+            notifyRequest.AddUrlSegment("access_token", token.access_token);
+            notifyRequest.AddBody(requestData);
+            var notifyResponse = JsonConvert.DeserializeObject<dynamic>(client.Execute(notifyRequest).Content);
+
+            if (notifyResponse.errcode == 0)
+            {
+                if (successCallback != null)
+                    successCallback(notifyResponse);
+                return true;
+            }
+            else
+            {
+                WgServiceHelper.RenewToken();
+                Logger.Debug(notifyResponse);
+
+                if (failCallback != null)
+                    failCallback(notifyResponse);
+                return false;
+            }
+
+
+        }
         private static ILog Logger
         {
             get

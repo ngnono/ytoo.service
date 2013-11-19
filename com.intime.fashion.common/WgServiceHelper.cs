@@ -24,7 +24,7 @@ namespace com.intime.fashion.common
             }
         }
 
-        private static void RenewToken()
+        public static void RenewToken()
         {
             var client = new RestClient(WeigouConfig.BASE_URL); 
             var request = new RestRequest("app/getAppInfoByAppId.xhtml", Method.GET);

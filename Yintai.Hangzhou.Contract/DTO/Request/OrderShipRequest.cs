@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace Yintai.Hangzhou.Contract.DTO.Request
 {
-   public class OrderShipRequest:BaseRequest
+   public class OrderShipRequest:BaseRequest,IValidatableObject
     {
-       [Required(ErrorMessage="OrderNo 不能为空")]
        public string OrderNo { get; set; }
-       [Required(ErrorMessage = "DealNo 不能为空")]
        public string Sales_Sid { get; set; }
        public int ShipVia { get; set; }
        [Required(ErrorMessage = "ShipViaName 不能为空")]
@@ -23,5 +21,15 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
        public int StoreId { get; set; }
        public bool ForceShip { get; set; }
 
+       public bool IsOrderShip { get {
+           return !string.IsNullOrEmpty(OrderNo);
+       } }
+
+
+       public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+       {
+           if (string.IsNullOrEmpty(OrderNo) && string.IsNullOrEmpty(Sales_Sid))
+               yield return new ValidationResult("订单号或销售sid为空");
+       }
     }
 }

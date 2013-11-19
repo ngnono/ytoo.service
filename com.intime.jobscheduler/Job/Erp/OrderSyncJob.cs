@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Service.Logic;
 
 namespace com.intime.jobscheduler.Job.Erp
@@ -58,7 +59,7 @@ namespace com.intime.jobscheduler.Job.Erp
                 {
                     try
                     {
-                        bool isOnlinePaid = string.Compare(order.PaymentCode, WxPayConfig.PaymentCode, true) != 0;
+                        bool isOnlinePaid = order.OrderType == (int)PaidOrderType.Self;
                         bool isSuccess = OrderRule.OrderPaid2Erp(order,isOnlinePaid);
                          if (isSuccess)
                              successCount++;

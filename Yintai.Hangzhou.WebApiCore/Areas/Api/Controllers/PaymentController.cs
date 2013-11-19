@@ -26,6 +26,8 @@ using com.intime.fashion.common;
 using System.Xml;
 using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Common.Models;
+using com.intime.fashion.common.Weigou;
+using System.Web;
 
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
@@ -301,6 +303,35 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 
 
                             }
+                            bool isSuccess = false;
+                            var orderItemEntity = Context.Set<OrderItemEntity>().Where(o => o.OrderNo == orderEntity.OrderNo).FirstOrDefault();
+                            var expDate = string.Format("{0}之前", DateTime.Today.AddDays(1).ToShortDateString());
+                            var detailRemark = string.Format("提货码:{0} 专柜:{1}", out_trade_no, orderEntity.ShippingAddress);
+                           var targetUrl = new Dictionary<string, string>() {
+                                            {"productname",orderItemEntity.ProductName}
+                                            , {"quantity",orderItemEntity.Quantity.ToString()}
+                                            ,{"expdate",expDate}
+                                            ,{"remark",detailRemark}
+                                        }.Aggregate(new StringBuilder(), (s, e) => s.AppendFormat("{0}={1}&", e.Key, HttpUtility.UrlEncode(e.Value))
+                                                                        , s => s.ToString().TrimEnd('&'));
+                            isSuccess = WxServiceHelper.SendMessage(new
+                            {
+                                touser = request.OpenId,
+                                template_id = WxPayConfig.MESSAGE_TEMPLATE_ID,
+                                url = string.Format("{0}?{1}",WeigouConfig.MESSAGE_TARGET_URL,targetUrl),
+                                data = new
+                                {
+                                    productType = new { value = "商品名",  color = "#000000" },
+                                    name = new { value = orderItemEntity.ProductName, color = "#173177" },
+                                    number = new { value = orderItemEntity.Quantity.ToString(), color = "#173177" },
+                                    expDate =new { value =  expDate, color = "#173177" },
+                                    remark = new { value = detailRemark, color = "#173177" } 
+                                }
+                            }, null, null);
+                            if (isSuccess)
+                                ts.Complete();
+                            else
+                                return Content("fail");
                             ts.Complete();
 
                         }
@@ -381,7 +412,30 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                      OrderType = (int)PaidOrderType.Erp,
                                       IsShipped = false
                             });
+                            /*
+                            bool isSuccess = false;
+                            var targetUrl = new Dictionary<string, string>() {
+                                            {"productname","详见小票"}
+                                            , {"quantity","详见小票"}
+                                            ,{"expdate","详见小票"}
+                                        }.Aggregate(new StringBuilder(), (s, e) => s.AppendFormat("{0}={1}&", e.Key, HttpUtility.UrlEncode(e.Value))
+                                                                         , s => s.ToString().TrimEnd('&'));
+                            isSuccess = WxServiceHelper.SendMessage(new
+                            {
+                                touser = request.OpenId,
+                                template_id = WxPayConfig.MESSAGE_TEMPLATE_ID,
+                                url =string.Format("{0}?{1}",WeigouConfig.MESSAGE_TARGET_URL,targetUrl),
+                                data = new
+                                {
+                                    productType = new { value = "商品名", color = "#000000" },
+                                    name = new { value = "详见小票", color = "#173177" },
+                                    number = new { value = "详见小票", color = "#173177" },
+                                    expDate = new { value = "详见小票", color = "#173177" },
+                                }
+                            }, null, null);
+                             * */
                             ts.Complete();
+                           
                            
                         }
                         //notify sync async

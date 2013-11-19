@@ -82,12 +82,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
             }
             request.ShipNo = request.ShipNo ?? string.Empty;
            
-            var orderEntity = Context.Set<Order2ExEntity>().Where(o => o.ExOrderNo == request.OrderNo)
-                            .Join(Context.Set<OrderEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => i)
-                            .Join(Context.Set<OrderItemEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => new { O = o, OI = i })
-                           ;
-
-            if (orderEntity == null)
+            if (!request.IsOrderShip)
             {
                 //check if it's a pure ex order
                 var exOrderEntity = Context.Set<ExOrderEntity>().Where(o => o.ExOrderNo == request.Sales_Sid).FirstOrDefault();
@@ -102,7 +97,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers
                 _exorderRepo.Update(exOrderEntity);
                 return this.RenderSuccess<BaseResponse>(null);
             }
-
+            var orderEntity = Context.Set<Order2ExEntity>().Where(o => o.ExOrderNo == request.OrderNo)
+                           .Join(Context.Set<OrderEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => i)
+                           .Join(Context.Set<OrderItemEntity>(), o => o.OrderNo, i => i.OrderNo, (o, i) => new { O = o, OI = i });
             if (!request.ForceShip && orderEntity.First().O.Status !=(int)OrderStatus.PreparePack)
                 return this.RenderError(r=>r.Message="订单状态不是准备发货");
 

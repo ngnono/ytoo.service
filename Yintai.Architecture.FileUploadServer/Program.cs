@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Configuration.Install;
 using System.IO;
 using System.Reflection;
+using Yintai.Architecture.Common.Logger;
 
 namespace Yintai.Architecture.FileUploadServer
 {
@@ -18,31 +19,10 @@ namespace Yintai.Architecture.FileUploadServer
         /// </summary>
         static void Main(string[] args)
         {
-            if (System.Environment.UserInteractive)
-            {
-                string parameter = string.Concat(args);
-                switch (parameter)
-                {
-                    case "--install":
-                        ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
-                        break;
-                    case "--uninstall":
-                        ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
-                        break;
-                }
-            }
-            else
-            {
-                ServiceBase[] ServicesToRun;
-                ServicesToRun = new ServiceBase[] 
-            { 
-                new Service1() 
-            };
-                ServiceBase.Run(ServicesToRun);
-            }
            
-
-
+               var  _host = new ServiceHostEx(typeof(ImageTool.Impl.ImageService),  LoggerManager.Current());
+                _host.Open();
+                Console.Read();
         }
     }
 }

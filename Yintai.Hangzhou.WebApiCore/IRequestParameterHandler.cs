@@ -173,7 +173,7 @@ namespace Yintai.Hangzhou.WebApiCore
         {
             var request = context.RequestContext.HttpContext.Request;
             var uid = request[Define.Uid];
-            if (String.IsNullOrEmpty(uid))
+            if (uid==null)
             {
                 throw new System.ArgumentNullException(Define.Uid);
             }
