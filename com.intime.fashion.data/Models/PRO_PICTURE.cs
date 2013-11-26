@@ -22,5 +22,6 @@ namespace com.intime.fashion.data.erp.Models
         public Nullable<short> MAIN_BIT { get; set; }
         public Nullable<short> UPLOAD_BIT { get; set; }
         public Nullable<decimal> CRC { get; set; }
+        public Nullable<short> DELETE_BIT { get; set; }
     }
 }

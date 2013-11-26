@@ -195,6 +195,7 @@
     <Content Include="Areas\Api\Views\Web.config" />
     <Content Include="Configurations\Log4Net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Areas\Cms\Views\Web.config" />
     <Content Include="Configurations\unity.config">

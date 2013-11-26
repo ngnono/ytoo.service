@@ -41,7 +41,8 @@ namespace com.intime.fashion.common.Wxpay
         Order = 1,
         Sku = 2,
         Product = 3,
-        ErpOrder = 4
+        ErpOrder = 4,
+        Erp2Order = 5
     }
     public static class WxPaySignMethod
     {

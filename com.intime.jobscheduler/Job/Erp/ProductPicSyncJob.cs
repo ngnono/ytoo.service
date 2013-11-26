@@ -187,8 +187,16 @@ namespace com.intime.jobscheduler.Job.Erp
                     });
                     existProduct.IsHasImage = true;
                     existProduct.UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now;
-                    existProduct.Status = (int)DataStatus.Normal;
                     db.SaveChanges();
+                }
+                else
+                {
+                    if (product.DELETE_BIT.HasValue && product.DELETE_BIT.Value == 1)
+                    {
+                        existPic.Status = 0;
+                        existPic.UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now;
+                        db.SaveChanges();
+                    }
                 }
             }
 

@@ -162,7 +162,7 @@ namespace com.intime.jobscheduler.Job.Erp
                             RecommendedReason = product.PRO_DESC ?? string.Empty,
                             RecommendUser = DEFAULT_OWNER_ID,
                             SortOrder = 0,
-                            Status = (int)DataStatus.Default,
+                            Status = ((product.PRO_SELLING??0)==1)?(int)DataStatus.Normal:(int)DataStatus.Default,
                             Store_Id = storeEntity == null ? 0 : storeEntity.Id,
                             Tag_Id = tagEntity == null ? int.Parse(DEFAULT_TAG_ID) : tagEntity.Id,
                             Price = product.PROMOTION_PRICE ?? NULL_PRICE,
@@ -199,6 +199,7 @@ namespace com.intime.jobscheduler.Job.Erp
                         existProductEntity.Price = product.PROMOTION_PRICE ?? NULL_PRICE;
                         existProductEntity.Description = product.PRO_DESC ?? string.Empty;
                         existProductEntity.RecommendedReason = product.PRO_DESC ?? string.Empty;
+                        existProductEntity.Status = ((product.PRO_SELLING ?? 0) == 1) ? (int)DataStatus.Normal : (int)DataStatus.Default;
 
                     }
                     db.SaveChanges();

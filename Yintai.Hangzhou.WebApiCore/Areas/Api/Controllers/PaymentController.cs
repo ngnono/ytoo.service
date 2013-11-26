@@ -486,6 +486,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                      return doProductPackage(request);
                 case (int)WxPackageType.ErpOrder:
                      return doErpOrderPackage(productIds[1],request);
+
                 default:
                     return new XmlResult(composePackageError(r => r.RetErrMsg = "订单类型有误！"));
             }

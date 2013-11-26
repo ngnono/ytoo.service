@@ -402,7 +402,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
            });
            return this.RenderSuccess<GetAvailOperationsResponse>(m=>m.Data=new GetAvailOperationsResponse() { 
                  IsFavored = isFavored,
-                  IfCanCoupon = ifCanCoupon
+                  IfCanCoupon = ifCanCoupon,
+                  IfCanTalk = false
                });
            
         }
