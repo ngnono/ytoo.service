@@ -120,7 +120,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                         (o,i)=>new {R=o,RR=i.OrderByDescending(resource=>resource.SortOrder).FirstOrDefault()});
                 r.CanVoid =  RMARule.CanVoid(r.Status);
 
-                r.Products = rmaItemsEntity.ToList().Select(ri=>new RMAItemInfoResponse().FromEntity<RMAItemInfoResponse>(ri,ritem=>{
+                r.Products = rmaItemsEntity.ToList().Select(ri=>new RMAItemInfoResponse().FromEntity<RMAItemInfoResponse>(ri.R,ritem=>{
                    ritem.ProductResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(ri.RR);
                     
                 }));

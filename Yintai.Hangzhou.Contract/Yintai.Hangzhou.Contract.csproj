@@ -116,6 +116,8 @@
     <Compile Include="DTO\Request\Pass\PassCreateRequest.cs" />
     <Compile Include="DTO\Request\Share\ShareRequest.cs" />
     <Compile Include="DTO\Request\Store\StoreRequest.cs" />
+    <Compile Include="DTO\Request\WxGetPay4AppTokenRequest.cs" />
+    <Compile Include="DTO\Request\WxGetPay4HtmlUrlRequest.cs" />
     <Compile Include="DTO\Request\WxNotifyPostRequest.cs" />
     <Compile Include="DTO\Request\WxPackageGetRequest.cs" />
     <Compile Include="DTO\Response\Card\CardInfoResponse.cs" />
@@ -153,6 +155,8 @@
     <Compile Include="DTO\Response\TagPropertyDetailResponse.cs" />
     <Compile Include="DTO\Response\Tag\TagInfoResponse.cs" />
     <Compile Include="DTO\Response\TPagerInfoResponse.cs" />
+    <Compile Include="DTO\Response\WxGetPay4AppTokenResponse.cs" />
+    <Compile Include="DTO\Response\WxGetPay4HtmlUrlResponse.cs" />
     <Compile Include="DTO\Response\WxPackageGetResponse.cs" />
     <Compile Include="DTO\ThumnImageType.cs" />
     <Compile Include="Favorite\IFavoriteDataService.cs" />

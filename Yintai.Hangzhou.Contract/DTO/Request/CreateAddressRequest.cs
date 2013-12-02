@@ -23,12 +23,15 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public string ShippingZipCode { get; set; }
         [Required(ErrorMessage = "地址省不能为空")]
         public string ShippingProvince { get; set; }
+        [Required(ErrorMessage="地址省份不能为空")]
         public int ShippingProvinceId { get; set; }
         [Required(ErrorMessage ="地址城市不能为空")]
         public string ShippingCity { get; set; }
+        [Required(ErrorMessage = "地址城市不能为空")]
         public int? ShippingCityId { get; set; }
         [Required(ErrorMessage = "地址地区不能为空")]
         public int? ShippingDistrictId { get; set; }
+         [Required(ErrorMessage = "地址地区不能为空")]
         public string ShippingDistrict { get; set; }
 
        

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Framework.ServiceLocation;
 
@@ -116,6 +118,51 @@ namespace com.intime.fashion.common
 
 
         }
+
+        public static WxAppPayTokenResponse GetAppPayToken(string orderNo, decimal totalAmount, string clientIp)
+        {
+            var client = WebRequest.CreateHttp(new WxAppPayToken() { 
+                     OrderNo = orderNo,
+                      TotalFee = totalAmount,
+                      ClientIp = clientIp
+            }.TokenUrl);
+            StringBuilder sb = new StringBuilder();
+            using (var response = client.GetResponse())
+            {
+                var body = response.GetResponseStream();
+                using (var streamReader = new StreamReader(body, Encoding.UTF8))
+                {
+                    sb.Append(streamReader.ReadToEnd());
+                }
+            }
+            dynamic xmlResponse = null;
+            try
+            {
+
+                xmlResponse = DynamicXml.Parse(sb.ToString());
+            }
+            catch (Exception ex)
+            {
+
+                Logger.Error(sb.ToString());
+                throw ex;
+            }
+
+            if (xmlResponse == null ||
+                xmlResponse.retcode != 0)
+            {
+                Logger.Error(sb);
+                throw new ApplicationException("获取支付token失败");
+            }
+            return new WxAppPayTokenResponse() { 
+                 noncestr = Util.Nonce(),
+                 timestamp = DateTime.Now.TicksOfWx(),
+                  package = string.Format("Sign={0}",xmlResponse.tenpay_sign),
+                 prepayid = xmlResponse.trade_token
+            };
+            
+        }
+
         private static ILog Logger
         {
             get
@@ -124,5 +171,16 @@ namespace com.intime.fashion.common
             }
         }
 
+
+        public static string GetHtmlPayUrl(string orderNo, decimal totalAmount, string clientIp, string returnUrl)
+        {
+            return new WxHtmlPayUrl()
+            {
+                OrderNo = orderNo,
+                TotalFee = totalAmount,
+                ClientIp = clientIp,
+                ReturnUrl = returnUrl
+            }.PayUrl;
+        }
     }
 }

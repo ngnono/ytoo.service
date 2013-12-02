@@ -81,6 +81,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EnumExtension.cs" />
+    <Compile Include="Erp2ServiceHelper.cs" />
+    <Compile Include="Erp2\Erp2Config.cs" />
+    <Compile Include="Erp2\Util.cs" />
     <Compile Include="ErpServiceHelper.cs" />
     <Compile Include="Erp\ErpConfig.cs" />
     <Compile Include="Erp\Util.cs" />
@@ -90,9 +93,13 @@
     <Compile Include="Weigou\WeigouConfig.cs" />
     <Compile Include="WgServiceHelper.cs" />
     <Compile Include="Wxpay\AccessToken.cs" />
+    <Compile Include="Wxpay\DynamicXml.cs" />
     <Compile Include="Wxpay\Extension.cs" />
     <Compile Include="Wxpay\OrderQuery.cs" />
     <Compile Include="Wxpay\Util.cs" />
+    <Compile Include="Wxpay\WxAppPayToken.cs" />
+    <Compile Include="Wxpay\WxAppPayTokenResponse.cs" />
+    <Compile Include="Wxpay\WxHtmlPayUrl.cs" />
     <Compile Include="Wxpay\WxNativeUrl.cs" />
     <Compile Include="Wxpay\WxNotify.cs" />
     <Compile Include="Wxpay\WxPackage.cs" />

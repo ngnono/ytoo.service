@@ -70,7 +70,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
      
         [DataMember(Name="canvoid")]
         public bool CanVoid { get {
-           return new int[]{(int)OrderStatus.Create,(int)OrderStatus.Paid}.Any(status => status == Status);
+           return new int[]{(int)OrderStatus.Create}.Any(status => status == Status);
         } }
           [DataMember(Name = "canrma")]
         public bool CanRMA {

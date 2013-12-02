@@ -1,5 +1,6 @@
 ﻿using com.intime.fashion.common;
 using com.intime.fashion.common.Aws;
+using com.intime.fashion.common.Erp2;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -311,20 +312,29 @@ namespace Yintai.Hangzhou.Service.Logic
                     log.Error(ex);
                 }
             }
-            var paymentName = string.Empty;
-            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            bool isSuccess = false;
+            if (order.OrderType == (int)PaidOrderType.Erp2)
             {
-                var paymentEntity = db.Set<PaymentMethodEntity>().Where(p => p.Code == order.PaymentCode).FirstOrDefault();
-                if (paymentEntity == null)
-                {
-                    log.Error(string.Format("orderno :{1} not support payment code paid:{0}",order.PaymentCode,order.OrderNo));
-                    return false;
-                }
-                paymentName = paymentEntity.Name;
+                isSuccess = Erp2ServiceHelper.SendHttpMessage(Erp2Config.BASE_URL, new { salesno = order.OrderNo, PAY_TYPE = order.PaymentCode, TRADE_NO = order.TransNo, CardNo = vipCard }, null
+                              , null);
             }
-            var paidFunc = isOnlinePay ? "WebOrdersPaid" : "WebSalesPaid";
-            bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = paidFunc, dealCode = order.OrderNo, PAY_TYPE = order.PaymentCode, PaymentName = paymentName, TRADE_NO = order.TransNo, CardNo = vipCard }, null
-                          , null);
+            else
+            {
+                var paymentName = string.Empty;
+                using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+                {
+                    var paymentEntity = db.Set<PaymentMethodEntity>().Where(p => p.Code == order.PaymentCode).FirstOrDefault();
+                    if (paymentEntity == null)
+                    {
+                        log.Error(string.Format("orderno :{1} not support payment code paid:{0}", order.PaymentCode, order.OrderNo));
+                        return false;
+                    }
+                    paymentName = paymentEntity.Name;
+                }
+                var paidFunc = isOnlinePay ? "WebOrdersPaid" : "WebSalesPaid";
+                isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = paidFunc, dealCode = order.OrderNo, PAY_TYPE = order.PaymentCode, PaymentName = paymentName, TRADE_NO = order.TransNo, CardNo = vipCard }, null
+                              , null);
+            }
             if (isSuccess)
             {
                 using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))

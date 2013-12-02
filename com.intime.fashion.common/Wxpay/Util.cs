@@ -68,6 +68,16 @@ namespace com.intime.fashion.common.Wxpay
             return HttpUtility.UrlEncode(value).Replace("+", "%20");
         }
 
+        public static string ClientIp(HttpRequestBase request)
+        { 
+            string ipAddress = request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+
+            if (ipAddress == null || ipAddress.ToLower() == "unknown")
+                ipAddress = request.ServerVariables["REMOTE_ADDR"];
+
+            return ipAddress;
+        }
+
     }
 
 

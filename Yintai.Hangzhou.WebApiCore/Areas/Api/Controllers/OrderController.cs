@@ -1,4 +1,5 @@
 ﻿using com.intime.fashion.common;
+using com.intime.fashion.common.Wxpay;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -69,10 +70,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     break;
                 case OrderRequestType.Complete:
                     linq = linq.Where(o=>o.Status==(int)OrderStatus.CustomerReceived ||
-                                        o.Status==(int)OrderStatus.CustomerRejected);
+                                        o.Status==(int)OrderStatus.CustomerRejected ||
+                                        o.Status == (int)OrderStatus.Complete);
                     break;
                 case OrderRequestType.Void:
-                    linq = linq.Where(o=>o.Status == (int)OrderStatus.Void);
+                    linq = linq.Where(o=>o.Status == (int)OrderStatus.Void ||
+                                          o.Status == (int)OrderStatus.RMAd);
                     break;
             }
             var linq2 = linq.GroupJoin(dbContext.Set<OrderItemEntity>().Join(dbContext.Set<BrandEntity>(), o => o.BrandId, i => i.Id, (o, i) => new { OI=o,B=i})
@@ -238,60 +241,54 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         }
 
         [RestfulAuthorize]
-     //   [VersionFilter(ShouldGreater="2.3")]
-        public ActionResult Pay(MyOrderPayRequest request, UserModel authUser)
-        {
-           
-            var dbContext = Context;
-            var linq = dbContext.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo && o.CustomerId == authUser.Id).FirstOrDefault();
-            if (linq == null)
-            {
-                return this.RenderError(m => m.Message = "订单号不存在");
-            }
-            if (linq.TotalAmount > request.Amount)
-                return this.RenderError(m => m.Message = "支付额度不够");
-            var orderStatus = new int[] { (int)OrderStatus.Create };
-            if (!orderStatus.Any(s => s == linq.Status))
-            {
-                return this.RenderError(m => m.Message = "订单状态已经支付！");
-            }
-            using (var ts = new TransactionScope())
-            {
-                linq.Status = (int)OrderStatus.Paid;
-                linq.RecAmount = request.Amount;
-                linq.UpdateDate = DateTime.Now;
-                _orderRepo.Update(linq);
-
-                _orderlogRepo.Insert(new OrderLogEntity()
-                {
-                    CreateDate = DateTime.Now,
-                    CreateUser = 0,
-                    CustomerId = 0,
-                    OrderNo = linq.OrderNo,
-                    Type = (int)OrderOpera.CustomerPay,
-                    Operation = "用户支付订单。"
-                });
-                bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "WebOrdersPaid", dealCode = linq.OrderNo,PAY_TYPE=linq.PaymentMethodCode,PaymentName=string.Empty,CardNo = string.Empty,TRADE_NO=request.PayTransNo },null
-                   , null);
-                if (isSuccess)
-                {
-                    ts.Complete();
-                    return this.RenderSuccess<MyOrderDetailResponse>(null);
-                }
-                else
-                { 
-                    
-                    return this.RenderError(r=>r.Message="支付失败");
-                }
-            }
-           
-        }
-
-        [RestfulAuthorize]
         public ActionResult RMA(RMARequest request, UserModel authUser)
         {
 
             return DoRMA(request, authUser, true);
+        }
+        [RestfulAuthorize]
+        public ActionResult WxAppPay(WxGetPay4AppTokenRequest request, UserModel authUser) 
+        {
+            if (string.IsNullOrEmpty(request.OrderNo))
+                return this.RenderError(r => r.Message = "订单号必须");
+            var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo && o.Status == (int)OrderStatus.Create).FirstOrDefault();
+            if (null == orderEntity)
+                return this.RenderError(r => r.Message = "订单状态不能支付");
+            if (string.Compare(orderEntity.PaymentMethodCode, WxPayConfig.PAYMENT_CODE4APP, true) != 0)
+                return this.RenderError(r => r.Message = "订单支付方式不正确");
+
+            var token = WxServiceHelper.GetAppPayToken(orderEntity.OrderNo, orderEntity.TotalAmount,Util.ClientIp(Request));
+
+            return this.RenderSuccess<WxGetPay4AppTokenResponse>(r => r.Data = new WxGetPay4AppTokenResponse { 
+                 NonceStr = token.noncestr,
+                  Package = token.package,
+                   PartnerId = token.partnerid,
+                    PrepayId = token.prepayid,
+                     TimeStamp = token.timestamp,
+                      Sign = token.sign
+            });
+        }
+
+        [RestfulAuthorize]
+        public ActionResult WxHtmlPay(WxGetPay4HtmlUrlRequest request, UserModel authUser)
+        {
+            if (string.IsNullOrEmpty(request.OrderNo))
+                return this.RenderError(r => r.Message = "订单号必须");
+            if (string.IsNullOrEmpty(request.ClientIp))
+                return this.RenderError(r => r.Message = "客户ip必须");
+            if (string.IsNullOrEmpty(request.ReturnUrl))
+                return this.RenderError(r => r.Message = "回调地址必须");
+            var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo && o.Status == (int)OrderStatus.Create).FirstOrDefault();
+            if (null == orderEntity)
+                return this.RenderError(r => r.Message = "订单状态不能支付");
+            if (string.Compare(orderEntity.PaymentMethodCode, WxPayConfig.PAYMENT_CODE4APP, true) != 0)
+                return this.RenderError(r => r.Message = "订单支付方式不正确");
+
+            string url = WxServiceHelper.GetHtmlPayUrl(orderEntity.OrderNo, orderEntity.TotalAmount, request.ClientIp,request.ReturnUrl);
+
+            return this.RenderSuccess<WxGetPay4HtmlUrlResponse>(r => r.Data = new WxGetPay4HtmlUrlResponse() { 
+                 PayUrl = url
+               });
         }
 
         private ActionResult DoRMA(RMARequest request, UserModel authUser,bool ifNeedValidate)
@@ -310,12 +307,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     return this.RenderError(m => m.Message = "订单状态现在不能申请退货");
                 }
                 var rmaEntity = dbContext.Set<RMAEntity>().Where(r => r.OrderNo == request.OrderNo
-                                 && r.Status != (int)RMAStatus.Reject2Customer && r.Status != (int)RMAStatus.Void).FirstOrDefault();
+                                 && r.Status != (int)RMAStatus.Reject2Customer 
+                                 && r.Status != (int)RMAStatus.Void
+                                 && r.Status !=(int)RMAStatus.Reject
+                                 && r.Status !=(int)RMAStatus.Complete).FirstOrDefault();
                 if (rmaEntity != null)
                 {
                     return this.RenderError(m => m.Message = "已经申请了退货单，不能再次申请！");
                 }
             }
+            request.Reason = string.Format("{0}-{1}", dbContext.Set<RMAReasonEntity>().Find(request.RMAReason).Reason, request.Reason ?? string.Empty);
             var erpRma = new
             {
                 dealCode = orderEntity.OrderNo,
@@ -323,9 +324,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 COMPANY_FRT = "0",
                 REAL_NAME = orderEntity.ShippingContactPerson,
                 USER_SID = "0",
+
                 Detail = new List<dynamic>()
             };
-            request.Reason = string.Format("{0}-{1}",dbContext.Set<RMAReasonEntity>().Find(request.RMAReason).Reason,request.Reason??string.Empty);
+            
             using (var ts = new TransactionScope())
             {
                 decimal rmaAmount = 0;
@@ -370,7 +372,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                         ColorValueName = orderItemEntity.ColorValueName,
                         UpdateDate = DateTime.Now,
                         StoreItem = orderItemEntity.StoreItemNo,
-                        StoreDesc = orderItemEntity.StoreItemDesc
+                        StoreDesc = orderItemEntity.StoreItemDesc,
+                        BrandId = orderItemEntity.BrandId
+                        
 
                     });
                     var exInventory = Context.Set<InventoryEntity>().Where(i => i.ProductId == rma.ProductId && i.PColorId == rma.Properties.ColorValueId && i.PSizeId == rma.Properties.SizeValueId).FirstOrDefault();
@@ -379,7 +383,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     erpRma.Detail.Add(new
                     {
                         SelectPro_detail_sid = exInventory.ChannelInventoryId,
-                        RefundNum = rma.Quantity
+                        RefundNum = rma.Quantity,
+                        REFUND_REASON = request.Reason
                     });
                 }
                 newRma.RMAAmount = rmaAmount;
