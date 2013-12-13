@@ -22,7 +22,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2
             context.MapRoute(
                 "Api2_default",
                 "Api2/{controller}/{action}/{method}",
-                new { action = "Index", method = UrlParameter.Optional },
+                new { action = "Index", method = UrlParameter.Optional,app=UrlParameter.Optional },
                 new[] { "Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers" }
             );
         }

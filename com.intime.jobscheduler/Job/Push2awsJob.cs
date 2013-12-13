@@ -884,18 +884,31 @@ namespace com.intime.jobscheduler.Job
                                                 Name = sp.Name,
                                                 Description = sp.Description
                                             }
-                            let promotions = from ppr in db.Promotion2Product
-                                             where ppr.ProdId == p.Id
-                                             join pro in db.Promotions on ppr.ProId equals pro.Id
-                                             select new ESPromotion { 
-                                                Id = pro.Id,
-                                                Name = pro.Name,
-                                                Description = pro.Description,
-                                                CreatedDate = p.CreatedDate,
-                                                StartDate = pro.StartDate,
-                                                EndDate = pro.EndDate,
-                                                Status = pro.Status
-                                             }
+                            let promotions = db.Promotion2Product.Where(pp=>pp.ProdId == p.Id)
+                                             .Join(db.Promotions,o=>o.ProId,i=>i.Id,(o,i)=>i)
+                                             .GroupJoin(db.Resources.Where(pr=>pr.SourceType==(int)SourceType.Promotion && pr.Type==(int)ResourceType.Image)
+                                                        ,o=>o.Id
+                                                        ,i=>i.SourceId
+                                                        ,(o,i)=>new {Pro=o,R=i.OrderByDescending(r=>r.SortOrder)})
+                                             .Select(ppr=> new ESPromotion { 
+                                                Id = ppr.Pro.Id,
+                                                Name = ppr.Pro.Name,
+                                                Description = ppr.Pro.Description,
+                                                CreatedDate = ppr.Pro.CreatedDate,
+                                                StartDate = ppr.Pro.StartDate,
+                                                EndDate = ppr.Pro.EndDate,
+                                                Status = ppr.Pro.Status,
+                                                Resource = ppr.R.Select(r=> new ESResource()
+                                                {
+                                                    Domain = r.Domain,
+                                                    Name = r.Name,
+                                                    SortOrder = r.SortOrder,
+                                                    IsDefault = r.IsDefault,
+                                                    Type = r.Type,
+                                                    Width = r.Width,
+                                                    Height = r.Height
+                                                })
+                                             })
                             let section = (from section in db.Sections
                                            where section.BrandId == p.Brand_Id && section.StoreId == p.Store_Id
                                           select new ESSection(){

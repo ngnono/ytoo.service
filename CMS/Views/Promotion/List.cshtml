@@ -1,0 +1,247 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.WebSupport.Helper
+@model Yintai.Hangzhou.Cms.WebSiteV1.Models.PromotionCollectionViewModel
+@{
+    ViewBag.Title = "促销列表";
+    PromotionListSearchOption search = ViewBag.SearchOptions;
+    HtmlHelper<PromotionListSearchOption> searchModelHelper = Html.HtmlHelperFor<PromotionListSearchOption>();
+
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("促销管理", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+@section PageJsSection {
+    <script>
+        $(function () {
+            $("a[id^='delete']").click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var itemId = $(this).attr("data-rightId");
+                $("#delete-dialog").dialog({
+                    resizable: false,
+                    height: 140,
+                    modal: true,
+                    buttons: {
+                        "删除": function () {
+                            $(this).dialog("close");
+                            $.ajax({
+                                type: "POST",
+                                url: "@(Url.Action("Delete"))",
+                                data: {
+                                    id: itemId
+                                },
+                                success: function (data) {
+                                    if (data["Success"] == true) {
+                                        self.parents("tr:first").remove();
+                                    }
+                                    else {
+                                        alert('删除失败！');
+                                    }
+                                },
+                                error: function (data, textStatus, jqXHR) {
+                                    alert('删除失败！');
+                                }
+
+                            });
+                        },
+                        "取消": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+
+                });
+            });
+        });
+    </script>
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("List", null, new { page = 0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="span4">
+                        <div class="control-group">
+                <label class="control-label" for="Name">活动代码</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.PId)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">活动名称</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Name)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">排序</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Filters.GenericOrder>())
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="Name">状态</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.Status, EnumHelper.DisplayList<DataStatus>())
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">门店</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(model => search.Store)
+                </div>
+            </div>
+        </div>
+        
+    </div>
+}
+
+<table>
+    <tr>
+        <th>图片</th>
+        <th>操作</th>
+        <th>促销编码</th>
+        <th>促销名
+        </th>
+        <th>状态
+        </th>
+        <th>促销描述
+        </th>
+        <th>开始时间
+        </th>
+        <th>结束时间
+        </th>
+        <th>推荐人
+        </th>
+        <th>收藏数量
+        </th>
+        <th>已领用量
+        </th>
+        <th>发行量
+        </th>
+        <th>门店
+        </th>
+        <th>是否置顶
+        </th>
+        <th>能否包含商品
+        </th>
+
+
+        <th>创建用户
+        </th>
+        <th>创建时间
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model.Promotions)
+    {
+        <tr>
+            <td>
+                @if (item.Resources != null && item.Resources.Count > 0)
+                {
+                    <div>
+                        @foreach (var re in item.Resources)
+                        {
+                            if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                            {
+                            <a href="@Url.Action("Details", "Resource", new { id = re.Id })">
+                                <img width="60" src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120X0" />
+                            </a>
+                            }
+                        }
+                    </div>
+                }
+
+
+            </td>
+            <td>
+                <div class="btn-group">
+                <button class="btn btn-small">操作</button>
+                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id })</li>
+                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id }) </li>
+                        <li><a  href="@string.Format("{0}?search.promotion={1}",Url.Action("List","Product"),item.Name)">查看商品</a></li>
+                        <li><a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
+                        
+                    </ul>
+                </div>
+            </td>
+            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.Label("", ((DataStatus)item.Status).ToFriendlyString())
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @if (item.RecommendUser>0){
+                    @Html.ActionLink(item.RecommendUser.ToString(), "Details", "Customer", new { id = item.RecommendUser }, null)
+                } else
+                {
+                   <label>NA</label>
+                }
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FavoriteCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvolvedCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PublicationLimit)
+            </td>
+            <td>
+                @Html.ActionLink(item.Store_Id.ToString(), "Details", "Store", new { id = item.Store_Id }, null)
+
+            </td>
+            <td>
+                @Html.Label("", item.IsTop.ToString())
+            </td>
+            <td>
+                @Html.Label("", (item.IsProdBindable ?? false).ToString())
+            </td>
+
+
+            <td>
+                @Html.ActionLink(item.CreatedUser.ToString(), "Details", "Customer", new { id = item.CreatedUser }, null)
+            </td>
+            <td>
+
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+
+        </tr>
+    }
+
+</table>
+@Html.Partial("PagerPartialView", Model)
+<div class="hide" id="delete-dialog" title="删除促销">
+    <p>您确认要删除该条促销吗？</p>
+</div>

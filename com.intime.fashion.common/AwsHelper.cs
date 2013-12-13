@@ -95,11 +95,16 @@ namespace com.intime.fashion.common
 
         }
 
-        public static void Transfer2S3(string localPath)
+        public static void Transfer2S3(string localPath,string remotePath)
         {
             EnsureS3();
             var transferClient = new TransferUtility(s3);
-            transferClient.Upload(localPath, AwsConfig.S3_BUCKET_NAME);
+            transferClient.Upload(new TransferUtilityUploadRequest() { 
+                 CannedACL = Amazon.S3.Model.S3CannedACL.PublicRead,
+                 FilePath = localPath,
+                 BucketName = AwsConfig.S3_BUCKET_NAME,
+                 Key = remotePath
+            });
         }
         private static void EnsureQueue()
         {

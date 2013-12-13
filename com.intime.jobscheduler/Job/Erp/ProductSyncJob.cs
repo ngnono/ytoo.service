@@ -200,6 +200,8 @@ namespace com.intime.jobscheduler.Job.Erp
                         existProductEntity.Description = product.PRO_DESC ?? string.Empty;
                         existProductEntity.RecommendedReason = product.PRO_DESC ?? string.Empty;
                         existProductEntity.Status = ((product.PRO_SELLING ?? 0) == 1) ? (int)DataStatus.Normal : (int)DataStatus.Default;
+                        if ((product.PRO_SELLING ?? 0) == 0)
+                            existProductEntity.Is4Sale = false;
 
                     }
                     db.SaveChanges();

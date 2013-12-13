@@ -163,9 +163,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
             var itemsEntity = dbContext.Set<OrderItemEntity>().Where(o => o.OrderNo == request.OrderNo).ToList();
             var currentStatus = linq.Status;
-           var voidStatus = new int[]{(int)OrderStatus.Create,(int)OrderStatus.Paid,
-               (int)OrderStatus.PassConfirmed,
-               (int)OrderStatus.PreparePack};
+           var voidStatus = new int[]{(int)OrderStatus.Create};
            if (!voidStatus.Any(s=>s==currentStatus))
            {
                return this.RenderError(m => m.Message = "订单状态现在不能取消");

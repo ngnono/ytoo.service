@@ -138,7 +138,7 @@ namespace com.intime.fashion.common
             dynamic xmlResponse = null;
             try
             {
-
+                Logger.Debug(sb);
                 xmlResponse = DynamicXml.Parse(sb.ToString());
             }
             catch (Exception ex)
@@ -149,7 +149,7 @@ namespace com.intime.fashion.common
             }
 
             if (xmlResponse == null ||
-                xmlResponse.retcode != 0)
+                xmlResponse.retcode != "0")
             {
                 Logger.Error(sb);
                 throw new ApplicationException("获取支付token失败");

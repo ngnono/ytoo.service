@@ -139,7 +139,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             {
                 var result =
                 this._promotionDataService.CreateCoupon(request);
-
+                /*
                 if (request.IsPass == 1 && result.Data != null && result.Data.CouponCodeResponse != null)
                 {
                     var code = result.Data.CouponCodeResponse;
@@ -154,6 +154,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     //                                                                   .ProductDescription, null, result.Data.CouponCodeResponse.User_Id);
 
                 }
+                 * */
 
                 return new RestfulResult
                 {

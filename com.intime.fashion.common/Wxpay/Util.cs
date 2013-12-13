@@ -13,7 +13,7 @@ namespace com.intime.fashion.common.Wxpay
     {
         public static string Nonce()
         {
-            return Guid.NewGuid().ToString().Substring(0, 20).Replace("-","");
+            return Guid.NewGuid().ToString().Replace("-", "").Substring(0, 32);
         }
 
 
@@ -58,6 +58,12 @@ namespace com.intime.fashion.common.Wxpay
         {
             var signingStr = sPara.OrderBy(s=>s.Key).Aggregate(new StringBuilder(),(s,b)=>s.AppendFormat("{0}={1}&",b.Key,b.Value),s=>s.ToString().TrimEnd('&'));
             signingStr = string.Format("{0}&key={1}",signingStr,WxPayConfig.PARTER_KEY);
+            return MD5_Encode(signingStr).ToUpper();
+        }
+
+        public static string NotifySignApp(Dictionary<string, string> sPara) {
+            var signingStr = sPara.OrderBy(s => s.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}&", b.Key, b.Value), s => s.ToString().TrimEnd('&'));
+            signingStr = string.Format("{0}&key={1}", signingStr, WxPayConfig.APP_PARTER_KEY);
             return MD5_Encode(signingStr).ToUpper();
         }
 

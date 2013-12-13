@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "导入权限";
+}
+@section PageJsSection {
+    <script>
+        $(function () {
+            $("#right_selectall").click(function () {
+                var allSelected = $(this);
+                $("input:checkbox[name='RoleRightDisplay']").each(function () {
+                    if (allSelected.is(":checked")) {
+                        $(this).attr("checked", true);
+                    } else {
+                        $(this).removeAttr("checked");
+                    }
+                });
+            });
+        });
+    </script>
+}
+@using (Html.BeginForm())
+{
+    <div class="span12">
+        <legend>@ViewBag.Title</legend>
+            <label>
+                <input type="submit" value="导入" class="btn btn-primary" />
+            </label>
+                <input type="checkbox" id="right_selectall" />
+                <span>全选/全不选</span>
+
+          @Html.Partial("_UpdateResultPartial")
+    </div>   
+        foreach (Yintai.Hangzhou.Data.Models.AdminAccessRightEntity right in ViewBag.ImplicitRights)
+        {
+
+            string rightValue = string.Format("{0}\\{1}", right.ControllName, right.ActionName);
+    <div class="span4">
+        <label>
+            <input type="checkbox" name="RoleRightDisplay" value="@rightValue" />
+            <span>@rightValue</span>
+        </label>
+    </div>
+        }
+
+}
+
+<div class="span12">
+    @Html.ActionLink2("返回列表", "RightList")
+</div>

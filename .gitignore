@@ -29,6 +29,11 @@ local.properties
 # PDT-specific
 .buildpath
 
+# exclude production configuration
+Yintai.Hangzhou.WebApi/Configurations/product/
+Yintai.Hangzhou.WebApi/Web.Release.Config
+Yintai.Hangzhou.Cms.WebSiteV1/Configurations/product/
+Yintai.Hangzhou.Cms.WebSiteV1/Web.Release.Config
 
 #################
 ## Visual Studio

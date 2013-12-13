@@ -551,7 +551,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             {
                 var requestSign = sPara["sign"];
                 sPara.Remove("sign");
-                var notifySigned = Util.NotifySign(sPara);
+                var notifySigned = Util.NotifySignApp(sPara);
 
                 if (string.Compare(requestSign, notifySigned, true) != 0)
                     return Content("fail");
@@ -563,7 +563,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 var amount = decimal.Parse(sPara["total_fee"]) / 100;
                 if (trade_status == 0)
                 {
-                    var orderEntity = Context.Set<OrderEntity>().Join(Context.Set<Order2ExEntity>().Where(oe => oe.ExOrderNo == out_trade_no), o => o.OrderNo, i => i.OrderNo, (o, i) => o).FirstOrDefault();
+                    var orderEntity = Context.Set<OrderEntity>().Where(o=>o.OrderNo==out_trade_no).FirstOrDefault();
                     var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == orderEntity.OrderNo
                                                 && p.PaymentCode == WxPayConfig.PAYMENT_CODE4APP
                                                 && (!p.OrderType.HasValue || p.OrderType.Value == (int)PaidOrderType.Self)).FirstOrDefault();

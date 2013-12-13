@@ -1,0 +1,197 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.WebSupport.Helper
+@model Yintai.Hangzhou.Cms.WebSiteV1.Models.PromotionViewModel
+@{
+    ViewBag.Title = "促销编辑";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("促销管理", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+@section PageJsSection {
+    <script>
+        $(function () {
+            var resSeedId = 10;
+            $("button[id='addresource']").click(function (event) {
+                event.preventDefault();
+                var fileName = "files" + (resSeedId++);
+                $(this).parents("table:first").append("<tr><td colspan=2><input type='file' name='"+fileName+"' /></td></tr>");
+            });
+            $("button[id^='deleteresource']").click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var itemId = $(this).attr("data-rightId");
+                $("#delete-dialog").dialog({
+                    resizable: false,
+                    height: 140,
+                    modal: true,
+                    buttons: {
+                        "删除": function () {
+                            $(this).dialog("close");
+                            $.ajax({
+                                type: "POST",
+                                url: "@(Url.Action("DeleteAjax","Resource"))",
+                                data: {
+                                    id: itemId
+                                },
+                                success: function (data) {
+                                    if (data["Success"] == true) {
+                                        self.parents("tr:first").remove();
+                                    }
+                                    else {
+                                        alert('删除失败！');
+                                    }
+                                },
+                                error: function (data, textStatus, jqXHR) {
+                                    alert('删除失败！');
+                                }
+
+                            });
+                        },
+                        "取消": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+
+                });
+            });
+        });
+    </script>
+}
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Edit", "Promotion", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Description)
+        </div>
+        <div class="editor-field">
+            @Html.TextArea("description", Model == null ? String.Empty : Model.Description)
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.StartDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.StartDate)
+            @Html.ValidationMessageFor(model => model.StartDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EndDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.EndDate)
+            @Html.ValidationMessageFor(model => model.EndDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Store_Id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Store_Id)
+            @Html.ValidationMessageFor(model => model.Store_Id)
+        </div>
+
+        <div class="editor-label-flow">  
+
+            <span >是否置顶：</span>     
+            @Html.EditorFor(model=>model.IsTop)
+            @Html.ValidationMessageFor(model => model.IsTop)
+        </div>
+
+
+        <div class="editor-label-flow">
+            <span >是否绑定商品：</span>     
+            @Html.CheckBox("IsProdBindable",Model==null?false:Model.IsProdBindable)
+            @Html.ValidationMessageFor(model => model.IsProdBindable)
+        </div>
+    <div class="editor-label-flow">
+            <span >是否显示在促销列表：</span>     
+            @Html.CheckBox("IsMain",Model==null?true:Model.IsMain)
+            @Html.ValidationMessageFor(model => model.IsMain)
+        </div>
+        <div class="editor-label-flow">
+            <span >限制每人限领一次：</span>     
+            @Html.CheckBox("IsLimitPerUser",Model==null?true:Model.IsLimitPerUser)
+            @Html.ValidationMessageFor(model => model.IsLimitPerUser)
+        </div>
+         <div class="editor-label-flow">
+            <span >优惠码限制使用一次：</span>     
+            @Html.CheckBox("IsCodeUseLimit",Model==null?true:Model.IsCodeUseLimit)
+            @Html.ValidationMessageFor(model => model.IsCodeUseLimit)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PublicationLimit)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PublicationLimit)
+            @Html.ValidationMessageFor(model => model.PublicationLimit)
+        </div>
+            <div class="editor-label">
+            @Html.LabelFor(model => model.PublicProCode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PublicProCode)
+            @Html.ValidationMessageFor(model => model.PublicProCode)
+        </div>
+            <div class="editor-label">
+            @Html.LabelFor(model => model.Status)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model=>model.Status,EnumHelper.DisplayList<DataStatus>())
+            @Html.ValidationMessageFor(model => model.Status)
+        </div>
+        <div class="editor-label-required">
+            选择促销图片
+        </div>
+        <div class="editor-field">
+            @if (this.Model.Resources != null && Model.Resources.Count > 0)
+            {
+                <table>
+                    @foreach(var re in Model.Resources) {
+                        <tr>
+                            <td>
+                                @if (re.Type == (int)Yintai.Architecture.Common.Models.ResourceType.Image)
+                                {
+                        
+                                    <img width="120" src="@String.Concat(re.Domain, re.Name, "_120x0.jpg")" alt="120x0" />
+                                }
+                            </td>
+                            <td><button id="deleteresource-@re.Id" data-rightId="@re.Id" type="button" class="btn btn-danger" value="@re.Id">删除</button>
+                                <button id="addresource" type="button" class="btn">增加</button>
+                            </td>
+                          
+                         </tr>
+                    }
+                </table>
+            } else
+            {
+                <input type="file" name="file1" />
+                <input type="file" name="file2" />
+                <input type="file" name="file3" />
+            }
+        </div>
+        <p>
+             <input type="submit" value="保存" class="btn btn-primary" />
+             @Html.ActionLink2("返回列表", "List", null, new { @class="btn"})
+        </p>
+}
+<div class="hide" id="delete-dialog" title="删除图片">
+    <p>您确认要删除此图片吗？</p>
+</div>
+

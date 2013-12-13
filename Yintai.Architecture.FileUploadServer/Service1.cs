@@ -9,8 +9,7 @@ namespace Yintai.Architecture.FileUploadServer
 {
     public partial class Service1 : ServiceBase
     {
-        //private static c.Task _task;
-        private ServiceHost _host;//new ServiceHost(typeof(Test));
+        private ServiceHost _host;
         private readonly ILog _logger = LoggerManager.Current();
 
 
@@ -26,7 +25,7 @@ namespace Yintai.Architecture.FileUploadServer
 
         protected override void OnStart(string[] args)
         {
-            _logger.Info("服务开启");
+            _logger.Info("service start....");
 
             _host = new ServiceHostEx(typeof(ImageTool.Impl.ImageService), _logger);
             _host.Open();
@@ -40,7 +39,7 @@ namespace Yintai.Architecture.FileUploadServer
                 _host = null;
             }
 
-            _logger.Info("服务停止");
+            _logger.Info("service stop ....");
         }
     }
 

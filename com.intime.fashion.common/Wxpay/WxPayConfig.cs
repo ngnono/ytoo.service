@@ -23,6 +23,7 @@ namespace com.intime.fashion.common.Wxpay
         public static readonly string APP_PARTER_ID = ConfigurationManager.AppSettings["WX_PARTER_ID_4APP"];
         public static readonly string APP_PARTER_KEY = ConfigurationManager.AppSettings["WX_PARTER_KEY_4APP"];
         public static readonly string PAY4APP_TOKEN_URL = ConfigurationManager.AppSettings["WX_PAY4APP_TOKEN_URL"];
+        public static readonly string PAY4HTML_TOKEN_URL = ConfigurationManager.AppSettings["WX_PAY4HTML_TOKEN_URL"];
         public static readonly string PAY4APP_RETURN_URL = ConfigurationManager.AppSettings["WX_PAY4APP_RETURN_URL"];
         public static readonly string PAY4APP_NOTIFY_URL = ConfigurationManager.AppSettings["WX_PAY4APP_NOTIFY_URL"];
         public static readonly string PAYMENT_CODE4APP = ConfigurationManager.AppSettings["WX_PAYMENT_CODE4APP"];

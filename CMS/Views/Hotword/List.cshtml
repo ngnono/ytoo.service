@@ -1,0 +1,173 @@
+﻿@using Yintai.Hangzhou.Model.Filters
+@model Yintai.Hangzhou.Cms.WebSiteV1.Models.Pager<HotwordViewModel>
+@{
+    ViewBag.Title = "关键词列表";
+    HotwordSearchOption search = ViewBag.SearchOptions ?? new HotwordSearchOption();
+    HtmlHelper<HotwordSearchOption> searchModelHelper = Html.HtmlHelperFor<HotwordSearchOption>();
+}
+
+@section PageJsSection {
+    <script>
+        $(function () {
+            $("a[id^='delete']").click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var itemId = $(this).attr("data-rightId");
+                $("#delete-dialog").dialog({
+                    resizable: false,
+                    height: 140,
+                    modal: true,
+                    buttons: {
+                        "删除": function () {
+                            $(this).dialog("close");
+                            $.ajax({
+                                type: "POST",
+                                url: "@(Url.Action("Delete"))",
+                                data: {
+                                    id: itemId
+                                },
+                                success: function (data) {
+                                    if (data["Success"] == true) {
+                                        self.parents("tr:first").remove();
+                                    }
+                                    else {
+                                        alert('删除失败！');
+                                    }
+                                },
+                                error: function (data, textStatus, jqXHR) {
+                                    alert('删除失败！');
+                                }
+
+                            });
+                        },
+                        "取消": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+
+                });
+            });
+        });
+    </script>
+}
+
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("产品管理", "Index", "Product")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+<h2>@ViewBag.Title</h2>
+<p>
+    @Html.ActionLink2("新建", "Create", null, new { @class = "btn btn-primary" })
+</p>
+@using (Html.BeginForm("List", "Hotword", new {page=0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Word)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.Word)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.Type)</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.Type, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Enums.HotWordType>())
+                </div>
+            </div>
+          
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.OrderBy)</label>
+                <div class="controls">
+                   @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<GenericOrder>())
+               
+                </div>
+            </div>
+           
+                      
+        </div>
+
+    </div>
+}
+<table>
+    <tr>
+        <th>操作</th>
+        <th>编码</th>
+
+        <th>类型
+        </th>
+        <th>关键词
+        </th>
+
+        <th>品牌名
+        </th>
+        <th>门店名
+        </th>
+        <th>状态
+        </th>
+        <th>创建时间
+        </th>
+        <th>更新时间
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Data)
+    {
+        <tr>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-small">操作</button>
+                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink2("编辑", "Edit", new { id = item.Id })</li>
+                        <li><a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
+                    </ul>
+
+                </div>
+            </td>
+            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Word)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BrandName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StoreName)
+            </td>
+            <td>
+                @Html.Label("", ((Yintai.Hangzhou.Model.Enums.DataStatus)item.Status).ToFriendlyString())
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedDate)
+            </td>
+
+
+        </tr>
+    }
+
+</table>
+@Html.Partial("PagerPartialView", this.Model)
+<div class="hide" id="delete-dialog" title="删除关键词">
+    <p>您确认要删除该条关键词吗？</p>
+</div>

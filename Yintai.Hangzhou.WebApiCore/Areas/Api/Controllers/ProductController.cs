@@ -178,15 +178,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             if (System.String.Compare(request.Method, DefineRestfulMethod.Create, System.StringComparison.OrdinalIgnoreCase) == 0)
             {
                 var result = this._productDataService.CreateCoupon(request);
-
+                /*
                 if (request.IsPass == 1 && result.Data != null && result.Data.CouponCodeResponse != null)
                 {
                     var code = result.Data.CouponCodeResponse;
+                    
                     result.Data.CouponCodeResponse.Pass = _passHelper.GetPass(ControllerContext.HttpContext, code.Id,
                                                                               code.CouponId, code.User_Id);
                    
                 }
-
+                */
                 return new RestfulResult
                 {
                     Data = result

@@ -179,7 +179,7 @@ namespace com.intime.jobscheduler.Job.Erp
                         UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now,
                         Name = uploadFile.FileName,
                         Status = (product.DELETE_BIT??0)==0?(int)DataStatus.Normal:(int)DataStatus.Deleted,
-                        SortOrder = 100- (int)product.PRO_PICT_ORDER,
+                        SortOrder = product.PICTURE_MAST_BIT ==1 ?100:(100 - (int)product.PRO_PICT_ORDER),
                         Size = string.Format("{0}x{1}", uploadFile.Width, uploadFile.Height),
                         Type = (int)uploadFile.ResourceType,
                         Width = uploadFile.Width,
@@ -194,7 +194,7 @@ namespace com.intime.jobscheduler.Job.Erp
                     if (product.DELETE_BIT.HasValue && product.DELETE_BIT.Value == 1)
                     {
                         existPic.Status = (int)DataStatus.Deleted;
-                        existPic.SortOrder = 100 - (int)product.PRO_PICT_ORDER;
+                        existPic.SortOrder = product.PICTURE_MAST_BIT == 1 ? 100 : (100 - (int)product.PRO_PICT_ORDER);
                         existPic.UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now;
                         db.SaveChanges();
                     }
