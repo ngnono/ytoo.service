@@ -636,6 +636,99 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
         }
 
+        public ActionResult NotifyWxHtml(WxNotifyPostRequest request)
+        {
+            Dictionary<string, string> sPara = GetQueryStringParams();
+
+            if (sPara.Count > 0)
+            {
+                var requestSign = sPara["sign"];
+                sPara.Remove("sign");
+                var notifySigned = Util.NotifySignHtml(sPara);
+
+                if (string.Compare(requestSign, notifySigned, true) != 0)
+                    return Content("fail");
+                //external order no
+                string out_trade_no = sPara["out_trade_no"];
+                string trade_no = sPara["transaction_id"];
+                int trade_status = int.Parse(sPara["trade_state"]);
+                string bank_bill_no = sPara["bank_billno"];
+                var amount = decimal.Parse(sPara["total_fee"]) / 100;
+                if (trade_status == 0)
+                {
+                    var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == out_trade_no).FirstOrDefault();
+                    var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == orderEntity.OrderNo
+                                                && p.PaymentCode == WxPayConfig.PAYMENT_CODE4HTML
+                                                && (!p.OrderType.HasValue || p.OrderType.Value == (int)PaidOrderType.Self)).FirstOrDefault();
+
+                    if (paymentEntity == null && orderEntity != null)
+                    {
+                        OrderTransactionEntity orderTransaction = null;
+                        using (var ts = new TransactionScope())
+                        {
+                            _paymentNotifyRepo.Insert(new PaymentNotifyLogEntity()
+                            {
+                                CreateDate = DateTime.Now,
+                                OrderNo = orderEntity.OrderNo,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4HTML,
+                                PaymentContent = JsonConvert.SerializeObject(sPara)
+                            });
+
+                            orderTransaction = _orderTranRepo.Insert(new OrderTransactionEntity()
+                            {
+                                Amount = amount,
+                                OrderNo = orderEntity.OrderNo,
+                                CreateDate = DateTime.Now,
+                                IsSynced = false,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4HTML,
+                                TransNo = trade_no,
+                                OrderType = (int)PaidOrderType.Self
+                            });
+                            if (orderEntity.Status != (int)OrderStatus.Paid && orderEntity.TotalAmount <= amount)
+                            {
+
+                                orderEntity.Status = (int)OrderStatus.Paid;
+                                orderEntity.UpdateDate = DateTime.Now;
+                                orderEntity.RecAmount = amount;
+                                _orderRepo.Update(orderEntity);
+
+                                _orderlogRepo.Insert(new OrderLogEntity()
+                                {
+                                    CreateDate = DateTime.Now,
+                                    CreateUser = 0,
+                                    CustomerId = orderEntity.CustomerId,
+                                    Operation = "支付订单",
+                                    OrderNo = orderEntity.OrderNo,
+                                    Type = (int)OrderOpera.CustomerPay
+                                });
+
+
+                            }
+
+                            ts.Complete();
+
+
+                        }
+                        //notify sync async
+                        if (orderTransaction != null)
+                        {
+                            Task.Factory.StartNew(() =>
+                            {
+                                OrderRule.OrderPaid2Erp(orderTransaction);
+                            });
+                        }
+                    }
+
+                }
+                return Content("success");
+
+            }
+            else
+            {
+                return Content("fail");
+            }
+        }
+
         [HttpPost]
         public ActionResult WxPackage(WxPackageGetRequest request)
         {

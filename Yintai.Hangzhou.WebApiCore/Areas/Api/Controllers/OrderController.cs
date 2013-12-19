@@ -279,7 +279,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo && o.Status == (int)OrderStatus.Create).FirstOrDefault();
             if (null == orderEntity)
                 return this.RenderError(r => r.Message = "订单状态不能支付");
-            if (string.Compare(orderEntity.PaymentMethodCode, WxPayConfig.PAYMENT_CODE4APP, true) != 0)
+            if (string.Compare(orderEntity.PaymentMethodCode, WxPayConfig.PAYMENT_CODE4HTML, true) != 0)
                 return this.RenderError(r => r.Message = "订单支付方式不正确");
 
             string url = WxServiceHelper.GetHtmlPayUrl(orderEntity.OrderNo, orderEntity.TotalAmount, request.ClientIp,request.ReturnUrl);

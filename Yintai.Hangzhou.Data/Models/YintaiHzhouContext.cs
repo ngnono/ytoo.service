@@ -129,6 +129,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<CategoryMapEntity> CategoryMaps { get; set; }
         public DbSet<CategoryPropertyEntity> CategoryProperties { get; set; }
         public DbSet<CategoryPropertyValueEntity> CategoryPropertyValues { get; set; }
+        public DbSet<ChannelEntity> Channels { get; set; }
         public DbSet<CityEntity> Cities { get; set; }
         public DbSet<CommentEntity> Comments { get; set; }
         public DbSet<ConfigMsgEntity> ConfigMsgs { get; set; }
@@ -222,6 +223,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new CategoryMapEntityMap());
             modelBuilder.Configurations.Add(new CategoryPropertyEntityMap());
             modelBuilder.Configurations.Add(new CategoryPropertyValueEntityMap());
+            modelBuilder.Configurations.Add(new ChannelEntityMap());
             modelBuilder.Configurations.Add(new CityEntityMap());
             modelBuilder.Configurations.Add(new CommentEntityMap());
             modelBuilder.Configurations.Add(new ConfigMsgEntityMap());

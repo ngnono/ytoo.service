@@ -23,7 +23,7 @@ namespace com.intime.fashion.common.Wxpay
 
         public string sign { get {
             var preSigned = new Dictionary<string, dynamic>();
-            preSigned.Add("appid", WxPayConfig.APP_ID);
+            preSigned.Add("appid", WxPayConfig.APP_APPID);
             preSigned.Add("appkey", WxPayConfig.APP_PARTER_SIGN_KEY);
             preSigned.Add("noncestr", noncestr);
             preSigned.Add("package", package);

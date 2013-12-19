@@ -75,7 +75,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var linq = Context.Set<RMAEntity>().Where(r => r.UserId == authUser.Id)
                        .GroupJoin(Context.Set<RMAItemEntity>()
                                     .GroupJoin(Context.Set<ResourceEntity>().Where(res => res.SourceType == (int)SourceType.Product && res.Type == (int)ResourceType.Image)
-                                    , o => new { Product = o.ProductId, Color = o.ColorId }
+                                    , o => new { Product = o.ProductId, Color = o.ColorValueId }
                                     , i => new { Product = i.SourceId, Color = i.ColorId }
                                     , (o, i) => new { R = o, Res = i.OrderByDescending(res2 => res2.SortOrder).FirstOrDefault() })
                                     .GroupJoin(Context.Set<BrandEntity>(), o => o.R.BrandId, i => i.Id, (o, i) => new { R=o.R,Res=o.Res,B=i.FirstOrDefault()})
@@ -114,10 +114,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 return this.RenderError(r => r.Message = "RMANo 不存在");
             var response = new RMAInfoResponse().FromEntity<RMAInfoResponse>(rmaEntity, r => { 
                 var rmaItemsEntity = Context.Set<RMAItemEntity>().Where(ri=>ri.RMANo== request.RMANo)
-                                .GroupJoin(Context.Set<ResourceEntity>().Where(resource=>resource.SourceType==(int)SourceType.Product),
-                                        o=>o.ProductId,
-                                        i=>i.SourceId,
-                                        (o,i)=>new {R=o,RR=i.OrderByDescending(resource=>resource.SortOrder).FirstOrDefault()});
+                                    .GroupJoin(Context.Set<ResourceEntity>().Where(res => res.SourceType == (int)SourceType.Product && res.Type == (int)ResourceType.Image)
+                                        , o => new { Product = o.ProductId, Color = o.ColorValueId }
+                                        , i => new { Product = i.SourceId, Color = i.ColorId }
+                                        , (o, i) => new { R = o, RR = i.OrderByDescending(res2 => res2.SortOrder).FirstOrDefault() });
+                                
                 r.CanVoid =  RMARule.CanVoid(r.Status);
 
                 r.Products = rmaItemsEntity.ToList().Select(ri=>new RMAItemInfoResponse().FromEntity<RMAItemInfoResponse>(ri.R,ritem=>{

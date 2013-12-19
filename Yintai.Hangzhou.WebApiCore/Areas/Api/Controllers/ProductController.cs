@@ -243,7 +243,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
         [RestfulAuthorize]
         [HttpPost]
-        public ActionResult Order(OrderRequest request,UserModel authUser)
+        public ActionResult Order(OrderRequest request,UserModel authUser,string channel)
         {
             if (!ModelState.IsValid)
             {
@@ -251,6 +251,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
             request.AuthUser = authUser;
+            request.Channel = channel;
             bool isSuccess;
             return OrderRule.Create(request, authUser, out isSuccess);
 
@@ -273,7 +274,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         /// <param name="request"></param>
         /// <param name="currentAuthUser"></param>
         /// <returns></returns>
-        public ActionResult Detail4P(GetProductInfo4PRequest request)
+        public ActionResult Detail4P(GetProductInfo4PRequest request,string channel)
         {
             if (!ModelState.IsValid)
             {
@@ -298,9 +299,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     res.DimensionResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(dimensionEntity);
                 var rmaMsg = Context.Set<ConfigMsgEntity>().Where(c=>c.MKey=="O_C_RMAPolicy").FirstOrDefault();
                 res.RMAPolicy = rmaMsg==null?string.Empty:rmaMsg.Message;
-                res.SupportPayments = context.Set<PaymentMethodEntity>().Where(p => p.Status == (int)DataStatus.Normal)
-                                .ToList()
-                                .Select(p => new PaymentResponse().FromEntity<PaymentResponse>(p));
+                var channelEntity = Context.Set<ChannelEntity>().Where(c => c.Name == channel).FirstOrDefault();
+                if (channelEntity != null)
+                {
+                    res.SupportPayments = context.Set<PaymentMethodEntity>().Where(p => p.Status == (int)DataStatus.Normal)
+                                    .ToList()
+                                    .Where(p=> (!p.AvailChannels.HasValue) ||((p.AvailChannels| channelEntity.BusinessId)== channelEntity.BusinessId))
+                                    .Select(p => new PaymentResponse().FromEntity<PaymentResponse>(p));
+                }
                 res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id).GroupBy(pi => pi.PColorId)
                                 .Select(pi => pi.Key)
                                 .Join(Context.Set<ProductPropertyValueEntity>(), o => o, i => i.Id, (o, i) => i)
