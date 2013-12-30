@@ -11,6 +11,7 @@ namespace com.intime.fashion.common.Erp2
     {
         public static string PUBLIC_KEY = ConfigurationManager.AppSettings["Erp2_Public_Key"];
         public static string Private_KEY = ConfigurationManager.AppSettings["Erp2_Private_Key"];
-        public static string BASE_URL = ConfigurationManager.AppSettings["Erp2_Base_Url"];
+        public static string PACKAGE_URL = ConfigurationManager.AppSettings["Erp2_Package_Url"];
+        public static string PAY_URL = ConfigurationManager.AppSettings["Erp2_Pay_Url"];
     }
 }

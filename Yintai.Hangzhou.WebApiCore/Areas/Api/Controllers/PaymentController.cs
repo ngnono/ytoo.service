@@ -75,7 +75,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     string trade_status = Request.Form["trade_status"];
 
                     var amount = decimal.Parse(Request.Form["total_fee"]);
-                    if (Request.Form["trade_status"] == "TRADE_FINISHED")
+                    if (trade_status == "TRADE_FINISHED" ||
+                        trade_status == "TRADE_SUCCESS")
                     {
                         var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no
                             && p.PaymentCode == Config.PaymentCode).FirstOrDefault();
@@ -1045,8 +1046,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     r.TimeStamp = request.TimeStamp + 1;
                 }));
             dynamic erpOrder = null;
-            bool isSuccess = Erp2ServiceHelper.SendHttpMessage(Erp2Config.BASE_URL
-                             , new { salesno = orderNo }
+            bool isSuccess = Erp2ServiceHelper.SendHttpMessage(Erp2Config.PACKAGE_URL
+                             , new { saleno = orderNo }
                              , r => erpOrder = r
                              , null);
             if (!isSuccess)
@@ -1055,7 +1056,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     r.RetErrMsg = "订单无法获取！";
                     r.TimeStamp = request.TimeStamp + 1;
                 }));
-            decimal totalAmount = erpOrder.totalamount;
+            decimal totalAmount = erpOrder.Data;
             if (totalAmount <= 0)
                 return new XmlResult(composePackageError(r =>
                 {

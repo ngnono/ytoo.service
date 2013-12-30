@@ -315,7 +315,7 @@ namespace Yintai.Hangzhou.Service.Logic
             bool isSuccess = false;
             if (order.OrderType == (int)PaidOrderType.Erp2)
             {
-                isSuccess = Erp2ServiceHelper.SendHttpMessage(Erp2Config.BASE_URL, new { salesno = order.OrderNo, PAY_TYPE = order.PaymentCode, TRADE_NO = order.TransNo, CardNo = vipCard }, null
+                isSuccess = Erp2ServiceHelper.SendHttpMessage(Erp2Config.PAY_URL, new { saleno = order.OrderNo, paymentcode = order.PaymentCode, transno = order.TransNo, vipno = vipCard }, null
                               , null);
             }
             else

@@ -22,10 +22,7 @@ namespace com.intime.fashion.common
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentException("url is empty");
 
-            var requestbody = JsonConvert.SerializeObject(new
-            {
-                data = requestData
-            });
+            var requestbody = JsonConvert.SerializeObject(requestData);
             string requestUrl = ConstructHttpRequestUrl(url, requestData);
             var client = WebRequest.CreateHttp(requestUrl);
             client.ContentType = "application/json";
@@ -60,7 +57,7 @@ namespace com.intime.fashion.common
             }
 
             if (jsonResponse != null &&
-                jsonResponse.error == string.Empty)
+                jsonResponse.isSuccess == true)
             {
                 if (successCallback != null)
                     successCallback(jsonResponse);
@@ -91,7 +88,7 @@ namespace com.intime.fashion.common
 
             query.Add("from", Erp2Config.PUBLIC_KEY);
             query.Add("nonce", new Random(1000).Next().ToString());
-            query.Add("ts", DateTime.UtcNow.SecondsNow().ToString());
+            query.Add("timestamp", DateTime.UtcNow.SecondsNow().ToString());
             var signingValue = new StringBuilder();
             var signedValue = string.Empty;
             foreach (var s in query.Values.ToArray().OrderBy(s => s))

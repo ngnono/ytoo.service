@@ -848,6 +848,7 @@
     <Content Include="Content\themes\webget\uploadify\uploadify-cancel.png" />
     <Content Include="Content\themes\webget\uploadify\uploadify.css" />
     <Content Include="Content\themes\webget\uploadify\uploadify.swf" />
+    <Content Include="status.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

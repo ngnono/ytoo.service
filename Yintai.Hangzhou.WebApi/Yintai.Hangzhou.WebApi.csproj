@@ -162,6 +162,8 @@
     <Content Include="Configurations\production\unity.config" />
     <Content Include="Configurations\production\Log4Net.config" />
     <None Include="Properties\PublishProfiles\HangzhouV45.pubxml" />
+    <None Include="Properties\PublishProfiles\intimedemo - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\intimedemo - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <None Include="Properties\PublishProfiles\victor.pubxml" />
     <None Include="readme.txt" />
