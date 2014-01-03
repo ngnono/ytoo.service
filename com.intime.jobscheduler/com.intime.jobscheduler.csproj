@@ -176,6 +176,7 @@
     <Compile Include="Job\FreeMemoryJob.cs" />
     <Compile Include="Job\JobConfig.cs" />
     <Compile Include="Job\JobType.cs" />
+    <Compile Include="Job\Order\AutoVoidUnpaidOrderJob.cs" />
     <Compile Include="Job\PointsFromApp2GroupJob.cs" />
     <Compile Include="Job\Erp\ProductInventorySyncJob.cs" />
     <Compile Include="Job\Push2awsIncreJob.cs" />

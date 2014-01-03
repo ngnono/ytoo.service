@@ -42,6 +42,7 @@ namespace com.intime.fashion.common
                streamWriter.Write(requestbody);
            }
             * */
+           Logger.Debug(requestUrl);
            StringBuilder sb = new StringBuilder();
            using (var response = client.GetResponse())
            {
