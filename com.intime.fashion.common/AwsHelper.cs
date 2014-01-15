@@ -142,7 +142,10 @@ namespace com.intime.fashion.common
             {
                 lock (lockObject)
                 {
-                    s3 = AWSClientFactory.CreateAmazonS3Client();
+                    s3 = AWSClientFactory.CreateAmazonS3Client(new AmazonS3Config() {
+                        ServiceURL = "s3.amazonaws.com",
+                        CommunicationProtocol = Amazon.S3.Model.Protocol.HTTP
+                    });
 
                 }
             }

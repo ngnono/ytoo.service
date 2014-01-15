@@ -41,7 +41,7 @@ namespace com.intime.jobscheduler.Job.Erp
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
             var totalCount = 0;
-            var benchTime = DateTime.Now.AddSeconds(-interval);
+            var benchTime = data.GetDateTime("benchtime");
             Expression<Func<PRO_PICTURE, bool>> whereCondition = null;
             if (!isRebuild)
                 whereCondition = b => b.OPT_UPDATE_TIME >= benchTime;
@@ -86,7 +86,7 @@ namespace com.intime.jobscheduler.Job.Erp
 
         }
 
-        private string FetchRemotePic(string url)
+        private static string FetchRemotePic(string url)
         {
             var client = new HttpClient();
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Tmp",DateTime.Today.ToString("yyyyMMdd"));
@@ -109,7 +109,7 @@ namespace com.intime.jobscheduler.Job.Erp
                 
         }
 
-        private bool EnsureProductContext(PRO_PICTURE product)
+        private static bool EnsureProductContext(PRO_PICTURE product)
         {
             using(var erpDb= new ErpContext())
             {
@@ -136,11 +136,11 @@ namespace com.intime.jobscheduler.Job.Erp
             return true;
         }
 
-        private void SyncOne(PRO_PICTURE product)
+        public static bool SyncOne(PRO_PICTURE product)
         {
             if (!EnsureProductContext(product))
-                return ;
-            var log = LogManager.GetLogger(this.GetType());
+                return false;
+            var log = Log;
             //download remote picture
             string exPicDomain = ConfigurationManager.AppSettings["EXPIC_DOMAIN"];
             var filePath = FetchRemotePic(string.Format("{0}/{1}",exPicDomain.TrimEnd('/'),Path.Combine(product.PRO_PICT_DIR,product.PRO_PICT_NAME)));
@@ -152,7 +152,7 @@ namespace com.intime.jobscheduler.Job.Erp
             {
                 log.Error(string.Format("upload file error:{0}", filePath));
                  File.Delete(filePath);
-                return;
+                return false;
             }
             
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
@@ -187,6 +187,7 @@ namespace com.intime.jobscheduler.Job.Erp
                     });
                     existProduct.IsHasImage = true;
                     existProduct.UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now;
+                    db.Entry(existProduct).State = System.Data.EntityState.Modified;
                     db.SaveChanges();
                 }
                 else
@@ -196,12 +197,14 @@ namespace com.intime.jobscheduler.Job.Erp
                         existPic.Status = (int)DataStatus.Deleted;
                         existPic.SortOrder = product.PICTURE_MAST_BIT == 1 ? 100 : (100 - (int)product.PRO_PICT_ORDER);
                         existPic.UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now;
+                        db.Entry(existPic).State = System.Data.EntityState.Modified;
                         db.SaveChanges();
                     }
                 }
             }
 
             File.Delete(filePath);
+            return true;
         }
         private static ILog Log
         {

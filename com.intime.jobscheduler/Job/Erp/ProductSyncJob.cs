@@ -41,7 +41,7 @@ namespace com.intime.jobscheduler.Job.Erp
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
             var totalCount = 0;
-            var benchTime = DateTime.Now.AddSeconds(-interval);
+            var benchTime = data.GetDateTime("benchtime");
             
             Expression<Func<SUPPLY_MIN_PRICE, bool>> whereCondition = null;
             if (!isRebuild)
@@ -127,6 +127,7 @@ namespace com.intime.jobscheduler.Job.Erp
             EnsureProductContext(product);
             if (!product.SHOP_SID.HasValue)
                 return false;
+            bool shouldSyncPic = false;
             using (var ts = new TransactionScope())
             {
                 using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
@@ -147,6 +148,7 @@ namespace com.intime.jobscheduler.Job.Erp
                         Log.Error(string.Format("product sid has no brand:{0}", product.PRODUCT_SID));
                         return false;
                     }
+
                     if (existProduct == null)
                     {
                         var newProduct = new ProductEntity()
@@ -184,6 +186,7 @@ namespace com.intime.jobscheduler.Job.Erp
                             ProductId = newProduct.Id,
                             UpdateDate = product.OPT_UPDATE_TIME ?? DateTime.Now
                         });
+                        shouldSyncPic = true;
                     }
                     else
                     {
@@ -202,6 +205,7 @@ namespace com.intime.jobscheduler.Job.Erp
                         existProductEntity.Status = ((product.PRO_SELLING ?? 0) == 1) ? (int)DataStatus.Normal : (int)DataStatus.Default;
                         if ((product.PRO_SELLING ?? 0) != 1)
                             existProductEntity.Is4Sale = false;
+                        db.Entry(existProductEntity).State = System.Data.EntityState.Modified;
 
                     }
                     db.SaveChanges();
@@ -209,7 +213,24 @@ namespace com.intime.jobscheduler.Job.Erp
                 }
                 ts.Complete();
             }
+            if (shouldSyncPic) {
+                syncRelatedPics(product);
+            }
             return true;
+        }
+
+        private static void syncRelatedPics(SUPPLY_MIN_PRICE product)
+        {
+            IEnumerable<PRO_PICTURE> pics = null;
+            using (var erp = new ErpContext())
+            {
+                pics = erp.PRO_PICTURE.Where(p => p.PRODUCT_SID == product.PRODUCT_SID).ToList();
+
+            }
+            foreach (var pic in pics)
+            {
+                ProductPicSyncJob.SyncOne(pic);
+            }
         }
         private static ILog Log { get { 
             return LogManager.GetLogger(typeof(ProductSyncJob));

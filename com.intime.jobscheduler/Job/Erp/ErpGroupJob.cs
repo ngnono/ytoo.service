@@ -10,7 +10,7 @@ namespace com.intime.jobscheduler.Job.Erp
     [DisallowConcurrentExecution]
     class ErpGroupJob:IJob
     {
-
+        
         public void Execute(IJobExecutionContext context)
         {
 
@@ -24,6 +24,16 @@ namespace com.intime.jobscheduler.Job.Erp
             var includeProd = data.ContainsKey("includeProd") ? data.GetBoolean("includeProd") : true;
             var includeInv = data.ContainsKey("includeInv") ? data.GetBoolean("includeInv") : true;
              var includePic = data.ContainsKey("includePic") ? data.GetBoolean("includePic") : true;
+             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
+             if (!data.ContainsKey("benchtime"))
+             {
+                 data.Put("benchtime", DateTime.Now.AddSeconds(-interval));
+             }
+             else
+             {
+                 data["benchtime"] = data.GetDateTimeValue("benchtime").AddSeconds(interval);
+             }
+            
             if (includeStore)
                 jobs.Add(new StoreSyncJob());
             if (includeSection)

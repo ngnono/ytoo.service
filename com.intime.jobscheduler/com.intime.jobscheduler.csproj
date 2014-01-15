@@ -169,6 +169,7 @@
     <Compile Include="Job\Erp\ProductPicSyncJob.cs" />
     <Compile Include="Job\Erp\ProductPropertySyncJob.cs" />
     <Compile Include="Job\Erp\ProductSyncJob.cs" />
+    <Compile Include="Job\Erp\SaleProductNoPicSyncOneTimeJob.cs" />
     <Compile Include="Job\Erp\SectionSyncJob.cs" />
     <Compile Include="Job\Erp\StoreSyncJob.cs" />
     <Compile Include="Job\ExpireStoreCouponReturnPointsJob.cs" />

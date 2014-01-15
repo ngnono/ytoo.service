@@ -77,7 +77,8 @@ namespace com.intime.jobscheduler.Job.Order
                     }
                 }
                 cursor += size;
-                lastCursor = oneTimeList.Max(o => o.Id);
+                if (oneTimeList != null && oneTimeList.Count > 0)
+                    lastCursor = oneTimeList.Max(o => o.Id);
             }
 
             sw.Stop();

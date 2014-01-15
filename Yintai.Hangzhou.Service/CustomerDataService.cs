@@ -178,7 +178,6 @@ namespace Yintai.Hangzhou.Service
                     return new ExecuteResult<CustomerInfoResponse>(null) { StatusCode = StatusCode.InternalServerError, Message = "2创建用户失败" };
                 }
 
-                //TODO:增加积点
                 _pointService.Insert(new PointHistoryEntity
                     {
                         Amount = 100,
@@ -195,15 +194,18 @@ namespace Yintai.Hangzhou.Service
                         Type = (int)PointType.Register
                     });
 
-               // _userService.AddPoint(utmp.Id, 100, utmp.Id);
 
                 userId = tmp.AssociateUserId;
             }
             else
             {
                 userId = outsiteEntity.AssociateUserId;
-                //更新登录时间
-                _customerRepository.SetLoginDate(userId, DateTime.Now);
+
+                var customerEntity = _customerRepository.Find(userId);
+                customerEntity.LastLoginDate = DateTime.Now;
+                customerEntity.Nickname = request.OutsiteNickname;
+
+                _customerRepository.Update(customerEntity);
             }
 
             return GetUserInfo(new GetUserInfoRequest
@@ -282,7 +284,10 @@ namespace Yintai.Hangzhou.Service
             else
             {
                 userId = outsiteEntity.AssociateUserId;
-                _customerRepository.SetLoginDate(userId, DateTime.Now);
+                var customerEntity = _customerRepository.Find(userId);
+                customerEntity.LastLoginDate = DateTime.Now;
+
+                _customerRepository.Update(customerEntity);
                 return _customerRepository.GetItem(userId);
             }
 

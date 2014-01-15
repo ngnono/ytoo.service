@@ -307,11 +307,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     .Where(p=> (!p.AvailChannels.HasValue) ||((p.AvailChannels| channelEntity.BusinessId)== channelEntity.BusinessId))
                                     .Select(p => new PaymentResponse().FromEntity<PaymentResponse>(p));
                 }
-                res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id).GroupBy(pi => pi.PColorId)
+                res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id && pi.Amount>0).GroupBy(pi => pi.PColorId)
                                 .Select(pi => pi.Key)
                                 .Join(Context.Set<ProductPropertyValueEntity>(), o => o, i => i.Id, (o, i) => i)
-                                .GroupJoin(Context.Set<ResourceEntity>().Where(pr => pr.SourceType == (int)SourceType.Product && pr.SourceId == linq.P.Id), o => o.Id, i => i.ColorId, (o, i) => new { C = o, CR = i.FirstOrDefault() })
-                                .ToList().Select(color => new SaleColorPropertyResponse()
+                                .GroupJoin(Context.Set<ResourceEntity>().Where(pr => pr.SourceType == (int)SourceType.Product && pr.Type==(int)ResourceType.Image && pr.SourceId == linq.P.Id), o => o.Id, i => i.ColorId, (o, i) => new { C = o, CR = i.FirstOrDefault() })
+                                .ToList()
+                                .Where(l=>l.CR !=null )
+                                .Select(color => new SaleColorPropertyResponse()
                                 {
                                     ColorId = color.C.Id,
                                     ColorName = color.C.ValueDesc,

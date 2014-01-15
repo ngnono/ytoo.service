@@ -814,7 +814,9 @@
     </Content>
     <Content Include="Configurations\Debug\unity.config" />
     <Content Include="Content\ProTemplate\PRO_UPLOAD_TMP.xls" />
-    <Content Include="Configurations\Production\appSettings.config" />
+    <Content Include="Configurations\Production\appSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Configurations\Log4Net.config" />
     <Content Include="Configurations\Production\unity.config" />
     <Content Include="Configurations\Production\Log4Net.config" />

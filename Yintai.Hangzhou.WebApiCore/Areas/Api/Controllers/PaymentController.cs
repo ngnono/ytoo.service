@@ -368,7 +368,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 var notifySigned = Util.NotifySign(sPara);
 
                 if (string.Compare(requestSign, notifySigned, true) != 0)
+                {
+                    Log.Info(string.Format("{0} vs {1}",requestSign,notifySigned));
                     return Content("fail");
+                }
                 //external order no
                 string out_trade_no = sPara["out_trade_no"];
                 string trade_no = sPara["transaction_id"];
@@ -821,8 +824,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             {
                 r.Package = new WxPackage()
                     {
-                        Body = erpOrder.productDetail[0].productname,
-                        Attach = erpOrder.storedesc,
+                        Body = "银泰商业微信支付",
                         OutTradeNo = orderNo,
                         TotalFee = Util.Feng4Decimal(totalAmount),
                         TransportFee = 0,
