@@ -1,0 +1,84 @@
+﻿@model Pager<Yintai.Hangzhou.Data.Models.CardEntity>
+@using Yintai.Hangzhou.Model.Filters
+@using Yintai.Hangzhou.Data.Models
+@{
+    ViewBag.Title = "银泰卡绑定列表";
+ CardSearchOption search = ViewBag.SearchOptions;
+ HtmlHelper<CardSearchOption> searchModelHelper = Html.HtmlHelperFor<CardSearchOption>();
+
+}
+
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("用户管理", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Card", "Customer", FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.UserId)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.UserId)
+                </div>
+            </div>
+           
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+                      <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.OrderBy)</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Filters.GenericOrder>())
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+}
+<table>
+    <tr>
+        <th>编号</th>
+        <th>用户代码
+        </th>
+        <th>卡号
+        </th>
+        <th>创建时间
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Data)
+    {
+        <tr>
+             <td>
+               @Html.DisplayFor(modelItem => item.Id)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.User_Id)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.CardNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+           
+           
+        </tr>
+    }
+
+</table>
+@Html.Partial("PagerPartialView", Model)
+

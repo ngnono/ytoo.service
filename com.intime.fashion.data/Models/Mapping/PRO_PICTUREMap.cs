@@ -44,6 +44,7 @@ namespace com.intime.fashion.data.erp.Models.Mapping
             this.Property(t => t.MAIN_BIT).HasColumnName("MAIN_BIT");
             this.Property(t => t.UPLOAD_BIT).HasColumnName("UPLOAD_BIT");
             this.Property(t => t.CRC).HasColumnName("CRC");
+            this.Property(t => t.DELETE_BIT).HasColumnName("DELETE_BIT");
         }
     }
 }

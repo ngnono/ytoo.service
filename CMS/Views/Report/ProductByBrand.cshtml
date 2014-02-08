@@ -1,0 +1,87 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.Cms.WebSiteV1.Util
+@using Yintai.Hangzhou.WebSupport.Helper
+@using Yintai.Hangzhou.Model.Filters
+@model Pager<ProductByBrandReportViewModel>
+@{
+    ViewBag.Title = "商品上传统计报表";
+    ReportByProductBrandOption search = ViewBag.SearchOptions ?? new ReportByProductBrandOption();
+    bool showDownload = Model != null && Model.Data.Count() > 0;
+   
+}
+
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("统计报表", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("ProductByBrand", "Report", FormMethod.Post, new { @class = "form-horizontal searchForm-border " }))
+{
+    @Html.ValidationSummary(false)
+    <div class="row">
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => search.FromDate)</label>
+                <div class="controls">
+                    @Html.EditorFor(m => search.FromDate)
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                    @if (showDownload)
+                    { 
+                        @Html.ActionLink("下载", "Download", new { reportname = "productsdaterangereport", FromDate = search.FromDate, ToDate = search.ToDate }, new { @class="btn",target="window"})
+                    }
+                </div>
+
+            </div>
+        </div>
+        <div class="span4">
+
+            <div class="control-group">
+                <label class="control-label" for="Name">@Html.LabelFor(m => search.ToDate)</label>
+                <div class="controls">
+                    @Html.EditorFor(m => search.ToDate)
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+<table>
+    <tr>
+        <th>门店代码</th>
+        <th>门店名</th>
+        <th>品牌代码</th>
+        <th>品牌名
+        </th>
+        <th>上传数量</th>
+    </tr>
+    @if (Model != null)
+    {
+        foreach (var item in Model.Data)
+        {
+        <tr>
+
+            <td>@Html.DisplayFor(modelItem => item.StoreId)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StoreName)
+            </td>
+            <td>@Html.DisplayFor(modelItem => item.BrandId)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BrandName)
+            </td>
+            <td>@Html.DisplayFor(modelItem => item.Products)</td>
+
+
+        </tr>
+        }
+    }
+
+</table>
+

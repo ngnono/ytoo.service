@@ -20,6 +20,12 @@ namespace Yintai.Architecture.ImageTool.Configurations
             set { base["backupFolder"] = value; }
         }
 
+        [ConfigurationProperty("directory")]
+        public string SubDirectory
+        {
+            get { return (String)base["directory"]; }
+            set { base["directory"] = value; }
+        }
         [ConfigurationProperty("imageQuality")]
         public int ImageQuality
         {

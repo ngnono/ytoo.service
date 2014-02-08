@@ -12,5 +12,6 @@ namespace com.intime.fashion.common.Aws
        public static readonly string PUBLIC_KEY = ConfigurationManager.AppSettings["aws_public_key"];
        public static readonly string PRIVATE_KEY = ConfigurationManager.AppSettings["aws_private_key"];
        public static readonly string BASE_URL = ConfigurationManager.AppSettings["aws_base_url"];
+       public static readonly string S3_BUCKET_NAME = ConfigurationManager.AppSettings["aws_s3_bucket"];
     }
 }

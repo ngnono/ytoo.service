@@ -135,5 +135,23 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             };
             return new RestfulResult { Data = new ExecuteResult<PagerInfoResponse<GetMessageDetailReponse>>(response) };
         }
+
+        /// <summary>
+        /// return all supported invoice detail
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SupportInvoiceDetails()
+        {
+
+            var invoices = new List<dynamic>();
+            invoices.Add(new { id = 1, name="礼品"});
+            invoices.Add(new { id = 2, name = "日用品" });
+            invoices.Add(new { id = 3, name = "买什么开什么" });
+            var response = new PagerInfoResponse<dynamic>(new PagerRequest(), invoices.Count())
+            {
+                Items = invoices.ToList()
+            };
+            return new RestfulResult { Data = new ExecuteResult<PagerInfoResponse<dynamic>>(response) };
+        }
     }
 }

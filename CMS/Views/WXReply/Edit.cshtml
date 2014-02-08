@@ -1,0 +1,27 @@
+﻿@using Yintai.Hangzhou.Model.Enums
+@using Yintai.Hangzhou.WebSupport.Helper
+@model Yintai.Hangzhou.Cms.WebSiteV1.Models.WXReplyViewModel
+@{
+    ViewBag.Title = "自动修改回复";
+    
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("配置管理", "Index","Configuration")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("微信列表", "List")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Edit"))
+{
+  @Html.EditorForModel()
+   <div class="form-actions">
+        <input type="submit" value="保存" class="btn btn-primary" />
+        @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
+    </div>
+}
+

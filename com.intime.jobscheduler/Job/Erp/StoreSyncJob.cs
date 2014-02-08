@@ -34,7 +34,7 @@ namespace com.intime.jobscheduler.Job.Erp
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
             var totalCount = 0;
-            var benchTime = DateTime.Now.AddSeconds(-interval);
+            var benchTime = data.GetDateTime("benchtime");
             Expression<Func<SHOP_INFO, bool>> whereCondition = null;
             if (!isRebuild)
                 whereCondition = b => b.OPT_UPDATE_TIME >= benchTime;
@@ -112,6 +112,7 @@ namespace com.intime.jobscheduler.Job.Erp
                     existStore.Location = store.SHOP_ADDR??string.Empty;
                     existStore.Tel = store.LINKER_PHONE ?? string.Empty;
                     existStore.Name = store.SHOP_NAME;
+                    db.Entry(existStore).State = System.Data.EntityState.Modified;
                 }
                 db.SaveChanges();
 

@@ -121,200 +121,205 @@ namespace Yintai.Hangzhou.Data.Models
 		#endregion
 
 		#region code reverse
-		public DbSet<AdminAccessRightEntity> AdminAccessRights { get; set; }
-		public DbSet<BannerEntity> Banners { get; set; }
-		public DbSet<BrandEntity> Brands { get; set; }
-		public DbSet<CardEntity> Cards { get; set; }
-		public DbSet<CardBlackEntity> CardBlacks { get; set; }
-		public DbSet<CategoryEntity> Categories { get; set; }
-		public DbSet<CategoryMapEntity> CategoryMaps { get; set; }
-		public DbSet<CategoryPropertyEntity> CategoryProperties { get; set; }
-		public DbSet<CategoryPropertyValueEntity> CategoryPropertyValues { get; set; }
-		public DbSet<CityEntity> Cities { get; set; }
-		public DbSet<CommentEntity> Comments { get; set; }
-		public DbSet<ConfigMsgEntity> ConfigMsgs { get; set; }
-		public DbSet<CouponHistoryEntity> CouponHistories { get; set; }
-		public DbSet<CouponLogEntity> CouponLogs { get; set; }
-		public DbSet<DeviceLogEntity> DeviceLogs { get; set; }
-		public DbSet<DeviceTokenEntity> DeviceTokens { get; set; }
-		public DbSet<ExOrderEntity> ExOrders { get; set; }
-		public DbSet<FavoriteEntity> Favorites { get; set; }
-		public DbSet<FeedbackEntity> Feedbacks { get; set; }
-		public DbSet<GroupEntity> Groups { get; set; }
-		public DbSet<HotWordEntity> HotWords { get; set; }
-		public DbSet<InboundPackageEntity> InboundPackages { get; set; }
-		public DbSet<InventoryEntity> Inventories { get; set; }
-		public DbSet<JobSuccessHistoryEntity> JobSuccessHistories { get; set; }
-		public DbSet<LikeEntity> Likes { get; set; }
-		public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
-		public DbSet<OrderEntity> Orders { get; set; }
-		public DbSet<Order2ExEntity> Order2Ex { get; set; }
-		public DbSet<OrderItemEntity> OrderItems { get; set; }
-		public DbSet<OrderLogEntity> OrderLogs { get; set; }
-		public DbSet<OrderTransactionEntity> OrderTransactions { get; set; }
-		public DbSet<OutboundEntity> Outbounds { get; set; }
-		public DbSet<OutboundItemEntity> OutboundItems { get; set; }
-		public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
-		public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
-		public DbSet<PaymentNotifyLogEntity> PaymentNotifyLogs { get; set; }
-		public DbSet<PKeyEntity> PKeys { get; set; }
-		public DbSet<PMessageEntity> PMessages { get; set; }
-		public DbSet<PointHistoryEntity> PointHistories { get; set; }
-		public DbSet<PointOrderRuleEntity> PointOrderRules { get; set; }
-		public DbSet<ProductEntity> Products { get; set; }
-		public DbSet<ProductMapEntity> ProductMaps { get; set; }
-		public DbSet<ProductPriceEntity> ProductPrices { get; set; }
-		public DbSet<ProductPropertyEntity> ProductProperties { get; set; }
-		public DbSet<ProductPropertyStageEntity> ProductPropertyStages { get; set; }
-		public DbSet<ProductPropertyValueEntity> ProductPropertyValues { get; set; }
-		public DbSet<ProductStageEntity> ProductStages { get; set; }
-		public DbSet<ProductUploadJobEntity> ProductUploadJobs { get; set; }
-		public DbSet<PromotionEntity> Promotions { get; set; }
-		public DbSet<Promotion2ProductEntity> Promotion2Product { get; set; }
-		public DbSet<PromotionBrandRelationEntity> PromotionBrandRelations { get; set; }
-		public DbSet<RemindEntity> Reminds { get; set; }
-		public DbSet<ResourceEntity> Resources { get; set; }
-		public DbSet<ResourceStageEntity> ResourceStages { get; set; }
-		public DbSet<RMAEntity> RMAs { get; set; }
-		public DbSet<RMA2ExEntity> RMA2Ex { get; set; }
-		public DbSet<RMAItemEntity> RMAItems { get; set; }
-		public DbSet<RMALogEntity> RMALogs { get; set; }
-		public DbSet<RMAReasonEntity> RMAReasons { get; set; }
-		public DbSet<RoleEntity> Roles { get; set; }
-		public DbSet<RoleAccessRightEntity> RoleAccessRights { get; set; }
-		public DbSet<SectionEntity> Sections { get; set; }
-		public DbSet<SeedEntity> Seeds { get; set; }
-		public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
-		public DbSet<ShippingAddressEntity> ShippingAddresses { get; set; }
-		public DbSet<ShipViaEntity> ShipVias { get; set; }
-		public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
-		public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
-		public DbSet<StoreEntity> Stores { get; set; }
-		public DbSet<StoreCouponEntity> StoreCoupons { get; set; }
-		public DbSet<StorePromotionEntity> StorePromotions { get; set; }
-		public DbSet<StorePromotionScopeEntity> StorePromotionScopes { get; set; }
-		public DbSet<StoreRealEntity> StoreReals { get; set; }
-		public DbSet<TagEntity> Tags { get; set; }
-		public DbSet<TimeSeedEntity> TimeSeeds { get; set; }
-		public DbSet<UserEntity> Users { get; set; }
-		public DbSet<UserAccountEntity> UserAccounts { get; set; }
-		public DbSet<UserAuthEntity> UserAuths { get; set; }
-		public DbSet<UserRoleEntity> UserRoles { get; set; }
-		public DbSet<VerifyCodeEntity> VerifyCodes { get; set; }
-		public DbSet<WXReplyEntity> WXReplies { get; set; }
-		public DbSet<VUserEntity> VUsers { get; set; }
-		public DbSet<VUserRoleEntity> VUserRoles { get; set; }
+        public DbSet<AdminAccessRightEntity> AdminAccessRights { get; set; }
+        public DbSet<BannerEntity> Banners { get; set; }
+        public DbSet<BrandEntity> Brands { get; set; }
+        public DbSet<CardEntity> Cards { get; set; }
+        public DbSet<CardBlackEntity> CardBlacks { get; set; }
+        public DbSet<CategoryEntity> Categories { get; set; }
+        public DbSet<CategoryMapEntity> CategoryMaps { get; set; }
+        public DbSet<CategoryPropertyEntity> CategoryProperties { get; set; }
+        public DbSet<CategoryPropertyValueEntity> CategoryPropertyValues { get; set; }
+        public DbSet<ChannelEntity> Channels { get; set; }
+        public DbSet<CityEntity> Cities { get; set; }
+        public DbSet<CommentEntity> Comments { get; set; }
+        public DbSet<ConfigMsgEntity> ConfigMsgs { get; set; }
+        public DbSet<CouponHistoryEntity> CouponHistories { get; set; }
+        public DbSet<CouponLogEntity> CouponLogs { get; set; }
+        public DbSet<DeviceLogEntity> DeviceLogs { get; set; }
+        public DbSet<DeviceTokenEntity> DeviceTokens { get; set; }
+        public DbSet<ExOrderEntity> ExOrders { get; set; }
+        public DbSet<FavoriteEntity> Favorites { get; set; }
+        public DbSet<FeedbackEntity> Feedbacks { get; set; }
+        public DbSet<GroupEntity> Groups { get; set; }
+        public DbSet<HotWordEntity> HotWords { get; set; }
+        public DbSet<InboundPackageEntity> InboundPackages { get; set; }
+        public DbSet<InventoryEntity> Inventories { get; set; }
+        public DbSet<JobSuccessHistoryEntity> JobSuccessHistories { get; set; }
+        public DbSet<LikeEntity> Likes { get; set; }
+        public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<Order2ExEntity> Order2Ex { get; set; }
+        public DbSet<OrderItemEntity> OrderItems { get; set; }
+        public DbSet<OrderLogEntity> OrderLogs { get; set; }
+        public DbSet<OrderTransactionEntity> OrderTransactions { get; set; }
+        public DbSet<OutboundEntity> Outbounds { get; set; }
+        public DbSet<OutboundItemEntity> OutboundItems { get; set; }
+        public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
+        public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
+        public DbSet<PaymentNotifyLogEntity> PaymentNotifyLogs { get; set; }
+        public DbSet<PKeyEntity> PKeys { get; set; }
+        public DbSet<PMessageEntity> PMessages { get; set; }
+        public DbSet<PointHistoryEntity> PointHistories { get; set; }
+        public DbSet<PointOrderRuleEntity> PointOrderRules { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<ProductMapEntity> ProductMaps { get; set; }
+        public DbSet<ProductPriceEntity> ProductPrices { get; set; }
+        public DbSet<ProductPropertyEntity> ProductProperties { get; set; }
+        public DbSet<ProductPropertyStageEntity> ProductPropertyStages { get; set; }
+        public DbSet<ProductPropertyValueEntity> ProductPropertyValues { get; set; }
+        public DbSet<ProductStageEntity> ProductStages { get; set; }
+        public DbSet<ProductUploadJobEntity> ProductUploadJobs { get; set; }
+        public DbSet<PromotionEntity> Promotions { get; set; }
+        public DbSet<Promotion2ProductEntity> Promotion2Product { get; set; }
+        public DbSet<PromotionBrandRelationEntity> PromotionBrandRelations { get; set; }
+        public DbSet<RemindEntity> Reminds { get; set; }
+        public DbSet<ResourceEntity> Resources { get; set; }
+        public DbSet<ResourceStageEntity> ResourceStages { get; set; }
+        public DbSet<RMAEntity> RMAs { get; set; }
+        public DbSet<RMA2ExEntity> RMA2Ex { get; set; }
+        public DbSet<RMAItemEntity> RMAItems { get; set; }
+        public DbSet<RMALogEntity> RMALogs { get; set; }
+        public DbSet<RMAReasonEntity> RMAReasons { get; set; }
+        public DbSet<RoleEntity> Roles { get; set; }
+        public DbSet<RoleAccessRightEntity> RoleAccessRights { get; set; }
+        public DbSet<SectionEntity> Sections { get; set; }
+        public DbSet<SeedEntity> Seeds { get; set; }
+        public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
+        public DbSet<ShippingAddressEntity> ShippingAddresses { get; set; }
+        public DbSet<ShipViaEntity> ShipVias { get; set; }
+        public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
+        public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
+        public DbSet<StoreEntity> Stores { get; set; }
+        public DbSet<StoreCouponEntity> StoreCoupons { get; set; }
+        public DbSet<StorePromotionEntity> StorePromotions { get; set; }
+        public DbSet<StorePromotionScopeEntity> StorePromotionScopes { get; set; }
+        public DbSet<StoreRealEntity> StoreReals { get; set; }
+        public DbSet<TagEntity> Tags { get; set; }
+        public DbSet<TimeSeedEntity> TimeSeeds { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
+        public DbSet<UserAccountEntity> UserAccounts { get; set; }
+        public DbSet<UserAuthEntity> UserAuths { get; set; }
+        public DbSet<UserRoleEntity> UserRoles { get; set; }
+        public DbSet<VerifyCodeEntity> VerifyCodes { get; set; }
+        public DbSet<WXReplyEntity> WXReplies { get; set; }
+        public DbSet<VUserEntity> VUsers { get; set; }
+        public DbSet<VUserRoleEntity> VUserRoles { get; set; }
 
-		public DbSet<Map4Brand> Map4Brands { get; set; }
+        public DbSet<Map4Brand> Map4Brands { get; set; }
 
-		public DbSet<Map4Product> Map4Products { get; set; }
+        public DbSet<Map4Product> Map4Products { get; set; }
 
-		public DbSet<Map4Category> Map4Categories { get; set; }
+        public DbSet<Map4Category> Map4Categories { get; set; }
 
         public DbSet<Map4Inventory> Map4Inventories { get; set; }
 
         public DbSet<Map4Order> Map4Orders { get; set; }
 
         public DbSet<MappedProductBackup> MappedProductBackups { get; set; }
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
-		{
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
 			Configuration.AutoDetectChangesEnabled = false;
-			// 移除复数表名的契约
-			modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            // 移除复数表名的契约
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-			// 防止黑幕交易 要不然每次都要访问 EdmMetadata这个表 EF4.1后可注释
-			modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
+            // 防止黑幕交易 要不然每次都要访问 EdmMetadata这个表 EF4.1后可注释
+            modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
 
-			modelBuilder.Configurations.Add(new AdminAccessRightEntityMap());
-			modelBuilder.Configurations.Add(new BannerEntityMap());
-			modelBuilder.Configurations.Add(new BrandEntityMap());
-			modelBuilder.Configurations.Add(new CardEntityMap());
-			modelBuilder.Configurations.Add(new CardBlackEntityMap());
-			modelBuilder.Configurations.Add(new CategoryEntityMap());
-			modelBuilder.Configurations.Add(new CategoryMapEntityMap());
-			modelBuilder.Configurations.Add(new CategoryPropertyEntityMap());
-			modelBuilder.Configurations.Add(new CategoryPropertyValueEntityMap());
-			modelBuilder.Configurations.Add(new CityEntityMap());
-			modelBuilder.Configurations.Add(new CommentEntityMap());
-			modelBuilder.Configurations.Add(new ConfigMsgEntityMap());
-			modelBuilder.Configurations.Add(new CouponHistoryEntityMap());
-			modelBuilder.Configurations.Add(new CouponLogEntityMap());
-			modelBuilder.Configurations.Add(new DeviceLogEntityMap());
-			modelBuilder.Configurations.Add(new DeviceTokenEntityMap());
-			modelBuilder.Configurations.Add(new ExOrderEntityMap());
-			modelBuilder.Configurations.Add(new FavoriteEntityMap());
-			modelBuilder.Configurations.Add(new FeedbackEntityMap());
-			modelBuilder.Configurations.Add(new GroupEntityMap());
-			modelBuilder.Configurations.Add(new HotWordEntityMap());
-			modelBuilder.Configurations.Add(new InboundPackageEntityMap());
-			modelBuilder.Configurations.Add(new InventoryEntityMap());
-			modelBuilder.Configurations.Add(new JobSuccessHistoryEntityMap());
-			modelBuilder.Configurations.Add(new LikeEntityMap());
-			modelBuilder.Configurations.Add(new NotificationLogEntityMap());
-			modelBuilder.Configurations.Add(new OrderEntityMap());
-			modelBuilder.Configurations.Add(new Order2ExEntityMap());
-			modelBuilder.Configurations.Add(new OrderItemEntityMap());
-			modelBuilder.Configurations.Add(new OrderLogEntityMap());
-			modelBuilder.Configurations.Add(new OrderTransactionEntityMap());
-			modelBuilder.Configurations.Add(new OutboundEntityMap());
-			modelBuilder.Configurations.Add(new OutboundItemEntityMap());
-			modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
-			modelBuilder.Configurations.Add(new PaymentMethodEntityMap());
-			modelBuilder.Configurations.Add(new PaymentNotifyLogEntityMap());
-			modelBuilder.Configurations.Add(new PKeyEntityMap());
-			modelBuilder.Configurations.Add(new PMessageEntityMap());
-			modelBuilder.Configurations.Add(new PointHistoryEntityMap());
-			modelBuilder.Configurations.Add(new PointOrderRuleEntityMap());
-			modelBuilder.Configurations.Add(new ProductEntityMap());
-			modelBuilder.Configurations.Add(new ProductMapEntityMap());
-			modelBuilder.Configurations.Add(new ProductPriceEntityMap());
-			modelBuilder.Configurations.Add(new ProductPropertyEntityMap());
-			modelBuilder.Configurations.Add(new ProductPropertyStageEntityMap());
-			modelBuilder.Configurations.Add(new ProductPropertyValueEntityMap());
-			modelBuilder.Configurations.Add(new ProductStageEntityMap());
-			modelBuilder.Configurations.Add(new ProductUploadJobEntityMap());
-			modelBuilder.Configurations.Add(new PromotionEntityMap());
-			modelBuilder.Configurations.Add(new Promotion2ProductEntityMap());
-			modelBuilder.Configurations.Add(new PromotionBrandRelationEntityMap());
-			modelBuilder.Configurations.Add(new RemindEntityMap());
-			modelBuilder.Configurations.Add(new ResourceEntityMap());
-			modelBuilder.Configurations.Add(new ResourceStageEntityMap());
-			modelBuilder.Configurations.Add(new RMAEntityMap());
-			modelBuilder.Configurations.Add(new RMA2ExEntityMap());
-			modelBuilder.Configurations.Add(new RMAItemEntityMap());
-			modelBuilder.Configurations.Add(new RMALogEntityMap());
-			modelBuilder.Configurations.Add(new RMAReasonEntityMap());
-			modelBuilder.Configurations.Add(new RoleEntityMap());
-			modelBuilder.Configurations.Add(new RoleAccessRightEntityMap());
-			modelBuilder.Configurations.Add(new SectionEntityMap());
-			modelBuilder.Configurations.Add(new SeedEntityMap());
-			modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
-			modelBuilder.Configurations.Add(new ShippingAddressEntityMap());
-			modelBuilder.Configurations.Add(new ShipViaEntityMap());
-			modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
-			modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());
-			modelBuilder.Configurations.Add(new StoreEntityMap());
-			modelBuilder.Configurations.Add(new StoreCouponEntityMap());
-			modelBuilder.Configurations.Add(new StorePromotionEntityMap());
-			modelBuilder.Configurations.Add(new StorePromotionScopeEntityMap());
-			modelBuilder.Configurations.Add(new StoreRealEntityMap());
-			modelBuilder.Configurations.Add(new TagEntityMap());
-			modelBuilder.Configurations.Add(new TimeSeedEntityMap());
-			modelBuilder.Configurations.Add(new UserEntityMap());
-			modelBuilder.Configurations.Add(new UserAccountEntityMap());
-			modelBuilder.Configurations.Add(new UserAuthEntityMap());
-			modelBuilder.Configurations.Add(new UserRoleEntityMap());
-			modelBuilder.Configurations.Add(new VerifyCodeEntityMap());
-			modelBuilder.Configurations.Add(new WXReplyEntityMap());
-			modelBuilder.Configurations.Add(new VUserEntityMap());
-			modelBuilder.Configurations.Add(new VUserRoleEntityMap());
-			modelBuilder.Configurations.Add(new Map4BrandMap());
-			modelBuilder.Configurations.Add(new Map4ProductMap());
-			modelBuilder.Configurations.Add(new Map4CategoryMap());
-		    modelBuilder.Configurations.Add(new Map4InventoryMap());
-		    modelBuilder.Configurations.Add(new Map4OrderMap());
-		    modelBuilder.Configurations.Add(new MappedProductBackupMap());
-		}
+            modelBuilder.Configurations.Add(new AdminAccessRightEntityMap());
+            modelBuilder.Configurations.Add(new BannerEntityMap());
+            modelBuilder.Configurations.Add(new BrandEntityMap());
+            modelBuilder.Configurations.Add(new CardEntityMap());
+            modelBuilder.Configurations.Add(new CardBlackEntityMap());
+            modelBuilder.Configurations.Add(new CategoryEntityMap());
+            modelBuilder.Configurations.Add(new CategoryMapEntityMap());
+            modelBuilder.Configurations.Add(new CategoryPropertyEntityMap());
+            modelBuilder.Configurations.Add(new CategoryPropertyValueEntityMap());
+            modelBuilder.Configurations.Add(new ChannelEntityMap());
+            modelBuilder.Configurations.Add(new CityEntityMap());
+            modelBuilder.Configurations.Add(new CommentEntityMap());
+            modelBuilder.Configurations.Add(new ConfigMsgEntityMap());
+            modelBuilder.Configurations.Add(new CouponHistoryEntityMap());
+            modelBuilder.Configurations.Add(new CouponLogEntityMap());
+            modelBuilder.Configurations.Add(new DeviceLogEntityMap());
+            modelBuilder.Configurations.Add(new DeviceTokenEntityMap());
+            modelBuilder.Configurations.Add(new ExOrderEntityMap());
+            modelBuilder.Configurations.Add(new FavoriteEntityMap());
+            modelBuilder.Configurations.Add(new FeedbackEntityMap());
+            modelBuilder.Configurations.Add(new GroupEntityMap());
+            modelBuilder.Configurations.Add(new HotWordEntityMap());
+            modelBuilder.Configurations.Add(new InboundPackageEntityMap());
+            modelBuilder.Configurations.Add(new InventoryEntityMap());
+            modelBuilder.Configurations.Add(new JobSuccessHistoryEntityMap());
+            modelBuilder.Configurations.Add(new LikeEntityMap());
+            modelBuilder.Configurations.Add(new NotificationLogEntityMap());
+            modelBuilder.Configurations.Add(new OrderEntityMap());
+            modelBuilder.Configurations.Add(new Order2ExEntityMap());
+            modelBuilder.Configurations.Add(new OrderItemEntityMap());
+            modelBuilder.Configurations.Add(new OrderLogEntityMap());
+            modelBuilder.Configurations.Add(new OrderTransactionEntityMap());
+            modelBuilder.Configurations.Add(new OutboundEntityMap());
+            modelBuilder.Configurations.Add(new OutboundItemEntityMap());
+            modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
+            modelBuilder.Configurations.Add(new PaymentMethodEntityMap());
+            modelBuilder.Configurations.Add(new PaymentNotifyLogEntityMap());
+            modelBuilder.Configurations.Add(new PKeyEntityMap());
+            modelBuilder.Configurations.Add(new PMessageEntityMap());
+            modelBuilder.Configurations.Add(new PointHistoryEntityMap());
+            modelBuilder.Configurations.Add(new PointOrderRuleEntityMap());
+            modelBuilder.Configurations.Add(new ProductEntityMap());
+            modelBuilder.Configurations.Add(new ProductMapEntityMap());
+            modelBuilder.Configurations.Add(new ProductPriceEntityMap());
+            modelBuilder.Configurations.Add(new ProductPropertyEntityMap());
+            modelBuilder.Configurations.Add(new ProductPropertyStageEntityMap());
+            modelBuilder.Configurations.Add(new ProductPropertyValueEntityMap());
+            modelBuilder.Configurations.Add(new ProductStageEntityMap());
+            modelBuilder.Configurations.Add(new ProductUploadJobEntityMap());
+            modelBuilder.Configurations.Add(new PromotionEntityMap());
+            modelBuilder.Configurations.Add(new Promotion2ProductEntityMap());
+            modelBuilder.Configurations.Add(new PromotionBrandRelationEntityMap());
+            modelBuilder.Configurations.Add(new RemindEntityMap());
+            modelBuilder.Configurations.Add(new ResourceEntityMap());
+            modelBuilder.Configurations.Add(new ResourceStageEntityMap());
+            modelBuilder.Configurations.Add(new RMAEntityMap());
+            modelBuilder.Configurations.Add(new RMA2ExEntityMap());
+            modelBuilder.Configurations.Add(new RMAItemEntityMap());
+            modelBuilder.Configurations.Add(new RMALogEntityMap());
+            modelBuilder.Configurations.Add(new RMAReasonEntityMap());
+            modelBuilder.Configurations.Add(new RoleEntityMap());
+            modelBuilder.Configurations.Add(new RoleAccessRightEntityMap());
+            modelBuilder.Configurations.Add(new SectionEntityMap());
+            modelBuilder.Configurations.Add(new SeedEntityMap());
+            modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
+            modelBuilder.Configurations.Add(new ShippingAddressEntityMap());
+            modelBuilder.Configurations.Add(new ShipViaEntityMap());
+            modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
+            modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());
+            modelBuilder.Configurations.Add(new StoreEntityMap());
+            modelBuilder.Configurations.Add(new StoreCouponEntityMap());
+            modelBuilder.Configurations.Add(new StorePromotionEntityMap());
+            modelBuilder.Configurations.Add(new StorePromotionScopeEntityMap());
+            modelBuilder.Configurations.Add(new StoreRealEntityMap());
+            modelBuilder.Configurations.Add(new TagEntityMap());
+            modelBuilder.Configurations.Add(new TimeSeedEntityMap());
+            modelBuilder.Configurations.Add(new UserEntityMap());
+            modelBuilder.Configurations.Add(new UserAccountEntityMap());
+            modelBuilder.Configurations.Add(new UserAuthEntityMap());
+            modelBuilder.Configurations.Add(new UserRoleEntityMap());
+            modelBuilder.Configurations.Add(new VerifyCodeEntityMap());
+            modelBuilder.Configurations.Add(new WXReplyEntityMap());
+            modelBuilder.Configurations.Add(new VUserEntityMap());
+            modelBuilder.Configurations.Add(new VUserRoleEntityMap());
+            modelBuilder.Configurations.Add(new Map4BrandMap());
+            modelBuilder.Configurations.Add(new Map4ProductMap());
+            modelBuilder.Configurations.Add(new Map4CategoryMap());
+            modelBuilder.Configurations.Add(new Map4InventoryMap());
+            modelBuilder.Configurations.Add(new Map4OrderMap());
+            modelBuilder.Configurations.Add(new MappedProductBackupMap());
+
+        }
+
 
 		#endregion
 	}

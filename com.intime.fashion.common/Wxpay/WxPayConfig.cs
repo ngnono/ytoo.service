@@ -17,6 +17,25 @@ namespace com.intime.fashion.common.Wxpay
 
         public static readonly string NOTIFY_URL = ConfigurationManager.AppSettings["WX_NOTIFY_URL"];
         public static readonly string NOTIFY_ERP_URL = ConfigurationManager.AppSettings["WX_NOTIFY_ERP_URL"];
+        public static readonly string NOTIFY_ERP2_URL = ConfigurationManager.AppSettings["WX_NOTIFY_ERP2_URL"];
+
+        public static readonly string APP_APPID = ConfigurationManager.AppSettings["WX_APP_APPID"];
+        public static readonly string APP_PARTER_SIGN_KEY = ConfigurationManager.AppSettings["WX_SIGN_KEY_4APP"];
+        public static readonly string APP_PARTER_ID = ConfigurationManager.AppSettings["WX_PARTER_ID_4APP"];
+        public static readonly string APP_PARTER_KEY = ConfigurationManager.AppSettings["WX_PARTER_KEY_4APP"];
+        public static readonly string PAY4APP_TOKEN_URL = ConfigurationManager.AppSettings["WX_PAY4APP_TOKEN_URL"];
+        public static readonly string PAY4APP_RETURN_URL = ConfigurationManager.AppSettings["WX_PAY4APP_RETURN_URL"];
+        public static readonly string PAY4APP_NOTIFY_URL = ConfigurationManager.AppSettings["WX_PAY4APP_NOTIFY_URL"];
+
+        public static readonly string HTML_PARTER_SIGN_KEY = ConfigurationManager.AppSettings["WX_SIGN_KEY_4HTML"];
+        public static readonly string HTML_PARTER_ID = ConfigurationManager.AppSettings["WX_PARTER_ID_4HTML"];
+        public static readonly string HTML_PARTER_KEY = ConfigurationManager.AppSettings["WX_PARTER_KEY_4HTML"];
+        public static readonly string PAY4HTML_TOKEN_URL = ConfigurationManager.AppSettings["WX_PAY4HTML_TOKEN_URL"];
+        public static readonly string PAY4HTML_NOTIFY_URL = ConfigurationManager.AppSettings["WX_PAY4HTML_NOTIFY_URL"];
+
+        public static readonly string PAYMENT_CODE4APP = ConfigurationManager.AppSettings["WX_PAYMENT_CODE4APP"];
+        public static readonly string PAYMENT_CODE4HTML = ConfigurationManager.AppSettings["WX_PAYMENT_CODE4HTML"];
+
         public static string PaymentCode
         {
             get
@@ -41,7 +60,8 @@ namespace com.intime.fashion.common.Wxpay
         Order = 1,
         Sku = 2,
         Product = 3,
-        ErpOrder = 4
+        ErpOrder = 4,
+        Erp2Order = 5
     }
     public static class WxPaySignMethod
     {

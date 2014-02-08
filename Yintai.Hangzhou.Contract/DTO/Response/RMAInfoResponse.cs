@@ -71,13 +71,13 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
          [DataMember(Name = "productid")]
         public string ProductId { get; set; }
         [DataMember(Name = "productname")]
-        public string ProductName { get; set; }
+         public string ProductName { get { return ProductDesc; } }
         [IgnoreDataMember]
         public string ProductDesc { get; set; }
         [DataMember(Name = "itemno")]
-        public string StoreItemNo { get; set; }
+        public string StoreItem { get; set; }
         [DataMember(Name = "itemdesc")]
-        public string StoreItemDesc { get; set; }
+        public string StoreDesc { get { return ProductDesc; } }
         [DataMember(Name = "quantity")]
         public int Quantity { get; set; }
         [DataMember(Name = "price")]
@@ -85,7 +85,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name="resource")]
          public ResourceInfoResponse ProductResource { get; set; }
         [DataMember(Name = "skucode")]
-        public string SkuCode { get { return StoreItemNo; } }
+        public string SkuCode { get { return StoreItem; } }
         [DataMember(Name = "brandname")]
         public string BrandName { get; set; }
         [DataMember(Name = "brand2name")]

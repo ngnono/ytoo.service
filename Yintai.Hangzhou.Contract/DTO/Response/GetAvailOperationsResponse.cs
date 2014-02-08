@@ -15,5 +15,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public bool IsFavored { get; set; }
         [DataMember(Name="ifcancoupon")]
         public bool IfCanCoupon { get; set; }
+        [DataMember(Name="ifcantalk")]
+        public bool IfCanTalk { get; set; }
     }
 }

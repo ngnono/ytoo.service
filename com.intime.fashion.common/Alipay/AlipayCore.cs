@@ -6,6 +6,8 @@ using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using Yintai.Architecture.Framework.ServiceLocation;
+using Yintai.Architecture.Common.Logger;
 
 namespace Com.Alipay
 {
@@ -92,11 +94,8 @@ namespace Com.Alipay
         /// <param name="sWord">要写入日志里的文本内容</param>
         public static void LogResult(string sWord)
         {
-            string strPath = HttpContext.Current.Server.MapPath("log");
-            strPath = strPath + "\\" + DateTime.Now.ToString().Replace(":", "") + ".txt";
-            StreamWriter fs = new StreamWriter(strPath, false, System.Text.Encoding.Default);
-            fs.Write(sWord);
-            fs.Close();
+            var log = ServiceLocator.Current.Resolve<ILog>();
+            log.Debug(sWord);
         }
 
         /// <summary>

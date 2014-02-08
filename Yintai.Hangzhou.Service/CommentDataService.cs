@@ -53,35 +53,38 @@ namespace Yintai.Hangzhou.Service
             }
             using (var ts = new TransactionScope())
             {
-                entity = _commentRepository.Insert(new CommentEntity
-                   {
-                       Content = request.Content,
-                       CreatedDate = DateTime.Now,
-                       CreatedUser = request.AuthUid,
-                       ReplyUser = request.ReplyUser,
-                       SourceId = request.SourceId,
-                       SourceType = (int)request.SType,
-                       Status = 1,
-                       UpdatedDate = DateTime.Now,
-                       UpdatedUser = request.AuthUid,
-                       User_Id = request.AuthUid
-                   });
-
-                //插入一个提醒
-                _remindService.Insert(new RemindEntity
-                    {
+                if (request.SourceType == (int)SourceType.Comment) {
+                    var repliedComment = _commentRepository.Get(l => l.Id == request.SourceId).First();
+                    entity = _commentRepository.Insert(new CommentEntity() {
+                        Content = request.Content,
                         CreatedDate = DateTime.Now,
-                        CreatedUser = request.AuthUid,
-                        IsRemind = false,
-                        RemindUser = request.AuthUid,
-                        SourceId = entity.Id,
-                        Stauts = (int)DataStatus.Default,
-                        Type = (int)SourceType.Comment,
+                        CreatedUser = request.AuthUser.Id,
+                        ReplyUser = repliedComment.User_Id,
+                        SourceId = repliedComment.SourceId,
+                        SourceType = repliedComment.SourceType,
+                        Status = 1,
                         UpdatedDate = DateTime.Now,
-                        UpdatedUser = request.AuthUid,
-                        User_Id = entity.ReplyUser
+                        UpdatedUser = request.AuthUser.Id,
+                        User_Id = request.AuthUser.Id,
+                        ReplyId = request.SourceId
                     });
-
+                }
+                else
+                {
+                    entity = _commentRepository.Insert(new CommentEntity
+                       {
+                           Content = request.Content,
+                           CreatedDate = DateTime.Now,
+                           CreatedUser = request.AuthUid,
+                           ReplyUser = request.ReplyUser,
+                           SourceId = request.SourceId,
+                           SourceType = (int)request.SType,
+                           Status = 1,
+                           UpdatedDate = DateTime.Now,
+                           UpdatedUser = request.AuthUid,
+                           User_Id = request.AuthUid
+                       });
+                }
                 //处理文件上传
                 if (request.Files != null && request.Files.Count > 0)
                 {

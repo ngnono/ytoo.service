@@ -19,6 +19,7 @@ namespace com.intime.jobscheduler.Job
     [DisallowConcurrentExecution]
     public class Push2awsJob:IJob
     {
+        private bool _isActiveOnly = false;
         public void Execute(IJobExecutionContext context)
         {
             ILog log = LogManager.GetLogger(this.GetType());
@@ -42,7 +43,10 @@ namespace com.intime.jobscheduler.Job
             {
                 var response = client.DeleteIndex(esIndex);
                 if (response.OK)
-                    log.Info(string.Format("index:{0} is deleted!",esIndex));
+                {
+                    log.Info(string.Format("index:{0} is deleted!", esIndex));
+                    _isActiveOnly = true;
+                }
                 else
                 {
                     log.Info("remove index failed");
@@ -122,7 +126,10 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = from r in db.Resources
+                var linq = db.Resources.AsQueryable(); ;
+                if (_isActiveOnly)
+                    linq = linq.Where(l => l.Status == (int)DataStatus.Normal);
+                var prods = from r in linq
                             where (r.CreatedDate >= benchDate || r.UpdatedDate >= benchDate)
                             select new ESResource()
                             {
@@ -339,7 +346,10 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var words = from p in db.HotWords
+                var linq = db.HotWords.AsQueryable();
+                if (_isActiveOnly)
+                    linq = db.HotWords.Where(b => b.Status == (int)DataStatus.Normal);
+                var words = from p in linq
                             where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
                             select p;
                 var prods = from p in words.ToList()
@@ -390,7 +400,10 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = from p in db.Banners
+                var linq = db.Banners.AsQueryable();
+                if (_isActiveOnly)
+                    linq = db.Banners.Where(b => b.Status == (int)DataStatus.Normal);
+                var prods = from p in linq
                             join pro in db.Promotions on p.SourceId equals pro.Id
                             where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
                                 && p.SourceType == 2
@@ -644,6 +657,8 @@ namespace com.intime.jobscheduler.Job
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var linq = db.SpecialTopics.AsQueryable();
+                if (_isActiveOnly)
+                    linq = linq.Where(s => s.Status == (int)DataStatus.Normal);
                 if (benchDate.HasValue)
                     linq = linq.Where(p => p.CreatedDate >= benchDate.Value || p.UpdatedDate >= benchDate.Value);
                 else if (whereCondition != null)
@@ -740,6 +755,8 @@ namespace com.intime.jobscheduler.Job
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var linq = db.Promotions.AsQueryable();
+                if (_isActiveOnly)
+                    linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
                 if (benchDate.HasValue)
                     linq = linq.Where(p => p.CreatedDate >= benchDate.Value || p.UpdatedDate >= benchDate.Value);
                 else if (whereCondition != null)
@@ -850,6 +867,8 @@ namespace com.intime.jobscheduler.Job
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var linq = db.Products.AsQueryable();
+                if (_isActiveOnly)
+                    linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
                 if (benchDate.HasValue)
                     linq = linq.Where(p => p.CreatedDate >= benchDate.Value || p.UpdatedDate >= benchDate.Value);
                 else if (whereCondition!=null)
@@ -884,18 +903,31 @@ namespace com.intime.jobscheduler.Job
                                                 Name = sp.Name,
                                                 Description = sp.Description
                                             }
-                            let promotions = from ppr in db.Promotion2Product
-                                             where ppr.ProdId == p.Id
-                                             join pro in db.Promotions on ppr.ProId equals pro.Id
-                                             select new ESPromotion { 
-                                                Id = pro.Id,
-                                                Name = pro.Name,
-                                                Description = pro.Description,
-                                                CreatedDate = p.CreatedDate,
-                                                StartDate = pro.StartDate,
-                                                EndDate = pro.EndDate,
-                                                Status = pro.Status
-                                             }
+                            let promotions = db.Promotion2Product.Where(pp=>pp.ProdId == p.Id)
+                                             .Join(db.Promotions,o=>o.ProId,i=>i.Id,(o,i)=>i)
+                                             .GroupJoin(db.Resources.Where(pr=>pr.SourceType==(int)SourceType.Promotion && pr.Type==(int)ResourceType.Image)
+                                                        ,o=>o.Id
+                                                        ,i=>i.SourceId
+                                                        ,(o,i)=>new {Pro=o,R=i.OrderByDescending(r=>r.SortOrder)})
+                                             .Select(ppr=> new ESPromotion { 
+                                                Id = ppr.Pro.Id,
+                                                Name = ppr.Pro.Name,
+                                                Description = ppr.Pro.Description,
+                                                CreatedDate = ppr.Pro.CreatedDate,
+                                                StartDate = ppr.Pro.StartDate,
+                                                EndDate = ppr.Pro.EndDate,
+                                                Status = ppr.Pro.Status,
+                                                Resource = ppr.R.Select(r=> new ESResource()
+                                                {
+                                                    Domain = r.Domain,
+                                                    Name = r.Name,
+                                                    SortOrder = r.SortOrder,
+                                                    IsDefault = r.IsDefault,
+                                                    Type = r.Type,
+                                                    Width = r.Width,
+                                                    Height = r.Height
+                                                })
+                                             })
                             let section = (from section in db.Sections
                                            where section.BrandId == p.Brand_Id && section.StoreId == p.Store_Id
                                           select new ESSection(){

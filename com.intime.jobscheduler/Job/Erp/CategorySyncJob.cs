@@ -34,7 +34,7 @@ namespace com.intime.jobscheduler.Job.Erp
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
             var totalCount = 0;
-            var benchTime = DateTime.Now.AddSeconds(-interval);
+            var benchTime = data.GetDateTime("benchtime");
             Expression<Func<PRO_CLASS_DICT, bool>> whereCondition = null;
             if (!isRebuild)
                 whereCondition = b => b.OPT_UPDATE_TIME >= benchTime;
@@ -97,6 +97,8 @@ namespace com.intime.jobscheduler.Job.Erp
                     existCat.ExCatCode = cat.PRO_CLASS_NUM;
                     existCat.Name = cat.PRO_CLASS_DESC;
                     existCat.UpdateDate = cat.OPT_UPDATE_TIME ?? DateTime.Now;
+
+                    db.Entry(existCat).State = System.Data.EntityState.Modified;
                 }
                 db.SaveChanges();
 

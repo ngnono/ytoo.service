@@ -61,6 +61,7 @@ namespace com.intime.jobscheduler.Job.Erp
                 {
                     existColor.ValueDesc = colorName;
                     existColor.UpdateDate = DateTime.Now;
+                    db.Entry(existColor).State = System.Data.EntityState.Modified;
                     
                 }
                 var existSize = db.Set<ProductPropertyValueEntity>().Where(b => b.ChannelValueId == sizeId)
@@ -98,6 +99,7 @@ namespace com.intime.jobscheduler.Job.Erp
                 {
                     existSize.ValueDesc = sizeName;
                     existSize.UpdateDate = DateTime.Now;
+                    db.Entry(existSize).State = System.Data.EntityState.Modified;
                 }
                 db.SaveChanges();
 

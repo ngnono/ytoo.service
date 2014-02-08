@@ -71,6 +71,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
+            var existAddressCount = Context.Set<ShippingAddressEntity>().Where(s => s.UserId == authUser.Id && s.Status == (int)DataStatus.Normal).Count();
+            if (existAddressCount>= 8)
+                return this.RenderError(r => r.Message ="您最多可维护8个地址！");
             var inserted = _shippingRepo.Insert(new ShippingAddressEntity()
             {
                 ShippingAddress1 = request.ShippingAddress,

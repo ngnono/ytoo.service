@@ -143,7 +143,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 });
                 
                string groupErr;
-               bool isGroupExchangeSuccess = true;/* GroupServiceHelper.SendHttpMessage(ConfigManager.GroupHttpUrlExchange,
+               bool isGroupExchangeSuccess = GroupServiceHelper.SendHttpMessage(ConfigManager.GroupHttpUrlExchange,
                     ConfigManager.GroupHttpPublicKey,
                     ConfigManager.GroupHttpPrivateKey,
                     new { 
@@ -152,13 +152,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                         identityno = request.IdentityNo.Trim(),
                         storeno = ConfigManager.AppStoreNoInGroup
                      },
-                    out groupErr);*/
+                    out groupErr);
                 
                 // step3: commit
-               if (isGroupExchangeSuccess)
-               // if (exchangeResult.Success)
+                 if (exchangeResult.Success)
                     ts.Complete();
-                   /*
                 else
                 {
                     Logger.Info(groupErr);
@@ -169,7 +167,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
                 };
                 }
-                    * */
+               
             }
             return new RestfulResult { Data = new ExecuteResult<ExchangeStoreCouponResponse>(
                                 new ExchangeStoreCouponResponse().FromEntity<ExchangeStoreCouponResponse>(newCoupon,

@@ -17,7 +17,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
 
             this.Property(t => t.OrderNo)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
             this.Property(t => t.PaymentContent)
                 .IsRequired();

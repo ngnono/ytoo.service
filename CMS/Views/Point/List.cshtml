@@ -1,0 +1,202 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteV1.Models.PointCollectionViewModel
+
+@{
+    ViewBag.Title = "积点列表";
+   PointListSearchOption search = ViewBag.SearchOptions;
+   HtmlHelper<PointListSearchOption> searchModelHelper = Html.HtmlHelperFor<PointListSearchOption>();
+
+}
+
+@section PageJsSection {
+    <script>
+        $(function () {
+            $("a[id^='delete']").click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var itemId = $(this).attr("data-rightId");
+                $("#delete-dialog").dialog({
+                    resizable: false,
+                    height: 140,
+                    modal: true,
+                    buttons: {
+                        "删除": function () {
+                            $(this).dialog("close");
+                            $.ajax({
+                                type: "POST",
+                                url: "@(Url.Action("Delete"))",
+                                data: {
+                                    id: itemId
+                                },
+                                success: function (data) {
+                                    if (data["Success"] == true) {
+                                        self.parents("tr:first").remove();
+                                    }
+                                    else {
+                                        alert('删除失败！');
+                                    }
+                                },
+                                error: function (data, textStatus, jqXHR) {
+                                    alert('删除失败！');
+                                }
+
+                            });
+                        },
+                        "取消": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+
+                });
+            });
+        });
+    </script>
+}
+
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("用户管理", "Index","Customer")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<p>
+    @Html.ActionLink2("新增积点", "Create", null, new { @class="btn btn-primary"})
+</p>
+@using (Html.BeginForm("List", "Point", new { page = 0 }, FormMethod.Get, new { @class = "form-horizontal searchForm-border small-labels" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.UId)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.UId)
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.PType)</label>
+                <div class="controls">
+                   @searchModelHelper.DropDownListFor(m => search.PType, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Enums.PointType>())
+                </div>
+            </div>
+                         <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.OrderBy)</label>
+                <div class="controls">
+                    @searchModelHelper.DropDownListFor(m => search.OrderBy, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Filters.GenericOrder>())
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="control-label">
+                    <button type="submit" class="btn">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+
+            <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.PSourceType)</label>
+                <div class="controls">
+                   @searchModelHelper.DropDownListFor(m => search.PSourceType, EnumHelper.DisplayList<Yintai.Hangzhou.Model.Enums.PointSourceType>())
+                
+                </div>
+            </div>
+                        <div class="control-group">
+                <label class="control-label" for="Name">@searchModelHelper.LabelFor(m => search.PSourceId)</label>
+                <div class="controls">
+                    @searchModelHelper.EditorFor(m => search.PSourceId)
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+<table>
+    <tr>
+        <th>操作</th>
+        <th>
+            用户代码
+        </th>
+        <th>
+            积点数量
+        </th>
+        <th>
+            积点类型
+        </th>
+        <th>
+            标题
+        </th>
+        <th>
+            描述
+        </th>
+        <th>
+            积点来源代码
+        </th>
+        <th>
+            积点来源类型
+        </th>
+        <th>
+            状态
+        </th>
+        <th>
+            创建用户
+        </th>
+        <th>
+            创建时间
+        </th>
+       
+    </tr>
+
+@foreach (var item in Model.Points) {
+    <tr>
+        <td>
+             <div class="btn-group">
+                    <button class="btn btn-small">操作</button>
+                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink2("详情", "Details", new { id = item.Id }) </li>
+                        <li><a href="#" data-rightId="@item.Id" class="btn btn-danger" id="delete@(item.Id)">删除</a></li>
+                    </ul>
+
+                </div>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User_Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+             @Html.Label("", ((Yintai.Hangzhou.Model.Enums.PointType)item.Type).ToFriendlyString())
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PointSourceId)
+        </td>
+        <td>
+             @Html.Label("", ((Yintai.Hangzhou.Model.Enums.PointSourceType)item.PointSourceType).ToFriendlyString())
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedUser)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedDate)
+        </td>
+
+    </tr>
+}
+
+</table>
+@Html.Partial("PagerPartialView", this.Model)
+<div class="hide" id="delete-dialog" title="删除积点">
+    <p>您确认要删除该条积点吗？</p>
+</div>

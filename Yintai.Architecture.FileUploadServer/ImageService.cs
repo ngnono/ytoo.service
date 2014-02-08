@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.intime.fashion.common;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
@@ -41,7 +42,12 @@ namespace Yintai.Architecture.ImageTool.Impl
             var tFullName = oName.Substring(0, oName.IndexOf(FileTempExt, System.StringComparison.Ordinal)) + ".mp3";
 
             AudioService.Current.Compression(oFullName, tFullName);
-
+            if (Sync2S3)
+            {
+                string keyPath = tFullName.Replace(_imageSetting.Folder, "");
+                Log.Debug("keyPath:" + keyPath);
+                AwsHelper.Transfer2S3(tFullName, keyPath);
+            }
             if (isReturnDuration)
             {
                 try
@@ -71,7 +77,7 @@ namespace Yintai.Architecture.ImageTool.Impl
             _imageSetting = (ImageSettingConfig)ConfigurationManager.GetSection("imageSetting");
             _imageElement = _imageSetting.ImageCollection[key];
 
-            _fileFolder = String.IsNullOrEmpty(_imageElement.RootFolder) ? _imageSetting.Folder : _imageElement.RootFolder;
+            _fileFolder = Path.Combine(_imageSetting.Folder, String.IsNullOrEmpty(_imageElement.RootFolder) ? _imageSetting.SubDirectory : _imageElement.RootFolder);
 
             fileExt = clientFilePath.Substring(clientFilePath.LastIndexOf(".", System.StringComparison.Ordinal) + 1).ToLower();
 
@@ -112,7 +118,6 @@ namespace Yintai.Architecture.ImageTool.Impl
             }
 
             fileKey = String.Format("{0}{1}", tfileFolder, Guid.NewGuid().ToString());
-            //Console.WriteLine(clientFilePath + "验证成功");
 
             Log.Debug(String.Format("Create file and generate key successful.fileFolder: {0},filekey: {1}", _fileFolder, fileKey));
 
@@ -166,7 +171,7 @@ namespace Yintai.Architecture.ImageTool.Impl
             _imageElement = _imageSetting.ImageCollection[request.KeyName];
 
 
-            _fileFolder = string.IsNullOrEmpty(_imageElement.RootFolder) ? _imageSetting.Folder : _imageElement.RootFolder;
+            _fileFolder = Path.Combine(_imageSetting.Folder, String.IsNullOrEmpty(_imageElement.RootFolder) ? _imageSetting.SubDirectory : _imageElement.RootFolder);
 
             var filePath = Path.Combine(_fileFolder, request.FileName + (_imageElement.AsNormalFile ? String.Empty : FileTempExt) + "." + request.FileExt);
 
@@ -230,6 +235,12 @@ namespace Yintai.Architecture.ImageTool.Impl
                         try
                         {
                             Thumbnail.Instance.MakeThumbnailPic(filePath, thumbPath, thumb.Width, thumb.Height, thumb.Mode, _imageSetting.ImageQuality);
+                            if (Sync2S3)
+                            {
+                                string keyPath = thumbPath.Replace(_imageSetting.Folder, "");
+                                Log.Debug("keyPath:" + keyPath);
+                                AwsHelper.Transfer2S3(thumbPath, keyPath);
+                            }
                         }
                         catch
                         {
@@ -286,8 +297,7 @@ namespace Yintai.Architecture.ImageTool.Impl
             _imageElement = _imageSetting.ImageCollection[request.KeyName];
 
 
-            _fileFolder = String.IsNullOrEmpty(_imageElement.RootFolder) ? _imageSetting.Folder : _imageElement.RootFolder;
-
+            _fileFolder = Path.Combine(_imageSetting.Folder, String.IsNullOrEmpty(_imageElement.RootFolder) ? _imageSetting.SubDirectory : _imageElement.RootFolder);
             string filePath = Path.Combine(_fileFolder, request.FileName + (_imageElement.AsNormalFile ? string.Empty : FileTempExt) + "." + request.FileExt);
 
             var fileInfo = new FileInfo(filePath);
@@ -356,7 +366,12 @@ namespace Yintai.Architecture.ImageTool.Impl
 
                             Log.Debug("thumbPath:" + thumbPath);
                             long size = Thumbnail.Instance.MakeThumbnailPicAndReturnSize(filePath, thumbPath, thumb.Width, thumb.Height, thumb.Mode, _imageSetting.ImageQuality, out realWidth, out realHeight, thumbnailInfoes.ExifInfos);
-
+                            if (Sync2S3)
+                            {
+                                string keyPath = thumbPath.Replace(_imageSetting.Folder,"");
+                                Log.Debug("keyPath:" + keyPath);
+                                AwsHelper.Transfer2S3(thumbPath,keyPath);
+                            }
                             thumbnailInfoes.Info.Add(thumb.Key, size);
                             thumbnailInfoes.Sizes.Add(thumb.Key, new ImageSize(realWidth, realHeight));
                         }
@@ -375,13 +390,19 @@ namespace Yintai.Architecture.ImageTool.Impl
                 {
                     using (Image bitmap = Image.FromFile(filePath))
                     {
-
-                        bitmap.Save(filePath.Substring(0, filePath.IndexOf("." + request.FileExt)) + ".jpg", ImageFormat.Jpeg);
+                        var targetPath = filePath.Substring(0, filePath.IndexOf("." + request.FileExt)) + ".jpg";
+                        bitmap.Save(targetPath, ImageFormat.Jpeg);
+                        if (Sync2S3)
+                        {
+                            string keyPath = targetPath.Replace(_imageSetting.Folder, "");
+                            Log.Debug("keyPath:" + keyPath);
+                            AwsHelper.Transfer2S3(targetPath, keyPath);
+                        }
                     }
 
                 }
 
-
+               
                 if (!request.SaveOrigin)
                 {
                     File.Delete(filePath);
@@ -828,5 +849,16 @@ namespace Yintai.Architecture.ImageTool.Impl
         }
 
         #endregion
+
+
+        private bool Sync2S3 {
+            get {
+                var setting = ConfigurationManager.AppSettings["IsToS3"];
+                if (string.IsNullOrEmpty(setting))
+                    return false;
+                return bool.Parse(setting);
+            }
+        }
+
     }
 }

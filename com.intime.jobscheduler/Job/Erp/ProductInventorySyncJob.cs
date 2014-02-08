@@ -35,7 +35,7 @@ namespace com.intime.jobscheduler.Job.Erp
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
             var totalCount = 0;
-            var benchTime = DateTime.Now.AddSeconds(-interval);
+            var benchTime = data.GetDateTime("benchtime");
             Expression<Func<SUPPLY_MIN_PRICE_MX, bool>> whereCondition = null;
             if (!isRebuild)
                 whereCondition = b => b.OPT_UPDATE_TIME >= benchTime;
@@ -135,12 +135,15 @@ namespace com.intime.jobscheduler.Job.Erp
                     else
                     {
                         inventory.Amount = amount;
+                        inventory.UpdateDate = DateTime.Now;
+                        db.Entry(inventory).State = System.Data.EntityState.Modified;
                     }
                     //update product.is4sale
                     if ((existProduct.Is4Sale ?? false) == false && !no4sale)
                     {
                         existProduct.Is4Sale = true;
                         existProduct.UpdatedDate = DateTime.Now;
+                        db.Entry(existProduct).State = System.Data.EntityState.Modified;
                     }
                     db.SaveChanges();
 

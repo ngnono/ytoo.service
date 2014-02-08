@@ -31,6 +31,10 @@ namespace Yintai.Hangzhou.Model.Enums
         CustomerReceived = 16,
         [Description("转集团销售")]
         Convert2Sales =17,
+        [Description("完成")]
+        Complete = 18,
+        [Description("全部退货")]
+        RMAd = 19,
         [Description("用户拒收")]
         CustomerRejected = 10
     }

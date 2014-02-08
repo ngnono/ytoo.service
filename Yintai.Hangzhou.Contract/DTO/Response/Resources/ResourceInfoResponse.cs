@@ -32,8 +32,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Resources
         public string Domain { get; set; }
         [DataMember(Name = "domain")]
         public string Domain_s { get {
+            /*
             if (!string.IsNullOrEmpty(Domain))
                 return Domain;
+             * */
             switch (Type)
             { 
                 case (int)ResourceType.Image:

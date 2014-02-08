@@ -70,6 +70,8 @@
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -161,6 +163,7 @@
     <Compile Include="Job\AccountSyncJob.cs" />
     <Compile Include="Job\ApnsNotificationCommonJob.cs" />
     <Compile Include="Job\ApnsNotificationJob.cs" />
+    <Compile Include="Job\AutoConvertOrderStatus.cs" />
     <Compile Include="Job\CouponStatusSyncJob.cs" />
     <Compile Include="Job\Erp\BrandSyncJob.cs" />
     <Compile Include="Job\Erp\CategorySyncJob.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="Job\Erp\ProductPicSyncJob.cs" />
     <Compile Include="Job\Erp\ProductPropertySyncJob.cs" />
     <Compile Include="Job\Erp\ProductSyncJob.cs" />
+    <Compile Include="Job\Erp\SaleProductNoPicSyncOneTimeJob.cs" />
     <Compile Include="Job\Erp\SectionSyncJob.cs" />
     <Compile Include="Job\Erp\StoreSyncJob.cs" />
     <Compile Include="Job\ExpireStoreCouponReturnPointsJob.cs" />
@@ -177,6 +181,7 @@
     <Compile Include="Job\FreeMemoryJob.cs" />
     <Compile Include="Job\JobConfig.cs" />
     <Compile Include="Job\JobType.cs" />
+    <Compile Include="Job\Order\AutoVoidUnpaidOrderJob.cs" />
     <Compile Include="Job\PointsFromApp2GroupJob.cs" />
     <Compile Include="Job\Erp\ProductInventorySyncJob.cs" />
     <Compile Include="Job\Push2awsIncreJob.cs" />
@@ -214,7 +219,7 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="log4net.config">
+    <None Include="Configuration\log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -224,7 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\app.manifest" />
-    <None Include="quartz_jobs.xml">
+    <None Include="Configuration\quartz_jobs.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>

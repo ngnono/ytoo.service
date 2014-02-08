@@ -1,6 +1,9 @@
 ﻿using Amazon;
+using Amazon.S3;
+using Amazon.S3.Transfer;
 using Amazon.SQS;
 using Amazon.SQS.Model;
+using com.intime.fashion.common.Aws;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,6 +27,7 @@ namespace com.intime.fashion.common
         private static AmazonSQS sqs;
         private static string queueUrl;
         private static object lockObject = new object();
+        private static AmazonS3 s3;
         public static void SendMessage(string typeName,Func<object> messageComposer)
         {
            
@@ -91,6 +95,17 @@ namespace com.intime.fashion.common
 
         }
 
+        public static void Transfer2S3(string localPath,string remotePath)
+        {
+            EnsureS3();
+            var transferClient = new TransferUtility(s3);
+            transferClient.Upload(new TransferUtilityUploadRequest() { 
+                 CannedACL = Amazon.S3.Model.S3CannedACL.PublicRead,
+                 FilePath = localPath,
+                 BucketName = AwsConfig.S3_BUCKET_NAME,
+                 Key = remotePath
+            });
+        }
         private static void EnsureQueue()
         {
             if (!string.IsNullOrEmpty(queueUrl))
@@ -117,6 +132,20 @@ namespace com.intime.fashion.common
                 lock (lockObject)
                 {
                     sqs = AWSClientFactory.CreateAmazonSQSClient();
+
+                }
+            }
+        }
+        private static void EnsureS3()
+        {
+            if (s3 == null)
+            {
+                lock (lockObject)
+                {
+                    s3 = AWSClientFactory.CreateAmazonS3Client(new AmazonS3Config() {
+                        ServiceURL = "s3.amazonaws.com",
+                        CommunicationProtocol = Amazon.S3.Model.Protocol.HTTP
+                    });
 
                 }
             }

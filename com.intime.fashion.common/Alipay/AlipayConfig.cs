@@ -31,6 +31,7 @@ namespace Com.Alipay
         private static string public_key = "";
         private static string input_charset = "";
         private static string sign_type = "";
+        private static string _md5_key = "";
         #endregion
 
         static Config()
@@ -48,7 +49,7 @@ namespace Com.Alipay
 
             //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
-
+            _md5_key = ConfigurationManager.AppSettings["Ali_md5key"];
 
             //字符编码格式 目前支持 gbk 或 utf-8
             input_charset = "utf-8";
@@ -58,6 +59,11 @@ namespace Com.Alipay
         }
 
         #region 属性
+        public static string MD5_Key
+        {
+            get { return _md5_key; }
+            set { _md5_key = value; }
+        }
         /// <summary>
         /// 获取或设置合作者身份ID
         /// </summary>

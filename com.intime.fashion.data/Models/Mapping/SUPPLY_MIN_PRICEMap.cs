@@ -69,6 +69,8 @@ namespace com.intime.fashion.data.erp.Models.Mapping
             this.Property(t => t.SHOP_SID).HasColumnName("SHOP_SID");
             this.Property(t => t.PRO_DESC).HasColumnName("PRO_DESC");
             this.Property(t => t.BARCODE).HasColumnName("BARCODE");
+            this.Property(t => t.PRO_SELLING).HasColumnName("PRO_SELLING");
+            this.Property(t => t.PRO_SELLING_DOWN_TIME).HasColumnName("PRO_SELLING_DOWN_TIME");
 
             // Relationships
             this.HasOptional(t => t.SALE_CODE)

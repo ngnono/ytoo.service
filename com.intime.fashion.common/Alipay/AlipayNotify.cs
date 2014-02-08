@@ -27,6 +27,7 @@ namespace Com.Alipay
         private string _public_key = "";            //支付宝的公钥
         private string _input_charset = "";         //编码格式
         private string _sign_type = "";             //签名方式
+        private string _md5_key = "";
 
         //支付宝消息验证地址
         private string Https_veryfy_url = "https://mapi.alipay.com/gateway.do?service=notify_verify&";
@@ -46,6 +47,7 @@ namespace Com.Alipay
             _public_key = Config.Public_key.Trim();
             _input_charset = Config.Input_charset.Trim().ToLower();
             _sign_type = Config.Sign_type.Trim().ToUpper();
+            _md5_key = Config.MD5_Key.Trim();
         }
 
         /// <summary>
@@ -64,8 +66,8 @@ namespace Com.Alipay
             if (notify_id != null && notify_id != "") { responseTxt = GetResponseTxt(notify_id); }
 
             //写日志记录（若要调试，请取消下面两行注释）
-            //string sWord = "responseTxt=" + responseTxt + "\n isSign=" + isSign.ToString() + "\n 返回回来的参数：" + GetPreSignStr(inputPara) + "\n ";
-            //Core.LogResult(sWord);
+            string sWord = "responseTxt=" + responseTxt + "\n isSign=" + isSign.ToString() + "\n 返回回来的参数：" + GetPreSignStr(inputPara) + "\n ";
+            Core.LogResult(sWord);
 
             //判断responsetTxt是否为true，isSign是否为true
             //responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
@@ -106,6 +108,7 @@ namespace Com.Alipay
         /// <returns>签名验证结果</returns>
         private bool GetSignVeryfy(SortedDictionary<string, string> inputPara, string sign)
         {
+            string signType = inputPara["sign_type"].ToUpper();
             Dictionary<string, string> sPara = new Dictionary<string, string>();
 
             //过滤空值、sign与sign_type参数
@@ -114,14 +117,19 @@ namespace Com.Alipay
             //获取待签名字符串
             string preSignStr = Core.CreateLinkString(sPara);
 
+          
+
             //获得签名验证结果
             bool isSgin = false;
             if (sign != null && sign != "")
             {
-                switch (_sign_type)
+                switch (signType)
                 {
                     case "RSA":
                         isSgin = RSAFromPkcs8.verify(preSignStr, sign, _public_key, _input_charset);
+                        break;
+                    case "MD5":
+                        isSgin = AlipayMD5.Verify(preSignStr, sign, _md5_key, _input_charset);
                         break;
                     default:
                         break;

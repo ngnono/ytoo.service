@@ -1,0 +1,140 @@
+﻿@model RMAViewModel
+@{
+    ViewBag.Title = "订单撤消";
+    var operatorName = (ViewContext.Controller as Yintai.Hangzhou.Cms.WebSiteV1.Controllers.UserController).CurrentUser.NickName;
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("订单管理", "Index")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("订单列表", "List")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+@section PageJsSection
+{
+    <script>
+        function PrintRMA(data) {
+            if (data["Success"] != true) {
+                alert(data["Message"]);
+                return;
+            }
+            var printwin = $("#printwindow");
+            printwin.kendoWindow({
+                content: {
+                    url: "@Url.Action("PrintRMAReport",new {RMANo=Model.RMANo})"
+                    },
+                    iframe: true,
+                    close: onPrintClose,
+                    width: "100%",
+                    height: "100%",
+                    modal: true,
+                    title: "打印退货单",
+
+                });
+                var kendoWindow = printwin.data("kendoWindow");
+                kendoWindow.open();
+                kendoWindow.center();
+                var printFrame = $("iframe:first")[0];
+                $(printFrame).bind('load', function () {
+                    this.focus();
+                    this.contentWindow.print();
+                });
+
+        }
+        function onPrintClose(e) {
+            e.preventDefault();
+            if (confirm('确认已经打印报表之后再退出，是否已打印？')) {
+                window.location.href = "@Url.Action("details", new { orderno = Model.OrderNo })";
+                return true;
+            }
+            else
+                return false;
+        }
+        </script>
+    }
+<h2>@ViewBag.Title</h2>
+@using (Ajax.BeginForm("PrintRMA","Order", new AjaxOptions() { 
+     HttpMethod = "Post",
+      OnSuccess="PrintRMA",
+     LoadingElementId = "i_refresh"
+}))
+{
+    @Html.ValidationSummary(false)
+    @Html.HiddenFor(model => model.RMANo)
+    <table>
+         <caption>
+             <div class="span1"><strong>处理组</strong></div>
+             <div class="span2">@Html.Label("", operatorName)</div>
+             <div class="span1"><strong>撤销日期</strong></div>
+              <div class="span2">@Html.Label("", DateTime.Today.ToShortDateString())</div>
+             <div class="span1"><strong>原订单号</strong></div>
+              <div class="span2">@Html.TextBoxFor(model => model.OrderNo, new { @readonly=true})</div>
+         </caption>
+        <tr>
+            <td>赠品</td>
+            <td colspan="5">@Html.TextBoxFor(model => model.GiftReason, new { @class = "span5", placeholder = "（是否收回，谁收回，还是折现扣回现金，或扣积点）" })</td>
+            <td>营业员</td>
+            <td>@Html.DisplayFor(model=>model.Item.SalesPerson)</td>
+            <td>退邮费</td>
+            <td>@Html.TextBoxFor(model => model.rebatepostfee)</td>
+        </tr>
+        <tr>
+            <td>发票</td>
+            <td colspan="5">@Html.TextBoxFor(model => model.InvoiceReason, new { @class = "span5", placeholder = "（有无发票，是否收回，不收回理由）" })</td>
+            <td>商品编码</td>
+            <td>@Html.DisplayFor(model => model.Item.StoreItem)</td>
+            <td>收邮费</td>
+            <td>@Html.TextBoxFor(model => model.chargepostfee)</td>
+        </tr>
+            <tr>
+            <td>积点退回</td>
+            <td colspan="5">@Html.TextBoxFor(model => model.RebatePointReason, new { @class = "span5", placeholder = "（积点退回情况，是否退回，不退理由）" })</td>
+            <td>数量</td>
+            <td>@Html.DisplayFor(model => model.Item.Quantity)</td>
+            <td>赠品扣款</td>
+            <td>@Html.TextBoxFor(model => model.ChargeGiftFee)</td>
+        </tr>
+               <tr>
+            <td>邮费</td>
+            <td colspan="5">@Html.TextBoxFor(model => model.PostalFeeReason, new { @class = "span5", placeholder = "（是否扣回邮费，还是邮费补贴，金额多少）" })</td>
+            <td>销售价</td>
+            <td colspan="3">@Html.DisplayFor(model => model.Item.UnitPrice)</td>
+        </tr>
+          <tr>
+            <td>收款人</td>
+            <td>@Html.DisplayFor(model => model.BankAccount)</td>
+            <td>现金</td>
+            <td>@Html.CheckBox("IsCash", Model.RMAType == (int)RMAType.FromOffline, new { @disabled = "disabled" })</td>
+            <td>银行卡</td>
+            <td>@Html.CheckBox("IsCard", Model.RMAType == (int)RMAType.FromOnline, new { @disabled = "disabled" })</td>
+               <td>现价</td>
+            <td colspan="3">@Html.DisplayFor(model => model.Item.ItemPrice)</td>
+        
+        </tr>
+        <tr>
+              <tr>
+            <td>卡号</td>
+            <td colspan="5">@Html.DisplayFor(model => model.BankCard)</td>
+            <td>积点支付</td>
+            <td colspan="3">0</td>
+
+            
+        </tr>
+        <tr>
+            <td>开户行</td>
+            <td colspan="5">@Html.DisplayFor(model => model.BankName)</td>
+            <td>线上支付</td>
+            <td>@Html.DisplayFor(model => model.RMAAmount)</td>
+            <td colspan="2"></td>          
+        </tr>
+    </table>
+     <div class="form-actions">
+        <input type="submit" value="打印" class="btn btn-primary" />
+         <div class="hide" id="i_refresh">
+             <img src="@Url.Content("~/Content/img/loading_16x16.gif")" />
+         </div>
+        @Html.ActionLink2("返回订单", "Details", new { OrderNo = Model.OrderNo }, new { @class = "btn" })
+ </div>
+}
+<div id="printwindow"></div>

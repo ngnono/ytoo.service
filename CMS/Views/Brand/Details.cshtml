@@ -1,0 +1,66 @@
+﻿@model Yintai.Hangzhou.Cms.WebSiteV1.Models.BrandViewModel
+@{
+    ViewBag.Title = "品牌详情";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("品牌管理", "Index")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<h2>@ViewBag.Title</h2>
+
+<fieldset>
+    <div class="display-label">@Html.LabelFor(m=>m.Name)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(m=>m.EnglishName)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.EnglishName)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(m=>m.Description)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+
+    <div class="display-label">@Html.LabelFor(m=>m.WebSite)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.WebSite)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(m=>m.Group)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Group)
+    </div>
+
+
+    <div class="display-label">@Html.LabelFor(m=>m.CreatedDate)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedDate)
+    </div>
+
+    <div class="display-label">@Html.LabelFor(m=>m.UpdatedDate)</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedDate)
+    </div>
+     <div class="display-label">图片</div>
+    <div class="display-field">
+        @if (this.Model.Resource != null)
+        {
+            var re = Model.Resource;          
+            <img width="120" src="@String.Concat(re.Domain, re.Name, "_630x0.jpg")" alt="630x0" />
+
+        }
+    </div>
+   
+
+</fieldset>
+<p>
+    @Html.ActionLink2("编辑", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
+</p>

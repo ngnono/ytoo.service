@@ -100,6 +100,7 @@
     <Compile Include="Models\Map4Inventory.cs" />
     <Compile Include="Models\Map4Order.cs" />
     <Compile Include="Models\Map4Product.cs" />
+    <Compile Include="Models\Channel.cs" />
     <Compile Include="Models\City.cs" />
     <Compile Include="Models\ConfigMsg.cs" />
     <Compile Include="Models\CouponLog.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Models\Mapping\CategoryMapMap.cs" />
     <Compile Include="Models\Mapping\CategoryPropertyMap.cs" />
     <Compile Include="Models\Mapping\CategoryPropertyValueMap.cs" />
+    <Compile Include="Models\Mapping\ChannelMap.cs" />
     <Compile Include="Models\Mapping\CityMap.cs" />
     <Compile Include="Models\Mapping\ConfigMsgMap.cs" />
     <Compile Include="Models\Mapping\CouponLogMap.cs" />

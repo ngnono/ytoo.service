@@ -17,7 +17,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api
             context.MapRoute(
                 "Api_default",
                 "Api/{controller}/{action}/{method}",
-                new { action = "Index", method = UrlParameter.Optional },
+                new { action = "Index", method = UrlParameter.Optional,app = UrlParameter.Optional },
                 new[] { "Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers" }
             );
         }

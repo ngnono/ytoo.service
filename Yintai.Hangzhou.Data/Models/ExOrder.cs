@@ -12,7 +12,7 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime PaidDate { get; set; }
         public Nullable<bool> IsShipped { get; set; }
         public Nullable<System.DateTime> ShipDate { get; set; }
-        public int? OrderType { get; set; }
+        public Nullable<int> OrderType { get; set; }
 
         #region Overrides of BaseEntity
 
