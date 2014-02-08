@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -11,113 +12,113 @@ using Yintai.Hangzhou.Data.Models.Mapping;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class YintaiHangzhouContext : DbContext
-    {
-        private static readonly Architecture.Common.Logger.ILog _log;
+	public partial class YintaiHangzhouContext : DbContext
+	{
+		private static readonly Architecture.Common.Logger.ILog _log;
 
-        static YintaiHangzhouContext()
-        {
-            Database.SetInitializer<YintaiHangzhouContext>(null);
-            _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
-        }
+		static YintaiHangzhouContext()
+		{
+			Database.SetInitializer<YintaiHangzhouContext>(null);
+			_log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
+		}
 
 		/// <summary>
-        /// 正式环境使用，无跟踪
-        /// </summary>
-        public YintaiHangzhouContext()
-            : this("Name=YintaiHangzhouContext", "v1")
-        {
-        }
+		/// 正式环境使用，无跟踪
+		/// </summary>
+		public YintaiHangzhouContext()
+			: this("Name=YintaiHangzhouContext", "v1")
+		{
+		}
 
-        /// <summary>
-        /// 正式环境使用，无跟踪
-        /// </summary>
-        /// <param name="nameOrConnectionString"></param>
-        /// <param name="version"></param>
-        public YintaiHangzhouContext(string nameOrConnectionString, string version)
-            : base(nameOrConnectionString)
-        {
-        }
+		/// <summary>
+		/// 正式环境使用，无跟踪
+		/// </summary>
+		/// <param name="nameOrConnectionString"></param>
+		/// <param name="version"></param>
+		public YintaiHangzhouContext(string nameOrConnectionString, string version)
+			: base(nameOrConnectionString)
+		{
+		}
 
-        #region ef tracing
+		#region ef tracing
 
 		public YintaiHangzhouContext(string nameOrConnectionString)
-            : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
-        {
-        }
+			: this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
+		{
+		}
 
-        public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
-            : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
-        {
+		public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
+			: base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
+		{
 			var ctx = ((IObjectContextAdapter)this).ObjectContext;
 
-            this.ObjectContext = ctx;
+			this.ObjectContext = ctx;
 
-            EFTracingConnection tracingConnection;
-            if (ObjectContext.TryUnwrapConnection(out tracingConnection))
-            {
-                ctx.GetTracingConnection().CommandExecuting += (s, e) => _log.Debug(e.ToTraceString());
-            }
+			EFTracingConnection tracingConnection;
+			if (ObjectContext.TryUnwrapConnection(out tracingConnection))
+			{
+				ctx.GetTracingConnection().CommandExecuting += (s, e) => _log.Debug(e.ToTraceString());
+			}
 
-            EFCachingConnection cachingConnection;
-            if (ObjectContext.TryUnwrapConnection(out cachingConnection))
-            {
-                Cache = cacheProvider;
-                CachingPolicy = cachingPolicy;
-            }
-        }
+			EFCachingConnection cachingConnection;
+			if (ObjectContext.TryUnwrapConnection(out cachingConnection))
+			{
+				Cache = cacheProvider;
+				CachingPolicy = cachingPolicy;
+			}
+		}
 
-        #endregion
+		#endregion
 
 		#region Tracing Extensions
 
-        private ObjectContext ObjectContext { get; set; }
+		private ObjectContext ObjectContext { get; set; }
 
-        private EFTracingConnection TracingConnection
-        {
-            get { return ObjectContext.UnwrapConnection<EFTracingConnection>(); }
-        }
+		private EFTracingConnection TracingConnection
+		{
+			get { return ObjectContext.UnwrapConnection<EFTracingConnection>(); }
+		}
 
-        public event EventHandler<CommandExecutionEventArgs> CommandExecuting
-        {
-            add { this.TracingConnection.CommandExecuting += value; }
-            remove { this.TracingConnection.CommandExecuting -= value; }
-        }
+		public event EventHandler<CommandExecutionEventArgs> CommandExecuting
+		{
+			add { this.TracingConnection.CommandExecuting += value; }
+			remove { this.TracingConnection.CommandExecuting -= value; }
+		}
 
-        public event EventHandler<CommandExecutionEventArgs> CommandFinished
-        {
-            add { this.TracingConnection.CommandFinished += value; }
-            remove { this.TracingConnection.CommandFinished -= value; }
-        }
+		public event EventHandler<CommandExecutionEventArgs> CommandFinished
+		{
+			add { this.TracingConnection.CommandFinished += value; }
+			remove { this.TracingConnection.CommandFinished -= value; }
+		}
 
-        public event EventHandler<CommandExecutionEventArgs> CommandFailed
-        {
-            add { this.TracingConnection.CommandFailed += value; }
-            remove { this.TracingConnection.CommandFailed -= value; }
-        }
+		public event EventHandler<CommandExecutionEventArgs> CommandFailed
+		{
+			add { this.TracingConnection.CommandFailed += value; }
+			remove { this.TracingConnection.CommandFailed -= value; }
+		}
 
-        #endregion
+		#endregion
 
-        #region Caching Extensions
+		#region Caching Extensions
 
-        private EFCachingConnection CachingConnection
-        {
-            get { return ObjectContext.UnwrapConnection<EFCachingConnection>(); }
-        }
+		private EFCachingConnection CachingConnection
+		{
+			get { return ObjectContext.UnwrapConnection<EFCachingConnection>(); }
+		}
 
-        public ICache Cache
-        {
-            get { return CachingConnection.Cache; }
-            set { CachingConnection.Cache = value; }
-        }
+		public ICache Cache
+		{
+			get { return CachingConnection.Cache; }
+			set { CachingConnection.Cache = value; }
+		}
 
-        public CachingPolicy CachingPolicy
-        {
-            get { return CachingConnection.CachingPolicy; }
-            set { CachingConnection.CachingPolicy = value; }
-        }
+		public CachingPolicy CachingPolicy
+		{
+			get { return CachingConnection.CachingPolicy; }
+			set { CachingConnection.CachingPolicy = value; }
+		}
 
-        #endregion
+		#endregion
 
 		#region code reverse
         public DbSet<AdminAccessRightEntity> AdminAccessRights { get; set; }
@@ -204,6 +205,18 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<WXReplyEntity> WXReplies { get; set; }
         public DbSet<VUserEntity> VUsers { get; set; }
         public DbSet<VUserRoleEntity> VUserRoles { get; set; }
+
+        public DbSet<Map4Brand> Map4Brands { get; set; }
+
+        public DbSet<Map4Product> Map4Products { get; set; }
+
+        public DbSet<Map4Category> Map4Categories { get; set; }
+
+        public DbSet<Map4Inventory> Map4Inventories { get; set; }
+
+        public DbSet<Map4Order> Map4Orders { get; set; }
+
+        public DbSet<MappedProductBackup> MappedProductBackups { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -298,8 +311,16 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new WXReplyEntityMap());
             modelBuilder.Configurations.Add(new VUserEntityMap());
             modelBuilder.Configurations.Add(new VUserRoleEntityMap());
+            modelBuilder.Configurations.Add(new Map4BrandMap());
+            modelBuilder.Configurations.Add(new Map4ProductMap());
+            modelBuilder.Configurations.Add(new Map4CategoryMap());
+            modelBuilder.Configurations.Add(new Map4InventoryMap());
+            modelBuilder.Configurations.Add(new Map4OrderMap());
+            modelBuilder.Configurations.Add(new MappedProductBackupMap());
+
         }
 
+
 		#endregion
-    }
+	}
 }

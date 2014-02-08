@@ -39,6 +39,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -157,6 +159,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionTimer.cs" />
     <Compile Include="Job\AccountSyncJob.cs" />
     <Compile Include="Job\ApnsNotificationCommonJob.cs" />
     <Compile Include="Job\ApnsNotificationJob.cs" />
@@ -165,6 +168,7 @@
     <Compile Include="Job\Erp\BrandSyncJob.cs" />
     <Compile Include="Job\Erp\CategorySyncJob.cs" />
     <Compile Include="Job\Erp\ErpGroupJob.cs" />
+    <Compile Include="Job\Erp\Order2ExSyncJob.cs" />
     <Compile Include="Job\Erp\OrderSyncJob.cs" />
     <Compile Include="Job\Erp\ProductPicSyncJob.cs" />
     <Compile Include="Job\Erp\ProductPropertySyncJob.cs" />
@@ -183,6 +187,12 @@
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="Job\Push2awsJob.cs" />
     <Compile Include="Job\Push2mysqlJob.cs" />
+    <Compile Include="Job\Wgw\BrandSyncJob.cs" />
+    <Compile Include="Job\Wgw\GetItemMultiStockJob.cs" />
+    <Compile Include="Job\Wgw\ProductStatusSyncJob.cs" />
+    <Compile Include="Job\Wgw\InventorySyncJob.cs" />
+    <Compile Include="Job\Wgw\OrderSyncJob.cs" />
+    <Compile Include="Job\Wgw\ProductSyncJob.cs" />
     <Compile Include="Job\Wx\NotifyExShippingJob.cs" />
     <Compile Include="Job\Wx\NotifyShippingJob.cs" />
     <Compile Include="MainJobService.cs">
@@ -213,6 +223,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="unity.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\app.manifest" />
@@ -225,6 +238,10 @@
     <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.data.sync\com.intime.fashion.data.sync.csproj">
+      <Project>{174cfff7-c2b4-4e57-8503-733ec3062bae}</Project>
+      <Name>com.intime.fashion.data.sync</Name>
     </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.data\com.intime.fashion.data.erp.csproj">
       <Project>{b224c596-53f1-48a6-948f-df3cd2acd15d}</Project>
@@ -250,7 +267,7 @@
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4 %28x86 和 x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

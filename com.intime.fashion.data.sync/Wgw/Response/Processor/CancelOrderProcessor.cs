@@ -1,0 +1,63 @@
+﻿using System;
+using System.Linq;
+using Yintai.Hangzhou.Model.Enums;
+
+namespace com.intime.fashion.data.sync.Wgw.Response.Processor
+{
+    public class CancelOrderProcessor:IProcessor
+    {
+        /// <summary>
+        /// 取消订单
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="otherInfo"></param>
+        /// <returns></returns>
+        public bool Process(dynamic response, dynamic otherInfo)
+        {
+            using (var db = DbContextHelper.GetDbContext())
+            {
+                string dealCode = response.dealCode;
+                var order =
+                    db.Orders.Join(
+                        db.Map4Orders.Where(m => m.ChannelOrderCode == dealCode && m.Channel == ConstValue.WGW_CHANNEL_NAME),
+                        m => m.OrderNo, o => o.OrderNo, (o, m) => o).FirstOrDefault();
+
+                var mappedOrder = 
+                    db.Map4Orders.FirstOrDefault(
+                        m => m.ChannelOrderCode == dealCode && m.Channel == ConstValue.WGW_CHANNEL_NAME);
+                if (order == null || mappedOrder == null)
+                {
+                    ErrorMessage = string.Format("本地不存在的微购物订单:{0}",dealCode);
+                    return false;
+                }
+
+                switch ((OrderStatus) order.Status)
+                {
+                    case OrderStatus.Void:
+                        ErrorMessage = "订单已经是取消状态";
+                        return false;
+                    case OrderStatus.Shipped:
+                        ErrorMessage = "订单已发货，无法取消";
+                        return false;
+                    default:
+                        try
+                        {
+                            order.Status = (int) OrderStatus.Void;
+                            order.UpdateDate = DateTime.Now;
+                            order.UpdateUser = ConstValue.WGW_OPERATOR_USER;
+                            mappedOrder.SyncStatus = OrderOpera.CustomerVoid;
+                            db.SaveChanges();
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            ErrorMessage = ex.Message;
+                            return false;
+                        }
+                }
+            }
+        }
+
+        public string ErrorMessage { get; private set; }
+    }
+}

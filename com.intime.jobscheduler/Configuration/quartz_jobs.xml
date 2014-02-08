@@ -482,6 +482,61 @@
         <cron-expression>0 0 0/1 * * ?</cron-expression>
       </cron>
     </trigger>
+
+    <job>
+      <name>MapBrand</name>
+      <group>Item</group>
+      <description>Map brand info to wgw per week</description>
+      <job-type>com.intime.jobscheduler.Job.Wgw.BrandSyncJob, com.intime.jobscheduler</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>isRebuild</key>
+          <value>false</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>MapBrand-1w</name>
+        <group>Item</group>
+        <description>every 1 week</description>
+        <job-name>MapBrand</job-name>
+        <job-group>Item</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 0 1 ? * L</cron-expression>
+      </cron>
+    </trigger>
+
+    <job>
+      <name>SyncOrder</name>
+      <group>Item</group>
+      <description>Sync order</description>
+      <job-type>com.intime.jobscheduler.Job.Wgw.OrderSyncJob, com.intime.jobscheduler</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>isRebuild</key>
+          <value>false</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>SyncOrder-1w</name>
+        <group>Item</group>
+        <description>every 5 MINS</description>
+        <job-name>SyncOrder</job-name>
+        <job-group>Item</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 */5 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+
   </schedule>
 
 </job-scheduling-data>

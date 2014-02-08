@@ -49,11 +49,6 @@ namespace Yintai.Hangzhou.Repository.Impl
             //return entity;
         }
 
-        public override TEntity Insert(TEntity entity)
-        {
-            return base.Insert(entity);
-        }
-
         public override void Delete(TEntity entity)
         {
             base.Delete(entity);
