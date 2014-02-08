@@ -1,14 +1,11 @@
 ﻿using com.intime.fashion.common;
-using com.intime.fashion.common.Aws;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
-using System.Web.Mvc;
 using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
 using Yintai.Architecture.Framework.ServiceLocation;
@@ -104,7 +101,7 @@ namespace Yintai.Hangzhou.Service.Logic
             {
                 var productEntity = _productRepo.Find(product.ProductId);
                 if (productEntity == null)
-                    return CommonUtil.RenderError(r => r.Message = string.Format("{0} 不存在！", productEntity.Id));
+                    return CommonUtil.RenderError(r => r.Message = string.Format("{0} 不存在！", product.ProductId));
                 if (!productEntity.Is4Sale.HasValue || productEntity.Is4Sale.Value == false)
                     return CommonUtil.RenderError(r => r.Message = string.Format("{0} 不能销售！", productEntity.Id));
                 totalAmount += productEntity.Price * product.Quantity;
@@ -334,7 +331,6 @@ namespace Yintai.Hangzhou.Service.Logic
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
                 }
-               
             }
             return isSuccess;
         }
@@ -353,6 +349,119 @@ namespace Yintai.Hangzhou.Service.Logic
             public decimal ExtendPrice { get; set; }
             public decimal TotalAmount { get; set; }
 
+        }
+
+        public static bool SyncPaidOrder2Erp(string orderNo, string orderSource = "wgw")
+        {
+            if (string.IsNullOrEmpty(orderNo))
+            {
+                throw new ArgumentNullException("orderNo");
+            }
+
+            var order =
+                Context.Set<OrderEntity>().FirstOrDefault(o => o.OrderNo == orderNo && o.OrderSource == orderSource);
+
+            if (order == null)
+            {
+                throw new NullReferenceException(string.Format("未找到订单号为({0})订单",orderNo));
+            }
+
+            var customer = Context.Set<UserEntity>().FirstOrDefault(u => u.Id == order.CustomerId);
+
+            var erpOrder = new
+            {
+                orderSource,
+                dealPayType = order.PaymentMethodCode,
+                shipType = (int)ShipType.TrdParty, //request.OrderModel.ShippingType,
+                needInvoice = order.NeedInvoice.HasValue && order.NeedInvoice.Value ? 1 : 0,
+                invoiceTitle = order.InvoiceSubject ?? string.Empty,
+                invoiceMemo = order.InvoiceDetail ?? string.Empty,
+                orderMemo = order.Memo ?? string.Empty,
+                lastUpdateTime = DateTime.Now.ToString(ErpServiceHelper.DATE_FORMAT),
+                payTime = string.Empty,
+                recvfeeReturnTime = string.Empty,
+                dealState = "STATE_WG_WAIT_PAY",
+                buyerName = customer != null ? customer.Name: string.Empty,
+                sellerConsignmentTime = string.Empty,
+                receiverPostcode = "",
+                freight = 0,
+                couponFee = "0",
+                comboInfo = string.Empty,
+                dealRateState = "DEAL_RATE_NO_EVAL",
+                totalCash = "0",
+                dealNote = order.Memo ?? string.Empty,
+                dealFlag = string.Empty,
+                dealCode = orderNo,
+                createTime = DateTime.Now.ToString(ErpServiceHelper.DATE_FORMAT),
+                receiverMobile = order.ShippingContactPhone ?? string.Empty,
+
+                receiverPhone = order.ShippingContactPhone??string.Empty,
+                receiverName = order.ShippingContactPerson??string.Empty,
+
+                dealPayFeeTicket = "0",
+                dealNoteType = "UN_LABEL",
+                recvfeeTime = string.Empty,
+                dealPayFeeTotal = order.TotalAmount,
+                ppCodId = string.Empty,
+
+                receiverAddress = order.ShippingAddress,
+                transportType = "TRANSPORT_NONE",
+                wuliuId = "0",
+
+                vipCard = string.Empty,
+                itemList = new List<dynamic>()
+
+            };
+            foreach (var item in Context.Set<OrderItemEntity>().Where(o => o.OrderNo == orderNo))
+            {
+                erpOrder.itemList.Add(CreateErpItem(item));
+            }
+            string exOrderNo = string.Empty;
+            bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "DivideOrderToSaleFromJSON", OrdersJSON = erpOrder }, r => exOrderNo = r.order_no
+                , null);
+            if (isSuccess)
+            {
+                Context.Set<Order2ExEntity>().Add(new Order2ExEntity()
+                {
+                    ExOrderNo = exOrderNo,
+                    OrderNo = order.OrderNo,
+                    UpdateTime = DateTime.Now
+                });
+                Context.SaveChanges();
+            }
+            return isSuccess;
+        }
+
+        private static dynamic CreateErpItem(OrderItemEntity item)
+        {
+            var skuId = Context.Set<InventoryEntity>().Where(i=>i.ProductId == item.ProductId && i.PColorId == item.ColorValueId && i.PSizeId == item.SizeValueId).Select(t=>t.ChannelInventoryId).FirstOrDefault();
+            var store =
+                Context.Set<StoreEntity>()
+                    .Join(Context.Set<ProductEntity>().Where(p => p.Id == item.ProductId), s => s.Id,
+                        p => p.Store_Id, (s, p) => s.ExStoreId);
+
+            var erpItem = new 
+            {
+                itemName = item.ProductName,
+                itemFlag = string.Empty,
+                itemCode = string.Empty,
+                account = string.Empty,
+
+                refundStateDesc = string.Empty,
+                itemAdjustPrice = "0",
+                itemRetailPrice = item.ItemPrice,
+                tradePropertymask = "256",
+                itemDealState = "STATE_WG_WAIT_PAY",
+                itemDealCount = item.Quantity,
+                skuId,
+                itemDealPrice = item.ItemPrice,
+
+                ////微客多上拿不到以下信息
+                storeId = store,
+                saleCodeSid = string.Empty
+                //saleCodeSid = saleCodeId.HasValue ? saleCodeId.ToString() : string.Empty
+            };
+            return erpItem;
         }
     }
            

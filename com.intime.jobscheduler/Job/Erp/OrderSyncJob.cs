@@ -25,7 +25,7 @@ namespace com.intime.jobscheduler.Job.Erp
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var accounts = db.Set<OrderTransactionEntity>().Where(ot => ot.IsSynced == false);
+                var accounts = db.Set<OrderTransactionEntity>().Where(ot => ot.IsSynced == false).Join(db.Set<Order2ExEntity>(),o=>o.OrderNo,m=>m.OrderNo,(o,m)=>o);
 
                 if (callback != null)
                     callback(accounts);
@@ -44,7 +44,7 @@ namespace com.intime.jobscheduler.Job.Erp
 
             int cursor = 0;
             int successCount = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int lastCursor = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();

@@ -88,12 +88,18 @@
   <ItemGroup>
     <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
     <Compile Include="Models\Banner.cs" />
+    <Compile Include="Models\Map4Brand.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Models\CardBlack.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CategoryMap.cs" />
     <Compile Include="Models\CategoryProperty.cs" />
     <Compile Include="Models\CategoryPropertyValue.cs" />
+    <Compile Include="Models\Map4Category.cs" />
+    <Compile Include="Models\Map4EntityBase.cs" />
+    <Compile Include="Models\Map4Inventory.cs" />
+    <Compile Include="Models\Map4Order.cs" />
+    <Compile Include="Models\Map4Product.cs" />
     <Compile Include="Models\City.cs" />
     <Compile Include="Models\ConfigMsg.cs" />
     <Compile Include="Models\CouponLog.cs" />
@@ -103,6 +109,7 @@
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\JobSuccessHistory.cs" />
     <Compile Include="Models\Mapping\BannerMap.cs" />
+    <Compile Include="Models\Mapping\Map4BrandMap.cs" />
     <Compile Include="Models\Mapping\CardBlackMap.cs" />
     <Compile Include="Models\Mapping\CardMap.cs" />
     <Compile Include="Models\Mapping\CategoryMap.cs" />
