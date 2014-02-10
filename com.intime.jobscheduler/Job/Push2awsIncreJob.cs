@@ -11,8 +11,17 @@ namespace com.intime.jobscheduler.Job
         {
             //every 5mins, figure out new create/updated products, promotions
             var dataMap = context.JobDetail.JobDataMap;
-            int intervalMins =  dataMap.ContainsKey("interval") ? dataMap.GetIntValue("interval") : 5;
-            return DateTime.Now.AddMinutes(-intervalMins);
+            var interval = dataMap.ContainsKey("interval") ? dataMap.GetInt("interval") : 5;
+            if (!dataMap.ContainsKey("benchtime"))
+            {
+                dataMap.Put("benchtime", DateTime.Now.AddMinutes(-interval));
+            }
+            else
+            {
+                dataMap["benchtime"] = dataMap.GetDateTimeValue("benchtime").AddMinutes(interval);
+            }
+
+            return dataMap.GetDateTime("benchtime");
         }
         protected override bool CascadPush
         {

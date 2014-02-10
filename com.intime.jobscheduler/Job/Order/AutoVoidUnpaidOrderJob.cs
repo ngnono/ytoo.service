@@ -30,9 +30,18 @@ namespace com.intime.jobscheduler.Job.Order
             ILog log = LogManager.GetLogger(this.GetType());
 
             JobDataMap data = context.JobDetail.JobDataMap;
-            var interval = data.ContainsKey("intervalOfHrs") ? data.GetInt("intervalOfHrs") : 1;
+           
             var totalCount = 0;
-            var benchTime = DateTime.Now.AddHours(-interval);
+            var interval = data.ContainsKey("intervalOfHrs") ? data.GetInt("intervalOfHrs") : 1;
+            if (!data.ContainsKey("benchtime"))
+            {
+                data.Put("benchtime", DateTime.Now.AddHours(-interval));
+            }
+            else
+            {
+                data["benchtime"] = data.GetDateTimeValue("benchtime").AddHours(interval);
+            }
+            var benchTime = data.GetDateTime("benchtime");
 
             Query(benchTime, orders => totalCount = orders.Count());
 
