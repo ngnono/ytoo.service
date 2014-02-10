@@ -25,7 +25,7 @@ namespace com.intime.jobscheduler.Job.Erp
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var accounts = db.Set<OrderTransactionEntity>().Where(ot => ot.IsSynced == false).Join(db.Set<Order2ExEntity>(),o=>o.OrderNo,m=>m.OrderNo,(o,m)=>o);
+                var accounts = db.Set<OrderTransactionEntity>().Where(ot => ot.IsSynced == false && ot.CanSync != -1);
 
                 if (callback != null)
                     callback(accounts);
@@ -34,12 +34,14 @@ namespace com.intime.jobscheduler.Job.Erp
         public void Execute(IJobExecutionContext context)
         {
             ILog log = LogManager.GetLogger(this.GetType());
-
+            var totalCount = 0;
+#if DEBUG
+            DateTime benchTime = DateTime.Now.AddMonths(-1);
+#else
             JobDataMap data = context.JobDetail.JobDataMap;
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
-            var totalCount = 0;
             var benchTime = DateTime.Now.AddSeconds(-interval);
-
+#endif
             Query(benchTime, orders => totalCount = orders.Count());
 
             int cursor = 0;

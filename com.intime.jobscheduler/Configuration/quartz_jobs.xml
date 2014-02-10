@@ -471,7 +471,7 @@
      
     </job>
 
-    <trigger>
+   <trigger>
       <cron>
         <name>FreeMemory-1hr</name>
         <group>Fashion</group>

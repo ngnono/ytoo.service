@@ -154,6 +154,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                         CreateDate = DateTime.Now,
                         TransNo = string.Empty,
                         IsSynced = false,
+                        CanSync = -1,
                         //OutsiteUId =  customer.
                         OrderType = (int)PaidOrderType.Self
                     });

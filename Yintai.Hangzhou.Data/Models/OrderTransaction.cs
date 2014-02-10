@@ -16,6 +16,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string OutsiteUId { get; set; }
         public Nullable<int> OutsiteType { get; set; }
         public Nullable<int> OrderType { get; set; }
+        public Nullable<int> CanSync { get; set; }
 
         #region Overrides of BaseEntity
 

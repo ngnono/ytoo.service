@@ -10,15 +10,20 @@ namespace com.intime.jobscheduler.Job.Wgw
     {
         public void Execute(IJobExecutionContext context)
         {
+#if DEBUG
             DateTime benchTime = DateTime.Now.AddYears(-1);
-#if !DEBUG
+#else
             JobDataMap data = context.JobDetail.JobDataMap;
-            var isRebuild = data.ContainsKey("isRebuild") && data.GetBoolean("isRebuild");
-            if (!isRebuild)
+             var interval = data.ContainsKey("intervalOfHrs") ? data.GetInt("intervalOfHrs") : 1;
+            if (!data.ContainsKey("benchtime"))
             {
-                var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
-                benchTime = DateTime.Now.AddSeconds(-interval);
+                data.Put("benchtime", DateTime.Now.AddHours(-interval));
             }
+            else
+            {
+                data["benchtime"] = data.GetDateTimeValue("benchtime").AddHours(interval);
+            }
+            var benchTime = data.GetDateTime("benchtime");
 #endif
             ILog logger = LogManager.GetLogger(this.GetType());
             ExecuteResult executeInfo = null;

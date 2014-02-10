@@ -48,11 +48,12 @@ namespace com.intime.jobscheduler
 
             //job = new Job.Wgw.BrandSyncJob();
             //job = new Job.Wgw.OrderSyncJob();
+            //job.Execute(null);
             //job = new Job.Wgw.InventorySyncJob();
             //job = new Job.Wgw.ProductStatusSyncJob();
             //job = new GetItemMultiStockJob();
-            //job = new Order2ExSyncJob();
-            //job.Execute(null);
+            job = new Job.Erp.OrderSyncJob();
+            job.Execute(null);
             Console.WriteLine("Job执行完成！");
             Console.ReadLine();
 #endif

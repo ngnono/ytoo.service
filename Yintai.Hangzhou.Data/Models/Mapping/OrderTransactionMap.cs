@@ -38,6 +38,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.OutsiteUId).HasColumnName("OutsiteUId");
             this.Property(t => t.OutsiteType).HasColumnName("OutsiteType");
             this.Property(t => t.OrderType).HasColumnName("OrderType");
+            this.Property(t => t.CanSync).HasColumnName("CanSync");
 		Init();
         }
 

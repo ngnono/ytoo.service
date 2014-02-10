@@ -321,6 +321,9 @@ namespace Yintai.Hangzhou.Service.Logic
             else
             {
                 var paymentName = string.Empty;
+
+                string dealCode = order.OrderNo;
+
                 using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
                 {
                     var paymentEntity = db.Set<PaymentMethodEntity>().Where(p => p.Code == order.PaymentCode).FirstOrDefault();
@@ -330,9 +333,16 @@ namespace Yintai.Hangzhou.Service.Logic
                         return false;
                     }
                     paymentName = paymentEntity.Name;
+
+                    //渠道订单同步时传递的是渠道订单号
+                    var channelOrder = db.Set<Map4Order>().FirstOrDefault(o=>o.OrderNo==dealCode);
+                    if (channelOrder != null && !string.IsNullOrEmpty(channelOrder.ChannelOrderCode))
+                    {
+                        dealCode = channelOrder.ChannelOrderCode;
+                    }
                 }
                 var paidFunc = isOnlinePay ? "WebOrdersPaid" : "WebSalesPaid";
-                isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = paidFunc, dealCode = order.OrderNo, PAY_TYPE = order.PaymentCode, PaymentName = paymentName, TRADE_NO = order.TransNo, CardNo = vipCard }, null
+                isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = paidFunc, dealCode, PAY_TYPE = order.PaymentCode, PaymentName = paymentName, TRADE_NO = order.TransNo, CardNo = vipCard }, null
                               , null);
             }
             if (isSuccess)
@@ -379,6 +389,9 @@ namespace Yintai.Hangzhou.Service.Logic
                 throw new NullReferenceException(string.Format("未找到订单号为({0})订单",orderNo));
             }
 
+            var dealCode =
+                Context.Set<Map4Order>().First(o => o.OrderNo == orderNo && o.Channel == orderSource).ChannelOrderCode;
+
             var customer = Context.Set<UserEntity>().FirstOrDefault(u => u.Id == order.CustomerId);
 
             var erpOrder = new
@@ -404,7 +417,7 @@ namespace Yintai.Hangzhou.Service.Logic
                 totalCash = "0",
                 dealNote = order.Memo ?? string.Empty,
                 dealFlag = string.Empty,
-                dealCode = orderNo,
+                dealCode,
                 createTime = DateTime.Now.ToString(ErpServiceHelper.DATE_FORMAT),
                 receiverMobile = order.ShippingContactPhone ?? string.Empty,
 
@@ -432,17 +445,23 @@ namespace Yintai.Hangzhou.Service.Logic
             string exOrderNo = string.Empty;
             bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "DivideOrderToSaleFromJSON", OrdersJSON = erpOrder }, r => exOrderNo = r.order_no
                 , null);
-            if (isSuccess)
+
+            if (!isSuccess) return false;
+
+            Context.Set<Order2ExEntity>().Add(new Order2ExEntity()
             {
-                Context.Set<Order2ExEntity>().Add(new Order2ExEntity()
-                {
-                    ExOrderNo = exOrderNo,
-                    OrderNo = order.OrderNo,
-                    UpdateTime = DateTime.Now
-                });
-                Context.SaveChanges();
+                ExOrderNo = exOrderNo,
+                OrderNo = order.OrderNo,
+                UpdateTime = DateTime.Now
+            });
+            var oderTransaction =
+                Context.Set<OrderTransactionEntity>().FirstOrDefault(ot => ot.OrderNo == order.OrderNo);
+            if (oderTransaction != null)
+            {
+                oderTransaction.CanSync = 0;//同步给衡和系统后可以同步支付状态
             }
-            return isSuccess;
+            Context.SaveChanges();
+            return true;
         }
 
         private static dynamic CreateErpItem(OrderItemEntity item)
