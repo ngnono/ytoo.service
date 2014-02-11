@@ -41,7 +41,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
         {
             int pageSize = extraParameter??20;
             this.SyncPaidOrders(pageSize);
-            this.SyncCancelledOrder(pageSize);
+            //this.SyncCancelledOrder(pageSize);
             this.SyncShippedOrder(pageSize);
         }
 
@@ -235,7 +235,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
         private string TimeStampStr(DateTime dateTime)
         {
             TimeSpan t = dateTime.ToUniversalTime() - new DateTime(1970, 1, 1);
-            return t.TotalSeconds.ToString();
+            return ((Int64)t.TotalSeconds).ToString();
         }
     }
 }
