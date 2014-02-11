@@ -51,7 +51,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             {
                 var linq =
                     context.OrderLogs.Where(l => l.Type == (int) OrderOpera.Shipping && l.CreateDate >= BenchTime)
-                        .Join(context.Map4Orders.Where(m => m.SyncStatus == OrderOpera.FromOperator), l => l.OrderNo,
+                        .Join(context.Map4Orders.Where(m => m.SyncStatus == OrderOpera.FromCustomer), l => l.OrderNo,
                             m => m.OrderNo, (l, m) => m);
                 if (whereCondition != null)
                     linq = linq.Where(whereCondition);
