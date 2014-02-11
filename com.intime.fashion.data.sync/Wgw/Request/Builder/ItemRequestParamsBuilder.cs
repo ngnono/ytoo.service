@@ -169,12 +169,16 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
                         m => m.ChannelCatId, (o, m) => o).FirstOrDefault();
                 if (cat == null)
                 {
-                    throw new WgwSyncException(string.Format("商品分类不存在"));
+                    //throw new WgwSyncException(string.Format("商品分类不存在"));
+                    Request.Put("leafClassId", "123");
+                    return;
                 }
                 var mapping = db.Map4Categories.FirstOrDefault(ccm => ccm.CategoryCode == cat.ExCatCode);
                 if (mapping == null)
                 {
-                    throw new WgwSyncException(string.Format("未映射微购物商品分类{0}({1})", cat.Name, cat.ExCatCode));
+                    Request.Put("leafClassId", "123");
+                    return;
+                    //throw new WgwSyncException(string.Format("未映射微购物商品分类{0}({1})", cat.Name, cat.ExCatCode));
                 }
 
                 Request.Put("leafClassId",mapping.ChannelCategoryId);
