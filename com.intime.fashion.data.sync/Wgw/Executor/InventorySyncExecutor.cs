@@ -89,14 +89,14 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         else
                         {
                             _failedCount += 1;
-                            Logger.Error(string.Format("更新库存{0}(库存ID)失败,Error Message:{1}", mapId,
+                            Logger.Error(string.Format("Failed to update stock {0}(stockID),Error Message:{1}", mapId,
                                 result.errorMessage));
                         }
                     }
                     catch (Exception ex)
                     {
                         _failedCount += 1;
-                        Logger.Error(string.Format("更新库存{0}(库存ID)失败,Error Message:{1}", mapId,
+                        Logger.Error(string.Format("Failed to update stock {0}(stock ID),Error Message:{1}", mapId,
                             ex.StackTrace));
                     }
                 }
@@ -152,7 +152,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     }
                     else
                     {
-                        Logger.Info(string.Format("同步商品(id) = {0}库存失败,Error Message:{1}", pid, rsp.errorMessage));
+                        Logger.Info(string.Format("Failed to update stock (id) = {0},Error Message:{1}", pid, rsp.errorMessage));
                     }
                 }
             }
@@ -182,7 +182,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         db.Map4Inventories.Remove(inventory);
                     }
                     _failedCount += 1;
-                    Logger.Error(string.Format("同步商品库存异常 库存ID={0}", stock.stockId));
+                    Logger.Error(string.Format("Failed to update stock, stock ID={0}", stock.stockId));
                 }
                 db.SaveChanges();
             }
@@ -244,7 +244,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     catch (Exception ex)
                     {
                         _failedCount += 1;
-                        Logger.Error(string.Format("库存同步后保存至Map4Inventory失败：库存ID:{0},错误信息{1}", stock.stockId, ex.Message));
+                        Logger.Error(string.Format("Failed to save stock mapping to Map4Inventory:stockID:{0},Error Message:{1}", stock.stockId, ex.Message));
                     }
                 }
             }

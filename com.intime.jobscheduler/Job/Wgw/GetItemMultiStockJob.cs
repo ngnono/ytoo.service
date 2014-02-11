@@ -47,7 +47,7 @@ namespace com.intime.jobscheduler.Job.Wgw
             }
             else
             {
-                logger.Info(string.Format("同步商品库存,成功{0},失败{1},总数{2},执行时间{3},效率{4}",
+                logger.Info(string.Format("Sync stocks succeed : {0}, failed :{1}, total: {2}, elapsed:{3}, ratio: {4}",
                     executeInfo.SucceedCount,
                     executeInfo.FailedCount,
                     executeInfo.TotalCount,

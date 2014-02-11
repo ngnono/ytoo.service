@@ -208,7 +208,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
             }
             using (var db = DbContextHelper.GetDbContext())
             {
-                return db.Users.FirstOrDefault(u => u.Id == outsiteUser.Id);
+                return db.Users.FirstOrDefault(u => u.Id == outsiteUser.AssociateUserId);
             }
         }
 

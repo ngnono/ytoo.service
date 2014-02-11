@@ -22,12 +22,12 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
                         m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ChannelOrderCode == orderNo).Join(db.Orders, m => m.OrderNo, o => o.OrderNo, (o, m) => o).Join(db.Outbounds.Where(o => o.Status == 1), o => o.OrderNo, ot => ot.SourceNo, (o, ot) => ot).FirstOrDefault();
                 if (null == outBoundInfo)
                 {
-                    throw new WgwSyncException(string.Format("未找到渠道订单{0}的发货信息",dealCode));
+                    throw new WgwSyncException(string.Format("No shipping info for order {0}",dealCode));
                 }
                 var ship = db.ShipVias.FirstOrDefault(s => s.Id == outBoundInfo.ShippingVia.Value);
                 if (ship == null)
                 {
-                    throw new WgwSyncException(string.Format("未找到订单{0}的物流信息,物流公司ID{1}",dealCode,outBoundInfo.ShippingVia.Value));
+                    throw new WgwSyncException(string.Format("No wuliu info for {0}, wuliu company ID {1}",dealCode,outBoundInfo.ShippingVia.Value));
                 }
                 Request.Put("wuliuCode",outBoundInfo.ShippingNo);
                 Request.Put("wuliuCompany",ship.Name);

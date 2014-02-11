@@ -150,7 +150,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
 
                         if (map4Product == null)
                         {
-                            throw new WgwSyncException(string.Format("未映射商品至微购物 {0} ID=({1})",item.Name, item.Id));
+                            throw new WgwSyncException(string.Format("Unmappend product ID=({0})", item.Id));
                         }
 
                         map4Product.Status = item.Is4Sale.HasValue && item.Is4Sale.Value && item.IsHasImage && item.Status == 1
@@ -162,11 +162,11 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     }
                 }
 
-                Logger.Error(string.Format("Failed to modify product {0}({1}) Error Message: {2}", item.Name, item.Id, result.errorMessage));
+                Logger.Error(string.Format("Failed to modify product ({0}) Error Message: {1}",  item.Id, result.errorMessage));
             }
             catch (Exception ex)
             {
-                Logger.Error(string.Format("Failed to modify product {0}({1}) Error Message: {2}", item.Name, item.Id, ex.Message));
+                Logger.Error(string.Format("Failed to modify product ({0}) Error Message: {1}", item.Id, ex.Message));
             }
             _failedCount += 1;
             return false;
@@ -209,8 +209,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     }
                     else
                     {
-                        Logger.Error(string.Format("Failed to upload product to wgw {0}({1}) Error Message: {2}", item.Name,
-                        item.Id, result.errorMessage));
+                        Logger.Error(string.Format("Failed to upload product to wgw {0} Error Message: {1}",item.Id, result.errorMessage));
                     }
                 }
                 //else
@@ -222,7 +221,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             }
             catch (Exception ex)
             {
-                Logger.Error(string.Format("Failed to upload product {0}({1}) Error Message: {2}", item.Name, item.Id, ex.Message));
+                Logger.Error(string.Format("Failed to upload product {0} Error Message: {1}", item.Id, ex.Message));
             }
             _failedCount += 1;
             return false;

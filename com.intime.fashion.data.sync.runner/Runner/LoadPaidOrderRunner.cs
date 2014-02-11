@@ -28,7 +28,7 @@ namespace com.intime.fashion.data.sync.runner.Runner
             else
             {
                 this.Execute(benchTime);
-                Console.WriteLine("同步订单,成功{0},失败{1},总数{2}", executeInfo.SucceedCount, executeInfo.FailedCount, executeInfo.TotalCount);
+                Console.WriteLine("Sync orders {0}, failed {1}, error {2}", executeInfo.SucceedCount, executeInfo.FailedCount, executeInfo.TotalCount);
             }
         }
 

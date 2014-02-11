@@ -42,7 +42,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             bool succeed = rsp.errorCode == 0;
             if (!succeed)
             {
-                Logger.Error(string.Format("加载品牌信息失败{0}", rsp.errorMessage));
+                Logger.Error(string.Format("Failed to load brand info {0}", rsp.errorMessage));
             }
             else
             {
@@ -131,7 +131,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     UpdateDate = DateTime.Now,
                     ChannelBrandId = wgAppid,
                 });
-                Logger.Info(string.Format("映射品牌 {0} ID = {1}To微购物:{2}", brand.Name, brand.Id, wgAppid));
+                Logger.Info(string.Format("Map brand ID = {0}To WGW:{1}", brand.Id, wgAppid));
                 db.SaveChanges();
             }
         }

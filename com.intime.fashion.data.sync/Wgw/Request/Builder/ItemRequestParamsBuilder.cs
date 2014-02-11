@@ -208,7 +208,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
             {
                 return BuildParameters(item);
             }
-            throw new WgwSyncException("参数类型应为ProductEntity");
+            throw new WgwSyncException("Parameter type should be ProductEntity");
         }
     }
 }

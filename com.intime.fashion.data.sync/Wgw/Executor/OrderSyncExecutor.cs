@@ -198,7 +198,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     if (!processor.Process(order, detail))
                     {
                         _failedCount += 1;
-                        Logger.Error(string.Format("获取订单详情失败{0},Error Message{1}", order.dealCode, processor.ErrorMessage));
+                        Logger.Error(string.Format("Failed to load order detail {0},Error Message{1}", order.dealCode, processor.ErrorMessage));
                     }
                     else
                     {
@@ -216,7 +216,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             }
             else
             {
-                Logger.Error(string.Format("获取订单列表失败:{0}", result.errorMessage));
+                Logger.Error(string.Format("Failed to load order list:{0}", result.errorMessage));
             }
         }
 

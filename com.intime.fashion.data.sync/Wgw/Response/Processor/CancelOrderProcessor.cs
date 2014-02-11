@@ -27,17 +27,17 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                         m => m.ChannelOrderCode == dealCode && m.Channel == ConstValue.WGW_CHANNEL_NAME);
                 if (order == null || mappedOrder == null)
                 {
-                    ErrorMessage = string.Format("本地不存在的微购物订单:{0}",dealCode);
+                    ErrorMessage = string.Format("Order not exists in local db:{0}",dealCode);
                     return false;
                 }
 
                 switch ((OrderStatus) order.Status)
                 {
                     case OrderStatus.Void:
-                        ErrorMessage = "订单已经是取消状态";
+                        ErrorMessage = "Order status already void.";
                         return false;
                     case OrderStatus.Shipped:
-                        ErrorMessage = "订单已发货，无法取消";
+                        ErrorMessage = "Order is on shipping, can't void!";
                         return false;
                     default:
                         try

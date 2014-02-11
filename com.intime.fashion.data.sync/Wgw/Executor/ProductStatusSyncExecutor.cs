@@ -99,7 +99,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         m => m.ProductId == productId && m.Channel == ConstValue.WGW_CHANNEL_NAME);
                 if (map == null)
                 {
-                    throw new WgwSyncException(string.Format("商品未上传至微购物{0} ID:({1})",item.Name,item.Id));
+                    throw new WgwSyncException(string.Format("Unmapped product ID:({0})", item.Id));
                 }
                 var idList = new List<string>() {map.ChannelProductId};
                 ISyncRequest reqeust = null;
@@ -114,12 +114,12 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                             map.Status = 1;
                             map.UpdateDate = DateTime.Now;
                             db.SaveChanges();
-                            Logger.Error(string.Format("成功上架商品{0}", item.Name));
+                            Logger.Error(string.Format("Succeed publish product {0}", item.Id));
                         }
                         else
                         {
                             _failedCount += 1;
-                            Logger.Error(string.Format("上架商品失败{0}", item.Name));
+                            Logger.Error(string.Format("Failed to publish product {0}", item.Id));
                         }
            
                 }
@@ -133,12 +133,12 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         map.Status = 0;
                         map.UpdateDate = DateTime.Now;
                         db.SaveChanges();
-                        Logger.Error(string.Format("成功下架商品{0}", item.Name));
+                        Logger.Error(string.Format("Succeed Down product {0}", item.Id));
                     }
                     else
                     {
                         _failedCount += 1;
-                        Logger.Error(string.Format("下架商品失败{0}", item.Name));
+                        Logger.Error(string.Format("Failed to Down product {0}", item.Id));
                     }
                 }
             }
