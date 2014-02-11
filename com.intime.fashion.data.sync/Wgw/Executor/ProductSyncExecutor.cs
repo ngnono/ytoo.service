@@ -49,20 +49,20 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                                 && p.Status == 1
                                 && !db.Map4Products.Any(
                                     m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ProductId == p.Id)
-                        )
+                        );
                         //.Join(
                         //    db.Set<BrandEntity>()
                         //        .Join(db.Set<Map4Brand>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME),
                         //            b => b.Id, m => m.BrandId, (b, m) => b), p => p.Brand_Id, b => b.Id, (p, m) => p)
-                        .Join(
-                            db.Set<ProductMapEntity>()
-                                .Join(
-                                    db.Set<CategoryEntity>()
-                                        .Join(
-                                            db.Set<Map4Category>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME),
-                                            c => c.ExCatCode, m => m.CategoryCode, (c, m) => c), pm => pm.ChannelCatId,
-                                    c => c.ExCatId, (pm, c) => pm),
-                            p => p.Id, pm => pm.ProductId, (p, pm) => p);
+                        //.Join(
+                        //    db.Set<ProductMapEntity>()
+                        //        .Join(
+                        //            db.Set<CategoryEntity>()
+                        //                .Join(
+                        //                    db.Set<Map4Category>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME),
+                        //                    c => c.ExCatCode, m => m.CategoryCode, (c, m) => c), pm => pm.ChannelCatId,
+                        //            c => c.ExCatId, (pm, c) => pm),
+                        //    p => p.Id, pm => pm.ProductId, (p, pm) => p);
                 if (callback != null)
                     callback(products);
             }

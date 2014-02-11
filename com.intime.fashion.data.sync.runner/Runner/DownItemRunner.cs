@@ -33,6 +33,7 @@ namespace com.intime.fashion.data.sync.runner.Runner
                 IEnumerable<string> maps = null;
                 DoQuery(null,items => maps = items.OrderBy(t=>t.Id).Skip(cursor).Take(pageSize).Select(t=>t.ChannelProductId).ToList());
                 request.Put(ParamName.Param_ItemList,string.Join("|",maps));
+                request.Remove("sign");
                 var rsp = Client.Execute<dynamic>(request);
                 if (rsp.errorCode == 0)
                 {
