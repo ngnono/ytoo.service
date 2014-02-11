@@ -137,11 +137,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
 
         private void SyncPaidOrders(int size)
         {
-#if DEBUG
-            var dict = BuildQueryDict(OrderStatusConst.STATE_WG_COMPLEX_WAIT_PAY,size.ToString());
-#else
-            var dict = BuildQueryDict(OrderStatusConst.STATE_WG_PAY_OK,size.ToString());
-#endif
+            var dict = BuildQueryDict(OrderStatusConst.STATE_WG_PAY_OK, size.ToString());
             var request = new QueryOrderListRequest(dict);
 
             SyncPaidOrdersFromWgw(request);
@@ -237,7 +233,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
         private string TimeStampStr(DateTime dateTime)
         {
             TimeSpan t = dateTime.ToUniversalTime() - new DateTime(1970, 1, 1);
-            return ((Int64)t.TotalSeconds).ToString();
+            return ((Int64)t.TotalMilliseconds).ToString();
         }
     }
 }
