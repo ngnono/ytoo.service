@@ -14,6 +14,11 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
     /// </summary>
     public class OrderProcessor : IProcessor
     {
+        public OrderProcessor()
+        {
+            this.ErrorMessage = string.Empty;
+        }
+
         /// <summary>
         /// 微购物上已经支付的订单同步处理
         /// </summary>

@@ -25,7 +25,7 @@ namespace com.intime.jobscheduler.Job.Erp
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var accounts = db.Set<OrderTransactionEntity>().Where(ot => ot.IsSynced == false && ot.CanSync != -1);
+                var accounts = db.Set<OrderTransactionEntity>().Where(ot => ot.IsSynced == false && ot.CanSync == 0);
 
                 if (callback != null)
                     callback(accounts);

@@ -235,7 +235,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
         private string TimeStampStr(DateTime dateTime)
         {
             TimeSpan t = dateTime.ToUniversalTime() - new DateTime(1970, 1, 1);
-            return t.TotalMilliseconds.ToString();
+            return t.TotalSeconds.ToString();
         }
     }
 }
