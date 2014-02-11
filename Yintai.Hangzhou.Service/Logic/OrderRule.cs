@@ -427,7 +427,7 @@ namespace Yintai.Hangzhou.Service.Logic
                 dealPayFeeTicket = "0",
                 dealNoteType = "UN_LABEL",
                 recvfeeTime = string.Empty,
-                dealPayFeeTotal = order.TotalAmount,
+                dealPayFeeTotal = order.TotalAmount/100,
                 ppCodId = string.Empty,
 
                 receiverAddress = order.ShippingAddress,
