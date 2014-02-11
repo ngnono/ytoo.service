@@ -99,7 +99,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
                     {
                         continue;
                     }
-                    images.Add(new { property = color.PropertyDesc, value = colorEntity.ValueDesc,url = string.Format("{0}/{1}.{2}",WgwConfigHelper.Image_BaseUrl, img.Name, img.ExtName) });
+                    images.Add(new { property = color.PropertyDesc, value = colorEntity.ValueDesc, url = string.Format("{0}/{1}_120x0.jpg", WgwConfigHelper.Image_BaseUrl, img.Name) });
 
                 }
 #if !DEBUG
@@ -139,7 +139,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
                 {
                     throw new WgwSyncException(string.Format("商品 {0} ({1}) 没有图片",entity.Name,entity.Id));
                 }
-                Request.Put("uploadPicInfo1", string.Format("{0}/{1}.{2}", WgwConfigHelper.Image_BaseUrl, img.Name, img.ExtName));
+                Request.Put("uploadPicInfo1", string.Format("{0}/{1}_320x0.jpg", WgwConfigHelper.Image_BaseUrl, img.Name));
             }
 #else
             Request.Put("uploadPicInfo1", "http://ec4.images-amazon.com/images/I/71oMNPbikLL._AA1500_.jpg");

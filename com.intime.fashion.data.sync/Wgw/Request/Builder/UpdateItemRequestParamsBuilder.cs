@@ -39,7 +39,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
                 var moreImg = new StringBuilder();
                 foreach (var img in db.Resources.Where(t => t.SourceId == entity.Id && t.Type == 1).OrderByDescending(t=>t.IsDefault))
                 {
-                    var url = string.Format("{0}/{1}.{2}", WgwConfigHelper.Image_BaseUrl, img.Name, img.ExtName);
+                    var url = string.Format("{0}/{1}_320x0.jpg", WgwConfigHelper.Image_BaseUrl, img.Name);
                     if (idx > 5)
                     {
                         moreImg.Append("url").Append("|");
