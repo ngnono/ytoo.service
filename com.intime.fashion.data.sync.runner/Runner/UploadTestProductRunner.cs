@@ -109,16 +109,6 @@ namespace com.intime.fashion.data.sync.runner.Runner
                     return false;
                 }
 
-                var brand = db.Set<BrandEntity>()
-                    .Join(db.Set<Map4Brand>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME),
-                        b => b.Id, m => m.BrandId, (b, m) => b).FirstOrDefault(b => b.Id == product.Brand_Id);
-
-                if (brand == null)
-                {
-                    Console.WriteLine("商品品牌未映射至微购物，请检查");
-                    return false;
-                }
-
                 var map = db.Set<ProductMapEntity>()
                     .Join(
                         db.Set<CategoryEntity>()
