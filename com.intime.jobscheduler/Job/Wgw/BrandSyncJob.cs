@@ -14,14 +14,14 @@ namespace com.intime.jobscheduler.Job.Wgw
             DateTime benchTime = DateTime.Now.AddYears(-1);
 #else
             JobDataMap data = context.JobDetail.JobDataMap;
-            var interval = data.ContainsKey("intervalOfHrs") ? data.GetInt("intervalOfHrs") : 1;
+            var interval = data.ContainsKey("intervalOfDays") ? data.GetInt("intervalOfDays") : 2;
             if (!data.ContainsKey("benchtime"))
             {
-                data.Put("benchtime", DateTime.Now.AddHours(-interval));
+                data.Put("benchtime", DateTime.Now.AddDays(-interval));
             }
             else
             {
-                data["benchtime"] = data.GetDateTimeValue("benchtime").AddHours(interval);
+                data["benchtime"] = data.GetDateTimeValue("benchtime").AddDays(interval);
             }
             var benchTime = data.GetDateTime("benchtime");
 #endif

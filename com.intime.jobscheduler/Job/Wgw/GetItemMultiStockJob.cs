@@ -18,14 +18,14 @@ namespace com.intime.jobscheduler.Job.Wgw
             DateTime benchTime = DateTime.Now.AddYears(-1);
 #else
             JobDataMap data = context.JobDetail.JobDataMap;
-            var interval = data.ContainsKey("intervalOfHrs") ? data.GetInt("intervalOfHrs") : 1;
+            var interval = data.ContainsKey("intervalofmins") ? data.GetInt("intervalofmins") : 1;
             if (!data.ContainsKey("benchtime"))
             {
-                data.Put("benchtime", DateTime.Now.AddHours(-interval));
+                data.Put("benchtime", DateTime.Now.AddMinutes(-interval));
             }
             else
             {
-                data["benchtime"] = data.GetDateTimeValue("benchtime").AddHours(interval);
+                data["benchtime"] = data.GetDateTimeValue("benchtime").AddMinutes(interval);
             }
             var benchTime = data.GetDateTime("benchtime");
 #endif
