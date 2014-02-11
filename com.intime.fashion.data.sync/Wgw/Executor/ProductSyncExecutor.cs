@@ -50,10 +50,10 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                                 && !db.Map4Products.Any(
                                     m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ProductId == p.Id)
                         )
-                        .Join(
-                            db.Set<BrandEntity>()
-                                .Join(db.Set<Map4Brand>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME),
-                                    b => b.Id, m => m.BrandId, (b, m) => b), p => p.Brand_Id, b => b.Id, (p, m) => p)
+                        //.Join(
+                        //    db.Set<BrandEntity>()
+                        //        .Join(db.Set<Map4Brand>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME),
+                        //            b => b.Id, m => m.BrandId, (b, m) => b), p => p.Brand_Id, b => b.Id, (p, m) => p)
                         .Join(
                             db.Set<ProductMapEntity>()
                                 .Join(
@@ -73,7 +73,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             using (var db = DbContextHelper.GetDbContext())
             {
                 var items =
-                    db.Products.Join(db.Map4Products.Where(pm => pm.Channel == ConstValue.WGW_CHANNEL_NAME), p => p.Id,
+                    db.Products.Where(p=>p.UpdatedDate > BenchTime).Join(db.Map4Products.Where(pm => pm.Channel == ConstValue.WGW_CHANNEL_NAME), p => p.Id,
                         pm => pm.ProductId, (p, pm) => new {p, pm})
                         .Where(@p1 => @p1.p.IsHasImage && @p1.p.UpdatedDate > @p1.pm.UpdateDate)
                         .Select(@t1 => @t1.p);

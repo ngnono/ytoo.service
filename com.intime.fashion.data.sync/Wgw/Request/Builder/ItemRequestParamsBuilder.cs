@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using com.intime.fashion.data.sync.Wgw.Request.Item;
 using com.intime.jobscheduler.Job.Wgw;
+using log4net.Repository.Hierarchy;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -189,11 +190,10 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
             using (var db = GetDbContext())
             {
                 var map = db.Map4Brands.FirstOrDefault(b => b.BrandId == brandId);
-                if (map == null)
-                {
-                    throw new WgwSyncException(string.Format("未映射商品品牌({0})", brandId));
-                }
-                Request.Put("lable", string.Format("brands|{0}", map.ChannelBrandId));
+                Request.Put("lable",
+                    map == null
+                        ? string.Format("brands|{0}", "wg138629481702337")
+                        : string.Format("brands|{0}", map.ChannelBrandId));
             }
         }
 

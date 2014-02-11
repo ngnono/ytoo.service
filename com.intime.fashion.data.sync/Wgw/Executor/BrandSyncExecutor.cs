@@ -64,6 +64,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         }
                         catch (Exception ex)
                         {
+                            _failedCount += 1;
                             Logger.Error(ex);
                         }
                     }
