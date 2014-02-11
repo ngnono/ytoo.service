@@ -109,18 +109,18 @@ namespace com.intime.fashion.data.sync.runner.Runner
                     return false;
                 }
 
-                var map = db.Set<ProductMapEntity>()
-                    .Join(
-                        db.Set<CategoryEntity>()
-                            .Join(
-                                db.Set<Map4Category>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME),
-                                c => c.ExCatCode, m => m.CategoryCode, (c, m) => c), pm => pm.ChannelCatId,
-                        c => c.ExCatId, (pm, c) => pm).FirstOrDefault(pm=>pm.ProductId == productId);
-                if (map == null)
-                {
-                    Console.WriteLine("商品没有映射关系或未映射类目，请检查");
-                    return false;
-                }
+                //var map = db.Set<ProductMapEntity>()
+                //    .Join(
+                //        db.Set<CategoryEntity>()
+                //            .Join(
+                //                db.Set<Map4Category>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME),
+                //                c => c.ExCatCode, m => m.CategoryCode, (c, m) => c), pm => pm.ChannelCatId,
+                //        c => c.ExCatId, (pm, c) => pm).FirstOrDefault(pm=>pm.ProductId == productId);
+                //if (map == null)
+                //{
+                //    Console.WriteLine("商品没有映射关系或未映射类目，请检查");
+                //    return false;
+                //}
 
                 if (!db.Inventories.Any(i => i.ProductId == productId))
                 {
