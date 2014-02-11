@@ -14,6 +14,6 @@ namespace Yintai.Hangzhou.Data.Models
         /// </summary>
         public string ChannelOrderCode { get; set; }
 
-        public OrderOpera SyncStatus { get; set; }
+        public int SyncStatus { get; set; }
     }
 }

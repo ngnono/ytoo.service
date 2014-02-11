@@ -49,9 +49,11 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
         {
             using (var context = DbContextHelper.GetDbContext())
             {
+                int shipping = (int) OrderOpera.Shipping;
+                int fromCustomer = (int) OrderOpera.FromCustomer;
                 var linq =
-                    context.OrderLogs.Where(l => l.Type == (int) OrderOpera.Shipping && l.CreateDate >= BenchTime)
-                        .Join(context.Map4Orders.Where(m => m.SyncStatus == OrderOpera.FromCustomer), l => l.OrderNo,
+                    context.OrderLogs.Where(l => l.Type == shipping && l.CreateDate >= BenchTime)
+                        .Join(context.Map4Orders.Where(m => m.SyncStatus == fromCustomer), l => l.OrderNo,
                             m => m.OrderNo, (l, m) => m);
                 if (whereCondition != null)
                     linq = linq.Where(whereCondition);
@@ -92,7 +94,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                             {
                                 var mapping = db.Map4Orders.FirstOrDefault(m => m.Id == map4Order.Id);
                                 if(mapping == null) continue;
-                                mapping.SyncStatus = OrderOpera.Shipping;
+                                mapping.SyncStatus = (int)OrderOpera.Shipping;
                                 mapping.UpdateDate = DateTime.Now;
                                 db.SaveChanges();
                                 _succeedCount += 1;

@@ -45,7 +45,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                             order.Status = (int) OrderStatus.Void;
                             order.UpdateDate = DateTime.Now;
                             order.UpdateUser = ConstValue.WGW_OPERATOR_USER;
-                            mappedOrder.SyncStatus = OrderOpera.CustomerVoid;
+                            mappedOrder.SyncStatus = (int)OrderOpera.CustomerVoid;
                             db.SaveChanges();
                             return true;
                         }

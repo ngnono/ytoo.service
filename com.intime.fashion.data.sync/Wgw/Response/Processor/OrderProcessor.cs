@@ -140,7 +140,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                         Channel = ConstValue.WGW_CHANNEL_NAME,
                         CreateDate = DateTime.Now,
                         UpdateDate = DateTime.Now,
-                        SyncStatus = OrderOpera.FromCustomer,
+                        SyncStatus = (int)OrderOpera.FromCustomer,
                     });
                     db.OrderLogs.Add(new OrderLogEntity()
                     {
