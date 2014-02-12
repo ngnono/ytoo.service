@@ -200,7 +200,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     if (rsp.errorCode == 0)
                     {
                         var ps = ProcessorFactory.CreateProcessor<QueryItemListResponseProcessor>();
-                        if (ps.Process(rsp, item))
+                        if (ps.Process(rsp,null))
                         {
                             _succeedCount += 1;
                             return true;
