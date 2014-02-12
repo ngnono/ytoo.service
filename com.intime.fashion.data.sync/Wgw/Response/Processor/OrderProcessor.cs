@@ -1,4 +1,5 @@
-﻿using com.intime.jobscheduler.Job.Wgw;
+﻿using System.Text;
+using com.intime.jobscheduler.Job.Wgw;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -69,36 +70,36 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                         int stockId;
                         if (!int.TryParse(item.stockLoCode.ToString(), out stockId))
                         {
-                            throw new WgwSyncException(string.Format("无效的库存编码({0})", item.stockLoCode));
+                            throw new WgwSyncException(string.Format("Invalid stock code ({0})", item.stockLoCode));
                         }
 
-                        var map4Inventory =
-                            db.Map4Inventories.FirstOrDefault(
-                                m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.InventoryId == stockId);
+                        //var map4Inventory =
+                        //    db.Map4Inventories.FirstOrDefault(
+                        //        m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.InventoryId == stockId);
 
-                        if (map4Inventory == null)
-                        {
-                            throw new WgwSyncException(string.Format("商品({0})库存未映射至微购物",item.tilte));
-                        }
+                        //if (map4Inventory == null)
+                        //{
+                        //    throw new WgwSyncException(string.Format("商品({0})库存未映射至微购物",item.tilte));
+                        //}
 
                         var inventory =
                             db.Inventories.FirstOrDefault(x=>x.Id == stockId);
                         if (inventory == null)
                         {
-                            throw new WgwSyncException(string.Format("不存在的商品库存 ID ({0})", stockId));
+                            throw new WgwSyncException(string.Format("Invalid inventory ID ({0})", stockId));
                         }
 
                         var product = db.Products.FirstOrDefault(t=>t.Id == inventory.ProductId);
                         if (product == null)
                         {
-                            throw new WgwSyncException(string.Format("微购物订单({1})包含无效的商品 ({0})", item.tilte, dealDetail.dealCode));
+                            throw new WgwSyncException(string.Format("Order from wgw contains invalid product ({1}) ({0})", item.tilte, dealDetail.dealCode));
                         }
 
                         int buyNum = int.Parse(item.buyNum.ToString());
 
                         if(inventory.Amount < buyNum)
                         {
-                            throw new WgwSyncException(string.Format("商品{0}({1})库存不足,用户购买({2})件，实际库存({3})件", product.Name, product.Id, buyNum, inventory.Amount));
+                            throw new WgwSyncException(string.Format("Product stock is insufficient {0}({1}), expected: ({2}), but: ({3})", product.Name, product.Id, buyNum, inventory.Amount));
                         }
 
                         //是否要扣减库存?或者是OPC扣减??
@@ -106,6 +107,10 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
 
                         var colorEntity = db.ProductPropertyValues.FirstOrDefault(ppv => ppv.Id == inventory.PColorId);
                         var sizeEntity = db.ProductPropertyValues.FirstOrDefault(ppv=>ppv.Id == inventory.PSizeId);
+                        //var color = db.ProductProperties.FirstOrDefault(t => t.Id == colorEntity.PropertyId);
+                        //var size = db.ProductProperties.FirstOrDefault(t => t.Id == sizeEntity.PropertyId);
+                        //var attr = ConstructAttr(colorEntity, sizeEntity, color, size);
+
                         db.OrderItems.Add(new OrderItemEntity()
                         {
                             OrderNo = order.OrderNo,
@@ -121,7 +126,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                             UpdateDate = DateTime.Now,
                             UpdateUser = ConstValue.WGW_OPERATOR_USER,
                             ExtendPrice = ((decimal)item.disTotal)/100,
-                            ProductDesc = map4Inventory.attr,
+                            ProductDesc = string.Empty,
                             ColorId = colorEntity == null ? 0 : colorEntity.PropertyId,
                             ColorValueId = colorEntity == null ? 0 : colorEntity.Id,
                             SizeId = sizeEntity == null ? 0 : sizeEntity.PropertyId,
@@ -168,6 +173,26 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                 ts.Complete();
             }
         }
+
+        //private string ConstructAttr(ProductPropertyValueEntity colorEntity, ProductPropertyValueEntity sizeEntity, ProductPropertyEntity color, ProductPropertyEntity size)
+        //{
+        //    var sb = new StringBuilder();
+   
+        //    if (colorEntity != null && color!=null)
+        //    {
+        //        sb.AppendFormat("{0}:{1}",color.PropertyDesc,colorEntity.ValueDesc);
+        //    }
+        //    if (sb.ToString().Length > 0 && sizeEntity!=null && size!=null)
+        //    {
+        //        sb.AppendFormat("|{0}:{1}", size.PropertyDesc, sizeEntity.ValueDesc);
+        //        return sb.ToString();
+        //    }
+        //    if (sizeEntity != null && size != null)
+        //    {
+        //        return string.Format("{0}:{1}", size.PropertyDesc, sizeEntity.ValueDesc);
+        //    }
+        //    return string.Empty;
+        //}
 
         /// <summary>
         /// 订单是否已经同步
