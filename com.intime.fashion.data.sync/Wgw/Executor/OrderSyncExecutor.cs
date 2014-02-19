@@ -45,7 +45,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             //this.SyncCreatedOrders(sizeStr);
             this.SyncPaidOrders(sizeStr);
             //this.SyncCancelledOrder(sizeStr);
-            //this.SyncShippedOrder(pageSize);
+            this.SyncShippedOrder(pageSize);
         }
 
         private void DoQuery(Expression<Func<Map4Order, bool>> whereCondition, Action<IQueryable<Map4Order>> callback)
