@@ -9,6 +9,8 @@ namespace Yintai.Hangzhou.Data.Models
 
         public int ProductId { get; set; }
 
+        public Nullable<int> IsImageUpload { get; set; }
+
         /// <summary>
         /// 商品在渠道的上下架状态
         /// </summary>

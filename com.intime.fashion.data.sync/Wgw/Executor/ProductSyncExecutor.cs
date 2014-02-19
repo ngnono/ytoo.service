@@ -50,24 +50,16 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                                 && !db.Map4Products.Any(
                                     m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ProductId == p.Id)
                         );
-                        //.Join(
-                        //    db.Set<BrandEntity>()
-                        //        .Join(db.Set<Map4Brand>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME),
-                        //            b => b.Id, m => m.BrandId, (b, m) => b), p => p.Brand_Id, b => b.Id, (p, m) => p)
-                        //.Join(
-                        //    db.Set<ProductMapEntity>()
-                        //        .Join(
-                        //            db.Set<CategoryEntity>()
-                        //                .Join(
-                        //                    db.Set<Map4Category>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME),
-                        //                    c => c.ExCatCode, m => m.CategoryCode, (c, m) => c), pm => pm.ChannelCatId,
-                        //            c => c.ExCatId, (pm, c) => pm),
-                        //    p => p.Id, pm => pm.ProductId, (p, pm) => p);
                 if (callback != null)
                     callback(products);
             }
         }
 
+        /// <summary>
+        /// 商品map表里存在的商品
+        /// 商品修改日期大于映射表修改日期
+        /// </summary>
+        /// <param name="callback"></param>
         private void QueryUpdatedItems(Action<IQueryable<ProductEntity>> callback)
         {
             using (var db = DbContextHelper.GetDbContext())
@@ -101,7 +93,18 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                 {
                     oneTimeList = products.Where(a => a.Id > lastCursor).OrderBy(a => a.Id).Take(pageSize).ToList();
                 });
-                _succeedCount += oneTimeList.Count(Upload);
+
+                foreach (var entity in oneTimeList)
+                {
+                    if (Upload(entity))
+                    {
+                        _succeedCount += 1;
+                    }
+                    else
+                    {
+                        _failedCount += 1;
+                    }
+                }
                 
                 cursor += pageSize;
                 lastCursor = oneTimeList.Max(t => t.Id);
@@ -120,7 +123,19 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     {
                         oneTimeList = items.Where(i=>i.Id >  lastCursor).OrderBy(p => p.Id).Take(pageSize).ToList();
                     });
-                _succeedCount += oneTimeList.Count(Update);
+
+                foreach (var entity in oneTimeList)
+                {
+                    if (Update(entity))
+                    {
+                        _succeedCount += 1;
+                    }
+                    else
+                    {
+                        _failedCount += 1;
+                    }
+                }
+
                 cursor += pageSize;
                 lastCursor = oneTimeList.Max(t => t.Id);
             }
@@ -141,7 +156,6 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                 var result = Client.Execute<dynamic>(builder.BuildParameters(item));
                 if (result.errorCode == 0)
                 {
-                    _succeedCount += 1;
                     using (var db = DbContextHelper.GetDbContext())
                     {
                         var map4Product =
@@ -150,25 +164,26 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
 
                         if (map4Product == null)
                         {
-                            throw new WgwSyncException(string.Format("Unmappend product ID=({0})", item.Id));
+                            throw new WgwSyncException(string.Format("Unmapped product ID=({0})", item.Id));
                         }
 
                         map4Product.Status = item.Is4Sale.HasValue && item.Is4Sale.Value && item.IsHasImage && item.Status == 1
                             ? 1
                             : 0;
-                        map4Product.UpdateDate = DateTime.Now;
+                        map4Product.UpdateDate = item.UpdatedDate;
+                        map4Product.IsImageUpload = 1;
                         db.SaveChanges();
                         return true;
                     }
                 }
 
-                Logger.Error(string.Format("Failed to modify product ({0}) Error Message: {1}",  item.Id, result.errorMessage));
+                Logger.Error(string.Format("Failed to upate product ({0}) Error Message: {1}",  item.Id, result.errorMessage));
             }
             catch (Exception ex)
             {
-                Logger.Error(string.Format("Failed to modify product ({0}) Error Message: {1}", item.Id, ex.Message));
+                Logger.Error(string.Format("Failed to update product ({0}) Error Message: {1}", item.Id, ex.Message));
             }
-            _failedCount += 1;
+
             return false;
         }
 
@@ -180,10 +195,13 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                 var result = Client.Execute<dynamic>(builder.BuildParameters(item));
                 if (result.errorCode == 0)
                 {
+                    if (!string.IsNullOrEmpty(result.warnMessage))
+                    {
+                        Logger.Error(string.Format("Succeed upload product,but some warnning message :{0}",result.warnMessage));
+                    }
                     var processor = ProcessorFactory.CreateProcessor<ItemResponseProcessor>();
                     if (processor.Process(result, item.Id))
                     {
-                        _succeedCount += 1;
                         return true;
                     }
                     Logger.Error(string.Format("Failed to upload product to wgw {0}({1}) Error Message: {2}", item.Name,
@@ -202,7 +220,6 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         var ps = ProcessorFactory.CreateProcessor<QueryItemListResponseProcessor>();
                         if (ps.Process(rsp,null))
                         {
-                            _succeedCount += 1;
                             return true;
                         }
                         Logger.Error(ps.ErrorMessage);
@@ -212,18 +229,11 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         Logger.Error(string.Format("Failed to upload product to wgw {0} Error Message: {1}",item.Id, result.errorMessage));
                     }
                 }
-                //else
-                //{
-                //    Logger.Error(string.Format("Failed to upload product to wgw {0}({1}) Error Message: {2}", item.Name,
-                //        item.Id, result.errorMessage));
-                //}
-
             }
             catch (Exception ex)
             {
                 Logger.Error(string.Format("Failed to upload product {0} Error Message: {1}", item.Id, ex.Message));
             }
-            _failedCount += 1;
             return false;
         }
     }

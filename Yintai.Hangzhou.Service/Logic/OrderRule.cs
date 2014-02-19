@@ -374,7 +374,7 @@ namespace Yintai.Hangzhou.Service.Logic
 
         }
 
-        public static bool SyncPaidOrder2Erp(string orderNo, string orderSource = "wgw")
+        public static bool SyncOrder2Erp(string orderNo, string orderSource = "wgw")
         {
             if (string.IsNullOrEmpty(orderNo))
             {
@@ -386,7 +386,7 @@ namespace Yintai.Hangzhou.Service.Logic
 
             if (order == null)
             {
-                throw new NullReferenceException(string.Format("未找到订单号为({0})订单",orderNo));
+                throw new NullReferenceException(string.Format("Not exist order ({0})",orderNo));
             }
 
             var dealCode =
@@ -454,11 +454,14 @@ namespace Yintai.Hangzhou.Service.Logic
                 OrderNo = order.OrderNo,
                 UpdateTime = DateTime.Now
             });
-            var oderTransaction =
-                Context.Set<OrderTransactionEntity>().FirstOrDefault(ot => ot.OrderNo == order.OrderNo);
-            if (oderTransaction != null)
+            if (order.Status == (int) OrderStatus.Paid)
             {
-                oderTransaction.CanSync = 0;//同步给衡和系统后可以同步支付状态
+                var oderTransaction =
+                    Context.Set<OrderTransactionEntity>().FirstOrDefault(ot => ot.OrderNo == order.OrderNo);
+                if (oderTransaction != null)
+                {
+                    oderTransaction.CanSync = 0; //同步给衡和系统后可以同步支付状态
+                }
             }
             Context.SaveChanges();
             return true;

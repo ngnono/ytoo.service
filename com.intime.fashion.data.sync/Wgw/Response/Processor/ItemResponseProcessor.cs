@@ -46,7 +46,8 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                             ProductId = productId,
                             //更新和CreateDate修改为三年前，以便后续更新以添加颜色和图片
                             UpdateDate = DateTime.Now.AddYears(-3),
-                            CreateDate = DateTime.Now.AddYears(-3)
+                            CreateDate = DateTime.Now.AddYears(-3),
+                            IsImageUpload = 0
                         });
                     }
                     else

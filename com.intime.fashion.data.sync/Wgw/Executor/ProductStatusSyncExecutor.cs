@@ -78,7 +78,6 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     try
                     {
                         SyncOne(item);
-                        _succeedCount += 1;
                     }
                     catch (Exception ex)
                     {
@@ -99,6 +98,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         m => m.ProductId == productId && m.Channel == ConstValue.WGW_CHANNEL_NAME);
                 if (map == null)
                 {
+                    _failedCount += 1;
                     throw new WgwSyncException(string.Format("Unmapped product ID:({0})", item.Id));
                 }
                 var idList = new List<string>() {map.ChannelProductId};

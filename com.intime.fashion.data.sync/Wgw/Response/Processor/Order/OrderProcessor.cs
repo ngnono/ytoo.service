@@ -1,21 +1,21 @@
-﻿using System.Text;
-using com.intime.jobscheduler.Job.Wgw;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using System.Transactions;
+using com.intime.fashion.data.sync.Wgw.Request.Order;
+using com.intime.jobscheduler.Job.Wgw;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Service.Logic;
 
-namespace com.intime.fashion.data.sync.Wgw.Response.Processor
+namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
 {
     /// <summary>
     /// 处理已经支付的订单
     /// </summary>
-    public class OrderProcessor : IProcessor
+    public abstract class OrderProcessor : IProcessor
     {
-        public OrderProcessor()
+        protected OrderProcessor()
         {
             this.ErrorMessage = string.Empty;
         }
@@ -45,19 +45,17 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
             return false;
         }
 
+
         /// <summary>
         /// 已同步过的不再处理
         /// </summary>
         /// <param name="orderInfo">订单列表查询wgQueryDealList返回的dealList.dealListVo</param>
         /// <param name="dealDetail">订单详情wgQueryDealDetail返回的Json对象</param>
-        private void ProcessOrder(dynamic orderInfo, dynamic dealDetail)
+        protected abstract void ProcessOrder(dynamic orderInfo, dynamic dealDetail);
+
+        protected void CreateOrder(dynamic orderInfo, dynamic dealDetail)
         {
             UserEntity customer = FindCustomer(orderInfo);
-            string dealCode = dealDetail.dealCode;
-            if (IsOrderExists(customer.Id, dealCode)) //已经加载过的订单不再处理
-            {
-                return;
-            }
             using (var ts = new TransactionScope())
             {
                 using (var db = DbContextHelper.GetDbContext())
@@ -70,26 +68,29 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                         int stockId;
                         if (!int.TryParse(item.stockLoCode.ToString(), out stockId))
                         {
-                            throw new WgwSyncException(string.Format("Invalid stock code ({0})", item.stockLoCode));
+                            Int64 skuid;
+                            if (!Int64.TryParse(item.skuId.ToString(), out skuid))
+                            {
+                                throw new WgwSyncException(string.Format("Invalid stockLoCode ({0})", item.stockLoCode));
+                            }
+                            var map =
+                                db.Map4Inventories.FirstOrDefault(
+                                    m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.skuId == skuid);
+                            if (map == null)
+                            {
+                                throw new WgwSyncException(string.Format("No mapping for skuId ({0})", skuid));
+                            }
+                            stockId = (int)map.InventoryId;
                         }
 
-                        //var map4Inventory =
-                        //    db.Map4Inventories.FirstOrDefault(
-                        //        m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.InventoryId == stockId);
-
-                        //if (map4Inventory == null)
-                        //{
-                        //    throw new WgwSyncException(string.Format("商品({0})库存未映射至微购物",item.tilte));
-                        //}
-
                         var inventory =
-                            db.Inventories.FirstOrDefault(x=>x.Id == stockId);
+                            db.Inventories.FirstOrDefault(x => x.Id == stockId);
                         if (inventory == null)
                         {
                             throw new WgwSyncException(string.Format("Invalid inventory ID ({0})", stockId));
                         }
 
-                        var product = db.Products.FirstOrDefault(t=>t.Id == inventory.ProductId);
+                        var product = db.Products.FirstOrDefault(t => t.Id == inventory.ProductId);
                         if (product == null)
                         {
                             throw new WgwSyncException(string.Format("Order from wgw contains invalid product ({1}) ({0})", item.tilte, dealDetail.dealCode));
@@ -97,19 +98,11 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
 
                         int buyNum = int.Parse(item.buyNum.ToString());
 
-                        if(inventory.Amount < buyNum)
-                        {
-                            throw new WgwSyncException(string.Format("Product stock is insufficient {0}({1}), expected: ({2}), but: ({3})", product.Name, product.Id, buyNum, inventory.Amount));
-                        }
-
-                        //是否要扣减库存?或者是OPC扣减??
-                        inventory.Amount -= buyNum;
+                        //扣减库存
+                        CheckStocks(inventory, buyNum);
 
                         var colorEntity = db.ProductPropertyValues.FirstOrDefault(ppv => ppv.Id == inventory.PColorId);
-                        var sizeEntity = db.ProductPropertyValues.FirstOrDefault(ppv=>ppv.Id == inventory.PSizeId);
-                        //var color = db.ProductProperties.FirstOrDefault(t => t.Id == colorEntity.PropertyId);
-                        //var size = db.ProductProperties.FirstOrDefault(t => t.Id == sizeEntity.PropertyId);
-                        //var attr = ConstructAttr(colorEntity, sizeEntity, color, size);
+                        var sizeEntity = db.ProductPropertyValues.FirstOrDefault(ppv => ppv.Id == inventory.PSizeId);
 
                         db.OrderItems.Add(new OrderItemEntity()
                         {
@@ -119,14 +112,14 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                             StoreId = product.Store_Id,
                             CreateUser = ConstValue.WGW_OPERATOR_USER,
                             CreateDate = DateTime.Now,
-                            ItemPrice = ((decimal)item.price)/100,
+                            ItemPrice = ((decimal)item.price) / 100,
                             Quantity = item.buyNum,
                             ProductName = product.Name,
                             Status = (int)DataStatus.Normal,
                             UpdateDate = DateTime.Now,
                             UpdateUser = ConstValue.WGW_OPERATOR_USER,
-                            ExtendPrice = ((decimal)item.disTotal)/100,
-                            ProductDesc = string.Empty,
+                            ExtendPrice = ((decimal)item.disTotal) / 100,
+                            ProductDesc = item.attr,//string.Empty,
                             ColorId = colorEntity == null ? 0 : colorEntity.PropertyId,
                             ColorValueId = colorEntity == null ? 0 : colorEntity.Id,
                             SizeId = sizeEntity == null ? 0 : sizeEntity.PropertyId,
@@ -140,7 +133,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                     }
                     db.Map4Orders.Add(new Map4Order
                     {
-                        ChannelOrderCode = dealCode,
+                        ChannelOrderCode = dealDetail.dealCode,
                         OrderNo = order.OrderNo,
                         Channel = ConstValue.WGW_CHANNEL_NAME,
                         CreateDate = DateTime.Now,
@@ -152,60 +145,59 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                         CreateDate = DateTime.Now,
                         CreateUser = ConstValue.WGW_OPERATOR_USER,
                         CustomerId = customer.Id,
-                        Operation = string.Format("创建已支付订单"),
+                        Operation = dealDetail.dealState.ToString() == OrderStatusConst.STATE_WG_WAIT_PAY ? string.Format("创建订单") : dealDetail.dealState.ToString() == OrderStatusConst.STATE_WG_PAY_OK ? string.Format("支付订单") : string.Format("取消订单"),
                         OrderNo = order.OrderNo,
                         Type = (int)OrderOpera.FromOperator
                     });
-                    db.OrderTransactions.Add(new OrderTransactionEntity()
-                    {
-                        OrderNo = order.OrderNo,
-                        PaymentCode = order.PaymentMethodCode,
-                        Amount = order.TotalAmount,
-                        CreateDate = DateTime.Now,
-                        TransNo = string.Empty,
-                        IsSynced = false,
-                        CanSync = -1,
-                        //OutsiteUId =  customer.
-                        OrderType = (int)PaidOrderType.Self
-                    });
+
+                    db.OrderTransactions.Add(CreateOrderTransaction(order,dealDetail));
+
                     db.SaveChanges();
                 }
                 ts.Complete();
             }
         }
 
-        //private string ConstructAttr(ProductPropertyValueEntity colorEntity, ProductPropertyValueEntity sizeEntity, ProductPropertyEntity color, ProductPropertyEntity size)
-        //{
-        //    var sb = new StringBuilder();
-   
-        //    if (colorEntity != null && color!=null)
-        //    {
-        //        sb.AppendFormat("{0}:{1}",color.PropertyDesc,colorEntity.ValueDesc);
-        //    }
-        //    if (sb.ToString().Length > 0 && sizeEntity!=null && size!=null)
-        //    {
-        //        sb.AppendFormat("|{0}:{1}", size.PropertyDesc, sizeEntity.ValueDesc);
-        //        return sb.ToString();
-        //    }
-        //    if (sizeEntity != null && size != null)
-        //    {
-        //        return string.Format("{0}:{1}", size.PropertyDesc, sizeEntity.ValueDesc);
-        //    }
-        //    return string.Empty;
-        //}
+        /// <summary>
+        /// Create order transaction
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="dealDetail"></param>
+        /// <returns></returns>
+        protected virtual OrderTransactionEntity CreateOrderTransaction(OrderEntity order, dynamic dealDetail)
+        {
+            return new OrderTransactionEntity()
+            {
+                OrderNo = order.OrderNo,
+                PaymentCode = order.PaymentMethodCode,
+                Amount = order.TotalAmount,
+                CreateDate = DateTime.Now,
+                TransNo = dealDetail.cftPayId, //财付通订单号
+                IsSynced = false,
+                CanSync = -1,
+                OutsiteUId = dealDetail.buyerOpenid,
+                OrderType = (int) PaidOrderType.Self
+            };
+        }
+
+        /// <summary>
+        /// 扣减库存
+        /// </summary>
+        /// <param name="inventory">库存ID</param>
+        /// <param name="buyNum">库存数量</param>
+        protected abstract void  CheckStocks(InventoryEntity inventory, int buyNum);
 
         /// <summary>
         /// 订单是否已经同步
         /// </summary>
-        /// <param name="customerId">用户Id</param>
         /// <param name="dealCode">微购物订单编码</param>
         /// <returns></returns>
-        private bool IsOrderExists(int customerId, string dealCode)
+        protected bool IsOrderExists(string dealCode)
         {
             using (var db = GetDbContext())
             {
                 return
-                    db.Orders.Where(o => o.CustomerId == customerId)
+                    db.Orders.Where(o => o.OrderSource == ConstValue.WGW_CHANNEL_NAME)
                         .Join(
                             db.Map4Orders.Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ChannelOrderCode == dealCode),
                             o => o.OrderNo, m => m.OrderNo, (o, m) => o).Any();
@@ -299,6 +291,31 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
             return OrderRule.CreateCode(storeId);
         }
 
+        protected int ExtractOrderStatus(dynamic dealState)
+        {
+            if (dealState.ToString() == OrderStatusConst.STATE_WG_WAIT_PAY)
+            {
+                return (int)OrderStatus.Create;
+            }
+            if (dealState.ToString() == OrderStatusConst.STATE_WG_PAY_OK)
+            {
+                return (int)OrderStatus.Paid;
+            }
+            if (dealState.ToString() == OrderStatusConst.STATE_WG_END)
+            {
+                return (int)OrderStatus.Complete;
+            }
+            if (dealState.ToString() == OrderStatusConst.STATE_WG_CANCLE)
+            {
+                return (int)OrderStatus.Void;
+            }
+            if (dealState.ToString() == OrderStatusConst.STATE_WG_SHIPPING_OK)
+            {
+                return (int)OrderStatus.Shipped;
+            }
+            throw new WgwSyncException(string.Format("Unsupported order status {0}", dealState));
+        }
+
         /// <summary>
         /// 创建订单实体对象
         /// </summary>
@@ -306,7 +323,8 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
         /// <returns></returns>
         private OrderEntity CreateOrder(dynamic dealDetail)
         {
-            decimal totalAmount = decimal.Parse(dealDetail.disTotalPay.ToString())/100;
+            int orderStatus = ExtractOrderStatus(dealDetail.dealState);
+            decimal totalAmount = decimal.Parse(dealDetail.disTotalPay.ToString()) / 100;
             return new OrderEntity()
             {
                 BrandId = 0,
@@ -323,7 +341,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                 ShippingContactPhone = dealDetail.recv.mobile ?? dealDetail.recv.phone,
                 ShippingZipCode = dealDetail.recv.postCode,
                 ShippingFee = dealDetail.shipFee,
-                Status = (int)OrderStatus.Paid,
+                Status = orderStatus,
                 UpdateDate = DateTime.Now,
                 UpdateUser = ConstValue.WGW_OPERATOR_USER,
                 TotalAmount = totalAmount,
@@ -335,13 +353,70 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
             };
         }
 
+        protected int GetInventoryId(dynamic trade)
+        {
+            int stockId;
+            using (var db = GetDbContext())
+            {
+                if (!int.TryParse(trade.stockLoCode.ToString(), out stockId))
+                {
+                    Int64 skuid;
+                    if (!Int64.TryParse(trade.skuId.ToString(), out skuid))
+                    {
+                        return GetInventoryByItemId(db, trade.itemCode.ToString());
+                    }
+                    var map =
+                        db.Map4Inventories.FirstOrDefault(
+                            m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.skuId == skuid);
+                    if (map == null)
+                    {
+                        return GetInventoryByItemId(db, trade.itemCode.ToString());
+                    }
+                    stockId = (int)map.InventoryId;
+                }
+            }
+            return stockId;
+        }
+
+        private int GetInventoryByItemId(YintaiHangzhouContext context, string itemId)
+        {
+            string snapshotId = SnapShotId2ItemId(itemId);
+            var product =
+                context.Set<Map4Product>().Where(m=>m.Channel == ConstValue.WGW_CHANNEL_NAME && (m.ChannelProductId == itemId || m.ChannelProductId == snapshotId))
+                    .Join(context.Set<ProductEntity>(), m => m.ProductId, p => p.Id, (m, p) => p)
+                    .FirstOrDefault();
+            if (context.Inventories.Count(i => i.ProductId == product.Id) > 1)
+            {
+                throw new WgwSyncException(string.Format("Product ({0}) has more than one inventory records, can't determine which is the correct inventory",itemId));
+            }
+            return context.Inventories.First(i => i.ProductId == product.Id).Id;
+        }
+
+        private string SnapShotId2ItemId(string snapshotId)
+        {
+            if (string.IsNullOrEmpty(snapshotId))
+            {
+                throw new ArgumentNullException("snapshotId");
+            }
+            if (snapshotId.Length < 16)
+            {
+                throw new WgwSyncException(string.Format("Invalid snapshot itemId {0}",snapshotId));
+            }
+            var arr = snapshotId.ToArray();
+            for (int i = 12; i < 16; i++)
+            {
+                arr[i] = '0';
+            }
+            return string.Join("", arr);
+        }
+
         public string ErrorMessage
         {
             get;
             private set;
         }
 
-        private YintaiHangzhouContext GetDbContext()
+        protected YintaiHangzhouContext GetDbContext()
         {
             return DbContextHelper.GetDbContext();
         }

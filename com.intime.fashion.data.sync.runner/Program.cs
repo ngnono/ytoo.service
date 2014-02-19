@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
 using com.intime.fashion.data.sync.runner.Runner;
+using com.intime.fashion.data.sync.Wgw.Executor;
+using Common.Logging;
 using Yintai.Architecture.Framework.ServiceLocation;
 
 namespace com.intime.fashion.data.sync.runner
@@ -11,10 +13,10 @@ namespace com.intime.fashion.data.sync.runner
     1. 备份已上传的商品。
     2. 下架已上传的商品
     3. 上传一个测试商品
-    4. 上传商品
-    5. 同步商品库存
-    6. 下架商品
-    7. 上架商品
+    4. 查询商品详情
+    5. 查询多库存
+    6. Upload all products
+    7. Sync product image
     8. 同步已支付订单
     9. 同步品牌信息
     Q. 退出";
@@ -26,7 +28,7 @@ namespace com.intime.fashion.data.sync.runner
             Console.Title = "银泰微购物商品上架助手";
             Console.BackgroundColor = ConsoleColor.DarkCyan;
             Console.ForegroundColor = ConsoleColor.Yellow;
-
+            ILog logger = LogManager.GetLogger(typeof (Program));
             Console.WriteLine("{0}已启动", Console.Title);
             Console.WriteLine(Usages);
 
@@ -34,7 +36,7 @@ namespace com.intime.fashion.data.sync.runner
 
             while (true)
             {
-                while(string.IsNullOrEmpty(input))
+                while (string.IsNullOrEmpty(input))
                 {
                     Console.WriteLine(Usages);
                     input = Console.ReadLine();
@@ -57,13 +59,25 @@ namespace com.intime.fashion.data.sync.runner
                         new UploadTestProductRunner().Run();
                         break;
                     case "4":
-                        return;
+                        Console.WriteLine("请输入微客多的商品编码:");
+                        string itemId = Console.ReadLine();
+                        while (string.IsNullOrEmpty(itemId))
+                        {
+                            Console.WriteLine("请输入微客多的商品编码:");
+                            itemId = Console.ReadLine();
+                        }
+                        new QueryItemDetailRunner(itemId).Run();
+                        break;
                     case "5":
-                        return;
+                        new QueryMultiStockRunner().Run();
+                        break;
                     case "6":
-                        return;
+                        new ProductSyncExecutor(DateTime.Now.AddYears(-1), logger)
+                            .Execute();
+                        break;
                     case "7":
-                        return;
+                        new ProductImageSyncExecutor(DateTime.Now.AddYears(-1), logger).Execute();
+                        break;
                     case "8":
                         new LoadPaidOrderRunner().Run();
                         break;

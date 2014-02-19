@@ -115,7 +115,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
         {
             using (var db = DbContextHelper.GetDbContext())
             {
-                var pIds = db.Inventories.GroupBy(t => t.ProductId)
+                var pIds = db.Inventories.Where(i=>i.Amount > 0).GroupBy(t => t.ProductId)
                         .Select(o => new {iid = o.Key, countOfLocalStockRecords = o.Count()})
                         .Join(
                             db.Map4Inventories.Where(t => t.Channel == ConstValue.WGW_CHANNEL_NAME)

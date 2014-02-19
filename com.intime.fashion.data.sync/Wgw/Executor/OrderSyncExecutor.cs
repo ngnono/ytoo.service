@@ -17,6 +17,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
         private int _failedCount = 0;
         private readonly string _beginTime;
         private readonly string _endTime;
+
         public OrderSyncExecutor(DateTime benchTime, ILog logger) : this(new SyncClient(), benchTime, logger)
         {
         }
@@ -40,17 +41,19 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
         protected override void ExecuteCore(dynamic extraParameter = null)
         {
             int pageSize = extraParameter??20;
-            this.SyncPaidOrders(pageSize);
-            //this.SyncCancelledOrder(pageSize);
-            this.SyncShippedOrder(pageSize);
+            var sizeStr = pageSize.ToString();
+            //this.SyncCreatedOrders(sizeStr);
+            this.SyncPaidOrders(sizeStr);
+            //this.SyncCancelledOrder(sizeStr);
+            //this.SyncShippedOrder(pageSize);
         }
 
         private void DoQuery(Expression<Func<Map4Order, bool>> whereCondition, Action<IQueryable<Map4Order>> callback)
         {
             using (var context = DbContextHelper.GetDbContext())
             {
-                int shipping = (int) OrderOpera.Shipping;
-                int fromCustomer = (int) OrderOpera.FromCustomer;
+                const int shipping = (int) OrderOpera.Shipping;
+                const int fromCustomer = (int) OrderOpera.FromCustomer;
                 var linq =
                     context.OrderLogs.Where(l => l.Type == shipping && l.CreateDate >= BenchTime)
                         .Join(context.Map4Orders.Where(m => m.SyncStatus == fromCustomer), l => l.OrderNo,
@@ -112,35 +115,49 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             }
         }
 
-        private void SyncCancelledOrder(int pageSize)
+        /// <summary>
+        /// 微购物上取消的订单状态同步
+        /// </summary>
+        /// <param name="pageSize"></param>
+        private void SyncCancelledOrder(string pageSize)
         {
-            var dict = BuildQueryDict(OrderStatusConst.STATE_WG_CANCLE, pageSize.ToString());
+            var dict = BuildQueryDict(pageSize);
             var request = new QueryOrderListRequest(dict);
+            request.Put("dealState", OrderStatusConst.STATE_WG_CANCLE);
             SyncCancelledOrdersFromWgw(request);
         }
 
-        private Dictionary<string, string> BuildQueryDict(string orderStatus,string size)
+        private Dictionary<string, string> BuildQueryDict(string pageSize)
         {
             return new Dictionary<string, string>
             {
-                {"pageSize", size},
+                {"pageSize", pageSize},
                 {"pageindex", "1"},
                 {"timeBegin",_beginTime},
                 {"timeEnd", _endTime},
                 {"historyDeal", "0"},
-                {"timeType", "PAY"},
                 {"listItem", "0"},
                 {"orderDesc", "0"},
-                {"dealState", orderStatus}
             };
         }
 
-        private void SyncPaidOrders(int size)
-        {
-            var dict = BuildQueryDict(OrderStatusConst.STATE_WG_PAY_OK, size.ToString());
-            var request = new QueryOrderListRequest(dict);
 
-            SyncPaidOrdersFromWgw(request);
+        private void SyncCreatedOrders(string sizeStr)
+        {
+            var dict = BuildQueryDict(sizeStr);
+            var request = new QueryOrderListRequest(dict);
+            request.Put("dealState", OrderStatusConst.STATE_WG_WAIT_PAY);
+            request.Put("timeType", "CREATE");
+            SyncOrdersFromWgw(request);
+        }
+
+        private void SyncPaidOrders(string pageSize)
+        {
+            var dict = BuildQueryDict(pageSize);
+            var request = new QueryOrderListRequest(dict);
+            request.Put("dealState", OrderStatusConst.STATE_WG_PAY_OK);
+            request.Put("timeType", "PAY");
+            SyncOrdersFromWgw(request);
         }
 
         /// <summary>
@@ -155,7 +172,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             {
                 foreach (var order in result.dealList.dealListVo)
                 {
-                    var processor = ProcessorFactory.CreateProcessor<CancelOrderProcessor>();
+                    var processor = OrderPrcossorFactory.CreateProcessor(request.RequestParams["dealState"]);
                     if (!processor.Process(order, null))
                     {
                         _failedCount += 1;
@@ -181,10 +198,10 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
         }
 
         /// <summary>
-        /// 同步最新支付的订单
+        /// 同步订单
         /// </summary>
         /// <param name="request"></param>
-        private void SyncPaidOrdersFromWgw(ISyncRequest request)
+        private void SyncOrdersFromWgw(ISyncRequest request)
         {
             var result = Client.Execute<dynamic>(request);
 
@@ -194,7 +211,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                 {
                     var detailRequest = new QueryOrderDetailRequest(order.dealCode.ToString());
                     var detail = Client.Execute<dynamic>(detailRequest);
-                    var processor = ProcessorFactory.CreateProcessor<OrderProcessor>();
+                    var processor = OrderPrcossorFactory.CreateProcessor(request.RequestParams["dealState"]);
                     if (!processor.Process(order, detail))
                     {
                         _failedCount += 1;
@@ -211,7 +228,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                 {
                     request.Put("pageindex", currentPage += 1);
                     request.Remove("sign");
-                    SyncPaidOrdersFromWgw(request);
+                    SyncOrdersFromWgw(request);
                 }
             }
             else

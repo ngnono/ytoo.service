@@ -75,6 +75,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                             CreateDate = DateTime.Now,
                             ProductId = productId,
                             UpdateDate = DateTime.Now,
+                            IsImageUpload = 0,
                             Status = item.itemState
                         });
                     }

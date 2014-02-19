@@ -56,7 +56,7 @@ namespace com.intime.jobscheduler.Job.Erp
                     {
                         try
                         {
-                            if (OrderRule.SyncPaidOrder2Erp(order.OrderNo))
+                            if (OrderRule.SyncOrder2Erp(order.OrderNo))
                             {
                                 successCount++;
                             }

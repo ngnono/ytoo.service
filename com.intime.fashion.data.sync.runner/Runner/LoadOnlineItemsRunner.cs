@@ -12,7 +12,8 @@ namespace com.intime.fashion.data.sync.runner.Runner
             var request = new QueryItemListRequest();
             request.Put("startIndex", index++);
             request.Put("pageSize", 100);
-            request.Put("orderType", "7");
+            request.Put("defStockId", "200091");
+            //request.Put("orderType", "7");
             var rsp = Client.Execute<dynamic>(request);
             int cursor = 1;
 

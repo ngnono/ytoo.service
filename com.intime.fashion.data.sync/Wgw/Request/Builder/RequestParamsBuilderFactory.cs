@@ -31,6 +31,11 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
                 return new MarkShippingRequestBuilder(request);
             }
 
+            if (request is UpdateProductImageRequest)
+            {
+                return new UpdateProductImageRequestBuilder(request);
+            }
+
             return null;
         }
     }

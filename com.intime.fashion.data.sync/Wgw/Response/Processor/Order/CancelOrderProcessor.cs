@@ -2,7 +2,7 @@
 using System.Linq;
 using Yintai.Hangzhou.Model.Enums;
 
-namespace com.intime.fashion.data.sync.Wgw.Response.Processor
+namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
 {
     public class CancelOrderProcessor:IProcessor
     {
