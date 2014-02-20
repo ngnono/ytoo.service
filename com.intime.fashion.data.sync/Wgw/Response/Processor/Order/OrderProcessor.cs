@@ -65,23 +65,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                     db.Orders.Add(order);
                     foreach (var item in dealDetail.trades)
                     {
-                        int stockId;
-                        if (!int.TryParse(item.stockLoCode.ToString(), out stockId))
-                        {
-                            Int64 skuid;
-                            if (!Int64.TryParse(item.skuId.ToString(), out skuid))
-                            {
-                                throw new WgwSyncException(string.Format("Invalid stockLoCode ({0})", item.stockLoCode));
-                            }
-                            var map =
-                                db.Map4Inventories.FirstOrDefault(
-                                    m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.skuId == skuid);
-                            if (map == null)
-                            {
-                                throw new WgwSyncException(string.Format("No mapping for skuId ({0})", skuid));
-                            }
-                            stockId = (int)map.InventoryId;
-                        }
+                        int stockId = this.GetInventoryId(item);
 
                         var inventory =
                             db.Inventories.FirstOrDefault(x => x.Id == stockId);
@@ -385,11 +369,22 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                 context.Set<Map4Product>().Where(m=>m.Channel == ConstValue.WGW_CHANNEL_NAME && (m.ChannelProductId == itemId || m.ChannelProductId == snapshotId))
                     .Join(context.Set<ProductEntity>(), m => m.ProductId, p => p.Id, (m, p) => p)
                     .FirstOrDefault();
-            if (context.Inventories.Count(i => i.ProductId == product.Id) > 1)
+            if (product == null)
             {
-                throw new WgwSyncException(string.Format("Product ({0}) has more than one inventory records, can't determine which is the correct inventory",itemId));
+                throw new WgwSyncException(string.Format("Can't find product accordding itemId ({0})",itemId));
             }
-            return context.Inventories.First(i => i.ProductId == product.Id).Id;
+            int productId = product.Id;
+            var cnt = context.Inventories.Count(i => i.ProductId == productId);
+
+            if (cnt == 0)
+            {
+                throw new WgwSyncException(string.Format("Product ({0}) has no stock",productId));
+            }
+            if (cnt > 1)
+            {
+                throw new WgwSyncException(string.Format("Product ({0}) is multi stocks , can't determine which is the correct inventory",productId));
+            }
+            return context.Inventories.First(i => i.ProductId == productId).Id;
         }
 
         private string SnapShotId2ItemId(string snapshotId)

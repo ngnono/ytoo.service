@@ -12,7 +12,7 @@ namespace com.intime.fashion.data.sync.runner.Runner
     {
         protected override void Do()
         {
-            var benchTime = DateTime.Now.AddDays(-5);
+            var benchTime = DateTime.Now.AddDays(-10);
             ExecuteResult executeInfo = null;
 
             var productSyncExecutor = new OrderSyncExecutor(benchTime, Logger);
