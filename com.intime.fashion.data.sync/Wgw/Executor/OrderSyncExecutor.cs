@@ -89,7 +89,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         if (rsp.errorCode != 0)
                         {
                             _failedCount += 1;
-                            Logger.Error(string.Format("标记订单发货失败,Error Message:{0}", rsp.errorMessage));
+                            Logger.Error(string.Format("Failed to mark order to shipping status ==>Error Message:{0}", rsp.errorMessage));
                         }
                         else
                         {
