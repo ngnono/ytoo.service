@@ -189,6 +189,7 @@
     <Compile Include="Job\Push2mysqlJob.cs" />
     <Compile Include="Job\Wgw\BrandSyncJob.cs" />
     <Compile Include="Job\Wgw\GetItemMultiStockJob.cs" />
+    <Compile Include="Job\Wgw\ProductImageSyncJob.cs" />
     <Compile Include="Job\Wgw\ProductStatusSyncJob.cs" />
     <Compile Include="Job\Wgw\InventorySyncJob.cs" />
     <Compile Include="Job\Wgw\OrderSyncJob.cs" />

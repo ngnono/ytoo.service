@@ -10,6 +10,7 @@ namespace com.intime.fashion.data.sync.runner
     class Program
     {
         private const string Usages = @"请选择要执行的任务，输入序号后回车执行：
+    0. Sync inventories
     1. 备份已上传的商品。
     2. 下架已上传的商品
     3. 上传一个测试商品
@@ -83,6 +84,9 @@ namespace com.intime.fashion.data.sync.runner
                         break;
                     case "9":
                         new MapBrandRunner().Run();
+                        break;
+                    case "0":
+                        new InventorySyncExecutor(DateTime.Now.AddYears(-1), logger).Execute();
                         break;
                     default:
                         Console.WriteLine(Usages);

@@ -89,7 +89,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         else
                         {
                             _failedCount += 1;
-                            Logger.Error(string.Format("Failed to update stock {0}(stockID),Error Message:{1}", mapId,
+                            Logger.Error(string.Format("Failed to update stock {0}(stockID),Error message from wgw:{1}", mapId,
                                 result.errorMessage));
                         }
                     }
@@ -97,7 +97,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     {
                         _failedCount += 1;
                         Logger.Error(string.Format("Failed to update stock {0}(stock ID),Error Message:{1}", mapId,
-                            ex.StackTrace));
+                            ex.Message));
                     }
                 }
             }

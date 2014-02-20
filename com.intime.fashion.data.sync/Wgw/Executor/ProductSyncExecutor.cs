@@ -195,9 +195,9 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                 var result = Client.Execute<dynamic>(builder.BuildParameters(item));
                 if (result.errorCode == 0)
                 {
-                    if (!string.IsNullOrEmpty(result.warnMessage))
+                    if (result.warnMessage != null && result.warnMessage.ToString().Length > 0)
                     {
-                        Logger.Error(string.Format("Succeed upload product,but some warnning message :{0}",result.warnMessage));
+                        Logger.Error(string.Format("Succeed upload product,but some warnning message :{0}", result.warnMessage));
                     }
                     var processor = ProcessorFactory.CreateProcessor<ItemResponseProcessor>();
                     if (processor.Process(result, item.Id))
