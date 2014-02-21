@@ -37,6 +37,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                             m =>
                                 m.ProductId == productId && m.ChannelProductId == itemId &&
                                 m.Channel == ConstValue.WGW_CHANNEL_NAME);
+                    var product = db.Products.FirstOrDefault(p => p.Id == productId);
                     if (mapping == null)
                     {
                         db.Map4Products.Add(new Map4Product
@@ -47,6 +48,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                             //更新和CreateDate修改为三年前，以便后续更新以添加颜色和图片
                             UpdateDate = DateTime.Now.AddYears(-3),
                             CreateDate = DateTime.Now.AddYears(-3),
+                            Status = product.Status,
                             IsImageUpload = 0
                         });
                     }
