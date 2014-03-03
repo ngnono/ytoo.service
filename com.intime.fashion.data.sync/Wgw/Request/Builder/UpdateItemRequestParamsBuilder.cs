@@ -21,12 +21,13 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
             {
                 throw new WgwSyncException(string.Format("Unmapped product:{0}", item.Id));
             }
+            
             Request.Put(ParamName.Param_ItemId, map4Product.ChannelProductId);
             if (!map4Product.IsImageUpload.HasValue || map4Product.IsImageUpload.Value != 1)
             {
-                (new ImageBuilder()).BuildImage(Request, item);
-                (new StockBuilder(Request, item)).BuildStockInfo("stockstr");
+                new ImageBuilder().BuildImage(Request, item);
             }
+            new StockBuilder(Request, item).BuildStockInfo("stockstr");
         }
 
         private Map4Product GetMap4Product(int productId)

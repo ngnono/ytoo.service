@@ -47,7 +47,6 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
         /// <param name="entity"></param>
         private void BuildImages(ProductEntity entity)
         {
-#if !DEBUG
             using (var db = GetDbContext())
             {
                 var img =
@@ -60,12 +59,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
                 }
                 Request.Put("uploadPicInfo1", string.Format("{0}/{1}_320x0.jpg", WgwConfigHelper.Image_BaseUrl, img.Name));
             }
-#else
-            Request.Put("uploadPicInfo1", "http://ec4.images-amazon.com/images/I/71oMNPbikLL._AA1500_.jpg");
-#endif
         }
-
-       
 
         /// <summary>
         /// 构建上架日期参数

@@ -71,6 +71,7 @@
     <Compile Include="Wgw\Executor\ProductStatusSyncExecutor.cs" />
     <Compile Include="Wgw\Executor\ProductSyncExecutor.cs" />
     <Compile Include="Wgw\Executor\ItemStatusExecutor.cs" />
+    <Compile Include="Wgw\Request\Builder\CloseOrderRequestBuilder.cs" />
     <Compile Include="Wgw\Request\Builder\Image\ImageBuilder.cs" />
     <Compile Include="Wgw\Request\Builder\ItemRequestParamsBuilder.cs">
       <SubType>Code</SubType>
