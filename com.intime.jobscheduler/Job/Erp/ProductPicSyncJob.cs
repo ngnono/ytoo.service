@@ -176,7 +176,7 @@ namespace com.intime.jobscheduler.Job.Erp
                         ExtName = uploadFile.FileExtName,
                         Height = uploadFile.Height,
                         IsDefault = product.PICTURE_MAST_BIT == 1 ? true : false,
-                        UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now,
+                        UpdatedDate = DateTime.Now,
                         Name = uploadFile.FileName,
                         Status = (product.DELETE_BIT??0)==0?(int)DataStatus.Normal:(int)DataStatus.Deleted,
                         SortOrder = product.PICTURE_MAST_BIT ==1 ?100:(100 - (int)product.PRO_PICT_ORDER),
@@ -186,7 +186,7 @@ namespace com.intime.jobscheduler.Job.Erp
                         ChannelPicId = (int)product.SID
                     });
                     existProduct.IsHasImage = true;
-                    existProduct.UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now;
+                    existProduct.UpdatedDate = DateTime.Now;
                     db.Entry(existProduct).State = System.Data.EntityState.Modified;
                     db.SaveChanges();
                 }
@@ -196,7 +196,7 @@ namespace com.intime.jobscheduler.Job.Erp
                     {
                         existPic.Status = (int)DataStatus.Deleted;
                         existPic.SortOrder = product.PICTURE_MAST_BIT == 1 ? 100 : (100 - (int)product.PRO_PICT_ORDER);
-                        existPic.UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now;
+                        existPic.UpdatedDate = DateTime.Now;
                         db.Entry(existPic).State = System.Data.EntityState.Modified;
                         db.SaveChanges();
                     }

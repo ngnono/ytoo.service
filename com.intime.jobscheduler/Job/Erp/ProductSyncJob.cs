@@ -168,7 +168,7 @@ namespace com.intime.jobscheduler.Job.Erp
                             Store_Id = storeEntity == null ? 0 : storeEntity.Id,
                             Tag_Id = tagEntity == null ? int.Parse(DEFAULT_TAG_ID) : tagEntity.Id,
                             Price = product.PROMOTION_PRICE ?? NULL_PRICE,
-                            UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now,
+                            UpdatedDate = DateTime.Now,
                             UpdatedUser = DEFAULT_OWNER_ID,
                             BarCode = product.BARCODE,
                             Favorable = "1"
@@ -184,7 +184,7 @@ namespace com.intime.jobscheduler.Job.Erp
                             ChannelPId = (int)product.PRODUCT_SID,
                             ChannelCatId = (int)(product.PRO_CLASS_SID??0m),
                             ProductId = newProduct.Id,
-                            UpdateDate = product.OPT_UPDATE_TIME ?? DateTime.Now
+                            UpdateDate = DateTime.Now
                         });
                         shouldSyncPic = true;
                     }
@@ -192,7 +192,7 @@ namespace com.intime.jobscheduler.Job.Erp
                     {
                         var existProductEntity = db.Set<ProductEntity>().Find(existProduct.ProductId);
                         existProductEntity.BarCode = product.BARCODE;
-                        existProductEntity.UpdatedDate = product.OPT_UPDATE_TIME ?? DateTime.Now;
+                        existProductEntity.UpdatedDate = DateTime.Now;
                         existProductEntity.Store_Id = storeEntity == null ? 0 : storeEntity.Id;
                         existProductEntity.Brand_Id = brandEntity == null ? 0 : brandEntity.Id;
                         existProductEntity.Tag_Id = tagEntity == null ? int.Parse(DEFAULT_TAG_ID) : tagEntity.Id;
