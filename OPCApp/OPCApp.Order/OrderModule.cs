@@ -6,7 +6,7 @@
 // Last Modified By : Liuyh
 // Last Modified On : 02-21-2014 21:34:46
 // ***********************************************************************
-// <copyright file="OrderModule.cs" company="">
+// <copyright file="OrderModule.cs" company="Liuyh">
 //     Copyright (c) Liuyh. All rights reserved.
 // </copyright>
 // <summary></summary>
