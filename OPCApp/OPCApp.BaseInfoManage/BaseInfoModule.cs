@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace OPCApp.BaseInfoManage
 {
-    //
+    //test push
     [ModuleExport(typeof(BaseInfoModule))]
     public class BaseInfoModule : IModule
     {
