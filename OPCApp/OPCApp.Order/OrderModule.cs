@@ -29,7 +29,7 @@ using System.Threading.Tasks;
 namespace OPCApp.Order
 {
     /// <summary>
-    /// Class OrderModule.
+    /// Class OrderModule. test
     /// </summary>
     [ModuleExport(typeof(OrderModule))]
     public class OrderModule : IModule
