@@ -2,9 +2,9 @@
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.AuthManage.Views;
-using OPCAPP.Domain;
-using OPCAPP.DataService.Interface;
-using OPCAPP.DataService.Impl;
+using OPCApp.Domain;
+using OPCApp.DataService.Interface;
+using OPCApp.DataService.Impl;
 namespace OPCApp.AuthManage.ViewModels
 {
    public class UserListWindowViewModel : BindableBase

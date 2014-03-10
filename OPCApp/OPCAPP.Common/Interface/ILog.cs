@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OPCAPP.Common.Interface
+namespace OPCApp.Common.Interface
 {
     public interface ILog
     {

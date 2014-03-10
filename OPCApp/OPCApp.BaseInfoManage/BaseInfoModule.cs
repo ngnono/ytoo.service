@@ -2,7 +2,7 @@
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
-using OPCApp.Main.Infrastructure;
+using OPCApp.Infrastructure;
 using OPCApp.BaseInfoManage.Views;
 using System;
 using System.Collections.Generic;
