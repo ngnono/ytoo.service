@@ -70,7 +70,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="ObjectToVisibilityConverter.cs" />
     <Compile Include="ObservableCommand.cs" />
-    <Compile Include="Page.cs" />
+    <Compile Include="PageResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
