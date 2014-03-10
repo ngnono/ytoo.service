@@ -12,18 +12,27 @@
             <ColumnDefinition />
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <RadioButton x:Name="NavigateToCalendarRadioButton" GroupName="MainNavigation" Click="Button_Click" Style="{StaticResource MainViewRadioButtonStyle}" AutomationProperties.AutomationId="CalendarRadioButton">订单管理</RadioButton>
-        
-        <controls:InfoTipToggleButton Grid.Column="1">
-            <controls:InfoTipToggleButton.Popup>
-                <Popup>
-                    <Border BorderBrush="Black" BorderThickness="2">
-                        <StackPanel MinWidth="100" MinHeight="24" MaxWidth="400" Background="White">
-                            <TextBlock TextWrapping="Wrap">This button demonstrates navigation to a view that that supports cross-navigation to another area.</TextBlock>
-                        </StackPanel>
-                    </Border>
-                </Popup>
-            </controls:InfoTipToggleButton.Popup>
-        </controls:InfoTipToggleButton>
+        <Expander VerticalAlignment="Stretch" ExpandDirection="Down" HorizontalContentAlignment="Left" SnapsToDevicePixels="True">
+            <Expander.Header>
+                <TextBlock Text="订单管理" FontSize="14" FontWeight="Bold" />
+            </Expander.Header>
+            <Expander.Content>
+                <Grid Width="250">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <!--<RadioButton x:Name="NavigateToCalendarRadioButton" Grid.Row="0"  GroupName="MainNavigation" Click="Button_Click" Style="{StaticResource MainViewRadioButtonStyle}" AutomationProperties.AutomationId="CalendarRadioButton">权限管理</RadioButton>-->
+                    <RadioButton Grid.Row="0"  Margin="0, 5, 0, 5" Width="250" Click="Button_Click" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Style="{StaticResource MainViewRadioButtonStyle}">订单信息</RadioButton>
+                    <!--<RadioButton Grid.Row="0" Width="Auto" Style="{StaticResource MainViewRadioButtonStyle}">用户管理</RadioButton>-->
+
+                </Grid>
+            </Expander.Content>
+        </Expander>
+        <!--<Expander >
+           
+
+        </Expander>-->
+
     </Grid>
 </UserControl>

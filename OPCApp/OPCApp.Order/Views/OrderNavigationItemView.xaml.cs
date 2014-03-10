@@ -39,22 +39,22 @@ namespace OPCApp.Order.Views
 
         void IPartImportsSatisfiedNotification.OnImportsSatisfied()
         {
-            IRegion mainContentRegion = this.regionManager.Regions[RegionNames.MainContentRegion];
-            if (mainContentRegion != null && mainContentRegion.NavigationService != null)
-            {
-                mainContentRegion.NavigationService.Navigated += this.MainContentRegion_Navigated;
-            }
+            //IRegion mainContentRegion = this.regionManager.Regions[RegionNames.MainContentRegion];
+            //if (mainContentRegion != null && mainContentRegion.NavigationService != null)
+            //{
+            //    mainContentRegion.NavigationService.Navigated += this.MainContentRegion_Navigated;
+            //}
         }
 
-        public void MainContentRegion_Navigated(object sender, RegionNavigationEventArgs e)
-        {
-            this.UpdateNavigationButtonState(e.Uri);
-        }
+        //public void MainContentRegion_Navigated(object sender, RegionNavigationEventArgs e)
+        //{
+        //    this.UpdateNavigationButtonState(e.Uri);
+        //}
 
-        private void UpdateNavigationButtonState(Uri uri)
-        {
-            this.NavigateToCalendarRadioButton.IsChecked = (uri == calendarViewUri);
-        }
+        //private void UpdateNavigationButtonState(Uri uri)
+        //{
+        //    this.NavigateToCalendarRadioButton.IsChecked = (uri == calendarViewUri);
+        //}
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
