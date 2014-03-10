@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace OPCApp.Common.Interface
 {
+
+    //
     public interface ILog
     {
         string WriteLog(string OprUser, string ModuleName, DateTime OprDate, string Operation);
