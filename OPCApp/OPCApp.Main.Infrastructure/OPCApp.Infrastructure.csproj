@@ -37,8 +37,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DllFile\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.Prism.MefExtensions">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.MefExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Mvvm">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.PubSubEvents, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.PubSubEvents.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Prism.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\Prism.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -67,6 +81,9 @@
     <Compile Include="Auth\User.cs" />
     <Compile Include="Auth\UserAuth.cs" />
     <Compile Include="DesignDataCollectionView.cs" />
+    <Compile Include="Mvvm\ViewModel\IBaseViewModel.cs" />
+    <Compile Include="Mvvm\ViewModel\IFilterViewModel.cs" />
+    <Compile Include="Mvvm\ViewModel\ViewModel4Grid.cs" />
     <Compile Include="ObjectToVisibilityConverter.cs" />
     <Compile Include="ObservableCommand.cs" />
     <Compile Include="PageResult.cs" />
@@ -99,6 +116,8 @@
   <ItemGroup>
     <Folder Include="MAP\" />
     <Folder Include="Moudel\" />
+    <Folder Include="Mvvm\Model\" />
+    <Folder Include="Mvvm\Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

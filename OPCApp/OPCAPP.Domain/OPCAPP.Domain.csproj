@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseInfo\OrgInfo.cs" />
+    <Compile Include="BaseInfo\ShoppeInfo.cs" />
+    <Compile Include="BaseInfo\StoreInfo.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

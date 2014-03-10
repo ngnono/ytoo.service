@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\UserAuth.cs" />
+    <Compile Include="Common\RestClient.cs" />
     <Compile Include="Impl\AuthenticateService.cs" />
     <Compile Include="Interface\IAuthenticateService.cs" />
     <Compile Include="Interface\IOrderService.cs" />
@@ -67,6 +68,7 @@
       <Name>OPCApp.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

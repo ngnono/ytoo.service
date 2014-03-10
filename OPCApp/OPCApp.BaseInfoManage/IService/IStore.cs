@@ -1,9 +1,10 @@
-﻿using System;
+﻿using OPCApp.Domain.BaseInfo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OPCApp.BaseInfoManage.Models;
+
 
 namespace OPCApp.BaseInfoManage.IService
 {
