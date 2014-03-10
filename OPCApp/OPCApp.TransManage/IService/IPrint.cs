@@ -13,7 +13,7 @@ namespace OPCApp.TransManage.IService
 
         void FastPrint(int type);
         
-    }
+    }//
 
     public class PrintService : IPrintService
     {
