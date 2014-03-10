@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace OPCApp.TransManage
 {
-    //test push   324324
+    //test push
     [ModuleExport(typeof(TransManageModule))]
     public class TransManageModule : IModule
     {
