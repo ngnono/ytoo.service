@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace OPCApp.Common.Interface
 {
-
     //
     public interface ILog
     {
