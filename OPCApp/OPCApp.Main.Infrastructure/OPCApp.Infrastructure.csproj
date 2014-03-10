@@ -67,6 +67,7 @@
     <Compile Include="Auth\User.cs" />
     <Compile Include="Auth\UserAuth.cs" />
     <Compile Include="DesignDataCollectionView.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="ObjectToVisibilityConverter.cs" />
     <Compile Include="ObservableCommand.cs" />
     <Compile Include="Page.cs" />
