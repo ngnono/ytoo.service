@@ -34,9 +34,9 @@ namespace OPCApp.Infrastructure.Mvvm
 
         #region Methods
 
-        private void AddAction()
+        private void AddAction(T t)
         {
-            var t= DoAddAction();
+            //var t= DoAddAction();
             this.Models.Add(t);
         }
 
