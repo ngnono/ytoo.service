@@ -10,7 +10,7 @@ using System.ComponentModel.Composition;
 using System.Windows.Controls;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
-using OPCApp.Main.Infrastructure;
+using OPCApp.Infrastructure;
 using System.Windows;
 using MahApps.Metro;
 using MahApps.Metro.Controls;

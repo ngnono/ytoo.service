@@ -1,5 +1,5 @@
-﻿using OPCAPP.DataService.Interface;
-using OPCAPP.Domain;
+﻿using OPCApp.DataService.Interface;
+using OPCApp.Domain;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Net.Http;
 
-namespace OPCAPP.DataService.Impl
+namespace OPCApp.DataService.Impl
 {
     [Export(typeof(IAuthenticateService))]
     public class AuthenticateService : IAuthenticateService

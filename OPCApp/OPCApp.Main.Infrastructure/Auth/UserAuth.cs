@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OPCApp.Main.Infrastructure.Auth
+namespace OPCApp.Infrastructure.Auth
 {
 
-        public interface UserAuth
+        public interface IUserAuth
         {
             IUser CurrentUser { get; }
             /// <summary>
@@ -17,6 +17,12 @@ namespace OPCApp.Main.Infrastructure.Auth
             /// <param name="password">密码</param>
             /// <returns>验证成功，则返回空；失败时，返回错误提示</returns>
             string Login(string userName, string password);
+
+            /// <summary>
+            /// 重新登录
+            /// </summary>
+            /// <returns>System.String.</returns>
+            string Relogin();
             /// <summary>
             /// 注销登录
             /// </summary>

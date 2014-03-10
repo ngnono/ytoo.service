@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OPCAPP.Domain
+namespace OPCApp.Domain
 {
   public  class User 
     {

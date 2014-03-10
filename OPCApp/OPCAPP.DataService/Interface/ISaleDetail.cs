@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OPCAPP.DataService.Interface
+namespace OPCApp.DataService.Interface
 {
     public interface ISaleDetail
     {

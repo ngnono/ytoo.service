@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OPCApp.Main.Infrastructure.Auth
+namespace OPCApp.Infrastructure.Auth
 {
     /// <summary>
     /// 用户接口
@@ -24,11 +24,6 @@ namespace OPCApp.Main.Infrastructure.Auth
         /// <value>The name of the pet.<alue>
         string ShowName { get; }
 
-        /// <summary>
-        /// 邮箱
-        /// </summary>
-        /// <value>The email.<alue>
-        string Email { set; }
     }
 
     /// <summary>

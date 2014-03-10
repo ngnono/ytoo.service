@@ -17,7 +17,7 @@
 using System.Windows.Input;
 using Microsoft.Practices.Prism;
 
-namespace OPCApp.Main.Infrastructure
+namespace OPCApp.Infrastructure
 {
     public class ObservableCommand : ObservableObject<ICommand>
     {
