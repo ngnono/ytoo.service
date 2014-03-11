@@ -18,7 +18,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace OPCApp.Infrastructure
+namespace OPCApp.Main.Infrastructure
 {
     /// <summary>
     /// This class is used to specify design data for view models that expose an ICollectionView. It is not intended

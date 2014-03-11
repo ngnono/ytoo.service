@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OPCAPP.Common.Mvvm
+namespace OPCApp.Main.Infrastructure
 {
-    public interface IBaseViewModel
+    public class Page
     {
     }
 }

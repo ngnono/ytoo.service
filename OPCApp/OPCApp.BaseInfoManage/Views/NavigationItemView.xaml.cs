@@ -19,7 +19,7 @@ using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Practices.Prism.Regions;//.Regions;
-using OPCApp.Infrastructure;
+using OPCApp.Main.Infrastructure;
 using OPCApp.BaseInfoManage.ViewModels;//.Infrastructure;
 
 

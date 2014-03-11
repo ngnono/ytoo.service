@@ -19,7 +19,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace OPCApp.Infrastructure
+namespace OPCApp.Main.Infrastructure
 {
     public class ObjectToVisibilityConverter : IValueConverter
     {

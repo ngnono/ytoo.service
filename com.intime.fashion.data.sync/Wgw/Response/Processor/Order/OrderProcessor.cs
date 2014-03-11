@@ -83,7 +83,11 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                         int buyNum = int.Parse(item.buyNum.ToString());
 
                         //扣减库存
-                        CheckStocks(inventory, buyNum);
+
+                        if (!CheckStocks(inventory, buyNum))
+                        {
+                            throw new StockInsufficientException(dealDetail.dealCode, OrderStatusConst.STATE_WG_PAY_OK);
+                        }
 
                         var colorEntity = db.ProductPropertyValues.FirstOrDefault(ppv => ppv.Id == inventory.PColorId);
                         var sizeEntity = db.ProductPropertyValues.FirstOrDefault(ppv => ppv.Id == inventory.PSizeId);
@@ -134,7 +138,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                         Type = (int)OrderOpera.FromOperator
                     });
 
-                    db.OrderTransactions.Add(CreateOrderTransaction(order,dealDetail));
+                    db.OrderTransactions.Add(CreateOrderTransaction(order, dealDetail));
 
                     db.SaveChanges();
                 }
@@ -160,7 +164,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                 IsSynced = false,
                 CanSync = -1,
                 OutsiteUId = dealDetail.buyerOpenid,
-                OrderType = (int) PaidOrderType.Self
+                OrderType = (int)PaidOrderType.Self
             };
         }
 
@@ -169,7 +173,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
         /// </summary>
         /// <param name="inventory">库存ID</param>
         /// <param name="buyNum">库存数量</param>
-        protected abstract void  CheckStocks(InventoryEntity inventory, int buyNum);
+        protected abstract bool CheckStocks(InventoryEntity inventory, int buyNum);
 
         /// <summary>
         /// 订单是否已经同步
@@ -366,23 +370,23 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
         {
             string snapshotId = SnapShotId2ItemId(itemId);
             var product =
-                context.Set<Map4Product>().Where(m=>m.Channel == ConstValue.WGW_CHANNEL_NAME && (m.ChannelProductId == itemId || m.ChannelProductId == snapshotId))
+                context.Set<Map4Product>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME && (m.ChannelProductId == itemId || m.ChannelProductId == snapshotId))
                     .Join(context.Set<ProductEntity>(), m => m.ProductId, p => p.Id, (m, p) => p)
                     .FirstOrDefault();
             if (product == null)
             {
-                throw new WgwSyncException(string.Format("Can't find product accordding itemId ({0})",itemId));
+                throw new WgwSyncException(string.Format("Can't find product accordding itemId ({0})", itemId));
             }
             int productId = product.Id;
             var cnt = context.Inventories.Count(i => i.ProductId == productId);
 
             if (cnt == 0)
             {
-                throw new WgwSyncException(string.Format("Product ({0}) has no stock",productId));
+                throw new WgwSyncException(string.Format("Product ({0}) has no stock", productId));
             }
             if (cnt > 1)
             {
-                throw new WgwSyncException(string.Format("Product ({0}) is multi stocks , can't determine which is the correct inventory",productId));
+                throw new WgwSyncException(string.Format("Product ({0}) is multi stocks , can't determine which is the correct inventory", productId));
             }
             return context.Inventories.First(i => i.ProductId == productId).Id;
         }
@@ -395,7 +399,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
             }
             if (snapshotId.Length < 16)
             {
-                throw new WgwSyncException(string.Format("Invalid snapshot itemId {0}",snapshotId));
+                throw new WgwSyncException(string.Format("Invalid snapshot itemId {0}", snapshotId));
             }
             var arr = snapshotId.ToArray();
             for (int i = 12; i < 16; i++)

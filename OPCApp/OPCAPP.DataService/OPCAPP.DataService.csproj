@@ -49,8 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\UserAuth.cs" />
-    <Compile Include="Common\RestClient.cs" />
     <Compile Include="Impl\AuthenticateService.cs" />
     <Compile Include="Interface\IAuthenticateService.cs" />
     <Compile Include="Interface\IOrderService.cs" />
@@ -63,12 +61,11 @@
       <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
       <Name>OPCAPP.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Infrastructure.csproj">
+    <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Main.Infrastructure.csproj">
       <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
-      <Name>OPCApp.Infrastructure</Name>
+      <Name>OPCApp.Main.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

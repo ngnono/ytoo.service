@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OPCApp.DataService.Interface
+namespace OPCAPP.DataService.Interface
 {
     public interface IOrderService
     {

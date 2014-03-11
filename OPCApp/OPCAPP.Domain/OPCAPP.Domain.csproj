@@ -42,9 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseInfo\OrgInfo.cs" />
-    <Compile Include="BaseInfo\ShoppeInfo.cs" />
-    <Compile Include="BaseInfo\StoreInfo.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,9 +49,9 @@
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Infrastructure.csproj">
+    <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Main.Infrastructure.csproj">
       <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
-      <Name>OPCApp.Infrastructure</Name>
+      <Name>OPCApp.Main.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

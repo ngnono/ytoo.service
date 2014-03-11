@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OPCApp.Domain
+namespace OPCAPP.Domain
 {
     public class Log
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Prism.Commands;
-using OPCApp.Domain;
+using OPCAPP.Domain;
 namespace OPCApp.BaseInfoManage.ViewModels
 {
    public class NavigationItemViewModel :BindableBase

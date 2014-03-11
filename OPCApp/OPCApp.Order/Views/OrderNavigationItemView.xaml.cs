@@ -19,7 +19,7 @@ using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Practices.Prism.Regions;
-using OPCApp.Infrastructure;
+using OPCApp.Main.Infrastructure;
 
 
 namespace OPCApp.Order.Views

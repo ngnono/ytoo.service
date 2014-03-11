@@ -2,6 +2,8 @@
 
 namespace com.intime.fashion.data.sync
 {
+
+    //test git push
     public class DbContextHelper
     {
         public static YintaiHangzhouContext GetDbContext()

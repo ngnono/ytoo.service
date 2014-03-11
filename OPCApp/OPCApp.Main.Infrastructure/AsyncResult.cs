@@ -17,9 +17,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using OPCApp.Infrastructure.Properties;
+using OPCApp.Main.Infrastructure.Properties;
 
-namespace OPCApp.Infrastructure
+namespace OPCApp.Main.Infrastructure
 {
     [SuppressMessage("Microsoft.Design", "CA1001",
         Justification = "Calling the End method, which is part of the contract of using an IAsyncResult, releases the IDisposable.")]

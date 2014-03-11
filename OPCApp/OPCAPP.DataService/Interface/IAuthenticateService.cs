@@ -1,6 +1,6 @@
-﻿using OPCApp.Domain;
+﻿using OPCAPP.Domain;
 using System.Collections.Generic;
-namespace OPCApp.DataService.Interface
+namespace OPCAPP.DataService.Interface
 {
     public interface IAuthenticateService
     {
