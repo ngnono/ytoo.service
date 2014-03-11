@@ -19,9 +19,6 @@
             </TabItem>
 
 
-            <TabItem Header="发货调拨信息" Custom:ControlsHelper.HeaderFontSize="18">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
             <TabItem Header="退货调配信息" Custom:ControlsHelper.HeaderFontSize="18">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>

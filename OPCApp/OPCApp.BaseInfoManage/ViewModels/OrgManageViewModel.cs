@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.Prism.Commands;
 using System.Windows;
-using OPCApp.BaseInfoManage.Models;
 using OPCApp.BaseInfoManage.Views;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.BaseInfoManage.IService;
+using OPCApp.BaseInfoManage.Models;
+
 
 namespace OPCApp.BaseInfoManage.ViewModels
 {

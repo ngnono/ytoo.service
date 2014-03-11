@@ -38,8 +38,8 @@ namespace OPCApp.BaseInfoManage.Models
 
         public string RMAPhone { get; set; }//退货电话
 
-        //public string 
-        
+       
+
     }
 
     public class Store4Get

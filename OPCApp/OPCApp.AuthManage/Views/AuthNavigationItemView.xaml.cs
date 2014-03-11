@@ -20,7 +20,8 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Practices.Prism.Regions;//.Regions;
 using OPCApp.Infrastructure;
-using OPCApp.AuthManage.ViewModels;//.Infrastructure;
+using OPCApp.AuthManage.ViewModels;
+using OPCApp.Main.Infrastructure;//.Infrastructure;
 
 
 namespace OPCApp.AuthManage.Views

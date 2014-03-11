@@ -1,19 +1,25 @@
 //===================================================================================
-//
-// 
+// Microsoft patterns & practices
+// Composite Application Guidance for Windows Presentation Foundation
 //===================================================================================
-// 作者：赵晓玉
-// 创建日期：2014-2-5
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY
+// OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT
+// LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+// FITNESS FOR A PARTICULAR PURPOSE.
 //===================================================================================
-// 修改记录
-//
+// The example companies, organizations, products, domain names,
+// e-mail addresses, logos, people, places, and events depicted
+// herein are fictitious.  No association with any real company,
+// organization, product, domain name, email address, logo, person,
+// places, or events is intended or should be inferred.
 //===================================================================================
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using OPCApp.Infrastructure.Properties;
+using OPCApp.Main.Infrastructure.Properties;
 
-namespace OPCApp.Infrastructure
+namespace OPCApp.Main.Infrastructure
 {
     [SuppressMessage("Microsoft.Design", "CA1001",
         Justification = "Calling the End method, which is part of the contract of using an IAsyncResult, releases the IDisposable.")]

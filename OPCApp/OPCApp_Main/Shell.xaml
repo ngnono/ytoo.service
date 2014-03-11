@@ -18,19 +18,25 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="80"/>
+
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel  Grid.Row="0"  Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Width="Auto" Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}">
-                <TextBlock  HorizontalAlignment="Center"  Width="Auto" Text="银泰百货  OPC系统" FontWeight="Normal" Foreground="White" FontSize="30"   VerticalAlignment="Center"/>
+            <StackPanel  Grid.Row="0"  Grid.ColumnSpan="2" Orientation="Horizontal"   >
+                <StackPanel.Background>
+                    <LinearGradientBrush EndPoint="1,0.5" MappingMode="RelativeToBoundingBox" StartPoint="0,0.5">
+                        <GradientStop Color="#B241B1E1" Offset="1"/>
+                        <GradientStop Color="#CC7D83B8"/>
+                    </LinearGradientBrush>
+                </StackPanel.Background>
+                <TextBlock  HorizontalAlignment="Center"  Margin="10,0,0,0" Width="Auto" Text="银泰百货  OPC系统" FontWeight="Normal" Foreground="White" FontSize="35"   VerticalAlignment="Center"/>
             </StackPanel>
 
-            <Border Grid.Column="0" Grid.Row="2" Background="LightGray" MinWidth="250" Margin="0">
+            <Border Grid.Column="0" Grid.Row="1" Background="LightGray" MinWidth="272" Margin="1">
                 <ItemsControl x:Name="NavigationItemsControl" prism:RegionManager.RegionName="MainNavigationRegion" Grid.Column="0" />
             </Border>
             <ContentControl prism:RegionManager.RegionName="MainContentRegion" 
-            Grid.Column="1" Grid.Row="2" Margin="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+            Grid.Column="1" Grid.Row="1" Margin="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
         </Grid>
     </Grid>
 </controls1:MetroWindow>

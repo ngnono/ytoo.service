@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Title="门店管理" Height="400" Width="850" GlowBrush="Blue"  Background="LightGray" ResizeMode="NoResize">
-    <controls:MetroContentControl>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -102,8 +102,5 @@
 
             
         </Grid>
-
-    </controls:MetroContentControl>
-
 
 </controls:MetroWindow>

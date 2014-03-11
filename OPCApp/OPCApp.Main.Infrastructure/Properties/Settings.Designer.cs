@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OPCApp.Infrastructure.Properties {
+namespace OPCApp.Main.Infrastructure.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

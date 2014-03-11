@@ -5,6 +5,8 @@ using OPCApp.AuthManage.Views;
 using OPCApp.Domain;
 using OPCApp.DataService.Interface;
 using OPCApp.DataService.Impl;
+using OPCApp.Domain;
+using OPCApp.DataService.Interface;
 namespace OPCApp.AuthManage.ViewModels
 {
    public class UserListWindowViewModel : BindableBase

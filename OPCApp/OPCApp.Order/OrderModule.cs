@@ -6,15 +6,16 @@
 // Last Modified By : Liuyh
 // Last Modified On : 02-21-2014 21:34:46
 // ***********************************************************************
-// <copyright file="OrderModule.cs" company="Liuyh">
+// <copyright file="OrderModule.cs" company="">
 //     Copyright (c) Liuyh. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+//ddd
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
-using OPCApp.Infrastructure;
+using OPCApp.Main.Infrastructure;
 using OPCApp.Order.Views;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ using System.Threading.Tasks;
 namespace OPCApp.Order
 {
     /// <summary>
-    /// Class OrderModule. test
+    /// Class OrderModule.
     /// </summary>
     [ModuleExport(typeof(OrderModule))]
     public class OrderModule : IModule
