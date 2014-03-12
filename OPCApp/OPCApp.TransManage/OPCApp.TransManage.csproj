@@ -77,6 +77,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Class1.cs" />
     <Compile Include="TransManageModule.cs" />
     <Compile Include="IService\IInvoice.cs" />
     <Compile Include="IService\ResultMsg.cs" />
@@ -188,9 +189,9 @@
     <Resource Include="image\验证.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OPCAPP.Domain\OPCAPP.Domain.csproj">
+    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
       <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
-      <Name>OPCAPP.Domain</Name>
+      <Name>OPCApp.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\OPCApp.Main.Controls\OPCApp.Main.Controls.csproj">
       <Project>{c8950baf-06a5-4af3-964a-55b18b0e0b9f}</Project>

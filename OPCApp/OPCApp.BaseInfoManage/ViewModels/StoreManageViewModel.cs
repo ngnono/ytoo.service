@@ -7,12 +7,12 @@ using System.Windows.Input;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using OPCApp.BaseInfoManage.Views;
-using OPCApp.BaseInfoManage.Models;
 using Newtonsoft.Json;
 using Microsoft.Practices.Prism.Mvvm;
 using System.Net.Http;
 using OPCApp.Common;
 using OPCApp.BaseInfoManage.IService;
+using OPCApp.BaseInfoManage.Models;
 
 
 namespace OPCApp.BaseInfoManage.ViewModels

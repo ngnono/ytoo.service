@@ -5,16 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
-using OPCAPP.Common.Mvvm;
 using System.Collections.ObjectModel;
 
 namespace OPCApp.Infrastructure.Mvvm
 {
-    public abstract class ViewModel4Grid<T>:IBaseViewModel
+    public abstract class ViewModel4Grid<T> where T:new()
     {
         protected ViewModel4Grid()
         {
-            //this.AddCommand=new DelegateCommand<T>(this.AddAction();
+            this.AddCommand=new DelegateCommand(this.AddAction);
         }
 
         #region Commands
@@ -23,10 +22,10 @@ namespace OPCApp.Infrastructure.Mvvm
         /// 添加
         /// </summary>
         /// <value>The add command.</value>
-        public DelegateCommand<T> AddCommand { get; set; }
+        public ICommand AddCommand { get; set; }
 
 
-        public DelegateCommand<T> EditCommand { get; set; }
+        public ICommand EditCommand { get; set; }
 
         public ICommand DeleteCommand { get; set; }
 
@@ -34,14 +33,15 @@ namespace OPCApp.Infrastructure.Mvvm
 
         #region Methods
 
-        private void AddAction(T t)
+        private void AddAction()
         {
+            var t = new T();
             //var t= DoAddAction();
             this.Models.Add(t);
         }
 
         #endregion
-        public IFilterViewModel FilterViewModel { get; set; }
+       // public IFilterViewModel FilterViewModel { get; set; }
 
         public ObservableCollection<T> Models { get; set; }
 

@@ -18,7 +18,6 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\OPCApp_Main\bin\Debug\</OutputPath>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -105,21 +104,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OPCAPP.DataService\OPCAPP.DataService.csproj">
+    <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
       <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
-      <Name>OPCAPP.DataService</Name>
+      <Name>OPCApp.DataService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OPCAPP.Domain\OPCAPP.Domain.csproj">
+    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
       <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
-      <Name>OPCAPP.Domain</Name>
+      <Name>OPCApp.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\OPCApp.Main.Controls\OPCApp.Main.Controls.csproj">
       <Project>{c8950baf-06a5-4af3-964a-55b18b0e0b9f}</Project>
       <Name>OPCApp.Main.Controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Infrastructure.csproj">
-      <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
-      <Name>OPCApp.Infrastructure</Name>
     <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Main.Infrastructure.csproj">
       <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
       <Name>OPCApp.Main.Infrastructure</Name>
