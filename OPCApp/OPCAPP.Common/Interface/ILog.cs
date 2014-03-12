@@ -9,6 +9,7 @@ namespace OPCAPP.Common.Interface
     public interface ILog
     {
         //test git
+        //dddd
         string WriteLog(string OprUser, string ModuleName, DateTime OprDate, string Operation);
 
     }
