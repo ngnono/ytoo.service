@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GasMap.Core
+namespace OPCApp.Main.Infrastructure
 {
     /// <summary>
     /// 日志操作

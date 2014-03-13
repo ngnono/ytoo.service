@@ -18,7 +18,7 @@ using System.Text;
 using log4net;
 
 
-namespace GasMap.Core
+namespace OPCApp.Main.Infrastructure
 {
     /// <summary>
     /// Class Log4NetLogger.
