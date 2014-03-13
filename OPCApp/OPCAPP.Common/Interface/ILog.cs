@@ -10,6 +10,8 @@ namespace OPCApp.Common.Interface
     {
         //test git
         //dddd
+
+        //test ddddd
         string WriteLog(string OprUser, string ModuleName, DateTime OprDate, string Operation);
 
     }
