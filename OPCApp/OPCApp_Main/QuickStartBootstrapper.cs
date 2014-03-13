@@ -10,6 +10,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.Windows;
 using Microsoft.Practices.Prism.MefExtensions;
 using Microsoft.Practices.Prism.Modularity;
+using OPCApp.Main.Infrastructure;
 
 namespace OPCApp.Main
 {
@@ -24,6 +25,7 @@ namespace OPCApp.Main
             this.AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(QuickStartBootstrapper).Assembly));
 
             this.AggregateCatalog.Catalogs.Add(new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory));
+       
         }
 
         protected override IModuleCatalog CreateModuleCatalog()
@@ -39,6 +41,7 @@ namespace OPCApp.Main
         protected override void InitializeShell()
         {
             base.InitializeShell();
+            AppEx.Init(this.Container);
             Application.Current.MainWindow = (Window)this.Shell;
             Application.Current.MainWindow.WindowState = WindowState.Maximized;
             Application.Current.MainWindow.Show();

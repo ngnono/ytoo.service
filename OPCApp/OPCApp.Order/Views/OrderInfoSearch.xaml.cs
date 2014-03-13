@@ -33,8 +33,8 @@ using OPCApp.Order.ViewModels;
 /// </summary>
 namespace OPCApp.Order.Views
 {
-    //[Export("OrderInfoSearch2")]
-    //[PartCreationPolicy(CreationPolicy.NonShared)]
+    [Export("OrderInfoSearch2")]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     /// <summary>
     /// OrderInfoSearch.xaml 的交互逻辑
     /// </summary>
