@@ -20,7 +20,7 @@ namespace OPCApp.AuthManage.Views
     /// RoleWindow.xaml 的交互逻辑
     /// </summary>
     ///  
-    [Export("UserListWindow")]
+    [Export("UserListWindow", typeof(UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class UserListWindow : UserControl
     {

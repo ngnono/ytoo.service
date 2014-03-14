@@ -29,7 +29,7 @@ namespace OPCApp.AuthManage
             InitializeComponent();
            // this.DataContext = mvm;
             //this.InitMenu();
-            
+          
         }
         [Import(typeof(MenuViewModel))]
         public MenuViewModel ViewMode

@@ -31,17 +31,33 @@ namespace OPCApp.AuthManage.Views
         //private static Uri userListViewUri = new Uri("UserListWindow", UriKind.Relative);
         private static Uri userListViewUri = new Uri("MenuView", UriKind.Relative);
         private static Uri roleListViewUri = new Uri("RoleListWindow", UriKind.Relative);
+        
+        public MenuViewModel ViewMode
+        {
+            get
+            {
+                return this.DataContext as MenuViewModel;
+            }
+            set
+            {
+                this.DataContext = value;
+            }
+        }
+    
         [Import]
         public IRegionManager regionManager;
 
-        public AuthNavigationItemViewModel aniv = new AuthNavigationItemViewModel();
-        public AuthNavigationItemView()
+        //public AuthNavigationItemViewModel aniv = new AuthNavigationItemViewModel();
+
+        [ImportingConstructor]
+        public AuthNavigationItemView(MenuViewModel viewModel)
         {
             InitializeComponent();
+            ViewMode = viewModel;
             //this.yhid.Visibility = Visibility.Hidden;
-            aniv.UserListCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(UserListCommond));
-            aniv.RoleListCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(RoleListCommand));
-            this.DataContext = aniv;
+            ViewMode.ClickCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(this.clickCommand);
+            ViewMode.MenuClickCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand<string>(this.menuClickCommand);
+            //this.DataContext = aniv;
         }
 
         void IPartImportsSatisfiedNotification.OnImportsSatisfied()
@@ -63,13 +79,36 @@ namespace OPCApp.AuthManage.Views
             //this.NavigateToCalendarRadioButton.IsChecked = (uri == calendarViewUri);
         }
 
-        private void UserListCommond()
+        private void clickCommand()
         {
-            this.regionManager.RequestNavigate(RegionNames.MainContentRegion, userListViewUri);
+            MessageBox.Show("1");
         }
-        private void RoleListCommand()
+        private void menuClickCommand(string url)
         {
+            Uri roleListViewUri = new Uri(url, UriKind.Relative);
             this.regionManager.RequestNavigate(RegionNames.MainContentRegion, roleListViewUri);
+        }
+
+      
+
+        private void TextBlock_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var o = sender as TextBlock;
+            var o1 = o.Parent as StackPanel;
+            var o2 = o1.Parent as Expander;
+            o2.IsExpanded = !o2.IsExpanded;
+        }
+
+     
+        private void RadioButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            var o = sender as RadioButton;
+            var o1 = o.CommandParameter;
+            Uri roleListViewUri = new Uri(o1.ToString(), UriKind.Relative);
+            var sss=  AppEx.Container.GetInstance<UserControl>("UserListWindow");
+            this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,  () => {
+                return sss;
+            });
         }
     }
 }

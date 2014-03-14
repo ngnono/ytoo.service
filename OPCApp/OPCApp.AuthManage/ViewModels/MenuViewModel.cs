@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using Microsoft.Practices.Prism.Commands;
 
 namespace OPCApp.AuthManage.ViewModels
 {
@@ -38,8 +39,10 @@ namespace OPCApp.AuthManage.ViewModels
         [ImportingConstructor]
         public MenuViewModel(IMenuDataService menuService ) {
             this.GroupItems = menuService.GetMenus();
-        }
 
+        }
+        public DelegateCommand<string> MenuClickCommand { get; set; }
+        public DelegateCommand ClickCommand { get; set; }
         /// <summary>
         /// Gets or sets the items.
         /// </summary>

@@ -12,8 +12,9 @@ namespace OPCApp.AuthManage.ViewModels
 {
    public class AuthNavigationItemViewModel :BindableBase
     {
-        public DelegateCommand UserListCommand { get; set; }
-        public DelegateCommand RoleListCommand { get; set; }
+       public DelegateCommand<string> MenuClickCommand { get; set; }
+       public DelegateCommand ClickCommand { get; set; }
+        
         public AuthNavigationItemViewModel() 
         {
             //this.SubmitCommand = new DelegateCommand(this.OnSubmit);
