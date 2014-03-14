@@ -8,6 +8,9 @@ namespace OPCApp.Domain
 {
     public class MenuGroup
     {
+        public MenuGroup() { 
+            this.Items=new List<MenuInfo>();
+        }
         public int Sort { get; set; }
 
         public string Text { get; set; }
