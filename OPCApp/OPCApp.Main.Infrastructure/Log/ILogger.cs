@@ -20,6 +20,7 @@ namespace OPCApp.Main.Infrastructure
 {
     /// <summary>
     /// 日志操作
+    /// test
     /// </summary>
     public interface ILogger
     {
