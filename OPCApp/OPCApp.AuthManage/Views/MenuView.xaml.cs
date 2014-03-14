@@ -23,8 +23,15 @@ namespace OPCApp.AuthManage
         public MenuView()
         {
             InitializeComponent();
-            Expander ex = new Expander();
+            this.InitMenu();
             
+        }
+        public void InitMenu()
+        {
+            Expander ex = new Expander();
+            ex.VerticalAlignment = VerticalAlignment.Stretch;
+            ex.Header = "权限管理";
+            this.NavigationItemsControl.Items.Add(ex); 
         }
     }
 }

@@ -6,6 +6,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ItemsControl x:Name="NavigationItemsControl"  />
+       
+            <!--<Expander >
+           
+
+        </Expander>-->
+
+        <ItemsControl x:Name="NavigationItemsControl"  ItemTemplate="1" ItemsSource="{Binding itemMen}" />
     </Grid>
 </UserControl>
