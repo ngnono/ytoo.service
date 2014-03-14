@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MahApps.Metro;
 using MahApps.Metro.Controls;
-using  OPCApp.Main.Infrastructure.Mvvm.View;
+using  OPCApp.Infrastructure.Mvvm.View;
 namespace OPCApp.AuthManage.Views
 {
     /// <summary>

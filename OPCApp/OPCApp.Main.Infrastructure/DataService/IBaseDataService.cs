@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OPCApp.Main.Infrastructure.DataService
+namespace OPCApp.Infrastructure.DataService
 {
     public interface  IBaseDataService <T>
     {

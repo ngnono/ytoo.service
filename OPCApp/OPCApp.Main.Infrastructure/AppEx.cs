@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OPCApp.Main.Infrastructure
+namespace OPCApp.Infrastructure
 {
     public  class AppEx
     {

@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Interop;
 using MahApps.Metro.Controls;
 
-namespace OPCApp.Main.Infrastructure.Mvvm.View
+namespace OPCApp.Infrastructure.Mvvm.View
 {
     public  class BaseView:MetroWindow, IBaseView
     {

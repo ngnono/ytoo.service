@@ -13,7 +13,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace OPCApp.Main.Infrastructure
+namespace OPCApp.Infrastructure
 {
     /// <summary>
     /// This class is used to specify design data for view models that expose an ICollectionView. It is not intended

@@ -10,7 +10,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.Windows;
 using Microsoft.Practices.Prism.MefExtensions;
 using Microsoft.Practices.Prism.Modularity;
-using OPCApp.Main.Infrastructure;
+using OPCApp.Infrastructure;
 
 namespace OPCApp.Main
 {

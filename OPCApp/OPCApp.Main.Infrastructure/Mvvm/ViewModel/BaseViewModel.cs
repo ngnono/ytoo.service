@@ -7,7 +7,7 @@ using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Interfaces;
 using Microsoft.Practices.Prism.Mvvm;
-using OPCApp.Main.Infrastructure.Mvvm.View;
+using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.Infrastructure.Mvvm
 {

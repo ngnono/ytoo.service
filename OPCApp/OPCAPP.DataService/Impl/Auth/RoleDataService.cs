@@ -1,6 +1,6 @@
 ﻿using OPCApp.DataService.Interface;
 using OPCApp.Domain;
-using OPCApp.Main.Infrastructure.DataService;
+using OPCApp.Infrastructure.DataService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +18,13 @@ namespace OPCApp.DataService.Impl
             return new ResultMsg() { IsSuccess=true,Msg="OK"};
         }
 
-        public OPCApp.Main.Infrastructure.DataService.ResultMsg Edit(OPCApp.Domain.Role model)
+        public OPCApp.Infrastructure.DataService.ResultMsg Edit(OPCApp.Domain.Role model)
         {
             ListRole.Add(model);
             return new ResultMsg() { IsSuccess = true, Msg = "OK" };
         }
 
-        public OPCApp.Main.Infrastructure.DataService.ResultMsg Delete(OPCApp.Domain.Role model)
+        public OPCApp.Infrastructure.DataService.ResultMsg Delete(OPCApp.Domain.Role model)
         {
             throw new NotImplementedException();
         }

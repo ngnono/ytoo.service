@@ -8,7 +8,7 @@ using OPCApp.Domain;
 using OPCApp.AuthManage.Views;
 namespace OPCApp.AuthManage.ViewModels
 {
-    public class RoleViewModel : OPCApp.Infrastructure.Mvvm.BaseViewModel<Role>
+    public class RoleViewModel : BaseViewModel<Role>
     {
         public RoleViewModel(RoleAddWindow raw) :base(raw)
         {

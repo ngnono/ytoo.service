@@ -11,7 +11,7 @@
 //===================================================================================
 using System;
 
-namespace OPCApp.Main.Infrastructure
+namespace OPCApp.Infrastructure
 {
     public static class RegionNames
     {

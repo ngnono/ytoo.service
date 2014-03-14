@@ -7,8 +7,8 @@
     <ProjectGuid>{6938948D-192F-473D-92BB-4AE97B115536}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OPCAPP.DataService</RootNamespace>
-    <AssemblyName>OPCAPP.DataService</AssemblyName>
+    <RootNamespace>OPCApp.DataService</RootNamespace>
+    <AssemblyName>OPCApp.DataService</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -49,12 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Impl\AuthenticateService.cs" />
-    <Compile Include="Impl\RoleDataService.cs" />
-    <Compile Include="Interface\IAuthenticateService.cs" />
+    <Compile Include="Impl\Auth\AuthenticateService.cs" />
+    <Compile Include="Impl\Auth\MenuDataService.cs" />
+    <Compile Include="Impl\Auth\RoleDataService.cs" />
+    <Compile Include="Interface\Auth\IAuthenticateService.cs" />
+    <Compile Include="Interface\Auth\IMenuDataService.cs" />
     <Compile Include="Interface\IOrderService.cs" />
     <Compile Include="Interface\IRole.cs" />
-    <Compile Include="Interface\IRoleDataService.cs" />
+    <Compile Include="Interface\Auth\IRoleDataService.cs" />
     <Compile Include="Interface\ISaleDetail.cs" />
     <Compile Include="Interface\ISaleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

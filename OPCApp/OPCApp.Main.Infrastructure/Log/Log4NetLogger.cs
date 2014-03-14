@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : OPCApp.Main.Infrastructure
+// Assembly         : OPCApp.Infrastructure
 // Author           : liuyh
 // Created          : 03-13-2014 22:24:36
 //
@@ -18,7 +18,7 @@ using System.Text;
 using log4net;
 
 
-namespace OPCApp.Main.Infrastructure
+namespace OPCApp.Infrastructure
 {
     /// <summary>
     /// Class Log4NetLogger.

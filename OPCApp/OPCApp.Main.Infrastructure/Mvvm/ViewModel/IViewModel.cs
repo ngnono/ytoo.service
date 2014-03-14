@@ -1,5 +1,5 @@
 ﻿using Microsoft.Practices.Prism.Commands;
-using OPCApp.Main.Infrastructure.Mvvm.View;
+using OPCApp.Infrastructure.Mvvm.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;

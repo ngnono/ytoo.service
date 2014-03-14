@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using System.Collections.ObjectModel;
-using OPCApp.Main.Infrastructure.DataService;
+using OPCApp.Infrastructure.DataService;
 using Microsoft.Practices.Prism.Mvvm;
-using OPCApp.Main.Infrastructure.Mvvm.View;
+using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.Infrastructure.Mvvm
 {

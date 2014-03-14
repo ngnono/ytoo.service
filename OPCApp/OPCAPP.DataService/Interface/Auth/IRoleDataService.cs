@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPCApp.DataService.Interface
 {
-    public interface IRoleDataService : OPCApp.Main.Infrastructure.DataService.IBaseDataService<Role>
+    public interface IRoleDataService : OPCApp.Infrastructure.DataService.IBaseDataService<Role>
     {
     }
 }

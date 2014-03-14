@@ -14,7 +14,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace OPCApp.Main.Infrastructure
+namespace OPCApp.Infrastructure
 {
     public class ObjectToVisibilityConverter : IValueConverter
     {

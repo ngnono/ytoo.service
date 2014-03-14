@@ -21,7 +21,7 @@ using System.Windows.Controls;
 using Microsoft.Practices.Prism.Regions;//.Regions;
 using OPCApp.Infrastructure;
 using OPCApp.BaseInfoManage.ViewModels;
-using OPCApp.Main.Infrastructure;//.Infrastructure;
+using OPCApp.Infrastructure;//.Infrastructure;
 
 
 namespace OPCApp.BaseInfoManage.Views

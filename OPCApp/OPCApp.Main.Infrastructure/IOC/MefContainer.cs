@@ -8,7 +8,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
 
 
-namespace OPCApp.Main.Infrastructure
+namespace OPCApp.Infrastructure
 {
     public class MefContainer : IContainer
     {

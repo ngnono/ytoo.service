@@ -1,6 +1,7 @@
 ﻿using OPCApp.AuthManage.Views;
 using OPCApp.Domain;
 using OPCApp.DataService.Impl;
+using OPCApp.Infrastructure.DataService;
 namespace OPCApp.AuthManage.ViewModels
 {
     public class RoleListWindowViewModel : OPCApp.Infrastructure.Mvvm.ViewModel4Grid<Role>
@@ -21,7 +22,7 @@ namespace OPCApp.AuthManage.ViewModels
             throw new System.NotImplementedException();
         }
 
-        protected override Main.Infrastructure.DataService.IBaseDataService<Role> GetDataService()
+        protected override IBaseDataService<Role> GetDataService()
         {
             return new RoleDataService();
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OPCApp.Main.Infrastructure.Auth
+namespace OPCApp.Infrastructure.Auth
 {
     public class Encrypt
     {
