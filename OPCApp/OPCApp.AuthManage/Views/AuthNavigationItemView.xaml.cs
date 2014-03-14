@@ -19,9 +19,8 @@ using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Practices.Prism.Regions;//.Regions;
-using OPCApp.Infrastructure;
-using OPCApp.AuthManage.ViewModels;
-using OPCApp.Main.Infrastructure;//.Infrastructure;
+using OPCApp.Main.Infrastructure;
+using OPCApp.AuthManage.ViewModels;//.Infrastructure;
 
 
 namespace OPCApp.AuthManage.Views
@@ -38,6 +37,7 @@ namespace OPCApp.AuthManage.Views
         public AuthNavigationItemView()
         {
             InitializeComponent();
+            //this.yhid.Visibility = Visibility.Hidden;
             aniv.UserListCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(UserListCommond));
             aniv.RoleListCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(RoleListCommand));
             this.DataContext = aniv;

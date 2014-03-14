@@ -6,27 +6,44 @@
     <Grid Margin="0,0,18,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="41*"/>
-            <ColumnDefinition Width="17*"/>
-            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="50*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-
+            <RowDefinition Height="50"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid HorizontalAlignment="Left" AutoGenerateColumns="True" Grid.Column="0" Margin="10,0,0,-208" VerticalAlignment="Top" Width="235" Height="460">
-            <DataGrid.Columns>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal" Background="LightGray">
+
+                <Button Background="LightGray" Width="50">
+                    <StackPanel>
+                        <Image Source="/image/变更单位.png" Stretch="None"></Image>
+                        <TextBlock HorizontalAlignment="Center">返回</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Background="LightGray" Width="50" Command="{Binding AuthorizationUserCommand}">
+                    <StackPanel>
+                        <Image Source="/image/导出.png" Stretch="None"></Image>
+                        <TextBlock HorizontalAlignment="Center">授权角色</TextBlock>
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
+        </StackPanel>
+        <DataGrid HorizontalAlignment="Left" AutoGenerateColumns="True" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top">
+            <DataGrid.Columns> 
                 <DataGridCheckBoxColumn Header="全选" Width="50" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="菜单名称" Width="80" Binding="{Binding ShopId}"/>
+                <DataGridTextColumn Header="菜单名称" Width="80" Binding="{Binding MenuName}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid HorizontalAlignment="Left" AutoGenerateColumns="True" VerticalAlignment="Top" Width="271" Height="460" Grid.Column="2" Margin="0,0,0,-207">
+        <DataGrid HorizontalAlignment="Left" AutoGenerateColumns="True" Grid.Row="1" VerticalAlignment="Top"  Grid.Column="0">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="id" Visibility="Hidden"></DataGridTextColumn>
                 <DataGridCheckBoxColumn Header="全选" Width="50" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="角色名称" Width="80" Binding="{Binding ShopId}"/>
-                <DataGridTextColumn Header="所属菜单名称" Width="80" Binding="{Binding ShopId}"/>
+                <DataGridTextColumn Header="角色描述" Width="80" Binding="{Binding ShopId}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="授权菜单到角色" Grid.Column="1"  Style="{StaticResource SquareButtonStyle}" HorizontalAlignment="Left" Margin="5,135,0,89" Width="97"/>
-        <Button Content="取消角色授权" Grid.Column="1"  Style="{StaticResource SquareButtonStyle}" HorizontalAlignment="Left" Margin="5,214,0,0" VerticalAlignment="Top" Width="97" Height="32"/>
+      
     </Grid>
 </UserControl>

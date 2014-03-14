@@ -11,17 +11,7 @@ namespace OPCApp.Main.Infrastructure.Mvvm.View
 {
     public  class BaseView:MetroWindow, IBaseView
     {
-        public void Close()
-        {
-            var error = ValidModel();
-            if (!string.IsNullOrWhiteSpace(error))
-            {
-                MessageBox.Show(error);
-                return;
-            }
-            DialogResult = true;
-           base.Close();
-        }
+       
 
         public void Cancel()
         {
@@ -35,5 +25,18 @@ namespace OPCApp.Main.Infrastructure.Mvvm.View
         }
 
 
+
+        public void CloseView()
+        {
+
+            var error = ValidModel();
+            if (!string.IsNullOrWhiteSpace(error))
+            {
+                MessageBox.Show(error);
+                return;
+            }
+            DialogResult = true;
+            base.Close();
+        }
     }
 }

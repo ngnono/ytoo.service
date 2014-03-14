@@ -75,7 +75,7 @@
         </StackPanel>
 
 
-        <DataGrid x:Name="dataGrid"  BorderThickness="1" AutoGenerateColumns="False" Grid.Row="2" GridLinesVisibility="All">
+        <DataGrid x:Name="dataGrid"  Grid.Row="2" ItemsSource="{Binding Models}" SelectedItem="{Binding SelectModel}"> 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Width="180" Visibility="Hidden" Binding="{Binding RoleID}"/>
                 <DataGridTextColumn Header="角色名称" Width="180" Binding="{Binding RoleName}"/>

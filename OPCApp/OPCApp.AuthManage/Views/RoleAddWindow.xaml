@@ -2,20 +2,20 @@
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        Title="角色" Height="226" Width="508.138" WindowStartupLocation="CenterScreen"
+        Title="角色" Height="276" Width="520.138" WindowStartupLocation="CenterScreen"
                       ShowMinButton="False" ShowMaxRestoreButton="False">
     <Grid>
         <Label Content="角色名称" HorizontalAlignment="Left" Margin="44,37,0,0" VerticalAlignment="Top" Width="77"/>
-        <TextBox TextWrapping="Wrap" Text="TextBox" Grid.Row="0" Margin="126,37,43,132"  
-                                        controls:TextboxHelper.ClearTextButton="True"
-                                         controls:TextboxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
-                                         controls:TextboxHelper.Watermark="Watermark"/>
-        <RichTextBox Margin="126,85,43,25"
+        <TextBox TextWrapping="Wrap" Grid.Row="0" Margin="126,37,43,132"  Text="{Binding Model.RoleName}"
+                                    />
+        <RichTextBox Margin="126,85,43,74"
                                              IsReadOnly="True"
                                              Padding="5"
                                              IsDocumentEnabled="True">
-           
+
         </RichTextBox>
         <Label Content="角色描述" HorizontalAlignment="Left" Margin="44,85,0,0" VerticalAlignment="Top" Width="77"/>
-    </Grid>                      
+        <Button Content="Button" HorizontalAlignment="Left" Margin="107,202,0,0" Command="{Binding OKCommand }" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="251,202,0,0"  Command="{Binding CancelCommand }" VerticalAlignment="Top" Width="75"/>
+    </Grid>
 </controls:MetroWindow>

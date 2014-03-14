@@ -85,6 +85,9 @@
     <Compile Include="Auth\Encrypt.cs" />
     <Compile Include="Auth\User.cs" />
     <Compile Include="Auth\UserAuth.cs" />
+    <Compile Include="DataService\IBaseDataService.cs" />
+    <Compile Include="DataService\IFilter.cs" />
+    <Compile Include="DataService\ResultMsg.cs" />
     <Compile Include="DesignDataCollectionView.cs" />
     <Compile Include="IOC\IContainer.cs" />
     <Compile Include="IOC\MefContainer.cs" />
@@ -98,6 +101,7 @@
     <Compile Include="ObjectToVisibilityConverter.cs" />
     <Compile Include="ObservableCommand.cs" />
     <Compile Include="Page.cs" />
+    <Compile Include="PageResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -5,8 +5,6 @@ using OPCApp.AuthManage.Views;
 using OPCApp.Domain;
 using OPCApp.DataService.Interface;
 using OPCApp.DataService.Impl;
-using OPCApp.Domain;
-using OPCApp.DataService.Interface;
 namespace OPCApp.AuthManage.ViewModels
 {
    public class UserListWindowViewModel : BindableBase
@@ -47,6 +45,7 @@ namespace OPCApp.AuthManage.ViewModels
         public DelegateCommand ExportUserCommand { get; set; }
        /*是否停用*/
         /*构造*/
+        public DelegateCommand DBGridClickCommand { get; set; }
         public UserListWindowViewModel() 
         {
             this.SearchCommand = new DelegateCommand(this.searchCommand);
@@ -54,7 +53,12 @@ namespace OPCApp.AuthManage.ViewModels
             this.UpdateCommand = new DelegateCommand(this.updateCommand);
             this.DelCommand = new DelegateCommand(this.delCommand);
             this.SetStopUserCommand = new DelegateCommand(this.setStopUserCommand);
+            this.DBGridClickCommand = new DelegateCommand(this.dbGridClickCommand);
             this.Init();
+        }
+        private void dbGridClickCommand() 
+        {
+
         }
         /*初始化页面固有的数据值*/
         private void Init() 
@@ -80,7 +84,8 @@ namespace OPCApp.AuthManage.ViewModels
         private void addCommand()
         {
             this.User = new User();
-            UserAddWindow userWin = new UserAddWindow();
+            
+          var  userWin = new UserAddWindow();
             userWin.userAddWin.User =this.User;
             if (userWin.ShowDialog() == true)
             {

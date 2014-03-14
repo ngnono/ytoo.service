@@ -8,10 +8,10 @@ namespace OPCApp.Main.Infrastructure.Mvvm.View
 {
     public  interface IBaseView
     {
-        void Close();
+        void CloseView();
 
         void Cancel();
-
+        bool? ShowDialog();
         object DataContext { set; get ; }
     }
 }

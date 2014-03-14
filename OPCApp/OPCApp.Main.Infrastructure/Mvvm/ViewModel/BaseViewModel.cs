@@ -13,28 +13,30 @@ namespace OPCApp.Infrastructure.Mvvm
 {
    public abstract  class BaseViewModel<T>:BindableBase,IViewModel<T>
    {
-       private IBaseView _view;
+       
        public BaseViewModel(IBaseView view)
        {
-           _view = view;
+           View = view;
+           
            this.OKCommand=new DelegateCommand(this.OkAction);
            this.CancelCommand=new DelegateCommand(this.CancelAction);
            view.DataContext = this;
+
        }
 
        private T _model;
        private void CancelAction()
        {
            doCancelAction();
-           _view.Cancel();
+           View.Cancel();
        }
 
-       public System.Windows.Input.ICommand OKCommand
+       public DelegateCommand OKCommand
        {
            get; set; 
        }
 
-       public System.Windows.Input.ICommand CancelCommand
+       public DelegateCommand CancelCommand
        {
            get; set;
        }
@@ -42,7 +44,7 @@ namespace OPCApp.Infrastructure.Mvvm
        private void OkAction()
        {
            BeforeDoOKAction();
-           _view.Close();
+           View.CloseView();
            AfterDoOKAction();
        }
 
@@ -68,5 +70,12 @@ namespace OPCApp.Infrastructure.Mvvm
             get { return _model; } 
             set { SetProperty(ref _model, value); } 
         }
-    }
+
+
+        public IBaseView View
+        {
+            get;
+            set;
+        }
+   }
 }

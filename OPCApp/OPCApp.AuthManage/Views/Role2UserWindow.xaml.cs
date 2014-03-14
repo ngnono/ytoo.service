@@ -30,5 +30,10 @@ namespace OPCApp.AuthManage.Views
         {
             //是估覅一
         }
+
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

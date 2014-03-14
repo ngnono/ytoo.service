@@ -3,6 +3,8 @@ using System.Windows.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using OPCApp.Main.Infrastructure.Mvvm.View;
+using OPCApp.AuthManage.ViewModels;
 namespace OPCApp.AuthManage.Views
 {
     /// <summary>
@@ -11,17 +13,29 @@ namespace OPCApp.AuthManage.Views
     /// 
     [Export("RoleListWindow")]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial  class RoleListWindow :UserControl
+    public partial  class RoleListWindow :UserControl,IBaseView
     {
+        public RoleListWindowViewModel rwv = new RoleListWindowViewModel();
         public RoleListWindow()
         {
             InitializeComponent();
+            this.DataContext = rwv;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public void CloseView()
         {
-            RoleAddWindow roleWin = new RoleAddWindow();
-            roleWin.ShowDialog();
+            throw new NotImplementedException();
+        }
+
+        public void Cancel()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool? ShowDialog()
+        {
+            throw new NotImplementedException();
         }
     }
 }

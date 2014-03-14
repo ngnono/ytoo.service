@@ -13,22 +13,29 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MahApps.Metro;
 using MahApps.Metro.Controls;
-
+using  OPCApp.Main.Infrastructure.Mvvm.View;
 namespace OPCApp.AuthManage.Views
 {
     /// <summary>
     /// UserAddWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class RoleAddWindow : MetroWindow
+    public partial class RoleAddWindow : MetroWindow,IBaseView
     {
         public RoleAddWindow()
         {
             InitializeComponent();
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        public void Cancel()
         {
-            //是估覅一
+            this.DialogResult = false;
+            this.Close();
         }
-    }
+    
+        public void CloseView()
+        {
+            this.DialogResult = true;
+            this.Close();
+        }
+}
 }

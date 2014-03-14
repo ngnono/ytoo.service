@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Practices.Prism.Commands;
+using OPCApp.Main.Infrastructure.Mvvm.View;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +12,13 @@ namespace OPCApp.Infrastructure.Mvvm
     public interface IViewModel<T>
     {
 
-         ICommand OKCommand { get; set; }
+        DelegateCommand OKCommand { get; set; }
 
-         ICommand CancelCommand { get; set; }
+        DelegateCommand CancelCommand { get; set; }
 
          T Model { get; set; }
+
+         IBaseView View { get; set; }
      
     }
 }

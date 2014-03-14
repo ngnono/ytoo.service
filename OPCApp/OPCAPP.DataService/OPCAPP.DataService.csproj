@@ -50,8 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Impl\AuthenticateService.cs" />
+    <Compile Include="Impl\RoleDataService.cs" />
     <Compile Include="Interface\IAuthenticateService.cs" />
     <Compile Include="Interface\IOrderService.cs" />
+    <Compile Include="Interface\IRole.cs" />
+    <Compile Include="Interface\IRoleDataService.cs" />
     <Compile Include="Interface\ISaleDetail.cs" />
     <Compile Include="Interface\ISaleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
