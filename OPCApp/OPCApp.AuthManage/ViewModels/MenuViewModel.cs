@@ -37,13 +37,13 @@ namespace OPCApp.AuthManage.ViewModels
         /// <param name="menuService">The menu service.</param>
         [ImportingConstructor]
         public MenuViewModel(IMenuDataService menuService ) {
-            this.Items = menuService.GetMenus();
+            this.GroupItems = menuService.GetMenus();
         }
 
         /// <summary>
         /// Gets or sets the items.
         /// </summary>
         /// <value>The items.</value>
-        public IEnumerable<MenuGroup> Items { get; set; }
+        public IEnumerable<MenuGroup> GroupItems { get; set; }
     }
 }

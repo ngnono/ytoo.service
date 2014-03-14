@@ -28,7 +28,8 @@ namespace OPCApp.AuthManage.Views
     [Export]
     public partial class AuthNavigationItemView : UserControl, IPartImportsSatisfiedNotification
     {
-        private static Uri userListViewUri = new Uri("UserListWindow", UriKind.Relative);
+        //private static Uri userListViewUri = new Uri("UserListWindow", UriKind.Relative);
+        private static Uri userListViewUri = new Uri("MenuView", UriKind.Relative);
         private static Uri roleListViewUri = new Uri("RoleListWindow", UriKind.Relative);
         [Import]
         public IRegionManager regionManager;

@@ -26,6 +26,8 @@
                     <RadioButton Grid.Row="0" Name="yhid" AutomationProperties.AutomationId="yhid"  Margin="0, 5, 0, 5" Width="250" Command="{Binding UserListCommand }" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Style="{StaticResource MainViewRadioButtonStyle}">用户管理</RadioButton>
                     <!--<RadioButton Grid.Row="0" Width="Auto" Style="{StaticResource MainViewRadioButtonStyle}">用户管理</RadioButton>-->
                     <RadioButton Grid.Row="1" Name="jsid" AutomationProperties.AutomationId="jsid"  Margin="0, 5, 0, 5" Width="250" Command="{Binding RoleListCommand }" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Style="{StaticResource MainViewRadioButtonStyle}">角色管理</RadioButton>
+
+                    <RadioButton Grid.Row="1" Name="jsid3" AutomationProperties.AutomationId="jsid"  Margin="0, 5, 0, 5" Width="250" Command="{Binding RoleListCommand }" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Style="{StaticResource MainViewRadioButtonStyle}">角色管理</RadioButton>
                 </Grid>
             </Expander.Content>
         </Expander>
