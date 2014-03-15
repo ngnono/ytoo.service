@@ -86,7 +86,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="SecitonId" Width="50" Binding="{Binding SecitonId}" Visibility="Hidden"/>
                 <DataGridTextColumn Header="OrgId" Width="50" Binding="{Binding OrgId}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="SID" Width="50" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Id" Width="50" Binding="{Binding Id}"  Visibility="Hidden"/>
                 <DataGridTextColumn Header="专柜" Width="80" Binding="{Binding SectionName}"/>
                 <DataGridTextColumn Width="100" Header="登录名" Binding="{Binding LogonName}"/>
                 <DataGridTextColumn Header="密码" Width="80" Binding="{Binding Password}"/>
