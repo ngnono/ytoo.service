@@ -9,16 +9,17 @@ using System.Windows.Input;
 
 namespace OPCApp.Infrastructure.Mvvm
 {
-    public interface IViewModel<T>
+    public interface IViewModel
     {
+        IBaseView View { get; set; }
 
-        DelegateCommand OKCommand { get; set; }
+        Object Model { get; set; }
+    }
 
-        DelegateCommand CancelCommand { get; set; }
+    public interface ISubView
+    {
+        ICommand OKCommand { get; set; }
 
-         T Model { get; set; }
-
-         IBaseView View { get; set; }
-     
+        ICommand CancelCommand { get; set; }
     }
 }
