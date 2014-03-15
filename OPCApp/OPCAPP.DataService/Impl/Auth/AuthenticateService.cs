@@ -16,7 +16,6 @@ namespace OPCApp.DataService.Impl.Auth
         public string Login(string userName, string password)
         {
             return "OK";
-            throw new NotImplementedException();
         }
 
 
@@ -99,5 +98,31 @@ namespace OPCApp.DataService.Impl.Auth
             }
         }
 
+
+
+        public bool SetIsStop(int userId, bool isStop)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Infrastructure.DataService.ResultMsg Add(Domain.Models.OPC_AuthUser model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Infrastructure.DataService.ResultMsg Edit(Domain.Models.OPC_AuthUser model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Infrastructure.DataService.ResultMsg Delete(Domain.Models.OPC_AuthUser model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Infrastructure.PageResult<Domain.Models.OPC_AuthUser> Search(Infrastructure.DataService.IFilter filter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
