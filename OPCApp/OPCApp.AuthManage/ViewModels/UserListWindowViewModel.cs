@@ -5,15 +5,17 @@ using OPCApp.AuthManage.Views;
 using OPCApp.Domain;
 using OPCApp.DataService.Interface;
 using OPCApp.DataService.Impl;
+using System.ComponentModel.Composition;
 namespace OPCApp.AuthManage.ViewModels
 {
    public class UserListWindowViewModel : BindableBase
     {
        /*选择字段*/
-       public string selectedFiled { get; set; }
+       public string SelectedFiled { get; set; }
        /*选择字段的值*/
-       public string selectedFiledValue { get; set; }
-       public IAuthenticateService userService { get; set; }
+       public string SelectedFiledValue { get; set; }
+       [Import]
+       public IAuthenticateService UserService { get; set; }
        /*查询字段列表*/
        public List<string> FieldList { get; set; }
        private User user;
@@ -48,15 +50,15 @@ namespace OPCApp.AuthManage.ViewModels
         public DelegateCommand DBGridClickCommand { get; set; }
         public UserListWindowViewModel() 
         {
-            this.SearchCommand = new DelegateCommand(this.searchCommand);
-            this.AddCommand = new DelegateCommand(this.addCommand);
-            this.UpdateCommand = new DelegateCommand(this.updateCommand);
-            this.DelCommand = new DelegateCommand(this.delCommand);
-            this.SetStopUserCommand = new DelegateCommand(this.setStopUserCommand);
-            this.DBGridClickCommand = new DelegateCommand(this.dbGridClickCommand);
+            this.SearchCommand = new DelegateCommand(this.Search);
+            this.AddCommand = new DelegateCommand(this.Add);
+            this.UpdateCommand = new DelegateCommand(this.Update);
+            this.DelCommand = new DelegateCommand(this.Delete);
+            this.SetStopUserCommand = new DelegateCommand(this.SetStopUser);
+            this.DBGridClickCommand = new DelegateCommand(this.DBGridClick);
             this.Init();
         }
-        private void dbGridClickCommand() 
+        private void DBGridClick() 
         {
 
         }
@@ -71,52 +73,50 @@ namespace OPCApp.AuthManage.ViewModels
             this.FieldList.Add("机构");
            
             /*查询初始化*/
-            this.selectedFiledValue = "";
-            this.selectedFiled = "";
-            /*初始化结构 IOC*/
-            this.userService = new AuthenticateService();
+            this.SelectedFiledValue = "";
+            this.SelectedFiled = "";
+            //this.userService = new AuthenticateService();
         }
         /**/
-        private void searchCommand() 
+        private void Search() 
         {
-            this.refreshList();
+            this.RefreshList();
         }
-        private void addCommand()
+        private void Add()
         {
             this.User = new User();
-            
-          var  userWin = new UserAddWindow();
+            var  userWin = new UserAddWindow();
             userWin.userAddWin.User =this.User;
             if (userWin.ShowDialog() == true)
             {
-                this.userService.AddUser(User);
-                this.refreshList();
+                this.UserService.AddUser(User);
+                this.RefreshList();
             }
         }
-        private void updateCommand()
+        private void Update()
         {
             UserAddWindow userWin = new UserAddWindow();
             userWin.userAddWin.User = this.User;
             if (userWin.ShowDialog() == true)
             {
-                this.userService.UpdateUser(User);
-                this.refreshList();
+                this.UserService.UpdateUser(User);
+                this.RefreshList();
             }
         }
-        private void delCommand()
+        private void Delete()
         {
-             this.userService.DelUser(User);
-            this.refreshList();
+            this.UserService.DelUser(User);
+            this.RefreshList();
         }
-        private void refreshList() 
+        private void RefreshList() 
         {
-            this.UserList = this.userService.GetUserList(this.selectedFiled,this.selectedFiledValue);
+            this.UserList = this.UserService.GetUserList(this.SelectedFiled,this.SelectedFiledValue);
         }
 
-        private void setStopUserCommand() 
+        private void SetStopUser() 
         {
-            bool isValid = user.IsValid ? true : false;
-            this.userService.SetIsStop(isValid);
+            bool isValid = User.IsValid ? true : false;
+            this.UserService.SetIsStop(isValid);
         }
        
       
