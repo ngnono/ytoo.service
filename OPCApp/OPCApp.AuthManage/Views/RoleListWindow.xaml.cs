@@ -11,7 +11,7 @@ namespace OPCApp.AuthManage.Views
     /// RoleWindow.xaml 的交互逻辑
     /// </summary>
     /// 
-    [Export("UserListWindow", typeof(UserControl))]
+    [Export("RoleListWindow", typeof(UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial  class RoleListWindow :UserControl,IBaseView
     {
