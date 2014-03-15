@@ -29,7 +29,7 @@ namespace OPCApp.Infrastructure.Mvvm
     /// Class BaseCollectionViewModel.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class BaseCollectionViewModel<T> : BindableBase, IViewModel where T : new()
+    public abstract class BaseListViewModel<T> : BindableBase, IViewModel where T : new()
     {
         /// <summary>
         /// The view key
@@ -41,10 +41,10 @@ namespace OPCApp.Infrastructure.Mvvm
         /// </summary>
         private  ObservableCollection<T> _Collection;
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseCollectionViewModel{T}"/> class.
+        /// Initializes a new instance of the <see cref="BaseListViewModel{T}"/> class.
         /// </summary>
         /// <param name="viewKey">对应的view 导出时的键值</param>
-        protected BaseCollectionViewModel(string viewKey)
+        protected BaseListViewModel(string viewKey)
         {
            
             this.AddCommand=new DelegateCommand(this.AddAction);

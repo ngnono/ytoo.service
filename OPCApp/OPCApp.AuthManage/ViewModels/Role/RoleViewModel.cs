@@ -1,48 +1,36 @@
-﻿
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// ***********************************************************************
+// Assembly         : OPCApp.AuthManage
+// Author           : Liuyh
+// Created          : 03-15-2014 14:45:59
+//
+// Last Modified By : Liuyh
+// Last Modified On : 03-15-2014 21:01:37
+// ***********************************************************************
+// <copyright file="RoleViewModel.cs" company="">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+﻿using System.ComponentModel.Composition;
 using OPCApp.Infrastructure.Mvvm;
 using OPCApp.Domain;
-using OPCApp.AuthManage.Views;
 namespace OPCApp.AuthManage.ViewModels
 {
+    /// <summary>
+    /// Class RoleViewModel.
+    /// </summary>
     [Export("RoleViewModel", typeof(IViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class RoleViewModel : BaseViewModel<Role>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RoleViewModel"/> class.
+        /// </summary>
         public RoleViewModel()
             : base("RoleAddView")
         {
             this.Model = new Role();
         }
-         /*选择字段*/
-       public string selectedFiled { get; set; }
-       /*选择字段的值*/
-       public string selectedFiledValue { get; set; }
-     
-        /*初始化页面固有的数据值*/
-        private void Init() 
-        {
-            //this.FieldList = new List<string>();
-            //this.FieldList.Add("登陆名");
-            //this.FieldList.Add("专柜码");
-            //this.FieldList.Add("姓名");
-            //this.FieldList.Add("门店");
-            //this.FieldList.Add("机构");
-           
-            ///*查询初始化*/
-            //this.selectedFiledValue = "";
-            //this.selectedFiled = "";
-            ///*初始化结构 IOC*/
-            //this.userService = new AuthenticateService();
-        }
-        /**/
-      
-      
-       
     }
 }
