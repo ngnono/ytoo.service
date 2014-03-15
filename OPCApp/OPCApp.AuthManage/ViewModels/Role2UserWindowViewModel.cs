@@ -14,11 +14,11 @@ namespace OPCApp.AuthManage.ViewModels
        {
            this.AuthorizationUserCommand = new DelegateCommand(this.authorizationUserCommand);
            this.AddUserWindowCommand = new DelegateCommand(this.addUserWindowCommand);
-           this.DBGridClickCommand = new DelegateCommand(this.dbGridClickCommand);
+           this.DbGridClickCommand = new DelegateCommand(this.dbGridClickCommand);
        }
        public DelegateCommand AuthorizationUserCommand { get; set; }
        public DelegateCommand AddUserWindowCommand { get; set; }
-       public DelegateCommand DBGridClickCommand { get; set; }
+       public DelegateCommand DbGridClickCommand { get; set; }
        private void authorizationUserCommand()
        {
 

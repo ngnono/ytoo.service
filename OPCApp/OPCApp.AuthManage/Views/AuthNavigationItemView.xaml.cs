@@ -29,8 +29,8 @@ namespace OPCApp.AuthManage.Views
     public partial class AuthNavigationItemView : UserControl, IPartImportsSatisfiedNotification
     {
         //private static Uri userListViewUri = new Uri("UserListWindow", UriKind.Relative);
-        private static Uri userListViewUri = new Uri("MenuView", UriKind.Relative);
-        private static Uri roleListViewUri = new Uri("RoleListWindow", UriKind.Relative);
+        private static Uri _userListViewUri = new Uri("MenuView", UriKind.Relative);
+        private static Uri _roleListViewUri = new Uri("RoleListWindow", UriKind.Relative);
         
         public MenuViewModel ViewMode
         {
@@ -45,7 +45,7 @@ namespace OPCApp.AuthManage.Views
         }
     
         [Import]
-        public IRegionManager regionManager;
+        public IRegionManager RegionManager;
 
         //public AuthNavigationItemViewModel aniv = new AuthNavigationItemViewModel();
 
@@ -56,13 +56,13 @@ namespace OPCApp.AuthManage.Views
             ViewMode = viewModel;
             //this.yhid.Visibility = Visibility.Hidden;
             ViewMode.ClickCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(this.clickCommand);
-            ViewMode.MenuClickCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand<string>(this.menuClickCommand);
+            ViewMode.MenuClickCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand<string>(this.MenuClickCommand);
             //this.DataContext = aniv;
         }
 
         void IPartImportsSatisfiedNotification.OnImportsSatisfied()
         {
-            IRegion mainContentRegion = this.regionManager.Regions[RegionNames.MainContentRegion];
+            IRegion mainContentRegion = this.RegionManager.Regions[RegionNames.MainContentRegion];
             if (mainContentRegion != null && mainContentRegion.NavigationService != null)
             {
                 mainContentRegion.NavigationService.Navigated += this.MainContentRegion_Navigated;
@@ -83,32 +83,39 @@ namespace OPCApp.AuthManage.Views
         {
             MessageBox.Show("1");
         }
-        private void menuClickCommand(string url)
+        private void MenuClickCommand(string url)
         {
             Uri roleListViewUri = new Uri(url, UriKind.Relative);
-            this.regionManager.RequestNavigate(RegionNames.MainContentRegion, roleListViewUri);
+            this.RegionManager.RequestNavigate(RegionNames.MainContentRegion, roleListViewUri);
         }
 
       
 
         private void TextBlock_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var o = sender as TextBlock;
-            var o1 = o.Parent as StackPanel;
-            var o2 = o1.Parent as Expander;
-            o2.IsExpanded = !o2.IsExpanded;
+            var tbContorl = sender as TextBlock;
+            if (tbContorl != null)
+            {
+                var spContorl = tbContorl.Parent as StackPanel;
+                if (spContorl != null)
+                {
+                    var expContorl = spContorl.Parent as Expander;
+                    if (expContorl != null) expContorl.IsExpanded = !expContorl.IsExpanded;
+                }
+            }
         }
 
      
         private void RadioButton_Click_1(object sender, RoutedEventArgs e)
         {
-            var o = sender as RadioButton;
-            var o1 = o.CommandParameter;
-            Uri roleListViewUri = new Uri(o1.ToString(), UriKind.Relative);
-            var sss=  AppEx.Container.GetInstance<UserControl>(o1.ToString());
-            this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,  () => {
-                return sss;
-            });
+            var rbControl = sender as RadioButton;
+            if (rbControl != null)
+            {
+                var cparams = rbControl.CommandParameter;
+                Uri roleListViewUri = new Uri(cparams.ToString(), UriKind.Relative);
+                var ucViewModel = AppEx.Container.GetInstance<UserControl>(cparams.ToString());
+                this.RegionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,  () => ucViewModel);
+            }
         }
     }
 }

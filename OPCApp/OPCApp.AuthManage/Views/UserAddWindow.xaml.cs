@@ -22,13 +22,13 @@ namespace OPCApp.AuthManage.Views
     /// </summary>
     public partial class UserAddWindow : MetroWindow
     {
-        public UserAddWindowViewModel userAddWin = new UserAddWindowViewModel();
+        public UserAddWindowViewModel UserAddWin = new UserAddWindowViewModel();
         public UserAddWindow()
         {
             InitializeComponent();
-            userAddWin.SubmitCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(Submit));
-            userAddWin.ResetCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(Cancel));
-            this.DataContext = userAddWin;
+            UserAddWin.SubmitCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(Submit));
+            UserAddWin.ResetCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(Cancel));
+            this.DataContext = UserAddWin;
 
         }
         public void Submit() 

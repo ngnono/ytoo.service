@@ -12,12 +12,12 @@ namespace OPCApp.AuthManage.ViewModels
 {
     public class UserAddWindowViewModel : BindableBase
     {
-        private User cUser;
+        private User _cUser;
         public DelegateCommand SubmitCommand { get; set; }
         public DelegateCommand ResetCommand { get; set; }
         public UserAddWindowViewModel() 
         {
-            this.cUser = new User();
+            this._cUser = new User();
             //this.SubmitCommand = new DelegateCommand(this.OnSubmit);
             //this.ResetCommand = new DelegateCommand(this.OnReset);
         }
@@ -31,8 +31,8 @@ namespace OPCApp.AuthManage.ViewModels
         //}
         public User User
         {
-            get { return this.cUser; }
-            set { SetProperty(ref this.cUser, value); }
+            get { return this._cUser; }
+            set { SetProperty(ref this._cUser, value); }
         }
     }
    

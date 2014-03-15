@@ -15,9 +15,9 @@ namespace OPCApp.AuthManage.ViewModels
             this.Model = new Role();
         }
          /*选择字段*/
-       public string selectedFiled { get; set; }
+       public string SelectedFiled { get; set; }
        /*选择字段的值*/
-       public string selectedFiledValue { get; set; }
+       public string SelectedFiledValue { get; set; }
      
         /*初始化页面固有的数据值*/
         private void Init() 

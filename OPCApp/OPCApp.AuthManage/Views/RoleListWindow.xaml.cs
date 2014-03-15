@@ -15,11 +15,11 @@ namespace OPCApp.AuthManage.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial  class RoleListWindow :UserControl,IBaseView
     {
-        public RoleListWindowViewModel rwv = new RoleListWindowViewModel();
+        public RoleListWindowViewModel Rwv = new RoleListWindowViewModel();
         public RoleListWindow()
         {
             InitializeComponent();
-            this.DataContext = rwv;
+            this.DataContext = Rwv;
         }
 
         public void CloseView()
