@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.Composition;
 using OPCApp.Infrastructure.Mvvm;
-using OPCApp.Domain;
-using OPCApp.AuthManage.Views;
-namespace OPCApp.AuthManage.ViewModels
+
+namespace OPCApp.AuthManage.ViewModels.Role
 {
     [Export("RoleViewModel", typeof(IViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class RoleViewModel : BaseViewModel<Role>
+    public class RoleViewModel : BaseViewModel<Domain.Role>
     {
         public RoleViewModel()
             : base("RoleAddView")
         {
-            this.Model = new Role();
+            this.Model = new Domain.Role();
         }
          /*选择字段*/
        public string SelectedFiled { get; set; }
