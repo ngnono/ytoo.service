@@ -36,7 +36,7 @@ namespace OPCApp.DataService.Impl
 
             var mg = new MenuGroup();
             mg.Text = "权限管理";
-            mg.Items.Add(new MenuInfo { Sort = 1, Text = "用户管理", ResourceUrl = "UserListWindow" });
+            mg.Items.Add(new MenuInfo { Sort = 1, Text = "用户管理", ResourceUrl = "UserListViewModel" });
             mg.Items.Add(new MenuInfo { Sort = 1, Text = "角色管理", ResourceUrl = "RoleListViewModel" });
             lstMenuGroup.Add(mg);
 
