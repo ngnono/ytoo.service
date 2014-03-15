@@ -43,11 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataModel\OPC_AuthMenu.cs" />
-    <Compile Include="DataModel\OPC_AuthRole.cs" />
-    <Compile Include="DataModel\OPC_AuthRoleMenu.cs" />
-    <Compile Include="DataModel\OPC_AuthRoleUser.cs" />
-    <Compile Include="DataModel\OPC_AuthUser.cs" />
+    <Compile Include="Models\OPC_AuthMenu.cs" />
+    <Compile Include="Models\OPC_AuthRole.cs" />
+    <Compile Include="Models\OPC_AuthRoleMenu.cs" />
+    <Compile Include="Models\OPC_AuthRoleUser.cs" />
+    <Compile Include="Models\OPC_AuthUser.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MenuGroup.cs" />
     <Compile Include="Order.cs" />
