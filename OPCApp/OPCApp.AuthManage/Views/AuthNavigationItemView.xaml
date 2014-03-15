@@ -13,7 +13,7 @@
             <ColumnDefinition />
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <ItemsControl x:Name="TopLevelListBox" ItemsSource="{Binding GroupItems}" >
+        <ItemsControl x:Name="TopLevelListBox" ItemsSource="{Binding GroupItems}"  >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Vertical" />
@@ -40,7 +40,7 @@
                                 <DataTemplate>
 
                                     <StackPanel Orientation="Horizontal">
-                                        <RadioButton    Margin="0, 5, 0, 5" Width="250" Command="{Binding DataContext.MenuClickCommand}" CommandParameter="{Binding ResourceUrl}" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Style="{StaticResource MainViewRadioButtonStyle}" Content="{Binding Path=Text}" Click="RadioButton_Click_1" ></RadioButton>
+                                        <RadioButton    Margin="0, 5, 0, 5" Width="250" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=ClickCommand}" CommandParameter="{Binding ResourceUrl}" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Style="{StaticResource MainViewRadioButtonStyle}" Content="{Binding Path=Text}" Click="RadioButton_Click_1" ></RadioButton>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
