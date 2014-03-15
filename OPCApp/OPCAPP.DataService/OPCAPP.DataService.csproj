@@ -63,6 +63,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Intime.OPC.ApiClient\05_Intime.OPC.ApiClient.csproj">
+      <Project>{d34916d5-ba8a-4a70-9a9c-2997289ef411}</Project>
+      <Name>05_Intime.OPC.ApiClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
       <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
       <Name>OPCApp.Domain</Name>
