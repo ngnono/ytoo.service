@@ -15,7 +15,7 @@ namespace OPCApp.AuthManage.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial  class RoleListWindow :UserControl,IBaseView
     {
-        //public RoleListWindowViewModel rwv = new RoleListWindowViewModel();
+        
         public RoleListWindow()
         {
             InitializeComponent();

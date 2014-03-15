@@ -15,6 +15,6 @@ namespace OPCApp.Infrastructure
         }
         public static IContainer Container { get; private set; }
 
-        public static IUser User { get; private set; }
+        //public static User User { get; private set; }
     }
 }

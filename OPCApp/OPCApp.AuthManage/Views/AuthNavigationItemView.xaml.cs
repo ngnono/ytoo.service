@@ -105,8 +105,6 @@ namespace OPCApp.AuthManage.Views
         {
             var o = sender as RadioButton;
             var o1 = o.CommandParameter;
-            //Uri roleListViewUri = new Uri(o1.ToString(), UriKind.Relative);
-            //var sss = AppEx.Container.GetInstance<IViewModel>(o1.ToString());
             this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,  () => {
                 return AppEx.Container.GetInstance<IViewModel>(o1.ToString()).View; ;
             });

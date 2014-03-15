@@ -1,3 +1,4 @@
+﻿
 ﻿using System.Collections.Generic;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Prism.Commands;
@@ -86,7 +87,7 @@ namespace OPCApp.AuthManage.ViewModels
         {
             this.User = new User();
             var  userWin = new UserAddWindow();
-            userWin.userAddWin.User =this.User;
+            userWin.UserAddWin.User =this.User;
             if (userWin.ShowDialog() == true)
             {
                 this.UserService.AddUser(User);
@@ -96,7 +97,7 @@ namespace OPCApp.AuthManage.ViewModels
         private void Update()
         {
             UserAddWindow userWin = new UserAddWindow();
-            userWin.userAddWin.User = this.User;
+            userWin.UserAddWin.User = this.User;
             if (userWin.ShowDialog() == true)
             {
                 this.UserService.UpdateUser(User);
@@ -123,3 +124,4 @@ namespace OPCApp.AuthManage.ViewModels
     }
 
 }
+

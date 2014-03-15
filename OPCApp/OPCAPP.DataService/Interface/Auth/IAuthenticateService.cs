@@ -12,6 +12,6 @@ namespace OPCApp.DataService.Interface
        bool AddUser(User user);
        bool UpdateUser(User user);
        bool DelUser(User user);
-       bool SetIsStop(bool IsStop);
+       bool SetIsStop(bool isStop);
     }
 }
