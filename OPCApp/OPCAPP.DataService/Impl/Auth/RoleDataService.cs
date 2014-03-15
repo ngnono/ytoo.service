@@ -1,17 +1,14 @@
-﻿using OPCApp.DataService.Interface;
+﻿using System;
+using System.Collections.Generic;
+using OPCApp.DataService.Interface;
 using OPCApp.Domain;
 using OPCApp.Infrastructure.DataService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace OPCApp.DataService.Impl
+namespace OPCApp.DataService.Impl.Auth
 {
    public   class RoleDataService : IRoleDataService
     {
-       public static List<Role> ListRole = new List<Role>() { new Role() { RoleName = "1" }, new Role() {RoleName="hanyuxing" } };
+       public static List<Role> ListRole = new List<Role> { new Role() { RoleName = "1" }, new Role() {RoleName="hanyuxing" } };
         public ResultMsg Add(OPCApp.Domain.Role model)
         {
             ListRole.Add(model);

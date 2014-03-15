@@ -1,4 +1,5 @@
 ﻿using OPCApp.AuthManage.Views;
+using OPCApp.DataService.Impl.Auth;
 using OPCApp.Domain;
 using OPCApp.DataService.Impl;
 using OPCApp.Infrastructure.DataService;
