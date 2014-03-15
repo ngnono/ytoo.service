@@ -1,14 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// ***********************************************************************
+// Assembly         : OPCApp.Main.Infrastructure
+// Author           : Liuyh
+// Created          : 03-13-2014 08:50:23
+//
+// Last Modified By : Liuyh
+// Last Modified On : 03-15-2014 14:50:00
+// ***********************************************************************
+// <copyright file="BaseCollectionViewModel.cs" company="">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.ComponentModel;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Microsoft.Expression.Interactivity.Layout;
 using Microsoft.Practices.Prism.Commands;
 using System.Collections.ObjectModel;
 using OPCApp.Infrastructure.DataService;
@@ -18,11 +25,25 @@ using OPCApp.Infrastructure.Mvvm.View;
 namespace OPCApp.Infrastructure.Mvvm
 {
 
+    /// <summary>
+    /// Class BaseCollectionViewModel.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class BaseCollectionViewModel<T> : BindableBase, IViewModel where T : new()
     {
+        /// <summary>
+        /// The view key
+        /// </summary>
         private string ViewKey = "";
- 
+
+        /// <summary>
+        /// The _ collection
+        /// </summary>
         private  ObservableCollection<T> _Collection;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseCollectionViewModel{T}"/> class.
+        /// </summary>
+        /// <param name="viewKey">对应的view 导出时的键值</param>
         protected BaseCollectionViewModel(string viewKey)
         {
            
@@ -37,8 +58,11 @@ namespace OPCApp.Infrastructure.Mvvm
             this.View.DataContext = this;
         }
 
-       
 
+
+        /// <summary>
+        /// Searches the action.
+        /// </summary>
         private void SearchAction()
         {
             var service = GetDataService();
@@ -49,6 +73,10 @@ namespace OPCApp.Infrastructure.Mvvm
             }
         }
 
+        /// <summary>
+        /// Gets the data service.
+        /// </summary>
+        /// <returns>IBaseDataService{`0}.</returns>
         protected abstract IBaseDataService<T> GetDataService();
 
         #region Commands
@@ -60,20 +88,43 @@ namespace OPCApp.Infrastructure.Mvvm
         public ICommand AddCommand { get; set; }
 
 
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <value>The edit command.</value>
         public ICommand EditCommand { get; set; }
 
+        /// <summary>
+        ///删除
+        /// </summary>
+        /// <value>The delete command.</value>
         public ICommand DeleteCommand { get; set; }
+        /// <summary>
+        /// Gets or sets the search command.
+        /// </summary>
+        /// <value>The search command.</value>
         public ICommand SearchCommand { get; set; }
 
         #endregion
 
+        /// <summary>
+        /// Gets or sets the edit view mode key.
+        /// </summary>
+        /// <value>The edit view mode key.</value>
         protected string EditViewModeKey { get; set; }
 
+        /// <summary>
+        /// Gets or sets the add view mode key.
+        /// </summary>
+        /// <value>The add view mode key.</value>
         protected string AddViewModeKey { get; set; }
 
         #region Methods
 
         #region Action
+        /// <summary>
+        /// Adds the action.
+        /// </summary>
         private void AddAction()
         {
             var w = AppEx.Container.GetInstance<IViewModel>(AddViewModeKey);
@@ -84,6 +135,10 @@ namespace OPCApp.Infrastructure.Mvvm
             }
         }
 
+        /// <summary>
+        /// Edits the action.
+        /// </summary>
+        /// <param name="model">The model.</param>
         public void EditAction(T model)
         {
             var w = AppEx.Container.GetInstance<IViewModel>(EditViewModeKey);
@@ -92,6 +147,10 @@ namespace OPCApp.Infrastructure.Mvvm
             {
             }
         }
+        /// <summary>
+        /// Deletes the action.
+        /// </summary>
+        /// <param name="model">The model.</param>
         public void DeleteAction(T model)
         {
             MessageBoxResult msg=  MessageBox.Show("确定要删除吗？", "删除", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -117,12 +176,23 @@ namespace OPCApp.Infrastructure.Mvvm
         #endregion
        // public IFilterViewModel FilterViewModel { get; set; }
 
+        /// <summary>
+        /// Gets or sets the models.
+        /// </summary>
+        /// <value>The models.</value>
         public ICollectionView Models { get; set; }
 
 
+        /// <summary>
+        /// The _view
+        /// </summary>
         private IBaseView _view;
 
 
+        /// <summary>
+        /// Gets or sets the view.
+        /// </summary>
+        /// <value>The view.</value>
         public IBaseView View
         {
             get
@@ -138,6 +208,12 @@ namespace OPCApp.Infrastructure.Mvvm
 
 
 
+        /// <summary>
+        /// Gets or sets the model.
+        /// </summary>
+        /// <value>The model.</value>
+        /// <exception cref="System.NotImplementedException">
+        /// </exception>
         public object Model
         {
             get
