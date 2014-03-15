@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace OPCApp.AuthManage.Views
     /// <summary>
     /// UserAddWindow.xaml 的交互逻辑
     /// </summary>
+    [Export("RoleAddWindow", typeof(IBaseView))]
     public partial class RoleAddWindow : MetroWindow,IBaseView
     {
         public RoleAddWindow()

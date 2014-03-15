@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using OPCApp.AuthManage.ViewModels;
+using OPCApp.Infrastructure.Mvvm.View;
+
 namespace OPCApp.AuthManage.Views
 {
     /// <summary>
@@ -22,7 +24,7 @@ namespace OPCApp.AuthManage.Views
     ///  
     [Export("UserListWindow", typeof(UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class UserListWindow : UserControl
+    public partial class UserListWindow : UserControl,IBaseView
     {
         public UserListWindowViewModel userListVM = new UserListWindowViewModel();
         public UserListWindow()
@@ -31,6 +33,21 @@ namespace OPCApp.AuthManage.Views
             this.DataContext = userListVM;
         }
 
-    
+
+
+        public void CloseView()
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void Cancel()
+        {
+            //throw new NotImplementedException();
+        }
+
+        public bool? ShowDialog()
+        {
+            return false;
+        }
     }
 }

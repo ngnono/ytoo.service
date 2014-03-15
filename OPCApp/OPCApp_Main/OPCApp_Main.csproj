@@ -165,14 +165,6 @@
       <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
       <Name>OPCApp.Main.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OPCApp.Order\OPCApp.Order.csproj">
-      <Project>{006b987f-8e52-45bb-bff4-6d3dfa278ab9}</Project>
-      <Name>OPCApp.Order</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OPCApp.TransManage\OPCApp.TransManage.csproj">
-      <Project>{58cbe625-8df4-4487-b984-f64d1349c169}</Project>
-      <Name>OPCApp.TransManage</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\20140223054736505_easyicon_net_48.png" />
