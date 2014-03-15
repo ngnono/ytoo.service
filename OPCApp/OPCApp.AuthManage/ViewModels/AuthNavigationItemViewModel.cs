@@ -17,8 +17,6 @@ namespace OPCApp.AuthManage.ViewModels
         
         public AuthNavigationItemViewModel() 
         {
-            //this.SubmitCommand = new DelegateCommand(this.OnSubmit);
-            //this.ResetCommand = new DelegateCommand(this.OnReset);
         }
        
         //public void OnSubmit() 
