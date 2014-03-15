@@ -104,7 +104,7 @@
     <Compile Include="Log\Log4NetLogger.cs" />
     <Compile Include="MAP\Mapper.cs" />
     <Compile Include="Mvvm\Conts.cs" />
-    <Compile Include="Mvvm\ViewModel\BaseCollectionViewModel.cs" />
+    <Compile Include="Mvvm\ViewModel\BaseListViewModel.cs" />
     <Compile Include="Mvvm\ViewModel\BaseViewModel.cs" />
     <Compile Include="Mvvm\ViewModel\IViewModel.cs" />
     <Compile Include="Mvvm\View\BaseView.cs" />
