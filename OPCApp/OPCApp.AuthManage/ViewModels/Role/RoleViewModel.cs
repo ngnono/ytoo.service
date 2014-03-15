@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,12 @@ using OPCApp.Domain;
 using OPCApp.AuthManage.Views;
 namespace OPCApp.AuthManage.ViewModels
 {
+    [Export("RoleViewModel", typeof(IViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class RoleViewModel : BaseViewModel<Role>
     {
-        public RoleViewModel(RoleAddWindow raw) :base(raw)
+        public RoleViewModel()
+            : base("RoleAddView")
         {
             this.Model = new Role();
         }

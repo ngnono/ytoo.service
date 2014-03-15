@@ -20,12 +20,14 @@ namespace OPCApp.AuthManage.Views
     /// <summary>
     /// UserAddWindow.xaml 的交互逻辑
     /// </summary>
-    [Export("RoleAddWindow", typeof(IBaseView))]
+    [Export("RoleAddView", typeof(IBaseView))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class RoleAddWindow : MetroWindow,IBaseView
     {
         public RoleAddWindow()
         {
             InitializeComponent();
+           
         }
 
         public void Cancel()
