@@ -26,23 +26,19 @@ namespace OPCApp.AuthManage.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class UserListWindow : UserControl,IBaseView
     {
-        public UserListWindowViewModel UserListVm = new UserListWindowViewModel();
         public UserListWindow()
         {
             InitializeComponent();
-            this.DataContext = UserListVm;
         }
 
 
 
         public void CloseView()
         {
-            //throw new NotImplementedException();
         }
 
         public void Cancel()
         {
-            //throw new NotImplementedException();
         }
 
         public bool? ShowDialog()

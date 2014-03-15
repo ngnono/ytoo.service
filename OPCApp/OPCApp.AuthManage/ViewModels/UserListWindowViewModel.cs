@@ -19,20 +19,20 @@ namespace OPCApp.AuthManage.ViewModels
        public IAuthenticateService UserService { get; set; }
        /*查询字段列表*/
        public List<string> FieldList { get; set; }
-       private User user;
+       private User _user;
        /*列表选择用户 并且 也用于新增修改时接受的用户*/
       
        public User User
         {
-            get { return this.user; }
-            set { SetProperty(ref this.user, value); }
+            get { return this._user; }
+            set { SetProperty(ref this._user, value); }
         }
-       private List<User> userList;
+       private List<User> _userList;
        /*用户列表*/
        public List<User> UserList
        {
-           get { return this.userList; }
-           set { SetProperty(ref this.userList, value); }
+           get { return this._userList; }
+           set { SetProperty(ref this._userList, value); }
        }
        /*查询用户命令*/
         public DelegateCommand SearchCommand { get; set; }
