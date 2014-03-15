@@ -149,14 +149,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OPCApp.AuthManage\OPCApp.AuthManage.csproj">
-      <Project>{f354057b-1212-496c-9738-30590624a3ec}</Project>
-      <Name>OPCApp.AuthManage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OPCApp.BaseInfoManage\OPCApp.BaseInfoManage.csproj">
-      <Project>{23d22b9e-465d-415c-92ea-52b93465a55e}</Project>
-      <Name>OPCApp.BaseInfoManage</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OPCApp.Main.Controls\OPCApp.Main.Controls.csproj">
       <Project>{c8950baf-06a5-4af3-964a-55b18b0e0b9f}</Project>
       <Name>OPCApp.Main.Controls</Name>
