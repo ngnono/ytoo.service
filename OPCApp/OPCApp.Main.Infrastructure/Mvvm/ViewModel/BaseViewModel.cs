@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Interfaces;
@@ -11,32 +13,39 @@ using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.Infrastructure.Mvvm
 {
-   public abstract  class BaseViewModel<T>:BindableBase,IViewModel<T>
+    
+   public abstract  class BaseViewModel<T>:BindableBase,IViewModel
    {
        
-       public BaseViewModel(IBaseView view)
+       public BaseViewModel(string viewKey)
        {
-           View = view;
            
            this.OKCommand=new DelegateCommand(this.OkAction);
            this.CancelCommand=new DelegateCommand(this.CancelAction);
-           view.DataContext = this;
+
+           View = GetView(viewKey);
+           View.DataContext = this;
 
        }
 
-       private T _model;
+       protected IBaseView GetView(string key)
+       {
+           return AppEx.Container.GetInstance<IBaseView>(key);
+       }
+
+       private object _model;
        private void CancelAction()
        {
            doCancelAction();
            View.Cancel();
        }
 
-       public DelegateCommand OKCommand
+       public ICommand OKCommand
        {
            get; set; 
        }
 
-       public DelegateCommand CancelCommand
+       public ICommand CancelCommand
        {
            get; set;
        }
@@ -65,7 +74,7 @@ namespace OPCApp.Infrastructure.Mvvm
        }
 
 
-        public T Model
+        public object Model
         {
             get { return _model; } 
             set { SetProperty(ref _model, value); } 

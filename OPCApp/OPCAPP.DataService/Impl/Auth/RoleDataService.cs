@@ -1,4 +1,5 @@
-﻿using OPCApp.DataService.Interface;
+﻿using System.ComponentModel.Composition;
+using OPCApp.DataService.Interface;
 using OPCApp.Domain;
 using OPCApp.Infrastructure.DataService;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPCApp.DataService.Impl
 {
+    [Export(typeof(IRoleDataService))]
    public   class RoleDataService : IRoleDataService
     {
        public static List<Role> ListRole = new List<Role>() { new Role() { RoleName = "1" }, new Role() {RoleName="hanyuxing" } };
@@ -24,9 +26,9 @@ namespace OPCApp.DataService.Impl
             return new ResultMsg() { IsSuccess = true, Msg = "OK" };
         }
 
-        public OPCApp.Infrastructure.DataService.ResultMsg Delete(OPCApp.Domain.Role model)
+        public ResultMsg Delete(OPCApp.Domain.Role model)
         {
-            throw new NotImplementedException();
+            return ResultMsg.Success();
         }
 
         public OPCApp.Infrastructure.PageResult<OPCApp.Domain.Role> Search(IFilter filter)

@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\RestClient.cs" />
     <Compile Include="Impl\Auth\AuthenticateService.cs" />
     <Compile Include="Impl\Auth\MenuDataService.cs" />
     <Compile Include="Impl\Auth\RoleDataService.cs" />

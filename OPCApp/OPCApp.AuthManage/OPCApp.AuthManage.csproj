@@ -78,7 +78,7 @@
     <Compile Include="AuthModule.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ViewModels\Role2UserWindowViewModel.cs" />
-    <Compile Include="ViewModels\RoleListWindowViewModel.cs" />
+    <Compile Include="ViewModels\Role\RoleListViewModel.cs" />
     <Compile Include="Views\AuthTab.xaml.cs">
       <DependentUpon>AuthTab.xaml</DependentUpon>
     </Compile>
@@ -86,7 +86,7 @@
       <DependentUpon>MenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\RoleViewModel.cs" />
+    <Compile Include="ViewModels\Role\RoleViewModel.cs" />
     <Compile Include="ViewModels\AuthNavigationItemViewModel.cs" />
     <Compile Include="ViewModels\UserAddWindowViewModel.cs" />
     <Compile Include="ViewModels\UserListWindowViewModel.cs" />
@@ -101,10 +101,10 @@
       <DependentUpon>Role2UserWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\RoleListWindow.xaml.cs">
-      <DependentUpon>RoleListWindow.xaml</DependentUpon>
+    <Compile Include="Views\View\RoleListView.xaml.cs">
+      <DependentUpon>RoleListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RoleAddWindow.xaml.cs">
+    <Compile Include="Views\View\RoleAddWindow.xaml.cs">
       <DependentUpon>RoleAddWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserAddWindow.xaml.cs">
@@ -154,11 +154,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RoleListWindow.xaml">
+    <Page Include="Views\View\RoleListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\RoleAddWindow.xaml">
+    <Page Include="Views\View\RoleAddWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

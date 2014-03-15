@@ -20,8 +20,9 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Practices.Prism.Regions;//.Regions;
 using OPCApp.Infrastructure;
-using OPCApp.AuthManage.ViewModels;//.Infrastructure;
-
+using OPCApp.AuthManage.ViewModels; //.Infrastructure;
+using OPCApp.Infrastructure.Mvvm;
+using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.AuthManage.Views
 {
@@ -104,10 +105,10 @@ namespace OPCApp.AuthManage.Views
         {
             var o = sender as RadioButton;
             var o1 = o.CommandParameter;
-            Uri roleListViewUri = new Uri(o1.ToString(), UriKind.Relative);
-            var sss=  AppEx.Container.GetInstance<UserControl>(o1.ToString());
+            //Uri roleListViewUri = new Uri(o1.ToString(), UriKind.Relative);
+            //var sss = AppEx.Container.GetInstance<IViewModel>(o1.ToString());
             this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,  () => {
-                return sss;
+                return AppEx.Container.GetInstance<IViewModel>(o1.ToString()).View; ;
             });
         }
     }
