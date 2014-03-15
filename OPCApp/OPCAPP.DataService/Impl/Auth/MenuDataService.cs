@@ -33,7 +33,7 @@ namespace OPCApp.DataService.Impl.Auth
             var mg = new MenuGroup {Text = "权限管理"};
             mg.Items.Add(new MenuInfo { Sort = 1, Text = "用户管理", ResourceUrl = "UserListWindow" });
             mg.Items.Add(new MenuInfo { Sort = 1, Text = "角色管理", ResourceUrl = "RoleListWindow" });
-            _lstMenuGroup.Add(mg);
+            lstMenuGroup.Add(mg);
 
             mg = new MenuGroup {Text = "基本信息"};
             mg.Items.Add(new MenuInfo { Sort = 1, Text = "门店管理", ResourceUrl = "StoreManage" });
