@@ -5,6 +5,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OPCApp.Infrastructure.Config;
 using OPCApp.Infrastructure.Interfaces;
 
 namespace OPCApp.Infrastructure
@@ -15,7 +16,10 @@ namespace OPCApp.Infrastructure
             Container = new MefContainer(container);
             var loginManager = Container.GetInstance<ILoginManager>();
 
+            Config=new DefaultConfig();
         }
+
+        public static IConfig Config { get; private set; }
         public static IContainer Container { get; private set; }
 
         public static ILoginModel LoginModel { get; private set; }
