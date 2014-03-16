@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Title="用户管理" Height="400" Width="850" GlowBrush="Blue"  Background="LightGray" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <controls:MetroContentControl>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -46,49 +45,49 @@
                     <Grid Grid.Column="0" Background="LightGray" Margin="15"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="登陆名：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBox   Foreground="Blue" Width="300" Height="25" Text="{Binding User.LogonName}"/>
+                            <TextBox   Foreground="Blue" Width="300" Height="25" Text="{Binding Model.LogonName}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Column="1" Background="LightGray" Margin="3"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="密码：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBox   Foreground="Blue" Width="300" Height="25" Text="{Binding User.Password}"/>
+                        <TextBox   Foreground="Blue" Width="300" Height="25" Text="{Binding Model.Password}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="0" Background="LightGray" Margin="15"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="姓名：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBox   Foreground="Blue" Width="300" Height="25" Text="{Binding User.Name}"/>
+                        <TextBox   Foreground="Blue" Width="300" Height="25" Text="{Binding Model.Name}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="1" Background="LightGray" Margin="3"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="门店名称：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <ComboBox   Foreground="Blue" Width="300" Height="25" Text="{Binding User.SectionName}"/>
+                        <ComboBox   Foreground="Blue" Width="300" Height="25" Text="{Binding Model.SectionName}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="2" Grid.Column="0" Background="LightGray" Margin="15"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="所属机构：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <ComboBox   Foreground="Blue" Width="300" Height="25" Text="{Binding User.OrgName}"/>
+                        <ComboBox   Foreground="Blue" Width="300" Height="25" Text="{Binding Model.OrgName}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="2" Grid.Column="1" Background="LightGray" Margin="3"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="是否有效：" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-                            <CheckBox   Foreground="Blue" Width="300" Height="25" IsChecked="{Binding User.IsValid }" />
+                        <CheckBox   Foreground="Blue" Width="300" Height="25" IsChecked="{Binding Model.IsValid }" />
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="3" Grid.Column="0" Background="LightGray" Margin="15"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="是否是导购：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <CheckBox   Foreground="Blue" Width="300" Height="25" IsChecked="{Binding User.IsShopping }" />
+                        <CheckBox   Foreground="Blue" Width="300" Height="25" IsChecked="{Binding Model.IsShopping }" />
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="3" Grid.Column="1" Background="LightGray" Margin="3">
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="专柜码：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBox   Foreground="Blue" Width="300" Height="25" Text="{Binding User.OrgName}" />
+                        <TextBox   Foreground="Blue" Width="300" Height="25" Text="{Binding Model.OrgName}" />
                         </StackPanel>
                     </Grid>
 
@@ -103,7 +102,6 @@
 
         </Grid>
 
-    </controls:MetroContentControl>
 
 
 </controls:MetroWindow>

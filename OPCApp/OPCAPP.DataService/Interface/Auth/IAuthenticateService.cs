@@ -1,17 +1,9 @@
-﻿using OPCApp.Domain;
-using System.Collections.Generic;
+﻿using OPCApp.Domain.Models;
 namespace OPCApp.DataService.Interface
 {
-    public interface IAuthenticateService
+    public interface IAuthenticateService : OPCApp.Infrastructure.DataService.IBaseDataService<OPC_AuthUser>
     {
        string Login(string userName,string password);
-
-
-
-       List<User> GetUserList(string fieldName, string value);
-       bool AddUser(User user);
-       bool UpdateUser(User user);
-       bool DelUser(User user);
-       bool SetIsStop(bool isStop);
+       bool SetIsStop(int userId,bool isStop);
     }
 }
