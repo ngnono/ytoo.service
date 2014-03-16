@@ -130,8 +130,21 @@ namespace OPCApp.Infrastructure.Mvvm
             var w = AppEx.Container.GetInstance<IViewModel>(AddViewModeKey);
             if (w.View.ShowDialog() == true)
             {
+                var service = GetDataService();
+                var resultMsg= service.Add((T)w.Model);
+                if (resultMsg.IsSuccess)
+                {
+                    this._Collection.Clear();
+                    if (this.SearchCommand.CanExecute(null))
+                    {
+                        this.SearchCommand.Execute(null);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("添加失败", "失败", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
 
-                this._Collection.Add((T)w.Model);
             }
         }
 
@@ -145,6 +158,20 @@ namespace OPCApp.Infrastructure.Mvvm
             w.Model = model;
             if (w.View.ShowDialog() == true)
             {
+                var service = GetDataService();
+                var resultMsg = service.Edit((T) w.Model);
+                if (resultMsg.IsSuccess)
+                {
+                    this._Collection.Clear();
+                    if (this.SearchCommand.CanExecute(null))
+                    {
+                        this.SearchCommand.Execute(null);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("修改失败", "失败", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
         /// <summary>

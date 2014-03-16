@@ -1,0 +1,45 @@
+﻿// ***********************************************************************
+// Assembly         : OPCApp.Main.Infrastructure
+// Author           : Liuyh
+// Created          : 03-15-2014 23:15:02
+//
+// Last Modified By : Liuyh
+// Last Modified On : 03-15-2014 23:26:19
+// ***********************************************************************
+// <copyright file="ILoginManager.cs" company="">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OPCApp.Infrastructure.Interfaces
+{
+    /// <summary>
+    /// Interface ILoginManager
+    /// </summary>
+    public interface ILoginManager
+    {
+        /// <summary>
+        /// Logins the specified user identifier.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <param name="password">The password.</param>
+        /// <returns>ILoginModel.</returns>
+        ILoginModel Login(string userName, string password);
+
+
+        /// <summary>
+        /// Res the login.
+        /// </summary>
+        /// <returns>ILoginModel.</returns>
+        ILoginModel ReLogin();
+
+        bool IsLogin { get; }
+
+    }
+}

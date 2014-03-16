@@ -98,6 +98,8 @@
     <Compile Include="DataService\IFilter.cs" />
     <Compile Include="DataService\ResultMsg.cs" />
     <Compile Include="DesignDataCollectionView.cs" />
+    <Compile Include="Interfaces\ILoginManager.cs" />
+    <Compile Include="Interfaces\ILoginModel.cs" />
     <Compile Include="IOC\IContainer.cs" />
     <Compile Include="IOC\MefContainer.cs" />
     <Compile Include="Log\ILogger.cs" />

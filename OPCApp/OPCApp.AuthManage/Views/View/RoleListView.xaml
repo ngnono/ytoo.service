@@ -75,13 +75,12 @@
         </StackPanel>
 
 
-        <DataGrid x:Name="dataGrid"  Grid.Row="2" ItemsSource="{Binding Models}"> 
+        <DataGrid x:Name="dataGrid"  Grid.Row="2" ItemsSource="{Binding Models}" AutoGenerateColumns="False"> 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Width="180" Visibility="Hidden" Binding="{Binding RoleID}"/>
-                <DataGridTextColumn Header="角色名称" Width="180" Binding="{Binding RoleName}"/>
-                <DataGridTextColumn Header="角色描述" Width="150" Binding="{Binding RoleMemo}"/>
-                <DataGridTextColumn Header="机构名称" Width="150" Binding="{Binding OrgName}"/>
-                <DataGridCheckBoxColumn Header="是否启用"></DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="Id" Width="180" Visibility="Hidden" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="角色名称" Width="180" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="角色描述" Width="150" Binding="{Binding Description}"/>
+                <DataGridCheckBoxColumn Header="是否启用" Binding="{Binding IsValid}"></DataGridCheckBoxColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

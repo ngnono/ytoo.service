@@ -12,6 +12,8 @@ namespace OPCApp.Infrastructure.DataService
        public bool IsSuccess { get; set; }
        public string Msg { get; set; }
 
+       public object Data { get; set; }
+
        public static ResultMsg Success(string msg = "")
        {
            resultMsg.IsSuccess = true;
