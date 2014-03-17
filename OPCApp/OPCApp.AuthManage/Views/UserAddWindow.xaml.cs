@@ -18,6 +18,7 @@ namespace OPCApp.AuthManage.Views
         }
         public void Cancel() 
         {
+            
             this.DialogResult = false;
             this.Close();
         }
