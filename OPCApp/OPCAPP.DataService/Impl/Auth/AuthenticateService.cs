@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Net.Http;
 using Intime.OPC.ApiClient;
-
+using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain;
-
+using OPCApp.Domain.Models;
+using OPCApp.Infrastructure;
+using OPCApp.Infrastructure.DataService;
 
 namespace OPCApp.DataService.Impl.Auth
 {
@@ -17,110 +19,45 @@ namespace OPCApp.DataService.Impl.Auth
         {
             return "OK";
         }
-
-
-        public List<User> GetUserList(string fieldName, string value)
-        {
-            var factory = new DefaultApiHttpClientFactory(new Uri("http://localhost:1403"), "100000001", "test001");
-
-            using (var client1 = factory.Create())
-            {
-                var response = client1.GetAsync("/api/account/selectUser").Result;
-                if (!response.IsSuccessStatusCode)
-                {
-                    return null;
-                }
-                else
-                {
-                    var users = response.Content.ReadAsAsync<List<User>>().Result;
-                    return users;
-                }
-            }
-            //Uri ur
-           
-        }
-        public bool AddUser(User user)
-        {
-            var factory = new DefaultApiHttpClientFactory(new Uri("http://localhost:1403"), "100000001", "test001");
-
-            using (var client = factory.Create())
-            {
-                user.IsValid = true;
-                user.CreateDate = DateTime.Now;
-                user.CreateUserId = 1;
-                user.UpdateDate = DateTime.Now;
-                user.UpdateUserId = 1;
-                var response = client.PutAsJsonAsync("/api/account/adduser",user).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-        public bool UpdateUser(User user)
-        {
-            var factory = new DefaultApiHttpClientFactory(new Uri("http://localhost:1403"), "100000001", "test001");
-
-            using (var client = factory.Create())
-            {
-                var response = client.PutAsJsonAsync("/api/account/updateuser", user).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-        public bool DelUser(User user)
-        {
-            var factory = new DefaultApiHttpClientFactory(new Uri("http://localhost:1403"), "100000001", "test001");
-            using (var client = factory.Create())
-            {
-                var response = client.PutAsJsonAsync("/api/account/deleteuser", user).Result;
-                return response.IsSuccessStatusCode;
-            }
-        }
-        public bool SetIsStop(bool isStop)
-        {
-            var factory = new DefaultApiHttpClientFactory(new Uri("http://localhost:1403"), "100000001", "test001");
-            using (var client = factory.Create())
-            {
-                var url = isStop ? "/api/account/stop" : "/api/account/enable";
-                var response = client.PutAsJsonAsync(url, isStop).Result;
-                return response.IsSuccessStatusCode;
-            }
-        }
-
-
-
         public bool SetIsStop(int userId, bool isStop)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
-        public Infrastructure.DataService.ResultMsg Add(Domain.Models.OPC_AuthUser model)
+        public Infrastructure.DataService.ResultMsg Add(Domain.Models.OPC_AuthUser user)
         {
-            throw new NotImplementedException();
+            if (user == null)
+            {
+                return new ResultMsg() { IsSuccess = false, Msg = "增加错误" };
+            }
+            user.IsValid = true;
+            user.CreateDate = DateTime.Now;
+            user.CreateUserId = 1;
+            user.UpdateDate = DateTime.Now;
+            user.UpdateUserId = 1;
+            var bFalg= RestClient.Put("/api/account/adduser", user);
+            return  new ResultMsg(){IsSuccess = bFalg,Msg = "保存成功"};
         }
 
-        public Infrastructure.DataService.ResultMsg Edit(Domain.Models.OPC_AuthUser model)
+        public Infrastructure.DataService.ResultMsg Edit(Domain.Models.OPC_AuthUser user)
         {
-            throw new NotImplementedException();
+            var bFalg = RestClient.Put("/api/account/updateuser", user);
+            return new ResultMsg() { IsSuccess = bFalg, Msg = "保存成功" };
         }
 
-        public Infrastructure.DataService.ResultMsg Delete(Domain.Models.OPC_AuthUser model)
+        public Infrastructure.DataService.ResultMsg Delete(Domain.Models.OPC_AuthUser user)
         {
-            throw new NotImplementedException();
+            var bFalg = RestClient.Put("/api/account/deleteuser", user);
+            return new ResultMsg() { IsSuccess = bFalg, Msg = "删除错误" };
         }
 
-        public Infrastructure.PageResult<Domain.Models.OPC_AuthUser> Search(Infrastructure.DataService.IFilter filter)
+        public List<OPC_AuthUser> Search(Infrastructure.DataService.IFilter filter)
+        {
+            return (List<OPC_AuthUser>) RestClient.Get<List<OPC_AuthUser>>("/api/account/selectuser", null);
+        }
+
+
+        PageResult<OPC_AuthUser> IBaseDataService<OPC_AuthUser>.Search(IFilter filter)
         {
             throw new NotImplementedException();
         }

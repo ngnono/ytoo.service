@@ -13,14 +13,8 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using Intime.OPC.ApiClient;
-using OPCApp.Domain;
-using OPCApp.Infrastructure;
 using System.Net.Http;
 
 namespace OPCApp.DataService.Common
@@ -33,7 +27,7 @@ namespace OPCApp.DataService.Common
         /// <summary>
         /// The base URL
         /// </summary>
-        private static string baseUrl = "http://localhost:1401/Api/";
+        private static string baseUrl = ConfigurationManager.AppSettings["apiAddress"];
         /// <summary>
         /// The _client factory
         /// </summary>
