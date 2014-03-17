@@ -101,6 +101,9 @@
       <DependentUpon>Role2UserWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\UsersWindow.xaml.cs">
+      <DependentUpon>UsersWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\View\RoleListView.xaml.cs">
       <DependentUpon>RoleListView.xaml</DependentUpon>
     </Compile>
@@ -157,6 +160,10 @@
     <Page Include="Views\Role2UserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UsersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\View\RoleListView.xaml">
       <Generator>MSBuild:Compile</Generator>
