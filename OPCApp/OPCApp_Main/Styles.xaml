@@ -102,4 +102,11 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style x:Key="FieldStyle" TargetType="Label">
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Right"> </Setter>
+        <Setter Property="Width" Value="100"></Setter>
+        <Setter Property="FontSize" Value="14"></Setter>
+    </Style>
 </ResourceDictionary>

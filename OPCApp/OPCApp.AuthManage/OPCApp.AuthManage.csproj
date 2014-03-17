@@ -115,6 +115,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Intime.OPC.ApiClient\05_Intime.OPC.ApiClient.csproj">
+      <Project>{d34916d5-ba8a-4a70-9a9c-2997289ef411}</Project>
+      <Name>05_Intime.OPC.ApiClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
       <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
       <Name>OPCApp.DataService</Name>

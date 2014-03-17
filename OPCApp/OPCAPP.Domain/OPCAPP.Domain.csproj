@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LoginModel.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />
     <Compile Include="Models\OPC_AuthRoleMenu.cs" />
