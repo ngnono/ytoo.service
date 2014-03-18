@@ -1,6 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ADC437BB-76B4-4C49-8146-A7AC9ACFC544}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01_Intime.OPC.Repository", "Intime.OPC.Repository\01_Intime.OPC.Repository.csproj", "{6F89B48C-F608-4C24-968C-2646ACA68D26}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02_Intime.OPC.Service", "Intime.OPC.Service\02_Intime.OPC.Service.csproj", "{B34F0A0C-CEFC-4491-913C-C76EA6B05FBE}"
@@ -11,10 +18,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "00_Intime.OPC.Domain", "Int
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Intime.OPC.WebHost", "Intime.OPC.WebHost\04_Intime.OPC.WebHost.csproj", "{F58664A9-FDE5-41A7-8AC4-361B1544CD46}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ADC437BB-76B4-4C49-8146-A7AC9ACFC544}"
-	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_Intime.OPC.ApiClient", "Intime.OPC.ApiClient\05_Intime.OPC.ApiClient.csproj", "{D34916D5-BA8A-4A70-9A9C-2997289EF411}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06_Intime.OPC.ApiClientTests", "Intime.OPC.ApiClientTests\06_Intime.OPC.ApiClientTests.csproj", "{9D049775-E8F8-4E7F-93EF-2C0252EA3D55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +48,14 @@ Global
 		{F58664A9-FDE5-41A7-8AC4-361B1544CD46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F58664A9-FDE5-41A7-8AC4-361B1544CD46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F58664A9-FDE5-41A7-8AC4-361B1544CD46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D34916D5-BA8A-4A70-9A9C-2997289EF411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D34916D5-BA8A-4A70-9A9C-2997289EF411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D34916D5-BA8A-4A70-9A9C-2997289EF411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D34916D5-BA8A-4A70-9A9C-2997289EF411}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D049775-E8F8-4E7F-93EF-2C0252EA3D55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D049775-E8F8-4E7F-93EF-2C0252EA3D55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D049775-E8F8-4E7F-93EF-2C0252EA3D55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D049775-E8F8-4E7F-93EF-2C0252EA3D55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

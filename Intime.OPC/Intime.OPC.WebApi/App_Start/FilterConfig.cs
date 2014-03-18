@@ -3,9 +3,9 @@
 namespace Intime.OPC.WebApi
 {
     /// <summary>
-    /// 过滤器配置
+    ///     过滤器配置
     /// </summary>
-    public class FilterConfig
+    public static class FilterConfig
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {

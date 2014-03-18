@@ -8,28 +8,28 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_AuthRoleMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Id)
+            Property(t => t.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
-            this.Property(t => t.Name)
+            Property(t => t.Name)
                 .HasMaxLength(20);
 
-            this.Property(t => t.Description)
+            Property(t => t.Description)
                 .HasMaxLength(100);
 
             // Table & Column Mappings
-            this.ToTable("OPC_AuthRole");
-            this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.Name).HasColumnName("Name");
-            this.Property(t => t.Description).HasColumnName("Description");
-            this.Property(t => t.IsValid).HasColumnName("IsValid");
-            this.Property(t => t.CreateDate).HasColumnName("CreateDate");
-            this.Property(t => t.CreateUserId).HasColumnName("CreateUserId");
-            this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
-            this.Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
+            ToTable("OPC_AuthRole");
+            Property(t => t.Id).HasColumnName("Id");
+            Property(t => t.Name).HasColumnName("Name");
+            Property(t => t.Description).HasColumnName("Description");
+            Property(t => t.IsValid).HasColumnName("IsValid");
+            Property(t => t.CreateDate).HasColumnName("CreateDate");
+            Property(t => t.CreateUserId).HasColumnName("CreateUserId");
+            Property(t => t.UpdateDate).HasColumnName("UpdateDate");
+            Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
         }
     }
 }

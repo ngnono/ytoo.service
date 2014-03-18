@@ -8,50 +8,51 @@ namespace Intime.OPC.WebApi.Core.Security.Cryptography
     public static class CryptoHelper
     {
         #region base64 AES
+
         /// <summary>
-        /// Encrypts specified plaintext using Rijndael symmetric key algorithm
-        /// and returns a base64-encoded result.
+        ///     Encrypts specified plaintext using Rijndael symmetric key algorithm
+        ///     and returns a base64-encoded result.
         /// </summary>
         /// <param name="plainText">
-        /// Plaintext value to be encrypted.
+        ///     Plaintext value to be encrypted.
         /// </param>
         /// <param name="passPhrase">
-        /// Passphrase from which a pseudo-random password will be derived. The
-        /// derived password will be used to generate the encryption key.
-        /// Passphrase can be any string. In this example we assume that this
-        /// passphrase is an ASCII string.
+        ///     Passphrase from which a pseudo-random password will be derived. The
+        ///     derived password will be used to generate the encryption key.
+        ///     Passphrase can be any string. In this example we assume that this
+        ///     passphrase is an ASCII string.
         /// </param>
         /// <param name="saltValue">
-        /// Salt value used along with passphrase to generate password. Salt can
-        /// be any string. In this example we assume that salt is an ASCII string.
+        ///     Salt value used along with passphrase to generate password. Salt can
+        ///     be any string. In this example we assume that salt is an ASCII string.
         /// </param>
         /// <param name="hashAlgorithm">
-        /// Hash algorithm used to generate password. Allowed values are: "MD5" and
-        /// "SHA1". SHA1 hashes are a bit slower, but more secure than MD5 hashes.
+        ///     Hash algorithm used to generate password. Allowed values are: "MD5" and
+        ///     "SHA1". SHA1 hashes are a bit slower, but more secure than MD5 hashes.
         /// </param>
         /// <param name="passwordIterations">
-        /// Number of iterations used to generate password. One or two iterations
-        /// should be enough.
+        ///     Number of iterations used to generate password. One or two iterations
+        ///     should be enough.
         /// </param>
         /// <param name="initVector">
-        /// Initialization vector (or IV). This value is required to encrypt the
-        /// first block of plaintext data. For RijndaelManaged class IV must be 
-        /// exactly 16 ASCII characters long.
+        ///     Initialization vector (or IV). This value is required to encrypt the
+        ///     first block of plaintext data. For RijndaelManaged class IV must be
+        ///     exactly 16 ASCII characters long.
         /// </param>
         /// <param name="keySize">
-        /// Size of encryption key in bits. Allowed values are: 128, 192, and 256. 
-        /// Longer keys are more secure than shorter keys.
+        ///     Size of encryption key in bits. Allowed values are: 128, 192, and 256.
+        ///     Longer keys are more secure than shorter keys.
         /// </param>
         /// <returns>
-        /// Encrypted value formatted as a base64-encoded string.
+        ///     Encrypted value formatted as a base64-encoded string.
         /// </returns>
         public static string Base64AESEncrypt(string plainText,
-                                     string passPhrase,
-                                     string saltValue,
-                                     string hashAlgorithm,
-                                     int passwordIterations,
-                                     string initVector,
-                                     int keySize)
+            string passPhrase,
+            string saltValue,
+            string hashAlgorithm,
+            int passwordIterations,
+            string initVector,
+            int keySize)
         {
             //safety check
             if (string.IsNullOrEmpty(plainText))
@@ -74,18 +75,18 @@ namespace Intime.OPC.WebApi.Core.Security.Cryptography
             // This password will be generated from the specified passphrase and 
             // salt value. The password will be created using the specified hash 
             // algorithm. Password creation can be done in several iterations.
-            PasswordDeriveBytes password = new PasswordDeriveBytes(
-                                                            passPhrase,
-                                                            saltValueBytes,
-                                                            hashAlgorithm,
-                                                            passwordIterations);
+            var password = new PasswordDeriveBytes(
+                passPhrase,
+                saltValueBytes,
+                hashAlgorithm,
+                passwordIterations);
 
             // Use the password to generate pseudo-random bytes for the encryption
             // key. Specify the size of the key in bytes (instead of bits).
-            byte[] keyBytes = password.GetBytes(keySize / 8);
+            byte[] keyBytes = password.GetBytes(keySize/8);
 
             // Create uninitialized Rijndael encryption object.
-            RijndaelManaged symmetricKey = new RijndaelManaged();
+            var symmetricKey = new RijndaelManaged();
 
             // It is reasonable to set encryption mode to Cipher Block Chaining
             // (CBC). Use default options for other symmetric key parameters.
@@ -95,16 +96,16 @@ namespace Intime.OPC.WebApi.Core.Security.Cryptography
             // vector. Key size will be defined based on the number of the key 
             // bytes.
             ICryptoTransform encryptor = symmetricKey.CreateEncryptor(
-                                                             keyBytes,
-                                                             initVectorBytes);
+                keyBytes,
+                initVectorBytes);
 
             // Define memory stream which will be used to hold encrypted data.
-            MemoryStream memoryStream = new MemoryStream();
+            var memoryStream = new MemoryStream();
 
             // Define cryptographic stream (always use Write mode for encryption).
-            CryptoStream cryptoStream = new CryptoStream(memoryStream,
-                                                         encryptor,
-                                                         CryptoStreamMode.Write);
+            var cryptoStream = new CryptoStream(memoryStream,
+                encryptor,
+                CryptoStreamMode.Write);
             // Start encrypting.
             cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
 
@@ -126,55 +127,55 @@ namespace Intime.OPC.WebApi.Core.Security.Cryptography
         }
 
         /// <summary>
-        /// Decrypts specified ciphertext using Rijndael symmetric key algorithm.
+        ///     Decrypts specified ciphertext using Rijndael symmetric key algorithm.
         /// </summary>
         /// <param name="cipherText">
-        /// Base64-formatted ciphertext value.
+        ///     Base64-formatted ciphertext value.
         /// </param>
         /// <param name="passPhrase">
-        /// Passphrase from which a pseudo-random password will be derived. The
-        /// derived password will be used to generate the encryption key.
-        /// Passphrase can be any string. In this example we assume that this
-        /// passphrase is an ASCII string.
+        ///     Passphrase from which a pseudo-random password will be derived. The
+        ///     derived password will be used to generate the encryption key.
+        ///     Passphrase can be any string. In this example we assume that this
+        ///     passphrase is an ASCII string.
         /// </param>
         /// <param name="saltValue">
-        /// Salt value used along with passphrase to generate password. Salt can
-        /// be any string. In this example we assume that salt is an ASCII string.
+        ///     Salt value used along with passphrase to generate password. Salt can
+        ///     be any string. In this example we assume that salt is an ASCII string.
         /// </param>
         /// <param name="hashAlgorithm">
-        /// Hash algorithm used to generate password. Allowed values are: "MD5" and
-        /// "SHA1". SHA1 hashes are a bit slower, but more secure than MD5 hashes.
+        ///     Hash algorithm used to generate password. Allowed values are: "MD5" and
+        ///     "SHA1". SHA1 hashes are a bit slower, but more secure than MD5 hashes.
         /// </param>
         /// <param name="passwordIterations">
-        /// Number of iterations used to generate password. One or two iterations
-        /// should be enough.
+        ///     Number of iterations used to generate password. One or two iterations
+        ///     should be enough.
         /// </param>
         /// <param name="initVector">
-        /// Initialization vector (or IV). This value is required to encrypt the
-        /// first block of plaintext data. For RijndaelManaged class IV must be
-        /// exactly 16 ASCII characters long.
+        ///     Initialization vector (or IV). This value is required to encrypt the
+        ///     first block of plaintext data. For RijndaelManaged class IV must be
+        ///     exactly 16 ASCII characters long.
         /// </param>
         /// <param name="keySize">
-        /// Size of encryption key in bits. Allowed values are: 128, 192, and 256.
-        /// Longer keys are more secure than shorter keys.
+        ///     Size of encryption key in bits. Allowed values are: 128, 192, and 256.
+        ///     Longer keys are more secure than shorter keys.
         /// </param>
         /// <returns>
-        /// Decrypted string value.
+        ///     Decrypted string value.
         /// </returns>
         /// <remarks>
-        /// Most of the logic in this function is similar to the Encrypt
-        /// logic. In order for decryption to work, all parameters of this function
-        /// - except cipherText value - must match the corresponding parameters of
-        /// the Encrypt function which was called to generate the
-        /// ciphertext.
+        ///     Most of the logic in this function is similar to the Encrypt
+        ///     logic. In order for decryption to work, all parameters of this function
+        ///     - except cipherText value - must match the corresponding parameters of
+        ///     the Encrypt function which was called to generate the
+        ///     ciphertext.
         /// </remarks>
         public static string Base64AESDecrypt(string cipherText,
-                                     string passPhrase,
-                                     string saltValue,
-                                     string hashAlgorithm,
-                                     int passwordIterations,
-                                     string initVector,
-                                     int keySize)
+            string passPhrase,
+            string saltValue,
+            string hashAlgorithm,
+            int passwordIterations,
+            string initVector,
+            int keySize)
         {
             //safety check
             if (string.IsNullOrEmpty(cipherText))
@@ -197,18 +198,18 @@ namespace Intime.OPC.WebApi.Core.Security.Cryptography
             // passphrase and salt value. The password will be created using
             // the specified hash algorithm. Password creation can be done in
             // several iterations.
-            PasswordDeriveBytes password = new PasswordDeriveBytes(
-                                                            passPhrase,
-                                                            saltValueBytes,
-                                                            hashAlgorithm,
-                                                            passwordIterations);
+            var password = new PasswordDeriveBytes(
+                passPhrase,
+                saltValueBytes,
+                hashAlgorithm,
+                passwordIterations);
 
             // Use the password to generate pseudo-random bytes for the encryption
             // key. Specify the size of the key in bytes (instead of bits).
-            byte[] keyBytes = password.GetBytes(keySize / 8);
+            byte[] keyBytes = password.GetBytes(keySize/8);
 
             // Create uninitialized Rijndael encryption object.
-            RijndaelManaged symmetricKey = new RijndaelManaged();
+            var symmetricKey = new RijndaelManaged();
 
             // It is reasonable to set encryption mode to Cipher Block Chaining
             // (CBC). Use default options for other symmetric key parameters.
@@ -218,26 +219,26 @@ namespace Intime.OPC.WebApi.Core.Security.Cryptography
             // vector. Key size will be defined based on the number of the key 
             // bytes.
             ICryptoTransform decryptor = symmetricKey.CreateDecryptor(
-                                                             keyBytes,
-                                                             initVectorBytes);
+                keyBytes,
+                initVectorBytes);
 
             // Define memory stream which will be used to hold encrypted data.
-            MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
+            var memoryStream = new MemoryStream(cipherTextBytes);
 
             // Define cryptographic stream (always use Read mode for encryption).
-            CryptoStream cryptoStream = new CryptoStream(memoryStream,
-                                                          decryptor,
-                                                          CryptoStreamMode.Read);
+            var cryptoStream = new CryptoStream(memoryStream,
+                decryptor,
+                CryptoStreamMode.Read);
 
             // Since at this point we don't know what the size of decrypted data
             // will be, allocate the buffer long enough to hold ciphertext;
             // plaintext is never longer than ciphertext.
-            byte[] plainTextBytes = new byte[cipherTextBytes.Length];
+            var plainTextBytes = new byte[cipherTextBytes.Length];
 
             // Start decrypting.
             int decryptedByteCount = cryptoStream.Read(plainTextBytes,
-                                                       0,
-                                                       plainTextBytes.Length);
+                0,
+                plainTextBytes.Length);
 
             // Close both streams.
             memoryStream.Close();
@@ -246,12 +247,13 @@ namespace Intime.OPC.WebApi.Core.Security.Cryptography
             // Convert decrypted data into a string. 
             // Let us assume that the original plaintext string was UTF8-encoded.
             string plainText = Encoding.UTF8.GetString(plainTextBytes,
-                                                       0,
-                                                       decryptedByteCount);
+                0,
+                decryptedByteCount);
 
             // Return decrypted string.   
             return plainText;
         }
+
         #endregion
     }
 }

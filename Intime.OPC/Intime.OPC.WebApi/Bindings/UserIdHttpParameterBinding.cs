@@ -1,7 +1,8 @@
-﻿using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
-
+﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
+using System.Web.Http.Metadata;
+using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 
 namespace Intime.OPC.WebApi.Bindings
 {
@@ -11,15 +12,22 @@ namespace Intime.OPC.WebApi.Bindings
             : base(descriptor)
         {
         }
-        public override Task ExecuteBindingAsync(System.Web.Http.Metadata.ModelMetadataProvider metadataProvider, HttpActionContext actionContext, System.Threading.CancellationToken cancellationToken)
+
+        public override Task ExecuteBindingAsync(ModelMetadataProvider metadataProvider, HttpActionContext actionContext,
+            CancellationToken cancellationToken)
         {
-            if (actionContext.Request.Properties.ContainsKey(AccessTokenConst.USERID_PROPERTIES_NAME))
+            if (actionContext != null &&
+                actionContext.Request.Properties.ContainsKey(AccessTokenConst.UseridPropertiesName))
             {
-                actionContext.ActionArguments[Descriptor.ParameterName] = actionContext.Request.Properties[AccessTokenConst.USERID_PROPERTIES_NAME];
+                if (actionContext.ActionArguments != null)
+                    actionContext.ActionArguments[Descriptor.ParameterName] =
+                        actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName];
             }
             else
             {
-                actionContext.ActionArguments[Descriptor.ParameterName] = 0;
+                if (actionContext != null)
+                    if (actionContext.ActionArguments != null)
+                        actionContext.ActionArguments[Descriptor.ParameterName] = 0;
             }
 
             var tsc = new TaskCompletionSource<object>();

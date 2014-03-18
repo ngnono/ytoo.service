@@ -8,23 +8,23 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_AuthMenuMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Id)
+            Property(t => t.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
-            this.Property(t => t.MenuName)
+            Property(t => t.MenuName)
                 .HasMaxLength(40);
 
             // Table & Column Mappings
-            this.ToTable("OPC_AuthMenu");
-            this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.MenuName).HasColumnName("MenuName");
-            this.Property(t => t.CreateDate).HasColumnName("CreateDate");
-            this.Property(t => t.CreateUserId).HasColumnName("CreateUserId");
-            this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
-            this.Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
+            ToTable("OPC_AuthMenu");
+            Property(t => t.Id).HasColumnName("Id");
+            Property(t => t.MenuName).HasColumnName("MenuName");
+            Property(t => t.CreateDate).HasColumnName("CreateDate");
+            Property(t => t.CreateUserId).HasColumnName("CreateUserId");
+            Property(t => t.UpdateDate).HasColumnName("UpdateDate");
+            Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
         }
     }
 }
