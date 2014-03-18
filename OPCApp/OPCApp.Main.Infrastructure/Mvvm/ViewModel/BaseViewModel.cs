@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
-using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Interfaces;
 using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.Infrastructure.DataService;
 using OPCApp.Infrastructure.Mvvm.View;
+using System.ComponentModel.DataAnnotations;
 
 namespace OPCApp.Infrastructure.Mvvm
 {
@@ -52,17 +49,40 @@ namespace OPCApp.Infrastructure.Mvvm
 
        private void OkAction()
        {
-           BeforeDoOKAction();
+           var errors = Validate((T) Model);
+           if (errors.Count>0)
+           {
+               StringBuilder strB=new StringBuilder();
+               foreach (var err in errors)
+               {
+                   strB.AppendLine(err.ErrorMessage);
+               }
+               
+               MessageBox.Show(strB.ToString(), "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+               return;
+           }
+           var service = GetDataService();
+           var msg= service.Add((T)Model);
+           if (!msg.IsSuccess)
+           {
+               MessageBox.Show(msg.Msg, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+               return;
+           }
            View.CloseView();
            AfterDoOKAction();
        }
 
-       
+       protected abstract IBaseDataService<T> GetDataService();
 
-       protected virtual bool BeforeDoOKAction()
+       protected IList<ValidationResult> Validate(T entity)
        {
-           return true;
+           var results = new List<ValidationResult>();
+           var context = new ValidationContext(entity, null, null);
+           Validator.TryValidateObject(entity, context, results);
+           return results;
        }
+
+       
        protected virtual bool AfterDoOKAction()
        {
            return true;

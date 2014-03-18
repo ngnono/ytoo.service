@@ -13,8 +13,11 @@
 // ***********************************************************************
 
 ﻿using System.ComponentModel.Composition;
-using OPCApp.Infrastructure.Mvvm;
+﻿using OPCApp.DataService.Interface;
+﻿using OPCApp.Infrastructure;
+﻿using OPCApp.Infrastructure.Mvvm;
 using OPCApp.Domain;
+using OPCApp.Domain.Models;
 namespace OPCApp.AuthManage.ViewModels
 {
     /// <summary>
@@ -22,7 +25,7 @@ namespace OPCApp.AuthManage.ViewModels
     /// </summary>
     [Export("RoleViewModel", typeof(IViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class RoleViewModel : BaseViewModel<Role>
+    public class RoleViewModel : BaseViewModel<OPC_AuthRole>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleViewModel"/> class.
@@ -30,7 +33,12 @@ namespace OPCApp.AuthManage.ViewModels
         public RoleViewModel()
             : base("RoleAddView")
         {
-            this.Model = new Role();
+            this.Model = new OPC_AuthRole();
+        }
+
+        protected override Infrastructure.DataService.IBaseDataService<OPC_AuthRole> GetDataService()
+        {
+            return AppEx.Container.GetInstance<IRoleDataService>();
         }
     }
 }
