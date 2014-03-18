@@ -12,8 +12,11 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
+using System.Security.Policy;
 using Intime.OPC.ApiClient;
 using System.Net.Http;
 using OPCApp.Infrastructure;
@@ -75,18 +78,13 @@ namespace OPCApp.DataService.Common
         //}
         //}
 
-        public static IList<T> Get<T>(string url, object obj)
+        public static IList<T> Get<T>(string address, IDictionary<string,object> fields)
         {
-
+            const string strFormat = "{0}={1}&";
+            string str = fields.Keys.Aggregate("", (current, key) => current + string.Format(strFormat, key, fields[key]));
+            string url = string.Format("{0}?{1}",address,str.Substring(0,str.Length-1));
             var response = Client.GetAsync(url).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                return  response.Content.ReadAsAsync<List<T>>().Result;
-            }
-            else
-            {
-                return new List<T>();
-            }
+            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
 
         }
 
@@ -100,15 +98,7 @@ namespace OPCApp.DataService.Common
         public static bool Post<T>(string url,T data)
         {
             var response = Client.PostAsJsonAsync(url, data).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-          
+            return response.IsSuccessStatusCode;
         }
 
         /// <summary>
@@ -122,17 +112,8 @@ namespace OPCApp.DataService.Common
         public static TResult Post<T, TResult>(string url, T data)
         {
             var response = Client.PostAsJsonAsync(url, data).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                return response.Content.ReadAsAsync<TResult>().Result;
-            }
-            else
-            {
-                return default(TResult);
-            }
-            
+            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<TResult>().Result : default(TResult);
         }
-
 
 
         /// <summary>
@@ -144,17 +125,8 @@ namespace OPCApp.DataService.Common
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool Put<T>(string url, T data)
         {
-
             var response = Client.PutAsJsonAsync(url, data).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            
+            return response.IsSuccessStatusCode;
         }
 
         /// <summary>
@@ -165,19 +137,8 @@ namespace OPCApp.DataService.Common
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool Delete<T>(string url)
         {
-
             var response = Client.DeleteAsync(url).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            
+            return response.IsSuccessStatusCode;
         }
-
-
     }
 }

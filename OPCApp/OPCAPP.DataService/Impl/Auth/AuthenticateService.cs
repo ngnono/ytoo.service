@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Net.Http;
 using Intime.OPC.ApiClient;
 using OPCApp.DataService.Common;
@@ -35,7 +36,7 @@ namespace OPCApp.DataService.Impl.Auth
             user.CreateUserId = 1;
             user.UpdateDate = DateTime.Now;
             user.UpdateUserId = 1;
-            var bFalg= RestClient.Put("/api/account/adduser", user);
+            var bFalg= RestClient.Put("account/addUser", user);
             return  new ResultMsg(){IsSuccess = bFalg,Msg = "保存成功"};
         }
 
@@ -51,15 +52,13 @@ namespace OPCApp.DataService.Impl.Auth
             return new ResultMsg() { IsSuccess = bFalg, Msg = "删除错误" };
         }
 
-        public List<OPC_AuthUser> Search(Infrastructure.DataService.IFilter filter)
+        public PageResult<OPC_AuthUser> Search(Infrastructure.DataService.IFilter filter)
         {
-            return (List<OPC_AuthUser>) RestClient.Get<List<OPC_AuthUser>>("/api/account/selectuser", null);
+            var lst= RestClient.Get<OPC_AuthUser>("/api/account/selectuser", filter.GetFilter());
+            return new PageResult<OPC_AuthUser>(lst,lst.Count);
         }
 
 
-        PageResult<OPC_AuthUser> IBaseDataService<OPC_AuthUser>.Search(IFilter filter)
-        {
-            throw new NotImplementedException();
-        }
+    
     }
 }
