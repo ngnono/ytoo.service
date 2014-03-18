@@ -12,8 +12,6 @@ namespace OPCApp.Infrastructure.DataService
         ResultMsg Add(T model);
         ResultMsg Edit(T model);
         ResultMsg Delete(T model);
-
-
         PageResult<T> Search(IFilter filter);
     }
 }
