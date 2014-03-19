@@ -6,7 +6,6 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -32,20 +31,20 @@
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50">
+                <Button Background="LightGray" Command="{Binding CommandViewAndPrint}">
                     <StackPanel>
                         <Image Source="/image/打印.png" Stretch="None"></Image>
                         <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray"  Command="{Binding CommandInputLSH}">
+                <Button Background="LightGray"  >
                     <StackPanel>
                         <Image Source="/image/打印.png" Stretch="None"></Image>
                         <TextBlock HorizontalAlignment="Center">打印销售单</TextBlock>
                     </StackPanel>
                 </Button>
 
-                <Button Background="LightGray" >
+                <Button Background="LightGray" Command="{Binding CommandFinish}">
                     <StackPanel>
                         <Image Source="/image/打印.png" Stretch="None"></Image>
                         <TextBlock HorizontalAlignment="Center">完成打印销售单</TextBlock>
@@ -57,13 +56,13 @@
         <StackPanel Grid.Row="1" Background="LightGray" >
             <StackPanel Orientation="Horizontal" >
                 <TextBlock Text="   购买时间：" />
-                <DatePicker Width="150"   Foreground="Blue" />
+                <DatePicker Width="150"   Foreground="Blue" SelectedDate="{Binding Invoice4Get.StartSellDate}" />
                 <TextBlock Text="  至：" />
-                <DatePicker Width="150"   Foreground="Blue" />
+                <DatePicker Width="150"   Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}"/>
                 <TextBlock Text="  订单号" />
-                <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}"/>
                 <TextBlock Text="  销售单" />
-                <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding Invoice4Get.SaleOrderNo}"/>
                 <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
             </StackPanel>
         </StackPanel>
@@ -76,10 +75,26 @@
 
 
 
-        <DataGrid Grid.Row="3" ItemsSource="{Binding DingDan}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
+        <DataGrid Grid.Row="3" ItemsSource="{Binding Invoice4List}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
             <DataGrid.Columns >
-                <DataGridTextColumn Header="SID" Visibility="Hidden"  Binding="{Binding SID}" />
-                <DataGridTextColumn Header="销售单号"  Binding="{Binding DingDan.Category}" />
+                <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate >
+                            <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"  
+                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTextColumn Header="销售单号"  Binding="{Binding Name}" />
+                <DataGridTemplateColumn Header="备注录入" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="录入" Command="{Binding Path=DataContext.CommandRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"></Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="订单号"  Binding="{Binding Dish.Comment}" />
                 <DataGridTextColumn Header="销售类别"  Binding="{Binding Dish.Score}" />
                 <DataGridTextColumn Header="销售状态"  Binding="{Binding Dish.Score}"/>
@@ -94,23 +109,14 @@
                 <DataGridTextColumn Header="收银流水号"  Binding="{Binding Dish.Score}" />
                 <DataGridTextColumn Header="收银时间"  Binding="{Binding Dish.Score}" />
                 <DataGridTextColumn Header="专柜码"  Binding="{Binding Dish.Score}" />
-                <DataGridTextColumn Header="备注"  Binding="{Binding Dish.Score}" />
+                
                 <DataGridTextColumn Header="备注时间"  Binding="{Binding Dish.Score}"/>
             </DataGrid.Columns>
 
         </DataGrid>
-        <StackPanel Grid.Row="3" Grid.Column="1" >
-            <StackPanel Orientation="Vertical"  Background="LightGray" >
-                <TextBox Height="100"   Foreground="Blue" Background="White" Text="输入订单备注"/>
-                <Button Content="保存销售单备注" Width="100" />
-            </StackPanel>
-        </StackPanel>
+        
 
-        <StackPanel Grid.Row="2" Grid.Column="1">
-            <StackPanel Orientation="Horizontal" Background="LightGray">
-                <TextBlock Text="   销售订单备注" />
-            </StackPanel>
-        </StackPanel>
+        
         <StackPanel Grid.Row="4">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <TextBlock Text="   销售明细" />

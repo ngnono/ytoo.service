@@ -16,9 +16,6 @@ namespace OPCApp.DataService.Impl.Auth
     [Export(typeof(IRole2MenuService))]
     public class Role2MenuService : IRole2MenuService
     {
-
-
-
         public ResultMsg SetMenuByRole(int roleId, List<int> listMenuId)
         {
             throw new NotImplementedException();

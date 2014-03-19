@@ -17,10 +17,21 @@ namespace OPCApp.TransManage.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class PrintInvoice 
     {
+        
+        public object sv;
         public PrintInvoice()
         {
             InitializeComponent();
-            this.DataContext = new PrintInvoiceViewModel();
+
+        }
+        [Import("PrintInvoiceViewModel")]
+        public object ViewModel {
+            set {
+                this.DataContext = value;
+            }
+            get {
+                return this.DataContext;
+            }
         }
     }
 }
