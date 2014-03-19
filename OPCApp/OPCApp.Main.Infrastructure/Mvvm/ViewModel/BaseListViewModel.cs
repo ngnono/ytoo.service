@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
@@ -21,6 +22,7 @@ using System.Collections.ObjectModel;
 using OPCApp.Infrastructure.DataService;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.Infrastructure.Mvvm.View;
+using System.Collections.Generic;
 
 namespace OPCApp.Infrastructure.Mvvm
 {
@@ -63,14 +65,19 @@ namespace OPCApp.Infrastructure.Mvvm
         /// <summary>
         /// Searches the action.
         /// </summary>
-        private void SearchAction()
+        private  void SearchAction()
         {
             var service = GetDataService();
-            var c=service.Search(null);
+            var c=service.Search(this.GetFilter());
             foreach (var item in c.Result)
             {
                 _Collection.Add(item);
             }
+        }
+
+        protected virtual IDictionary<string,object> GetFilter()
+        {
+            return null;
         }
 
         /// <summary>
