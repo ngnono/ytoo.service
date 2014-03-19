@@ -23,5 +23,11 @@ namespace OPCApp.DataService.Impl.Auth
         {
             throw new NotImplementedException();
         }
+
+
+        public List<OPC_AuthMenu> GetMenuList(int roleId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
