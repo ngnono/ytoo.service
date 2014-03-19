@@ -87,7 +87,7 @@ namespace OPCApp.AuthManage.ViewModels
            UsersWindow obj = AppEx.Container.GetInstance<UsersWindow>("UsersView");
            if (obj.ShowDialog()==true)
            {
-               this.UserList=obj.ViewModel.
+               this.UserList = obj.ViewModel.UserList;
            }
            ;
        }
