@@ -55,6 +55,7 @@
     <Compile Include="Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />
+    <Compile Include="RoleMenuDto.cs" />
     <Compile Include="TokenModel.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
