@@ -1,9 +1,7 @@
-﻿
-namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
+﻿namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
 {
-    public sealed class AccessTokenConst
+    public static class AccessTokenConst
     {
-        public const string ACCESSTOKEN = "X-Token";
-        public const string USERID_PROPERTIES_NAME = "__ACCESS_TOKEN__USERID__";
+        public const string UseridPropertiesName = "__ACCESS_TOKEN__USERID__";
     }
 }

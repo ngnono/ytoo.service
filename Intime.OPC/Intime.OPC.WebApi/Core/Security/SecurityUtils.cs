@@ -1,40 +1,39 @@
-﻿using Intime.OPC.MessageHandlers.AccessToken;
-using Intime.OPC.WebApi.Core.Security.Cryptography;
-
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using Intime.OPC.MessageHandlers.AccessToken;
+using Intime.OPC.WebApi.Core.Security.Cryptography;
 
 namespace Intime.OPC.WebApi.Core.Security
 {
-    public class SecurityUtils
+    public static class SecurityUtils
     {
         #region fields
 
-        private static readonly string VECTOR = "abcdefghijklmnox";
-        private static readonly string HASH = "SHA1";
-        private static readonly int KEY_SIZE = 256;
-        private const string ACCESSTOKEN = "AccessToken";
+        private const string Accesstoken = "AccessToken";
+        private const string Vector = "abcdefghijklmnox";
+        private const string Hash = "SHA1";
+        private const int KeySize = 256;
 
         #endregion
 
         public static string CreateAccessToken(int userId, DateTime expires)
         {
-            var token = new AccessTokenIdentity()
+            var token = new AccessTokenIdentity
             {
                 UserId = userId,
                 Expires = expires
             };
 
-            var input = ToJson<AccessTokenIdentity>(token);
+            string input = ToJson(token);
 
-            return AESEncrypt(input);
+            return AesEncrypt(input);
         }
 
         public static AccessTokenIdentity GetAccessToken(string input)
         {
-            var temp = AESDecrypt(input);
+            string temp = AesDecrypt(input);
 
             if (string.IsNullOrWhiteSpace(temp))
             {
@@ -47,53 +46,53 @@ namespace Intime.OPC.WebApi.Core.Security
 
         #region Helper
 
-        private static string AESEncrypt(string input)
+        private static string AesEncrypt(string input)
         {
             return CryptoHelper.Base64AESEncrypt(input,
-               ACCESSTOKEN,
-               ACCESSTOKEN,
-                HASH,
+                Accesstoken,
+                Accesstoken,
+                Hash,
                 1,
-                VECTOR,
-                KEY_SIZE
-            );
+                Vector,
+                KeySize
+                );
         }
 
-        private static string AESDecrypt(string input)
+        private static string AesDecrypt(string input)
         {
             return CryptoHelper.Base64AESDecrypt(input,
-                ACCESSTOKEN,
-                ACCESSTOKEN,
-                HASH,
+                Accesstoken,
+                Accesstoken,
+                Hash,
                 1,
-                VECTOR,
-                KEY_SIZE
-            );
+                Vector,
+                KeySize
+                );
         }
 
-        public static string ToJson<T>(T target)
+        private static string ToJson<T>(T target)
         {
             var dcs = new DataContractJsonSerializer(target.GetType());
-            var result = string.Empty;
+            string result;
 
-            using (MemoryStream stream = new MemoryStream())
+            using (var stream = new MemoryStream())
             {
                 dcs.WriteObject(stream, target);
-                result = System.Text.Encoding.UTF8.GetString(stream.ToArray());
+                result = Encoding.UTF8.GetString(stream.ToArray());
             }
 
             return result;
         }
 
-        public static T Deserialize<T>(string json) where T : class
+        private static T Deserialize<T>(string json) where T : class
         {
-            DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T));
+            var ds = new DataContractJsonSerializer(typeof (T));
 
-            T obj = null;
+            T obj;
 
-            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(json)))
+            using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(json)))
             {
-                obj = (T)ds.ReadObject(ms);
+                obj = (T) ds.ReadObject(ms);
                 ms.Close();
             }
 

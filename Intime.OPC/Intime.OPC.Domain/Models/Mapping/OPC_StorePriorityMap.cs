@@ -8,21 +8,21 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_StorePriorityMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Id)
+            Property(t => t.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             // Table & Column Mappings
-            this.ToTable("OPC_StorePriority");
-            this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.StoreId).HasColumnName("StoreId");
-            this.Property(t => t.Priority).HasColumnName("Priority");
-            this.Property(t => t.CreateDate).HasColumnName("CreateDate");
-            this.Property(t => t.CreateUser).HasColumnName("CreateUser");
-            this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
-            this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
+            ToTable("OPC_StorePriority");
+            Property(t => t.Id).HasColumnName("Id");
+            Property(t => t.StoreId).HasColumnName("StoreId");
+            Property(t => t.Priority).HasColumnName("Priority");
+            Property(t => t.CreateDate).HasColumnName("CreateDate");
+            Property(t => t.CreateUser).HasColumnName("CreateUser");
+            Property(t => t.UpdateDate).HasColumnName("UpdateDate");
+            Property(t => t.UpdateUser).HasColumnName("UpdateUser");
         }
     }
 }

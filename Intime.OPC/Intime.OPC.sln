@@ -1,6 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ADC437BB-76B4-4C49-8146-A7AC9ACFC544}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01_Intime.OPC.Repository", "Intime.OPC.Repository\01_Intime.OPC.Repository.csproj", "{6F89B48C-F608-4C24-968C-2646ACA68D26}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02_Intime.OPC.Service", "Intime.OPC.Service\02_Intime.OPC.Service.csproj", "{B34F0A0C-CEFC-4491-913C-C76EA6B05FBE}"
@@ -10,11 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "00_Intime.OPC.Domain", "Intime.OPC.Domain\00_Intime.OPC.Domain.csproj", "{03E03B5B-EAD6-4E27-976D-82D15F7396D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Intime.OPC.WebHost", "Intime.OPC.WebHost\04_Intime.OPC.WebHost.csproj", "{F58664A9-FDE5-41A7-8AC4-361B1544CD46}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ADC437BB-76B4-4C49-8146-A7AC9ACFC544}"
-	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

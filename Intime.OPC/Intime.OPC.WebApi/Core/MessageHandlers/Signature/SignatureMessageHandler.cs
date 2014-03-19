@@ -1,5 +1,4 @@
-﻿using Intime.OPC.WebApi.Core.Security;
-
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,24 +7,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Intime.OPC.WebApi.Core.MessageHandlers
+namespace Intime.OPC.WebApi.Core.MessageHandlers.Signature
 {
     /// <summary>
-    /// 签名处理消息类，
-    /// 说明 ： 针对发送数据和URL进行统一的签名处理
+    ///     签名处理消息类，
+    ///     说明 ： 针对发送数据和URL进行统一的签名处理
     /// </summary>
     public class SignatureMessageHandler : DelegatingHandler
     {
-        #region fields
-
-        private const string SIGNATURE_HTTP_HEADER_NAME = "X-Sign";
-        private const string AppKey_HTTP_HEADER_NAME = "X-AppKey";
-
-        private IAppSecurityManager appSecurityManager = new AppSecurityManager();
-
-        #endregion
-
-        #region Methods
+        private IAppSecurityManager _appSecurityManager = new AppSecurityManager();
 
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)
@@ -34,7 +24,7 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers
              *  签名开启检查
             ========================================================================--*/
 
-            if (!appSecurityManager.Enabled)
+            if (!_appSecurityManager.Enabled)
             {
                 return base.SendAsync(request, cancellationToken);
             }
@@ -46,33 +36,33 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers
              *      
              ========================================================================--*/
 
-            if (!request.Headers.Contains(SIGNATURE_HTTP_HEADER_NAME))
+            if (!request.Headers.Contains(HeadConfig.Sign))
             {
-                return createErrorResponse(request, "签名为空");
+                return CreateErrorResponse(request, "签名为空");
             }
 
-            if (!request.Headers.Contains(AppKey_HTTP_HEADER_NAME))
+            if (!request.Headers.Contains(HeadConfig.Consumerkey))
             {
-                return createErrorResponse(request, "AppKey为空");
+                return CreateErrorResponse(request, "ConsumeyKey为空");
             }
 
-            var sign = request.Headers.GetValues(SIGNATURE_HTTP_HEADER_NAME).FirstOrDefault();
+            string sign = request.Headers.GetValues(HeadConfig.Sign).FirstOrDefault();
 
             if (string.IsNullOrWhiteSpace(sign))
             {
-                return createErrorResponse(request, "签名不正确");
+                return CreateErrorResponse(request, "签名不正确");
             }
 
-            var appKey = request.Headers.GetValues(AppKey_HTTP_HEADER_NAME).FirstOrDefault();
-            if (string.IsNullOrWhiteSpace(appKey))
+            string consumerKey = request.Headers.GetValues(HeadConfig.Consumerkey).FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(consumerKey))
             {
-                return createErrorResponse(request, "AppKey不能为空");
+                return CreateErrorResponse(request, "ConsumerKey不能为空");
             }
 
-            var secretKey = appSecurityManager.GetSecretKey(appKey);
+            string secretKey = _appSecurityManager.GetSecretKey(consumerKey);
             if (string.IsNullOrWhiteSpace(secretKey))
             {
-                return createErrorResponse(request, string.Format("AppKey找不到相关配置"));
+                return CreateErrorResponse(request, string.Format("Consumerkey找不到相关配置"));
             }
 
             /**======================================================================
@@ -81,15 +71,21 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers
 
             var buffer = new StringBuilder();
 
+            // 添加Method
+            buffer.Append(request.Method);
+
             // 添加请求地址
             buffer.Append(request.RequestUri.PathAndQuery);
 
             // 添加PostData
-            if (!request.Content.IsMimeMultipartContent())
+            if (request.Content != null && !request.Content.IsMimeMultipartContent())
             {
-                var postData = request.Content.ReadAsStringAsync().Result;
+                string postData = request.Content.ReadAsStringAsync().Result;
                 buffer.Append(postData);
             }
+
+            // 添加ConsumerKe
+            buffer.Append(consumerKey);
 
             // 添加secretKey
             buffer.Append(secretKey);
@@ -98,24 +94,22 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers
             *  比较签名
             ========================================================================--*/
 
-            var signStr = GetMd5Hash(buffer.ToString().ToUpper());
-            if (string.Compare(sign, signStr, true) != 0)
-            {
-                return createErrorResponse(request, "签名不正确");
-            }
-
-            /*======================================================================
-            *  执行函数
-            ========================================================================--*/
-            return base.SendAsync(request, cancellationToken);
+            string signStr = GetMd5Hash(buffer.ToString().ToUpper());
+            return String.Compare(sign, signStr, StringComparison.OrdinalIgnoreCase) != 0
+                ? CreateErrorResponse(request, "签名不正确")
+                : base.SendAsync(request, cancellationToken);
         }
 
+        public void SetAppSecurityManager(IAppSecurityManager appSecurityManager)
+        {
+            _appSecurityManager = appSecurityManager;
+        }
 
         #region Helper
 
-        private Task<HttpResponseMessage> createErrorResponse(HttpRequestMessage request, string message)
+        private static Task<HttpResponseMessage> CreateErrorResponse(HttpRequestMessage request, string message)
         {
-            var errorResponse = request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
+            HttpResponseMessage errorResponse = request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
             return Task.FromResult(errorResponse);
         }
 
@@ -124,20 +118,13 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers
             MD5 md5Hasher = MD5.Create();
             byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(content));
 
-            StringBuilder sBuilder = new StringBuilder();
-            for (int i = 0; i < data.Length; i++)
+            var sBuilder = new StringBuilder();
+            foreach (byte t in data)
             {
-                sBuilder.Append(data[i].ToString("x2"));
+                sBuilder.Append(t.ToString("x2"));
             }
 
             return sBuilder.ToString();
-        }
-
-        #endregion
-
-        public void SetAppSecurityManager(IAppSecurityManager appSecurityManager)
-        {
-            this.appSecurityManager = appSecurityManager;
         }
 
         #endregion

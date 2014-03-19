@@ -6,30 +6,33 @@ using System.Web.Http.Dependencies;
 namespace Intime.OPC.WebApi.Core.DependencyResolver.MEF
 {
     /// <summary>
-    /// Implements IDependencyScope over a MEF lightweight container.
+    ///     Implements IDependencyScope over a MEF lightweight container.
     /// </summary>
-    public class MEFDependencyScope : IDependencyScope
+    public class MefDependencyScope : IDependencyScope
     {
-        readonly Export<CompositionContext> _compositionScope;
+        private readonly Export<CompositionContext> _compositionScope;
 
         /// <summary>
-        /// Construct a dependency scope for the composition context accessed
-        /// using the <see cref="CompositionContext"/>.
+        ///     Construct a dependency scope for the composition context accessed
+        ///     using the <see cref="CompositionContext" />.
         /// </summary>
         /// <param name="compositionScope">A handle to the export provider to use.</param>
-        public MEFDependencyScope(Export<CompositionContext> compositionScope)
+        public MefDependencyScope(Export<CompositionContext> compositionScope)
         {
             if (compositionScope == null) throw new ArgumentNullException("compositionScope");
             _compositionScope = compositionScope;
         }
 
         /// <summary>
-        /// The composition scope.
+        ///     The composition scope.
         /// </summary>
-        protected CompositionContext CompositionScope { get { return _compositionScope.Value; } }
+        protected CompositionContext CompositionScope
+        {
+            get { return _compositionScope.Value; }
+        }
 
         /// <summary>
-        /// Release the scope.
+        ///     Release the scope.
         /// </summary>
         public void Dispose()
         {
@@ -37,19 +40,8 @@ namespace Intime.OPC.WebApi.Core.DependencyResolver.MEF
         }
 
         /// <summary>
-        /// Release the scope.
-        /// </summary>
-        /// <param name="disposing">If the scope is being disposed, true; otherwise
-        /// the scope is undergoing finalization.</param>
-        protected void Dispose(bool disposing)
-        {
-            if (disposing)
-                _compositionScope.Dispose();
-        }
-
-        /// <summary>
-        /// Get the service represented by <paramref name="serviceType"/> from the
-        /// scope.
+        ///     Get the service represented by <paramref name="serviceType" /> from the
+        ///     scope.
         /// </summary>
         /// <param name="serviceType">The service to retrieve.</param>
         /// <returns>The service instance; or null.</returns>
@@ -63,8 +55,8 @@ namespace Intime.OPC.WebApi.Core.DependencyResolver.MEF
         }
 
         /// <summary>
-        /// Get all services represented by <paramref name="serviceType"/> from
-        /// the scope.
+        ///     Get all services represented by <paramref name="serviceType" /> from
+        ///     the scope.
         /// </summary>
         /// <param name="serviceType">The service type to retrieve.</param>
         /// <returns>All instances of the service type.</returns>
@@ -73,6 +65,19 @@ namespace Intime.OPC.WebApi.Core.DependencyResolver.MEF
             if (serviceType == null) throw new ArgumentNullException("serviceType");
 
             return CompositionScope.GetExports(serviceType, null);
+        }
+
+        /// <summary>
+        ///     Release the scope.
+        /// </summary>
+        /// <param name="disposing">
+        ///     If the scope is being disposed, true; otherwise
+        ///     the scope is undergoing finalization.
+        /// </param>
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+                _compositionScope.Dispose();
         }
     }
 }

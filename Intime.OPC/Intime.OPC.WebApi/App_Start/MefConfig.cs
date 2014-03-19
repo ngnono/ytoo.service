@@ -1,17 +1,18 @@
-﻿using Intime.OPC.WebApi.Core.DependencyResolver.MEF;
-
-using System;
-using System.Composition.Convention;
+﻿using System.Composition.Convention;
 using System.Composition.Hosting;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using Intime.OPC.WebApi.Core.DependencyResolver.MEF;
+using System.Web.Compilation;
+using System.Reflection;
 
 namespace Intime.OPC.WebApi
 {
     /// <summary>
-    /// MEF配置管理
+    ///     MEF配置管理
     /// </summary>
-    public class MefConfig
+    public static class MefConfig
     {
         public static void RegisterMefDependencyResolver()
         {
@@ -30,13 +31,13 @@ namespace Intime.OPC.WebApi
 
             // Export namespace {*.Support.*}
             conventions.ForTypesMatching(t => t.Namespace != null &&
-                      (t.Namespace.EndsWith(".Support") || t.Namespace.Contains(".Support.")))
+                                              (t.Namespace.EndsWith(".Support") || t.Namespace.Contains(".Support.")))
                 .Export()
                 .ExportInterfaces();
 
-            var container = new ContainerConfiguration()
-                .WithAssemblies(AppDomain.CurrentDomain.GetAssemblies(), conventions)
-                .CreateContainer();
+            CompositionHost container = new ContainerConfiguration()
+                    .WithAssemblies(BuildManager.GetReferencedAssemblies().Cast<Assembly>(), conventions)
+                    .CreateContainer();
 
             // 设置WebApi的DependencyResolver
             GlobalConfiguration.Configuration.DependencyResolver = new MefDependencyResolver(container);

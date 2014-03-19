@@ -1,14 +1,13 @@
 using System;
-using System.Collections.Generic;
 
 namespace Intime.OPC.Domain.Models
 {
-    public partial class OPC_SaleLog
+    public class OPC_SaleLog
     {
         public int Id { get; set; }
         public string SaleId { get; set; }
         public int Status { get; set; }
-        public System.DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public int CreatedUser { get; set; }
     }
 }
