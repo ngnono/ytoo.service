@@ -181,19 +181,31 @@ namespace System.Collections.Generic
             return res.Distinct();
         }
 
+        /// <summary>
+        /// 是否包含符合條件的項
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="match">The match.</param>
+        /// <returns><c>true</c> if [contains] [the specified source]; otherwise, <c>false</c>.</returns>
         public static bool Contains<T>(this IEnumerable<T> source, Expression<Func<T, bool>> match) {
             var t=  source.FirstOrDefault(match.Compile());
             return t != null;
         }
 
-        public static IList<T> Remove<T>(this IList<T> source, Expression<Func<T, bool>> match)
+        /// <summary>
+        /// 根据条件移除数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="match">The match.</param>
+        public static void Remove<T>(this IList<T> source, Expression<Func<T, bool>> match)
         {
             var lst = source.Where(match.Compile());
            lst.ForEach((t) =>
            {
                source.Remove(t);
            });
-            return source;
         }
 
     }
