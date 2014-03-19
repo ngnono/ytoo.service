@@ -5,6 +5,11 @@ namespace Intime.OPC.Service.Support
 {
     public class RoleService : IRoleService
     {
+        public RoleService(IRoleRepository roleRepository)
+        {
+            this._roleRepository = roleRepository;
+        }
+
         private readonly IRoleRepository _roleRepository;
 
 
@@ -31,6 +36,12 @@ namespace Intime.OPC.Service.Support
         public bool IsStop(int roleId, bool bValid)
         {
             return _roleRepository.IsStop(roleId, bValid);
+        }
+
+
+        public bool SetMenus(object roleMenuDto)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

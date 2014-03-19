@@ -10,5 +10,6 @@ namespace Intime.OPC.Repository
         bool Delete(int roleId);
         IList<OPC_AuthRole> Select();
         bool IsStop(int roleId, bool bValid);
+        bool SetMenus(object roleMenuDto);
     }
 }
