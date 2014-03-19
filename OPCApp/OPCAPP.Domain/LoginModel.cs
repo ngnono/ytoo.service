@@ -21,7 +21,7 @@ namespace OPCAPP.Domain
     /// </summary>
     public  class LoginModel : ILoginModel
     {
-        public LoginModel(string userId, string userName, string token, string shoppeId, DateTime expires)
+        public LoginModel(int userId, string userName, string token, string shoppeId, DateTime expires)
         {
             this.UserID = userId;
             this.UserName = userName;
@@ -34,7 +34,7 @@ namespace OPCAPP.Domain
         /// 用户ID
         /// </summary>
         /// <value>The user identifier.</value>
-        public string UserID
+        public int UserID
         {
             get; private set;
         }

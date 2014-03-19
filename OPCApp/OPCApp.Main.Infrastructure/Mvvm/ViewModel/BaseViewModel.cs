@@ -61,13 +61,13 @@ namespace OPCApp.Infrastructure.Mvvm
                MessageBox.Show(strB.ToString(), "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                return;
            }
-           var service = GetDataService();
-           var msg= service.Add((T)Model);
-           if (!msg.IsSuccess)
-           {
-               MessageBox.Show(msg.Msg, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-               return;
-           }
+           //var service = GetDataService();
+           //var msg= service.Add((T)Model);
+           //if (!msg.IsSuccess)
+           //{
+           //    MessageBox.Show(msg.Msg, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+           //    return;
+           //}
            View.CloseView();
            AfterDoOKAction();
        }

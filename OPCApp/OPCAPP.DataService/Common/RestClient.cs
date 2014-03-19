@@ -81,8 +81,13 @@ namespace OPCApp.DataService.Common
         public static IList<T> Get<T>(string address, IDictionary<string,object> fields)
         {
             const string strFormat = "{0}={1}&";
-            string str = fields.Keys.Aggregate("", (current, key) => current + string.Format(strFormat, key, fields[key]));
-            string url = string.Format("{0}?{1}",address,str.Substring(0,str.Length-1));
+            string str = "";
+            if (fields != null)
+            {
+                str = fields.Keys.Aggregate("", (current, key) => current + string.Format(strFormat, key, fields[key]));
+            }
+
+            string url = string.IsNullOrWhiteSpace(str)?address : string.Format("{0}?{1}",address,str.Substring(0,str.Length-1));
             var response = Client.GetAsync(url).Result;
             return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
 
@@ -124,6 +129,12 @@ namespace OPCApp.DataService.Common
         /// <param name="data">The data.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool Put<T>(string url, T data)
+        {
+            var response = Client.PutAsJsonAsync(url, data).Result;
+            return response.IsSuccessStatusCode;
+        }
+
+        public static bool Put(string url, object data)
         {
             var response = Client.PutAsJsonAsync(url, data).Result;
             return response.IsSuccessStatusCode;

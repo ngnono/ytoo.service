@@ -4,6 +4,13 @@ namespace OPCApp.Domain.Models
 {
     public class OPC_AuthRole
     {
+        public OPC_AuthRole()
+        {
+            CreateDate = DateTime.Now;
+            UpdateDate = DateTime.Now;
+            IsValid = false;
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
