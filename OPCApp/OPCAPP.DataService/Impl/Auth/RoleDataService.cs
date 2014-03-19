@@ -25,10 +25,9 @@ namespace OPCApp.DataService.Impl.Auth
             return ResultMsg.Success();
         }
 
-        public OPCApp.Infrastructure.PageResult<OPC_AuthRole> Search(IFilter filter)
+        public Infrastructure.PageResult<OPC_AuthRole> Search(IDictionary<string, object> iDicFilter)
         {
-            return null;
-
+            throw new System.NotImplementedException();
         }
     }
 }
