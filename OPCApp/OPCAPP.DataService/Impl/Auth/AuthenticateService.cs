@@ -52,9 +52,9 @@ namespace OPCApp.DataService.Impl.Auth
             return new ResultMsg() { IsSuccess = bFalg, Msg = "删除错误" };
         }
 
-        public PageResult<OPC_AuthUser> Search(Infrastructure.DataService.IFilter filter)
+        public PageResult<OPC_AuthUser> Search(IDictionary<string,object> filter)
         {
-            var lst= RestClient.Get<OPC_AuthUser>("/api/account/selectuser", filter.GetFilter());
+            var lst= RestClient.Get<OPC_AuthUser>("/api/account/selectuser",filter);
             return new PageResult<OPC_AuthUser>(lst,lst.Count);
         }
 
