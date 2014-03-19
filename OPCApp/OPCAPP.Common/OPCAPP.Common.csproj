@@ -42,6 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\DoubleExtensions.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\PagingExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Impl\Log.cs" />
     <Compile Include="Interface\ILog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
