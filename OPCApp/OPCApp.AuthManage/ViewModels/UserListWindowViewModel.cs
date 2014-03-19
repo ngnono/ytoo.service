@@ -35,6 +35,13 @@ namespace OPCApp.AuthManage.ViewModels
             this.AddViewModeKey = "UserViewModel";
             this.Init();
         }
+
+        protected override IDictionary<string, object> GetFilter()
+        {
+           var dicFilter= new Dictionary<string, object> {{SelectedFiled, SelectedFiledValue}};
+           return dicFilter;
+        }
+
         private void DBGridClick() 
         {
 
@@ -46,13 +53,18 @@ namespace OPCApp.AuthManage.ViewModels
             /*查询初始化*/
             this.SelectedFiledValue = "";
             this.SelectedFiled = "";
+            this.SetStopUserCommand = new DelegateCommand(this.SetStopUser);
+            
         }
         private void SetStopUser() 
         {
             var user = Model as OPC_AuthUser;
             if (user != null)
             {
-                //bool isValid = user.IsValid == true ? true : false;
+                var iauth= this.GetDataService() as IAuthenticateService;
+                bool isValid = user.IsValid == true ? true : false;
+                iauth.SetIsStop(user.Id, isValid);
+
                 //SetIsStop(user.Id, isValid);
             }
           
