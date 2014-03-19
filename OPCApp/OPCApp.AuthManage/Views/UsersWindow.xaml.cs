@@ -1,21 +1,31 @@
 ﻿using System;
 using MahApps.Metro.Controls;
+using Microsoft.Practices.Prism.Commands;
 using OPCApp.AuthManage.ViewModels;
 using System.ComponentModel.Composition;
+using OPCApp.Domain;
 using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.AuthManage.Views
 {
-   [Export("UserView", typeof(IBaseView))]
+   [Export("UsersView", typeof(UsersWindow))]
    [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class UserAddWindow : MetroWindow, IBaseView
-    {
-        
-        public UserAddWindow()
+    public partial class UsersWindow : MetroWindow
+   {
+       
+       public UsersWindow()
         {
             InitializeComponent();
-
+            ViewModel.CancelCommand = new DelegateCommand(this.Cancel);
+            ViewModel.OkCommand = new DelegateCommand(this.CloseView);
         }
+       [Import("UsersViewModel")]
+       public UsersWindowViewModel ViewModel
+       {
+           get { return this.DataContext as UsersWindowViewModel; }
+           set { this.DataContext = value; }
+       }
+
         public void Cancel() 
         {
             this.DialogResult = false;
