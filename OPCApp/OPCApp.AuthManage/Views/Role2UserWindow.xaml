@@ -34,6 +34,12 @@
                         <TextBlock HorizontalAlignment="Center">添加用户</TextBlock>
                     </StackPanel>
                 </Button>
+                <Button Background="LightGray" Width="50" Command="{Binding AddUserWindowCommand}">
+                    <StackPanel>
+                        <Image Source="/image/删除.png" Stretch="None" ></Image>
+                        <TextBlock HorizontalAlignment="Center">添加用户</TextBlock>
+                    </StackPanel>
+                </Button>
 
             </StackPanel>
         </StackPanel>
@@ -50,9 +56,18 @@
                 <DataGridTextColumn Header="角色描述" Width="80" Binding="{Binding Description}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid HorizontalAlignment="Left" AutoGenerateColumns="True" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1">
+        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding UserList}"  AutoGenerateColumns="True" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1">
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header="全选" Width="50" Binding="{Binding IsSelected}"/>
+                <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate >
+                            <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"  
+                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <DataGridTextColumn Header="用户名称" Width="80" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="专柜名称" Width="80" Binding="{Binding SectionName}"/>
             </DataGrid.Columns>
