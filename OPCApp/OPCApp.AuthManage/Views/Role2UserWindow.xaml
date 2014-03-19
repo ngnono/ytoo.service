@@ -34,16 +34,16 @@
                         <TextBlock HorizontalAlignment="Center">添加用户</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding AddUserWindowCommand}">
+                <Button Background="LightGray" Width="50" Command="{Binding DeleteUserListCommand}">
                     <StackPanel>
                         <Image Source="/image/删除.png" Stretch="None" ></Image>
-                        <TextBlock HorizontalAlignment="Center">添加用户</TextBlock>
+                        <TextBlock HorizontalAlignment="Center">删除用户</TextBlock>
                     </StackPanel>
                 </Button>
 
             </StackPanel>
         </StackPanel>
-        <DataGrid HorizontalAlignment="Left" Height="Auto"   AutoGenerateColumns="True" Grid.Column="0"  Grid.Row="1">
+        <DataGrid HorizontalAlignment="Left" Height="Auto" ItemsSource="{Binding RoleList}" SelectedItem="{Binding SelectedRole}"  AutoGenerateColumns="True" Grid.Column="0"  Grid.Row="1">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding DBGridClickCommand}"></i:InvokeCommandAction>
@@ -51,8 +51,8 @@
                 
             </i:Interaction.Triggers>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="角色Id" Visibility="Hidden"></DataGridTextColumn>
-                <DataGridTextColumn Header="角色名称" Width="80" Binding="{Binding RoleName}"/>
+                <DataGridTextColumn Header="角色Id" Visibility="Hidden" Binding="{Binding Id}" ></DataGridTextColumn>
+                <DataGridTextColumn Header="角色名称" Width="80" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="角色描述" Width="80" Binding="{Binding Description}"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -67,7 +67,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                <DataGridTextColumn Header="用户Id" Visibility="Hidden" Binding="{Binding Id}" ></DataGridTextColumn>
                 <DataGridTextColumn Header="用户名称" Width="80" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="专柜名称" Width="80" Binding="{Binding SectionName}"/>
             </DataGrid.Columns>

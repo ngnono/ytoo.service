@@ -38,7 +38,7 @@ namespace OPCApp.AuthManage.ViewModels
 
         protected override IDictionary<string, object> GetFilter()
         {
-           var dicFilter= new Dictionary<string, object> {{SelectedFiled, SelectedFiledValue}};
+            var dicFilter = new Dictionary<string, object> { { this.FieldList.IndexOf(SelectedFiled).ToString(), SelectedFiledValue } };
            return dicFilter;
         }
 

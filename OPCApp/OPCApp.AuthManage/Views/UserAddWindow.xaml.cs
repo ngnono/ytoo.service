@@ -8,10 +8,10 @@ namespace OPCApp.AuthManage.Views
 {
    [Export("UsersView", typeof(IBaseView))]
    [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class UsersAddWindow : MetroWindow, IBaseView
+    public partial class UserAddWindow : MetroWindow, IBaseView
     {
 
-       public UsersAddWindow()
+       public UserAddWindow()
         {
             InitializeComponent();
 

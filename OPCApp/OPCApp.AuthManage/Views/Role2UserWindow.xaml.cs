@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MahApps.Metro;
 using MahApps.Metro.Controls;
+using OPCApp.AuthManage.ViewModels;
 
 namespace OPCApp.AuthManage.Views
 {
@@ -21,19 +23,17 @@ namespace OPCApp.AuthManage.Views
     /// </summary>
     public partial class Role2UserListWindow : UserControl
     {
+        [Import("Role2UserViewModel")] 
+        public Role2UserWindowViewModel ViewModel
+        {
+            get { return this.DataContext as Role2UserWindowViewModel; }
+            set { this.DataContext = value; }
+        }
         public Role2UserListWindow()
         {
             InitializeComponent();
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            //是估覅一
-        }
-
-        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-        }
+       
     }
 }
