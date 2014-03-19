@@ -42,19 +42,22 @@ namespace OPCApp.DataService.Impl.Auth
 
         public Infrastructure.DataService.ResultMsg Edit(Domain.Models.OPC_AuthUser user)
         {
-            var bFalg = RestClient.Put("/api/account/updateuser", user);
+            var bFalg = RestClient.Put("account/updateuser", user);
             return new ResultMsg() { IsSuccess = bFalg, Msg = "保存成功" };
         }
 
         public Infrastructure.DataService.ResultMsg Delete(Domain.Models.OPC_AuthUser user)
         {
-            var bFalg = RestClient.Put("/api/account/deleteuser", user);
+            var oo = new { userId =user.Id};
+            var bFalg = RestClient.Put("account/deleteuser",user.Id);
             return new ResultMsg() { IsSuccess = bFalg, Msg = "删除错误" };
         }
 
         public PageResult<OPC_AuthUser> Search(Infrastructure.DataService.IFilter filter)
         {
-            var lst= RestClient.Get<OPC_AuthUser>("/api/account/selectuser", filter.GetFilter());
+            var dic = filter == null ? new Dictionary<string, object>() : filter.GetFilter();
+
+            var lst= RestClient.Get<OPC_AuthUser>("account/selectuser", dic);
             return new PageResult<OPC_AuthUser>(lst,lst.Count);
         }
 

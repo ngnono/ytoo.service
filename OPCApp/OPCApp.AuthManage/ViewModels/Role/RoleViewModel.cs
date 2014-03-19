@@ -33,7 +33,16 @@ namespace OPCApp.AuthManage.ViewModels
         public RoleViewModel()
             : base("RoleAddView")
         {
-            this.Model = new OPC_AuthRole();
+            if (AppEx.LoginModel != null)
+            {
+                this.Model = new OPC_AuthRole() {CreateUserId = AppEx.LoginModel.UserID};
+            }
+            else
+            {
+                this.Model = new OPC_AuthRole() { CreateUserId = 0 };
+            }
+
+
         }
 
         protected override Infrastructure.DataService.IBaseDataService<OPC_AuthRole> GetDataService()
