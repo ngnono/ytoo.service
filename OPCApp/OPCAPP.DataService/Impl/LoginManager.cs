@@ -39,11 +39,11 @@ namespace OPCApp.DataService.Impl
         /// <returns>ILoginModel.</returns>
         public ILoginModel Login(string userId, string password)
         {
-            this.UserName = userId;
-            this.Password = password;
+            this.userName = userId;
+            this.password = password;
             var info = new LoginInfo();
-            info.UserName = this.UserName;
-            info.Password = this.Password;
+            info.UserName = this.userName;
+            info.Password = this.password;
             var tk = RestClient.Post<LoginInfo, TokenModel>("Account/token", info);
             if (tk!=null)
             {
@@ -58,17 +58,17 @@ namespace OPCApp.DataService.Impl
         /// <returns>ILoginModel.</returns>
         public ILoginModel ReLogin()
         {
-            return Login(UserName, Password);
+            return Login(userName, password);
         }
 
         /// <summary>
         /// The user name
         /// </summary>
-        private string UserName;
+        private string userName;
         /// <summary>
         /// The password
         /// </summary>
-        private string Password;
+        private string password;
 
 
         /// <summary>
