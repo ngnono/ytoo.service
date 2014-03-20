@@ -78,13 +78,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IService\IRemark.cs" />
-    <Compile Include="Models\Remark.cs" />
+    <Compile Include="Models\Remark.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TransManageModule.cs" />
     <Compile Include="IService\IInvoice.cs" />
     <Compile Include="IService\ResultMsg.cs" />
     <Compile Include="IService\IPrint.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
-    <Compile Include="ViewModels\RemarkViewModel.cs" />
+    <Compile Include="ViewModels\RemarkViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ViewModels\StoreOutViewModel.cs" />
     <Compile Include="ViewModels\StoreInViewModel.cs" />
     <Compile Include="ViewModels\PrintInvoiceViewModel.cs" />
@@ -93,6 +97,7 @@
     </Compile>
     <Compile Include="Views\RemarkWin.xaml.cs">
       <DependentUpon>RemarkWin.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\StoreOut.xaml.cs">
       <DependentUpon>StoreOut.xaml</DependentUpon>
@@ -108,8 +113,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\RemarkWin.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StoreOut.xaml">
       <Generator>MSBuild:Compile</Generator>
