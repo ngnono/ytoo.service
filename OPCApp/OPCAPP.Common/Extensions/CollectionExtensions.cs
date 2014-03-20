@@ -208,6 +208,27 @@ namespace System.Collections.Generic
            });
         }
 
+        /// <summary>
+        /// 将数组合并为字符串
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="split">The split.</param>
+        /// <returns>System.String.</returns>
+        public static string Join(this IEnumerable<int> source, char split=',')
+        {
+           
+            StringBuilder stringBuilder=new StringBuilder();
+        
+            foreach (var id in source)
+            {
+                stringBuilder.AppendFormat("{0}{1}", id, split);
+            }
+            if (source.Count()>0)
+            {
+                return stringBuilder.ToString().TrimEnd(split);
+            }
+            return "";
+        }
     }
 
     public class EqualityComparer<T> : IEqualityComparer<T>
