@@ -56,8 +56,9 @@ namespace OPCApp.DataService.Impl.Auth
 
         public PageResult<OPC_AuthUser> Search(IDictionary<string, object> iDicFilter)
         {
-            var lst = RestClient.Get<OPC_AuthUser>("account/selectuser", iDicFilter);
-            return new PageResult<OPC_AuthUser>(lst, lst.Count);
+            //var lst = RestClient.Get<OPC_AuthUser>("account/selectuser", iDicFilter);
+            //return new PageResult<OPC_AuthUser>(lst, lst.Count);
+            return null;
         }
     }
 }

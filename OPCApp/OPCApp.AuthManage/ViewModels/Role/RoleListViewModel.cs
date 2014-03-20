@@ -25,7 +25,6 @@ namespace OPCApp.AuthManage.ViewModels
     /// Class RoleListViewModel.
     /// </summary>
     [Export("RoleListViewModel", typeof(IViewModel))]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class RoleListViewModel : BaseListViewModel<OPC_AuthRole>
     {
         /// <summary>

@@ -181,21 +181,54 @@ namespace System.Collections.Generic
             return res.Distinct();
         }
 
+        /// <summary>
+        /// 是否包含符合條件的項
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="match">The match.</param>
+        /// <returns><c>true</c> if [contains] [the specified source]; otherwise, <c>false</c>.</returns>
         public static bool Contains<T>(this IEnumerable<T> source, Expression<Func<T, bool>> match) {
             var t=  source.FirstOrDefault(match.Compile());
             return t != null;
         }
 
-        public static IList<T> Remove<T>(this IList<T> source, Expression<Func<T, bool>> match)
+        /// <summary>
+        /// 根据条件移除数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="match">The match.</param>
+        public static void Remove<T>(this IList<T> source, Expression<Func<T, bool>> match)
         {
             var lst = source.Where(match.Compile());
            lst.ForEach((t) =>
            {
                source.Remove(t);
            });
-            return source;
         }
 
+        /// <summary>
+        /// 将数组合并为字符串
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="split">The split.</param>
+        /// <returns>System.String.</returns>
+        public static string Join(this IEnumerable<int> source, char split=',')
+        {
+           
+            StringBuilder stringBuilder=new StringBuilder();
+        
+            foreach (var id in source)
+            {
+                stringBuilder.AppendFormat("{0}{1}", id, split);
+            }
+            if (source.Count()>0)
+            {
+                return stringBuilder.ToString().TrimEnd(split);
+            }
+            return "";
+        }
     }
 
     public class EqualityComparer<T> : IEqualityComparer<T>

@@ -56,38 +56,10 @@ namespace OPCApp.DataService.Common
             }
         }
 
-        /// <summary>
-        /// Gets the page result.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="url">The URL.</param>
-        /// <param name="obj">The object.</param>
-        /// <returns>PageResult{``0}.</returns>
-        //public static PageResult<T> GetPageResult<T>(string url)
-        //{
-        //"Order/Index"
-        //HttpResponseMessage response = Client.GetAsync(url).Result;
-        //if (response.IsSuccessStatusCode)
-        //{
-        //    var lst = response.Content.ReadAsAsync<IEnumerable<T>>().Result;
-        //    return new PageResult<T>(lst, 100);
-        //}
-        //else
-        //{
-        //    return new PageResult<T>(new List<T>(),0);
-        //}
-        //}
-
-        public static IList<T> Get<T>(string address, IDictionary<string,object> fields)
+      
+        public static IList<T> Get<T>(string address, string urlParams="")
         {
-            const string strFormat = "{0}={1}&";
-            string str = "";
-            if (fields != null)
-            {
-                str = fields.Keys.Aggregate("", (current, key) => current + string.Format(strFormat, key, fields[key]));
-            }
-
-            string url = string.IsNullOrWhiteSpace(str)?address : string.Format("{0}?{1}",address,str.Substring(0,str.Length-1));
+            string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}", address, urlParams);
             var response = Client.GetAsync(url).Result;
             return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
 

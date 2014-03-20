@@ -261,7 +261,16 @@ namespace System
             return CHT_WordPadLeftRight(s, "R", length, padchar);
         }
 
+        public static int[] ToInts(this string s, char pchar = '%')
+        {
+            IList<int> lst=new List<int>();
+            var strs = s.Split(pchar);
+            strs.ForEach((t) =>
+            {
+                lst.Add(t.ToInt());
+            });
+            return lst.ToArray();
+        }
 
-        
     }
 }

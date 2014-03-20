@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OPCAPP.Common</RootNamespace>
     <AssemblyName>OPCAPP.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -51,16 +51,6 @@
     <Compile Include="Impl\Log.cs" />
     <Compile Include="Interface\ILog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
-      <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
-      <Name>OPCApp.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Main.Infrastructure.csproj">
-      <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
-      <Name>OPCApp.Main.Infrastructure</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

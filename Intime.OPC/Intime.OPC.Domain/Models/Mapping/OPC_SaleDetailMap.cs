@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Intime.OPC.Domain.Models.Mapping
@@ -7,31 +8,31 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_SaleDetailMap()
         {
             // Primary Key
-            HasKey(t => t.Id);
+            this.HasKey(t => t.Id);
 
             // Properties
-            Property(t => t.ProdSaleCode)
+            this.Property(t => t.ProdSaleCode)
                 .HasMaxLength(50);
 
-            Property(t => t.Remark)
+            this.Property(t => t.Remark)
                 .HasMaxLength(500);
 
             // Table & Column Mappings
-            ToTable("OPC_SaleDetail");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.SaleId).HasColumnName("SaleId");
-            Property(t => t.Status).HasColumnName("Status");
-            Property(t => t.StockId).HasColumnName("StockId");
-            Property(t => t.SaleCount).HasColumnName("SaleCount");
-            Property(t => t.Price).HasColumnName("Price");
-            Property(t => t.BackNumber).HasColumnName("BackNumber");
-            Property(t => t.ProdSaleCode).HasColumnName("ProdSaleCode");
-            Property(t => t.Remark).HasColumnName("Remark");
-            Property(t => t.RemarkDate).HasColumnName("RemarkDate");
-            Property(t => t.CreatedDate).HasColumnName("CreatedDate");
-            Property(t => t.CreatedUser).HasColumnName("CreatedUser");
-            Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
-            Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
+            this.ToTable("OPC_SaleDetail");
+            this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.SaleId).HasColumnName("SaleId");
+            this.Property(t => t.Status).HasColumnName("Status");
+            this.Property(t => t.StockId).HasColumnName("StockId");
+            this.Property(t => t.SaleCount).HasColumnName("SaleCount");
+            this.Property(t => t.Price).HasColumnName("Price");
+            this.Property(t => t.BackNumber).HasColumnName("BackNumber");
+            this.Property(t => t.ProdSaleCode).HasColumnName("ProdSaleCode");
+            this.Property(t => t.Remark).HasColumnName("Remark");
+            this.Property(t => t.RemarkDate).HasColumnName("RemarkDate");
+            this.Property(t => t.CreatedDate).HasColumnName("CreatedDate");
+            this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
+            this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
+            this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
         }
     }
 }

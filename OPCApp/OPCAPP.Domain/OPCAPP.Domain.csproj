@@ -44,6 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\EnumReturnGoodsStatus.cs" />
+    <Compile Include="Enums\EnumRMACashStatus.cs" />
+    <Compile Include="Enums\EnumRMAStatus.cs" />
+    <Compile Include="Enums\EnumSaleOrderStatus.cs" />
+    <Compile Include="Enums\EnumSaleStatus.cs" />
+    <Compile Include="Enums\EnumCashStatus.cs" />
+    <Compile Include="Enums\EnumOderStatus.cs" />
     <Compile Include="LoginModel.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />
@@ -52,6 +59,8 @@
     <Compile Include="Models\OPC_AuthUser.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MenuGroup.cs" />
+    <Compile Include="Models\OPC_Sale.cs" />
+    <Compile Include="Models\OPC_SaleDetail.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />

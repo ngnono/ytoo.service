@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Intime.OPC.Domain.Models.Mapping
@@ -7,24 +8,24 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_SaleRMAMap()
         {
             // Primary Key
-            HasKey(t => t.Id);
+            this.HasKey(t => t.Id);
 
             // Properties
-            Property(t => t.Reason)
+            this.Property(t => t.Reason)
                 .IsRequired()
                 .HasMaxLength(200);
 
             // Table & Column Mappings
-            ToTable("OPC_SaleRMA");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.SaleId).HasColumnName("SaleId");
-            Property(t => t.Reason).HasColumnName("Reason");
-            Property(t => t.BackDate).HasColumnName("BackDate");
-            Property(t => t.Status).HasColumnName("Status");
-            Property(t => t.CreatedDate).HasColumnName("CreatedDate");
-            Property(t => t.CreatedUser).HasColumnName("CreatedUser");
-            Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
-            Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
+            this.ToTable("OPC_SaleRMA");
+            this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.SaleId).HasColumnName("SaleId");
+            this.Property(t => t.Reason).HasColumnName("Reason");
+            this.Property(t => t.BackDate).HasColumnName("BackDate");
+            this.Property(t => t.Status).HasColumnName("Status");
+            this.Property(t => t.CreatedDate).HasColumnName("CreatedDate");
+            this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
+            this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
+            this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
         }
     }
 }
