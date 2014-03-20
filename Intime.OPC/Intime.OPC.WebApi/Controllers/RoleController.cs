@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service;
@@ -19,7 +20,10 @@ namespace Intime.OPC.WebApi.Controllers
         {
             _roleService = roleService;
         }
-        [HttpPut]
+
+       
+
+        [HttpPost]
         public IHttpActionResult AddRole([FromBody] OPC_AuthRole role)
         //public IHttpActionResult AddUser()
         {
@@ -42,6 +46,16 @@ namespace Intime.OPC.WebApi.Controllers
             }
 
             return InternalServerError();
+        }
+
+        [HttpPut]
+        public IHttpActionResult SetMenus(RoleMenuDto menuDto)
+        {
+            bool bl= _roleService.SetMenus(menuDto);
+            if (bl)
+                return Ok();
+            else
+                return InternalServerError();
         }
 
         [HttpPut]

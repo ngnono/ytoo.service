@@ -13,7 +13,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto" MinHeight="53"/>
+            <!--<RowDefinition Height="Auto" MinHeight="53"/>-->
             <RowDefinition Height="Auto" MinHeight="107"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
@@ -60,7 +60,7 @@
 
             </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,3">
+        <!--<StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,3">
             <Label Content=" 查找字段:" Height="25" />
             <ComboBox  Width="100"  ItemsSource="{Binding FieldList}" Height="25" SelectedItem="{ Binding selectedFiled}" SelectedIndex="0"/>
             <Label Content=" 查找内容:"  Height="25"/>
@@ -72,10 +72,10 @@
                 </StackPanel>
             </Button>
 
-        </StackPanel>
+        </StackPanel>-->
 
 
-        <DataGrid x:Name="dataGrid"  Grid.Row="2" ItemsSource="{Binding Models}" AutoGenerateColumns="False"> 
+        <DataGrid x:Name="dataGrid"  Grid.Row="1" ItemsSource="{Binding Models}" AutoGenerateColumns="False"> 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Width="180" Visibility="Hidden" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="角色名称" Width="180" Binding="{Binding Name}"/>

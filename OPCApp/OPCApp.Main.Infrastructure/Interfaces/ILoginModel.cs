@@ -28,7 +28,7 @@ namespace OPCApp.Infrastructure.Interfaces
         /// 用户ID
         /// </summary>
         /// <value>The user identifier.</value>
-        string UserID { get; }
+        int UserID { get; }
 
         /// <summary>
         /// 用户名称

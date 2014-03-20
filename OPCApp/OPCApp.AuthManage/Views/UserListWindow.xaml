@@ -76,7 +76,7 @@
 
         </StackPanel>
 
-        <DataGrid  x:Name="dataGrid" Grid.Row="2" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"  ItemsSource="{Binding Models }" >
+        <DataGrid  x:Name="dataGrid" Grid.Row="2"   AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"  ItemsSource="{Binding Models }" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding DBGridClickCommand}"></i:InvokeCommandAction>
@@ -84,6 +84,7 @@
 
             </i:Interaction.Triggers>
             <DataGrid.Columns>
+                <DataGridCheckBoxColumn IsReadOnly="False" Width="30"></DataGridCheckBoxColumn>
                 <DataGridTextColumn Header="SecitonId" Width="50" Binding="{Binding SecitonId}" Visibility="Hidden"/>
                 <DataGridTextColumn Header="OrgId" Width="50" Binding="{Binding OrgId}" Visibility="Hidden"/>
                 <DataGridTextColumn Header="Id" Width="50" Binding="{Binding Id}"  Visibility="Hidden"/>

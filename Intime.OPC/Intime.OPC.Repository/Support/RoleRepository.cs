@@ -7,6 +7,7 @@ namespace Intime.OPC.Repository.Support
 {
     public class RoleRepository : IRoleRepository
     {
+        
      
         public bool Create(OPC_AuthRole role) {
             using (var db = new YintaiHZhouContext()) {

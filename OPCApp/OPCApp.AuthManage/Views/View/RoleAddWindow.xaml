@@ -33,13 +33,13 @@
     
         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="角色名称:" Style="{StaticResource FieldStyle}" />
-            <TextBox TextWrapping="Wrap"   Text="{Binding Model.RoleName}"  Width="390" />
+            <TextBox TextWrapping="Wrap"   Text="{Binding Model.Name}"  Width="390" />
         </StackPanel>
         <StackPanel Grid.Row="2"  Orientation="Horizontal" VerticalAlignment="Top">
             <Label Content="角色描述" Style="{StaticResource FieldStyle}" />
-            <RichTextBox  Padding="5"  Width="390" Height="100" />
+            <TextBox  Padding="5"  Text="{Binding Model.Description}" Width="390" Height="100" />
         </StackPanel>
-        <!--<Button Content="确定" HorizontalAlignment="Left" Margin="285,202,0,0" Command="{Binding OKCommand }" VerticalAlignment="Top" Width="75"/>
+        <!--<Button Content="确定" HorizontalAlignment="Left" Margin="285,202,0,0" Command="{Binding OKCommand }"  VerticalAlignment="Top" Width="75"/>
         <Button Content="取消" HorizontalAlignment="Left" Margin="390,202,0,0"  Command="{Binding CancelCommand }" VerticalAlignment="Top" Width="75"/>-->
     </Grid>
 

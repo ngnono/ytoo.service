@@ -49,9 +49,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Owin">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Composition.AttributedModel">
@@ -111,6 +108,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SaleController.cs" />
+    <Compile Include="Controllers\TransController.cs" />
     <Compile Include="Core\DependencyResolver\MEF\Boundaries.cs" />
     <Compile Include="Core\DependencyResolver\MEF\MEFDependencyResolver.cs" />
     <Compile Include="Core\DependencyResolver\MEF\MEFDependencyScope.cs" />

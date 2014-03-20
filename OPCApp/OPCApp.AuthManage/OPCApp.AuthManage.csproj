@@ -77,8 +77,10 @@
   <ItemGroup>
     <Compile Include="AuthModule.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
+    <Compile Include="ViewModels\Role2MenuWindowViewModel.cs" />
     <Compile Include="ViewModels\Role2UserWindowViewModel.cs" />
     <Compile Include="ViewModels\Role\RoleListViewModel.cs" />
+    <Compile Include="ViewModels\UsersWindowViewModel.cs" />
     <Compile Include="Views\AuthTab.xaml.cs">
       <DependentUpon>AuthTab.xaml</DependentUpon>
     </Compile>
@@ -121,6 +123,10 @@
     <ProjectReference Include="..\Intime.OPC.ApiClient\05_Intime.OPC.ApiClient.csproj">
       <Project>{d34916d5-ba8a-4a70-9a9c-2997289ef411}</Project>
       <Name>05_Intime.OPC.ApiClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
+      <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
+      <Name>OPCApp.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
       <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>

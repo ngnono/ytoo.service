@@ -12,17 +12,11 @@
 // <summary></summary>
 // ***********************************************************************
 
-using OPCApp.Domain;
-using OPCApp.Infrastructure.Mvvm;
+using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface;
-using System;
+using OPCApp.Domain;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using Microsoft.Practices.Prism.Commands;
 
 namespace OPCApp.AuthManage.ViewModels
 {

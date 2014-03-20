@@ -51,10 +51,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\RestClient.cs" />
+    <Compile Include="Impl\Auth\Role2MenuService.cs" />
+    <Compile Include="Impl\Auth\Role2UserService.cs" />
     <Compile Include="Impl\Auth\AuthenticateService.cs" />
     <Compile Include="Impl\Auth\MenuDataService.cs" />
     <Compile Include="Impl\Auth\RoleDataService.cs" />
     <Compile Include="Impl\LoginManager.cs" />
+    <Compile Include="Impl\TransService.cs" />
+    <Compile Include="Interface\Auth\IRole2MenuService.cs" />
+    <Compile Include="Interface\Auth\IRole2UserService.cs" />
     <Compile Include="Interface\Auth\IAuthenticateService.cs" />
     <Compile Include="Interface\Auth\IMenuDataService.cs" />
     <Compile Include="Interface\IOrderService.cs" />
@@ -62,6 +67,7 @@
     <Compile Include="Interface\Auth\IRoleDataService.cs" />
     <Compile Include="Interface\ISaleDetail.cs" />
     <Compile Include="Interface\ISaleService.cs" />
+    <Compile Include="Interface\ITransService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

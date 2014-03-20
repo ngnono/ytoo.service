@@ -49,7 +49,7 @@ namespace OPCApp.DataService.Impl
             {
                 IsLogin = true;
             }
-            return new LoginModel(tk.UserId.ToString(),tk.UserName,tk.AccessToken,"",tk.Expires);
+            return new LoginModel(tk.UserId,tk.UserName,tk.AccessToken,"",tk.Expires);
         }
 
         /// <summary>
