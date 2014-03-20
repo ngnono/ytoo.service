@@ -28,7 +28,7 @@ namespace Intime.OPC.Service.Support
 
         public IList<OPC_SaleDetail> SelectSaleDetail(string saleIDs)
         {
-            return _transRepository.SelectSaleDetail(saleIDs.ToInts(','));
+            return _transRepository.SelectSaleDetail(Intime.OPC.Repository.Common.StringHelper.ToInts(saleIDs,','));
         }
     }
 }

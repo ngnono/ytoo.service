@@ -18,8 +18,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "00_Intime.OPC.Domain", "Int
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Intime.OPC.WebHost", "Intime.OPC.WebHost\04_Intime.OPC.WebHost.csproj", "{F58664A9-FDE5-41A7-8AC4-361B1544CD46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPCAPP.Common", "..\OPCApp\OPCAPP.Common\OPCAPP.Common.csproj", "{9D9E5D0E-3E34-4C75-84E7-DB07F0C74EF8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,10 +44,6 @@ Global
 		{F58664A9-FDE5-41A7-8AC4-361B1544CD46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F58664A9-FDE5-41A7-8AC4-361B1544CD46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F58664A9-FDE5-41A7-8AC4-361B1544CD46}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D9E5D0E-3E34-4C75-84E7-DB07F0C74EF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D9E5D0E-3E34-4C75-84E7-DB07F0C74EF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D9E5D0E-3E34-4C75-84E7-DB07F0C74EF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D9E5D0E-3E34-4C75-84E7-DB07F0C74EF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

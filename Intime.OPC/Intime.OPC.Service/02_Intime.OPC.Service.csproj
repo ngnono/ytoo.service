@@ -50,10 +50,6 @@
     <Compile Include="Support\TransService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OPCApp\OPCAPP.Common\OPCAPP.Common.csproj">
-      <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
-      <Name>OPCAPP.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Intime.OPC.Domain\00_Intime.OPC.Domain.csproj">
       <Project>{03e03b5b-ead6-4e27-976d-82d15f7396d7}</Project>
       <Name>00_Intime.OPC.Domain</Name>
