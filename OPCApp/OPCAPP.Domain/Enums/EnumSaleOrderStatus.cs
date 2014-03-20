@@ -54,7 +54,7 @@ namespace OPCAPP.Domain.Enums
         /// The put in storage
         /// </summary>
         [Description("物流入库")]
-        PutInStorage = 25,
+        ShipInStorage = 25,
 
         /// <summary>
         /// The print invoice

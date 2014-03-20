@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\EnumReturnGoodsStatus.cs" />
+    <Compile Include="Enums\EnumRMACashStatus.cs" />
+    <Compile Include="Enums\EnumRMAStatus.cs" />
     <Compile Include="Enums\EnumSaleOrderStatus.cs" />
     <Compile Include="Enums\EnumSaleStatus.cs" />
     <Compile Include="Enums\EnumCashStatus.cs" />

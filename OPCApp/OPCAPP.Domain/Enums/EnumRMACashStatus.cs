@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : OPCApp.Domain
 // Author           : Liuyh
-// Created          : 03-20-2014 23:17:15
+// Created          : 03-20-2014 23:59:31
 //
 // Last Modified By : Liuyh
-// Last Modified On : 03-20-2014 23:19:40
+// Last Modified On : 03-21-2014 00:01:23
 // ***********************************************************************
-// <copyright file="OderStatus.cs" company="">
+// <copyright file="EnumRMACashStatus.cs" company="">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -16,20 +16,25 @@ using System.ComponentModel;
 namespace OPCAPP.Domain.Enums
 {
     /// <summary>
-    /// 订单状态
+    /// 退货收银状态
     /// </summary>
-    public enum EnumOderStatus
+    public enum EnumRMACashStatus
     {
-        /// <summary>
-        /// The no shipp
-        /// </summary>
-        [Description("未发货")]
-        NoShipp = 0,
 
         /// <summary>
-        /// The shipped
+        /// The no cash
         /// </summary>
-        [Description("已发货")]
-        Shipped = 5
+        [Description("未送收银")]
+        NoCash = 0,
+        /// <summary>
+        /// The cash over
+        /// </summary>
+        [Description("完成收银")]
+        CashOver = 5,
+        /// <summary>
+        /// The send cash
+        /// </summary>
+        [Description("已送收银")]
+        SendCash = 10,
     }
 }
