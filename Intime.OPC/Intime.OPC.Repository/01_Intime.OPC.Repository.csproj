@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\IRespository.cs" />
+    <Compile Include="Base\BaseRespository.cs" />
     <Compile Include="Common\StringHelper.cs" />
     <Compile Include="IAccountRepository.cs" />
     <Compile Include="IRepository.cs" />
