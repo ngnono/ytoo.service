@@ -8,39 +8,36 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_AuthUserMap()
         {
             // Primary Key
-            HasKey(t => t.Id);
+            this.HasKey(t => t.Id);
 
             // Properties
-            Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
-            Property(t => t.Name)
+            this.Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(40);
 
-            Property(t => t.LogonName)
+            this.Property(t => t.LogonName)
                 .HasMaxLength(40);
 
-            Property(t => t.Password)
+            this.Property(t => t.Password)
                 .HasMaxLength(40);
 
-            Property(t => t.Phone)
+            this.Property(t => t.Phone)
                 .HasMaxLength(40);
 
             // Table & Column Mappings
-            ToTable("OPC_AuthUser");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.Name).HasColumnName("Name");
-            Property(t => t.SectionId).HasColumnName("SectionId");
-            Property(t => t.LogonName).HasColumnName("LogonName");
-            Property(t => t.Password).HasColumnName("Password");
-            Property(t => t.Phone).HasColumnName("Phone");
-            Property(t => t.IsValid).HasColumnName("IsValid");
-            Property(t => t.OrgId).HasColumnName("OrgId");
-            Property(t => t.CreateDate).HasColumnName("CreateDate");
-            Property(t => t.CreateUserId).HasColumnName("CreateUserId");
-            Property(t => t.UpdateDate).HasColumnName("UpdateDate");
-            Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
+            this.ToTable("OPC_AuthUser");
+            this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.Name).HasColumnName("Name");
+            this.Property(t => t.SectionId).HasColumnName("SectionId");
+            this.Property(t => t.LogonName).HasColumnName("LogonName");
+            this.Property(t => t.Password).HasColumnName("Password");
+            this.Property(t => t.Phone).HasColumnName("Phone");
+            this.Property(t => t.IsValid).HasColumnName("IsValid");
+            this.Property(t => t.OrgId).HasColumnName("OrgId");
+            this.Property(t => t.CreateDate).HasColumnName("CreateDate");
+            this.Property(t => t.CreateUserId).HasColumnName("CreateUserId");
+            this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
+            this.Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
         }
     }
 }

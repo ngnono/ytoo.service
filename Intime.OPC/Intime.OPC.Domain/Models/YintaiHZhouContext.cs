@@ -1,5 +1,6 @@
-using Intime.OPC.Domain.Models.Mapping;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using Intime.OPC.Domain.Models.Mapping;
 
 namespace Intime.OPC.Domain.Models
 {
@@ -35,10 +36,8 @@ namespace Intime.OPC.Domain.Models
         public DbSet<OPC_StorePriority> OPC_StorePriority { get; set; }
         public DbSet<OPC_SupplierInfo> OPC_SupplierInfo { get; set; }
 
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-           
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMenuMap());
@@ -58,7 +57,6 @@ namespace Intime.OPC.Domain.Models
             modelBuilder.Configurations.Add(new OPC_StockMap());
             modelBuilder.Configurations.Add(new OPC_StorePriorityMap());
             modelBuilder.Configurations.Add(new OPC_SupplierInfoMap());
-           
         }
     }
 }

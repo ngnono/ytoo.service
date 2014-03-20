@@ -7,10 +7,11 @@
 #>
 using System;
 using System.Collections.Generic;
+using Intime.OPC.Domain.Base;
 
 namespace <#= code.EscapeNamespace(efHost.Namespace) #>
 {
-    public partial class <#= efHost.EntityType.Name #>
+    public partial class <#= efHost.EntityType.Name #>:IEntity
     {
 <#
     var collectionNavigations = efHost.EntityType.NavigationProperties.Where(
