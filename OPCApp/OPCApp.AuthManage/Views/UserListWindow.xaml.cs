@@ -10,7 +10,7 @@ namespace OPCApp.AuthManage.Views
     ///  
     [Export("UserListWindow", typeof(IBaseView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class UserListWindow : UserControl,IBaseView
+    public partial class UserListWindow : UserControl, IBaseView
     {
         public UserListWindow()
         {
@@ -30,6 +30,11 @@ namespace OPCApp.AuthManage.Views
         public bool? ShowDialog()
         {
             return false;
+        }
+
+        public void OnImportsSatisfied()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

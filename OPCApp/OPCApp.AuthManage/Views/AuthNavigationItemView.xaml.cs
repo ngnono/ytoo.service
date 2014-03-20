@@ -16,6 +16,7 @@
 //===================================================================================
 using System;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Practices.Prism.Regions;//.Regions;
@@ -29,15 +30,11 @@ namespace OPCApp.AuthManage.Views
     [Export]
     public partial class AuthNavigationItemView : UserControl, IPartImportsSatisfiedNotification
     {
-        //private static Uri userListViewUri = new Uri("UserListWindow", UriKind.Relative);
-        private static Uri userListViewUri = new Uri("MenuView", UriKind.Relative);
-        private static Uri roleListViewUri = new Uri("RoleListWindow", UriKind.Relative);
-        
-        public MenuViewModel ViewMode
+        public AuthNavaeigationItemViewModel ViewMode
         {
             get
             {
-                return this.DataContext as MenuViewModel;
+                return this.DataContext as AuthNavaeigationItemViewModel;
             }
             set
             {
@@ -48,17 +45,13 @@ namespace OPCApp.AuthManage.Views
         [Import]
         public IRegionManager regionManager;
 
-        //public AuthNavigationItemViewModel aniv = new AuthNavigationItemViewModel();
-
         [ImportingConstructor]
-        public AuthNavigationItemView(MenuViewModel viewModel)
+        public AuthNavigationItemView(AuthNavaeigationItemViewModel viewModel)
         {
             InitializeComponent();
             ViewMode = viewModel;
-            //this.yhid.Visibility = Visibility.Hidden;
             ViewMode.ClickCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(this.clickCommand);
             ViewMode.MenuClickCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand<string>(this.menuClickCommand);
-            //this.DataContext = aniv;
         }
 
         void IPartImportsSatisfiedNotification.OnImportsSatisfied()
@@ -86,13 +79,13 @@ namespace OPCApp.AuthManage.Views
         }
         private void menuClickCommand(string url)
         {
-            Uri roleListViewUri = new Uri(url, UriKind.Relative);
-            this.regionManager.RequestNavigate(RegionNames.MainContentRegion, roleListViewUri);
+            Uri uri = new Uri(url, UriKind.Relative);
+            this.regionManager.RequestNavigate(RegionNames.MainContentRegion, uri);
         }
 
       
 
-        private void TextBlock_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void TextBlock_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var o = sender as TextBlock;
             var o1 = o.Parent as StackPanel;
@@ -101,13 +94,18 @@ namespace OPCApp.AuthManage.Views
         }
 
      
-        private void RadioButton_Click_1(object sender, RoutedEventArgs e)
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
             var o = sender as RadioButton;
             var o1 = o.CommandParameter;
-            this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,  () => {
-                return AppEx.Container.GetInstance<IViewModel>(o1.ToString()).View; ;
-            });
+            while (this.regionManager.Regions[RegionNames.MainContentRegion].Views.Count() > 0)
+            {
+                this.regionManager.Regions[RegionNames.MainContentRegion].Remove(this.regionManager.Regions[RegionNames.MainContentRegion].Views.FirstOrDefault());
+            }
+            //this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,);
+            this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion, () =>
+                AppEx.Container.GetInstance<IViewModel>(o1.ToString()).View
+            );
         }
     }
 }
