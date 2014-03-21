@@ -1126,14 +1126,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             SortedDictionary<string, string> sArray = new SortedDictionary<string, string>();
             NameValueCollection coll;
             //Load Form variables into NameValueCollection variable.
-            coll = Request.Form;
+            var unValidRequest = Request.Unvalidated;
+            coll = unValidRequest.Form;
 
             // Get names of all forms into a string array.
             String[] requestItem = coll.AllKeys;
 
             for (i = 0; i < requestItem.Length; i++)
             {
-                sArray.Add(requestItem[i], Request.Form[requestItem[i]]);
+                sArray.Add(requestItem[i], unValidRequest.Form[requestItem[i]]);
             }
 
             return sArray;
@@ -1144,14 +1145,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             Dictionary<string, string> sArray = new Dictionary<string, string>();
             NameValueCollection coll;
             //Load Form variables into NameValueCollection variable.
-            coll = Request.Form;
+            var unValidRequest = Request.Unvalidated;
+            coll = unValidRequest.Form;
 
             // Get names of all forms into a string array.
             String[] requestItem = coll.AllKeys;
 
             for (i = 0; i < requestItem.Length; i++)
             {
-                sArray.Add(requestItem[i], Request.Form[requestItem[i]]);
+                sArray.Add(requestItem[i], unValidRequest.Form[requestItem[i]]);
             }
 
             return sArray;

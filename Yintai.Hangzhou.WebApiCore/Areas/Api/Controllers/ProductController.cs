@@ -409,10 +409,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 }
                
            });
+           var productEntity = dbContext.Set<ProductEntity>().Where(p =>p.Id == request.ProductId &&
+                                                p.Status == (int)DataStatus.Normal && (p.Is4Sale??false) == true)
+                                   .Join(dbContext.Set<InventoryEntity>().Where(inv => inv.Amount > 0),
+                                       o => o.Id,
+                                       i => i.ProductId,
+                                       (o, i) => o).FirstOrDefault();
            return this.RenderSuccess<GetAvailOperationsResponse>(m=>m.Data=new GetAvailOperationsResponse() { 
                  IsFavored = isFavored,
                   IfCanCoupon = ifCanCoupon,
-                  IfCanTalk = false
+                  IfCanTalk = false,
+                  Is4Sale = productEntity!=null
                });
            
         }

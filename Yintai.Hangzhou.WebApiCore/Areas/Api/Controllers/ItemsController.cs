@@ -41,8 +41,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
             request.UserModel = showUser ?? authUser;
 
-            var linq = Context.Set<ProductEntity>().Where(f =>f.RecommendUser == request.UserModel.Id && f.Status != (int)DataStatus.Deleted)
-                 .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image && r.Status != (int)DataStatus.Deleted)
+            var linq = Context.Set<ProductEntity>().Where(f =>f.RecommendUser == request.UserModel.Id && f.Status == (int)DataStatus.Normal)
+                 .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image && r.Status == (int)DataStatus.Normal)
                           , o => o.Id, i => i.SourceId, (o, i) => new { P = o, R = i.OrderByDescending(ri => ri.SortOrder).FirstOrDefault() });
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
