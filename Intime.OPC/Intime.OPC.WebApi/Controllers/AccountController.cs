@@ -18,7 +18,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             _accountService = accountService;
         }
-        [HttpGet]
+        [HttpPut]
         public IHttpActionResult AddUser([FromBody] OPC_AuthUser user)
         //public IHttpActionResult AddUser()
         {
@@ -56,7 +56,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult SelectUser()
+        public IHttpActionResult SelectUser([FromUri] string test1,[FromUri] string li)
         {
 
             //TODO:check params
