@@ -6,7 +6,7 @@ using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.AuthManage.Views
 {
-   [Export("UsersView", typeof(IBaseView))]
+   [Export("UserView", typeof(IBaseView))]
    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class UserAddWindow : MetroWindow, IBaseView
     {

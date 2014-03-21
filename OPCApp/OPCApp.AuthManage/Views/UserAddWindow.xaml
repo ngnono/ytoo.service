@@ -15,7 +15,7 @@
         <Grid Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                <Button Background="LightGray" Width="50" Command="{Binding CancelAction}">
+                <Button Background="LightGray" Width="50" Command="{Binding CancelCommand}">
                     <StackPanel>
                         <Image  Source="/Image/删除.png" Stretch="None"></Image>
                         <TextBlock HorizontalAlignment="Center">取消</TextBlock>
