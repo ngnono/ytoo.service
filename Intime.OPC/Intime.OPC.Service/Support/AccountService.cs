@@ -1,4 +1,6 @@
-﻿using Intime.OPC.Domain.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
@@ -35,12 +37,38 @@ namespace Intime.OPC.Service.Support
 
         public System.Collections.Generic.IList<OPC_AuthUser> Select()
         {
-            return _accountRepository.Select();
+           // return null;
+            //var key = dictionary.Keys.FirstOrDefault();
+            //var v = dictionary.Values.FirstOrDefault();
+            return _accountRepository.Select(t => t.IsValid.HasValue==true).ToList();
+            //switch (key)
+            //{
+            //    case "0":
+            //        query = _accountRepository.Select(t => t.LogonName == v);
+            //        return query.ToList();
+            //    case "1":
+            //        query = _accountRepository.Select(t => t. == v);
+            //        return query.ToList();
+            //    case "2":
+            //        query = _accountRepository.Select(t => t.Name == v);
+            //        return query.ToList();
+            //    case "3":
+            //        query = _accountRepository.Select(t => t.SectionId == v);
+            //        return query.ToList();
+            //    case "4":
+            //        query = _accountRepository.Select(t => t.OrgId == v);
+            //        return query.ToList();
+
+            //}
+            //return query.ToList();
         }
 
         public bool IsStop(int userId, bool bValid)
         {
-            return _accountRepository.IsStop(userId, bValid);
+            return _accountRepository.SetEnable(userId, bValid);
         }
+
+
+       
     }
 }
