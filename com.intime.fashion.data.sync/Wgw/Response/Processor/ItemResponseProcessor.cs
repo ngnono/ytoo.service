@@ -45,9 +45,9 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                             Channel = ConstValue.WGW_CHANNEL_NAME,
                             ChannelProductId = itemId,
                             ProductId = productId,
-                            //更新和CreateDate修改为三年前，以便后续更新以添加颜色和图片
+                            //UpdateDate修改为三年前，以便后续更新以添加颜色和图片
                             UpdateDate = DateTime.Now.AddYears(-3),
-                            CreateDate = DateTime.Now.AddYears(-3),
+                            CreateDate = DateTime.Now,
                             Status = product.Status,
                             IsImageUpload = 0
                         });

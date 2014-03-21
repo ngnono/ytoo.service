@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Transactions;
+using com.intime.fashion.data.sync.Wgw.Request.Order;
 using com.intime.jobscheduler.Job.Wgw;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
@@ -21,13 +22,14 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                 this.CreateOrder(orderInfo,dealDetail);
             }
         }
-        protected override void CheckStocks(InventoryEntity inventory, int buyNum)
+        protected override bool CheckStocks(InventoryEntity inventory, int buyNum)
         {
             if (inventory.Amount < buyNum)
             {
-                throw new WgwSyncException(string.Format("Product stock is insufficient productId: {0} color: {1}, expected: ({2}), but: ({3})", inventory.ProductId, inventory.PColorId, buyNum, inventory.Amount));
+                return false;
             }
             inventory.Amount -= buyNum;//支付状态订单扣减库存
+            return true;
         }
 
         /// <summary>
@@ -82,15 +84,11 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
 
                         int buyNum = int.Parse(item.buyNum.ToString());
 
-                        if (inventory.Amount < buyNum)
-                        {
-                            throw new WgwSyncException(
-                                string.Format("Product stock is insufficient {0}({1}), expected: ({2}), but: ({3})",
-                                    product.Name, product.Id, buyNum, inventory.Amount));
-                        }
-
                         //检查并扣减库存
-                        CheckStocks(inventory, buyNum);
+                        if (!CheckStocks(inventory, buyNum))
+                        {
+                            throw new StockInsufficientException(dealDetail.dealCode,OrderStatusConst.STATE_WG_PAY_OK);
+                        }
                     }
 
                     var order2Ex = db.Set<Order2ExEntity>().FirstOrDefault(t => t.OrderNo == order.OrderNo);

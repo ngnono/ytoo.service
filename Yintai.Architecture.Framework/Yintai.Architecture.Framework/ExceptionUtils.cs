@@ -2,6 +2,7 @@
 
 namespace Yintai.Architecture.Framework
 {
+    //test git push
     public class ExceptionUtils
     {
         #region fields

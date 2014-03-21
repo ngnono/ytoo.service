@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}"
 EndProject
@@ -50,7 +50,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "console", "console", "{3E8507B1-E5AD-4805-8AB8-8408C016BDA6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.data.sync.runner", "com.intime.fashion.data.sync.runner\com.intime.fashion.data.sync.runner.csproj", "{5FDB9185-06A3-4950-9285-6EACEFF2C8B6}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS", "CMS\CMS.csproj", "{F20D05CE-1EEE-4DE6-A457-37CEEFB39EEC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OPCApp", "OPCApp", "{05C61B67-B8F5-4401-8500-7A9EFA95D909}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

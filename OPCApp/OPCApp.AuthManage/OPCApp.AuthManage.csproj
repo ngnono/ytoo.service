@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F354057B-1212-496C-9738-30590624A3EC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OPCApp.AuthManage</RootNamespace>
+    <AssemblyName>OPCApp.AuthManage</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MahApps.Metro, Version=0.12.1.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro.Resources, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\MahApps.Metro.Resources.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.MefExtensions">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.MefExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Mvvm">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Prism.Interfaces">
+      <HintPath>..\DllFile\Prism.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AuthModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\RoleViewModel.cs" />
+    <Compile Include="ViewModels\AuthNavigationItemViewModel.cs" />
+    <Compile Include="ViewModels\UserAddWindowViewModel.cs" />
+    <Compile Include="ViewModels\UserListWindowViewModel.cs" />
+    <Compile Include="Views\AuthNavigationItemView.xaml.cs">
+      <DependentUpon>AuthNavigationItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Role2MenuWindow.xaml.cs">
+      <DependentUpon>Role2MenuWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Role2UserWindow.xaml.cs">
+      <DependentUpon>Role2UserWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\RoleListWindow.xaml.cs">
+      <DependentUpon>RoleListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RoleAddWindow.xaml.cs">
+      <DependentUpon>RoleAddWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserAddWindow.xaml.cs">
+      <DependentUpon>UserAddWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserListWindow.xaml.cs">
+      <DependentUpon>UserListWindow.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OPCAPP.DataService\OPCAPP.DataService.csproj">
+      <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
+      <Name>OPCAPP.DataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.Domain\OPCAPP.Domain.csproj">
+      <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
+      <Name>OPCAPP.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.Main.Controls\OPCApp.Main.Controls.csproj">
+      <Project>{c8950baf-06a5-4af3-964a-55b18b0e0b9f}</Project>
+      <Name>OPCApp.Main.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Main.Infrastructure.csproj">
+      <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
+      <Name>OPCApp.Main.Infrastructure</Name>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\AuthNavigationItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Role2MenuWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Role2UserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RoleListWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RoleAddWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserAddWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserListWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Image\1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\上传.png" />
+    <Content Include="Image\保存.png" />
+    <Content Include="Image\修改.png" />
+    <Content Include="Image\删除.png" />
+    <Content Include="Image\到达指派.png" />
+    <Content Include="Image\到达确认.png" />
+    <Content Include="Image\发布.png" />
+    <Content Include="Image\取消.png" />
+    <Content Include="Image\受理.png" />
+    <Content Include="Image\变更单位.png" />
+    <Content Include="Image\回单存档.png" />
+    <Content Include="Image\回单派发.png" />
+    <Content Include="Image\回单确认.png" />
+    <Content Include="Image\回单返回.png" />
+    <Content Include="Image\处理.png" />
+    <Content Include="Image\审批.png" />
+    <Content Include="Image\导出.png" />
+    <Content Include="Image\帮助.png" />
+    <Content Include="Image\打印.png" />
+    <Content Include="Image\拒签.png" />
+    <Content Include="Image\挂失.png" />
+    <Content Include="Image\指派.png" />
+    <Content Include="Image\指派送货.png" />
+    <Content Include="Image\收款确认.png" />
+    <Content Include="Image\放款.png" />
+    <Content Include="Image\放款复核.png" />
+    <Content Include="Image\新增.png" />
+    <Content Include="Image\明细.png" />
+    <Content Include="Image\查看.png" />
+    <Content Include="Image\查看回单标准.png" />
+    <Content Include="Image\查询.png" />
+    <Content Include="Image\申请审批.png" />
+    <Content Include="Image\移动.png" />
+    <Content Include="Image\立案.png" />
+    <Content Include="Image\签单上传.png" />
+    <Content Include="Image\签收.png" />
+    <Content Include="Image\结案.png" />
+    <Content Include="Image\统计.png" />
+    <Content Include="Image\解挂.png" />
+    <Content Include="Image\认领.png" />
+    <Content Include="Image\退回.png" />
+    <Content Include="Image\销款.png" />
+    <Content Include="Image\验证.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
