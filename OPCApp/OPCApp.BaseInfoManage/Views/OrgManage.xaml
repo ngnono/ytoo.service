@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Title="销售单入收银" Height="600" Width="1000" GlowBrush="Blue"  Background="LightGray">
-    <controls:MetroContentControl>
         <Grid>
             
             <Grid.RowDefinitions>
@@ -114,7 +113,6 @@
             
         </Grid>
 
-    </controls:MetroContentControl>
 
 
 </controls:MetroWindow>

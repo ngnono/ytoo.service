@@ -122,10 +122,7 @@ namespace OPCApp.AuthManage.ViewModels
        /// </summary>
        private void DeleteUserList()
        {
-           //liuyahua
-          // var userSeleted = UserList.Where(e => e.IsSelected == true);
            MenuList.Remove(e => e.IsSelected == true);
-           //UserList.Remove()
        }
 
        /// <summary>
