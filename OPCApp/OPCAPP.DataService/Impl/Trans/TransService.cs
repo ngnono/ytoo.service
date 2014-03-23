@@ -19,11 +19,11 @@ namespace OPCApp.DataService.Impl.Trans
     public class TransService : ITransService
     {
 
-        public bool Finish(Dictionary<string,string> sale)
-        {
-            bool bFalg = RestClient.Put("trans/finish", sale);
-            return bFalg;
-        }
+        //public bool Finish()
+        //{
+        //    bool bFalg = RestClient.Put("trans/finish", sale);
+        //    return bFalg;
+        //}
 
      
 
@@ -63,6 +63,26 @@ namespace OPCApp.DataService.Impl.Trans
         {
             var lst = RestClient.Get<OPC_SaleDetail>("trans/SelectSaleDetail", saleIds);
             return new PageResult<OPC_SaleDetail>(lst, lst.Count);
+        }
+
+        public bool AffirmPrintSaleFinish(string saleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetStatusAffirmPrintSaleFinish(string saleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetStatusStoreInSure(string saleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetStatusSoldOut(string saleId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
