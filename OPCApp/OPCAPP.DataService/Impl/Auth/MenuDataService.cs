@@ -56,9 +56,10 @@ namespace OPCApp.DataService.Impl
         /// <exception cref="System.NotImplementedException"></exception>
         public IEnumerable<MenuGroup> GetMenus()
         {
-            string paras = string.Format("id={0}", 1);//1 update curUserId 
+            string paras = string.Format("UserId={0}", 1);//1 update curUserId 
             var listMenu= RestClient.Get<OPC_AuthMenu>("menu/loadmenu",paras);
-            List<MenuGroup> groupMenu = listMenu.Where(e => e.PraentMenuId == e.Id).Select(e=>new MenuGroup(){Id=e.Id,Sort = e.Sort,MenuName= e.Url}).OrderBy(e=>e.Sort).ToList();
+            var groupMenu1 = listMenu.Where(e => e.PraentMenuId == e.Id).ToList();
+            var groupMenu=groupMenu1 .Select(e=>new MenuGroup(){Id=e.Id,Sort = e.Sort,MenuName= e.MenuName}).OrderBy(e=>e.Sort).ToList();
             foreach (var grpMenu in groupMenu)
             {
                 var menus = listMenu.Where(e => e.Id != e.PraentMenuId && e.PraentMenuId == grpMenu.Id).OrderBy(e=>e.Sort).ToList();
