@@ -17,10 +17,21 @@ namespace OPCApp.TransManage.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class StoreIn 
     {
+        [Import("StoreInViewModel")]
+        public object ViewModel
+        {
+            set
+            {
+                this.DataContext = value;
+            }
+            get
+            {
+                return this.DataContext;
+            }
+        }
         public StoreIn()
         {
             InitializeComponent();
-            this.DataContext = new StoreInViewModel();
         }
     }
 }

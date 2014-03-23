@@ -21,13 +21,14 @@ namespace OPCApp.TransManage.ViewModels
     [Export("PrintInvoiceViewModel", typeof(PrintInvoiceViewModel))]
     public class PrintInvoiceViewModel : BindableBase
     {
+        public EnumSearchSaleStatus SearchSaleStatus { get; set; }
         //Grid数据集
-        private IEnumerable<OPC_Sale> invoice4list;
-        public IEnumerable<OPC_Sale> Invoice4List
+        private IEnumerable<OPC_Sale> saleList;
+        public IEnumerable<OPC_Sale> SaleList
         {
 
-            get { return this.invoice4list; }
-            set { SetProperty(ref this.invoice4list, value); }
+            get { return this.saleList; }
+            set { SetProperty(ref this.saleList, value); }
         }
 
         //界面查询条件
@@ -71,6 +72,7 @@ namespace OPCApp.TransManage.ViewModels
             this.CommandSetRemark = new DelegateCommand(this.CommandRemarkExecute);
             this.CommandGetDown = new DelegateCommand(this.CommandGetDownExecute);
             this.Invoice4Get = new Invoice4Get();
+            this.SearchSaleStatus = EnumSearchSaleStatus.CompletePrintSearchStatus;
         }
 
         //调用接口打开填写Remark的窗口
@@ -90,16 +92,16 @@ namespace OPCApp.TransManage.ViewModels
         {
 
             string salesfilter = string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}", Invoice4Get.StartSellDate.ToShortDateString(), Invoice4Get.EndSellDate.ToShortDateString(), Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo);
-            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter);
-            Invoice4List = re.Result;
+            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter,this.SearchSaleStatus);
+            this.SaleList = re.Result;
 
         }
 
         public void CommandGetDownExecute()
         {
-            var selectSaleIds = Invoice4List.Where(n => n.IsSelected == true).Select(e=>e.Id).ToList().Join();
+            var saleCur = this.SaleList.Where(n => n.IsSelected == true).FirstOrDefault();
             //这个工作状态
-            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(selectSaleIds).Result;
+            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleCur.SaleOrderNo).Result;
         }
 
         public void CommandViewAndPrintExecute()
@@ -122,7 +124,7 @@ namespace OPCApp.TransManage.ViewModels
         /*完成销售单打印*/
         public void CommandFinishExecute()
         {
-            var selectSaleIds = Invoice4List.Where(n => n.IsSelected == true).Select(e => e.Id).ToList().Join();
+            var selectSaleIds = this.SaleList.Where(n => n.IsSelected == true).Select(e => e.SaleOrderNo).ToList();
             ITransService iTransService = AppEx.Container.GetInstance<ITransService>();
             bool bFalg= iTransService.SetStatusAffirmPrintSaleFinish(selectSaleIds);
             MessageBox.Show("提示",bFalg ? "打印销售单完成": "打印销售单失败");

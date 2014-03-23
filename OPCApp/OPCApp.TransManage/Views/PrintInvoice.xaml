@@ -25,7 +25,7 @@
                         <TextBlock HorizontalAlignment="Center">返回</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50">
+                <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
                     <StackPanel>
                         <Image Source="/image/查询.png" Stretch="None"></Image>
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
@@ -75,7 +75,7 @@
 
 
 
-        <DataGrid Grid.Row="3" ItemsSource="{Binding Invoice4List}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Invoice4Remark}"  >
+        <DataGrid Grid.Row="3" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Invoice4Remark}"  >
             <DataGrid.Columns >
                 <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                     <DataGridTemplateColumn.CellTemplate>
@@ -95,22 +95,21 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="订单号"  Binding="{Binding Dish.Comment}" />
-                <DataGridTextColumn Header="销售类别"  Binding="{Binding Dish.Score}" />
-                <DataGridTextColumn Header="销售状态"  Binding="{Binding Dish.Score}"/>
-                <DataGridTextColumn Header="销售单状态"  Binding="{Binding Dish.Score}"/>
-                <DataGridTextColumn Header="收银状态"  Binding="{Binding Dish.Score}" />
-                <DataGridTextColumn Header="销售时间"  Binding="{Binding Dish.Score}" />
-                <DataGridTextColumn Header="是否调拨"  Binding="{Binding Dish.Score}" />
-                <DataGridTextColumn Header="调拨状态"  Binding="{Binding Dish.Score}" />
-                <DataGridTextColumn Header="销售单金额"  Binding="{Binding Dish.Score}" />
-                <DataGridTextColumn Header="销售单数量"  Binding="{Binding Dish.Score}"/>
-                <DataGridTextColumn Header="门店"  Binding="{Binding Dish.Score}"/>
-                <DataGridTextColumn Header="收银流水号"  Binding="{Binding Dish.Score}" />
-                <DataGridTextColumn Header="收银时间"  Binding="{Binding Dish.Score}" />
-                <DataGridTextColumn Header="专柜码"  Binding="{Binding Dish.Score}" />
-                
-                <DataGridTextColumn Header="备注时间"  Binding="{Binding Dish.Score}"/>
+                <DataGridTextColumn Header="订单号"  Binding="{Binding OrderNo}" />
+                <DataGridTextColumn Header="销售单号"  Binding="{Binding SaleOrderNo}" />
+                <DataGridTextColumn Header="销售类别"  Binding="{Binding SalesType}" />
+                <DataGridTextColumn Header="销售状态"  Binding="{Binding ShipViaId}"/>
+                <DataGridTextColumn Header="销售单状态"  Binding="{Binding Status}"/>
+                <DataGridTextColumn Header="收银状态"  Binding="{Binding CashStatus}" />
+                <DataGridTextColumn Header="销售时间"  Binding="{Binding SellDate}" />
+                <DataGridTextColumn Header="是否调拨"  Binding="{Binding IfTrans}" />
+                <DataGridTextColumn Header="调拨状态"  Binding="{Binding TransStatus}" />
+                <DataGridTextColumn Header="销售单金额"  Binding="{Binding SalesAmount}" />
+                <DataGridTextColumn Header="销售单数量"  Binding="{Binding SalesCount}"/>
+                <DataGridTextColumn Header="门店"  Binding="{Binding SectionName}"/>
+                <DataGridTextColumn Header="收银流水号"  Binding="{Binding CashNum}" />
+                <DataGridTextColumn Header="收银时间"  Binding="{Binding CashDate}" />
+                <DataGridTextColumn Header="专柜码"  Binding="{Binding ShippingCode}" />
             </DataGrid.Columns>
 
         </DataGrid>

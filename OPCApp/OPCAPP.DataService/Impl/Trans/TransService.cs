@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Net.Http;
-using Intime.OPC.ApiClient;
 using Intime.OPC.Domain.Models;
 using OPCApp.DataService.Common;
-using OPCApp.DataService.Interface;
 using OPCApp.DataService.Interface.Trans;
-using OPCApp.Domain;
-using OPCApp.Domain.Models;
+using OPCAPP.Domain.Enums;
 using OPCApp.Infrastructure;
-using OPCApp.Infrastructure.DataService;
 
 namespace OPCApp.DataService.Impl.Trans
 {
@@ -19,70 +13,50 @@ namespace OPCApp.DataService.Impl.Trans
     public class TransService : ITransService
     {
 
-        //public bool Finish()
-        //{
-        //    bool bFalg = RestClient.Put("trans/finish", sale);
-        //    return bFalg;
-        //}
 
-     
-
-      
-        
-
-        /*
-        public Infrastructure.DataService.ResultMsg Finish(Domain.Models.OPC_AuthUser user)
+        public PageResult<OPC_Sale> Search(string salesfilter,EnumSearchSaleStatus enumSearchSaleStatus)
         {
-            var bFalg = RestClient.Put("/api/account/updateuser", user);
-            return new ResultMsg() { IsSuccess = bFalg, Msg = "保存成功" };
-        }
-
-        public Infrastructure.DataService.ResultMsg Delete(Domain.Models.OPC_AuthUser user)
-        {
-            var bFalg = RestClient.Put("/api/account/deleteuser", user);
-            return new ResultMsg() { IsSuccess = bFalg, Msg = "删除错误" };
-        }
-
-        public PageResult<OPC_AuthUser> Search(Infrastructure.DataService.IFilter filter)
-        {
-            var lst= RestClient.Get<OPC_AuthUser>("/api/account/selectuser", filter.GetFilter());
-            return new PageResult<OPC_AuthUser>(lst,lst.Count);
-        }
-        */
-
-
-
-
-        public PageResult<OPC_Sale> Search(string salesfilter)
-        {
-            var lst = RestClient.Get<OPC_Sale>("trans/selectsales", salesfilter);
+            string url = "";
+            switch (enumSearchSaleStatus)
+            {
+                case EnumSearchSaleStatus.CompletePrintSearchStatus:
+                    url = "sale/selectSale";
+                    break;
+                case EnumSearchSaleStatus.StoreInDataBaseSearchStatus:
+                    url = "";
+                    break;
+                default:
+                    break;
+            }
+            var lst = RestClient.Get<OPC_Sale>("sale/selectSale", salesfilter);
             return new PageResult<OPC_Sale>(lst, lst.Count);
         }
-
-        public PageResult<OPC_SaleDetail> SelectSaleDetail(string saleIds)
+        public bool PrintSale(IList<string> saleOrderNoList)
         {
-            var lst = RestClient.Get<OPC_SaleDetail>("trans/SelectSaleDetail", saleIds);
-            return new PageResult<OPC_SaleDetail>(lst, lst.Count);
+            return RestClient.Put("sale/PrintSale", saleOrderNoList);
+        }
+        /*完成打印销售单 状态*/
+        public bool SetStatusAffirmPrintSaleFinish(IList<string> saleOrderNoList)
+        {
+            return RestClient.Put("sale/SetNoPickUp", saleOrderNoList);
+        }
+        /*设置销售单入库 状态*/
+        public bool SetStatusStoreInSure(IList<string> saleOrderNoList)
+        {
+            return RestClient.Put("sale/selectSale", saleOrderNoList);
+        }
+        /*设置销售单出库 状态*/
+        public bool SetStatusSoldOut(IList<string> saleOrderNoList)
+        {
+            return RestClient.Put("sale/selectSale", saleOrderNoList);
         }
 
-        public bool AffirmPrintSaleFinish(string saleId)
+
+        public PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo)
         {
-            throw new NotImplementedException();
+            var lst = RestClient.Get<OPC_SaleDetail>("sale/selectSale",string.Format("saleOrderNo={0}",saleOrderNo));
+            return new PageResult<OPC_SaleDetail>(lst, 100);
         }
 
-        public bool SetStatusAffirmPrintSaleFinish(string saleId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SetStatusStoreInSure(string saleId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SetStatusSoldOut(string saleId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
