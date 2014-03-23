@@ -87,9 +87,6 @@
     <Compile Include="Model\OrderInfo.cs" />
     <Compile Include="ViewModels\OrderInfoSearchViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="Views\OrderNavigationItemView.xaml.cs">
-      <DependentUpon>OrderNavigationItemView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\OrderGoodsInfoView.xaml.cs">
       <DependentUpon>OrderGoodsInfoView.xaml</DependentUpon>
     </Compile>
@@ -100,10 +97,6 @@
     <Compile Include="Views\OrderSearch.xaml.cs">
       <DependentUpon>OrderSearch.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\OrderNavigationItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\OrderGoodsInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -4,6 +4,7 @@ namespace OPCApp.Domain.Models
 {
     public class OPC_AuthRoleUser
     {
+
         public int Id { get; set; }
         public int OPC_AuthUserId { get; set; }
         public int OPC_AuthRoleId { get; set; }

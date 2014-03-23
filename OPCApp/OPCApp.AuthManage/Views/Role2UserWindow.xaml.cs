@@ -21,6 +21,8 @@ namespace OPCApp.AuthManage.Views
     /// <summary>
     /// Role2UserListWindow.xaml 的交互逻辑
     /// </summary>
+    [Export("Role2UserWindow", typeof(Role2UserListWindow))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class Role2UserListWindow : UserControl
     {
         [Import("Role2UserViewModel")] 

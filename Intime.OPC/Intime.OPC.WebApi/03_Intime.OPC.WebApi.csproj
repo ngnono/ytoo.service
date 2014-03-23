@@ -104,6 +104,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Bindings\UserIdHttpParameterBinding.cs" />
     <Compile Include="Bindings\UserIdAttribute.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
