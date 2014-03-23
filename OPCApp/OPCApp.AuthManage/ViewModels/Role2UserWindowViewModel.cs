@@ -46,6 +46,14 @@ namespace OPCApp.AuthManage.ViewModels
            this.DeleteUserListCommand = new DelegateCommand(this.DeleteUserList);
            this.DbGridClickCommand = new DelegateCommand(this.DBGridClick);
            this.GetSelectedCommand=new DelegateCommand(this.GetSelected);
+           this.Init();
+       }
+       public void Init()
+       {
+           IRoleDataService roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
+           roleDataService.Search(null);
+           IMenuDataService menuDataService = AppEx.Container.GetInstance<IMenuDataService>();
+           menuDataService.GetMenus();//所有的 还是有权限
        }
        public DelegateCommand DeleteUserListCommand { get; set; }
        public DelegateCommand GetSelectedCommand { get; set; }
