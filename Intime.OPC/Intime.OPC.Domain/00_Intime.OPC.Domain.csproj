@@ -57,6 +57,14 @@
   <ItemGroup>
     <Compile Include="Base\IEntity.cs" />
     <Compile Include="Dto\RoleMenuDto.cs" />
+    <Compile Include="Enums\EnumCashStatus.cs" />
+    <Compile Include="Enums\EnumOderStatus.cs" />
+    <Compile Include="Enums\EnumReturnGoodsStatus.cs" />
+    <Compile Include="Enums\EnumRMACashStatus.cs" />
+    <Compile Include="Enums\EnumRMAStatus.cs" />
+    <Compile Include="Enums\EnumSaleOrderStatus.cs" />
+    <Compile Include="Enums\EnumSaleStatus.cs" />
+    <Compile Include="Exception\SaleOrderNotExistsException.cs" />
     <Compile Include="Models\Mapping\OPC_AuthMenuMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleMenuMap.cs" />

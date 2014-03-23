@@ -14,5 +14,8 @@ namespace Intime.OPC.Service
 
         IList<OPC_SaleComment> GetRemarksBySaleNo(string saleNo);
 
+        bool PrintSale(string orderNo, int userId);
+
+        IList<OPC_SaleDetail> GetSaleOrderDetails(string saleOrderNo, int userId);
     }
 }
