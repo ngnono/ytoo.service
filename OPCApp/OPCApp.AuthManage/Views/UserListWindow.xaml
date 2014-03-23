@@ -64,9 +64,9 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,1" >
             <Label Content=" 查找字段:" Margin="0,14,0,10"/>
-            <ComboBox  Width="100"  ItemsSource="{Binding FieldList}" Height="20" SelectedItem="{ Binding selectedFiled}" SelectedIndex="0"/>
+            <ComboBox  Width="100"  ItemsSource="{Binding FieldList}" Height="20" SelectedItem="{Binding SelectedFiled}" SelectedIndex="0"/>
             <Label Content=" 查找内容:" Margin="0,14,0,0" />
-            <TextBox Controls:TextboxHelper.Watermark="输入内容"  Height="20" Width="130" Text="{Binding selectedFiledValue}" />
+            <TextBox  Height="20" Width="130" Text="{Binding SelectedFiledValue}" />
             <Button Background="LightGray" Width="50" Command="{Binding SearchCommand}">
                 <StackPanel>
                     <Image Source="/image/查询.png" Stretch="None"></Image>

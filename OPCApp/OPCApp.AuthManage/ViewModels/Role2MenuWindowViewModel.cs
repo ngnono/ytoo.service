@@ -96,6 +96,13 @@ namespace OPCApp.AuthManage.ViewModels
            this.DbGridClickCommand          = new DelegateCommand(this.DBGridClick);
            this.GetSelectedCommand          =new DelegateCommand(this.GetSelected);
        }
+
+        public void Init()
+        {
+            IRoleDataService roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
+            roleDataService.Search(null);
+        }
+
         /// <summary>
         /// Gets or sets the delete user list command.
         /// </summary>
