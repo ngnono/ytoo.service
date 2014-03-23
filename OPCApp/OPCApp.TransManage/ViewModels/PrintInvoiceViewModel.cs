@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.Prism.Commands;
 using System.Windows;
+using OPCAPP.Domain.Enums;
 using OPCApp.TransManage.Models;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.Common;
@@ -96,10 +97,9 @@ namespace OPCApp.TransManage.ViewModels
 
         public void CommandGetDownExecute()
         {
-            var selectSaleIds = Invoice4List.Where(n => n.IsSelected == true).Select(e=>e.Id).ToList();
-            string saleIds = selectSaleIds.Aggregate("", (current, key) => current + key+',');
+            var selectSaleIds = Invoice4List.Where(n => n.IsSelected == true).Select(e=>e.Id).ToList().Join();
             //这个工作状态
-            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleIds.Substring(0,saleIds.Length-1)).Result;
+            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(selectSaleIds).Result;
         }
 
         public void CommandViewAndPrintExecute()
@@ -119,15 +119,15 @@ namespace OPCApp.TransManage.ViewModels
 
 
         }
+        /*完成销售单打印*/
         public void CommandFinishExecute()
         {
-            ITransService ITrans = new TransService();
-            var dic = new Dictionary<string, string>();
-            dic.Add("id", "1");
-            dic.Add("status", "55");
-            ITrans.Finish(dic);
+            var selectSaleIds = Invoice4List.Where(n => n.IsSelected == true).Select(e => e.Id).ToList().Join();
+            ITransService iTransService = AppEx.Container.GetInstance<ITransService>();
+            bool bFalg= iTransService.SetStatusAffirmPrintSaleFinish(selectSaleIds);
+            MessageBox.Show("提示",bFalg ? "打印销售单完成": "打印销售单失败");
         }
-       
+        
 
         
         

@@ -202,6 +202,10 @@
       <Project>{23d22b9e-465d-415c-92ea-52b93465a55e}</Project>
       <Name>OPCApp.BaseInfoManage</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
+      <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
+      <Name>OPCApp.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
       <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
       <Name>OPCApp.DataService</Name>

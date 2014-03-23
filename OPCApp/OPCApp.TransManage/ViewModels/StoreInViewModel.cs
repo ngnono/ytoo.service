@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.Prism.Commands;
 using System.Windows;
+using OPCApp.DataService.Interface.Trans;
+using OPCApp.Infrastructure;
 using OPCApp.TransManage.Models;
 using Microsoft.Practices.Prism.Mvvm;
 
@@ -41,7 +43,8 @@ namespace OPCApp.TransManage.ViewModels
         }
         public void CommandStoreInSureExecute()
         {
-
+            ITransService ts = AppEx.Container.GetInstance<ITransService>();
+           // ts.StoreInSure("1");
 
         }
         //选择上面行数据时赋值的数据集
