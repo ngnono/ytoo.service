@@ -12,6 +12,8 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain;
 using System;
@@ -20,6 +22,8 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OPCApp.Domain.Models;
+using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Impl
 {
@@ -29,22 +33,20 @@ namespace OPCApp.DataService.Impl
     [Export(typeof(IMenuDataService))]
     public class MenuDataService : IMenuDataService
     {
-        IList<MenuGroup> lstMenuGroup;
 
         public MenuDataService() {
-            lstMenuGroup = new List<MenuGroup>();
 
-            var mg = new MenuGroup();
-            mg.Text = "权限管理";
-            mg.Items.Add(new MenuInfo { Sort = 1, Text = "用户管理", ResourceUrl = "UserListViewModel" });
-            mg.Items.Add(new MenuInfo { Sort = 1, Text = "角色管理", ResourceUrl = "RoleListViewModel" });
-            lstMenuGroup.Add(mg);
+            //var mg = new MenuGroup();
+            //mg.Text = "权限管理";
+            //mg.Items.Add(new MenuInfo { Sort = 1, Text = "用户管理", ResourceUrl = "UserListViewModel" });
+            //mg.Items.Add(new MenuInfo { Sort = 1, Text = "角色管理", ResourceUrl = "RoleListViewModel" });
+            //lstMenuGroup.Add(mg);
 
-            mg = new MenuGroup();
-            mg.Text = "基本信息";
-            mg.Items.Add(new MenuInfo { Sort = 1, Text = "门店管理", ResourceUrl = "StoreManage" });
+            //mg = new MenuGroup();
+            //mg.Text = "基本信息";
+            //mg.Items.Add(new MenuInfo { Sort = 1, Text = "门店管理", ResourceUrl = "StoreManage" });
           
-            lstMenuGroup.Add(mg);
+            //lstMenuGroup.Add(mg);
         }
 
         /// <summary>
@@ -54,7 +56,19 @@ namespace OPCApp.DataService.Impl
         /// <exception cref="System.NotImplementedException"></exception>
         public IEnumerable<MenuGroup> GetMenus()
         {
-            return lstMenuGroup;
+            string paras = string.Format("UserId={0}", 1);//1 update curUserId 
+            var listMenu= RestClient.Get<OPC_AuthMenu>("menu/loadmenu",paras);
+            var groupMenu1 = listMenu.Where(e => e.PraentMenuId == e.Id).ToList();
+            var groupMenu=groupMenu1 .Select(e=>new MenuGroup(){Id=e.Id,Sort = e.Sort,MenuName= e.MenuName}).OrderBy(e=>e.Sort).ToList();
+            foreach (var grpMenu in groupMenu)
+            {
+                var menus = listMenu.Where(e => e.Id != e.PraentMenuId && e.PraentMenuId == grpMenu.Id).OrderBy(e=>e.Sort).ToList();
+                if (menus.Count>0)
+                {
+                    grpMenu.Items = menus;
+                }
+            }
+            return groupMenu;
         }
     }
 }

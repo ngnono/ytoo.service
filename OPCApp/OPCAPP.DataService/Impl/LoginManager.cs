@@ -45,7 +45,11 @@ namespace OPCApp.DataService.Impl
             info.UserName = this.userName;
             info.Password = this.password;
             var tk = RestClient.Post<LoginInfo, TokenModel>("Account/token", info);
-            if (tk!=null)
+            if (null==tk)
+            {
+                return null;
+            }
+            else
             {
                 IsLogin = true;
             }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Prism.Commands;
+using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain;
 namespace OPCApp.AuthManage.ViewModels
@@ -16,6 +17,7 @@ namespace OPCApp.AuthManage.ViewModels
        [Export(typeof(AuthNavaeigationItemViewModel))]
        public class AuthNavaeigationItemViewModel
        {
+           private readonly IMenuDataService _menuDataService;
            /// <summary>
            /// Initializes a new instance of the <see cref="MenuViewModel"/> class.
            /// </summary>
@@ -23,7 +25,7 @@ namespace OPCApp.AuthManage.ViewModels
            [ImportingConstructor]
            public AuthNavaeigationItemViewModel(IMenuDataService menuService)
            {
-               this.GroupItems = menuService.GetMenus();
+               _menuDataService = menuService;
 
            }
            public DelegateCommand<string> MenuClickCommand { get; set; }
@@ -32,7 +34,16 @@ namespace OPCApp.AuthManage.ViewModels
            /// Gets or sets the items.
            /// </summary>
            /// <value>The items.</value>
-           public IEnumerable<MenuGroup> GroupItems { get; set; }
+           public IEnumerable<MenuGroup> GroupItems {
+               get
+               {
+                   // Logon(); 
+                   var rest = RestClient.Post("Account/Token", new { UserName ="111", Password = "11" });
+                   return _menuDataService.GetMenus();
+
+               }
+               
+           }
        }
 
    

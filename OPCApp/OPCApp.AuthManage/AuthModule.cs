@@ -2,6 +2,7 @@
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
+using OPCApp.DataService.Common;
 using OPCApp.Infrastructure;
 using OPCApp.AuthManage.Views;
 using System;
@@ -20,7 +21,13 @@ namespace OPCApp.AuthManage
         public IRegionManager RegionManager;
         public void Initialize()
         {
+            Logon();   
             this.RegionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, typeof(AuthNavigationItemView));
+        }
+
+        public void Logon()
+        {
+          
         }
     }
 }

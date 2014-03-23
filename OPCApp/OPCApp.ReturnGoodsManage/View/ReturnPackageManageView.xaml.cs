@@ -10,21 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using OPCApp.BaseInfoManage.ViewModels;
 
-namespace OPCApp.BaseInfoManage.Views
+namespace OPCApp.ReturnGoodsManage.View
 {
     /// <summary>
-    /// OrgManage.xaml 的交互逻辑
+    /// ReturnPackageManageView.xaml 的交互逻辑
     /// </summary>
-    public partial class OrgManage 
+    public partial class ReturnPackageManageView : UserControl
     {
-        public OrgManage()
+        public ReturnPackageManageView()
         {
-            //InitializeComponent();
-
-            //this.DataContext = new OrgManageViewModel();
+            InitializeComponent();
         }
     }
 }

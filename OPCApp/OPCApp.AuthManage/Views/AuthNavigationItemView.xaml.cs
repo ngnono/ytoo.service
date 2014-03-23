@@ -103,9 +103,19 @@ namespace OPCApp.AuthManage.Views
                 this.regionManager.Regions[RegionNames.MainContentRegion].Remove(this.regionManager.Regions[RegionNames.MainContentRegion].Views.FirstOrDefault());
             }
             //this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,);
-            this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion, () =>
-                AppEx.Container.GetInstance<IViewModel>(o1.ToString()).View
-            );
+            if (o1.ToString().Contains("ViewModel"))//´ýµ÷Õû
+            {
+                this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion, () =>
+                    AppEx.Container.GetInstance<IViewModel>(o1.ToString()).View
+                    );
+            }
+            else
+            {
+                this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,
+                     () => AppEx.Container.GetInstance<UserControl>(o1.ToString())
+                     );
+
+            }
         }
     }
 }

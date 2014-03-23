@@ -21,7 +21,7 @@ namespace OPCApp.TransManage
         public IRegionManager RegionManager;
         public void Initialize()
         {
-            this.RegionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, typeof(NavigationItemView));
+           // this.RegionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, typeof(NavigationItemView));
         }
     }
 }

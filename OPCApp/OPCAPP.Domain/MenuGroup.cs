@@ -3,26 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OPCApp.Domain.Models;
 
 namespace OPCApp.Domain
 {
     public class MenuGroup
     {
-        public MenuGroup() { 
-            this.Items=new List<MenuInfo>();
+        public MenuGroup() {
+            this.Items = new List<OPC_AuthMenu>();
         }
+
+        public int Id { get; set; }
         public int Sort { get; set; }
 
-        public string Text { get; set; }
+        public string MenuName { get; set; }
 
-        public IList<MenuInfo> Items { get; set; }
+        public IList<OPC_AuthMenu> Items { get; set; }
 
     }
 
-    public class MenuInfo {
-        public int Sort { get; set; }
-        public string Text { get; set; }
-        public string ResourceUrl { get; set; }
-
-    }
+   
 }
