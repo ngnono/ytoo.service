@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,24 +22,40 @@ namespace OPCApp.TransManage.Views
     /// RemarkWin.xaml 的交互逻辑
     /// 封装的录入备注的接口
     /// </summary>
+    /// 
+    [Export(typeof(IRemark))]
+    [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
     public partial class RemarkWin : IRemark
     {
-        public RemarkViewModel sv = new RemarkViewModel();
-        public RemarkWin()
+        
+        public RemarkViewModel ViewModel
+        {
+            set
+            {
+                this.DataContext = value;
+            }
+            get
+            {
+                return this.DataContext as RemarkViewModel;
+            }
+        }
+        [ImportingConstructor]
+        public RemarkWin(RemarkViewModel viewModel)
         {
             InitializeComponent();
-            sv.CommandSave = new DelegateCommand(new Action(this.CommandSaveExecute));
-            sv.CommandBack = new DelegateCommand(new Action(this.CommandBackExecute));
-            this.DataContext = sv;
+            this.ViewModel = viewModel;
+            ViewModel.CommandSave = new DelegateCommand(new Action(this.CommandSaveExecute));
+            ViewModel.CommandBack = new DelegateCommand(new Action(this.CommandBackExecute));
+            ViewModel.Remark.Content = "";
         }
 
-        public void ShowRemarkWin()
+        public void ShowRemarkWin(int id,int type)
         {
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            ViewModel.OpenWinSearch(id, type);
             if (this.ShowDialog() == true)
             {
-                this.sv.SaveRemark();
-                
+                ViewModel.SaveRemark(id);
             }
         }
         public void CommandBackExecute()

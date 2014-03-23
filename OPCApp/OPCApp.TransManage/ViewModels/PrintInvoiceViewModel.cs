@@ -28,6 +28,7 @@ namespace OPCApp.TransManage.ViewModels
             get { return this.invoice4list; }
             set { SetProperty(ref this.invoice4list, value); }
         }
+
         //界面查询条件
         private Invoice4Get invoice4get;
         public Invoice4Get Invoice4Get
@@ -36,43 +37,14 @@ namespace OPCApp.TransManage.ViewModels
             set { SetProperty(ref this.invoice4get, value); }
         }
 
-        public DelegateCommand CommandSearch { get; set; }
-        public DelegateCommand CommandViewAndPrint { get; set; }
-        public DelegateCommand CommandOnlyPrint { get; set; }
-        public DelegateCommand CommandFinish { get; set; }
-        public DelegateCommand CommandRemark { get; set; }
-        public DelegateCommand CommandGetDown { get; set; }
-        public PrintInvoiceViewModel()
+        //选择上面行数据时赋值的数据集
+        private OPC_Sale invoice4remark = new OPC_Sale();
+        public OPC_Sale Invoice4Remark
         {
-            //初始化命令属性
-            CommandSearch = new DelegateCommand(new Action(CommandSearchExecute));
-            CommandViewAndPrint = new DelegateCommand(new Action(CommandViewAndPrintExecute));
-            CommandOnlyPrint = new DelegateCommand(new Action(CommandOnlyPrintExecute));
-            CommandFinish = new DelegateCommand(new Action(CommandFinishExecute));
-            CommandRemark = new DelegateCommand(new Action(CommandRemarkExecute));
-            CommandGetDown = new DelegateCommand(new Action(CommandGetDownExecute));
-            invoice4get = new Invoice4Get();
-        }
-
-
-        public void CommandRemarkExecute()
-        {
-            IRemark remark = new RemarkWin();
-            remark.ShowRemarkWin();
-        }
-        public void CommandSearchExecute()
-        {
-            var dic = new Dictionary<string, object>();
-
-            dic.Add("startdate", Invoice4Get.StartSellDate.ToShortDateString());
-            dic.Add("enddate", Invoice4Get.EndSellDate.ToShortDateString());
-            dic.Add("orderno", Invoice4Get.OrderNo);
-            dic.Add("saleorderno", Invoice4Get.SaleOrderNo);
-            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(dic);
-            Invoice4List = re.Result;
+            get { return this.invoice4remark; }
+            set { SetProperty(ref this.invoice4remark, value); }
 
         }
-
         //销售单明细Grid数据集
         private IEnumerable<OPC_SaleDetail> invoicedetail4list;
         public IEnumerable<OPC_SaleDetail> InvoiceDetail4List
@@ -82,20 +54,52 @@ namespace OPCApp.TransManage.ViewModels
             set { SetProperty(ref this.invoicedetail4list, value); }
         }
 
+        public DelegateCommand CommandSearch        { get; set; }
+        public DelegateCommand CommandViewAndPrint  { get; set; }
+        public DelegateCommand CommandOnlyPrint     { get; set; }
+        public DelegateCommand CommandFinish        { get; set; }
+        public DelegateCommand CommandSetRemark     { get; set; }
+        public DelegateCommand CommandGetDown       { get; set; }
+        public PrintInvoiceViewModel()
+        {
+            //初始化命令属性
+            this.CommandSearch = new DelegateCommand(this.CommandSearchExecute);
+            this.CommandViewAndPrint = new DelegateCommand(this.CommandViewAndPrintExecute);
+            this.CommandOnlyPrint = new DelegateCommand(this.CommandOnlyPrintExecute);
+            this.CommandFinish = new DelegateCommand(this.CommandFinishExecute);
+            this.CommandSetRemark = new DelegateCommand(this.CommandRemarkExecute);
+            this.CommandGetDown = new DelegateCommand(this.CommandGetDownExecute);
+            this.Invoice4Get = new Invoice4Get();
+        }
+
+        //调用接口打开填写Remark的窗口
+        //[Import("IRemark",typeof(IRemark))]
+       // public
+       
+        public void CommandRemarkExecute()
+        {
+            
+            //被选择的对象
+            int id = Invoice4Remark.Id;
+             IRemark remarkWin=AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, 1);
+        }
+
+        public void CommandSearchExecute()
+        {
+
+            string salesfilter = string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}", Invoice4Get.StartSellDate.ToShortDateString(), Invoice4Get.EndSellDate.ToShortDateString(), Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo);
+            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter);
+            Invoice4List = re.Result;
+
+        }
+
         public void CommandGetDownExecute()
         {
-            var selectdata = Invoice4List.Where(n => n.IsSelected == true).Select(e => e.Id).ToList();
-            string passData = "";
-            foreach (int id in selectdata)
-            {
-                passData += id.ToString() + ",";
-            }
-            if (!string.IsNullOrEmpty(passData))
-            {
-                var dic = new Dictionary<string, object>();
-                dic.Add("ids", passData);
-                InvoiceDetail4List= AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(dic).Result;
-            }
+            var selectSaleIds = Invoice4List.Where(n => n.IsSelected == true).Select(e=>e.Id).ToList();
+            string saleIds = selectSaleIds.Aggregate("", (current, key) => current + key+',');
+            //这个工作状态
+            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleIds.Substring(0,saleIds.Length-1)).Result;
         }
 
         public void CommandViewAndPrintExecute()
@@ -123,14 +127,7 @@ namespace OPCApp.TransManage.ViewModels
             dic.Add("status", "55");
             ITrans.Finish(dic);
         }
-        //选择上面行数据时赋值的数据集
-        private Invoice invoice4sel;
-        public Invoice Invoice4Sel
-        {
-            get { return this.invoice4sel; }
-            set { SetProperty(ref this.invoice4sel, value); }
-
-        }
+       
 
         
         

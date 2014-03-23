@@ -13,7 +13,7 @@ namespace OPCApp.TransManage.Views
     /// PrintInvoiceViewModel.xaml 的交互逻辑
     /// </summary>
     /// 
-    [Export("StoreIn",typeof(UserControl))]
+    [Export("StoreIn")]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class StoreIn 
     {

@@ -8,7 +8,7 @@ namespace OPCApp.TransManage.IService
 {
     public interface IRemark
     {
-        void ShowRemarkWin();
+        void ShowRemarkWin(int id, int type);
         
     }
 }
