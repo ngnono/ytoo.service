@@ -11,10 +11,10 @@ namespace OPCApp.DataService.Interface.Trans
 {
     public interface ITransService
     {
-        bool SetStatusAffirmPrintSaleFinish(string saleId);
-        bool SetStatusStoreInSure(string saleId);
-        bool SetStatusSoldOut(string saleId);
-        PageResult<OPC_Sale> Search(string salesfilter);
-        PageResult<OPC_SaleDetail> SelectSaleDetail(string saleIds);
+        bool SetStatusAffirmPrintSaleFinish(IList<string> saleOrderNoList);
+        bool SetStatusStoreInSure(IList<string> saleOrderNoList);
+        bool SetStatusSoldOut(IList<string> saleOrderNoList);
+        PageResult<OPC_Sale> Search(string salesfilter, EnumSearchSaleStatus searchSaleStatus);
+        PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo);
     }
 }

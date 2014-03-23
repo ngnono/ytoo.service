@@ -1,12 +1,10 @@
 ﻿<UserControl x:Class="OPCApp.TransManage.Views.StoreIn"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Height="AUTO" Width="AUTO"  Background="LightGray">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -100,18 +98,6 @@
             </DataGrid.Columns>
 
         </DataGrid>
-        <StackPanel Grid.Row="3" Grid.Column="1" >
-            <StackPanel Orientation="Vertical"  Background="LightGray" >
-                <TextBox Height="100"   Foreground="Blue" Background="White" Text="输入订单备注"/>
-                <Button Content="保存销售单备注" Width="100" />
-            </StackPanel>
-        </StackPanel>
-
-        <StackPanel Grid.Row="2" Grid.Column="1">
-            <StackPanel Orientation="Horizontal" Background="LightGray">
-                <TextBlock Text="   销售订单备注" />
-            </StackPanel>
-        </StackPanel>
         <StackPanel Grid.Row="4">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <TextBlock Text="   销售明细" />

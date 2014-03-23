@@ -6,6 +6,7 @@ using Intime.OPC.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using System.Windows;
 using OPCApp.DataService.Interface.Trans;
+using OPCAPP.Domain.Enums;
 using OPCApp.Infrastructure;
 using OPCApp.TransManage.Models;
 using Microsoft.Practices.Prism.Mvvm;
@@ -23,6 +24,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public StoreInViewModel():base()
         {
+            this.SearchSaleStatus=EnumSearchSaleStatus.StoreInDataBaseSearchStatus;
             //初始化命令属性
             CommandSoldOut = new DelegateCommand(new Action(CommandSoldOutExecute));
             CommandStoreInSure = new DelegateCommand(new Action(CommandStoreInSureExecute));

@@ -21,6 +21,7 @@ namespace OPCApp.TransManage.ViewModels
     [Export("PrintInvoiceViewModel", typeof(PrintInvoiceViewModel))]
     public class PrintInvoiceViewModel : BindableBase
     {
+        public EnumSearchSaleStatus SearchSaleStatus { get; set; }
         //Grid数据集
         private IEnumerable<OPC_Sale> saleList;
         public IEnumerable<OPC_Sale> SaleList
@@ -71,6 +72,7 @@ namespace OPCApp.TransManage.ViewModels
             this.CommandSetRemark = new DelegateCommand(this.CommandRemarkExecute);
             this.CommandGetDown = new DelegateCommand(this.CommandGetDownExecute);
             this.Invoice4Get = new Invoice4Get();
+            this.SearchSaleStatus = EnumSearchSaleStatus.CompletePrintSearchStatus;
         }
 
         //调用接口打开填写Remark的窗口
@@ -90,7 +92,7 @@ namespace OPCApp.TransManage.ViewModels
         {
 
             string salesfilter = string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}", Invoice4Get.StartSellDate.ToShortDateString(), Invoice4Get.EndSellDate.ToShortDateString(), Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo);
-            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter);
+            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter,this.SearchSaleStatus);
             this.SaleList = re.Result;
 
         }
