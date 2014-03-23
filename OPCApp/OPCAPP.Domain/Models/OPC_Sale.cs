@@ -26,6 +26,7 @@ namespace Intime.OPC.Domain.Models
         public string CashNum { get; set; }
         public DateTime? CashDate { get; set; }
         public int? SectionId { get; set; }
+        public string SectionName { get; set; }
         public int? PrintTimes { get; set; }
         public string Remark { get; set; }
         public DateTime? RemarkDate { get; set; }
