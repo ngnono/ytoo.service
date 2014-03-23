@@ -22,52 +22,52 @@ namespace Intime.OPC.Domain.Enums
     public enum EnumSaleOrderStatus
     {
         /// <summary>
-        ///     The no pick up
+        /// 未提货
         /// </summary>
         [Description("未提货")] NoPickUp = 0,
 
         /// <summary>
-        ///     The no pick up
+        ///  打印销售单
         /// </summary>
         [Description("打印销售单")]
         PrintSale = 2,
         /// <summary>
-        ///     The stock out
+        ///  缺货
         /// </summary>
         [Description("缺货")] StockOut = 5,
 
         /// <summary>
-        ///     The replenished
+        ///  已补货
         /// </summary>
         [Description("已补货")] Replenished = 10,
 
         /// <summary>
-        ///     The pick up
+        /// 已提货
         /// </summary>
         [Description("已提货")] PickUp = 15,
 
         /// <summary>
-        ///     The shopping guide pick up
+        ///  导购提货
         /// </summary>
         [Description("导购提货")] ShoppingGuidePickUp = 20,
 
         /// <summary>
-        ///     The put in storage
+        ///  物流入库
         /// </summary>
         [Description("物流入库")] ShipInStorage = 25,
 
         /// <summary>
-        ///     The print invoice
+        ///  打印发货单
         /// </summary>
         [Description("打印发货单")] PrintInvoice = 30,
 
         /// <summary>
-        ///     The print express
+        /// 打印快递单
         /// </summary>
         [Description("打印快递单")] PrintExpress = 35,
 
         /// <summary>
-        ///     The shipped
+        ///  已发货
         /// </summary>
         [Description("已发货")] Shipped = 40,
     }
