@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Base\BaseRespository.cs" />
     <Compile Include="Common\StringHelper.cs" />
+    <Compile Include="IMenuRepository.cs" />
     <Compile Include="IAccountRepository.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IRoleRepository.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="ITransRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultMsg.cs" />
+    <Compile Include="Support\MenuRepository.cs" />
     <Compile Include="Support\AccountRepository.cs" />
     <Compile Include="Support\RoleRepository.cs" />
     <Compile Include="Support\SaleRepository.cs" />
