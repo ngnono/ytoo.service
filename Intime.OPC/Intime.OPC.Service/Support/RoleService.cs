@@ -1,4 +1,5 @@
-﻿using Intime.OPC.Domain.Models;
+﻿using System.Linq;
+using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
@@ -30,12 +31,12 @@ namespace Intime.OPC.Service.Support
 
         public System.Collections.Generic.IList<OPC_AuthRole> Select()
         {
-            return _roleRepository.Select();
+            return _roleRepository.Select(e=>true).ToList();
         }
 
         public bool IsStop(int roleId, bool bValid)
         {
-            return _roleRepository.IsStop(roleId, bValid);
+            return _roleRepository.SetEnable(roleId, bValid);
         }
 
 
