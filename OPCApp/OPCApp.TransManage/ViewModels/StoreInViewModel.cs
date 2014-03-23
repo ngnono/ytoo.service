@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
+using Intime.OPC.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using System.Windows;
 using OPCApp.DataService.Interface.Trans;
@@ -11,7 +13,8 @@ using Microsoft.Practices.Prism.Mvvm;
 
 namespace OPCApp.TransManage.ViewModels
 {
-    class StoreInViewModel : BindableBase
+    [Export("StoreInViewModel", typeof(StoreInViewModel))]
+  public  class StoreInViewModel : BindableBase
     {
 
         public DelegateCommand CommandSearch { get; set; }
@@ -40,6 +43,13 @@ namespace OPCApp.TransManage.ViewModels
         {
 
 
+        }
+        private IEnumerable<OPC_Sale> invoice4list;
+        public IEnumerable<OPC_Sale> Invoice4List
+        {
+
+            get { return this.invoice4list; }
+            set { SetProperty(ref this.invoice4list, value); }
         }
         public void CommandStoreInSureExecute()
         {
