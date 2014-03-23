@@ -22,9 +22,9 @@ namespace OPCApp.BaseInfoManage.Views
     {
         public OrgManage()
         {
-            InitializeComponent();
+            //InitializeComponent();
 
-            this.DataContext = new OrgManageViewModel();
+            //this.DataContext = new OrgManageViewModel();
         }
     }
 }
