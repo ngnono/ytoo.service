@@ -22,7 +22,7 @@ namespace Intime.OPC.Repository.Support
     /// <summary>
     /// Class RoleRepository.
     /// </summary>
-    public class RoleRepository : BaseRespository<OPC_AuthRole>, IRoleRepository
+    public class RoleRepository : BaseRepository<OPC_AuthRole>, IRoleRepository
     {
 
         /// <summary>
@@ -51,6 +51,30 @@ namespace Intime.OPC.Repository.Support
                     return true;
                 }
                 return false;
+            }
+        }
+
+        public IList<OPC_AuthRole> All()
+        {
+            return Select(t => t.IsValid == true);
+        }
+
+
+        public IList<OPC_AuthRole> GetByUserID(int userID)
+        {
+            IList<OPC_AuthRole> lstRoles = new List<OPC_AuthRole>();
+            using (var db = new YintaiHZhouContext())
+            {
+                var lstRoleUser = db.OPC_AuthRoleUser.Where(t => t.OPC_AuthUserId == userID);
+                foreach (var roleUser in lstRoleUser)
+                {
+                    var role = GetByID(roleUser.OPC_AuthRoleId);
+                    if (null != role && role.IsValid == true)
+                    {
+                        lstRoles.Add(role);
+                    }
+                }
+                return lstRoles;
             }
         }
     }

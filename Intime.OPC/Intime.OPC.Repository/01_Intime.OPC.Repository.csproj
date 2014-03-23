@@ -54,11 +54,14 @@
     <Compile Include="IRoleRepository.cs" />
     <Compile Include="ISaleRepository.cs" />
     <Compile Include="ITransRepository.cs" />
+    <Compile Include="IRoleUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResultMsg.cs" />
     <Compile Include="Support\MenuRepository.cs" />
     <Compile Include="Support\AccountRepository.cs" />
+    <Compile Include="Support\RoleMenuRepository.cs" />
     <Compile Include="Support\RoleRepository.cs" />
+    <Compile Include="Support\RoleUserRepository.cs" />
     <Compile Include="Support\SaleRepository.cs" />
     <Compile Include="Support\TransRepository.cs" />
     <Compile Include="YintaiHZhouContext.cs" />
@@ -68,6 +71,9 @@
       <Project>{03e03b5b-ead6-4e27-976d-82d15f7396d7}</Project>
       <Name>00_Intime.OPC.Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IRoleMenuRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

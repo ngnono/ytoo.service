@@ -23,10 +23,10 @@ using Intime.OPC.Domain.Base;
 namespace Intime.OPC.Repository.Base
 {
     /// <summary>
-    /// Class BaseRespository.
+    /// Class BaseRepository.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class BaseRespository<T> : IRespository<T> where T : class,IEntity
+    public abstract class BaseRepository<T> : IRepository<T> where T : class,IEntity
     {
         /// <summary>
         /// Creates the specified entity.
@@ -94,13 +94,23 @@ namespace Intime.OPC.Repository.Base
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>IQueryable{`0}.</returns>
-       public IQueryable<T> Select(System.Linq.Expressions.Expression<Func<T, bool>> filter)
+        protected IList<T> Select(System.Linq.Expressions.Expression<Func<T, bool>> filter)
         {
             using (var db = new YintaiHZhouContext())
             {
                 IDbSet<T> set = db.Set<T>();
-                return set.Where(filter);
+                return set.Where(filter).ToList();
             }
         }
+
+
+       public T GetByID(int id)
+       {
+           using (var db = new YintaiHZhouContext())
+           {
+               IDbSet<T> set = db.Set<T>();
+               return set.FirstOrDefault(t => t.Id == id);
+           }
+       }
     }
 }

@@ -8,24 +8,32 @@ namespace Intime.OPC.Repository
 {
    public  class ResultMsg
     {
-       private static ResultMsg resultMsg=new ResultMsg();
-       public bool IsSuccess { get; set; }
-       public string Msg { get; set; }
+     
+
+       public bool IsSuccess { get;  set; }
+       public string Msg { get;  set; }
 
        public object Data { get; set; }
 
-       public static ResultMsg Success(string msg = "")
+       public static ResultMsg Success(string msg = "",object data=null)
        {
-           resultMsg.IsSuccess = true;
-           resultMsg.Msg = msg;
-           return resultMsg;
+         return   new ResultMsg
+         {
+             IsSuccess = true,
+             Data = data,
+             Msg=msg
+         };
+
        }
 
-       public static ResultMsg Failure(string msg = "")
+       public static ResultMsg Failure(string msg,object data=null)
        {
-           resultMsg.IsSuccess = false;
-           resultMsg.Msg = msg;
-           return resultMsg;
+           return new ResultMsg
+           {
+               IsSuccess = false,
+               Data =null,
+               Msg = msg
+           };
        }
     }
 

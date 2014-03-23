@@ -12,7 +12,7 @@ namespace Intime.OPC.Domain.Models.Mapping
 
             // Properties
             this.Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             // Table & Column Mappings
             this.ToTable("OPC_AuthRoleUser");
