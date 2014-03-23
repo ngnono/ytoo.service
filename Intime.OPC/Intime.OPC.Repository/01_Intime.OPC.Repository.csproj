@@ -50,8 +50,10 @@
     <Compile Include="Common\StringHelper.cs" />
     <Compile Include="IMenuRepository.cs" />
     <Compile Include="IAccountRepository.cs" />
+    <Compile Include="IOrderRemarkRepository.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IRoleRepository.cs" />
+    <Compile Include="ISaleRemarkRepository.cs" />
     <Compile Include="ISaleRepository.cs" />
     <Compile Include="ITransRepository.cs" />
     <Compile Include="IRoleUserRepository.cs" />
@@ -59,9 +61,11 @@
     <Compile Include="ResultMsg.cs" />
     <Compile Include="Support\MenuRepository.cs" />
     <Compile Include="Support\AccountRepository.cs" />
+    <Compile Include="Support\OrderRemarkRepository.cs" />
     <Compile Include="Support\RoleMenuRepository.cs" />
     <Compile Include="Support\RoleRepository.cs" />
     <Compile Include="Support\RoleUserRepository.cs" />
+    <Compile Include="Support\SaleRemarkRepository.cs" />
     <Compile Include="Support\SaleRepository.cs" />
     <Compile Include="Support\TransRepository.cs" />
     <Compile Include="YintaiHZhouContext.cs" />

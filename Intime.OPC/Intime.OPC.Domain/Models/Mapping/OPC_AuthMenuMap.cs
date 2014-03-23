@@ -9,11 +9,16 @@ namespace Intime.OPC.Domain.Models.Mapping
         {
             // Primary Key
             this.HasKey(t => t.Id);
-            this.Property(t => t.Id)
-               .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
             // Properties
+            this.Property(t => t.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
             this.Property(t => t.MenuName)
                 .HasMaxLength(40);
+
+            this.Property(t => t.PraentMenuId)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.Property(t => t.Url)
                 .HasMaxLength(40);

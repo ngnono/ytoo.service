@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Web.Http;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
@@ -40,5 +41,10 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
 
+        [HttpGet]
+        public IHttpActionResult SelectRemarks(string  saleID)
+        {
+            return Ok(  _saleService.GetRemarksBySaleNo(saleID));
+        }
     }
 }

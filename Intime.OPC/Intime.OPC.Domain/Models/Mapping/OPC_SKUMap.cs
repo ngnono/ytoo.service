@@ -15,8 +15,8 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.ToTable("OPC_SKU");
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.ProductId).HasColumnName("ProductId");
-            this.Property(t => t.ColorId).HasColumnName("ColorId");
-            this.Property(t => t.SizeId).HasColumnName("SizeId");
+            this.Property(t => t.ColorValueId).HasColumnName("ColorValueId");
+            this.Property(t => t.SizeValueId).HasColumnName("SizeValueId");
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Intime.OPC.Domain.Models
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public int ColorId { get; set; }
-        public int SizeId { get; set; }
+        public int ColorValueId { get; set; }
+        public int SizeValueId { get; set; }
     }
 }

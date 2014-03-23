@@ -8,6 +8,8 @@ namespace Intime.OPC.Service
         bool Finish(Dictionary<string, string> sale);
         IList<OPC_Sale> Select(string startDate, string endDate, string orderNo, string saleOrderNo);
 
-        IList<OPC_SaleDetail> SelectSaleDetail(string saleIDs);
+        IList<OPC_SaleDetail> SelectSaleDetail(IEnumerable<string> saleIDs);
+
+        IList<OPC_OrderComment> GetRemarksByOrderNo(string orderNo);
     }
 }

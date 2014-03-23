@@ -7,7 +7,7 @@ namespace Intime.OPC.Domain.Models
     public partial class OPC_SaleDetail:IEntity
     {
         public int Id { get; set; }
-        public int SaleId { get; set; }
+        public string SaleOrderNo { get; set; }
         public int Status { get; set; }
         public int StockId { get; set; }
         public int SaleCount { get; set; }

@@ -9,8 +9,7 @@ namespace Intime.OPC.Domain.Models.Mapping
         {
             // Primary Key
             this.HasKey(t => t.Id);
-            this.Property(t => t.Id)
-               .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
             // Properties
             this.Property(t => t.Name)
                 .IsRequired()

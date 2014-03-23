@@ -71,12 +71,11 @@ namespace Intime.OPC.Repository.Support
         /// </summary>
         /// <param name="saleIDs">销售单ID串</param>
         /// <returns></returns>
-        public IList<OPC_SaleDetail> SelectSaleDetail(int[] saleIDs)
+        public IList<OPC_SaleDetail> SelectSaleDetail(IEnumerable<string> saleNos)
         {
             using (var db = new YintaiHZhouContext())
             {
-                var saleList = db.OPC_SaleDetail.Where(p => saleIDs.Contains(p.SaleId));
-                return saleList.ToList();
+                return db.OPC_SaleDetail.Where(t => saleNos.Contains(t.SaleOrderNo)).ToList();
             }
         }
 
