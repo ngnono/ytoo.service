@@ -12,18 +12,23 @@ namespace OPCApp.AuthManage.Views
    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class UsersWindow : MetroWindow
    {
-       
+
+
        public UsersWindow()
         {
             InitializeComponent();
-            ViewModel.CancelCommand = new DelegateCommand(this.Cancel);
-            ViewModel.OkCommand = new DelegateCommand(this.CloseView);
+            
         }
-       [Import("UsersViewModel")]
+       [Import("UsersViewModel", typeof(UsersWindowViewModel))]
        public UsersWindowViewModel ViewModel
        {
            get { return this.DataContext as UsersWindowViewModel; }
-           set { this.DataContext = value; }
+           set
+           {
+               this.DataContext = value;
+               ViewModel.CancelCommand = new DelegateCommand(this.Cancel);
+               ViewModel.OkCommand = new DelegateCommand(this.CloseView);
+           }
        }
 
         public void Cancel() 
