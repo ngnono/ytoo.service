@@ -70,7 +70,7 @@ namespace OPCApp.AuthManage.ViewModels
        {
            IRole2UserService role2UserService = AppEx.Container.GetInstance<IRole2UserService>();
            if (SelectedRole == null) return;
-          this.UserList= role2UserService.GetUserList(SelectedRole.Id);
+          this.UserList= role2UserService.GetUserListByRole(SelectedRole.Id);
 
        }
 

@@ -22,7 +22,7 @@ namespace OPCApp.DataService.Impl.Auth
         }
 
 
-        public List<OPC_AuthUser> GetUserList(int roleId)
+        public List<OPC_AuthUser> GetUserListByRole(int roleId)
         {
             throw new NotImplementedException();
         }
