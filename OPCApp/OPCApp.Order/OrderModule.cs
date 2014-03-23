@@ -45,7 +45,7 @@ namespace OPCApp.Order
         /// </summary>
         public void Initialize()
         {
-            this.RegionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, typeof(OrderNavigationItemView));
+            //this.RegionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, typeof(OrderNavigationItemView));
         }
     }
 }
