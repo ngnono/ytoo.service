@@ -43,20 +43,24 @@ namespace Intime.OPC.WebApi.Controllers
             return InternalServerError();
         }
 
-        public IHttpActionResult DeleteUser(int userId)
+        [HttpPut]
+         public IHttpActionResult DeleteUser([FromUri] int? userId)
         {
-
-            //TODO:check params
-            if (_accountService.Delete(userId))
+            if (userId!=0)
             {
-                return Ok();
+                 if (_accountService.Delete(userId.Value))
+                {
+                    return Ok();
+                }
             }
+            //TODO:check params
+           
 
             return InternalServerError();
         }
 
         [HttpGet]
-        public IHttpActionResult SelectUser([FromUri] string test1,[FromUri] string li)
+        public IHttpActionResult SelectUser([FromUri] string SearchField, [FromUri] string SearchValue)
         {
 
             //TODO:check params
