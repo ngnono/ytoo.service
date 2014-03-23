@@ -90,9 +90,17 @@
     <Compile Include="IService\IStore.cs" />
     <Compile Include="IService\ResultMsg.cs" />
     <Compile Include="Models\StoreInfo.cs" />
+    <Compile Include="ViewModels\EditCompanyEntryModel.cs" />
+    <Compile Include="ViewModels\ExpressCompanyViewModel.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
     <Compile Include="ViewModels\StoreManageViewModel.cs" />
     <Compile Include="ViewModels\OrgManageViewModel.cs" />
+    <Compile Include="Views\EditCompanyEntryDialog.xaml.cs">
+      <DependentUpon>EditCompanyEntryDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExpressCompanyView.xaml.cs">
+      <DependentUpon>ExpressCompanyView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\OrgManage.xaml.cs">
       <DependentUpon>OrgManage.xaml</DependentUpon>
     </Compile>
@@ -177,6 +185,14 @@
     <Resource Include="image\验证.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\EditCompanyEntryDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ExpressCompanyView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\OrgManage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
