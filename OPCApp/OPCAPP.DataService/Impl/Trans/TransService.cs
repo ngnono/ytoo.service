@@ -25,20 +25,9 @@ namespace OPCApp.DataService.Impl.Trans
             return bFalg;
         }
 
-        public PageResult<OPC_Sale> Search(IDictionary<string, object> filter)
-        {
-            //var lst = RestClient.Get<OPC_Sale>("trans/selectsales", filter);
-            //return new PageResult<OPC_Sale>(lst, lst.Count);
+     
 
-            return null;
-        }
-
-        public PageResult<OPC_SaleDetail> SelectSaleDetail(IDictionary<string, object> filter)
-        {
-            //var lst = RestClient.Get<OPC_SaleDetail>("trans/SelectSaleDetail", filter);
-            //return new PageResult<OPC_SaleDetail>(lst, lst.Count);
-            return null;
-        }
+      
         
 
         /*
@@ -61,6 +50,19 @@ namespace OPCApp.DataService.Impl.Trans
         }
         */
 
-    
+
+
+
+        public PageResult<OPC_Sale> Search(string salesfilter)
+        {
+            var lst = RestClient.Get<OPC_Sale>("trans/selectsales", salesfilter);
+            return new PageResult<OPC_Sale>(lst, lst.Count);
+        }
+
+        public PageResult<OPC_SaleDetail> SelectSaleDetail(string saleIds)
+        {
+            var lst = RestClient.Get<OPC_SaleDetail>("trans/SelectSaleDetail", saleIds);
+            return new PageResult<OPC_SaleDetail>(lst, lst.Count);
+        }
     }
 }

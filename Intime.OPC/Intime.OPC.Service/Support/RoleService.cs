@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 
@@ -6,13 +7,13 @@ namespace Intime.OPC.Service.Support
 {
     public class RoleService : IRoleService
     {
+        private readonly IRoleRepository _roleRepository;
+
         public RoleService(IRoleRepository roleRepository)
         {
             this._roleRepository = roleRepository;
+         
         }
-
-        private readonly IRoleRepository _roleRepository;
-
 
         public bool Create(OPC_AuthRole role)
         {
@@ -29,9 +30,9 @@ namespace Intime.OPC.Service.Support
             return _roleRepository.Delete(roleId);
         }
 
-        public System.Collections.Generic.IList<OPC_AuthRole> Select()
+        public IList<OPC_AuthRole> Select()
         {
-            return _roleRepository.Select(e=>true).ToList();
+            return _roleRepository.All().ToList();
         }
 
         public bool IsStop(int roleId, bool bValid)
@@ -43,6 +44,12 @@ namespace Intime.OPC.Service.Support
         public bool SetMenus(object roleMenuDto)
         {
             throw new System.NotImplementedException();
+        }
+
+
+        public IEnumerable<OPC_AuthRole> GetByUserID(int userID)
+        {
+            return _roleRepository.GetByUserID(userID);
         }
     }
 }

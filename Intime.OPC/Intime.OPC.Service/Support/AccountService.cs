@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 
@@ -34,9 +35,9 @@ namespace Intime.OPC.Service.Support
             return _accountRepository.Delete(userId);
         }
 
-        public System.Collections.Generic.IList<OPC_AuthUser> Select()
+        public IList<OPC_AuthUser> Select()
         {
-            return _accountRepository.Select(e=>true).ToList();
+            return _accountRepository.All().ToList();
         }
 
         public bool IsStop(int userId, bool bValid)

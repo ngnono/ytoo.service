@@ -60,6 +60,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="MenuGroup.cs" />
     <Compile Include="Models\OPC_Sale.cs" />
+    <Compile Include="Models\OPC_SaleComment.cs" />
     <Compile Include="Models\OPC_SaleDetail.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,7 +18,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             _accountService = accountService;
         }
-        [HttpGet]
+        [HttpPut]
         public IHttpActionResult AddUser([FromBody] OPC_AuthUser user)
         //public IHttpActionResult AddUser()
         {
@@ -43,20 +43,24 @@ namespace Intime.OPC.WebApi.Controllers
             return InternalServerError();
         }
 
-        public IHttpActionResult DeleteUser(int userId)
+        [HttpPut]
+         public IHttpActionResult DeleteUser([FromUri] int? userId)
         {
-
-            //TODO:check params
-            if (_accountService.Delete(userId))
+            if (userId!=0)
             {
-                return Ok();
+                 if (_accountService.Delete(userId.Value))
+                {
+                    return Ok();
+                }
             }
+            //TODO:check params
+           
 
             return InternalServerError();
         }
 
         [HttpGet]
-        public IHttpActionResult SelectUser()
+        public IHttpActionResult SelectUser([FromUri] string SearchField, [FromUri] string SearchValue)
         {
 
             //TODO:check params

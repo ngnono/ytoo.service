@@ -75,7 +75,7 @@
 
 
 
-        <DataGrid Grid.Row="3" ItemsSource="{Binding Invoice4List}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
+        <DataGrid Grid.Row="3" ItemsSource="{Binding Invoice4List}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Invoice4Remark}"  >
             <DataGrid.Columns >
                 <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                     <DataGridTemplateColumn.CellTemplate>
@@ -91,7 +91,7 @@
                 <DataGridTemplateColumn Header="备注录入" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="录入" Command="{Binding Path=DataContext.CommandRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"></Button>
+                            <Button Content="录入" Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"></Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

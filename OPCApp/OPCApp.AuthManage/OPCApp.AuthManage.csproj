@@ -76,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthModule.cs" />
-    <Compile Include="ViewModels\OrgManageViewModel.cs" />
     <Compile Include="ViewModels\Role2MenuWindowViewModel.cs" />
     <Compile Include="ViewModels\Role2UserWindowViewModel.cs" />
     <Compile Include="ViewModels\Role\RoleListViewModel.cs" />
@@ -91,9 +90,6 @@
     <Compile Include="ViewModels\UserListWindowViewModel.cs" />
     <Compile Include="Views\AuthNavigationItemView.xaml.cs">
       <DependentUpon>AuthNavigationItemView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\OrgManage.xaml.cs">
-      <DependentUpon>OrgManage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Role2MenuWindow.xaml.cs">
       <DependentUpon>Role2MenuWindow.xaml</DependentUpon>
@@ -155,10 +151,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <CodeAnalysisDictionary Include="Views\OrgManage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </CodeAnalysisDictionary>
     <Page Include="Views\Role2MenuWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

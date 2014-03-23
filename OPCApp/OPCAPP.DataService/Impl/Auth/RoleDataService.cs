@@ -56,5 +56,8 @@ namespace OPCApp.DataService.Impl.Auth
             var result = RestClient.Get<OPC_AuthRole>("Role/SelectRole", null);
             return new PageResult<OPC_AuthRole>(result, result.Count);
         }
+
+
+      
     }
 }

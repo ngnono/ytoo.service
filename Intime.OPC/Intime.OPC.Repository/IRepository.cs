@@ -22,7 +22,7 @@ namespace Intime.OPC.Repository
     /// Interface IRespository
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IRespository<T> where T : class ,IEntity
+    public interface IRepository<T> where T : class ,IEntity
     {
         /// <summary>
         /// Creates the specified entity.
@@ -44,10 +44,10 @@ namespace Intime.OPC.Repository
         bool Delete(int id);
 
         /// <summary>
-        /// Selects the specified filter.
+        /// 通过ID获得实体
         /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <returns>IQueryable{`0}.</returns>
-        IQueryable<T> Select(Expression<Func<T, bool>> filter);
+        /// <param name="id">The identifier.</param>
+        /// <returns>`0.</returns>
+        T GetByID(int id);
     }
 }

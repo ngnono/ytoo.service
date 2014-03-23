@@ -5,19 +5,11 @@ namespace OPCApp.Domain.Models
 {
     public class OPC_AuthUser
     {
-        public OPC_AuthUser()
-        {
-            CreateDate = DateTime.Now;
-            UpdateDate = DateTime.Now;
-            UpdateUserId = this.UpdateUserId;
-        }
-
         public int Id { get; set; }
 
         [Required(ErrorMessage = "用户名不能为空！")]
         public string Name { get; set; }
         public int? SectionId { get; set; }
-        public string SectionName { get; set; }
         [Required(ErrorMessage = "登陆名不能为空！")]
         public string LogonName { get; set; }
         [Required(ErrorMessage = "密码不能为空！")]
@@ -25,7 +17,6 @@ namespace OPCApp.Domain.Models
         public string Phone { get; set; }
         public bool? IsValid { get; set; }
         public int? OrgId { get; set; }
-        public string OrgName { get; set; }
         public DateTime CreateDate { get; set; }
         public int CreateUserId { get; set; }
         public DateTime UpdateDate { get; set; }

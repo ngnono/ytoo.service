@@ -9,12 +9,13 @@ namespace Intime.OPC.Domain.Models.Mapping
         {
             // Primary Key
             this.HasKey(t => t.Id);
-
-            // Properties
             this.Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
+               .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            // Properties
             this.Property(t => t.MenuName)
+                .HasMaxLength(40);
+
+            this.Property(t => t.Url)
                 .HasMaxLength(40);
 
             // Table & Column Mappings
@@ -25,6 +26,10 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.CreateUserId).HasColumnName("CreateUserId");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
+            this.Property(t => t.PraentMenuId).HasColumnName("PraentMenuId");
+            this.Property(t => t.IsValid).HasColumnName("IsValid");
+            this.Property(t => t.Sort).HasColumnName("Sort");
+            this.Property(t => t.Url).HasColumnName("Url");
         }
     }
 }

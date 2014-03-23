@@ -9,13 +9,23 @@ namespace Intime.OPC.Service.Support
     {
         private readonly IMenuRepository _menuRepository;
 
-        public MenuService(IMenuRepository accountMenutory)
+
+        public MenuService(IMenuRepository menuRepository)
         {
-            _menuRepository = accountMenutory;
+            _menuRepository = menuRepository;
         }
-        public IEnumerable<OPC_AuthMenu> Select()
+       
+        public IEnumerable<OPC_AuthMenu> SelectByRoleID(int roleID)
         {
-            return  _menuRepository.Select(e => true).ToList();
+           
+            return _menuRepository.GetMenusByRoleID(roleID);
+        }
+
+
+
+        public IEnumerable<OPC_AuthMenu> SelectByUserID(int userID)
+        {
+            return _menuRepository.GetMenusByUserID(userID);
         }
     }
 }

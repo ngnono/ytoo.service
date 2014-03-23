@@ -12,5 +12,9 @@ namespace Intime.OPC.Domain.Models
         public int CreateUserId { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public int UpdateUserId { get; set; }
+        public Nullable<int> PraentMenuId { get; set; }
+        public bool IsValid { get; set; }
+        public int Sort { get; set; }
+        public string Url { get; set; }
     }
 }

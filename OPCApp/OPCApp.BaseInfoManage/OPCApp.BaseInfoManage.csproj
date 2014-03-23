@@ -92,6 +92,10 @@
     <Compile Include="Models\StoreInfo.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
     <Compile Include="ViewModels\StoreManageViewModel.cs" />
+    <Compile Include="ViewModels\OrgManageViewModel.cs" />
+    <Compile Include="Views\OrgManage.xaml.cs">
+      <DependentUpon>OrgManage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StoreManage4Modify.xaml.cs">
       <DependentUpon>StoreManage4Modify.xaml</DependentUpon>
     </Compile>
@@ -173,6 +177,10 @@
     <Resource Include="image\验证.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\OrgManage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\StoreManage4Modify.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
