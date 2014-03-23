@@ -97,9 +97,9 @@ namespace OPCApp.TransManage.ViewModels
 
         public void CommandGetDownExecute()
         {
-            var selectSaleIds = this.SaleList.Where(n => n.IsSelected == true).Select(e=>e.Id).ToList().Join();
+            var saleCur = this.SaleList.Where(n => n.IsSelected == true).FirstOrDefault();
             //这个工作状态
-            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(selectSaleIds).Result;
+            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleCur.SaleOrderNo).Result;
         }
 
         public void CommandViewAndPrintExecute()
@@ -122,7 +122,7 @@ namespace OPCApp.TransManage.ViewModels
         /*完成销售单打印*/
         public void CommandFinishExecute()
         {
-            var selectSaleIds = this.SaleList.Where(n => n.IsSelected == true).Select(e => e.Id).ToList().Join();
+            var selectSaleIds = this.SaleList.Where(n => n.IsSelected == true).Select(e => e.SaleOrderNo).ToList();
             ITransService iTransService = AppEx.Container.GetInstance<ITransService>();
             bool bFalg= iTransService.SetStatusAffirmPrintSaleFinish(selectSaleIds);
             MessageBox.Show("提示",bFalg ? "打印销售单完成": "打印销售单失败");

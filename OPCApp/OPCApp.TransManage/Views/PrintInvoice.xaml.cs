@@ -18,7 +18,6 @@ namespace OPCApp.TransManage.Views
     public partial class PrintInvoice 
     {
         
-        public object sv;
         public PrintInvoice()
         {
             InitializeComponent();

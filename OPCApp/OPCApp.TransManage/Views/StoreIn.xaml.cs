@@ -17,7 +17,7 @@ namespace OPCApp.TransManage.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class StoreIn 
     {
-        [Import("PrintInvoiceViewModel")]
+        [Import("StoreInViewModel")]
         public object ViewModel
         {
             set
@@ -32,7 +32,6 @@ namespace OPCApp.TransManage.Views
         public StoreIn()
         {
             InitializeComponent();
-            this.DataContext = new StoreInViewModel();
         }
     }
 }
