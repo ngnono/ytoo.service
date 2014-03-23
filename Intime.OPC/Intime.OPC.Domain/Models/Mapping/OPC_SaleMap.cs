@@ -15,6 +15,10 @@ namespace Intime.OPC.Domain.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(20);
 
+            this.Property(t => t.SaleOrderNo)
+                .IsRequired()
+                .HasMaxLength(50);
+
             this.Property(t => t.ShippingRemark)
                 .HasMaxLength(500);
 
