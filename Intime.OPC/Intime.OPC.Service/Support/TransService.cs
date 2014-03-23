@@ -9,10 +9,12 @@ namespace Intime.OPC.Service.Support
     public class TransService : ITransService
     {
         private readonly ITransRepository _transRepository;
+        private readonly IOrderRemarkRepository _orderRemarkRepository;
 
-        public TransService(ITransRepository transRepository)
+        public TransService(ITransRepository transRepository,IOrderRemarkRepository orderRemarkRepository)
         {
             _transRepository = transRepository;
+            _orderRemarkRepository = orderRemarkRepository;
         }
 
         public System.Collections.Generic.IList<OPC_Sale> Select(string startDate, string endDate, string orderNo, string saleOrderNo)
@@ -26,9 +28,17 @@ namespace Intime.OPC.Service.Support
         }
 
 
-        public IList<OPC_SaleDetail> SelectSaleDetail(string saleIDs)
+        public IList<OPC_SaleDetail> SelectSaleDetail(IEnumerable<string> saleNos)
         {
-            return _transRepository.SelectSaleDetail(Intime.OPC.Repository.Common.StringHelper.ToInts(saleIDs,','));
+            return _transRepository.SelectSaleDetail(saleNos);
+        }
+
+
+
+
+        public IList<OPC_OrderComment> GetRemarksByOrderNo(string orderNo)
+        {
+            return _orderRemarkRepository.GetByOrderNo(orderNo);
         }
     }
 }

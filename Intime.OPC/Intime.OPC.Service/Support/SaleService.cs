@@ -11,9 +11,11 @@ namespace Intime.OPC.Service.Support
     public class SaleService : ISaleService
     {
         private readonly ISaleRepository _saleRepository;
-        public SaleService(ISaleRepository saleRepository)
+        private readonly ISaleRemarkRepository _saleRemarkRepository;
+        public SaleService(ISaleRepository saleRepository,ISaleRemarkRepository saleRemarkRepository)
         {
             _saleRepository = saleRepository;
+            _saleRemarkRepository = saleRemarkRepository;
         }
 
         public bool UpdateSatus(OPC_Sale sale)
@@ -25,5 +27,11 @@ namespace Intime.OPC.Service.Support
             return _saleRepository.Select();
         }
 
+
+
+        public IList<OPC_SaleComment> GetRemarksBySaleNo(string saleNo)
+        {
+           return  _saleRemarkRepository.GetBySaleOrderNo(saleNo);
+        }
     }
 }

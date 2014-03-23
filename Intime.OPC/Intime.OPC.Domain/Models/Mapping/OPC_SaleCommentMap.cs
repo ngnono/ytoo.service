@@ -14,6 +14,10 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
+            this.Property(t => t.SaleOrderNo)
+                .IsRequired()
+                .HasMaxLength(50);
+
             this.Property(t => t.Content)
                 .IsRequired()
                 .HasMaxLength(200);
@@ -21,7 +25,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             // Table & Column Mappings
             this.ToTable("OPC_SaleComment");
             this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.SaleId).HasColumnName("SaleId");
+            this.Property(t => t.SaleOrderNo).HasColumnName("SaleOrderNo");
             this.Property(t => t.Content).HasColumnName("Content");
             this.Property(t => t.CreateDate).HasColumnName("CreateDate");
             this.Property(t => t.CreateUser).HasColumnName("CreateUser");

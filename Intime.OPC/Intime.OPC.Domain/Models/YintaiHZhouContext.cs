@@ -16,6 +16,7 @@ namespace Intime.OPC.Domain.Models
         {
         }
 
+      
         public DbSet<OPC_AuthMenu> OPC_AuthMenu { get; set; }
         public DbSet<OPC_AuthRole> OPC_AuthRole { get; set; }
         public DbSet<OPC_AuthRoleMenu> OPC_AuthRoleMenu { get; set; }
@@ -23,6 +24,7 @@ namespace Intime.OPC.Domain.Models
         public DbSet<OPC_AuthUser> OPC_AuthUser { get; set; }
         public DbSet<OPC_ChannelProduct> OPC_ChannelProduct { get; set; }
         public DbSet<OPC_OrderComment> OPC_OrderComment { get; set; }
+        public DbSet<OPC_OrgInfo> OPC_OrgInfo { get; set; }
         public DbSet<OPC_RMA> OPC_RMA { get; set; }
         public DbSet<OPC_RMADetail> OPC_RMADetail { get; set; }
         public DbSet<OPC_RMALog> OPC_RMALog { get; set; }
@@ -35,9 +37,11 @@ namespace Intime.OPC.Domain.Models
         public DbSet<OPC_Stock> OPC_Stock { get; set; }
         public DbSet<OPC_StorePriority> OPC_StorePriority { get; set; }
         public DbSet<OPC_SupplierInfo> OPC_SupplierInfo { get; set; }
+       
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+           
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMenuMap());
@@ -45,6 +49,7 @@ namespace Intime.OPC.Domain.Models
             modelBuilder.Configurations.Add(new OPC_AuthUserMap());
             modelBuilder.Configurations.Add(new OPC_ChannelProductMap());
             modelBuilder.Configurations.Add(new OPC_OrderCommentMap());
+            modelBuilder.Configurations.Add(new OPC_OrgInfoMap());
             modelBuilder.Configurations.Add(new OPC_RMAMap());
             modelBuilder.Configurations.Add(new OPC_RMADetailMap());
             modelBuilder.Configurations.Add(new OPC_RMALogMap());
@@ -57,6 +62,7 @@ namespace Intime.OPC.Domain.Models
             modelBuilder.Configurations.Add(new OPC_StockMap());
             modelBuilder.Configurations.Add(new OPC_StorePriorityMap());
             modelBuilder.Configurations.Add(new OPC_SupplierInfoMap());
+            
         }
     }
 }

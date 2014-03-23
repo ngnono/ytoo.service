@@ -12,5 +12,7 @@ namespace Intime.OPC.Service
         IList<OPC_Sale> Select();
         bool UpdateSatus(OPC_Sale sale);
 
+        IList<OPC_SaleComment> GetRemarksBySaleNo(string saleNo);
+
     }
 }

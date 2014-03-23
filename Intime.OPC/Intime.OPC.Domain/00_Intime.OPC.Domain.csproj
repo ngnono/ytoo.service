@@ -64,6 +64,7 @@
     <Compile Include="Models\Mapping\OPC_AuthUserMap.cs" />
     <Compile Include="Models\Mapping\OPC_ChannelProductMap.cs" />
     <Compile Include="Models\Mapping\OPC_OrderCommentMap.cs" />
+    <Compile Include="Models\Mapping\OPC_OrgInfoMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMADetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMALogMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMAMap.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Models\OPC_AuthUser.cs" />
     <Compile Include="Models\OPC_ChannelProduct.cs" />
     <Compile Include="Models\OPC_OrderComment.cs" />
+    <Compile Include="Models\OPC_OrgInfo.cs" />
     <Compile Include="Models\OPC_RMA.cs" />
     <Compile Include="Models\OPC_RMADetail.cs" />
     <Compile Include="Models\OPC_RMALog.cs" />
