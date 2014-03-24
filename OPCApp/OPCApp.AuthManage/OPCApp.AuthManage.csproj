@@ -91,6 +91,9 @@
     <Compile Include="Views\AuthNavigationItemView.xaml.cs">
       <DependentUpon>AuthNavigationItemView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\OrgManage.xaml.cs">
+      <DependentUpon>OrgManage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Role2MenuWindow.xaml.cs">
       <DependentUpon>Role2MenuWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -148,6 +151,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\AuthNavigationItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\OrgManage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
