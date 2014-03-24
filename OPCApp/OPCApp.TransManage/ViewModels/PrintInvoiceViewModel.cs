@@ -83,9 +83,9 @@ namespace OPCApp.TransManage.ViewModels
         {
             
             //被选择的对象
-            int id = Invoice4Remark.Id;
+            string id = Invoice4Remark.SaleOrderNo;
              IRemark remarkWin=AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id.ToString(), 1);
+            remarkWin.ShowRemarkWin(id, 1);
         }
 
         public void CommandSearchExecute()
