@@ -57,6 +57,15 @@
   <ItemGroup>
     <Compile Include="Base\IEntity.cs" />
     <Compile Include="Dto\RoleMenuDto.cs" />
+    <Compile Include="Dto\SaleDto.cs" />
+    <Compile Include="Enums\EnumCashStatus.cs" />
+    <Compile Include="Enums\EnumOderStatus.cs" />
+    <Compile Include="Enums\EnumReturnGoodsStatus.cs" />
+    <Compile Include="Enums\EnumRMACashStatus.cs" />
+    <Compile Include="Enums\EnumRMAStatus.cs" />
+    <Compile Include="Enums\EnumSaleOrderStatus.cs" />
+    <Compile Include="Enums\EnumSaleStatus.cs" />
+    <Compile Include="Exception\SaleOrderNotExistsException.cs" />
     <Compile Include="Models\Mapping\OPC_AuthMenuMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleMenuMap.cs" />
@@ -77,6 +86,8 @@
     <Compile Include="Models\Mapping\OPC_StockMap.cs" />
     <Compile Include="Models\Mapping\OPC_StorePriorityMap.cs" />
     <Compile Include="Models\Mapping\OPC_SupplierInfoMap.cs" />
+    <Compile Include="Models\Mapping\SectionMap.cs" />
+    <Compile Include="Models\Mapping\StoreMap.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />
     <Compile Include="Models\OPC_AuthRoleMenu.cs" />
@@ -97,6 +108,8 @@
     <Compile Include="Models\OPC_Stock.cs" />
     <Compile Include="Models\OPC_StorePriority.cs" />
     <Compile Include="Models\OPC_SupplierInfo.cs" />
+    <Compile Include="Models\Section.cs" />
+    <Compile Include="Models\Store.cs" />
     <Compile Include="Models\YintaiHZhouContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

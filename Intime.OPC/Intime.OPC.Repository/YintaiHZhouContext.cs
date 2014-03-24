@@ -36,7 +36,6 @@ namespace Intime.OPC.Repository
         public DbSet<OPC_StorePriority> OPC_StorePriority { get; set; }
         public DbSet<OPC_SupplierInfo> OPC_SupplierInfo { get; set; }
 
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());

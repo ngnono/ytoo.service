@@ -18,7 +18,7 @@ using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using AutoMapper;
 
-namespace OPCApp.Infrastructure
+namespace Intime.OPC.Service.Map
 {
     /// <summary>
     ///     Class Mapper.
