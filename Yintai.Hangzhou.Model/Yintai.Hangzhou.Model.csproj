@@ -101,6 +101,7 @@
     <Compile Include="Enums\StorePromotionType.cs" />
     <Compile Include="Enums\StoreSortOrder.cs" />
     <Compile Include="Enums\TagSortOrder.cs" />
+    <Compile Include="Enums\UserOperatorRight.cs" />
     <Compile Include="Enums\UserRole.cs" />
     <Compile Include="ESModel\ESBanner.cs" />
     <Compile Include="ESModel\ESBrand.cs" />
