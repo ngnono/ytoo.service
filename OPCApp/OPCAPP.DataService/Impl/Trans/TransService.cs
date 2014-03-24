@@ -25,6 +25,9 @@ namespace OPCApp.DataService.Impl.Trans
                 case EnumSearchSaleStatus.StoreInDataBaseSearchStatus:
                     url = "sale/GetSalePrintSale";
                     break;
+                case EnumSearchSaleStatus.StoreOutDataBaseSearchStatus:
+                    url = "sale/GetSaleShipInStorage";
+                    break;
                 case EnumSearchSaleStatus.PrintInvoiceSearchStatus:
                     url = "sale/GetSalePrintInvoice";
                     break;

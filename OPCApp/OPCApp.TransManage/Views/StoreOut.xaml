@@ -4,13 +4,15 @@
         xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                xmlns:si="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
         Height="AUTO" Width="AUTO"  Background="LightGray">
     
         <Grid>
         <controls:MetroAnimatedSingleRowTabControl x:Name="tabControlName" Grid.Row="1" Grid.ColumnSpan="2">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding CommandSelectionChanged}" CommandParameter="{Binding SelectedIndex,ElementName=tabControlName}"></i:InvokeCommandAction>
+                    <si:CallMethodAction  MethodName="SelectionChanged" TargetObject="{Binding}"></si:CallMethodAction>
+                    <!--<i:InvokeCommandAction Command="{Binding CommandSelectionChanged}" CommandParameter="{Binding SelectedIndex,ElementName="tabControlName"}"></i:InvokeCommandAction>-->
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <TabItem Header="打印发货单完成包装"  Custom:ControlsHelper.HeaderFontSize="18">
@@ -27,14 +29,14 @@
                     <StackPanel Grid.Row="0">
                             <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                                <Button Background="LightGray" Width="50" Command="{Binding CommandBack}">
+                                <Button Background="LightGray" Width="50" Command="">
                                     <StackPanel>
                                         <Image Source="/image/变更单位.png" Stretch="None"></Image>
                                         <TextBlock HorizontalAlignment="Center">返回</TextBlock>
                                     </StackPanel>
                                 </Button>
                               
-                                <Button Background="LightGray" Width="50" Command="{Binding CommandSoldOut}">
+                                <Button Background="LightGray" Width="50" Command="">
                                     <StackPanel>
                                         <Image Source="/image/打印.png" Stretch="None"></Image>
                                         <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
@@ -54,13 +56,13 @@
                     <StackPanel Grid.Row="1" Background="LightGray" >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Text="   购买时间：" />
-                            <DatePicker Width="150"   Foreground="Blue" />
+                            <DatePicker Width="150"   Foreground="Blue" SelectedDate="{Binding Invoice4Get.StartSellDate}" />
                             <TextBlock Text="  至：" />
-                            <DatePicker Width="150"   Foreground="Blue" />
+                            <DatePicker Width="150"   Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}"/>
                             <TextBlock Text="  订单号" />
-                            <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                            <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}"/>
                             <TextBlock Text="  销售单" />
-                            <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                            <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding Invoice4Get.SaleOrderNo}"/>
                             <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
                         </StackPanel>
                     </StackPanel>
@@ -154,13 +156,13 @@
                     <StackPanel Grid.Row="1" Background="LightGray" >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Text="   购买时间：" />
-                            <DatePicker Width="150"   Foreground="Blue" />
+                            <DatePicker Width="150"   Foreground="Blue" SelectedDate="{Binding Invoice4Get.StartSellDate}" />
                             <TextBlock Text="  至：" />
-                            <DatePicker Width="150"   Foreground="Blue" />
+                            <DatePicker Width="150"   Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}"/>
                             <TextBlock Text="  订单号" />
-                            <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                            <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}"/>
                             <TextBlock Text="  销售单" />
-                            <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                            <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding Invoice4Get.SaleOrderNo}"/>
                             <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
                         </StackPanel>
                     </StackPanel>
@@ -273,21 +275,21 @@
 
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Background="LightGray" >
-                            <StackPanel Orientation="Horizontal" >
-                                <TextBlock Text="   购买时间：" />
-                                <DatePicker Width="150"   Foreground="Blue" />
-                                <TextBlock Text="  至：" />
-                                <DatePicker Width="150"   Foreground="Blue" />
-                                <TextBlock Text="  订单号" />
-                                <TextBox Width="150"   Foreground="Blue" Background="White"/>
-                                <TextBlock Text="  销售单" />
-                                <TextBox Width="150"   Foreground="Blue" Background="White"/>
-                                <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
-                            </StackPanel>
+                    <StackPanel Grid.Row="1" Background="LightGray" >
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="   购买时间：" />
+                            <DatePicker Width="150"   Foreground="Blue" SelectedDate="{Binding Invoice4Get.StartSellDate}" />
+                            <TextBlock Text="  至：" />
+                            <DatePicker Width="150"   Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}"/>
+                            <TextBlock Text="  订单号" />
+                            <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}"/>
+                            <TextBlock Text="  销售单" />
+                            <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding Invoice4Get.SaleOrderNo}"/>
+                            <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
                         </StackPanel>
+                    </StackPanel>
 
-                        <StackPanel Grid.Row="2" >
+                    <StackPanel Grid.Row="2" >
                             <StackPanel Orientation="Horizontal" Background="LightGray">
                                 <TextBlock Text="   销售单" />
                             </StackPanel>
