@@ -14,6 +14,27 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>http://localhost/SampleApp/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>true</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <UpdateUrl>http://111.207.166.196:8088/</UpdateUrl>
+    <SupportUrl>http://localhost/SampleApp</SupportUrl>
+    <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationVersion>1.0.0.9</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +54,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MahApps.Metro, Version=0.12.1.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
@@ -144,6 +171,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -151,11 +179,35 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
+    <None Include="Theme\App.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Intime.OPC.ApiClient\05_Intime.OPC.ApiClient.csproj">
+      <Project>{d34916d5-ba8a-4a70-9a9c-2997289ef411}</Project>
+      <Name>05_Intime.OPC.ApiClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.AuthManage\OPCApp.AuthManage.csproj">
+      <Project>{f354057b-1212-496c-9738-30590624a3ec}</Project>
+      <Name>OPCApp.AuthManage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.BaseInfoManage\OPCApp.BaseInfoManage.csproj">
+      <Project>{23d22b9e-465d-415c-92ea-52b93465a55e}</Project>
+      <Name>OPCApp.BaseInfoManage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
+      <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
+      <Name>OPCApp.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
+      <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
+      <Name>OPCApp.DataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
+      <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
+      <Name>OPCApp.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OPCApp.Main.Controls\OPCApp.Main.Controls.csproj">
       <Project>{c8950baf-06a5-4af3-964a-55b18b0e0b9f}</Project>
       <Name>OPCApp.Main.Controls</Name>
@@ -163,6 +215,18 @@
     <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Main.Infrastructure.csproj">
       <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
       <Name>OPCApp.Main.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.Order\OPCApp.Order.csproj">
+      <Project>{006b987f-8e52-45bb-bff4-6d3dfa278ab9}</Project>
+      <Name>OPCApp.Order</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.ReturnGoodsManage\OPCApp.ReturnGoodsManage.csproj">
+      <Project>{3f264666-c1dc-4fc3-b2ac-d99b68b250a4}</Project>
+      <Name>OPCApp.ReturnGoodsManage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.TransManage\OPCApp.TransManage.csproj">
+      <Project>{58cbe625-8df4-4487-b984-f64d1349c169}</Project>
+      <Name>OPCApp.TransManage</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +262,35 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\查询.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.1 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="AutoMapper">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>False</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
