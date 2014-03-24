@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Intime.OPC.Domain.Exception;
+using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Bindings;
 using Microsoft.Owin.Logging;
@@ -29,7 +30,7 @@ namespace Intime.OPC.WebApi.Controllers
 
 
         [HttpGet]
-        public IHttpActionResult SelectRemarks(string saleId,[UserId] int userId)
+        public IHttpActionResult GetSaleRemarks(string saleId,[UserId] int userId)
         {
             //todo data Ahorization
             return Ok(_saleService.GetRemarksBySaleNo(saleId));
@@ -484,5 +485,30 @@ namespace Intime.OPC.WebApi.Controllers
         
 
         #endregion
+        [HttpPost]
+         public IHttpActionResult WriteSaleRemark(OPC_SaleComment comment, [UserId] int userId)
+        {
+            
+            try
+            {
+                comment.CreateDate = DateTime.Now;
+                comment.CreateUser = userId;
+                comment.UpdateDate = DateTime.Now;
+                comment.UpdateUser = userId;
+                this._saleService.WriteSaleRemark(comment);
+                return Ok();
+            }
+            catch (SaleOrderNotExistsException ex)
+            {
+                //todo 增加处理方式
+                // _logger.WriteError(ex.Message);
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                // _logger.WriteError(e.Message);
+                return InternalServerError();
+            }
+        }
     }
 }
