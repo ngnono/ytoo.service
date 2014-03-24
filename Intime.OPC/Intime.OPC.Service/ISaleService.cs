@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿// ***********************************************************************
 // Assembly         : 02_Intime.OPC.Service
 // Author           : Liuyh
@@ -165,3 +166,23 @@ namespace Intime.OPC.Service
         bool WriteSaleRemark(OPC_SaleComment comment);
     }
 }
+=======
+﻿using Intime.OPC.Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Intime.OPC.Service
+{
+    public interface ISaleService
+    {
+        IList<OPC_Sale> Select();
+        bool UpdateSatus(OPC_Sale sale);
+
+        IList<OPC_SaleComment> GetRemarksBySaleNo(string saleNo);
+
+    }
+}
+>>>>>>> 57c447bbe22f6b2f14a2f332de06985506fd2e28

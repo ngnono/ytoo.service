@@ -83,7 +83,7 @@ namespace OPCApp.TransManage.ViewModels
         {
             
             //被选择的对象
-            int id = Invoice4Remark.Id;
+            string id = Invoice4Remark.SaleOrderNo;
              IRemark remarkWin=AppEx.Container.GetInstance<IRemark>();
             remarkWin.ShowRemarkWin(id, 1);
         }
@@ -91,10 +91,15 @@ namespace OPCApp.TransManage.ViewModels
         public void CommandSearchExecute()
         {
 
-            string salesfilter = string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}", Invoice4Get.StartSellDate.ToShortDateString(), Invoice4Get.EndSellDate.ToShortDateString(), Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo);
-            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter,this.SearchSaleStatus);
-            this.SaleList = re.Result;
+          Refresh();
 
+        }
+
+        public void Refresh()
+        {
+            var salesfilter = string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}", Invoice4Get.StartSellDate.ToShortDateString(), Invoice4Get.EndSellDate.ToShortDateString(), Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo);
+            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter, this.SearchSaleStatus);
+            this.SaleList = re.Result;
         }
 
         public void CommandGetDownExecute()
@@ -127,7 +132,8 @@ namespace OPCApp.TransManage.ViewModels
             var selectSaleIds = this.SaleList.Where(n => n.IsSelected == true).Select(e => e.SaleOrderNo).ToList();
             ITransService iTransService = AppEx.Container.GetInstance<ITransService>();
             bool bFalg= iTransService.SetStatusAffirmPrintSaleFinish(selectSaleIds);
-            MessageBox.Show("提示",bFalg ? "打印销售单完成": "打印销售单失败");
+            MessageBox.Show(bFalg ? "打印销售单完成": "打印销售单失败","提示");
+            this.Refresh();
         }
         
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿// ***********************************************************************
 // Assembly         : 01_Intime.OPC.Repository
 // Author           : Liuyh
@@ -12,15 +13,18 @@
 // <summary></summary>
 // ***********************************************************************
 
+=======
+﻿using Intime.OPC.Domain.Models;
+>>>>>>> 57c447bbe22f6b2f14a2f332de06985506fd2e28
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Intime.OPC.Domain.Enums;
-using Intime.OPC.Domain.Models;
-using Intime.OPC.Repository.Base;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Intime.OPC.Repository.Support
 {
+<<<<<<< HEAD
     /// <summary>
     ///     Class SaleRepository.
     /// </summary>
@@ -164,23 +168,32 @@ namespace Intime.OPC.Repository.Support
         /// <returns>IList{OPC_Sale}.</returns>
         private IList<OPC_Sale> getSalesData(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
             EnumSaleOrderStatus saleOrderStatus)
+=======
+    public class SaleRepository:ISaleRepository
+    {
+        public bool UpdateSatus(OPC_Sale sale)
         {
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_Sale> result = db.OPC_Sale.Where(t => t.Status == (int) saleOrderStatus
-                                                                     && t.SellDate > dtStart
-                                                                     && t.SellDate <= dtEnd);
-                if (!string.IsNullOrWhiteSpace(orderNo))
+                OPC_Sale saleEnt = db.OPC_Sale.Where(e => e.Id == sale.Id).FirstOrDefault();
+                if (saleEnt != null)
                 {
-                    result.Where(t => t.OrderNo == orderNo);
-                }
+                    saleEnt.Status = sale.Status;
+                    db.SaveChanges();
+                    return true;
 
-                if (!string.IsNullOrWhiteSpace(saleId))
-                {
-                    result.Where(t => t.SaleOrderNo == saleId);
                 }
+                return false;
+            }
+        }
 
-                return result.ToList();
+        public IList<OPC_Sale> Select()
+>>>>>>> 57c447bbe22f6b2f14a2f332de06985506fd2e28
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var saleList = db.OPC_Sale.ToList();
+                return saleList;
             }
         }
     }

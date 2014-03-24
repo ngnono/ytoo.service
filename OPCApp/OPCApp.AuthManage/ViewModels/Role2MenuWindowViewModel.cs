@@ -19,8 +19,6 @@ using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
-using OPCApp.Infrastructure.Mvvm.View;
-using OPCApp.AuthManage.Views;
 
 /// <summary>
 /// The ViewModels namespace.

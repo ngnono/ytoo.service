@@ -1,10 +1,7 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using OPCApp.Infrastructure.Mvvm.View;
-using OPCApp.AuthManage.ViewModels;
 namespace OPCApp.AuthManage.Views
 {
     /// <summary>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿// ***********************************************************************
 // Assembly         : 01_Intime.OPC.Repository
 // Author           : Liuyh
@@ -104,3 +105,21 @@ namespace Intime.OPC.Repository
         IList<OPC_Sale> GetShipInStorage(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd);
     }
 }
+=======
+﻿using Intime.OPC.Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Intime.OPC.Repository
+{
+    public interface ISaleRepository
+    {
+        IList<OPC_Sale> Select();
+        bool UpdateSatus(OPC_Sale sale);
+
+    }
+}
+>>>>>>> 57c447bbe22f6b2f14a2f332de06985506fd2e28

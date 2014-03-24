@@ -20,35 +20,47 @@ namespace OPCApp.DataService.Impl.Trans
             switch (enumSearchSaleStatus)
             {
                 case EnumSearchSaleStatus.CompletePrintSearchStatus:
-                    url = "sale/selectSale";
+                    url = "sale/GetSaleNoPickUp";
                     break;
                 case EnumSearchSaleStatus.StoreInDataBaseSearchStatus:
-                    url = "";
+                    url = "sale/GetSalePrintSale";
                     break;
-                default:
+                case EnumSearchSaleStatus.StoreOutDataBaseSearchStatus:
+                    url = "sale/GetSaleShipInStorage";
+                    break;
+                case EnumSearchSaleStatus.PrintInvoiceSearchStatus:
+                    url = "sale/GetSalePrintInvoice";
+                    break;
+                case EnumSearchSaleStatus.PrintExpressSearchStatus:
+                    url = "sale/GetSalePrintExpress";
                     break;
             }
-            var lst = RestClient.Get<OPC_Sale>("sale/selectSale", salesfilter);
+            var lst = RestClient.Get<OPC_Sale>(url, salesfilter);
             return new PageResult<OPC_Sale>(lst, lst.Count);
         }
         public bool PrintSale(IList<string> saleOrderNoList)
         {
             return RestClient.Put("sale/PrintSale", saleOrderNoList);
         }
-        /*完成打印销售单 状态*/
+        /*完成打印销售单 状态*/ //SetSaleOrderPrintSale
         public bool SetStatusAffirmPrintSaleFinish(IList<string> saleOrderNoList)
         {
-            return RestClient.Put("sale/SetNoPickUp", saleOrderNoList);
+            return RestClient.Put("sale/SetSaleOrderFinishPrintSale", saleOrderNoList);
         }
         /*设置销售单入库 状态*/
         public bool SetStatusStoreInSure(IList<string> saleOrderNoList)
         {
-            return RestClient.Put("sale/selectSale", saleOrderNoList);
+            return RestClient.Put("sale/SetSaleOrderShipInStorage", saleOrderNoList);
         }
         /*设置销售单出库 状态*/
+        public bool SetSaleOrderStockOut(IList<string> saleOrderNoList)
+        {
+            return RestClient.Put("sale/SetSaleOrderStockOut", saleOrderNoList);
+        }
+        /*设置销售单缺货 状态*/
         public bool SetStatusSoldOut(IList<string> saleOrderNoList)
         {
-            return RestClient.Put("sale/selectSale", saleOrderNoList);
+            return RestClient.Put("sale/SetSaleOrderStockOut", saleOrderNoList);
         }
 
 
@@ -58,5 +70,17 @@ namespace OPCApp.DataService.Impl.Trans
             return new PageResult<OPC_SaleDetail>(lst, 100);
         }
 
+
+
+        public bool SetStatusPrintInvoice(IList<string> saleOrderNoList)
+        {
+            return RestClient.Put("sale/SetSaleOrderPrintInvoice", saleOrderNoList);
+        }
+
+
+        public bool SetStatusPrintExpress(IList<string> saleOrderNoList)
+        {
+            return RestClient.Put("sale/SetSaleOrderPrintExpress", saleOrderNoList);
+        }
     }
 }

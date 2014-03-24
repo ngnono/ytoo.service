@@ -50,13 +50,13 @@
         <StackPanel Grid.Row="1" Background="LightGray" >
             <StackPanel Orientation="Horizontal" >
                 <TextBlock Text="   购买时间：" />
-                <DatePicker Width="150"   Foreground="Blue" />
+                <DatePicker Width="150"   Foreground="Blue" SelectedDate="{Binding Invoice4Get.StartSellDate}" />
                 <TextBlock Text="  至：" />
-                <DatePicker Width="150"   Foreground="Blue" />
+                <DatePicker Width="150"   Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}"/>
                 <TextBlock Text="  订单号" />
-                <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}"/>
                 <TextBlock Text="  销售单" />
-                <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding Invoice4Get.SaleOrderNo}"/>
                 <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
             </StackPanel>
         </StackPanel>

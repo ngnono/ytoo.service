@@ -1,31 +1,33 @@
 ﻿using System.ComponentModel.Composition;
 using MahApps.Metro.Controls;
-using  OPCApp.Infrastructure.Mvvm.View;
-namespace OPCApp.AuthManage.Views
+using OPCApp.Infrastructure.Mvvm.View;
+
+namespace OPCApp.BaseInfoManage.Views
 {
     /// <summary>
-    /// UserAddWindow.xaml 的交互逻辑
+    /// StoreManage.xaml 的交互逻辑
     /// </summary>
-    [Export("RoleAddView", typeof(IBaseView))]
+    [Export("StoreView", typeof(IBaseView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class RoleAddWindow : MetroWindow,IBaseView
+    public partial class StoreAddWindow : MetroWindow, IBaseView
     {
-        public RoleAddWindow()
+
+        public StoreAddWindow()
         {
             InitializeComponent();
-           
-        }
 
+        }
         public void Cancel()
         {
+
             this.DialogResult = false;
             this.Close();
         }
-    
+
         public void CloseView()
         {
             this.DialogResult = true;
             this.Close();
         }
-}
+    }
 }

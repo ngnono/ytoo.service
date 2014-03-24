@@ -2,7 +2,6 @@
 using System.ComponentModel.Composition;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
-using OPCApp.Domain;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
 using OPCApp.Domain.Models;
