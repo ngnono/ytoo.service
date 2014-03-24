@@ -23,8 +23,8 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandBack { get; set; }//返回
 
         //Grid数据集
-        private IEnumerable<OPC_SaleComment> remark4list;
-        public IEnumerable<OPC_SaleComment> Remark4List
+        private IEnumerable<OPC_Comment> remark4list;
+        public IEnumerable<OPC_Comment> Remark4List
         {
             get { return this.remark4list; }
             set { SetProperty(ref this.remark4list, value); }
@@ -38,23 +38,51 @@ namespace OPCApp.TransManage.ViewModels
             set { SetProperty(ref this.remark, value); }
         }
 
-        public void SaveRemark(int id)
+        public void SaveRemark(string id,int type)
         {
-            OPC_SaleComment saleComment = new OPC_SaleComment();
-            saleComment.SaleId = id;
-            saleComment.Content = Remark.Content;
-            saleComment.CreateUser = 1;
-            saleComment.CreateDate = System.DateTime.Now;
+            OPC_Comment comment = new OPC_Comment();
+            comment.RelationId = id;
+            comment.Content = Remark.Content;
+            comment.CreateUser = 1;
+            comment.CreateDate = System.DateTime.Now;
+            
+            bool isSuccess = false;
+            switch (type)
+            {
+                case 1:
+                    OPC_SaleComment salecomment = Mapper.Map<OPC_Comment, OPC_SaleComment>(comment);
+                    isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteSaleRemark(salecomment);
+                    break;
+                case 2:
+                    OPC_SaleDetailsComment saledetailscomment = Mapper.Map<OPC_Comment, OPC_SaleDetailsComment>(comment);
+                    isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteSaleDetailsRemark(saledetailscomment);
+                    break;
 
-            AppEx.Container.GetInstance<IRemarkService>().WriteRemark(saleComment);
+            }
            
         }
 
-        public void OpenWinSearch(int id,int type)
+        public void OpenWinSearch(string id,int type)
         {
-            string selectRemarkIdsAndType = string.Format("id={0}&type={1}", id, type);
-            PageResult<OPC_SaleComment> re = AppEx.Container.GetInstance<IRemarkService>().SelectRemark(selectRemarkIdsAndType);
-            Remark4List=re.Result;
+            
+            switch (type)
+            {
+                case 1:
+                    string saleId = string.Format("saleId={0}", id);
+                    var x = AppEx.Container.GetInstance<IRemarkService>();
+                    PageResult<OPC_SaleComment> saleremark = AppEx.Container.GetInstance<IRemarkService>().GetSaleRemark(saleId);
+                    Remark4List = Mapper.Map<OPC_SaleComment, OPC_Comment>(saleremark.Result);
+                    break;
+                case 2:
+                    string saledetailId = string.Format("saledetailId={0}", id);
+                    PageResult<OPC_SaleDetailsComment> saledetailremark = AppEx.Container.GetInstance<IRemarkService>().GetSaleDetailsRemark(saledetailId);
+                    Remark4List = Mapper.Map<OPC_SaleDetailsComment, OPC_Comment>(saledetailremark.Result);;
+                    break;
+
+            }
+            
+            
+            
         }
     }
 }

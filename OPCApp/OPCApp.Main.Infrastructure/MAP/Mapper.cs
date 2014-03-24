@@ -39,7 +39,7 @@ namespace OPCApp.Infrastructure
         /// <returns>``1.</returns>
         public static TTagart Map<TSource, TTagart>(TSource source, Expression<Func<TSource, TTagart>> convert = null)
         {
-            string key = typeof (TSource).FullName + "_" + typeof (TTagart).FullName;
+            string key = typeof(TSource).FullName + "_" + typeof(TTagart).FullName;
             if (!registCollection.Contains(key))
             {
                 IMappingExpression<TSource, TTagart> map = AutoMapper.Mapper.CreateMap<TSource, TTagart>();
@@ -56,7 +56,7 @@ namespace OPCApp.Infrastructure
         public static IList<TTagart> Map<TSource, TTagart>(IEnumerable<TSource> source,
             Expression<Func<TSource, TTagart>> convert = null)
         {
-            string key = typeof (TSource).FullName + "_" + typeof (TTagart).FullName;
+            string key = typeof(TSource).FullName + "_" + typeof(TTagart).FullName;
             if (!registCollection.Contains(key))
             {
                 IMappingExpression<TSource, TTagart> map = AutoMapper.Mapper.CreateMap<TSource, TTagart>();
@@ -72,6 +72,20 @@ namespace OPCApp.Infrastructure
                 lst.Add(AutoMapper.Mapper.Map<TSource, TTagart>(s));
             }
             return lst;
+        }
+
+        public static void CreateMap<TSource, TTagart>(Expression<Func<TSource, TTagart>> convert = null)
+        {
+            string key = typeof(TSource).FullName + "_" + typeof(TTagart).FullName;
+            if (!registCollection.Contains(key))
+            {
+                IMappingExpression<TSource, TTagart> map = AutoMapper.Mapper.CreateMap<TSource, TTagart>();
+                if (convert != null)
+                {
+                    map.ConvertUsing(convert.Compile());
+                }
+                registCollection.Add(key);
+            }
         }
     }
 }

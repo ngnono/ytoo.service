@@ -87,8 +87,6 @@
   <ItemGroup>
     <Compile Include="BaseInfoModule.cs" />
     <Compile Include="Common\JsonExtension.cs" />
-    <Compile Include="IService\IStore.cs" />
-    <Compile Include="IService\ResultMsg.cs" />
     <Compile Include="Models\StoreInfo.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
     <Compile Include="ViewModels\StoreManageViewModel.cs" />
@@ -96,8 +94,8 @@
     <Compile Include="Views\OrgManage.xaml.cs">
       <DependentUpon>OrgManage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StoreManage4Modify.xaml.cs">
-      <DependentUpon>StoreManage4Modify.xaml</DependentUpon>
+    <Compile Include="Views\StoreAddWindow.xaml.cs">
+      <DependentUpon>StoreAddWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StoreManage.xaml.cs">
       <DependentUpon>StoreManage.xaml</DependentUpon>
@@ -181,7 +179,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\StoreManage4Modify.xaml">
+    <Page Include="Views\StoreAddWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
