@@ -94,6 +94,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 }
                                 c.CountsFromEntity(l.UA);
                                 c.Token = SessionKeyHelper.Encrypt(authUser.Id.ToString(CultureInfo.InvariantCulture));
+                                c.OperateRight =(int)(UserOperatorRight.SelfProduct| UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct)
                             }); ;
 
             return new RestfulResult

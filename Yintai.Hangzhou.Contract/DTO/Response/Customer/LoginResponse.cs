@@ -226,5 +226,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
         [DataMember(Name = "isbindcard")]
         public bool? IsCardBinded { get; set; }
 
+        [DataMember(Name="operate_right")]
+        public int? OperateRight { get; set; }
+            
     }
 }
