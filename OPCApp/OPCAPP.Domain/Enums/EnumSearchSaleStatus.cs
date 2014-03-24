@@ -7,7 +7,12 @@ namespace OPCAPP.Domain.Enums
     public enum EnumSearchSaleStatus
     {
         CompletePrintSearchStatus= 0,
+        StoreInDataBaseSearchStatus = 5,
+        StoreOutDataBaseSearchStatus = 10,
+        PrintInvoiceSearchStatus = 15,
+        PrintExpressSearchStatus =20,
+        
 
-        StoreInDataBaseSearchStatus = 5
+
     }
 }

@@ -3,24 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         Height="AUTO" Width="AUTO"  Background="LightGray">
     
         <Grid>
-            <controls:MetroAnimatedSingleRowTabControl Grid.Row="1" Grid.ColumnSpan="2">
-                <TabItem Header="打印发货单完成包装"  Custom:ControlsHelper.HeaderFontSize="18">
+        <controls:MetroAnimatedSingleRowTabControl x:Name="tabControlName" Grid.Row="1" Grid.ColumnSpan="2">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding CommandSelectionChanged}" CommandParameter="{Binding SelectedIndex,ElementName=tabControlName}"></i:InvokeCommandAction>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <TabItem Header="打印发货单完成包装"  Custom:ControlsHelper.HeaderFontSize="18">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="150"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-
-                        <StackPanel Grid.Row="0">
+                    <StackPanel Grid.Row="0">
                             <StackPanel Orientation="Horizontal" Background="LightGray">
 
                                 <Button Background="LightGray" Width="50" Command="{Binding CommandBack}">
@@ -29,19 +33,14 @@
                                         <TextBlock HorizontalAlignment="Center">返回</TextBlock>
                                     </StackPanel>
                                 </Button>
-                                <Button Background="LightGray" Width="50">
-                                    <StackPanel>
-                                        <Image Source="/image/查询.png" Stretch="None"></Image>
-                                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
-                                    </StackPanel>
-                                </Button>
+                              
                                 <Button Background="LightGray" Width="50" Command="{Binding CommandSoldOut}">
                                     <StackPanel>
                                         <Image Source="/image/打印.png" Stretch="None"></Image>
                                         <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
                                     </StackPanel>
                                 </Button>
-                                <Button Background="LightGray"  Command="{Binding CommandStoreInSure}">
+                                <Button Background="LightGray"  Command="{Binding CommandPrintInvoice}">
                                     <StackPanel>
                                         <Image Source="/image/打印.png" Stretch="None"></Image>
                                         <TextBlock HorizontalAlignment="Center">打印发货单</TextBlock>
@@ -52,69 +51,59 @@
 
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Background="LightGray" >
-                            <StackPanel Orientation="Horizontal" >
-                                <TextBlock Text="   购买时间：" />
-                                <DatePicker Width="150"   Foreground="Blue" />
-                                <TextBlock Text="  至：" />
-                                <DatePicker Width="150"   Foreground="Blue" />
-                                <TextBlock Text="  订单号" />
-                                <TextBox Width="150"   Foreground="Blue" Background="White"/>
-                                <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
-                            </StackPanel>
+                    <StackPanel Grid.Row="1" Background="LightGray" >
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="   购买时间：" />
+                            <DatePicker Width="150"   Foreground="Blue" />
+                            <TextBlock Text="  至：" />
+                            <DatePicker Width="150"   Foreground="Blue" />
+                            <TextBlock Text="  订单号" />
+                            <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                            <TextBlock Text="  销售单" />
+                            <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                            <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
                         </StackPanel>
-
-                        <StackPanel Grid.Row="2" >
-                            <StackPanel Orientation="Horizontal" Background="LightGray">
-                                <TextBlock Text="   销售单" />
-                            </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" >
+                        <StackPanel Orientation="Horizontal" Background="LightGray">
+                            <TextBlock Text="   销售单" />
                         </StackPanel>
+                    </StackPanel>
+                    <DataGrid Grid.Row="3" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
+                        <DataGrid.Columns >
+                            <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate >
+                                        <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"  
+                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="订单号"  Binding="{Binding OrderNo}" />
+                            <DataGridTextColumn Header="销售单号"  Binding="{Binding SaleOrderNo}" />
+                            <DataGridTextColumn Header="销售类别"  Binding="{Binding SalesType}" />
+                            <DataGridTextColumn Header="销售状态"  Binding="{Binding ShipViaId}"/>
+                            <DataGridTextColumn Header="销售单状态"  Binding="{Binding Status}"/>
+                            <DataGridTextColumn Header="收银状态"  Binding="{Binding CashStatus}" />
+                            <DataGridTextColumn Header="销售时间"  Binding="{Binding SellDate}" />
+                            <DataGridTextColumn Header="是否调拨"  Binding="{Binding IfTrans}" />
+                            <DataGridTextColumn Header="调拨状态"  Binding="{Binding TransStatus}" />
+                            <DataGridTextColumn Header="销售单金额"  Binding="{Binding SalesAmount}" />
+                            <DataGridTextColumn Header="销售单数量"  Binding="{Binding SalesCount}"/>
+                            <DataGridTextColumn Header="门店"  Binding="{Binding SectionName}"/>
+                            <DataGridTextColumn Header="收银流水号"  Binding="{Binding CashNum}" />
+                            <DataGridTextColumn Header="收银时间"  Binding="{Binding CashDate}" />
+                            <DataGridTextColumn Header="专柜码"  Binding="{Binding ShippingCode}" />
+                        </DataGrid.Columns>
 
-
-
-                        <DataGrid Grid.Row="3" ItemsSource="{Binding DingDan}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
-                            <DataGrid.Columns >
-                                <DataGridTextColumn Header="SID" Visibility="Hidden"  Binding="{Binding SID}" />
-                                <DataGridTextColumn Header="销售单号"  Binding="{Binding DingDan.Category}" />
-                                <DataGridTextColumn Header="订单号"  Binding="{Binding Dish.Comment}" />
-                                <DataGridTextColumn Header="销售类别"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售状态"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="销售单状态"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="收银状态"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售时间"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="是否调拨"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="调拨状态"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售单金额"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售单数量"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="门店"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="收银流水号"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="收银时间"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="专柜码"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="备注"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="备注时间"  Binding="{Binding Dish.Score}"/>
-                            </DataGrid.Columns>
-
-                        </DataGrid>
-                        <StackPanel Grid.Row="3" Grid.Column="1" >
-                            <StackPanel Orientation="Vertical"  Background="LightGray" >
-                                <TextBox Height="100"   Foreground="Blue" Background="White" Text="输入订单备注"/>
-                                <Button Content="保存销售单备注" Width="100" />
-                            </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="2" Grid.Column="1">
-                            <StackPanel Orientation="Horizontal" Background="LightGray">
-                                <TextBlock Text="   销售订单备注" />
-                            </StackPanel>
-                        </StackPanel>
-                        
-                    </Grid>
+                    </DataGrid>
+                </Grid>
                 </TabItem>
                 <TabItem Header="打印快递单" Custom:ControlsHelper.HeaderFontSize="18">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="150"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -125,100 +114,94 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Row="0">
-                            <StackPanel Orientation="Horizontal" Background="LightGray">
+                    <StackPanel Grid.Row="0">
+                        <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                                <Button Background="LightGray" Width="50" Command="{Binding CommandBack}">
-                                    <StackPanel>
-                                        <Image Source="/image/变更单位.png" Stretch="None"></Image>
-                                        <TextBlock HorizontalAlignment="Center">返回</TextBlock>
-                                    </StackPanel>
-                                </Button>
-                                <Button Background="LightGray" Width="50">
-                                    <StackPanel>
-                                        <Image Source="/image/查询.png" Stretch="None"></Image>
-                                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
-                                    </StackPanel>
-                                </Button>
-                                <Button Background="LightGray" Width="50" Command="{Binding CommandSoldOut}">
-                                    <StackPanel>
-                                        <Image Source="/image/打印.png" Stretch="None"></Image>
-                                        <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
-                                    </StackPanel>
-                                </Button>
-                                <Button Background="LightGray"  Command="{Binding CommandStoreInSure}">
-                                    <StackPanel>
-                                        <Image Source="/image/打印.png" Stretch="None"></Image>
-                                        <TextBlock HorizontalAlignment="Center">打印快递单</TextBlock>
-                                    </StackPanel>
-                                </Button>
-                                <Button Background="LightGray"  Command="{Binding CommandStoreInSure}">
-                                    <StackPanel>
-                                        <Image Source="/image/打印.png" Stretch="None"></Image>
-                                        <TextBlock HorizontalAlignment="Center">快递单完成打印</TextBlock>
-                                    </StackPanel>
-                                </Button>
+                            <Button Background="LightGray" Width="50" Command="{Binding CommandBack}">
+                                <StackPanel>
+                                    <Image Source="/image/变更单位.png" Stretch="None"></Image>
+                                    <TextBlock HorizontalAlignment="Center">返回</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Background="LightGray" Width="50">
+                                <StackPanel>
+                                    <Image Source="/image/查询.png" Stretch="None"></Image>
+                                    <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Background="LightGray" Width="50" Command="{Binding CommandSoldOut}">
+                                <StackPanel>
+                                    <Image Source="/image/打印.png" Stretch="None"></Image>
+                                    <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Background="LightGray"  Command="{Binding CommandStoreInSure}">
+                                <StackPanel>
+                                    <Image Source="/image/打印.png" Stretch="None"></Image>
+                                    <TextBlock HorizontalAlignment="Center">打印快递单</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Background="LightGray"  Command="{Binding CommandPrintExpress}">
+                                <StackPanel>
+                                    <Image Source="/image/打印.png" Stretch="None"></Image>
+                                    <TextBlock HorizontalAlignment="Center">完成快递单打印</TextBlock>
+                                </StackPanel>
+                            </Button>
 
 
-                            </StackPanel>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Background="LightGray" >
-                            <StackPanel Orientation="Horizontal" >
-                                <TextBlock Text="   购买时间：" />
-                                <DatePicker Width="150"   Foreground="Blue" />
-                                <TextBlock Text="  至：" />
-                                <DatePicker Width="150"   Foreground="Blue" />
-                                <TextBlock Text="  订单号" />
-                                <TextBox Width="150"   Foreground="Blue" Background="White"/>
-                                <TextBlock Text="  销售单" />
-                                <TextBox Width="150"   Foreground="Blue" Background="White"/>
-                                <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
-                            </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Background="LightGray" >
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="   购买时间：" />
+                            <DatePicker Width="150"   Foreground="Blue" />
+                            <TextBlock Text="  至：" />
+                            <DatePicker Width="150"   Foreground="Blue" />
+                            <TextBlock Text="  订单号" />
+                            <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                            <TextBlock Text="  销售单" />
+                            <TextBox Width="150"   Foreground="Blue" Background="White"/>
+                            <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
                         </StackPanel>
+                    </StackPanel>
 
-                        <StackPanel Grid.Row="2" >
-                            <StackPanel Orientation="Horizontal" Background="LightGray">
-                                <TextBlock Text="   销售单" />
-                            </StackPanel>
+                    <StackPanel Grid.Row="2" >
+                        <StackPanel Orientation="Horizontal" Background="LightGray">
+                            <TextBlock Text="   销售单" />
                         </StackPanel>
+                    </StackPanel>
 
 
 
-                        <DataGrid Grid.Row="3" ItemsSource="{Binding DingDan}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
-                            <DataGrid.Columns >
-                                <DataGridTextColumn Header="SID" Visibility="Hidden"  Binding="{Binding SID}" />
-                                <DataGridTextColumn Header="销售单号"  Binding="{Binding DingDan.Category}" />
-                                <DataGridTextColumn Header="订单号"  Binding="{Binding Dish.Comment}" />
-                                <DataGridTextColumn Header="销售类别"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售状态"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="销售单状态"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="收银状态"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售时间"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="是否调拨"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="调拨状态"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售单金额"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售单数量"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="门店"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="收银流水号"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="收银时间"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="专柜码"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="备注"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="备注时间"  Binding="{Binding Dish.Score}"/>
-                            </DataGrid.Columns>
+                    <DataGrid Grid.Row="3" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
+                        <DataGrid.Columns >
+                            <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate >
+                                        <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"  
+                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="订单号"  Binding="{Binding OrderNo}" />
+                            <DataGridTextColumn Header="销售单号"  Binding="{Binding SaleOrderNo}" />
+                            <DataGridTextColumn Header="销售类别"  Binding="{Binding SalesType}" />
+                            <DataGridTextColumn Header="销售状态"  Binding="{Binding ShipViaId}"/>
+                            <DataGridTextColumn Header="销售单状态"  Binding="{Binding Status}"/>
+                            <DataGridTextColumn Header="收银状态"  Binding="{Binding CashStatus}" />
+                            <DataGridTextColumn Header="销售时间"  Binding="{Binding SellDate}" />
+                            <DataGridTextColumn Header="是否调拨"  Binding="{Binding IfTrans}" />
+                            <DataGridTextColumn Header="调拨状态"  Binding="{Binding TransStatus}" />
+                            <DataGridTextColumn Header="销售单金额"  Binding="{Binding SalesAmount}" />
+                            <DataGridTextColumn Header="销售单数量"  Binding="{Binding SalesCount}"/>
+                            <DataGridTextColumn Header="门店"  Binding="{Binding SectionName}"/>
+                            <DataGridTextColumn Header="收银流水号"  Binding="{Binding CashNum}" />
+                            <DataGridTextColumn Header="收银时间"  Binding="{Binding CashDate}" />
+                            <DataGridTextColumn Header="专柜码"  Binding="{Binding ShippingCode}" />
+                        </DataGrid.Columns>
 
-                        </DataGrid>
-                        <StackPanel Grid.Row="3" Grid.Column="1" >
-                            <StackPanel Orientation="Vertical"  Background="LightGray" >
-                                <TextBox Height="100"   Foreground="Blue" Background="White" Text="输入订单备注"/>
-                                <Button Content="保存销售单备注" Width="100" />
-                            </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="2" Grid.Column="1">
-                            <StackPanel Orientation="Horizontal" Background="LightGray">
-                                <TextBlock Text="   销售订单备注" />
-                            </StackPanel>
-                        </StackPanel>
+                    </DataGrid>     
                         <StackPanel Grid.Row="4">
                             <StackPanel Orientation="Horizontal" Background="LightGray">
                                 <TextBlock Text="   销售明细" />
@@ -248,7 +231,6 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="150"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -271,19 +253,19 @@
                                 <Button Background="LightGray" Width="50">
                                     <StackPanel>
                                         <Image Source="/image/查询.png" Stretch="None"></Image>
-                                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                                        <TextBlock HorizontalAlignment="Center">补打快递预览</TextBlock>
                                     </StackPanel>
                                 </Button>
                                 <Button Background="LightGray" Width="50" Command="{Binding CommandSoldOut}">
                                     <StackPanel>
                                         <Image Source="/image/打印.png" Stretch="None"></Image>
-                                        <TextBlock HorizontalAlignment="Center">缺货</TextBlock>
+                                        <TextBlock HorizontalAlignment="Center">补打快递单</TextBlock>
                                     </StackPanel>
                                 </Button>
                                 <Button Background="LightGray"  Command="{Binding CommandStoreInSure}">
                                     <StackPanel>
                                         <Image Source="/image/打印.png" Stretch="None"></Image>
-                                        <TextBlock HorizontalAlignment="Center">销售单入库确认</TextBlock>
+                                        <TextBlock HorizontalAlignment="Center">完成快递发货交接</TextBlock>
                                     </StackPanel>
                                 </Button>
 
@@ -313,42 +295,36 @@
 
 
 
-                        <DataGrid Grid.Row="3" ItemsSource="{Binding DingDan}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
-                            <DataGrid.Columns >
-                                <DataGridTextColumn Header="SID" Visibility="Hidden"  Binding="{Binding SID}" />
-                                <DataGridTextColumn Header="销售单号"  Binding="{Binding DingDan.Category}" />
-                                <DataGridTextColumn Header="订单号"  Binding="{Binding Dish.Comment}" />
-                                <DataGridTextColumn Header="销售类别"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售状态"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="销售单状态"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="收银状态"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售时间"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="是否调拨"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="调拨状态"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售单金额"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="销售单数量"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="门店"  Binding="{Binding Dish.Score}"/>
-                                <DataGridTextColumn Header="收银流水号"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="收银时间"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="专柜码"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="备注"  Binding="{Binding Dish.Score}" />
-                                <DataGridTextColumn Header="备注时间"  Binding="{Binding Dish.Score}"/>
-                            </DataGrid.Columns>
+                    <DataGrid Grid.Row="3" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
+                        <DataGrid.Columns >
+                            <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate >
+                                        <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"  
+                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="订单号"  Binding="{Binding OrderNo}" />
+                            <DataGridTextColumn Header="销售单号"  Binding="{Binding SaleOrderNo}" />
+                            <DataGridTextColumn Header="销售类别"  Binding="{Binding SalesType}" />
+                            <DataGridTextColumn Header="销售状态"  Binding="{Binding ShipViaId}"/>
+                            <DataGridTextColumn Header="销售单状态"  Binding="{Binding Status}"/>
+                            <DataGridTextColumn Header="收银状态"  Binding="{Binding CashStatus}" />
+                            <DataGridTextColumn Header="销售时间"  Binding="{Binding SellDate}" />
+                            <DataGridTextColumn Header="是否调拨"  Binding="{Binding IfTrans}" />
+                            <DataGridTextColumn Header="调拨状态"  Binding="{Binding TransStatus}" />
+                            <DataGridTextColumn Header="销售单金额"  Binding="{Binding SalesAmount}" />
+                            <DataGridTextColumn Header="销售单数量"  Binding="{Binding SalesCount}"/>
+                            <DataGridTextColumn Header="门店"  Binding="{Binding SectionName}"/>
+                            <DataGridTextColumn Header="收银流水号"  Binding="{Binding CashNum}" />
+                            <DataGridTextColumn Header="收银时间"  Binding="{Binding CashDate}" />
+                            <DataGridTextColumn Header="专柜码"  Binding="{Binding ShippingCode}" />
+                        </DataGrid.Columns>
 
-                        </DataGrid>
-                        <StackPanel Grid.Row="3" Grid.Column="1" >
-                            <StackPanel Orientation="Vertical"  Background="LightGray" >
-                                <TextBox Height="100"   Foreground="Blue" Background="White" Text="输入订单备注"/>
-                                <Button Content="保存销售单备注" Width="100" />
-                            </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="2" Grid.Column="1">
-                            <StackPanel Orientation="Horizontal" Background="LightGray">
-                                <TextBlock Text="   销售订单备注" />
-                            </StackPanel>
-                        </StackPanel>
-                        <StackPanel Grid.Row="4">
+                    </DataGrid>
+                    <StackPanel Grid.Row="4">
                             <StackPanel Orientation="Horizontal" Background="LightGray">
                                 <TextBlock Text="   销售明细" />
                             </StackPanel>

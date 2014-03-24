@@ -14,6 +14,8 @@ namespace OPCApp.DataService.Interface.Trans
         bool SetStatusAffirmPrintSaleFinish(IList<string> saleOrderNoList);
         bool SetStatusStoreInSure(IList<string> saleOrderNoList);
         bool SetStatusSoldOut(IList<string> saleOrderNoList);
+        bool SetStatusPrintExpress(IList<string> saleOrderNoList);
+        bool SetStatusPrintInvoice(IList<string> saleOrderNoList);
         PageResult<OPC_Sale> Search(string salesfilter, EnumSearchSaleStatus searchSaleStatus);
         PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo);
     }

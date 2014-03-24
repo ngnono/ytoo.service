@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using Intime.OPC.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
-using System.Windows;
 using OPCApp.DataService.Interface.Trans;
 using OPCAPP.Domain.Enums;
 using OPCApp.Infrastructure;
-using OPCApp.TransManage.Models;
-using Microsoft.Practices.Prism.Mvvm;
 
 
 namespace OPCApp.TransManage.ViewModels
