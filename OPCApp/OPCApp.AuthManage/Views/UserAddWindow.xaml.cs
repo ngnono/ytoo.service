@@ -1,6 +1,4 @@
-﻿using System;
-using MahApps.Metro.Controls;
-using OPCApp.AuthManage.ViewModels;
+﻿using MahApps.Metro.Controls;
 using System.ComponentModel.Composition;
 using OPCApp.Infrastructure.Mvvm.View;
 

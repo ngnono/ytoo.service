@@ -16,7 +16,6 @@
 ﻿using OPCApp.DataService.Interface;
 ﻿using OPCApp.Infrastructure;
 ﻿using OPCApp.Infrastructure.Mvvm;
-using OPCApp.Domain;
 using OPCApp.Domain.Models;
 namespace OPCApp.AuthManage.ViewModels
 {

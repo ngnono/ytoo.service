@@ -16,14 +16,10 @@
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OPCApp.Domain.Models;
-using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Impl
 {
