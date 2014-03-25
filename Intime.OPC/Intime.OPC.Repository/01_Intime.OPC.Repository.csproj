@@ -50,6 +50,7 @@
     <Compile Include="IMenuRepository.cs" />
     <Compile Include="IAccountRepository.cs" />
     <Compile Include="IOrderRemarkRepository.cs" />
+    <Compile Include="IOrderRepository.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IRoleRepository.cs" />
     <Compile Include="ISaleRemarkRepository.cs" />
