@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\BaseRespository.cs" />
-    <Compile Include="Common\StringHelper.cs" />
     <Compile Include="IMenuRepository.cs" />
     <Compile Include="IAccountRepository.cs" />
     <Compile Include="IOrderRemarkRepository.cs" />
