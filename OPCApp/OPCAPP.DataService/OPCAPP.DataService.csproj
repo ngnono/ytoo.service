@@ -65,7 +65,7 @@
     <Compile Include="Interface\Auth\IRole2UserService.cs" />
     <Compile Include="Interface\Auth\IAuthenticateService.cs" />
     <Compile Include="Interface\Auth\IMenuDataService.cs" />
-    <Compile Include="Interface\Info\IStoreService.cs" />
+    <Compile Include="Interface\Info\IStoreDataService.cs" />
     <Compile Include="Interface\IOrderService.cs" />
     <Compile Include="Interface\IRole.cs" />
     <Compile Include="Interface\Auth\IRoleDataService.cs" />
