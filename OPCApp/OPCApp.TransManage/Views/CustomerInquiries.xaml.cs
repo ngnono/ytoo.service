@@ -12,7 +12,7 @@ namespace OPCApp.TransManage.Views
     /// PrintInvoiceViewModel.xaml 的交互逻辑
     /// </summary>
     /// 
-    [Export("StoreOut",typeof(UserControl))]
+    [Export("CustomerInquiries", typeof(UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class CustomerInquiries 
     {
