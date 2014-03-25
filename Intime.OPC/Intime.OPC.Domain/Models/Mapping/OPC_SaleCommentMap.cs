@@ -11,9 +11,6 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
             this.Property(t => t.SaleOrderNo)
                 .IsRequired()
                 .HasMaxLength(50);

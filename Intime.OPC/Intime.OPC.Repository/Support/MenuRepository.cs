@@ -25,26 +25,10 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                //IQueryable<OPC_AuthRoleMenu> lstRoleMenu = db.OPC_AuthRoleMenu.Where(t => t.OPC_AuthRoleId == roleID);
-                //IList<OPC_AuthMenu> lstMenu = new List<OPC_AuthMenu>();
-
-                //foreach (OPC_AuthRoleMenu opcAuthRoleMenu in lstRoleMenu)
-                //{
-                //    OPC_AuthMenu menu = db.OPC_AuthMenu.FirstOrDefault(t => t.Id == opcAuthRoleMenu.OPC_AuthMenuId);
-                //    if (menu != null && menu.IsValid)
-                //    {
-                //        lstMenu.Add(menu);
-                //    }
-                //}
-                //return lstMenu;
-
-
               return   db.OPC_AuthRoleMenu.Where(t => t.OPC_AuthRoleId == roleID).Join(
                     db.OPC_AuthMenu,
                     t => t.OPC_AuthMenuId,
                     o => o.Id, (arm, aru) => aru).ToList();
-
-
             }
         }
 

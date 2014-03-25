@@ -26,7 +26,7 @@ namespace Intime.OPC.Service
         /// Selects this instance.
         /// </summary>
         /// <returns>IList{OPC_Sale}.</returns>
-        IList<SaleDto> All(string saleOrderNo, int userId, string orderNo, System.DateTime dtStart, System.DateTime dtEnd);
+        IList<OPC_Sale> Select();
   
 
         /// <summary>
@@ -163,16 +163,5 @@ namespace Intime.OPC.Service
         IList<OPC_Sale> GetShipInStorage(string saleOrderNo, int userId, string orderNo, System.DateTime dtStart, System.DateTime dtEnd);
 
         bool WriteSaleRemark(OPC_SaleComment comment);
-
-        /// <summary>
-        ///  获得缺货的数据
-        /// </summary>
-        /// <param name="saleOrderNo1">The sale order no1.</param>
-        /// <param name="userId">The user identifier.</param>
-        /// <param name="saleOrderNo2">The sale order no2.</param>
-        /// <param name="dtStart">The dt start.</param>
-        /// <param name="dtEnd">The dt end.</param>
-        /// <returns>IList{OPC_Sale}.</returns>
-        IList<SaleDto> GetStockOut(string saleOrderNo, int userId, string orderNo, System.DateTime dtStart, System.DateTime dtEnd);
     }
 }
