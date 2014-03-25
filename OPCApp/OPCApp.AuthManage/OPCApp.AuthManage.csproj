@@ -102,10 +102,10 @@
     <Compile Include="Views\UsersWindow.xaml.cs">
       <DependentUpon>UsersWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\View\RoleListView.xaml.cs">
+    <Compile Include="Views\RoleListView.xaml.cs">
       <DependentUpon>RoleListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\View\RoleAddWindow.xaml.cs">
+    <Compile Include="Views\RoleAddWindow.xaml.cs">
       <DependentUpon>RoleAddWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserAddWindow.xaml.cs">
@@ -163,11 +163,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\View\RoleListView.xaml">
+    <Page Include="Views\RoleListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\View\RoleAddWindow.xaml">
+    <Page Include="Views\RoleAddWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
