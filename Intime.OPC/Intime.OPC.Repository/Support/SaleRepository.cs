@@ -151,6 +151,11 @@ namespace Intime.OPC.Repository.Support
             return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.ShipInStorage);
         }
 
+        public IList<OPC_Sale> GetStockOut(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
+        {
+            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.StockOut);
+        }
+
         #endregion
 
         /// <summary>

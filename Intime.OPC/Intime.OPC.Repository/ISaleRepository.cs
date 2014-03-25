@@ -102,5 +102,15 @@ namespace Intime.OPC.Repository
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
         IList<OPC_Sale> GetShipInStorage(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd);
+
+        /// <summary>
+        ///  获得 缺货 的数据
+        /// </summary>
+        /// <param name="saleOrderNo">The sale order no.</param>
+        /// <param name="orderNo">The order no.</param>
+        /// <param name="dtStart">The dt start.</param>
+        /// <param name="dtEnd">The dt end.</param>
+        /// <returns>IList{OPC_Sale}.</returns>
+        IList<OPC_Sale> GetStockOut(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd);
     }
 }
