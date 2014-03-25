@@ -360,6 +360,38 @@ namespace Intime.OPC.WebApi.Controllers
              }
          }
 
+        
+               /// <summary>
+        /// 获得未提货的数据
+        /// </summary>
+        /// <param name="saleId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+         [HttpGet]
+         public IHttpActionResult GetSaleStockOut(string startDate, string endDate, string saleOrderNo, string orderNo, [UserId] int userId)
+        {
+            DateTime dtStart = DateTime.MinValue;
+            bool bl = DateTime.TryParse(startDate, out dtStart);
+
+            DateTime dtEnd = DateTime.Now;
+            bl = DateTime.TryParse(endDate, out dtEnd);
+            
+             try
+             {
+                 return Ok(_saleService.GetStockOut(saleOrderNo, userId, orderNo, dtStart, dtEnd));
+             }
+             catch (SaleOrderNotExistsException e)
+             {
+                // _logger.WriteError(e.Message);
+                 return BadRequest();
+             }
+             catch (Exception ex)
+             {
+                 //_logger.WriteError(ex.Message);
+                 return InternalServerError();
+             }
+         }
+
         /// <summary>
         /// 获得已完成 打印销售单 的数据
         /// </summary>
@@ -483,6 +515,38 @@ namespace Intime.OPC.WebApi.Controllers
          }
 
         
+        
+
+         //            /// <summary>
+         ///// 获得 所有 数据
+         ///// </summary>
+         ///// <param name="saleId"></param>
+         ///// <param name="userId"></param>
+         ///// <returns></returns>
+         //[HttpGet]
+         //public IHttpActionResult GetSaleAll(string startDate, string endDate, string saleOrderNo, string orderNo, [UserId] int userId)
+         //{
+         //    try
+         //    {
+         //        DateTime dtStart = DateTime.MinValue;
+         //        bool bl = DateTime.TryParse(startDate, out dtStart);
+
+         //        DateTime dtEnd = DateTime.Now;
+         //        bl = DateTime.TryParse(endDate, out dtEnd);
+         //        return Ok(_saleService.All(saleOrderNo, userId, orderNo, dtStart, dtEnd));
+         //    }
+         //    catch (SaleOrderNotExistsException e)
+         //    {
+         //        //_logger.WriteError(e.Message);
+         //        return BadRequest();
+         //    }
+         //    catch (Exception ex)
+         //    {
+         //        //_logger.WriteError(ex.Message);
+         //        return InternalServerError();
+         //    }
+         //}
+
 
         #endregion
         [HttpPost]
