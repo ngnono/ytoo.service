@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseInfo\shoppeInfo.cs" />
+    <Compile Include="BaseInfo\StoreInfo.cs" />
+    <Compile Include="Base\DomainBase.cs" />
     <Compile Include="Enums\EnumReturnGoodsStatus.cs" />
     <Compile Include="Enums\EnumRMACashStatus.cs" />
     <Compile Include="Enums\EnumRMAStatus.cs" />
@@ -65,6 +68,8 @@
     <Compile Include="Models\OPC_SaleComment.cs" />
     <Compile Include="Models\OPC_SaleDetail.cs" />
     <Compile Include="Models\OPC_SaleDetailsComment.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderGet.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Order.cs" />
