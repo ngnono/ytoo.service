@@ -76,17 +76,9 @@
                             <TextBlock Text="    订单" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="4" ItemsSource="{Binding OrderList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
+                    <DataGrid Grid.Row="4" ItemsSource="{Binding OrderList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectOrder}" Selected="{Binding CommandGetSaleByOrderId}"  >
                         <DataGrid.Columns >
-                            <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate >
-                                        <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"  
-                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                            
                             <DataGridTextColumn Header="订单号"  Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="渠道订单号"  Binding="{Binding OrderSource}" />
                             <DataGridTextColumn Header="支付方式"  Binding="{Binding SalesType}" />
@@ -122,17 +114,9 @@
                             <TextBlock Text="   销售单" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="6" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
+                    <DataGrid Grid.Row="6" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"  SelectedItem="{Binding SelectSale}" Selected="{Binding CommandGetSaleDetailBySaleId}" >
                         <DataGrid.Columns >
-                            <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate >
-                                        <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"  
-                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                            
                             <DataGridTextColumn Header="订单号"  Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="销售单号"  Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Header="销售类别"  Binding="{Binding SalesType}" />
@@ -157,15 +141,7 @@
                     </Grid>
                     <DataGrid Grid.Row="8" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
                         <DataGrid.Columns >
-                            <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate >
-                                        <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"  
-                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                            
                             <DataGridTextColumn Header="款号"  Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="规格"  Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Header="色码"  Binding="{Binding SalesType}" />
