@@ -1,7 +1,11 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
+using Intime.OPC.Service;
+using Intime.OPC.WebApi.Core.Security;
+using Intime.OPC.WebApi.Models;
 
 namespace Intime.OPC.WebApi.Controllers
 {
@@ -17,9 +21,11 @@ namespace Intime.OPC.WebApi.Controllers
             _roleService = roleService;
         }
 
+       
+
         [HttpPost]
         public IHttpActionResult AddRole([FromBody] OPC_AuthRole role)
-            //public IHttpActionResult AddUser()
+        //public IHttpActionResult AddUser()
         {
             //TODO:check params
             if (_roleService.Create(role))
@@ -29,10 +35,10 @@ namespace Intime.OPC.WebApi.Controllers
 
             return InternalServerError();
         }
-
-        [HttpPut]
+         [HttpPut]
         public IHttpActionResult UpdateRole([FromBody] OPC_AuthRole role)
         {
+
             //TODO:check params
             if (_roleService.Update(role))
             {
@@ -45,15 +51,17 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPut]
         public IHttpActionResult SetMenus(RoleMenuDto menuDto)
         {
-            bool bl = _roleService.SetMenus(menuDto);
+            bool bl= _roleService.SetMenus(menuDto);
             if (bl)
                 return Ok();
-            return InternalServerError();
+            else
+                return InternalServerError();
         }
 
         [HttpPut]
         public IHttpActionResult DeleteRole(int roleId)
         {
+
             //TODO:check params
             if (_roleService.Delete(roleId))
             {
@@ -66,12 +74,13 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult SelectRole()
         {
+
             //TODO:check params
             return Ok(_roleService.Select());
         }
-
         public IHttpActionResult Stop(int roleId)
         {
+
             //TODO:check params
             if (_roleService.IsStop(roleId, true))
             {
@@ -80,9 +89,9 @@ namespace Intime.OPC.WebApi.Controllers
 
             return InternalServerError();
         }
-
         public IHttpActionResult Enable(int roleId)
         {
+
             //TODO:check params
             if (_roleService.IsStop(roleId, false))
             {
@@ -91,5 +100,6 @@ namespace Intime.OPC.WebApi.Controllers
 
             return InternalServerError();
         }
+      
     }
 }

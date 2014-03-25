@@ -66,10 +66,9 @@
     <Compile Include="Models\OPC_ShippingSale.cs" />
     <Compile Include="Models\OPC_SaleDetail.cs" />
     <Compile Include="Models\OPC_SaleDetailsComment.cs" />
-    <Compile Include="Models\OrderGet.cs" />
-    <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\Store.cs" />
+    <Compile Include="Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="RoleMenuDto.cs" />

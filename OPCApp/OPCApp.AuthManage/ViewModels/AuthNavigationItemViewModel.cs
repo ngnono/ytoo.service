@@ -12,7 +12,7 @@ namespace OPCApp.AuthManage.ViewModels
        {
            private readonly IMenuDataService _menuDataService;
            /// <summary>
-           /// Initializes a new instance of the <see cref="MenuViewModel"/> class.
+           /// Initializes a new1 instance of the <see cref="MenuViewModel"/> class.
            /// </summary>
            /// <param name="menuService">The menu service.</param>
            [ImportingConstructor]
