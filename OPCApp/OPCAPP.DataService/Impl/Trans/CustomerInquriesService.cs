@@ -21,16 +21,26 @@ namespace OPCApp.DataService.Impl.Trans
 
         public PageResult<Order> GetOrder(string orderfilter)
         {
-            var lst = RestClient.Get<Order>("sale/getorder", orderfilter);
+            var lst = RestClient.Get<Order>("order/getorder", orderfilter);
             return new PageResult<Order>(lst, lst.Count);
         }
 
-        public PageResult<OPC_Sale> GetSaleByOrderId(string orderId)
+        public PageResult<OPC_Sale> GetSaleByOrderNo(string orderNo)
         {
-            var lst = RestClient.Get<OPC_Sale>("sale/getSaleByOrderId", orderId);
+            var lst = RestClient.Get<OPC_Sale>("sale/GetSaleByOrderNo", orderNo);
             return new PageResult<OPC_Sale>(lst, lst.Count);
         }
 
+        public PageResult<OPC_ShippingSale> GetShipping(string shippingfilter)
+        {
+            var lst = RestClient.Get<OPC_ShippingSale>("order/GetShipping", shippingfilter);
+            return new PageResult<OPC_ShippingSale>(lst, lst.Count);
+        }
 
+        public PageResult<Order> GetOrderByShippingId(string shippingId)
+        {
+            var lst = RestClient.Get<Order>("order/GetOrderByShippingId", shippingId);
+            return new PageResult<Order>(lst, lst.Count);
+        }
     }
 }

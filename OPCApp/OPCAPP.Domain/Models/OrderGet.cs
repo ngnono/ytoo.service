@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace Intime.OPC.Domain.Models
 {
-    public partial class OrderGet
+    public class OrderGet
     {
         public string OrderNo { get; set; }
         public string OrderSource { get; set; }
-        public System.DateTime StartCreateDate { get; set; }
-        public System.DateTime EndCreateDate { get; set; }
         public int StoreId { get; set; }
         public int BrandId { get; set; }
         public int Status { get; set; }
@@ -17,6 +15,27 @@ namespace Intime.OPC.Domain.Models
         public string OutGoodsType { get; set; }
         public string ShippingContactPhone { get; set; }
         public string ExpressDeliveryCode { get; set; }
-        public string ExpressDeliveryCompany { get; set; }
+        public int ExpressDeliveryCompany { get; set; }
+
+        public OrderGet()
+        {
+            this.StartCreateDate = DateTime.Now;
+            this.EndCreateDate = DateTime.Now;
+            this.Status = -1;
+            this.ExpressDeliveryCompany = -1;
+        }
+        public DateTime StartCreateDate
+        {
+            get;
+            set;
+
+        }
+        //开始时间条件
+
+        public DateTime EndCreateDate
+        {
+            get;
+            set;
+        }//结束时间条件
     }
 }

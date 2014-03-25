@@ -1,62 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
-using OPCApp.Domain.Models;
 
 namespace OPCApp.DataService.Impl.Info
 {
     [Export(typeof(IStoreDataService))]
-    public class RoleDataService : IStoreDataService
+    public class StoreDataService : IStoreDataService
     {
-        private string url = "Role/AddRole";
-        public ResultMsg Add(OPC_AuthRole model)
+        public bool SetIsStop(int StoreId, bool isStop)
         {
-            var result = RestClient.Post<OPC_AuthRole>("Role/AddRole", model);
-            if (result)
-            {
-                return ResultMsg.Success();
-            }
-            return ResultMsg.Failure("添加失败！");
+            throw new System.NotImplementedException();
         }
 
-        public ResultMsg Edit(OPC_AuthRole model)
+        public ResultMsg Add(Intime.OPC.Domain.Models.Store model)
         {
-            var result = RestClient.Post<OPC_AuthRole>("Role/UpdateRole", model);
-            if (result)
-            {
-                return ResultMsg.Success();
-            }
-            return ResultMsg.Failure("更新失败！");
+            throw new System.NotImplementedException();
         }
 
-        public ResultMsg Delete(OPC_AuthRole model)
+        public ResultMsg Edit(Intime.OPC.Domain.Models.Store model)
         {
-            var result = RestClient.Delete<OPC_AuthRole>("Role/DeleteRole/" + model.Id);
-            if (result)
-            {
-                return ResultMsg.Success();
-            }
-            return ResultMsg.Failure("删除失败！");
+            throw new System.NotImplementedException();
         }
 
-        public PageResult<OPC_AuthRole> Search(IFilter filter)
+        public ResultMsg Delete(Intime.OPC.Domain.Models.Store model)
         {
-
-            var result = RestClient.Get<OPC_AuthRole>("Role/SelectRole", null);
-            return new PageResult<OPC_AuthRole>(result, result.Count);
+            throw new System.NotImplementedException();
         }
 
-
-        public PageResult<OPC_AuthRole> Search(IDictionary<string, object> iDicFilter)
+        public PageResult<Intime.OPC.Domain.Models.Store> Search(IDictionary<string, object> iDicFilter)
         {
-            var result = RestClient.Get<OPC_AuthRole>("Role/SelectRole", null);
-            return new PageResult<OPC_AuthRole>(result, result.Count);
+            throw new System.NotImplementedException();
         }
-
-
-
     }
 }

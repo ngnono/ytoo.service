@@ -17,7 +17,8 @@ namespace OPCApp.BaseInfoManage.ViewModels
 
         protected override Infrastructure.DataService.IBaseDataService<Store> GetDataService()
         {
-            return AppEx.Container.GetInstance<OPCApp.DataService.Interface.IStoreService>();
+            return AppEx.Container.GetInstance<OPCApp.DataService.Interface.IStoreDataService>();
         }
     }
+
 }

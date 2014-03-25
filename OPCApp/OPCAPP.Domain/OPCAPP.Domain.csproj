@@ -70,6 +70,7 @@
     <Compile Include="Models\OPC_SaleDetail.cs" />
     <Compile Include="Models\OPC_SaleDetailsComment.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\ShippingGet.cs" />
     <Compile Include="Models\OrderGet.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\Store.cs" />

@@ -17,6 +17,7 @@ namespace OPCApp.BaseInfoManage.Views
             InitializeComponent();
 
         }
+
         public void Cancel()
         {
 
