@@ -266,18 +266,5 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             return this.RenderSuccess<dynamic>(null);
         }
 
-        [RestfulAuthorize]
-        public ActionResult Favor(Yintai.Hangzhou.Contract.DTO.Request.IMSAssistantFavorRequest request)
-        {
-
-            return this.RenderSuccess<dynamic>(null);
-        }
-
-        [RestfulAuthorize]
-        public ActionResult Unfavor(Yintai.Hangzhou.Contract.DTO.Request.IMSAssistantFavorRequest request)
-        {
-
-            return this.RenderSuccess<dynamic>(null);
-        }
     }
 }

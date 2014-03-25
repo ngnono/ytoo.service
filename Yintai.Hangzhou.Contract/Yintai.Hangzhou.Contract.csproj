@@ -85,7 +85,6 @@
     <Compile Include="DTO\Request\GetConversationRequest.cs" />
     <Compile Include="DTO\Request\GetFavorListRequest.cs" />
     <Compile Include="DTO\Request\GetProductInfo4PRequest.cs" />
-    <Compile Include="DTO\Request\IMSAssistantFavorRequest.cs" />
     <Compile Include="DTO\Request\IMSComboCreateRequest.cs" />
     <Compile Include="DTO\Request\IMSGiftcardChangePwdRequest.cs" />
     <Compile Include="DTO\Request\IMSGiftcardListRequest.cs" />
@@ -95,6 +94,7 @@
     <Compile Include="DTO\Request\IMSProductCreateRequest.cs" />
     <Compile Include="DTO\Request\IMSProductSearchRequest.cs" />
     <Compile Include="DTO\Request\IMSStoreDetailUpdateRequest.cs" />
+    <Compile Include="DTO\Request\IMSUserFavorRequest.cs" />
     <Compile Include="DTO\Request\MyCommentListRequest.cs" />
     <Compile Include="DTO\Request\MyOrderDetailRequest.cs" />
     <Compile Include="DTO\Request\MyOrderPayRequest.cs" />
