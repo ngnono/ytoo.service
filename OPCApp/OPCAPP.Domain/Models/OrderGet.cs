@@ -15,12 +15,14 @@ namespace Intime.OPC.Domain.Models
         public string OutGoodsType { get; set; }
         public string ShippingContactPhone { get; set; }
         public string ExpressDeliveryCode { get; set; }
-        public string ExpressDeliveryCompany { get; set; }
+        public int ExpressDeliveryCompany { get; set; }
 
         public OrderGet()
         {
             this.StartCreateDate = DateTime.Now;
             this.EndCreateDate = DateTime.Now;
+            this.Status = -1;
+            this.ExpressDeliveryCompany = -1;
         }
         public DateTime StartCreateDate
         {

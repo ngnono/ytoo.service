@@ -27,7 +27,7 @@ namespace OPCApp.DataService.Impl.Trans
 
         public PageResult<OPC_Sale> GetSaleByOrderNo(string orderNo)
         {
-            var lst = RestClient.Get<OPC_Sale>("order/GetSaleByOrderNo", orderNo);
+            var lst = RestClient.Get<OPC_Sale>("sale/GetSaleByOrderNo", orderNo);
             return new PageResult<OPC_Sale>(lst, lst.Count);
         }
 
