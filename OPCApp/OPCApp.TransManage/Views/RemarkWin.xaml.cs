@@ -49,13 +49,13 @@ namespace OPCApp.TransManage.Views
             ViewModel.Remark.Content = "";
         }
 
-        public void ShowRemarkWin(int id,int type)
+        public void ShowRemarkWin(string id,int type)
         {
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             ViewModel.OpenWinSearch(id, type);
             if (this.ShowDialog() == true)
             {
-                ViewModel.SaveRemark(id);
+                ViewModel.SaveRemark(id,type);
             }
         }
         public void CommandBackExecute()
@@ -69,5 +69,7 @@ namespace OPCApp.TransManage.Views
             DialogResult = true;
             this.Close();
         }
+
+      
     }
 }

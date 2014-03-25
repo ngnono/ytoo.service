@@ -34,5 +34,6 @@ namespace Intime.OPC.Domain.Models
         public int CreatedUser { get; set; }
         public DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
+        public string StatusName { get; set; }
     }
 }

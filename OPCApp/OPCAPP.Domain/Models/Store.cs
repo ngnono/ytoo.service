@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Domain.Models
 {
-    public partial class Store:IEntity
+    public  class Store
     {
         public int Id { get; set; }
         public string Name { get; set; }

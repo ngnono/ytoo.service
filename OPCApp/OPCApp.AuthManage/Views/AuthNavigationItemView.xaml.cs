@@ -96,25 +96,33 @@ namespace OPCApp.AuthManage.Views
      
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
-            var o = sender as RadioButton;
-            var o1 = o.CommandParameter;
-            while (this.regionManager.Regions[RegionNames.MainContentRegion].Views.Count() > 0)
+            try
             {
-                this.regionManager.Regions[RegionNames.MainContentRegion].Remove(this.regionManager.Regions[RegionNames.MainContentRegion].Views.FirstOrDefault());
-            }
-            //this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,);
-            if (o1.ToString().Contains("ViewModel"))//待调整
-            {
-                this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion, () =>
-                    AppEx.Container.GetInstance<IViewModel>(o1.ToString()).View
-                    );
-            }
-            else
-            {
-                this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,
-                     () => AppEx.Container.GetInstance<UserControl>(o1.ToString())
-                     );
+                var o = sender as RadioButton;
+                var o1 = o.CommandParameter;
+                while (this.regionManager.Regions[RegionNames.MainContentRegion].Views.Count() > 0)
+                {
+                    this.regionManager.Regions[RegionNames.MainContentRegion].Remove(this.regionManager.Regions[RegionNames.MainContentRegion].Views.FirstOrDefault());
+                }
+                //this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,);
+                if (o1.ToString().Contains("ViewModel"))//待调整
+                {
+                    this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion, () =>
+                        AppEx.Container.GetInstance<IViewModel>(o1.ToString()).View
+                        );
+                }
+                else
+                {
+                    this.regionManager.RegisterViewWithRegion(RegionNames.MainContentRegion,
+                         () => AppEx.Container.GetInstance<UserControl>(o1.ToString())
+                         );
 
+                }
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("功能正在开发中", "提示");
             }
         }
     }

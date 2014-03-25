@@ -56,8 +56,6 @@
     <Compile Include="IRoleRepository.cs" />
     <Compile Include="ISaleRemarkRepository.cs" />
     <Compile Include="ISaleRepository.cs" />
-    <Compile Include="ISectionRepository.cs" />
-    <Compile Include="IStoreRepository.cs" />
     <Compile Include="ITransRepository.cs" />
     <Compile Include="IRoleUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,8 +69,6 @@
     <Compile Include="Support\RoleUserRepository.cs" />
     <Compile Include="Support\SaleRemarkRepository.cs" />
     <Compile Include="Support\SaleRepository.cs" />
-    <Compile Include="Support\SectionRepository.cs" />
-    <Compile Include="Support\StoreRepository.cs" />
     <Compile Include="Support\TransRepository.cs" />
     <Compile Include="YintaiHZhouContext.cs" />
   </ItemGroup>

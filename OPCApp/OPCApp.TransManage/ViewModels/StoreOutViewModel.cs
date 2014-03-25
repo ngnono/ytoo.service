@@ -1,66 +1,79 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
-using Microsoft.Practices.Prism.Commands;
 using System.Windows;
-using OPCApp.TransManage.Models;
+using System.Windows.Controls;
+using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.DataService.Interface.Trans;
+using OPCAPP.Domain.Enums;
+using OPCApp.Infrastructure;
 
 
 namespace OPCApp.TransManage.ViewModels
 {
-    class StoreOutViewModel : BindableBase
+     [Export("StoreOutViewModel", typeof(StoreOutViewModel))]
+   public class StoreOutViewModel :PrintInvoiceViewModel
     {
-
-        public DelegateCommand CommandSearch { get; set; }
-        public DelegateCommand CommandSoldOut { get; set; }
-        public DelegateCommand CommandStoreInSure { get; set; }
-        public DelegateCommand CommandBack { get; set; }
+        public DelegateCommand CommandPrintInvoice { get; set; }
+        public DelegateCommand CommandPrintExpress { get; set; }
+         public DelegateCommand<int?> CommandSelectionChanged { get; set; }
+         public int IsTabIndex { get; set; }
 
         public StoreOutViewModel()
+            : base()
         {
             //初始化命令属性
-            CommandSearch = new DelegateCommand(new Action(CommandSearchExecute));
-            CommandSoldOut = new DelegateCommand(new Action(CommandSoldOutExecute));
-            CommandStoreInSure = new DelegateCommand(new Action(CommandStoreInSureExecute));
+            this.SearchSaleStatus = EnumSearchSaleStatus.StoreOutDataBaseSearchStatus;
+            //初始化命令属性
+            CommandPrintInvoice = new DelegateCommand(PrintInvoice);
+            CommandPrintExpress = new DelegateCommand(PrintExpress);
+           // CommandSelectionChanged = new DelegateCommand<int?>(SelectionChanged);
+        }
+         //有问题 所以改为下面这种方式
+         //public void SelectionChanged(int? i)
+         //{
             
-        }
-
-        public void CommandBackExecute()
+         //}
+         public void SelectionChanged(object sender, SelectionChangedEventArgs e)
+         {
+             if (e.Source is TabControl)
+             {
+                 TabControl tabControl = sender as TabControl;
+                 int i = tabControl.SelectedIndex;
+                 switch (i)
+                 {
+                     case 1:
+                         this.SearchSaleStatus = EnumSearchSaleStatus.PrintInvoiceSearchStatus;
+                         break;
+                     case 2:
+                         this.SearchSaleStatus = EnumSearchSaleStatus.PrintExpressSearchStatus;
+                         break;
+                     default:
+                         this.SearchSaleStatus = EnumSearchSaleStatus.StoreOutDataBaseSearchStatus;
+                         break; ;
+                 }
+                 this.Refresh();
+             }
+           
+         }
+         public void PrintInvoice()
         {
+            var selectSaleIds = this.SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
+            ITransService ts = AppEx.Container.GetInstance<ITransService>();
+            bool bFalg= ts.SetStatusPrintInvoice(selectSaleIds);
+            MessageBox.Show(bFalg ? "打印发货单成功" : "打印发货单失败", "提示");
+             this.Refresh();
 
         }
-        public void CommandSearchExecute()
+        public void PrintExpress()
         {
+            var selectSaleIds = this.SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
+            ITransService ts = AppEx.Container.GetInstance<ITransService>();
+            bool bFalg= ts.SetStatusPrintExpress(selectSaleIds);
+            MessageBox.Show(bFalg ? "打印快递单成功" : "打印快递单失败", "提示");
+            this.Refresh();
 
         }
-        public void CommandSoldOutExecute()
-        {
-
-
-        }
-        public void CommandStoreInSureExecute()
-        {
-
-
-        }
-        //选择上面行数据时赋值的数据集
-        private Invoice invoice4sel;
-        public Invoice Invoice4Sel
-        {
-            get { return this.invoice4sel; }
-            set { SetProperty(ref this.invoice4sel, value); }
-
-        }
-
-        //Grid数据集
-        private List<Invoice> invoice4grid;
-        public List<Invoice> InvoiceInfo4Grid
-        {
-
-            get { return this.invoice4grid; }
-            set { SetProperty(ref this.invoice4grid, value); }
-        }
-        
     }
 }

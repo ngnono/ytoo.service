@@ -57,7 +57,6 @@
   <ItemGroup>
     <Compile Include="Base\IEntity.cs" />
     <Compile Include="Dto\RoleMenuDto.cs" />
-    <Compile Include="Dto\SaleDto.cs" />
     <Compile Include="Enums\EnumCashStatus.cs" />
     <Compile Include="Enums\EnumOderStatus.cs" />
     <Compile Include="Enums\EnumReturnGoodsStatus.cs" />

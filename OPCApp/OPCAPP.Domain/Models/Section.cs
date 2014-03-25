@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Domain.Models
 {
-    public partial class Section:IEntity
+    public partial class Section
     {
         public string Location { get; set; }
         public string ContactPhone { get; set; }

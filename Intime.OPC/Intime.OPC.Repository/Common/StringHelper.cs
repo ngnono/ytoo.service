@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Intime.OPC.Repository.Common
 {
     public class StringHelper
     {
-        public static int[] ToInts(string s, char pchar = '%')
+        public static int[] ToInts( string s, char pchar = '%')
         {
             IList<int> lst = new List<int>();
-            string[] strs = s.Split(pchar);
-            foreach (string t in strs)
+            var strs = s.Split(pchar);
+            foreach (var t in strs)
             {
                 int i = 0;
                 bool bl = int.TryParse(t, out i);
@@ -18,7 +22,7 @@ namespace Intime.OPC.Repository.Common
                     lst.Add(i);
                 }
             }
-
+         
             return lst.ToArray();
         }
     }

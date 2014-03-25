@@ -1,16 +1,14 @@
-﻿using System;
-using MahApps.Metro.Controls;
+﻿using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.AuthManage.ViewModels;
 using System.ComponentModel.Composition;
-using OPCApp.Domain;
-using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.AuthManage.Views
 {
    [Export("UsersView", typeof(UsersWindow))]
    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class UsersWindow : MetroWindow
+
    {
 
 

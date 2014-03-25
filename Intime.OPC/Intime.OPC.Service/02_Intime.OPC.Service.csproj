@@ -30,12 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
-      <HintPath>..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper.Net4">
-      <HintPath>..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.Net4.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,8 +44,6 @@
     <Compile Include="IRoleService.cs" />
     <Compile Include="ISaleService.cs" />
     <Compile Include="ITransService.cs" />
-    <Compile Include="MapConfig.cs" />
-    <Compile Include="Map\Mapper.cs" />
     <Compile Include="Support\MeunService.cs" />
     <Compile Include="Support\AccountService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,10 +52,6 @@
     <Compile Include="Support\TransService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Intime.OPC.Common\Intime.OPC.Common.csproj">
-      <Project>{120944ff-a829-4c64-b938-5af79875d747}</Project>
-      <Name>Intime.OPC.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Intime.OPC.Domain\00_Intime.OPC.Domain.csproj">
       <Project>{03e03b5b-ead6-4e27-976d-82d15f7396d7}</Project>
       <Name>00_Intime.OPC.Domain</Name>
@@ -75,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

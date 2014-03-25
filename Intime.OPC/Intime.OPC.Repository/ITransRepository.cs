@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using Intime.OPC.Domain.Models;
+﻿using Intime.OPC.Domain.Models;
+using System.Collections.Generic;
+using Intime.OPC.Domain;
 
 namespace Intime.OPC.Repository
 {
@@ -10,5 +11,7 @@ namespace Intime.OPC.Repository
         IList<OPC_SaleDetail> SelectSaleDetail(IEnumerable<string> saleNos);
 
         ResultMsg InputRemark(string strID, string remark, string strType);
+
+        
     }
 }
