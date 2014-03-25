@@ -87,6 +87,7 @@
     <Compile Include="IService\IPrint.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
     <Compile Include="ViewModels\RemarkViewModel.cs" />
+    <Compile Include="ViewModels\CustomerInquiriesViewModel.cs" />
     <Compile Include="ViewModels\StoreOutViewModel.cs" />
     <Compile Include="ViewModels\StoreInViewModel.cs" />
     <Compile Include="ViewModels\PrintInvoiceViewModel.cs" />
@@ -95,6 +96,9 @@
     </Compile>
     <Compile Include="Views\RemarkWin.xaml.cs">
       <DependentUpon>RemarkWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomerInquiries.xaml.cs">
+      <DependentUpon>CustomerInquiries.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StoreOut.xaml.cs">
       <DependentUpon>StoreOut.xaml</DependentUpon>
@@ -110,6 +114,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\RemarkWin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CustomerInquiries.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
