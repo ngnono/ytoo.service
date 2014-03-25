@@ -50,7 +50,7 @@
                             <TextBox Width="100"   Foreground="Blue" Background="White" Text="{Binding OrderGet.Store}"/>
                             <TextBlock Text="  品牌" />
                             <TextBox Width="100"   Foreground="Blue" Background="White" Text="{Binding OrderGet.BrandId}"/>
-                            <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
+                            <Button Content="查询" Width="60"  Command="{Binding CommandGetOrder}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="2" Background="LightGray" >
@@ -76,7 +76,7 @@
                             <TextBlock Text="    订单" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="4" ItemsSource="{Binding OrderList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectOrder}" Selected="{Binding CommandGetSaleByOrderId}"  >
+                    <DataGrid Grid.Row="4" ItemsSource="{Binding OrderList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectOrder}"   >
                         <DataGrid.Columns >
 
                             <DataGridTextColumn Header="订单号"  Binding="{Binding OrderNo}" />
@@ -112,7 +112,7 @@
                             <TextBlock Text="   销售单" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="6" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"  SelectedItem="{Binding SelectSale}" Selected="{Binding CommandGetSaleDetailBySaleId}" >
+                    <DataGrid Grid.Row="6" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"  SelectedItem="{Binding SelectSale}"  >
                         <DataGrid.Columns >
                             <DataGridTextColumn Header="销售单号"  Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Header="订单号"  Binding="{Binding OrderNo}" />
@@ -192,7 +192,7 @@
                             <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding ShippingGet.CustomerPhone}"/>
                                 <TextBlock Text="  品牌" />
                             <TextBox Width="150"   Foreground="Blue" Background="White" Text="{Binding ShippingGet.BrandId}"/>
-                                <Button Content="查询" Width="60"  Command="{Binding CommandSearch}"/>
+                            <Button Content="查询" Width="60"  Command="{Binding CommandGetOrder}"/>
                             </StackPanel>
                         </Grid>
 
@@ -201,8 +201,8 @@
                                 <TextBlock Text="   发货单" />
                             </StackPanel>
                         </StackPanel>
-    
-                        <DataGrid Grid.Row="3" ItemsSource="{Binding OPC_ShippingSale}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"   >
+
+                    <DataGrid Grid.Row="3" ItemsSource="{Binding ShippingList}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"  SelectedItem="{Binding SelectShipping}"  >
                             <DataGrid.Columns >
                                 <DataGridTextColumn Header="发货单号"  Binding="{Binding GoodsOutCode}" />
                                 <DataGridTextColumn Header="快递单号"  Binding="{Binding ExpressCode}" />
@@ -222,7 +222,7 @@
                                 <TextBlock Text="   订单信息" />
                             </StackPanel>
                         </Grid>
-                        <DataGrid Grid.Row="5" ItemsSource="{Binding OutOrderList}"  AutoGenerateColumns="False" SelectedItem="{Binding SelectOrder}"  >
+                    <DataGrid Grid.Row="5" ItemsSource="{Binding OutOrderList}"  AutoGenerateColumns="False" SelectedItem="{Binding SelectOrderShipping}"  >
                         <DataGrid.Columns >
                             <DataGridTextColumn Header="订单号"  Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="渠道订单号"  Binding="{Binding OrderChannelNo}" />

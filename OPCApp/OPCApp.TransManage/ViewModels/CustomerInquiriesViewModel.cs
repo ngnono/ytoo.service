@@ -37,10 +37,29 @@ namespace OPCApp.TransManage.ViewModels
 
         }
 
-        #region Tab1页签
         public DelegateCommand CommandGetOrder { get; set; }
         public DelegateCommand CommandGetSaleByOrderId { get; set; }
         public DelegateCommand CommandGetSaleDetailBySaleId { get; set; }
+
+        public DelegateCommand CommandGetShipping { get; set; }
+        public DelegateCommand CommandGetOrderByShippingId { get; set; }
+        public DelegateCommand CommandGetSaleByOrderNoShipping { get; set; }
+
+        public CustomerInquiriesViewModel()
+        {
+            //Tab 订单查询
+            this.CommandGetOrder = new DelegateCommand(this.GetOrder);
+            this.CommandGetSaleByOrderId = new DelegateCommand(this.GetSaleByOrderId);
+            this.CommandGetSaleDetailBySaleId = new DelegateCommand(this.GetSaleDetailBySaleId);
+
+            //Tab 发货信息
+            this.CommandGetShipping = new DelegateCommand(this.GetShipping);
+            this.CommandGetOrderByShippingId = new DelegateCommand(this.GetOrderByShippingId);
+            this.CommandGetSaleByOrderNoShipping = new DelegateCommand(this.GetSaleByOrderNoShipping);
+            orderGet = new OrderGet();
+        }
+        #region Tab1页签
+       
 
         //Tab1选中的Order中的数据集
         private Order selectOrder;
@@ -93,20 +112,13 @@ namespace OPCApp.TransManage.ViewModels
             set { SetProperty(ref this.orderGet, value); }
         }
 
-        public CustomerInquiriesViewModel()
-        {
-            //初始化命令属性
-            CommandGetOrder = new DelegateCommand(GetOrder);
-
-            CommandGetSaleByOrderId = new DelegateCommand(GetSaleByOrderId);
-            CommandGetSaleDetailBySaleId = new DelegateCommand(GetSaleDetailBySaleId);
-        }
+        
 
 
 
         public void GetOrder()
         {
-            var orderfilter = string.Format("orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}", OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString(), OrderGet.EndCreateDate.ToShortDateString(), OrderGet.StoreId, OrderGet.BrandId, OrderGet.Status, OrderGet.PaymentType, OrderGet.OutGoodsType, OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
+            var orderfilter = string.Format("orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}", OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate, OrderGet.EndCreateDate, OrderGet.StoreId, OrderGet.BrandId, OrderGet.Status, OrderGet.PaymentType, OrderGet.OutGoodsType, OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
 
             OrderList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
 
@@ -119,7 +131,7 @@ namespace OPCApp.TransManage.ViewModels
             }
             string orderId = SelectOrder.Id.ToString();
             //这个工作状态
-            SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderId(orderId).Result;
+            SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderId).Result;
 
         }
 
@@ -136,9 +148,7 @@ namespace OPCApp.TransManage.ViewModels
         #endregion
 
         #region Tab2页签
-        public DelegateCommand CommandGetShipping { get; set; }
-        public DelegateCommand CommandGetOrderByShippingId { get; set; }
-        public DelegateCommand CommandGetSaleByOrderIdShipping { get; set; }
+        
 
         //Tab 发货查询 选中的Shipping中的数据集
         private OPC_ShippingSale selectShipping;
@@ -178,7 +188,7 @@ namespace OPCApp.TransManage.ViewModels
 
         //Tab  发货查询 中Grid数据集sale
         private IEnumerable<OPC_Sale> saleListShipping;
-        public IEnumerable<OPC_Sale> SaleDetailList
+        public IEnumerable<OPC_Sale> SaleListShipping
         {
 
             get { return this.saleListShipping; }
@@ -186,52 +196,44 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         //Tab  发货查询  界面查询条件
-        private OrderGet shippingGet;
-        public OrderGet ShippingGet
+        private ShippingGet shippingGet;
+        public ShippingGet ShippingGet
         {
             get { return this.shippingGet; }
             set { SetProperty(ref this.shippingGet, value); }
         }
 
-        public CustomerInquiriesViewModel()
-        {
-            //初始化命令属性
-            CommandGetShipping = new DelegateCommand(GetShipping);
-
-            CommandGetOrderByShippingId = new DelegateCommand(GetOrderByShippingId);
-            CommandGetSaleByOrderIdShipping = new DelegateCommand(GetSaleByOrderIdShipping);
-        }
 
 
 
         public void GetShipping()
         {
-            var orderfilter = string.Format("orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}", OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString(), OrderGet.EndCreateDate.ToShortDateString(), OrderGet.StoreId, OrderGet.BrandId, OrderGet.Status, OrderGet.PaymentType, OrderGet.OutGoodsType, OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
+            var shippingfilter = string.Format("OrderNo={0}&ExpressNo={1}&StartGoodsOutDate={2}&EndGoodsOutDate={3}&OutGoodsCode={4}&SectionId={5}&ShippingStatus={6}&CustomerPhone={7}&BrandId={8}", ShippingGet.OrderNo, ShippingGet.ExpressNo, ShippingGet.StartGoodsOutDate.ToShortDateString(), ShippingGet.EndGoodsOutDate.ToShortDateString(), ShippingGet.OutGoodsCode, ShippingGet.SectionId, ShippingGet.ShippingStatus, ShippingGet.CustomerPhone, ShippingGet.BrandId);
 
-            OrderList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
+            ShippingList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetShipping(shippingfilter).Result;
 
         }
         public void GetOrderByShippingId()
         {
-            if (string.IsNullOrEmpty(SelectOrder.Id.ToString()))
+            if (string.IsNullOrEmpty(SelectShipping.Id.ToString()))
             {
                 return;
             }
-            string orderId = SelectOrder.Id.ToString();
+            string shippingId = SelectShipping.Id.ToString();
             //这个工作状态
-            SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderId(orderId).Result;
+            OrderListShipping = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderByShippingId(shippingId).Result;
 
         }
 
-        public void GetSaleByOrderIdShipping()
+        public void GetSaleByOrderNoShipping()
         {
-            if (string.IsNullOrEmpty(SelectSale.Id.ToString()))
+            if (string.IsNullOrEmpty(SelectOrderShipping.Id.ToString()))
             {
                 return;
             }
-            string saleOrderNo = SelectSale.SaleOrderNo.ToString();
+            string OrderNo = SelectOrderShipping.OrderNo.ToString();
             //这个工作状态
-            SaleDetailList = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleOrderNo).Result;
+            SaleListShipping = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(OrderNo).Result;
         }
         #endregion
 
