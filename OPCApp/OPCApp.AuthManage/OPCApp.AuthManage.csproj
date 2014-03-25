@@ -78,13 +78,13 @@
     <Compile Include="AuthModule.cs" />
     <Compile Include="ViewModels\Role2MenuWindowViewModel.cs" />
     <Compile Include="ViewModels\Role2UserWindowViewModel.cs" />
-    <Compile Include="ViewModels\Role\RoleListViewModel.cs" />
+    <Compile Include="ViewModels\RoleListViewModel.cs" />
     <Compile Include="ViewModels\UsersWindowViewModel.cs" />
     <Compile Include="Views\AuthTab.xaml.cs">
       <DependentUpon>AuthTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\Role\RoleViewModel.cs" />
+    <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\AuthNavigationItemViewModel.cs" />
     <Compile Include="ViewModels\UserAddWindowViewModel.cs" />
     <Compile Include="ViewModels\UserListWindowViewModel.cs" />
