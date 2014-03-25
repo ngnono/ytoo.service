@@ -77,58 +77,6 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
-        /// <summary>
-        ///     对订单、销售单、销售明细进行备注
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="remark"></param>
-        /// <param name="strType"></param>
-        /// <returns></returns>
-        public ResultMsg InputRemark(string strID, string remark, string strType)
-        {
-            using (var db = new YintaiHZhouContext())
-            {
-                int intid = int.Parse(strID);
-                var msg = new ResultMsg();
-                try
-                {
-                    //订单
-                    if (strType == "1")
-                    {
-                    }
-                        //销售单
-                    else if (strType == "2")
-                    {
-                        OPC_SaleComment entity4Add = db.OPC_SaleComment.Create();
-                        entity4Add.Content = remark;
-                        entity4Add.CreateDate = DateTime.Now;
-                        entity4Add.CreateUser = 1;
-                        entity4Add.UpdateDate = DateTime.Now;
-                        entity4Add.UpdateUser = 1;
-                        db.OPC_SaleComment.Add(entity4Add);
-                    }
-                        //销售单备注
-                    else if (strType == "3")
-                    {
-                        OPC_SaleComment entity4Add = db.OPC_SaleComment.Create();
-                        entity4Add.Content = remark;
-                        entity4Add.CreateDate = DateTime.Now;
-                        entity4Add.CreateUser = 1;
-                        entity4Add.UpdateDate = DateTime.Now;
-                        entity4Add.UpdateUser = 1;
-                        db.OPC_SaleComment.Add(entity4Add);
-                    }
-                    msg.IsSuccess = true;
-                    msg.Msg = "";
-                }
-                catch
-                {
-                    msg.IsSuccess = false;
-                    msg.Msg = "";
-                }
-                return msg;
-            }
-        }
 
         #endregion
     }

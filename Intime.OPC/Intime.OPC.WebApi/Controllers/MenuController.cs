@@ -65,8 +65,6 @@ namespace Intime.OPC.WebApi.Controllers
             }
             return BadRequest("用户名未登录，或用户名为空");
 
-            //TODO:check params
-            return Ok();
         }
     }
 }

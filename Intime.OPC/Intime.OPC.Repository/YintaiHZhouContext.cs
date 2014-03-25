@@ -4,7 +4,7 @@ using Intime.OPC.Domain.Models.Mapping;
 
 namespace Intime.OPC.Repository
 {
-    public partial class YintaiHZhouContext : DbContext
+    public class YintaiHZhouContext : DbContext
     {
         static YintaiHZhouContext()
         {
@@ -16,7 +16,6 @@ namespace Intime.OPC.Repository
         {
         }
 
-
         public DbSet<OPC_AuthMenu> OPC_AuthMenu { get; set; }
         public DbSet<OPC_AuthRole> OPC_AuthRole { get; set; }
         public DbSet<OPC_AuthRoleMenu> OPC_AuthRoleMenu { get; set; }
@@ -24,7 +23,6 @@ namespace Intime.OPC.Repository
         public DbSet<OPC_AuthUser> OPC_AuthUser { get; set; }
         public DbSet<OPC_ChannelProduct> OPC_ChannelProduct { get; set; }
         public DbSet<OPC_OrderComment> OPC_OrderComment { get; set; }
-        public DbSet<OPC_OrgInfo> OPC_OrgInfo { get; set; }
         public DbSet<OPC_RMA> OPC_RMA { get; set; }
         public DbSet<OPC_RMADetail> OPC_RMADetail { get; set; }
         public DbSet<OPC_RMALog> OPC_RMALog { get; set; }
@@ -37,14 +35,9 @@ namespace Intime.OPC.Repository
         public DbSet<OPC_Stock> OPC_Stock { get; set; }
         public DbSet<OPC_StorePriority> OPC_StorePriority { get; set; }
         public DbSet<OPC_SupplierInfo> OPC_SupplierInfo { get; set; }
-        public DbSet<Order> Orders { get; set; }
-
-        public DbSet<Store> Stores { get; set; }
-        public DbSet<Section> Sections { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMenuMap());
@@ -52,7 +45,6 @@ namespace Intime.OPC.Repository
             modelBuilder.Configurations.Add(new OPC_AuthUserMap());
             modelBuilder.Configurations.Add(new OPC_ChannelProductMap());
             modelBuilder.Configurations.Add(new OPC_OrderCommentMap());
-            modelBuilder.Configurations.Add(new OPC_OrgInfoMap());
             modelBuilder.Configurations.Add(new OPC_RMAMap());
             modelBuilder.Configurations.Add(new OPC_RMADetailMap());
             modelBuilder.Configurations.Add(new OPC_RMALogMap());
@@ -65,11 +57,6 @@ namespace Intime.OPC.Repository
             modelBuilder.Configurations.Add(new OPC_StockMap());
             modelBuilder.Configurations.Add(new OPC_StorePriorityMap());
             modelBuilder.Configurations.Add(new OPC_SupplierInfoMap());
-            modelBuilder.Configurations.Add(new OrderMap());
-
-            modelBuilder.Configurations.Add(new SectionMap());
-            modelBuilder.Configurations.Add(new StoreMap());
-
         }
     }
 }
