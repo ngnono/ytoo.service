@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using Intime.OPC.Domain.Models;
+using System.Collections.Generic;
 
 namespace Intime.OPC.Repository
 {
     public interface IMenuRepository : IRepository<OPC_AuthMenu>
     {
-        IList<OPC_AuthMenu> GetMenusByUserID(int userID);
+        IEnumerable<OPC_AuthMenu> GetMenusByUserID(int userID);
 
-        IList<OPC_AuthMenu> GetMenusByRoleID(int roleID);
+        IEnumerable<OPC_AuthMenu> GetMenusByRoleID(int roleID);
     }
 }

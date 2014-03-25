@@ -11,40 +11,40 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Repository
 {
     /// <summary>
-    ///     Interface IRespository
+    /// Interface IRespository
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IRepository<T> where T : class, IEntity
+    public interface IRepository<T> where T : class ,IEntity
     {
         /// <summary>
-        ///     Creates the specified entity.
+        /// Creates the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool Create(T entity);
-
         /// <summary>
-        ///     Updates the specified entity.
+        /// Updates the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool Update(T entity);
-
         /// <summary>
-        ///     Deletes the specified identifier.
+        /// Deletes the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool Delete(int id);
 
         /// <summary>
-        ///     通过ID获得实体
+        /// 通过ID获得实体
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>`0.</returns>

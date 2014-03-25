@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using Intime.OPC.Domain.Models;
+﻿using Intime.OPC.Domain.Models;
+using System.Collections.Generic;
+using Intime.OPC.Domain;
 
 namespace Intime.OPC.Repository
 {
@@ -9,6 +10,8 @@ namespace Intime.OPC.Repository
         IList<OPC_Sale> Select(string startDate, string endDate, string orderNo, string saleOrderNo);
         IList<OPC_SaleDetail> SelectSaleDetail(IEnumerable<string> saleNos);
 
-        //ResultMsg InputRemark(string strID, string remark, string strType);
+        ResultMsg InputRemark(string strID, string remark, string strType);
+
+        
     }
 }

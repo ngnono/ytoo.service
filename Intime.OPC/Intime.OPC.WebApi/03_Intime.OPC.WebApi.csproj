@@ -116,7 +116,6 @@
     <Compile Include="Core\HeadConfig.cs" />
     <Compile Include="Core\MessageHandlers\AccessToken\AccessTokenConst.cs" />
     <Compile Include="Core\MessageHandlers\AccessToken\AccessTokenMessageHandler.cs" />
-    <Compile Include="Core\MessageHandlers\AccessToken\UserIdFilterAttribute.cs" />
     <Compile Include="Core\MessageHandlers\Signature\IAppSecurityManager.cs" />
     <Compile Include="Core\MessageHandlers\Signature\SignatureMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\Signature\AppSecurityManager.cs" />

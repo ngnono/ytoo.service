@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Intime.OPC.Domain.Models;
+using System.Collections.Generic;
+using System;
+using Intime.OPC.Domain;
 
 namespace Intime.OPC.Repository.Support
 {
     public class TransRepository : ITransRepository
     {
-        #region ITransRepository Members
-
-        public IList<OPC_Sale> Select(string startDate, string endDate, string orderNo, string saleOrderNo)
+        
+       
+        public IList<OPC_Sale> Select(string startDate, string endDate, string orderNo, string saleOrderNo) 
         {
-            using (var db = new YintaiHZhouContext())
+            using (var db = new YintaiHZhouContext()) 
             {
-                DateTime dateNow = DateTime.Now;
-                DateTime dateStart = dateNow;
-                DateTime dateEnd = dateNow;
+                
+                DateTime dateNow = System.DateTime.Now;
+                System.DateTime dateStart = dateNow;
+                System.DateTime dateEnd = dateNow;
                 if (!string.IsNullOrEmpty(startDate))
                 {
                     dateStart = Convert.ToDateTime(startDate);
@@ -24,8 +26,8 @@ namespace Intime.OPC.Repository.Support
                 {
                     dateEnd = Convert.ToDateTime(endDate);
                 }
-
-                IQueryable<OPC_Sale> saleList = db.OPC_Sale.Where(e => 1 == 1);
+                
+                var saleList = db.OPC_Sale.Where(e=>1==1);
                 if (dateStart != dateNow)
                 {
                     saleList = saleList.Where(p => p.SellDate >= dateStart);
@@ -46,15 +48,15 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
-        public bool Finish(Dictionary<string, string> sale)
+        public bool Finish(Dictionary<string, string> sale) 
         {
-            using (var db = new YintaiHZhouContext())
+            using (var db = new YintaiHZhouContext()) 
             {
-                int intid = int.Parse(sale["id"]);
-                int intstatus = int.Parse(sale["status"]);
+                int intid = int.Parse(sale["id"].ToString());
+                int intstatus = int.Parse(sale["status"].ToString());
 
-                OPC_Sale user = db.OPC_Sale.Where(e => e.Id == intid).FirstOrDefault();
-                if (user != null)
+                var user = db.OPC_Sale.Where(e => e.Id == intid).FirstOrDefault();
+                if (user != null) 
                 {
                     user.Status = intstatus;
                     db.SaveChanges();
@@ -65,7 +67,7 @@ namespace Intime.OPC.Repository.Support
         }
 
         /// <summary>
-        ///     查询销售单明细信息
+        /// 查询销售单明细信息
         /// </summary>
         /// <param name="saleIDs">销售单ID串</param>
         /// <returns></returns>
@@ -77,7 +79,60 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        /// <summary>
+        /// 对订单、销售单、销售明细进行备注
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="remark"></param>
+        /// <param name="strType"></param>
+        /// <returns></returns>
+        public ResultMsg InputRemark(string strID, string remark, string strType)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                int intid = int.Parse(strID);
+                ResultMsg msg = new ResultMsg();
+                try
+                {
+                    //订单
+                    if (strType == "1")
+                    {
 
-        #endregion
+                    }
+                    //销售单
+                    else if (strType == "2")
+                    {
+                        var entity4Add = db.OPC_SaleComment.Create();
+                        entity4Add.Content = remark;
+                        entity4Add.CreateDate = System.DateTime.Now;
+                        entity4Add.CreateUser = 1;
+                        entity4Add.UpdateDate = System.DateTime.Now;
+                        entity4Add.UpdateUser = 1;
+                        db.OPC_SaleComment.Add(entity4Add);
+                    }
+                    //销售单备注
+                    else if (strType == "3")
+                    {
+                        var entity4Add = db.OPC_SaleComment.Create();
+                        entity4Add.Content = remark;
+                        entity4Add.CreateDate = System.DateTime.Now;
+                        entity4Add.CreateUser = 1;
+                        entity4Add.UpdateDate = System.DateTime.Now;
+                        entity4Add.UpdateUser = 1;
+                        db.OPC_SaleComment.Add(entity4Add);
+                    }
+                    msg.IsSuccess = true;
+                    msg.Msg = "";
+                }
+                catch
+                {
+                    msg.IsSuccess = false;
+                    msg.Msg = "";
+                }
+                return msg;
+            }
+            
+        }
+
     }
 }

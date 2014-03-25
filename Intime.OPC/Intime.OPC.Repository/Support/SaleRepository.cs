@@ -11,7 +11,6 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +21,14 @@ using Intime.OPC.Repository.Base;
 namespace Intime.OPC.Repository.Support
 {
     /// <summary>
-    ///     Class SaleRepository.
+    /// Class SaleRepository.
     /// </summary>
     public class SaleRepository : BaseRepository<OPC_Sale>, ISaleRepository
     {
         #region ISaleRepository Members
 
         /// <summary>
-        ///     Selects this instance.
+        /// Selects this instance.
         /// </summary>
         /// <returns>IList{OPC_Sale}.</returns>
         public IList<OPC_Sale> Select()
@@ -42,7 +41,7 @@ namespace Intime.OPC.Repository.Support
         }
 
         /// <summary>
-        ///     Gets the by sale no.
+        /// Gets the by sale no.
         /// </summary>
         /// <param name="saleNo">The sale no.</param>
         /// <returns>OPC_Sale.</returns>
@@ -55,7 +54,7 @@ namespace Intime.OPC.Repository.Support
         }
 
         /// <summary>
-        ///     Gets the sale order details.
+        /// Gets the sale order details.
         /// </summary>
         /// <param name="saleOrderNo">The sale order no.</param>
         /// <returns>IList{OPC_SaleDetail}.</returns>
@@ -68,7 +67,7 @@ namespace Intime.OPC.Repository.Support
         }
 
         /// <summary>
-        ///     获得已完成 打印销售单 的数据
+        /// 获得已完成 打印销售单 的数据
         /// </summary>
         /// <param name="saleId">The sale identifier.</param>
         /// <param name="orderNo">The order no.</param>
@@ -77,11 +76,11 @@ namespace Intime.OPC.Repository.Support
         /// <returns>IList{OPC_Sale}.</returns>
         public IList<OPC_Sale> GetPrintSale(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
-            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintSale);
+            return GetData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintSale);
         }
 
         /// <summary>
-        ///     获得 未提货 的数据
+        /// 获得 未提货 的数据
         /// </summary>
         /// <param name="saleId">The sale identifier.</param>
         /// <param name="orderNo">The order no.</param>
@@ -90,11 +89,11 @@ namespace Intime.OPC.Repository.Support
         /// <returns>IList{OPC_Sale}.</returns>
         public IList<OPC_Sale> GetNoPickUp(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
-            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.NoPickUp);
+            return GetData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.NoPickUp);
         }
 
         /// <summary>
-        ///     Updates the satus.
+        /// Updates the satus.
         /// </summary>
         /// <param name="saleNos">The sale nos.</param>
         /// <param name="saleOrderStatus">The sale order status.</param>
@@ -114,14 +113,21 @@ namespace Intime.OPC.Repository.Support
                         sale.Status = (int) saleOrderStatus;
                     }
                 }
-                db.SaveChanges();
-                return true;
-               
+                try
+                {
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    //todo 增加错误日志
+                    return false;
+                }
             }
         }
 
         /// <summary>
-        ///     Gets the print express.
+        /// Gets the print express.
         /// </summary>
         /// <param name="saleOrderNo">The sale order no.</param>
         /// <param name="orderNo">The order no.</param>
@@ -130,11 +136,11 @@ namespace Intime.OPC.Repository.Support
         /// <returns>IList{OPC_Sale}.</returns>
         public IList<OPC_Sale> GetPrintExpress(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
-            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintExpress);
+            return GetData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintExpress);
         }
 
         /// <summary>
-        ///     Gets the print invoice.
+        /// Gets the print invoice.
         /// </summary>
         /// <param name="saleOrderNo">The sale order no.</param>
         /// <param name="orderNo">The order no.</param>
@@ -143,18 +149,19 @@ namespace Intime.OPC.Repository.Support
         /// <returns>IList{OPC_Sale}.</returns>
         public IList<OPC_Sale> GetPrintInvoice(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
-            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintInvoice);
+            return GetData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintInvoice);
         }
 
         public IList<OPC_Sale> GetShipInStorage(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
-            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.ShipInStorage);
+            return GetData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.ShipInStorage);
         }
 
         #endregion
 
+    
         /// <summary>
-        ///     Gets the data.
+        /// Gets the data.
         /// </summary>
         /// <param name="saleId">The sale identifier.</param>
         /// <param name="orderNo">The order no.</param>
@@ -162,7 +169,7 @@ namespace Intime.OPC.Repository.Support
         /// <param name="dtEnd">The dt end.</param>
         /// <param name="saleOrderStatus">The sale order status.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        private IList<OPC_Sale> getSalesData(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
+        private IList<OPC_Sale> GetData(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
             EnumSaleOrderStatus saleOrderStatus)
         {
             using (var db = new YintaiHZhouContext())

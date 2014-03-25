@@ -1,19 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Intime.OPC.Domain.Models;
+using System.Collections.Generic;
 using Intime.OPC.Repository.Base;
 
 namespace Intime.OPC.Repository.Support
 {
     public class AccountRepository : BaseRepository<OPC_AuthUser>, IAccountRepository
     {
-        #region IAccountRepository Members
-
         public OPC_AuthUser Get(string userName, string password)
         {
             using (var db = new YintaiHZhouContext())
             {
+                //var query = db.OPC_AuthUser
+                //    .Where(b => (b.LogonName == userName && b.Password == password))
+                //    .Select(item => new OPC_AuthUser()
+                //    {
+                //        Id = item.Id,
+                //        LogonName = item.LogonName
+                //    });
+
+                //return query.FirstOrDefault();
+
                 return db.OPC_AuthUser.FirstOrDefault(t => t.LogonName == userName && t.Password == password);
+
             }
         }
 
@@ -21,7 +32,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                OPC_AuthUser user = db.OPC_AuthUser.FirstOrDefault(t => t.Id == userId);
+                var user = db.OPC_AuthUser.FirstOrDefault(t => t.Id == userId);
                 if (user != null)
                 {
                     user.IsValid = enable;
@@ -32,11 +43,10 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
-        public IList<OPC_AuthUser> All()
+
+        public IEnumerable<OPC_AuthUser> All()
         {
             return Select(t => t.IsValid == true);
         }
-
-        #endregion
     }
 }
