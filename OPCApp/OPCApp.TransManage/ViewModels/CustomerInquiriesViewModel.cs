@@ -109,7 +109,7 @@ namespace OPCApp.TransManage.ViewModels
         {
             var orderfilter = string.Format("orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}", Order4Get.OrderNo, Order4Get.OrderSource, Order4Get.StartCreateDate.ToShortDateString(), Order4Get.EndCreateDate.ToShortDateString(), Order4Get.StoreId, Order4Get.BrandId, Order4Get.Status, Order4Get.PaymentType, Order4Get.OutGoodsType, Order4Get.ShippingContactPhone, Order4Get.ExpressDeliveryCode, Order4Get.ExpressDeliveryCompany);
 
-            OrderList = AppEx.Container.GetInstance<ICustomerInquiries>().GetOrder(orderfilter).Result;
+            OrderList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
 
         }
          public void GetSaleByOrderId()
@@ -120,7 +120,7 @@ namespace OPCApp.TransManage.ViewModels
             }
             string orderId = SelectOrder.Id.ToString();
             //这个工作状态
-            SaleList = AppEx.Container.GetInstance<ICustomerInquiries>().GetSaleByOrderId(orderId).Result;
+            SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderId(orderId).Result;
 
         }
 
