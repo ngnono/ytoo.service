@@ -17,7 +17,7 @@ namespace OPCApp.TransManage.ViewModels
 {
      [Export("CustomerInquiriesViewModel", typeof(CustomerInquiriesViewModel))]
    public class CustomerInquiriesViewModel:BindableBase
-    {
+    {//1
         public DelegateCommand CommandGetOrder { get; set; }
         public DelegateCommand CommandGetSaleByOrderId { get; set; }
         public DelegateCommand CommandPrintExpress { get; set; }
