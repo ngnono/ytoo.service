@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="IMenuService.cs" />
     <Compile Include="IAccountService.cs" />
+    <Compile Include="IOrderService.cs" />
     <Compile Include="IRoleService.cs" />
     <Compile Include="ISaleService.cs" />
     <Compile Include="ITransService.cs" />
