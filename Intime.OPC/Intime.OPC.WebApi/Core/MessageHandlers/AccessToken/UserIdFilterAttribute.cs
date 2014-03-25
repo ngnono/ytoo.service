@@ -10,15 +10,15 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
     {
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            if (actionContext.Request.Properties.ContainsKey(AccessTokenConst.USERID_PROPERTIES_NAME))
+            if (actionContext.Request.Properties.ContainsKey(AccessTokenConst.UseridPropertiesName))
             {
                 if (actionContext.ActionArguments.ContainsKey("userId"))
                 {
-                    actionContext.ActionArguments["userId"] = actionContext.Request.Properties[AccessTokenConst.USERID_PROPERTIES_NAME];
+                    actionContext.ActionArguments["userId"] = actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName];
                 }
                 else
                 {
-                    actionContext.ActionArguments.Add("userId", actionContext.Request.Properties[AccessTokenConst.USERID_PROPERTIES_NAME]);
+                    actionContext.ActionArguments.Add("userId", actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName]);
                 }
             }
         }

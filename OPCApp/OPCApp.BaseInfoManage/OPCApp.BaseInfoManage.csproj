@@ -89,6 +89,7 @@
     <Compile Include="Common\JsonExtension.cs" />
     <Compile Include="Models\StoreInfo.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
+    <Compile Include="ViewModels\StoreAddWindowViewModel.cs" />
     <Compile Include="ViewModels\StoreManageViewModel.cs" />
     <Compile Include="ViewModels\OrgManageViewModel.cs" />
     <Compile Include="Views\OrgManage.xaml.cs">
@@ -189,6 +190,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
+      <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
+      <Name>OPCApp.DataService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
       <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
       <Name>OPCApp.Domain</Name>

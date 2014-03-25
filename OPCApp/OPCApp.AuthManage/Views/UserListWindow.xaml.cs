@@ -32,9 +32,5 @@ namespace OPCApp.AuthManage.Views
             return false;
         }
 
-        public void OnImportsSatisfied()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

@@ -51,14 +51,14 @@
                     </Grid>
                     <Grid Grid.Column="1" Background="LightGray" Margin="3"  >
                         <StackPanel Orientation="Horizontal" >
-                            <TextBlock Width="90" Text="邮政编码：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBox   Foreground="Blue" Width="300" Height="40" />
+                            <TextBlock Width="90" Text="邮政编码：" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                        <TextBox   Foreground="Blue" Width="300" Height="40"  Text="{Binding Model.RMAZipCode}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="0" Background="LightGray" Margin="15"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="店联系人：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBox   Foreground="Blue" Width="300" Height="40"/>
+                        <TextBox   Foreground="Blue" Width="300" Height="40" Text="{Binding Model.RMAPerson}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="1" Background="LightGray" Margin="3"  >
@@ -70,25 +70,25 @@
                     <Grid Grid.Row="2" Grid.Column="0" Background="LightGray" Margin="15"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="门店退货地址：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBox   Foreground="Blue" Width="300" Height="40"/>
+                        <TextBox   Foreground="Blue" Width="300" Height="40" Text="{Binding Model.RMAAddress}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="2" Grid.Column="1" Background="LightGray" Margin="3"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="门店顺序号：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBox   Foreground="Blue" Width="300" Height="40"/>
+                        <TextBox   Foreground="Blue" Width="300" Height="40" Text="{Binding Model.Id}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="3" Grid.Column="0" Background="LightGray" Margin="15"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="退货联系人：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBox   Foreground="Blue" Width="300" Height="40"/>
+                        <TextBox   Foreground="Blue" Width="300"  Text="{Binding Model.RMAPerson}" Height="40"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="3" Grid.Column="1" Background="LightGray" Margin="3"  >
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Width="90" Text="退货电话：" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBox   Foreground="Blue" Width="300" Height="40"/>
+                        <TextBox   Foreground="Blue" Width="300"  Text="{Binding Model.RMAPhone}" Height="40"/>
                         </StackPanel>
                     </Grid>
                     
