@@ -20,4 +20,5 @@ namespace OPCApp.BaseInfoManage.ViewModels
             return AppEx.Container.GetInstance<OPCApp.DataService.Interface.IStoreDataService>();
         }
     }
+
 }
