@@ -60,7 +60,6 @@
     <Compile Include="ITransRepository.cs" />
     <Compile Include="IRoleUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResultMsg.cs" />
     <Compile Include="Support\MenuRepository.cs" />
     <Compile Include="Support\AccountRepository.cs" />
     <Compile Include="Support\OrderRemarkRepository.cs" />
