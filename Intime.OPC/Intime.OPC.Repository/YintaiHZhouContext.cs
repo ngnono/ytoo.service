@@ -36,6 +36,9 @@ namespace Intime.OPC.Repository
         public DbSet<OPC_StorePriority> OPC_StorePriority { get; set; }
         public DbSet<OPC_SupplierInfo> OPC_SupplierInfo { get; set; }
 
+        public DbSet<Section> Sections { get; set; }
+        public DbSet<Store> Stores { get; set; }
+        public DbSet<Order> Orders { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
@@ -57,6 +60,10 @@ namespace Intime.OPC.Repository
             modelBuilder.Configurations.Add(new OPC_StockMap());
             modelBuilder.Configurations.Add(new OPC_StorePriorityMap());
             modelBuilder.Configurations.Add(new OPC_SupplierInfoMap());
+            modelBuilder.Configurations.Add(new SectionMap());
+            modelBuilder.Configurations.Add(new OrderMap());
+            modelBuilder.Configurations.Add(new StoreMap());
+            
         }
     }
 }

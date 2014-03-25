@@ -11,6 +11,9 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using System.Collections.Generic;
+using System.Linq;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -21,5 +24,57 @@ namespace Intime.OPC.Repository.Support
     /// </summary>
     public class OrderRepository : BaseRepository<Order>, IOrderRepository
     {
+        public IList<Order> GetOrder(string orderNo, string orderSource, System.DateTime dtStart, System.DateTime dtEnd, int storeId, 
+            int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone, 
+            string expressDeliveryCode, int expressDeliveryCompany)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var query = db.Orders.Where(t=>t.CreateDate>=dtStart && t.CreateDate<=dtEnd);
+                if (!string.IsNullOrWhiteSpace(orderNo))
+                {
+                    query = query.Where(t => t.OrderNo == orderNo);
+                }
+                if (!string.IsNullOrWhiteSpace(orderSource))
+                {
+                    query = query.Where(t => t.OrderSource == orderSource);
+                }
+                if (storeId>0)
+                {
+                    query = query.Where(t => t.StoreId == storeId);
+                }
+                if (brandId>0)
+                {
+                    query = query.Where(t => t.BrandId == brandId);
+                }
+                if (status > -1)
+                {
+                    query = query.Where(t => t.Status == status);
+                }
+                if (!string.IsNullOrWhiteSpace(paymentType))
+                {
+                    query = query.Where(t => t.PaymentMethodCode == paymentType);
+                }
+                if (!string.IsNullOrWhiteSpace(outGoodsType))
+                {
+                    query = query.Where(t => t.PaymentMethodCode == outGoodsType);
+                }
+
+                if (!string.IsNullOrWhiteSpace(shippingContactPhone))
+                {
+                    query = query.Where(t => t.ShippingContactPhone == shippingContactPhone);
+                }
+                if (!string.IsNullOrWhiteSpace(expressDeliveryCode))
+                {
+                    query = query.Where(t => t.ShippingNo == expressDeliveryCode);
+                }
+                if (expressDeliveryCompany>-1)
+                {
+                    query = query.Where(t => t.ShippingVia == expressDeliveryCompany);
+                }
+
+                return query.ToList();
+            }
+        }
     }
 }

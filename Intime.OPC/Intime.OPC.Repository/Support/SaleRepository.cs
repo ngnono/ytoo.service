@@ -183,5 +183,14 @@ namespace Intime.OPC.Repository.Support
                 return result.ToList();
             }
         }
+
+
+        public IList<OPC_Sale> GetByOrderNo(string orderID)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                return db.OPC_Sale.Where(t => t.OrderNo == orderID).ToList();
+            }
+        }
     }
 }

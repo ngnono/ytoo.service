@@ -39,8 +39,6 @@ namespace Intime.OPC.Service
         /// <param name="expressDeliveryCompany">The express delivery company.</param>
         /// <param name="userId">The user identifier.</param>
         /// <returns>IList{OrderDto}.</returns>
-        IList<OrderDto> GetOrderInfo(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd,
-            string storeId, string brandId, string status, string paymentType, string outGoodsType,
-            string shippingContactPhone, string expressDeliveryCode, string expressDeliveryCompany, int userId);
+        IList<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd, int storeId, int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone, string expressDeliveryCode, int expressDeliveryCompany, int userId);
     }
 }

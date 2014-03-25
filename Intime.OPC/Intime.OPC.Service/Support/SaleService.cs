@@ -133,6 +133,15 @@ namespace Intime.OPC.Service.Support
             return  _saleRemarkRepository.Create(comment);
         }
 
+        public IList<OPC_Sale> GetByOrderNo(string orderID)
+        {
+            if (string.IsNullOrWhiteSpace(orderID))
+            {
+                throw new OrderNoIsNullException();
+            }
+            return _saleRepository.GetByOrderNo(orderID);
+        }
+
         public IList<SaleDto> GetNoPickUp(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
             //todo 权限校验

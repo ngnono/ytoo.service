@@ -55,29 +55,25 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetOrderInfo(string orderNo,
+        public IHttpActionResult GetOrder(string orderNo,
             string orderSource,
-            string startCreateDate,
-            string endCreateDate,
-            string storeId,
-            string brandId,
-            string status,
+            DateTime startCreateDate,
+            DateTime endCreateDate,
+            int storeId,
+            int brandId,
+            int status,
             string paymentType,
             string outGoodsType,
             string shippingContactPhone,
             string expressDeliveryCode,
-            string expressDeliveryCompany,
+            int expressDeliveryCompany,
             [UserId] int userId)
         {
-            DateTime dtStart = DateTime.MinValue;
-            bool bl = DateTime.TryParse(startCreateDate, out dtStart);
-
-            DateTime dtEnd = DateTime.Now;
-            bl = DateTime.TryParse(endCreateDate, out dtEnd);
+            
 
             try
             {
-                return Ok(_orderService.GetOrderInfo(orderNo, orderSource, dtStart, dtEnd, storeId, brandId,
+                return Ok(_orderService.GetOrder(orderNo, orderSource, startCreateDate, endCreateDate, storeId, brandId,
                     status, paymentType, outGoodsType, shippingContactPhone, expressDeliveryCode, expressDeliveryCompany,
                     userId));
             }
@@ -86,5 +82,6 @@ namespace Intime.OPC.WebApi.Controllers
                 return InternalServerError();
             }
         }
+
     }
 }

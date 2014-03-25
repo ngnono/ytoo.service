@@ -163,5 +163,12 @@ namespace Intime.OPC.Service
         IList<OPC_Sale> GetShipInStorage(string saleOrderNo, int userId, string orderNo, System.DateTime dtStart, System.DateTime dtEnd);
 
         bool WriteSaleRemark(OPC_SaleComment comment);
+
+        /// <summary>
+        /// 根据订单号获得销售单信息
+        /// </summary>
+        /// <param name="orderID">The order identifier.</param>
+        /// <returns>IList{OPC_Sale}.</returns>
+        IList<OPC_Sale> GetByOrderNo(string orderID);
     }
 }

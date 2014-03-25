@@ -63,6 +63,7 @@
     <Compile Include="Support\MenuRepository.cs" />
     <Compile Include="Support\AccountRepository.cs" />
     <Compile Include="Support\OrderRemarkRepository.cs" />
+    <Compile Include="Support\OrderRepository.cs" />
     <Compile Include="Support\RoleMenuRepository.cs" />
     <Compile Include="Support\RoleRepository.cs" />
     <Compile Include="Support\RoleUserRepository.cs" />
