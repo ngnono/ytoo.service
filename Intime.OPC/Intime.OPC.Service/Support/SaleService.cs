@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
+using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service.Support
 {
@@ -24,6 +26,20 @@ namespace Intime.OPC.Service.Support
         {
             return _saleRepository.Select();
         }
+
+        //public IList<SaleDto> All(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        //{
+        //    var lst = _saleRepository.All(saleOrderNo, orderNo, dtStart, dtEnd);
+        //    var lstDto = new List<SaleDto>();
+        //    foreach (var opcSale in lst)
+        //    {
+        //        var t = Mapper.Map<OPC_Sale, SaleDto>(opcSale);
+        //        EnumSaleOrderStatus saleOrderStatus = (EnumSaleOrderStatus)opcSale.Status;
+        //        t.StatusName = saleOrderStatus.GetDescription();
+        //        lstDto.Add(t);
+        //    }
+        //    return lstDto;
+        //}
 
         public IList<OPC_SaleComment> GetRemarksBySaleNo(string saleNo)
         {
@@ -126,11 +142,40 @@ namespace Intime.OPC.Service.Support
             return _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd);
         }
 
-        public IList<OPC_Sale> GetNoPickUp(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public bool WriteSaleRemark(OPC_SaleComment comment)
+        {
+            return  _saleRemarkRepository.Create(comment);
+        }
+
+        public IList<SaleDto> GetStockOut(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        {
+            var lst = _saleRepository.GetStockOut(saleOrderNo, orderNo, dtStart, dtEnd);
+            var lstDto = new List<SaleDto>();
+            foreach (var opcSale in lst)
+            {
+                var t = Mapper.Map<OPC_Sale, SaleDto>(opcSale);
+                EnumSaleOrderStatus saleOrderStatus = (EnumSaleOrderStatus)opcSale.Status;
+                t.StatusName = saleOrderStatus.GetDescription();
+                lstDto.Add(t);
+            }
+            return lstDto;
+        }
+
+        public IList<SaleDto> GetNoPickUp(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
             //todo 权限校验
 
-            return _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd);
+            
+            var lst= _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd);
+            var lstDto = new List<SaleDto>();
+            foreach (var opcSale in lst)
+            {
+                var t = Mapper.Map<OPC_Sale, SaleDto>(opcSale);
+                EnumSaleOrderStatus saleOrderStatus = (EnumSaleOrderStatus)opcSale.Status;
+                t.StatusName = saleOrderStatus.GetDescription();
+                lstDto.Add(t);
+            }
+            return lstDto;
         }
 
         #endregion
@@ -152,6 +197,11 @@ namespace Intime.OPC.Service.Support
             saleOrder.UpdatedUser = userId;
             _saleRepository.Update(saleOrder);
             return true;
+        }
+
+        public IList<SaleDto> All(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System.Collections.Generic;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service
@@ -25,7 +26,7 @@ namespace Intime.OPC.Service
         /// Selects this instance.
         /// </summary>
         /// <returns>IList{OPC_Sale}.</returns>
-        IList<OPC_Sale> Select();
+        IList<SaleDto> All(string saleOrderNo, int userId, string orderNo, System.DateTime dtStart, System.DateTime dtEnd);
   
 
         /// <summary>
@@ -116,7 +117,7 @@ namespace Intime.OPC.Service
         /// <param name="dtStart"></param>
         /// <param name="dtEnd"></param>
         /// <returns></returns>
-        IList<OPC_Sale> GetNoPickUp(string saleOrderNo, int userId, string orderNo, System.DateTime dtStart, System.DateTime dtEnd);
+        IList<SaleDto> GetNoPickUp(string saleOrderNo, int userId, string orderNo, System.DateTime dtStart, System.DateTime dtEnd);
 
         /// <summary>
         /// 获得已完成 打印销售单 的数据
@@ -160,5 +161,18 @@ namespace Intime.OPC.Service
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
         IList<OPC_Sale> GetShipInStorage(string saleOrderNo, int userId, string orderNo, System.DateTime dtStart, System.DateTime dtEnd);
+
+        bool WriteSaleRemark(OPC_SaleComment comment);
+
+        /// <summary>
+        ///  获得缺货的数据
+        /// </summary>
+        /// <param name="saleOrderNo1">The sale order no1.</param>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="saleOrderNo2">The sale order no2.</param>
+        /// <param name="dtStart">The dt start.</param>
+        /// <param name="dtEnd">The dt end.</param>
+        /// <returns>IList{OPC_Sale}.</returns>
+        IList<SaleDto> GetStockOut(string saleOrderNo, int userId, string orderNo, System.DateTime dtStart, System.DateTime dtEnd);
     }
 }

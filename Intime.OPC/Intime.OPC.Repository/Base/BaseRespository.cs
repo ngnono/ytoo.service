@@ -11,25 +11,27 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Repository.Base
 {
     /// <summary>
-    /// Class BaseRepository.
+    ///     Class BaseRepository.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class BaseRepository<T> : IRepository<T> where T : class,IEntity
+    public abstract class BaseRepository<T> : IRepository<T> where T : class, IEntity
     {
+        #region IRepository<T> Members
+
         /// <summary>
-        /// Creates the specified entity.
+        ///     Creates the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
@@ -49,7 +51,7 @@ namespace Intime.OPC.Repository.Base
         }
 
         /// <summary>
-        /// Updates the specified entity.
+        ///     Updates the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
@@ -69,7 +71,7 @@ namespace Intime.OPC.Repository.Base
         }
 
         /// <summary>
-        /// Deletes the specified identifier.
+        ///     Deletes the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
@@ -78,8 +80,8 @@ namespace Intime.OPC.Repository.Base
             using (var db = new YintaiHZhouContext())
             {
                 IDbSet<T> set = db.Set<T>();
-                var entity = set.FirstOrDefault(t => t.Id == id);
-                if (null!=entity)
+                T entity = set.FirstOrDefault(t => t.Id == id);
+                if (null != entity)
                 {
                     set.Remove(entity);
                     db.SaveChanges();
@@ -89,12 +91,23 @@ namespace Intime.OPC.Repository.Base
             }
         }
 
+        public T GetByID(int id)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                IDbSet<T> set = db.Set<T>();
+                return set.FirstOrDefault(t => t.Id == id);
+            }
+        }
+
+        #endregion
+
         /// <summary>
-        /// Selects the specified filter.
+        ///     Selects the specified filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>IQueryable{`0}.</returns>
-        protected IList<T> Select(System.Linq.Expressions.Expression<Func<T, bool>> filter)
+        protected IList<T> Select(Expression<Func<T, bool>> filter)
         {
             using (var db = new YintaiHZhouContext())
             {
@@ -102,15 +115,5 @@ namespace Intime.OPC.Repository.Base
                 return set.Where(filter).ToList();
             }
         }
-
-
-       public T GetByID(int id)
-       {
-           using (var db = new YintaiHZhouContext())
-           {
-               IDbSet<T> set = db.Set<T>();
-               return set.FirstOrDefault(t => t.Id == id);
-           }
-       }
     }
 }
