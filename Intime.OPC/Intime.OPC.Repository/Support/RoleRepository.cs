@@ -56,20 +56,8 @@ namespace Intime.OPC.Repository.Support
 
         public IList<OPC_AuthRole> GetByUserID(int userID)
         {
-            //IList<OPC_AuthRole> lstRoles = new List<OPC_AuthRole>();
             using (var db = new YintaiHZhouContext())
             {
-                //IQueryable<OPC_AuthRoleUser> lstRoleUser = db.OPC_AuthRoleUser.Where(t => t.OPC_AuthUserId == userID);
-                //foreach (OPC_AuthRoleUser roleUser in lstRoleUser)
-                //{
-                //    OPC_AuthRole role = GetByID(roleUser.OPC_AuthRoleId);
-                //    if (null != role && role.IsValid)
-                //    {
-                //        lstRoles.Add(role);
-                //    }
-                //}
-                //return lstRoles;
-
                 return db.OPC_AuthRoleUser.Where(t => t.OPC_AuthUserId == userID).Join(db.OPC_AuthRole,
                      t => t.OPC_AuthUserId, o => o.Id, (t, o) => o).ToList();
             }

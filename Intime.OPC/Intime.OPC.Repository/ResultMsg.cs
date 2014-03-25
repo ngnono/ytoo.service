@@ -11,8 +11,7 @@
         {
             return new ResultMsg
             {
-                IsSuccess = true,
-                Data = data,
+                IsSuccess = true,                               Data = data,
                 Msg = msg
             };
         }

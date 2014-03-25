@@ -56,7 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\IEntity.cs" />
-    <Compile Include="Dto\OrderDto.cs" />
     <Compile Include="Dto\RoleMenuDto.cs" />
     <Compile Include="Dto\SaleDto.cs" />
     <Compile Include="Enums\EnumCashStatus.cs" />
@@ -87,7 +86,6 @@
     <Compile Include="Models\Mapping\OPC_StockMap.cs" />
     <Compile Include="Models\Mapping\OPC_StorePriorityMap.cs" />
     <Compile Include="Models\Mapping\OPC_SupplierInfoMap.cs" />
-    <Compile Include="Models\Mapping\OrderMap.cs" />
     <Compile Include="Models\Mapping\SectionMap.cs" />
     <Compile Include="Models\Mapping\StoreMap.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
@@ -110,7 +108,6 @@
     <Compile Include="Models\OPC_Stock.cs" />
     <Compile Include="Models\OPC_StorePriority.cs" />
     <Compile Include="Models\OPC_SupplierInfo.cs" />
-    <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\YintaiHZhouContext.cs" />
