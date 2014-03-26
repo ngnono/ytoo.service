@@ -129,9 +129,9 @@ namespace OPCApp.TransManage.ViewModels
             {
                 return;
             }
-            string orderId = SelectOrder.Id.ToString();
+            string orderNo = string .Format("orderID={0}", SelectOrder.OrderNo.ToString());
             //这个工作状态
-            SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderId).Result;
+            SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderNo).Result;
 
         }
 

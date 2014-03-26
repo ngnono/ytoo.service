@@ -66,7 +66,7 @@ namespace OPCApp.DataService.Impl.Trans
 
         public PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo)
         {
-            var lst = RestClient.Get<OPC_SaleDetail>("sale/selectSale",string.Format("saleOrderNo={0}",saleOrderNo));
+            var lst = RestClient.Get<OPC_SaleDetail>("sale/GetSaleOrderDetails", string.Format("saleOrderNo={0}", saleOrderNo));
             return new PageResult<OPC_SaleDetail>(lst, 100);
         }
 
