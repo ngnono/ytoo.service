@@ -22,6 +22,9 @@ namespace Intime.OPC.WebApi
 
             // 路由注册
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            //初始化映射
+            Intime.OPC.Service.MapConfig.Config();
         }
     }
 }
