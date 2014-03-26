@@ -58,6 +58,7 @@
     <Compile Include="Impl\Auth\RoleDataService.cs" />
     <Compile Include="Impl\Info\StoreService.cs" />
     <Compile Include="Impl\LoginManager.cs" />
+    <Compile Include="Impl\RMA\RMACashInService.cs" />
     <Compile Include="Impl\Trans\RemarkService.cs" />
     <Compile Include="Impl\Trans\CustomerInquriesService.cs" />
     <Compile Include="Impl\Trans\TransService.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Interface\Auth\IRoleDataService.cs" />
     <Compile Include="Interface\ISaleDetail.cs" />
     <Compile Include="Interface\ISaleService.cs" />
+    <Compile Include="Interface\RMA\IRMACashInService.cs" />
     <Compile Include="Interface\Trans\IRemarkService.cs" />
     <Compile Include="Interface\Trans\ICustomerInquriesService.cs" />
     <Compile Include="Interface\Trans\ITransService.cs" />
