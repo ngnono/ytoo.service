@@ -44,15 +44,12 @@ namespace OPCApp.DataService.Impl.Auth
         }
 
 
+ 
+
+
         public PageResult<OPC_AuthRole> Search(IDictionary<string, object> iDicFilter)
         {
-            IList<OPC_AuthRole> result = RestClient.Get<OPC_AuthRole>("Role/SelectRole", null);
-            return new PageResult<OPC_AuthRole>(result, result.Count);
-        }
-
-        public PageResult<OPC_AuthRole> Search(IFilter filter)
-        {
-            IList<OPC_AuthRole> result = RestClient.Get<OPC_AuthRole>("Role/SelectRole", null);
+            IList<OPC_AuthRole> result = RestClient.Get<OPC_AuthRole>("Role/SelectRole");
             return new PageResult<OPC_AuthRole>(result, result.Count);
         }
     }

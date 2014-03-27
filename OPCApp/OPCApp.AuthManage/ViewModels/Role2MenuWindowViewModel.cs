@@ -49,7 +49,7 @@ namespace OPCApp.AuthManage.ViewModels
         /// <summary>
         ///     The _rolelist
         /// </summary>
-        private List<OPC_AuthUser> _rolelist;
+        private List<OPC_AuthRole> _rolelist;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Role2MenuWindowViewModel" /> class.
@@ -77,7 +77,7 @@ namespace OPCApp.AuthManage.ViewModels
         ///     Gets or sets the role list.
         /// </summary>
         /// <value>The role list.</value>
-        public List<OPC_AuthUser> RoleList
+        public List<OPC_AuthRole> RoleList
         {
             get { return _rolelist; }
             set { SetProperty(ref _rolelist, value); }
@@ -130,10 +130,9 @@ namespace OPCApp.AuthManage.ViewModels
         public void Init()
         {
             var roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
-            roleDataService.Search(null);
-            if (this.SelectedRole == null) return;
+           this.RoleList= roleDataService.Search(null).Result.ToList();
             var menuDataService = AppEx.Container.GetInstance<IMenuDataService>();
-            menuDataService.GetMenus(); //所有的 还是有权限
+            this.MenuList=menuDataService.GetMenuList().ToList(); //所有的 还是有权限
         }
 
         /// <summary>

@@ -36,6 +36,10 @@ namespace OPCApp.DataService.Impl
         /// <exception cref="System.NotImplementedException"></exception>
         public IEnumerable<MenuGroup> GetMenus()
         {
+            try
+            {
+
+           
             string paras = string.Format("UserId={0}", 1); //AppEx.LoginModel.UserID); //1 update curUserId 
             IList<OPC_AuthMenu> listMenu = RestClient.Get<OPC_AuthMenu>("menu/loadmenu", paras);
             List<OPC_AuthMenu> groupMenu1 = listMenu.Where(e => e.PraentMenuId == e.Id).ToList();
@@ -55,6 +59,12 @@ namespace OPCApp.DataService.Impl
                 }
             }
             return groupMenu;
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
         }
 
         public IEnumerable<OPC_AuthMenu> GetMenuList()

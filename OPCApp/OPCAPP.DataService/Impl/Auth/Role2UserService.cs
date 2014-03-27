@@ -16,7 +16,7 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                bool bFalg = RestClient.Post("account/updateuser", new {roleId, listMenuId = listUserId});
+                bool bFalg = RestClient.Post("role/setUsers", new {roleId, listMenuId = listUserId});
                 return new ResultMsg {IsSuccess = true, Msg = "保存成功"};
             }
             catch (Exception ex)
@@ -30,7 +30,7 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                return RestClient.Get<OPC_AuthUser>("account/updateuser", string.Format("roleId={0}", roleId)).ToList();
+                return RestClient.Get<OPC_AuthUser>("account/GetUsersByRoleID", string.Format("roleId={0}", roleId)).ToList();
             }
             catch (Exception ex)
             {

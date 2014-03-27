@@ -31,7 +31,7 @@
 
             </StackPanel>
         </StackPanel>
-        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding MenuList}" AutoGenerateColumns="True" Grid.Row="1"
+        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding MenuList}" IsReadOnly="True" AutoGenerateColumns="False" Grid.Row="1"
                   Grid.Column="1" VerticalAlignment="Top">
 
             <DataGrid.Columns>
@@ -50,7 +50,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding RoleList}" SelectedItem="{Binding SelectedRole}"
-                  AutoGenerateColumns="True" Grid.Row="1" VerticalAlignment="Top" Grid.Column="0">
+                 IsReadOnly="True" AutoGenerateColumns="False" Grid.Row="1" VerticalAlignment="Top" Grid.Column="0">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding DBGridClickCommand}" />
