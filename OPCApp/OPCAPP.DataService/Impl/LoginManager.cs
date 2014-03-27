@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OPCApp.DataService.Common;
 using OPCApp.Domain;
+using OPCAPP.Domain;
 using OPCApp.Infrastructure.Interfaces;
 
 
