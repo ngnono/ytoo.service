@@ -60,6 +60,12 @@ namespace OPCApp.AuthManage.ViewModels
             DeleteUserListCommand = new DelegateCommand(DeleteUserList);
             DbGridClickCommand = new DelegateCommand(DBGridClick);
             GetSelectedCommand = new DelegateCommand(GetSelected);
+            AuthorizationRefreshCommand=new DelegateCommand(Resfresh);
+            Init();
+        }
+
+        private void Resfresh()
+        {
             Init();
         }
 
@@ -127,6 +133,8 @@ namespace OPCApp.AuthManage.ViewModels
         /// <value>The database grid click command.</value>
         public DelegateCommand DbGridClickCommand { get; set; }
 
+        public DelegateCommand AuthorizationRefreshCommand { get; set; }
+
         public void Init()
         {
             var roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
@@ -169,9 +177,9 @@ namespace OPCApp.AuthManage.ViewModels
         /// </summary>
         private void AuthorizationUser()
         {
-            var role2UserService = AppEx.Container.GetInstance<IRole2UserService>();
+            var role2UserService = AppEx.Container.GetInstance<IRole2MenuService>();
             if (SelectedRole == null || SelectedMenuIdList == null) return;
-            role2UserService.SetUserByRole(SelectedRole.Id, SelectedMenuIdList);
+            role2UserService.SetMenuByRole(SelectedRole.Id, SelectedMenuIdList);
         }
     }
 }

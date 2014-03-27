@@ -16,7 +16,7 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                bool bFalg = RestClient.Post("account/updateuser", new {roleId, listMenuId});
+                bool bFalg = RestClient.Post("role/setmenus",new Domain.Dto.RoleMenuDto{ RoleID = roleId,MenuList= listMenuId});
                 return new ResultMsg {IsSuccess = true, Msg = "保存成功"};
             }
             catch (Exception ex)

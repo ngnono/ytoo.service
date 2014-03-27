@@ -33,10 +33,16 @@
                         <TextBlock HorizontalAlignment="Center">添加用户</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding DeleteUserListCommand}">
+                <Button Background="LightGray" Width="50" Command="{Binding DeleteCommand}">
                     <StackPanel>
                         <Image Source="/image/删除.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">删除用户</TextBlock>
+                        <TextBlock HorizontalAlignment="Center">删除选中用户</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Background="LightGray" Width="50" Command="{Binding RefreshCommand}">
+                    <StackPanel>
+                        <Image Source="/image/处理.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">刷新</TextBlock>
                     </StackPanel>
                 </Button>
 

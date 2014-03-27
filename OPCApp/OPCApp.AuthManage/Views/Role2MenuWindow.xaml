@@ -28,6 +28,12 @@
                         <TextBlock HorizontalAlignment="Center">授权角色</TextBlock>
                     </StackPanel>
                 </Button>
+                <Button Background="LightGray" Width="50" Command="{Binding AuthorizationRefreshCommand}">
+                    <StackPanel>
+                        <Image Source="/image/导出.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">刷新</TextBlock>
+                    </StackPanel>
+                </Button>
 
             </StackPanel>
         </StackPanel>

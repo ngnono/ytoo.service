@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using Microsoft.Practices.Prism.Commands;
@@ -21,9 +22,10 @@ namespace OPCApp.AuthManage.ViewModels
         {
             AuthorizationUserCommand = new DelegateCommand(AuthorizationUser);
             AddUserWindowCommand = new DelegateCommand(AddUsersWindow);
-            DeleteUserListCommand = new DelegateCommand(DeleteUserList);
+            RefreshCommand = new DelegateCommand(Refresh);
             DbGridClickCommand = new DelegateCommand(DBGridClick);
             GetSelectedCommand = new DelegateCommand(GetSelected);
+            DeleteCommand = new DelegateCommand(DeleteUserList);
             Init();
         }
 
@@ -49,26 +51,36 @@ namespace OPCApp.AuthManage.ViewModels
             set { SetProperty(ref _role, value); }
         }
 
-        public DelegateCommand DeleteUserListCommand { get; set; }
+        public DelegateCommand RefreshCommand { get; set; }
         public DelegateCommand GetSelectedCommand { get; set; }
         public DelegateCommand AuthorizationUserCommand { get; set; }
         public DelegateCommand AddUserWindowCommand { get; set; }
         public DelegateCommand DbGridClickCommand { get; set; }
+        public DelegateCommand DeleteCommand { get; set; }
+
+        private void Refresh()
+        {
+            throw new NotImplementedException();
+        }
 
         public void Init()
         {
             var roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
             roleDataService.Search(null);
-            var menuDataService = AppEx.Container.GetInstance<IMenuDataService>();
-            menuDataService.GetMenus(); //所有的 还是有权限
+            if (SelectedRole == null)
+            {
+                if (UserList == null) return;
+                UserList.Clear();
+                return;
+            }
+            var menuDataService = AppEx.Container.GetInstance<IRole2UserService>();
+            menuDataService.GetUserListByRole(SelectedRole.Id); //所有的 还是有权限
         }
 
         private void DeleteUserList()
         {
-            //liuyahua
-            // var userSeleted = UserList.Where(e => e.IsSelected == true);
+            if (UserList == null)return;
             UserList.Remove(e => e.IsSelected);
-            //UserList.Remove()
         }
 
         private void DBGridClick()

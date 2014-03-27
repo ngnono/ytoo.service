@@ -84,7 +84,7 @@ namespace OPCApp.DataService.Impl.Auth
             }
             catch (Exception ex)
             {
-                return new ResultMsg {IsSuccess = false, Msg = "保存失败"};
+                return null;
             }
         }
     }

@@ -8,6 +8,6 @@ namespace OPCApp.Domain.Dto
 
         public int UserID { get; set; }
 
-        public IList<int> MeueList { get; set; }
+        public IList<int> MenuList { get; set; }
     }
 }
