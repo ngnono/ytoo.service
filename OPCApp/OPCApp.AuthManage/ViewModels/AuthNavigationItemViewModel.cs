@@ -4,6 +4,9 @@ using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain;
+using OPCApp.Infrastructure;
+using OPCApp.Infrastructure.Interfaces;
+
 namespace OPCApp.AuthManage.ViewModels
 {
  
@@ -30,8 +33,10 @@ namespace OPCApp.AuthManage.ViewModels
            public IEnumerable<MenuGroup> GroupItems {
                get
                {
+
+                   AppEx.Container.GetInstance<ILoginManager>().Login("111", "11");
                    // Logon(); 
-                   var rest = RestClient.Post("Account/Token", new { UserName ="111", Password = "11" });
+                  // var rest = RestClient.Post("Account/Token", new { UserName ="111", Password = "11" });
                    return _menuDataService.GetMenus();
 
                }

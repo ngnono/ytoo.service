@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPCApp.Domain
 {
+    [DataContract]
     public class TokenModel
     {
         [DataMember(Name = "access_token")]
