@@ -124,6 +124,7 @@
     <Compile Include="Core\MessageHandlers\Signature\AppSecurityManager.cs" />
     <Compile Include="Core\Security\Cryptography\CryptoHelper.cs" />
     <Compile Include="Core\Security\SecurityUtils.cs" />
+    <Compile Include="Extentison\ControllerExtension.cs" />
     <Compile Include="Models\AccessTokenModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Core\MessageHandlers\AccessToken\AccessTokenIdentity.cs" />
@@ -136,6 +137,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Intime.OPC.Common\Intime.OPC.Common.csproj">
+      <Project>{120944ff-a829-4c64-b938-5af79875d747}</Project>
+      <Name>Intime.OPC.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Intime.OPC.Domain\00_Intime.OPC.Domain.csproj">
       <Project>{03e03b5b-ead6-4e27-976d-82d15f7396d7}</Project>
       <Name>00_Intime.OPC.Domain</Name>

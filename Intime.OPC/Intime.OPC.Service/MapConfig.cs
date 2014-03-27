@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
@@ -8,14 +6,12 @@ using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service
 {
-    public  class MapConfig
+    public class MapConfig
     {
         public static void Config()
         {
             //Mapper.CreateMap<OPC_Sale, SaleDto>();
-            Mapper.CreateMap<Order, OrderDto>((o) =>  MapConfig.converDto(o));
-             
-            
+            Mapper.CreateMap<Order, OrderDto>(o => converDto(o));
         }
 
         private static OrderDto converDto(Order o)
@@ -29,7 +25,7 @@ namespace Intime.OPC.Service
             t.OrderNo = o.OrderNo;
             t.OrderSouce = o.OrderSource;
             t.ExpressNo = o.ShippingNo;
-            t.IfReceipt=o.NeedInvoice.HasValue && o.NeedInvoice.Value ?"是":"否";
+            t.IfReceipt = o.NeedInvoice.HasValue && o.NeedInvoice.Value ? "是" : "否";
             t.MustPayTotal = o.TotalAmount;
             //t.OrderChannelNo=o.
             //t.OutGoodsDate=o.
@@ -40,13 +36,11 @@ namespace Intime.OPC.Service
             t.ReceiptContent = o.InvoiceDetail;
             t.ReceiptHead = o.InvoiceSubject;
             t.ShippingNo = o.ShippingNo;
-            
-            EnumOderStatus orderStatus = (EnumOderStatus)o.Status;
+
+            var orderStatus = (EnumOderStatus) o.Status;
             t.Status = orderStatus.GetDescription();
 
             t.TotalAmount = o.TotalAmount;
-
-
 
             //todo 没有映射完成
             return t;

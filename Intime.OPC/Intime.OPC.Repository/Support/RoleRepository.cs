@@ -12,7 +12,6 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Intime.OPC.Domain.Models;
@@ -59,10 +58,8 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 return db.OPC_AuthRoleUser.Where(t => t.OPC_AuthUserId == userID).Join(db.OPC_AuthRole,
-                     t => t.OPC_AuthUserId, o => o.Id, (t, o) => o).ToList();
+                    t => t.OPC_AuthUserId, o => o.Id, (t, o) => o).ToList();
             }
-
-            
         }
 
         #endregion

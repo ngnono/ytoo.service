@@ -8,33 +8,33 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_AuthMenuMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Id)
+            Property(t => t.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
-            this.Property(t => t.MenuName)
+            Property(t => t.MenuName)
                 .HasMaxLength(40);
 
-            this.Property(t => t.PraentMenuId)
+            Property(t => t.PraentMenuId)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            this.Property(t => t.Url)
+            Property(t => t.Url)
                 .HasMaxLength(40);
 
             // Table & Column Mappings
-            this.ToTable("OPC_AuthMenu");
-            this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.MenuName).HasColumnName("MenuName");
-            this.Property(t => t.CreateDate).HasColumnName("CreateDate");
-            this.Property(t => t.CreateUserId).HasColumnName("CreateUserId");
-            this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
-            this.Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
-            this.Property(t => t.PraentMenuId).HasColumnName("PraentMenuId");
-            this.Property(t => t.IsValid).HasColumnName("IsValid");
-            this.Property(t => t.Sort).HasColumnName("Sort");
-            this.Property(t => t.Url).HasColumnName("Url");
+            ToTable("OPC_AuthMenu");
+            Property(t => t.Id).HasColumnName("Id");
+            Property(t => t.MenuName).HasColumnName("MenuName");
+            Property(t => t.CreateDate).HasColumnName("CreateDate");
+            Property(t => t.CreateUserId).HasColumnName("CreateUserId");
+            Property(t => t.UpdateDate).HasColumnName("UpdateDate");
+            Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
+            Property(t => t.PraentMenuId).HasColumnName("PraentMenuId");
+            Property(t => t.IsValid).HasColumnName("IsValid");
+            Property(t => t.Sort).HasColumnName("Sort");
+            Property(t => t.Url).HasColumnName("Url");
         }
     }
 }

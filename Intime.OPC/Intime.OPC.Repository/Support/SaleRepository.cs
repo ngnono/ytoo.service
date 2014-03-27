@@ -116,7 +116,6 @@ namespace Intime.OPC.Repository.Support
                 }
                 db.SaveChanges();
                 return true;
-               
             }
         }
 
@@ -151,6 +150,14 @@ namespace Intime.OPC.Repository.Support
             return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.ShipInStorage);
         }
 
+        public IList<OPC_Sale> GetByOrderNo(string orderID)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                return db.OPC_Sale.Where(t => t.OrderNo == orderID).ToList();
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -181,15 +188,6 @@ namespace Intime.OPC.Repository.Support
                 }
 
                 return result.ToList();
-            }
-        }
-
-
-        public IList<OPC_Sale> GetByOrderNo(string orderID)
-        {
-            using (var db = new YintaiHZhouContext())
-            {
-                return db.OPC_Sale.Where(t => t.OrderNo == orderID).ToList();
             }
         }
     }

@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System.Collections.Generic;
 using System.Web.Http;
 using Intime.OPC.Domain.Models;
@@ -19,17 +20,17 @@ using Intime.OPC.Service;
 namespace Intime.OPC.WebApi.Controllers
 {
     /// <summary>
-    /// 账户相关接口
+    ///     账户相关接口
     /// </summary>
     public class TransController : ApiController
     {
         /// <summary>
-        /// The _trans service
+        ///     The _trans service
         /// </summary>
         private readonly ITransService _transService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransController"/> class.
+        ///     Initializes a new instance of the <see cref="TransController" /> class.
         /// </summary>
         /// <param name="transService">The trans service.</param>
         public TransController(ITransService transService)
@@ -38,7 +39,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
-        /// Selects the sales.
+        ///     Selects the sales.
         /// </summary>
         /// <param name="startDate">The start date.</param>
         /// <param name="endDate">The end date.</param>
@@ -52,7 +53,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
-        /// Finishes the specified sale.
+        ///     Finishes the specified sale.
         /// </summary>
         /// <param name="sale">The sale.</param>
         /// <returns>IHttpActionResult.</returns>
@@ -69,7 +70,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
-        /// Selects the sale detail.
+        ///     Selects the sale detail.
         /// </summary>
         /// <param name="ids">The ids.</param>
         /// <returns>IHttpActionResult.</returns>
@@ -80,7 +81,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
-        /// Selects the mark.
+        ///     Selects the mark.
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>

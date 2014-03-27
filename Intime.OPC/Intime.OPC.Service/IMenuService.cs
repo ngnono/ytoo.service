@@ -11,29 +11,35 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using Intime.OPC.Domain.Models;
+
 using System.Collections.Generic;
+using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service
 {
     /// <summary>
-    /// Interface IMenuService
+    ///     Interface IMenuService
     /// </summary>
     public interface IMenuService
     {
         /// <summary>
-        /// 获得角色的所有菜单
+        ///     获得角色的所有菜单
         /// </summary>
         /// <param name="roleID">The role identifier.</param>
         /// <returns>IEnumerable{OPC_AuthMenu}.</returns>
         IEnumerable<OPC_AuthMenu> SelectByRoleID(int roleID);
 
         /// <summary>
-        /// 获得用户的所有菜单
+        ///     获得用户的所有菜单
         /// </summary>
         /// <param name="userID">The user identifier.</param>
         /// <returns>IEnumerable{OPC_AuthMenu}.</returns>
         IEnumerable<OPC_AuthMenu> SelectByUserID(int userID);
-      
+
+        /// <summary>
+        /// 获得所有二级菜单
+        /// </summary>
+        /// <returns>IList{OPC_AuthMenu}.</returns>
+        IList<OPC_AuthMenu> GetMenuList();
     }
 }

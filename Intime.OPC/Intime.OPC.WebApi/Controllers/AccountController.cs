@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
@@ -18,9 +19,10 @@ namespace Intime.OPC.WebApi.Controllers
         {
             _accountService = accountService;
         }
+
         [HttpPut]
         public IHttpActionResult AddUser([FromBody] OPC_AuthUser user)
-        //public IHttpActionResult AddUser()
+            //public IHttpActionResult AddUser()
         {
             //TODO:check params
             if (_accountService.Create(user))
@@ -30,10 +32,10 @@ namespace Intime.OPC.WebApi.Controllers
 
             return InternalServerError();
         }
-         [HttpPut]
+
+        [HttpPut]
         public IHttpActionResult UpdateUser([FromBody] OPC_AuthUser user)
         {
-
             //TODO:check params
             if (_accountService.Update(user))
             {
@@ -43,18 +45,25 @@ namespace Intime.OPC.WebApi.Controllers
             return InternalServerError();
         }
 
-        [HttpPut]
-         public IHttpActionResult DeleteUser([FromUri] int? userId)
+        [HttpGet]
+        public IHttpActionResult GetUsersByRoleID(int roleId)
         {
-            if (userId!=0)
+            IList<OPC_AuthUser> lst = _accountService.GetUsersByRoleID(roleId);
+
+            return Ok(lst);
+        }
+
+        [HttpPut]
+        public IHttpActionResult DeleteUser([FromUri] int? userId)
+        {
+            if (userId != 0)
             {
-                 if (_accountService.Delete(userId.Value))
+                if (_accountService.Delete(userId.Value))
                 {
                     return Ok();
                 }
             }
             //TODO:check params
-           
 
             return InternalServerError();
         }
@@ -62,13 +71,12 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult SelectUser([FromUri] string SearchField, [FromUri] string SearchValue)
         {
-
             //TODO:check params
             return Ok(_accountService.Select());
         }
+
         public IHttpActionResult Stop(int userId)
         {
-
             //TODO:check params
             if (_accountService.IsStop(userId, true))
             {
@@ -77,9 +85,9 @@ namespace Intime.OPC.WebApi.Controllers
 
             return InternalServerError();
         }
+
         public IHttpActionResult Enable(int userId)
         {
-
             //TODO:check params
             if (_accountService.IsStop(userId, false))
             {
@@ -88,6 +96,7 @@ namespace Intime.OPC.WebApi.Controllers
 
             return InternalServerError();
         }
+
         [HttpPost]
         public IHttpActionResult Token([FromBody] LoginModel loginModel)
         {
@@ -103,7 +112,7 @@ namespace Intime.OPC.WebApi.Controllers
                 return BadRequest("用户名或密码错误");
             }
 
-            DateTime expiresDate = DateTime.Now.AddSeconds(60 * 60 * 24);
+            DateTime expiresDate = DateTime.Now.AddSeconds(60*60*24);
 
             return Ok(new TokenModel
             {

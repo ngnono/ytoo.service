@@ -1,11 +1,11 @@
 ﻿using System.Composition.Convention;
 using System.Composition.Hosting;
 using System.Linq;
+using System.Reflection;
+using System.Web.Compilation;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using Intime.OPC.WebApi.Core.DependencyResolver.MEF;
-using System.Web.Compilation;
-using System.Reflection;
 
 namespace Intime.OPC.WebApi
 {
@@ -36,8 +36,8 @@ namespace Intime.OPC.WebApi
                 .ExportInterfaces();
 
             CompositionHost container = new ContainerConfiguration()
-                    .WithAssemblies(BuildManager.GetReferencedAssemblies().Cast<Assembly>(), conventions)
-                    .CreateContainer();
+                .WithAssemblies(BuildManager.GetReferencedAssemblies().Cast<Assembly>(), conventions)
+                .CreateContainer();
 
             // 设置WebApi的DependencyResolver
             GlobalConfiguration.Configuration.DependencyResolver = new MefDependencyResolver(container);

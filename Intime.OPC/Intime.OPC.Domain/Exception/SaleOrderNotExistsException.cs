@@ -1,11 +1,9 @@
-﻿
-namespace Intime.OPC.Domain.Exception
+﻿namespace Intime.OPC.Domain.Exception
 {
-    public class SaleOrderNotExistsException: System.Exception
+    public class SaleOrderNotExistsException : System.Exception
     {
-        public SaleOrderNotExistsException(string saleOrderNo):base(saleOrderNo)
+        public SaleOrderNotExistsException(string saleOrderNo) : base(saleOrderNo)
         {
-
         }
     }
 }

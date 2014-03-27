@@ -1,5 +1,5 @@
-﻿using Intime.OPC.Domain.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service
 {
@@ -11,5 +11,7 @@ namespace Intime.OPC.Service
         bool Delete(int userId);
         IList<OPC_AuthUser> Select();
         bool IsStop(int userId, bool bValid);
+
+        IList<OPC_AuthUser> GetUsersByRoleID(int roleId);
     }
 }

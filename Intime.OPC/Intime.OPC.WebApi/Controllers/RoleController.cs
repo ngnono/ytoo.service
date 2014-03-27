@@ -1,7 +1,9 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
+using Intime.OPC.WebApi.Bindings;
 
 namespace Intime.OPC.WebApi.Controllers
 {
@@ -15,6 +17,27 @@ namespace Intime.OPC.WebApi.Controllers
         public RoleController(IRoleService roleService)
         {
             _roleService = roleService;
+        }
+
+        /// <summary>
+        ///     设定用户的角色
+        /// </summary>
+        /// <param name="roleUserDto">The role user dto.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult SetUsers([FromBody] RoleUserDto roleUserDto)
+        {
+            try
+            {
+                _roleService.SetUsers(roleUserDto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                this.GetLog().Error(ex);
+            }
+            return InternalServerError();
+
         }
 
         [HttpPost]
@@ -34,18 +57,26 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult UpdateRole([FromBody] OPC_AuthRole role)
         {
             //TODO:check params
-            if (_roleService.Update(role))
+
+            try
             {
-                return Ok();
+                if (_roleService.Update(role))
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.GetLog().Error(ex);
             }
 
             return InternalServerError();
         }
 
-        [HttpPut]
-        public IHttpActionResult SetMenus(RoleMenuDto menuDto)
+        [HttpPost]
+        public IHttpActionResult SetMenus([FromBody] RoleMenuDto menuDto,[UserId] int userId)
         {
-            bool bl = _roleService.SetMenus(menuDto);
+            bool bl = _roleService.SetMenus(menuDto.RoleID,userId,menuDto.MenuList);
             if (bl)
                 return Ok();
             return InternalServerError();

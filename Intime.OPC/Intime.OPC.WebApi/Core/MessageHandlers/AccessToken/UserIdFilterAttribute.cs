@@ -4,7 +4,7 @@ using System.Web.Http.Filters;
 namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
 {
     /// <summary>
-    /// 绑定用户接口中的UserId
+    ///     绑定用户接口中的UserId
     /// </summary>
     public class UserIdFilterAttribute : ActionFilterAttribute
     {
@@ -14,11 +14,13 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
             {
                 if (actionContext.ActionArguments.ContainsKey("userId"))
                 {
-                    actionContext.ActionArguments["userId"] = actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName];
+                    actionContext.ActionArguments["userId"] =
+                        actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName];
                 }
                 else
                 {
-                    actionContext.ActionArguments.Add("userId", actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName]);
+                    actionContext.ActionArguments.Add("userId",
+                        actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName]);
                 }
             }
         }

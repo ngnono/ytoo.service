@@ -5,6 +5,8 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.Signature
 {
     public class AppSecurityManager : IAppSecurityManager
     {
+        #region IAppSecurityManager Members
+
         public string GetSecretKey(string appKey)
         {
             if (string.IsNullOrEmpty(appKey))
@@ -35,5 +37,7 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.Signature
                 return result;
             }
         }
+
+        #endregion
     }
 }

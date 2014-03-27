@@ -1,14 +1,35 @@
-﻿using System.Collections.Generic;
+﻿// ***********************************************************************
+// Assembly         : 01_Intime.OPC.Repository
+// Author           : Liuyh
+// Created          : 03-23-2014 11:38:21
+//
+// Last Modified By : Liuyh
+// Last Modified On : 03-27-2014 23:17:01
+// ***********************************************************************
+// <copyright file="MenuRepository.cs" company="">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System.Collections.Generic;
 using System.Linq;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
 namespace Intime.OPC.Repository.Support
 {
+    /// <summary>
+    /// Class MenuRepository.
+    /// </summary>
     public class MenuRepository : BaseRepository<OPC_AuthMenu>, IMenuRepository
     {
         #region IMenuRepository Members
 
+        /// <summary>
+        /// Gets the menus by user identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>IList{OPC_AuthMenu}.</returns>
         public IList<OPC_AuthMenu> GetMenusByUserID(int userId)
         {
             using (var db = new YintaiHZhouContext())
@@ -21,15 +42,29 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        /// <summary>
+        /// Gets the menus by role identifier.
+        /// </summary>
+        /// <param name="roleID">The role identifier.</param>
+        /// <returns>IList{OPC_AuthMenu}.</returns>
         public IList<OPC_AuthMenu> GetMenusByRoleID(int roleID)
         {
             using (var db = new YintaiHZhouContext())
             {
-              return   db.OPC_AuthRoleMenu.Where(t => t.OPC_AuthRoleId == roleID).Join(
+                return db.OPC_AuthRoleMenu.Where(t => t.OPC_AuthRoleId == roleID).Join(
                     db.OPC_AuthMenu,
                     t => t.OPC_AuthMenuId,
                     o => o.Id, (arm, aru) => aru).ToList();
             }
+        }
+
+        /// <summary>
+        /// Gets the menu list.
+        /// </summary>
+        /// <returns>IList{OPC_AuthMenu}.</returns>
+        public IList<OPC_AuthMenu> GetMenuList()
+        {
+            return Select(t => t.Id != t.PraentMenuId);
         }
 
         #endregion

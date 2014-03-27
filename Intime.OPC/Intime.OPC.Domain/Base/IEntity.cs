@@ -11,21 +11,16 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intime.OPC.Domain.Base
 {
     /// <summary>
-    /// Interface IEntity
+    ///     Interface IEntity
     /// </summary>
     public interface IEntity
     {
         /// <summary>
-        /// Gets or sets the identifier.
+        ///     Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
         int Id { get; set; }

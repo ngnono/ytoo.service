@@ -11,58 +11,67 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using Intime.OPC.Domain.Models;
+
 using System.Collections.Generic;
+using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
 {
     /// <summary>
-    /// Interface IRoleService
+    ///     Interface IRoleService
     /// </summary>
     public interface IRoleService
     {
         /// <summary>
-        /// Creates the specified role.
+        ///     Creates the specified role.
         /// </summary>
         /// <param name="role">The role.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool Create(OPC_AuthRole role);
+
         /// <summary>
-        /// Updates the specified role.
+        ///     Updates the specified role.
         /// </summary>
         /// <param name="role">The role.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool Update(OPC_AuthRole role);
+
         /// <summary>
-        /// Deletes the specified role identifier.
+        ///     Deletes the specified role identifier.
         /// </summary>
         /// <param name="roleId">The role identifier.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool Delete(int roleId);
+
         /// <summary>
-        /// Selects this instance.
+        ///     Selects this instance.
         /// </summary>
         /// <returns>IList{OPC_AuthRole}.</returns>
         IList<OPC_AuthRole> Select();
+
         /// <summary>
-        /// Determines whether the specified role identifier is stop.
+        ///     Determines whether the specified role identifier is stop.
         /// </summary>
         /// <param name="roleId">The role identifier.</param>
         /// <param name="bValid">if set to <c>true</c> [b valid].</param>
         /// <returns><c>true</c> if the specified role identifier is stop; otherwise, <c>false</c>.</returns>
         bool IsStop(int roleId, bool bValid);
+
         /// <summary>
-        /// Sets the menus.
+        ///     Sets the menus.
         /// </summary>
         /// <param name="roleMenuDto">The role menu dto.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool SetMenus(object roleMenuDto);
+        bool SetMenus(int roleId,int userID,IEnumerable<int> menuids );
 
         /// <summary>
-        /// 获取用户的所有角色
+        ///     获取用户的所有角色
         /// </summary>
         /// <param name="userID">The user identifier.</param>
         /// <returns>IEnumerable{OPC_AuthRole}.</returns>
         IEnumerable<OPC_AuthRole> GetByUserID(int userID);
+
+        bool SetUsers(Domain.Dto.RoleUserDto roleUserDto);
     }
 }

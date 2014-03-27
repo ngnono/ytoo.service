@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Intime.OPC.Domain.Models.Mapping
@@ -8,61 +7,61 @@ namespace Intime.OPC.Domain.Models.Mapping
         public StoreMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Name)
+            Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(64);
 
-            this.Property(t => t.Description)
+            Property(t => t.Description)
                 .IsRequired();
 
-            this.Property(t => t.Location)
+            Property(t => t.Location)
                 .IsRequired()
                 .HasMaxLength(2048);
 
-            this.Property(t => t.Tel)
+            Property(t => t.Tel)
                 .IsRequired()
                 .HasMaxLength(64);
 
-            this.Property(t => t.RMAAddress)
+            Property(t => t.RMAAddress)
                 .HasMaxLength(200);
 
-            this.Property(t => t.RMAZipCode)
+            Property(t => t.RMAZipCode)
                 .HasMaxLength(50);
 
-            this.Property(t => t.RMAPerson)
+            Property(t => t.RMAPerson)
                 .HasMaxLength(10);
 
-            this.Property(t => t.RMAPhone)
+            Property(t => t.RMAPhone)
                 .HasMaxLength(20);
 
             // Table & Column Mappings
-            this.ToTable("Store");
-            this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.Name).HasColumnName("Name");
-            this.Property(t => t.Description).HasColumnName("Description");
-            this.Property(t => t.Location).HasColumnName("Location");
-            this.Property(t => t.Tel).HasColumnName("Tel");
-            this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
-            this.Property(t => t.CreatedDate).HasColumnName("CreatedDate");
-            this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
-            this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
-            this.Property(t => t.Longitude).HasColumnName("Longitude");
-            this.Property(t => t.Latitude).HasColumnName("Latitude");
-            this.Property(t => t.Group_Id).HasColumnName("Group_Id");
-            this.Property(t => t.Status).HasColumnName("Status");
-            this.Property(t => t.Region_Id).HasColumnName("Region_Id");
-            this.Property(t => t.StoreLevel).HasColumnName("StoreLevel");
-            this.Property(t => t.GpsLat).HasColumnName("GpsLat");
-            this.Property(t => t.GpsLng).HasColumnName("GpsLng");
-            this.Property(t => t.GpsAlt).HasColumnName("GpsAlt");
-            this.Property(t => t.ExStoreId).HasColumnName("ExStoreId");
-            this.Property(t => t.RMAAddress).HasColumnName("RMAAddress");
-            this.Property(t => t.RMAZipCode).HasColumnName("RMAZipCode");
-            this.Property(t => t.RMAPerson).HasColumnName("RMAPerson");
-            this.Property(t => t.RMAPhone).HasColumnName("RMAPhone");
+            ToTable("Store");
+            Property(t => t.Id).HasColumnName("Id");
+            Property(t => t.Name).HasColumnName("Name");
+            Property(t => t.Description).HasColumnName("Description");
+            Property(t => t.Location).HasColumnName("Location");
+            Property(t => t.Tel).HasColumnName("Tel");
+            Property(t => t.CreatedUser).HasColumnName("CreatedUser");
+            Property(t => t.CreatedDate).HasColumnName("CreatedDate");
+            Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
+            Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
+            Property(t => t.Longitude).HasColumnName("Longitude");
+            Property(t => t.Latitude).HasColumnName("Latitude");
+            Property(t => t.Group_Id).HasColumnName("Group_Id");
+            Property(t => t.Status).HasColumnName("Status");
+            Property(t => t.Region_Id).HasColumnName("Region_Id");
+            Property(t => t.StoreLevel).HasColumnName("StoreLevel");
+            Property(t => t.GpsLat).HasColumnName("GpsLat");
+            Property(t => t.GpsLng).HasColumnName("GpsLng");
+            Property(t => t.GpsAlt).HasColumnName("GpsAlt");
+            Property(t => t.ExStoreId).HasColumnName("ExStoreId");
+            Property(t => t.RMAAddress).HasColumnName("RMAAddress");
+            Property(t => t.RMAZipCode).HasColumnName("RMAZipCode");
+            Property(t => t.RMAPerson).HasColumnName("RMAPerson");
+            Property(t => t.RMAPhone).HasColumnName("RMAPhone");
         }
     }
 }

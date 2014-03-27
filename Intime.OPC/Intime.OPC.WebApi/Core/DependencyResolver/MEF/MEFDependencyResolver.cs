@@ -39,6 +39,8 @@ namespace Intime.OPC.WebApi.Core.DependencyResolver.MEF
             _requestScopeFactory = (ExportFactory<CompositionContext>) rootCompositionScope.GetExport(factoryContract);
         }
 
+        #region IDependencyResolver Members
+
         /// <summary>
         ///     Create a new request-specific scope.
         /// </summary>
@@ -47,5 +49,7 @@ namespace Intime.OPC.WebApi.Core.DependencyResolver.MEF
         {
             return new MefDependencyScope(_requestScopeFactory.CreateExport());
         }
+
+        #endregion
     }
 }
