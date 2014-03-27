@@ -126,7 +126,7 @@ namespace Intime.OPC.Service
         /// <param name="dtStart"></param>
         /// <param name="dtEnd"></param>
         /// <returns></returns>
-        IList<OPC_Sale> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
+        IList<SaleDto> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
 
         /// <summary>
         ///     获得已完成 打印快递单 的数据
@@ -137,7 +137,7 @@ namespace Intime.OPC.Service
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        IList<OPC_Sale> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
+        IList<SaleDto> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
 
         /// <summary>
         ///     获得已完成 打印发货单 的数据
@@ -148,7 +148,7 @@ namespace Intime.OPC.Service
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        IList<OPC_Sale> GetPrintInvoice(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
+        IList<SaleDto> GetPrintInvoice(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
 
         /// <summary>
         ///     获得已完成 物流入库 的数据
@@ -159,7 +159,7 @@ namespace Intime.OPC.Service
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        IList<OPC_Sale> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
+        IList<SaleDto> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
             DateTime dtEnd);
 
         bool WriteSaleRemark(OPC_SaleComment comment);
@@ -169,6 +169,6 @@ namespace Intime.OPC.Service
         /// </summary>
         /// <param name="orderID">The order identifier.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        IList<OPC_Sale> GetByOrderNo(string orderID);
+        IList<SaleDto> GetByOrderNo(string orderID);
     }
 }

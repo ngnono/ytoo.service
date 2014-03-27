@@ -12,6 +12,15 @@ namespace Intime.OPC.Service
         {
             //Mapper.CreateMap<OPC_Sale, SaleDto>();
             Mapper.CreateMap<Order, OrderDto>(o => converDto(o));
+
+            var map = AutoMapper.Mapper.CreateMap<OPC_Sale, SaleDto>();
+            map.ForMember(d => d.StatusName, opt => opt.MapFrom(t => GetSaleStatusName(t.Status))); 
+        }
+
+        private static  string GetSaleStatusName(int status)
+        {
+            var orderStatus = (EnumSaleOrderStatus)status;
+            return  orderStatus.GetDescription();
         }
 
         private static OrderDto converDto(Order o)

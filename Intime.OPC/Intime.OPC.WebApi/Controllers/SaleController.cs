@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
@@ -369,17 +370,12 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        public IHttpActionResult GetSalePrintSale(string startDate, string endDate, string saleOrderNo, string orderNo,
+        public IHttpActionResult GetSalePrintSale(DateTime startDate, DateTime endDate, string saleOrderNo, string orderNo,
             [UserId] int userId)
         {
             try
             {
-                DateTime dtStart = DateTime.MinValue;
-                bool bl = DateTime.TryParse(startDate, out dtStart);
-
-                DateTime dtEnd = DateTime.Now;
-                bl = DateTime.TryParse(endDate, out dtEnd);
-                return Ok(_saleService.GetPrintSale(saleOrderNo, userId, orderNo, dtStart, dtEnd));
+                return Ok(_saleService.GetPrintSale(saleOrderNo, userId, orderNo, startDate, endDate));
             }
             catch (SaleOrderNotExistsException e)
             {
@@ -491,7 +487,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             try
             {
-                IList<OPC_Sale> d = _saleService.GetByOrderNo(orderID);
+                IList<SaleDto> d = _saleService.GetByOrderNo(orderID);
                 return Ok(d);
             }
             catch (OrderNoIsNullException ex)
