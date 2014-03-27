@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
 {
-    public class IMS_Combo2ProductMap : EntityTypeConfiguration<IMS_Combo2Product>
+    public partial class IMS_Combo2ProductEntityMap : EntityTypeConfiguration<IMS_Combo2ProductEntity>
     {
-        public IMS_Combo2ProductMap()
+        public IMS_Combo2ProductEntityMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
@@ -15,6 +16,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.ComboId).HasColumnName("ComboId");
             this.Property(t => t.ProductId).HasColumnName("ProductId");
+		Init();
         }
+
+		partial void Init();
     }
 }

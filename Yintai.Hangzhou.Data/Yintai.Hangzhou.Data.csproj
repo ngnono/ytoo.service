@@ -89,6 +89,7 @@
     <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
     <Compile Include="Models\Banner.cs" />
     <Compile Include="Models\IMS_Associate.cs" />
+    <Compile Include="Models\IMS_AssociateBrand.cs" />
     <Compile Include="Models\IMS_AssociateIncome.cs" />
     <Compile Include="Models\IMS_AssociateIncomeHistory.cs" />
     <Compile Include="Models\IMS_AssociateIncomeRequest.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Models\IMS_AssociateIncomeRuleFlatten.cs" />
     <Compile Include="Models\IMS_AssociateIncomeRuleFlex.cs" />
     <Compile Include="Models\IMS_AssociateItems.cs" />
+    <Compile Include="Models\IMS_AssociateSaleCode.cs" />
     <Compile Include="Models\IMS_Combo.cs" />
     <Compile Include="Models\IMS_Combo2Product.cs" />
     <Compile Include="Models\IMS_GiftCard.cs" />
@@ -131,6 +133,7 @@
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\JobSuccessHistory.cs" />
     <Compile Include="Models\Mapping\BannerMap.cs" />
+    <Compile Include="Models\Mapping\IMS_AssociateBrandMap.cs" />
     <Compile Include="Models\Mapping\IMS_AssociateIncomeHistoryMap.cs" />
     <Compile Include="Models\Mapping\IMS_AssociateIncomeMap.cs" />
     <Compile Include="Models\Mapping\IMS_AssociateIncomeRequestMap.cs" />
@@ -140,6 +143,7 @@
     <Compile Include="Models\Mapping\IMS_AssociateIncomeRuleMap.cs" />
     <Compile Include="Models\Mapping\IMS_AssociateItemsMap.cs" />
     <Compile Include="Models\Mapping\IMS_AssociateMap.cs" />
+    <Compile Include="Models\Mapping\IMS_AssociateSaleCodeMap.cs" />
     <Compile Include="Models\Mapping\IMS_Combo2ProductMap.cs" />
     <Compile Include="Models\Mapping\IMS_ComboMap.cs" />
     <Compile Include="Models\Mapping\IMS_GiftCardItemMap.cs" />

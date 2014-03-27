@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class IMS_AssociateIncomeRuleFlex : Yintai.Architecture.Common.Models.BaseEntity
+    public partial class IMS_AssociateIncomeRuleFlexEntity : Yintai.Architecture.Common.Models.BaseEntity
     {
         public int Id { get; set; }
         public int RuleId { get; set; }
@@ -10,9 +11,17 @@ namespace Yintai.Hangzhou.Data.Models
         public decimal BenchTo { get; set; }
         public Nullable<decimal> Percentage { get; set; }
 
+        #region Overrides of BaseEntity
+
+        /// <summary>
+        /// KeyMemberId
+        /// </summary>
         public override object EntityId
-        {
-            get { return this.Id; }
+        {       
+                get { return Id; }
+ 
         }
+
+        #endregion
     }
 }

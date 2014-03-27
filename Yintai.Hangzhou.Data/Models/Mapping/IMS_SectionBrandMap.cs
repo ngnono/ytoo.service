@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
 {
-    public class IMS_SectionBrandMap : EntityTypeConfiguration<IMS_SectionBrand>
+    public partial class IMS_SectionBrandEntityMap : EntityTypeConfiguration<IMS_SectionBrandEntity>
     {
-        public IMS_SectionBrandMap()
+        public IMS_SectionBrandEntityMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
@@ -15,6 +16,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.SectionId).HasColumnName("SectionId");
             this.Property(t => t.BrandId).HasColumnName("BrandId");
+		Init();
         }
+
+		partial void Init();
     }
 }

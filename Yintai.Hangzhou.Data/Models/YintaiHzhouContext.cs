@@ -218,27 +218,27 @@ namespace Yintai.Hangzhou.Data.Models
 
         public DbSet<MappedProductBackup> MappedProductBackups { get; set; }
 
-        public DbSet<IMS_Associate> IMS_Associate { get; set; }
-        public DbSet<IMS_AssociateIncome> IMS_AssociateIncome { get; set; }
-        public DbSet<IMS_AssociateIncomeHistory> IMS_AssociateIncomeHistory { get; set; }
-        public DbSet<IMS_AssociateIncomeRequest> IMS_AssociateIncomeRequest { get; set; }
-        public DbSet<IMS_AssociateIncomeRule> IMS_AssociateIncomeRule { get; set; }
-        public DbSet<IMS_AssociateIncomeRuleFix> IMS_AssociateIncomeRuleFix { get; set; }
-        public DbSet<IMS_AssociateIncomeRuleFlatten> IMS_AssociateIncomeRuleFlatten { get; set; }
-        public DbSet<IMS_AssociateIncomeRuleFlex> IMS_AssociateIncomeRuleFlex { get; set; }
-        public DbSet<IMS_AssociateItems> IMS_AssociateItems { get; set; }
-        public DbSet<IMS_Combo> IMS_Combo { get; set; }
-        public DbSet<IMS_Combo2Product> IMS_Combo2Product { get; set; }
-        public DbSet<IMS_GiftCard> IMS_GiftCard { get; set; }
-        public DbSet<IMS_GiftCardItem> IMS_GiftCardItem { get; set; }
-        public DbSet<IMS_GiftCardOrder> IMS_GiftCardOrder { get; set; }
-        public DbSet<IMS_GiftCardRecharge> IMS_GiftCardRecharge { get; set; }
-        public DbSet<IMS_GiftCardTransfers> IMS_GiftCardTransfers { get; set; }
-        public DbSet<IMS_GiftCardUser> IMS_GiftCardUser { get; set; }
-        public DbSet<IMS_InviteCode> IMS_InviteCode { get; set; }
-        public DbSet<IMS_SalesCode> IMS_SalesCode { get; set; }
-        public DbSet<IMS_SectionBrand> IMS_SectionBrand { get; set; }
-        public DbSet<IMS_SectionOperator> IMS_SectionOperator { get; set; }
+        public DbSet<IMS_AssociateEntity> IMS_Associate { get; set; }
+        public DbSet<IMS_AssociateIncomeEntity> IMS_AssociateIncome { get; set; }
+        public DbSet<IMS_AssociateIncomeHistoryEntity> IMS_AssociateIncomeHistory { get; set; }
+        public DbSet<IMS_AssociateIncomeRequestEntity> IMS_AssociateIncomeRequest { get; set; }
+        public DbSet<IMS_AssociateIncomeRuleEntity> IMS_AssociateIncomeRule { get; set; }
+        public DbSet<IMS_AssociateIncomeRuleFixEntity> IMS_AssociateIncomeRuleFix { get; set; }
+        public DbSet<IMS_AssociateIncomeRuleFlattenEntity> IMS_AssociateIncomeRuleFlatten { get; set; }
+        public DbSet<IMS_AssociateIncomeRuleFlexEntity> IMS_AssociateIncomeRuleFlex { get; set; }
+        public DbSet<IMS_AssociateItemsEntity> IMS_AssociateItems { get; set; }
+        public DbSet<IMS_ComboEntity> IMS_Combo { get; set; }
+        public DbSet<IMS_Combo2ProductEntity> IMS_Combo2Product { get; set; }
+        public DbSet<IMS_GiftCardEntity> IMS_GiftCard { get; set; }
+        public DbSet<IMS_GiftCardItemEntity> IMS_GiftCardItem { get; set; }
+        public DbSet<IMS_GiftCardOrderEntity> IMS_GiftCardOrder { get; set; }
+        public DbSet<IMS_GiftCardRechargeEntity> IMS_GiftCardRecharge { get; set; }
+        public DbSet<IMS_GiftCardTransfersEntity> IMS_GiftCardTransfers { get; set; }
+        public DbSet<IMS_GiftCardUserEntity> IMS_GiftCardUser { get; set; }
+        public DbSet<IMS_InviteCodeEntity> IMS_InviteCode { get; set; }
+        public DbSet<IMS_SalesCodeEntity> IMS_SalesCode { get; set; }
+        public DbSet<IMS_SectionBrandEntity> IMS_SectionBrand { get; set; }
+        public DbSet<IMS_SectionOperatorEntity> IMS_SectionOperator { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -339,27 +339,27 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new Map4InventoryMap());
             modelBuilder.Configurations.Add(new Map4OrderMap());
             modelBuilder.Configurations.Add(new MappedProductBackupMap());
-            modelBuilder.Configurations.Add(new IMS_AssociateMap());
-            modelBuilder.Configurations.Add(new IMS_AssociateIncomeMap());
-            modelBuilder.Configurations.Add(new IMS_AssociateIncomeHistoryMap());
-            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRequestMap());
-            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleMap());
-            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFixMap());
-            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFlattenMap());
-            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFlexMap());
-            modelBuilder.Configurations.Add(new IMS_AssociateItemsMap());
-            modelBuilder.Configurations.Add(new IMS_ComboMap());
-            modelBuilder.Configurations.Add(new IMS_Combo2ProductMap());
-            modelBuilder.Configurations.Add(new IMS_GiftCardMap());
-            modelBuilder.Configurations.Add(new IMS_GiftCardItemMap());
-            modelBuilder.Configurations.Add(new IMS_GiftCardOrderMap());
-            modelBuilder.Configurations.Add(new IMS_GiftCardRechargeMap());
-            modelBuilder.Configurations.Add(new IMS_GiftCardTransfersMap());
-            modelBuilder.Configurations.Add(new IMS_GiftCardUserMap());
-            modelBuilder.Configurations.Add(new IMS_InviteCodeMap());
-            modelBuilder.Configurations.Add(new IMS_SalesCodeMap());
-            modelBuilder.Configurations.Add(new IMS_SectionBrandMap());
-            modelBuilder.Configurations.Add(new IMS_SectionOperatorMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateIncomeEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateIncomeHistoryEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRequestEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFixEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFlattenEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFlexEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateItemsEntityMap());
+            modelBuilder.Configurations.Add(new IMS_ComboEntityMap());
+            modelBuilder.Configurations.Add(new IMS_Combo2ProductEntityMap());
+            modelBuilder.Configurations.Add(new IMS_GiftCardEntityMap());
+            modelBuilder.Configurations.Add(new IMS_GiftCardItemEntityMap());
+            modelBuilder.Configurations.Add(new IMS_GiftCardOrderEntityMap());
+            modelBuilder.Configurations.Add(new IMS_GiftCardRechargeEntityMap());
+            modelBuilder.Configurations.Add(new IMS_GiftCardTransfersEntityMap());
+            modelBuilder.Configurations.Add(new IMS_GiftCardUserEntityMap());
+            modelBuilder.Configurations.Add(new IMS_InviteCodeEntityMap());
+            modelBuilder.Configurations.Add(new IMS_SalesCodeEntityMap());
+            modelBuilder.Configurations.Add(new IMS_SectionBrandEntityMap());
+            modelBuilder.Configurations.Add(new IMS_SectionOperatorEntityMap());
 
         }
 

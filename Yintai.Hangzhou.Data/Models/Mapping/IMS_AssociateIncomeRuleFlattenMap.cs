@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
 {
-    public class IMS_AssociateIncomeRuleFlattenMap : EntityTypeConfiguration<IMS_AssociateIncomeRuleFlatten>
+    public partial class IMS_AssociateIncomeRuleFlattenEntityMap : EntityTypeConfiguration<IMS_AssociateIncomeRuleFlattenEntity>
     {
-        public IMS_AssociateIncomeRuleFlattenMap()
+        public IMS_AssociateIncomeRuleFlattenEntityMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
@@ -15,6 +16,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.RuleId).HasColumnName("RuleId");
             this.Property(t => t.Percentage).HasColumnName("Percentage");
+		Init();
         }
+
+		partial void Init();
     }
 }

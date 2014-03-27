@@ -1,10 +1,13 @@
+using System;
+using System.Collections.Generic;
+
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class IMS_SectionOperator : Yintai.Architecture.Common.Models.BaseEntity
+    public partial class IMS_SectionOperatorEntity : Yintai.Architecture.Common.Models.BaseEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Brands { get; set; }
+        public int SectionId { get; set; }
 
         #region Overrides of BaseEntity
 
@@ -12,9 +15,9 @@ namespace Yintai.Hangzhou.Data.Models
         /// KeyMemberId
         /// </summary>
         public override object EntityId
-        {
-            get { return Id; }
-
+        {       
+                get { return Id; }
+ 
         }
 
         #endregion

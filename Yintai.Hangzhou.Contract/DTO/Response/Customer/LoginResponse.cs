@@ -228,6 +228,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
 
         [DataMember(Name="operate_right")]
         public int? OperateRight { get; set; }
+
+        [DataMember(Name="template_id")]
+        public int? TemplateId { get; set; }
             
     }
 }

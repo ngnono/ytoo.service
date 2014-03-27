@@ -93,6 +93,10 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IEFRepository<OrderTransactionEntity>, EFRepository<OrderTransactionEntity>>();
             Current.Register<IEFRepository<PaymentNotifyLogEntity>, EFRepository<PaymentNotifyLogEntity>>();
             Current.Register<IEFRepository<ExOrderEntity>, EFRepository<ExOrderEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateEntity>, EFRepository<IMS_AssociateEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateBrandEntity>, EFRepository<IMS_AssociateBrandEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateSaleCodeEntity>, EFRepository<IMS_AssociateSaleCodeEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateItemsEntity>, EFRepository<IMS_AssociateItemsEntity>>();
         }
 
         #endregion

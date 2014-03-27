@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
 {
-    public class IMS_ComboMap : EntityTypeConfiguration<IMS_Combo>
+    public partial class IMS_ComboEntityMap : EntityTypeConfiguration<IMS_ComboEntity>
     {
-        public IMS_ComboMap()
+        public IMS_ComboEntityMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
@@ -31,6 +32,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.OnlineDate).HasColumnName("OnlineDate");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
+		Init();
         }
+
+		partial void Init();
     }
 }

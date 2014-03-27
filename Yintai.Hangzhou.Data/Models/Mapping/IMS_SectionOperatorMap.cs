@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
 {
-    public class IMS_SectionOperatorMap : EntityTypeConfiguration<IMS_SectionOperator>
+    public partial class IMS_SectionOperatorEntityMap : EntityTypeConfiguration<IMS_SectionOperatorEntity>
     {
-        public IMS_SectionOperatorMap()
+        public IMS_SectionOperatorEntityMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
@@ -14,14 +15,14 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(50);
 
-            this.Property(t => t.Brands)
-                .HasMaxLength(50);
-
             // Table & Column Mappings
             this.ToTable("IMS_SectionOperator");
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.Name).HasColumnName("Name");
-            this.Property(t => t.Brands).HasColumnName("Brands");
+            this.Property(t => t.SectionId).HasColumnName("SectionId");
+		Init();
         }
+
+		partial void Init();
     }
 }

@@ -81,13 +81,14 @@
     <Compile Include="ConfigManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EnumExtension.cs" />
+    <Compile Include="Extension\EnumExtension.cs" />
     <Compile Include="Erp2ServiceHelper.cs" />
     <Compile Include="Erp2\Erp2Config.cs" />
     <Compile Include="Erp2\Util.cs" />
     <Compile Include="ErpServiceHelper.cs" />
     <Compile Include="Erp\ErpConfig.cs" />
     <Compile Include="Erp\Util.cs" />
+    <Compile Include="Extension\ImageOperaExtension.cs" />
     <Compile Include="GroupServiceHelper.cs" />
     <Compile Include="SecurityHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

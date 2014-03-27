@@ -224,8 +224,19 @@ namespace com.intime.fashion.common
             {
                 return int.Parse(ConfigurationManager.AppSettings["VoidOrderRMAReasonId"]);
             }
-        } 
-
+        }
        
+        public static int IMS_DEFAULT_TEMPLATE
+        {
+            get { 
+                return int.Parse(ConfigurationManager.AppSettings["IMS_Default_Template"]);
+            }
+        }
+
+
+
+        public static string IMS_DEFAULT_LOGO { get{
+            return ConfigurationManager.AppSettings["IMS_Default_LOGO"];
+        } }
     }
 }

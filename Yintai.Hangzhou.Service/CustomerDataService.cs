@@ -308,6 +308,17 @@ namespace Yintai.Hangzhou.Service
 
             var result = new ExecuteResult<CustomerInfoResponse>();
             var response = MappingManager.CustomerInfoResponseMappingForReadCount(userModel);
+
+            //modify: plug in template if user is the daogou
+            if (response.UserLevel == (int)UserLevel.DaoGou)
+            {
+                var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == response.Id).FirstOrDefault();
+                if (associateEntity != null)
+                {
+                    response.TemplateId = associateEntity.TemplateId;
+                    response.OperateRight = associateEntity.OperateRight;
+                }
+            }
             result.Data = response;
 
             return result;

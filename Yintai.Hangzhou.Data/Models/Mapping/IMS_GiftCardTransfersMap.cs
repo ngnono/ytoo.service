@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
 {
-    public class IMS_GiftCardTransfersMap : EntityTypeConfiguration<IMS_GiftCardTransfers>
+    public partial class IMS_GiftCardTransfersEntityMap : EntityTypeConfiguration<IMS_GiftCardTransfersEntity>
     {
-        public IMS_GiftCardTransfersMap()
+        public IMS_GiftCardTransfersEntityMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
@@ -30,6 +31,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.PreTransferId).HasColumnName("PreTransferId");
             this.Property(t => t.CreateDate).HasColumnName("CreateDate");
             this.Property(t => t.CreateUser).HasColumnName("CreateUser");
+		Init();
         }
+
+		partial void Init();
     }
 }

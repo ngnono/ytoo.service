@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
 {
-    public class IMS_SalesCodeMap : EntityTypeConfiguration<IMS_SalesCode>
+    public partial class IMS_SalesCodeEntityMap : EntityTypeConfiguration<IMS_SalesCodeEntity>
     {
-        public IMS_SalesCodeMap()
+        public IMS_SalesCodeEntityMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
@@ -19,6 +20,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.SectionId).HasColumnName("SectionId");
             this.Property(t => t.Code).HasColumnName("Code");
+		Init();
         }
+
+		partial void Init();
     }
 }

@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
+
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class IMS_GiftCardOrder : Yintai.Architecture.Common.Models.BaseEntity
+    public partial class IMS_GiftCardOrderEntity : Yintai.Architecture.Common.Models.BaseEntity
     {
         public int Id { get; set; }
         public string No { get; set; }
@@ -12,9 +15,17 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime CreateDate { get; set; }
         public int CreateUser { get; set; }
 
+        #region Overrides of BaseEntity
+
+        /// <summary>
+        /// KeyMemberId
+        /// </summary>
         public override object EntityId
-        {
-            get { return this.Id; }
+        {       
+                get { return Id; }
+ 
         }
+
+        #endregion
     }
 }

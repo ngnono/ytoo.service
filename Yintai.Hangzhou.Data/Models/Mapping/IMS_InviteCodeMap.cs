@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
 {
-    public class IMS_InviteCodeMap : EntityTypeConfiguration<IMS_InviteCode>
+    public partial class IMS_InviteCodeEntityMap : EntityTypeConfiguration<IMS_InviteCodeEntity>
     {
-        public IMS_InviteCodeMap()
+        public IMS_InviteCodeEntityMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
@@ -28,6 +29,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
             this.Property(t => t.Status).HasColumnName("Status");
+		Init();
         }
+
+		partial void Init();
     }
 }

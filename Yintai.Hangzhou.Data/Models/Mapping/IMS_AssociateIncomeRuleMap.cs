@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
 {
-    public class IMS_AssociateIncomeRuleMap : EntityTypeConfiguration<IMS_AssociateIncomeRule>
+    public partial class IMS_AssociateIncomeRuleEntityMap : EntityTypeConfiguration<IMS_AssociateIncomeRuleEntity>
     {
-        public IMS_AssociateIncomeRuleMap()
+        public IMS_AssociateIncomeRuleEntityMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
@@ -18,6 +19,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.EndDate).HasColumnName("EndDate");
             this.Property(t => t.RuleType).HasColumnName("RuleType");
             this.Property(t => t.Status).HasColumnName("Status");
+		Init();
         }
+
+		partial void Init();
     }
 }

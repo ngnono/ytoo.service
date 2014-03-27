@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
+
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class IMS_AssociateItems : Yintai.Architecture.Common.Models.BaseEntity
+    public partial class IMS_AssociateItemsEntity : Yintai.Architecture.Common.Models.BaseEntity
     {
         public int Id { get; set; }
         public int AssociateId { get; set; }
@@ -12,9 +15,17 @@ namespace Yintai.Hangzhou.Data.Models
         public int UpdateUser { get; set; }
         public System.DateTime UpdateDate { get; set; }
 
+        #region Overrides of BaseEntity
+
+        /// <summary>
+        /// KeyMemberId
+        /// </summary>
         public override object EntityId
-        {
-            get { return this.Id; }
+        {       
+                get { return Id; }
+ 
         }
+
+        #endregion
     }
 }
