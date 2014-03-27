@@ -19,7 +19,7 @@ namespace OPCApp.TransManage.ViewModels
         //Grid数据集
         private Invoice4Get invoice4get;
         private OPC_Sale invoice4remark = new OPC_Sale();
-        private IEnumerable<OPC_SaleDetail> invoicedetail4list;
+        private List<OPC_SaleDetail> invoicedetail4list;
         private IEnumerable<OPC_Sale> saleList;
 
         public PrintInvoiceViewModel()
@@ -61,7 +61,7 @@ namespace OPCApp.TransManage.ViewModels
 
         //销售单明细Grid数据集
 
-        public IEnumerable<OPC_SaleDetail> InvoiceDetail4List
+        public List<OPC_SaleDetail> InvoiceDetail4List
         {
             get { return invoicedetail4list; }
             set { SetProperty(ref invoicedetail4list, value); }
@@ -98,10 +98,12 @@ namespace OPCApp.TransManage.ViewModels
                 Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo);
             PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter, SearchSaleStatus);
             SaleList = re.Result;
+            if (InvoiceDetail4List != null) InvoiceDetail4List.Clear();
         }
 
         public void CommandGetDownExecute()
         {
+            if(SaleList==null)return;
             OPC_Sale saleCur = SaleList.Where(n => n.IsSelected).FirstOrDefault();
             if (saleCur == null)
             {
@@ -111,7 +113,7 @@ namespace OPCApp.TransManage.ViewModels
             }
             //这个工作状态
             InvoiceDetail4List =
-                AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleCur.SaleOrderNo).Result;
+                AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleCur.SaleOrderNo).Result.ToList();
         }
 
         public void CommandViewAndPrintExecute()

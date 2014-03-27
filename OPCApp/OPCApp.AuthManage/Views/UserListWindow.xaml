@@ -79,7 +79,7 @@
 
         </StackPanel>
 
-        <DataGrid x:Name="dataGrid" Grid.Row="2" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
+        <DataGrid x:Name="dataGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True" HorizontalScrollBarVisibility="Auto"
                   ItemsSource="{Binding Models }">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

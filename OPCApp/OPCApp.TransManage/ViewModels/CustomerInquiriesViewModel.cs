@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Windows.Controls;
 using Intime.OPC.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
@@ -104,6 +105,11 @@ namespace OPCApp.TransManage.ViewModels
             string orderNo = string.Format("orderID={0}", SelectOrder.OrderNo);
             //这个工作状态
             SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderNo).Result;
+            if (SaleList != null)
+            {
+                var sale = SaleList.ToList()[0];
+                SaleDetailList = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result;
+            }
         }
 
         public void GetSaleDetailBySaleId()
