@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Yintai.Hangzhou.Data.Models
 {
@@ -32,6 +31,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string SkuCode { get; set; }
         public string BarCode { get; set; }
         public string MoreDesc { get; set; }
+        public Nullable<int> ProductType { get; set; }
 
         #region Overrides of BaseEntity
 
@@ -39,9 +39,9 @@ namespace Yintai.Hangzhou.Data.Models
         /// KeyMemberId
         /// </summary>
         public override object EntityId
-        {       
-                get { return Id; }
- 
+        {
+            get { return Id; }
+
         }
 
         #endregion

@@ -33,6 +33,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<decimal> InvoiceAmount { get; set; }
         public Nullable<int> TotalPoints { get; set; }
         public string OrderSource { get; set; }
+        public Nullable<int> OrderType { get; set; }
 
         #region Overrides of BaseEntity
 
