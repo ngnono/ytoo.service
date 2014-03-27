@@ -11,6 +11,7 @@ using OPCApp.Infrastructure;
 namespace OPCApp.TransManage.ViewModels
 {
     [Export("StoreOutViewModel", typeof (StoreOutViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class StoreOutViewModel : PrintInvoiceViewModel
     {
         public StoreOutViewModel()

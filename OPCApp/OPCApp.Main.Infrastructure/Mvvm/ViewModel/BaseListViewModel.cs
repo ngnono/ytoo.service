@@ -57,6 +57,7 @@ namespace OPCApp.Infrastructure.Mvvm
             SearchCommand = new DelegateCommand(SearchAction);
             EditCommand = new DelegateCommand<T>(EditAction);
             DeleteCommand = new DelegateCommand<T>(DeleteAction);
+            LoadCommand=new DelegateCommand(Load);
             ViewKey = viewKey;
 
             _Collection = new ObservableCollection<T>();
@@ -88,6 +89,10 @@ namespace OPCApp.Infrastructure.Mvvm
         #region Methods
 
         #region Action
+
+        protected virtual  void Load()
+        {
+        }
 
         /// <summary>
         ///     Adds the action.
@@ -204,6 +209,7 @@ namespace OPCApp.Infrastructure.Mvvm
         {
             IBaseDataService<T> service = GetDataService();
             PageResult<T> c = service.Search(GetFilter());
+            _Collection.Clear();
             foreach (T item in c.Result)
             {
                 _Collection.Add(item);
@@ -247,7 +253,7 @@ namespace OPCApp.Infrastructure.Mvvm
         /// </summary>
         /// <value>The search command.</value>
         public ICommand SearchCommand { get; set; }
-
+        public ICommand LoadCommand { get; set; }
         #endregion
     }
 }

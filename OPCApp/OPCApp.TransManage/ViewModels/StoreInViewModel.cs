@@ -26,6 +26,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void CommandSoldOutExecute()
         {
+            if(SaleList==null)return;
             List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
             var ts = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = ts.SetStatusSoldOut(selectSaleIds);
