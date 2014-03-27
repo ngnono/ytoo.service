@@ -15,38 +15,39 @@
 /// <summary>
 /// The Enums namespace.
 /// </summary>
+
 namespace OPCAPP.Domain.Enums
 {
     /// <summary>
-    /// 收银状态
-    /// <summary>
-    /// Enum EnumSearchSaleStatus
-    /// </summary>
+    ///     收银状态
+    ///     <summary>
+    ///         Enum EnumSearchSaleStatus
+    ///     </summary>
     public enum EnumSearchSaleStatus
     {
+        /// <summary>
+        ///     完成打印查询
+        /// </summary>
+        CompletePrintSearchStatus = 0,
 
         /// <summary>
-        /// 完成打印查询
-        /// </summary>
-        CompletePrintSearchStatus= 0,
-        /// <summary>
-        /// 入库查询
+        ///     入库查询
         /// </summary>
         StoreInDataBaseSearchStatus = 5,
+
         /// <summary>
-        /// 出库 打印发货但查询
+        ///     出库 打印发货但查询
         /// </summary>
         StoreOutDataBaseSearchStatus = 10,
+
         /// <summary>
-        ///打印发货单查询
+        ///     打印发货单查询
         /// </summary>
         PrintInvoiceSearchStatus = 15,
+
         /// <summary>
-        /// 打印快递单查询
+        ///     打印快递单查询
         /// </summary>
-        PrintExpressSearchStatus =20,
-        
-
-
+        PrintExpressSearchStatus = 20,
     }
 }

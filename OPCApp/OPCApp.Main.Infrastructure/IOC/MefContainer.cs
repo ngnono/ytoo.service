@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Primitives;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
-using System.Reflection;
-
 
 namespace OPCApp.Infrastructure
 {
     public class MefContainer : IContainer
     {
-        CompositionContainer _container;
+        private readonly CompositionContainer _container;
+
         public MefContainer(AggregateCatalog aggCatalog)
         {
             _container = new CompositionContainer(aggCatalog);
-
         }
 
         public MefContainer(CompositionContainer container)
         {
             _container = container;
-
         }
+
         public IEnumerable<T> GetInstances<T>()
         {
             return _container.GetExportedValues<T>();
@@ -41,8 +34,8 @@ namespace OPCApp.Infrastructure
 
         public void Dispose()
         {
-            if (_container!=null)
-            _container.Dispose();
+            if (_container != null)
+                _container.Dispose();
         }
     }
 }

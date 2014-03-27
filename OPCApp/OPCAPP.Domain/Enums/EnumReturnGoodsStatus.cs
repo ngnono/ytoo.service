@@ -11,54 +11,42 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
+
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OPCAPP.Domain.Enums
 {
     /// <summary>
-    /// 退货状态
+    ///     退货状态
     /// </summary>
     public enum EnumReturnGoodsStatus
     {
+        /// <summary>
+        ///     The service approve
+        /// </summary>
+        [Description("客服批准")] ServiceApprove = 0,
 
 
         /// <summary>
-        /// The service approve
+        ///     The compensate verify
         /// </summary>
-        [Description("客服批准")]
-        ServiceApprove = 0,
+        [Description("赔偿审核")] CompensateVerify = 5,
 
 
         /// <summary>
-        /// The compensate verify
+        ///     The compensate verify pass
         /// </summary>
-        [Description("赔偿审核")]
-        CompensateVerify = 5,
+        [Description("赔偿审核通过")] CompensateVerifyPass = 5,
 
 
         /// <summary>
-        /// The compensate verify pass
+        ///     The compensate verify failed
         /// </summary>
-        [Description("赔偿审核通过")]
-        CompensateVerifyPass = 5,
-
+        [Description("赔偿审核未通过")] CompensateVerifyFailed = 5,
 
         /// <summary>
-        /// The compensate verify failed
+        ///     The valid
         /// </summary>
-        [Description("赔偿审核未通过")]
-        CompensateVerifyFailed = 5,
-
-        /// <summary>
-        /// The valid
-        /// </summary>
-        [Description("已生效")]
-        Valid = 5
-
+        [Description("已生效")] Valid = 5
     }
 }

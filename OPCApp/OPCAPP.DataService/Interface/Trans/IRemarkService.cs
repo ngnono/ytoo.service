@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Intime.OPC.Domain.Models;
+﻿using Intime.OPC.Domain.Models;
 using OPCApp.Infrastructure;
-using OPCApp.Infrastructure.DataService;
 
 namespace OPCApp.DataService.Interface.Trans
 {
@@ -17,6 +11,5 @@ namespace OPCApp.DataService.Interface.Trans
 
         bool WriteSaleDetailsRemark(OPC_SaleDetailsComment saleDetailsComment);
         PageResult<OPC_SaleDetailsComment> GetSaleDetailsRemark(string SaleDetailId);
-
     }
 }

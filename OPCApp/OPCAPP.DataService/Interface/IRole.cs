@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OPCApp.DataService.Interface
+﻿namespace OPCApp.DataService.Interface
 {
-    interface IRole
+    internal interface IRole
     {
-
     }
 }

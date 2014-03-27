@@ -1,105 +1,116 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.AuthManage.Views;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
-using OPCApp.AuthManage.Views;
 
 namespace OPCApp.AuthManage.ViewModels
 {
-   [Export("Role2UserViewModel", typeof(Role2UserWindowViewModel))]
-   public class Role2UserWindowViewModel:BindableBase
+    [Export("Role2UserViewModel", typeof (Role2UserWindowViewModel))]
+    public class Role2UserWindowViewModel : BindableBase
     {
+        private OPC_AuthRole _role;
+        private List<OPC_AuthUser> _rolelist;
         private List<OPC_AuthUser> _userlist;
+
+        public Role2UserWindowViewModel()
+        {
+            AuthorizationUserCommand = new DelegateCommand(AuthorizationUser);
+            AddUserWindowCommand = new DelegateCommand(AddUsersWindow);
+            RefreshCommand = new DelegateCommand(Refresh);
+            DbGridClickCommand = new DelegateCommand(DBGridClick);
+            GetSelectedCommand = new DelegateCommand(GetSelected);
+            DeleteCommand = new DelegateCommand(DeleteUserList);
+            Init();
+        }
+
         public List<OPC_AuthUser> UserList
         {
-
-            get { return this._userlist; }
-            set { SetProperty(ref this._userlist, value); }
+            get { return _userlist; }
+            set { SetProperty(ref _userlist, value); }
         }
-        private List<OPC_AuthUser> _rolelist;
+
         public List<OPC_AuthUser> RoleList
         {
-
-            get { return this._rolelist; }
-            set { SetProperty(ref this._rolelist, value); }
+            get { return _rolelist; }
+            set { SetProperty(ref _rolelist, value); }
         }
+
         /*选中的用户Id*/
         private List<int> SelectedUserIdList { get; set; }
         /**/
-        private OPC_AuthRole _role;
+
         public OPC_AuthRole SelectedRole
         {
-
-            get { return this._role; }
-            set { SetProperty(ref this._role, value); }
+            get { return _role; }
+            set { SetProperty(ref _role, value); }
         }
 
-       public Role2UserWindowViewModel() 
-       {
-           this.AuthorizationUserCommand = new DelegateCommand(this.AuthorizationUser);
-           this.AddUserWindowCommand = new DelegateCommand(this.AddUsersWindow);
-           this.DeleteUserListCommand = new DelegateCommand(this.DeleteUserList);
-           this.DbGridClickCommand = new DelegateCommand(this.DBGridClick);
-           this.GetSelectedCommand=new DelegateCommand(this.GetSelected);
-           this.Init();
-       }
-       public void Init()
-       {
-           IRoleDataService roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
-           roleDataService.Search(null);
-           IMenuDataService menuDataService = AppEx.Container.GetInstance<IMenuDataService>();
-           menuDataService.GetMenus();//所有的 还是有权限
-       }
-       public DelegateCommand DeleteUserListCommand { get; set; }
-       public DelegateCommand GetSelectedCommand { get; set; }
-       public DelegateCommand AuthorizationUserCommand { get; set; }
-       public DelegateCommand AddUserWindowCommand { get; set; }
-       public DelegateCommand DbGridClickCommand { get; set; }
+        public DelegateCommand RefreshCommand { get; set; }
+        public DelegateCommand GetSelectedCommand { get; set; }
+        public DelegateCommand AuthorizationUserCommand { get; set; }
+        public DelegateCommand AddUserWindowCommand { get; set; }
+        public DelegateCommand DbGridClickCommand { get; set; }
+        public DelegateCommand DeleteCommand { get; set; }
 
-       private void DeleteUserList()
-       {
-           //liuyahua
-          // var userSeleted = UserList.Where(e => e.IsSelected == true);
-           UserList.Remove(e => e.IsSelected == true);
-           //UserList.Remove()
-       }
+        private void Refresh()
+        {
+            throw new NotImplementedException();
+        }
 
-       private void DBGridClick()
-       {
-           IRole2UserService role2UserService = AppEx.Container.GetInstance<IRole2UserService>();
-           if (SelectedRole == null) return;
-          this.UserList= role2UserService.GetUserListByRole(SelectedRole.Id);
+        public void Init()
+        {
+            var roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
+            roleDataService.Search(null);
+            if (SelectedRole == null)
+            {
+                if (UserList == null) return;
+                UserList.Clear();
+                return;
+            }
+            var menuDataService = AppEx.Container.GetInstance<IRole2UserService>();
+            menuDataService.GetUserListByRole(SelectedRole.Id); //所有的 还是有权限
+        }
 
-       }
+        private void DeleteUserList()
+        {
+            if (UserList == null)return;
+            UserList.Remove(e => e.IsSelected);
+        }
 
-       private void GetSelected()
-       {
-           this.SelectedUserIdList = UserList.Where(n => n.IsSelected == true).Select(e => e.Id).ToList();
-       }
+        private void DBGridClick()
+        {
+            var role2UserService = AppEx.Container.GetInstance<IRole2UserService>();
+            if (SelectedRole == null) return;
+            UserList = role2UserService.GetUserListByRole(SelectedRole.Id);
+        }
 
-       private void AuthorizationUser()
-       {
-          IRole2UserService role2UserService = AppEx.Container.GetInstance<IRole2UserService>();
-           if (SelectedRole == null || this.SelectedUserIdList==null) return;
-          role2UserService.SetUserByRole(SelectedRole.Id, this.SelectedUserIdList);
-       }
+        private void GetSelected()
+        {
+            SelectedUserIdList = UserList.Where(n => n.IsSelected).Select(e => e.Id).ToList();
+        }
 
-       
-       private void AddUsersWindow()
-       {
-           UsersWindow obj = AppEx.Container.GetInstance<UsersWindow>("UsersView");
-           if (obj.ShowDialog()==true)
-           {
-               this.UserList = obj.ViewModel.UserList;
-           }
-           ;
-       }
+        private void AuthorizationUser()
+        {
+            var role2UserService = AppEx.Container.GetInstance<IRole2UserService>();
+            if (SelectedRole == null || SelectedUserIdList == null) return;
+            role2UserService.SetUserByRole(SelectedRole.Id, SelectedUserIdList);
+        }
 
-    
 
-}
+        private void AddUsersWindow()
+        {
+            var obj = AppEx.Container.GetInstance<UsersWindow>("UsersView");
+            if (obj.ShowDialog() == true)
+            {
+                UserList = obj.ViewModel.UserList;
+            }
+            ;
+        }
+    }
 }

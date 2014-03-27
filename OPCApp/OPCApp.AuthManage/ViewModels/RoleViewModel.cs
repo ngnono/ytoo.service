@@ -12,39 +12,39 @@
 // <summary></summary>
 // ***********************************************************************
 
-﻿using System.ComponentModel.Composition;
-﻿using OPCApp.DataService.Interface;
-﻿using OPCApp.Infrastructure;
-﻿using OPCApp.Infrastructure.Mvvm;
+using System.ComponentModel.Composition;
+using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
+using OPCApp.Infrastructure;
+using OPCApp.Infrastructure.DataService;
+using OPCApp.Infrastructure.Mvvm;
+
 namespace OPCApp.AuthManage.ViewModels
 {
     /// <summary>
-    /// Class RoleViewModel.
+    ///     Class RoleViewModel.
     /// </summary>
-    [Export("RoleViewModel", typeof(IViewModel))]
+    [Export("RoleViewModel", typeof (IViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class RoleViewModel : BaseViewModel<OPC_AuthRole>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RoleViewModel"/> class.
+        ///     Initializes a new instance of the <see cref="RoleViewModel" /> class.
         /// </summary>
         public RoleViewModel()
             : base("RoleAddView")
         {
             if (AppEx.LoginModel != null)
             {
-                this.Model = new OPC_AuthRole() {CreateUserId = AppEx.LoginModel.UserID};
+                Model = new OPC_AuthRole {CreateUserId = AppEx.LoginModel.UserID};
             }
             else
             {
-                this.Model = new OPC_AuthRole() { CreateUserId = 0 };
+                Model = new OPC_AuthRole {CreateUserId = 0};
             }
-
-
         }
 
-        protected override Infrastructure.DataService.IBaseDataService<OPC_AuthRole> GetDataService()
+        protected override IBaseDataService<OPC_AuthRole> GetDataService()
         {
             return AppEx.Container.GetInstance<IRoleDataService>();
         }

@@ -1,5 +1,3 @@
-using System;
-
 namespace Intime.OPC.Domain.Models
 {
     public class OPC_SaleDetail

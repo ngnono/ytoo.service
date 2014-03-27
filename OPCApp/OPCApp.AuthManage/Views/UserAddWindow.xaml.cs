@@ -1,30 +1,28 @@
-﻿using MahApps.Metro.Controls;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
+using MahApps.Metro.Controls;
 using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.AuthManage.Views
 {
-   [Export("UserView", typeof(IBaseView))]
-   [PartCreationPolicy(CreationPolicy.NonShared)]
+    [Export("UserView", typeof (IBaseView))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class UserAddWindow : MetroWindow, IBaseView
     {
-
-       public UserAddWindow()
+        public UserAddWindow()
         {
             InitializeComponent();
-
         }
-        public void Cancel() 
+
+        public void Cancel()
         {
-            
-            this.DialogResult = false;
-            this.Close();
+            DialogResult = false;
+            Close();
         }
 
         public void CloseView()
         {
-            this.DialogResult = true;
-            this.Close();
+            DialogResult = true;
+            Close();
         }
     }
 }

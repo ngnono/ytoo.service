@@ -11,51 +11,44 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System.ComponentModel;
 
 namespace OPCAPP.Domain.Enums
 {
     /// <summary>
-    /// 退货单状态
+    ///     退货单状态
     /// </summary>
     public enum EnumRMAStatus
     {
+        /// <summary>
+        ///     The no delivery
+        /// </summary>
+        [Description("未送货")] NoDelivery = 0,
 
         /// <summary>
-        /// The no delivery
+        ///     The ship receive
         /// </summary>
-        [Description("未送货")]
-        NoDelivery = 0,
+        [Description("物流收货")] ShipReceive = 5,
 
         /// <summary>
-        /// The ship receive
+        ///     The ship verify
         /// </summary>
-        [Description("物流收货")]
-        ShipReceive = 5,
+        [Description("物流审核")] ShipVerify = 10,
 
         /// <summary>
-        /// The ship verify
+        ///     The ship in storage
         /// </summary>
-        [Description("物流审核")]
-        ShipVerify = 10,
+        [Description("物流入库")] ShipInStorage = 15,
 
         /// <summary>
-        /// The ship in storage
+        ///     The print rma
         /// </summary>
-        [Description("物流入库")]
-        ShipInStorage = 15,
+        [Description("打印退货单")] PrintRMA = 20,
 
         /// <summary>
-        /// The print rma
+        ///     The shopping guide receive
         /// </summary>
-        [Description("打印退货单")]
-        PrintRMA = 20,
-
-        /// <summary>
-        /// The shopping guide receive
-        /// </summary>
-        [Description("导购确认收货")]
-        ShoppingGuideReceive = 25
-
+        [Description("导购确认收货")] ShoppingGuideReceive = 25
     }
 }

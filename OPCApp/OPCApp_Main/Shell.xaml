@@ -1,14 +1,14 @@
-﻿<controls1:MetroWindow  x:Class="OPCApp.Main.Shell"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    xmlns:prism="http://www.codeplex.com/prism"
-    xmlns:controls="clr-namespace:OPCApp.Main.Controls;assembly=OPCApp.Main.Controls"
-                        xmlns:controls1="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-    Title="Intime"
-    d:DesignHeight="300" d:DesignWidth="400">
+﻿<controls1:MetroWindow x:Class="OPCApp.Main.Shell"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d"
+                       xmlns:prism="http://www.codeplex.com/prism"
+                       xmlns:controls="clr-namespace:OPCApp.Main.Controls;assembly=OPCApp.Main.Controls"
+                       xmlns:controls1="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                       Title="Intime"
+                       d:DesignHeight="300" d:DesignWidth="400">
 
     <Grid x:Name="LayoutRoot"
           Background="#D6DBE9">
@@ -18,25 +18,28 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="80" />
 
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <StackPanel  Grid.Row="0"  Grid.ColumnSpan="2" Orientation="Horizontal"   >
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                 <StackPanel.Background>
                     <LinearGradientBrush EndPoint="1,0.5" MappingMode="RelativeToBoundingBox" StartPoint="0,0.5">
-                        <GradientStop Color="#B241B1E1" Offset="1"/>
-                        <GradientStop Color="#CC7D83B8"/>
+                        <GradientStop Color="#B241B1E1" Offset="1" />
+                        <GradientStop Color="#CC7D83B8" />
                     </LinearGradientBrush>
                 </StackPanel.Background>
-                <TextBlock  HorizontalAlignment="Center"  Margin="10,0,0,0" Width="Auto" Text="银泰百货  OPC系统" FontWeight="Normal" Foreground="White" FontSize="35"   VerticalAlignment="Center"/>
+                <TextBlock HorizontalAlignment="Center" Margin="10,0,0,0" Width="Auto" Text="银泰百货  OPC系统"
+                           FontWeight="Normal" Foreground="White" FontSize="35" VerticalAlignment="Center" />
             </StackPanel>
 
             <Border Grid.Column="0" Grid.Row="1" Background="LightGray" MinWidth="272" Margin="1">
-                <ItemsControl x:Name="NavigationItemsControl" prism:RegionManager.RegionName="MainNavigationRegion" Grid.Column="0" />
+                <ItemsControl x:Name="NavigationItemsControl" prism:RegionManager.RegionName="MainNavigationRegion"
+                              Grid.Column="0" />
             </Border>
-            <ContentControl prism:RegionManager.RegionName="MainContentRegion" 
-            Grid.Column="1" Grid.Row="1" Margin="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+            <ContentControl prism:RegionManager.RegionName="MainContentRegion"
+                            Grid.Column="1" Grid.Row="1" Margin="1" HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch" />
         </Grid>
     </Grid>
 </controls1:MetroWindow>

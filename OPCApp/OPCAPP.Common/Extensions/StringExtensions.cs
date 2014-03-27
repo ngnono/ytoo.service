@@ -1,17 +1,12 @@
-﻿
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
+
 namespace System
 {
-    using Collections.Generic;
-
-    using Globalization;
-
-    using Linq;
-
-    using Security.Cryptography;
-
-    using Text;
-    using Text.RegularExpressions;
-
     public static class HashHelper
     {
         #region Methods
@@ -31,7 +26,7 @@ namespace System
             byte[] inputBytes;
             byte[] hash;
 
-            using (var hashProvider = hashAlgorithm)
+            using (HashAlgorithm hashProvider = hashAlgorithm)
             {
                 inputBytes = Encoding.ASCII.GetBytes(input);
                 hash = hashProvider.ComputeHash(inputBytes);
@@ -55,7 +50,7 @@ namespace System
 
         public static string StripHtml(this string text)
         {
-            Regex reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase);
+            var reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase);
             return reg.Replace(text, "");
         }
 
@@ -65,7 +60,8 @@ namespace System
     public static class StringSlugExtension
     {
         private static readonly Regex guidExpression =
-            new Regex(@"^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$");
+            new Regex(
+                @"^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$");
 
         #region Fields
 
@@ -82,9 +78,9 @@ namespace System
             List<char> validChars = "aaaaaaceeeeiiiinoooooouuuuyy".ToCharArray().ToList();
             rules1 = invalidChars.ToDictionary(i => i.ToString(), i => validChars[invalidChars.IndexOf(i)].ToString());
 
-            invalidChars = new[] { 'Þ', 'þ', 'Ð', 'ð', 'ß', 'Œ', 'œ', 'Æ', 'æ', 'µ', '&', '(', ')' }.ToList();
+            invalidChars = new[] {'Þ', 'þ', 'Ð', 'ð', 'ß', 'Œ', 'œ', 'Æ', 'æ', 'µ', '&', '(', ')'}.ToList();
             List<string> validStrings =
-                new[] { "TH", "th", "DH", "dh", "ss", "OE", "oe", "AE", "ae", "u", "and", "", "" }.ToList();
+                new[] {"TH", "th", "DH", "dh", "ss", "OE", "oe", "AE", "ae", "u", "and", "", ""}.ToList();
             rules2 = invalidChars.ToDictionary(i => i.ToString(), i => validStrings[invalidChars.IndexOf(i)]);
         }
 
@@ -93,7 +89,7 @@ namespace System
         #region Methods
 
         /// <summary>
-        /// Will transform "some $ugly ###url wit[]h spaces" into "some-ugly-url-with-spaces"
+        ///     Will transform "some $ugly ###url wit[]h spaces" into "some-ugly-url-with-spaces"
         /// </summary>
         public static string Slugify(this string phrase)
         {
@@ -136,26 +132,23 @@ namespace System
                     {
                         return replacements[match];
                     }
-                    else
-                    {
-                        return match;
-                    }
+                    return match;
                 };
 
             return regex.Replace(source, evaluator);
         }
 
 
-        public static bool IsNull(this string s) {
+        public static bool IsNull(this string s)
+        {
             return string.IsNullOrWhiteSpace(s) || string.IsNullOrEmpty(s);
         }
-        #endregion Methods
 
+        #endregion Methods
 
         public static bool IsGuid(this string s)
         {
             return guidExpression.IsMatch(s);
-            
         }
 
         public static Guid ToGuid(this string s)
@@ -163,22 +156,23 @@ namespace System
             return new Guid(s);
         }
 
-        public static int ToInt(this string s) {
+        public static int ToInt(this string s)
+        {
             return s.ToInt(0);
         }
 
-        public static int ToInt(this string s,int dafultValue)
+        public static int ToInt(this string s, int dafultValue)
         {
             int d = dafultValue;
-            bool bl= int.TryParse(s, out d);
+            bool bl = int.TryParse(s, out d);
             if (!bl)
             {
-                 d = dafultValue;
+                d = dafultValue;
             }
             return d;
         }
 
-        public static double ToDouble(this string s, double dafultValue=0)
+        public static double ToDouble(this string s, double dafultValue = 0)
         {
             double d = dafultValue;
             bool bl = double.TryParse(s, out d);
@@ -188,17 +182,18 @@ namespace System
             }
             return d;
         }
+
         /// <summary>
-        /// 中文字截字，不足補字串
+        ///     中文字截字，不足補字串
         /// </summary>
         /// <param name="org">原始字串</param>
         /// <param name="RL">R(右补齐) L(左补齐)</param>
         /// <param name="sLen">长度</param>
         /// <param name="padStr">替代字元</param>
         /// <returns></returns>
-        static string CHT_WordPadLeftRight(string org, string RL, int sLen, char padStr)
+        private static string CHT_WordPadLeftRight(string org, string RL, int sLen, char padStr)
         {
-            var sResult = "";
+            string sResult = "";
             //計算轉換過實際的總長
             int orgLen = 0;
             int tLen = 0;
@@ -230,27 +225,25 @@ namespace System
             {
                 return ss + org;
             }
-            else
-            {
-                return org + ss;
-            }
+            return org + ss;
         }
 
 
         /// <summary>
-        /// 补齐中文字符串长度
+        ///     补齐中文字符串长度
         /// </summary>
         /// <param name="s">The s.</param>
         /// <param name="length">总长度</param>
         /// <param name="padchar">补齐的字符</param>
         /// <returns>System.String.</returns>
-        public static string PadLeftCn(this string s, int length,char padchar=' ') {
+        public static string PadLeftCn(this string s, int length, char padchar = ' ')
+        {
             return CHT_WordPadLeftRight(s, "L", length, padchar);
         }
 
 
         /// <summary>
-        /// Pads the right cn.
+        ///     Pads the right cn.
         /// </summary>
         /// <param name="s">The s.</param>
         /// <param name="length">总长度</param>
@@ -263,14 +256,10 @@ namespace System
 
         public static int[] ToInts(this string s, char pchar = '%')
         {
-            IList<int> lst=new List<int>();
-            var strs = s.Split(pchar);
-            strs.ForEach((t) =>
-            {
-                lst.Add(t.ToInt());
-            });
+            IList<int> lst = new List<int>();
+            string[] strs = s.Split(pchar);
+            strs.ForEach(t => { lst.Add(t.ToInt()); });
             return lst.ToArray();
         }
-
     }
 }

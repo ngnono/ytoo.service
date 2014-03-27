@@ -6,7 +6,7 @@ namespace OPCApp.DataService.Interface
 {
     public interface IRole2UserService
     {
-        ResultMsg SetUserByRole(int roleId,List<int> listUserId);
+        ResultMsg SetUserByRole(int roleId, List<int> listUserId);
         List<OPC_AuthUser> GetUserListByRole(int roleId);
     }
 }

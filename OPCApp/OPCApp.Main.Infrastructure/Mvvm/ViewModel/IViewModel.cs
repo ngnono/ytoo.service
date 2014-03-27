@@ -1,11 +1,6 @@
-﻿using Microsoft.Practices.Prism.Commands;
-using OPCApp.Infrastructure.Mvvm.View;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Input;
+using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.Infrastructure.Mvvm
 {

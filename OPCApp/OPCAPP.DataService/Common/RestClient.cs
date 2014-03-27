@@ -11,75 +11,83 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Security.Policy;
-using Intime.OPC.ApiClient;
 using System.Net.Http;
+using Intime.OPC.ApiClient;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Common
 {
     /// <summary>
-    /// Class RestClient.
+    ///     Class RestClient.
     /// </summary>
-    public  class RestClient
+    public class RestClient
     {
         /// <summary>
-        /// The base URL
+        ///     The base URL
         /// </summary>
         private static ApiHttpClient _client;
 
         /// <summary>
-        /// Gets the client.
+        ///     Gets the client.
         /// </summary>
         /// <value>The client.</value>
         private static ApiHttpClient Client
         {
             get
             {
-
                 if (_client == null)
                 {
-                    string  baseUrl = AppEx.Config.GetValue("apiAddress");
+                    string baseUrl = AppEx.Config.GetValue("apiAddress");
                     string consumerKey = AppEx.Config.GetValue("consumerKey");
                     string consumerSecret = AppEx.Config.GetValue("consumerSecret");
 
-                    var factory=new DefaultApiHttpClientFactory(new Uri(baseUrl), consumerKey, consumerSecret);
+                    var factory = new DefaultApiHttpClientFactory(new Uri(baseUrl), consumerKey, consumerSecret);
                     _client = factory.Create();
-
                 }
                 return _client;
             }
         }
 
-      
-        public static IList<T> Get<T>(string address, string urlParams="")
+        /// <summary>
+        ///     SetToken
+        /// </summary>
+        /// <param name="token"></param>
+        public static void SetToken(string token)
         {
-            string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}", address, urlParams);
-            var response = Client.GetAsync(url).Result;
-            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
-
+            Client.SetToken(token);
         }
 
         /// <summary>
-        /// Posts the specified URL.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="address"></param>
+        /// <param name="urlParams"></param>
+        /// <returns></returns>
+        public static IList<T> Get<T>(string address, string urlParams = "")
+        {
+            string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}", address, urlParams);
+            HttpResponseMessage response = Client.GetAsync(url).Result;
+            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
+        }
+
+        /// <summary>
+        ///     Posts the specified URL.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="url">The URL.</param>
         /// <param name="data">The data.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public static bool Post<T>(string url,T data)
+        public static bool Post<T>(string url, T data)
         {
-            var response = Client.PostAsJsonAsync(url, data).Result;
+            HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
             return response.IsSuccessStatusCode;
         }
 
         /// <summary>
-        /// Posts the specified URL.
+        ///     Posts the specified URL.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TResult">The type of the t result.</typeparam>
@@ -88,13 +96,13 @@ namespace OPCApp.DataService.Common
         /// <returns>``1.</returns>
         public static TResult Post<T, TResult>(string url, T data)
         {
-            var response = Client.PostAsJsonAsync(url, data).Result;
+            HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
             return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<TResult>().Result : default(TResult);
         }
 
 
         /// <summary>
-        /// Puts the specified URL.
+        ///     Puts the specified URL.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="url">The URL.</param>
@@ -102,25 +110,25 @@ namespace OPCApp.DataService.Common
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool Put<T>(string url, T data)
         {
-            var response = Client.PutAsJsonAsync(url, data).Result;
+            HttpResponseMessage response = Client.PutAsJsonAsync(url, data).Result;
             return response.IsSuccessStatusCode;
         }
 
         public static bool Put(string url, object data)
         {
-            var response = Client.PutAsJsonAsync(url, data).Result;
+            HttpResponseMessage response = Client.PutAsJsonAsync(url, data).Result;
             return response.IsSuccessStatusCode;
         }
 
         /// <summary>
-        /// Deletes the specified URL.
+        ///     Deletes the specified URL.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="url">The URL.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool Delete<T>(string url)
         {
-            var response = Client.DeleteAsync(url).Result;
+            HttpResponseMessage response = Client.DeleteAsync(url).Result;
             return response.IsSuccessStatusCode;
         }
     }

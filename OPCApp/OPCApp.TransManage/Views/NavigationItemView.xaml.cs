@@ -14,48 +14,52 @@
 // organization, product, domain name, email address, logo, person,
 // places, or events is intended or should be inferred.
 //===================================================================================
+
+//.Regions;
+
 using System;
 using System.ComponentModel.Composition;
-using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Practices.Prism.Regions;//.Regions;
+using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Regions;
 using OPCApp.Infrastructure;
-using OPCApp.TransManage.ViewModels;//.Infrastructure;
+using OPCApp.TransManage.ViewModels;
 
+//.Infrastructure;
 
 namespace OPCApp.TransManage.Views
 {
     [Export]
     public partial class NavigationItemView : UserControl, IPartImportsSatisfiedNotification
     {
-        private static Uri PrintInvoiceUri = new Uri("PrintInvoice", UriKind.Relative);
-        private static Uri StoreInUri = new Uri("StoreIn", UriKind.Relative);
-        private static Uri StoreOutUri = new Uri("StoreOut", UriKind.Relative);
-        [Import]
-        public IRegionManager regionManager;
+        private static readonly Uri PrintInvoiceUri = new Uri("PrintInvoice", UriKind.Relative);
+        private static readonly Uri StoreInUri = new Uri("StoreIn", UriKind.Relative);
+        private static readonly Uri StoreOutUri = new Uri("StoreOut", UriKind.Relative);
 
         public NavigationItemViewModel aniv = new NavigationItemViewModel();
+        [Import] public IRegionManager regionManager;
+
         public NavigationItemView()
         {
             InitializeComponent();
-            aniv.PrintInvoiceCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(PrintInvoiceCommand));
-            aniv.StoreInCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(StoreInCommand));
-            aniv.StoreOutCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(StoreOutCommand));
-            this.DataContext = aniv;
+            aniv.PrintInvoiceCommand = new DelegateCommand(PrintInvoiceCommand);
+            aniv.StoreInCommand = new DelegateCommand(StoreInCommand);
+            aniv.StoreOutCommand = new DelegateCommand(StoreOutCommand);
+            DataContext = aniv;
         }
 
         void IPartImportsSatisfiedNotification.OnImportsSatisfied()
         {
-            IRegion mainContentRegion = this.regionManager.Regions[RegionNames.MainContentRegion];
+            IRegion mainContentRegion = regionManager.Regions[RegionNames.MainContentRegion];
             if (mainContentRegion != null && mainContentRegion.NavigationService != null)
             {
-                mainContentRegion.NavigationService.Navigated += this.MainContentRegion_Navigated;
+                mainContentRegion.NavigationService.Navigated += MainContentRegion_Navigated;
             }
         }
 
         public void MainContentRegion_Navigated(object sender, RegionNavigationEventArgs e)
         {
-            this.UpdateNavigationButtonState(e.Uri);
+            UpdateNavigationButtonState(e.Uri);
         }
 
         private void UpdateNavigationButtonState(Uri uri)
@@ -65,15 +69,17 @@ namespace OPCApp.TransManage.Views
 
         private void PrintInvoiceCommand()
         {
-            this.regionManager.RequestNavigate(RegionNames.MainContentRegion, PrintInvoiceUri);
+            regionManager.RequestNavigate(RegionNames.MainContentRegion, PrintInvoiceUri);
         }
+
         private void StoreInCommand()
         {
-            this.regionManager.RequestNavigate(RegionNames.MainContentRegion, StoreInUri);
+            regionManager.RequestNavigate(RegionNames.MainContentRegion, StoreInUri);
         }
+
         private void StoreOutCommand()
         {
-            this.regionManager.RequestNavigate(RegionNames.MainContentRegion, StoreOutUri);
+            regionManager.RequestNavigate(RegionNames.MainContentRegion, StoreOutUri);
         }
     }
 }

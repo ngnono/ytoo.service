@@ -1,11 +1,9 @@
 ﻿using Microsoft.Practices.Prism.Mvvm;
 
-
 namespace OPCApp.BaseInfoManage.ViewModels
 {
-    class OrgManageViewModel : BindableBase
+    internal class OrgManageViewModel : BindableBase
     {
-        
         //public DelegateCommand CommandSearch { get; set; }//查询
         //public DelegateCommand CommandBack { get; set; }//返回
         //public DelegateCommand CommandInputLSH { get; set; }//打印销售单
@@ -22,7 +20,5 @@ namespace OPCApp.BaseInfoManage.ViewModels
         //    set { SetProperty(ref this.orginfo, value); }
 
         //}
-        
-
     }
 }

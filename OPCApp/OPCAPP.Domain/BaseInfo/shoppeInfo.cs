@@ -11,30 +11,24 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace OPCAPP.Domain.BaseInfo
 {
     /// <summary>
-    /// 专柜信息
+    ///     专柜信息
     /// </summary>
     public class ShoppeInfo
     {
         /// <summary>
-        /// 专柜ID
+        ///     专柜ID
         /// </summary>
         /// <value>The identifier.</value>
         public int Id { get; set; }
 
         /// <summary>
-        /// 专柜名称
+        ///     专柜名称
         /// </summary>
         /// <value>The name.</value>
-        public string   Name { get; set; }      
+        public string Name { get; set; }
     }
 }

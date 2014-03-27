@@ -1,4 +1,4 @@
-// ***********************************************************************
+ï»¿// ***********************************************************************
 // Assembly         : GasMap.Core
 // Author           : liuyh
 // Created          : 03-26-2013
@@ -11,42 +11,42 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using System.Collections.Generic;
+
 namespace System.Linq
 {
-    using Collections.Generic;
-
-
     /// <summary>
-    /// Class PagingExtensions
+    ///     Class PagingExtensions
     /// </summary>
     public static class PagingExtensions
     {
         #region Methods
 
         /// <summary>
-        /// ·ÖÒ³
+        ///     ï¿½ï¿½Ò³
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="query"></param>
-        /// <param name="pageNumber">Ò³Âë</param>
-        /// <param name="pageSize">Ò³´óÐ¡</param>
-        /// <returns>·ÖÒ³ºóµÄ½á¹û</returns>
+        /// <param name="pageNumber">Ò³ï¿½ï¿½</param>
+        /// <param name="pageSize">Ò³ï¿½ï¿½Ð¡</param>
+        /// <returns>ï¿½ï¿½Ò³ï¿½ï¿½Ä½ï¿½ï¿½</returns>
         public static IQueryable<T> Page<T>(this IQueryable<T> query, int pageNumber, int pageSize)
         {
-            return query.Skip((pageNumber * pageSize)).Take(pageSize);
+            return query.Skip((pageNumber*pageSize)).Take(pageSize);
         }
 
         /// <summary>
-        /// ·ÖÒ³
+        ///     ï¿½ï¿½Ò³
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="query">The query.</param>
-        /// <param name="pageNumber">Ò³Âë</param>
-        /// <param name="pageSize">Ò³´óÐ¡</param>
-        /// <returns>·ÖÒ³ºóµÄ½á¹û</returns>
+        /// <param name="pageNumber">Ò³ï¿½ï¿½</param>
+        /// <param name="pageSize">Ò³ï¿½ï¿½Ð¡</param>
+        /// <returns>ï¿½ï¿½Ò³ï¿½ï¿½Ä½ï¿½ï¿½</returns>
         public static IEnumerable<T> Page<T>(this IEnumerable<T> query, int pageNumber, int pageSize)
         {
-            return query.Skip(((pageNumber-1)* pageSize)).Take(pageSize);
+            return query.Skip(((pageNumber - 1)*pageSize)).Take(pageSize);
         }
 
         #endregion Methods

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OPCApp.Order.ViewModels
+﻿namespace OPCApp.Order.ViewModels
 {
-    public abstract  class ViewModelBase
+    public abstract class ViewModelBase
     {
     }
 }

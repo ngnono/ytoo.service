@@ -5,10 +5,9 @@ using OPCApp.Infrastructure.Mvvm.View;
 namespace OPCApp.AuthManage.Views
 {
     /// <summary>
-    /// RoleWindow.xaml 的交互逻辑
+    ///     RoleWindow.xaml 的交互逻辑
     /// </summary>
-    ///  
-    [Export("UserListWindow", typeof(IBaseView))]
+    [Export("UserListWindow", typeof (IBaseView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class UserListWindow : UserControl, IBaseView
     {
@@ -16,7 +15,6 @@ namespace OPCApp.AuthManage.Views
         {
             InitializeComponent();
         }
-
 
 
         public void CloseView()
@@ -31,6 +29,5 @@ namespace OPCApp.AuthManage.Views
         {
             return false;
         }
-
     }
 }

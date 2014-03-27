@@ -1,25 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Net.Http;
-using Intime.OPC.ApiClient;
 using Intime.OPC.Domain.Models;
 using OPCApp.DataService.Common;
-using OPCApp.DataService.Interface;
 using OPCApp.DataService.Interface.Trans;
-using OPCApp.Domain;
-using OPCApp.Domain.Models;
-using OPCApp.Infrastructure;
-using OPCApp.Infrastructure.DataService;
 using OPCAPP.Domain.Enums;
+using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Impl.Trans
 {
-    [Export(typeof(IRMACashInService))]
+    [Export(typeof (IRMACashInService))]
     public class RMACashInService : IRMACashInService
     {
-
         public PageResult<OPC_RMA> GetRMA(string filter, EnumRMACashStatus enumRMACashStatus)
         {
             string url = "";
@@ -29,13 +20,13 @@ namespace OPCApp.DataService.Impl.Trans
                     url = "RMA/GetRMANoCash";
                     break;
             }
-            var lst = RestClient.Get<OPC_RMA>(url, filter);
+            IList<OPC_RMA> lst = RestClient.Get<OPC_RMA>(url, filter);
             return new PageResult<OPC_RMA>(lst, lst.Count);
         }
 
         public PageResult<OPC_RMADetail> GetRMADetailByRMANo(string rmaNo)
         {
-            var lst = RestClient.Get<OPC_RMADetail>("RMA/GetRMADetailByRMANo", rmaNo);
+            IList<OPC_RMADetail> lst = RestClient.Get<OPC_RMADetail>("RMA/GetRMADetailByRMANo", rmaNo);
             return new PageResult<OPC_RMADetail>(lst, lst.Count);
         }
 
@@ -43,7 +34,5 @@ namespace OPCApp.DataService.Impl.Trans
         {
             return RestClient.Put("RMA/FinishRMACashIn", RMASelect);
         }
-
-       
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OPCApp.Order.Model
+﻿namespace OPCApp.Order.Model
 {
     public class OrderInfo : ModelBase
     {

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OPCApp.TransManage.Models
 {
@@ -38,40 +34,31 @@ namespace OPCApp.TransManage.Models
         public DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
     }
+
     public class Invoice4Get
     {
         public Invoice4Get()
         {
-            this.StartSellDate=DateTime.Now;
-            this.EndSellDate = DateTime.Now;
+            StartSellDate = DateTime.Now;
+            EndSellDate = DateTime.Now;
         }
-        public DateTime StartSellDate
-        {
-            get;
-            set;
 
-        }
+        public DateTime StartSellDate { get; set; }
         //开始时间条件
 
-        public DateTime EndSellDate
-        {
-            get;
-            set;
-        }//结束时间条件
+        public DateTime EndSellDate { get; set; } //结束时间条件
 
-        public string OrderNo { get; set; }//订单号
+        public string OrderNo { get; set; } //订单号
 
-        public string SaleOrderNo { get; set; }//销售单号
-
+        public string SaleOrderNo { get; set; } //销售单号
     }
 
     public class InvoiceDetail
     {
-
     }
 
     public class InvoiceDetail4Get
     {
-        public string InvoiceID { get; set; }//选中的销售单ID
+        public string InvoiceID { get; set; } //选中的销售单ID
     }
 }
