@@ -103,6 +103,12 @@ namespace OPCApp.TransManage.ViewModels
         public void CommandGetDownExecute()
         {
             OPC_Sale saleCur = SaleList.Where(n => n.IsSelected).FirstOrDefault();
+            if (saleCur == null)
+            {
+                if (invoicedetail4list==null)return;
+                invoicedetail4list.ToList().Clear();
+                return;
+            }
             //这个工作状态
             InvoiceDetail4List =
                 AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleCur.SaleOrderNo).Result;

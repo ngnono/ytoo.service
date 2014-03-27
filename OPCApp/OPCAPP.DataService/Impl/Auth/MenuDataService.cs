@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace OPCApp.DataService.Impl
         /// <exception cref="System.NotImplementedException"></exception>
         public IEnumerable<MenuGroup> GetMenus()
         {
-            string paras = string.Format("UserId={0}", 1); //1 update curUserId 
+            string paras = string.Format("UserId={0}", 1); //AppEx.LoginModel.UserID); //1 update curUserId 
             IList<OPC_AuthMenu> listMenu = RestClient.Get<OPC_AuthMenu>("menu/loadmenu", paras);
             List<OPC_AuthMenu> groupMenu1 = listMenu.Where(e => e.PraentMenuId == e.Id).ToList();
             List<MenuGroup> groupMenu =
@@ -54,6 +55,20 @@ namespace OPCApp.DataService.Impl
                 }
             }
             return groupMenu;
+        }
+
+        public IEnumerable<OPC_AuthMenu> GetMenuList()
+        {
+            try
+            {
+                IList<OPC_AuthMenu> listMenu = RestClient.Get<OPC_AuthMenu>("menu/GetMenuList");
+
+                return listMenu;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

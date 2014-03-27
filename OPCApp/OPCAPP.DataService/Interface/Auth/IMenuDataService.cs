@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using OPCApp.Domain;
+using OPCApp.Domain.Models;
 
 namespace OPCApp.DataService.Interface
 {
@@ -27,5 +28,7 @@ namespace OPCApp.DataService.Interface
         /// </summary>
         /// <returns>IEnumerable{MenuGroup}.</returns>
         IEnumerable<MenuGroup> GetMenus();
+
+        IEnumerable<OPC_AuthMenu> GetMenuList();
     }
 }

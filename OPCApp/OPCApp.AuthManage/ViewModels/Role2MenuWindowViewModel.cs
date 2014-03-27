@@ -131,6 +131,7 @@ namespace OPCApp.AuthManage.ViewModels
         {
             var roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
             roleDataService.Search(null);
+            if (this.SelectedRole == null) return;
             var menuDataService = AppEx.Container.GetInstance<IMenuDataService>();
             menuDataService.GetMenus(); //所有的 还是有权限
         }
