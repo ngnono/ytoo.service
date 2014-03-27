@@ -88,7 +88,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="销售单号" Binding="{Binding Name}" />
-              
+
                 <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                 <DataGridTextColumn Header="销售单号" Binding="{Binding SaleOrderNo}" />
                 <DataGridTextColumn Header="销售类别" Binding="{Binding SalesType}" />

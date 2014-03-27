@@ -30,7 +30,9 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                return RestClient.Get<OPC_AuthUser>("account/GetUsersByRoleID", string.Format("roleId={0}", roleId)).ToList();
+                return
+                    RestClient.Get<OPC_AuthUser>("account/GetUsersByRoleID", string.Format("roleId={0}", roleId))
+                        .ToList();
             }
             catch (Exception ex)
             {

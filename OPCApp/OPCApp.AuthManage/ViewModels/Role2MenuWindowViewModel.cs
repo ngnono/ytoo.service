@@ -130,9 +130,9 @@ namespace OPCApp.AuthManage.ViewModels
         public void Init()
         {
             var roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
-           this.RoleList= roleDataService.Search(null).Result.ToList();
+            RoleList = roleDataService.Search(null).Result.ToList();
             var menuDataService = AppEx.Container.GetInstance<IMenuDataService>();
-            this.MenuList=menuDataService.GetMenuList().ToList(); //所有的 还是有权限
+            MenuList = menuDataService.GetMenuList().ToList(); //所有的 还是有权限
         }
 
         /// <summary>

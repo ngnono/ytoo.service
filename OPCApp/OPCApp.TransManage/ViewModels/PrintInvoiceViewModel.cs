@@ -105,7 +105,7 @@ namespace OPCApp.TransManage.ViewModels
             OPC_Sale saleCur = SaleList.Where(n => n.IsSelected).FirstOrDefault();
             if (saleCur == null)
             {
-                if (invoicedetail4list==null)return;
+                if (invoicedetail4list == null) return;
                 invoicedetail4list.ToList().Clear();
                 return;
             }

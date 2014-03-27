@@ -44,9 +44,6 @@ namespace OPCApp.DataService.Impl.Auth
         }
 
 
- 
-
-
         public PageResult<OPC_AuthRole> Search(IDictionary<string, object> iDicFilter)
         {
             IList<OPC_AuthRole> result = RestClient.Get<OPC_AuthRole>("Role/SelectRole");

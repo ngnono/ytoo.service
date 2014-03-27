@@ -16,7 +16,7 @@ namespace OPCApp.AuthManage.Views
             InitializeComponent();
         }
 
-        [Import("Role2MenuViewModel",typeof(Role2MenuWindowViewModel))]
+        [Import("Role2MenuViewModel", typeof (Role2MenuWindowViewModel))]
         public Role2MenuWindowViewModel ViewModel
         {
             get { return DataContext as Role2MenuWindowViewModel; }
