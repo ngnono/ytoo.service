@@ -482,7 +482,26 @@ namespace Intime.OPC.WebApi.Controllers
              }
          }
 
-        
+        [HttpGet]
+        public IHttpActionResult GetSaleByOrderNo(string orderID)
+        {
+            try
+            {
+                var d = this._saleService.GetByOrderNo(orderID);
+                return Ok(d);
+            }
+            catch ( OrderNoIsNullException ex)
+            {
+                //todo 增加处理方式
+                // _logger.WriteError(ex.Message);
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                // _logger.WriteError(e.Message);
+                return InternalServerError();
+            }
+        }
 
         #endregion
         [HttpPost]
