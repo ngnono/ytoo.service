@@ -11,13 +11,14 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
 namespace Intime.OPC.Repository.Support
 {
     /// <summary>
-    /// Class SectionRepository.
+    ///     Class SectionRepository.
     /// </summary>
     public class SectionRepository : BaseRepository<Section>, ISectionRepository
     {

@@ -76,7 +76,7 @@ namespace Intime.OPC.Service.Map
 
         public static void CreateMap<TSource, TTagart>(Expression<Func<TSource, TTagart>> convert = null)
         {
-            string key = typeof(TSource).FullName + "_" + typeof(TTagart).FullName;
+            string key = typeof (TSource).FullName + "_" + typeof (TTagart).FullName;
             if (!registCollection.Contains(key))
             {
                 IMappingExpression<TSource, TTagart> map = AutoMapper.Mapper.CreateMap<TSource, TTagart>();

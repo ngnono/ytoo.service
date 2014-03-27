@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Intime.OPC.Domain.Models.Mapping
@@ -8,42 +7,42 @@ namespace Intime.OPC.Domain.Models.Mapping
         public SectionMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Location)
+            Property(t => t.Location)
                 .HasMaxLength(200);
 
-            this.Property(t => t.ContactPhone)
+            Property(t => t.ContactPhone)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            this.Property(t => t.ContactPerson)
+            Property(t => t.ContactPerson)
                 .HasMaxLength(20);
 
-            this.Property(t => t.Name)
+            Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(200);
 
-            this.Property(t => t.StoreCode)
+            Property(t => t.StoreCode)
                 .HasMaxLength(50);
 
             // Table & Column Mappings
-            this.ToTable("Section");
-            this.Property(t => t.Location).HasColumnName("Location");
-            this.Property(t => t.ContactPhone).HasColumnName("ContactPhone");
-            this.Property(t => t.Status).HasColumnName("Status");
-            this.Property(t => t.BrandId).HasColumnName("BrandId");
-            this.Property(t => t.StoreId).HasColumnName("StoreId");
-            this.Property(t => t.CreateDate).HasColumnName("CreateDate");
-            this.Property(t => t.CreateUser).HasColumnName("CreateUser");
-            this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
-            this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
-            this.Property(t => t.ContactPerson).HasColumnName("ContactPerson");
-            this.Property(t => t.Name).HasColumnName("Name");
-            this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.StoreCode).HasColumnName("StoreCode");
-            this.Property(t => t.ChannelSectionId).HasColumnName("ChannelSectionId");
+            ToTable("Section");
+            Property(t => t.Location).HasColumnName("Location");
+            Property(t => t.ContactPhone).HasColumnName("ContactPhone");
+            Property(t => t.Status).HasColumnName("Status");
+            Property(t => t.BrandId).HasColumnName("BrandId");
+            Property(t => t.StoreId).HasColumnName("StoreId");
+            Property(t => t.CreateDate).HasColumnName("CreateDate");
+            Property(t => t.CreateUser).HasColumnName("CreateUser");
+            Property(t => t.UpdateDate).HasColumnName("UpdateDate");
+            Property(t => t.UpdateUser).HasColumnName("UpdateUser");
+            Property(t => t.ContactPerson).HasColumnName("ContactPerson");
+            Property(t => t.Name).HasColumnName("Name");
+            Property(t => t.Id).HasColumnName("Id");
+            Property(t => t.StoreCode).HasColumnName("StoreCode");
+            Property(t => t.ChannelSectionId).HasColumnName("ChannelSectionId");
         }
     }
 }

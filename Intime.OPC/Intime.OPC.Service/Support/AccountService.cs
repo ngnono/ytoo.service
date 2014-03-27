@@ -14,11 +14,12 @@ namespace Intime.OPC.Service.Support
             _accountRepository = accountRepository;
         }
 
+        #region IAccountService Members
+
         public OPC_AuthUser Get(string userName, string password)
         {
             return _accountRepository.Get(userName, password);
         }
-
 
         public bool Create(OPC_AuthUser user)
         {
@@ -44,5 +45,12 @@ namespace Intime.OPC.Service.Support
         {
             return _accountRepository.SetEnable(userId, bValid);
         }
+
+        public IList<OPC_AuthUser> GetUsersByRoleID(int roleId)
+        {
+            return GetUsersByRoleID(roleId);
+        }
+
+        #endregion
     }
 }

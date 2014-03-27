@@ -32,6 +32,16 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        public IList<OPC_AuthUser> GetByRoleId(int roleId)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                IQueryable<OPC_AuthUser> lst = db.OPC_AuthRoleUser.Where(t => t.OPC_AuthRoleId == roleId)
+                    .Join(db.OPC_AuthUser.Where(t => t.IsValid == true), t => t.OPC_AuthUserId, o => o.Id, (t, o) => o);
+                return lst.ToList();
+            }
+        }
+
         public IList<OPC_AuthUser> All()
         {
             return Select(t => t.IsValid == true);

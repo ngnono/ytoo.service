@@ -1,5 +1,5 @@
-﻿using Intime.OPC.Domain.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service
 {

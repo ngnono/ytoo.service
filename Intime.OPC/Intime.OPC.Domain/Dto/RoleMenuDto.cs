@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Intime.OPC.Domain.Dto
 {
-    public  class RoleMenuDto
+    public class RoleMenuDto
     {
-        public int  RoleID { get; set; }
+        public RoleMenuDto()
+        {
+            this.MenuList = new List<int>();
+        }
+
+        public int RoleID { get; set; }
 
         public int UserID { get; set; }
 
-        public IList<int> MeueList { get; set; }
+        public IList<int> MenuList { get; set; }
     }
 }

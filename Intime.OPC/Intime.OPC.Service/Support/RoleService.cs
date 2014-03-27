@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 
@@ -8,16 +10,19 @@ namespace Intime.OPC.Service.Support
     public class RoleService : IRoleService
     {
         private readonly IRoleRepository _roleRepository;
+        private readonly IRoleMenuRepository _roleMenuRepository;
 
-        public RoleService(IRoleRepository roleRepository)
+        public RoleService(IRoleRepository roleRepository,IRoleMenuRepository roleMenuRepository)
         {
-            this._roleRepository = roleRepository;
-         
+            _roleRepository = roleRepository;
+            _roleMenuRepository = roleMenuRepository;
         }
+
+        #region IRoleService Members
 
         public bool Create(OPC_AuthRole role)
         {
-          return  _roleRepository.Create(role);
+            return _roleRepository.Create(role);
         }
 
         public bool Update(OPC_AuthRole role)
@@ -40,16 +45,26 @@ namespace Intime.OPC.Service.Support
             return _roleRepository.SetEnable(roleId, bValid);
         }
 
-
-        public bool SetMenus(object roleMenuDto)
+        public bool SetMenus(int roleId, int userID, IEnumerable<int> menuids)
         {
-            throw new System.NotImplementedException();
+            var bl = _roleMenuRepository.DeleteByRoleMenu(roleId);
+            if (bl)
+            {
+                return _roleMenuRepository.AddMenus(roleId, userID, menuids);
+            }
+            return false;
         }
-
 
         public IEnumerable<OPC_AuthRole> GetByUserID(int userID)
         {
             return _roleRepository.GetByUserID(userID);
         }
+
+        public bool SetUsers(RoleUserDto roleUserDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

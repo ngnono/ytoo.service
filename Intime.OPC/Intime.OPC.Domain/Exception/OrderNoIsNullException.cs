@@ -11,10 +11,11 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 namespace Intime.OPC.Domain.Exception
 {
     /// <summary>
-    /// Class OrderNoIsNullException.
+    ///     Class OrderNoIsNullException.
     /// </summary>
     public class OrderNoIsNullException : System.Exception
     {

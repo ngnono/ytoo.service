@@ -104,55 +104,62 @@ namespace Intime.OPC.Service.Support
             return UpdateSatus(orderNo, userId, EnumSaleOrderStatus.StockOut);
         }
 
-        public IList<OPC_Sale> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public IList<SaleDto> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
-            //todo 权限校验
 
-            return _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd);
+            var lst = _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd);
+            return  Mapper.Map<OPC_Sale, SaleDto>(lst);
+         
         }
 
-        public IList<OPC_Sale> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
+        public IList<SaleDto> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
             DateTime dtEnd)
         {
-            return _saleRepository.GetPrintExpress(saleOrderNo, orderNo, dtStart, dtEnd);
+         
+            var lst = _saleRepository.GetPrintExpress(saleOrderNo, orderNo, dtStart, dtEnd);
+            return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
-        public IList<OPC_Sale> GetPrintInvoice(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
+        public IList<SaleDto> GetPrintInvoice(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
             DateTime dtEnd)
         {
-            return _saleRepository.GetPrintInvoice(saleOrderNo, orderNo, dtStart, dtEnd);
+            var lst = _saleRepository.GetPrintInvoice(saleOrderNo, orderNo, dtStart, dtEnd);
+            return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
-        public IList<OPC_Sale> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public IList<SaleDto> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
+            DateTime dtEnd)
         {
-            return _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd);
+            var lst = _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd);
+            return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public bool WriteSaleRemark(OPC_SaleComment comment)
         {
-            return  _saleRemarkRepository.Create(comment);
+            return _saleRemarkRepository.Create(comment);
         }
 
-        public IList<OPC_Sale> GetByOrderNo(string orderID)
+        public IList<SaleDto> GetByOrderNo(string orderID)
         {
             if (string.IsNullOrWhiteSpace(orderID))
             {
                 throw new OrderNoIsNullException();
             }
-            return _saleRepository.GetByOrderNo(orderID);
+      
+            var lst = _saleRepository.GetByOrderNo(orderID);
+            return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public IList<SaleDto> GetNoPickUp(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
             //todo 权限校验
 
-            
-            var lst= _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd);
+            IList<OPC_Sale> lst = _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd);
             var lstDto = new List<SaleDto>();
-            foreach (var opcSale in lst)
+            foreach (OPC_Sale opcSale in lst)
             {
-                var t = Mapper.Map<OPC_Sale, SaleDto>(opcSale);
-                EnumSaleOrderStatus saleOrderStatus = (EnumSaleOrderStatus)opcSale.Status;
+                SaleDto t = Mapper.Map<OPC_Sale, SaleDto>(opcSale);
+                var saleOrderStatus = (EnumSaleOrderStatus) opcSale.Status;
                 t.StatusName = saleOrderStatus.GetDescription();
                 lstDto.Add(t);
             }

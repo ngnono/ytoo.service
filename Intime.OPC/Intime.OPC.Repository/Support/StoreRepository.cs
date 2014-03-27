@@ -11,13 +11,14 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
 namespace Intime.OPC.Repository.Support
 {
     /// <summary>
-    /// Class StoreRepository.
+    ///     Class StoreRepository.
     /// </summary>
     public class StoreRepository : BaseRepository<Store>, IStoreRepository
     {

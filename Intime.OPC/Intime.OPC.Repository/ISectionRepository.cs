@@ -11,12 +11,13 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
 {
     /// <summary>
-    /// Interface ISectionRepository
+    ///     Interface ISectionRepository
     /// </summary>
     public interface ISectionRepository : IRepository<Section>
     {

@@ -12,16 +12,19 @@
 // <summary></summary>
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
 {
     /// <summary>
-    /// Interface IOrderRepository
+    ///     Interface IOrderRepository
     /// </summary>
     public interface IOrderRepository : IRepository<Order>
     {
-        IList<Order> GetOrder(string orderNo, string orderSource, System.DateTime dtStart, System.DateTime dtEnd, int storeId, int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone, string expressDeliveryCode, int expressDeliveryCompany);
+        IList<Order> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd, int storeId,
+            int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone,
+            string expressDeliveryCode, int expressDeliveryCompany);
     }
 }

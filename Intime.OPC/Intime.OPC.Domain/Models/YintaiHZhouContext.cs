@@ -1,10 +1,9 @@
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using Intime.OPC.Domain.Models.Mapping;
 
 namespace Intime.OPC.Domain.Models
 {
-    public partial class YintaiHZhouContext : DbContext
+    public class YintaiHZhouContext : DbContext
     {
         static YintaiHZhouContext()
         {
@@ -16,7 +15,6 @@ namespace Intime.OPC.Domain.Models
         {
         }
 
-       
         public DbSet<OPC_AuthMenu> OPC_AuthMenu { get; set; }
         public DbSet<OPC_AuthRole> OPC_AuthRole { get; set; }
         public DbSet<OPC_AuthRoleMenu> OPC_AuthRoleMenu { get; set; }
@@ -37,15 +35,13 @@ namespace Intime.OPC.Domain.Models
         public DbSet<OPC_Stock> OPC_Stock { get; set; }
         public DbSet<OPC_StorePriority> OPC_StorePriority { get; set; }
         public DbSet<OPC_SupplierInfo> OPC_SupplierInfo { get; set; }
-        
+
         public DbSet<Section> Sections { get; set; }
-       
+
         public DbSet<Store> Stores { get; set; }
-       
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-           
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMenuMap());
@@ -66,11 +62,10 @@ namespace Intime.OPC.Domain.Models
             modelBuilder.Configurations.Add(new OPC_StockMap());
             modelBuilder.Configurations.Add(new OPC_StorePriorityMap());
             modelBuilder.Configurations.Add(new OPC_SupplierInfoMap());
-            
+
             modelBuilder.Configurations.Add(new SectionMap());
-            
+
             modelBuilder.Configurations.Add(new StoreMap());
-            
         }
     }
 }

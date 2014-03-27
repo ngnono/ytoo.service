@@ -39,6 +39,7 @@ namespace Intime.OPC.Repository
         public DbSet<Section> Sections { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<Order> Orders { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
@@ -63,7 +64,6 @@ namespace Intime.OPC.Repository
             modelBuilder.Configurations.Add(new SectionMap());
             modelBuilder.Configurations.Add(new OrderMap());
             modelBuilder.Configurations.Add(new StoreMap());
-            
         }
     }
 }

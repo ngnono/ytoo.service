@@ -8,5 +8,7 @@ namespace Intime.OPC.Repository
         IList<OPC_AuthMenu> GetMenusByUserID(int userID);
 
         IList<OPC_AuthMenu> GetMenusByRoleID(int roleID);
+
+        IList<OPC_AuthMenu> GetMenuList();
     }
 }

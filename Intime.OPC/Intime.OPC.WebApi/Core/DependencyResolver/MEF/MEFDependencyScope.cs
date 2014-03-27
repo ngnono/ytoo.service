@@ -31,6 +31,8 @@ namespace Intime.OPC.WebApi.Core.DependencyResolver.MEF
             get { return _compositionScope.Value; }
         }
 
+        #region IDependencyScope Members
+
         /// <summary>
         ///     Release the scope.
         /// </summary>
@@ -66,6 +68,8 @@ namespace Intime.OPC.WebApi.Core.DependencyResolver.MEF
 
             return CompositionScope.GetExports(serviceType, null);
         }
+
+        #endregion
 
         /// <summary>
         ///     Release the scope.

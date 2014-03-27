@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using Intime.OPC.Domain.Dto;
@@ -18,12 +19,12 @@ using Intime.OPC.Domain.Dto;
 namespace Intime.OPC.Service
 {
     /// <summary>
-    /// Interface IOrderService
+    ///     Interface IOrderService
     /// </summary>
     public interface IOrderService
     {
         /// <summary>
-        /// Gets the order information.
+        ///     Gets the order information.
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         /// <param name="orderSource">The order source.</param>
@@ -39,6 +40,8 @@ namespace Intime.OPC.Service
         /// <param name="expressDeliveryCompany">The express delivery company.</param>
         /// <param name="userId">The user identifier.</param>
         /// <returns>IList{OrderDto}.</returns>
-        IList<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd, int storeId, int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone, string expressDeliveryCode, int expressDeliveryCompany, int userId);
+        IList<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd, int storeId,
+            int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone,
+            string expressDeliveryCode, int expressDeliveryCompany, int userId);
     }
 }

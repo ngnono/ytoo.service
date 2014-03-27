@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Web.Http;
 using Intime.OPC.Service;
@@ -19,17 +20,17 @@ using Intime.OPC.WebApi.Bindings;
 namespace Intime.OPC.WebApi.Controllers
 {
     /// <summary>
-    /// Class OrderController.
+    ///     Class OrderController.
     /// </summary>
     public class OrderController : ApiController
     {
         /// <summary>
-        /// The _order service
+        ///     The _order service
         /// </summary>
         private readonly IOrderService _orderService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrderController"/> class.
+        ///     Initializes a new instance of the <see cref="OrderController" /> class.
         /// </summary>
         /// <param name="orderService">The order service.</param>
         public OrderController(IOrderService orderService)
@@ -38,7 +39,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获得未提货的数据
+        ///     获得未提货的数据
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         /// <param name="orderSource">The order source.</param>
@@ -69,8 +70,6 @@ namespace Intime.OPC.WebApi.Controllers
             int expressDeliveryCompany,
             [UserId] int userId)
         {
-            
-
             try
             {
                 return Ok(_orderService.GetOrder(orderNo, orderSource, startCreateDate, endCreateDate, storeId, brandId,
@@ -82,6 +81,5 @@ namespace Intime.OPC.WebApi.Controllers
                 return InternalServerError();
             }
         }
-
     }
 }
