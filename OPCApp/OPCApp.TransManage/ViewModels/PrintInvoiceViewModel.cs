@@ -135,6 +135,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void CommandFinishExecute()
         {
+            if (SaleList==null)return;
             List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
             var iTransService = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = iTransService.SetStatusAffirmPrintSaleFinish(selectSaleIds);
