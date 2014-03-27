@@ -12,36 +12,31 @@
 // <summary></summary>
 // ***********************************************************************
 //ddd
+
+using System.ComponentModel.Composition;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
-using OPCApp.Infrastructure;
-using OPCApp.Order.Views;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 /// <summary>
 /// The Order namespace.
 /// </summary>
+
 namespace OPCApp.Order
 {
     /// <summary>
-    /// Class OrderModule.
+    ///     Class OrderModule.
     /// </summary>
-    [ModuleExport(typeof(OrderModule))]
+    [ModuleExport(typeof (OrderModule))]
     public class OrderModule : IModule
     {
         /// <summary>
-        /// The region manager
+        ///     The region manager
         /// </summary>
-        [Import]
-        public IRegionManager RegionManager;
+        [Import] public IRegionManager RegionManager;
+
         /// <summary>
-        /// Initializes this instance.
+        ///     Initializes this instance.
         /// </summary>
         public void Initialize()
         {

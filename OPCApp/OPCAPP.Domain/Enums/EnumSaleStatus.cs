@@ -11,30 +11,24 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
+
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OPCAPP.Domain.Enums
 {
     /// <summary>
-    /// 销售状态
+    ///     销售状态
     /// </summary>
     public enum EnumSaleStatus
     {
         /// <summary>
-        /// The sold
+        ///     The sold
         /// </summary>
-        [Description("已销售")]
-        Sold=0,
+        [Description("已销售")] Sold = 0,
 
         /// <summary>
-        /// The valid
+        ///     The valid
         /// </summary>
-        [Description("有效的")]
-        Valid=5
+        [Description("有效的")] Valid = 5
     }
 }

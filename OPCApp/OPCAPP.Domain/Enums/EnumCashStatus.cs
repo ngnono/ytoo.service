@@ -11,30 +11,24 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
+
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OPCAPP.Domain.Enums
 {
     /// <summary>
-    /// 收银状态
+    ///     收银状态
     /// </summary>
     public enum EnumCashStatus
     {
         /// <summary>
-        /// The no shipp
+        ///     The no shipp
         /// </summary>
-        [Description("未送收银")]
-        NoCash = 0,
+        [Description("未送收银")] NoCash = 0,
 
         /// <summary>
-        /// The shipped
+        ///     The shipped
         /// </summary>
-        [Description("完成收银")]
-        CashOver = 5
+        [Description("完成收银")] CashOver = 5
     }
 }

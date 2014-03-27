@@ -11,18 +11,19 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using OPCApp.Domain;
+
 using System.Collections.Generic;
+using OPCApp.Domain;
 
 namespace OPCApp.DataService.Interface
 {
     /// <summary>
-    /// Interface IMenuDataService
+    ///     Interface IMenuDataService
     /// </summary>
     public interface IMenuDataService
     {
         /// <summary>
-        /// 获得登录用户的所有菜单
+        ///     获得登录用户的所有菜单
         /// </summary>
         /// <returns>IEnumerable{MenuGroup}.</returns>
         IEnumerable<MenuGroup> GetMenus();

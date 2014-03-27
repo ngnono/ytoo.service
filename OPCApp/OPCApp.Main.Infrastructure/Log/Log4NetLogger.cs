@@ -11,48 +11,27 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
 
+using System;
+using log4net;
+using log4net.Config;
 
 namespace OPCApp.Infrastructure
 {
     /// <summary>
-    /// Class Log4NetLogger.
+    ///     Class Log4NetLogger.
     /// </summary>
     public class Log4NetLogger : ILogger
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Log4NetLogger"/> class.
+        ///     The log
         /// </summary>
-        internal Log4NetLogger()
-            : this(typeof(ILogger))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Log4NetLogger"/> class.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        internal Log4NetLogger(Type type)
-        {
-            log4net.Config.XmlConfigurator.Configure();
-            Log = log4net.LogManager.GetLogger(type);
-        }
-
-        /// <summary>
-        /// The log
-        /// </summary>
-        log4net.ILog Log;
-
+        private readonly ILog Log;
 
         #region Implementation of ILogger
 
         /// <summary>
-        /// 写日志 日志级别为 Warning
+        ///     写日志 日志级别为 Warning
         /// </summary>
         /// <param name="message">消息</param>
         public void Warning(string message)
@@ -61,7 +40,7 @@ namespace OPCApp.Infrastructure
         }
 
         /// <summary>
-        /// 写日志 日志级别为Debug
+        ///     写日志 日志级别为Debug
         /// </summary>
         /// <param name="message">消息</param>
         public void Debug(string message)
@@ -70,7 +49,7 @@ namespace OPCApp.Infrastructure
         }
 
         /// <summary>
-        /// 写日志 日志级别为 Info
+        ///     写日志 日志级别为 Info
         /// </summary>
         /// <param name="message">消息</param>
         public void Info(string message)
@@ -79,7 +58,7 @@ namespace OPCApp.Infrastructure
         }
 
         /// <summary>
-        /// 写日志 日志级别为 Error
+        ///     写日志 日志级别为 Error
         /// </summary>
         /// <param name="message">消息</param>
         public void Error(string message)
@@ -88,7 +67,7 @@ namespace OPCApp.Infrastructure
         }
 
         /// <summary>
-        /// 写日志 日志级别为 Error
+        ///     写日志 日志级别为 Error
         /// </summary>
         /// <param name="message">消息</param>
         /// <param name="t">系统错误类</param>
@@ -99,7 +78,7 @@ namespace OPCApp.Infrastructure
         }
 
         /// <summary>
-        /// 写日志 日志级别为Debug
+        ///     写日志 日志级别为Debug
         /// </summary>
         /// <param name="format">消息格式字符串</param>
         /// <param name="args">一个对象数组，其中包含零个或多个要设置格式的对象</param>
@@ -109,7 +88,7 @@ namespace OPCApp.Infrastructure
         }
 
         /// <summary>
-        /// 写日志 日志级别为 Error
+        ///     写日志 日志级别为 Error
         /// </summary>
         /// <param name="format">消息格式字符串</param>
         /// <param name="args">一个对象数组，其中包含零个或多个要设置格式的对象</param>
@@ -119,7 +98,7 @@ namespace OPCApp.Infrastructure
         }
 
         /// <summary>
-        /// 写日志 日志级别为 Info
+        ///     写日志 日志级别为 Info
         /// </summary>
         /// <param name="format">消息格式字符串</param>
         /// <param name="args">一个对象数组，其中包含零个或多个要设置格式的对象</param>
@@ -129,7 +108,7 @@ namespace OPCApp.Infrastructure
         }
 
         /// <summary>
-        /// 写日志 日志级别为 Warning
+        ///     写日志 日志级别为 Warning
         /// </summary>
         /// <param name="format">消息格式字符串</param>
         /// <param name="args">一个对象数组，其中包含零个或多个要设置格式的对象</param>
@@ -137,7 +116,25 @@ namespace OPCApp.Infrastructure
         {
             Log.WarnFormat(format, args);
         }
+
         #endregion
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Log4NetLogger" /> class.
+        /// </summary>
+        internal Log4NetLogger()
+            : this(typeof (ILogger))
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Log4NetLogger" /> class.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        internal Log4NetLogger(Type type)
+        {
+            XmlConfigurator.Configure();
+            Log = LogManager.GetLogger(type);
+        }
     }
 }
-

@@ -11,55 +11,58 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OPCApp.DataService.Common;
 using OPCApp.Domain;
 using OPCAPP.Domain;
 using OPCApp.Infrastructure.Interfaces;
 
-
 namespace OPCApp.DataService.Impl
 {
     /// <summary>
-    /// Class LoginManager
+    ///     Class LoginManager
     /// </summary>
-    [Export(typeof(ILoginManager))]
+    [Export(typeof (ILoginManager))]
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class LoginManager : ILoginManager
     {
         /// <summary>
-        /// Logins the specified user identifier.
+        ///     The password
+        /// </summary>
+        private string password;
+
+        /// <summary>
+        ///     The user name
+        /// </summary>
+        private string userName;
+
+        /// <summary>
+        ///     Logins the specified user identifier.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="password">The password.</param>
         /// <returns>ILoginModel.</returns>
         public ILoginModel Login(string userId, string password)
         {
-            this.userName = userId;
+            userName = userId;
             this.password = password;
             var info = new LoginInfo();
-            info.UserName = this.userName;
+            info.UserName = userName;
             info.Password = this.password;
-            var tk = RestClient.Post<LoginInfo, TokenModel>("account/token", info);
+            TokenModel tk = RestClient.Post<LoginInfo, TokenModel>("account/token", info);
             if (null == tk)
             {
                 return null;
             }
-            else
-            {
-                IsLogin = true;
-                RestClient.SetToken(tk.AccessToken);
-            }
+            IsLogin = true;
+            RestClient.SetToken(tk.AccessToken);
             return new LoginModel(tk.UserId, tk.UserName, tk.AccessToken, "", tk.Expires);
         }
 
         /// <summary>
-        /// Res the login.
+        ///     Res the login.
         /// </summary>
         /// <returns>ILoginModel.</returns>
         public ILoginModel ReLogin()
@@ -67,43 +70,29 @@ namespace OPCApp.DataService.Impl
             return Login(userName, password);
         }
 
-        /// <summary>
-        /// The user name
-        /// </summary>
-        private string userName;
-        /// <summary>
-        /// The password
-        /// </summary>
-        private string password;
-
 
         /// <summary>
-        /// Class LoginInfo.
+        ///     Gets a value indicating whether this instance is login.
+        /// </summary>
+        /// <value><c>true</c> 如果实例 is login; 否则, <c>false</c>.</value>
+        public bool IsLogin { get; private set; }
+
+        /// <summary>
+        ///     Class LoginInfo.
         /// </summary>
         internal class LoginInfo
         {
             /// <summary>
-            /// Gets or sets the name of the user.
+            ///     Gets or sets the name of the user.
             /// </summary>
             /// <value>The name of the user.</value>
             public String UserName { get; set; }
 
             /// <summary>
-            /// Gets or sets the password.
+            ///     Gets or sets the password.
             /// </summary>
             /// <value>The password.</value>
             public String Password { get; set; }
-        }
-
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is login.
-        /// </summary>
-        /// <value><c>true</c> 如果实例 is login; 否则, <c>false</c>.</value>
-        public bool IsLogin
-        {
-            get;
-            private set;
         }
     }
 }

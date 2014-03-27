@@ -1,9 +1,9 @@
 ﻿using OPCApp.Domain.Models;
+using OPCApp.Infrastructure.DataService;
 
 namespace OPCApp.DataService.Interface
 {
-    public interface IRoleDataService : OPCApp.Infrastructure.DataService.IBaseDataService<OPC_AuthRole>
+    public interface IRoleDataService : IBaseDataService<OPC_AuthRole>
     {
-
     }
 }

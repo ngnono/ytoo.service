@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-/// <summary>
+﻿ /// <summary>
 /// The Model namespace.
 /// </summary>
+
 namespace OPCApp.Order.Model
 {
     /// <summary>
-    /// 商品明细
+    ///     商品明细
     /// </summary>
     public class OrderGoodsInfo : ModelBase
     {
@@ -21,9 +16,9 @@ namespace OPCApp.Order.Model
         public string Style { get; set; }
 
         public string Standard { get; set; }
-        public string   Color { get; set; }
+        public string Color { get; set; }
 
-        public double  BuyNumber { get; set; }
+        public double BuyNumber { get; set; }
 
         public double BuyPrice { get; set; }
 
@@ -31,6 +26,5 @@ namespace OPCApp.Order.Model
 
         public double OriginalPrice { get; set; }
         public double Price { get; set; }
-        
     }
 }

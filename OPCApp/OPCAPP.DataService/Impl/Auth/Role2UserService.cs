@@ -9,20 +9,19 @@ using OPCApp.Infrastructure.DataService;
 
 namespace OPCApp.DataService.Impl.Auth
 {
-    [Export(typeof(IRole2UserService))]
+    [Export(typeof (IRole2UserService))]
     public class Role2UserService : IRole2UserService
     {
         public ResultMsg SetUserByRole(int roleId, List<int> listUserId)
         {
             try
             {
-                var bFalg = RestClient.Post("account/updateuser", new { roleId = roleId, listMenuId = listUserId });
-                return new ResultMsg() { IsSuccess = true, Msg = "保存成功" };
+                bool bFalg = RestClient.Post("account/updateuser", new {roleId, listMenuId = listUserId});
+                return new ResultMsg {IsSuccess = true, Msg = "保存成功"};
             }
             catch (Exception ex)
             {
-
-                return new ResultMsg() { IsSuccess = false, Msg = "API发送失败" };
+                return new ResultMsg {IsSuccess = false, Msg = "API发送失败"};
             }
         }
 

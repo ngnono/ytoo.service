@@ -1,14 +1,12 @@
-﻿using OPCApp.BaseInfoManage.ViewModels;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.BaseInfoManage.Views
 {
     /// <summary>
-    /// StoreManage.xaml 的交互逻辑
+    ///     StoreManage.xaml 的交互逻辑
     /// </summary>
-
-    [Export("StoreManageWindow", typeof(IBaseView))]
+    [Export("StoreManageWindow", typeof (IBaseView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class StoreManage
     {
@@ -16,6 +14,7 @@ namespace OPCApp.BaseInfoManage.Views
         {
             InitializeComponent();
         }
+
         public void CloseView()
         {
         }

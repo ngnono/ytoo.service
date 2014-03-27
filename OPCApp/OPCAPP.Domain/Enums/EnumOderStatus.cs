@@ -11,25 +11,24 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System.ComponentModel;
 
 namespace OPCAPP.Domain.Enums
 {
     /// <summary>
-    /// 订单状态
+    ///     订单状态
     /// </summary>
     public enum EnumOderStatus
     {
         /// <summary>
-        /// The no shipp
+        ///     The no shipp
         /// </summary>
-        [Description("未发货")]
-        NoShipp = 0,
+        [Description("未发货")] NoShipp = 0,
 
         /// <summary>
-        /// The shipped
+        ///     The shipped
         /// </summary>
-        [Description("已发货")]
-        Shipped = 5
+        [Description("已发货")] Shipped = 5
     }
 }

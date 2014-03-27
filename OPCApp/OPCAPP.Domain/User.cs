@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OPCApp.Domain
 {
-  public  class User 
+    public class User
     {
         public int Id { get; set; }
         public int OrgId { get; set; }
@@ -17,13 +12,12 @@ namespace OPCApp.Domain
         public int SectionId { get; set; }
         public string SectionName { get; set; }
         public string LogonName { get; set; }
-        public string Phone { get; set;}
+        public string Phone { get; set; }
         public bool IsValid { get; set; }
         public bool IsShopping { get; set; }
         public DateTime CreateDate { get; set; }
         public int CreateUserId { get; set; }
         public DateTime UpdateDate { get; set; }
         public int UpdateUserId { get; set; }
-
     }
 }

@@ -1,33 +1,25 @@
-﻿
+﻿using System.ComponentModel.Composition;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
-using OPCApp.DataService.Common;
-using OPCApp.Infrastructure;
 using OPCApp.AuthManage.Views;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OPCApp.Infrastructure;
+
 namespace OPCApp.AuthManage
 {
-    [ModuleExport(typeof(AuthModule))]
+    [ModuleExport(typeof (AuthModule))]
     public class AuthModule : IModule
     {
-        [Import]
-        public IRegionManager RegionManager;
+        [Import] public IRegionManager RegionManager;
+
         public void Initialize()
         {
-            Logon();   
-            this.RegionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, typeof(AuthNavigationItemView));
+            Logon();
+            RegionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, typeof (AuthNavigationItemView));
         }
 
         public void Logon()
         {
-          
         }
     }
 }

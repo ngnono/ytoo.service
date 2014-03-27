@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OPCApp.Infrastructure.Config
 {
-    class DefaultConfig:IConfig
+    internal class DefaultConfig : IConfig
     {
-        public string GetValue(string key)
-        {
-            return System.Configuration.ConfigurationManager.AppSettings[key];
-        }
-
         public string GetValue(string key, string defaultValue = "")
         {
-            if (System.Configuration.ConfigurationManager.AppSettings.AllKeys.Contains(key))
+            if (ConfigurationManager.AppSettings.AllKeys.Contains(key))
             {
-                return System.Configuration.ConfigurationManager.AppSettings[key];
+                return ConfigurationManager.AppSettings[key];
             }
-            else
-            {
-                return defaultValue;
-            }
+            return defaultValue;
+        }
+
+        public string GetValue(string key)
+        {
+            return ConfigurationManager.AppSettings[key];
         }
     }
 }

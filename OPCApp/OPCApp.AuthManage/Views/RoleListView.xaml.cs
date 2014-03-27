@@ -1,18 +1,17 @@
-﻿using System.Windows.Controls;
-using System;
+﻿using System;
 using System.ComponentModel.Composition;
+using System.Windows.Controls;
 using OPCApp.Infrastructure.Mvvm.View;
+
 namespace OPCApp.AuthManage.Views
 {
     /// <summary>
-    /// RoleWindow.xaml 的交互逻辑
+    ///     RoleWindow.xaml 的交互逻辑
     /// </summary>
-    /// 
-    [Export("RoleListWindow", typeof(IBaseView))]
+    [Export("RoleListWindow", typeof (IBaseView))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial  class RoleListWindow :UserControl,IBaseView
+    public partial class RoleListWindow : UserControl, IBaseView
     {
-        
         public RoleListWindow()
         {
             InitializeComponent();

@@ -6,7 +6,7 @@ namespace OPCApp.DataService.Interface
 {
     public interface IRole2MenuService
     {
-        ResultMsg SetMenuByRole(int roleId,List<int> listMenuId);
+        ResultMsg SetMenuByRole(int roleId, List<int> listMenuId);
         List<OPC_AuthMenu> GetMenuList(int roleId);
     }
 }

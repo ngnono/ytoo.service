@@ -1,8 +1,10 @@
 ﻿using Intime.OPC.Domain.Models;
+using OPCApp.Infrastructure.DataService;
+
 namespace OPCApp.DataService.Interface
 {
-    public interface IStoreDataService : OPCApp.Infrastructure.DataService.IBaseDataService<Store>
+    public interface IStoreDataService : IBaseDataService<Store>
     {
-       bool SetIsStop(int StoreId,bool isStop);
+        bool SetIsStop(int StoreId, bool isStop);
     }
 }

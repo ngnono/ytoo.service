@@ -11,35 +11,33 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 
 namespace OPCApp.Infrastructure
 {
     /// <summary>
-    /// Interface IContainer
+    ///     Interface IContainer
     /// </summary>
-    public interface IContainer:IDisposable
+    public interface IContainer : IDisposable
     {
-
         /// <summary>
-        /// 获得某个接口的一组实例
+        ///     获得某个接口的一组实例
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>IEnumerable{``0}.</returns>
         IEnumerable<T> GetInstances<T>();
+
         /// <summary>
-        /// 获取接口的一个实例
+        ///     获取接口的一个实例
         /// </summary>
         /// <typeparam name="T">接口的类型</typeparam>
         /// <returns>，如果没有注册该接口，则返回null</returns>
         T GetInstance<T>();
 
         /// <summary>
-        /// 根据关键字获取对象
+        ///     根据关键字获取对象
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>接口的类型</returns>

@@ -1,36 +1,25 @@
 ﻿using System.ComponentModel.Composition;
-using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using MahApps.Metro;
-using OPCApp.TransManage.ViewModels;
 
 namespace OPCApp.TransManage.Views
 {
     /// <summary>
-    /// PrintInvoiceViewModel.xaml 的交互逻辑
+    ///     PrintInvoiceViewModel.xaml 的交互逻辑
     /// </summary>
-    /// 
-    [Export("StoreOut",typeof(UserControl))]
+    [Export("StoreOut", typeof (UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class StoreOut 
+    public partial class StoreOut
     {
-        [Import("StoreOutViewModel")]
-        public object ViewModel
-        {
-            set
-            {
-                this.DataContext = value;
-            }
-            get
-            {
-                return this.DataContext;
-            }
-        }
         public StoreOut()
         {
             InitializeComponent();
+        }
+
+        [Import("StoreOutViewModel")]
+        public object ViewModel
+        {
+            set { DataContext = value; }
+            get { return DataContext; }
         }
     }
 }

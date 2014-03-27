@@ -5,6 +5,7 @@
 // 
 // 
 //===================================================================================
+
 using System;
 using System.ComponentModel.Composition.Hosting;
 using System.Windows;
@@ -21,11 +22,10 @@ namespace OPCApp.Main
         protected override void ConfigureAggregateCatalog()
         {
             base.ConfigureAggregateCatalog();
-           
-            this.AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(QuickStartBootstrapper).Assembly));
 
-            this.AggregateCatalog.Catalogs.Add(new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory));
-       
+            AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof (QuickStartBootstrapper).Assembly));
+
+            AggregateCatalog.Catalogs.Add(new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory));
         }
 
         protected override IModuleCatalog CreateModuleCatalog()
@@ -35,14 +35,14 @@ namespace OPCApp.Main
 
         protected override DependencyObject CreateShell()
         {
-            return this.Container.GetExportedValue<Shell>();
+            return Container.GetExportedValue<Shell>();
         }
 
         protected override void InitializeShell()
         {
             base.InitializeShell();
-            AppEx.Init(this.Container);
-            Application.Current.MainWindow = (Window)this.Shell;
+            AppEx.Init(Container);
+            Application.Current.MainWindow = (Window) Shell;
             Application.Current.MainWindow.WindowState = WindowState.Maximized;
             Application.Current.MainWindow.Show();
         }

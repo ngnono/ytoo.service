@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using OPCApp.Domain.Models;
 
 namespace OPCApp.Domain
 {
     public class MenuGroup
     {
-        public MenuGroup() {
-            this.Items = new List<OPC_AuthMenu>();
+        public MenuGroup()
+        {
+            Items = new List<OPC_AuthMenu>();
         }
 
         public int Id { get; set; }
@@ -19,8 +16,5 @@ namespace OPCApp.Domain
         public string MenuName { get; set; }
 
         public IList<OPC_AuthMenu> Items { get; set; }
-
     }
-
-   
 }

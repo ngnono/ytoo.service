@@ -11,40 +11,39 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using System.ComponentModel.Composition;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
 using OPCApp.Infrastructure.Mvvm;
-using System.ComponentModel.Composition;
+
 namespace OPCApp.AuthManage.ViewModels
 {
-
     /// <summary>
-    /// Class RoleListViewModel.
+    ///     Class RoleListViewModel.
     /// </summary>
-    [Export("RoleListViewModel", typeof(IViewModel))]
+    [Export("RoleListViewModel", typeof (IViewModel))]
     public class RoleListViewModel : BaseListViewModel<OPC_AuthRole>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RoleListViewModel"/> class.
+        ///     Initializes a new instance of the <see cref="RoleListViewModel" /> class.
         /// </summary>
         public RoleListViewModel()
             : base("RoleListWindow")
         {
-            this.EditViewModeKey = "RoleViewModel";
-            this.AddViewModeKey = "RoleViewModel";
+            EditViewModeKey = "RoleViewModel";
+            AddViewModeKey = "RoleViewModel";
         }
 
         /// <summary>
-        /// Gets the data service.
+        ///     Gets the data service.
         /// </summary>
         /// <returns>IBaseDataService{Role}.</returns>
         protected override IBaseDataService<OPC_AuthRole> GetDataService()
         {
             return AppEx.Container.GetInstance<IRoleDataService>();
         }
-       
     }
-
 }

@@ -2,23 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OPCAPP.Domain.Base
 {
     public class DomainBase : INotifyDataErrorInfo, INotifyPropertyChanged
     {
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-        readonly Dictionary<string, List<string>> _currentErrors;
+        private readonly Dictionary<string, List<string>> _currentErrors;
 
         public DomainBase()
         {
             _currentErrors = new Dictionary<string, List<string>>();
         }
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         public IEnumerable GetErrors(string propertyName)
         {
@@ -33,25 +30,26 @@ namespace OPCAPP.Domain.Base
 
         public bool HasErrors
         {
-            get
-            {
-                return (_currentErrors.Where(c => c.Value.Count > 0).Count() > 0);
-            }
+            get { return (_currentErrors.Where(c => c.Value.Count > 0).Count() > 0); }
         }
 
-        void FireErrorsChanged(string property)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void FireErrorsChanged(string property)
         {
             if (ErrorsChanged != null)
             {
                 ErrorsChanged(this, new DataErrorsChangedEventArgs(property));
             }
         }
+
         public void ClearErrorFromProperty(string property)
         {
             MakeOrCreatePropertyErrorList(property);
             _currentErrors[property].Clear();
             FireErrorsChanged(property);
         }
+
         public void AddErrorForProperty(string property, string error)
         {
             MakeOrCreatePropertyErrorList(property);
@@ -59,15 +57,12 @@ namespace OPCAPP.Domain.Base
             FireErrorsChanged(property);
         }
 
-        void MakeOrCreatePropertyErrorList(string propertyName)
+        private void MakeOrCreatePropertyErrorList(string propertyName)
         {
             if (!_currentErrors.ContainsKey(propertyName))
             {
                 _currentErrors[propertyName] = new List<string>();
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
-
 }

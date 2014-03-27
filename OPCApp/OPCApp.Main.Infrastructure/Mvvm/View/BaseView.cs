@@ -1,35 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Interop;
+﻿using System.Windows;
 using MahApps.Metro.Controls;
 
 namespace OPCApp.Infrastructure.Mvvm.View
 {
-    public  class BaseView:MetroWindow, IBaseView
+    public class BaseView : MetroWindow, IBaseView
     {
-       
-
         public void Cancel()
         {
             DialogResult = false;
             base.Close();
         }
 
-        protected virtual string ValidModel()
-        {
-            return "";
-        }
-
-
 
         public void CloseView()
         {
-
-            var error = ValidModel();
+            string error = ValidModel();
             if (!string.IsNullOrWhiteSpace(error))
             {
                 MessageBox.Show(error);
@@ -37,6 +22,11 @@ namespace OPCApp.Infrastructure.Mvvm.View
             }
             DialogResult = true;
             base.Close();
+        }
+
+        protected virtual string ValidModel()
+        {
+            return "";
         }
     }
 }

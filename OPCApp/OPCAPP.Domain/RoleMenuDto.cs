@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Intime.OPC.Domain.Dto
 {
-    public  class RoleAuthDto
+    public class RoleAuthDto
     {
-        public int  RoleID { get; set; }
+        public int RoleID { get; set; }
 
         public int UserID { get; set; }
 

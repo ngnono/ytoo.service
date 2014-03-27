@@ -1,9 +1,9 @@
-﻿<UserControl  x:Class="OPCApp.AuthManage.Views.UserListWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-         Height="Auto" Width="Auto" Background="LightGray" >
+﻿<UserControl x:Class="OPCApp.AuthManage.Views.UserListWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             Height="Auto" Width="Auto" Background="LightGray">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -13,47 +13,49 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
                 <Button Background="LightGray" Width="50">
                     <StackPanel>
-                        <Image Source="/image/变更单位.png" Stretch="None"></Image>
+                        <Image Source="/image/变更单位.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">返回</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="50">
                     <StackPanel>
-                        <Image Source="/image/导出.png" Stretch="None"></Image>
+                        <Image Source="/image/导出.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">导出</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding SetStopUserCommand}">
                     <StackPanel>
-                        <Image Source="/image/解挂.png" Stretch="None"></Image>
+                        <Image Source="/image/解挂.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">是否启用</TextBlock>
                     </StackPanel>
                 </Button>
 
                 <Button Background="LightGray" Width="50" Command="{Binding AddCommand}">
                     <StackPanel>
-                        <Image Source="/image/新增.png" Stretch="None"></Image>
+                        <Image Source="/image/新增.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">增加</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding EditCommand}" CommandParameter="{Binding Models.CurrentItem}">
+                <Button Background="LightGray" Width="50" Command="{Binding EditCommand}"
+                        CommandParameter="{Binding Models.CurrentItem}">
                     <StackPanel>
-                        <Image Source="/image/修改.png" Stretch="None"></Image>
+                        <Image Source="/image/修改.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding DeleteCommand}"  CommandParameter="{Binding Models.CurrentItem}">
+                <Button Background="LightGray" Width="50" Command="{Binding DeleteCommand}"
+                        CommandParameter="{Binding Models.CurrentItem}">
                     <StackPanel>
-                        <Image Source="/image/删除.png" Stretch="None"></Image>
+                        <Image Source="/image/删除.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">删除</TextBlock>
                     </StackPanel>
                 </Button>
@@ -62,40 +64,42 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,1" >
-            <Label Content=" 查找字段:" Margin="0,14,0,10"/>
-            <ComboBox  Width="100"  ItemsSource="{Binding FieldList}" Height="20" SelectedItem="{Binding SelectedFiled}" SelectedIndex="0"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,1">
+            <Label Content=" 查找字段:" Margin="0,14,0,10" />
+            <ComboBox Width="100" ItemsSource="{Binding FieldList}" Height="20" SelectedItem="{Binding SelectedFiled}"
+                      SelectedIndex="0" />
             <Label Content=" 查找内容:" Margin="0,14,0,0" />
-            <TextBox  Height="20" Width="130" Text="{Binding SelectedFiledValue}" />
+            <TextBox Height="20" Width="130" Text="{Binding SelectedFiledValue}" />
             <Button Background="LightGray" Width="50" Command="{Binding SearchCommand}">
                 <StackPanel>
-                    <Image Source="/image/查询.png" Stretch="None"></Image>
+                    <Image Source="/image/查询.png" Stretch="None" />
                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                 </StackPanel>
             </Button>
 
         </StackPanel>
 
-        <DataGrid  x:Name="dataGrid" Grid.Row="2"   AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"  ItemsSource="{Binding Models }" >
+        <DataGrid x:Name="dataGrid" Grid.Row="2" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
+                  ItemsSource="{Binding Models }">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding DBGridClickCommand}"></i:InvokeCommandAction>
+                    <i:InvokeCommandAction Command="{Binding DBGridClickCommand}" />
                 </i:EventTrigger>
 
             </i:Interaction.Triggers>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="SecitonId" Width="50" Binding="{Binding SecitonId}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="OrgId" Width="50" Binding="{Binding OrgId}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="Id" Width="50" Binding="{Binding Id}"  Visibility="Hidden"/>
-                <DataGridTextColumn Header="专柜" Width="80" Binding="{Binding SectionName}"/>
-                <DataGridTextColumn Width="100" Header="登录名" Binding="{Binding LogonName}"/>
-                <DataGridTextColumn Header="密码" Width="80" Binding="{Binding Password}"/>
-                <DataGridTextColumn Header="姓名" Width="150" Binding="{Binding Name}"/>
-                <DataGridTextColumn Width="80" Header="手机号" Binding="{Binding Phone}"  />
-                <DataGridTextColumn Header="邮箱" Width="100" Binding="{Binding Mail}"/>
-                <DataGridCheckBoxColumn Header="是否有效" Width="100" Binding="{Binding IsVaild}"/>
-                <DataGridCheckBoxColumn Width="80" Header="是否导购"  Binding="{Binding IsShopping}" />
-                <DataGridTextColumn Width="100" Header="机构名称" Binding="{Binding OrgName}"  />             
+                <DataGridTextColumn Header="SecitonId" Width="50" Binding="{Binding SecitonId}" Visibility="Hidden" />
+                <DataGridTextColumn Header="OrgId" Width="50" Binding="{Binding OrgId}" Visibility="Hidden" />
+                <DataGridTextColumn Header="Id" Width="50" Binding="{Binding Id}" Visibility="Hidden" />
+                <DataGridTextColumn Header="专柜" Width="80" Binding="{Binding SectionName}" />
+                <DataGridTextColumn Width="100" Header="登录名" Binding="{Binding LogonName}" />
+                <DataGridTextColumn Header="密码" Width="80" Binding="{Binding Password}" />
+                <DataGridTextColumn Header="姓名" Width="150" Binding="{Binding Name}" />
+                <DataGridTextColumn Width="80" Header="手机号" Binding="{Binding Phone}" />
+                <DataGridTextColumn Header="邮箱" Width="100" Binding="{Binding Mail}" />
+                <DataGridCheckBoxColumn Header="是否有效" Width="100" Binding="{Binding IsVaild}" />
+                <DataGridCheckBoxColumn Width="80" Header="是否导购" Binding="{Binding IsShopping}" />
+                <DataGridTextColumn Width="100" Header="机构名称" Binding="{Binding OrgName}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

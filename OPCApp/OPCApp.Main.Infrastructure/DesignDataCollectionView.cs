@@ -9,15 +9,19 @@
 // ÐÞ¸Ä¼ÇÂ¼
 //
 //===================================================================================
+
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace OPCApp.Infrastructure
 {
     /// <summary>
-    /// This class is used to specify design data for view models that expose an ICollectionView. It is not intended
-    /// to be used by production code.
+    ///     This class is used to specify design data for view models that expose an ICollectionView. It is not intended
+    ///     to be used by production code.
     /// </summary>
     public class DesignDataCollectionView : Collection<object>, ICollectionView
     {
@@ -36,16 +40,10 @@ namespace OPCApp.Infrastructure
             get { throw new NotImplementedException(); }
         }
 
-        public System.Globalization.CultureInfo Culture
+        public CultureInfo Culture
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
 #pragma warning disable 67    
@@ -73,14 +71,8 @@ namespace OPCApp.Infrastructure
 
         public Predicate<object> Filter
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public ObservableCollection<GroupDescription> GroupDescriptions
@@ -148,7 +140,7 @@ namespace OPCApp.Infrastructure
             get { throw new NotImplementedException(); }
         }
 
-        public System.Collections.IEnumerable SourceCollection
+        public IEnumerable SourceCollection
         {
             get { throw new NotImplementedException(); }
         }
@@ -156,7 +148,7 @@ namespace OPCApp.Infrastructure
 #pragma warning disable 67
         // Implements ICollectionView and is here only to support design-time data only.
         // It's no surprise no one actually uses this event.
-        public event System.Collections.Specialized.NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
 #pragma warning restore 67
     }
 }

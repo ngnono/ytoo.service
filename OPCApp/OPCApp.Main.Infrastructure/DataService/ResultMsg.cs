@@ -9,7 +9,7 @@
 
         public static ResultMsg Success(string msg = "")
         {
-            return new ResultMsg()
+            return new ResultMsg
             {
                 IsSuccess = true,
                 Msg = msg
@@ -18,7 +18,7 @@
 
         public static ResultMsg Failure(string msg)
         {
-            return new ResultMsg()
+            return new ResultMsg
             {
                 IsSuccess = false,
                 Msg = msg
