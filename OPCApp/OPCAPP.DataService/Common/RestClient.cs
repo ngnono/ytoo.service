@@ -55,7 +55,21 @@ namespace OPCApp.DataService.Common
                 return _client;
             }
         }
-
+        /// <summary>
+        ///  SetToken
+        /// </summary>
+        /// <param name="token"></param>
+        public static void SetToken(string token)
+        {
+            Client.SetToken(token);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="address"></param>
+        /// <param name="urlParams"></param>
+        /// <returns></returns>
       
         public static IList<T> Get<T>(string address, string urlParams="")
         {

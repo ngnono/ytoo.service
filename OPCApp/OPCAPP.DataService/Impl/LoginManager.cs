@@ -18,18 +18,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OPCApp.DataService.Common;
-using OPCAPP.Domain;
 using OPCApp.Domain;
 using OPCApp.Infrastructure.Interfaces;
+
 
 namespace OPCApp.DataService.Impl
 {
     /// <summary>
-    /// Class LoginManager.
+    /// Class LoginManager
     /// </summary>
     [Export(typeof(ILoginManager))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class LoginManager:ILoginManager
+    public class LoginManager : ILoginManager
     {
         /// <summary>
         /// Logins the specified user identifier.
@@ -44,16 +44,17 @@ namespace OPCApp.DataService.Impl
             var info = new LoginInfo();
             info.UserName = this.userName;
             info.Password = this.password;
-            var tk = RestClient.Post<LoginInfo, TokenModel>("Account/token", info);
-            if (null==tk)
+            var tk = RestClient.Post<LoginInfo, TokenModel>("account/token", info);
+            if (null == tk)
             {
                 return null;
             }
             else
             {
                 IsLogin = true;
+                RestClient.SetToken(tk.AccessToken);
             }
-            return new LoginModel(tk.UserId,tk.UserName,tk.AccessToken,"",tk.Expires);
+            return new LoginModel(tk.UserId, tk.UserName, tk.AccessToken, "", tk.Expires);
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace OPCApp.DataService.Impl
         /// <summary>
         /// Class LoginInfo.
         /// </summary>
-        internal class  LoginInfo
+        internal class LoginInfo
         {
             /// <summary>
             /// Gets or sets the name of the user.
@@ -100,6 +101,8 @@ namespace OPCApp.DataService.Impl
         /// <value><c>true</c> 如果实例 is login; 否则, <c>false</c>.</value>
         public bool IsLogin
         {
-            get; private set; }
+            get;
+            private set;
+        }
     }
 }
