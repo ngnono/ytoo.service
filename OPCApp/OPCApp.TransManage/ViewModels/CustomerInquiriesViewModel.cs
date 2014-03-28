@@ -98,7 +98,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetSaleByOrderId()
         {
-            if (string.IsNullOrEmpty(SelectOrder.Id.ToString()))
+            if (SelectOrder==null||string.IsNullOrEmpty(SelectOrder.Id.ToString()))
             {
                 return;
             }
@@ -114,7 +114,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetSaleDetailBySaleId()
         {
-            if (string.IsNullOrEmpty(SelectSale.Id.ToString()))
+            if (selectSale==null||string.IsNullOrEmpty(SelectSale.Id.ToString()))
             {
                 return;
             }
