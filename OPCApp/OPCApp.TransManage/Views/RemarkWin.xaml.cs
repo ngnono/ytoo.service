@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.TransManage.IService;
@@ -48,6 +49,11 @@ namespace OPCApp.TransManage.Views
 
         private void CommandSaveExecute()
         {
+            if (String.IsNullOrEmpty(ViewModel.Remark.Content))
+            {
+                MessageBox.Show("请填写备注信息", "提示");
+                return; ;
+            }
             DialogResult = true;
             Close();
         }

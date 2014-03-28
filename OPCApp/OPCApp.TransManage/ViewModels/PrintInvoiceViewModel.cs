@@ -75,9 +75,6 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandGetDown { get; set; }
 
         //调用接口打开填写Remark的窗口
-        //[Import("IRemark",typeof(IRemark))]
-        // public
-
         public void CommandRemarkExecute()
         {
             //被选择的对象
@@ -132,10 +129,13 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         /*完成销售单打印*/
-
         public void CommandFinishExecute()
         {
-            if (SaleList==null)return;
+            if (SaleList == null)
+            {
+                MessageBox.Show("请选择要打印的销售单", "提示");
+                return;
+            }
             List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
             var iTransService = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = iTransService.SetStatusAffirmPrintSaleFinish(selectSaleIds);
