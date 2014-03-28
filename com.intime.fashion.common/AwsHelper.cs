@@ -105,6 +105,7 @@ namespace com.intime.fashion.common
                  BucketName = AwsConfig.S3_BUCKET_NAME,
                  Key = remotePath
             });
+            Aliyun.AliyunUtil.Transfer2AliyunAsync(localPath, remotePath,(object o)=>Logger.Error(o));
         }
         private static void EnsureQueue()
         {
