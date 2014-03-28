@@ -4,6 +4,8 @@ namespace Intime.OPC.Domain.Dto
 {
     public class OrderDto
     {
+
+        //todo 缺少 门店应付款  备注时间
         /// <summary>
         ///     订单ID
         /// </summary>

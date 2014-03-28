@@ -23,12 +23,8 @@ namespace Intime.OPC.Service.Map
     /// <summary>
     ///     Class Mapper.
     /// </summary>
-    public class Mapper
+    public  class Mapper
     {
-        /// <summary>
-        ///     The regist collection
-        /// </summary>
-        private static readonly ICollection<string> registCollection = new Collection<string>();
 
         /// <summary>
         ///     两个类型之间的映射
@@ -39,53 +35,15 @@ namespace Intime.OPC.Service.Map
         /// <returns>``1.</returns>
         public static TTagart Map<TSource, TTagart>(TSource source, Expression<Func<TSource, TTagart>> convert = null)
         {
-            string key = typeof (TSource).FullName + "_" + typeof (TTagart).FullName;
-            if (!registCollection.Contains(key))
-            {
-                IMappingExpression<TSource, TTagart> map = AutoMapper.Mapper.CreateMap<TSource, TTagart>();
-                if (convert != null)
-                {
-                    map.ConvertUsing(convert.Compile());
-                }
-                registCollection.Add(key);
-            }
-
+    
             return AutoMapper.Mapper.Map<TSource, TTagart>(source);
         }
 
-        public static IList<TTagart> Map<TSource, TTagart>(IEnumerable<TSource> source,
-            Expression<Func<TSource, TTagart>> convert = null)
+        public static IList<TTagart> Map<TSource, TTagart>(IList<TSource> source)
         {
-            string key = typeof (TSource).FullName + "_" + typeof (TTagart).FullName;
-            if (!registCollection.Contains(key))
-            {
-                IMappingExpression<TSource, TTagart> map = AutoMapper.Mapper.CreateMap<TSource, TTagart>();
-                if (convert != null)
-                {
-                    map.ConvertUsing(convert.Compile());
-                }
-                registCollection.Add(key);
-            }
-            IList<TTagart> lst = new List<TTagart>();
-            foreach (TSource s in source)
-            {
-                lst.Add(AutoMapper.Mapper.Map<TSource, TTagart>(s));
-            }
-            return lst;
+            return AutoMapper.Mapper.Map<IList<TSource>, IList<TTagart>>(source);
         }
 
-        public static void CreateMap<TSource, TTagart>(Expression<Func<TSource, TTagart>> convert = null)
-        {
-            string key = typeof (TSource).FullName + "_" + typeof (TTagart).FullName;
-            if (!registCollection.Contains(key))
-            {
-                IMappingExpression<TSource, TTagart> map = AutoMapper.Mapper.CreateMap<TSource, TTagart>();
-                if (convert != null)
-                {
-                    map.ConvertUsing(convert.Compile());
-                }
-                registCollection.Add(key);
-            }
-        }
+        
     }
 }

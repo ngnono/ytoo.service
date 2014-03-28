@@ -54,6 +54,7 @@
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IRoleRepository.cs" />
+    <Compile Include="ISaleDetailRepository.cs" />
     <Compile Include="ISaleRemarkRepository.cs" />
     <Compile Include="ISaleRepository.cs" />
     <Compile Include="ISectionRepository.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Support\RoleMenuRepository.cs" />
     <Compile Include="Support\RoleRepository.cs" />
     <Compile Include="Support\RoleUserRepository.cs" />
+    <Compile Include="Support\SaleDetailRepository.cs" />
     <Compile Include="Support\SaleRemarkRepository.cs" />
     <Compile Include="Support\SaleRepository.cs" />
     <Compile Include="Support\SectionRepository.cs" />

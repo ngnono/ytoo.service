@@ -15,9 +15,11 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Mvc;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Bindings;
+using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 
 namespace Intime.OPC.WebApi.Controllers
 {
@@ -45,13 +47,15 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [System.Web.Http.HttpGet]
         public IHttpActionResult LoadMenu([UserId] int? userId)
         {
             if (userId.HasValue)
             {
                 try
                 {
+                    var ss = GetUserID();
+                    
                     IEnumerable<OPC_AuthMenu> lstMenu = _menuService.SelectByUserID(userId.Value);
                     return Ok(lstMenu);
                 }
@@ -63,7 +67,16 @@ namespace Intime.OPC.WebApi.Controllers
             return BadRequest("用户名未登录，或用户名为空");
         }
 
-        [HttpGet]
+        private int? GetUserID()
+        {
+            if (this.ActionContext.Request.Properties.ContainsKey(AccessTokenConst.UseridPropertiesName))
+            {
+                return int.Parse( this.ActionContext.Request.Properties[AccessTokenConst.UseridPropertiesName].ToString());
+            }
+            return null;
+        }
+
+        [System.Web.Http.HttpGet]
         public IHttpActionResult LoadMenuByRoleID(int roleId, [UserId] int? userId)
         {
             if (userId.HasValue)
@@ -81,7 +94,7 @@ namespace Intime.OPC.WebApi.Controllers
             return BadRequest("用户名未登录，或用户名为空");
         }
 
-        [HttpGet]
+        [System.Web.Http.HttpGet]
         public IHttpActionResult GetMenuList([UserId] int? userId)
         {
             if (userId.HasValue)
