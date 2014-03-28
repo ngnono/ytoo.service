@@ -19,5 +19,12 @@ namespace Intime.OPC.Domain.Exception
     /// </summary>
     public class OrderNoIsNullException : System.Exception
     {
+        public OrderNoIsNullException(string orderNo)
+            : base(orderNo)
+        {
+            this.OrderNo = orderNo;
+        }
+
+        public string OrderNo { get; private set; }
     }
 }

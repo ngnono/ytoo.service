@@ -4,6 +4,9 @@
     {
         public SaleOrderNotExistsException(string saleOrderNo) : base(saleOrderNo)
         {
+            this.SaleOrderNo = saleOrderNo;
         }
+
+        public string SaleOrderNo { get; private set; }
     }
 }
