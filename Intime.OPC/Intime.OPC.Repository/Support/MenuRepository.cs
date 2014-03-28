@@ -38,7 +38,7 @@ namespace Intime.OPC.Repository.Support
                     db.OPC_AuthMenu.Join(
                         db.OPC_AuthRoleMenu.Join(db.OPC_AuthRoleUser.Where(u => u.OPC_AuthUserId == userId),
                             arm => arm.OPC_AuthRoleId, aru => aru.OPC_AuthRoleId, (arm, aru) => arm), m => m.Id,
-                        arm => arm.OPC_AuthMenuId, (m, arm) => m).ToList();
+                        arm => arm.OPC_AuthMenuId, (m, arm) => m).OrderBy(t=>t.Sort).ToList();
             }
         }
 
@@ -54,7 +54,7 @@ namespace Intime.OPC.Repository.Support
                 return db.OPC_AuthRoleMenu.Where(t => t.OPC_AuthRoleId == roleID).Join(
                     db.OPC_AuthMenu,
                     t => t.OPC_AuthMenuId,
-                    o => o.Id, (arm, aru) => aru).ToList();
+                    o => o.Id, (arm, aru) => aru).OrderBy(t=>t.Sort).ToList();
             }
         }
 
@@ -64,7 +64,7 @@ namespace Intime.OPC.Repository.Support
         /// <returns>IList{OPC_AuthMenu}.</returns>
         public IList<OPC_AuthMenu> GetMenuList()
         {
-            return Select(t => t.Id != t.PraentMenuId);
+            return Select(t => t.Id != t.PraentMenuId).OrderBy(t=>t.Sort).ToList();
         }
 
         #endregion
