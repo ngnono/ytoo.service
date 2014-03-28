@@ -1,28 +1,25 @@
 ﻿// ***********************************************************************
 // Assembly         : 01_Intime.OPC.Repository
 // Author           : Liuyh
-// Created          : 03-25-2014 01:13:16
+// Created          : 03-28-2014 21:07:30
 //
 // Last Modified By : Liuyh
-// Last Modified On : 03-25-2014 01:13:43
+// Last Modified On : 03-28-2014 21:07:45
 // ***********************************************************************
-// <copyright file="IStoreRepository.cs" company="">
+// <copyright file="IBrandRepository.cs" company="">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
-using System.Collections;
-using System.Collections.Generic;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
 {
     /// <summary>
-    ///     Interface IStoreRepository
+    /// Interface IBrandRepository
     /// </summary>
-    public interface IStoreRepository : IRepository<Store>
+    public interface IBrandRepository : IRepository<Brand>
     {
-        IList<Store> GetAll();
+        System.Collections.Generic.IList<Brand> GetAll();
     }
 }

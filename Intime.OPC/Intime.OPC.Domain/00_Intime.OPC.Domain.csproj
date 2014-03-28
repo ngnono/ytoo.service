@@ -70,6 +70,8 @@
     <Compile Include="Exception\OrderNoIsNullException.cs" />
     <Compile Include="Exception\OrderNotExistsException.cs" />
     <Compile Include="Exception\SaleOrderNotExistsException.cs" />
+    <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\Mapping\BrandMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthMenuMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleMenuMap.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="Models\Mapping\OPC_SupplierInfoMap.cs" />
     <Compile Include="Models\Mapping\OrderMap.cs" />
     <Compile Include="Models\Mapping\SectionMap.cs" />
+    <Compile Include="Models\Mapping\ShipViaMap.cs" />
     <Compile Include="Models\Mapping\StoreMap.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />
@@ -115,6 +118,7 @@
     <Compile Include="Models\OPC_SupplierInfo.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Section.cs" />
+    <Compile Include="Models\ShipVia.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\YintaiHZhouContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
