@@ -31,8 +31,17 @@ namespace OPCApp.TransManage.ViewModels
             CommandFinish = new DelegateCommand(CommandFinishExecute);
             CommandSetRemark = new DelegateCommand(CommandRemarkExecute);
             CommandGetDown = new DelegateCommand(CommandGetDownExecute);
+            CommandDbClick = new DelegateCommand(CommandDbClickExecute);
             Invoice4Get = new Invoice4Get();
             SearchSaleStatus = EnumSearchSaleStatus.CompletePrintSearchStatus;
+        }
+
+        private void CommandDbClickExecute()
+        {
+            if (Invoice4Remark != null)
+            {
+                InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(Invoice4Remark.SaleOrderNo).Result.ToList();
+            }
         }
 
         public EnumSearchSaleStatus SearchSaleStatus { get; set; }
@@ -73,7 +82,7 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandFinish { get; set; }
         public DelegateCommand CommandSetRemark { get; set; }
         public DelegateCommand CommandGetDown { get; set; }
-
+        public DelegateCommand CommandDbClick { get; set; }
         //调用接口打开填写Remark的窗口
         public void CommandRemarkExecute()
         {
@@ -91,16 +100,17 @@ namespace OPCApp.TransManage.ViewModels
         public void Refresh()
         {
             string salesfilter = string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}",
-                Invoice4Get.StartSellDate.ToShortDateString(), Invoice4Get.EndSellDate.ToShortDateString(),
+                Invoice4Get.StartSellDate.ToShortDateString(),
+                Invoice4Get.EndSellDate.ToShortDateString(),
                 Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo);
             PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter, SearchSaleStatus);
             SaleList = re.Result;
-            if (InvoiceDetail4List != null) InvoiceDetail4List.Clear();
+            if (InvoiceDetail4List != null) InvoiceDetail4List=new List<OPC_SaleDetail>();
         }
 
         public void CommandGetDownExecute()
         {
-            if(SaleList==null)return;
+            if (SaleList == null)return;
             OPC_Sale saleCur = SaleList.Where(n => n.IsSelected).FirstOrDefault();
             if (saleCur == null)
             {
@@ -108,9 +118,7 @@ namespace OPCApp.TransManage.ViewModels
                 invoicedetail4list.ToList().Clear();
                 return;
             }
-            //这个工作状态
-            InvoiceDetail4List =
-                AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleCur.SaleOrderNo).Result.ToList();
+            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleCur.SaleOrderNo).Result.ToList();
         }
 
         public void CommandViewAndPrintExecute()
@@ -133,13 +141,13 @@ namespace OPCApp.TransManage.ViewModels
         {
             if (SaleList == null)
             {
-                MessageBox.Show("请选择要打印的销售单", "提示");
+                MessageBox.Show("请勾选要设置打印完成状态的销售单", "提示");
                 return;
             }
             List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
             var iTransService = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = iTransService.SetStatusAffirmPrintSaleFinish(selectSaleIds);
-            MessageBox.Show(bFalg ? "打印销售单完成" : "打印销售单失败", "提示");
+            MessageBox.Show(bFalg ? "设置打印销售单完成成功" : "设置打印销售单失败", "提示");
             Refresh();
         }
     }

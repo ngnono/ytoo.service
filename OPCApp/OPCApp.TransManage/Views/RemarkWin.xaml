@@ -23,7 +23,7 @@
 
                     <DataGridTextColumn Width="120" Header="备注人" Binding="{Binding CreateUser}" />
 
-                    <DataGridTextColumn Width="120" Header="备注时间" Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd}}" />
+                    <DataGridTextColumn Width="140" Header="备注时间" Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -36,7 +36,7 @@
                     </StackPanel>
                 </Button>
                  
-                <Button Background="LightGray" Width="50" Margin="" Command="{Binding CommandSave}">
+                <Button Background="LightGray" Width="50" Command="{Binding CommandSave}">
                     <StackPanel>
                         <Image Source="/image/保存.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">保存</TextBlock>

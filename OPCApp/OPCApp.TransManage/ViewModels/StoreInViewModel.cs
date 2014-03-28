@@ -26,7 +26,11 @@ namespace OPCApp.TransManage.ViewModels
 
         public void CommandSoldOutExecute()
         {
-            if(SaleList==null)return;
+            if (SaleList == null)
+            {
+                MessageBox.Show("请勾选要设置缺货状态的销售单", "提示");
+                return;
+            }
             List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
             var ts = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = ts.SetStatusSoldOut(selectSaleIds);
@@ -36,6 +40,11 @@ namespace OPCApp.TransManage.ViewModels
 
         public void CommandStoreInSureExecute()
         {
+            if (SaleList == null)
+            {
+                MessageBox.Show("请勾选要设置入库的销售单", "提示");
+                return;
+            }
             List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
             var ts = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = ts.SetStatusStoreInSure(selectSaleIds);
