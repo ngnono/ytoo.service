@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Windows;
 using Microsoft.Practices.Prism.Commands;
@@ -44,6 +45,7 @@ namespace OPCApp.TransManage.Views
         public void CommandBackExecute()
         {
             DialogResult = false;
+            isCancel = false;
             Close();
         }
 
@@ -52,10 +54,20 @@ namespace OPCApp.TransManage.Views
             if (String.IsNullOrEmpty(ViewModel.Remark.Content))
             {
                 MessageBox.Show("请填写备注信息", "提示");
-                return; ;
+                isCancel = true;
+                return;
             }
             DialogResult = true;
+            isCancel = false;
             Close();
+        }
+
+        private bool isCancel = false;
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = isCancel;
+            base.OnClosing(e);
         }
     }
 }
