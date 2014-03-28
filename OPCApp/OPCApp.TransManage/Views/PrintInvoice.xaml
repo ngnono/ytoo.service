@@ -83,7 +83,7 @@
                   HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Invoice4Remark}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDown">
-                    <i:InvokeCommandAction Command="{Binding CommandGetSaleByOrderId}" />
+                    <i:InvokeCommandAction Command="{Binding CommandDbClick}" />
                 </i:EventTrigger>
 
             </i:Interaction.Triggers>
@@ -133,7 +133,7 @@
         </StackPanel>
         <DataGrid Grid.Row="5"  IsReadOnly="True" ItemsSource="{Binding InvoiceDetail4List}" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="款号" Binding="{Binding SectionNumber}" ElementStyle="{StaticResource CellRight}"  />
+                <DataGridTextColumn Header="款号" Width="150" Binding="{Binding SectionNumber}" ElementStyle="{StaticResource CellRight}"  />
                 <DataGridTextColumn Header="规格" Binding="{Binding Standard}"  ElementStyle="{StaticResource CellRight}" />
                 <DataGridTextColumn Header="色码" Binding="{Binding ColorCode}" />
                 <DataGridTextColumn Header="销售价" Binding="{Binding SalePrice}" ElementStyle="{StaticResource CellRight}"  />
