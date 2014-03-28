@@ -18,13 +18,6 @@
 
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
-
-                <Button Background="LightGray" Width="50">
-                    <StackPanel>
-                        <Image Source="/image/变更单位.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">返回</TextBlock>
-                    </StackPanel>
-                </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
                     <StackPanel>
                         <Image Source="/image/查询.png" Stretch="None" />
@@ -63,7 +56,6 @@
                 <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}" />
                 <TextBlock Text="  销售单" />
                 <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding Invoice4Get.SaleOrderNo}" />
-                <Button Content="查询" Width="60" Command="{Binding CommandSearch}" />
             </StackPanel>
         </StackPanel>
 

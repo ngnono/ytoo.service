@@ -7,6 +7,7 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.Infrastructure;
+using System;
 
 namespace OPCApp.TransManage.ViewModels
 {
@@ -15,7 +16,7 @@ namespace OPCApp.TransManage.ViewModels
     {
         public CustomerInquiriesViewModel()
         {
-            //Tab 订单查询
+            //Tab 订单查询         CommandGetSaleByOrderId
             CommandGetOrder = new DelegateCommand(GetOrder);
             CommandGetSaleByOrderId = new DelegateCommand(GetSaleByOrderId);
             CommandGetSaleDetailBySaleId = new DelegateCommand(GetSaleDetailBySaleId);
@@ -98,23 +99,30 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetSaleByOrderId()
         {
-            if (string.IsNullOrEmpty(SelectOrder.Id.ToString()))
+            try
             {
-                return;
+                if (SelectOrder == null || string.IsNullOrEmpty(SelectOrder.Id.ToString()))
+                {
+                    return;
+                }
+                string orderNo = string.Format("orderID={0}", SelectOrder.OrderNo);
+                //这个工作状态
+                SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderNo).Result;
+                if (SaleList != null && SaleList.Count()>0)
+                {
+                    var sale = SaleList.ToList()[0];
+                    SaleDetailList = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result;
+                }
             }
-            string orderNo = string.Format("orderID={0}", SelectOrder.OrderNo);
-            //这个工作状态
-            SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderNo).Result;
-            if (SaleList != null)
+            catch(Exception ex)
             {
-                var sale = SaleList.ToList()[0];
-                SaleDetailList = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result;
+               
             }
         }
 
         public void GetSaleDetailBySaleId()
         {
-            if (string.IsNullOrEmpty(SelectSale.Id.ToString()))
+            if (SelectSale==null||string.IsNullOrEmpty(SelectSale.Id.ToString()))
             {
                 return;
             }
@@ -197,19 +205,26 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetOrderByShippingId()
         {
-            if (string.IsNullOrEmpty(SelectShipping.Id.ToString()))
+            try
             {
-                return;
+                if (SelectShipping==null||string.IsNullOrEmpty(SelectShipping.Id.ToString()))
+                {
+                    return;
+                }
+                string shippingId = SelectShipping.Id.ToString();
+                //这个工作状态
+                OrderListShipping =
+                    AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderByShippingId(shippingId).Result;
             }
-            string shippingId = SelectShipping.Id.ToString();
-            //这个工作状态
-            OrderListShipping =
-                AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderByShippingId(shippingId).Result;
+            catch(Exception ex)
+            { 
+
+             }
         }
 
         public void GetSaleByOrderNoShipping()
         {
-            if (string.IsNullOrEmpty(SelectOrderShipping.Id.ToString()))
+            if (SelectOrderShipping==null||string.IsNullOrEmpty(SelectOrderShipping.Id.ToString()))
             {
                 return;
             }
