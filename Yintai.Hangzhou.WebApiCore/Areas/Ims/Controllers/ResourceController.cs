@@ -4,19 +4,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
+using com.intime.fashion.common.Extension;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
     public class ResourceController:RestfulController
     {
-        [RestfulAuthorize]
-        public ActionResult Upload(FormCollection form,int authuid)
+        private IResourceService _resourceService;
+        public ResourceController(IResourceService resourceService)
         {
-            return this.RenderSuccess<dynamic>(c => c.Data = new { 
-                id = 1,
-                url = "http://irss.ytrss.com/fileupload/img/product/20140321/3c955b75-aa89-4732-96ea-925f6dd853e3_320x0.jpg"
-            });
+            _resourceService = resourceService;
+        }
+        [RestfulRoleAuthorize(Model.Enums.UserLevel.DaoGou)]
+        public ActionResult Upload(int authuid,int image_type)
+        {
+            var files = HttpContext.Request.Files;
+            if (files.Count!=1)
+             return this.RenderError(r=>r.Message="必须选择唯一一个图片上传！");
+            
+            int[] permitTypes = new int[]{(int)SourceType.Product,(int)SourceType.CustomerPortrait,(int)SourceType.Combo};
+            if (!permitTypes.Contains(image_type))
+                return this.RenderError(r=>r.Message="图片类型不允许！");
+            var resources = _resourceService.Save(files
+                                     , authuid
+                                     , -1
+                                     , 0
+                                     , (SourceType)image_type)
+                             .Select(r => new { 
+                                id = r.Id,
+                                url = r.Name.Image320Url()
+                             });
+            
+            return this.RenderSuccess<dynamic>(c => c.Data = resources);
         }
     }
 }

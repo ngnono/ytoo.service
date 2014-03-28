@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.DTO.Response;
+using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
@@ -29,31 +31,33 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
         }
 
-        [RestfulAuthorize]
-        public ActionResult Combos(PagerInfoRequest request)
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Combos(PagerInfoRequest request,int authuid)
         {
-            var mockupResponse = new List<dynamic>();
-            mockupResponse.Add(new
+            var linq = Context.Set<IMS_AssociateEntity>().Where(ia=>ia.UserId == authuid)
+                       .Join(Context.Set<IMS_AssociateItemsEntity>().Where(ia=>ia.ItemType==(int)ComboType.Product),o=>o.Id,i=>i.AssociateId,(o,i)=>i)
+                       .Join(Context.Set<IMS_ComboEntity>(),o=>o.ItemId,i=>i.Id,(o,i)=>i)
+                       .GroupJoin(Context.Set<ResourceEntity>().Where(r=>r.SourceType==(int)SourceType.Combo && r.Status==(int)DataStatus.Normal)
+                                ,o=>o.Id
+                                ,i=>i.SourceId
+                                , (o, i) => new { A = o, R = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() });
+
+            int totalCount = linq.Count();
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(l => l.A.CreateDate).Skip(skipCount).Take(request.Pagesize);
+            var result = linq.ToList().Select(l => new Yintai.Hangzhou.Contract.DTO.Response.IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(l.A, o =>
             {
-                id = 1,
-                desc = "mockup搭配",
-                image = "",
-                price = 100.1,
-                is_online = true
-            });
-            mockupResponse.Add(new
+                if (l.R == null)
+                    return;
+                o.ImageUrl = l.R.Name;
+
+            }));
+            var response = new PagerInfoResponse<IMSComboDetailResponse>(request.PagerRequest, totalCount)
             {
-                id = 2,
-                desc = "mockup2搭配",
-                image = "",
-                price = 101.1,
-                is_online = true
-            });
-            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, mockupResponse.Count)
-            {
-                Items = mockupResponse
+                Items = result.ToList()
             };
-            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
+
+            return this.RenderSuccess<PagerInfoResponse<IMSComboDetailResponse>>(c => c.Data = response);
         }
 
         [RestfulAuthorize]

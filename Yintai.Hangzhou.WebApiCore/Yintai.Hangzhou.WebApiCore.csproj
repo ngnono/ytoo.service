@@ -114,7 +114,6 @@
     <Compile Include="Areas\Ims\Controllers\AssistantController.cs" />
     <Compile Include="Areas\Ims\Controllers\ComboController.cs" />
     <Compile Include="Areas\Ims\Controllers\GiftCardController.cs" />
-    <Compile Include="Areas\Ims\Controllers\IMSUserFavorRequest.cs" />
     <Compile Include="Areas\Ims\Controllers\OrderController.cs" />
     <Compile Include="Areas\Ims\Controllers\ProductController.cs" />
     <Compile Include="Areas\Ims\Controllers\ResourceController.cs" />

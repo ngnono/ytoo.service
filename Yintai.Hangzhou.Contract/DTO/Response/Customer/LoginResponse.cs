@@ -231,6 +231,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
 
         [DataMember(Name="template_id")]
         public int? TemplateId { get; set; }
-            
+
+         [DataMember(Name = "associate_id")]
+        public int? AssociateId { get; set; }
     }
 }

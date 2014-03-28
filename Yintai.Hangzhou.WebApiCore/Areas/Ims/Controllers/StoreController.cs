@@ -72,6 +72,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 var initialBrands = Context.Set<IMS_SectionBrandEntity>().Where(isb => isb.SectionId == inviteEntity.Sec.SectionId);
                 var initialSaleCodes = Context.Set<IMS_SalesCodeEntity>().Where(isc => isc.SectionId == inviteEntity.Sec.SectionId);
+                var sectionEntity = Context.Set<SectionEntity>().Find(inviteEntity.Sec.SectionId);
                 //2.1 update user level to daogou
                 exitUserEntity.UserLevel = (int)UserLevel.DaoGou;
                 exitUserEntity.UpdatedDate = DateTime.Now;
@@ -88,7 +89,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     OperateRight = inviteEntity.Inv.AuthRight.Value,
                     Status = (int)DataStatus.Normal,
                     TemplateId = ConfigManager.IMS_DEFAULT_TEMPLATE,
-                    UserId = authuid.Value
+                    UserId = authuid.Value,
+                    StoreId = sectionEntity.Id
                 });
                 //2.3 create daogou's brands
                 foreach (var brand in initialBrands)

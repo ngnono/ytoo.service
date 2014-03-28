@@ -73,6 +73,7 @@
     <Compile Include="Enums\BrandSortOrder.cs" />
     <Compile Include="Enums\BusinessStatus.cs" />
     <Compile Include="Enums\CardType.cs" />
+    <Compile Include="Enums\CategorySizeType.cs" />
     <Compile Include="Enums\ComboType.cs" />
     <Compile Include="Enums\CouponActionType.cs" />
     <Compile Include="Enums\CouponStatus.cs" />
