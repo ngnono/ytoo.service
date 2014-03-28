@@ -24,15 +24,17 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                            <Button Background="LightGray" Width="50" Command="">
+                            <Button Background="LightGray" Width="50" Command="{Binding CommandSearchOrder}">
                                 <StackPanel>
-                                    <Image Source="/image/变更单位.png" Stretch="None" />
-                                    <TextBlock HorizontalAlignment="Center">返回</TextBlock>
+                                    <Image Source="/image/查询.png" Stretch="None" />
+                                    <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                                 </StackPanel>
                             </Button>
 
@@ -54,26 +56,48 @@
                     </StackPanel>
                     <StackPanel Grid.Row="1" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="   购买时间：" />
-                            <DatePicker Width="150" Foreground="Blue"
-                                        SelectedDate="{Binding Invoice4Get.StartSellDate}" />
-                            <TextBlock Text="  至：" />
+                            <TextBlock Text="购买时间" Margin="0 5" />
+                            <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding Invoice4Get.StartSellDate}" />
+                            <TextBlock Text="  至"  Margin="0 5" />
                             <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}" />
-                            <TextBlock Text="  订单号" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding Invoice4Get.OrderNo}" />
-                            <TextBlock Text="  销售单" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding Invoice4Get.SaleOrderNo}" />
-                            <Button Content="查询" Width="60" Command="{Binding CommandSearch}" />
+                            <TextBlock Text="  订单号"  Margin="0 5" />
+                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}" />
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="2">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
+                            <TextBlock Text="订单" />
+                        </StackPanel>
+                    </StackPanel>
+                    <DataGrid Grid.Row="3" ItemsSource="{Binding OrderList}" IsReadOnly="True"
+                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
+                            <DataGridTextColumn Width="200" Header="渠道订单号" Binding="{Binding OrderChannelNo}" />
+                            <DataGridTextColumn Header="支付方式" Binding="{Binding PaymentMethodName}" />
+                            <DataGridTextColumn Header="应付款总计" Binding="{Binding MustPayTotal}" />
+                            <DataGridTextColumn Header="门店应付款"/>
+                            <DataGridTextColumn Header="物流备注" Binding="{Binding SalesAmount}" />
+                            <DataGridTextColumn Header="备注时间" />
+                            <DataGridTextColumn Header="购买时间" Binding="{Binding BuyDate}" />
+                            <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
+                            <DataGridTextColumn Header="收货人地址" Binding="{Binding CustomerAddress}" />
+                            <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
+                            <DataGridTextColumn Header="顾客备注" Binding="{Binding CustomerRemark}" />
+                            <DataGridTextColumn Header="是否要发票" Binding="{Binding IfReceipt}" />
+                            <DataGridTextColumn Header="发票台头" Binding="{Binding ReceiptHead}" />
+                            <DataGridTextColumn Header="发票内容" Binding="{Binding ReceiptContent}" />
+                            <DataGridTextColumn Header="发货方式" Binding="{Binding OutGoodsType}" />
+                            <DataGridTextColumn Header="邮编" Binding="{Binding PostCode}" />
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                    <StackPanel Grid.Row="4">
+                        <StackPanel Orientation="Horizontal" Background="LightGray">
                             <TextBlock Text="   销售单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="3" ItemsSource="{Binding SaleList}" IsReadOnly="True"
+                    <DataGrid Grid.Row="5" ItemsSource="{Binding SaleList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
@@ -123,13 +147,7 @@
                     <StackPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                            <Button Background="LightGray" Width="50" Command="{Binding CommandBack}">
-                                <StackPanel>
-                                    <Image Source="/image/变更单位.png" Stretch="None" />
-                                    <TextBlock HorizontalAlignment="Center">返回</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button Background="LightGray" Width="50">
+                            <Button Background="LightGray"  Command="{Binding CommandSearch}" Width="50">
                                 <StackPanel>
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
@@ -170,7 +188,7 @@
                             <TextBlock Text="  销售单" />
                             <TextBox Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding Invoice4Get.SaleOrderNo}" />
-                            <Button Content="查询" Width="60" Command="{Binding CommandSearch}" />
+                           
                         </StackPanel>
                     </StackPanel>
 
