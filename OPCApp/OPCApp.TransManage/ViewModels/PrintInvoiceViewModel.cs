@@ -91,16 +91,21 @@ namespace OPCApp.TransManage.ViewModels
         public void Refresh()
         {
             string salesfilter = string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}",
-                Invoice4Get.StartSellDate.ToShortDateString(), Invoice4Get.EndSellDate.ToShortDateString(),
+                Invoice4Get.StartSellDate.ToShortDateString(),
+                Invoice4Get.EndSellDate.ToShortDateString(),
                 Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo);
             PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter, SearchSaleStatus);
             SaleList = re.Result;
-            if (InvoiceDetail4List != null) InvoiceDetail4List.Clear();
+            if (InvoiceDetail4List != null) InvoiceDetail4List=new List<OPC_SaleDetail>();
         }
 
         public void CommandGetDownExecute()
         {
-            if(SaleList==null)return;
+            if (SaleList == null)
+            {
+                MessageBox.Show("请选择要打印的销售单", "提示");
+                return;
+            }
             OPC_Sale saleCur = SaleList.Where(n => n.IsSelected).FirstOrDefault();
             if (saleCur == null)
             {
@@ -133,13 +138,13 @@ namespace OPCApp.TransManage.ViewModels
         {
             if (SaleList == null)
             {
-                MessageBox.Show("请选择要打印的销售单", "提示");
+                MessageBox.Show("请选择要设置打印完成状态的销售单", "提示");
                 return;
             }
             List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
             var iTransService = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = iTransService.SetStatusAffirmPrintSaleFinish(selectSaleIds);
-            MessageBox.Show(bFalg ? "打印销售单完成" : "打印销售单失败", "提示");
+            MessageBox.Show(bFalg ? "设置打印销售单完成成功" : "设置打印销售单失败", "提示");
             Refresh();
         }
     }

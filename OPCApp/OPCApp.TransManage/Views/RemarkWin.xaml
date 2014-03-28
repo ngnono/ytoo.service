@@ -23,7 +23,7 @@
 
                     <DataGridTextColumn Width="120" Header="备注人" Binding="{Binding CreateUser}" />
 
-                    <DataGridTextColumn Width="120" Header="备注时间" Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd}}" />
+                    <DataGridTextColumn Width="140" Header="备注时间" Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
