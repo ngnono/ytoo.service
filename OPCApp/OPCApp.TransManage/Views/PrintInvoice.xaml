@@ -3,19 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              Height="AUTO" Width="AUTO" Background="LightGray">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <Style x:Key="CellCenter" TargetType="TextBlock">
-                <Setter Property="TextAlignment" Value="Center"/>
-            </Style>
-            <Style x:Key="CellRight" TargetType="TextBlock">
-                <Setter Property="TextAlignment" Value="Right"/>
-            </Style>
-            <Style x:Key="CellLeft" TargetType="TextBlock">
-                <Setter Property="TextAlignment" Value="Left"/>
-            </Style>
-        </ResourceDictionary>
-    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
