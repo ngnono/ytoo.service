@@ -45,20 +45,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IBrandService.cs" />
     <Compile Include="IMenuService.cs" />
     <Compile Include="IAccountService.cs" />
     <Compile Include="IOrderService.cs" />
     <Compile Include="IRoleService.cs" />
     <Compile Include="ISaleService.cs" />
+    <Compile Include="IShipViaService.cs" />
+    <Compile Include="IStoreService.cs" />
     <Compile Include="ITransService.cs" />
     <Compile Include="MapConfig.cs" />
     <Compile Include="Map\Mapper.cs" />
+    <Compile Include="Support\BrandService.cs" />
     <Compile Include="Support\MeunService.cs" />
     <Compile Include="Support\AccountService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\OrderService.cs" />
     <Compile Include="Support\RoleService.cs" />
     <Compile Include="Support\SaleService.cs" />
+    <Compile Include="Support\ShipViaService.cs" />
+    <Compile Include="Support\StoreService.cs" />
     <Compile Include="Support\TransService.cs" />
   </ItemGroup>
   <ItemGroup>
