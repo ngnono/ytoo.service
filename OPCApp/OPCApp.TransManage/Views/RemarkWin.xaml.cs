@@ -55,10 +55,13 @@ namespace OPCApp.TransManage.Views
             {
                 MessageBox.Show("请填写备注信息", "提示");
                 isCancel = true;
-                return;
             }
-            DialogResult = true;
-            isCancel = false;
+            else
+            {
+                DialogResult = true;
+                isCancel = false;
+            }
+          
             Close();
         }
 
@@ -68,6 +71,7 @@ namespace OPCApp.TransManage.Views
         {
             e.Cancel = isCancel;
             base.OnClosing(e);
+            isCancel = false;
         }
     }
 }
