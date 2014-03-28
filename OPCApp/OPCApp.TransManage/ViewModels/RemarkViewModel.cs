@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Windows;
 using Intime.OPC.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
@@ -36,6 +37,11 @@ namespace OPCApp.TransManage.ViewModels
 
         public void SaveRemark(string id, int type)
         {
+            if (String.IsNullOrEmpty(Remark.Content))
+            {
+                MessageBox.Show("请填写备注信息", "提示");
+                return;;
+            }
             var comment = new OPC_Comment();
             comment.RelationId = id;
             comment.Content = Remark.Content;
