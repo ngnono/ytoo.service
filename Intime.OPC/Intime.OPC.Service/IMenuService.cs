@@ -20,7 +20,7 @@ namespace Intime.OPC.Service
     /// <summary>
     ///     Interface IMenuService
     /// </summary>
-    public interface IMenuService
+    public interface IMenuService : IService
     {
         /// <summary>
         ///     获得角色的所有菜单

@@ -8,7 +8,7 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public class BrandService:IBrandService
+    public class BrandService : BaseService, IBrandService
     {
         private IBrandRepository _brandRepository;
         public BrandService(IBrandRepository brandRepository)

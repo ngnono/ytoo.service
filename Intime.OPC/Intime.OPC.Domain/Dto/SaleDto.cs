@@ -10,7 +10,7 @@ namespace Intime.OPC.Domain.Dto
         public int SalesType { get; set; }
         public int? ShipViaId { get; set; }
         public int Status { get; set; }
-        public int? ShippingCode { get; set; }
+        public string ShippingCode { get; set; }
         public decimal ShippingFee { get; set; }
         public int? ShippingStatus { get; set; }
         public string ShippingRemark { get; set; }

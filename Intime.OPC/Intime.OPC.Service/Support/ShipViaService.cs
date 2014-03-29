@@ -7,7 +7,7 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public  class ShipViaService:IShipViaService
+    public class ShipViaService : BaseService, IShipViaService
     {
         private IShipViaRepository _shipViaRepository;
         public ShipViaService(IShipViaRepository shipViaRepository)

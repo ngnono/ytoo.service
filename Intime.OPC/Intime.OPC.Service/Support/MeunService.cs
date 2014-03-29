@@ -4,7 +4,7 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public class MenuService : IMenuService
+    public class MenuService : BaseService, IMenuService
     {
         private readonly IMenuRepository _menuRepository;
 

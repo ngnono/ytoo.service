@@ -7,16 +7,15 @@ using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service.Support
 {
-    public class OrderService : IOrderService
+    public class OrderService : BaseService, IOrderService
     {
         private readonly IOrderRepository _orderRepository;
-
-        public OrderService(IOrderRepository orderRepository)
+        private readonly IOrderRemarkRepository _orderRemarkRepository;
+        public OrderService(IOrderRepository orderRepository, IOrderRemarkRepository orderRemarkRepository)
         {
             _orderRepository = orderRepository;
+            _orderRemarkRepository = orderRemarkRepository;
         }
-
-        #region IOrderService Members
 
         public IList<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd,
             int storeId, int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone,
@@ -35,6 +34,20 @@ namespace Intime.OPC.Service.Support
             return  Mapper.Map<Order, OrderDto>(e);
         }
 
+        #region 有关备注
+        
+       
+        public bool AddOrderComment(OPC_OrderComment comment)
+        {
+
+            return _orderRemarkRepository.Create(comment);
+        }
+
+        public IList<OPC_OrderComment> GetCommentByOderNo(string orderNo)
+        {
+            return _orderRemarkRepository.GetByOrderNo(orderNo);
+        }
         #endregion
+    
     }
 }

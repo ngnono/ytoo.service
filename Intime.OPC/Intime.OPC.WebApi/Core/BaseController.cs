@@ -52,7 +52,7 @@ namespace Intime.OPC.WebApi.Core
  
             }
         }
-        protected IHttpActionResult DoFunction(Func<bool> action,string falseMeg)
+        protected IHttpActionResult DoFunction(Func<object> action,string falseMeg)
         {
             try
             {
@@ -60,9 +60,7 @@ namespace Intime.OPC.WebApi.Core
             }
             catch (HttpResponseException ex)
             {
-                this.GetLog().Error(ex);
-
-                return BadRequest("用户未登录！");
+                return new StatusCodeResult(HttpStatusCode.Unauthorized, this);
             }
             catch (UserIdConverException ex)
             {
@@ -70,7 +68,38 @@ namespace Intime.OPC.WebApi.Core
 
                 return BadRequest("用户未登录或非法用户！");
             }
+            catch (SaleOrderNotExistsException e)
+            {
+                return BadRequest("销售单编号不能为空");
+            }
+            catch (Exception ex)
+            {
+                this.GetLog().Error(ex);
+                return InternalServerError();
+            }
+        }
 
+        protected IHttpActionResult DoAction(Action action, string falseMeg)
+        {
+            try
+            {
+                action();
+                return Ok();
+            }
+            catch (HttpResponseException ex)
+            {
+                return new StatusCodeResult(HttpStatusCode.Unauthorized, this);
+            }
+            catch (UserIdConverException ex)
+            {
+                this.GetLog().Error(ex);
+
+                return BadRequest("用户未登录或非法用户！");
+            }
+            catch (SaleOrderNotExistsException e)
+            {
+                return BadRequest("销售单编号不能为空");
+            }
             catch (Exception ex)
             {
                 this.GetLog().Error(ex);

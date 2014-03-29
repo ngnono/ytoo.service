@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
+using System.Web;
 using System.Web.Http;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
@@ -115,6 +117,7 @@ namespace Intime.OPC.WebApi.Controllers
 
             DateTime expiresDate = DateTime.Now.AddSeconds(60*60*24);
 
+           HttpContext.Current.User=new ClaimsPrincipal();
             return Ok(new TokenModel
             {
                 AccessToken = SecurityUtils.CreateAccessToken(user.Id, expiresDate),

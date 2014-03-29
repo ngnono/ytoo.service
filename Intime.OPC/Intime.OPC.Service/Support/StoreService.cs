@@ -8,7 +8,7 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-   public  class StoreService:IStoreService
+    public class StoreService : BaseService, IStoreService
     {
         private IStoreRepository _storeRepository;
         public StoreService(IStoreRepository repository)

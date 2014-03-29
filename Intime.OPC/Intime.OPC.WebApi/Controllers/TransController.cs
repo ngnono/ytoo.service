@@ -40,63 +40,96 @@ namespace Intime.OPC.WebApi.Controllers
             _transService = transService;
         }
 
-        /// <summary>
-        ///     Selects the sales.
-        /// </summary>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        /// <param name="orderNo">The order no.</param>
-        /// <param name="saleOrderNo">The sale order no.</param>
-        /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
-        public IHttpActionResult SelectSales(string startDate, string endDate, string orderNo, string saleOrderNo)
-        {
-            return Ok(_transService.Select(startDate, endDate, orderNo, saleOrderNo));
-        }
+        ///// <summary>
+        /////     Selects the sales.
+        ///// </summary>
+        ///// <param name="startDate">The start date.</param>
+        ///// <param name="endDate">The end date.</param>
+        ///// <param name="orderNo">The order no.</param>
+        ///// <param name="saleOrderNo">The sale order no.</param>
+        ///// <returns>IHttpActionResult.</returns>
+        //[HttpGet]
+        //public IHttpActionResult SelectSales(string startDate, string endDate, string orderNo, string saleOrderNo)
+        //{
+        //    return Ok(_transService.Select(startDate, endDate, orderNo, saleOrderNo));
+        //}
+
+        
+        ///// <summary>
+        /////   查询销售单详情
+        ///// </summary>
+        ///// <param name="ids">The ids.</param>
+        ///// <returns>IHttpActionResult.</returns>
+        //[HttpGet]
+        //public IHttpActionResult SelectSaleDetail(IEnumerable<string> ids)
+        //{
+        //    return Ok(_transService.SelectSaleDetail(ids));
+        //}
 
         /// <summary>
-        ///  增加订单备注
+        /// 查询快递单信息
+        /// </summary>
+        /// <param name="saleNo">销售单编号</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetShippingSaleByOrderNo(string saleNo)
+        {
+            return Ok(_transService.GetShippingSaleBySaleNo(saleNo));
+        }
+
+        #region 备注
+
+        /// <summary>
+        ///  增加快递单 备注
         /// </summary>
         /// <param name="sale">The sale.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult AddOrderComment([FromBody] OPC_OrderComment comment)
+        public IHttpActionResult AddShippingSaleComment([FromBody] OPC_OrderComment comment)
         {
-           return  DoFunction(() =>
-            {
+            //return DoFunction(() =>
+            //{
 
-                comment.CreateDate = DateTime.Now;
-                comment.CreateUser = this.GetCurrentUserID();
-                comment.UpdateDate = comment.CreateDate;
-                comment.UpdateUser = comment.CreateUser;
-                return _transService.AddOrderComment(comment);
+            //    comment.CreateDate = DateTime.Now;
+            //    comment.CreateUser = this.GetCurrentUserID();
+            //    comment.UpdateDate = comment.CreateDate;
+            //    comment.UpdateUser = comment.CreateUser;
+            //    return _orderService.AddOrderComment(comment);
 
-            },"增加订单备注失败");
+            //}, "增加订单备注失败");
+
+            return null;
         }
-
         /// <summary>
-        ///   查询销售单详情
-        /// </summary>
-        /// <param name="ids">The ids.</param>
-        /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
-        public IHttpActionResult SelectSaleDetail(IEnumerable<string> ids)
-        {
-            return Ok(_transService.SelectSaleDetail(ids));
-        }
-
-        /// <summary>
-        ///     Selects the mark.
+        /// 根据订单编号读取快递单备注
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult SelectMark([FromUri] string orderNo)
+        public IHttpActionResult GetShippingSaleCommentByShippingSaleNo(string shippingSaleNo)
         {
-            IList<OPC_OrderComment> result = _transService.GetRemarksByOrderNo(orderNo);
-            return Ok(result);
+            //return base.DoFunction(() =>
+            //{
+            //    return _orderService.GetCommentByOderNo(orderNo);
+
+            //}, "读取订单备注失败！");
+
+            return null;
         }
 
 
+        [HttpGet]
+        public IHttpActionResult CreateShippingSale(string shippingSaleNo)
+        {
+            //return base.DoFunction(() =>
+            //{
+            //    return _orderService.GetCommentByOderNo(orderNo);
+
+            //}, "读取订单备注失败！");
+
+            return null;
+        }
+
+        #endregion
     }
 }

@@ -16,8 +16,8 @@ namespace Intime.OPC.Domain.Models
         public DateTime? RemarkDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public int CreatedUser { get; set; }
-        public DateTime UpdatedDate { get; set; }
-        public int UpdatedUser { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public int? UpdatedUser { get; set; }
 
         #region IEntity Members
 

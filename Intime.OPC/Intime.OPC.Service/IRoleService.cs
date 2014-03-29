@@ -15,13 +15,14 @@
 using System.Collections.Generic;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Service;
 
 namespace Intime.OPC.Repository
 {
     /// <summary>
     ///     Interface IRoleService
     /// </summary>
-    public interface IRoleService
+    public interface IRoleService : IService
     {
         /// <summary>
         ///     Creates the specified role.
