@@ -22,7 +22,7 @@ namespace  OPCApp.Domain.Models
         public int? TransStatus { get; set; }
         public decimal SalesAmount { get; set; }
         public int? SalesCount { get; set; }
-        public int? CashStatus { get; set; }
+        public string CashStatusName { get; set; }
         public string CashNum { get; set; }
         public DateTime? CashDate { get; set; }
         public int? SectionId { get; set; }

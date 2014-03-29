@@ -16,14 +16,10 @@ namespace OPCApp.TransManage.ViewModels
     [Export("PrintInvoiceViewModel", typeof (PrintInvoiceViewModel))]
     public class PrintInvoiceViewModel : BindableBase
     {
-        //Grid数据集
-        private Invoice4Get invoice4get;
-        private OPC_Sale invoice4remark = new OPC_Sale();
-        private List<OPC_SaleDetail> invoicedetail4list;
-        private IEnumerable<OPC_Sale> saleList;
-
+      
         public PrintInvoiceViewModel()
         {
+            this.EnumSetRemarkType = EnumSetRemarkType.SetSaleRemark;
             //初始化命令属性
             CommandSearch = new DelegateCommand(CommandSearchExecute);
             CommandViewAndPrint = new DelegateCommand(CommandViewAndPrintExecute);
@@ -45,6 +41,9 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         public EnumSearchSaleStatus SearchSaleStatus { get; set; }
+        //Grid数据集
+        
+        private IEnumerable<OPC_Sale> saleList;
 
         public IEnumerable<OPC_Sale> SaleList
         {
@@ -53,27 +52,29 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         //界面查询条件
-
+        private Invoice4Get invoice4Get;
+     
         public Invoice4Get Invoice4Get
         {
-            get { return invoice4get; }
-            set { SetProperty(ref invoice4get, value); }
+            get { return invoice4Get; }
+            set { SetProperty(ref invoice4Get, value); }
         }
 
         //选择上面行数据时赋值的数据集
-
+        private OPC_Sale invoice4Remark = new OPC_Sale();
+      
         public OPC_Sale Invoice4Remark
         {
-            get { return invoice4remark; }
-            set { SetProperty(ref invoice4remark, value); }
+            get { return invoice4Remark; }
+            set { SetProperty(ref invoice4Remark, value); }
         }
 
         //销售单明细Grid数据集
-
+        private List<OPC_SaleDetail> invoiceDetail4List;
         public List<OPC_SaleDetail> InvoiceDetail4List
         {
-            get { return invoicedetail4list; }
-            set { SetProperty(ref invoicedetail4list, value); }
+            get { return invoiceDetail4List; }
+            set { SetProperty(ref invoiceDetail4List, value); }
         }
 
         public DelegateCommand CommandSearch { get; set; }
@@ -83,13 +84,14 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandSetRemark { get; set; }
         public DelegateCommand CommandGetDown { get; set; }
         public DelegateCommand CommandDbClick { get; set; }
+        public EnumSetRemarkType EnumSetRemarkType { get; set; }
         //调用接口打开填写Remark的窗口
         public void CommandRemarkExecute()
         {
             //被选择的对象
             string id = Invoice4Remark.SaleOrderNo;
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id, 1);
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetSaleRemark);
         }
 
         public void CommandSearchExecute()
@@ -114,8 +116,8 @@ namespace OPCApp.TransManage.ViewModels
             OPC_Sale saleCur = SaleList.Where(n => n.IsSelected).FirstOrDefault();
             if (saleCur == null)
             {
-                if (invoicedetail4list == null) return;
-                invoicedetail4list.ToList().Clear();
+                if (invoiceDetail4List == null) return;
+                invoiceDetail4List.ToList().Clear();
                 return;
             }
             InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleCur.SaleOrderNo).Result.ToList();
@@ -132,8 +134,18 @@ namespace OPCApp.TransManage.ViewModels
             //}
         }
 
+        /*打印销售单*/
         public void CommandOnlyPrintExecute()
         {
+            if (SaleList == null)
+            {
+                MessageBox.Show("请勾选要打印的销售单", "提示");
+                return;
+            }
+            List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
+            var iTransService = AppEx.Container.GetInstance<ITransService>();
+            bool bFalg = iTransService.ExecutePrintSale(selectSaleIds);
+            MessageBox.Show(bFalg ? "打印成功" : "打印失败", "提示");
         }
 
         /*完成销售单打印*/

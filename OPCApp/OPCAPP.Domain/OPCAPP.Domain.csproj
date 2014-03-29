@@ -57,6 +57,7 @@
     <Compile Include="Enums\EnumSaleStatus.cs" />
     <Compile Include="Enums\EnumCashStatus.cs" />
     <Compile Include="Enums\EnumOderStatus.cs" />
+    <Compile Include="Enums\EnumSetRemarkType.cs" />
     <Compile Include="Enums\EnumSearchSaleStatus.cs" />
     <Compile Include="LoginModel.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />

@@ -1,7 +1,9 @@
-﻿namespace OPCApp.TransManage.IService
+﻿using OPCAPP.Domain.Enums;
+
+namespace OPCApp.TransManage.IService
 {
     public interface IRemark
     {
-        void ShowRemarkWin(string id, int type);
+        void ShowRemarkWin(string id, EnumSetRemarkType type);
     }
 }
