@@ -1,4 +1,4 @@
-namespace Intime.OPC.Domain.Models
+namespace  OPCApp.Domain.Models
 {
     public class OPC_RMAGet
     {

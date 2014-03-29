@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows;
-using Intime.OPC.Domain.Models;
+using  OPCApp.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;
@@ -54,6 +54,10 @@ namespace OPCApp.TransManage.ViewModels
                 case 2:
                     OPC_SaleDetailsComment saledetailscomment = Mapper.Map<OPC_Comment, OPC_SaleDetailsComment>(comment);
                     isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteSaleDetailsRemark(saledetailscomment);
+                    break;
+                case 3:
+                    OPC_OrderComment orderComment = Mapper.Map<OPC_Comment, OPC_OrderComment>(comment);
+                    isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteOrderRemark(orderComment);
                     break;
             }
         }

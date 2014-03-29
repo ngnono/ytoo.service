@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Intime.OPC.Domain.Models;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
+using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Impl.Trans
@@ -19,8 +20,15 @@ namespace OPCApp.DataService.Impl.Trans
         /// <returns></returns>
         public bool WriteSaleRemark(OPC_SaleComment saleComment)
         {
-            bool bFalg = RestClient.Post("sale/writesaleremark", saleComment);
-            return bFalg;
+            try
+            {
+                bool bFalg = RestClient.Post("sale/writesaleremark", saleComment);
+                return bFalg;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -30,8 +38,28 @@ namespace OPCApp.DataService.Impl.Trans
         /// <returns></returns>
         public PageResult<OPC_SaleComment> GetSaleRemark(string saleIds)
         {
-            IList<OPC_SaleComment> lst = RestClient.Get<OPC_SaleComment>("sale/getsaleremarks", saleIds);
-            return new PageResult<OPC_SaleComment>(lst, lst.Count);
+            try
+            {
+                IList<OPC_SaleComment> lst = RestClient.Get<OPC_SaleComment>("sale/getsaleremarks", saleIds);
+                return new PageResult<OPC_SaleComment>(lst, lst.Count);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public bool WriteOrderRemark(OPC_OrderComment orderComment)
+        {
+            try
+            {
+                bool bResult = RestClient.Post("sale/addordercomment", orderComment);
+                return bResult;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         #endregion
@@ -45,8 +73,15 @@ namespace OPCApp.DataService.Impl.Trans
         /// <returns></returns>
         public bool WriteSaleDetailsRemark(OPC_SaleDetailsComment saleDetailsComment)
         {
-            bool bFalg = RestClient.Post("sale/writesaledetailsremark", saleDetailsComment);
-            return bFalg;
+            try
+            {
+                bool bFalg = RestClient.Post("sale/writesaledetailsremark", saleDetailsComment);
+                return bFalg;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -56,9 +91,16 @@ namespace OPCApp.DataService.Impl.Trans
         /// <returns></returns>
         public PageResult<OPC_SaleDetailsComment> GetSaleDetailsRemark(string SaleDetailIds)
         {
-            IList<OPC_SaleDetailsComment> lst = RestClient.Get<OPC_SaleDetailsComment>("sale/getsaledetailsremark",
-                SaleDetailIds);
-            return new PageResult<OPC_SaleDetailsComment>(lst, lst.Count);
+            try
+            {
+                IList<OPC_SaleDetailsComment> lst = RestClient.Get<OPC_SaleDetailsComment>("sale/getsaledetailsremark",
+                    SaleDetailIds);
+                return new PageResult<OPC_SaleDetailsComment>(lst, lst.Count);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         #endregion

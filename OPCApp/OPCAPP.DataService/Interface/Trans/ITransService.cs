@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Intime.OPC.Domain.Models;
+using  OPCApp.Domain.Models;
 using OPCAPP.Domain.Enums;
 using OPCApp.Infrastructure;
 
@@ -13,6 +13,7 @@ namespace OPCApp.DataService.Interface.Trans
         bool SetStatusPrintExpress(IList<string> saleOrderNoList);
         bool SetStatusPrintInvoice(IList<string> saleOrderNoList);
         PageResult<OPC_Sale> Search(string salesfilter, EnumSearchSaleStatus searchSaleStatus);
+        PageResult<Order> SearchOrderBySale(string saleOrder);
         PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo);
     }
 }

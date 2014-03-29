@@ -71,6 +71,7 @@
     <Compile Include="Models\OPC_RMA.cs" />
     <Compile Include="Models\OPC_RMADetail.cs" />
     <Compile Include="Models\OPC_Sale.cs" />
+    <Compile Include="Models\OPC_OrderComment.cs" />
     <Compile Include="Models\OPC_SaleComment.cs" />
     <Compile Include="Models\OPC_ShippingSale.cs" />
     <Compile Include="Models\OPC_SaleDetail.cs" />

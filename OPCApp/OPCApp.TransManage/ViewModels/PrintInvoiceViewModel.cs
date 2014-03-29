@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
-using Intime.OPC.Domain.Models;
+using  OPCApp.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;
@@ -108,7 +108,7 @@ namespace OPCApp.TransManage.ViewModels
             if (InvoiceDetail4List != null) InvoiceDetail4List=new List<OPC_SaleDetail>();
         }
 
-        public void CommandGetDownExecute()
+        public  void CommandGetDownExecute()
         {
             if (SaleList == null)return;
             OPC_Sale saleCur = SaleList.Where(n => n.IsSelected).FirstOrDefault();

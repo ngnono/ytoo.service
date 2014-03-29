@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Intime.OPC.Domain.Models;
+using  OPCApp.Domain.Models;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.Infrastructure;
