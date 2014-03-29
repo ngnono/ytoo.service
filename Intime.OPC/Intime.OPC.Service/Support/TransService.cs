@@ -1,18 +1,22 @@
 ﻿using System.Collections.Generic;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
+using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service.Support
 {
-    public class TransService : ITransService
+    public class TransService : BaseService, ITransService
     {
         private readonly IOrderRemarkRepository _orderRemarkRepository;
+        private readonly ISaleRepository _saleRepository;
         private readonly ITransRepository _transRepository;
 
-        public TransService(ITransRepository transRepository, IOrderRemarkRepository orderRemarkRepository)
+        public TransService(ITransRepository transRepository, IOrderRemarkRepository orderRemarkRepository,ISaleRepository saleRepository)
         {
             _transRepository = transRepository;
             _orderRemarkRepository = orderRemarkRepository;
+            _saleRepository = saleRepository;
         }
 
         #region ITransService Members
@@ -44,6 +48,12 @@ namespace Intime.OPC.Service.Support
         {
            
            return   _orderRemarkRepository.Create(comment);
+        }
+
+        public ShippingSaleDto GetShippingSaleBySaleNo(string saleNo)
+        {
+            var entity=  _saleRepository.GetBySaleNo(saleNo);
+            return Mapper.Map<OPC_Sale, ShippingSaleDto>(entity);
         }
     }
 }

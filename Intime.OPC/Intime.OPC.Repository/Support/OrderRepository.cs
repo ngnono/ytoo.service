@@ -84,7 +84,6 @@ namespace Intime.OPC.Repository.Support
         {
             return Select(t => t.OrderNo == orderNo).FirstOrDefault();
         }
-
         #endregion
     }
 }

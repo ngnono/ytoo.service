@@ -3,7 +3,7 @@ using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service
 {
-    public interface IAccountService
+    public interface IAccountService : IService
     {
         OPC_AuthUser Get(string userName, string password);
         bool Create(OPC_AuthUser user);

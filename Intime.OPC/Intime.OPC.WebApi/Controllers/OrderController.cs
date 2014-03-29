@@ -16,6 +16,7 @@ using System;
 using System.Web;
 using System.Web.Http;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Repository;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Bindings;
 using Intime.OPC.WebApi.Core;
@@ -31,6 +32,7 @@ namespace Intime.OPC.WebApi.Controllers
         ///     The _order service
         /// </summary>
         private readonly IOrderService _orderService;
+        
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="OrderController" /> class.
@@ -39,6 +41,7 @@ namespace Intime.OPC.WebApi.Controllers
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
+            
         }
 
         /// <summary>
@@ -85,10 +88,54 @@ namespace Intime.OPC.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the order by oder no.
+        /// </summary>
+        /// <param name="orderNo">The order no.</param>
+        /// <returns>IHttpActionResult.</returns>
         [HttpGet]
         public IHttpActionResult GetOrderByOderNo(string orderNo)
         {
           return  Ok(  _orderService.GetOrderByOrderNo(orderNo));
         }
+
+        #region 备注
+        
+        /// <summary>
+        ///  增加订单备注
+        /// </summary>
+        /// <param name="sale">The sale.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult AddOrderComment([FromBody] OPC_OrderComment comment)
+        {
+            return DoFunction(() =>
+             {
+
+                 comment.CreateDate = DateTime.Now;
+                 comment.CreateUser = this.GetCurrentUserID();
+                 comment.UpdateDate = comment.CreateDate;
+                 comment.UpdateUser = comment.CreateUser;
+                 return _orderService.AddOrderComment(comment);
+
+             }, "增加订单备注失败");
+        }
+        /// <summary>
+        /// 根据订单编号读取订单备注
+        /// </summary>
+        /// <param name="orderNo">The order no.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetCommentByOderNo(string orderNo)
+        {
+            return base.DoFunction(() =>
+            {
+                return _orderService.GetCommentByOderNo(orderNo);
+
+            }, "读取订单备注失败！");
+        }
+
+
+        #endregion
     }
 }

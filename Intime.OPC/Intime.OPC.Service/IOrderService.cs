@@ -15,13 +15,14 @@
 using System;
 using System.Collections.Generic;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service
 {
     /// <summary>
     ///     Interface IOrderService
     /// </summary>
-    public interface IOrderService
+    public interface IOrderService : IService
     {
         /// <summary>
         ///     Gets the order information.
@@ -45,5 +46,14 @@ namespace Intime.OPC.Service
             string expressDeliveryCode, int expressDeliveryCompany, int userId);
 
         OrderDto GetOrderByOrderNo(string orderNo);
+
+        IList<OPC_OrderComment> GetCommentByOderNo(string orderNo);
+
+        /// <summary>
+        /// 增加订单日志
+        /// </summary>
+        /// <param name="comment">The comment.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool AddOrderComment(OPC_OrderComment comment);
     }
 }

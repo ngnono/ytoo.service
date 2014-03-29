@@ -22,7 +22,7 @@ namespace Intime.OPC.Service
     /// <summary>
     ///     Interface ISaleService
     /// </summary>
-    public interface ISaleService
+    public interface ISaleService : IService
     {
         /// <summary>
         ///     Selects this instance.

@@ -5,7 +5,7 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public class AccountService : IAccountService
+    public class AccountService :BaseService, IAccountService
     {
         private readonly IAccountRepository _accountRepository;
 

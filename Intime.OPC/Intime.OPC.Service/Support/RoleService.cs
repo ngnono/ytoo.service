@@ -7,7 +7,7 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public class RoleService : IRoleService
+    public class RoleService : BaseService, IRoleService
     {
         private readonly IRoleRepository _roleRepository;
         private readonly IRoleMenuRepository _roleMenuRepository;

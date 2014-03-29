@@ -10,7 +10,7 @@ using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service.Support
 {
-    public class SaleService : ISaleService
+    public class SaleService : BaseService, ISaleService
     {
         private readonly ISaleRemarkRepository _saleRemarkRepository;
         private readonly ISaleRepository _saleRepository;
