@@ -33,8 +33,34 @@ namespace OPCApp.DataService.Impl.Trans
                     url = "sale/GetSalePrintExpress";
                     break;
             }
+            try
+            {
+
+           
             IList<OPC_Sale> lst = RestClient.Get<OPC_Sale>(url, salesfilter);
             return new PageResult<OPC_Sale>(lst, lst.Count);
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+        }
+        /*根据销售单拿到订单*/
+        public PageResult<Order> SearchOrderBySale(string orderNo)
+        {
+            try
+            {
+
+           
+            var order = RestClient.GetSingle<Order>("order/GetOrderByOderNo", orderNo);
+            return new PageResult<Order>(new List<Order>{order}, 100);
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
         }
 
         /*完成打印销售单 状态*/ //SetSaleOrderPrintSale

@@ -68,10 +68,10 @@
                     </StackPanel>
                     <StackPanel Grid.Row="2">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
-                            <TextBlock Text="   销售单" />
+                            <TextBlock Text="销售单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="3" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" 
+                    <DataGrid Grid.Row="3" Height="400" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" 
                   HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Invoice4Remark}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDown">
