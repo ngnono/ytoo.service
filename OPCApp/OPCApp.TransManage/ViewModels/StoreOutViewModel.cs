@@ -34,7 +34,6 @@ namespace OPCApp.TransManage.ViewModels
             // CommandSelectionChanged = new DelegateCommand<int?>(SelectionChanged);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
             CommondSearchOrderBySale=new DelegateCommand(SearchOrderBySale);
-
         }
         public DelegateCommand CommandPrintInvoice { get; set; }
         public DelegateCommand CommandPrintExpress { get; set; }
@@ -56,7 +55,7 @@ namespace OPCApp.TransManage.ViewModels
             //被选择的对象
             string id = Invoice4Remark.SaleOrderNo;
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id, 3);//3填写的是订单
+            remarkWin.ShowRemarkWin(id,EnumSetRemarkType.SetOrderRemark);//3填写的是订单
         }
         //有问题 所以改为下面这种方式
         //public void SelectionChanged(int? i)

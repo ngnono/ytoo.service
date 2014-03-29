@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Windows;
 using Microsoft.Practices.Prism.Commands;
+using OPCAPP.Domain.Enums;
 using OPCApp.TransManage.IService;
 using OPCApp.TransManage.ViewModels;
 
@@ -32,7 +33,7 @@ namespace OPCApp.TransManage.Views
             get { return DataContext as RemarkViewModel; }
         }
 
-        public void ShowRemarkWin(string id, int type)
+        public void ShowRemarkWin(string id, EnumSetRemarkType type)
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             ViewModel.OpenWinSearch(id, type);

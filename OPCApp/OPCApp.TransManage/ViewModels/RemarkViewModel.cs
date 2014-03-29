@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows;
+using OPCAPP.Domain.Enums;
 using  OPCApp.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
@@ -35,7 +36,7 @@ namespace OPCApp.TransManage.ViewModels
             set { SetProperty(ref remark, value); }
         }
 
-        public void SaveRemark(string id, int type)
+        public void SaveRemark(string id, EnumSetRemarkType type)
         {
            
             var comment = new OPC_Comment();
@@ -47,37 +48,44 @@ namespace OPCApp.TransManage.ViewModels
             bool isSuccess = false;
             switch (type)
             {
-                case 1:
+                case EnumSetRemarkType.SetSaleRemark:
                     OPC_SaleComment salecomment = Mapper.Map<OPC_Comment, OPC_SaleComment>(comment);
                     isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteSaleRemark(salecomment);
                     break;
-                case 2:
+                case EnumSetRemarkType.SetSaleDetailRemark:
                     OPC_SaleDetailsComment saledetailscomment = Mapper.Map<OPC_Comment, OPC_SaleDetailsComment>(comment);
                     isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteSaleDetailsRemark(saledetailscomment);
                     break;
-                case 3:
+                case EnumSetRemarkType.SetOrderRemark:
                     OPC_OrderComment orderComment = Mapper.Map<OPC_Comment, OPC_OrderComment>(comment);
                     isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteOrderRemark(orderComment);
                     break;
             }
+            if (!isSuccess)
+            {
+                MessageBox.Show("保存备注失败", "提示");
+            }
         }
 
-        public void OpenWinSearch(string id, int type)
+        public void OpenWinSearch(string id, EnumSetRemarkType type)
         {
             switch (type)
             {
-                case 1:
-                    string saleId = string.Format("saleId={0}", id);
-                    var x = AppEx.Container.GetInstance<IRemarkService>();
-                    PageResult<OPC_SaleComment> saleremark =
-                        AppEx.Container.GetInstance<IRemarkService>().GetSaleRemark(saleId);
-                    Remark4List = Mapper.Map<OPC_SaleComment, OPC_Comment>(saleremark.Result);
+                case EnumSetRemarkType.SetSaleRemark:
+                    PageResult<OPC_SaleComment> saleRemark =
+                        AppEx.Container.GetInstance<IRemarkService>().GetSaleRemark( string.Format("saleId={0}", id));
+                    Remark4List = Mapper.Map<OPC_SaleComment, OPC_Comment>(saleRemark.Result);
                     break;
-                case 2:
-                    string saledetailId = string.Format("saledetailId={0}", id);
-                    PageResult<OPC_SaleDetailsComment> saledetailremark =
-                        AppEx.Container.GetInstance<IRemarkService>().GetSaleDetailsRemark(saledetailId);
-                    Remark4List = Mapper.Map<OPC_SaleDetailsComment, OPC_Comment>(saledetailremark.Result);
+                case EnumSetRemarkType.SetSaleDetailRemark:
+                    PageResult<OPC_SaleDetailsComment> saleDetailRemark =
+                        AppEx.Container.GetInstance<IRemarkService>().GetSaleDetailsRemark( string.Format("saledetailId={0}", id));
+                    Remark4List = Mapper.Map<OPC_SaleDetailsComment, OPC_Comment>(saleDetailRemark.Result);
+                    ;
+                    break;
+                case EnumSetRemarkType.SetOrderRemark:
+                    PageResult<OPC_SaleDetailsComment> orderRemark =
+                        AppEx.Container.GetInstance<IRemarkService>().GetSaleDetailsRemark(string.Format("saledetailId={0}", id));
+                    Remark4List = Mapper.Map<OPC_SaleDetailsComment, OPC_Comment>(orderRemark.Result);
                     ;
                     break;
             }
