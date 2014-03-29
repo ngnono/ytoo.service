@@ -177,6 +177,34 @@ namespace OPCApp.DataService.Impl.Trans
             try
             {
                 return RestClient.Put("sale/SetSaleOrderPrintSale", saleOrderNoList);
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        public PageResult<ShipVia> GetShipViaAll()
+        {
+            try
+            {
+                var list= RestClient.Get<ShipVia>("shipVia/Getall","");
+                return new PageResult<ShipVia>(list, 100);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public bool SaveShip(int shipVia, double real, double shipNum, IList<string> saleOrderNoList)
+        {
+            try
+            {
+                var list = RestClient.Put("shipVia/Getall",new {});
+                return true;
             }
             catch (Exception ex)
             {

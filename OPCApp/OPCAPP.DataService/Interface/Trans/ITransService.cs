@@ -16,5 +16,9 @@ namespace OPCApp.DataService.Interface.Trans
         PageResult<OPC_Sale> Search(string salesfilter, EnumSearchSaleStatus searchSaleStatus);
         PageResult<Order> SearchOrderBySale(string saleOrder);
         PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo);
+
+        PageResult<ShipVia> GetShipViaAll();
+        bool SaveShip(int shipVia, double real, double shipNum, IList<string> saleOrderNoList);
+
     }
 }

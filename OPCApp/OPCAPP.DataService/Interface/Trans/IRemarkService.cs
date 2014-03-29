@@ -5,8 +5,12 @@ namespace OPCApp.DataService.Interface.Trans
 {
     public interface IRemarkService
     {
+        bool WriteShippingRemark(OPC_ShipComment saleComment);
+        PageResult<OPC_ShipComment> GetShipRemark(string shipId);
+
         bool WriteSaleRemark(OPC_SaleComment saleComment);
         PageResult<OPC_SaleComment> GetSaleRemark(string saleId);
+        PageResult<OPC_SaleComment> GetOrderRemark(string orderId);
         bool WriteOrderRemark(OPC_OrderComment orderComment);
         
         bool WriteSaleDetailsRemark(OPC_SaleDetailsComment saleDetailsComment);

@@ -17,6 +17,12 @@ namespace OPCApp.TransManage.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class StoreOutViewModel : PrintInvoiceViewModel
     {
+        private IEnumerable<OPC_ShippingSale> _shipList;
+        public IEnumerable<OPC_ShippingSale> ShipList
+        {
+            get { return _shipList; }
+            set { SetProperty(ref _shipList, value); }
+        }
         private IEnumerable<Order> _orderList;
         public IEnumerable<Order> OrderList
         {
@@ -31,15 +37,29 @@ namespace OPCApp.TransManage.ViewModels
             //初始化命令属性
             CommandPrintInvoice = new DelegateCommand(PrintInvoice);
             CommandPrintExpress = new DelegateCommand(PrintExpress);
-            // CommandSelectionChanged = new DelegateCommand<int?>(SelectionChanged);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
             CommondSearchOrderBySale=new DelegateCommand(SearchOrderBySale);
+            CommandSetShippingRemark = new DelegateCommand(SetShippingRemark);
+            CommandSaveShip = new DelegateCommand(SaveShip);
         }
+        //发货单备注
+        private void SetShippingRemark()
+        {
+            throw new System.NotImplementedException();
+        }
+        //发货单
+        public void SaveShip()
+        {
+
+        }
+
+        public DelegateCommand CommandSaveShip { get; set; }
         public DelegateCommand CommandPrintInvoice { get; set; }
         public DelegateCommand CommandPrintExpress { get; set; }
         public DelegateCommand CommandSetOrderRemark { get; set; }
         public DelegateCommand<int?> CommandSelectionChanged { get; set; }
         public DelegateCommand CommondSearchOrderBySale { get; set; }
+        public DelegateCommand CommandSetShippingRemark { get; set; }
         public int IsTabIndex { get; set; }
 
         public void SearchOrderBySale()
