@@ -108,7 +108,7 @@ namespace OPCApp.TransManage.ViewModels
             if (InvoiceDetail4List != null) InvoiceDetail4List=new List<OPC_SaleDetail>();
         }
 
-        public void CommandGetDownExecute()
+        public  void CommandGetDownExecute()
         {
             if (SaleList == null)return;
             OPC_Sale saleCur = SaleList.Where(n => n.IsSelected).FirstOrDefault();
