@@ -118,6 +118,18 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
 
+        [HttpGet]
+        public IHttpActionResult CreateShippingSale(string shippingSaleNo)
+        {
+            //return base.DoFunction(() =>
+            //{
+            //    return _orderService.GetCommentByOderNo(orderNo);
+
+            //}, "读取订单备注失败！");
+
+            return null;
+        }
+
         #endregion
     }
 }
