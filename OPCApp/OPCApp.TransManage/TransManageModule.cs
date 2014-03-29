@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.Composition;
-using Intime.OPC.Domain.Models;
+using  OPCApp.Domain.Models;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;

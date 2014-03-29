@@ -1,4 +1,4 @@
-﻿using Intime.OPC.Domain.Models;
+﻿using  OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Interface.Trans

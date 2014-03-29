@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
-using Intime.OPC.Domain.Models;
+using  OPCApp.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;

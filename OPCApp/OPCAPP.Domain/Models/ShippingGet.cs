@@ -1,6 +1,6 @@
 using System;
 
-namespace Intime.OPC.Domain.Models
+namespace  OPCApp.Domain.Models
 {
     public class ShippingGet
     {
