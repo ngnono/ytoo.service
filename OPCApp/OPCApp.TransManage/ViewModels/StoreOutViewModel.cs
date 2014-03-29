@@ -7,6 +7,7 @@ using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface.Trans;
 using OPCAPP.Domain.Enums;
 using OPCApp.Infrastructure;
+using OPCApp.TransManage.IService;
 
 namespace OPCApp.TransManage.ViewModels
 {
@@ -22,13 +23,21 @@ namespace OPCApp.TransManage.ViewModels
             CommandPrintInvoice = new DelegateCommand(PrintInvoice);
             CommandPrintExpress = new DelegateCommand(PrintExpress);
             // CommandSelectionChanged = new DelegateCommand<int?>(SelectionChanged);
+            CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
         }
-
         public DelegateCommand CommandPrintInvoice { get; set; }
         public DelegateCommand CommandPrintExpress { get; set; }
+        public DelegateCommand CommandSetOrderRemark { get; set; }
         public DelegateCommand<int?> CommandSelectionChanged { get; set; }
         public int IsTabIndex { get; set; }
 
+        public void SetOrderRemark()
+        {
+            //被选择的对象
+            string id = Invoice4Remark.SaleOrderNo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, 2);//2填写的是订单
+        }
         //有问题 所以改为下面这种方式
         //public void SelectionChanged(int? i)
         //{
