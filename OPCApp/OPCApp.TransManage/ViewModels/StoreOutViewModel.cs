@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface.Trans;
 using OPCAPP.Domain.Enums;
@@ -32,20 +33,22 @@ namespace OPCApp.TransManage.ViewModels
             CommandPrintExpress = new DelegateCommand(PrintExpress);
             // CommandSelectionChanged = new DelegateCommand<int?>(SelectionChanged);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
+            CommondSearchOrderBySale=new DelegateCommand(SearchOrderBySale);
+
         }
         public DelegateCommand CommandPrintInvoice { get; set; }
         public DelegateCommand CommandPrintExpress { get; set; }
         public DelegateCommand CommandSetOrderRemark { get; set; }
         public DelegateCommand<int?> CommandSelectionChanged { get; set; }
-        public DelegateCommand CommandSearchOrder { get; set; }
+        public DelegateCommand CommondSearchOrderBySale { get; set; }
         public int IsTabIndex { get; set; }
 
         public void SearchOrderBySale()
         {
-
-            PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(Invoice4Get.OrderNo);
-            OrderList = re.Result;
-            if (OrderList != null) SaleList = new List<OPC_Sale>();
+            var sale = SaleList.FirstOrDefault(e => e.IsSelected);
+            if (sale == null) return;
+            PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
+            OrderList =re==null?new List<Order>():re.Result;
         }
 
         public void SetOrderRemark()
