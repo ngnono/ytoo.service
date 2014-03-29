@@ -7,6 +7,7 @@ namespace OPCApp.DataService.Interface.Trans
 {
     public interface ITransService
     {
+        bool ExecutePrintSale(IList<string> saleOrderNoList);
         bool SetStatusAffirmPrintSaleFinish(IList<string> saleOrderNoList);
         bool SetStatusStoreInSure(IList<string> saleOrderNoList);
         bool SetStatusSoldOut(IList<string> saleOrderNoList);

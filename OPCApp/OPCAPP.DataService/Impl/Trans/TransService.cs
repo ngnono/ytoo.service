@@ -53,7 +53,7 @@ namespace OPCApp.DataService.Impl.Trans
             {
 
            
-            var order = RestClient.GetSingle<Order>("order/GetOrderByOderNo", orderNo);
+            var order = RestClient.GetSingle<Order>("order/GetOrderByOderNo",string.Format("orderNo={0}",orderNo));
             return new PageResult<Order>(new List<Order>{order}, 100);
             }
             catch (Exception ex)
@@ -165,6 +165,18 @@ namespace OPCApp.DataService.Impl.Trans
             try
             {
                 return RestClient.Put("sale/SetSaleOrderStockOut", saleOrderNoList);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        /*打印销售单*/
+        public bool ExecutePrintSale(IList<string> saleOrderNoList)
+        {
+            try
+            {
+                return RestClient.Put("sale/SetSaleOrderPrintSale", saleOrderNoList);
             }
             catch (Exception ex)
             {
