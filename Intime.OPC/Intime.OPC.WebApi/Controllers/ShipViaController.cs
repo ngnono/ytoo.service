@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Bindings;
+using Intime.OPC.WebApi.Core;
 
 namespace Intime.OPC.WebApi.Controllers
 {
-    public class ShipViaController:ApiController
+    public class ShipViaController : BaseController
     {
         private IShipViaService _shipViaService;
         public ShipViaController(IShipViaService shipViaService)

@@ -19,6 +19,7 @@ using System.Web.Mvc;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Bindings;
+using Intime.OPC.WebApi.Core;
 using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 
 namespace Intime.OPC.WebApi.Controllers
@@ -26,7 +27,7 @@ namespace Intime.OPC.WebApi.Controllers
     /// <summary>
     ///     账户相关接口
     /// </summary>
-    public class MenuController : ApiController
+    public class MenuController : BaseController
     {
         /// <summary>
         ///     The _menu service

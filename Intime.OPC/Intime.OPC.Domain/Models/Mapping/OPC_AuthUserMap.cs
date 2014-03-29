@@ -23,6 +23,9 @@ namespace Intime.OPC.Domain.Models.Mapping
             Property(t => t.Phone)
                 .HasMaxLength(40);
 
+            Property(t => t.SectionName).HasMaxLength(50);
+            Property(t => t.OrgName).HasMaxLength(50);
+
             // Table & Column Mappings
             ToTable("OPC_AuthUser");
             Property(t => t.Id).HasColumnName("Id");
@@ -37,6 +40,8 @@ namespace Intime.OPC.Domain.Models.Mapping
             Property(t => t.CreateUserId).HasColumnName("CreateUserId");
             Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
+            Property(t => t.SectionName).HasColumnName("SectionName");
+            Property(t => t.OrgName).HasColumnName("OrgName");
         }
     }
 }

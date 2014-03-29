@@ -13,16 +13,19 @@
 // ***********************************************************************
 
 using System;
+using System.Web;
 using System.Web.Http;
+using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Bindings;
+using Intime.OPC.WebApi.Core;
 
 namespace Intime.OPC.WebApi.Controllers
 {
     /// <summary>
     ///     Class OrderController.
     /// </summary>
-    public class OrderController : ApiController
+    public class OrderController : BaseController
     {
         /// <summary>
         ///     The _order service
@@ -80,6 +83,12 @@ namespace Intime.OPC.WebApi.Controllers
             {
                 return InternalServerError();
             }
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetOrderByOderNo(string orderNo)
+        {
+          return  Ok(  _orderService.GetOrderByOrderNo(orderNo));
         }
     }
 }

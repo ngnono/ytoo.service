@@ -29,6 +29,12 @@ namespace Intime.OPC.Service.Support
             return Mapper.Map<Order, OrderDto>(lstOrder);
         }
 
+        public OrderDto GetOrderByOrderNo(string orderNo)
+        {
+            var e = _orderRepository.GetOrderByOrderNo(orderNo);
+            return  Mapper.Map<Order, OrderDto>(e);
+        }
+
         #endregion
     }
 }

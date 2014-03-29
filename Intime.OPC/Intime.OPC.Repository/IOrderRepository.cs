@@ -26,5 +26,7 @@ namespace Intime.OPC.Repository
         IList<Order> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd, int storeId,
             int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone,
             string expressDeliveryCode, int expressDeliveryCompany);
+
+        Order GetOrderByOrderNo(string orderNo);
     }
 }
