@@ -132,8 +132,18 @@ namespace OPCApp.TransManage.ViewModels
             //}
         }
 
+        /*打印销售单*/
         public void CommandOnlyPrintExecute()
         {
+            if (SaleList == null)
+            {
+                MessageBox.Show("请勾选要打印的销售单", "提示");
+                return;
+            }
+            List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
+            var iTransService = AppEx.Container.GetInstance<ITransService>();
+            bool bFalg = iTransService.ExecutePrintSale(selectSaleIds);
+            MessageBox.Show(bFalg ? "打印成功" : "打印失败", "提示");
         }
 
         /*完成销售单打印*/

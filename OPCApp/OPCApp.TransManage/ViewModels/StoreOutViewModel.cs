@@ -32,7 +32,6 @@ namespace OPCApp.TransManage.ViewModels
             CommandPrintExpress = new DelegateCommand(PrintExpress);
             // CommandSelectionChanged = new DelegateCommand<int?>(SelectionChanged);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
-            CommandSearchOrder = new DelegateCommand(SearchOrder);
         }
         public DelegateCommand CommandPrintInvoice { get; set; }
         public DelegateCommand CommandPrintExpress { get; set; }
@@ -41,7 +40,7 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandSearchOrder { get; set; }
         public int IsTabIndex { get; set; }
 
-        public void SearchOrder()
+        public void SearchOrderBySale()
         {
 
             PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(Invoice4Get.OrderNo);
