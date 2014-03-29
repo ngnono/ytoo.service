@@ -80,6 +80,11 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        public Order GetOrderByOrderNo(string orderNo)
+        {
+            return Select(t => t.OrderNo == orderNo).FirstOrDefault();
+        }
+
         #endregion
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
+using Intime.OPC.WebApi.Core;
 using Intime.OPC.WebApi.Core.Security;
 using Intime.OPC.WebApi.Models;
 
@@ -11,7 +12,7 @@ namespace Intime.OPC.WebApi.Controllers
     /// <summary>
     ///     账户相关接口
     /// </summary>
-    public class AccountController : ApiController
+    public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
 

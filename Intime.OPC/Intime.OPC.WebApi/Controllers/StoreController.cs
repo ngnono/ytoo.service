@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Intime.OPC.WebApi.Core;
 
 namespace Intime.OPC.WebApi.Controllers
 {
-    public class StoreController:ApiController
+    public class StoreController : BaseController
     {
         private IStoreService _Service;
         public StoreController(IStoreService service)

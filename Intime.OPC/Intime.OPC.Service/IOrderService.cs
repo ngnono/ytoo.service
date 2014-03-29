@@ -43,5 +43,7 @@ namespace Intime.OPC.Service
         IList<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd, int storeId,
             int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone,
             string expressDeliveryCode, int expressDeliveryCompany, int userId);
+
+        OrderDto GetOrderByOrderNo(string orderNo);
     }
 }

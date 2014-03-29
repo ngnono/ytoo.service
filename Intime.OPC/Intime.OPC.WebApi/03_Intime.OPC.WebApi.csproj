@@ -115,6 +115,7 @@
     <Compile Include="Controllers\SaleController.cs" />
     <Compile Include="Controllers\ShipViaController.cs" />
     <Compile Include="Controllers\TransController.cs" />
+    <Compile Include="Core\BaseController.cs" />
     <Compile Include="Core\DependencyResolver\MEF\Boundaries.cs" />
     <Compile Include="Core\DependencyResolver\MEF\MEFDependencyResolver.cs" />
     <Compile Include="Core\DependencyResolver\MEF\MEFDependencyScope.cs" />

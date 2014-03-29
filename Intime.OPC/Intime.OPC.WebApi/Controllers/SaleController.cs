@@ -63,13 +63,13 @@ namespace Intime.OPC.WebApi.Controllers
             }
             catch (SaleOrderNotExistsException ex)
             {
-                //todo 增加处理方式
-                // _logger.WriteError(ex.Message);
-                return BadRequest();
+                
+                this.GetLog().Error(ex);
+                return BadRequest("销售单错误或不存在");
             }
             catch (Exception e)
             {
-                // _logger.WriteError(e.Message);
+                this.GetLog().Error(e);
                 return InternalServerError();
             }
         }
@@ -353,12 +353,12 @@ namespace Intime.OPC.WebApi.Controllers
             }
             catch (SaleOrderNotExistsException e)
             {
-                // _logger.WriteError(e.Message);
+                this.GetLog().Error(e);
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                //_logger.WriteError(ex.Message);
+                this.GetLog().Error(ex);
                 return InternalServerError();
             }
         }
@@ -396,18 +396,15 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        public IHttpActionResult GetSalePrintInvoice(string startDate, string endDate, string saleOrderNo,
-            string orderNo, [UserId] int userId)
+        public IHttpActionResult GetSalePrintInvoice(DateTime startDate, DateTime endDate, string saleOrderNo,
+            string orderNo)
         {
             try
             {
-                DateTime dtStart = DateTime.MinValue;
-                bool bl = DateTime.TryParse(startDate, out dtStart);
-
-                DateTime dtEnd = DateTime.Now;
-                bl = DateTime.TryParse(endDate, out dtEnd);
-                return Ok(_saleService.GetPrintInvoice(saleOrderNo, userId, orderNo, dtStart, dtEnd));
+                var userId = this.GetCurrentUserID().Value;
+                return Ok(_saleService.GetPrintInvoice(saleOrderNo, userId, orderNo, startDate, endDate));
             }
+            
             catch (SaleOrderNotExistsException e)
             {
                 //_logger.WriteError(e.Message);

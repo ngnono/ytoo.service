@@ -12,17 +12,19 @@
 // <summary></summary>
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Web.Http;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
+using Intime.OPC.WebApi.Core;
 
 namespace Intime.OPC.WebApi.Controllers
 {
     /// <summary>
     ///     账户相关接口
     /// </summary>
-    public class TransController : ApiController
+    public class TransController : BaseController
     {
         /// <summary>
         ///     The _trans service
@@ -53,24 +55,27 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
-        ///     Finishes the specified sale.
+        ///  增加订单备注
         /// </summary>
         /// <param name="sale">The sale.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpPut]
-        public IHttpActionResult Finish([FromBody] Dictionary<string, string> sale)
+        [HttpPost]
+        public IHttpActionResult AddOrderComment([FromBody] OPC_OrderComment comment)
         {
-            //TODO:check params
-            if (_transService.Finish(sale))
+           return  DoFunction(() =>
             {
-                return Ok();
-            }
 
-            return InternalServerError();
+                comment.CreateDate = DateTime.Now;
+                comment.CreateUser = this.GetCurrentUserID();
+                comment.UpdateDate = comment.CreateDate;
+                comment.UpdateUser = comment.CreateUser;
+                return _transService.AddOrderComment(comment);
+
+            },"增加订单备注失败");
         }
 
         /// <summary>
-        ///     Selects the sale detail.
+        ///   查询销售单详情
         /// </summary>
         /// <param name="ids">The ids.</param>
         /// <returns>IHttpActionResult.</returns>
@@ -91,5 +96,7 @@ namespace Intime.OPC.WebApi.Controllers
             IList<OPC_OrderComment> result = _transService.GetRemarksByOrderNo(orderNo);
             return Ok(result);
         }
+
+
     }
 }

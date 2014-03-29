@@ -4,13 +4,14 @@ using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.WebApi.Bindings;
+using Intime.OPC.WebApi.Core;
 
 namespace Intime.OPC.WebApi.Controllers
 {
     /// <summary>
     ///     账户相关接口
     /// </summary>
-    public class RoleController : ApiController
+    public class RoleController : BaseController
     {
         private readonly IRoleService _roleService;
 

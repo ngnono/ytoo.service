@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Intime.OPC.WebApi.Core;
 
 namespace Intime.OPC.WebApi.Controllers
 {
-    public class BrandController:ApiController
+    public class BrandController : BaseController
     {
         private IBrandService _brandService;
         public BrandController(IBrandService brandService)

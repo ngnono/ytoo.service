@@ -38,5 +38,12 @@ namespace Intime.OPC.Service.Support
         }
 
         #endregion
+
+
+        public bool AddOrderComment(OPC_OrderComment comment)
+        {
+           
+           return   _orderRemarkRepository.Create(comment);
+        }
     }
 }

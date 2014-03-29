@@ -11,5 +11,12 @@ namespace Intime.OPC.Service
         IList<OPC_SaleDetail> SelectSaleDetail(IEnumerable<string> saleIDs);
 
         IList<OPC_OrderComment> GetRemarksByOrderNo(string orderNo);
+
+        /// <summary>
+        /// 增加订单日志
+        /// </summary>
+        /// <param name="comment">The comment.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool AddOrderComment(OPC_OrderComment comment);
     }
 }
