@@ -10,7 +10,11 @@ namespace Intime.OPC.Domain.Models
         public int SalesType { get; set; }
         public int? ShipViaId { get; set; }
         public int Status { get; set; }
-        public int? ShippingCode { get; set; }
+        /// <summary>
+        /// ¿ìµÝµ¥ºÅ
+        /// </summary>
+        /// <value>The shipping code.</value>
+        public string ShippingCode { get; set; }
         public decimal ShippingFee { get; set; }
         public int? ShippingStatus { get; set; }
         public string ShippingRemark { get; set; }
@@ -28,8 +32,8 @@ namespace Intime.OPC.Domain.Models
         public DateTime? RemarkDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public int CreatedUser { get; set; }
-        public DateTime UpdatedDate { get; set; }
-        public int UpdatedUser { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public int? UpdatedUser { get; set; }
 
         #region IEntity Members
 
