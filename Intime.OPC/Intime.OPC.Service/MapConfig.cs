@@ -11,16 +11,31 @@ namespace Intime.OPC.Service
         public static void Config()
         {
             //Mapper.CreateMap<OPC_Sale, SaleDto>();
-            Mapper.CreateMap<Order, OrderDto>(o => converDto(o));
+            var map1 = AutoMapper.Mapper.CreateMap<Order, OrderDto>();
+            map1.ConvertUsing((t) => converDto(t));
 
             var map = AutoMapper.Mapper.CreateMap<OPC_Sale, SaleDto>();
-            map.ForMember(d => d.StatusName, opt => opt.MapFrom(t => GetSaleStatusName(t.Status))); 
+            map.ForMember(d => d.StatusName, opt => opt.MapFrom(t => GetSaleOrderStatusName(t.Status)));
+            map.ForMember(d => d.CashStatusName, opt => opt.MapFrom(t => GetCashStatusName(t.CashStatus)));
+
+            var map2 = AutoMapper.Mapper.CreateMap<OPC_SaleDetail, SaleDetailDto>();
+            //todo 销售单明细 匹配
         }
 
-        private static  string GetSaleStatusName(int status)
+        private static string GetSaleOrderStatusName(int status)
         {
             var orderStatus = (EnumSaleOrderStatus)status;
             return  orderStatus.GetDescription();
+        }
+
+        private static string GetCashStatusName(int? status)
+        {
+            if (!status.HasValue)
+            {
+                return "";
+            }
+            var orderStatus = (EnumCashStatus)status.Value;
+            return orderStatus.GetDescription();
         }
 
         private static OrderDto converDto(Order o)

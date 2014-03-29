@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
@@ -52,7 +53,7 @@ namespace Intime.OPC.Service.Support
             return true;
         }
 
-        public IList<OPC_SaleDetail> GetSaleOrderDetails(string saleOrderNo, int userId)
+        public IList<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int userId)
         {
             if (string.IsNullOrEmpty(saleOrderNo))
             {
@@ -64,9 +65,9 @@ namespace Intime.OPC.Service.Support
                 throw new SaleOrderNotExistsException(saleOrderNo);
             }
 
-            //todo 权限校验
+            var lst = _saleRepository.GetSaleOrderDetails(saleOrderNo);
 
-            return _saleRepository.GetSaleOrderDetails(saleOrderNo);
+            return Mapper.Map<OPC_SaleDetail, SaleDetailDto>(lst);
         }
 
         public bool SetSaleOrderPickUp(string saleOrderNo, int userId)
@@ -143,7 +144,7 @@ namespace Intime.OPC.Service.Support
         {
             if (string.IsNullOrWhiteSpace(orderID))
             {
-                throw new OrderNoIsNullException();
+                throw new OrderNoIsNullException(orderID);
             }
       
             var lst = _saleRepository.GetByOrderNo(orderID);

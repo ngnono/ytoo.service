@@ -12,6 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
+using System.Data;
+
 namespace Intime.OPC.Domain.Exception
 {
     /// <summary>
@@ -26,6 +28,9 @@ namespace Intime.OPC.Domain.Exception
         public OrderNotExistsException(string orderNo)
             : base(orderNo)
         {
+            this.OrderNo = orderNo;
         }
+
+        public string OrderNo { get; private set; }
     }
 }

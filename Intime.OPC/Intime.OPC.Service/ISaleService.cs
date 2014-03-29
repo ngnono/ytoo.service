@@ -51,7 +51,7 @@ namespace Intime.OPC.Service
         /// <param name="saleOrderNo">The sale order no.</param>
         /// <param name="userId">The user identifier.</param>
         /// <returns>IList{OPC_SaleDetail}.</returns>
-        IList<OPC_SaleDetail> GetSaleOrderDetails(string saleOrderNo, int userId);
+        IList<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int userId);
 
         /// <summary>
         ///     销售提货

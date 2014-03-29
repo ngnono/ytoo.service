@@ -31,5 +31,7 @@ namespace Intime.OPC.Domain.Dto
         public DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
         public string StatusName { get; set; }
+
+        public string CashStatusName { get; set; }
     }
 }
