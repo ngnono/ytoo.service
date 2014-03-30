@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Controls;
+using OPCAPP.Domain.Dto;
 using  OPCApp.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
@@ -11,9 +12,33 @@ using System;
 
 namespace OPCApp.TransManage.ViewModels
 {
+
     [Export("CustomerInquiriesViewModel", typeof (CustomerInquiriesViewModel))]
     public class CustomerInquiriesViewModel : BindableBase
     {
+       // public List<object> OderStatusList { get; set; }
+
+        public IList<KeyValue> StoreList { get; set; }
+
+        public IList<KeyValue> BrandList { get; set; }
+
+        public IList<KeyValue> OrderStatusList { get; set; }
+
+        public IList<KeyValue> PaymentTypeList { get; set; }
+
+        public IList<KeyValue> OutGoodsTypeList { get; set; }
+        
+        
+        public void InitCombo()
+        {
+           // OderStatusList=new 
+            this.StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
+            this.BrandList = AppEx.Container.GetInstance<ICommonInfo>().GetBrandList();
+            this.OrderStatusList = AppEx.Container.GetInstance<ICommonInfo>().GetOrderStatus();
+            this.PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
+            this.OutGoodsTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetOutGoodsMehtod();
+        }
+
         public CustomerInquiriesViewModel()
         {
             //Tab 订单查询         CommandGetSaleByOrderId
@@ -25,6 +50,7 @@ namespace OPCApp.TransManage.ViewModels
             CommandGetShipping = new DelegateCommand(GetShipping);
             CommandGetOrderByShippingId = new DelegateCommand(GetOrderByShippingId);
             CommandGetSaleByOrderNoShipping = new DelegateCommand(GetSaleByOrderNoShipping);
+            this.InitCombo();
             orderGet = new OrderGet();
         }
 

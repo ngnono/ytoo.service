@@ -8,7 +8,7 @@
              Height="AUTO" Width="AUTO" Background="LightGray">
 
     <Grid>
-        <controls:MetroAnimatedSingleRowTabControl x:Name="tabControlName" Grid.Row="1" Grid.ColumnSpan="2">
+        <controls:MetroAnimatedSingleRowTabControl  HorizontalAlignment="Left">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <si:CallMethodAction MethodName="SelectionChanged" TargetObject="{Binding}" />
@@ -408,7 +408,7 @@
                                     <TextBlock HorizontalAlignment="Center">补打快递单</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Background="LightGray"  Width="120" Command="{Binding CommandStoreInSure}">
+                            <Button Background="LightGray"  Width="120" Command="{Binding CommandShippSaleHandOver}">
                                 <StackPanel>
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">完成快递发货交接</TextBlock>
@@ -449,6 +449,8 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Width="130" Header="单号" Visibility="Hidden" Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Width="130" Header="发货单号" Binding="{Binding GoodsOutCode}" />
                             <DataGridTextColumn Width="200" Header="快递公司名称" Binding="{Binding ShipCompanyName}" />
                             <DataGridTextColumn Header="发货状态" Binding="{Binding ShippingStatus}" />

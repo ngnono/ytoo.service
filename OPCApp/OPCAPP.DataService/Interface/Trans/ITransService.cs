@@ -21,7 +21,7 @@ namespace OPCApp.DataService.Interface.Trans
         /// <returns></returns>
         bool SetStatusPrintExpress(string goodsOutCode);
 
-        bool SetSaleOrderShipped(IList<string> saleOrderNoList);
+        bool SetSaleOrderShipped(IList<string> shipSaleNoList);
         bool SetStatusPrintInvoice(IList<string> saleOrderNoList);
         PageResult<OPC_Sale> Search(string salesfilter, EnumSearchSaleStatus searchSaleStatus);
         PageResult<Order> SearchOrderBySale(string saleOrder);

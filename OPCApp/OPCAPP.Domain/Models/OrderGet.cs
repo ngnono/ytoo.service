@@ -8,8 +8,6 @@ namespace  OPCApp.Domain.Models
         {
             StartCreateDate = DateTime.Now;
             EndCreateDate = DateTime.Now;
-            Status = -1;
-            ExpressDeliveryCompany = -1;
         }
 
         public string OrderNo { get; set; }
