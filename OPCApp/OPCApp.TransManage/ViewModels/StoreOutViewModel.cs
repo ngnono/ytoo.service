@@ -27,6 +27,7 @@ namespace OPCApp.TransManage.ViewModels
             //初始化命令属性
             SearchSaleStatus = EnumSearchSaleStatus.StoreOutDataBaseSearchStatus;
             //初始化命令属性
+            //tab1 打印发货单
             CommandPrintInvoice = new DelegateCommand(PrintInvoice);
             CommandOnlyPrint = new DelegateCommand(OnlyPrint);
             CommandPrintExpress = new DelegateCommand(PrintExpress);
@@ -39,8 +40,8 @@ namespace OPCApp.TransManage.ViewModels
             ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
             ShippingSaleCreateDto = new ShippingSaleCreateDto();
             CommandGetDownShip = new DelegateCommand(GetDownShip);
+        
         }
-
 
         public OPC_ShippingSale ShipSaleSelected
         {
@@ -62,6 +63,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public ShipVia ShipVia { get; set; }
         public List<ShipVia> ShipViaList { get; set; }
+        public DelegateCommand CommandDbClick { get; set; }
         public DelegateCommand CommandSaveShip { get; set; }
         public DelegateCommand CommandPrintInvoice { get; set; }
         public DelegateCommand CommandPrintExpress { get; set; }
@@ -170,14 +172,10 @@ namespace OPCApp.TransManage.ViewModels
 
         public override void ClearOtherList()
         {
-            OrderList = new List<Order>();
+           this.ClearList();
         }
 
-        //有问题 所以改为下面这种方式
-        //public void SelectionChanged(int? i)
-        //{
-
-        //}
+        //清空所有默认列表值
         public void ClearList()
         {
             ShipViaList = new List<ShipVia>();
@@ -215,6 +213,7 @@ namespace OPCApp.TransManage.ViewModels
             }
         }
 
+        //打印发货单
         public void PrintInvoice()
         {
             if (SaleList == null || SaleList.Count() == 0)
@@ -226,8 +225,8 @@ namespace OPCApp.TransManage.ViewModels
             var ts = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = ts.SetStatusPrintInvoice(selectSaleIds);
             MessageBox.Show(bFalg ? "打印发货单成功" : "打印发货单失败", "提示");
+            ClearList();
             Refresh();
-            OrderList = new List<Order>();
         }
 
         public void PrintExpress()
@@ -240,11 +239,12 @@ namespace OPCApp.TransManage.ViewModels
             var ts = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = ts.SetStatusPrintExpress(ShipSaleSelected.GoodsOutCode);
             MessageBox.Show(bFalg ? "打印快递单成功" : "打印快递单失败", "提示");
-            Refresh();
+         
             if (bFalg)
-            {
-                ShipSaleList = new List<OPC_ShippingSale>();
-                OrderList = new List<Order>();
+            {  
+                this.ClearList();
+                Refresh();
+               
             }
         }
 
@@ -276,5 +276,6 @@ namespace OPCApp.TransManage.ViewModels
             }
             SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(saleCur.GoodsOutCode);
         }
+
     }
 }

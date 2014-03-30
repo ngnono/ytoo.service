@@ -8,7 +8,7 @@
              Height="AUTO" Width="AUTO" Background="LightGray">
 
     <Grid>
-        <controls:MetroAnimatedSingleRowTabControl x:Name="tabControlName" Grid.Row="1" Grid.ColumnSpan="2">
+        <controls:MetroAnimatedSingleRowTabControl  HorizontalAlignment="Left">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <si:CallMethodAction MethodName="SelectionChanged" TargetObject="{Binding}" />
