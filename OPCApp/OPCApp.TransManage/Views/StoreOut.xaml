@@ -408,7 +408,7 @@
                                     <TextBlock HorizontalAlignment="Center">补打快递单</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Background="LightGray"  Width="120" Command="{Binding CommandStoreInSure}">
+                            <Button Background="LightGray"  Width="120" Command="{Binding CommandShippSaleHandOver}">
                                 <StackPanel>
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">完成快递发货交接</TextBlock>

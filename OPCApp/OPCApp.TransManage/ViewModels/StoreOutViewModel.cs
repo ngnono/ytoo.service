@@ -34,13 +34,27 @@ namespace OPCApp.TransManage.ViewModels
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
             CommandSearchOrderBySale = new DelegateCommand(SearchOrderBySale);
             CommandSetShippingRemark = new DelegateCommand(SetShippingRemark);
-            CommandSaveShip = new DelegateCommand(SaveShip);
+            CommandSaveShip = new DelegateCommand(SaveShipSale);
             CommandPrintView = new DelegateCommand(PrintView);
             CommandSearchExpress = new DelegateCommand(GetShipSaleList);
+            CommandGetDownShip = new DelegateCommand(GetDownShip);
+            CommandShippSaleHandOver = new DelegateCommand(ShippSaleHandOver);
             ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
             ShippingSaleCreateDto = new ShippingSaleCreateDto();
-            CommandGetDownShip = new DelegateCommand(GetDownShip);
+           
         
+        }
+
+        private void ShippSaleHandOver()
+        {
+           if(ShipSaleList==null)return;
+            var shipSale = ShipSaleList.Where(e => e.IsSelected).ToList();
+            if (shipSale == null||shipSale.Count==0)
+            {
+                MessageBox.Show("请勾选快递单", "提示");
+            }
+            var shipNum = shipSale.Select(e => e.GoodsOutCode).ToList();
+            var isSuccess = AppEx.Container.GetInstance<ITransService>().SetSaleOrderShipped(shipNum);
         }
 
         public OPC_ShippingSale ShipSaleSelected
@@ -64,6 +78,7 @@ namespace OPCApp.TransManage.ViewModels
         public ShipVia ShipVia { get; set; }
         public List<ShipVia> ShipViaList { get; set; }
         public DelegateCommand CommandDbClick { get; set; }
+        public DelegateCommand CommandShippSaleHandOver { get; set; }
         public DelegateCommand CommandSaveShip { get; set; }
         public DelegateCommand CommandPrintInvoice { get; set; }
         public DelegateCommand CommandPrintExpress { get; set; }
@@ -116,7 +131,7 @@ namespace OPCApp.TransManage.ViewModels
 
         /*生成*/
         //发货单
-        public void SaveShip()
+        public void SaveShipSale()
         {
             if (SaleList == null) return;
             List<OPC_Sale> sale = SaleList.Where(e => e.IsSelected).ToList();

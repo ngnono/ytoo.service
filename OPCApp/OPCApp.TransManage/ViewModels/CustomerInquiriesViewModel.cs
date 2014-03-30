@@ -11,6 +11,7 @@ using System;
 
 namespace OPCApp.TransManage.ViewModels
 {
+
     [Export("CustomerInquiriesViewModel", typeof (CustomerInquiriesViewModel))]
     public class CustomerInquiriesViewModel : BindableBase
     {

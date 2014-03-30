@@ -243,11 +243,11 @@ namespace OPCApp.DataService.Impl.Trans
         }
 
 
-       public bool SetSaleOrderShipped(IList<string> saleOrderNoList)
+       public bool SetSaleOrderShipped(IList<string> shipSalerNoList)
        {
            try
            {
-               return RestClient.Put("sale/SetSaleOrderShipped", saleOrderNoList);
+               return RestClient.Put("sale/SetSaleOrderShipped", shipSalerNoList);
            }
            catch (Exception ex)
            {
