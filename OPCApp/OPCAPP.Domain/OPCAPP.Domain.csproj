@@ -47,6 +47,7 @@
     <Compile Include="BaseInfo\shoppeInfo.cs" />
     <Compile Include="BaseInfo\StoreInfo.cs" />
     <Compile Include="Base\DomainBase.cs" />
+    <Compile Include="Dto\KeyValue.cs" />
     <Compile Include="Dto\RoleMenuDto.cs" />
     <Compile Include="Dto\RoleUserDto.cs" />
     <Compile Include="Dto\SaleDetailDto.cs" />
