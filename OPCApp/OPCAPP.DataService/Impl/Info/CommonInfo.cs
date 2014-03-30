@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
+using OPCAPP.Domain.Dto;
 using OPCApp.Domain.Models;
 
 namespace OPCApp.DataService.Impl.Info
@@ -26,11 +28,17 @@ namespace OPCApp.DataService.Impl.Info
             }
         }
 
-        public IList<Store> GetStoreList()
+        public IList<KeyValue> GetStoreList()
         {
             try
             {
-                return RestClient.Get<Store>("store/getall");
+                return RestClient.Get<Store>("store/getall").Select<Store, KeyValue>((t) =>
+                {
+                    KeyValue kv=new KeyValue();
+                    kv.Key = t.Id;
+                    kv.Value = t.Name;
+                    return kv;
+                }).ToList();
             }
             catch (Exception ex)
             {
@@ -38,11 +46,17 @@ namespace OPCApp.DataService.Impl.Info
             }
         }
 
-        public IList<Brand> GetBrandList()
+        public IList<KeyValue> GetBrandList()
         {
             try
             {
-                return RestClient.Get<Brand>("brand/getall");
+                return RestClient.Get<Brand>("brand/getall").Select<Brand, KeyValue>((t) =>
+                {
+                    KeyValue kv = new KeyValue();
+                    kv.Key = t.Id;
+                    kv.Value = t.Name;
+                    return kv;
+                }).ToList(); ;
             }
             catch (Exception ex)
             {
