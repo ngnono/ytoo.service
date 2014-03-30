@@ -27,8 +27,8 @@ namespace OPCApp.TransManage.ViewModels
         public IList<KeyValue> PaymentTypeList { get; set; }
 
         public IList<KeyValue> OutGoodsTypeList { get; set; }
-        
-        
+
+        public List<ShipVia> ShipViaList { get; set; }
         public void InitCombo()
         {
            // OderStatusList=new 
@@ -37,6 +37,7 @@ namespace OPCApp.TransManage.ViewModels
             this.OrderStatusList = AppEx.Container.GetInstance<ICommonInfo>().GetOrderStatus();
             this.PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
             this.OutGoodsTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetOutGoodsMehtod();
+            ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
         }
 
         public CustomerInquiriesViewModel()
@@ -52,6 +53,7 @@ namespace OPCApp.TransManage.ViewModels
             CommandGetSaleByOrderNoShipping = new DelegateCommand(GetSaleByOrderNoShipping);
             this.InitCombo();
             orderGet = new OrderGet();
+            ShippingGet=new ShippingGet();
         }
 
         #region Tab1页签
@@ -287,6 +289,27 @@ namespace OPCApp.TransManage.ViewModels
 
                         break;
                         ;
+                }
+            }
+            if (e.Source is DataGrid)
+            {
+                DataGrid dg = e.Source as DataGrid;
+                switch (dg.Name)
+                {
+                    case "OrderDataGrid":
+                        GetSaleByOrderId();
+                        break;
+                    case "SaleDataGrid":
+                        GetSaleDetailBySaleId();
+                        break;
+                    case "ShipDataGrid":
+                        GetOrderByShippingId();
+                        break;
+                    case "OrderDataGrid1":
+                        GetSaleByOrderNoShipping();
+                        break;
+                    default:
+                        break;
                 }
             }
         }

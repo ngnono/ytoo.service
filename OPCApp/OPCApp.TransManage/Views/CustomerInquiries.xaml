@@ -85,7 +85,7 @@
                             <TextBlock Text="    订单" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="4" ItemsSource="{Binding OrderList}" IsReadOnly="True"
+                    <DataGrid Grid.Row="4" x:Name="OrderDataGrid" ItemsSource="{Binding OrderList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
                               SelectedItem="{Binding SelectOrder}">
                         <i:Interaction.Triggers>
@@ -131,7 +131,7 @@
                             <TextBlock Text="   销售单" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="6" ItemsSource="{Binding SaleList}" IsReadOnly="True"
+                    <DataGrid x:Name="SaleDataGrid" Grid.Row="6" ItemsSource="{Binding SaleList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
                               SelectedItem="{Binding SelectSale}">
                         <i:Interaction.Triggers>
@@ -251,7 +251,7 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <DataGrid Grid.Row="4" ItemsSource="{Binding ShippingList}" IsReadOnly="True"
+                    <DataGrid  x:Name="ShipDataGrid" Grid.Row="4" ItemsSource="{Binding ShippingList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
                               SelectedItem="{Binding SelectShipping}">
                         <i:Interaction.Triggers>
@@ -280,7 +280,7 @@
                             <TextBlock Text="   订单信息" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="6" ItemsSource="{Binding OutOrderList}" IsReadOnly="True"
+                    <DataGrid  x:Name="OrderDataGrid1" Grid.Row="6" ItemsSource="{Binding OutOrderList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
                               SelectedItem="{Binding SelectOrderShipping}">
                         <i:Interaction.Triggers>
@@ -322,7 +322,7 @@
                             <TextBlock Text="   销售单信息" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="8" IsReadOnly="True" AutoGenerateColumns="False"
+                    <DataGrid  x:Name="SaleDataGrid1" Grid.Row="8" IsReadOnly="True" AutoGenerateColumns="False"
                               HorizontalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
