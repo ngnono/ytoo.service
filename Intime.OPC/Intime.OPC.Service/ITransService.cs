@@ -37,6 +37,14 @@ namespace Intime.OPC.Service
         /// </summary>
         /// <param name="shippingCode">发货单编号</param>
         /// <returns>IList{OPC_ShippingSaleComment}.</returns>
-        IList<OPC_ShippingSaleComment> GetByShippingCommentCode(string shippingCode); 
+        IList<OPC_ShippingSaleComment> GetByShippingCommentCode(string shippingCode);
+
+        /// <summary>
+        /// Creates the shipping sale.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="shippingSaleDto">The shipping sale dto.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool CreateShippingSale(int userId, ShippingSaleCreateDto shippingSaleDto);
     }
 }

@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -33,50 +34,50 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<Order> query = db.Orders.Where(t => t.CreateDate >= dtStart && t.CreateDate <= dtEnd);
+                Expression<Func<Order, bool>> query = t => t.CreateDate >= dtStart && t.CreateDate < dtEnd;
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
-                    query = query.Where(t => t.OrderNo.Contains(orderNo));
+                    query = query.And(t => t.OrderNo.Contains(orderNo));
                 }
                 if (!string.IsNullOrWhiteSpace(orderSource))
                 {
-                    query = query.Where(t => t.OrderSource == orderSource);
+                    query = query.And(t => t.OrderSource == orderSource);
                 }
                 if (storeId > 0)
                 {
-                    query = query.Where(t => t.StoreId == storeId);
+                    query = query.And(t => t.StoreId == storeId);
                 }
                 if (brandId > 0)
                 {
-                    query = query.Where(t => t.BrandId == brandId);
+                    query = query.And(t => t.BrandId == brandId);
                 }
                 if (status > -1)
                 {
-                    query = query.Where(t => t.Status == status);
+                    query = query.And(t => t.Status == status);
                 }
                 if (!string.IsNullOrWhiteSpace(paymentType))
                 {
-                    query = query.Where(t => t.PaymentMethodCode == paymentType);
+                    query = query.And(t => t.PaymentMethodCode == paymentType);
                 }
                 if (!string.IsNullOrWhiteSpace(outGoodsType))
                 {
-                    query = query.Where(t => t.PaymentMethodCode == outGoodsType);
+                    query = query.And(t => t.PaymentMethodCode == outGoodsType);
                 }
 
                 if (!string.IsNullOrWhiteSpace(shippingContactPhone))
                 {
-                    query = query.Where(t => t.ShippingContactPhone == shippingContactPhone);
+                    query = query.And(t => t.ShippingContactPhone == shippingContactPhone);
                 }
                 if (!string.IsNullOrWhiteSpace(expressDeliveryCode))
                 {
-                    query = query.Where(t => t.ShippingNo == expressDeliveryCode);
+                    query = query.And(t => t.ShippingNo == expressDeliveryCode);
                 }
                 if (expressDeliveryCompany > -1)
                 {
-                    query = query.Where(t => t.ShippingVia == expressDeliveryCompany);
+                    query = query.And(t => t.ShippingVia == expressDeliveryCompany);
                 }
 
-                return query.ToList();
+                return db.Orders.Where(query).ToList();
             }
         }
 
@@ -84,6 +85,20 @@ namespace Intime.OPC.Repository.Support
         {
             return Select(t => t.OrderNo == orderNo).FirstOrDefault();
         }
+
+        public IList<Order> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                Expression<Func<Order, bool>> filter =  t => t.CreateDate >= starTime && t.CreateDate < endTime;
+                if (string.IsNullOrWhiteSpace(orderNo))
+                {
+                    filter.And(t => t.OrderNo.Contains(orderNo));
+                }
+                return db.Orders.Where(filter).ToList();
+            }
+        }
+
         #endregion
     }
 }

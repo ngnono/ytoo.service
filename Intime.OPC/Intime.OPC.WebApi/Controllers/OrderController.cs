@@ -99,6 +99,21 @@ namespace Intime.OPC.WebApi.Controllers
           return  Ok(  _orderService.GetOrderByOrderNo(orderNo));
         }
 
+        /// <summary>
+        /// 查询订单 根据时间，和订单编码
+        /// </summary>
+        /// <param name="orderNo">The order no.</param>
+        /// <param name="starTime">The star time.</param>
+        /// <param name="endTime">The end time.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetOrderByOderNoTime(string orderNo,DateTime starTime,DateTime endTime)
+        {
+            return Ok(_orderService.GetOrderByOderNoTime(orderNo,starTime,endTime));
+            
+        }
+       
+
         #region 备注
         
         /// <summary>

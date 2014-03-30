@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Xml;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
@@ -12,11 +14,17 @@ namespace Intime.OPC.Service.Support
         private readonly ISaleRepository _saleRepository;
         private readonly ITransRepository _transRepository;
         private readonly IShippingSaleCommentRepository _shippingSaleCommentRepository;
+        private readonly IShippingSaleRepository _shippingSaleRepository;
 
-        public TransService(ITransRepository transRepository, IOrderRemarkRepository orderRemarkRepository,ISaleRepository saleRepository,IShippingSaleCommentRepository shippingSaleCommentRepository)
+        public TransService(ITransRepository transRepository, 
+            IOrderRemarkRepository orderRemarkRepository,
+            ISaleRepository saleRepository,
+            IShippingSaleRepository shippingSaleRepository,
+            IShippingSaleCommentRepository shippingSaleCommentRepository)
         {
             _transRepository = transRepository;
             _orderRemarkRepository = orderRemarkRepository;
+            _shippingSaleRepository = shippingSaleRepository;
             _saleRepository = saleRepository;
             _shippingSaleCommentRepository = shippingSaleCommentRepository;
         }
@@ -67,6 +75,26 @@ namespace Intime.OPC.Service.Support
         public IList<OPC_ShippingSaleComment> GetByShippingCommentCode(string shippingCode)
         {
             return _shippingSaleCommentRepository.GetByShippingCode(shippingCode);
+        }
+
+        public bool CreateShippingSale(int userId, ShippingSaleCreateDto shippingSaleDto)
+        {
+            var dt = DateTime.Now;
+            foreach (var saleID in shippingSaleDto.SaleOrderIDs)
+            {
+                var sale = new OPC_ShippingSale();
+                sale.CreateDate = dt;
+                sale.CreateUser = userId;
+                sale.UpdateDate = dt;
+                sale.UpdateUser = userId;
+                sale.SaleOrderNo = saleID;
+                sale.ShipViaId = shippingSaleDto.ShipViaID;
+                sale.ShippingCode = shippingSaleDto.ShippingCode;
+                sale.ShippingFee = (decimal)(shippingSaleDto.ShippingFee);
+
+                _shippingSaleRepository.Create(sale);
+            }
+            return true;
         }
     }
 }

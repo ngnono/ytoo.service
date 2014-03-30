@@ -21,7 +21,7 @@ namespace Intime.OPC.Service.Support
             int storeId, int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone,
             string expressDeliveryCode, int expressDeliveryCompany, int userId)
         {
-            IList<Order> lstOrder = _orderRepository.GetOrder(orderNo, orderSource, dtStart, dtEnd, storeId, brandId,
+            IList<Order> lstOrder = _orderRepository.GetOrder(orderNo, orderSource, dtStart.Date, dtEnd.Date.AddDays(1), storeId, brandId,
                 status, paymentType,
                 outGoodsType, shippingContactPhone, expressDeliveryCode, expressDeliveryCompany);
 
@@ -41,6 +41,12 @@ namespace Intime.OPC.Service.Support
         {
 
             return _orderRemarkRepository.Create(comment);
+        }
+
+        public IList<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime)
+        {
+            var lstOrder = _orderRepository.GetOrderByOderNoTime(orderNo, starTime, endTime);
+            return Mapper.Map<Order, OrderDto>(lstOrder);
         }
 
         public IList<OPC_OrderComment> GetCommentByOderNo(string orderNo)

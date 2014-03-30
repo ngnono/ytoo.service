@@ -55,5 +55,14 @@ namespace Intime.OPC.Service
         /// <param name="comment">The comment.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool AddOrderComment(OPC_OrderComment comment);
+
+        /// <summary>
+        /// 根据时间、订单号获取订单
+        /// </summary>
+        /// <param name="orderNo">The order no.</param>
+        /// <param name="starTime">The star time.</param>
+        /// <param name="endTime">The end time.</param>
+        /// <returns>IList{OrderDto}.</returns>
+        IList<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime);
     }
 }
