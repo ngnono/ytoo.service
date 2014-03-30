@@ -77,7 +77,7 @@ namespace Intime.OPC.WebApi.Core
             catch (Exception ex)
             {
                 this.GetLog().Error(ex);
-                return InternalServerError();
+                return BadRequest(ex.Message);
             }
         }
 

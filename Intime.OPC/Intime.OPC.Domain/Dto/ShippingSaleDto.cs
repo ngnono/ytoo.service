@@ -8,6 +8,10 @@ namespace Intime.OPC.Domain.Dto
     public class ShippingSaleDto
     {
         /// <summary>
+        ///     销售单号
+        /// </summary>
+        public string SaleOrderNo { get; set; }
+        /// <summary>
         ///     发货单ID
         /// </summary>
         public int Id { get; set; }

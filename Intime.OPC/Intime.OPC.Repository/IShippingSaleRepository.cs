@@ -14,6 +14,6 @@ namespace Intime.OPC.Repository
 
         IList<OPC_ShippingSale> GetByShippingCode(string shippingCode);
 
-        IList<OPC_ShippingSale> Get(string shippingCode, DateTime startTime, DateTime endTime);
+        IList<OPC_ShippingSale> Get(string shippingCode, DateTime startTime, DateTime endTime, int shippingStatus);
     }
 }

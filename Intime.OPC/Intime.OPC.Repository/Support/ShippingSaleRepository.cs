@@ -19,10 +19,10 @@ namespace Intime.OPC.Repository.Support
             return Select(t => t.ShippingCode == shippingCode).ToList();
         }
 
-        public IList<OPC_ShippingSale> Get(string shippingCode, DateTime startTime, DateTime endTime)
+        public IList<OPC_ShippingSale> Get(string shippingCode, DateTime startTime, DateTime endTime,int shippingStatus)
         {
             Expression<Func<OPC_ShippingSale, bool>> filterExpression =
-                t => t.CreateDate >= startTime && t.CreateDate < endTime;
+                t => t.CreateDate >= startTime && t.CreateDate < endTime && t.ShippingStatus==shippingStatus;
             if (!string.IsNullOrWhiteSpace(shippingCode))
             {
                 filterExpression.And(t => t.ShippingCode.Contains(shippingCode));

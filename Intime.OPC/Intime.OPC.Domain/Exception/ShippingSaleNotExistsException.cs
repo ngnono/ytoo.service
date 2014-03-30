@@ -16,4 +16,15 @@ namespace Intime.OPC.Domain.Exception
 
         public string SaleOrderNo { get; private set; }
     }
+
+   public class ShippingSaleExistsException : System.Exception
+   {
+       public ShippingSaleExistsException(string saleOrderNo)
+           : base(saleOrderNo)
+       {
+           this.SaleOrderNo = saleOrderNo;
+       }
+
+       public string SaleOrderNo { get; private set; }
+   }
 }

@@ -77,7 +77,7 @@ namespace Intime.OPC.Repository.Support
                     query = query.And(t => t.ShippingVia == expressDeliveryCompany);
                 }
 
-                return db.Orders.Where(query).ToList();
+                return db.Orders.Where(query.Compile()).ToList();
             }
         }
 

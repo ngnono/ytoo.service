@@ -41,7 +41,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult WriteSaleRemark(OPC_SaleComment comment, [UserId] int userId)
+        public IHttpActionResult WriteSaleRemark([FromBody]OPC_SaleComment comment, [UserId] int userId)
         {
             return DoFunction(() =>
             {
@@ -62,7 +62,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult SetSaleOrderFinishPrintSale(IEnumerable<string> saleOrderNos, [UserId] int? userId)
+        public IHttpActionResult SetSaleOrderFinishPrintSale([FromBody]IEnumerable<string> saleOrderNos, [UserId] int? userId)
         {
             if (!userId.HasValue)
             {
@@ -95,7 +95,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult SetSaleOrderPrintSale(IEnumerable<string> saleOrderNos)
+        public IHttpActionResult SetSaleOrderPrintSale([FromBody]IEnumerable<string> saleOrderNos)
         {
             return base.DoFunction(() =>
             {
@@ -115,7 +115,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPut]
-        public IHttpActionResult SetSaleOrderPickUp(IEnumerable<string> saleOrderNos, [UserId] int? userId)
+        public IHttpActionResult SetSaleOrderPickUp([FromBody]IEnumerable<string> saleOrderNos, [UserId] int? userId)
         {
             if (!userId.HasValue)
             {
@@ -147,7 +147,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPut]
-        public IHttpActionResult SetSaleOrderShipInStorage(IEnumerable<string> saleOrderNos, [UserId] int? userId)
+        public IHttpActionResult SetSaleOrderShipInStorage([FromBody]IEnumerable<string> saleOrderNos, [UserId] int? userId)
         {
             if (!userId.HasValue)
             {
@@ -179,7 +179,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPut]
-        public IHttpActionResult SetSaleOrderPrintInvoice(IEnumerable<string> saleOrderNos, [UserId] int? userId)
+        public IHttpActionResult SetSaleOrderPrintInvoice([FromBody]IEnumerable<string> saleOrderNos, [UserId] int? userId)
         {
             if (!userId.HasValue)
             {
@@ -211,7 +211,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPut]
-        public IHttpActionResult SetSaleOrderPrintExpress(string shippingCode)
+        public IHttpActionResult SetSaleOrderPrintExpress([FromBody]string shippingCode)
         {
             IList<OPC_ShippingSale> lst = _shippingSaleService.GetByShippingCode(shippingCode);
             if (lst == null || lst.Count == 0)
@@ -225,6 +225,7 @@ namespace Intime.OPC.WebApi.Controllers
                 try
                 {
                     _saleService.PrintExpress(orderNo, userId);
+                    _shippingSaleService.PrintExpress(orderNo, userId);
                 }
                 catch (SaleOrderNotExistsException ex)
                 {
@@ -246,14 +247,15 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPut]
-        public IHttpActionResult SetSaleOrderShipped(IEnumerable<string> saleOrderNos)
+        public IHttpActionResult SetSaleOrderShipped([FromBody]IEnumerable<string> saleOrderNos)
         {
             return base.DoAction(() =>
             {
                 int userId = GetCurrentUserID();
-                foreach (string orderNo in saleOrderNos)
+                foreach (string saleOrderNo in saleOrderNos)
                 {
-                    _saleService.Shipped(orderNo, userId);
+                    _saleService.Shipped(saleOrderNo, userId);
+                    _shippingSaleService.Shipped(saleOrderNo,userId);
                 }
             }, "设置已发货状态失败！");
         }
@@ -265,7 +267,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult SetSaleOrderStockOut(IEnumerable<string> saleOrderNos, [UserId] int? userId)
+        public IHttpActionResult SetSaleOrderStockOut([FromBody] IEnumerable<string> saleOrderNos, [UserId] int? userId)
         {
             if (!userId.HasValue)
             {

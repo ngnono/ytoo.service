@@ -96,12 +96,12 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
-        ///     创建快递单
+        ///     创建发货单
         /// </summary>
         /// <param name="comment">The comment.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult CreateShippingSale(ShippingSaleCreateDto shippingSaleDto)
+        public IHttpActionResult CreateShippingSale([FromBody]ShippingSaleCreateDto shippingSaleDto)
         {
             return base.DoFunction(() =>
             {
@@ -119,7 +119,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="comment">The comment.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult AddShippingSaleComment(OPC_ShippingSaleComment comment)
+        public IHttpActionResult AddShippingSaleComment([FromBody]OPC_ShippingSaleComment comment)
         {
             return base.DoFunction(() =>
             {
@@ -145,16 +145,6 @@ namespace Intime.OPC.WebApi.Controllers
 
         #endregion
 
-        #region 销售单提货记录查询
-        /// <summary>
-        /// 查询已发货的数据
-        /// </summary>
-        /// <param name="orderCode">The order code.</param>
-        /// <param name="saleOrderNo">The sale order no.</param>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        /// <returns>IHttpActionResult.</returns>
-        
-        #endregion
+
     }
 }

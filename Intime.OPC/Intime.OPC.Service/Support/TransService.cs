@@ -97,12 +97,27 @@ namespace Intime.OPC.Service.Support
                 sale.SaleOrderNo = saleID;
                 sale.ShipViaId = shippingSaleDto.ShipViaID;
                 sale.ShippingCode = shippingSaleDto.ShippingCode;
-                sale.ShippingFee = (decimal)(shippingSaleDto.ShippingFee);
-                sale.ShippingStatus = EnumSaleOrderStatus.PrintExpress.AsID();
+                sale.ShippingFee = (decimal) (shippingSaleDto.ShippingFee);
+                sale.ShippingStatus = EnumSaleOrderStatus.PrintInvoice.AsID();
+                
 
-                bool bl=  _shippingSaleRepository.Create(sale);
+                //验证是否已经生成过发货单
+                var lst = _shippingSaleRepository.GetBySaleOrderNo(saleID);
 
-                _saleRepository.UpdateSatus(saleID, EnumSaleOrderStatus.PrintExpress, userId);
+                if (lst.Count > 0)
+                {
+                    throw new ShippingSaleExistsException(shippingSaleDto.ShippingCode);
+                }
+                //验证发货单号 是否重复
+                var e=  _shippingSaleRepository.GetByShippingCode(shippingSaleDto.ShippingCode);
+                if (e.Count>0)
+                {
+                    throw new ShippingSaleExistsException(shippingSaleDto.ShippingCode);
+                }
+
+
+                var bl = _shippingSaleRepository.Create(sale);
+               // _saleRepository.UpdateSatus(saleID, EnumSaleOrderStatus.PrintExpress, userId);
             }
 
             return true;
@@ -110,7 +125,7 @@ namespace Intime.OPC.Service.Support
 
         public IList<ShippingSaleDto> GetShippingSale(string shippingCode, DateTime startTime, DateTime endTime)
         {
-            var lst=  _shippingSaleRepository.Get(shippingCode, startTime.Date, endTime.AddDays(1));
+            var lst=  _shippingSaleRepository.Get(shippingCode, startTime.Date, endTime.AddDays(1),EnumSaleOrderStatus.PrintExpress.AsID());
             return Mapper.Map<OPC_ShippingSale, ShippingSaleDto>(lst);
         }
 
@@ -121,11 +136,7 @@ namespace Intime.OPC.Service.Support
             {
                 throw new ShippingSaleNotExistsException(shippingSaleNo);
             }
-            IList<OPC_Sale> lstSales=new List<OPC_Sale>();
-            foreach (var opcShippingSale in lst)
-            {
-                lstSales.Add(_saleRepository.GetBySaleNo(opcShippingSale.SaleOrderNo));
-            }
+            IList<OPC_Sale> lstSales= lst.Select(opcShippingSale => _saleRepository.GetBySaleNo(opcShippingSale.SaleOrderNo)).ToList();
 
             return Mapper.Map<OPC_Sale, SaleDto>(lstSales);
         }
