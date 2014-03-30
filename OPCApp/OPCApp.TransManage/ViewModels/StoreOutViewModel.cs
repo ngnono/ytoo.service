@@ -30,6 +30,13 @@ namespace OPCApp.TransManage.ViewModels
             set { SetProperty(ref _orderList, value); }
         }
 
+        public List<ShipVia> ShipViaList { get; set; }
+
+        public List<ShipVia> GetListShipVia()
+        {
+
+        }
+
         public StoreOutViewModel()
         {
             //初始化命令属性
