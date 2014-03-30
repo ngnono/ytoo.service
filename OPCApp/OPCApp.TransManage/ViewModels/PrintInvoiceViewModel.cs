@@ -150,7 +150,7 @@ namespace OPCApp.TransManage.ViewModels
         /*打印销售单*/
         public void CommandOnlyPrintExecute()
         {
-            if (SaleList == null)
+            if (SaleList == null || !SaleList.Any())
             {
                 MessageBox.Show("请勾选要打印的销售单", "提示");
                 return;
@@ -164,7 +164,7 @@ namespace OPCApp.TransManage.ViewModels
         /*完成销售单打印*/
         public void CommandFinishExecute()
         {
-            if (SaleList == null)
+            if (SaleList == null||!SaleList.Any())
             {
                 MessageBox.Show("请勾选要设置打印完成状态的销售单", "提示");
                 return;

@@ -47,9 +47,9 @@ namespace OPCApp.TransManage.ViewModels
 
         private void ShippSaleHandOver()
         {
-           if(ShipSaleList==null)return;
+            if (ShipSaleList == null) return;
             var shipSale = ShipSaleList.Where(e => e.IsSelected).ToList();
-            if (shipSale == null||shipSale.Count==0)
+            if (shipSale.Count==0)
             {
                 MessageBox.Show("请选择快递单", "提示");
                 return;
@@ -89,7 +89,6 @@ namespace OPCApp.TransManage.ViewModels
 
         public ShipVia ShipVia { get; set; }
         public List<ShipVia> ShipViaList { get; set; }
-        public DelegateCommand CommandDbClick { get; set; }
         public DelegateCommand CommandShippSaleHandOver { get; set; }
         public DelegateCommand CommandSaveShip { get; set; }
         public DelegateCommand CommandPrintInvoice { get; set; }
@@ -100,7 +99,7 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandSearchOrderBySale { get; set; }
         public DelegateCommand CommandSetShippingRemark { get; set; }
         public DelegateCommand CommandGetListShipSale { get; set; }
-        public DelegateCommand CommandOnlyPrint { get; set; }
+        public DelegateCommand CommandOnlyPrint { get; set; }/*打印待加的命令*/
         public DelegateCommand CommandPrintView { get; set; }
         public DelegateCommand CommandGetDownShip { get; set; }
 
@@ -147,7 +146,7 @@ namespace OPCApp.TransManage.ViewModels
         {
             if (SaleList == null) return;
             List<OPC_Sale> sale = SaleList.Where(e => e.IsSelected).ToList();
-            if (sale == null || sale.Count == 0)
+            if (sale.Count == 0)
             {
                 MessageBox.Show("请勾选销售单", "提示");
                 return;
@@ -244,7 +243,7 @@ namespace OPCApp.TransManage.ViewModels
         //打印发货单
         public void PrintInvoice()
         {
-            if (SaleList == null || SaleList.Count() == 0)
+            if (SaleList == null || !SaleList.Any())
             {
                 MessageBox.Show("请勾选要打应销售单", "提示");
                 return;
@@ -294,7 +293,7 @@ namespace OPCApp.TransManage.ViewModels
         public void GetDownShip()
         {
             if (ShipSaleList == null) return;
-            OPC_ShippingSale saleCur = ShipSaleList.Where(n => n.IsSelected).FirstOrDefault();
+            OPC_ShippingSale saleCur = ShipSaleList.FirstOrDefault(n => n.IsSelected);
             if (saleCur == null)
             {
                 SaleList = new List<OPC_Sale>();
