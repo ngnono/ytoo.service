@@ -449,6 +449,8 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Width="130" Header="单号" Visibility="Hidden" Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Width="130" Header="发货单号" Binding="{Binding GoodsOutCode}" />
                             <DataGridTextColumn Width="200" Header="快递公司名称" Binding="{Binding ShipCompanyName}" />
                             <DataGridTextColumn Header="发货状态" Binding="{Binding ShippingStatus}" />

@@ -51,10 +51,22 @@ namespace OPCApp.TransManage.ViewModels
             var shipSale = ShipSaleList.Where(e => e.IsSelected).ToList();
             if (shipSale == null||shipSale.Count==0)
             {
-                MessageBox.Show("请勾选快递单", "提示");
+                MessageBox.Show("请选择快递单", "提示");
+                return;
             }
-            var shipNum = shipSale.Select(e => e.GoodsOutCode).ToList();
+            var shipNum = shipSale.Select(e => e.SaleOrderNo).ToList();
             var isSuccess = AppEx.Container.GetInstance<ITransService>().SetSaleOrderShipped(shipNum);
+            if (isSuccess)
+            {
+                MessageBox.Show("完成快递发货交接成功", "提示");
+                return;
+            }
+            else
+            {
+                this.ClearList();
+
+            }
+
         }
 
         public OPC_ShippingSale ShipSaleSelected
@@ -152,6 +164,7 @@ namespace OPCApp.TransManage.ViewModels
             else
             {
                 ShipSaleList = new List<OPC_ShippingSale>();
+                GetShipSaleList();
             }
         }
 
@@ -193,7 +206,7 @@ namespace OPCApp.TransManage.ViewModels
         //清空所有默认列表值
         public void ClearList()
         {
-            ShipViaList = new List<ShipVia>();
+            ShipSaleList = new List<OPC_ShippingSale>();
             SaleList = new List<OPC_Sale>();
             OrderList = new List<Order>();
             InvoiceDetail4List = new List<OPC_SaleDetail>();
