@@ -30,7 +30,7 @@ namespace Intime.OPC.Service
 
         private static string GetSaleOrderStatusName(int status)
         {
-            var orderStatus = (EnumSaleOrderStatus) status;
+            var orderStatus = (EnumSaleOrderStatus)status;
             return orderStatus.GetDescription();
         }
 
@@ -40,7 +40,7 @@ namespace Intime.OPC.Service
             {
                 return "";
             }
-            var orderStatus = (EnumCashStatus) status.Value;
+            var orderStatus = (EnumCashStatus)status.Value;
             return orderStatus.GetDescription();
         }
 
@@ -67,7 +67,7 @@ namespace Intime.OPC.Service
             t.ReceiptHead = o.InvoiceSubject;
             t.ShippingNo = o.ShippingNo;
 
-            var orderStatus = (EnumOderStatus) o.Status;
+            var orderStatus = (EnumOderStatus)o.Status;
             t.Status = orderStatus.GetDescription();
 
             t.TotalAmount = o.TotalAmount;
