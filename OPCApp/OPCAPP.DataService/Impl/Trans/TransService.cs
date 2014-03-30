@@ -128,13 +128,13 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                IList<OPC_ShippingSale> lst = RestClient.Get<OPC_ShippingSale>("trans/GetShippingSaleByOrderNo",
+               var shipSale = RestClient.GetSingle<OPC_ShippingSale>("trans/GetShippingSaleByOrderNo",
                     string.Format("saleNo={0}", saleOrderNo));
-                return new PageResult<OPC_ShippingSale>(lst, 100);
+               return new PageResult<OPC_ShippingSale>(new List<OPC_ShippingSale>(){shipSale}, 100);
             }
             catch (Exception ex)
             {
-                return null;
+                return new PageResult<OPC_ShippingSale>(new List<OPC_ShippingSale>(),0);
             }
         }
         public PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo)
