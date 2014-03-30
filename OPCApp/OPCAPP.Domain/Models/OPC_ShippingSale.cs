@@ -4,6 +4,8 @@ namespace  OPCApp.Domain.Models
 {
     public class OPC_ShippingSale
     {
+        public bool IsSelected { get; set; }
+
         /// <summary>
         ///     ·¢»õµ¥ID
         /// </summary>

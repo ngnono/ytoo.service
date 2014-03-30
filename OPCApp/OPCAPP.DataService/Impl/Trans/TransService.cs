@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using  OPCApp.Domain.Models;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
@@ -47,6 +48,21 @@ namespace OPCApp.DataService.Impl.Trans
                 return null;
             }
         }
+
+        public PageResult<OPC_ShippingSale> GetListShip(string filter)
+        {
+            try
+            {
+                var shipSales = RestClient.Get<OPC_ShippingSale>("trans/GetShippingSale", filter);
+                return new PageResult<OPC_ShippingSale>(shipSales, shipSales.Count);
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+        }
+
         /*根据销售单拿到订单*/
         public PageResult<Order> SearchOrderBySale(string orderNo)
         {
@@ -108,7 +124,19 @@ namespace OPCApp.DataService.Impl.Trans
             }
         }
 
-
+        public PageResult<OPC_ShippingSale> GetListShipSaleBySale(string saleOrderNo)
+        {
+            try
+            {
+                IList<OPC_ShippingSale> lst = RestClient.Get<OPC_ShippingSale>("trans/GetShippingSaleByOrderNo",
+                    string.Format("saleNo={0}", saleOrderNo));
+                return new PageResult<OPC_ShippingSale>(lst, 100);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         public PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo)
         {
             try
@@ -137,11 +165,11 @@ namespace OPCApp.DataService.Impl.Trans
         }
 
 
-        public bool SetStatusPrintExpress(IList<string> saleOrderNoList)
+        public bool SetStatusPrintExpress(string shipCode)
         {
             try
             {
-                return RestClient.Put("sale/SetSaleOrderPrintExpress", saleOrderNoList);
+                return RestClient.Put("sale/SetSaleOrderPrintExpress", shipCode);
             }
             catch (Exception ex)
             {
@@ -198,6 +226,19 @@ namespace OPCApp.DataService.Impl.Trans
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+       public List<OPC_Sale> SelectSaleByShip(string shipCode)
+        {
+            try
+            {
+            List<OPC_Sale> lst = RestClient.Get<OPC_Sale>("trans/GetSaleByShippingSaleNo",
+                 string.Format("shippingSaleNo={0}", shipCode)).ToList();
+            return lst;
+            }
+            catch (Exception ex)
+            {
+                return new List<OPC_Sale>();
             }
         }
     }
