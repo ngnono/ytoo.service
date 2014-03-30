@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using OPCApp.DataService.Interface.Trans;
+using OPCAPP.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.TransManage.ViewModels
 {
     [Export("SaleOrderPickupViewModel")]
-    public class SaleOrderPickupViewModel : StoreInViewModel
+    public class SaleOrderPickupViewModel : PrintInvoiceViewModel
     {
         public SaleOrderPickupViewModel() : base()
         {
+            SearchSaleStatus = EnumSearchSaleStatus.ShippedSearchStatus;
         }
 
         protected override void Refresh()

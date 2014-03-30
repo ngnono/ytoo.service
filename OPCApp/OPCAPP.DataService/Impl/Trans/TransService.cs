@@ -34,6 +34,9 @@ namespace OPCApp.DataService.Impl.Trans
                 case EnumSearchSaleStatus.PrintExpressSearchStatus:
                     url = "sale/GetSalePrintExpress";
                     break;
+                case EnumSearchSaleStatus.ShippedSearchStatus:
+                    url = "sale/GetSalePickup";
+                    break;
             }
             try
             {
