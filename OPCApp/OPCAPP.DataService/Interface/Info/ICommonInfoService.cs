@@ -10,5 +10,7 @@ namespace OPCApp.DataService.Interface.Trans
     public interface ICommonInfo
   {
        List<ShipVia> GetShipViaList();
+        IList<Store> GetStoreList();
+        IList<Brand> GetBrandList();
   }
 }

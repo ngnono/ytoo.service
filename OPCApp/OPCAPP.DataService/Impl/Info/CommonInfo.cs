@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OPCApp.DataService.Common;
-using OPCApp.DataService.Interface;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.Domain.Models;
-using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Impl.Info
 {
-     [Export(typeof(ICommonInfo))]
+    [Export(typeof (ICommonInfo))]
     public class CommonInfo : ICommonInfo
     {
-         /*物流公司*/
-        public List<Domain.Models.ShipVia> GetShipViaList()
+        /*物流公司*/
+
+        #region ICommonInfo Members
+
+        public List<ShipVia> GetShipViaList()
         {
             try
             {
@@ -27,5 +25,31 @@ namespace OPCApp.DataService.Impl.Info
                 return null;
             }
         }
+
+        public IList<Store> GetStoreList()
+        {
+            try
+            {
+                return RestClient.Get<Store>("store/getall");
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public IList<Brand> GetBrandList()
+        {
+            try
+            {
+                return RestClient.Get<Brand>("brand/getall");
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        #endregion
     }
 }
