@@ -73,6 +73,7 @@
     <Compile Include="Exception\OrderNoIsNullException.cs" />
     <Compile Include="Exception\OrderNotExistsException.cs" />
     <Compile Include="Exception\SaleOrderNotExistsException.cs" />
+    <Compile Include="Exception\ShippingSaleNotExistsException.cs" />
     <Compile Include="Exception\UserIdConverException.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\Mapping\BrandMap.cs" />

@@ -40,6 +40,15 @@ namespace Intime.OPC.Repository
         bool UpdateSatus(IEnumerable<string> saleNos, EnumSaleOrderStatus saleOrderStatus, int userID);
 
         /// <summary>
+        ///     Updates the satus.
+        /// </summary>
+        /// <param name="saleNos">The sale nos.</param>
+        /// <param name="saleOrderStatus">The sale order status.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool UpdateSatus(string saleNo, EnumSaleOrderStatus saleOrderStatus, int userID);
+
+        /// <summary>
         ///     Gets the by sale no.
         /// </summary>
         /// <param name="saleNo">The sale no.</param>

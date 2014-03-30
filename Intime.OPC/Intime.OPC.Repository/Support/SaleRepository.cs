@@ -41,6 +41,24 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        public bool UpdateSatus(string saleNo, EnumSaleOrderStatus saleOrderStatus, int userID)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+              
+                OPC_Sale sale = db.OPC_Sale.FirstOrDefault(t => t.SaleOrderNo == saleNo);
+                if (sale != null)
+                {
+                    sale.UpdatedDate = DateTime.Now;
+                    sale.UpdatedUser = userID;
+                    sale.Status = (int)saleOrderStatus;
+                }
+              
+                db.SaveChanges();
+                return true;
+            }
+        }
+
         /// <summary>
         ///     Gets the by sale no.
         /// </summary>

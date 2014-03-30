@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service.Map;
@@ -31,6 +32,10 @@ namespace Intime.OPC.Service.Support
         public OrderDto GetOrderByOrderNo(string orderNo)
         {
             var e = _orderRepository.GetOrderByOrderNo(orderNo);
+            if (e==null)
+            {
+                throw new OrderNotExistsException(orderNo);
+            }
             return  Mapper.Map<Order, OrderDto>(e);
         }
 

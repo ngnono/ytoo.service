@@ -44,6 +44,8 @@ namespace Intime.OPC.Repository
 
         public DbSet<ShipVia> ShipVias { get; set; }
 
+        public DbSet<OPC_ShippingSale> ShippingSales { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());

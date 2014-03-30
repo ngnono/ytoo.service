@@ -46,5 +46,16 @@ namespace Intime.OPC.Service
         /// <param name="shippingSaleDto">The shipping sale dto.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool CreateShippingSale(int userId, ShippingSaleCreateDto shippingSaleDto);
+
+        /// <summary>
+        /// 查询快递单
+        /// </summary>
+        /// <param name="shippingCode">The shipping code.</param>
+        /// <param name="startTime">The start time.</param>
+        /// <param name="endTime">The end time.</param>
+        /// <returns>IList{ShippingSaleDto}.</returns>
+        IList<ShippingSaleDto> GetShippingSale(string shippingCode, System.DateTime startTime, System.DateTime endTime);
+
+        IList<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo);
     }
 }

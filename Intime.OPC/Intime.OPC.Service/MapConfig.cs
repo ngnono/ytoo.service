@@ -1,8 +1,8 @@
 ﻿using System;
+using AutoMapper;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
-using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service
 {
@@ -10,22 +10,26 @@ namespace Intime.OPC.Service
     {
         public static void Config()
         {
-            //Mapper.CreateMap<OPC_Sale, SaleDto>();
-            var map1 = AutoMapper.Mapper.CreateMap<Order, OrderDto>();
-            map1.ConvertUsing((t) => converDto(t));
+            IMappingExpression<OPC_ShippingSale, ShippingSaleDto> map3 =
+                Mapper.CreateMap<OPC_ShippingSale, ShippingSaleDto>();
+            map3.ForMember(t => t.ExpressCode, o => o.MapFrom(t1 => t1.ShippingCode));
 
-            var map = AutoMapper.Mapper.CreateMap<OPC_Sale, SaleDto>();
+            IMappingExpression<Order, OrderDto> map1 = Mapper.CreateMap<Order, OrderDto>();
+            map1.ConvertUsing(t => converDto(t));
+
+            IMappingExpression<OPC_Sale, SaleDto> map = Mapper.CreateMap<OPC_Sale, SaleDto>();
             map.ForMember(d => d.StatusName, opt => opt.MapFrom(t => GetSaleOrderStatusName(t.Status)));
             map.ForMember(d => d.CashStatusName, opt => opt.MapFrom(t => GetCashStatusName(t.CashStatus)));
 
-            var map2 = AutoMapper.Mapper.CreateMap<OPC_SaleDetail, SaleDetailDto>();
+            IMappingExpression<OPC_SaleDetail, SaleDetailDto> map2 = Mapper.CreateMap<OPC_SaleDetail, SaleDetailDto>();
+
             //todo 销售单明细 匹配
         }
 
         private static string GetSaleOrderStatusName(int status)
         {
-            var orderStatus = (EnumSaleOrderStatus)status;
-            return  orderStatus.GetDescription();
+            var orderStatus = (EnumSaleOrderStatus) status;
+            return orderStatus.GetDescription();
         }
 
         private static string GetCashStatusName(int? status)
@@ -34,7 +38,7 @@ namespace Intime.OPC.Service
             {
                 return "";
             }
-            var orderStatus = (EnumCashStatus)status.Value;
+            var orderStatus = (EnumCashStatus) status.Value;
             return orderStatus.GetDescription();
         }
 
