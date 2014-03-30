@@ -85,7 +85,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      Command="{Binding Path=DataContext.CommondSearchOrderBySale,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                      Command="{Binding Path=DataContext.CommandSearchOrderBySale,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
                                       VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -164,12 +164,12 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="200" />
+                        <RowDefinition Height="100" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="150" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="100" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
@@ -207,15 +207,15 @@
                     </StackPanel>
                     <StackPanel Grid.Row="1" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="   购买时间：" />
+                            <TextBlock Text="购买时间" Margin="0 5" />
                             <DatePicker Width="150" Foreground="Blue"
                                         SelectedDate="{Binding Invoice4Get.StartSellDate}" />
-                            <TextBlock Text="  至：" />
+                            <TextBlock Text="至" Margin="0 5" />
                             <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}" />
-                            <TextBlock Text="  订单号" />
+                            <TextBlock Text="订单号" Margin="0 5" />
                             <TextBox Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding Invoice4Get.OrderNo}" />
-                            <TextBlock Text="  销售单" />
+                            <TextBlock Text="销售单" Margin="0 5" />
                             <TextBox Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding Invoice4Get.SaleOrderNo}" />
                            
@@ -306,15 +306,15 @@
                     </DataGrid>
                     <StackPanel Grid.Row="6" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="快递公司" />
-                            <ComboBox ItemsSource="{Binding ShipViaList}" Width="80" DisplayMemberPath="Name" SelectedValuePath="Id"   SelectedItem="ShipVia"/>
-                            <TextBlock Text="实际运费" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
+                            <TextBlock Text="快递公司" Margin="0 5" />
+                            <ComboBox Height="25" ItemsSource="{Binding ShipViaList}" Width="130" DisplayMemberPath="Name" SelectedValuePath="Id"   SelectedItem="ShipVia"/>
+                            <TextBlock Text="实际运费" Margin="0 5" />
+                            <TextBox  Height="25"  Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingSaleCreateDto.ShippingFee}" />
-                            <TextBlock Text="快递单号" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
+                            <TextBlock  Text="快递单号" Margin="0 5" />
+                            <TextBox  Height="25"  Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingSaleCreateDto.ShippingCode}" />
-                            <Button Content="生成快递单" Width="60" Command="{Binding CommandSaveShip}" />
+                            <Button Content="生成快递单" Margin="0 5" Width="60" Command="{Binding CommandSaveShip}" />
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="7">

@@ -99,6 +99,8 @@ namespace OPCApp.TransManage.ViewModels
             Refresh();
         }
 
+       
+
         public void Refresh()
         {
             string salesfilter = string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}",
@@ -110,6 +112,15 @@ namespace OPCApp.TransManage.ViewModels
             if (InvoiceDetail4List != null) InvoiceDetail4List=new List<OPC_SaleDetail>();
         }
 
+        public virtual void ClearOtherList()
+        {
+
+        }
+        public virtual void RefreshOther(OPC_Sale SaleOrderNo)
+        {
+
+        }
+       
         public  void CommandGetDownExecute()
         {
             if (SaleList == null)return;
@@ -118,9 +129,11 @@ namespace OPCApp.TransManage.ViewModels
             {
                 if (invoiceDetail4List == null) return;
                 invoiceDetail4List.ToList().Clear();
+                ClearOtherList();
                 return;
             }
             InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleCur.SaleOrderNo).Result.ToList();
+            RefreshOther(saleCur);
         }
 
         public void CommandViewAndPrintExecute()

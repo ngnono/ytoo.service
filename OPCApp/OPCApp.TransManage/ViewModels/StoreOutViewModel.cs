@@ -18,14 +18,14 @@ namespace OPCApp.TransManage.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class StoreOutViewModel : PrintInvoiceViewModel
     {
-        private IEnumerable<OPC_ShippingSale> _shipList;
-        public IEnumerable<OPC_ShippingSale> ShipSaleList
+        private List<OPC_ShippingSale> _shipList;
+        public List<OPC_ShippingSale> ShipSaleList
         {
             get { return _shipList; }
             set { SetProperty(ref _shipList, value); }
         }
-        private IEnumerable<Order> _orderList;
-        public IEnumerable<Order> OrderList
+        private List<Order> _orderList;
+        public List<Order> OrderList
         {
             get { return _orderList; }
             set { SetProperty(ref _orderList, value); }
@@ -42,10 +42,12 @@ namespace OPCApp.TransManage.ViewModels
             CommandPrintInvoice = new DelegateCommand(PrintInvoice);
             CommandPrintExpress = new DelegateCommand(PrintExpress);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
-            CommendSearchOrderBySale=new DelegateCommand(SearchOrderBySale);
+            CommandSearchOrderBySale = new DelegateCommand(SearchOrderBySale);
             CommandSetShippingRemark = new DelegateCommand(SetShippingRemark);
             CommandSaveShip = new DelegateCommand(SaveShip);
             ShipViaList= AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
+            ShippingSaleCreateDto = new ShippingSaleCreateDto();
+            ShipVia = new ShipVia();
         }
 
       
@@ -71,8 +73,17 @@ namespace OPCApp.TransManage.ViewModels
         //发货单
         public void SaveShip()
         {
-
-
+            var sale = SaleList.Where(e => e.IsSelected).ToList();
+            if (sale == null||sale.Count==0)
+            {
+                MessageBox.Show("请勾选销售单", "提示");
+                return;
+            }
+            shippingSaleCreateDto.SaleOrderIDs = sale.Select(e => e.SaleOrderNo).ToList();
+            shippingSaleCreateDto.ShipViaID = ShipVia.Id;
+            shippingSaleCreateDto.ShipViaName = ShipVia.Name;
+            var isSuccess=AppEx.Container.GetInstance<ITransService>().SaveShip(ShippingSaleCreateDto);
+            MessageBox.Show(isSuccess ? "生成发货单成功" : "生成发货单失败", "提示");
         }
 
         public DelegateCommand CommandSaveShip { get; set; }
@@ -80,7 +91,7 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandPrintExpress { get; set; }
         public DelegateCommand CommandSetOrderRemark { get; set; }
         public DelegateCommand<int?> CommandSelectionChanged { get; set; }
-        public DelegateCommand CommendSearchOrderBySale { get; set; }
+        public DelegateCommand CommandSearchOrderBySale { get; set; }
         public DelegateCommand CommandSetShippingRemark { get; set; }
         public int IsTabIndex { get; set; }
 
@@ -89,7 +100,7 @@ namespace OPCApp.TransManage.ViewModels
             var sale = SaleList.FirstOrDefault(e => e.IsSelected);
             if (sale == null) return;
             PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
-            OrderList =re==null?new List<Order>():re.Result;
+            OrderList =re==null?new List<Order>():re.Result.ToList();
         }
 
         public void SetOrderRemark()
@@ -98,6 +109,16 @@ namespace OPCApp.TransManage.ViewModels
             string id = Invoice4Remark.SaleOrderNo;
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
             remarkWin.ShowRemarkWin(id,EnumSetRemarkType.SetOrderRemark);//3填写的是订单
+        }
+
+        public override void RefreshOther(OPC_Sale sale)
+        {
+            PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
+            OrderList = re == null ? new List<Order>() : re.Result.ToList();
+        }
+        public override void ClearOtherList()
+        {
+            OrderList = new List<Order>();
         }
         //有问题 所以改为下面这种方式
         //public void SelectionChanged(int? i)
@@ -139,6 +160,7 @@ namespace OPCApp.TransManage.ViewModels
             bool bFalg = ts.SetStatusPrintInvoice(selectSaleIds);
             MessageBox.Show(bFalg ? "打印发货单成功" : "打印发货单失败", "提示");
             Refresh();
+            OrderList = new List<Order>();
         }
 
         public void PrintExpress()
