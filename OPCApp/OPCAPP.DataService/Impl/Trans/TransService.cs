@@ -6,6 +6,7 @@ using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
 using OPCAPP.Domain.Enums;
 using OPCApp.Infrastructure;
+using OPCApp.Domain.Dto;
 
 namespace OPCApp.DataService.Impl.Trans
 {
@@ -186,25 +187,13 @@ namespace OPCApp.DataService.Impl.Trans
         }
 
 
-        public PageResult<ShipVia> GetShipViaAll()
-        {
-            try
-            {
-                var list= RestClient.Get<ShipVia>("shipVia/Getall","");
-                return new PageResult<ShipVia>(list, 100);
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
 
-        public bool SaveShip(int shipVia, double real, double shipNum, IList<string> saleOrderNoList)
+
+        public bool SaveShip(ShippingSaleCreateDto dto)
         {
             try
             {
-                var list = RestClient.Put("shipVia/Getall",new {});
-                return true;
+                return RestClient.Post("trans/CreateShippingSale", dto);
             }
             catch (Exception ex)
             {

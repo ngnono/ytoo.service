@@ -307,14 +307,14 @@
                     <StackPanel Grid.Row="6" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="快递公司" />
-                            <ComboBox ItemsSource="{Binding ShipViaList}" SelectedValue=""/>
+                            <ComboBox ItemsSource="{Binding ShipViaList}" Width="80" DisplayMemberPath="Name" SelectedValuePath="Id"   SelectedItem="ShipVia"/>
                             <TextBlock Text="实际运费" />
                             <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding Invoice4Get.OrderNo}" />
+                                     Text="{Binding ShippingSaleCreateDto.ShippingFee}" />
                             <TextBlock Text="快递单号" />
                             <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding Invoice4Get.SaleOrderNo}" />
-                            <Button Content="保存" Width="60" Command="{Binding CommandSaveShip}" />
+                                     Text="{Binding ShippingSaleCreateDto.ShippingCode}" />
+                            <Button Content="生成快递单" Width="60" Command="{Binding CommandSaveShip}" />
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="7">

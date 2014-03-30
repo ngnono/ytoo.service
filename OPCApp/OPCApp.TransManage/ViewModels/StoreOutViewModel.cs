@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface.Trans;
+using OPCApp.Domain.Dto;
 using OPCAPP.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -18,7 +19,7 @@ namespace OPCApp.TransManage.ViewModels
     public class StoreOutViewModel : PrintInvoiceViewModel
     {
         private IEnumerable<OPC_ShippingSale> _shipList;
-        public IEnumerable<OPC_ShippingSale> ShipList
+        public IEnumerable<OPC_ShippingSale> ShipSaleList
         {
             get { return _shipList; }
             set { SetProperty(ref _shipList, value); }
@@ -30,12 +31,8 @@ namespace OPCApp.TransManage.ViewModels
             set { SetProperty(ref _orderList, value); }
         }
 
+        public ShipVia ShipVia { get; set; }
         public List<ShipVia> ShipViaList { get; set; }
-
-        public List<ShipVia> GetListShipVia()
-        {
-
-        }
 
         public StoreOutViewModel()
         {
@@ -45,18 +42,36 @@ namespace OPCApp.TransManage.ViewModels
             CommandPrintInvoice = new DelegateCommand(PrintInvoice);
             CommandPrintExpress = new DelegateCommand(PrintExpress);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
-            CommondSearchOrderBySale=new DelegateCommand(SearchOrderBySale);
+            CommendSearchOrderBySale=new DelegateCommand(SearchOrderBySale);
             CommandSetShippingRemark = new DelegateCommand(SetShippingRemark);
             CommandSaveShip = new DelegateCommand(SaveShip);
+            ShipViaList= AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
         }
+
+      
+        //界面查询条件
+        private ShippingSaleCreateDto shippingSaleCreateDto;
+
+        public ShippingSaleCreateDto ShippingSaleCreateDto
+        {
+            get { return shippingSaleCreateDto; }
+            set { SetProperty(ref shippingSaleCreateDto, value); }
+        }
+
         //发货单备注
         private void SetShippingRemark()
         {
-            throw new System.NotImplementedException();
+            //被选择的对象
+            string id = Invoice4Remark.SaleOrderNo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetShipSaleRemark);//4填写的是订单
         }
+
+        /*生成*/
         //发货单
         public void SaveShip()
         {
+
 
         }
 
@@ -65,7 +80,7 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandPrintExpress { get; set; }
         public DelegateCommand CommandSetOrderRemark { get; set; }
         public DelegateCommand<int?> CommandSelectionChanged { get; set; }
-        public DelegateCommand CommondSearchOrderBySale { get; set; }
+        public DelegateCommand CommendSearchOrderBySale { get; set; }
         public DelegateCommand CommandSetShippingRemark { get; set; }
         public int IsTabIndex { get; set; }
 

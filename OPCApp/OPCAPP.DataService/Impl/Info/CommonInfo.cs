@@ -15,6 +15,7 @@ namespace OPCApp.DataService.Impl.Info
      [Export(typeof(ICommonInfo))]
     public class CommonInfo : ICommonInfo
     {
+         /*物流公司*/
         public List<Domain.Models.ShipVia> GetShipViaList()
         {
             try

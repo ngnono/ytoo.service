@@ -106,13 +106,13 @@ namespace OPCApp.DataService.Impl.Trans
         #endregion
 
       
-        public PageResult<OPC_SaleComment> GetOrderRemark(string orderId)
+        public PageResult<OPC_OrderComment> GetOrderRemark(string orderId)
         {
             try
             {
-                IList<OPC_SaleComment> lst = RestClient.Get<OPC_SaleComment>("order/GetCommentByOderNo",
+                var lst = RestClient.Get<OPC_OrderComment>("order/GetCommentByOderNo",
                     orderId);
-                return new PageResult<OPC_SaleComment>(lst, lst.Count);
+                return new PageResult<OPC_OrderComment>(lst, lst.Count);
             }
             catch (Exception ex)
             {

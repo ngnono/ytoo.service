@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using OPCApp.Domain.Dto;
 using  OPCApp.Domain.Models;
 using OPCAPP.Domain.Enums;
 using OPCApp.Infrastructure;
@@ -17,8 +19,7 @@ namespace OPCApp.DataService.Interface.Trans
         PageResult<Order> SearchOrderBySale(string saleOrder);
         PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo);
 
-        PageResult<ShipVia> GetShipViaAll();
-        bool SaveShip(int shipVia, double real, double shipNum, IList<string> saleOrderNoList);
+        bool SaveShip(ShippingSaleCreateDto dto);
 
     }
 }
