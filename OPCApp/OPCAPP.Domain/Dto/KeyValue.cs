@@ -6,29 +6,34 @@ using System.Threading.Tasks;
 
 namespace OPCAPP.Domain.Dto
 {
-    public class KeyValue<TKey>:IEqualityComparer<KeyValue<TKey>>
+    public class KeyValue<TKey>
     {
+        public KeyValue()
+        {
+        }
+
+        public KeyValue(TKey key,string value)
+        {
+            this.Key = key;
+            this.Value = value;
+        }
+
         public TKey Key { get; set; }
 
         public string Value { get; set; }
 
-        public bool Equals(KeyValue<TKey> x, KeyValue<TKey> y)
-        {
-            if (x.Key.Equals(y.Key) && x.Value==y.Value)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public int GetHashCode(KeyValue<TKey> obj)
-        {
-            return string.Format("{0}_{1}", obj.Key.ToString(), obj.Value).GetHashCode();
-        }
+      
     }
 
 
-    public class KeyValue : KeyValue<int>
+    public class KeyValue :KeyValue<int>
     {
+        public KeyValue() : base()
+        {
+        }
+
+        public KeyValue(int key, string value) : base(key, value)
+        {
+        }
     }
 }
