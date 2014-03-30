@@ -26,7 +26,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void CommandSoldOutExecute()
         {
-            if (SaleList == null||!SaleList.Any())
+            if (SaleList == null || !SaleList.Any())
             {
                 MessageBox.Show("请勾选要设置缺货状态的销售单", "提示");
                 return;
@@ -40,7 +40,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void CommandStoreInSureExecute()
         {
-            if (SaleList == null||!SaleList.Any())
+            if (SaleList == null || !SaleList.Any())
             {
                 MessageBox.Show("请勾选要设置入库的销售单", "提示");
                 return;

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using  OPCApp.Domain.Models;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
+using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Impl.Trans

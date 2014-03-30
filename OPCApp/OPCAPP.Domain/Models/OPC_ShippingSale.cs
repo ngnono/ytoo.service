@@ -1,6 +1,6 @@
 using System;
 
-namespace  OPCApp.Domain.Models
+namespace OPCApp.Domain.Models
 {
     public class OPC_ShippingSale
     {
@@ -10,9 +10,10 @@ namespace  OPCApp.Domain.Models
         ///     发货单ID
         /// </summary>
         public int Id { get; set; }
+
         public string SaleOrderNo { get; set; }
 
-        ///     发货单号
+        /// 发货单号
         /// </summary>
         public string GoodsOutCode { get; set; }
 
@@ -60,29 +61,33 @@ namespace  OPCApp.Domain.Models
         ///     快递员
         /// </summary>
         public string ShipManName { get; set; }
+
         /// <summary>
-        /// 打印状态
+        ///     打印状态
         /// </summary>
         public string PrintStatus { get; set; }
+
         /// <summary>
-        /// 邮编
+        ///     邮编
         /// </summary>
         public string ShippingZipCode { get; set; }
+
         /// <summary>
-        /// 配送方式
+        ///     配送方式
         /// </summary>
         /// <value>The shipping method.</value>
         public string ShippingMethod { get; set; }
+
         /// <summary>
-        /// 支付快递公司快递费
+        ///     支付快递公司快递费
         /// </summary>
         /// <value>The express fee.</value>
         public double ShipViaExpressFee { get; set; }
+
         /// <summary>
-        /// 快递费
+        ///     快递费
         /// </summary>
         /// <value>The express fee.</value>
         public double ExpressFee { get; set; }
-
     }
 }

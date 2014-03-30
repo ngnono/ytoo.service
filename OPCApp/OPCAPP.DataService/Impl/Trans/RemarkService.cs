@@ -105,12 +105,11 @@ namespace OPCApp.DataService.Impl.Trans
 
         #endregion
 
-      
         public PageResult<OPC_OrderComment> GetOrderRemark(string orderId)
         {
             try
             {
-                var lst = RestClient.Get<OPC_OrderComment>("order/GetCommentByOderNo",
+                IList<OPC_OrderComment> lst = RestClient.Get<OPC_OrderComment>("order/GetCommentByOderNo",
                     orderId);
                 return new PageResult<OPC_OrderComment>(lst, lst.Count);
             }
@@ -135,11 +134,11 @@ namespace OPCApp.DataService.Impl.Trans
 
         public PageResult<OPC_ShipComment> GetShipRemark(string shipId)
         {
-
             try
             {
-                IList<OPC_ShipComment> lst = RestClient.Get<OPC_ShipComment>("trans/GetShippingSaleCommentByShippingSaleNo",
-                    shipId);
+                IList<OPC_ShipComment> lst =
+                    RestClient.Get<OPC_ShipComment>("trans/GetShippingSaleCommentByShippingSaleNo",
+                        shipId);
                 return new PageResult<OPC_ShipComment>(lst, lst.Count);
             }
             catch (Exception ex)

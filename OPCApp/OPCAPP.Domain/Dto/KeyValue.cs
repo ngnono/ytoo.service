@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OPCAPP.Domain.Dto
+﻿namespace OPCAPP.Domain.Dto
 {
     public class KeyValue<TKey>
     {
@@ -12,23 +6,21 @@ namespace OPCAPP.Domain.Dto
         {
         }
 
-        public KeyValue(TKey key,string value)
+        public KeyValue(TKey key, string value)
         {
-            this.Key = key;
-            this.Value = value;
+            Key = key;
+            Value = value;
         }
 
         public TKey Key { get; set; }
 
         public string Value { get; set; }
-
-      
     }
 
 
-    public class KeyValue :KeyValue<int>
+    public class KeyValue : KeyValue<int>
     {
-        public KeyValue() : base()
+        public KeyValue()
         {
         }
 

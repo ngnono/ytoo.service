@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using OPCApp.Domain.Dto;
-using  OPCApp.Domain.Models;
 using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Interface.Trans
@@ -13,11 +12,14 @@ namespace OPCApp.DataService.Interface.Trans
         bool SetStatusAffirmPrintSaleFinish(IList<string> saleOrderNoList);
         bool SetStatusStoreInSure(IList<string> saleOrderNoList);
         bool SetStatusSoldOut(IList<string> saleOrderNoList);
+
         /// <summary>
-        /// 快递单完成打应
+        ///     快递单完成打应
         /// </summary>
-        /// <param name="goodsOutCode"> 即是对应数据库shipCode  对应客户端数据转换类goodsOutCode 
-        /// 快递单号 或者 发货单号 它们是一个值 </param>
+        /// <param name="goodsOutCode">
+        ///     即是对应数据库shipCode  对应客户端数据转换类goodsOutCode
+        ///     快递单号 或者 发货单号 它们是一个值
+        /// </param>
         /// <returns></returns>
         bool SetStatusPrintExpress(string goodsOutCode);
 

@@ -1,4 +1,4 @@
-﻿using  OPCApp.Domain.Models;
+﻿using OPCApp.Domain.Models;
 using OPCApp.Infrastructure.DataService;
 
 namespace OPCApp.DataService.Interface

@@ -1,6 +1,6 @@
 using System;
 
-namespace  OPCApp.Domain.Models
+namespace OPCApp.Domain.Models
 {
     public class OPC_SaleComment
     {

@@ -79,7 +79,7 @@ namespace OPCApp.AuthManage.ViewModels
 
         private void DeleteUserList()
         {
-            if (UserList == null)return;
+            if (UserList == null) return;
             UserList.Remove(e => e.IsSelected);
         }
 

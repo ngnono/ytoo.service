@@ -3,7 +3,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     mc:Ignorable="d">
-                   
+
     <Style x:Key="MainViewRadioButtonStyle" TargetType="ToggleButton">
         <Setter Property="Background" Value="{x:Null}" />
         <Setter Property="Foreground" Value="#FF0E233E" />
@@ -123,13 +123,13 @@
         </Setter>
     </Style>
     <Style x:Key="CellCenter" TargetType="TextBlock">
-        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Center" />
     </Style>
     <Style x:Key="CellRight" TargetType="TextBlock">
-        <Setter Property="TextAlignment" Value="Right"/>
+        <Setter Property="TextAlignment" Value="Right" />
     </Style>
     <Style x:Key="CellLeft" TargetType="TextBlock">
-        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="TextAlignment" Value="Left" />
     </Style>
     <Style x:Key="FieldStyle" TargetType="Label">
         <Setter Property="VerticalContentAlignment" Value="Center" />
