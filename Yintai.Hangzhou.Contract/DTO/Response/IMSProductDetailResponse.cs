@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using Yintai.Hangzhou.Contract.Response;
+using com.intime.fashion.common.Extension;
 
 namespace Yintai.Hangzhou.Contract.DTO.Response
 {
@@ -32,7 +33,16 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string SkuCode { get; set; }
         [DataMember(Name = "product_type")]
         public Nullable<int> ProductType { get; set; }
-
+        [DataMember(Name = "image")]
+        public string Image
+        {
+            get
+            {
+                return ImageUrl.Image320Url();
+            }
+        }
+        [IgnoreDataMember]
+        public string ImageUrl { get; set; }
     }
 
     [DataContract]
@@ -44,6 +54,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string SalesCode { get; set; }
         [DataMember(Name = "size_type")]
         public int SizeType { get; set; }
+        [DataMember(Name="is_online")]
+        public int Status { get; set; }
+
+
     }
     [DataContract]
     public class IMSProductSizeResponse

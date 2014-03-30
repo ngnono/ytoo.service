@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Yintai.Architecture.Common.Data.EF;
+using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Data.Models;
@@ -14,6 +16,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
     public class AssistantController : RestfulController
     {
+        private IEFRepository<IMS_AssociateSaleCodeEntity> _salescodeRepo;
+        private IEFRepository<IMS_AssociateItemsEntity> _associateitemRepo;
+        public AssistantController(IEFRepository<IMS_AssociateSaleCodeEntity> salescodeRepo,
+            IEFRepository<IMS_AssociateItemsEntity> associateitemRepo)
+        {
+            _salescodeRepo = salescodeRepo;
+            _associateitemRepo = associateitemRepo;
+        }
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request)
         {
@@ -60,92 +70,119 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             return this.RenderSuccess<PagerInfoResponse<IMSComboDetailResponse>>(c => c.Data = response);
         }
 
-        [RestfulAuthorize]
-        public ActionResult Products(PagerInfoRequest request)
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Products(PagerInfoRequest request,int authuid)
         {
-            var mockupResponse = new List<dynamic>();
-            mockupResponse.Add(new
+            var linq = Context.Set<ProductEntity>().Where(ia => ia.CreatedUser == authuid && ia.ProductType == (int)ProductType.FromSelf)
+                       .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Status == (int)DataStatus.Normal),
+                                    o => o.Id,
+                                    i => i.SourceId,
+                                    (o, i) => new { P = o, R = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() });
+            int totalCount = linq.Count();
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(l => l.P.CreatedDate).Skip(skipCount).Take(request.Pagesize);
+            var result = linq.ToList().Select(l => new IMSProductSelfDetailResponse().FromEntity<IMSProductSelfDetailResponse>(l.P, o =>
             {
-                id = 1,
-                desc = "已拍商品1",
-                price = 100.1,
-                image = "",
-                is_online = true
-            });
-            mockupResponse.Add(new
+                
+                if (l.R == null)
+                    return;
+                o.ImageUrl = l.R.Name;
+            }));
+            var response = new PagerInfoResponse<IMSProductSelfDetailResponse>(request.PagerRequest, totalCount)
             {
-                id = 1,
-                desc = "已拍商品2",
-                price = 100.2,
-                image = "",
-                is_online = true
-            });
-            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, mockupResponse.Count)
-            {
-                Items = mockupResponse
+                Items = result.ToList()
             };
-            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
-        }
 
-        [RestfulAuthorize]
-        public ActionResult SalesCodes(PagerInfoRequest request)
-        {
-            var mockupResponse = new List<dynamic>();
-            mockupResponse.Add("mockupsalescode1");
-            mockupResponse.Add("mockupsalescode2");
+            return this.RenderSuccess<PagerInfoResponse<IMSProductSelfDetailResponse>>(c => c.Data = response);
            
-            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, mockupResponse.Count)
-            {
-                Items = mockupResponse
-            };
-            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
         }
 
-        [RestfulAuthorize]
-        public ActionResult Brands(PagerInfoRequest request)
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult SalesCodes(int authuid)
         {
-            var mockupResponse = new List<dynamic>();
-            mockupResponse.Add(new { 
-                id = 1,
-                name = "mockup品牌1"
-            });
-            mockupResponse.Add(new
+            var linq = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                            .GroupJoin(Context.Set<IMS_AssociateSaleCodeEntity>(),
+                                        o => o.Id,
+                                        i => i.AssociateId,
+                                        (o, i) => i).FirstOrDefault();
+            var  salesCodes = linq==null?new string[]{}:linq.Select(l=>l.Code).ToArray();
+            var response = new PagerInfoResponse<string>(new PagerRequest(), salesCodes.Count())
             {
-                id = 2,
-                name = "mockup品牌2"
-            });
-
-            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, mockupResponse.Count)
-            {
-                Items = mockupResponse
+                Items = salesCodes.ToList()
             };
-            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
+
+
+            return this.RenderSuccess<PagerInfoResponse<string>>(c => c.Data = response);
         }
 
-        [RestfulAuthorize]
-        public ActionResult Category_Sizes(PagerInfoRequest request)
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult SalesCode_Add(string sale_code,int authuid)
         {
-            var mockupResponse = new List<dynamic>();
-            mockupResponse.Add(new
-            {
-                id = 1,
-                name = "mockup分类1",
-                sizes = new List<dynamic>() { new { id = 1, name = "mockup尺码1" }, new { id = 2, name = "mockup尺码2" } }
-            });
-            mockupResponse.Add(new
-            {
-                id = 1,
-                name = "mockup分类2",
-                sizes = new List<dynamic>() { new { id = 1, name = "mockup尺码21" }, new { id = 2, name = "mockup尺码22" } }
-            });
+            if (string.IsNullOrEmpty(sale_code))
+                return this.RenderError(r => r.Message = "销售码为空");
+            var linq = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).FirstOrDefault();
+            if (linq == null)
+                return this.RenderError(r => r.Message = "无权操作");
 
-            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, mockupResponse.Count)
-            {
-                Items = mockupResponse
-            };
-            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
+            _salescodeRepo.Insert(new IMS_AssociateSaleCodeEntity() { 
+                 AssociateId = linq.Id,
+                  Code = sale_code,
+                   CreateDate = DateTime.Now,
+                   CreateUser = authuid,
+                    Status = (int)DataStatus.Normal,
+                     UserId = authuid
+            });
+            
+
+            return this.RenderSuccess<dynamic>(null);
         }
 
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Brands(int authuid)
+        {
+            var linq = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                            .GroupJoin(Context.Set<IMS_AssociateBrandEntity>().Join(Context.Set<BrandEntity>().Where(b=>b.Status==(int)DataStatus.Normal),
+                                                                    o => o.BrandId, 
+                                                                    i => i.Id, 
+                                                                    (o, i) => new { AB=o,B=i}),
+                                        o => o.Id,
+                                        i => i.AB.AssociateId,
+                                        (o, i) => i).FirstOrDefault();
+            List<dynamic> brands = null;
+            if (linq != null)
+                brands = linq.Select(l => new
+                {
+                    id = l.AB.BrandId,
+                    name = l.B.Name
+                }).ToList<dynamic>();
+            else
+                brands = new List<dynamic>();
+            var response = new PagerInfoResponse<dynamic>(new PagerRequest(), brands.Count())
+            {
+                Items = brands
+            };
+
+
+            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
+           
+        }
+
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Combo_Status_Update(IMSComboStatusUpdateRequest request,int authuid)
+        {
+            var comboItemEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                                .Join(Context.Set<IMS_AssociateItemsEntity>().Where(iai=>iai.ItemType==request.Item_Type && iai.ItemId == request.Item_Id), o => o.Id, i => i.AssociateId, (o, i) => i)
+                                .FirstOrDefault();
+            if (comboItemEntity == null)
+                return this.RenderError(r => r.Message = "无权操作该搭配");
+            comboItemEntity.Status = (int)DataStatus.Default;
+            comboItemEntity.UpdateDate = DateTime.Now;
+            _associateitemRepo.Update(comboItemEntity);
+
+
+            return this.RenderSuccess<dynamic>(null);
+
+        }
         [RestfulAuthorize]
         public ActionResult Income(int authuid)
         {

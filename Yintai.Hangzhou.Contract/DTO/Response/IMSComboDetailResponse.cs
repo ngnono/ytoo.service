@@ -25,7 +25,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int UserId { get; set; }
         [DataMember(Name = "create_date")]
         public System.DateTime CreateDate { get; set; }
-        [DataMember(Name = "create_user")]
+        [DataMember(Name = "owner_id")]
         public int CreateUser { get; set; }
         [DataMember(Name = "online_date")]
         public System.DateTime OnlineDate { get; set; }
@@ -41,6 +41,11 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
                 return ImageUrl.Image320Url();
             }
         }
+        [DataMember(Name="images")]
+        public IEnumerable<string> Images { get; set; }
+        [DataMember(Name="products")]
+        public IEnumerable<IMSProductDetailResponse> Products { get; set; }
+
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
     }
