@@ -270,7 +270,7 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandGetShipping { get; set; }
         public DelegateCommand CommandGetOrderByShippingId { get; set; }
         public DelegateCommand CommandGetSaleByOrderNoShipping { get; set; }
-
+        /*方式不可取 等待修改*/
         public void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
