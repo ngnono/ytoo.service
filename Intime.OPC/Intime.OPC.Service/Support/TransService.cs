@@ -11,12 +11,14 @@ namespace Intime.OPC.Service.Support
         private readonly IOrderRemarkRepository _orderRemarkRepository;
         private readonly ISaleRepository _saleRepository;
         private readonly ITransRepository _transRepository;
+        private readonly IShippingSaleCommentRepository _shippingSaleCommentRepository;
 
-        public TransService(ITransRepository transRepository, IOrderRemarkRepository orderRemarkRepository,ISaleRepository saleRepository)
+        public TransService(ITransRepository transRepository, IOrderRemarkRepository orderRemarkRepository,ISaleRepository saleRepository,IShippingSaleCommentRepository shippingSaleCommentRepository)
         {
             _transRepository = transRepository;
             _orderRemarkRepository = orderRemarkRepository;
             _saleRepository = saleRepository;
+            _shippingSaleCommentRepository = shippingSaleCommentRepository;
         }
 
         #region ITransService Members
@@ -54,6 +56,17 @@ namespace Intime.OPC.Service.Support
         {
             var entity=  _saleRepository.GetBySaleNo(saleNo);
             return Mapper.Map<OPC_Sale, ShippingSaleDto>(entity);
+        }
+
+
+        public bool AddShippingSaleComment(OPC_ShippingSaleComment comment)
+        {
+            return   _shippingSaleCommentRepository.Create(comment);
+        }
+
+        public IList<OPC_ShippingSaleComment> GetByShippingCommentCode(string shippingCode)
+        {
+            return _shippingSaleCommentRepository.GetByShippingCode(shippingCode);
         }
     }
 }

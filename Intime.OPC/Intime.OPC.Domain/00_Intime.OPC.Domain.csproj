@@ -86,6 +86,7 @@
     <Compile Include="Models\Mapping\OPC_RMADetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMALogMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMAMap.cs" />
+    <Compile Include="Models\Mapping\OPC_ShippingSaleCommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleCommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleDetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleLogMap.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Models\OPC_RMADetail.cs" />
     <Compile Include="Models\OPC_RMALog.cs" />
     <Compile Include="Models\OPC_Sale.cs" />
+    <Compile Include="Models\OPC_ShippingSaleComment.cs" />
     <Compile Include="Models\OPC_SaleComment.cs" />
     <Compile Include="Models\OPC_SaleDetail.cs" />
     <Compile Include="Models\OPC_SaleLog.cs" />

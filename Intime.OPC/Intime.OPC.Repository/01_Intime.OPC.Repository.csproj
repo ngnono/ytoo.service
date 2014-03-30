@@ -58,6 +58,7 @@
     <Compile Include="ISaleRemarkRepository.cs" />
     <Compile Include="ISaleRepository.cs" />
     <Compile Include="ISectionRepository.cs" />
+    <Compile Include="IShippingSaleCommentRepository.cs" />
     <Compile Include="IShipViaRepository.cs" />
     <Compile Include="IStoreRepository.cs" />
     <Compile Include="ITransRepository.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Support\SaleRemarkRepository.cs" />
     <Compile Include="Support\SaleRepository.cs" />
     <Compile Include="Support\SectionRepository.cs" />
+    <Compile Include="Support\ShippingSaleCommentRepository.cs" />
     <Compile Include="Support\ShipViaRepository.cs" />
     <Compile Include="Support\StoreRepository.cs" />
     <Compile Include="Support\TransRepository.cs" />

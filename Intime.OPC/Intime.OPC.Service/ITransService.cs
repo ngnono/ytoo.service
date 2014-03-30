@@ -24,5 +24,19 @@ namespace Intime.OPC.Service
         /// <param name="orderNo">The order no.</param>
         /// <returns>IList{ShippingSaleDto}.</returns>
         ShippingSaleDto GetShippingSaleBySaleNo(string saleNo);
+
+        /// <summary>
+        /// 新增发货单备注
+        /// </summary>
+        /// <param name="comment">The comment.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool AddShippingSaleComment(OPC_ShippingSaleComment comment);
+
+        /// <summary>
+        /// 读取发货单备注
+        /// </summary>
+        /// <param name="shippingCode">发货单编号</param>
+        /// <returns>IList{OPC_ShippingSaleComment}.</returns>
+        IList<OPC_ShippingSaleComment> GetByShippingCommentCode(string shippingCode); 
     }
 }

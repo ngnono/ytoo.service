@@ -30,7 +30,7 @@ namespace Intime.OPC.WebApi.Controllers
         ///     The _trans service
         /// </summary>
         private readonly ITransService _transService;
-
+      
         /// <summary>
         ///     Initializes a new instance of the <see cref="TransController" /> class.
         /// </summary>
@@ -80,27 +80,6 @@ namespace Intime.OPC.WebApi.Controllers
         #region 备注
 
         /// <summary>
-        ///  增加快递单 备注
-        /// </summary>
-        /// <param name="sale">The sale.</param>
-        /// <returns>IHttpActionResult.</returns>
-        [HttpPost]
-        public IHttpActionResult AddShippingSaleComment([FromBody] OPC_OrderComment comment)
-        {
-            //return DoFunction(() =>
-            //{
-
-            //    comment.CreateDate = DateTime.Now;
-            //    comment.CreateUser = this.GetCurrentUserID();
-            //    comment.UpdateDate = comment.CreateDate;
-            //    comment.UpdateUser = comment.CreateUser;
-            //    return _orderService.AddOrderComment(comment);
-
-            //}, "增加订单备注失败");
-
-            return null;
-        }
-        /// <summary>
         /// 根据订单编号读取快递单备注
         /// </summary>
         /// <param name="orderNo">The order no.</param>
@@ -108,26 +87,35 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetShippingSaleCommentByShippingSaleNo(string shippingSaleNo)
         {
-            //return base.DoFunction(() =>
-            //{
-            //    return _orderService.GetCommentByOderNo(orderNo);
+            return DoFunction(() =>
+            {
+                return _transService.GetByShippingCommentCode(shippingSaleNo);
 
-            //}, "读取订单备注失败！");
-
-            return null;
+            }, "读取快递单备注失败！");
         }
 
 
+        /// <summary>
+        /// 创建快递单备注
+        /// </summary>
+        /// <param name="comment">The comment.</param>
+        /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult CreateShippingSale(string shippingSaleNo)
+        public IHttpActionResult CreateShippingSale(OPC_ShippingSaleComment comment)
         {
-            //return base.DoFunction(() =>
-            //{
-            //    return _orderService.GetCommentByOderNo(orderNo);
 
-            //}, "读取订单备注失败！");
+            return base.DoFunction(() =>
+            {
+               
+                comment.CreateDate = DateTime.Now;
+                comment.CreateUser = this.GetCurrentUserID();
+                comment.UpdateDate = comment.CreateDate;
+                comment.UpdateUser = comment.CreateUser;
 
-            return null;
+                return _transService.AddShippingSaleComment(comment);
+
+            }, "读取快递单备注失败！");
+
         }
 
         #endregion
