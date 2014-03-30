@@ -72,14 +72,7 @@
                         </StackPanel>
                     </StackPanel>
                     <DataGrid Grid.Row="3" Height="400" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" 
-                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Invoice4Remark}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDown">
-                                <i:InvokeCommandAction Command="{Binding CommandDbClick}" />
-                            </i:EventTrigger>
-
-                        </i:Interaction.Triggers>
-
+                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -259,7 +252,7 @@
                         </StackPanel>
                     </StackPanel>
                     <DataGrid Grid.Row="5" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" 
-                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Invoice4Remark}">
+                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDown">
                                 <i:InvokeCommandAction Command="{Binding CommandDbClick}" />
@@ -403,19 +396,19 @@
                                 </StackPanel>
                             </Button>
 
-                            <Button Background="LightGray" Width="150" >
+                            <Button Background="LightGray" Width="100" >
                                 <StackPanel>
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">补打快递预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Background="LightGray" Width="100" Command="{Binding CommandSoldOut}">
+                            <Button Background="LightGray" Width="80">
                                 <StackPanel>
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">补打快递单</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Background="LightGray"  Width="150" Command="{Binding CommandStoreInSure}">
+                            <Button Background="LightGray"  Width="120" Command="{Binding CommandStoreInSure}">
                                 <StackPanel>
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">完成快递发货交接</TextBlock>
@@ -487,7 +480,7 @@
                         </StackPanel>
                     </StackPanel>
                     <DataGrid Grid.Row="5" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" 
-                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Invoice4Remark}">
+                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDown">
                                 <i:InvokeCommandAction Command="{Binding CommandDbClick}" />

@@ -107,7 +107,7 @@ namespace OPCApp.TransManage.ViewModels
         private void SetShippingRemark()
         {
             //被选择的对象
-            string id = Invoice4Remark.SaleOrderNo;
+            string id = SaleSelected.SaleOrderNo;
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
             remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetShipSaleRemark); //4填写的是订单
         }
@@ -141,16 +141,20 @@ namespace OPCApp.TransManage.ViewModels
 
         public void SearchOrderBySale()
         {
-            OPC_Sale sale = SaleList.FirstOrDefault(e => e.IsSelected);
-            if (sale == null) return;
-            PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
+            //OPC_Sale sale = SaleList.FirstOrDefault(e => e.IsSelected);
+            if (SaleSelected == null)
+            {
+                this.OrderList = new List<Order>();
+                return;
+            }
+            PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(SaleSelected.OrderNo);
             OrderList = re == null ? new List<Order>() : re.Result.ToList();
         }
 
         public void SetOrderRemark()
         {
             //被选择的对象
-            string id = Invoice4Remark.SaleOrderNo;
+            string id = SaleSelected.SaleOrderNo;
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
             remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetOrderRemark); //3填写的是订单
         }

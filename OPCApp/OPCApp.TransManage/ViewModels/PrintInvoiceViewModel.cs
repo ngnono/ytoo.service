@@ -34,9 +34,9 @@ namespace OPCApp.TransManage.ViewModels
 
         private void CommandDbClickExecute()
         {
-            if (Invoice4Remark != null)
+            if (SaleSelected != null)
             {
-                InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(Invoice4Remark.SaleOrderNo).Result.ToList();
+                InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(SaleSelected.SaleOrderNo).Result.ToList();
             }
         }
 
@@ -61,12 +61,12 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         //选择上面行数据时赋值的数据集
-        private OPC_Sale invoice4Remark = new OPC_Sale();
+        private OPC_Sale _opcSale  ;
       
-        public OPC_Sale Invoice4Remark
+        public OPC_Sale SaleSelected
         {
-            get { return invoice4Remark; }
-            set { SetProperty(ref invoice4Remark, value); }
+            get { return _opcSale; }
+            set { SetProperty(ref _opcSale, value); }
         }
 
         //销售单明细Grid数据集
@@ -89,7 +89,7 @@ namespace OPCApp.TransManage.ViewModels
         public void CommandRemarkExecute()
         {
             //被选择的对象
-            string id = Invoice4Remark.SaleOrderNo;
+            string id = SaleSelected.SaleOrderNo;
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
             remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetSaleRemark);
         }
@@ -123,17 +123,17 @@ namespace OPCApp.TransManage.ViewModels
        
         public  void CommandGetDownExecute()
         {
-            if (SaleList == null)return;
-            OPC_Sale saleCur = SaleList.Where(n => n.IsSelected).FirstOrDefault();
-            if (saleCur == null)
+            //if (SaleList == null)return;
+           // OPC_Sale saleCur = //SaleList.Where(n => n.IsSelected).FirstOrDefault();
+            if (SaleSelected == null)
             {
                 if (invoiceDetail4List == null) return;
                 invoiceDetail4List.ToList().Clear();
                 ClearOtherList();
                 return;
             }
-            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(saleCur.SaleOrderNo).Result.ToList();
-            RefreshOther(saleCur);
+            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(SaleSelected.SaleOrderNo).Result.ToList();
+            RefreshOther(SaleSelected);
         }
 
         public void CommandViewAndPrintExecute()
