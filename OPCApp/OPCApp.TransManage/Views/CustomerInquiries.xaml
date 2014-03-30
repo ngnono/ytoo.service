@@ -56,7 +56,7 @@
                         <StackPanel Orientation="Horizontal">
 
                             <TextBlock Text="  订单状态" />
-                            <TextBox Width="100" Foreground="Blue" Background="White" Text="{Binding OrderGet.Status}" />
+                            < Width="100" Foreground="Blue" Background="White" Text="{Binding OrderGet.Status}" />
                             <TextBlock Text="  支付方式   " />
                             <TextBox Width="100" Foreground="Blue" Background="White"
                                      Text="{Binding OrderGet.PaymentType}" />
