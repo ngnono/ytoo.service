@@ -15,6 +15,13 @@ namespace OPCApp.TransManage.ViewModels
     [Export("CustomerInquiriesViewModel", typeof (CustomerInquiriesViewModel))]
     public class CustomerInquiriesViewModel : BindableBase
     {
+       // public List<object> OderStatusList { get; set; }
+
+        public void InitCombo()
+        {
+           // OderStatusList=new 
+        }
+
         public CustomerInquiriesViewModel()
         {
             //Tab 订单查询         CommandGetSaleByOrderId
@@ -26,6 +33,7 @@ namespace OPCApp.TransManage.ViewModels
             CommandGetShipping = new DelegateCommand(GetShipping);
             CommandGetOrderByShippingId = new DelegateCommand(GetOrderByShippingId);
             CommandGetSaleByOrderNoShipping = new DelegateCommand(GetSaleByOrderNoShipping);
+            this.InitCombo();
             orderGet = new OrderGet();
         }
 
