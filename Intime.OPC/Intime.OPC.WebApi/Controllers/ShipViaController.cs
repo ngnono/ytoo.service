@@ -21,17 +21,8 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetAll()
         {
- 
-            try
-            {
-                var lst = _shipViaService.GetAll();
-                return Ok(lst);
-            }
-            catch (Exception ex)
-            {
-                this.GetLog().Error(ex);
-                return BadRequest("获得品牌信息失败");
-            }
+            return DoFunction(()=>_shipViaService.GetAll(), "获得品牌信息失败");
+            
         }
     }
 }

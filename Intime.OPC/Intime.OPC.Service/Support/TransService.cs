@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Enums;
+using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service.Map;
@@ -11,12 +16,20 @@ namespace Intime.OPC.Service.Support
         private readonly IOrderRemarkRepository _orderRemarkRepository;
         private readonly ISaleRepository _saleRepository;
         private readonly ITransRepository _transRepository;
+        private readonly IShippingSaleCommentRepository _shippingSaleCommentRepository;
+        private readonly IShippingSaleRepository _shippingSaleRepository;
 
-        public TransService(ITransRepository transRepository, IOrderRemarkRepository orderRemarkRepository,ISaleRepository saleRepository)
+        public TransService(ITransRepository transRepository, 
+            IOrderRemarkRepository orderRemarkRepository,
+            ISaleRepository saleRepository,
+            IShippingSaleRepository shippingSaleRepository,
+            IShippingSaleCommentRepository shippingSaleCommentRepository)
         {
             _transRepository = transRepository;
             _orderRemarkRepository = orderRemarkRepository;
+            _shippingSaleRepository = shippingSaleRepository;
             _saleRepository = saleRepository;
+            _shippingSaleCommentRepository = shippingSaleCommentRepository;
         }
 
         #region ITransService Members
@@ -52,8 +65,75 @@ namespace Intime.OPC.Service.Support
 
         public ShippingSaleDto GetShippingSaleBySaleNo(string saleNo)
         {
-            var entity=  _saleRepository.GetBySaleNo(saleNo);
-            return Mapper.Map<OPC_Sale, ShippingSaleDto>(entity);
+            var entity = _shippingSaleRepository.GetBySaleOrderNo(saleNo).FirstOrDefault();
+            if (entity==null)
+            {
+                throw new ShippingSaleNotExistsException(saleNo);
+            }
+            return Mapper.Map<OPC_ShippingSale, ShippingSaleDto>(entity);
+        }
+
+
+        public bool AddShippingSaleComment(OPC_ShippingSaleComment comment)
+        {
+            return   _shippingSaleCommentRepository.Create(comment);
+        }
+
+        public IList<OPC_ShippingSaleComment> GetByShippingCommentCode(string shippingCode)
+        {
+            return _shippingSaleCommentRepository.GetByShippingCode(shippingCode);
+        }
+
+        public bool CreateShippingSale(int userId, ShippingSaleCreateDto shippingSaleDto)
+        {
+            var dt = DateTime.Now;
+            foreach (var saleID in shippingSaleDto.SaleOrderIDs)
+            {
+                var sale = new OPC_ShippingSale();
+                sale.CreateDate = dt;
+                sale.CreateUser = userId;
+                sale.UpdateDate = dt;
+                sale.UpdateUser = userId;
+                sale.SaleOrderNo = saleID;
+                sale.ShipViaId = shippingSaleDto.ShipViaID;
+                sale.ShippingCode = shippingSaleDto.ShippingCode;
+                sale.ShippingFee = (decimal)(shippingSaleDto.ShippingFee);
+                sale.ShippingStatus = EnumSaleOrderStatus.PrintExpress.AsID();
+
+                bool bl=  _shippingSaleRepository.Create(sale);
+
+                _saleRepository.UpdateSatus(saleID, EnumSaleOrderStatus.PrintExpress, userId);
+            }
+
+            return true;
+        }
+
+        public IList<ShippingSaleDto> GetShippingSale(string shippingCode, DateTime startTime, DateTime endTime)
+        {
+            var lst=  _shippingSaleRepository.Get(shippingCode, startTime.Date, endTime.AddDays(1));
+            return Mapper.Map<OPC_ShippingSale, ShippingSaleDto>(lst);
+        }
+
+        public IList<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo)
+        {
+            var lst = _shippingSaleRepository.GetByShippingCode(shippingSaleNo);
+            if (lst==null || lst.Count==0)
+            {
+                throw new ShippingSaleNotExistsException(shippingSaleNo);
+            }
+            IList<OPC_Sale> lstSales=new List<OPC_Sale>();
+            foreach (var opcShippingSale in lst)
+            {
+                lstSales.Add(_saleRepository.GetBySaleNo(opcShippingSale.SaleOrderNo));
+            }
+
+            return Mapper.Map<OPC_Sale, SaleDto>(lstSales);
+        }
+
+        public IList<SaleDto> GetSaleOrderPickup(string orderNo, string saleOrderNo, DateTime startDate, DateTime endDate)
+        {
+            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate.Date,endDate.Date.AddDays(1));
+            return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
     }
 }

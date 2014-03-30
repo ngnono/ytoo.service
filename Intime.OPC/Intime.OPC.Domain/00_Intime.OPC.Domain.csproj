@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\IEntity.cs" />
+    <Compile Include="Dto\ShippingSaleCreateDto.cs" />
     <Compile Include="Dto\ShippingSaleDto.cs" />
     <Compile Include="Dto\OrderDto.cs" />
     <Compile Include="Dto\RoleMenuDto.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Exception\OrderNoIsNullException.cs" />
     <Compile Include="Exception\OrderNotExistsException.cs" />
     <Compile Include="Exception\SaleOrderNotExistsException.cs" />
+    <Compile Include="Exception\ShippingSaleNotExistsException.cs" />
     <Compile Include="Exception\UserIdConverException.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\Mapping\BrandMap.cs" />
@@ -86,11 +88,13 @@
     <Compile Include="Models\Mapping\OPC_RMADetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMALogMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMAMap.cs" />
+    <Compile Include="Models\Mapping\OPC_ShippingSaleCommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleCommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleDetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleLogMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleRMAMap.cs" />
+    <Compile Include="Models\Mapping\OPC_ShippingSaleMap.cs" />
     <Compile Include="Models\Mapping\OPC_SKUMap.cs" />
     <Compile Include="Models\Mapping\OPC_StockMap.cs" />
     <Compile Include="Models\Mapping\OPC_StorePriorityMap.cs" />
@@ -99,6 +103,7 @@
     <Compile Include="Models\Mapping\SectionMap.cs" />
     <Compile Include="Models\Mapping\ShipViaMap.cs" />
     <Compile Include="Models\Mapping\StoreMap.cs" />
+    <Compile Include="Models\OPC_ShippingSale.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />
     <Compile Include="Models\OPC_AuthRoleMenu.cs" />
@@ -111,6 +116,7 @@
     <Compile Include="Models\OPC_RMADetail.cs" />
     <Compile Include="Models\OPC_RMALog.cs" />
     <Compile Include="Models\OPC_Sale.cs" />
+    <Compile Include="Models\OPC_ShippingSaleComment.cs" />
     <Compile Include="Models\OPC_SaleComment.cs" />
     <Compile Include="Models\OPC_SaleDetail.cs" />
     <Compile Include="Models\OPC_SaleLog.cs" />

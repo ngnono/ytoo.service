@@ -13,8 +13,8 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Web.Http;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Core;
@@ -54,7 +54,6 @@ namespace Intime.OPC.WebApi.Controllers
         //    return Ok(_transService.Select(startDate, endDate, orderNo, saleOrderNo));
         //}
 
-        
         ///// <summary>
         /////   查询销售单详情
         ///// </summary>
@@ -67,69 +66,104 @@ namespace Intime.OPC.WebApi.Controllers
         //}
 
         /// <summary>
-        /// 查询快递单信息
+        ///     查询快递单信息
         /// </summary>
         /// <param name="saleNo">销售单编号</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
         public IHttpActionResult GetShippingSaleByOrderNo(string saleNo)
         {
-            return Ok(_transService.GetShippingSaleBySaleNo(saleNo));
+            return DoFunction(() => { return _transService.GetShippingSaleBySaleNo(saleNo); }, "查询快递单信息失败");
+        }
+
+        /// <summary>
+        /// 获得销售单数据
+        /// </summary>
+        /// <param name="shippingSaleNo">快递单编号</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetSaleByShippingSaleNo(string shippingSaleNo)
+        {
+            return DoFunction(() => { return _transService.GetSaleByShippingSaleNo(shippingSaleNo); }, "查询销售单信息失败");
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetShippingSale(string shippingCode, DateTime startDate, DateTime endDate)
+        {
+            
+            return DoFunction(() => { return _transService.GetShippingSale(shippingCode, startDate, endDate); },
+                "查询快递单信息失败");
+        }
+
+        /// <summary>
+        ///     创建快递单
+        /// </summary>
+        /// <param name="comment">The comment.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult CreateShippingSale(ShippingSaleCreateDto shippingSaleDto)
+        {
+            return base.DoFunction(() =>
+            {
+                int userId = GetCurrentUserID();
+
+                return _transService.CreateShippingSale(userId, shippingSaleDto);
+            }, "读取快递单备注失败！");
         }
 
         #region 备注
 
         /// <summary>
-        ///  增加快递单 备注
+        ///     增加快递单备注
         /// </summary>
-        /// <param name="sale">The sale.</param>
+        /// <param name="comment">The comment.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult AddShippingSaleComment([FromBody] OPC_OrderComment comment)
+        public IHttpActionResult AddShippingSaleComment(OPC_ShippingSaleComment comment)
         {
-            //return DoFunction(() =>
-            //{
+            return base.DoFunction(() =>
+            {
+                comment.CreateDate = DateTime.Now;
+                comment.CreateUser = GetCurrentUserID();
+                comment.UpdateDate = comment.CreateDate;
+                comment.UpdateUser = comment.CreateUser;
 
-            //    comment.CreateDate = DateTime.Now;
-            //    comment.CreateUser = this.GetCurrentUserID();
-            //    comment.UpdateDate = comment.CreateDate;
-            //    comment.UpdateUser = comment.CreateUser;
-            //    return _orderService.AddOrderComment(comment);
-
-            //}, "增加订单备注失败");
-
-            return null;
+                return _transService.AddShippingSaleComment(comment);
+            }, "增加快递单备注失败！");
         }
+
         /// <summary>
-        /// 根据订单编号读取快递单备注
+        ///     根据订单编号读取快递单备注
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
         public IHttpActionResult GetShippingSaleCommentByShippingSaleNo(string shippingSaleNo)
         {
-            //return base.DoFunction(() =>
-            //{
-            //    return _orderService.GetCommentByOderNo(orderNo);
-
-            //}, "读取订单备注失败！");
-
-            return null;
+            return DoFunction(() => { return _transService.GetByShippingCommentCode(shippingSaleNo); }, "读取快递单备注失败！");
         }
 
+        #endregion
 
+        #region 销售单提货记录查询
+        /// <summary>
+        /// 查询已发货的数据
+        /// </summary>
+        /// <param name="orderCode">The order code.</param>
+        /// <param name="saleOrderNo">The sale order no.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult CreateShippingSale(string shippingSaleNo)
+        public IHttpActionResult GetSaleOrderPickup(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate)
         {
-            //return base.DoFunction(() =>
-            //{
-            //    return _orderService.GetCommentByOderNo(orderNo);
-
-            //}, "读取订单备注失败！");
-
-            return null;
+            
+            return DoFunction(() =>
+            {
+                return _transService.GetSaleOrderPickup(orderCode,saleOrderNo, startDate, endDate);
+            },
+                "查询快递单信息失败");
         }
-
         #endregion
     }
 }

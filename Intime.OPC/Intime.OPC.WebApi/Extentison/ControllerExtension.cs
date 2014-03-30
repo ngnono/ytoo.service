@@ -22,16 +22,7 @@ namespace System.Web.Http
     /// </summary>
     public static class ControllerExtension
     {
-        /// <summary>
-        /// Gets the log.
-        /// </summary>
-        /// <param name="controller">The controller.</param>
-        /// <returns>ILog.</returns>
-        public static ILog GetLog(this ApiController controller)
-        {
-            return LoggerManager.Current();
-        }
-
+      
         /// <summary>
         /// 获得当前用户
         /// </summary>

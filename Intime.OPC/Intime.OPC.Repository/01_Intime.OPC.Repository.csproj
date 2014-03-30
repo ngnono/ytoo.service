@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\BaseRespository.cs" />
+    <Compile Include="Base\ExtensionEx.cs" />
     <Compile Include="IBrandRepository.cs" />
     <Compile Include="IMenuRepository.cs" />
     <Compile Include="IAccountRepository.cs" />
@@ -58,6 +59,8 @@
     <Compile Include="ISaleRemarkRepository.cs" />
     <Compile Include="ISaleRepository.cs" />
     <Compile Include="ISectionRepository.cs" />
+    <Compile Include="IShippingSaleRepository.cs" />
+    <Compile Include="IShippingSaleCommentRepository.cs" />
     <Compile Include="IShipViaRepository.cs" />
     <Compile Include="IStoreRepository.cs" />
     <Compile Include="ITransRepository.cs" />
@@ -75,6 +78,8 @@
     <Compile Include="Support\SaleRemarkRepository.cs" />
     <Compile Include="Support\SaleRepository.cs" />
     <Compile Include="Support\SectionRepository.cs" />
+    <Compile Include="Support\ShippingSaleCommentRepository.cs" />
+    <Compile Include="Support\ShippingSaleRepository.cs" />
     <Compile Include="Support\ShipViaRepository.cs" />
     <Compile Include="Support\StoreRepository.cs" />
     <Compile Include="Support\TransRepository.cs" />

@@ -53,6 +53,7 @@
     <Compile Include="IRoleService.cs" />
     <Compile Include="ISaleService.cs" />
     <Compile Include="IService.cs" />
+    <Compile Include="IShippingSaleService.cs" />
     <Compile Include="IShipViaService.cs" />
     <Compile Include="IStoreService.cs" />
     <Compile Include="ITransService.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Support\OrderService.cs" />
     <Compile Include="Support\RoleService.cs" />
     <Compile Include="Support\SaleService.cs" />
+    <Compile Include="Support\ShippingSaleService.cs" />
     <Compile Include="Support\ShipViaService.cs" />
     <Compile Include="Support\StoreService.cs" />
     <Compile Include="Support\TransService.cs" />

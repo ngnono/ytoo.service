@@ -40,6 +40,15 @@ namespace Intime.OPC.Repository
         bool UpdateSatus(IEnumerable<string> saleNos, EnumSaleOrderStatus saleOrderStatus, int userID);
 
         /// <summary>
+        ///     Updates the satus.
+        /// </summary>
+        /// <param name="saleNos">The sale nos.</param>
+        /// <param name="saleOrderStatus">The sale order status.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool UpdateSatus(string saleNo, EnumSaleOrderStatus saleOrderStatus, int userID);
+
+        /// <summary>
         ///     Gets the by sale no.
         /// </summary>
         /// <param name="saleNo">The sale no.</param>
@@ -62,6 +71,16 @@ namespace Intime.OPC.Repository
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
         IList<OPC_Sale> GetNoPickUp(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd);
+
+        /// <summary>
+        ///     获得 已发货 的数据
+        /// </summary>
+        /// <param name="saleId">The sale identifier.</param>
+        /// <param name="orderNo">The order no.</param>
+        /// <param name="dtStart">The dt start.</param>
+        /// <param name="dtEnd">The dt end.</param>
+        /// <returns>IList{OPC_Sale}.</returns>
+        IList<OPC_Sale> GetPickUped(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd);
 
         /// <summary>
         ///     获得已完成 打印销售单 的数据

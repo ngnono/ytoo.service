@@ -44,6 +44,11 @@ namespace Intime.OPC.Repository
 
         public DbSet<ShipVia> ShipVias { get; set; }
 
+        public DbSet<OPC_ShippingSale> ShippingSales { get; set; }
+
+
+        public DbSet<OPC_ShippingSaleComment> ShippingSaleComments { get; set; } 
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
@@ -70,6 +75,7 @@ namespace Intime.OPC.Repository
             modelBuilder.Configurations.Add(new StoreMap());
             modelBuilder.Configurations.Add(new BrandMap());
             modelBuilder.Configurations.Add(new ShipViaMap());
+            modelBuilder.Configurations.Add(new OPC_ShippingSaleMap());
         }
     }
 }

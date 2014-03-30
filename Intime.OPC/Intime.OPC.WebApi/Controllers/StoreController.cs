@@ -23,17 +23,9 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetAll([UserId] int? userId)
         {
- 
-            try
-            {
-                var lst = _Service.GetAll();
-                return Ok(lst);
-            }
-            catch (Exception ex)
-            {
-                this.GetLog().Error(ex);
-                return BadRequest("获得门店信息失败");
-            }
+
+            return DoFunction(() => _Service.GetAll(), "获得门店信息失败");
+           
         }
     }
 }

@@ -1,19 +1,16 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Intime.OPC.Domain.Models.Mapping
 {
-    public class OPC_SaleCommentMap : EntityTypeConfiguration<OPC_SaleComment>
+    public class OPC_ShippingSaleCommentMap : EntityTypeConfiguration<OPC_ShippingSaleComment>
     {
-        public OPC_SaleCommentMap()
+        public OPC_ShippingSaleCommentMap()
         {
             // Primary Key
             HasKey(t => t.Id);
-            Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             // Properties
-            Property(t => t.SaleOrderNo)
+            Property(t => t.ShippingCode)
                 .IsRequired()
                 .HasMaxLength(50);
 
@@ -22,9 +19,9 @@ namespace Intime.OPC.Domain.Models.Mapping
                 .HasMaxLength(200);
 
             // Table & Column Mappings
-            ToTable("OPC_SaleComment");
+            ToTable("OPC_ShippingSaleComment");
             Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.SaleOrderNo).HasColumnName("SaleOrderNo");
+            Property(t => t.ShippingCode).HasColumnName("ShippingCode");
             Property(t => t.Content).HasColumnName("Content");
             Property(t => t.CreateDate).HasColumnName("CreateDate");
             Property(t => t.CreateUser).HasColumnName("CreateUser");

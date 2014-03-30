@@ -15,6 +15,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Xml.XPath;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
@@ -38,6 +40,24 @@ namespace Intime.OPC.Repository.Support
             {
                 List<OPC_Sale> saleList = db.OPC_Sale.ToList();
                 return saleList;
+            }
+        }
+
+        public bool UpdateSatus(string saleNo, EnumSaleOrderStatus saleOrderStatus, int userID)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+              
+                OPC_Sale sale = db.OPC_Sale.FirstOrDefault(t => t.SaleOrderNo == saleNo);
+                if (sale != null)
+                {
+                    sale.UpdatedDate = DateTime.Now;
+                    sale.UpdatedUser = userID;
+                    sale.Status = (int)saleOrderStatus;
+                }
+              
+                db.SaveChanges();
+                return true;
             }
         }
 
@@ -65,6 +85,11 @@ namespace Intime.OPC.Repository.Support
             {
                 return db.OPC_SaleDetail.Where(t => t.SaleOrderNo == saleOrderNo).ToList();
             }
+        }
+
+        public IList<OPC_Sale> GetPickUped(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        {
+            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PickUp);
         }
 
         /// <summary>
@@ -174,20 +199,21 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_Sale> result = db.OPC_Sale.Where(t => t.Status == (int) saleOrderStatus
-                                                                     && t.SellDate > dtStart
-                                                                     && t.SellDate <= dtEnd);
+             
+                Expression<Func<OPC_Sale, bool>> filterExpression = t => t.Status == (int) saleOrderStatus
+                                                                         && t.SellDate >= dtStart
+                                                                         && t.SellDate < dtEnd;
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
-                    result.Where(t => t.OrderNo == orderNo);
+                    filterExpression=  filterExpression.And(t => t.OrderNo.Contains(orderNo));
                 }
 
                 if (!string.IsNullOrWhiteSpace(saleId))
                 {
-                    result.Where(t => t.SaleOrderNo == saleId);
+                    filterExpression=filterExpression.And(t => t.SaleOrderNo.Contains(saleId));
                 }
 
-                return result.ToList();
+                return db.OPC_Sale.Where(filterExpression.Compile()).ToList();
             }
         }
     }

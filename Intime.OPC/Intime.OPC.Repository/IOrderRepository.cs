@@ -28,5 +28,7 @@ namespace Intime.OPC.Repository
             string expressDeliveryCode, int expressDeliveryCompany);
 
         Order GetOrderByOrderNo(string orderNo);
+
+        IList<Order> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime);
     }
 }
