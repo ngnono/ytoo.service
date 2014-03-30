@@ -211,17 +211,14 @@
                     <Grid Grid.Row="1" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="门店" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ShippingGet.SectionId}" />
+                            <ComboBox Height="25" ItemsSource="{Binding StoreList}" Width="120" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding ShippingGet.SectionId}"/>
                             <TextBlock Text="  发货状态" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ShippingGet.ShippingStatus}" />
+                            <ComboBox Height="25" ItemsSource="{Binding OutGoodsTypeList}" Width="130" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.ShippingStatus}"/>
                             <TextBlock Text="  顾客电话" />
                             <TextBox Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingGet.CustomerPhone}" />
                             <TextBlock Text="  品牌" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ShippingGet.BrandId}" />
+                            <ComboBox Height="25" ItemsSource="{Binding BrandList}" Width="100" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding ShippingGet.BrandId}"/>
                             <Button Content="查询" Width="60" Command="{Binding CommandGetOrder}" />
                         </StackPanel>
                     </Grid>
