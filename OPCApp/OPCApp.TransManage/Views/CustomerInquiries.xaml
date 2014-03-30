@@ -33,41 +33,50 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" />
+                    <StackPanel Grid.Row="0">
+                        <StackPanel Orientation="Horizontal" Background="LightGray">
+                            <Button Background="LightGray" Width="50" Command="{Binding CommandGetOrder}">
+                                <StackPanel>
+                                    <Image Source="/image/查询.png" Stretch="None" />
+                                    <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
                     <Grid Grid.Row="1" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="订单号" />
-                            <TextBox Width="100" Foreground="Blue" Background="White" Text="{Binding OrderGet.OrderNo}" />
-                            <TextBlock Text="渠道订单号" />
+                            <TextBlock Text="订单号" Width="60" Margin="0 5"/>
+                            <TextBox Width="130" Foreground="Blue" Background="White" Text="{Binding OrderGet.OrderNo}" />
+                            <TextBlock Text="渠道订单号" Width="60" Margin="0 5"/>
                             <TextBox Width="100" Foreground="Blue" Background="White"
                                      Text="{Binding OrderGet.OrderSource}" />
-                            <TextBlock Text="   购买时间" />
+                            <TextBlock Text="购买时间" Margin="0 5"  Width="60"/>
                             <DatePicker Width="100" Foreground="Blue" SelectedDate="{Binding OrderGet.StartCreateDate}" />
-                            <TextBlock Text="  至" />
-                            <DatePicker Width="100" Foreground="Blue" SelectedDate="{Binding OrderGet.EndCreateDate}" />
-                            <TextBlock Text="  门店" />
-                            <ComboBox Height="25" ItemsSource="{Binding StoreList}" Width="100" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.Store}"/>
-                            <TextBlock Text="  品牌" />
-                            <ComboBox Height="25" ItemsSource="{Binding BrandList}" Width="100" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.BrandId}"/>
-                            <Button Content="查询" Width="60" Command="{Binding CommandGetOrder}" />
+                            <TextBlock Text=" 至 "  Margin="0 5" Width="20"/>
+                            <DatePicker Width="120" Foreground="Blue" SelectedDate="{Binding OrderGet.EndCreateDate}" />
+                            <TextBlock Text="门店"  Margin="0 5" Width="60"/>
+                            <ComboBox Height="25" ItemsSource="{Binding StoreList}" Width="150" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.Store}"/>
+                            <TextBlock Text="品牌" Margin="0 5" Width="60"/>
+                            <ComboBox Height="25" ItemsSource="{Binding BrandList}" Width="130" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.BrandId}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="2" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
 
-                            <TextBlock Text="  订单状态" />
+                            <TextBlock Text="订单状态" Width="60"  Margin="0 5"/>
                             <ComboBox Height="25" ItemsSource="{Binding OrderStatusList}" Width="130" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.Status}"/>
-                            <TextBlock Text="  支付方式   " />
-                            <ComboBox Height="25" ItemsSource="{Binding PaymentTypeList}" Width="130" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.PaymentType}"/>
-                            <TextBlock Text="  发货方式" />
-                            <ComboBox Height="25" ItemsSource="{Binding OutGoodsTypeList}" Width="130" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.OutGoodsType}"/>
-                            <TextBlock Text="  顾客电话   " />
+                            <TextBlock Text="支付方式" Width="60"  Margin="0 5" />
+                            <ComboBox Height="25" ItemsSource="{Binding PaymentTypeList}" Width="100" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.PaymentType}"/>
+                            <TextBlock Text="顾客电话"  Margin="0 5" Width="60"/>
                             <TextBox Width="100" Foreground="Blue" Background="White"
                                      Text="{Binding OrderGet.ShippingContactPhone}" />
-                            <TextBlock Text="  快递单号   " />
-                            <TextBox Width="100" Foreground="Blue" Background="White"
+                            <TextBlock Text="发货方式"  Margin="0 5" Width="60" />
+                            <ComboBox Height="25" ItemsSource="{Binding OutGoodsTypeList}" Width="80" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.OutGoodsType}"/>
+                           
+                            <TextBlock Text="快递单号"  Margin="0 5"  Width="60"/>
+                            <TextBox Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding OrderGet.ExpressDeliveryCode}" />
-                            <TextBlock Text="  快递公司   " />
+                            <TextBlock Text="快递公司" Width="60"/>
                             <ComboBox Height="25" ItemsSource="{Binding ShipViaList}" Width="130" DisplayMemberPath="Name" SelectedValuePath="Id"   SelectedValue="{Binding OrderGet.ExpressDeliveryCompany}"/>
                         </StackPanel>
                     </Grid>
@@ -99,20 +108,20 @@
                             <DataGridTextColumn Header="顾客运费" Binding="{Binding CustomerFreight}" />
                             <DataGridTextColumn Header="应付款总计" Binding="{Binding MustPayTotal}" />
                             <DataGridTextColumn Header="物流备注" Visibility="Hidden" Binding="{Binding SalesAmount}" />
-                            <DataGridTextColumn Header="购买时间" Binding="{Binding BuyDate}" />
-                            <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
-                            <DataGridTextColumn Header="收货人地址"  Width="130" Binding="{Binding CustomerAddress}" />
+                            <DataGridTextColumn Header="购买时间" Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"/>
+                            <DataGridTextColumn Header="收货人姓名" Width="100" Binding="{Binding CustomerName}" />
+                            <DataGridTextColumn Header="收货人地址"  Width="150" Binding="{Binding CustomerAddress}" />
                             <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
                             <DataGridTextColumn Header="顾客备注" Width="180" Binding="{Binding CustomerRemark}" />
                             <DataGridTextColumn Header="是否要发票" Binding="{Binding IfReceipt}" />
                             <DataGridTextColumn Header="发票台头" Width="130" Binding="{Binding ReceiptHead}" />
-                            <DataGridTextColumn Header="发票内容" Binding="{Binding ReceiptContent}" />
+                            <DataGridTextColumn Header="发票内容"  Width="130" Binding="{Binding ReceiptContent}" />
                             <DataGridTextColumn Header="发货方式" Binding="{Binding OutGoodsType}" />
                             <DataGridTextColumn Header="邮编" Binding="{Binding PostCode}" />
                             <DataGridTextColumn Header="发货单号" Binding="{Binding ShippingNo}" />
                             <DataGridTextColumn Header="快递单号" Binding="{Binding ExpressNo}" />
-                            <DataGridTextColumn Header="发货时间" Binding="{Binding OutGoodsDate}" />
-                            <DataGridTextColumn Header="快递公司" Binding="{Binding ExpressCompany}" />
+                            <DataGridTextColumn Header="发货时间" Binding="{Binding OutGoodsDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"/>
+                            <DataGridTextColumn Header="快递公司"  Width="150" Binding="{Binding ExpressCompany}" />
                             <DataGridTextColumn Header="客服备注" Visibility="Hidden" Binding="{Binding ShippingCode}" />
                         </DataGrid.Columns>
                     </DataGrid>
@@ -183,56 +192,66 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="150" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="150" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="150" />
+                        <RowDefinition Height="Auto" />
+                      
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Background="LightGray">
+                    <StackPanel Grid.Row="0">
+                        <StackPanel Orientation="Horizontal" Background="LightGray">
+                            <Button Background="LightGray" Width="50" Command="{Binding CommandGetOrder}">
+                                <StackPanel>
+                                    <Image Source="/image/查询.png" Stretch="None" />
+                                    <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                    <Grid Grid.Row="1" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="  订单号" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
+                            <TextBlock Text="  订单号"  Width="60" Margin="0 5" />
+                            <TextBox Width="130" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingGet.OrderNo}" />
-                            <TextBlock Text="  快递单号" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
+                            <TextBlock Text="  快递单号"  Width="60" Margin="0 5"  />
+                            <TextBox Width="130" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingGet.ExpressNo}" />
-                            <TextBlock Text="   发货时间" />
+                            <TextBlock Text="   发货时间"  Width="60" Margin="0 5" />
                             <DatePicker Width="150" Foreground="Blue"
                                         SelectedDate="{Binding ShippingGet.StartGoodsOutDate}" />
-                            <TextBlock Text="  至" />
-                            <DatePicker Width="150" Foreground="Blue"
+                            <TextBlock Text=" 至 "  Width="20" Margin="0 5"  />
+                            <DatePicker Width="120" Foreground="Blue"
                                         SelectedDate="{Binding ShippingGet.EndGoodsOutDate}" />
-                            <TextBlock Text="  发货单号" />
+                            <TextBlock Text="  发货单号"  Width="60" Margin="0 5" />
                             <TextBox Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingGet.OutGoodsCode}" />
                         </StackPanel>
                     </Grid>
-                    <Grid Grid.Row="1" Background="LightGray">
+                    <Grid Grid.Row="2" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="门店" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ShippingGet.SectionId}" />
-                            <TextBlock Text="  发货状态" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ShippingGet.ShippingStatus}" />
-                            <TextBlock Text="  顾客电话" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
+                            <TextBlock Text="     门店" Width="60" Margin="0 5"  />
+                            <ComboBox Height="25" ItemsSource="{Binding StoreList}" Width="130" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding ShippingGet.SectionId}"/>
+                            
+                            <TextBlock Text="  顾客电话"  Width="60" Margin="0 5"  />
+                            <TextBox Width="130" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingGet.CustomerPhone}" />
-                            <TextBlock Text="  品牌" />
-                            <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ShippingGet.BrandId}" />
-                            <Button Content="查询" Width="60" Command="{Binding CommandGetOrder}" />
+                            <TextBlock Text="  发货状态"  Width="60" Margin="0 5" />
+                            <ComboBox Height="25" ItemsSource="{Binding OutGoodsTypeList}" Width="80" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding OrderGet.ShippingStatus}"/>
+                            <TextBlock Text="  品牌" Width="60" Margin="0 5" />
+                            <ComboBox Height="25" ItemsSource="{Binding BrandList}" Width="150" DisplayMemberPath="Value" SelectedValuePath="Key"   SelectedItem="{Binding ShippingGet.BrandId}"/>
+                            
                         </StackPanel>
                     </Grid>
 
-                    <StackPanel Grid.Row="2">
+                    <StackPanel Grid.Row="3">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
                             <TextBlock Text="   发货单" />
                         </StackPanel>
                     </StackPanel>
 
-                    <DataGrid Grid.Row="3" ItemsSource="{Binding ShippingList}" IsReadOnly="True"
+                    <DataGrid Grid.Row="4" ItemsSource="{Binding ShippingList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
                               SelectedItem="{Binding SelectShipping}">
                         <i:Interaction.Triggers>
@@ -256,12 +275,12 @@
                         </DataGrid.Columns>
 
                     </DataGrid>
-                    <Grid Grid.Row="4">
+                    <Grid Grid.Row="5">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
                             <TextBlock Text="   订单信息" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="5" ItemsSource="{Binding OutOrderList}" IsReadOnly="True"
+                    <DataGrid Grid.Row="6" ItemsSource="{Binding OutOrderList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
                               SelectedItem="{Binding SelectOrderShipping}">
                         <i:Interaction.Triggers>
@@ -298,12 +317,12 @@
                             <DataGridTextColumn Header="客服备注" Visibility="Hidden" Binding="{Binding ShippingCode}" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Grid Grid.Row="6">
+                    <Grid Grid.Row="7">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
                             <TextBlock Text="   销售单信息" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid Grid.Row="7" IsReadOnly="True" AutoGenerateColumns="False"
+                    <DataGrid Grid.Row="8" IsReadOnly="True" AutoGenerateColumns="False"
                               HorizontalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
