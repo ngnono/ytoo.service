@@ -20,6 +20,8 @@ namespace OPCApp.DataService.Interface.Trans
         /// 快递单号 或者 发货单号 它们是一个值 </param>
         /// <returns></returns>
         bool SetStatusPrintExpress(string goodsOutCode);
+
+        bool SetSaleOrderShipped(IList<string> saleOrderNoList);
         bool SetStatusPrintInvoice(IList<string> saleOrderNoList);
         PageResult<OPC_Sale> Search(string salesfilter, EnumSearchSaleStatus searchSaleStatus);
         PageResult<Order> SearchOrderBySale(string saleOrder);
