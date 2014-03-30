@@ -101,7 +101,7 @@ namespace OPCApp.TransManage.ViewModels
 
        
 
-        public void Refresh()
+        protected virtual void Refresh()
         {
             string salesfilter = string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}",
                 Invoice4Get.StartSellDate.ToShortDateString(),

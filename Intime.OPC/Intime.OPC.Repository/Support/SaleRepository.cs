@@ -183,6 +183,11 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        public IList<OPC_Sale> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
+        {
+            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.Shipped);
+        }
+
         #endregion
 
         /// <summary>
