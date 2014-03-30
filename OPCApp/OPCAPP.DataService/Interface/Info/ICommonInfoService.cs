@@ -13,5 +13,9 @@ namespace OPCApp.DataService.Interface.Trans
        List<ShipVia> GetShipViaList();
        IList<KeyValue> GetStoreList();
        IList<KeyValue> GetBrandList();
+
+        IList<KeyValue> GetOrderStatus();
+        IList<KeyValue> GetPayMethod();
+        IList<KeyValue> GetOutGoodsMehtod();
   }
 }

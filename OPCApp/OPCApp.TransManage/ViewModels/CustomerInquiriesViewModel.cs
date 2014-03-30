@@ -22,11 +22,21 @@ namespace OPCApp.TransManage.ViewModels
 
         public IList<KeyValue> BrandList { get; set; }
 
+        public IList<KeyValue> OrderStatusList { get; set; }
+
+        public IList<KeyValue> PaymentTypeList { get; set; }
+
+        public IList<KeyValue> OutGoodsTypeList { get; set; }
+        
+        
         public void InitCombo()
         {
            // OderStatusList=new 
             this.StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
             this.BrandList = AppEx.Container.GetInstance<ICommonInfo>().GetBrandList();
+            this.OrderStatusList = AppEx.Container.GetInstance<ICommonInfo>().GetOrderStatus();
+            this.PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
+            this.OutGoodsTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetOutGoodsMehtod();
         }
 
         public CustomerInquiriesViewModel()
