@@ -7,5 +7,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
 {
     public class IMSStoreDetailUpdateRequest:BaseRequest
     {
+        public string Name { get; set; }
+        public string Phone { get; set; }
     }
 }

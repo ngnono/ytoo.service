@@ -172,15 +172,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     (o, i) => new { C = o, CR = i.OrderByDescending(ir => ir.SortOrder) }).FirstOrDefault();
             if (comboEntity == null)
                 return this.RenderError(r => r.Message = "搭配不存在");
-            return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, o => {
-                o.Images = comboEntity.CR.ToList().Select(cr => cr.Name.Image320Url());
-                o.Products = Context.Set<ProductEntity>().Join(Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == id), o => o.Id, i => i.ProductId, (o, i) => o)
+            return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, oc => {
+                oc.Images = comboEntity.CR.ToList().Select(cr => cr.Name.Image320Url());
+                oc.Products = Context.Set<ProductEntity>().Join(Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == id), oo => oo.Id, i => i.ProductId, (oo, i) => oo)
                             .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image && r.Status == (int)DataStatus.Normal),
                                         o => o.Id,
                                         i => i.SourceId,
                                         (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() })
                             .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p, po => {
-                                    po.ImageUrl = p.PR.Name
+                                po.ImageUrl = p.PR.Name;
                             }));
 
             }));

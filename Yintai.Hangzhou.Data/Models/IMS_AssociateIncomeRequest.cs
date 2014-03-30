@@ -13,6 +13,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int Status { get; set; }
         public System.DateTime CreateDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public string BankCode { get; set; }
 
         #region Overrides of BaseEntity
 

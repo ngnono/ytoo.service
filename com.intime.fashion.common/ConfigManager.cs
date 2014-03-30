@@ -238,5 +238,12 @@ namespace com.intime.fashion.common
         public static string IMS_DEFAULT_LOGO { get{
             return ConfigurationManager.AppSettings["IMS_Default_LOGO"];
         } }
+        public static int IMS_MAX_REQUEST_AMOUNT_MON
+        {
+            get
+            {
+                return int.Parse(ConfigurationManager.AppSettings["IMS_MAX_REQUEST_AMOUNT_MON"]);
+            }
+        }
     }
 }

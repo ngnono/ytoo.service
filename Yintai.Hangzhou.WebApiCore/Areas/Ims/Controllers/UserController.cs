@@ -6,81 +6,161 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.DTO.Response;
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
+using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
+using com.intime.fashion.common.Extension;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
     public class UserController:RestfulController
     {
+        private IFavoriteRepository _favorRepo;
+        public UserController(IFavoriteRepository favorRepo) {
+            _favorRepo = favorRepo;
+        }
         [RestfulAuthorize]
-        public ActionResult Favor_Store(PagerInfoRequest request)
+        public ActionResult Favor_Store(PagerInfoRequest request,int authuid)
         {
-            var mockupResponse = new List<dynamic>();
-            mockupResponse.Add(new
-            {
-                id = 1,
-                name = "mockup店铺1",
-                image = "",
-                phone = "13000000"
-            });
-            mockupResponse.Add(new
-            {
-                id = 1,
-                name = "mockup店铺2",
-                image = "",
-                phone = "13000000"
-            });
+            var linq = Context.Set<FavoriteEntity>().Where(f => f.Status == (int)DataStatus.Normal && f.User_Id == authuid
+                && f.FavoriteSourceType == (int)SourceType.Store)
+                        .Join(Context.Set<IMS_AssociateEntity>(), o => o.FavoriteSourceId, i => i.Id, (o, i) => i)
+                        .Join(Context.Set<UserEntity>().Where(u => u.Id == authuid), o => o.UserId, i => i.Id, (o, i) => new { A = o, U = i });
 
-            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, mockupResponse.Count)
+            int totalCount = linq.Count();
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(l => l.A.CreateDate).Skip(skipCount).Take(request.Pagesize);
+            var result = linq.ToList().Select(l => new
             {
-                Items = mockupResponse
+                id = l.A.Id,
+                image = l.U.Logo,
+                name = l.U.Nickname,
+                phone = l.U.Mobile
+            });
+            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, totalCount)
+            {
+                Items = result.ToList<dynamic>()
+            };
+
+            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
+           
+        }
+
+        [RestfulAuthorize]
+        public ActionResult Favor_Combo(PagerInfoRequest request,int authuid)
+        {
+            var linq = Context.Set<FavoriteEntity>().Where(f => f.Status == (int)DataStatus.Normal && f.User_Id == authuid
+               && f.FavoriteSourceType == (int)SourceType.Combo)
+                        .Join(Context.Set<IMS_ComboEntity>().GroupJoin(Context.Set<ResourceEntity>().Where(r=>r.Status==(int)DataStatus.Normal && r.SourceType==(int)SourceType.Combo),
+                                                                o=>o.Id,
+                                                                i=>i.SourceId,
+                                                                (o,i)=>new {IC=o,ICR=i.OrderByDescending(icr=>icr.SortOrder).FirstOrDefault()}),
+                                         o => o.FavoriteSourceId, i => i.IC.Id, (o, i) => new {
+                            type = (int)SourceType.Combo,
+                            id = (int)i.IC.Id,
+                            name = i.IC.Desc,
+                            is_online = i.IC.Status,
+                            price = i.IC.Price,
+                            create_date = o.CreatedDate,
+                            image = i.ICR.Name
+                        });
+            var linq2 = Context.Set<FavoriteEntity>().Where(f => f.Status == (int)DataStatus.Normal && f.User_Id == authuid
+               && f.FavoriteSourceType == (int)SourceType.GiftCard)
+                        .Join(Context.Set<IMS_GiftCardEntity>().GroupJoin(Context.Set<ResourceEntity>().Where(r => r.Status == (int)DataStatus.Normal && r.SourceType == (int)SourceType.GiftCard),
+                                                                o => o.Id,
+                                                                i => i.SourceId,
+                                                                (o, i) => new { IC = o, ICR = i.OrderByDescending(icr => icr.SortOrder).FirstOrDefault() }),
+                                         o => o.FavoriteSourceId, i => i.IC.Id, (o, i) => new
+                                         {
+                                             type = (int)SourceType.Combo,
+                                             id = (int)i.IC.Id,
+                                             name = i.IC.Name,
+                                             is_online = i.IC.Status,
+                                             price = 0m,
+                                             create_date = o.CreatedDate,
+                                             image = i.ICR.Name
+                                         });
+            linq = linq.Union(linq2);
+            int totalCount = linq.Count();
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(l => l.create_date).Skip(skipCount).Take(request.Pagesize);
+            var result = linq.ToList().Select(l => new
+            {
+                type = l.type,
+                id = l.id,
+                name = l.name,
+                is_online = l.is_online,
+                price =l.price,
+                create_date = l.create_date,
+                image = l.image.Image320Url()
+            });
+            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, totalCount)
+            {
+                Items = result.ToList<dynamic>()
             };
             return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
         }
 
-        [RestfulAuthorize]
-        public ActionResult Favor_Combo(PagerInfoRequest request)
-        {
-            var mockupResponse = new List<dynamic>();
-            mockupResponse.Add(new
-            {
-                id = 1,
-                type =1,
-                name = "mockupCombo1",
-                is_online = true,
-                price = 200.1,
-                image = ""
-            });
-            mockupResponse.Add(new
-            {
-                id = 1,
-                type = 2,
-                name = "mockupCombo1",
-                is_online = true,
-                price = 200.1,
-                image = ""
-            });
-
-            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, mockupResponse.Count)
-            {
-                Items = mockupResponse
-            };
-            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
-        }
-
 
         [RestfulAuthorize]
-        public ActionResult Favor(Yintai.Hangzhou.Contract.DTO.Request.IMSUserFavorRequest request)
+        public ActionResult Favor(IMSUserFavorRequest request,int authuid)
         {
-
+            int sourceType = (int)SourceType.Default;
+            switch (request.Type)
+            {
+                case (int)AssociateFavorType.Combo:
+                    sourceType = (int)SourceType.Combo;
+                    break;
+                case (int)AssociateFavorType.GiftCard:
+                    sourceType = (int)SourceType.GiftCard;
+                    break;
+                case (int)AssociateFavorType.Store:
+                    sourceType = (int)SourceType.Store;
+                    break;
+                default:
+                    return this.RenderError(r => r.Message = "收藏类型不支持");
+            }
+            _favorRepo.Insert(new FavoriteEntity()
+            {
+                CreatedDate = DateTime.Now,
+                CreatedUser = authuid,
+                Description = string.Empty,
+                FavoriteSourceId = request.Id,
+                Status = (int)DataStatus.Normal,
+                User_Id = authuid,
+                Store_Id = 0,
+                FavoriteSourceType = sourceType
+            });
             return this.RenderSuccess<dynamic>(null);
         }
 
         [RestfulAuthorize]
-        public ActionResult Unfavor(Yintai.Hangzhou.Contract.DTO.Request.IMSUserFavorRequest request)
+        public ActionResult Unfavor(IMSUserFavorRequest request,int authuid)
         {
-
+            int sourceType = (int)SourceType.Default;
+            switch (request.Type)
+            {
+                case (int)AssociateFavorType.Combo:
+                    sourceType = (int)SourceType.Combo;
+                    break;
+                case (int)AssociateFavorType.GiftCard:
+                    sourceType = (int)SourceType.GiftCard;
+                    break;
+                case (int)AssociateFavorType.Store:
+                    sourceType = (int)SourceType.Store;
+                    break;
+                default:
+                    return this.RenderError(r => r.Message = "收藏类型不支持");
+            }
+            var favorEntity = Context.Set<FavoriteEntity>().Where(f => f.FavoriteSourceType == sourceType
+                            && f.FavoriteSourceId == request.Type
+                            && f.User_Id == authuid).FirstOrDefault();
+            if (favorEntity == null)
+                return this.RenderSuccess<dynamic>(null);
+            favorEntity.Status = (int)DataStatus.Deleted;
+            _favorRepo.Update(favorEntity);
+            
             return this.RenderSuccess<dynamic>(null);
         }
     }

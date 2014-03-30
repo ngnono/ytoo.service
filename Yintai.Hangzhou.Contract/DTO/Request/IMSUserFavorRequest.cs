@@ -7,5 +7,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
 {
     public class IMSUserFavorRequest:BaseRequest
     {
+        public int Type { get; set; }
+        public int Id { get; set; }
     }
 }

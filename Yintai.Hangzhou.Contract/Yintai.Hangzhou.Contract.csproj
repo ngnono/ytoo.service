@@ -74,6 +74,9 @@
     <Compile Include="DTO\DateTimeExtension.cs" />
     <Compile Include="DTO\Request\Card\BindingRequest.cs" />
     <Compile Include="DTO\Request\ComputeAmountRequest.cs" />
+    <Compile Include="DTO\Request\IMSIncomeReqRequest.cs" />
+    <Compile Include="DTO\Request\IMSComboStatusUpdateRequest.cs" />
+    <Compile Include="DTO\Request\IMSComboUpdateRequest.cs" />
     <Compile Include="DTO\Request\Coupon\CouponRequest.cs" />
     <Compile Include="DTO\Request\Coupon\CouponRequestType.cs" />
     <Compile Include="DTO\Request\CreateAddressRequest.cs" />
@@ -132,6 +135,8 @@
     <Compile Include="DTO\Request\WxPackageGetRequest.cs" />
     <Compile Include="DTO\Response\Card\CardInfoResponse.cs" />
     <Compile Include="DTO\Response\Comment\CommentCollectionResponse.cs" />
+    <Compile Include="DTO\Response\IMSIncomeDetailResponse.cs" />
+    <Compile Include="DTO\Response\IMSIncomeReqDetailResponse.cs" />
     <Compile Include="DTO\Response\Device\DeviceInfoResponse.cs" />
     <Compile Include="DTO\Response\BaseResponse.cs" />
     <Compile Include="DTO\Response\Brand\BrandResponse.cs" />

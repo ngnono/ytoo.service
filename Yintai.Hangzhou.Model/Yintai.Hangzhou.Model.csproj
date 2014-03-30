@@ -69,6 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\AccountType.cs" />
+    <Compile Include="Enums\AssociateFavorType.cs" />
+    <Compile Include="Enums\AssociateIncomeRequestStatus.cs" />
+    <Compile Include="Enums\AssociateIncomeStatus.cs" />
     <Compile Include="Enums\AuthDataType.cs" />
     <Compile Include="Enums\BrandSortOrder.cs" />
     <Compile Include="Enums\BusinessStatus.cs" />
@@ -88,6 +91,7 @@
     <Compile Include="Enums\NotificationStatus.cs" />
     <Compile Include="Enums\OrderOpera.cs" />
     <Compile Include="Enums\OrderStatus.cs" />
+    <Compile Include="Enums\OrderType.cs" />
     <Compile Include="Enums\OutboundStatus.cs" />
     <Compile Include="Enums\OutboundType.cs" />
     <Compile Include="Enums\PaidOrderType.cs" />
@@ -114,6 +118,7 @@
     <Compile Include="ESModel\ESPromotion.cs" />
     <Compile Include="ESModel\ESResource.cs" />
     <Compile Include="ESModel\ESSection.cs" />
+    <Compile Include="ESModel\ESSize.cs" />
     <Compile Include="ESModel\ESSpecialTopic.cs" />
     <Compile Include="ESModel\ESStore.cs" />
     <Compile Include="ESModel\ESStorePromotion.cs" />
