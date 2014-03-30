@@ -4,6 +4,12 @@ namespace  OPCApp.Domain.Models
 {
     public class ShippingGet
     {
+        public ShippingGet()
+        {
+            StartGoodsOutDate = DateTime.Now;
+            EndGoodsOutDate = DateTime.Now;
+        }
+
         public string OrderNo { get; set; }
         public string ExpressNo { get; set; }
         public DateTime StartGoodsOutDate { get; set; }
