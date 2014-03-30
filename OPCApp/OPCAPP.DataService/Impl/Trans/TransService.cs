@@ -169,7 +169,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                return RestClient.Put("sale/SetSaleOrderPrintExpress", shipCode);
+                return RestClient.Put("sale/SetSaleOrderPrintExpress",shipCode);
             }
             catch (Exception ex)
             {

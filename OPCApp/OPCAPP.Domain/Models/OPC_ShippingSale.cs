@@ -10,8 +10,8 @@ namespace  OPCApp.Domain.Models
         ///     发货单ID
         /// </summary>
         public int Id { get; set; }
+        public string SaleOrderNo { get; set; }
 
-        /// <summary>
         ///     发货单号
         /// </summary>
         public string GoodsOutCode { get; set; }
