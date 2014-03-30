@@ -38,7 +38,7 @@ namespace OPCApp.DataService.Impl.Info
                     kv.Key = t.Id;
                     kv.Value = t.Name;
                     return kv;
-                }).ToList();
+                }).Distinct().ToList();
             }
             catch (Exception ex)
             {
@@ -56,7 +56,7 @@ namespace OPCApp.DataService.Impl.Info
                     kv.Key = t.Id;
                     kv.Value = t.Name;
                     return kv;
-                }).ToList(); ;
+                }).Distinct().ToList(); ;
             }
             catch (Exception ex)
             {

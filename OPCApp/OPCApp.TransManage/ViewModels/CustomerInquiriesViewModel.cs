@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Controls;
+using OPCAPP.Domain.Dto;
 using  OPCApp.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
@@ -17,9 +18,15 @@ namespace OPCApp.TransManage.ViewModels
     {
        // public List<object> OderStatusList { get; set; }
 
+        public IList<KeyValue> StoreList { get; set; }
+
+        public IList<KeyValue> BrandList { get; set; }
+
         public void InitCombo()
         {
            // OderStatusList=new 
+            this.StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
+            this.BrandList = AppEx.Container.GetInstance<ICommonInfo>().GetBrandList();
         }
 
         public CustomerInquiriesViewModel()
