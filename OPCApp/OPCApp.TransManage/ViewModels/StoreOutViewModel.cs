@@ -160,6 +160,9 @@ namespace OPCApp.TransManage.ViewModels
         {
             PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
             OrderList = re == null ? new List<Order>() : re.Result.ToList();
+            if (SearchSaleStatus == EnumSearchSaleStatus.PrintExpressSearchStatus) return;
+            GetListShipSaleBySale(sale.SaleOrderNo);
+            ;
         }
 
         public override void ClearOtherList()
@@ -242,6 +245,9 @@ namespace OPCApp.TransManage.ViewModels
              Invoice4Get.OrderNo);
             PageResult<OPC_ShippingSale> re = AppEx.Container.GetInstance<ITransService>().GetListShip(filter);
             ShipSaleList = re.Result.ToList();
+            OrderList = new List<Order>();
+            SaleList = new List<OPC_Sale>();
+            InvoiceDetail4List=new List<OPC_SaleDetail>();
         }
 
         public void GetDownShip()

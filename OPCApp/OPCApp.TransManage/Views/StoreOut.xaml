@@ -177,7 +177,7 @@
                     <StackPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                            <Button Background="LightGray"  Command="{Binding CommandSearchExpress}" Width="50">
+                            <Button Background="LightGray"  Command="{Binding CommandSearch}" Width="50">
                                 <StackPanel>
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
@@ -225,7 +225,7 @@
                             <TextBlock Text="发货单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="3" ItemsSource="{Binding ShipList}" IsReadOnly="True" SelectedItem="{Binding ShipSaleSelected}"
+                    <DataGrid Grid.Row="3" ItemsSource="{Binding ShipSaleList}" IsReadOnly="True" SelectedItem="{Binding ShipSaleSelected}"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="130" Header="发货单号" Binding="{Binding GoodsOutCode}" />
@@ -396,26 +396,26 @@
 
                     <StackPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
-
-                            <Button Background="LightGray" Width="50" Command="{Binding CommandBack}">
+                            <Button Background="LightGray"  Command="{Binding CommandSearchExpress}" Width="50">
                                 <StackPanel>
-                                    <Image Source="/image/变更单位.png" Stretch="None" />
-                                    <TextBlock HorizontalAlignment="Center">返回</TextBlock>
+                                    <Image Source="/image/查询.png" Stretch="None" />
+                                    <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Background="LightGray" Width="50">
+
+                            <Button Background="LightGray" Width="150" >
                                 <StackPanel>
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">补打快递预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Background="LightGray" Width="50" Command="{Binding CommandSoldOut}">
+                            <Button Background="LightGray" Width="100" Command="{Binding CommandSoldOut}">
                                 <StackPanel>
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">补打快递单</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Background="LightGray" Command="{Binding CommandStoreInSure}">
+                            <Button Background="LightGray"  Width="150" Command="{Binding CommandStoreInSure}">
                                 <StackPanel>
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">完成快递发货交接</TextBlock>
@@ -444,7 +444,7 @@
                             <TextBlock Text="快递单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="3" ItemsSource="{Binding ShipList}" IsReadOnly="True" SelectedItem="{Binding ShipSaleSelected}"
+                    <DataGrid Grid.Row="3" ItemsSource="{Binding ShipSaleList}" IsReadOnly="True" SelectedItem="{Binding ShipSaleSelected}"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
