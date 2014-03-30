@@ -8,7 +8,7 @@ using OPCApp.Infrastructure;
 namespace OPCApp.TransManage
 {
     //test
-    //liuyh test 222
+    //liuyh 2014-1-1
     [ModuleExport(typeof (TransManageModule))]
     public class TransManageModule : IModule
     {
