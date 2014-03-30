@@ -56,7 +56,7 @@
                         <StackPanel Orientation="Horizontal">
 
                             <TextBlock Text="  订单状态" />
-                            < Width="100" Foreground="Blue" Background="White" Text="{Binding OrderGet.Status}" />
+                            <ComboBox Height="25" ItemsSource="{Binding ShipViaList}" Width="130" DisplayMemberPath="Name" SelectedValuePath="Id"   SelectedItem="Binding OrderGet.Status"/>
                             <TextBlock Text="  支付方式   " />
                             <TextBox Width="100" Foreground="Blue" Background="White"
                                      Text="{Binding OrderGet.PaymentType}" />
@@ -70,9 +70,7 @@
                             <TextBox Width="100" Foreground="Blue" Background="White"
                                      Text="{Binding OrderGet.ExpressDeliveryCode}" />
                             <TextBlock Text="  快递公司   " />
-                            <TextBox Width="100" Foreground="Blue" Background="White"
-                                     Text="{Binding OrderGet.ExpressDeliveryCompany}" />
-
+                            <ComboBox Height="25" ItemsSource="{Binding ShipViaList}" Width="130" DisplayMemberPath="Name" SelectedValuePath="Id"   SelectedValue="{Binding OrderGet.ExpressDeliveryCompany}"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Row="3">
