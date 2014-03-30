@@ -49,5 +49,6 @@ namespace OPCAPP.Domain.Enums
         ///     打印快递单查询
         /// </summary>
         PrintExpressSearchStatus = 20,
+        ShipedSearchStatus = 30
     }
 }

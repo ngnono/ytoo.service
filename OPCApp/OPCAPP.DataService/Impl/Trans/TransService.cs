@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using  OPCApp.Domain.Models;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
-using OPCAPP.Domain.Enums;
-using OPCApp.Infrastructure;
 using OPCApp.Domain.Dto;
+using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Models;
+using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Impl.Trans
 {
@@ -34,17 +34,17 @@ namespace OPCApp.DataService.Impl.Trans
                 case EnumSearchSaleStatus.PrintExpressSearchStatus:
                     url = "sale/GetSalePrintExpress";
                     break;
+                case EnumSearchSaleStatus.ShipedSearchStatus:
+                    url = "sale/GetShipped";
+                    break;
             }
             try
             {
-
-           
-            IList<OPC_Sale> lst = RestClient.Get<OPC_Sale>(url, salesfilter);
-            return new PageResult<OPC_Sale>(lst, lst.Count);
+                IList<OPC_Sale> lst = RestClient.Get<OPC_Sale>(url, salesfilter);
+                return new PageResult<OPC_Sale>(lst, lst.Count);
             }
             catch (Exception ex)
             {
-
                 return null;
             }
         }
@@ -53,29 +53,26 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                var shipSales = RestClient.Get<OPC_ShippingSale>("trans/GetShippingSale", filter);
+                IList<OPC_ShippingSale> shipSales = RestClient.Get<OPC_ShippingSale>("trans/GetShippingSale", filter);
                 return new PageResult<OPC_ShippingSale>(shipSales, shipSales.Count);
             }
             catch (Exception ex)
             {
-
                 return null;
             }
         }
 
         /*根据销售单拿到订单*/
+
         public PageResult<Order> SearchOrderBySale(string orderNo)
         {
             try
             {
-
-           
-            var order = RestClient.GetSingle<Order>("order/GetOrderByOderNo",string.Format("orderNo={0}",orderNo));
-            return new PageResult<Order>(new List<Order>{order}, 100);
+                var order = RestClient.GetSingle<Order>("order/GetOrderByOderNo", string.Format("orderNo={0}", orderNo));
+                return new PageResult<Order>(new List<Order> {order}, 100);
             }
             catch (Exception ex)
             {
-
                 return null;
             }
         }
@@ -128,15 +125,16 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-               var shipSale = RestClient.GetSingle<OPC_ShippingSale>("trans/GetShippingSaleByOrderNo",
+                var shipSale = RestClient.GetSingle<OPC_ShippingSale>("trans/GetShippingSaleByOrderNo",
                     string.Format("saleNo={0}", saleOrderNo));
-             return  shipSale==null? new List<OPC_ShippingSale>():new List<OPC_ShippingSale>(){shipSale};
+                return shipSale == null ? new List<OPC_ShippingSale>() : new List<OPC_ShippingSale> {shipSale};
             }
             catch (Exception ex)
             {
                 return new List<OPC_ShippingSale>();
             }
         }
+
         public PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo)
         {
             try
@@ -169,7 +167,61 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                return RestClient.Put("sale/SetSaleOrderPrintExpress",shipCode);
+                return RestClient.Put("sale/SetSaleOrderPrintExpress", shipCode);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        /*打印销售单*/
+
+        public bool ExecutePrintSale(IList<string> saleOrderNoList)
+        {
+            try
+            {
+                return RestClient.Put("sale/SetSaleOrderPrintSale", saleOrderNoList);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        public bool SaveShip(ShippingSaleCreateDto dto)
+        {
+            try
+            {
+                return RestClient.Post("trans/CreateShippingSale", dto);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public List<OPC_Sale> SelectSaleByShip(string shipCode)
+        {
+            try
+            {
+                List<OPC_Sale> lst = RestClient.Get<OPC_Sale>("trans/GetSaleByShippingSaleNo",
+                    string.Format("shippingSaleNo={0}", shipCode)).ToList();
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                return new List<OPC_Sale>();
+            }
+        }
+
+
+        public bool SetSaleOrderShipped(IList<string> shipSalerNoList)
+        {
+            try
+            {
+                return RestClient.Put("sale/SetSaleOrderShipped", shipSalerNoList);
             }
             catch (Exception ex)
             {
@@ -200,59 +252,5 @@ namespace OPCApp.DataService.Impl.Trans
                 return false;
             }
         }
-        /*打印销售单*/
-        public bool ExecutePrintSale(IList<string> saleOrderNoList)
-        {
-            try
-            {
-                return RestClient.Put("sale/SetSaleOrderPrintSale", saleOrderNoList);
-
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
-
-
-
-        public bool SaveShip(ShippingSaleCreateDto dto)
-        {
-            try
-            {
-                return RestClient.Post("trans/CreateShippingSale", dto);
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-       public List<OPC_Sale> SelectSaleByShip(string shipCode)
-        {
-            try
-            {
-            List<OPC_Sale> lst = RestClient.Get<OPC_Sale>("trans/GetSaleByShippingSaleNo",
-                 string.Format("shippingSaleNo={0}", shipCode)).ToList();
-            return lst;
-            }
-            catch (Exception ex)
-            {
-                return new List<OPC_Sale>();
-            }
-        }
-
-
-       public bool SetSaleOrderShipped(IList<string> shipSalerNoList)
-       {
-           try
-           {
-               return RestClient.Put("sale/SetSaleOrderShipped", shipSalerNoList);
-           }
-           catch (Exception ex)
-           {
-               return false;
-           }
-       }
     }
 }
