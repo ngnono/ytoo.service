@@ -93,7 +93,7 @@ namespace Intime.OPC.Repository.Support
                 Expression<Func<Order, bool>> filter =  t => t.CreateDate >= starTime && t.CreateDate < endTime;
                 if (string.IsNullOrWhiteSpace(orderNo))
                 {
-                    filter.And(t => t.OrderNo.Contains(orderNo));
+                   filter= filter.And(t => t.OrderNo.Contains(orderNo));
                 }
                 return db.Orders.Where(filter).ToList();
             }

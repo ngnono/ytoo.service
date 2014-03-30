@@ -307,7 +307,7 @@ namespace Intime.OPC.WebApi.Controllers
             return base.DoFunction(() =>
             {
                 int userId = GetCurrentUserID();
-                return _saleService.GetNoPickUp(saleOrderNo, userId, saleOrderNo, startDate, endDate);
+                return _saleService.GetNoPickUp(saleOrderNo, userId, orderNo, startDate, endDate);
             }, "读取未提货数据失败");
         }
 

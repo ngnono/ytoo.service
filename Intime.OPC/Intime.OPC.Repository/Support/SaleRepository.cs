@@ -15,6 +15,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Xml.XPath;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
@@ -192,20 +194,22 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_Sale> result = db.OPC_Sale.Where(t => t.Status == (int) saleOrderStatus
-                                                                     && t.SellDate > dtStart
-                                                                     && t.SellDate <= dtEnd);
+             
+                Expression<Func<OPC_Sale, bool>> filterExpression = t => t.Status == (int) saleOrderStatus
+                                                                         && t.SellDate > dtStart
+                                                                         && t.SellDate <= dtEnd;
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
-                    result.Where(t => t.OrderNo == orderNo);
+                    filterExpression=  filterExpression.And(t => t.OrderNo.Contains(orderNo));
+                   // filterExpression = t => t.OrderNo.Contains(orderNo);
                 }
 
                 if (!string.IsNullOrWhiteSpace(saleId))
                 {
-                    result.Where(t => t.SaleOrderNo == saleId);
+                    filterExpression=filterExpression.And(t => t.SaleOrderNo.Contains(saleId));
                 }
 
-                return result.ToList();
+                return db.OPC_Sale.Where(filterExpression.Compile()).ToList();
             }
         }
     }

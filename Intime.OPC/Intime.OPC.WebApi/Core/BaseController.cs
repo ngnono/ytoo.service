@@ -56,7 +56,8 @@ namespace Intime.OPC.WebApi.Core
         {
             try
             {
-                return Ok(action());
+                var o = action();
+                return Ok(o);
             }
             catch (HttpResponseException ex)
             {
@@ -72,6 +73,7 @@ namespace Intime.OPC.WebApi.Core
             {
                 return BadRequest("销售单编号不能为空");
             }
+            
             catch (Exception ex)
             {
                 this.GetLog().Error(ex);
