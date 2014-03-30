@@ -53,7 +53,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                bool bResult = RestClient.Post("sale/addordercomment", orderComment);
+                bool bResult = RestClient.Post("order/addordercomment", orderComment);
                 return bResult;
             }
             catch (Exception ex)
@@ -104,5 +104,48 @@ namespace OPCApp.DataService.Impl.Trans
         }
 
         #endregion
+
+      
+        public PageResult<OPC_OrderComment> GetOrderRemark(string orderId)
+        {
+            try
+            {
+                var lst = RestClient.Get<OPC_OrderComment>("order/GetCommentByOderNo",
+                    orderId);
+                return new PageResult<OPC_OrderComment>(lst, lst.Count);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public bool WriteShippingRemark(OPC_ShipComment saleComment)
+        {
+            try
+            {
+                bool bResult = RestClient.Post("trans/AddShippingSaleComment", saleComment);
+                return bResult;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public PageResult<OPC_ShipComment> GetShipRemark(string shipId)
+        {
+
+            try
+            {
+                IList<OPC_ShipComment> lst = RestClient.Get<OPC_ShipComment>("trans/GetShippingSaleCommentByShippingSaleNo",
+                    shipId);
+                return new PageResult<OPC_ShipComment>(lst, lst.Count);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

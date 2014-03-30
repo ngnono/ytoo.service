@@ -63,7 +63,7 @@
 
 
         <DataGrid Grid.Row="3" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" 
-                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Invoice4Remark}">
+                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDown">
                     <i:InvokeCommandAction Command="{Binding CommandDbClick}" />
