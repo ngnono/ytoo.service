@@ -23,7 +23,7 @@ namespace OPCApp.DataService.Interface.Trans
         bool SetStatusPrintInvoice(IList<string> saleOrderNoList);
         PageResult<OPC_Sale> Search(string salesfilter, EnumSearchSaleStatus searchSaleStatus);
         PageResult<Order> SearchOrderBySale(string saleOrder);
-        PageResult<OPC_ShippingSale> GetListShipSaleBySale(string saleOrder);
+        List<OPC_ShippingSale> GetListShipSaleBySale(string saleOrder);
         PageResult<OPC_SaleDetail> SelectSaleDetail(string saleOrderNo);
 
         bool SaveShip(ShippingSaleCreateDto dto);

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.Domain.Dto;
@@ -36,14 +34,13 @@ namespace OPCApp.TransManage.ViewModels
             CommandSearchOrderBySale = new DelegateCommand(SearchOrderBySale);
             CommandSetShippingRemark = new DelegateCommand(SetShippingRemark);
             CommandSaveShip = new DelegateCommand(SaveShip);
-            CommandPrintView=new DelegateCommand(PrintView);
+            CommandPrintView = new DelegateCommand(PrintView);
             CommandSearchExpress = new DelegateCommand(GetShipSaleList);
             ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
             ShippingSaleCreateDto = new ShippingSaleCreateDto();
             CommandGetDownShip = new DelegateCommand(GetDownShip);
         }
 
-        
 
         public OPC_ShippingSale ShipSaleSelected
         {
@@ -89,21 +86,23 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetListShipSaleBySale(string saleOrderNo)
         {
-            IEnumerable<OPC_ShippingSale> re =
-                AppEx.Container.GetInstance<ITransService>().GetListShipSaleBySale(saleOrderNo).Result;
-            ShipSaleList = re.ToList();
+            ShipSaleList = AppEx.Container.GetInstance<ITransService>().GetListShipSaleBySale(saleOrderNo);
+            ;
         }
 
         /*打印*/
+
         public void OnlyPrint()
-        {//李写
-            
+        {
+//李写
         }
+
         /*打印预览*/
+
         private void PrintView()
         {
-
         }
+
         //发货单备注
         private void SetShippingRemark()
         {
@@ -175,6 +174,14 @@ namespace OPCApp.TransManage.ViewModels
         //{
 
         //}
+        public void ClearList()
+        {
+            ShipViaList = new List<ShipVia>();
+            SaleList = new List<OPC_Sale>();
+            OrderList = new List<Order>();
+            InvoiceDetail4List = new List<OPC_SaleDetail>();
+        }
+
         public void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
@@ -185,16 +192,17 @@ namespace OPCApp.TransManage.ViewModels
                 {
                     case 1:
                         SearchSaleStatus = EnumSearchSaleStatus.PrintInvoiceSearchStatus;
+                        ClearList();
                         Refresh();
                         break;
                     case 2:
                         SearchSaleStatus = EnumSearchSaleStatus.PrintExpressSearchStatus;
-                        SaleList = new List<OPC_Sale>();
-                        this.OrderList = new List<Order>();
-                        this.InvoiceDetail4List = new List<OPC_SaleDetail>();
-                        this.GetShipSaleList();
+
+                        ClearList();
+                        GetShipSaleList();
                         break;
                     default:
+                        ClearList();
                         SearchSaleStatus = EnumSearchSaleStatus.StoreOutDataBaseSearchStatus;
                         Refresh();
                         break;
@@ -237,17 +245,18 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         /*查询快递单*/
+
         public void GetShipSaleList()
         {
             string filter = string.Format("startdate={0}&enddate={1}&shippingCode={2}",
-             Invoice4Get.StartSellDate.ToShortDateString(),
-             Invoice4Get.EndSellDate.ToShortDateString(),
-             Invoice4Get.OrderNo);
+                Invoice4Get.StartSellDate.ToShortDateString(),
+                Invoice4Get.EndSellDate.ToShortDateString(),
+                Invoice4Get.OrderNo);
             PageResult<OPC_ShippingSale> re = AppEx.Container.GetInstance<ITransService>().GetListShip(filter);
             ShipSaleList = re.Result.ToList();
             OrderList = new List<Order>();
             SaleList = new List<OPC_Sale>();
-            InvoiceDetail4List=new List<OPC_SaleDetail>();
+            InvoiceDetail4List = new List<OPC_SaleDetail>();
         }
 
         public void GetDownShip()
@@ -261,7 +270,7 @@ namespace OPCApp.TransManage.ViewModels
                 OrderList = new List<Order>();
                 return;
             }
-           SaleList= AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(saleCur.GoodsOutCode);
+            SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(saleCur.GoodsOutCode);
         }
     }
 }
