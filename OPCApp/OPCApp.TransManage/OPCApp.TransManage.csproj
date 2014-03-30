@@ -89,6 +89,7 @@
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
     <Compile Include="ViewModels\RMACashInViewModel.cs" />
     <Compile Include="ViewModels\RemarkViewModel.cs" />
+    <Compile Include="ViewModels\SaleOrderPickupViewModel.cs" />
     <Compile Include="ViewModels\StoreOutViewModel.cs" />
     <Compile Include="ViewModels\StoreInViewModel.cs" />
     <Compile Include="ViewModels\PrintInvoiceViewModel.cs" />
@@ -103,6 +104,9 @@
     </Compile>
     <Compile Include="Views\RemarkWin.xaml.cs">
       <DependentUpon>RemarkWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SaleOrderPickupView.xaml.cs">
+      <DependentUpon>SaleOrderPickupView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StoreOut.xaml.cs">
       <DependentUpon>StoreOut.xaml</DependentUpon>
@@ -126,6 +130,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\RemarkWin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SaleOrderPickupView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
