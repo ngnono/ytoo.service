@@ -5,6 +5,7 @@ namespace Yintai.Hangzhou.Data.Models
 {
     public partial class IMS_ComboEntity : Yintai.Architecture.Common.Models.BaseEntity
     {
+        public int ProductType { get; set; }
         public int Id { get; set; }
         public string Desc { get; set; }
         public decimal Price { get; set; }

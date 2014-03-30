@@ -145,6 +145,7 @@
     <Compile Include="DTO\Response\GetShipCityDetailResponse.cs" />
     <Compile Include="DTO\Response\HotKey\HotWordResponse.cs" />
     <Compile Include="DTO\Response\IMSComboDetailResponse.cs" />
+    <Compile Include="DTO\Response\IMSProductDetailResponse.cs" />
     <Compile Include="DTO\Response\IMSStoreDetailResponse.cs" />
     <Compile Include="DTO\Response\ItemsInfoResponse.cs" />
     <Compile Include="DTO\Response\ItemsCollectionResponse.cs" />

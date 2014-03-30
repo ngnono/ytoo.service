@@ -12,6 +12,7 @@ using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
 using com.intime.fashion.common.Extension;
+using Yintai.Architecture.Common.Data.EF;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -23,12 +24,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IProductPropertyValueRepository _productPropertyValueRepo;
         private IInventoryRepository _inventoryRepo;
         private IResourceRepository _resourceRepo;
+        private IEFRepository<ProductCode2StoreCodeEntity> _productCodeRepo;
         public ProductController(IResourceService resourceService
             , IProductRepository productRepo
             , IProductPropertyRepository productPropertyRepo
             , IProductPropertyValueRepository productPropertyValueRepo
             , IInventoryRepository inventoryRepo
-            , IResourceRepository resourceRepo)
+            , IResourceRepository resourceRepo
+            ,IEFRepository<ProductCode2StoreCodeEntity> productCodeRepo)
         {
             _resourceService = resourceService;
             _productRepo = productRepo;
@@ -36,6 +39,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _productPropertyValueRepo = productPropertyValueRepo;
             _inventoryRepo = inventoryRepo;
             _resourceRepo = resourceRepo;
+            _productCodeRepo = productCodeRepo;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Create(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
@@ -97,6 +101,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     Store_Id = assocateEntity.StoreId
 
 
+                });
+                _productCodeRepo.Insert(new ProductCode2StoreCodeEntity()
+                {
+                    Status = (int)DataStatus.Normal,
+                    ProductId = productEntity.Id,
+                    StoreId = assocateEntity.StoreId,
+                    StoreProductCode = request.Sales_Code,
+                    UpdateDate = DateTime.Now,
+                    UpdateUser = authuid
                 });
                 //step2: create product color property
                 var propertyEntity = _productPropertyRepo.Insert(new ProductPropertyEntity()
@@ -258,6 +271,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 productEntity.Tag_Id = request.Category_Id;
                 _productRepo.Update(productEntity);
 
+                var productcodeEntity = Context.Set<ProductCode2StoreCodeEntity>().Where(pc => pc.ProductId == request.Id && pc.Status == (int)DataStatus.Normal).First();
+                productcodeEntity.StoreProductCode = request.Sales_Code;
+                productcodeEntity.UpdateDate = DateTime.Now;
+                _productCodeRepo.Update(productcodeEntity);
+
                 //step2: update product size property
                 var sizePropertyEntity = Context.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == productEntity.Id && pp.IsSize == true).First();
 
@@ -348,6 +366,38 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
         }
 
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Detail(int id, int authuid)
+        {
+            var productEntity = Context.Set<ProductEntity>().Where(p=>p.Id==id && p.Status!=(int)DataStatus.Deleted)
+                                .Join(Context.Set<TagEntity>(),o=>o.Tag_Id,i=>i.Id,(o,i)=>new {P=o,C=i})
+                                .Join(Context.Set<BrandEntity>(),o=>o.P.Brand_Id,i=>i.Id,(o,i)=>new {P=o.P,C=o.C,B=i})
+                                .Join(Context.Set<ProductCode2StoreCodeEntity>(),o=>o.P.Id,i=>i.ProductId,(o,i)=>new {P=o.P,C=o.C,B=o.B,PC=i})
+                                .FirstOrDefault();
+            if (productEntity == null)
+                return this.RenderError(r => r.Message = "商品不存在");
+            if (productEntity.P.CreatedUser != authuid)
+                return this.RenderError(r => r.Message = "无权操作该商品");
+            var sizeValues = Context.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == id && pp.IsSize == true && pp.Status == (int)DataStatus.Normal)
+                             .GroupJoin(Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Status == (int)DataStatus.Normal)
+                                        , o => o.Id
+                                        , i => i.PropertyId
+                                        , (o, i) => i)
+                             .FirstOrDefault();
+            return this.RenderSuccess<Yintai.Hangzhou.Contract.DTO.Response.IMSProductSelfDetailResponse>(r =>
+                            r.Data = new IMSProductSelfDetailResponse().FromEntity<IMSProductSelfDetailResponse>(productEntity.P, p => {
+                                p.Brand_Name = productEntity.B.Name;
+                                p.Category_Name = productEntity.C.Name;
+                                p.SalesCode = productEntity.PC.StoreProductCode;
+                                p.SizeType = productEntity.C.SizeType.Value;
+                                if (sizeValues != null)
+                                    p.Sizes = sizeValues.Select(ppv => new IMSProductSizeResponse() { 
+                                            SizeName = ppv.ValueDesc,
+                                            SizeValueId = ppv.Id
+                                    });
+
+                            }));
+        }
         [RestfulAuthorize]
         public ActionResult Search(Yintai.Hangzhou.Contract.DTO.Request.IMSProductSearchRequest request)
         {
