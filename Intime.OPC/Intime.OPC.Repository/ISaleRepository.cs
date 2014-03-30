@@ -128,5 +128,7 @@ namespace Intime.OPC.Repository
         /// <param name="orderID">The order identifier.</param>
         /// <returns>IList{OPC_Sale}.</returns>
         IList<OPC_Sale> GetByOrderNo(string orderID);
+
+        IList<OPC_Sale> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd);
     }
 }

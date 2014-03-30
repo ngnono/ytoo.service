@@ -311,6 +311,28 @@ namespace Intime.OPC.WebApi.Controllers
             }, "读取未提货数据失败");
         }
 
+        [HttpGet]
+        public IHttpActionResult GetSalePickup(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate)
+        {
+
+            return DoFunction(() =>
+            {
+                return _saleService.GetPickUp(orderCode, saleOrderNo, startDate, endDate);
+            },
+                "查询快递单信息失败");
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetShipped(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate)
+        {
+
+            return DoFunction(() =>
+            {
+                var userId = GetCurrentUserID();
+                return _saleService.GetShipped(orderCode,userId,  saleOrderNo, startDate, endDate);
+            },
+                "查询快递单信息失败");
+        }
         /// <summary>
         ///     获得已完成 打印销售单 的数据
         /// </summary>

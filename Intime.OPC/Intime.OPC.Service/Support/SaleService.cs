@@ -104,10 +104,27 @@ namespace Intime.OPC.Service.Support
             return UpdateSatus(orderNo, userId, EnumSaleOrderStatus.StockOut);
         }
 
+        public IList<SaleDto> GetPickUp(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
+        {
+            IList<OPC_Sale> lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, dtStart, dtEnd);
+            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+        }
+
+        public IList<SaleDto> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
+        {
+            IList<OPC_Sale> lst = _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd);
+            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+        }
+
         public IList<SaleDto> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
             IList<OPC_Sale> lst = _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd);
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
+        }
+
+        public IList<SaleDto> GetShipped(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        {
+            throw new NotImplementedException();
         }
 
         public IList<SaleDto> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart,

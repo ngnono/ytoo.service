@@ -109,6 +109,16 @@ namespace Intime.OPC.Service
         bool StockOut(string orderNo, int userId);
 
         /// <summary>
+        ///     获得 已发货 的数据
+        /// </summary>
+        /// <param name="saleOrderNo"></param>
+        /// <param name="userId"></param>
+        /// <param name="dtStart"></param>
+        /// <param name="dtEnd"></param>
+        /// <returns></returns>
+        IList<SaleDto> GetPickUp(string saleOrderNo,  string orderNo, DateTime dtStart, DateTime dtEnd);
+
+        /// <summary>
         ///     获得 未提货 的数据
         /// </summary>
         /// <param name="saleOrderNo"></param>
@@ -128,6 +138,15 @@ namespace Intime.OPC.Service
         /// <returns></returns>
         IList<SaleDto> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
 
+        /// <summary>
+        ///     获得 已发货 的数据
+        /// </summary>
+        /// <param name="saleId"></param>
+        /// <param name="userId"></param>
+        /// <param name="dtStart"></param>
+        /// <param name="dtEnd"></param>
+        /// <returns></returns>
+        IList<SaleDto> GetShipped(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
         /// <summary>
         ///     获得已完成 打印快递单 的数据
         /// </summary>
