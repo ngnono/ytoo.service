@@ -87,6 +87,11 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        public IList<OPC_Sale> GetPickUped(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        {
+            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PickUp);
+        }
+
         /// <summary>
         ///     获得已完成 打印销售单 的数据
         /// </summary>
@@ -196,12 +201,11 @@ namespace Intime.OPC.Repository.Support
             {
              
                 Expression<Func<OPC_Sale, bool>> filterExpression = t => t.Status == (int) saleOrderStatus
-                                                                         && t.SellDate > dtStart
-                                                                         && t.SellDate <= dtEnd;
+                                                                         && t.SellDate >= dtStart
+                                                                         && t.SellDate < dtEnd;
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     filterExpression=  filterExpression.And(t => t.OrderNo.Contains(orderNo));
-                   // filterExpression = t => t.OrderNo.Contains(orderNo);
                 }
 
                 if (!string.IsNullOrWhiteSpace(saleId))

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 
@@ -57,5 +58,6 @@ namespace Intime.OPC.Service
         IList<ShippingSaleDto> GetShippingSale(string shippingCode, System.DateTime startTime, System.DateTime endTime);
 
         IList<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo);
+        IList<SaleDto> GetSaleOrderPickup(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate);
     }
 }

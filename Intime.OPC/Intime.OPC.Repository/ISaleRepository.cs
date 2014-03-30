@@ -73,6 +73,16 @@ namespace Intime.OPC.Repository
         IList<OPC_Sale> GetNoPickUp(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd);
 
         /// <summary>
+        ///     获得 已发货 的数据
+        /// </summary>
+        /// <param name="saleId">The sale identifier.</param>
+        /// <param name="orderNo">The order no.</param>
+        /// <param name="dtStart">The dt start.</param>
+        /// <param name="dtEnd">The dt end.</param>
+        /// <returns>IList{OPC_Sale}.</returns>
+        IList<OPC_Sale> GetPickUped(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd);
+
+        /// <summary>
         ///     获得已完成 打印销售单 的数据
         /// </summary>
         /// <param name="saleId">The sale identifier.</param>

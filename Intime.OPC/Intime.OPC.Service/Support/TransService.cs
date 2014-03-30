@@ -129,5 +129,11 @@ namespace Intime.OPC.Service.Support
 
             return Mapper.Map<OPC_Sale, SaleDto>(lstSales);
         }
+
+        public IList<SaleDto> GetSaleOrderPickup(string orderNo, string saleOrderNo, DateTime startDate, DateTime endDate)
+        {
+            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate.Date,endDate.Date.AddDays(1));
+            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+        }
     }
 }

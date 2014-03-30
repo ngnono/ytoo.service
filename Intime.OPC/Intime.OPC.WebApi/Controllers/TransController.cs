@@ -144,5 +144,26 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         #endregion
+
+        #region 销售单提货记录查询
+        /// <summary>
+        /// 查询已发货的数据
+        /// </summary>
+        /// <param name="orderCode">The order code.</param>
+        /// <param name="saleOrderNo">The sale order no.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetSaleOrderPickup(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate)
+        {
+            
+            return DoFunction(() =>
+            {
+                return _transService.GetSaleOrderPickup(orderCode,saleOrderNo, startDate, endDate);
+            },
+                "查询快递单信息失败");
+        }
+        #endregion
     }
 }
