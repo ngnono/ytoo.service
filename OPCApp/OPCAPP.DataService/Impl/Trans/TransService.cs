@@ -241,5 +241,18 @@ namespace OPCApp.DataService.Impl.Trans
                 return new List<OPC_Sale>();
             }
         }
+
+
+       public bool SetSaleOrderShipped(IList<string> saleOrderNoList)
+       {
+           try
+           {
+               return RestClient.Put("sale/SetSaleOrderShipped", saleOrderNoList);
+           }
+           catch (Exception ex)
+           {
+               return false;
+           }
+       }
     }
 }
