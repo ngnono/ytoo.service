@@ -197,10 +197,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Image\查询.png" />
+    <Resource Include="Image\处理.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Image\处理.png" />
+    <Resource Include="Image\查询.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

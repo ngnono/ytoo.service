@@ -21,7 +21,7 @@
                 <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
                     <StackPanel>
                         <Image Source="/image/查询.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                        <TextBlock >查询</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Command="{Binding CommandViewAndPrint}">
