@@ -25,7 +25,7 @@
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal" Width="Auto">
 
-                                <TextBlock Text="{Binding Path=MenuName}" Margin="0,0,5,0" Width="150" FontSize="14"
+                                <TextBlock Text="{Binding Path=MenuName}" Margin="0,0,5,0" Width="200" FontSize="14"
                                            FontWeight="Bold" MouseDown="TextBlock_MouseDown">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDown">
@@ -41,7 +41,7 @@
                                 <DataTemplate>
 
                                     <StackPanel Orientation="Horizontal">
-                                        <RadioButton GroupName="Calendar" Margin="0, 5, 0, 5" Width="250"
+                                        <RadioButton GroupName="Calendar" Margin="0, 5, 0, 5" Width="200"
                                                      Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=ClickCommand}"
                                                      CommandParameter="{Binding Url}" Height="30"
                                                      HorizontalContentAlignment="Center"
