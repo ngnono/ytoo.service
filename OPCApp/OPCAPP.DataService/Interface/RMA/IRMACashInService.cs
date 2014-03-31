@@ -1,5 +1,5 @@
-﻿using  OPCApp.Domain.Models;
-using OPCAPP.Domain.Enums;
+﻿using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Interface.Trans

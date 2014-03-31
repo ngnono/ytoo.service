@@ -79,7 +79,8 @@
 
         </StackPanel>
 
-        <DataGrid x:Name="dataGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+        <DataGrid x:Name="dataGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True"
+                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                   ItemsSource="{Binding Models }">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

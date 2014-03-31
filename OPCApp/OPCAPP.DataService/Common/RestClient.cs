@@ -72,11 +72,12 @@ namespace OPCApp.DataService.Common
             HttpResponseMessage response = Client.GetAsync(url).Result;
             return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
         }
+
         public static T GetSingle<T>(string address, string urlParams = "")
         {
             string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}", address, urlParams);
             HttpResponseMessage response = Client.GetAsync(url).Result;
-            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<T>().Result :default(T);
+            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<T>().Result : default(T);
         }
 
         /// <summary>

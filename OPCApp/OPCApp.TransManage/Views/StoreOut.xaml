@@ -8,7 +8,7 @@
              Height="AUTO" Width="AUTO" Background="LightGray">
 
     <Grid>
-        <controls:MetroAnimatedSingleRowTabControl  HorizontalAlignment="Left">
+        <controls:MetroAnimatedSingleRowTabControl HorizontalAlignment="Left">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <si:CallMethodAction MethodName="SelectionChanged" TargetObject="{Binding}" />
@@ -57,13 +57,16 @@
                     <StackPanel Grid.Row="1" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="购买时间" Margin="0 5" />
-                            <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding Invoice4Get.StartSellDate}" />
-                            <TextBlock Text="  至"  Margin="0 5" />
+                            <DatePicker Width="150" Foreground="Blue"
+                                        SelectedDate="{Binding Invoice4Get.StartSellDate}" />
+                            <TextBlock Text="  至" Margin="0 5" />
                             <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}" />
-                            <TextBlock Text="  订单号"  Margin="0 5" />
-                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}" />
+                            <TextBlock Text="  订单号" Margin="0 5" />
+                            <TextBox Width="150" Foreground="Blue" Background="White"
+                                     Text="{Binding Invoice4Get.OrderNo}" />
                             <TextBlock Text="销售单" Margin="0 5" />
-                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding Invoice4Get.SaleOrderNo}" />
+                            <TextBox Width="150" Foreground="Blue" Background="White"
+                                     Text="{Binding Invoice4Get.SaleOrderNo}" />
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="2">
@@ -71,38 +74,47 @@
                             <TextBlock Text="销售单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="3" Height="400" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" 
-                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
+                    <DataGrid Grid.Row="3" Height="400" ItemsSource="{Binding SaleList}" IsReadOnly="True"
+                              AutoGenerateColumns="False"
+                              HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      Command="{Binding Path=DataContext.CommandSearchOrderBySale,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <CheckBox
+                                            IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                            Command="{Binding Path=DataContext.CommandSearchOrderBySale,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                            VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Header="销售类别" Binding="{Binding SalesType}" />
-                            <DataGridTextColumn Header="销售状态" Binding="{Binding ShipViaId}"  ElementStyle="{StaticResource CellCenter}" />
-                            <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}" ElementStyle="{StaticResource CellCenter}"/>
-                            <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatus}" ElementStyle="{StaticResource CellCenter}" />
-                            <DataGridTextColumn Header="销售时间" Width="150" Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"/>
+                            <DataGridTextColumn Header="销售状态" Binding="{Binding ShipViaId}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatus}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="销售时间" Width="150"
+                                                Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="是否调拨" Binding="{Binding IfTrans}" />
                             <DataGridTextColumn Header="调拨状态" Binding="{Binding TransStatus}" />
-                            <DataGridTextColumn Header="销售单金额"   Binding="{Binding SalesAmount}"  ElementStyle="{StaticResource CellRight}" />
-                            <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}"  ElementStyle="{StaticResource CellRight}" />
-                            <DataGridTextColumn Header="门店"  Width="200" Binding="{Binding SectionName}" />
+                            <DataGridTextColumn Header="销售单金额" Binding="{Binding SalesAmount}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="门店" Width="200" Binding="{Binding SectionName}" />
                             <DataGridTextColumn Header="收银流水号" Width="120" Binding="{Binding CashNum}" />
-                            <DataGridTextColumn Header="收银时间" Width="150" Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="收银时间" Width="150"
+                                                Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="专柜码" Binding="{Binding ShippingCode}" />
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -121,10 +133,12 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Width="200" Header="渠道订单号" Binding="{Binding OrderChannelNo}" />
-                            <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}" Binding="{Binding PaymentMethodName}" />
+                            <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}"
+                                                Binding="{Binding PaymentMethodName}" />
                             <DataGridTextColumn Header="应付款总计" Binding="{Binding MustPayTotal}" />
-                            <DataGridTextColumn Header="门店应付款"/>
-                            <DataGridTextColumn Header="购买时间" Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="门店应付款" />
+                            <DataGridTextColumn Header="购买时间"
+                                                Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
                             <DataGridTextColumn Header="收货人地址" Binding="{Binding CustomerAddress}" />
                             <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
@@ -138,7 +152,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetOrderRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.CommandSetOrderRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -170,7 +184,7 @@
                     <StackPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                            <Button Background="LightGray"  Command="{Binding CommandSearch}" Width="50">
+                            <Button Background="LightGray" Command="{Binding CommandSearch}" Width="50">
                                 <StackPanel>
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
@@ -218,13 +232,15 @@
                             <TextBlock Text="发货单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="3" ItemsSource="{Binding ShipSaleList}" IsReadOnly="True" SelectedItem="{Binding ShipSaleSelected}"
+                    <DataGrid Grid.Row="3" ItemsSource="{Binding ShipSaleList}" IsReadOnly="True"
+                              SelectedItem="{Binding ShipSaleSelected}"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="130" Header="发货单号" Binding="{Binding GoodsOutCode}" />
                             <DataGridTextColumn Width="200" Header="快递公司名称" Binding="{Binding ShipCompanyName}" />
                             <DataGridTextColumn Header="发货状态" Binding="{Binding ShippingStatus}" />
-                            <DataGridTextColumn Header="发货时间" Binding="{Binding GoodsOutDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="发货时间"
+                                                Binding="{Binding GoodsOutDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="快递公司取件人" Binding="{Binding ShipManName}" />
                             <DataGridTextColumn Header="打印状态" Binding="{Binding PrintStatus}" />
                             <DataGridTextColumn Header="快递单号" Binding="{Binding ExpressCode}" />
@@ -239,7 +255,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetShippingRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.CommandSetShippingRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -251,8 +267,9 @@
                             <TextBlock Text="销售单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="5" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" 
-                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
+                    <DataGrid Grid.Row="5" ItemsSource="{Binding SaleList}" IsReadOnly="True"
+                              AutoGenerateColumns="False"
+                              HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDown">
                                 <i:InvokeCommandAction Command="{Binding CommandDbClick}" />
@@ -264,32 +281,40 @@
                             <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <CheckBox
+                                            IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                            Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                            VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Header="销售类别" Binding="{Binding SalesType}" />
-                            <DataGridTextColumn Header="销售状态" Binding="{Binding ShipViaId}"  ElementStyle="{StaticResource CellCenter}" />
-                            <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}" ElementStyle="{StaticResource CellCenter}"/>
-                            <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatus}" ElementStyle="{StaticResource CellCenter}" />
-                            <DataGridTextColumn Header="销售时间" Width="150" Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"/>
+                            <DataGridTextColumn Header="销售状态" Binding="{Binding ShipViaId}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatus}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="销售时间" Width="150"
+                                                Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="是否调拨" Binding="{Binding IfTrans}" />
                             <DataGridTextColumn Header="调拨状态" Binding="{Binding TransStatus}" />
-                            <DataGridTextColumn Header="销售单金额"   Binding="{Binding SalesAmount}"  ElementStyle="{StaticResource CellRight}" />
-                            <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}"  ElementStyle="{StaticResource CellRight}" />
-                            <DataGridTextColumn Header="门店"  Width="200" Binding="{Binding SectionName}" />
+                            <DataGridTextColumn Header="销售单金额" Binding="{Binding SalesAmount}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="门店" Width="200" Binding="{Binding SectionName}" />
                             <DataGridTextColumn Header="收银流水号" Width="120" Binding="{Binding CashNum}" />
-                            <DataGridTextColumn Header="收银时间" Width="150" Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="收银时间" Width="150"
+                                                Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="专柜码" Binding="{Binding ShippingCode}" />
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -299,14 +324,16 @@
                     <StackPanel Grid.Row="6" Background="LightGray">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="快递公司" Margin="0 5" />
-                            <ComboBox Height="25" ItemsSource="{Binding ShipViaList}" Width="130" DisplayMemberPath="Name" SelectedValuePath="Id"   SelectedItem="{Binding ShipVia}"/>
+                            <ComboBox Height="25" ItemsSource="{Binding ShipViaList}" Width="130"
+                                      DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding ShipVia}" />
                             <TextBlock Text="实际运费" Margin="0 5" />
-                            <TextBox  Height="25"  Width="150" Foreground="Blue" Background="White"
+                            <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingSaleCreateDto.ShippingFee}" />
-                            <TextBlock  Text="快递单号" Margin="0 5" />
-                            <TextBox  Height="25"  Width="150" Foreground="Blue" Background="White"
+                            <TextBlock Text="快递单号" Margin="0 5" />
+                            <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingSaleCreateDto.ShippingCode}" />
-                            <Button  Height="25"  Content="生成发货单" Margin="0 5" Width="60" Command="{Binding CommandSaveShip}" />
+                            <Button Height="25" Content="生成发货单" Margin="0 5" Width="60"
+                                    Command="{Binding CommandSaveShip}" />
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="7">
@@ -314,19 +341,29 @@
                             <TextBlock Text="   销售明细" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="8"  IsReadOnly="True" ItemsSource="{Binding InvoiceDetail4List}" AutoGenerateColumns="False">
+                    <DataGrid Grid.Row="8" IsReadOnly="True" ItemsSource="{Binding InvoiceDetail4List}"
+                              AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="款号" Width="150" Binding="{Binding SectionNumber}" ElementStyle="{StaticResource CellRight}"  />
-                            <DataGridTextColumn Header="规格" Binding="{Binding Standard}"  ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="款号" Width="150" Binding="{Binding SectionNumber}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="规格" Binding="{Binding Standard}"
+                                                ElementStyle="{StaticResource CellRight}" />
                             <DataGridTextColumn Header="色码" Binding="{Binding ColorCode}" />
-                            <DataGridTextColumn Header="销售价" Binding="{Binding SalePrice}" ElementStyle="{StaticResource CellRight}"  />
-                            <DataGridTextColumn Header="销售数量" Binding="{Binding SaleCount}" ElementStyle="{StaticResource CellRight}"  />
-                            <DataGridTextColumn Header="已退货数量" Binding="{Binding RMACount}" ElementStyle="{StaticResource CellRight}"  />
+                            <DataGridTextColumn Header="销售价" Binding="{Binding SalePrice}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="销售数量" Binding="{Binding SaleCount}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="已退货数量" Binding="{Binding RMACount}"
+                                                ElementStyle="{StaticResource CellRight}" />
                             <DataGridTextColumn Width="150" Header="品牌" Binding="{Binding Brand}" />
-                            <DataGridTextColumn Header="吊牌价" Binding="{Binding OriginalPrice}"  ElementStyle="{StaticResource CellRight}"  />
-                            <DataGridTextColumn Header="现价" Binding="{Binding PresentPrice}"  ElementStyle="{StaticResource CellRight}" />
-                            <DataGridTextColumn Width="150" Header="备注" Visibility="Hidden" Binding="{Binding SalesAmount}" />
-                            <DataGridTextColumn Header="促销价格" Binding="{Binding SalesPrice}" ElementStyle="{StaticResource CellRight}"  />
+                            <DataGridTextColumn Header="吊牌价" Binding="{Binding OriginalPrice}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="现价" Binding="{Binding PresentPrice}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Width="150" Header="备注" Visibility="Hidden"
+                                                Binding="{Binding SalesAmount}" />
+                            <DataGridTextColumn Header="促销价格" Binding="{Binding SalesPrice}"
+                                                ElementStyle="{StaticResource CellRight}" />
                             <DataGridTextColumn Header="商品编码" Binding="{Binding GoodsCode}" />
                         </DataGrid.Columns>
 
@@ -342,10 +379,12 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Width="200" Header="渠道订单号" Binding="{Binding OrderChannelNo}" />
-                            <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}" Binding="{Binding PaymentMethodName}" />
+                            <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}"
+                                                Binding="{Binding PaymentMethodName}" />
                             <DataGridTextColumn Header="应付款总计" Binding="{Binding MustPayTotal}" />
-                            <DataGridTextColumn Header="门店应付款"/>
-                            <DataGridTextColumn Header="购买时间" Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="门店应付款" />
+                            <DataGridTextColumn Header="购买时间"
+                                                Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
                             <DataGridTextColumn Header="收货人地址" Binding="{Binding CustomerAddress}" />
                             <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
@@ -359,7 +398,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetOrderRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.CommandSetOrderRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -389,14 +428,14 @@
 
                     <StackPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
-                            <Button Background="LightGray"  Command="{Binding CommandSearchExpress}" Width="50">
+                            <Button Background="LightGray" Command="{Binding CommandSearchExpress}" Width="50">
                                 <StackPanel>
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                                 </StackPanel>
                             </Button>
 
-                            <Button Background="LightGray" Width="100" >
+                            <Button Background="LightGray" Width="100">
                                 <StackPanel>
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">补打快递预览</TextBlock>
@@ -408,7 +447,7 @@
                                     <TextBlock HorizontalAlignment="Center">补打快递单</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Background="LightGray"  Width="120" Command="{Binding CommandShippSaleHandOver}">
+                            <Button Background="LightGray" Width="120" Command="{Binding CommandShippSaleHandOver}">
                                 <StackPanel>
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">完成快递发货交接</TextBlock>
@@ -428,7 +467,7 @@
                             <TextBlock Text="快递单号" Margin="0 5" />
                             <TextBox Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding Invoice4Get.OrderNo}" />
-                           
+
 
                         </StackPanel>
                     </StackPanel>
@@ -437,24 +476,28 @@
                             <TextBlock Text="快递单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="3" ItemsSource="{Binding ShipSaleList}" IsReadOnly="True" SelectedItem="{Binding ShipSaleSelected}"
+                    <DataGrid Grid.Row="3" ItemsSource="{Binding ShipSaleList}" IsReadOnly="True"
+                              SelectedItem="{Binding ShipSaleSelected}"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      Command="{Binding Path=DataContext.CommandGetDownShip,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <CheckBox
+                                            IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                            Command="{Binding Path=DataContext.CommandGetDownShip,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                            VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTextColumn Width="130" Header="单号" Visibility="Hidden" Binding="{Binding SaleOrderNo}" />
+                            <DataGridTextColumn Width="130" Header="单号" Visibility="Hidden"
+                                                Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Width="130" Header="发货单号" Binding="{Binding GoodsOutCode}" />
                             <DataGridTextColumn Width="200" Header="快递公司名称" Binding="{Binding ShipCompanyName}" />
                             <DataGridTextColumn Header="发货状态" Binding="{Binding ShippingStatus}" />
-                            <DataGridTextColumn Header="发货时间" Binding="{Binding GoodsOutDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="发货时间"
+                                                Binding="{Binding GoodsOutDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="快递公司取件人" Binding="{Binding ShipManName}" />
                             <DataGridTextColumn Header="打印状态" Binding="{Binding PrintStatus}" />
                             <DataGridTextColumn Header="快递单号" Binding="{Binding ExpressCode}" />
@@ -469,7 +512,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetShippingRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.CommandSetShippingRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -481,8 +524,9 @@
                             <TextBlock Text="销售单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="5" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False" 
-                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
+                    <DataGrid Grid.Row="5" ItemsSource="{Binding SaleList}" IsReadOnly="True"
+                              AutoGenerateColumns="False"
+                              HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDown">
                                 <i:InvokeCommandAction Command="{Binding CommandDbClick}" />
@@ -494,32 +538,40 @@
                             <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <CheckBox
+                                            IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                            Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                            VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Header="销售类别" Binding="{Binding SalesType}" />
-                            <DataGridTextColumn Header="销售状态" Binding="{Binding ShipViaId}"  ElementStyle="{StaticResource CellCenter}" />
-                            <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}" ElementStyle="{StaticResource CellCenter}"/>
-                            <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatus}" ElementStyle="{StaticResource CellCenter}" />
-                            <DataGridTextColumn Header="销售时间" Width="150" Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"/>
+                            <DataGridTextColumn Header="销售状态" Binding="{Binding ShipViaId}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatus}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="销售时间" Width="150"
+                                                Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="是否调拨" Binding="{Binding IfTrans}" />
                             <DataGridTextColumn Header="调拨状态" Binding="{Binding TransStatus}" />
-                            <DataGridTextColumn Header="销售单金额"   Binding="{Binding SalesAmount}"  ElementStyle="{StaticResource CellRight}" />
-                            <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}"  ElementStyle="{StaticResource CellRight}" />
-                            <DataGridTextColumn Header="门店"  Width="200" Binding="{Binding SectionName}" />
+                            <DataGridTextColumn Header="销售单金额" Binding="{Binding SalesAmount}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="门店" Width="200" Binding="{Binding SectionName}" />
                             <DataGridTextColumn Header="收银流水号" Width="120" Binding="{Binding CashNum}" />
-                            <DataGridTextColumn Header="收银时间" Width="150" Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="收银时间" Width="150"
+                                                Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="专柜码" Binding="{Binding ShippingCode}" />
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -531,19 +583,29 @@
                             <TextBlock Text="   销售明细" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="7"  IsReadOnly="True" ItemsSource="{Binding InvoiceDetail4List}" AutoGenerateColumns="False">
+                    <DataGrid Grid.Row="7" IsReadOnly="True" ItemsSource="{Binding InvoiceDetail4List}"
+                              AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="款号" Width="150" Binding="{Binding SectionNumber}" ElementStyle="{StaticResource CellRight}"  />
-                            <DataGridTextColumn Header="规格" Binding="{Binding Standard}"  ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="款号" Width="150" Binding="{Binding SectionNumber}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="规格" Binding="{Binding Standard}"
+                                                ElementStyle="{StaticResource CellRight}" />
                             <DataGridTextColumn Header="色码" Binding="{Binding ColorCode}" />
-                            <DataGridTextColumn Header="销售价" Binding="{Binding SalePrice}" ElementStyle="{StaticResource CellRight}"  />
-                            <DataGridTextColumn Header="销售数量" Binding="{Binding SaleCount}" ElementStyle="{StaticResource CellRight}"  />
-                            <DataGridTextColumn Header="已退货数量" Binding="{Binding RMACount}" ElementStyle="{StaticResource CellRight}"  />
+                            <DataGridTextColumn Header="销售价" Binding="{Binding SalePrice}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="销售数量" Binding="{Binding SaleCount}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="已退货数量" Binding="{Binding RMACount}"
+                                                ElementStyle="{StaticResource CellRight}" />
                             <DataGridTextColumn Width="150" Header="品牌" Binding="{Binding Brand}" />
-                            <DataGridTextColumn Header="吊牌价" Binding="{Binding OriginalPrice}"  ElementStyle="{StaticResource CellRight}"  />
-                            <DataGridTextColumn Header="现价" Binding="{Binding PresentPrice}"  ElementStyle="{StaticResource CellRight}" />
-                            <DataGridTextColumn Width="150" Header="备注" Visibility="Hidden" Binding="{Binding SalesAmount}" />
-                            <DataGridTextColumn Header="促销价格" Binding="{Binding SalesPrice}" ElementStyle="{StaticResource CellRight}"  />
+                            <DataGridTextColumn Header="吊牌价" Binding="{Binding OriginalPrice}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="现价" Binding="{Binding PresentPrice}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Width="150" Header="备注" Visibility="Hidden"
+                                                Binding="{Binding SalesAmount}" />
+                            <DataGridTextColumn Header="促销价格" Binding="{Binding SalesPrice}"
+                                                ElementStyle="{StaticResource CellRight}" />
                             <DataGridTextColumn Header="商品编码" Binding="{Binding GoodsCode}" />
                         </DataGrid.Columns>
 
@@ -559,10 +621,12 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Width="200" Header="渠道订单号" Binding="{Binding OrderChannelNo}" />
-                            <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}" Binding="{Binding PaymentMethodName}" />
+                            <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}"
+                                                Binding="{Binding PaymentMethodName}" />
                             <DataGridTextColumn Header="应付款总计" Binding="{Binding MustPayTotal}" />
-                            <DataGridTextColumn Header="门店应付款"/>
-                            <DataGridTextColumn Header="购买时间" Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="门店应付款" />
+                            <DataGridTextColumn Header="购买时间"
+                                                Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
                             <DataGridTextColumn Header="收货人地址" Binding="{Binding CustomerAddress}" />
                             <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
@@ -576,7 +640,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetOrderRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.CommandSetOrderRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -585,9 +649,8 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            
-            
-            
+
+
         </controls:MetroAnimatedSingleRowTabControl>
     </Grid>
 

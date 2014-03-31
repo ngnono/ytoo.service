@@ -6,7 +6,7 @@ namespace OPCApp.TransManage.Views
     /// <summary>
     ///     PrintInvoiceViewModel.xaml 的交互逻辑
     /// </summary>
-    [Export("SaleOrderPickupView", typeof(UserControl))]
+    [Export("SaleOrderPickupView", typeof (UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class SaleOrderPickupView
     {

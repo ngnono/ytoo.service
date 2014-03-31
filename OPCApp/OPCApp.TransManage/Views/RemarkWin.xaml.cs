@@ -17,6 +17,8 @@ namespace OPCApp.TransManage.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class RemarkWin : IRemark
     {
+        private bool isCancel;
+
         [ImportingConstructor]
         public RemarkWin(RemarkViewModel viewModel)
         {
@@ -62,11 +64,9 @@ namespace OPCApp.TransManage.Views
                 DialogResult = true;
                 isCancel = false;
             }
-          
+
             Close();
         }
-
-        private bool isCancel = false;
 
         protected override void OnClosing(CancelEventArgs e)
         {

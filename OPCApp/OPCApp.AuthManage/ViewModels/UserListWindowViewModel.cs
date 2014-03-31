@@ -58,7 +58,7 @@ namespace OPCApp.AuthManage.ViewModels
             SelectedFiledValue = "";
             SelectedFiled = "";
             SetStopUserCommand = new DelegateCommand(SetStopUser);
-            this.DBGridClickCommand = new DelegateCommand(DBGridClick);
+            DBGridClickCommand = new DelegateCommand(DBGridClick);
         }
 
         private void SetStopUser()

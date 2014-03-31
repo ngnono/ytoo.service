@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
 using OPCAPP.Domain.Dto;
-using OPCAPP.Domain.Enums;
 using OPCApp.Domain.Models;
 
 namespace OPCApp.DataService.Impl.Info
@@ -14,8 +12,6 @@ namespace OPCApp.DataService.Impl.Info
     [Export(typeof (ICommonInfo))]
     public class CommonInfo : ICommonInfo
     {
-        /*物流公司*/
-
         #region ICommonInfo Members
 
         public List<ShipVia> GetShipViaList()
@@ -34,14 +30,14 @@ namespace OPCApp.DataService.Impl.Info
         {
             try
             {
-                var lst= RestClient.Get<Store>("store/getall").Select<Store, KeyValue>((t) =>
+                List<KeyValue> lst = RestClient.Get<Store>("store/getall").Select<Store, KeyValue>(t =>
                 {
-                    KeyValue kv=new KeyValue();
+                    var kv = new KeyValue();
                     kv.Key = t.Id;
                     kv.Value = t.Name;
                     return kv;
                 }).Distinct().ToList();
-                lst.Insert(0, new KeyValue(-1,"全部"));
+                lst.Insert(0, new KeyValue(-1, "全部"));
                 return lst;
             }
             catch (Exception ex)
@@ -54,9 +50,9 @@ namespace OPCApp.DataService.Impl.Info
         {
             try
             {
-                var lst= RestClient.Get<Brand>("brand/getall").Select<Brand, KeyValue>((t) =>
+                List<KeyValue> lst = RestClient.Get<Brand>("brand/getall").Select<Brand, KeyValue>(t =>
                 {
-                    KeyValue kv = new KeyValue();
+                    var kv = new KeyValue();
                     kv.Key = t.Id;
                     kv.Value = t.Name;
                     return kv;
@@ -72,15 +68,16 @@ namespace OPCApp.DataService.Impl.Info
 
         public IList<KeyValue> GetOrderStatus()
         {
-            IList<KeyValue> lstKeyValues=new List<KeyValue>();
+            IList<KeyValue> lstKeyValues = new List<KeyValue>();
             lstKeyValues.Add(new KeyValue(-1, "全部"));
-            lstKeyValues.Add(new KeyValue(0,"未发货"));
+            lstKeyValues.Add(new KeyValue(0, "未发货"));
             lstKeyValues.Add(new KeyValue(5, "已发货"));
             return lstKeyValues;
         }
 
         #endregion
 
+        /*物流公司*/
 
         public IList<KeyValue> GetOutGoodsMehtod()
         {
@@ -89,6 +86,7 @@ namespace OPCApp.DataService.Impl.Info
             lstKeyValues.Add(new KeyValue(0, "快递"));
             return lstKeyValues;
         }
+
         public IList<KeyValue> GetPayMethod()
         {
             IList<KeyValue> lstKeyValues = new List<KeyValue>();

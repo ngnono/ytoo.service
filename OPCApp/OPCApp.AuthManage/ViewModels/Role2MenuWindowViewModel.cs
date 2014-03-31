@@ -60,12 +60,7 @@ namespace OPCApp.AuthManage.ViewModels
             DeleteUserListCommand = new DelegateCommand(DeleteUserList);
             DbGridClickCommand = new DelegateCommand(DBGridClick);
             GetSelectedCommand = new DelegateCommand(GetSelected);
-            AuthorizationRefreshCommand=new DelegateCommand(Resfresh);
-            Init();
-        }
-
-        private void Resfresh()
-        {
+            AuthorizationRefreshCommand = new DelegateCommand(Resfresh);
             Init();
         }
 
@@ -134,6 +129,11 @@ namespace OPCApp.AuthManage.ViewModels
         public DelegateCommand DbGridClickCommand { get; set; }
 
         public DelegateCommand AuthorizationRefreshCommand { get; set; }
+
+        private void Resfresh()
+        {
+            Init();
+        }
 
         public void Init()
         {

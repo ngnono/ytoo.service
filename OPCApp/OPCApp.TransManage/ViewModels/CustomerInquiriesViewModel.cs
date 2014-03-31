@@ -1,44 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Controls;
-using OPCAPP.Domain.Dto;
-using  OPCApp.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;
+using OPCAPP.Domain.Dto;
+using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
-using System;
 
 namespace OPCApp.TransManage.ViewModels
 {
-
     [Export("CustomerInquiriesViewModel", typeof (CustomerInquiriesViewModel))]
     public class CustomerInquiriesViewModel : BindableBase
     {
-       // public List<object> OderStatusList { get; set; }
-
-        public IList<KeyValue> StoreList { get; set; }
-
-        public IList<KeyValue> BrandList { get; set; }
-
-        public IList<KeyValue> OrderStatusList { get; set; }
-
-        public IList<KeyValue> PaymentTypeList { get; set; }
-
-        public IList<KeyValue> OutGoodsTypeList { get; set; }
-
-        public List<ShipVia> ShipViaList { get; set; }
-        public void InitCombo()
-        {
-           // OderStatusList=new 
-            this.StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
-            this.BrandList = AppEx.Container.GetInstance<ICommonInfo>().GetBrandList();
-            this.OrderStatusList = AppEx.Container.GetInstance<ICommonInfo>().GetOrderStatus();
-            this.PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
-            this.OutGoodsTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetOutGoodsMehtod();
-            ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
-        }
+        // public List<object> OderStatusList { get; set; }
 
         public CustomerInquiriesViewModel()
         {
@@ -51,9 +28,9 @@ namespace OPCApp.TransManage.ViewModels
             CommandGetShipping = new DelegateCommand(GetShipping);
             CommandGetOrderByShippingId = new DelegateCommand(GetOrderByShippingId);
             CommandGetSaleByOrderNoShipping = new DelegateCommand(GetSaleByOrderNoShipping);
-            this.InitCombo();
+            InitCombo();
             orderGet = new OrderGet();
-            ShippingGet=new ShippingGet();
+            ShippingGet = new ShippingGet();
         }
 
         #region Tab1页签
@@ -136,21 +113,21 @@ namespace OPCApp.TransManage.ViewModels
                 string orderNo = string.Format("orderID={0}", SelectOrder.OrderNo);
                 //这个工作状态
                 SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderNo).Result;
-                if (SaleList != null && SaleList.Count()>0)
+                if (SaleList != null && SaleList.Count() > 0)
                 {
-                    var sale = SaleList.ToList()[0];
-                    SaleDetailList = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result;
+                    OPC_Sale sale = SaleList.ToList()[0];
+                    SaleDetailList =
+                        AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-               
             }
         }
 
         public void GetSaleDetailBySaleId()
         {
-            if (SelectSale==null||string.IsNullOrEmpty(SelectSale.Id.ToString()))
+            if (SelectSale == null || string.IsNullOrEmpty(SelectSale.Id.ToString()))
             {
                 return;
             }
@@ -235,7 +212,7 @@ namespace OPCApp.TransManage.ViewModels
         {
             try
             {
-                if (SelectShipping==null||string.IsNullOrEmpty(SelectShipping.Id.ToString()))
+                if (SelectShipping == null || string.IsNullOrEmpty(SelectShipping.Id.ToString()))
                 {
                     return;
                 }
@@ -244,15 +221,14 @@ namespace OPCApp.TransManage.ViewModels
                 OrderListShipping =
                     AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderByShippingId(shippingId).Result;
             }
-            catch(Exception ex)
-            { 
-
-             }
+            catch (Exception ex)
+            {
+            }
         }
 
         public void GetSaleByOrderNoShipping()
         {
-            if (SelectOrderShipping==null||string.IsNullOrEmpty(SelectOrderShipping.Id.ToString()))
+            if (SelectOrderShipping == null || string.IsNullOrEmpty(SelectOrderShipping.Id.ToString()))
             {
                 return;
             }
@@ -263,6 +239,18 @@ namespace OPCApp.TransManage.ViewModels
 
         #endregion
 
+        public IList<KeyValue> StoreList { get; set; }
+
+        public IList<KeyValue> BrandList { get; set; }
+
+        public IList<KeyValue> OrderStatusList { get; set; }
+
+        public IList<KeyValue> PaymentTypeList { get; set; }
+
+        public IList<KeyValue> OutGoodsTypeList { get; set; }
+
+        public List<ShipVia> ShipViaList { get; set; }
+
         public DelegateCommand CommandGetOrder { get; set; }
         public DelegateCommand CommandGetSaleByOrderId { get; set; }
         public DelegateCommand CommandGetSaleDetailBySaleId { get; set; }
@@ -270,7 +258,20 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandGetShipping { get; set; }
         public DelegateCommand CommandGetOrderByShippingId { get; set; }
         public DelegateCommand CommandGetSaleByOrderNoShipping { get; set; }
+
+        public void InitCombo()
+        {
+            // OderStatusList=new 
+            StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
+            BrandList = AppEx.Container.GetInstance<ICommonInfo>().GetBrandList();
+            OrderStatusList = AppEx.Container.GetInstance<ICommonInfo>().GetOrderStatus();
+            PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
+            OutGoodsTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetOutGoodsMehtod();
+            ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
+        }
+
         /*方式不可取 等待修改*/
+
         public void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
@@ -293,7 +294,7 @@ namespace OPCApp.TransManage.ViewModels
             }
             if (e.Source is DataGrid)
             {
-                DataGrid dg = e.Source as DataGrid;
+                var dg = e.Source as DataGrid;
                 switch (dg.Name)
                 {
                     case "OrderDataGrid":

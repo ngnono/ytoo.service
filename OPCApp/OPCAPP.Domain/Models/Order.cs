@@ -1,10 +1,9 @@
 using System;
 
-namespace  OPCApp.Domain.Models
+namespace OPCApp.Domain.Models
 {
     public class Order
     {
-
         /// <summary>
         ///     订单ID
         /// </summary>
@@ -54,7 +53,7 @@ namespace  OPCApp.Domain.Models
         ///     应付款合计
         /// </summary>
         public decimal MustPayTotal { get; set; }
-        
+
 
         /// <summary>
         ///     购买时间
@@ -115,6 +114,7 @@ namespace  OPCApp.Domain.Models
         ///     快递单号
         /// </summary>
         public string ExpressNo { get; set; }
+
         /// <summary>
         ///     快递公司
         /// </summary>

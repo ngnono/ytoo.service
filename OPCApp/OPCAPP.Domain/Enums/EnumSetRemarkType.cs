@@ -26,22 +26,23 @@ namespace OPCAPP.Domain.Enums
     public enum EnumSetRemarkType
     {
         /// <summary>
-        ///    填写销售单备注类型
+        ///     填写销售单备注类型
         /// </summary>
         SetSaleRemark = 0,
+
         /// <summary>
-        ///  填写销售单明细备注类型
+        ///     填写销售单明细备注类型
         /// </summary>
         SetSaleDetailRemark = 1,
+
         /// <summary>
         ///     填写订单备注类型
         /// </summary>
         SetOrderRemark = 2,
 
         /// <summary>
-        /// 填写快递单备注
+        ///     填写快递单备注
         /// </summary>
         SetShipSaleRemark = 3
-      
     }
 }

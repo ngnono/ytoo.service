@@ -13,7 +13,6 @@
 // ***********************************************************************
 
 using System.ComponentModel.Composition;
-using System.Linq;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -36,7 +35,6 @@ namespace OPCApp.AuthManage.ViewModels
         {
             EditViewModeKey = "RoleViewModel";
             AddViewModeKey = "RoleViewModel";
-            
         }
 
         protected override void Load()

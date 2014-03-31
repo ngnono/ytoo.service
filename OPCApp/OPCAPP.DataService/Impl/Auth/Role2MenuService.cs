@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
+using OPCApp.Domain.Dto;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure.DataService;
 
@@ -16,7 +17,7 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                bool bFalg = RestClient.Post("role/setmenus",new Domain.Dto.RoleMenuDto{ RoleID = roleId,MenuList= listMenuId});
+                bool bFalg = RestClient.Post("role/setmenus", new RoleMenuDto {RoleID = roleId, MenuList = listMenuId});
                 return new ResultMsg {IsSuccess = true, Msg = "保存成功"};
             }
             catch (Exception ex)

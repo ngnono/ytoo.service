@@ -23,19 +23,20 @@
 
                     <DataGridTextColumn Width="120" Header="备注人" Binding="{Binding CreateUser}" />
 
-                    <DataGridTextColumn Width="140" Header="备注时间" Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                    <DataGridTextColumn Width="140" Header="备注时间"
+                                        Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
         <Grid Grid.Row="2">
-            <StackPanel Orientation="Horizontal" Background="LightGray"  HorizontalAlignment="Right" Width="175">
+            <StackPanel Orientation="Horizontal" Background="LightGray" HorizontalAlignment="Right" Width="175">
                 <Button Background="LightGray" Width="50" Margin="0 0 30 0" Command="{Binding CommandBack}">
                     <StackPanel>
                         <Image Source="/image/删除.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">取消</TextBlock>
                     </StackPanel>
                 </Button>
-                 
+
                 <Button Background="LightGray" Width="50" Command="{Binding CommandSave}">
                     <StackPanel>
                         <Image Source="/image/保存.png" Stretch="None" />
@@ -53,9 +54,10 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid Grid.Column="0" Background="LightGray" Margin="15">
-                <TextBlock Width="33" Text="备注：" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1,15,730,11" Height="44" />
+                <TextBlock Width="33" Text="备注：" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Margin="1,15,730,11" Height="44" />
                 <TextBox AcceptsReturn="True" Foreground="Blue"
-                             Text="{Binding Remark.Content}" Margin="42,10,0,-104" />
+                         Text="{Binding Remark.Content}" Margin="42,10,0,-104" />
             </Grid>
         </Grid>
 

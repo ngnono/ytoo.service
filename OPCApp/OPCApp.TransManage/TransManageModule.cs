@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.Composition;
-using  OPCApp.Domain.Models;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
+using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.TransManage

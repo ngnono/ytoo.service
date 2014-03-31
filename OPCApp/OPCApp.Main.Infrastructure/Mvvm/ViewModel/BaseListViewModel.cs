@@ -57,7 +57,7 @@ namespace OPCApp.Infrastructure.Mvvm
             SearchCommand = new DelegateCommand(SearchAction);
             EditCommand = new DelegateCommand<T>(EditAction);
             DeleteCommand = new DelegateCommand<T>(DeleteAction);
-            LoadCommand=new DelegateCommand(Load);
+            LoadCommand = new DelegateCommand(Load);
             ViewKey = viewKey;
 
             _Collection = new ObservableCollection<T>();
@@ -90,7 +90,7 @@ namespace OPCApp.Infrastructure.Mvvm
 
         #region Action
 
-        protected virtual  void Load()
+        protected virtual void Load()
         {
         }
 
@@ -253,7 +253,9 @@ namespace OPCApp.Infrastructure.Mvvm
         /// </summary>
         /// <value>The search command.</value>
         public ICommand SearchCommand { get; set; }
+
         public ICommand LoadCommand { get; set; }
+
         #endregion
     }
 }

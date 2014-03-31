@@ -36,7 +36,7 @@
 
             </StackPanel>
         </StackPanel>
-        <DataGrid x:Name="gri1" HorizontalAlignment="Left" ItemsSource="{Binding MenuList}" 
+        <DataGrid x:Name="gri1" HorizontalAlignment="Left" ItemsSource="{Binding MenuList}"
                   AutoGenerateColumns="False" Grid.Row="1"
                   Grid.Column="1" VerticalAlignment="Top">
 
@@ -45,9 +45,10 @@
                 <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <CheckBox
+                                IsChecked="{Binding Path=IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 
-                            VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                VerticalAlignment="Center" HorizontalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -55,7 +56,8 @@
                 <DataGridTextColumn Header="菜单名称" Width="80" Binding="{Binding MenuName}" IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="gri2" HorizontalAlignment="Left" ItemsSource="{Binding RoleList}" SelectedItem="{Binding SelectedRole}"
+        <DataGrid x:Name="gri2" HorizontalAlignment="Left" ItemsSource="{Binding RoleList}"
+                  SelectedItem="{Binding SelectedRole}"
                   IsReadOnly="True" AutoGenerateColumns="False" Grid.Row="1" VerticalAlignment="Top" Grid.Column="0">
 
             <i:Interaction.Triggers>

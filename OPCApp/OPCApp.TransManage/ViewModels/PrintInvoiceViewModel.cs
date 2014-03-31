@@ -2,11 +2,11 @@
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
-using  OPCApp.Domain.Models;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;
 using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using OPCApp.TransManage.IService;
 using OPCApp.TransManage.Models;
@@ -16,10 +16,14 @@ namespace OPCApp.TransManage.ViewModels
     [Export("PrintInvoiceViewModel", typeof (PrintInvoiceViewModel))]
     public class PrintInvoiceViewModel : BindableBase
     {
-      
+        private OPC_Sale _opcSale;
+        private Invoice4Get invoice4Get;
+        private List<OPC_SaleDetail> invoiceDetail4List;
+        private IEnumerable<OPC_Sale> saleList;
+
         public PrintInvoiceViewModel()
         {
-            this.EnumSetRemarkType = EnumSetRemarkType.SetSaleRemark;
+            EnumSetRemarkType = EnumSetRemarkType.SetSaleRemark;
             //初始化命令属性
             CommandSearch = new DelegateCommand(CommandSearchExecute);
             CommandViewAndPrint = new DelegateCommand(CommandViewAndPrintExecute);
@@ -32,18 +36,8 @@ namespace OPCApp.TransManage.ViewModels
             SearchSaleStatus = EnumSearchSaleStatus.CompletePrintSearchStatus;
         }
 
-        private void CommandDbClickExecute()
-        {
-            if (SaleSelected != null)
-            {
-                InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(SaleSelected.SaleOrderNo).Result.ToList();
-            }
-        }
-
         public EnumSearchSaleStatus SearchSaleStatus { get; set; }
         //Grid数据集
-        
-        private IEnumerable<OPC_Sale> saleList;
 
         public IEnumerable<OPC_Sale> SaleList
         {
@@ -52,8 +46,7 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         //界面查询条件
-        private Invoice4Get invoice4Get;
-     
+
         public Invoice4Get Invoice4Get
         {
             get { return invoice4Get; }
@@ -61,8 +54,7 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         //选择上面行数据时赋值的数据集
-        private OPC_Sale _opcSale  ;
-      
+
         public OPC_Sale SaleSelected
         {
             get { return _opcSale; }
@@ -70,7 +62,7 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         //销售单明细Grid数据集
-        private List<OPC_SaleDetail> invoiceDetail4List;
+
         public List<OPC_SaleDetail> InvoiceDetail4List
         {
             get { return invoiceDetail4List; }
@@ -85,6 +77,18 @@ namespace OPCApp.TransManage.ViewModels
         public DelegateCommand CommandGetDown { get; set; }
         public DelegateCommand CommandDbClick { get; set; }
         public EnumSetRemarkType EnumSetRemarkType { get; set; }
+
+        private void CommandDbClickExecute()
+        {
+            if (SaleSelected != null)
+            {
+                InvoiceDetail4List =
+                    AppEx.Container.GetInstance<ITransService>()
+                        .SelectSaleDetail(SaleSelected.SaleOrderNo)
+                        .Result.ToList();
+            }
+        }
+
         //调用接口打开填写Remark的窗口
         public void CommandRemarkExecute()
         {
@@ -99,7 +103,6 @@ namespace OPCApp.TransManage.ViewModels
             Refresh();
         }
 
-       
 
         protected virtual void Refresh()
         {
@@ -109,22 +112,21 @@ namespace OPCApp.TransManage.ViewModels
                 Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo);
             PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter, SearchSaleStatus);
             SaleList = re.Result;
-            if (InvoiceDetail4List != null) InvoiceDetail4List=new List<OPC_SaleDetail>();
+            if (InvoiceDetail4List != null) InvoiceDetail4List = new List<OPC_SaleDetail>();
         }
 
         public virtual void ClearOtherList()
         {
-
         }
+
         public virtual void RefreshOther(OPC_Sale SaleOrderNo)
         {
-
         }
-       
-        public  void CommandGetDownExecute()
+
+        public void CommandGetDownExecute()
         {
             //if (SaleList == null)return;
-           // OPC_Sale saleCur = //SaleList.Where(n => n.IsSelected).FirstOrDefault();
+            // OPC_Sale saleCur = //SaleList.Where(n => n.IsSelected).FirstOrDefault();
             if (SaleSelected == null)
             {
                 if (invoiceDetail4List == null) return;
@@ -132,7 +134,8 @@ namespace OPCApp.TransManage.ViewModels
                 ClearOtherList();
                 return;
             }
-            InvoiceDetail4List = AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(SaleSelected.SaleOrderNo).Result.ToList();
+            InvoiceDetail4List =
+                AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(SaleSelected.SaleOrderNo).Result.ToList();
             RefreshOther(SaleSelected);
         }
 
@@ -148,9 +151,10 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         /*打印销售单*/
+
         public void CommandOnlyPrintExecute()
         {
-            if (SaleList == null)
+            if (SaleList == null || !SaleList.Any())
             {
                 MessageBox.Show("请勾选要打印的销售单", "提示");
                 return;
@@ -162,9 +166,10 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         /*完成销售单打印*/
+
         public void CommandFinishExecute()
         {
-            if (SaleList == null)
+            if (SaleList == null || !SaleList.Any())
             {
                 MessageBox.Show("请勾选要设置打印完成状态的销售单", "提示");
                 return;
