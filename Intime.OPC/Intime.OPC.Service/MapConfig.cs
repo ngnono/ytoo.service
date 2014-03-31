@@ -14,7 +14,7 @@ namespace Intime.OPC.Service
                 Mapper.CreateMap<OPC_ShippingSale, ShippingSaleDto>();
             map3.ForMember(t => t.ExpressCode, o => o.MapFrom(t1 => t1.ShippingCode));
             map3.ForMember(t => t.GoodsOutCode, o => o.MapFrom(t1 => t1.ShippingCode));
-
+          
 
             IMappingExpression<Order, OrderDto> map1 = Mapper.CreateMap<Order, OrderDto>();
             map1.ConvertUsing(t => converDto(t));

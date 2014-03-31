@@ -10,5 +10,9 @@ namespace Intime.OPC.Service
     public interface IShippingSaleService:IService
     {
         IList< OPC_ShippingSale> GetByShippingCode(string shippingCode);
+
+        void Shipped(string saleOrderNo,int userID);
+
+        void PrintExpress(string orderNo, int userId);
     }
 }

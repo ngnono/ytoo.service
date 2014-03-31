@@ -129,7 +129,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                foreach (string saleNo in saleNos)
+                foreach (var saleNo in saleNos)
                 {
                     OPC_Sale sale = db.OPC_Sale.FirstOrDefault(t => t.SaleOrderNo == saleNo);
                     if (sale != null)
@@ -139,6 +139,11 @@ namespace Intime.OPC.Repository.Support
                         sale.Status = (int) saleOrderStatus;
                     }
                 }
+               var lst= db.OPC_Sale.Where(t => saleNos.Contains(t.SaleOrderNo));
+
+               var lst2=  saleNos.Join(db.OPC_Sale, t => t, o => o.SaleOrderNo, (t, o) => o);
+               
+
                 db.SaveChanges();
                 return true;
             }

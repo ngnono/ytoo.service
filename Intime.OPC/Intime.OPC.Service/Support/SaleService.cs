@@ -110,11 +110,6 @@ namespace Intime.OPC.Service.Support
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
-        public IList<SaleDto> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
-        {
-            IList<OPC_Sale> lst = _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd);
-            return Mapper.Map<OPC_Sale, SaleDto>(lst);
-        }
 
         public IList<SaleDto> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
@@ -124,7 +119,8 @@ namespace Intime.OPC.Service.Support
 
         public IList<SaleDto> GetShipped(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
-            throw new NotImplementedException();
+            IList<OPC_Sale> lst = _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd);
+            return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public IList<SaleDto> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
