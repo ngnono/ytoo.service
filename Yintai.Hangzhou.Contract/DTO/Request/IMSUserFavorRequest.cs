@@ -9,5 +9,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
     {
         public int Type { get; set; }
         public int Id { get; set; }
+        public int StoreId { get; set; }
     }
 }

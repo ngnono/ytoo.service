@@ -36,6 +36,8 @@ namespace com.intime.fashion.common.Wxpay
         public static readonly string PAYMENT_CODE4APP = ConfigurationManager.AppSettings["WX_PAYMENT_CODE4APP"];
         public static readonly string PAYMENT_CODE4HTML = ConfigurationManager.AppSettings["WX_PAYMENT_CODE4HTML"];
 
+        public static readonly string IMS_SIGN_KEY = ConfigurationManager.AppSettings["WX_SIGN_KEY_IMS"];
+
         public static string PaymentCode
         {
             get

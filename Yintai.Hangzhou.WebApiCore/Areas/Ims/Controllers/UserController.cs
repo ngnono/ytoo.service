@@ -63,7 +63,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             is_online = i.IC.Status,
                             price = i.IC.Price,
                             create_date = o.CreatedDate,
-                            image = i.ICR.Name
+                            image = i.ICR.Name,
+                            store_id = o.Store_Id
                         });
             var linq2 = Context.Set<FavoriteEntity>().Where(f => f.Status == (int)DataStatus.Normal && f.User_Id == authuid
                && f.FavoriteSourceType == (int)SourceType.GiftCard)
@@ -79,7 +80,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                              is_online = i.IC.Status,
                                              price = 0m,
                                              create_date = o.CreatedDate,
-                                             image = i.ICR.Name
+                                             image = i.ICR.Name,
+                                             store_id = o.Store_Id
                                          });
             linq = linq.Union(linq2);
             int totalCount = linq.Count();
@@ -93,7 +95,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 is_online = l.is_online,
                 price =l.price,
                 create_date = l.create_date,
-                image = l.image.Image320Url()
+                image = l.image.Image320Url(),
+                store_id = l.store_id
             });
             var response = new PagerInfoResponse<dynamic>(request.PagerRequest, totalCount)
             {
@@ -129,7 +132,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 FavoriteSourceId = request.Id,
                 Status = (int)DataStatus.Normal,
                 User_Id = authuid,
-                Store_Id = 0,
+                Store_Id = request.StoreId,
                 FavoriteSourceType = sourceType
             });
             return this.RenderSuccess<dynamic>(null);

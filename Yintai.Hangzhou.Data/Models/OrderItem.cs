@@ -33,6 +33,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string SizeValueName { get; set; }
 
         public Nullable<int> ProductType { get; set; }
+        public string StoreSalesCode { get; set; }
 
         #region Overrides of BaseEntity
 

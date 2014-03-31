@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Yintai.Hangzhou.Model.Enums
 {
-    public enum PaidOrderType
+    public enum IncomeRuleType
     {
-        Self = 0,
-        Erp = 1,
-        Erp2 = 2,
-        Self_ProductOfSelf = 3,
-        GiftCard = 4
+        Flat = 1,
+        Fix = 2,
+        Flex = 3
     }
 }

@@ -244,7 +244,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Income_Frozen(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
-                        Where(iair => iair.AssociateUserId == authuid && iair.Status == (int)AssociateIncomeStatus.Frozen && iair.SourceType == (int)OrderType.GiftCard)
+                        Where(iair => iair.AssociateUserId == authuid && iair.Status == (int)AssociateIncomeStatus.Frozen && iair.SourceType == (int)AssociateOrderType.GiftCard)
                         .Join(Context.Set<IMS_GiftCardOrderEntity>(), o => o.SourceNo, i => i.No, (o, i) => new IMSIncomeDetailResponse
                          { 
                             CreateDate = o.CreateDate,
@@ -257,7 +257,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         });
 
             var linq2 = Context.Set<IMS_AssociateIncomeHistoryEntity>().
-                        Where(iair => iair.AssociateUserId == authuid && iair.Status == (int)AssociateIncomeStatus.Frozen && iair.SourceType == (int)OrderType.GiftCard)
+                        Where(iair => iair.AssociateUserId == authuid && iair.Status == (int)AssociateIncomeStatus.Frozen && iair.SourceType == (int)AssociateOrderType.GiftCard)
                         .Join(Context.Set<OrderEntity>(), o => o.SourceNo, i => i.OrderNo, (o, i) => new IMSIncomeDetailResponse
                         {
                             CreateDate = o.CreateDate,
@@ -326,7 +326,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Order_GiftCards(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
-                        Where(iai => iai.AssociateUserId == authuid && iai.SourceType == (int)OrderType.Product)
+                        Where(iai => iai.AssociateUserId == authuid && iai.SourceType == (int)AssociateOrderType.Product)
                         .Join(Context.Set<IMS_GiftCardOrderEntity>(), o => o.SourceNo, i => i.No, (o, i) => new
                         {
                             A = o,
@@ -351,7 +351,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Orders(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
-                        Where(iai => iai.AssociateUserId == authuid && iai.SourceType == (int)OrderType.Product)
+                        Where(iai => iai.AssociateUserId == authuid && iai.SourceType == (int)AssociateOrderType.Product)
                         .Join(Context.Set<OrderEntity>(), o => o.SourceNo, i => i.OrderNo, (o, i) => new
                         {
                             A = o,

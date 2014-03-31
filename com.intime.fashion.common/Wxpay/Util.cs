@@ -74,6 +74,13 @@ namespace com.intime.fashion.common.Wxpay
             return MD5_Encode(signingStr).ToUpper();
         }
 
+        public static string NotifySignIMS(Dictionary<string, string> sPara)
+        {
+            var signingStr = sPara.OrderBy(s => s.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}&", b.Key, b.Value), s => s.ToString().TrimEnd('&'));
+            signingStr = string.Format("{0}&key={1}", signingStr, WxPayConfig.PARTER_KEY);
+            return MD5_Encode(signingStr).ToUpper();
+        }
+
         public static string UrlEncode(string value)
         {
             if (value == null)

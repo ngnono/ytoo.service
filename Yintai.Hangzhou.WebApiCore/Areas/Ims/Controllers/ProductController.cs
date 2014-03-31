@@ -398,54 +398,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
                             }));
         }
-        [RestfulAuthorize]
-        public ActionResult Search(Yintai.Hangzhou.Contract.DTO.Request.IMSProductSearchRequest request)
-        {
-            var mockupResponse = new List<dynamic>();
-            mockupResponse.Add(new
-            {
-                id = 1,
-                desc = "系统商品1",
-                price = 100.1,
-                image = "",
-                create_date = "2014-03-24 1:00:00",
-                product_type = (int)ProductType.FromSystem
-            });
-            mockupResponse.Add(new
-            {
-                id = 1,
-                desc = "系统商品2",
-                price = 100.1,
-                image = "",
-                create_date = "2014-03-25 2:00:00",
-                product_type = (int)ProductType.FromSystem
-            });
-            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, mockupResponse.Count)
-            {
-                Items = mockupResponse
-            };
-            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
-        }
-
-        [RestfulAuthorize]
-        public ActionResult Brands(Yintai.Hangzhou.Contract.DTO.Request.IMSProductBrandsRequest request)
-        {
-            var mockupResponse = new List<dynamic>();
-            mockupResponse.Add(new
-            {
-                id = 1,
-                name = "mockup系统品牌1"
-            });
-            mockupResponse.Add(new
-            {
-                id = 2,
-                name = "mockup系统品牌2"
-            });
-            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, mockupResponse.Count)
-            {
-                Items = mockupResponse
-            };
-            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
-        }
+      
+       
     }
 }

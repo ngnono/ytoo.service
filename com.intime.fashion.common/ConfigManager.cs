@@ -245,5 +245,12 @@ namespace com.intime.fashion.common
                 return int.Parse(ConfigurationManager.AppSettings["IMS_MAX_REQUEST_AMOUNT_MON"]);
             }
         }
+        public static int IMS_GIFTCARD_CAT_ID
+        {
+            get
+            {
+                return int.Parse(ConfigurationManager.AppSettings["IMS_GIFTCARD_CAT_ID"]);
+            }
+        }
     }
 }

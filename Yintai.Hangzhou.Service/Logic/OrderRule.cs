@@ -1,8 +1,6 @@
 ﻿using com.intime.fashion.common;
-
 using com.intime.fashion.common.Aws;
 using com.intime.fashion.common.Erp2;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +8,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Transactions;
+using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Common.Web.Mvc.ActionResults;
 using Yintai.Architecture.Framework.ServiceLocation;
@@ -100,7 +99,7 @@ namespace Yintai.Hangzhou.Service.Logic
             var _orderexRepo = ServiceLocator.Current.Resolve<IOrder2ExRepository>();
 
             decimal totalAmount = 0m;
-
+            bool isSelfOrder = false;
             foreach (var product in request.OrderModel.Products)
             {
                 var productEntity = _productRepo.Find(product.ProductId);
@@ -109,6 +108,10 @@ namespace Yintai.Hangzhou.Service.Logic
                 if (!productEntity.Is4Sale.HasValue || productEntity.Is4Sale.Value == false)
                     return CommonUtil.RenderError(r => r.Message = string.Format("{0} 不能销售！", productEntity.Id));
                 totalAmount += productEntity.Price * product.Quantity;
+                if (productEntity.ProductType.HasValue && productEntity.ProductType.Value == (int)ProductType.FromSelf) 
+                {
+                    isSelfOrder = true;
+                }
             }
 
             if (totalAmount <= 0)
@@ -190,12 +193,18 @@ namespace Yintai.Hangzhou.Service.Logic
                     InvoiceAmount = totalAmount,
                     OrderNo = orderNo,
                     TotalPoints = otherFee.TotalPoints,
-                    OrderSource = request.Channel
+                    OrderSource = request.Channel,
+                    OrderProductType = isSelfOrder?(int)OrderProductType.SelfProduct:(int)OrderProductType.SystemProduct
 
                 });
                 foreach (var product in request.OrderModel.Products)
                 {
                     var productEntity = _productRepo.Find(product.ProductId);
+                    string salesCode = string.Empty;
+                    if (productEntity.ProductType == (int)ProductType.FromSelf) {
+                        var productSaleCodeEntity = Context.Set<ProductCode2StoreCodeEntity>().Where(p => p.ProductId == product.ProductId && p.Status == (int)DataStatus.Normal).First();
+                        salesCode = productSaleCodeEntity.StoreProductCode;
+                    }
                     var inventoryEntity = Context.Set<InventoryEntity>().Where(pm => pm.ProductId == product.ProductId && pm.PColorId == product.Properties.ColorValueId && pm.PSizeId == product.Properties.SizeValueId).FirstOrDefault();
                     if (inventoryEntity == null)
                         return CommonUtil.RenderError(r => r.Message = string.Format("{0}库存 不存在！", productEntity.Id));
@@ -227,7 +236,9 @@ namespace Yintai.Hangzhou.Service.Logic
                         ColorValueName = productColorEntity == null ? string.Empty : productColorEntity.ValueDesc,
                         SizeValueName = productSizeEntity == null ? string.Empty : productSizeEntity.ValueDesc,
                         StoreItemNo = productEntity.SkuCode,
-                        Points = 0
+                        Points = 0,
+                        ProductType = productEntity.ProductType??(int)ProductType.FromSystem,
+                        StoreSalesCode =salesCode
 
                     });
                     inventoryEntity.Amount = inventoryEntity.Amount - product.Quantity;
@@ -272,20 +283,38 @@ namespace Yintai.Hangzhou.Service.Logic
                     OrderNo = orderNo,
                     Type = (int)OrderOpera.FromCustomer
                 });
+                if (request.OrderModel.StoreId.HasValue && request.OrderModel.StoreId > 0)
+                {
+                    
+                    var associateEntity = Context.Set<IMS_AssociateEntity>().Find(request.OrderModel.StoreId);
+                    AssociateIncomeLogic.Create(associateEntity.UserId, orderEntity);
+
+                }
                 string exOrderNo = string.Empty;
-                bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "DivideOrderToSaleFromJSON", OrdersJSON = erpOrder }, r => exOrderNo = r.order_no
+
+                bool isSuccess = true;
+                if (!isSelfOrder)
+                {
+                    ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "DivideOrderToSaleFromJSON", OrdersJSON = erpOrder }, r => exOrderNo = r.order_no
                     , null);
+                }
                 if (isSuccess)
                 {
-                   var exOrderEntity= _orderexRepo.Insert(new Order2ExEntity()
+                    
+                    if (isSelfOrder)
                     {
-                        ExOrderNo = exOrderNo,
-                        OrderNo = orderEntity.OrderNo,
-                        UpdateTime = DateTime.Now
-                    });
+                        var exOrderEntity = _orderexRepo.Insert(new Order2ExEntity()
+                         {
+                             ExOrderNo = exOrderNo,
+                             OrderNo = orderEntity.OrderNo,
+                         });
+                    } else
+                    {
+                        exOrderNo = orderEntity.OrderNo;
+                    }
                     ts.Complete();
                     createSuccess = true;
-                    return CommonUtil.RenderSuccess<OrderResponse>(m => m.Data = new OrderResponse().FromEntity<OrderResponse>(orderEntity,o=>o.ExOrderNo = exOrderEntity.ExOrderNo));
+                    return CommonUtil.RenderSuccess<OrderResponse>(m => m.Data = new OrderResponse().FromEntity<OrderResponse>(orderEntity,o=>o.ExOrderNo=exOrderNo));
                 }
                 else
                 {
@@ -318,7 +347,7 @@ namespace Yintai.Hangzhou.Service.Logic
                 isSuccess = Erp2ServiceHelper.SendHttpMessage(Erp2Config.PAY_URL, new { saleno = order.OrderNo, paymentcode = order.PaymentCode, transno = order.TransNo, vipno = vipCard }, null
                               , null);
             }
-            else
+            else if (order.OrderType == (int)PaidOrderType.Erp || order.OrderType == (int)PaidOrderType.Self)
             {
                 var paymentName = string.Empty;
 
@@ -497,6 +526,19 @@ namespace Yintai.Hangzhou.Service.Logic
                 //saleCodeSid = saleCodeId.HasValue ? saleCodeId.ToString() : string.Empty
             };
             return erpItem;
+        }
+
+        public static string CreateGiftCardNo()
+        {
+            var code = string.Concat(string.Format("GC{0}", DateTime.Now.ToString("yyMMdd"))
+                        , DateTime.UtcNow.Ticks.ToString().Reverse().Take(5)
+                            .Aggregate(new StringBuilder(), (s, e) => s.Append(e), s => s.ToString())
+                            .PadRight(5, '0'));
+            IEFRepository<IMS_GiftCardOrderEntity> couponData = ServiceLocator.Current.Resolve<IEFRepository<IMS_GiftCardOrderEntity>>();
+            var existingCodes = couponData.Get(c => c.No == code && c.CreateDate >= DateTime.Today).Count();
+            if (existingCodes > 0)
+                code = string.Concat(code, (existingCodes + 1).ToString());
+            return code;
         }
     }
            

@@ -78,6 +78,8 @@
     <Compile Include="Enums\CardType.cs" />
     <Compile Include="Enums\CategorySizeType.cs" />
     <Compile Include="Enums\ComboType.cs" />
+    <Compile Include="Enums\IncomeRuleType.cs" />
+    <Compile Include="Enums\OrderProductType.cs" />
     <Compile Include="Enums\CouponActionType.cs" />
     <Compile Include="Enums\CouponStatus.cs" />
     <Compile Include="Enums\HotWordType.cs" />
@@ -91,7 +93,7 @@
     <Compile Include="Enums\NotificationStatus.cs" />
     <Compile Include="Enums\OrderOpera.cs" />
     <Compile Include="Enums\OrderStatus.cs" />
-    <Compile Include="Enums\OrderType.cs" />
+    <Compile Include="Enums\AsssociateOrderType.cs" />
     <Compile Include="Enums\OutboundStatus.cs" />
     <Compile Include="Enums\OutboundType.cs" />
     <Compile Include="Enums\PaidOrderType.cs" />

@@ -996,6 +996,7 @@ namespace com.intime.jobscheduler.Job
                                 RecommendUserId = p.RecommendUser,
                                 Section=section.FirstOrDefault(),
                                 UpcCode = p.SkuCode
+
                             };
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESProduct>();
