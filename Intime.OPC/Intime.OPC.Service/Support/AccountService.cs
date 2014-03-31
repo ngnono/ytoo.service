@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 
@@ -36,9 +37,9 @@ namespace Intime.OPC.Service.Support
             return _accountRepository.Delete(userId);
         }
 
-        public IList<OPC_AuthUser> Select()
+        public PageResult<OPC_AuthUser> Select(int pageIndex, int pageSize = 20)
         {
-            return _accountRepository.All().ToList();
+            return _accountRepository.All(pageIndex, pageSize);
         }
 
         public bool IsStop(int userId, bool bValid)
@@ -46,9 +47,9 @@ namespace Intime.OPC.Service.Support
             return _accountRepository.SetEnable(userId, bValid);
         }
 
-        public IList<OPC_AuthUser> GetUsersByRoleID(int roleId)
+        public PageResult<OPC_AuthUser> GetUsersByRoleID(int roleId, int pageIndex, int pageSize = 20)
         {
-            return GetUsersByRoleID(roleId);
+            return GetUsersByRoleID(roleId,pageIndex,pageSize);
         }
 
         #endregion

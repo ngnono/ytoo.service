@@ -96,10 +96,10 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult SelectRole()
+        public IHttpActionResult SelectRole(int pageIndex,int pageSize=20)
         {
             //TODO:check params
-            return Ok(_roleService.Select());
+            return Ok(_roleService.Select(pageIndex,pageSize));
         }
 
         public IHttpActionResult Stop(int roleId)

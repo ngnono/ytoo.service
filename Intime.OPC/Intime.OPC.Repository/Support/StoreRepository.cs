@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System.Linq;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 using System.Collections.Generic;
@@ -24,12 +25,11 @@ namespace Intime.OPC.Repository.Support
     /// </summary>
     public class StoreRepository : BaseRepository<Store>, IStoreRepository
     {
-        public IList<Store> GetAll()
+        public PageResult<Store> GetAll(int pageIndex, int pageSize = 20)
         {
-            using (var db = new YintaiHZhouContext())
-            {
-                return db.Stores.Where(t => t.Status == 1).ToList();
-            }
+
+          return Select(t => t.Status == 1,pageIndex,pageSize);
+           
         }
     }
 }

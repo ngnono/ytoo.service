@@ -131,6 +131,7 @@
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\YintaiHZhouContext.cs" />
     <Compile Include="MyPrincipal .cs" />
+    <Compile Include="PageResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

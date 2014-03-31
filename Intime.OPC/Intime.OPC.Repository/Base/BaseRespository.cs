@@ -18,6 +18,7 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Repository.Base
@@ -113,6 +114,33 @@ namespace Intime.OPC.Repository.Base
             {
                 IDbSet<T> set = db.Set<T>();
                 return set.Where(filter).ToList();
+            }
+        }
+
+        protected PageResult<T> Select(Expression<Func<T, bool>> filter,int pageIndex,int pageSize=20)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                IDbSet<T> set = db.Set<T>();
+                int count = set.Where(filter).Count();
+
+                pageIndex = pageIndex - 1;
+                if (pageIndex<0)
+                {
+                    pageIndex = 0;
+                }
+                IList<T> lst;
+                if (pageIndex == 0)
+                {
+                    lst = set.Where(filter).Take(pageSize).ToList();
+                }
+                else
+                {
+                     lst = set.Where(filter).Skip(pageIndex*pageSize).Take(pageSize).ToList();
+                }
+
+                return new PageResult<T>(lst,count);
+
             }
         }
     }

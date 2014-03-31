@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -22,7 +23,7 @@ namespace Intime.OPC.Repository
     /// </summary>
     public interface IShipViaRepository : IRepository<ShipVia>
     {
-        IList<ShipVia> GetAll();
+        PageResult<ShipVia> GetAll(int pageIndex, int pageSize = 20);
 
     }
 }

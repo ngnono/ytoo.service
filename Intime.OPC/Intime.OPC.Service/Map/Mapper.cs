@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using AutoMapper;
+using Intime.OPC.Domain;
 
 namespace Intime.OPC.Service.Map
 {
@@ -43,7 +44,11 @@ namespace Intime.OPC.Service.Map
         {
             return AutoMapper.Mapper.Map<IList<TSource>, IList<TTagart>>(source);
         }
-
+        public static PageResult<TTagart> Map<TSource, TTagart>(PageResult<TSource> source)
+        {
+            var lst= AutoMapper.Mapper.Map<IList<TSource>, IList<TTagart>>(source.Result);
+            return new PageResult<TTagart>(lst,source.TotalCount);
+        }
         
     }
 }

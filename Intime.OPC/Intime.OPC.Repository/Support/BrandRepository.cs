@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -24,12 +25,9 @@ namespace Intime.OPC.Repository.Support
     /// </summary>
     public class BrandRepository : BaseRepository<Brand>, IBrandRepository
     {
-        public IList<Brand> GetAll()
+        public PageResult<Brand> GetAll(int pageIndex, int pageSize = 20)
         {
-            using (var db = new YintaiHZhouContext())
-            {
-                return db.Brands.Where(t => t.Status == 1).ToList();
-            }
+            return Select(t => t.Status == 1, pageIndex, pageSize);
         }
     }
 }

@@ -14,6 +14,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -23,6 +24,6 @@ namespace Intime.OPC.Repository
     /// </summary>
     public interface IStoreRepository : IRepository<Store>
     {
-        IList<Store> GetAll();
+        PageResult<Store> GetAll(int pageIndex, int pageSize = 20);
     }
 }

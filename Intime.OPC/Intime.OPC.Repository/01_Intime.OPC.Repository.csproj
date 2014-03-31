@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Base\BaseRespository.cs" />
     <Compile Include="Base\ExtensionEx.cs" />
+    <Compile Include="Base\QueryTableEx.cs" />
     <Compile Include="IBrandRepository.cs" />
     <Compile Include="IMenuRepository.cs" />
     <Compile Include="IAccountRepository.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 
@@ -7,8 +8,8 @@ namespace Intime.OPC.Service
 {
     public interface ITransService : IService
     {
-        bool Finish(Dictionary<string, string> sale);
-        IList<OPC_Sale> Select(string startDate, string endDate, string orderNo, string saleOrderNo);
+
+        PageResult<OPC_Sale> Select(DateTime startDate, DateTime endDate, string orderNo, string saleOrderNo,int pageIndex,int pageSize=20);
 
         IList<OPC_SaleDetail> SelectSaleDetail(IEnumerable<string> saleIDs);
 
@@ -55,7 +56,7 @@ namespace Intime.OPC.Service
         /// <param name="startTime">The start time.</param>
         /// <param name="endTime">The end time.</param>
         /// <returns>IList{ShippingSaleDto}.</returns>
-        IList<ShippingSaleDto> GetShippingSale(string shippingCode, System.DateTime startTime, System.DateTime endTime);
+        PageResult<ShippingSaleDto> GetShippingSale(string shippingCode, System.DateTime startTime, System.DateTime endTime,int pageIndex,int pageSize=20);
 
         IList<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo);
         IList<SaleDto> GetSaleOrderPickup(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate);

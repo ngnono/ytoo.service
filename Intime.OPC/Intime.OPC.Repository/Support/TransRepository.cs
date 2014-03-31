@@ -1,49 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Repository.Base;
 
 namespace Intime.OPC.Repository.Support
 {
-    public class TransRepository : ITransRepository
+    public class TransRepository : BaseRepository<OPC_Sale>, ITransRepository
     {
         #region ITransRepository Members
 
-        public IList<OPC_Sale> Select(string startDate, string endDate, string orderNo, string saleOrderNo)
+        public PageResult<OPC_Sale> Select(DateTime startDate, DateTime endDate, string orderNo, string saleOrderNo, int pageIndex, int pageSize = 20)
         {
-            using (var db = new YintaiHZhouContext())
-            {
-                DateTime dateNow = DateTime.Now;
-                DateTime dateStart = dateNow;
-                DateTime dateEnd = dateNow;
-                if (!string.IsNullOrEmpty(startDate))
-                {
-                    dateStart = Convert.ToDateTime(startDate);
-                }
-                if (!string.IsNullOrEmpty(endDate))
-                {
-                    dateEnd = Convert.ToDateTime(endDate);
-                }
 
-                IQueryable<OPC_Sale> saleList = db.OPC_Sale.Where(e => 1 == 1);
-                if (dateStart != dateNow)
+                DateTime dateNow = DateTime.Now;
+
+                Expression<Func<OPC_Sale, bool>> filterExpression =
+               t => t.SellDate >= startDate && t.SellDate < endDate;
+
+                
+                if (startDate != dateNow)
                 {
-                    saleList = saleList.Where(p => p.SellDate >= dateStart);
+                    filterExpression = filterExpression.And(p => p.SellDate >= startDate);
                 }
-                if (dateEnd != dateNow)
+                if (endDate != dateNow)
                 {
-                    saleList = saleList.Where(p => p.SellDate <= dateEnd);
+                    filterExpression = filterExpression.And(p => p.SellDate <= endDate);
                 }
                 if (!string.IsNullOrEmpty(orderNo))
                 {
-                    saleList = saleList.Where(p => p.OrderNo.Contains(orderNo));
+                    filterExpression = filterExpression.And(p => p.OrderNo.Contains(orderNo));
                 }
                 if (!string.IsNullOrEmpty(saleOrderNo))
                 {
-                    saleList = saleList.Where(p => p.SaleOrderNo.Contains(saleOrderNo));
+                    filterExpression = filterExpression.And(p => p.SaleOrderNo.Contains(saleOrderNo));
                 }
-                return saleList.ToList();
-            }
+                return Select(filterExpression, pageIndex, pageSize);
+
         }
 
         public bool Finish(Dictionary<string, string> sale)
