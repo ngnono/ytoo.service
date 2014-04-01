@@ -9,33 +9,20 @@ using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
 namespace OPCApp.DataService.Impl.Auth
 {
-    [Export(typeof (IAuthenticateService))]
-    public class AuthenticateService : IAuthenticateService
+    [Export(typeof (IOrderService))]
+    public class OrgService : IOrderService
     {
-        public string Login(string userName, string password)
-        {
-            return "OK";
-        }
 
-        public bool SetIsStop(int userId, bool isStop)
-        {
-            return false;
-        }
-
-        public ResultMsg Add(OPC_AuthUser user)
+        public ResultMsg Add(OPC_OrgInfo org)
         {
             try
             {
-                if (user == null)
+                if (org == null)
                 {
                     return new ResultMsg {IsSuccess = false, Msg = "增加错误"};
                 }
-                user.IsValid = true;
-                user.CreateDate = DateTime.Now;
-                user.CreateUserId = 1;
-                user.UpdateDate = DateTime.Now;
-                user.UpdateUserId = 1;
-                bool bFalg = RestClient.Put("account/addUser", user);
+
+                bool bFalg = RestClient.Put("account/addUser", org);
                 return new ResultMsg {IsSuccess = bFalg, Msg = "保存成功"};
             }
             catch (Exception ex)
@@ -44,11 +31,11 @@ namespace OPCApp.DataService.Impl.Auth
             }
         }
 
-        public ResultMsg Edit(OPC_AuthUser user)
+        public ResultMsg Edit(OPC_OrgInfo org)
         {
             try
             {
-                bool bFalg = RestClient.Put("account/updateuser", user);
+                bool bFalg = RestClient.Put("account/updateuser", org);
                 return new ResultMsg {IsSuccess = bFalg, Msg = "保存成功"};
             }
             catch (Exception ex)
@@ -57,12 +44,12 @@ namespace OPCApp.DataService.Impl.Auth
             }
         }
 
-        public ResultMsg Delete(OPC_AuthUser user)
+        public ResultMsg Delete(OPC_OrgInfo org)
         {
             try
             {
-                var oo = new {userId = user.Id};
-                bool bFalg = RestClient.Put("account/deleteuser", user.Id);
+                var oo = new { userId = org.Id };
+                bool bFalg = RestClient.Put("account/deleteuser", org.Id);
                 return new ResultMsg {IsSuccess = bFalg, Msg = "删除错误"};
             }
             catch (Exception ex)
@@ -72,13 +59,13 @@ namespace OPCApp.DataService.Impl.Auth
         }
 
 
-        public PageResult<OPC_AuthUser> Search(IDictionary<string, object> iDicFilter)
+        public PageResult<OPC_OrgInfo> Search(IDictionary<string, object> iDicFilter)
         {
             try
             {
                 string strParmas = iDicFilter.Keys.Aggregate("",
                     (current, key) => current + string.Format("{0}={1}&", key, iDicFilter[key]));
-                PageResult<OPC_AuthUser> lst = RestClient.GetPage<OPC_AuthUser>("account/selectuser",strParmas.Trim('&'));
+                PageResult<OPC_OrgInfo> lst = RestClient.GetPage<OPC_OrgInfo>("account/selectuser", strParmas.Trim('&'));
                 return lst;
             }
             catch (Exception ex)

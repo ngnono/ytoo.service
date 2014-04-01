@@ -42,6 +42,12 @@ namespace OPCApp.Infrastructure.Mvvm
         /// </summary>
         private readonly ObservableCollection<T> _Collection;
 
+        private int _total;
+        private  int Total {
+            get { return _total; }
+            set { SetProperty(ref _total, value); }
+        }
+
         /// <summary>
         ///     The _view
         /// </summary>
@@ -205,7 +211,7 @@ namespace OPCApp.Infrastructure.Mvvm
         /// <summary>
         ///     Searches the action.
         /// </summary>
-        private void SearchAction()
+        public virtual void SearchAction()
         {
             IBaseDataService<T> service = GetDataService();
             PageResult<T> c = service.Search(GetFilter());
@@ -214,6 +220,7 @@ namespace OPCApp.Infrastructure.Mvvm
             {
                 _Collection.Add(item);
             }
+            Total = c.TotalCount;
         }
 
         protected virtual IDictionary<string, object> GetFilter()

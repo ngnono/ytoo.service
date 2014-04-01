@@ -8,21 +8,21 @@ namespace OPCApp.Domain.Models
         {
             StartCreateDate = DateTime.Now;
             EndCreateDate = DateTime.Now;
-            Status = -1;
-            ExpressDeliveryCompany = -1;
+            Status = "-1";
+            ExpressDeliveryCompany = "-1";
         }
 
         public string OrderNo { get; set; }
         public string OrderSource { get; set; }
-        public int StoreId { get; set; }
-        public int BrandId { get; set; }
-        public int Status { get; set; }
+        public string StoreId { get; set; }
+        public string BrandId { get; set; }
+        public string Status { get; set; }
 
         public string PaymentType { get; set; }
         public string OutGoodsType { get; set; }
         public string ShippingContactPhone { get; set; }
         public string ExpressDeliveryCode { get; set; }
-        public int ExpressDeliveryCompany { get; set; }
+        public string ExpressDeliveryCompany { get; set; }
 
         public DateTime StartCreateDate { get; set; }
         //开始时间条件

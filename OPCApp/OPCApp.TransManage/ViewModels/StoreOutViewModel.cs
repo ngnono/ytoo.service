@@ -279,6 +279,18 @@ namespace OPCApp.TransManage.ViewModels
             OrderList = new List<Order>();
             SaleList = new List<OPC_Sale>();
             InvoiceDetail4List = new List<OPC_SaleDetail>();
+            if (ShipSaleList != null && ShipSaleList.Count>0)
+            {
+                SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(ShipSaleList[0].GoodsOutCode);
+                if (SaleList != null && SaleList.Any())
+                {
+                    var sale = SaleList.FirstOrDefault();
+                    PageResult<Order> re1 = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.SaleOrderNo);
+                    OrderList = re1 == null ? new List<Order>() : re1.Result.ToList();
+                    InvoiceDetail4List =
+                    AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result.ToList();
+                }
+            }
         }
 
         public void GetDownShip()

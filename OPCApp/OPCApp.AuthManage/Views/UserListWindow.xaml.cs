@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.Composition;
+using System.Runtime.Remoting.Contexts;
 using System.Windows.Controls;
 using CustomControlLibrary;
+using OPCApp.AuthManage.ViewModels;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
+using OPCApp.Infrastructure.Mvvm;
 using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.AuthManage.Views
@@ -21,8 +24,10 @@ namespace OPCApp.AuthManage.Views
         }
         public void Query(int size, int pageIndex)
         {
-           // PageResult<OPC_AuthUser> pageResult = AppEx.Container.GetInstance<IAuthenticateService>().Search(null);
-
+            var vm = AppEx.Container.GetInstance<IViewModel>("UserListViewModel") as UserListWindowViewModel;
+            vm.PageIndex = pageIndex;
+            vm.PageSize = size;
+            vm.SearchAction();
         }
         private void dataPager_PageChanged(object sender, PageChangedEventArgs args)
         {

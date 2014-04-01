@@ -15,8 +15,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                IList<Order> lst = RestClient.Get<Order>("order/getorder", orderfilter);
-                return new PageResult<Order>(lst, lst.Count);
+                PageResult<Order> lst = RestClient.Get<Order>("order/getorder", orderfilter,1,100);
+                return lst;//new PageResult<Order>(lst, lst.Count);
             }
             catch (Exception ex)
             {
