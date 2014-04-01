@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Practices.Prism.Mvvm;
 
 namespace OPCApp.Infrastructure
 {
@@ -36,6 +37,11 @@ namespace OPCApp.Infrastructure
             TotalCount = totalCount;
         }
 
+        public PageResult()
+        {
+            Result = new List<TEntity>();
+        }
+
         #endregion Constructors
 
         #region Properties
@@ -44,13 +50,18 @@ namespace OPCApp.Infrastructure
         ///     分页数据
         /// </summary>
         /// <value>The result.</value>
-        public IList<TEntity> Result { get;  set; }
+        public IList<TEntity> Result
+        {
+            get; set; }
+
+        private IList<TEntity> _result;
 
         /// <summary>
         ///     结果总数
         /// </summary>
         /// <value>The total count.</value>
-        public int TotalCount { get;  set; }
+        private int _totalCount;
+        public int TotalCount { get; set; }
 
         #endregion Properties
 

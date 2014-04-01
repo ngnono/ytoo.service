@@ -76,9 +76,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthModule.cs" />
+    <Compile Include="ViewModels\NodeViewModel.cs" />
+    <Compile Include="ViewModels\PageResult.cs" />
     <Compile Include="ViewModels\Role2MenuWindowViewModel.cs" />
     <Compile Include="ViewModels\Role2UserWindowViewModel.cs" />
     <Compile Include="ViewModels\RoleListViewModel.cs" />
+    <Compile Include="ViewModels\OrgAddWindowViewModel.cs" />
     <Compile Include="ViewModels\UsersWindowViewModel.cs" />
     <Compile Include="Views\AuthTab.xaml.cs">
       <DependentUpon>AuthTab.xaml</DependentUpon>
@@ -98,6 +101,9 @@
     <Compile Include="Views\Role2UserWindow.xaml.cs">
       <DependentUpon>Role2UserWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\OrgAddWindow.xaml.cs">
+      <DependentUpon>OrgAddWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UsersWindow.xaml.cs">
       <DependentUpon>UsersWindow.xaml</DependentUpon>
@@ -162,6 +168,10 @@
     <Page Include="Views\Role2UserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrgAddWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UsersWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
