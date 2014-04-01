@@ -100,6 +100,7 @@ namespace Intime.OPC.Service.Support
                 sale.ShippingCode = shippingSaleDto.ShippingCode;
                 sale.ShippingFee = (decimal) (shippingSaleDto.ShippingFee);
                 sale.ShippingStatus = EnumSaleOrderStatus.PrintInvoice.AsID();
+                sale.ShipViaName = shippingSaleDto.ShipViaName;
                 
 
                 //验证是否已经生成过发货单
@@ -170,7 +171,16 @@ namespace Intime.OPC.Service.Support
 
         public IList<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo)
         {
-            throw new NotImplementedException();
+            var lst = _shippingSaleRepository.GetByShippingCode(shippingSaleNo, 1, 1);
+            if (lst.TotalCount > 0)
+            {
+                throw new ShippingSaleNotExistsException(shippingSaleNo);
+            }
+            IList<OPC_Sale> lstSales = lst.Result.Select(opcShippingSale => _saleRepository.GetBySaleNo(opcShippingSale.SaleOrderNo)).ToList();
+
+
+            return  Mapper.Map<OPC_Sale, SaleDto>(lstSales);
+           
         }
     }
 }

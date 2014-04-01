@@ -16,6 +16,7 @@ namespace Intime.OPC.Domain.Models
         public int Id { get; set; }
         public string SaleOrderNo { get; set; }
         public int? ShipViaId { get; set; }
+        public string ShipViaName { get; set; }
         public string ShippingCode { get; set; }
         public decimal? ShippingFee { get; set; }
         public int? ShippingStatus { get; set; }
