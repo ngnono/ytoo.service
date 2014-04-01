@@ -53,8 +53,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                IList<OPC_ShippingSale> shipSales = RestClient.Get<OPC_ShippingSale>("trans/GetShippingSale", filter);
-                return new PageResult<OPC_ShippingSale>(shipSales, shipSales.Count);
+                PageResult<OPC_ShippingSale> shipSales = RestClient.GetPage<OPC_ShippingSale>("trans/GetShippingSale", filter + "&pageIndex=1&pageSize=50");
+                return shipSales;// new PageResult<OPC_ShippingSale>(shipSales, shipSales.Count);
             }
             catch (Exception ex)
             {
