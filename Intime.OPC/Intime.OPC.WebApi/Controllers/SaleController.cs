@@ -35,12 +35,12 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetSaleOrderDetails(string saleOrderNo, int pageIndex, int pageSize)
+        public IHttpActionResult GetSaleOrderDetails(string saleOrderNo)
         {
             return DoFunction(() =>
             {
                 int userId = GetCurrentUserID();
-                return _saleService.GetSaleOrderDetails(saleOrderNo, userId,pageIndex,pageSize);
+                return _saleService.GetSaleOrderDetails(saleOrderNo, userId,1,1000).Result;
             }, "读取销售单详情失败");
         }
 
