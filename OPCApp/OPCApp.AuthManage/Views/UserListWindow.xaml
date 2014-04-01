@@ -18,8 +18,45 @@
             <RowDefinition Height="400" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-      
-        <StackPanel Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0">
+                <StackPanel Orientation="Horizontal" Background="LightGray">
+                    <Button Background="LightGray" Width="50" Command="{Binding AddCommand}">
+                        <StackPanel>
+                            <Image Source="/image/新增.png" Stretch="None" />
+                            <TextBlock HorizontalAlignment="Center">增加</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Background="LightGray" Width="50" Command="{Binding EditCommand}"
+                        CommandParameter="{Binding Models.CurrentItem}">
+                        <StackPanel>
+                            <Image Source="/image/修改.png" Stretch="None" />
+                            <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Background="LightGray" Width="50" Command="{Binding DeleteCommand}"
+                        CommandParameter="{Binding Models.CurrentItem}">
+                        <StackPanel>
+                            <Image Source="/image/删除.png" Stretch="None" />
+                            <TextBlock HorizontalAlignment="Center">删除</TextBlock>
+                        </StackPanel>
+                    </Button>
+
+
+                </StackPanel>
+            </StackPanel>
+            <TreeView  Grid.Row="1" Grid.RowSpan="3" ItemsSource="{Binding FirstGeneration}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding Name}" />
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+
+            </TreeView>
+        <StackPanel Grid.Row="0" Grid.Column="1">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <Button Background="LightGray" Width="50">
                     <StackPanel>
@@ -59,7 +96,7 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,1">
+        <StackPanel Orientation="Horizontal" Grid.Row="1"  Grid.Column="1" Margin="0,1">
             <Label Content=" 查找字段:" Margin="0,14,0,10" />
             <ComboBox Width="100" ItemsSource="{Binding FieldList}" Height="20" SelectedItem="{Binding SelectedFiled}"
                       SelectedIndex="0" />
@@ -74,7 +111,7 @@
 
         </StackPanel>
 
-        <DataGrid x:Name="dataGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid x:Name="dataGrid" Grid.Row="2"  Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True"
                   VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                   ItemsSource="{Binding Path=ItemsSource,ElementName=dataPager}">
             <i:Interaction.Triggers>
@@ -98,7 +135,7 @@
                 <DataGridTextColumn Width="100" Header="机构名称" Binding="{Binding OrgName}" />
             </DataGrid.Columns>
         </DataGrid>
-        <CustomControlLibrary:DataPager Grid.Row="3" x:Name="dataPager" PageSizeList="10,20,30"
+        <CustomControlLibrary:DataPager Grid.Row="3"  Grid.Column="1" x:Name="dataPager" PageSizeList="10,20,30"
                        ItemsSource="{Binding PrResult.Models}"
                        Total="{Binding PrResult.Total}"
                        PageChanged="dataPager_PageChanged" />
