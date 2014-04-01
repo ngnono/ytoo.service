@@ -68,11 +68,16 @@ namespace OPCApp.DataService.Common
         /// <returns></returns>
         public static IList<T> Get<T>(string address, string urlParams = "")
         {
-            string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}", address, urlParams);
+            string url = string.Format("{0}?{1}", address, "SearchField=\"\"&SearchValue=\"\"&pageIndex=1&pageSize=20");
             HttpResponseMessage response = Client.GetAsync(url).Result;
             return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
         }
-
+        public static PageResult<T> Get<T>(string address, string urlParams, int pageIndex, int pageSize)
+        {
+            string url = string.Format("{0}?{1}", address, "SearchField=\"\"&SearchValue=\"\"&pageIndex=1&pageSize=20");
+            HttpResponseMessage response = Client.GetAsync(url).Result;
+            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<PageResult<T>>().Result: new PageResult<T>(null,10);
+        }
         public static T GetSingle<T>(string address, string urlParams = "")
         {
             string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}", address, urlParams);

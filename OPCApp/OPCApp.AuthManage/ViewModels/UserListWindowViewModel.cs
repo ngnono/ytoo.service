@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -13,6 +15,8 @@ namespace OPCApp.AuthManage.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserListWindowViewModel : BaseListViewModel<OPC_AuthUser>
     {
+        public PageResult<OPC_AuthUser> PrResult1 { get; set; }
+        public PageResult PrResult { get; set; }
         /*选择字段*/
 
         public UserListWindowViewModel()
@@ -59,6 +63,11 @@ namespace OPCApp.AuthManage.ViewModels
             SelectedFiled = "";
             SetStopUserCommand = new DelegateCommand(SetStopUser);
             DBGridClickCommand = new DelegateCommand(DBGridClick);
+            PrResult1 = new PageResult<OPC_AuthUser>(null,2);
+            PrResult1 = GetDataService().Search(null);
+            PrResult = new PageResult();
+            PrResult.Models = PrResult1.Result.ToList();
+            PrResult.Total = PrResult1.TotalCount;
         }
 
         private void SetStopUser()
@@ -77,6 +86,30 @@ namespace OPCApp.AuthManage.ViewModels
         protected override IBaseDataService<OPC_AuthUser> GetDataService()
         {
             return AppEx.Container.GetInstance<IAuthenticateService>();
+        }
+
+        public class PageResult : BindableBase
+        {
+
+            public int _total;
+            public int Total
+            {
+                get { return _total; }
+                set { SetProperty(ref _total, value); }
+            }
+
+            private List<OPC_AuthUser> _students;
+            public List<OPC_AuthUser> Models
+            {
+                get { return _students; }
+                set { SetProperty(ref _students, value); }
+            }
+
+            public PageResult()
+            {
+                Models = new List<OPC_AuthUser>();
+            }
+
         }
     }
 }

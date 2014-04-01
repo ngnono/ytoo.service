@@ -116,6 +116,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomControlLibrary\CustomControlLibrary.csproj">
+      <Project>{AD060C8A-12AF-4C1B-89CF-9B41A1EDD31B}</Project>
+      <Name>CustomControlLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Intime.OPC.ApiClient\05_Intime.OPC.ApiClient.csproj">
       <Project>{d34916d5-ba8a-4a70-9a9c-2997289ef411}</Project>
       <Name>05_Intime.OPC.ApiClient</Name>

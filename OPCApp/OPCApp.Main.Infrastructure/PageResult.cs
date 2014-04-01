@@ -30,7 +30,7 @@ namespace OPCApp.Infrastructure
         /// </summary>
         /// <param name="entites">提取的分页数据</param>
         /// <param name="totalCount">实体的总数</param>
-        public PageResult(IEnumerable<TEntity> entites, int totalCount)
+        public PageResult(IList<TEntity> entites, int totalCount)
         {
             Result = entites;
             TotalCount = totalCount;
@@ -44,13 +44,13 @@ namespace OPCApp.Infrastructure
         ///     分页数据
         /// </summary>
         /// <value>The result.</value>
-        public IEnumerable<TEntity> Result { get; private set; }
+        public IList<TEntity> Result { get;  set; }
 
         /// <summary>
         ///     结果总数
         /// </summary>
         /// <value>The total count.</value>
-        public int TotalCount { get; private set; }
+        public int TotalCount { get;  set; }
 
         #endregion Properties
 

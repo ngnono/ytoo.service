@@ -77,10 +77,11 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                string strParmas = iDicFilter.Keys.Aggregate("",
-                    (current, key) => current + string.Format("{0}={1}&", key, iDicFilter[key]));
-                IList<OPC_AuthUser> lst = RestClient.Get<OPC_AuthUser>("account/selectuser", strParmas.TrimEnd('&'));
-                return new PageResult<OPC_AuthUser>(lst, lst.Count);
+                //string strParmas = iDicFilter.Keys.Aggregate("",
+                //    (current, key) => current + string.Format("{0}={1}&", key, iDicFilter[key]));
+                string strParmas = "";
+                PageResult<OPC_AuthUser> lst = RestClient.Get<OPC_AuthUser>("account/selectuser", strParmas.TrimEnd('&'),1,20);
+                return lst;
             }
             catch (Exception ex)
             {
