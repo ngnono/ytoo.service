@@ -15,7 +15,6 @@ namespace OPCApp.AuthManage.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserListWindowViewModel : BaseListViewModel<OPC_AuthUser>
     {
-        public PageResult<OPC_AuthUser> PrResult1 { get; set; }
         public PageResult PrResult { get; set; }
         /*选择字段*/
 
@@ -25,6 +24,7 @@ namespace OPCApp.AuthManage.ViewModels
             EditViewModeKey = "UserViewModel";
             AddViewModeKey = "UserViewModel";
             Init();
+
         }
 
         public string SelectedFiled { get; set; }
@@ -44,9 +44,21 @@ namespace OPCApp.AuthManage.ViewModels
             var dicFilter = new Dictionary<string, object>
             {
                 {"SearchField", FieldList.IndexOf(SelectedFiled).ToString()},
-                {"SearchValue", SelectedFiledValue}
+                {"SearchValue", SelectedFiledValue},
+                 {"pageIndex", this.PageIndex},
+                  {"pageSize", this.PageSize}
             };
             return dicFilter;
+        }
+
+        public int PageSize { get; set; }
+        public int PageIndex { get; set; }
+
+        public override void SearchAction()
+        {
+            var pages = AppEx.Container.GetInstance<IAuthenticateService>().Search(GetFilter());
+            PrResult.Models = pages.Result.ToList();
+            PrResult.Total = pages.TotalCount;
         }
 
         private void DBGridClick()
@@ -63,11 +75,9 @@ namespace OPCApp.AuthManage.ViewModels
             SelectedFiled = "";
             SetStopUserCommand = new DelegateCommand(SetStopUser);
             DBGridClickCommand = new DelegateCommand(DBGridClick);
-            PrResult1 = new PageResult<OPC_AuthUser>(null,2);
-            PrResult1 = GetDataService().Search(null);
-            PrResult = new PageResult();
-            PrResult.Models = PrResult1.Result.ToList();
-            PrResult.Total = PrResult1.TotalCount;
+            PageIndex = 1;
+            PageSize = 20;
+            PrResult=new PageResult();
         }
 
         private void SetStopUser()
@@ -98,11 +108,11 @@ namespace OPCApp.AuthManage.ViewModels
                 set { SetProperty(ref _total, value); }
             }
 
-            private List<OPC_AuthUser> _students;
+            private List<OPC_AuthUser> _models;
             public List<OPC_AuthUser> Models
             {
-                get { return _students; }
-                set { SetProperty(ref _students, value); }
+                get { return _models; }
+                set { SetProperty(ref _models, value); }
             }
 
             public PageResult()
