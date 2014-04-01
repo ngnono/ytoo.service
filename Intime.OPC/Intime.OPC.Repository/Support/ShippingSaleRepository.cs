@@ -12,12 +12,12 @@ namespace Intime.OPC.Repository.Support
     {
         public PageResult<OPC_ShippingSale> GetBySaleOrderNo(string saleNo, int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.SaleOrderNo == saleNo,pageIndex,pageSize);
+            return Select(t => t.SaleOrderNo == saleNo,t=>t.UpdateDate,false, pageIndex,pageSize);
         }
 
         public PageResult<OPC_ShippingSale> GetByShippingCode(string shippingCode, int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.ShippingCode == shippingCode, pageIndex, pageSize);
+            return Select(t => t.ShippingCode == shippingCode,t=>t.UpdateDate,false, pageIndex, pageSize);
         }
 
         public PageResult<OPC_ShippingSale> Get(string shippingCode, DateTime startTime, DateTime endTime, int shippingStatus, int pageIndex, int pageSize = 20)
@@ -28,7 +28,7 @@ namespace Intime.OPC.Repository.Support
             {
                 filterExpression.And(t => t.ShippingCode.Contains(shippingCode));
             }
-            return Select(filterExpression, pageIndex, pageSize);
+            return Select(filterExpression,t=>t.UpdateDate,false, pageIndex, pageSize);
         }
     }
 }

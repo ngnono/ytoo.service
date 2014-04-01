@@ -28,7 +28,7 @@ namespace Intime.OPC.Repository.Support
         public PageResult<ShipVia> GetAll(int pageIndex, int pageSize = 20)
         {
 
-           return Select(t => t.Status == 1,pageIndex,pageSize);
+           return Select(t => t.Status == 1,t=>t.UpdateDate,false,pageIndex,pageSize);
             
         }
     }

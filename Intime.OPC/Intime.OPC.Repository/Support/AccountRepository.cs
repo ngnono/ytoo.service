@@ -45,7 +45,7 @@ namespace Intime.OPC.Repository.Support
 
        public PageResult<OPC_AuthUser> All(int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.IsValid == true,pageIndex,pageSize);
+            return Select(t => t.IsValid == true,t=>t.Name,true,pageIndex,pageSize);
         }
 
         #endregion

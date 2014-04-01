@@ -51,7 +51,7 @@ namespace Intime.OPC.Repository.Support
 
         public PageResult<OPC_AuthRole> All(int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.IsValid,pageIndex,pageSize);
+            return Select(t => t.IsValid,t=>t.UpdateDate,false, pageIndex,pageSize);
         }
 
         public PageResult<OPC_AuthRole> GetByUserID(int userID, int pageIndex, int pageSize = 20)

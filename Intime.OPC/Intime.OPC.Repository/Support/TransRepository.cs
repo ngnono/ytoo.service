@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.Serialization.Formatters;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
@@ -37,7 +38,7 @@ namespace Intime.OPC.Repository.Support
                 {
                     filterExpression = filterExpression.And(p => p.SaleOrderNo.Contains(saleOrderNo));
                 }
-                return Select(filterExpression, pageIndex, pageSize);
+                return Select(filterExpression,t=>t.UpdatedDate,false, pageIndex, pageSize);
 
         }
 

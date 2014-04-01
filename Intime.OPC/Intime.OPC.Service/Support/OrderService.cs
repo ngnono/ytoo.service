@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
@@ -18,15 +19,18 @@ namespace Intime.OPC.Service.Support
             _orderRemarkRepository = orderRemarkRepository;
         }
 
-        public IList<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd,
+        public PageResult<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd,
             int storeId, int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone,
-            string expressDeliveryCode, int expressDeliveryCompany, int userId)
+            string expressDeliveryCode, int expressDeliveryCompany, int userId, int pageIndex, int pageSize = 20)
         {
-            IList<Order> lstOrder = _orderRepository.GetOrder(orderNo, orderSource, dtStart.Date, dtEnd.Date.AddDays(1), storeId, brandId,
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
+            var pg=_orderRepository.GetOrder(orderNo, orderSource, dtStart, dtEnd, storeId, brandId,
                 status, paymentType,
-                outGoodsType, shippingContactPhone, expressDeliveryCode, expressDeliveryCompany);
+                outGoodsType, shippingContactPhone, expressDeliveryCode, expressDeliveryCompany,pageIndex,pageSize);
 
-            return Mapper.Map<Order, OrderDto>(lstOrder);
+            var r= Mapper.Map<Order, OrderDto>(pg.Result);
+            return new PageResult<OrderDto>(r, pg.TotalCount);
         }
 
         public OrderDto GetOrderByOrderNo(string orderNo)
@@ -48,9 +52,11 @@ namespace Intime.OPC.Service.Support
             return _orderRemarkRepository.Create(comment);
         }
 
-        public IList<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime)
+        public IList<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime dtStart, DateTime dtEnd)
         {
-            var lstOrder = _orderRepository.GetOrderByOderNoTime(orderNo, starTime, endTime);
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
+            var lstOrder = _orderRepository.GetOrderByOderNoTime(orderNo, dtStart, dtEnd);
             return Mapper.Map<Order, OrderDto>(lstOrder);
         }
 

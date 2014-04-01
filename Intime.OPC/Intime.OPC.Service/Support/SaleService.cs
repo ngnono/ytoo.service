@@ -106,6 +106,8 @@ namespace Intime.OPC.Service.Support
 
         public IList<SaleDto> GetPickUp(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
             IList<OPC_Sale> lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, dtStart, dtEnd);
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
@@ -113,12 +115,16 @@ namespace Intime.OPC.Service.Support
 
         public IList<SaleDto> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
             IList<OPC_Sale> lst = _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd);
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public IList<SaleDto> GetShipped(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
             IList<OPC_Sale> lst = _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd);
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
@@ -126,6 +132,8 @@ namespace Intime.OPC.Service.Support
         public IList<SaleDto> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
             DateTime dtEnd)
         {
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
             IList<OPC_Sale> lst = _saleRepository.GetPrintExpress(saleOrderNo, orderNo, dtStart, dtEnd);
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
@@ -133,6 +141,8 @@ namespace Intime.OPC.Service.Support
         public IList<SaleDto> GetPrintInvoice(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
             DateTime dtEnd)
         {
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
             IList<OPC_Sale> lst = _saleRepository.GetPrintInvoice(saleOrderNo, orderNo, dtStart, dtEnd);
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
@@ -140,6 +150,8 @@ namespace Intime.OPC.Service.Support
         public IList<SaleDto> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
             DateTime dtEnd)
         {
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
             IList<OPC_Sale> lst = _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd);
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
@@ -162,8 +174,8 @@ namespace Intime.OPC.Service.Support
 
         public IList<SaleDto> GetNoPickUp(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
         {
-            //todo 权限校验
-
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
             IList<OPC_Sale> lst = _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd);
             var lstDto = new List<SaleDto>();
             foreach (OPC_Sale opcSale in lst)

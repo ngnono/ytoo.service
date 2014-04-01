@@ -123,7 +123,10 @@ namespace Intime.OPC.Service.Support
 
         public PageResult<ShippingSaleDto> GetShippingSale(string shippingCode, DateTime startTime, DateTime endTime, int pageIndex, int pageSize = 20)
         {
-            var lst=  _shippingSaleRepository.Get(shippingCode, startTime.Date, endTime.AddDays(1),EnumSaleOrderStatus.PrintExpress.AsID(),pageIndex,pageSize);
+            startTime = startTime.Date;
+            endTime = endTime.Date.AddDays(1);
+
+            var lst=  _shippingSaleRepository.Get(shippingCode, startTime, endTime,EnumSaleOrderStatus.PrintExpress.AsID(),pageIndex,pageSize);
             return Mapper.Map<OPC_ShippingSale, ShippingSaleDto>(lst);
         }
 
@@ -143,7 +146,9 @@ namespace Intime.OPC.Service.Support
 
         public IList<SaleDto> GetSaleOrderPickup(string orderNo, string saleOrderNo, DateTime startDate, DateTime endDate)
         {
-            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate.Date,endDate.Date.AddDays(1));
+            startDate = startDate.Date;
+            endDate = endDate.Date.AddDays(1);
+            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate,endDate);
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 

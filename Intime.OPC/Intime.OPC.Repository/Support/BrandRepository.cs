@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
@@ -27,7 +28,7 @@ namespace Intime.OPC.Repository.Support
     {
         public PageResult<Brand> GetAll(int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.Status == 1, pageIndex, pageSize);
+            return Select(t => t.Status == 1,t=>t.UpdatedDate,false, pageIndex, pageSize);
         }
     }
 }

@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 
@@ -41,9 +42,9 @@ namespace Intime.OPC.Service
         /// <param name="expressDeliveryCompany">The express delivery company.</param>
         /// <param name="userId">The user identifier.</param>
         /// <returns>IList{OrderDto}.</returns>
-        IList<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd, int storeId,
+        PageResult<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd, int storeId,
             int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone,
-            string expressDeliveryCode, int expressDeliveryCompany, int userId);
+            string expressDeliveryCode, int expressDeliveryCompany, int userId, int pageIndex, int pageSize = 20);
 
         OrderDto GetOrderByOrderNo(string orderNo);
 

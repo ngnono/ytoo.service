@@ -15,6 +15,9 @@
 using System;
 using System.Web;
 using System.Web.Http;
+using System.Web.UI.WebControls;
+using Intime.OPC.Domain;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service;
@@ -73,14 +76,17 @@ namespace Intime.OPC.WebApi.Controllers
             string outGoodsType,
             string shippingContactPhone,
             string expressDeliveryCode,
-            int expressDeliveryCompany,
-            [UserId] int userId)
+            int expressDeliveryCompany, int pageIndex, int pageSize = 20
+            )
         {
             try
             {
-                return Ok(_orderService.GetOrder(orderNo, orderSource, startCreateDate, endCreateDate, storeId, brandId,
+                int userId = GetCurrentUserID();
+                var lst = _orderService.GetOrder(orderNo, orderSource, startCreateDate, endCreateDate, storeId, brandId,
                     status, paymentType, outGoodsType, shippingContactPhone, expressDeliveryCode, expressDeliveryCompany,
-                    userId));
+                    userId,pageIndex,pageSize);
+                
+                return Ok(lst);
             }
             catch (Exception ex)
             {
