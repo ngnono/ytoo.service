@@ -172,7 +172,7 @@ namespace Intime.OPC.Service.Support
         public IList<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo)
         {
             var lst = _shippingSaleRepository.GetByShippingCode(shippingSaleNo, 1, 1);
-            if (lst.TotalCount > 0)
+            if (lst.TotalCount == 0)
             {
                 throw new ShippingSaleNotExistsException(shippingSaleNo);
             }
