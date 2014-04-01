@@ -95,7 +95,7 @@ namespace OPCApp.TransManage.ViewModels
             string orderfilter =
                 string.Format(
                     "orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}",
-                    OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString() + " 00:00:00", OrderGet.EndCreateDate.ToShortDateString() + " 23:59:59",
+                    OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString() + " 00:00:00.000", OrderGet.EndCreateDate.ToShortDateString() + " 23:59:59.999",
                     OrderGet.StoreId, OrderGet.BrandId, OrderGet.Status, OrderGet.PaymentType, OrderGet.OutGoodsType,
                     OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
             
