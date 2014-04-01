@@ -111,7 +111,7 @@
 
         </StackPanel>
 
-        <DataGrid x:Name="dataGrid" Grid.Row="2"  Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid x:Name="dataGrid" Grid.Row="2" MinWidth="600"  Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True"
                   VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                   ItemsSource="{Binding Path=ItemsSource,ElementName=dataPager}">
             <i:Interaction.Triggers>
@@ -121,18 +121,14 @@
 
             </i:Interaction.Triggers>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="SecitonId" Width="50" Binding="{Binding SecitonId}" Visibility="Hidden" />
                 <DataGridTextColumn Header="OrgId" Width="50" Binding="{Binding OrgId}" Visibility="Hidden" />
+                <DataGridTextColumn Header="authid" Visibility="Hidden" Width="150" Binding="{Binding DataAuthId}" />
                 <DataGridTextColumn Header="Id" Width="50" Binding="{Binding Id}" Visibility="Hidden" />
-                <DataGridTextColumn Header="专柜" Width="80" Binding="{Binding SectionName}" />
                 <DataGridTextColumn Width="100" Header="登录名" Binding="{Binding LogonName}" />
                 <DataGridTextColumn Header="密码" Width="80" Binding="{Binding Password}" />
                 <DataGridTextColumn Header="姓名" Width="150" Binding="{Binding Name}" />
-                <DataGridTextColumn Width="80" Header="手机号" Binding="{Binding Phone}" />
-                <DataGridTextColumn Header="邮箱" Width="100" Binding="{Binding Mail}" />
+                <DataGridTextColumn Header="所属机构" Width="150" Binding="{Binding DataAuthName}" />
                 <DataGridCheckBoxColumn Header="是否有效" Width="100" Binding="{Binding IsVaild}" />
-                <DataGridCheckBoxColumn Width="80" Header="是否导购" Binding="{Binding IsShopping}" />
-                <DataGridTextColumn Width="100" Header="机构名称" Binding="{Binding OrgName}" />
             </DataGrid.Columns>
         </DataGrid>
         <CustomControlLibrary:DataPager Grid.Row="3"  Grid.Column="1" x:Name="dataPager" PageSizeList="10,20,30"
