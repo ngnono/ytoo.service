@@ -15,6 +15,7 @@ namespace OPCApp.AuthManage.ViewModels
    // [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserListWindowViewModel : BaseListViewModel<OPC_AuthUser>
     {
+
         public PageResult _prResult;
         public PageResult PrResult
         {

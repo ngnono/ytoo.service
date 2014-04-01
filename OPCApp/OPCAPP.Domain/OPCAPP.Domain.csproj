@@ -71,6 +71,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="MenuGroup.cs" />
     <Compile Include="Models\OPC_Comment.cs" />
+    <Compile Include="Models\OPC_OrgInfo.cs" />
     <Compile Include="Models\OPC_ShipComment.cs" />
     <Compile Include="Models\OPC_RMAGet.cs" />
     <Compile Include="Models\OPC_RMA.cs" />
