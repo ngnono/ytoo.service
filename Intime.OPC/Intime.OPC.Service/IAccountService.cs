@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service
@@ -14,5 +15,8 @@ namespace Intime.OPC.Service
         bool IsStop(int userId, bool bValid);
 
         PageResult<OPC_AuthUser> GetUsersByRoleID(int roleId, int pageIndex, int pageSize = 20);
+
+        UserDto GetByUserID(int userID);
+
     }
 }

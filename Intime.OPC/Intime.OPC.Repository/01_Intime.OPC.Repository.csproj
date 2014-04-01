@@ -54,6 +54,7 @@
     <Compile Include="IAccountRepository.cs" />
     <Compile Include="IOrderRemarkRepository.cs" />
     <Compile Include="IOrderRepository.cs" />
+    <Compile Include="IOrgInfoRepository.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IRoleRepository.cs" />
     <Compile Include="ISaleDetailRepository.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Support\AccountRepository.cs" />
     <Compile Include="Support\OrderRemarkRepository.cs" />
     <Compile Include="Support\OrderRepository.cs" />
+    <Compile Include="Support\OrgInfoRepository.cs" />
     <Compile Include="Support\RoleMenuRepository.cs" />
     <Compile Include="Support\RoleRepository.cs" />
     <Compile Include="Support\RoleUserRepository.cs" />

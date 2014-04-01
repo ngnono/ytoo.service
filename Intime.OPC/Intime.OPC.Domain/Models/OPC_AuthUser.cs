@@ -12,13 +12,15 @@ namespace Intime.OPC.Domain.Models
         public string Password { get; set; }
         public string Phone { get; set; }
         public bool? IsValid { get; set; }
-        public int? OrgId { get; set; }
+        public string OrgId { get; set; }
 
         public string OrgName { get; set; }
         public DateTime CreateDate { get; set; }
         public int CreateUserId { get; set; }
         public DateTime UpdateDate { get; set; }
         public int UpdateUserId { get; set; }
+
+        public string DataAuthId { get; set; }
 
         #region IEntity Members
 

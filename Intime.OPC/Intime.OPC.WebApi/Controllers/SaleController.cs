@@ -35,16 +35,21 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetSaleOrderDetails(string saleOrderNo, [UserId] int userId)
-        {
-            return DoFunction(() => { return _saleService.GetSaleOrderDetails(saleOrderNo, userId); }, "读取销售单详情失败");
-        }
-
-        [HttpPost]
-        public IHttpActionResult WriteSaleRemark([FromBody]OPC_SaleComment comment, [UserId] int userId)
+        public IHttpActionResult GetSaleOrderDetails(string saleOrderNo, int pageIndex, int pageSize)
         {
             return DoFunction(() =>
             {
+                int userId = GetCurrentUserID();
+                return _saleService.GetSaleOrderDetails(saleOrderNo, userId,pageIndex,pageSize);
+            }, "读取销售单详情失败");
+        }
+
+        [HttpPost]
+        public IHttpActionResult WriteSaleRemark([FromBody]OPC_SaleComment comment)
+        {
+            return DoFunction(() =>
+            {
+                int userId = GetCurrentUserID();
                 comment.CreateDate = DateTime.Now;
                 comment.CreateUser = userId;
                 comment.UpdateDate = DateTime.Now;
@@ -304,34 +309,35 @@ namespace Intime.OPC.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         public IHttpActionResult GetSaleNoPickUp(DateTime startDate, DateTime endDate, string saleOrderNo,
-            string orderNo)
+            string orderNo, int pageIndex, int pageSize)
         {
             return base.DoFunction(() =>
             {
                 int userId = GetCurrentUserID();
-                return _saleService.GetNoPickUp(saleOrderNo, userId, orderNo, startDate, endDate);
+                return _saleService.GetNoPickUp(saleOrderNo, userId, orderNo, startDate, endDate, pageIndex, pageSize);
             }, "读取未提货数据失败");
         }
 
         [HttpGet]
-        public IHttpActionResult GetSalePickup(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate)
-        {
-
-            return DoFunction(() =>
-            {
-                return _saleService.GetPickUp(orderCode, saleOrderNo, startDate, endDate);
-            },
-                "查询快递单信息失败");
-        }
-
-        [HttpGet]
-        public IHttpActionResult GetShipped(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate)
+        public IHttpActionResult GetSalePickup(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize)
         {
 
             return DoFunction(() =>
             {
                 var userId = GetCurrentUserID();
-                return _saleService.GetShipped(orderCode,userId,  saleOrderNo, startDate, endDate);
+                return _saleService.GetPickUp(saleOrderNo, orderCode, startDate, endDate,userId, pageIndex, pageSize);
+            },
+                "查询快递单信息失败");
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetShipped(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize)
+        {
+
+            return DoFunction(() =>
+            {
+                var userId = GetCurrentUserID();
+                return _saleService.GetShipped(orderCode, userId, saleOrderNo, startDate, endDate, pageIndex, pageSize);
             },
                 "查询快递单信息失败");
         }
@@ -343,23 +349,14 @@ namespace Intime.OPC.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         public IHttpActionResult GetSalePrintSale(DateTime startDate, DateTime endDate, string saleOrderNo,
-            string orderNo,
-            [UserId] int userId)
+            string orderNo, int pageIndex, int pageSize)
         {
-            try
+
+            return DoFunction(() =>
             {
-                return Ok(_saleService.GetPrintSale(saleOrderNo, userId, orderNo, startDate, endDate));
-            }
-            catch (SaleOrderNotExistsException e)
-            {
-                //_logger.WriteError(e.Message);
-                return BadRequest();
-            }
-            catch (Exception ex)
-            {
-                //_logger.WriteError(ex.Message);
-                return InternalServerError();
-            }
+                var userId = GetCurrentUserID();
+                return _saleService.GetPrintSale(saleOrderNo, userId, orderNo, startDate, endDate, pageIndex, pageSize);
+            }, "读取已完成打印销售单的销售单数据失败");
         }
 
         /// <summary>
@@ -370,13 +367,13 @@ namespace Intime.OPC.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         public IHttpActionResult GetSalePrintInvoice(DateTime startDate, DateTime endDate, string saleOrderNo,
-            string orderNo)
+            string orderNo, int pageIndex, int pageSize)
         {
             return base.DoFunction(() =>
             {
                 int userId = GetCurrentUserID();
-                return _saleService.GetPrintInvoice(saleOrderNo, userId, orderNo, startDate, endDate);
-            }, "读取打印发货单数据失败");
+                return _saleService.GetPrintInvoice(saleOrderNo, userId, orderNo, startDate, endDate, pageIndex, pageSize);
+            }, "读取已完成打印发货单的销售单数据失败");
         }
 
         /// <summary>
@@ -387,13 +384,13 @@ namespace Intime.OPC.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         public IHttpActionResult GetSalePrintExpress(DateTime startDate, DateTime endDate, string saleOrderNo,
-            string orderNo)
+            string orderNo, int pageIndex, int pageSize)
         {
             return base.DoFunction(() =>
             {
                 int userId = GetCurrentUserID();
-                return _saleService.GetPrintExpress(saleOrderNo, userId, orderNo, startDate, endDate);
-            }, "读取打印快递单数据失败");
+                return _saleService.GetPrintExpress(saleOrderNo, userId, orderNo, startDate, endDate, pageIndex, pageSize);
+            }, "读取已完成打印快递单的销售单数据失败");
         }
 
         /// <summary>
@@ -404,34 +401,25 @@ namespace Intime.OPC.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         public IHttpActionResult GetSaleShipInStorage(DateTime startDate, DateTime endDate, string saleOrderNo,
-            string orderNo)
+            string orderNo, int pageIndex, int pageSize)
         {
             return base.DoFunction(() =>
             {
                 int userId = GetCurrentUserID();
-                return _saleService.GetShipInStorage(saleOrderNo, userId, orderNo, startDate, endDate);
+                return _saleService.GetShipInStorage(saleOrderNo, userId, orderNo, startDate, endDate, pageIndex, pageSize);
             }, "读取物流入库数据失败");
         }
 
         [HttpGet]
-        public IHttpActionResult GetSaleByOrderNo(string orderID)
+        public IHttpActionResult GetSaleByOrderNo(string orderID,int pageIndex, int pageSize)
         {
-            try
+            return DoFunction(() =>
             {
-                IList<SaleDto> d = _saleService.GetByOrderNo(orderID);
-                return Ok(d);
-            }
-            catch (OrderNoIsNullException ex)
-            {
-                //todo 增加处理方式
-                // _logger.WriteError(ex.Message);
-                return NotFound();
-            }
-            catch (Exception e)
-            {
-                // _logger.WriteError(e.Message);
-                return InternalServerError();
-            }
+                int userId = GetCurrentUserID();
+                return  _saleService.GetByOrderNo(orderID,userId,pageIndex,pageSize);
+                
+            }, "读取销售单数据失败");
+            
         }
 
         #endregion

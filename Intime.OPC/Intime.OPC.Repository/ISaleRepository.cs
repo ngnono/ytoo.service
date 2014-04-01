@@ -124,11 +124,12 @@ namespace Intime.OPC.Repository
         PageResult<OPC_Sale> GetShipInStorage(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize,params int[] sectionIds);
 
         /// <summary>
-        ///     h
+        /// 读取某个专柜下 某个订单的销售单
         /// </summary>
         /// <param name="orderID">The order identifier.</param>
+        /// <param name="sectinID">The sectin identifier.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        PageResult<OPC_Sale> GetByOrderNo(string orderID, int sectinID, int pageIndex, int pageSize);
+        IList<OPC_Sale> GetByOrderNo(string orderID, int sectinID);
 
         PageResult<OPC_Sale> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize,params int[] sectionIds);
     }

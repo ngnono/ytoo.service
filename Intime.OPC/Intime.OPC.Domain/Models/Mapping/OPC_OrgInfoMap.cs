@@ -12,7 +12,11 @@ namespace Intime.OPC.Domain.Models.Mapping
 
             // Properties
             Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            Property(t => t.OrgID)
+                .IsRequired()
+                .HasMaxLength(50);
 
             Property(t => t.OrgName)
                 .HasMaxLength(50);
@@ -20,7 +24,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             Property(t => t.ParentID)
                 .HasMaxLength(50);
 
-            Property(t => t.StoreName)
+            Property(t => t.StoreOrSectionName)
                 .HasMaxLength(50);
 
             // Table & Column Mappings
@@ -28,10 +32,11 @@ namespace Intime.OPC.Domain.Models.Mapping
             Property(t => t.Id).HasColumnName("ID");
             Property(t => t.OrgName).HasColumnName("OrgName");
             Property(t => t.ParentID).HasColumnName("ParentID");
-            Property(t => t.StoreID).HasColumnName("StoreID");
-            Property(t => t.StoreName).HasColumnName("StoreName");
+            Property(t => t.StoreOrSectionID).HasColumnName("StoreOrSectionID");
+            Property(t => t.StoreOrSectionName).HasColumnName("StoreOrSectionName");
             Property(t => t.OrgType).HasColumnName("OrgType");
             Property(t => t.IsDel).HasColumnName("IsDel");
+            Property(t => t.OrgID).HasColumnName("OrgID");
         }
     }
 }

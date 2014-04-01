@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 
@@ -51,7 +52,7 @@ namespace Intime.OPC.Service
         /// <param name="saleOrderNo">The sale order no.</param>
         /// <param name="userId">The user identifier.</param>
         /// <returns>IList{OPC_SaleDetail}.</returns>
-        IList<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int userId);
+        PageResult<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int userId, int pageIndex, int pageSize);
 
         /// <summary>
         ///     销售提货
@@ -116,7 +117,7 @@ namespace Intime.OPC.Service
         /// <param name="dtStart"></param>
         /// <param name="dtEnd"></param>
         /// <returns></returns>
-        IList<SaleDto> GetPickUp(string saleOrderNo,  string orderNo, DateTime dtStart, DateTime dtEnd);
+        PageResult<SaleDto> GetPickUp(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int userID, int pageIndex, int pageSize);
 
         /// <summary>
         ///     获得 未提货 的数据
@@ -126,7 +127,7 @@ namespace Intime.OPC.Service
         /// <param name="dtStart"></param>
         /// <param name="dtEnd"></param>
         /// <returns></returns>
-        IList<SaleDto> GetNoPickUp(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
+        PageResult<SaleDto> GetNoPickUp(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize);
 
         /// <summary>
         ///     获得已完成 打印销售单 的数据
@@ -136,7 +137,7 @@ namespace Intime.OPC.Service
         /// <param name="dtStart"></param>
         /// <param name="dtEnd"></param>
         /// <returns></returns>
-        IList<SaleDto> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
+        PageResult<SaleDto> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize);
 
         /// <summary>
         ///     获得 已发货 的数据
@@ -146,7 +147,7 @@ namespace Intime.OPC.Service
         /// <param name="dtStart"></param>
         /// <param name="dtEnd"></param>
         /// <returns></returns>
-        IList<SaleDto> GetShipped(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
+        PageResult<SaleDto> GetShipped(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize);
         /// <summary>
         ///     获得已完成 打印快递单 的数据
         /// </summary>
@@ -156,7 +157,8 @@ namespace Intime.OPC.Service
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        IList<SaleDto> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
+        PageResult<SaleDto> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
+            DateTime dtEnd, int pageIndex, int pageSize);
 
         /// <summary>
         ///     获得已完成 打印发货单 的数据
@@ -167,7 +169,7 @@ namespace Intime.OPC.Service
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        IList<SaleDto> GetPrintInvoice(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd);
+        PageResult<SaleDto> GetPrintInvoice(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize);
 
         /// <summary>
         ///     获得已完成 物流入库 的数据
@@ -178,8 +180,8 @@ namespace Intime.OPC.Service
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        IList<SaleDto> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
-            DateTime dtEnd);
+        PageResult<SaleDto> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
+            DateTime dtEnd, int pageIndex, int pageSize);
 
         bool WriteSaleRemark(OPC_SaleComment comment);
 
@@ -188,6 +190,6 @@ namespace Intime.OPC.Service
         /// </summary>
         /// <param name="orderID">The order identifier.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        IList<SaleDto> GetByOrderNo(string orderID);
+        PageResult<SaleDto> GetByOrderNo(string orderID, int userid, int pageIndex, int pageSize);
     }
 }

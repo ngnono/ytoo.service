@@ -63,8 +63,10 @@
     <Compile Include="Dto\RoleUserDto.cs" />
     <Compile Include="Dto\SaleDetailDto.cs" />
     <Compile Include="Dto\SaleDto.cs" />
+    <Compile Include="Dto\UserDto.cs" />
     <Compile Include="Enums\EnumCashStatus.cs" />
     <Compile Include="Enums\EnumOderStatus.cs" />
+    <Compile Include="Enums\EnumOrgType.cs" />
     <Compile Include="Enums\EnumReturnGoodsStatus.cs" />
     <Compile Include="Enums\EnumRMACashStatus.cs" />
     <Compile Include="Enums\EnumRMAStatus.cs" />
@@ -75,6 +77,8 @@
     <Compile Include="Exception\SaleOrderNotExistsException.cs" />
     <Compile Include="Exception\ShippingSaleNotExistsException.cs" />
     <Compile Include="Exception\UserIdConverException.cs" />
+    <Compile Include="Exception\UserNotExistException.cs" />
+    <Compile Include="Exception\UserNotValidException.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\Mapping\BrandMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthMenuMap.cs" />

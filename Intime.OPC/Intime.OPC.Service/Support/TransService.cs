@@ -19,11 +19,13 @@ namespace Intime.OPC.Service.Support
         private readonly ITransRepository _transRepository;
         private readonly IShippingSaleCommentRepository _shippingSaleCommentRepository;
         private readonly IShippingSaleRepository _shippingSaleRepository;
+        private readonly IAccountService  _accountService;
 
         public TransService(ITransRepository transRepository, 
             IOrderRemarkRepository orderRemarkRepository,
             ISaleRepository saleRepository,
             IShippingSaleRepository shippingSaleRepository,
+            IAccountService accountService,
             IShippingSaleCommentRepository shippingSaleCommentRepository)
         {
             _transRepository = transRepository;
@@ -31,6 +33,7 @@ namespace Intime.OPC.Service.Support
             _shippingSaleRepository = shippingSaleRepository;
             _saleRepository = saleRepository;
             _shippingSaleCommentRepository = shippingSaleCommentRepository;
+            _accountService = accountService;
         }
 
         #region ITransService Members
@@ -144,11 +147,17 @@ namespace Intime.OPC.Service.Support
             return new PageResult<SaleDto>(lst2,lst.TotalCount);
         }
 
-        public IList<SaleDto> GetSaleOrderPickup(string orderNo, string saleOrderNo, DateTime startDate, DateTime endDate)
+        public PageResult<SaleDto> GetSaleOrderPickup(string orderNo, string saleOrderNo, DateTime startDate, DateTime endDate,int userid,int pageIndex,int pageSize)
         {
             startDate = startDate.Date;
             endDate = endDate.Date.AddDays(1);
-            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate,endDate);
+             var user = _accountService.GetByUserID(userid);
+            if (user.SectionIDs.Count == 0)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate,endDate,pageIndex,pageSize,user.SectionIDs.ToArray());
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 

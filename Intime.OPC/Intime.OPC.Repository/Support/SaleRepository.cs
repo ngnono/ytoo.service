@@ -179,9 +179,9 @@ namespace Intime.OPC.Repository.Support
             return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.ShipInStorage,pageIndex, pageSize,sectionIds);
         }
 
-        public PageResult<OPC_Sale> GetByOrderNo(string orderID,int sectinID,int pageIndex, int pageSize)
+        public IList<OPC_Sale> GetByOrderNo(string orderID,int sectinID)
         {
-            return Select(t => t.OrderNo == orderID && t.SectionId == sectinID, t => t.UpdatedDate, false, pageIndex, pageSize);
+            return Select(t => t.OrderNo == orderID && t.SectionId == sectinID);
         }
 
         public PageResult<OPC_Sale> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd,int pageIndex, int pageSize,params int[] sectionIds)
