@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
-namespace Yintai.Hangzhou.Model.Enums
+namespace com.intime.fashion.common.Tencent
 {
-    public enum OrderType
+   public static  class XmlUtil
     {
-        GiftCard = 1,
-        Product = 2
+      
     }
 }

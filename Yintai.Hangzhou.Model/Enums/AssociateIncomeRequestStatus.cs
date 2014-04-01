@@ -9,7 +9,8 @@ namespace Yintai.Hangzhou.Model.Enums
     public enum AssociateIncomeRequestStatus
     {
         Requesting = 1,
-        Transferred = 2,
-        Failed = 3
+        Transferring = 2,
+        Transferred = 3,
+        Failed = 4
     }
 }

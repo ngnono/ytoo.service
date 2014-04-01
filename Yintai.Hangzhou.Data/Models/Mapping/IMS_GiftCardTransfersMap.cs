@@ -21,7 +21,6 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             // Table & Column Mappings
             this.ToTable("IMS_GiftCardTransfers");
             this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.GiftCardId).HasColumnName("GiftCardId");
             this.Property(t => t.FromUserId).HasColumnName("FromUserId");
             this.Property(t => t.ToUserId).HasColumnName("ToUserId");
             this.Property(t => t.Phone).HasColumnName("Phone");

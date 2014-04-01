@@ -39,7 +39,7 @@ namespace com.intime.fashion.common.Wxpay
 
         public static string MD5_Encode(string value)
         {
-           // CommonUtil.Log.Debug(string.Format("md5:{0}", value));
+
             byte[] hashData = MD5.Create().ComputeHash((Encoding.UTF8.GetBytes(value)));
             var hashText = new StringBuilder();
             foreach (byte b in hashData)

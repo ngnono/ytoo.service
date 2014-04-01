@@ -92,6 +92,15 @@
     <Compile Include="GroupServiceHelper.cs" />
     <Compile Include="SecurityHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tencent\AutoBankTransfer.cs" />
+    <Compile Include="Tencent\BaseBatchRequest.cs" />
+    <Compile Include="Tencent\BaseBatchResponse.cs" />
+    <Compile Include="Tencent\BatchQueryRequest.cs" />
+    <Compile Include="Tencent\BatchQueryResponse.cs" />
+    <Compile Include="Tencent\BatchTransferRequest.cs" />
+    <Compile Include="Tencent\BatchTransferResponse.cs" />
+    <Compile Include="Tencent\Config.cs" />
+    <Compile Include="Tencent\XmlUtil.cs" />
     <Compile Include="Weigou\WeigouConfig.cs" />
     <Compile Include="WgServiceHelper.cs" />
     <Compile Include="Wxpay\AccessToken.cs" />

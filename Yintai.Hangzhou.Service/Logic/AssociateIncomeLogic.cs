@@ -14,8 +14,7 @@ using Yintai.Hangzhou.Service.Logic.IncomeRule;
 namespace Yintai.Hangzhou.Service.Logic
 {
     public static class AssociateIncomeLogic
-    {
-       
+    {   
         public static bool Create(int associateUserId, OrderEntity order)
         {
             var incomeRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateIncomeHistoryEntity>>();
@@ -29,6 +28,7 @@ namespace Yintai.Hangzhou.Service.Logic
                 AssociateIncome = ComputeIncome(order),
                 AssociateUserId = associateUserId
             });
+            
             return true;
         }
         public static bool Froze(string orderNo)
@@ -39,12 +39,16 @@ namespace Yintai.Hangzhou.Service.Logic
                 item.Status = (int)AssociateIncomeStatus.Frozen;
                 item.UpdateDate = DateTime.Now;
                 incomeRepo.Update(item);
+
+                AssociateIncomeAccount.Froze(item.AssociateUserId, item.AssociateIncome);
             }
             return true;
         }
-        public static bool Froze(int associateUserId, IMS_GiftCardOrderEntity giftOrder)
+        public static bool Avail(int associateUserId, IMS_GiftCardOrderEntity giftOrder)
         {
             var incomeRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateIncomeHistoryEntity>>();
+            var incomeAccountRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateIncomeEntity>>();
+            var thisIncome = ComputeIncome(giftOrder);
             incomeRepo.Insert(new IMS_AssociateIncomeHistoryEntity()
             {
                 CreateDate = DateTime.Now,
@@ -52,18 +56,47 @@ namespace Yintai.Hangzhou.Service.Logic
                 SourceType = (int)AssociateOrderType.GiftCard,
                 Status = (int)AssociateIncomeStatus.Frozen,
                 UpdateDate = DateTime.Now,
-                AssociateIncome = ComputeIncome(giftOrder),
+                AssociateIncome = thisIncome,
                 AssociateUserId = associateUserId
             });
+
+            AssociateIncomeAccount.AvailGift(associateUserId, thisIncome);
+           
             return true;
         }
-        public static decimal ComputeIncome(Data.Models.IMS_GiftCardOrderEntity giftcardOrder)
+        public static bool Avail(string orderNo)
+        {
+            var incomeRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateIncomeHistoryEntity>>();
+            var incomeHistory = Context.Set<IMS_AssociateIncomeHistoryEntity>().Where(ia => ia.SourceType == (int)AssociateIncomeStatus.Frozen && ia.SourceNo == orderNo).FirstOrDefault();
+            if (incomeHistory == null)
+                return true;
+            incomeHistory.Status = (int)AssociateIncomeStatus.Avail;
+            incomeHistory.UpdateDate = DateTime.Now;
+            incomeRepo.Update(incomeHistory);
+            AssociateIncomeAccount.Avail(incomeHistory.AssociateUserId, incomeHistory.AssociateIncome);
+            return true;
+        }
+        public static bool Void(string orderNo)
+        {
+            var incomeRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateIncomeHistoryEntity>>();
+            var incomeHistory = Context.Set<IMS_AssociateIncomeHistoryEntity>().Where(ia => ia.SourceType == (int)AssociateIncomeStatus.Frozen && ia.SourceNo == orderNo).FirstOrDefault();
+            if (incomeHistory == null)
+                return true;
+            incomeHistory.Status = (int)AssociateIncomeStatus.Void;
+            incomeHistory.UpdateDate = DateTime.Now;
+            incomeRepo.Update(incomeHistory);
+            AssociateIncomeAccount.Void(incomeHistory.AssociateUserId, incomeHistory.AssociateIncome);
+            return true;
+        }
+
+
+        private static decimal ComputeIncome(Data.Models.IMS_GiftCardOrderEntity giftcardOrder)
         {
             if (giftcardOrder == null)
                 return 0m;
-            return DoInternalCompute(giftcardOrder.Price, ConfigManager.IMS_GIFTCARD_CAT_ID, 1);
+            return DoInternalCompute(giftcardOrder.Price.Value, ConfigManager.IMS_GIFTCARD_CAT_ID, 1);
         }
-        public static decimal ComputeIncome(Data.Models.OrderEntity order)
+        private static decimal ComputeIncome(Data.Models.OrderEntity order)
         {
             if (order == null)
                 return 0m;
@@ -75,7 +108,6 @@ namespace Yintai.Hangzhou.Service.Logic
             }
             return incomeSum;
         }
-
         private static decimal DoInternalCompute(decimal price, int categoryId, int quantity)
         {
             var incomeRuleEntity = Context.Set<IMS_AssociateIncomeRuleEntity>().Where(iar => iar.Status == (int)DataStatus.Normal &&
@@ -107,5 +139,8 @@ namespace Yintai.Hangzhou.Service.Logic
             get { return ServiceLocator.Current.Resolve<DbContext>(); }
         }
 
+
+
+       
     }
 }

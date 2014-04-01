@@ -179,6 +179,9 @@
     <Compile Include="Job\ExpireStoreCouponReturnPointsJob.cs" />
     <Compile Include="Job\ExternalProductSyncJob.cs" />
     <Compile Include="Job\FreeMemoryJob.cs" />
+    <Compile Include="Job\Income\AutoChangeIncomeStatusJob.cs" />
+    <Compile Include="Job\Income\BatchQueryIncomeJob.cs" />
+    <Compile Include="Job\Income\BatchTransferIncomeJob.cs" />
     <Compile Include="Job\JobConfig.cs" />
     <Compile Include="Job\JobType.cs" />
     <Compile Include="Job\Order\AutoVoidUnpaidOrderJob.cs" />

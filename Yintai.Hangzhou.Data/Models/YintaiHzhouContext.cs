@@ -226,6 +226,8 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<IMS_AssociateIncomeRuleFixEntity> IMS_AssociateIncomeRuleFix { get; set; }
         public DbSet<IMS_AssociateIncomeRuleFlattenEntity> IMS_AssociateIncomeRuleFlatten { get; set; }
         public DbSet<IMS_AssociateIncomeRuleFlexEntity> IMS_AssociateIncomeRuleFlex { get; set; }
+        public DbSet<IMS_AssociateIncomeTransferEntity> IMS_AssociateIncomeTransfer { get; set; }
+        public DbSet<IMS_AssociateIncomeTran2ReqEntity> IMS_AssociateIncomeTran2Req { get; set; }
         public DbSet<IMS_AssociateItemsEntity> IMS_AssociateItems { get; set; }
         public DbSet<IMS_ComboEntity> IMS_Combo { get; set; }
         public DbSet<IMS_Combo2ProductEntity> IMS_Combo2Product { get; set; }

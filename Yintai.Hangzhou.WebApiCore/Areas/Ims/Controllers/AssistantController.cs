@@ -130,7 +130,21 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             return this.RenderSuccess<PagerInfoResponse<string>>(c => c.Data = response);
         }
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Avail_Banks()
+        {
+            var linq = Context.Set<IMS_BankEntity>().Where(ia => ia.Status == (int)DataStatus.Normal).OrderBy(l=>l.Name);
+            var response = new PagerInfoResponse<dynamic>(new PagerRequest(), linq.Count())
+            {
+                Items = linq.ToList().Select(l=>new {
+                    code = l.Code,
+                    name = l.Name
+                }).ToList<dynamic>()
+            };
 
+
+            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
+        }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult SalesCode_Add(string sale_code, int authuid)
         {

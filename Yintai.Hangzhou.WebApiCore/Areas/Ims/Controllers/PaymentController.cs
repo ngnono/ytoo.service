@@ -276,8 +276,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 var associatEntity = Context.Set<IMS_AssociateEntity>().Find(assocateId);
                                 if (associatEntity != null)
                                 {
-                                    AssociateIncomeLogic.Froze(associatEntity.UserId, giftcardOrder);
-                                  
+                                    AssociateIncomeLogic.Avail(associatEntity.UserId, giftcardOrder);
                                 }
                             }
                             ts.Complete();

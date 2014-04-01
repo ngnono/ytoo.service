@@ -19,7 +19,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.ToTable("IMS_GiftCardOrder");
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.No).HasColumnName("No");
-            this.Property(t => t.GiftCardId).HasColumnName("GiftCardId");
+            this.Property(t => t.GiftCardItemId).HasColumnName("GiftCardItemId");
             this.Property(t => t.Amount).HasColumnName("Amount");
             this.Property(t => t.PurchaseUserId).HasColumnName("PurchaseUserId");
             this.Property(t => t.OwnerUserId).HasColumnName("OwnerUserId");

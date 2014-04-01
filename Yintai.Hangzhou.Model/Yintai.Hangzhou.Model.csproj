@@ -72,6 +72,7 @@
     <Compile Include="Enums\AssociateFavorType.cs" />
     <Compile Include="Enums\AssociateIncomeRequestStatus.cs" />
     <Compile Include="Enums\AssociateIncomeStatus.cs" />
+    <Compile Include="Enums\AssociateIncomeTransferStatus.cs" />
     <Compile Include="Enums\AuthDataType.cs" />
     <Compile Include="Enums\BrandSortOrder.cs" />
     <Compile Include="Enums\BusinessStatus.cs" />

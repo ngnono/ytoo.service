@@ -14,6 +14,9 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime CreateDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public string BankCode { get; set; }
+        public string BankAccountName { get; set; }
+        public string TransferErrorCode { get; set; }
+        public string TransferErrorMsg { get; set; }
 
         #region Overrides of BaseEntity
 

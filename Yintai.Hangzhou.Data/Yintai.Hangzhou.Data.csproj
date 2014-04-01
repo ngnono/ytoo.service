@@ -88,6 +88,8 @@
   <ItemGroup>
     <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
     <Compile Include="Models\Banner.cs" />
+    <Compile Include="Models\IMS_AssociateIncomeTran2Req.cs" />
+    <Compile Include="Models\IMS_AssociateIncomeTransfer.cs" />
     <Compile Include="Models\IMS_Bank.cs" />
     <Compile Include="Models\IMS_Associate.cs" />
     <Compile Include="Models\IMS_AssociateBrand.cs" />
