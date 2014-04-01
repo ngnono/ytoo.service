@@ -205,7 +205,7 @@ namespace OPCApp.Infrastructure.Mvvm
         /// <summary>
         ///     Searches the action.
         /// </summary>
-        private void SearchAction()
+        public virtual void SearchAction()
         {
             IBaseDataService<T> service = GetDataService();
             PageResult<T> c = service.Search(GetFilter());
