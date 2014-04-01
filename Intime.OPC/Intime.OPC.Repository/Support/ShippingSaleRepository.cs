@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -9,17 +10,17 @@ namespace Intime.OPC.Repository.Support
 {
     public class ShippingSaleRepository : BaseRepository<OPC_ShippingSale>, IShippingSaleRepository
     {
-        public IList<OPC_ShippingSale> GetBySaleOrderNo(string saleNo)
+        public PageResult<OPC_ShippingSale> GetBySaleOrderNo(string saleNo, int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.SaleOrderNo == saleNo).ToList();
+            return Select(t => t.SaleOrderNo == saleNo,pageIndex,pageSize);
         }
 
-        public IList<OPC_ShippingSale> GetByShippingCode(string shippingCode)
+        public PageResult<OPC_ShippingSale> GetByShippingCode(string shippingCode, int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.ShippingCode == shippingCode).ToList();
+            return Select(t => t.ShippingCode == shippingCode, pageIndex, pageSize);
         }
 
-        public IList<OPC_ShippingSale> Get(string shippingCode, DateTime startTime, DateTime endTime,int shippingStatus)
+        public PageResult<OPC_ShippingSale> Get(string shippingCode, DateTime startTime, DateTime endTime, int shippingStatus, int pageIndex, int pageSize = 20)
         {
             Expression<Func<OPC_ShippingSale, bool>> filterExpression =
                 t => t.CreateDate >= startTime && t.CreateDate < endTime && t.ShippingStatus==shippingStatus;
@@ -27,7 +28,7 @@ namespace Intime.OPC.Repository.Support
             {
                 filterExpression.And(t => t.ShippingCode.Contains(shippingCode));
             }
-            return Select(filterExpression).ToList();
+            return Select(filterExpression, pageIndex, pageSize);
         }
     }
 }

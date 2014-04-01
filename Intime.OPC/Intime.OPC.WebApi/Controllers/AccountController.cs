@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Core;
@@ -49,9 +50,17 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetUsersByRoleID(int roleId)
+        public IHttpActionResult GetUsersByRoleID(int roleId, int pageIndex, int pageSize)
         {
-            IList<OPC_AuthUser> lst = _accountService.GetUsersByRoleID(roleId);
+            if (pageIndex<1)
+            {
+                pageIndex = 1;
+            }
+            if (pageSize<1)
+            {
+                pageSize = 20;
+            }
+            PageResult<OPC_AuthUser> lst = _accountService.GetUsersByRoleID(roleId,pageIndex,pageSize);
 
             return Ok(lst);
         }
@@ -72,10 +81,10 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult SelectUser([FromUri] string SearchField, [FromUri] string SearchValue)
+        public IHttpActionResult SelectUser([FromUri] string SearchField, [FromUri] string SearchValue, [FromUri] int pageIndex, [FromUri] int pageSize = 20)
         {
             //TODO:check params
-            return Ok(_accountService.Select());
+            return Ok(_accountService.Select(pageIndex,pageSize));
         }
 
         public IHttpActionResult Stop(int userId)

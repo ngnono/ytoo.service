@@ -18,7 +18,7 @@ namespace Intime.OPC.Service.Support
 
         public IList<Store> GetAll()
         {
-            return _storeRepository.GetAll();
+            return _storeRepository.GetAll(0,1000).Result;
         }
     }
 }

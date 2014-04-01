@@ -213,7 +213,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPut]
         public IHttpActionResult SetSaleOrderPrintExpress([FromBody]string shippingCode)
         {
-            IList<OPC_ShippingSale> lst = _shippingSaleService.GetByShippingCode(shippingCode);
+            IList<OPC_ShippingSale> lst = _shippingSaleService.GetByShippingCode(shippingCode,1,10000).Result;
             if (lst == null || lst.Count == 0)
             {
                 return BadRequest("发货单不存在");

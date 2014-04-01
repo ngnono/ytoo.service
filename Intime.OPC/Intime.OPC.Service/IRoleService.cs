@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
@@ -49,7 +50,7 @@ namespace Intime.OPC.Repository
         ///     Selects this instance.
         /// </summary>
         /// <returns>IList{OPC_AuthRole}.</returns>
-        IList<OPC_AuthRole> Select();
+        PageResult<OPC_AuthRole> Select(int pageIndex, int pageSize = 20);
 
         /// <summary>
         ///     Determines whether the specified role identifier is stop.
@@ -71,7 +72,7 @@ namespace Intime.OPC.Repository
         /// </summary>
         /// <param name="userID">The user identifier.</param>
         /// <returns>IEnumerable{OPC_AuthRole}.</returns>
-        IEnumerable<OPC_AuthRole> GetByUserID(int userID);
+        PageResult<OPC_AuthRole> GetByUserID(int userID, int pageIndex, int pageSize = 20);
 
         bool SetUsers(Domain.Dto.RoleUserDto roleUserDto);
     }

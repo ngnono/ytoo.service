@@ -11,6 +11,8 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -20,6 +22,6 @@ namespace Intime.OPC.Repository
     /// </summary>
     public interface IBrandRepository : IRepository<Brand>
     {
-        System.Collections.Generic.IList<Brand> GetAll();
+        PageResult<Brand> GetAll(int pageIndex, int pageSize = 20);
     }
 }

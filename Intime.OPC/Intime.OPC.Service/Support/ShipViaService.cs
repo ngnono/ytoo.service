@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Intime.OPC.Domain;
 using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
@@ -15,9 +16,9 @@ namespace Intime.OPC.Service.Support
             _shipViaRepository = shipViaRepository;
         }
 
-        public IList<Domain.Models.ShipVia> GetAll()
+        public PageResult<Domain.Models.ShipVia> GetAll( int pageIndex, int pageSize = 20)
         {
-            return _shipViaRepository.GetAll();
+            return _shipViaRepository.GetAll(pageIndex,pageSize);
         }
     }
 }

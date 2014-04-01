@@ -26,7 +26,7 @@ namespace Intime.OPC.WebApi.Controllers
  
             try
             {
-                var lst = _brandService.GetAll();
+                var lst = _brandService.GetAll(1,10000);
                 return Ok(lst);
             }
             catch (Exception ex)

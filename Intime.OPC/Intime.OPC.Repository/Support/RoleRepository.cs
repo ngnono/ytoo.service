@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -48,17 +49,17 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
-        public IList<OPC_AuthRole> All()
+        public PageResult<OPC_AuthRole> All(int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.IsValid);
+            return Select(t => t.IsValid,pageIndex,pageSize);
         }
 
-        public IList<OPC_AuthRole> GetByUserID(int userID)
+        public PageResult<OPC_AuthRole> GetByUserID(int userID, int pageIndex, int pageSize = 20)
         {
             using (var db = new YintaiHZhouContext())
             {
                 return db.OPC_AuthRoleUser.Where(t => t.OPC_AuthUserId == userID).Join(db.OPC_AuthRole,
-                    t => t.OPC_AuthUserId, o => o.Id, (t, o) => o).ToList();
+                    t => t.OPC_AuthUserId, o => o.Id, (t, o) => o).ToPageResult(pageIndex, pageSize);
             }
         }
 

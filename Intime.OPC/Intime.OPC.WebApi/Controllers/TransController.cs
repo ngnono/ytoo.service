@@ -88,10 +88,10 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetShippingSale(string shippingCode, DateTime startDate, DateTime endDate)
+        public IHttpActionResult GetShippingSale(string shippingCode, DateTime startDate, DateTime endDate, int pageIndex, int pageSize = 20)
         {
             
-            return DoFunction(() => { return _transService.GetShippingSale(shippingCode, startDate, endDate); },
+            return DoFunction(() => { return _transService.GetShippingSale(shippingCode, startDate, endDate,pageIndex,pageSize); },
                 "查询快递单信息失败");
         }
 
