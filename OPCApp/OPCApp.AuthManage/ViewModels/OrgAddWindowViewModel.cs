@@ -19,7 +19,7 @@ namespace OPCApp.AuthManage.ViewModels
 
         protected override IBaseDataService<OPC_OrgInfo> GetDataService()
         {
-            return AppEx.Container.GetInstance<IAuthenticateService>();
+            return AppEx.Container.GetInstance<IOrgService>();
         }
     }
 }
