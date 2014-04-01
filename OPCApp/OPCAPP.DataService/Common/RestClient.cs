@@ -73,7 +73,12 @@ namespace OPCApp.DataService.Common
             return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
         }
 
-
+        public static PageResult<T> GetPage<T>(string address, string urlParams)
+        {
+            string url = string.Format("{0}?{1}", address, urlParams);
+            HttpResponseMessage response = Client.GetAsync(url).Result;
+            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<PageResult<T>>().Result : new PageResult<T>(null, 10);
+        }
         public static PageResult<T> Get<T>(string address, string urlParams, int pageIndex, int pageSize)
         {
             string url = string.Format("{0}?{1}&pageIndex={2}&pageSize={3}", address, urlParams, pageIndex, pageSize);

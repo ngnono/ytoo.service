@@ -38,8 +38,8 @@
 
             <TextBlock Text="第 "  VerticalAlignment="Center"/>
             <TextBox Width="30" Text="{Binding Path=PageIndex,ElementName=dp}" Name="tbPageIndex" PreviewKeyDown="tbPageIndex_PreviewKeyDown" LostFocus="tbPageIndex_LostFocus" />
-            <TextBlock Text=" 页 "  VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding Path=PageCount, ElementName=dp}"  VerticalAlignment="Center"/>
+            <TextBlock Text=" 页 总共"  VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding Path=PageCount, ElementName=dp}" VerticalAlignment="Center"/>
 
             <loc:ImageButton Click="btnNext_Click" x:Name="btnNext"
                 ImageSource="/CustomControlLibrary;component/Images/pagination_next.gif" 
@@ -51,7 +51,7 @@
                 ImageSource="/CustomControlLibrary;component/Images/pagination_load.png" />
         </StackPanel>
         <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="5,0,5,0" >
-            显示 <TextBlock Text="{Binding Path=Start,ElementName=dp}" /> 从 <TextBlock Text="{Binding Path=End,ElementName=dp}" /> 到 <TextBlock Text="{Binding Path=Total,ElementName=dp}" /> 页
+            显示从 <TextBlock Text="{Binding Path=Start,ElementName=dp}" /> 到  <TextBlock Text="{Binding Path=End,ElementName=dp}" />总共 <TextBlock Text="{Binding Path=Total,ElementName=dp}" /> 
         </TextBlock>
     </Grid>
 </UserControl>
