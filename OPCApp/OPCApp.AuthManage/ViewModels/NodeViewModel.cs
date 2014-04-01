@@ -219,7 +219,7 @@ namespace OPCApp.AuthManage
         }
         public void Rename()
         {
-            Name = GetNextDataName();
+            Name = ""; //GetNextDataName();
         }
 
         public void MoveUp()
@@ -255,8 +255,9 @@ namespace OPCApp.AuthManage
 
         void RefreshInfoCount(int addition)
         {
-            if (NodeInfo != null)
-                NodeInfo.SetCount(NodeInfo.Count + addition);
+            //if (NodeInfo != null)
+            //    //NodeInfo.SetCount(NodeInfo.Count + addition);
+            //    return;
         }
 
         #endregion
