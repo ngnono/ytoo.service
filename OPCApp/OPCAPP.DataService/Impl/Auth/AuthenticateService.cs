@@ -7,7 +7,6 @@ using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
-
 namespace OPCApp.DataService.Impl.Auth
 {
     [Export(typeof (IAuthenticateService))]

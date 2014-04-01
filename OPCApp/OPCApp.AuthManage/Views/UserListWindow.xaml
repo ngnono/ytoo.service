@@ -15,9 +15,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="200" />
+            <RowDefinition Height="400" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
+      
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <Button Background="LightGray" Width="50">

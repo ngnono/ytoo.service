@@ -12,10 +12,15 @@ using OPCApp.Infrastructure.Mvvm;
 namespace OPCApp.AuthManage.ViewModels
 {
     [Export("UserListViewModel", typeof (IViewModel))]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
+   // [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserListWindowViewModel : BaseListViewModel<OPC_AuthUser>
     {
-        public PageResult PrResult { get; set; }
+        public PageResult _prResult;
+        public PageResult PrResult
+        {
+            get { return _prResult; }
+            set { SetProperty(ref _prResult, value); }
+        }
         /*选择字段*/
 
         public UserListWindowViewModel()
@@ -56,9 +61,10 @@ namespace OPCApp.AuthManage.ViewModels
 
         public override void SearchAction()
         {
-            var pages = AppEx.Container.GetInstance<IAuthenticateService>().Search(GetFilter());
-            PrResult.Models = pages.Result.ToList();
-            PrResult.Total = pages.TotalCount;
+            var  PrResultTemp = AppEx.Container.GetInstance<IAuthenticateService>().Search(GetFilter());
+            PrResult=new PageResult();
+            PrResult.Models = PrResultTemp.Result.ToList();
+            PrResult.Total = PrResultTemp.TotalCount;
         }
 
         private void DBGridClick()
@@ -76,7 +82,7 @@ namespace OPCApp.AuthManage.ViewModels
             SetStopUserCommand = new DelegateCommand(SetStopUser);
             DBGridClickCommand = new DelegateCommand(DBGridClick);
             PageIndex = 1;
-            PageSize = 20;
+            PageSize = 10;
             PrResult=new PageResult();
         }
 
@@ -98,7 +104,7 @@ namespace OPCApp.AuthManage.ViewModels
             return AppEx.Container.GetInstance<IAuthenticateService>();
         }
 
-        public class PageResult : BindableBase
+        public class PageResult :BindableBase
         {
 
             public int _total;
