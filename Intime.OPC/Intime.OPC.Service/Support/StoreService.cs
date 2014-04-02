@@ -8,17 +8,15 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public class StoreService : BaseService, IStoreService
+    public class StoreService : BaseService<Store>, IStoreService
     {
-        private IStoreRepository _storeRepository;
-        public StoreService(IStoreRepository repository)
+        public StoreService(IStoreRepository repository):base(repository)
         {
-            _storeRepository = repository;
         }
 
         public IList<Store> GetAll()
         {
-            return _storeRepository.GetAll(0,1000).Result;
+            return _repository.GetAll(0,1000).Result;
         }
     }
 }

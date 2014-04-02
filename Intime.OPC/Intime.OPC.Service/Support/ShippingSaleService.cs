@@ -10,10 +10,10 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public class ShippingSaleService :BaseService, IShippingSaleService
+    public class ShippingSaleService :BaseService<OPC_ShippingSale>, IShippingSaleService
     {
         private readonly IShippingSaleRepository _shippingSaleRepository;
-        public ShippingSaleService(IShippingSaleRepository repository)
+        public ShippingSaleService(IShippingSaleRepository repository):base(repository)
         {
             _shippingSaleRepository = repository;
         }

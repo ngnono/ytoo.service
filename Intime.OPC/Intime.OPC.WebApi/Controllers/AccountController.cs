@@ -29,7 +29,7 @@ namespace Intime.OPC.WebApi.Controllers
             //public IHttpActionResult AddUser()
         {
             //TODO:check params
-            if (_accountService.Create(user))
+            if (_accountService.Add(user))
             {
                 return Ok();
             }
@@ -70,7 +70,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             if (userId != 0)
             {
-                if (_accountService.Delete(userId.Value))
+                if (_accountService.DeleteById(userId.Value))
                 {
                     return Ok();
                 }
@@ -81,10 +81,23 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult SelectUser([FromUri] string SearchField, [FromUri] string SearchValue, [FromUri] int pageIndex, [FromUri] int pageSize = 20)
+        public IHttpActionResult SelectUser([FromUri] string orgID,  [FromUri] string SearchField, [FromUri] string SearchValue, [FromUri] int pageIndex, [FromUri] int pageSize = 20)
         {
-            //TODO:check params
-            return Ok(_accountService.Select(pageIndex,pageSize));
+            return DoFunction(() =>
+            {
+                if (SearchField=="0")
+                {
+                    return _accountService.SelectByLogName(orgID, SearchValue, pageIndex, pageSize);
+                }
+                else if (SearchField == "1")
+                {
+                    return _accountService.Select(orgID, SearchValue, pageIndex, pageSize);
+                }
+                else
+                {
+                    return BadRequest("查询条件错误");
+                }
+            }, "查询用户信息失败");
         }
 
         public IHttpActionResult Stop(int userId)

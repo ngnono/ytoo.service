@@ -30,5 +30,11 @@ namespace Intime.OPC.Repository.Support
             }
             return Select(filterExpression,t=>t.UpdateDate,false, pageIndex, pageSize);
         }
+
+
+        public PageResult<OPC_ShippingSale> GetShippingSale(string saleOrderNo, string expressNo, DateTime startGoodsOutDate, DateTime endGoodsOutDate, string outGoodsCode, int sectionId, int shippingStatus, string customerPhone, int brandId, int pageIndex, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

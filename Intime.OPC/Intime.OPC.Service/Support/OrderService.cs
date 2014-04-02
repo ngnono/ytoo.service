@@ -9,13 +9,14 @@ using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service.Support
 {
-    public class OrderService : BaseService, IOrderService
+    public class OrderService : BaseService<Order>, IOrderService
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderRemarkRepository _orderRemarkRepository;
         public OrderService(IOrderRepository orderRepository, IOrderRemarkRepository orderRemarkRepository)
+            : base(orderRepository)
         {
-            _orderRepository = orderRepository;
+            _orderRepository = _repository as IOrderRepository;
             _orderRemarkRepository = orderRemarkRepository;
         }
 

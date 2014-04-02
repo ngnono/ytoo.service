@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Repository
@@ -49,5 +50,7 @@ namespace Intime.OPC.Repository
         /// <param name="id">The identifier.</param>
         /// <returns>`0.</returns>
         T GetByID(int id);
+
+        PageResult<T> GetAll(int pageIndex, int pageSize);
     }
 }

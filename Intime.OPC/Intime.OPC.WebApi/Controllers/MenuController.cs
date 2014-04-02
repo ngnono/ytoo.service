@@ -49,23 +49,15 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
         [System.Web.Http.HttpGet]
-        public IHttpActionResult LoadMenu([UserId] int? userId)
+        public IHttpActionResult LoadMenu()
         {
-            if (userId.HasValue)
+            return DoFunction(() =>
             {
-                try
-                {
-                    var ss = GetUserID();
-                    
-                    IEnumerable<OPC_AuthMenu> lstMenu = _menuService.SelectByUserID(userId.Value);
-                    return Ok(lstMenu);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest("获得用户菜单失败");
-                }
-            }
-            return BadRequest("用户名未登录，或用户名为空");
+                var userId = GetCurrentUserID();
+               return   _menuService.SelectByUserID(userId);
+            }, "加载菜单失败");
+
+            
         }
 
         private int? GetUserID()

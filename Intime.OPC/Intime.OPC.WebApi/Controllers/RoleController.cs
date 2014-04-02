@@ -46,7 +46,7 @@ namespace Intime.OPC.WebApi.Controllers
             //public IHttpActionResult AddUser()
         {
             //TODO:check params
-            if (_roleService.Create(role))
+            if (_roleService.Add(role))
             {
                 return Ok();
             }
@@ -87,7 +87,7 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult DeleteRole(int roleId)
         {
             //TODO:check params
-            if (_roleService.Delete(roleId))
+            if (_roleService.DeleteById(roleId))
             {
                 return Ok();
             }

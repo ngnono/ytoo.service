@@ -96,6 +96,49 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
+        /// 获得发货单数据
+        /// </summary>
+        /// <param name="orderNo">The order no.</param>
+        /// <param name="expressNo">The express no.</param>
+        /// <param name="startGoodsOutDate">The start goods out date.</param>
+        /// <param name="endGoodsOutDate">The end goods out date.</param>
+        /// <param name="outGoodsCode">The out goods code.</param>
+        /// <param name="sectionId">The section identifier.</param>
+        /// <param name="shippingStatus">The shipping status.</param>
+        /// <param name="customerPhone">The customer phone.</param>
+        /// <param name="brandId">The brand identifier.</param>
+        /// <param name="pageIndex">Index of the page.</param>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetShipping(string orderNo,
+            string expressNo,
+            DateTime startGoodsOutDate,
+            DateTime endGoodsOutDate,
+            string outGoodsCode,
+            int sectionId,
+            int shippingStatus,
+            string customerPhone,
+            int brandId,
+            int pageIndex, int pageSize = 20
+            )
+        {
+            try
+            {
+                int userId = GetCurrentUserID();
+
+                var lst = _transService.GetShippingSale(orderNo, expressNo, startGoodsOutDate, endGoodsOutDate,
+                    outGoodsCode, sectionId, shippingStatus, customerPhone, brandId, pageIndex, pageSize);
+
+                return Ok(lst);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
+
+        /// <summary>
         ///     创建发货单
         /// </summary>
         /// <param name="comment">The comment.</param>

@@ -12,7 +12,7 @@ using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service.Support
 {
-    public class TransService : BaseService, ITransService
+    public class TransService :  ITransService
     {
         private readonly IOrderRemarkRepository _orderRemarkRepository;
         private readonly ISaleRepository _saleRepository;
@@ -162,7 +162,13 @@ namespace Intime.OPC.Service.Support
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
-       
+        public PageResult<SaleDto> GetShippingSale(string saleOrderNo, string expressNo, DateTime startGoodsOutDate, DateTime endGoodsOutDate,
+            string outGoodsCode, int sectionId, int shippingStatus, string customerPhone, int brandId, int pageIndex,
+            int pageSize)
+        {
+            return null;
+        }
+
         public IList<ShippingSaleDto> GetShippingSale(string shippingCode, DateTime startTime, DateTime endTime)
         {
             throw new NotImplementedException();

@@ -8,12 +8,12 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public class RoleService : BaseService, IRoleService
+    public class RoleService : BaseService<OPC_AuthRole>, IRoleService
     {
         private readonly IRoleRepository _roleRepository;
         private readonly IRoleMenuRepository _roleMenuRepository;
 
-        public RoleService(IRoleRepository roleRepository,IRoleMenuRepository roleMenuRepository)
+        public RoleService(IRoleRepository roleRepository,IRoleMenuRepository roleMenuRepository):base(roleRepository)
         {
             _roleRepository = roleRepository;
             _roleMenuRepository = roleMenuRepository;
@@ -21,24 +21,9 @@ namespace Intime.OPC.Service.Support
 
         #region IRoleService Members
 
-        public bool Create(OPC_AuthRole role)
+        public PageResult<OPC_AuthRole> Select(int pageIndex, int pageSize)
         {
-            return _roleRepository.Create(role);
-        }
-
-        public bool Update(OPC_AuthRole role)
-        {
-            return _roleRepository.Update(role);
-        }
-
-        public bool Delete(int roleId)
-        {
-            return _roleRepository.Delete(roleId);
-        }
-
-        public PageResult<OPC_AuthRole> Select(int pageIndex, int pageSize = 20)
-        {
-            return _roleRepository.All(pageIndex,pageSize);
+            return _repository.GetAll(pageIndex, pageSize);
         }
 
         public bool IsStop(int roleId, bool bValid)

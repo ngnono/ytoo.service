@@ -109,7 +109,7 @@ namespace Intime.OPC.WebApi.Controllers
                 {
                     _saleService.PrintSale(saleOrderNo, userId);
                 }
-                return Ok();
+                return true;
             }, "打印销售单失败");
         }
 

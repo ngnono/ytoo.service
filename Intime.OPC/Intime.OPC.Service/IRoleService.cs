@@ -23,35 +23,9 @@ namespace Intime.OPC.Repository
     /// <summary>
     ///     Interface IRoleService
     /// </summary>
-    public interface IRoleService : IService
+    public interface IRoleService : IService,ICanAdd<OPC_AuthRole>, ICanDelete, ICanUpdate<OPC_AuthRole>
     {
-        /// <summary>
-        ///     Creates the specified role.
-        /// </summary>
-        /// <param name="role">The role.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool Create(OPC_AuthRole role);
-
-        /// <summary>
-        ///     Updates the specified role.
-        /// </summary>
-        /// <param name="role">The role.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool Update(OPC_AuthRole role);
-
-        /// <summary>
-        ///     Deletes the specified role identifier.
-        /// </summary>
-        /// <param name="roleId">The role identifier.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool Delete(int roleId);
-
-        /// <summary>
-        ///     Selects this instance.
-        /// </summary>
-        /// <returns>IList{OPC_AuthRole}.</returns>
-        PageResult<OPC_AuthRole> Select(int pageIndex, int pageSize = 20);
-
+        PageResult<OPC_AuthRole> Select(int pageIndex, int pageSize);
         /// <summary>
         ///     Determines whether the specified role identifier is stop.
         /// </summary>
