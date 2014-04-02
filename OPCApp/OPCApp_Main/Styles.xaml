@@ -4,6 +4,21 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     mc:Ignorable="d">
 
+    <HierarchicalDataTemplate x:Key="dtTreeView" ItemsSource="{Binding Children}">
+        <TextBlock Text="{Binding Name}" />
+    </HierarchicalDataTemplate>
+
+    <Style x:Key="stTreeViewItem" TargetType="TreeViewItem">
+        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+        <Setter Property="IsSelected"  Value="{Binding IsSelected, Mode=TwoWay}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="FontWeight" Value="Bold" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="MainViewRadioButtonStyle" TargetType="ToggleButton">
         <Setter Property="Background" Value="{x:Null}" />
         <Setter Property="Foreground" Value="#FF0E233E" />
