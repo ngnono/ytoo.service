@@ -97,6 +97,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IEFRepository<IMS_AssociateBrandEntity>, EFRepository<IMS_AssociateBrandEntity>>();
             Current.Register<IEFRepository<IMS_AssociateSaleCodeEntity>, EFRepository<IMS_AssociateSaleCodeEntity>>();
             Current.Register<IEFRepository<IMS_AssociateItemsEntity>, EFRepository<IMS_AssociateItemsEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateIncomeRequestEntity>, EFRepository<IMS_AssociateIncomeRequestEntity>>();
             Current.Register<IEFRepository<ProductCode2StoreCodeEntity>, EFRepository<ProductCode2StoreCodeEntity>>();
             Current.Register<IEFRepository<IMS_ComboEntity>, EFRepository<IMS_ComboEntity>>();
             Current.Register<IEFRepository<IMS_Combo2ProductEntity>, EFRepository<IMS_Combo2ProductEntity>>();
