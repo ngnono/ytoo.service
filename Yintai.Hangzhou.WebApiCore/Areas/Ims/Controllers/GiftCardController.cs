@@ -374,18 +374,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Items(IMSGiftcardListRequest request, int id, int authuid)
+        public ActionResult Items(int id, int authuid)
         {
             var card = _cardRepo.Find(id);
             if (card == null)
             {
-                return this.RenderError(r => r.Message = "Can't find card items!");
+                return this.RenderError(r => r.Message = "该礼品卡不存在");
             }
-
-            var pageSize = request.Pagesize;
-            var page = request.Page;
-
-            var items = _itemRepo.Get(x => x.GiftCardId == id).Skip((page - 1) * pageSize).Take(pageSize);
+            var items = _itemRepo.Get(x => x.GiftCardId == id);
 
             var data = new List<dynamic>();
             foreach (var item in items)
