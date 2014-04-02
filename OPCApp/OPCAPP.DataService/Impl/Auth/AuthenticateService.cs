@@ -75,6 +75,7 @@ namespace OPCApp.DataService.Impl.Auth
         public PageResult<OPC_AuthUser> Search(IDictionary<string, object> iDicFilter)
         {
             try
+
             {
                 string strParmas = iDicFilter.Keys.Aggregate("",
                     (current, key) => current + string.Format("{0}={1}&", key, iDicFilter[key]));

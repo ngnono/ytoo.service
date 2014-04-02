@@ -12,6 +12,11 @@ namespace OPCApp.DataService.Impl.Auth
     [Export(typeof (IOrderService))]
     public class OrgService : IOrderService
     {
+        private string _nameP;
+        public string Name {
+            get { return this._nameP; } 
+            set { _nameP = value; }
+        }
 
         public ResultMsg Add(OPC_OrgInfo org)
         {

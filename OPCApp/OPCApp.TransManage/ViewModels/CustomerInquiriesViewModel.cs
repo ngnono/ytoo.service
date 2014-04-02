@@ -95,8 +95,8 @@ namespace OPCApp.TransManage.ViewModels
             string orderfilter =
                 string.Format(
                     "orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}",
-                    OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString() + " 00:00:00.000", OrderGet.EndCreateDate.ToShortDateString() + " 23:59:59.999",
-                    OrderGet.StoreId, OrderGet.BrandId, OrderGet.Status, OrderGet.PaymentType, OrderGet.OutGoodsType,
+                    OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString() , OrderGet.EndCreateDate.ToShortDateString() ,
+                    string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId, string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status, OrderGet.PaymentType, OrderGet.OutGoodsType,
                     OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
             
 
@@ -204,8 +204,8 @@ namespace OPCApp.TransManage.ViewModels
                 string.Format(
                     "OrderNo={0}&ExpressNo={1}&StartGoodsOutDate={2}&EndGoodsOutDate={3}&OutGoodsCode={4}&SectionId={5}&ShippingStatus={6}&CustomerPhone={7}&BrandId={8}",
                     ShippingGet.OrderNo, ShippingGet.ExpressNo, ShippingGet.StartGoodsOutDate.ToShortDateString(),
-                    ShippingGet.EndGoodsOutDate.ToShortDateString(), ShippingGet.OutGoodsCode, ShippingGet.SectionId,
-                    ShippingGet.ShippingStatus, ShippingGet.CustomerPhone, ShippingGet.BrandId);
+                    ShippingGet.EndGoodsOutDate.ToShortDateString(), ShippingGet.OutGoodsCode, string.IsNullOrEmpty(ShippingGet.SectionId) ? "-1" : ShippingGet.SectionId,
+                    ShippingGet.ShippingStatus, ShippingGet.CustomerPhone, string.IsNullOrEmpty(ShippingGet.BrandId) ? "-1" : ShippingGet.BrandId);
 
             ShippingList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetShipping(shippingfilter).Result;
         }
@@ -283,13 +283,13 @@ namespace OPCApp.TransManage.ViewModels
                 switch (i)
                 {
                     case 1:
-                        GetOrder();
+                        GetShipping();
                         break;
                     case 2:
 
                         break;
                     default:
-
+                        GetOrder();
                         break;
                         ;
                 }
