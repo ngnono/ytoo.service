@@ -14,7 +14,6 @@ namespace Yintai.Hangzhou.Data.Models
         public string TransferRetMsg { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int Status { get; set; }
-        public int SerialNo { get; set; }
         public string QueryRetCode { get; set; }
         public string QueryRetMsg { get; set; }
 
