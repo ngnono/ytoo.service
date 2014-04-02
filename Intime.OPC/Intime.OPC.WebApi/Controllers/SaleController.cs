@@ -331,13 +331,13 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetShipped(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize)
+        public IHttpActionResult GetShipped(string orderNo, string saleOrderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize)
         {
 
             return DoFunction(() =>
             {
                 var userId = GetCurrentUserID();
-                return _saleService.GetShipped(orderCode, userId, saleOrderNo, startDate, endDate, pageIndex, pageSize);
+                return _saleService.GetShipped(orderNo, userId, saleOrderNo, startDate, endDate, pageIndex, pageSize);
             },
                 "查询快递单信息失败");
         }
