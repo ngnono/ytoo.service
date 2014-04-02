@@ -16,8 +16,8 @@ namespace Yintai.Hangzhou.Data.Models
         public int PreTransferId { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int CreateUser { get; set; }
-        public Nullable<int> OperateDate { get; set; }
-        public Nullable<int> OperateUser { get; set; }
+        public DateTime OperateDate { get; set; }
+        public int OperateUser { get; set; }
 
         #region Overrides of BaseEntity
 

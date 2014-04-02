@@ -90,6 +90,9 @@
     <Compile Include="Erp\Util.cs" />
     <Compile Include="Extension\ImageOperaExtension.cs" />
     <Compile Include="GroupServiceHelper.cs" />
+    <Compile Include="IT\Config.cs" />
+    <Compile Include="IT\ITServiceHelper.cs" />
+    <Compile Include="IT\Request.cs" />
     <Compile Include="SecurityHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tencent\AutoBankTransfer.cs" />
