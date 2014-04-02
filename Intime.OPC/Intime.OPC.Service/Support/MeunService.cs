@@ -4,13 +4,13 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public class MenuService : BaseService, IMenuService
+    public class MenuService : BaseService<OPC_AuthMenu>, IMenuService
     {
         private readonly IMenuRepository _menuRepository;
 
-        public MenuService(IMenuRepository menuRepository)
+        public MenuService(IMenuRepository menuRepository):base(menuRepository)
         {
-            _menuRepository = menuRepository;
+            _menuRepository = _repository as IMenuRepository;
         }
 
         #region IMenuService Members

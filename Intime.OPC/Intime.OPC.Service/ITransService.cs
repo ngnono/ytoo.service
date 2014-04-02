@@ -60,5 +60,22 @@ namespace Intime.OPC.Service
 
         IList<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo);
         PageResult<SaleDto> GetSaleOrderPickup(string orderNo, string saleOrderNo, DateTime startDate, DateTime endDate, int userid, int pageIndex, int pageSize);
+
+        /// <summary>
+        /// 查询发货单
+        /// </summary>
+        /// <param name="saleOrderNo">销售单</param>
+        /// <param name="expressNo">The express no.</param>
+        /// <param name="startGoodsOutDate">The start goods out date.</param>
+        /// <param name="endGoodsOutDate">The end goods out date.</param>
+        /// <param name="outGoodsCode">The out goods code.</param>
+        /// <param name="sectionId">The section identifier.</param>
+        /// <param name="shippingStatus">The shipping status.</param>
+        /// <param name="customerPhone">The customer phone.</param>
+        /// <param name="brandId">The brand identifier.</param>
+        /// <param name="pageIndex">Index of the page.</param>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <returns>PageResult{SaleDto}.</returns>
+        PageResult<SaleDto> GetShippingSale(string saleOrderNo, string expressNo, DateTime startGoodsOutDate, DateTime endGoodsOutDate, string outGoodsCode, int sectionId, int shippingStatus, string customerPhone, int brandId, int pageIndex, int pageSize);
     }
 }

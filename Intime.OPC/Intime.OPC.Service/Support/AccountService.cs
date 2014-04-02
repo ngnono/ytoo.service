@@ -10,12 +10,12 @@ using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public class AccountService :BaseService, IAccountService
+    public class AccountService :BaseService<OPC_AuthUser>, IAccountService
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IOrgInfoRepository _orgInfoRepository;
 
-        public AccountService(IAccountRepository accountRepository,IOrgInfoRepository orgInfoRepository)
+        public AccountService(IAccountRepository accountRepository,IOrgInfoRepository orgInfoRepository):base(accountRepository)
         {
             _accountRepository = accountRepository;
             _orgInfoRepository = orgInfoRepository;
@@ -28,19 +28,14 @@ namespace Intime.OPC.Service.Support
             return _accountRepository.Get(userName, password);
         }
 
-        public bool Create(OPC_AuthUser user)
+        public PageResult<OPC_AuthUser> Select(string orgid, string name, int pageIndex, int pageSize = 20)
         {
-            return _accountRepository.Create(user);
+            return _accountRepository.GetByOrgId(orgid, name, pageIndex, pageSize);
         }
 
-        public bool Update(OPC_AuthUser user)
+        public PageResult<OPC_AuthUser> SelectByLogName(string orgid, string loginName, int pageIndex, int pageSize = 20)
         {
-            return _accountRepository.Update(user);
-        }
-
-        public bool Delete(int userId)
-        {
-            return _accountRepository.Delete(userId);
+            return _accountRepository.GetByLoginName(orgid, loginName, pageIndex, pageSize);
         }
 
         public PageResult<OPC_AuthUser> Select(int pageIndex, int pageSize = 20)
@@ -76,6 +71,11 @@ namespace Intime.OPC.Service.Support
             dto.SectionIDs = _orgInfoRepository.GetByOrgType(user.DataAuthId, EnumOrgType.Section.AsID()).Select(t => t.StoreOrSectionID.Value).ToList();
 
             return dto;
+        }
+
+        public PageResult<OPC_AuthUser> GetUsersByOrgId(int orgId)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

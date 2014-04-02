@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Intime.OPC.Common.Logger;
@@ -14,9 +11,8 @@ namespace Intime.OPC.WebApi.Core
 {
     public class BaseController : ApiController
     {
-
         /// <summary>
-        /// Gets the log.
+        ///     Gets the log.
         /// </summary>
         /// <returns>ILog.</returns>
         protected ILog GetLog()
@@ -25,7 +21,7 @@ namespace Intime.OPC.WebApi.Core
         }
 
         /// <summary>
-        /// 获得当前用户
+        ///     获得当前用户
         /// </summary>
         /// <returns>System.Nullable{System.Int32}.</returns>
         /// <exception cref="Intime.OPC.Domain.Exception.UserIdConverException"></exception>
@@ -40,19 +36,12 @@ namespace Intime.OPC.WebApi.Core
                 {
                     return id;
                 }
-                else
-                {
-                    throw new UserIdConverException(userid);
-
-                }
+                throw new UserIdConverException(userid);
             }
-            else
-            {
-                throw new HttpResponseException(HttpStatusCode.Unauthorized); 
- 
-            }
+            throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
-        protected IHttpActionResult DoFunction(Func<object> action,string falseMeg)
+
+        protected IHttpActionResult DoFunction(Func<dynamic> action, string falseMeg)
         {
             try
             {
@@ -65,7 +54,7 @@ namespace Intime.OPC.WebApi.Core
             }
             catch (UserIdConverException ex)
             {
-                this.GetLog().Error(ex);
+                GetLog().Error(ex);
 
                 return BadRequest("用户未登录或非法用户！");
             }
@@ -73,10 +62,10 @@ namespace Intime.OPC.WebApi.Core
             {
                 return BadRequest("销售单编号不能为空");
             }
-            
+
             catch (Exception ex)
             {
-                this.GetLog().Error(ex);
+                GetLog().Error(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -94,7 +83,7 @@ namespace Intime.OPC.WebApi.Core
             }
             catch (UserIdConverException ex)
             {
-                this.GetLog().Error(ex);
+                GetLog().Error(ex);
 
                 return BadRequest("用户未登录或非法用户！");
             }
@@ -104,10 +93,9 @@ namespace Intime.OPC.WebApi.Core
             }
             catch (Exception ex)
             {
-                this.GetLog().Error(ex);
+                GetLog().Error(ex);
                 return InternalServerError();
             }
         }
-
     }
 }

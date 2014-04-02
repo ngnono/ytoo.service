@@ -172,6 +172,12 @@ namespace Intime.OPC.Repository.Base
             }
         }
 
-       
+
+
+
+        public PageResult<T> GetAll(int pageIndex, int pageSize)
+        {
+            return Select2<T, int>(t => 1 == 1, o => o.Id, true, pageIndex, pageSize);
+        }
     }
 }

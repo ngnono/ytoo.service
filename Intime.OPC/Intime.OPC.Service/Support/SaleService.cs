@@ -11,13 +11,13 @@ using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service.Support
 {
-    public class SaleService : BaseService, ISaleService
+    public class SaleService : BaseService<OPC_Sale>, ISaleService
     {
         private readonly ISaleRemarkRepository _saleRemarkRepository;
         private readonly ISaleRepository _saleRepository;
         private readonly IAccountService _accountService;
 
-        public SaleService(ISaleRepository saleRepository, ISaleRemarkRepository saleRemarkRepository,IAccountService accountService)
+        public SaleService(ISaleRepository saleRepository, ISaleRemarkRepository saleRemarkRepository,IAccountService accountService):base(saleRepository)
         {
             _saleRepository = saleRepository;
             _saleRemarkRepository = saleRemarkRepository;

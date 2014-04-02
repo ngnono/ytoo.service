@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -12,5 +13,7 @@ namespace Intime.OPC.Repository
         /// <param name="orgtype">The orgtype.</param>
         /// <returns>IList{OPC_OrgInfo}.</returns>
         IList<OPC_OrgInfo> GetByOrgType(string orgid, int orgtype);
+
+        PageResult<OPC_OrgInfo> GetAll(int pageIndex, int pageSize);
     }
 }

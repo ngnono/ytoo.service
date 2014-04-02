@@ -4,21 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 
 namespace Intime.OPC.Service.Support
 {
-    public class ShipViaService : BaseService, IShipViaService
+    public class ShipViaService : BaseService<ShipVia>, IShipViaService
     {
-        private IShipViaRepository _shipViaRepository;
-        public ShipViaService(IShipViaRepository shipViaRepository)
+        public ShipViaService(IShipViaRepository shipViaRepository):base(shipViaRepository)
         {
-            _shipViaRepository = shipViaRepository;
         }
 
-        public PageResult<Domain.Models.ShipVia> GetAll( int pageIndex, int pageSize = 20)
+        public PageResult<ShipVia> GetAll( int pageIndex, int pageSize = 20)
         {
-            return _shipViaRepository.GetAll(pageIndex,pageSize);
+            return _repository.GetAll(pageIndex,pageSize);
         }
     }
 }

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseService.cs" />
+    <Compile Include="IOrgService.cs" />
     <Compile Include="IBrandService.cs" />
     <Compile Include="IMenuService.cs" />
     <Compile Include="IAccountService.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="ITransService.cs" />
     <Compile Include="MapConfig.cs" />
     <Compile Include="Map\Mapper.cs" />
+    <Compile Include="Support\OrgService.cs" />
     <Compile Include="Support\BrandService.cs" />
     <Compile Include="Support\MeunService.cs" />
     <Compile Include="Support\AccountService.cs" />
