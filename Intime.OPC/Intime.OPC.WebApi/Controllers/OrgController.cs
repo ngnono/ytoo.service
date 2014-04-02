@@ -40,8 +40,8 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                bool bl = _orgServiceService.Add(orgInfo);
-                return bl;
+                return _orgServiceService.AddOrgInfo(orgInfo);
+                
             }, "获得品牌信息失败");
         }
 

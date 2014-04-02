@@ -36,5 +36,10 @@ namespace Intime.OPC.Service.Support
         {
             return _repository.GetAll(pageIndex, pageSize);
         }
+
+        public OPC_OrgInfo AddOrgInfo(OPC_OrgInfo orgInfo)
+        {
+            return ((IOrgInfoRepository) _repository).Add(orgInfo);
+        }
     }
 }
