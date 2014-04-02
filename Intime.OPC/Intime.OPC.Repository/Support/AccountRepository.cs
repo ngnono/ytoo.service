@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -45,7 +47,7 @@ namespace Intime.OPC.Repository.Support
 
        public PageResult<OPC_AuthUser> All(int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.IsValid == true,pageIndex,pageSize);
+            return Select(t => t.IsValid == true,t=>t.Name,true,pageIndex,pageSize);
         }
 
         #endregion

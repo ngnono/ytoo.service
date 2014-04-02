@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -28,12 +29,11 @@ namespace Intime.OPC.Repository.Support
     {
         #region IOrderRepository Members
 
-        public IList<Order> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd, int storeId,
+        public PageResult<Order> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd, int storeId,
             int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone,
-            string expressDeliveryCode, int expressDeliveryCompany)
+            string expressDeliveryCode, int expressDeliveryCompany, int pageIndex, int pageSize = 20)
         {
-            using (var db = new YintaiHZhouContext())
-            {
+          
                 Expression<Func<Order, bool>> query = t => t.CreateDate >= dtStart && t.CreateDate < dtEnd;
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -77,8 +77,8 @@ namespace Intime.OPC.Repository.Support
                     query = query.And(t => t.ShippingVia == expressDeliveryCompany);
                 }
 
-                return db.Orders.Where(query.Compile()).ToList();
-            }
+            return Select(query,t=>t.CreateDate,false, pageIndex, pageSize);
+
         }
 
         public Order GetOrderByOrderNo(string orderNo)

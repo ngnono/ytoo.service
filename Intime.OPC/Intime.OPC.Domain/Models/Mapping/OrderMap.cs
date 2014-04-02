@@ -78,7 +78,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             Property(t => t.InvoiceAmount).HasColumnName("InvoiceAmount");
             Property(t => t.TotalPoints).HasColumnName("TotalPoints");
             Property(t => t.OrderSource).HasColumnName("OrderSource");
-            Property(t => t.OrderType).HasColumnName("OrderType");
+            Property(t => t.OrderType).HasColumnName("OrderProductType");
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
@@ -13,11 +15,13 @@ namespace Intime.OPC.Service.Support
     {
         private readonly ISaleRemarkRepository _saleRemarkRepository;
         private readonly ISaleRepository _saleRepository;
+        private readonly IAccountService _accountService;
 
-        public SaleService(ISaleRepository saleRepository, ISaleRemarkRepository saleRemarkRepository)
+        public SaleService(ISaleRepository saleRepository, ISaleRemarkRepository saleRemarkRepository,IAccountService accountService)
         {
             _saleRepository = saleRepository;
             _saleRemarkRepository = saleRemarkRepository;
+            _accountService = accountService;
         }
 
         #region ISaleService Members
@@ -52,7 +56,7 @@ namespace Intime.OPC.Service.Support
             return true;
         }
 
-        public IList<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int userId)
+        public PageResult<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int userId,int pageIndex,int pageSize)
         {
             if (string.IsNullOrEmpty(saleOrderNo))
             {
@@ -64,8 +68,7 @@ namespace Intime.OPC.Service.Support
                 throw new SaleOrderNotExistsException(saleOrderNo);
             }
 
-            IList<OPC_SaleDetail> lst = _saleRepository.GetSaleOrderDetails(saleOrderNo);
-
+            var  lst = _saleRepository.GetSaleOrderDetails(saleOrderNo,pageIndex,pageSize);
             return Mapper.Map<OPC_SaleDetail, SaleDetailDto>(lst);
         }
 
@@ -104,43 +107,86 @@ namespace Intime.OPC.Service.Support
             return UpdateSatus(orderNo, userId, EnumSaleOrderStatus.StockOut);
         }
 
-        public IList<SaleDto> GetPickUp(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<SaleDto> GetPickUp(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd,int userID, int pageIndex, int pageSize)
         {
-            IList<OPC_Sale> lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, dtStart, dtEnd);
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
+            var user = _accountService.GetByUserID(userID);
+            if (user.SectionIDs.Count == 0)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIDs.ToArray());
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
 
-        public IList<SaleDto> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<SaleDto> GetPrintSale(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize)
         {
-            IList<OPC_Sale> lst = _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd);
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
+            var user = _accountService.GetByUserID(userId);
+            if (user.SectionIDs.Count == 0)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            var lst = _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize,user.SectionIDs.ToArray());
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
-        public IList<SaleDto> GetShipped(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<SaleDto> GetShipped(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize)
         {
-            IList<OPC_Sale> lst = _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd);
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
+            var user = _accountService.GetByUserID(userId);
+            if (user.SectionIDs.Count == 0)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            var lst = _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIDs.ToArray());
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
-        public IList<SaleDto> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
-            DateTime dtEnd)
+        public PageResult<SaleDto> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
+            DateTime dtEnd, int pageIndex, int pageSize)
         {
-            IList<OPC_Sale> lst = _saleRepository.GetPrintExpress(saleOrderNo, orderNo, dtStart, dtEnd);
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
+            var user = _accountService.GetByUserID(userId);
+            if (user.SectionIDs.Count == 0)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            var lst = _saleRepository.GetPrintExpress(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIDs.ToArray());
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
-        public IList<SaleDto> GetPrintInvoice(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
-            DateTime dtEnd)
+        public PageResult<SaleDto> GetPrintInvoice(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
+            DateTime dtEnd, int pageIndex, int pageSize)
         {
-            IList<OPC_Sale> lst = _saleRepository.GetPrintInvoice(saleOrderNo, orderNo, dtStart, dtEnd);
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
+            var user = _accountService.GetByUserID(userId);
+            if (user.SectionIDs.Count == 0)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            var lst = _saleRepository.GetPrintInvoice(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIDs.ToArray());
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
-        public IList<SaleDto> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
-            DateTime dtEnd)
+        public PageResult<SaleDto> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
+            DateTime dtEnd, int pageIndex, int pageSize)
         {
-            IList<OPC_Sale> lst = _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd);
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
+            var user = _accountService.GetByUserID(userId);
+            if (user.SectionIDs.Count == 0)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            var lst = _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIDs.ToArray());
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
@@ -149,31 +195,42 @@ namespace Intime.OPC.Service.Support
             return _saleRemarkRepository.Create(comment);
         }
 
-        public IList<SaleDto> GetByOrderNo(string orderID)
+        public PageResult<SaleDto> GetByOrderNo(string orderID, int userid, int pageIndex, int pageSize)
         {
             if (string.IsNullOrWhiteSpace(orderID))
             {
                 throw new OrderNoIsNullException(orderID);
             }
+            var user = _accountService.GetByUserID(userid);
+            if (user.SectionIDs.Count == 0)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            var lstDtos=new List<SaleDto>();
+            foreach (var sectionID in user.SectionIDs)
+            {
+                var lst = _saleRepository.GetByOrderNo(orderID,sectionID);
+                if (lst.Count>0)
+                {
+                    lstDtos.AddRange(Mapper.Map<OPC_Sale, SaleDto>(lst));  
+                }
+            }
 
-            IList<OPC_Sale> lst = _saleRepository.GetByOrderNo(orderID);
-            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            var lst2= lstDtos.Page(pageIndex, pageSize);
+            return new PageResult<SaleDto>(lst2.ToList(),lstDtos.Count);
         }
 
-        public IList<SaleDto> GetNoPickUp(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<SaleDto> GetNoPickUp(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize)
         {
-            //todo 权限校验
-
-            IList<OPC_Sale> lst = _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd);
-            var lstDto = new List<SaleDto>();
-            foreach (OPC_Sale opcSale in lst)
+            dtStart = dtStart.Date;
+            dtEnd = dtEnd.Date.AddDays(1);
+            var user = _accountService.GetByUserID(userId);
+            if (user.SectionIDs.Count == 0)
             {
-                SaleDto t = Mapper.Map<OPC_Sale, SaleDto>(opcSale);
-                var saleOrderStatus = (EnumSaleOrderStatus) opcSale.Status;
-                t.StatusName = saleOrderStatus.GetDescription();
-                lstDto.Add(t);
+                throw new UnauthorizedAccessException();
             }
-            return lstDto;
+            var lst = _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize,user.SectionIDs.ToArray());
+            return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         #endregion

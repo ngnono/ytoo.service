@@ -14,7 +14,11 @@ namespace Intime.OPC.Service
                 Mapper.CreateMap<OPC_ShippingSale, ShippingSaleDto>();
             map3.ForMember(t => t.ExpressCode, o => o.MapFrom(t1 => t1.ShippingCode));
             map3.ForMember(t => t.GoodsOutCode, o => o.MapFrom(t1 => t1.ShippingCode));
-          
+            map3.ForMember(t => t.ShippingStatus, o => o.MapFrom((t1) => GetSaleOrderStatusName(t1.ShippingStatus)));
+            map3.ForMember(t => t.GoodsOutDate, o => o.MapFrom(t1 => t1.CreateDate));
+
+            map3.ForMember(t => t.ShipCompanyName, o => o.MapFrom(t1 => t1.ShipViaName));
+
 
             IMappingExpression<Order, OrderDto> map1 = Mapper.CreateMap<Order, OrderDto>();
             map1.ConvertUsing(t => converDto(t));
@@ -22,6 +26,7 @@ namespace Intime.OPC.Service
             IMappingExpression<OPC_Sale, SaleDto> map = Mapper.CreateMap<OPC_Sale, SaleDto>();
             map.ForMember(d => d.StatusName, opt => opt.MapFrom(t => GetSaleOrderStatusName(t.Status)));
             map.ForMember(d => d.CashStatusName, opt => opt.MapFrom(t => GetCashStatusName(t.CashStatus)));
+            map.ForMember(d => d.ShippingStatus, opt => opt.MapFrom(t => GetSaleOrderStatusName(t.ShippingStatus)));
 
             IMappingExpression<OPC_SaleDetail, SaleDetailDto> map2 = Mapper.CreateMap<OPC_SaleDetail, SaleDetailDto>();
 
@@ -32,6 +37,14 @@ namespace Intime.OPC.Service
         {
             var orderStatus = (EnumSaleOrderStatus)status;
             return orderStatus.GetDescription();
+        }
+        private static string GetSaleOrderStatusName(int? status)
+        {
+            if (!status.HasValue)
+            {
+                return "";
+            }
+            return GetSaleOrderStatusName(status.Value);
         }
 
         private static string GetCashStatusName(int? status)

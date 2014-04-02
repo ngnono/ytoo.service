@@ -21,6 +21,9 @@ namespace Intime.OPC.Domain.Models.Mapping
 
             this.Property(t => t.ShippingRemark)
                 .HasMaxLength(500);
+            this.Property(t => t.ShipViaName)
+                .HasMaxLength(50);
+
 
             // Table & Column Mappings
             this.ToTable("OPC_ShippingSale");
@@ -35,6 +38,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.CreateUser).HasColumnName("CreateUser");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
+            this.Property(t => t.ShipViaName).HasColumnName("ShipViaName");
         }
     }
 }

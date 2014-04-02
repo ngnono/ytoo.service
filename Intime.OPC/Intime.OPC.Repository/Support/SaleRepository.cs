@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Xml.XPath;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
@@ -79,17 +80,15 @@ namespace Intime.OPC.Repository.Support
         /// </summary>
         /// <param name="saleOrderNo">The sale order no.</param>
         /// <returns>IList{OPC_SaleDetail}.</returns>
-        public IList<OPC_SaleDetail> GetSaleOrderDetails(string saleOrderNo)
+        public PageResult<OPC_SaleDetail> GetSaleOrderDetails(string saleOrderNo, int pageIndex, int pageSize)
         {
-            using (var db = new YintaiHZhouContext())
-            {
-                return db.OPC_SaleDetail.Where(t => t.SaleOrderNo == saleOrderNo).ToList();
-            }
+            return Select2<OPC_SaleDetail, DateTime>(t => t.SaleOrderNo == saleOrderNo, t => t.CreatedDate, false,
+                pageIndex, pageSize);
         }
 
-        public IList<OPC_Sale> GetPickUped(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<OPC_Sale> GetPickUped(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,int pageIndex, int pageSize,params int[] sectionIds)
         {
-            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PickUp);
+            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PickUp,pageIndex, pageSize,sectionIds);
         }
 
         /// <summary>
@@ -100,9 +99,9 @@ namespace Intime.OPC.Repository.Support
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        public IList<OPC_Sale> GetPrintSale(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<OPC_Sale> GetPrintSale(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize,params int[] sectionIds)
         {
-            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintSale);
+            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintSale,pageIndex, pageSize,sectionIds);
         }
 
         /// <summary>
@@ -113,9 +112,9 @@ namespace Intime.OPC.Repository.Support
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        public IList<OPC_Sale> GetNoPickUp(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<OPC_Sale> GetNoPickUp(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,int pageIndex, int pageSize,params int[] sectionIds)
         {
-            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.NoPickUp);
+            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.NoPickUp,pageIndex, pageSize,sectionIds);
         }
 
         /// <summary>
@@ -157,9 +156,9 @@ namespace Intime.OPC.Repository.Support
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        public IList<OPC_Sale> GetPrintExpress(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<OPC_Sale> GetPrintExpress(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize,params int[] sectionIds)
         {
-            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintExpress);
+            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintExpress,pageIndex, pageSize,sectionIds);
         }
 
         /// <summary>
@@ -170,27 +169,24 @@ namespace Intime.OPC.Repository.Support
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        public IList<OPC_Sale> GetPrintInvoice(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<OPC_Sale> GetPrintInvoice(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize,params int[] sectionIds)
         {
-            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintInvoice);
+            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintInvoice,pageIndex, pageSize,sectionIds);
         }
 
-        public IList<OPC_Sale> GetShipInStorage(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<OPC_Sale> GetShipInStorage(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize,params int[] sectionIds)
         {
-            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.ShipInStorage);
+            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.ShipInStorage,pageIndex, pageSize,sectionIds);
         }
 
-        public IList<OPC_Sale> GetByOrderNo(string orderID)
+        public IList<OPC_Sale> GetByOrderNo(string orderID,int sectinID)
         {
-            using (var db = new YintaiHZhouContext())
-            {
-                return db.OPC_Sale.Where(t => t.OrderNo == orderID).ToList();
-            }
+            return Select(t => t.OrderNo == orderID && t.SectionId == sectinID);
         }
 
-        public IList<OPC_Sale> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<OPC_Sale> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd,int pageIndex, int pageSize,params int[] sectionIds)
         {
-            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.Shipped);
+            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.Shipped, pageIndex, pageSize, sectionIds);
         }
 
         #endregion
@@ -204,15 +200,13 @@ namespace Intime.OPC.Repository.Support
         /// <param name="dtEnd">The dt end.</param>
         /// <param name="saleOrderStatus">The sale order status.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        private IList<OPC_Sale> getSalesData(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
-            EnumSaleOrderStatus saleOrderStatus)
+        private PageResult<OPC_Sale> getSalesData(string saleId, string orderNo,  DateTime dtStart, DateTime dtEnd,
+            EnumSaleOrderStatus saleOrderStatus, int pageIndex, int pageSize,params int[] sectionIds)
         {
-            using (var db = new YintaiHZhouContext())
-            {
-             
+
                 Expression<Func<OPC_Sale, bool>> filterExpression = t => t.Status == (int) saleOrderStatus
                                                                          && t.SellDate >= dtStart
-                                                                         && t.SellDate < dtEnd;
+                                                                         && t.SellDate < dtEnd && sectionIds.Contains(t.SectionId.Value);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     filterExpression=  filterExpression.And(t => t.OrderNo.Contains(orderNo));
@@ -222,9 +216,9 @@ namespace Intime.OPC.Repository.Support
                 {
                     filterExpression=filterExpression.And(t => t.SaleOrderNo.Contains(saleId));
                 }
+           
+            return Select(filterExpression, t => t.UpdatedDate, false, pageIndex, pageSize);
 
-                return db.OPC_Sale.Where(filterExpression.Compile()).ToList();
-            }
         }
     }
 }

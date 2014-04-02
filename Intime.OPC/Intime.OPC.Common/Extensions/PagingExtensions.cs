@@ -31,9 +31,14 @@ namespace System.Linq
         /// <param name="pageNumber">页码</param>
         /// <param name="pageSize">页大小</param>
         /// <returns>分页后的结果</returns>
-        public static IQueryable<T> Page<T>(this IQueryable<T> query, int pageNumber, int pageSize)
+        public static IQueryable<T> Page<T>(this IQueryable<T> query, int pageIndex, int pageSize)
         {
-            return query.Skip((pageNumber * pageSize)).Take(pageSize);
+            pageIndex = pageIndex - 1;
+            if (pageIndex<0)
+            {
+                pageIndex = 0;
+            }
+            return query.Skip((pageIndex * pageSize)).Take(pageSize);
         }
 
         /// <summary>
@@ -41,12 +46,17 @@ namespace System.Linq
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="query">The query.</param>
-        /// <param name="pageNumber">页码</param>
+        /// <param name="pageIndex">页码(从1开始)</param>
         /// <param name="pageSize">页大小</param>
         /// <returns>分页后的结果</returns>
-        public static IEnumerable<T> Page<T>(this IEnumerable<T> query, int pageNumber, int pageSize)
+        public static IEnumerable<T> Page<T>(this IEnumerable<T> query, int pageIndex, int pageSize)
         {
-            return query.Skip(((pageNumber-1)* pageSize)).Take(pageSize);
+            pageIndex = pageIndex - 1;
+            if (pageIndex < 0)
+            {
+                pageIndex = 0;
+            }
+            return query.Skip((pageIndex * pageSize)).Take(pageSize);
         }
 
         #endregion Methods

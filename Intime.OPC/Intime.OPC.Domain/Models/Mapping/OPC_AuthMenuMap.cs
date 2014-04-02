@@ -12,13 +12,13 @@ namespace Intime.OPC.Domain.Models.Mapping
 
             // Properties
             Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             Property(t => t.MenuName)
                 .HasMaxLength(40);
 
             Property(t => t.PraentMenuId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             Property(t => t.Url)
                 .HasMaxLength(40);

@@ -59,6 +59,6 @@ namespace Intime.OPC.Service
         PageResult<ShippingSaleDto> GetShippingSale(string shippingCode, System.DateTime startTime, System.DateTime endTime,int pageIndex,int pageSize=20);
 
         IList<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo);
-        IList<SaleDto> GetSaleOrderPickup(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate);
+        PageResult<SaleDto> GetSaleOrderPickup(string orderNo, string saleOrderNo, DateTime startDate, DateTime endDate, int userid, int pageIndex, int pageSize);
     }
 }

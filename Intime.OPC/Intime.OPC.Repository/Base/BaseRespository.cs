@@ -116,8 +116,7 @@ namespace Intime.OPC.Repository.Base
                 return set.Where(filter).ToList();
             }
         }
-
-        protected PageResult<T> Select(Expression<Func<T, bool>> filter,int pageIndex,int pageSize=20)
+        protected PageResult<T> Select<S>(Expression<Func<T, bool>> filter,Expression<Func<T, S>> orderByLambda, bool isAsc, int pageIndex, int pageSize = 20)
         {
             using (var db = new YintaiHZhouContext())
             {
@@ -125,23 +124,54 @@ namespace Intime.OPC.Repository.Base
                 int count = set.Where(filter).Count();
 
                 pageIndex = pageIndex - 1;
-                if (pageIndex<0)
+                if (pageIndex < 0)
                 {
                     pageIndex = 0;
                 }
                 IList<T> lst;
-                if (pageIndex == 0)
+                if (isAsc)
                 {
-                    lst = set.Where(filter).Take(pageSize).ToList();
+                    lst = set.Where(filter).OrderBy(orderByLambda).Skip(pageIndex*pageSize).Take(pageSize).ToList();
                 }
                 else
                 {
-                     lst = set.Where(filter).Skip(pageIndex*pageSize).Take(pageSize).ToList();
+                    lst = set.Where(filter).OrderByDescending(orderByLambda).Skip(pageIndex * pageSize).Take(pageSize).ToList();
                 }
 
-                return new PageResult<T>(lst,count);
+
+                return new PageResult<T>(lst, count);
 
             }
         }
+
+        protected PageResult<TEntity> Select2<TEntity, S>(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, S>> orderByLambda, bool isAsc, int pageIndex, int pageSize = 20) where TEntity : class 
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                IDbSet<TEntity> set = db.Set<TEntity>();
+                int count = set.Where(filter).Count();
+
+                pageIndex = pageIndex - 1;
+                if (pageIndex < 0)
+                {
+                    pageIndex = 0;
+                }
+                IList<TEntity> lst;
+                if (isAsc)
+                {
+                    lst = set.Where(filter).OrderBy(orderByLambda).Skip(pageIndex * pageSize).Take(pageSize).ToList();
+                }
+                else
+                {
+                    lst = set.Where(filter).OrderByDescending(orderByLambda).Skip(pageIndex * pageSize).Take(pageSize).ToList();
+                }
+
+
+                return new PageResult<TEntity>(lst, count);
+
+            }
+        }
+
+       
     }
 }
