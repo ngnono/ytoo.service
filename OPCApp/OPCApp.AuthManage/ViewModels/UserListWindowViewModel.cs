@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Windows;
 using MahApps.Metro;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
@@ -17,12 +18,41 @@ namespace OPCApp.AuthManage.ViewModels
    // [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserListWindowViewModel : BaseListViewModel<OPC_AuthUser>
     {
+        public DelegateCommand AddOrgCommand { get; set; }
+        public DelegateCommand EditOrgCommand { get; set; }
+        public DelegateCommand DeleteOrgCommand { get; set; }
         public NodeViewModel Nodes { get; private set; }
         public NodeInfo NodeInfo { get; private set; }
         public ReadOnlyCollection<DelegateCommand> Commands { get; private set; }
 
+        public void AddOrg()
+        {
+            if (CheckSelection())
+            {
+                GetOperationNode().AddOrg();
+            }
+        }
+        public void EditOrg()
+        {
+            if (CheckSelection())
+            {
+                GetOperationNode().UpdateOrg();
+            }
+        }
+
+        public void DeleteOrg()
+        {
+            if (CheckSelection())
+            {
+                GetOperationNode().DeleteOrg();
+            }
+        }
+
         private void InitOrg()
         {
+            AddOrgCommand=new DelegateCommand(AddOrg);
+            EditOrgCommand = new DelegateCommand(EditOrg);
+            DeleteOrgCommand = new DelegateCommand(DeleteOrg);
             var orgList = AppEx.Container.GetInstance<IOrgService>().Search().ToList();
             Commands = new ReadOnlyCollection<DelegateCommand>(new DelegateCommand[]
             {
@@ -35,7 +65,7 @@ namespace OPCApp.AuthManage.ViewModels
             GetNodesTree(Nodes,orgList);
         }
 
-        public void GetNodesTree(NodeViewModel node,List<OPC_OrgInfo> listOrg )
+        private void GetNodesTree(NodeViewModel node, List<OPC_OrgInfo> listOrg)
         {
             var orgParent = listOrg.Where(e => e.OrgID == e.ParentID).ToList();
             foreach (var opcOrgInfo in orgParent)
@@ -45,7 +75,7 @@ namespace OPCApp.AuthManage.ViewModels
             }
          
         }
-        public void GetNodesTreeChild(NodeViewModel node, List<OPC_OrgInfo> listOrg)
+        private void GetNodesTreeChild(NodeViewModel node, List<OPC_OrgInfo> listOrg)
         {
             var orgParent = listOrg.Where(e => e.OrgID != e.ParentID&&e.ParentID==node.OrgId).ToList();
             foreach (var opcOrgInfo in orgParent)
@@ -57,15 +87,21 @@ namespace OPCApp.AuthManage.ViewModels
         }
         private bool CheckSelection()
         {
-            return NodeInfo.SelectedNode != null;
+            if (NodeInfo.SelectedNode==null)
+            {
+
+
+                MessageBox.Show("请选择组织机构节点", "提示");
+                return false;
+                ;
+            }
+            return true;
         }
         void RefreshCommands()
         {
             foreach (var cmd in Commands)
             {
                 cmd.Execute();
-                //if (cmd.IsActive)
-                //    cmd.RaiseCanExecuteChanged();
             }
         }
      

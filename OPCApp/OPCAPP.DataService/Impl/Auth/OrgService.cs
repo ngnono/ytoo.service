@@ -27,8 +27,8 @@ namespace OPCApp.DataService.Impl.Auth
                     return new ResultMsg {IsSuccess = false, Msg = "增加错误"};
                 }
 
-                bool bFalg = RestClient.Put("org/addOrg", org);
-                return new ResultMsg {IsSuccess = bFalg, Msg = "保存成功"};
+                var ent = RestClient.PutReturnModel("org/addOrg", org);
+                return new ResultMsg {IsSuccess = ent==null, Msg = "保存成功",Data = ent};
             }
             catch (Exception ex)
             {

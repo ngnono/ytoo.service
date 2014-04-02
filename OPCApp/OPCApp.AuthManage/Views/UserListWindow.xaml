@@ -24,20 +24,20 @@
         </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="0" Grid.Column="0">
                 <StackPanel Orientation="Horizontal" Background="LightGray">
-                    <Button Background="LightGray" Width="50" Command="{Binding AddCommand}">
+                    <Button Background="LightGray" Width="50" Command="{Binding AddOrgCommand}">
                         <StackPanel>
                             <Image Source="/image/新增.png" Stretch="None" />
                             <TextBlock HorizontalAlignment="Center">增加</TextBlock>
                         </StackPanel>
                     </Button>
-                    <Button Background="LightGray" Width="50" Command="{Binding EditCommand}"
+                    <Button Background="LightGray" Width="50" Command="{Binding EditOrgCommand}"
                         CommandParameter="{Binding Models.CurrentItem}">
                         <StackPanel>
                             <Image Source="/image/修改.png" Stretch="None" />
                             <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
                         </StackPanel>
                     </Button>
-                    <Button Background="LightGray" Width="50" Command="{Binding DeleteCommand}"
+                    <Button Background="LightGray" Width="50" Command="{Binding DeleteOrgCommand}"
                         CommandParameter="{Binding Models.CurrentItem}">
                         <StackPanel>
                             <Image Source="/image/删除.png" Stretch="None" />

@@ -5,8 +5,13 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
+using OPCApp.Infrastructure;
+using OPCApp.Infrastructure.DataService;
+using OPCApp.Infrastructure.Mvvm;
 
 namespace OPCApp.AuthManage
 {
@@ -21,6 +26,8 @@ namespace OPCApp.AuthManage
             NodeInfo = info;
         }
 
+        public OPC_OrgInfo OPC_OrgInfo { get; set; }
+
         public NodeViewModel(NodeViewModel parent, OPC_OrgInfo orgInfo)
         {
             Parent = parent;
@@ -32,19 +39,68 @@ namespace OPCApp.AuthManage
             StoreOrSectionName = orgInfo.StoreOrSectionName;
             NodeInfo = parent.NodeInfo;
             children = new ObservableCollection<NodeViewModel>();
-
+            OPC_OrgInfo = orgInfo;
         }
-        private NodeViewModel(NodeViewModel parent, string name,string parentID,int orgType,int? storeOrSectionId,string storeOrSectionName)
-        {
-            Parent = parent;
-            Name = name;
-            ParentId = parentID;
-            OrgType = orgType;
-            StoreOrSectionId = storeOrSectionId;
-            StoreOrSectionName = storeOrSectionName;
 
-            NodeInfo = parent.NodeInfo;
-            children = new ObservableCollection<NodeViewModel>();
+        public IOrgService GetDataService()
+        {
+           return AppEx.Container.GetInstance<IOrgService>();
+        }
+
+        public void AddOrg()
+        {
+            var w = AppEx.Container.GetInstance<IViewModel>("OrgViewModel");
+            w.Model = new OPC_OrgInfo();
+            if (w.View.ShowDialog() == true)
+            {
+                var service = GetDataService();
+                ResultMsg resultMsg = service.Add(w.Model as OPC_OrgInfo);
+                if (resultMsg.IsSuccess)
+                {
+                   this.Parent.Append(resultMsg.Data as OPC_OrgInfo);
+                }
+                else
+                {
+                    MessageBox.Show("添加失败", "失败", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        public void UpdateOrg()
+        {
+            var w = AppEx.Container.GetInstance<IViewModel>("OrgViewModel");
+            w.Model = OPC_OrgInfo;
+            if (w.View.ShowDialog() == true)
+            {
+                IBaseDataService<OPC_OrgInfo> service = GetDataService();
+                ResultMsg resultMsg = service.Edit((OPC_OrgInfo)w.Model);
+                if (resultMsg.IsSuccess)
+                {
+                    this.Update(w.Model as OPC_OrgInfo);
+                }
+                else
+                {
+                    MessageBox.Show("修改失败", "失败", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        public void DeleteOrg()
+        {
+            MessageBoxResult msg = MessageBox.Show("确定要删除吗？", "删除", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (msg == MessageBoxResult.Yes)
+            {
+                IBaseDataService<OPC_OrgInfo> service = GetDataService();
+                ResultMsg r = service.Delete(OPC_OrgInfo);
+                if (r.IsSuccess)
+                {
+                   this.Remove();
+                }
+                else
+                {
+                    MessageBox.Show("删除失败", "删除", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         #region 字段
@@ -211,10 +267,7 @@ namespace OPCApp.AuthManage
             }
         }
 
-        public void Update()
-        {
-
-        }
+  
 
         public NodeViewModel AddSubNode(OPC_OrgInfo opcOrgInfo)
         {
@@ -233,11 +286,15 @@ namespace OPCApp.AuthManage
         {
             IsExpanded = true;
             children.Add(new NodeViewModel(this, opcOrgInfo));
-            RefreshInfoCount(1);
         }
-        public void Rename()
+        public void Update(OPC_OrgInfo orgInfo)
         {
-            Name = ""; //GetNextDataName();
+            Name = orgInfo.OrgName;
+            ParentId = orgInfo.ParentID;
+            OrgId = orgInfo.OrgID;
+            OrgType = orgInfo.OrgType;
+            StoreOrSectionId = orgInfo.StoreOrSectionID;
+            StoreOrSectionName = orgInfo.StoreOrSectionName;
         }
 
         public void MoveUp()
