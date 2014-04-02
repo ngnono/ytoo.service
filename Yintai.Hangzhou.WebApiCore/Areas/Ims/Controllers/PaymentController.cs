@@ -242,7 +242,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 Price = giftCardEntity.Price,
                                 CreateDate = DateTime.Now,
                                 CreateUser = orderUserId,
-                                GiftCardId = giftcardId,
+                                GiftCardItemId = giftcardId,
                                 OwnerUserId = orderUserId,
                                 PurchaseUserId = orderUserId,
                                 Status = (int)DataStatus.Normal,

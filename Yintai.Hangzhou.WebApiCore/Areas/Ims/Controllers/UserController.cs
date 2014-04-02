@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Yintai.Architecture.Common.Data.EF;
 using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Data.Models;
@@ -14,14 +15,17 @@ using com.intime.fashion.common.Extension;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
-    public class UserController:RestfulController
+    public class UserController : RestfulController
     {
         private IFavoriteRepository _favorRepo;
-        public UserController(IFavoriteRepository favorRepo) {
+        private IEFRepository<IMS_GiftCardOrderEntity> _orderRepo;
+        public UserController(IFavoriteRepository favorRepo, IEFRepository<IMS_GiftCardOrderEntity> orderRepo)
+        {
             _favorRepo = favorRepo;
+            _orderRepo = orderRepo;
         }
         [RestfulAuthorize]
-        public ActionResult Favor_Store(PagerInfoRequest request,int authuid)
+        public ActionResult Favor_Store(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<FavoriteEntity>().Where(f => f.Status == (int)DataStatus.Normal && f.User_Id == authuid
                 && f.FavoriteSourceType == (int)SourceType.Store)
@@ -44,28 +48,29 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             };
 
             return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
-           
+
         }
 
         [RestfulAuthorize]
-        public ActionResult Favor_Combo(PagerInfoRequest request,int authuid)
+        public ActionResult Favor_Combo(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<FavoriteEntity>().Where(f => f.Status == (int)DataStatus.Normal && f.User_Id == authuid
                && f.FavoriteSourceType == (int)SourceType.Combo)
-                        .Join(Context.Set<IMS_ComboEntity>().GroupJoin(Context.Set<ResourceEntity>().Where(r=>r.Status==(int)DataStatus.Normal && r.SourceType==(int)SourceType.Combo),
-                                                                o=>o.Id,
-                                                                i=>i.SourceId,
-                                                                (o,i)=>new {IC=o,ICR=i.OrderByDescending(icr=>icr.SortOrder).FirstOrDefault()}),
-                                         o => o.FavoriteSourceId, i => i.IC.Id, (o, i) => new {
-                            type = (int)SourceType.Combo,
-                            id = (int)i.IC.Id,
-                            name = i.IC.Desc,
-                            is_online = i.IC.Status,
-                            price = i.IC.Price,
-                            create_date = o.CreatedDate,
-                            image = i.ICR.Name,
-                            store_id = o.Store_Id
-                        });
+                        .Join(Context.Set<IMS_ComboEntity>().GroupJoin(Context.Set<ResourceEntity>().Where(r => r.Status == (int)DataStatus.Normal && r.SourceType == (int)SourceType.Combo),
+                                                                o => o.Id,
+                                                                i => i.SourceId,
+                                                                (o, i) => new { IC = o, ICR = i.OrderByDescending(icr => icr.SortOrder).FirstOrDefault() }),
+                                         o => o.FavoriteSourceId, i => i.IC.Id, (o, i) => new
+                                         {
+                                             type = (int)SourceType.Combo,
+                                             id = (int)i.IC.Id,
+                                             name = i.IC.Desc,
+                                             is_online = i.IC.Status,
+                                             price = i.IC.Price,
+                                             create_date = o.CreatedDate,
+                                             image = i.ICR.Name,
+                                             store_id = o.Store_Id
+                                         });
             var linq2 = Context.Set<FavoriteEntity>().Where(f => f.Status == (int)DataStatus.Normal && f.User_Id == authuid
                && f.FavoriteSourceType == (int)SourceType.GiftCard)
                         .Join(Context.Set<IMS_GiftCardEntity>().GroupJoin(Context.Set<ResourceEntity>().Where(r => r.Status == (int)DataStatus.Normal && r.SourceType == (int)SourceType.GiftCard),
@@ -93,7 +98,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 id = l.id,
                 name = l.name,
                 is_online = l.is_online,
-                price =l.price,
+                price = l.price,
                 create_date = l.create_date,
                 image = l.image.Image320Url(),
                 store_id = l.store_id
@@ -107,7 +112,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
 
         [RestfulAuthorize]
-        public ActionResult Favor(IMSUserFavorRequest request,int authuid)
+        public ActionResult Favor(IMSUserFavorRequest request, int authuid)
         {
             int sourceType = (int)SourceType.Default;
             switch (request.Type)
@@ -139,7 +144,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Unfavor(IMSUserFavorRequest request,int authuid)
+        public ActionResult Unfavor(IMSUserFavorRequest request, int authuid)
         {
             int sourceType = (int)SourceType.Default;
             switch (request.Type)
@@ -163,8 +168,20 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderSuccess<dynamic>(null);
             favorEntity.Status = (int)DataStatus.Deleted;
             _favorRepo.Update(favorEntity);
-            
+
             return this.RenderSuccess<dynamic>(null);
+        }
+
+        [RestfulAuthorize]
+        public ActionResult Latest_GiftCard(int giftcardid, int timestamp, int authuid)
+        {
+            var benchTime = new DateTime(1970, 1, 1).AddSeconds(timestamp);
+            var order = _orderRepo.Find(x => x.GiftCardItemId == giftcardid && x.CreateDate >= benchTime && x.CreateUser == authuid);
+            if (order == null)
+            {
+                return this.RenderError(r => r.Message = "无购买记录");
+            }
+            return this.RenderSuccess<dynamic>(r => r.Data = new { charge_no = order.No, amount = order.Amount, create_date = order.CreateDate });
         }
     }
 }
