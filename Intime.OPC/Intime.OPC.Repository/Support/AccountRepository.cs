@@ -62,22 +62,39 @@ namespace Intime.OPC.Repository.Support
 
        public PageResult<OPC_AuthUser> GetByLoginName(string orgID, string loginName, int pageIndex, int pageSize)
        {
-           Expression<Func<OPC_AuthUser, bool>> filter = t =>t.IsValid==true && t.LogonName.Contains(loginName) ;
-           if (!string.IsNullOrEmpty(orgID))
+           using (var db = new YintaiHZhouContext())
            {
-               filter = filter.And(t=>t.OrgId==orgID);
+               var lst = db.OPC_AuthUser.Where(t => true);
+               if (!string.IsNullOrWhiteSpace(loginName))
+               {
+                   lst = lst.Where(t => t.LogonName.Contains(loginName));
+               }
+               if (!string.IsNullOrEmpty(orgID))
+               {
+                   lst = lst.Where(t => t.OrgId == orgID);
+               }
+               lst = lst.OrderBy(t => t.LogonName);
+               return lst.ToPageResult(pageIndex, pageSize);
            }
-           return  Select(filter, s => s.LogonName, true, pageIndex, pageSize);
        }
 
         public PageResult<OPC_AuthUser> GetByOrgId(string orgID, string name, int pageIndex, int pageSize)
         {
-            Expression<Func<OPC_AuthUser, bool>> filter = t => t.IsValid == true && t.Name.Contains(name);
-            if (!string.IsNullOrEmpty(orgID))
+
+            using (var db = new YintaiHZhouContext())
             {
-                filter = filter.And(t => t.OrgId == orgID);
+                var lst = db.OPC_AuthUser.Where(t=>true);
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    lst = lst.Where(t => t.Name.Contains(name));
+                }
+                if (!string.IsNullOrEmpty(orgID))
+                {
+                    lst = lst.Where(t => t.OrgId == orgID);
+                }
+               lst=   lst.OrderBy(t => t.Name);
+              return    lst.ToPageResult(pageIndex, pageSize);
             }
-            return Select(filter, s => s.Name, true, pageIndex, pageSize);
         }
     }
 }

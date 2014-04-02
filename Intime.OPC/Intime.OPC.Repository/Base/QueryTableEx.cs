@@ -11,7 +11,7 @@ namespace System.Linq
     {
         public static PageResult<T> ToPageResult<T>(this IQueryable<T> source ,int pageIndex, int pageSize = 20)
         {
-            pageIndex = pageSize - 1;
+            pageIndex = pageIndex - 1;
             if (pageIndex < 0)
             {
                 pageIndex = 0;

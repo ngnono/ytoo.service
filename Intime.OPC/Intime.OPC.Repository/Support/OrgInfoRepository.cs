@@ -16,5 +16,20 @@ namespace Intime.OPC.Repository.Support
         {
             return Select2<OPC_OrgInfo, string>(t => t.IsDel == false, o => o.OrgID, true, pageIndex, pageSize);
         }
+
+
+        public OPC_OrgInfo Add(OPC_OrgInfo orgInfo)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                if (orgInfo != null)
+                {
+                   var a=  db.OrgInfos.Add(orgInfo);
+                    db.SaveChanges();
+                    return a;
+                }
+                return null;
+            }
+        }
     }
 }

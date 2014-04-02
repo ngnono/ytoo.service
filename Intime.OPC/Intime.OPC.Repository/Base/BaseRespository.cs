@@ -121,8 +121,8 @@ namespace Intime.OPC.Repository.Base
             using (var db = new YintaiHZhouContext())
             {
                 IDbSet<T> set = db.Set<T>();
-                int count = set.Where(filter).Count();
-
+                int count = set.Count(filter);
+                
                 pageIndex = pageIndex - 1;
                 if (pageIndex < 0)
                 {
