@@ -194,7 +194,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 Name = linq.U.Nickname,
                 Logo = linq.U.Logo,
                 GiftCardSaling = giftCards,
-                ComboSaling = combos
+                ComboSaling = combos,
+                Mobile = linq.U.Mobile
             };
         }
     }
