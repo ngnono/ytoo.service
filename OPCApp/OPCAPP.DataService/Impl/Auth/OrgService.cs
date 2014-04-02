@@ -9,8 +9,8 @@ using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
 namespace OPCApp.DataService.Impl.Auth
 {
-    [Export(typeof (IOrderService))]
-    public class OrgService : IOrderService
+    [Export(typeof(IOrgService))]
+    public class OrgService : IOrgService
     {
         private string _nameP;
         public string Name {
@@ -27,7 +27,7 @@ namespace OPCApp.DataService.Impl.Auth
                     return new ResultMsg {IsSuccess = false, Msg = "增加错误"};
                 }
 
-                bool bFalg = RestClient.Put("account/addUser", org);
+                bool bFalg = RestClient.Put("org/addOrg", org);
                 return new ResultMsg {IsSuccess = bFalg, Msg = "保存成功"};
             }
             catch (Exception ex)
@@ -40,7 +40,7 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                bool bFalg = RestClient.Put("account/updateuser", org);
+                bool bFalg = RestClient.Put("org/updateOrg", org);
                 return new ResultMsg {IsSuccess = bFalg, Msg = "保存成功"};
             }
             catch (Exception ex)
@@ -54,7 +54,7 @@ namespace OPCApp.DataService.Impl.Auth
             try
             {
                 var oo = new { userId = org.Id };
-                bool bFalg = RestClient.Put("account/deleteuser", org.Id);
+                bool bFalg = RestClient.Put("org/deleteorg", org.Id);
                 return new ResultMsg {IsSuccess = bFalg, Msg = "删除错误"};
             }
             catch (Exception ex)
@@ -64,19 +64,23 @@ namespace OPCApp.DataService.Impl.Auth
         }
 
 
-        public PageResult<OPC_OrgInfo> Search(IDictionary<string, object> iDicFilter)
+        public IList<OPC_OrgInfo> Search()
         {
             try
             {
-                string strParmas = iDicFilter.Keys.Aggregate("",
-                    (current, key) => current + string.Format("{0}={1}&", key, iDicFilter[key]));
-                PageResult<OPC_OrgInfo> lst = RestClient.GetPage<OPC_OrgInfo>("account/selectuser", strParmas.Trim('&'));
+                var lst = RestClient.Get<OPC_OrgInfo>("org/getall","");
                 return lst;
             }
             catch (Exception ex)
             {
                 return null;
             }
+        }
+
+
+        PageResult<OPC_OrgInfo> IBaseDataService<OPC_OrgInfo>.Search(IDictionary<string, object> iDicFilter)
+        {
+            throw new NotImplementedException();
         }
     }
 }

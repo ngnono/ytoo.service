@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
+using MahApps.Metro;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface;
@@ -15,6 +17,75 @@ namespace OPCApp.AuthManage.ViewModels
    // [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserListWindowViewModel : BaseListViewModel<OPC_AuthUser>
     {
+        public NodeViewModel Nodes { get; private set; }
+        public NodeInfo NodeInfo { get; private set; }
+        public ReadOnlyCollection<DelegateCommand> Commands { get; private set; }
+
+        private void InitOrg()
+        {
+            var orgList = AppEx.Container.GetInstance<IOrgService>().Search().ToList();
+            Commands = new ReadOnlyCollection<DelegateCommand>(new DelegateCommand[]
+            {
+                new DelegateCommand(SearchAction)
+            });
+
+            NodeInfo = new NodeInfo();
+            NodeInfo.SelectedNodeChanged += (s, e) => RefreshCommands();
+            Nodes = new NodeViewModel(NodeInfo);
+            GetNodesTree(Nodes,orgList);
+        }
+
+        public void GetNodesTree(NodeViewModel node,List<OPC_OrgInfo> listOrg )
+        {
+            var orgParent = listOrg.Where(e => e.OrgID == e.ParentID).ToList();
+            foreach (var opcOrgInfo in orgParent)
+            {
+                var nv = node.AddSubNode(opcOrgInfo);
+                GetNodesTreeChild(nv, listOrg);   
+            }
+         
+        }
+        public void GetNodesTreeChild(NodeViewModel node, List<OPC_OrgInfo> listOrg)
+        {
+            var orgParent = listOrg.Where(e => e.OrgID != e.ParentID&&e.ParentID==node.OrgId).ToList();
+            foreach (var opcOrgInfo in orgParent)
+            {
+                var nv = node.AddSubNode(opcOrgInfo);
+                GetNodesTreeChild(nv, listOrg);   
+            }
+
+        }
+        private bool CheckSelection()
+        {
+            return NodeInfo.SelectedNode != null;
+        }
+        void RefreshCommands()
+        {
+            foreach (var cmd in Commands)
+            {
+                cmd.Execute();
+                //if (cmd.IsActive)
+                //    cmd.RaiseCanExecuteChanged();
+            }
+        }
+     
+        NodeViewModel GetOperationNode()
+        {
+            if (NodeInfo.SelectedNode == null)
+                return Nodes;
+            return NodeInfo.SelectedNode;
+        }
+       
+
+
+
+
+
+
+
+
+
+
 
         public PageResult _prResult;
         public PageResult PrResult
@@ -29,8 +100,8 @@ namespace OPCApp.AuthManage.ViewModels
         {
             EditViewModeKey = "UserViewModel";
             AddViewModeKey = "UserViewModel";
-            Init();
-
+            InitOrg();
+            InitUser();
         }
 
         public string SelectedFiled { get; set; }
@@ -47,12 +118,15 @@ namespace OPCApp.AuthManage.ViewModels
 
         protected override IDictionary<string, object> GetFilter()
         {
+            var node = GetOperationNode();
+            var indexFiled = FieldList.IndexOf(SelectedFiled);
             var dicFilter = new Dictionary<string, object>
             {
-                {"SearchField", FieldList.IndexOf(SelectedFiled).ToString()},
+                {"SearchField",indexFiled ==-1?1:indexFiled},
                 {"SearchValue", SelectedFiledValue},
                  {"pageIndex", this.PageIndex},
-                  {"pageSize", this.PageSize}
+                  {"pageSize", this.PageSize},
+                  {"orgid",node.OrgId}
             };
             return dicFilter;
         }
@@ -63,6 +137,10 @@ namespace OPCApp.AuthManage.ViewModels
         public override void SearchAction()
         {
             var  PrResultTemp = AppEx.Container.GetInstance<IAuthenticateService>().Search(GetFilter());
+            if (PrResultTemp == null||PrResultTemp.Result==null)
+            {
+                return;
+            }
             PrResult=new PageResult();
             PrResult.Models = PrResultTemp.Result.ToList();
             PrResult.Total = PrResultTemp.TotalCount;
@@ -74,9 +152,9 @@ namespace OPCApp.AuthManage.ViewModels
 
         /*初始化页面固有的数据值*/
 
-        private void Init()
+        private void InitUser()
         {
-            FieldList = new List<string> {"登陆名", "专柜码", "姓名", "门店", "机构"};
+            FieldList = new List<string> {"登陆名","姓名"};
             /*查询初始化*/
             SelectedFiledValue = "";
             SelectedFiled = "";

@@ -1,32 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.Domain.Models;
 
 namespace OPCApp.AuthManage
 {
-    class NodeViewModel : BindableBase
+    public class NodeViewModel : BindableBase
     {
         /*
          * 省去构造函数，公共方法和一些静态成员
          * */
-
-
         public NodeViewModel(NodeInfo info)
         {
             children = new ObservableCollection<NodeViewModel>();
             NodeInfo = info;
         }
 
-        private NodeViewModel(NodeViewModel parent, string name)
+        public NodeViewModel(NodeViewModel parent, OPC_OrgInfo orgInfo)
         {
             Parent = parent;
-            Name = name;
+            Name = orgInfo.OrgName;
+            ParentId = orgInfo.ParentID;
+            OrgId = orgInfo.OrgID;
+            OrgType = orgInfo.OrgType ;
+            StoreOrSectionId = orgInfo.StoreOrSectionID;
+            StoreOrSectionName = orgInfo.StoreOrSectionName;
             NodeInfo = parent.NodeInfo;
             children = new ObservableCollection<NodeViewModel>();
+
         }
         private NodeViewModel(NodeViewModel parent, string name,string parentID,int orgType,int? storeOrSectionId,string storeOrSectionName)
         {
@@ -45,13 +51,13 @@ namespace OPCApp.AuthManage
 
         string _name;
         private string _orgId;
-        private int _orgType;
+        private int? _orgType;
         private string _parentId;
         private int? _storeOrSectionId;
         private string _storeOrSectionName;
         bool _isExpanded;
         bool _isSelected;
-        readonly ObservableCollection<NodeViewModel> children;
+         ObservableCollection<NodeViewModel> children;
 
         #endregion
 
@@ -90,7 +96,7 @@ namespace OPCApp.AuthManage
                 }
             }
         }
-        public int OrgType
+        public int? OrgType
         {
             get
             {
@@ -115,7 +121,7 @@ namespace OPCApp.AuthManage
             {
                 if (_parentId != value)
                 {
-                    _name = value;
+                    _parentId = value;
                     OnPropertyChanged("ParentId");
                 }
             }
@@ -145,7 +151,7 @@ namespace OPCApp.AuthManage
             {
                 if (_orgId != value)
                 {
-                    _name = value;
+                    _orgId = value;
                     OnPropertyChanged("OrgId");
                 }
             }
@@ -182,11 +188,11 @@ namespace OPCApp.AuthManage
             }
         }
 
-        public ReadOnlyObservableCollection<NodeViewModel> Children
+        public ObservableCollection<NodeViewModel> Children
         {
             get
             {
-                return new ReadOnlyObservableCollection<NodeViewModel>(children);
+                return new ObservableCollection<NodeViewModel>(children);
             }
         }
 
@@ -205,16 +211,28 @@ namespace OPCApp.AuthManage
             }
         }
 
-        public void Add(string name)
+        public void Update()
         {
-            IsExpanded = true;
-            children.Insert(0, (new NodeViewModel(this, name)));
-            RefreshInfoCount(1);
+
         }
-        public void Append(string name)
+
+        public NodeViewModel AddSubNode(OPC_OrgInfo opcOrgInfo)
         {
             IsExpanded = true;
-            children.Add(new NodeViewModel(this, name));
+            var node = new NodeViewModel(this, opcOrgInfo);
+            AddNodeViewModel(node);
+            return node;
+        }
+
+        public void AddNodeViewModel(NodeViewModel nv)
+        {
+            children.Insert(0,nv);
+        }
+
+        public void Append(OPC_OrgInfo opcOrgInfo)
+        {
+            IsExpanded = true;
+            children.Add(new NodeViewModel(this, opcOrgInfo));
             RefreshInfoCount(1);
         }
         public void Rename()
@@ -296,7 +314,7 @@ namespace OPCApp.AuthManage
         #endregion
     }
 
-    class NodeInfo : BindableBase
+    public class NodeInfo : BindableBase
     {
         NodeViewModel _selectedNode;
         public NodeViewModel SelectedNode
