@@ -21,13 +21,6 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetAll()
         {
-
-            //var lst2 = new List<OPC_OrgInfo>();
-            //OPC_OrgInfo v = new OPC_OrgInfo();
-            //v.OrgID = "sdfsd";
-            //lst2.Add(v);
-            //return Ok(lst2);
-
             return DoFunction(() =>
             {
                 PageResult<OPC_OrgInfo> lst = _orgServiceService.GetAll(1, 10000);

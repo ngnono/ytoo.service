@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
@@ -24,7 +25,20 @@ namespace Intime.OPC.Repository.Support
             {
                 if (orgInfo != null)
                 {
-                   var a=  db.OrgInfos.Add(orgInfo);
+
+                    var lst=  db.OrgInfos.Where(t => t.ParentID == orgInfo.ParentID).OrderBy(t=>t.OrgID);
+                    var e = lst.LastOrDefault();
+                    if (e == null)
+                    {
+                        orgInfo.OrgID = orgInfo.ParentID + "001";
+                    }
+                    else
+                    {
+                        int d = int.Parse(orgInfo.OrgID);
+                        orgInfo.OrgID = (d + 1).ToString();
+                    }
+
+                    var a=  db.OrgInfos.Add(orgInfo);
                     db.SaveChanges();
                     return a;
                 }
