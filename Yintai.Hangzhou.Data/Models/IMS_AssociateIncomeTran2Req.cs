@@ -8,7 +8,6 @@ namespace Yintai.Hangzhou.Data.Models
         public int Id { get; set; }
         public int FullPackageId { get; set; }
         public int RequestId { get; set; }
-        
 
         #region Overrides of BaseEntity
 

@@ -219,6 +219,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<MappedProductBackup> MappedProductBackups { get; set; }
 
         public DbSet<IMS_AssociateEntity> IMS_Associate { get; set; }
+        public DbSet<IMS_AssociateBrandEntity> IMS_AssociateBrand { get; set; }
         public DbSet<IMS_AssociateIncomeEntity> IMS_AssociateIncome { get; set; }
         public DbSet<IMS_AssociateIncomeHistoryEntity> IMS_AssociateIncomeHistory { get; set; }
         public DbSet<IMS_AssociateIncomeRequestEntity> IMS_AssociateIncomeRequest { get; set; }
@@ -226,9 +227,11 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<IMS_AssociateIncomeRuleFixEntity> IMS_AssociateIncomeRuleFix { get; set; }
         public DbSet<IMS_AssociateIncomeRuleFlattenEntity> IMS_AssociateIncomeRuleFlatten { get; set; }
         public DbSet<IMS_AssociateIncomeRuleFlexEntity> IMS_AssociateIncomeRuleFlex { get; set; }
-        public DbSet<IMS_AssociateIncomeTransferEntity> IMS_AssociateIncomeTransfer { get; set; }
         public DbSet<IMS_AssociateIncomeTran2ReqEntity> IMS_AssociateIncomeTran2Req { get; set; }
+        public DbSet<IMS_AssociateIncomeTransferEntity> IMS_AssociateIncomeTransfer { get; set; }
         public DbSet<IMS_AssociateItemsEntity> IMS_AssociateItems { get; set; }
+        public DbSet<IMS_AssociateSaleCodeEntity> IMS_AssociateSaleCode { get; set; }
+        public DbSet<IMS_BankEntity> IMS_Bank { get; set; }
         public DbSet<IMS_ComboEntity> IMS_Combo { get; set; }
         public DbSet<IMS_Combo2ProductEntity> IMS_Combo2Product { get; set; }
         public DbSet<IMS_GiftCardEntity> IMS_GiftCard { get; set; }
@@ -342,6 +345,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new Map4OrderMap());
             modelBuilder.Configurations.Add(new MappedProductBackupMap());
             modelBuilder.Configurations.Add(new IMS_AssociateEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateBrandEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeHistoryEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeRequestEntityMap());
@@ -349,7 +353,11 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFixEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFlattenEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFlexEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateIncomeTran2ReqEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateIncomeTransferEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateItemsEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateSaleCodeEntityMap());
+            modelBuilder.Configurations.Add(new IMS_BankEntityMap());
             modelBuilder.Configurations.Add(new IMS_ComboEntityMap());
             modelBuilder.Configurations.Add(new IMS_Combo2ProductEntityMap());
             modelBuilder.Configurations.Add(new IMS_GiftCardEntityMap());

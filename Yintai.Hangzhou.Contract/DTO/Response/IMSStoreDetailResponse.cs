@@ -18,6 +18,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int Id { get; set; }
         [DataMember(Name = "name")]
         public string Name { get; set; }
+        [DataMember(Name="mobile")]
+        public string Mobile { get; set; }
         [IgnoreDataMember]
         public string Logo { get; set; }
         [DataMember(Name="logo")]
@@ -27,7 +29,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
             if (Logo.StartsWith("http://"))
                 return Logo;
             return Path.Combine(ConfigManager.GetHttpApiImagePath(),
-                    Logo);
+                    Logo,"_100x100.jpg");
         } }
         [DataMember(Name="gift_card")]
         public IEnumerable<IMSGiftCard> GiftCardSaling { get; set; }

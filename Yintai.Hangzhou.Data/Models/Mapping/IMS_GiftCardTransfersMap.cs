@@ -11,6 +11,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.HasKey(t => t.Id);
 
             // Properties
+            this.Property(t => t.OrderNo)
+                .IsRequired()
+                .HasMaxLength(20);
+
             this.Property(t => t.Phone)
                 .IsRequired()
                 .HasMaxLength(11);
@@ -21,6 +25,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             // Table & Column Mappings
             this.ToTable("IMS_GiftCardTransfers");
             this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.OrderNo).HasColumnName("OrderNo");
             this.Property(t => t.FromUserId).HasColumnName("FromUserId");
             this.Property(t => t.ToUserId).HasColumnName("ToUserId");
             this.Property(t => t.Phone).HasColumnName("Phone");
@@ -30,6 +35,8 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.PreTransferId).HasColumnName("PreTransferId");
             this.Property(t => t.CreateDate).HasColumnName("CreateDate");
             this.Property(t => t.CreateUser).HasColumnName("CreateUser");
+            this.Property(t => t.OperateDate).HasColumnName("OperateDate");
+            this.Property(t => t.OperateUser).HasColumnName("OperateUser");
 		Init();
         }
 

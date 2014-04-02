@@ -19,6 +19,20 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(20);
 
+            this.Property(t => t.BankCode)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            this.Property(t => t.BankAccountName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            this.Property(t => t.TransferErrorCode)
+                .HasMaxLength(10);
+
+            this.Property(t => t.TransferErrorMsg)
+                .HasMaxLength(200);
+
             // Table & Column Mappings
             this.ToTable("IMS_AssociateIncomeRequest");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -29,6 +43,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.CreateDate).HasColumnName("CreateDate");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
+            this.Property(t => t.BankCode).HasColumnName("BankCode");
+            this.Property(t => t.BankAccountName).HasColumnName("BankAccountName");
+            this.Property(t => t.TransferErrorCode).HasColumnName("TransferErrorCode");
+            this.Property(t => t.TransferErrorMsg).HasColumnName("TransferErrorMsg");
 		Init();
         }
 

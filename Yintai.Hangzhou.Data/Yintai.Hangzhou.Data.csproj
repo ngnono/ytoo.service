@@ -88,9 +88,6 @@
   <ItemGroup>
     <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
     <Compile Include="Models\Banner.cs" />
-    <Compile Include="Models\IMS_AssociateIncomeTran2Req.cs" />
-    <Compile Include="Models\IMS_AssociateIncomeTransfer.cs" />
-    <Compile Include="Models\IMS_Bank.cs" />
     <Compile Include="Models\IMS_Associate.cs" />
     <Compile Include="Models\IMS_AssociateBrand.cs" />
     <Compile Include="Models\IMS_AssociateIncome.cs" />
@@ -100,8 +97,11 @@
     <Compile Include="Models\IMS_AssociateIncomeRuleFix.cs" />
     <Compile Include="Models\IMS_AssociateIncomeRuleFlatten.cs" />
     <Compile Include="Models\IMS_AssociateIncomeRuleFlex.cs" />
+    <Compile Include="Models\IMS_AssociateIncomeTran2Req.cs" />
+    <Compile Include="Models\IMS_AssociateIncomeTransfer.cs" />
     <Compile Include="Models\IMS_AssociateItems.cs" />
     <Compile Include="Models\IMS_AssociateSaleCode.cs" />
+    <Compile Include="Models\IMS_Bank.cs" />
     <Compile Include="Models\IMS_Combo.cs" />
     <Compile Include="Models\IMS_Combo2Product.cs" />
     <Compile Include="Models\IMS_GiftCard.cs" />
@@ -144,9 +144,12 @@
     <Compile Include="Models\Mapping\IMS_AssociateIncomeRuleFlattenMap.cs" />
     <Compile Include="Models\Mapping\IMS_AssociateIncomeRuleFlexMap.cs" />
     <Compile Include="Models\Mapping\IMS_AssociateIncomeRuleMap.cs" />
+    <Compile Include="Models\Mapping\IMS_AssociateIncomeTran2ReqMap.cs" />
+    <Compile Include="Models\Mapping\IMS_AssociateIncomeTransferMap.cs" />
     <Compile Include="Models\Mapping\IMS_AssociateItemsMap.cs" />
     <Compile Include="Models\Mapping\IMS_AssociateMap.cs" />
     <Compile Include="Models\Mapping\IMS_AssociateSaleCodeMap.cs" />
+    <Compile Include="Models\Mapping\IMS_BankMap.cs" />
     <Compile Include="Models\Mapping\IMS_Combo2ProductMap.cs" />
     <Compile Include="Models\Mapping\IMS_ComboMap.cs" />
     <Compile Include="Models\Mapping\IMS_GiftCardItemMap.cs" />
