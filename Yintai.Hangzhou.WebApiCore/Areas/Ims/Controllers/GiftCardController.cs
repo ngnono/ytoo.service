@@ -19,7 +19,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
     {
         private static string GIFTCARD_STORE_ID = "1000000";
         private ICustomerRepository _customerRepo;
-        private IEFRepository<ResourceEntity> _resourceRepo;
+        private IResourceRepository _resourceRepo;
         private IEFRepository<OrderTransactionEntity> _orderTranRepo;
         private IEFRepository<IMS_GiftCardEntity> _cardRepo;
         private IEFRepository<IMS_GiftCardOrderEntity> _orderRepo;
@@ -29,8 +29,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_GiftCardRechargeEntity> _rechargeRepo;
 
         public GiftCardController(
-            ICustomerRepository customerRepo, 
-            IEFRepository<ResourceEntity> resourceRepo, 
+            ICustomerRepository customerRepo,
+            IResourceRepository resourceRepo, 
             IEFRepository<OrderTransactionEntity> orderTranRepo,
             IEFRepository<IMS_GiftCardEntity> cardRepo,
             IEFRepository<IMS_GiftCardOrderEntity> orderRepo,
