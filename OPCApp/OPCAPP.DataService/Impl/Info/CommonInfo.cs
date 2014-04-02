@@ -87,6 +87,25 @@ namespace OPCApp.DataService.Impl.Info
             return lstKeyValues;
         }
 
+        public IList<KeyValue> GetSectionList()
+        {
+            try
+            {
+                List<KeyValue> lst = RestClient.Get<Section>("Section/getall").Select<Section, KeyValue>(t =>
+                {
+                    var kv = new KeyValue();
+                    kv.Key = t.Id;
+                    kv.Value = t.Name;
+                    return kv;
+                }).Distinct().ToList();
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public IList<KeyValue> GetPayMethod()
         {
             IList<KeyValue> lstKeyValues = new List<KeyValue>();
