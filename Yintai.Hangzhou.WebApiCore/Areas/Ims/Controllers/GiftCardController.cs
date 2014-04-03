@@ -86,7 +86,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     {
                         return this.RenderError(x => x.Message = "您已绑定此手机号!");
                     }
-                    if(cardAccount.UserId == authuid)
+                    if (cardAccount.UserId == authuid)
                     {
                         return this.RenderError(x => x.Message = "一个账号只能绑定一个手机号!");
                     }
@@ -492,6 +492,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             if (rsp.code != 200)
             {
                 return this.RenderError(r => r.Message = rsp.message);
+            }
+#else
+            var rnd = new Random(Guid.NewGuid().GetHashCode()).Next(0, 100) % 2 == 0;
+            if (rnd)
+            {
+                return this.RenderError(r => r.Message = "旧密码不正确，无法修改!");
             }
 #endif
             return this.RenderSuccess<dynamic>(null);
