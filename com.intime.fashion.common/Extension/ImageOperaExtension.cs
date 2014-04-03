@@ -30,7 +30,7 @@ namespace com.intime.fashion.common.Extension
         {
             if (string.IsNullOrEmpty(name))
                 return string.Empty;
-            return Path.Combine(ConfigManager.GetHttpApiImagePath(),name,string.Format("_{0}.jpg",size));
+            return string.Format("{0}{1}",Path.Combine(ConfigManager.GetHttpApiImagePath(),name),string.Format("_{0}.jpg",size));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using com.intime.fashion.common.Extension;
+﻿using System.Runtime.CompilerServices;
+using com.intime.fashion.common.Extension;
 using com.intime.fashion.common.IT;
 using System;
 using System.Collections.Generic;
@@ -347,6 +348,34 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 Logger.Error(ex);
                 return this.RenderError(r => r.Message = ex.Message);
             }
+        }
+
+        [RestfulAuthorize]
+        public ActionResult Detail(string charge_no, int authuid)
+        {
+            var user = _userRepo.Find(x => x.UserId == authuid);
+            if (user == null)
+            {
+                return this.RenderError(r => r.Message = "未绑定账号！请先绑定！");
+            }
+            var order = _orderRepo.Find(x => x.No == charge_no);
+            if (order == null)
+            {
+                return this.RenderError(r => r.Message = "无效的礼品卡编码");
+            }
+            if (order.OwnerUserId != authuid && order.PurchaseUserId != authuid)
+            {
+                return this.RenderError(r => r.Message = "您无权查看别人的礼品卡!");
+            }
+            return
+                this.RenderSuccess<dynamic>(
+                    c =>
+                        c.Data =
+                            new
+                            {
+                                phone = user.GiftCardAccount,
+                                amount = order.Price
+                            });
         }
 
         [RestfulAuthorize]

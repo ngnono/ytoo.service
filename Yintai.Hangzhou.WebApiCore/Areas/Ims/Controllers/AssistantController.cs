@@ -48,7 +48,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Gift_Cards(PagerInfoRequest request)
         {
             int page = request.Page <= 0 ? 0 : request.Page - 1;
-            int pagesize = request.Pagesize >= 40 ? 20 : request.Pagesize;
+            int pagesize = request.Pagesize >= 40 || request.Pagesize <= 0 ? 20 : request.Pagesize;
             var count = _cardRepo.Get(x => x.Status == 1).Count();
             var cards = new List<dynamic>();     
             var linq =
