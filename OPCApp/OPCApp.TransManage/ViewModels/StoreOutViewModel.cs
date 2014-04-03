@@ -234,7 +234,7 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         //打印发货单
-        public void PrintInvoice()
+        public  void PrintInvoice()
         {
             if (SaleList == null || !SaleList.Any())
             {
@@ -272,7 +272,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetShipSaleList()
         {
-            string filter = string.Format("startdate={0}&enddate={1}&shippingCode={2}",
+            string filter = string.Format("startdate={0}&enddate={1}&orderno={2}",
                 Invoice4Get.StartSellDate.ToShortDateString(),
                 Invoice4Get.EndSellDate.ToShortDateString(),
                 Invoice4Get.OrderNo);
