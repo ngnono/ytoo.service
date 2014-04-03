@@ -206,8 +206,14 @@ namespace OPCApp.TransManage.ViewModels
                     ShippingGet.OrderNo, ShippingGet.ExpressNo, ShippingGet.StartGoodsOutDate.ToShortDateString(),
                     ShippingGet.EndGoodsOutDate.ToShortDateString(), ShippingGet.OutGoodsCode, string.IsNullOrEmpty(ShippingGet.SectionId) ? "-1" : ShippingGet.SectionId,
                     string.IsNullOrEmpty(ShippingGet.ShippingStatus) ? "-1" : ShippingGet.ShippingStatus, ShippingGet.CustomerPhone, string.IsNullOrEmpty(ShippingGet.BrandId) ? "-1" : ShippingGet.BrandId, 1, 100);
-
-            ShippingList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetShipping(shippingfilter).Result;
+            try
+            {
+                ShippingList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetShipping(shippingfilter).Result;
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
 
         public void GetOrderByShippingId()
