@@ -152,7 +152,7 @@ namespace com.intime.jobscheduler.Job
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (!result.IsValid)
+                    if (result != null && !result.IsValid)
                     {
                         foreach (var item in result.Items)
                         {
@@ -568,7 +568,7 @@ namespace com.intime.jobscheduler.Job
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (!result.IsValid)
+                    if (result!=null && !result.IsValid)
                     {
                         foreach (var item in result.Items)
                         {

@@ -8,7 +8,10 @@ using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Contract.Customer;
+using Yintai.Hangzhou.Contract.DTO.Request.Customer;
 using Yintai.Hangzhou.Contract.DTO.Response;
+using Yintai.Hangzhou.Contract.DTO.Response.Customer;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
@@ -23,17 +26,20 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_AssociateSaleCodeEntity> _associateSaleCodeRepo;
         private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
         private ICustomerRepository _customerRepo;
+        private ICustomerDataService _customerService;
         public StoreController(IEFRepository<IMS_AssociateEntity> associateRepo,
             IEFRepository<IMS_AssociateBrandEntity> associateBrandRepo,
             IEFRepository<IMS_AssociateSaleCodeEntity> associateSaleCodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateItemRepo,
-            ICustomerRepository customerRepo)
+            ICustomerRepository customerRepo,
+            ICustomerDataService customerService)
         {
             _associateRepo = associateRepo;
             _associateBrandRepo = associateBrandRepo;
             _associateSaleCodeRepo = associateSaleCodeRepo;
             _associateItemRepo = associateItemRepo;
             _customerRepo = customerRepo;
+            _customerService = customerService;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult My(int? authuid)
@@ -136,9 +142,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     });
                 }
                 ts.Complete();
+               
             }
-            return this.RenderSuccess<dynamic>(null);
-
+            var response = _customerService.GetUserInfo(new GetUserInfoRequest
+            {
+                AuthUid = authuid.Value
+            });
+            return this.RenderSuccess<CustomerInfoResponse>(c => c.Data = response.Data);
+           
         }
 
         [RestfulAuthorize]

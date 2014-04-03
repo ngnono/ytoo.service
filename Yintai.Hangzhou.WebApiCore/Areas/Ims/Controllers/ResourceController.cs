@@ -38,7 +38,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 url = r.Name.Image320Url()
                              });
             
-            return this.RenderSuccess<dynamic>(c => c.Data = resources);
+            return this.RenderSuccess<dynamic>(c => c.Data = resources.First());
         }
     }
 }
