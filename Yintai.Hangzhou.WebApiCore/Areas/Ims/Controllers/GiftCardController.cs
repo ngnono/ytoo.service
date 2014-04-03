@@ -19,7 +19,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
     {
         private static string GIFTCARD_STORE_ID = "1000000";
         private ICustomerRepository _customerRepo;
-        private IEFRepository<ResourceEntity> _resourceRepo;
+        private IResourceRepository _resourceRepo;
         private IEFRepository<OrderTransactionEntity> _orderTranRepo;
         private IEFRepository<IMS_GiftCardEntity> _cardRepo;
         private IEFRepository<IMS_GiftCardOrderEntity> _orderRepo;
@@ -29,8 +29,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_GiftCardRechargeEntity> _rechargeRepo;
 
         public GiftCardController(
-            ICustomerRepository customerRepo, 
-            IEFRepository<ResourceEntity> resourceRepo, 
+            ICustomerRepository customerRepo,
+            IResourceRepository resourceRepo,
             IEFRepository<OrderTransactionEntity> orderTranRepo,
             IEFRepository<IMS_GiftCardEntity> cardRepo,
             IEFRepository<IMS_GiftCardOrderEntity> orderRepo,
@@ -53,6 +53,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult IsBind(string phone, int authuid)
         {
+            var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone);
+            if (cardAccount != null)
+            {
+                return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = true });
+            }
             var is_binded = this.IsPhoneBinded(phone);
             if (is_binded)
             {
@@ -62,7 +67,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     UserId = authuid,
                     GiftCardAccount = phone,
                     CreateDate = DateTime.Now,
-                    Name = user.Name,
+                    Name = user.Nickname,
                     CreateUser = authuid
                 });
             }
@@ -74,26 +79,21 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         {
             try
             {
-                var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone);
+                var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone || x.UserId == authuid);
                 if (cardAccount != null)
                 {
-                    if (cardAccount.UserId == authuid)
+                    if (cardAccount.UserId == authuid && cardAccount.UserId == authuid)
                     {
-                        return this.RenderError(x => x.Message = "You have bond the phone!");
+                        return this.RenderError(x => x.Message = "您已绑定此手机号!");
                     }
-                    return this.RenderError(x => x.Message = "The phone have been bound by some others.");
+                    if(cardAccount.UserId == authuid)
+                    {
+                        return this.RenderError(x => x.Message = "一个账号只能绑定一个手机号!");
+                    }
+                    return this.RenderError(x => x.Message = "此手机号已被其他用户绑定.");
                 }
                 if (IsPhoneBinded(phone))
                 {
-                    var user = _customerRepo.GetItem(authuid);
-                    _userRepo.Insert(new IMS_GiftCardUserEntity()
-                    {
-                        UserId = authuid,
-                        GiftCardAccount = phone,
-                        CreateDate = DateTime.Now,
-                        Name = user.Name,
-                        CreateUser = authuid
-                    });
                     try
                     {
                         var balance = GetUserAccountBalance(phone);
@@ -110,12 +110,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         return this.RenderError(r => r.Message = ex.Message);
                     }
                 }
-                return this.RenderError(r => r.Message = "This phone has't been bond, please register it.");
+                return this.RenderError(r => r.Message = "手机号未绑定，请先绑定手机号.");
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                return this.RenderError(r => r.Message = "Error occurred while bind user!");
+                return this.RenderError(r => r.Message = "绑定用户手机失败，请联系管理员!");
             }
         }
 
@@ -143,7 +143,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             catch (GetUserBalanceExcepiton ex)
             {
                 Logger.Error(ex);
-                return this.RenderError(r=>r.Message = ex.Message);
+                return this.RenderError(r => r.Message = ex.Message);
             }
 
         }
@@ -239,7 +239,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult Recharge(string charge_no, int authuid)
         {
-            Logger.Error(string.Format("Recharge orderno ({0})",charge_no));
+            Logger.Error(string.Format("Recharge orderno ({0})", charge_no));
             var cardUser = _userRepo.Find(x => x.UserId == authuid);
 
             if (cardUser == null)
@@ -369,23 +369,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 sender = user.Name,
                                 phone = trans.Phone,
                                 amount = order.Price,
-                                status = (int)this.SetStatus4Receiver(order,trans)
+                                status = (int)this.SetStatus4Receiver(order, trans)
                             });
         }
 
         [RestfulAuthorize]
-        public ActionResult Items(IMSGiftcardListRequest request, int id, int authuid)
+        public ActionResult Items(int id, int authuid)
         {
             var card = _cardRepo.Find(id);
             if (card == null)
             {
-                return this.RenderError(r => r.Message = "Can't find card items!");
+                return this.RenderError(r => r.Message = "该礼品卡不存在");
             }
-
-            var pageSize = request.Pagesize;
-            var page = request.Page;
-
-            var items = _itemRepo.Get(x => x.GiftCardId == id).Skip((page - 1) * pageSize).Take(pageSize);
+            var items = _itemRepo.Get(x => x.GiftCardId == id);
 
             var data = new List<dynamic>();
             foreach (var item in items)
@@ -393,7 +389,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 data.Add(new { id = item.Id, unit_price = item.UnitPrice, price = item.Price });
             }
 
-            var resource = _resourceRepo.Find(x => x.Type == (int) SourceType.GiftCard && x.SourceId == card.Id);
+            var resource = _resourceRepo.Find(x => x.Type == (int)SourceType.GiftCard && x.SourceId == card.Id);
 
             return
                 this.RenderSuccess<dynamic>(
@@ -412,7 +408,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         {
             PagerInfoResponse<dynamic> rsp;
             rsp = type == 1 ? ListItemsBuyed(request, authuid) : ListItemsReceived(request, authuid);
-            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c=>c.Data = rsp);
+            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = rsp);
         }
 
         [RestfulAuthorize]
@@ -561,11 +557,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     from = o.user.Nickname,
                     card_no = o.order.No,
                     amount = o.order.Amount,
-                    status_i = SetStatus4Receiver(o.order,o.transfer),
+                    status_i = SetStatus4Receiver(o.order, o.transfer),
                     operation_date = o.transfer.OperateDate.ToString("yyyy-MM-dd hh:mm:ss")
                 });
             }
-            return new PagerInfoResponse<dynamic>(request.PagerRequest,count){Items=items};
+            return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };
 
         }
 
@@ -581,7 +577,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 {
                     return GiftCardListItemStatus.ReTransfer;
                 }
-                if (order.Status == (int) GiftCardOrderStatus.Recharge)
+                if (order.Status == (int)GiftCardOrderStatus.Recharge)
                 {
                     return GiftCardListItemStatus.Received;
                 }
@@ -621,7 +617,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     //receive_date = o.ransfer != null && o.ransfer.IsActive == 1 ? o.ransfer.CreateDate.ToString("yyyy-MM-dd hh:mm:ss") : "null"
                 });
             }
-            return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items  = items};
+            return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };
         }
 
         private GiftCardListItemStatus SetStatusForBuyer(IMS_GiftCardOrderEntity order, IMS_GiftCardTransfersEntity transfer, IMS_GiftCardRechargeEntity recharge)
@@ -660,7 +656,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
     public class GetUserBalanceExcepiton : Exception
     {
-        public GetUserBalanceExcepiton(string message) : base(message)
+        public GetUserBalanceExcepiton(string message)
+            : base(message)
         {
         }
     }

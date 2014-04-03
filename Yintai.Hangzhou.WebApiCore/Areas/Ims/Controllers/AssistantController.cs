@@ -1,9 +1,8 @@
 ﻿using com.intime.fashion.common;
+using com.intime.fashion.common.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
@@ -24,12 +23,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private ICustomerRepository _userRepo;
         private IEFRepository<IMS_AssociateEntity> _associateRepo;
         private IFeedbackRepository _feedbackRepo;
+        private IEFRepository<IMS_GiftCardEntity> _cardRepo;
+        private IResourceRepository _resourceRepo;
         public AssistantController(IEFRepository<IMS_AssociateSaleCodeEntity> salescodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateitemRepo,
             IEFRepository<IMS_AssociateIncomeRequestEntity> incomerequestRepo,
             ICustomerRepository userRepo,
             IEFRepository<IMS_AssociateEntity> associateRepo,
-            IFeedbackRepository feedbackRepo
+            IFeedbackRepository feedbackRepo,
+            IEFRepository<IMS_GiftCardEntity> cardRepo,
+            IResourceRepository resourceRepo
             )
         {
             _salescodeRepo = salescodeRepo;
@@ -38,23 +41,35 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _userRepo = userRepo;
             _associateRepo = associateRepo;
             _feedbackRepo = feedbackRepo;
+            _cardRepo = cardRepo;
+            _resourceRepo = resourceRepo;
         }
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request)
         {
-            var mockupResponse = new List<dynamic>();
-            mockupResponse.Add(new
+            int page = request.Page <= 0 ? 0 : request.Page - 1;
+            int pagesize = request.Pagesize >= 40 ? 20 : request.Pagesize;
+            var count = _cardRepo.Get(x => x.Status == 1).Count();
+            var cards = new List<dynamic>();     
+            var linq =
+                _cardRepo.Get(x => x.Status == 1)
+                    .OrderByDescending(x => x.UpdateDate)
+                    .Skip(page*pagesize)
+                    .Take(pagesize)
+                    .GroupJoin(_resourceRepo.Get(x => x.SourceType == (int) SourceType.GiftCard), c => c.Id,
+                        s => s.SourceId, (c, rs) => new {card = c, image= rs.FirstOrDefault()});
+            foreach (var cr in linq)
             {
-                id = 1,
-                desc = "mockup 礼品卡",
-                image = "",
-                is_online = true
-            });
-            var response = new PagerInfoResponse<dynamic>(request.PagerRequest, mockupResponse.Count)
-            {
-                Items = mockupResponse
-            };
-            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = response);
+                cards.Add(new
+                {
+                    id = cr.card.Id,
+                    desc = cr.card.Name,
+                    image = cr.card.Name.Image320Url(),
+                    is_online = true,
+                });
+            }
+            var rsp = new PagerInfoResponse<dynamic>(request.PagerRequest, count) {Items = cards};
+            return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = rsp);
         }
 
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
