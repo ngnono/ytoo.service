@@ -158,8 +158,9 @@ namespace OPCApp.TransManage.ViewModels
                 GetShipSaleList();
             }
         }
-
-
+        /// <summary>
+        ///   查询
+        /// </summary>
         public void SearchOrderBySale()
         {
             //OPC_Sale sale = SaleList.FirstOrDefault(e => e.IsSelected);
@@ -266,6 +267,7 @@ namespace OPCApp.TransManage.ViewModels
             }
         }
 
+
         /*查询快递单*/
 
         public void GetShipSaleList()
@@ -285,7 +287,7 @@ namespace OPCApp.TransManage.ViewModels
                 if (SaleList != null && SaleList.Any())
                 {
                     var sale = SaleList.FirstOrDefault();
-                    PageResult<Order> re1 = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.SaleOrderNo);
+                    PageResult<Order> re1 = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
                     OrderList = re1 == null ? new List<Order>() : re1.Result.ToList();
                     InvoiceDetail4List =
                     AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result.ToList();
