@@ -277,10 +277,10 @@ namespace OPCApp.TransManage.ViewModels
                 Invoice4Get.EndSellDate.ToShortDateString(),
                 Invoice4Get.OrderNo);
             PageResult<OPC_ShippingSale> re = AppEx.Container.GetInstance<ITransService>().GetListShip(filter);
+           
+            this.ClearList();
+            if (re==null||re.Result == null || re.Result.ToList().Count == 0) return;
             ShipSaleList = re.Result.ToList();
-            OrderList = new List<Order>();
-            SaleList = new List<OPC_Sale>();
-            InvoiceDetail4List = new List<OPC_SaleDetail>();
             if (ShipSaleList != null && ShipSaleList.Count>0)
             {
                 SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(ShipSaleList[0].GoodsOutCode);

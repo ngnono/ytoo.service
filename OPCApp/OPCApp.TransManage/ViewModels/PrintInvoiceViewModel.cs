@@ -52,7 +52,6 @@ namespace OPCApp.TransManage.ViewModels
             get { return invoice4Get; }
             set { SetProperty(ref invoice4Get, value); }
         }
-
         //选择上面行数据时赋值的数据集
 
         public OPC_Sale SaleSelected

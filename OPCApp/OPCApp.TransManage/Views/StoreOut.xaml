@@ -222,6 +222,7 @@
                             <TextBlock Text="订单号" Margin="0 5" />
                             <TextBox Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding Invoice4Get.OrderNo}" />
+                            
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="2">

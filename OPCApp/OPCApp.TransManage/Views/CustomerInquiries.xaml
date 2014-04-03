@@ -271,7 +271,7 @@
                             <TextBlock Text="  发货状态" Width="60" Margin="0 5" />
                             <ComboBox Height="25" ItemsSource="{Binding OutGoodsTypeList}" Width="80"
                                       DisplayMemberPath="Value" SelectedValuePath="Key"
-                                      SelectedValue="{Binding OrderGet.ShippingStatus}" />
+                                      SelectedValue="{Binding ShippingGet.ShippingStatus}" />
                             <TextBlock Text="  品牌" Width="60" Margin="0 5" />
                             <ComboBox Height="25" ItemsSource="{Binding BrandList}" Width="150"
                                       DisplayMemberPath="Value" SelectedValuePath="Key"
