@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Intime.OPC.Domain.Models.Mapping
@@ -8,7 +9,8 @@ namespace Intime.OPC.Domain.Models.Mapping
         {
             // Primary Key
             HasKey(t => t.Id);
-
+            Property(t => t.Id)
+               .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             // Properties
             Property(t => t.Name)
                 .HasMaxLength(20);

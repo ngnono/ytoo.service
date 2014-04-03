@@ -12,7 +12,7 @@ namespace Intime.OPC.Domain.Models.Mapping
 
             // Properties
             Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             Property(t => t.OrderNo)
                 .IsRequired()
