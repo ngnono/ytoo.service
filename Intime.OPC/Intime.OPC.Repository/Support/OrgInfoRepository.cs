@@ -26,15 +26,15 @@ namespace Intime.OPC.Repository.Support
                 if (orgInfo != null)
                 {
 
-                    var lst=  db.OrgInfos.Where(t => t.ParentID == orgInfo.ParentID).OrderBy(t=>t.OrgID);
-                    var e = lst.LastOrDefault();
+                    var lst=  db.OrgInfos.Where(t => t.ParentID == orgInfo.ParentID).OrderByDescending(t=>t.OrgID);
+                    var e = lst.FirstOrDefault();
                     if (e == null)
                     {
                         orgInfo.OrgID = orgInfo.ParentID + "001";
                     }
                     else
                     {
-                        int d = int.Parse(orgInfo.OrgID);
+                        int d = int.Parse(e.OrgID);
                         orgInfo.OrgID = (d + 1).ToString();
                     }
 

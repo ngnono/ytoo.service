@@ -32,9 +32,50 @@ namespace Intime.OPC.Repository.Support
         }
 
 
+        public PageResult<OPC_ShippingSale> GetShippingSale(string saleOrderNo, string expressNo, DateTime startGoodsOutDate, 
+            DateTime endGoodsOutDate, int sectionId, int shippingStatus, 
+            string customerPhone, int brandId, int pageIndex, int pageSize)
+        {
+            Expression<Func<OPC_ShippingSale, bool>> filterExpression =
+                t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate && t.ShippingStatus == shippingStatus;
+            if (string.IsNullOrWhiteSpace(saleOrderNo))
+            {
+                filterExpression = filterExpression.And(t => t.SaleOrderNo.Contains( saleOrderNo));
+            }
+
+            if (string.IsNullOrWhiteSpace(expressNo))
+            {
+                filterExpression = filterExpression.And(t => t.ShippingCode.Contains(expressNo) );
+            }
+
+            if (sectionId>0)
+            {
+                //filterExpression = filterExpression.And(t => t(expressNo));
+            }
+            return Select(filterExpression, t => t.CreateDate, false, pageIndex, pageSize);
+
+        }
+
+
         public PageResult<OPC_ShippingSale> GetShippingSale(string saleOrderNo, string expressNo, DateTime startGoodsOutDate, DateTime endGoodsOutDate, string outGoodsCode, int sectionId, int shippingStatus, string customerPhone, int brandId, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            Expression<Func<OPC_ShippingSale, bool>> filterExpression =
+               t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate && t.ShippingStatus == shippingStatus;
+            if (string.IsNullOrWhiteSpace(saleOrderNo))
+            {
+                filterExpression = filterExpression.And(t => t.SaleOrderNo.Contains(saleOrderNo));
+            }
+
+            if (string.IsNullOrWhiteSpace(expressNo))
+            {
+                filterExpression = filterExpression.And(t => t.ShippingCode.Contains(expressNo));
+            }
+
+            if (sectionId > 0)
+            {
+                //filterExpression = filterExpression.And(t => t(expressNo));
+            }
+            return Select(filterExpression, t => t.CreateDate, false, pageIndex, pageSize);
         }
     }
 }
