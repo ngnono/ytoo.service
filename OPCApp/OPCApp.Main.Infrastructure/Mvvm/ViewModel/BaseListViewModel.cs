@@ -131,6 +131,11 @@ namespace OPCApp.Infrastructure.Mvvm
         /// <param name="model">The model.</param>
         public void EditAction(T model)
         {
+            if (model == null)
+            {
+                MessageBox.Show("请选择要编辑的记录", "失败", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             var w = AppEx.Container.GetInstance<IViewModel>(EditViewModeKey);
             w.Model = model;
             if (w.View.ShowDialog() == true)
@@ -248,6 +253,7 @@ namespace OPCApp.Infrastructure.Mvvm
         /// </summary>
         /// <value>The edit command.</value>
         public ICommand EditCommand { get; set; }
+
 
         /// <summary>
         ///     删除

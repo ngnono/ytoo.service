@@ -31,7 +31,7 @@
                         </StackPanel>
                     </Button>
                     <Button Background="LightGray" Width="50" Command="{Binding EditOrgCommand}"
-                        CommandParameter="{Binding Models.CurrentItem}">
+                        CommandParameter="{Binding CurModel}">
                         <StackPanel>
                             <Image Source="/image/修改.png" Stretch="None" />
                             <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
@@ -73,7 +73,7 @@
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding EditCommand}"
-                        CommandParameter="{Binding Models.CurrentItem}">
+                        CommandParameter="{Binding CurModel}">
                     <StackPanel>
                         <Image Source="/image/修改.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
@@ -108,6 +108,7 @@
 
         <DataGrid x:Name="dataGrid" Grid.Row="2" MinWidth="600"  Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True"
                   VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                  SelectedItem="{Binding CurModel}"
                   ItemsSource="{Binding Path=ItemsSource,ElementName=dataPager}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

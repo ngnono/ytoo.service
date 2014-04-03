@@ -27,19 +27,24 @@ namespace OPCApp.AuthManage.ViewModels
 
         public void OrgTypeChange(int? orgType)
         {
+           GetOrgRefreshStoreOrSection(orgType);
+        }
+
+        public void GetOrgRefreshStoreOrSection(int? orgType)
+        {
             switch (orgType)
             {
-                case  5:
+                case 5:
                     StoreOrSectionList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
                     break;
-                case  10:
-                     StoreOrSectionList = AppEx.Container.GetInstance<ICommonInfo>().GetSectionList();
+                case 10:
+                    StoreOrSectionList = AppEx.Container.GetInstance<ICommonInfo>().GetSectionList();
                     break;
                 default:
-                    StoreOrSectionList=new List<KeyValue>();
+                    StoreOrSectionList = new List<KeyValue>();
                     break;
             }
-          
+
         }
 
         public DelegateCommand<int?> OrgTypeChangeCommand { get; set; }

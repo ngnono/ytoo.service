@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.AuthManage.ViewModels;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -71,7 +72,8 @@ namespace OPCApp.AuthManage
 
         public void UpdateOrg()
         {
-            var w = AppEx.Container.GetInstance<IViewModel>("OrgViewModel");
+            var w = AppEx.Container.GetInstance<IViewModel>("OrgViewModel") as OrgAddWindowViewMode;
+            w.GetOrgRefreshStoreOrSection(OPC_OrgInfo.OrgType);
             w.Model = OPC_OrgInfo;
             if (w.View.ShowDialog() == true)
             {
@@ -251,7 +253,7 @@ namespace OPCApp.AuthManage
         {
             get
             {
-                return new ObservableCollection<NodeViewModel>(children);
+                return children;
             }
         }
 

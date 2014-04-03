@@ -53,7 +53,7 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                var oo = new { userId = org.Id };
+                var oo = new { orgInfoId = org.Id };
                 bool bFalg = RestClient.Put("org/deleteorg", org.Id);
                 return new ResultMsg {IsSuccess = bFalg, Msg = "删除错误"};
             }
