@@ -202,10 +202,10 @@ namespace OPCApp.TransManage.ViewModels
         {
             string shippingfilter =
                 string.Format(
-                    "OrderNo={0}&ExpressNo={1}&StartGoodsOutDate={2}&EndGoodsOutDate={3}&OutGoodsCode={4}&SectionId={5}&ShippingStatus={6}&CustomerPhone={7}&BrandId={8}",
+                    "OrderNo={0}&ExpressNo={1}&StartGoodsOutDate={2}&EndGoodsOutDate={3}&OutGoodsCode={4}&SectionId={5}&ShippingStatus={6}&CustomerPhone={7}&BrandId={8}&pageIndex={9}&pageSize={10}",
                     ShippingGet.OrderNo, ShippingGet.ExpressNo, ShippingGet.StartGoodsOutDate.ToShortDateString(),
                     ShippingGet.EndGoodsOutDate.ToShortDateString(), ShippingGet.OutGoodsCode, string.IsNullOrEmpty(ShippingGet.SectionId) ? "-1" : ShippingGet.SectionId,
-                    ShippingGet.ShippingStatus, ShippingGet.CustomerPhone, string.IsNullOrEmpty(ShippingGet.BrandId) ? "-1" : ShippingGet.BrandId);
+                    string.IsNullOrEmpty(ShippingGet.ShippingStatus) ? "-1" : ShippingGet.ShippingStatus, ShippingGet.CustomerPhone, string.IsNullOrEmpty(ShippingGet.BrandId) ? "-1" : ShippingGet.BrandId, 1, 100);
 
             ShippingList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetShipping(shippingfilter).Result;
         }
