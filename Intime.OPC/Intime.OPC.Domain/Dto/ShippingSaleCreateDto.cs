@@ -20,6 +20,7 @@ namespace Intime.OPC.Domain.Dto
         public int ShipViaID { get; set; }
 
         public string ShipViaName { get; set; }
+        public string OrderNo { get; set; }
 
         public IList<string> SaleOrderIDs { get; set; }
 

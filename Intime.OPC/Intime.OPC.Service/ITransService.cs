@@ -58,7 +58,23 @@ namespace Intime.OPC.Service
         /// <returns>IList{ShippingSaleDto}.</returns>
         PageResult<ShippingSaleDto> GetShippingSale(string shippingCode, System.DateTime startTime, System.DateTime endTime,int pageIndex,int pageSize=20);
 
+        /// <summary>
+        /// 通过快递单号 获得销售单
+        /// </summary>
+        /// <param name="shippingSaleNo">The shipping sale no.</param>
+        /// <returns>IList{SaleDto}.</returns>
         IList<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo);
+        /// <summary>
+        /// Gets the sale order pickup.
+        /// </summary>
+        /// <param name="orderNo">The order no.</param>
+        /// <param name="saleOrderNo">The sale order no.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="userid">The userid.</param>
+        /// <param name="pageIndex">Index of the page.</param>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <returns>PageResult{SaleDto}.</returns>
         PageResult<SaleDto> GetSaleOrderPickup(string orderNo, string saleOrderNo, DateTime startDate, DateTime endDate, int userid, int pageIndex, int pageSize);
 
         /// <summary>

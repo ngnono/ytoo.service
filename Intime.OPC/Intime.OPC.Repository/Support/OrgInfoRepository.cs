@@ -13,6 +13,12 @@ namespace Intime.OPC.Repository.Support
            return  Select(t => t.OrgID.StartsWith(orgid) && t.OrgType == orgtype);
         }
 
+        public override bool Create(OPC_OrgInfo entity)
+        {
+            entity.IsDel = false;
+            return base.Create(entity);
+        }
+
         public PageResult<OPC_OrgInfo> GetAll(int pageIndex, int pageSize)
         {
             return Select2<OPC_OrgInfo, string>(t => t.IsDel == false, o => o.OrgID, true, pageIndex, pageSize);
@@ -37,7 +43,7 @@ namespace Intime.OPC.Repository.Support
                         int d = int.Parse(e.OrgID);
                         orgInfo.OrgID = (d + 1).ToString();
                     }
-
+                    orgInfo.IsDel = false;
                     var a=  db.OrgInfos.Add(orgInfo);
                     db.SaveChanges();
                     return a;

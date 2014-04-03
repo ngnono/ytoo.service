@@ -111,7 +111,7 @@ namespace Intime.OPC.Repository
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        PageResult<OPC_Sale> GetPrintInvoice(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize,params int[] sectionIds);
+        PageResult<OPC_Sale> GetPrintInvoice(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize, params int[] sectionIds);
 
         /// <summary>
         ///     获得 物流入库 的数据

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -10,9 +11,19 @@ namespace Intime.OPC.Repository.Support
 {
     public class ShippingSaleRepository : BaseRepository<OPC_ShippingSale>, IShippingSaleRepository
     {
-        public PageResult<OPC_ShippingSale> GetBySaleOrderNo(string saleNo, int pageIndex, int pageSize = 20)
+        public OPC_ShippingSale GetBySaleOrderNo(string saleOrderNo)
         {
-            return Select(t => t.SaleOrderNo == saleNo,t=>t.UpdateDate,false, pageIndex,pageSize);
+
+            using (var db = new YintaiHZhouContext())
+            {
+                var sale = db.OPC_Sale.FirstOrDefault(t => t.SaleOrderNo == saleOrderNo);
+                if (sale==null)
+                {
+                    throw new SaleOrderNotExistsException(saleOrderNo);
+                }
+                return db.ShippingSales.FirstOrDefault(t => t.ShippingCode == sale.ShippingCode);
+            }
+           
         }
 
         public PageResult<OPC_ShippingSale> GetByShippingCode(string shippingCode, int pageIndex, int pageSize = 20)
@@ -38,10 +49,7 @@ namespace Intime.OPC.Repository.Support
         {
             Expression<Func<OPC_ShippingSale, bool>> filterExpression =
                 t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate && t.ShippingStatus == shippingStatus;
-            if (string.IsNullOrWhiteSpace(saleOrderNo))
-            {
-                filterExpression = filterExpression.And(t => t.SaleOrderNo.Contains( saleOrderNo));
-            }
+           
 
             if (string.IsNullOrWhiteSpace(expressNo))
             {
@@ -59,23 +67,37 @@ namespace Intime.OPC.Repository.Support
 
         public PageResult<OPC_ShippingSale> GetShippingSale(string saleOrderNo, string expressNo, DateTime startGoodsOutDate, DateTime endGoodsOutDate, string outGoodsCode, int sectionId, int shippingStatus, string customerPhone, int brandId, int pageIndex, int pageSize)
         {
-            Expression<Func<OPC_ShippingSale, bool>> filterExpression =
-               t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate && t.ShippingStatus == shippingStatus;
-            if (string.IsNullOrWhiteSpace(saleOrderNo))
-            {
-                filterExpression = filterExpression.And(t => t.SaleOrderNo.Contains(saleOrderNo));
-            }
+            //Expression<Func<OPC_ShippingSale, bool>> filterExpression =
+            //   t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate ;
+            ////todo 增加订单查询条件
+            //if (shippingStatus>-1)
+            //{
+            //    filterExpression = filterExpression.And(t => t.ShippingStatus == shippingStatus);
+            //}
 
-            if (string.IsNullOrWhiteSpace(expressNo))
-            {
-                filterExpression = filterExpression.And(t => t.ShippingCode.Contains(expressNo));
-            }
+            //if (!string.IsNullOrWhiteSpace(expressNo))
+            //{
+            //    filterExpression = filterExpression.And(t => t.ShippingCode.Contains(expressNo));
+            //}
 
-            if (sectionId > 0)
+           
+            //return Select(filterExpression, t => t.CreateDate, false, pageIndex, pageSize);
+
+            using (var db = new YintaiHZhouContext())
             {
-                //filterExpression = filterExpression.And(t => t(expressNo));
+                var query = db.ShippingSales.Where(t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate);
+                if (shippingStatus > -1)
+                {
+                    query = query.Where(t => t.ShippingStatus == shippingStatus);
+                }
+
+                if (!string.IsNullOrWhiteSpace(expressNo))
+                {
+                    query = query.Where(t => t.ShippingCode.Contains(expressNo));
+                }
+                query = query.OrderBy(t => t.CreateDate);
+                return query.ToPageResult(pageIndex, pageSize);
             }
-            return Select(filterExpression, t => t.CreateDate, false, pageIndex, pageSize);
         }
     }
 }

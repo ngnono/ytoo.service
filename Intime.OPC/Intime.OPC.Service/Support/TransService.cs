@@ -66,7 +66,7 @@ namespace Intime.OPC.Service.Support
 
         public ShippingSaleDto GetShippingSaleBySaleNo(string saleNo)
         {
-            var entity = _shippingSaleRepository.GetBySaleOrderNo(saleNo,0,100).Result.FirstOrDefault();
+            var entity = _shippingSaleRepository.GetBySaleOrderNo(saleNo);
             if (entity==null)
             {
                 throw new ShippingSaleNotExistsException(saleNo);
@@ -95,7 +95,8 @@ namespace Intime.OPC.Service.Support
                 sale.CreateUser = userId;
                 sale.UpdateDate = dt;
                 sale.UpdateUser = userId;
-                sale.SaleOrderNo = saleID;
+                sale.OrderNo = shippingSaleDto.OrderNo;
+                
                 sale.ShipViaId = shippingSaleDto.ShipViaID;
                 sale.ShippingCode = shippingSaleDto.ShippingCode;
                 sale.ShippingFee = (decimal) (shippingSaleDto.ShippingFee);
@@ -104,9 +105,9 @@ namespace Intime.OPC.Service.Support
                 
 
                 //验证是否已经生成过发货单
-                var lst = _shippingSaleRepository.GetBySaleOrderNo(saleID,1,1);
+                var lst = _shippingSaleRepository.GetBySaleOrderNo(saleID);
 
-                if (lst.TotalCount > 0)
+                if (lst==null)
                 {
                     throw new ShippingSaleExistsException(shippingSaleDto.ShippingCode);
                 }
@@ -141,7 +142,8 @@ namespace Intime.OPC.Service.Support
             {
                 throw new ShippingSaleNotExistsException(shippingSaleNo);
             }
-            IList<OPC_Sale> lstSales= lst.Result.Select(opcShippingSale => _saleRepository.GetBySaleNo(opcShippingSale.SaleOrderNo)).ToList();
+            //todo 修改销售单查询
+            IList<OPC_Sale> lstSales= new List<OPC_Sale>();// lst.Result.Select(opcShippingSale => _saleRepository.GetBySaleNo(opcShippingSale.SaleOrderNo)).ToList();
             
 
             var lst2= Mapper.Map<OPC_Sale, SaleDto>(lstSales);
@@ -187,7 +189,8 @@ namespace Intime.OPC.Service.Support
             {
                 throw new ShippingSaleNotExistsException(shippingSaleNo);
             }
-            IList<OPC_Sale> lstSales = lst.Result.Select(opcShippingSale => _saleRepository.GetBySaleNo(opcShippingSale.SaleOrderNo)).ToList();
+            //todo 增加销售单
+            IList<OPC_Sale> lstSales =new List<OPC_Sale>(); // lst.Result.Select(opcShippingSale => _saleRepository.GetBySaleNo(opcShippingSale.SaleOrderNo)).ToList();
 
 
             return  Mapper.Map<OPC_Sale, SaleDto>(lstSales);

@@ -40,40 +40,15 @@ namespace Intime.OPC.WebApi.Controllers
             _transService = transService;
         }
 
-        ///// <summary>
-        /////     Selects the sales.
-        ///// </summary>
-        ///// <param name="startDate">The start date.</param>
-        ///// <param name="endDate">The end date.</param>
-        ///// <param name="orderNo">The order no.</param>
-        ///// <param name="saleOrderNo">The sale order no.</param>
-        ///// <returns>IHttpActionResult.</returns>
-        //[HttpGet]
-        //public IHttpActionResult SelectSales(string startDate, string endDate, string orderNo, string saleOrderNo)
-        //{
-        //    return Ok(_transService.Select(startDate, endDate, orderNo, saleOrderNo));
-        //}
-
-        ///// <summary>
-        /////   查询销售单详情
-        ///// </summary>
-        ///// <param name="ids">The ids.</param>
-        ///// <returns>IHttpActionResult.</returns>
-        //[HttpGet]
-        //public IHttpActionResult SelectSaleDetail(IEnumerable<string> ids)
-        //{
-        //    return Ok(_transService.SelectSaleDetail(ids));
-        //}
-
         /// <summary>
         ///     查询快递单信息
         /// </summary>
         /// <param name="saleNo">销售单编号</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
-        public IHttpActionResult GetShippingSaleByOrderNo(string saleNo)
+        [HttpGet] //ddd
+        public IHttpActionResult GetShippingSaleBySaleOrderNo(string saleOrderNo)
         {
-            return DoFunction(() => { return _transService.GetShippingSaleBySaleNo(saleNo); }, "查询快递单信息失败");
+            return DoFunction(() => { return _transService.GetShippingSaleBySaleNo(saleOrderNo); }, "查询快递单信息失败");
         }
 
         /// <summary>
@@ -87,11 +62,21 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() => { return _transService.GetSaleByShippingSaleNo(shippingSaleNo); }, "查询销售单信息失败");
         }
 
+        //ddd
+        /// <summary>
+        /// Gets the shipping sale.
+        /// </summary>
+        /// <param name="orderNo">订单号</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="pageIndex">Index of the page.</param>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetShippingSale(string shippingCode, DateTime startDate, DateTime endDate, int pageIndex, int pageSize = 20)
+        public IHttpActionResult GetShippingSale(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize = 20)
         {
             
-            return DoFunction(() => { return _transService.GetShippingSale(shippingCode, startDate, endDate,pageIndex,pageSize); },
+            return DoFunction(() => { return _transService.GetShippingSale(orderNo, startDate, endDate, pageIndex, pageSize); },
                 "查询快递单信息失败");
         }
 
@@ -116,7 +101,7 @@ namespace Intime.OPC.WebApi.Controllers
             DateTime startGoodsOutDate,
             DateTime endGoodsOutDate,
             string outGoodsCode,
-            int sectionId,
+            int storeId,
             int shippingStatus,
             string customerPhone,
             int brandId,
@@ -128,7 +113,7 @@ namespace Intime.OPC.WebApi.Controllers
                 int userId = GetCurrentUserID();
 
                 var lst = _transService.GetShippingSale(orderNo, expressNo, startGoodsOutDate, endGoodsOutDate,
-                    outGoodsCode, sectionId, shippingStatus, customerPhone, brandId, pageIndex, pageSize);
+                    outGoodsCode, storeId, shippingStatus, customerPhone, brandId, pageIndex, pageSize);
 
                 return Ok(lst);
             }
@@ -143,7 +128,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="comment">The comment.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpPost]
+        [HttpPost] //dddd
         public IHttpActionResult CreateShippingSale([FromBody]ShippingSaleCreateDto shippingSaleDto)
         {
             return base.DoFunction(() =>

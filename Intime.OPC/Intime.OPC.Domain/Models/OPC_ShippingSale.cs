@@ -12,9 +12,14 @@ namespace Intime.OPC.Domain.Models
         public OPC_ShippingSale()
         {
         }
-
+        public string OrderNo { get; set; }
         public int Id { get; set; }
-        public string SaleOrderNo { get; set; }
+        public int? StoreId { get; set; }
+        public int? BrandId { get; set; }
+        public string ShippingZipCode { get; set; }
+        public string ShippingAddress { get; set; }
+        public string ShippingContactPerson { get; set; }
+        public string ShippingContactPhone { get; set; }
         public int? ShipViaId { get; set; }
         public string ShipViaName { get; set; }
         public string ShippingCode { get; set; }
