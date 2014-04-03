@@ -13,6 +13,7 @@ namespace Intime.OPC.Domain.Dto
         public string ShippingCode { get; set; }
         public decimal ShippingFee { get; set; }
         public int? ShippingStatus { get; set; }
+        public string ShippingStatusName { get; set; }
         public string ShippingRemark { get; set; }
         public DateTime SellDate { get; set; }
         public bool? IfTrans { get; set; }

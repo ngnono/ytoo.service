@@ -191,6 +191,12 @@ namespace Intime.OPC.Repository.Support
             return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.Shipped, pageIndex, pageSize, sectionIds);
         }
 
+        public IList<OPC_Sale> GetByShippingCode(string shippingCode)
+        {
+            int va = (int) (EnumSaleOrderStatus.Void);
+            return Select(t => t.ShippingCode == shippingCode && t.Status >va);
+        }
+
         #endregion
 
         /// <summary>
@@ -220,7 +226,7 @@ namespace Intime.OPC.Repository.Support
                 {
                     query=query.Where(t => t.SaleOrderNo.Contains(saleId));
                 }
-                query.OrderByDescending(t => t.CreatedDate);
+                query=  query.OrderByDescending(t => t.CreatedDate);
                 return query.ToPageResult(pageIndex, pageSize);
             }
         }

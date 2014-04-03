@@ -20,12 +20,14 @@ namespace Intime.OPC.Service.Support
         private readonly IShippingSaleCommentRepository _shippingSaleCommentRepository;
         private readonly IShippingSaleRepository _shippingSaleRepository;
         private readonly IAccountService  _accountService;
+        private readonly IOrderRepository _orderRepository;
 
         public TransService(ITransRepository transRepository, 
             IOrderRemarkRepository orderRemarkRepository,
             ISaleRepository saleRepository,
             IShippingSaleRepository shippingSaleRepository,
             IAccountService accountService,
+            IOrderRepository  orderRepository,
             IShippingSaleCommentRepository shippingSaleCommentRepository)
         {
             _transRepository = transRepository;
@@ -34,6 +36,7 @@ namespace Intime.OPC.Service.Support
             _saleRepository = saleRepository;
             _shippingSaleCommentRepository = shippingSaleCommentRepository;
             _accountService = accountService;
+            _orderRepository = orderRepository;
         }
 
         #region ITransService Members
@@ -88,6 +91,7 @@ namespace Intime.OPC.Service.Support
         public bool CreateShippingSale(int userId, ShippingSaleCreateDto shippingSaleDto)
         {
             var dt = DateTime.Now;
+            var order = _orderRepository.GetOrderByOrderNo(shippingSaleDto.OrderNo);
             foreach (var saleID in shippingSaleDto.SaleOrderIDs)
             {
                 var sale = new OPC_ShippingSale();
@@ -102,12 +106,17 @@ namespace Intime.OPC.Service.Support
                 sale.ShippingFee = (decimal) (shippingSaleDto.ShippingFee);
                 sale.ShippingStatus = EnumSaleOrderStatus.PrintInvoice.AsID();
                 sale.ShipViaName = shippingSaleDto.ShipViaName;
+                sale.BrandId = order.BrandId;
+                sale.ShippingAddress = order.ShippingAddress;
+                sale.ShippingContactPerson = order.ShippingContactPerson;
+                sale.ShippingContactPhone = order.ShippingContactPhone;
+                sale.StoreId = order.StoreId;
                 
 
                 //验证是否已经生成过发货单
                 var lst = _shippingSaleRepository.GetBySaleOrderNo(saleID);
 
-                if (lst==null)
+                if (lst!=null)
                 {
                     throw new ShippingSaleExistsException(shippingSaleDto.ShippingCode);
                 }
@@ -118,6 +127,10 @@ namespace Intime.OPC.Service.Support
                     throw new ShippingSaleExistsException(shippingSaleDto.ShippingCode);
                 }
 
+               var pSale=  _saleRepository.GetBySaleNo(saleID);
+                pSale.ShippingCode = sale.ShippingCode;
+                pSale.ShippingStatus = sale.ShippingStatus;
+                _saleRepository.Update(pSale);
 
                 var bl = _shippingSaleRepository.Create(sale);
                // _saleRepository.UpdateSatus(saleID, EnumSaleOrderStatus.PrintExpress, userId);
@@ -189,9 +202,8 @@ namespace Intime.OPC.Service.Support
             {
                 throw new ShippingSaleNotExistsException(shippingSaleNo);
             }
-            //todo 增加销售单
-            IList<OPC_Sale> lstSales =new List<OPC_Sale>(); // lst.Result.Select(opcShippingSale => _saleRepository.GetBySaleNo(opcShippingSale.SaleOrderNo)).ToList();
 
+            IList<OPC_Sale> lstSales = _saleRepository.GetByShippingCode(shippingSaleNo); // lst.Result.Select(opcShippingSale => _saleRepository.GetBySaleNo(opcShippingSale.SaleOrderNo)).ToList();
 
             return  Mapper.Map<OPC_Sale, SaleDto>(lstSales);
            

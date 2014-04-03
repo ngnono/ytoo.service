@@ -224,45 +224,52 @@ namespace Intime.OPC.WebApi.Controllers
             {
                 return BadRequest("发货单不存在");
             }
-            //IEnumerable<string> saleOrderNos = lst.Select(t => t.SaleOrderNo).Distinct();
-            //int userId = base.GetCurrentUserID();
-            //foreach (string orderNo in saleOrderNos)
-            //{
-            //    try
-            //    {
-            //        _saleService.PrintExpress(orderNo, userId);
-            //        _shippingSaleService.PrintExpress(orderNo, userId);
-            //    }
-            //    catch (SaleOrderNotExistsException ex)
-            //    {
-            //        // _logger.WriteError(ex.Message);
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        // _logger.WriteError(e.Message);
-            //        return InternalServerError();
-            //    }
-            //}
+            var sd = lst.FirstOrDefault();
+            var lstSale = _saleService.GetByShippingCode(shippingCode);
+            
+            int userId = base.GetCurrentUserID();
+            foreach (var sale in lstSale)
+            {
+                try
+                {
+                    _saleService.PrintExpress(sale.SaleOrderNo, userId);
+                    _shippingSaleService.PrintExpress(sale.SaleOrderNo, userId);
+                }
+                catch (SaleOrderNotExistsException ex)
+                {
+                    // _logger.WriteError(ex.Message);
+                }
+                catch (Exception e)
+                {
+                    // _logger.WriteError(e.Message);
+                    return InternalServerError();
+                }
+            }
             return Ok();
         }
 
         /// <summary>
-        ///     已发货
+        /// 已发货
         /// </summary>
-        /// <param name="saleOrderNos">The sale order nos.</param>
-        /// <param name="userId">The user identifier.</param>
+        /// <param name="shippingCodes">发货单编码</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPut]
-        public IHttpActionResult SetSaleOrderShipped([FromBody]IEnumerable<string> saleOrderNos)
+        public IHttpActionResult SetSaleOrderShipped([FromBody]IEnumerable<string> shippingCodes)
         {
             return base.DoAction(() =>
             {
                 int userId = GetCurrentUserID();
-                foreach (string saleOrderNo in saleOrderNos)
+                foreach (var shippingCode in shippingCodes)
                 {
-                    _saleService.Shipped(saleOrderNo, userId);
-                    _shippingSaleService.Shipped(saleOrderNo,userId);
+                    var lstSales = _saleService.GetByShippingCode(shippingCode);
+                    foreach (var sale in lstSales)
+                    {
+                        _saleService.Shipped(sale.SaleOrderNo, userId);
+                        _shippingSaleService.Shipped(sale.SaleOrderNo, userId);
+                    }
                 }
+                
+                
             }, "设置已发货状态失败！");
         }
 
