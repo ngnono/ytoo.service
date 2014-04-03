@@ -19,28 +19,13 @@ namespace com.intime.fashion.common
             get {
                 if (WxToken == null ||
                     WxToken.IsExpired)
-                    RenewToken();
+                {
+                    WxToken = new AccessToken(AccessTokenType.XihuanYintai).Renew();
+                };
                 return WxToken;
             }
         }
 
-        public static void RenewToken()
-        {
-            var client = new RestClient(WeigouConfig.BASE_URL); 
-            var request = new RestRequest("app/getAppInfoByAppId.xhtml", Method.GET);
-            request.AddParameter("appID", WxPayConfig.APP_ID);
-            request.AddParameter("appKey", WxPayConfig.APP_SECRET);
-            var response = client.Execute(request).Content;
-            var resObject = JsonConvert.DeserializeObject<dynamic>(response).getAppInfoByAppId;
-            if (resObject.errorCode != 0)
-            {
-                CommonUtil.Log.Info(resObject.errorMessage);
-                return;
-            }
-            WxToken = new AccessToken() {
-                access_token = resObject.appInfo.accessToken,
-                expires_in = resObject.appInfo.expireTime
-            };
-        }
+       
     }
 }

@@ -114,6 +114,7 @@
     <Compile Include="Wxpay\WxAppPayToken.cs" />
     <Compile Include="Wxpay\WxAppPayTokenResponse.cs" />
     <Compile Include="Wxpay\WxHtmlPayUrl.cs" />
+    <Compile Include="Wxpay\WxMenu.cs" />
     <Compile Include="Wxpay\WxNativeUrl.cs" />
     <Compile Include="Wxpay\WxNotify.cs" />
     <Compile Include="Wxpay\WxPackage.cs" />

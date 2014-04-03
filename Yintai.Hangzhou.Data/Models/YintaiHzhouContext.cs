@@ -244,6 +244,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<IMS_SalesCodeEntity> IMS_SalesCode { get; set; }
         public DbSet<IMS_SectionBrandEntity> IMS_SectionBrand { get; set; }
         public DbSet<IMS_SectionOperatorEntity> IMS_SectionOperator { get; set; }
+        public DbSet<ProductCode2StoreCodeEntity> ProductCode2StoreCode { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -370,6 +371,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new IMS_SalesCodeEntityMap());
             modelBuilder.Configurations.Add(new IMS_SectionBrandEntityMap());
             modelBuilder.Configurations.Add(new IMS_SectionOperatorEntityMap());
+            modelBuilder.Configurations.Add(new ProductCode2StoreCodeEntityMap());
 
         }
 

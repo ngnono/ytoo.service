@@ -19,6 +19,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
+            context.MapRoute("weixin_complain",
+                    "ims/complain",
+                    new { controller = "WeiXin", action = "Complain", method = UrlParameter.Optional },
+                    new[] { "Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers" }
+                    );
+            context.MapRoute("weixin_monitor",
+                    "ims/monitor",
+                    new { controller = "WeiXin", action = "Monitor", method = UrlParameter.Optional },
+                    new[] { "Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers" }
+                    );
             context.MapRoute(
                 "Ims_default",
                 "ims/{controller}/{action}/{method}",
