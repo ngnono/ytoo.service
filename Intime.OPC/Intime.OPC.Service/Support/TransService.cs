@@ -162,11 +162,16 @@ namespace Intime.OPC.Service.Support
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
-        public PageResult<SaleDto> GetShippingSale(string saleOrderNo, string expressNo, DateTime startGoodsOutDate, DateTime endGoodsOutDate,
+        public PageResult<ShippingSaleDto> GetShippingSale(string saleOrderNo, string expressNo, DateTime startGoodsOutDate, DateTime endGoodsOutDate,
             string outGoodsCode, int sectionId, int shippingStatus, string customerPhone, int brandId, int pageIndex,
             int pageSize)
         {
-            return null;
+            startGoodsOutDate = startGoodsOutDate.Date;
+            endGoodsOutDate = endGoodsOutDate.Date.AddDays(1);
+            var lst=  _shippingSaleRepository.GetShippingSale(saleOrderNo, expressNo, startGoodsOutDate, endGoodsOutDate,
+                outGoodsCode, sectionId, shippingStatus, customerPhone, brandId, pageIndex, pageSize);
+
+            return  Mapper.Map<OPC_ShippingSale, ShippingSaleDto>(lst);
         }
 
         public IList<ShippingSaleDto> GetShippingSale(string shippingCode, DateTime startTime, DateTime endTime)
