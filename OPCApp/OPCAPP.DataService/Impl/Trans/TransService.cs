@@ -68,7 +68,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                var order = RestClient.GetSingle<Order>("order/GetOrderByOderNo", string.Format("orderNo={0}", orderNo));
+                var order = RestClient.GetSingle<Order>("order/GetOrderByOderNo", string.Format("OrderNo={0}", orderNo));
                 return new PageResult<Order>(new List<Order> {order}, 100);
             }
             catch (Exception ex)
