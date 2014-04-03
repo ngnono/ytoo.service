@@ -112,7 +112,7 @@ namespace OPCApp.TransManage.ViewModels
                 {
                     return;
                 }
-                string orderNo = string.Format("orderID={0}", SelectOrder.OrderNo);
+                string orderNo = string.Format("orderID={0}&pageIndex={1}&pageSize={2}", SelectOrder.OrderNo,1,30);
                 //这个工作状态
                 SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderNo).Result;
                 if (SaleList != null && SaleList.Count() > 0)
