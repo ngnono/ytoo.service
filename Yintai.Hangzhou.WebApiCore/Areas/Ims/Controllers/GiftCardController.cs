@@ -54,24 +54,24 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult IsBind(string phone, int authuid)
         {
             var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone);
-            if (cardAccount != null)
-            {
-                return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = true });
-            }
-            var is_binded = this.IsPhoneBinded(phone);
-            if (is_binded)
-            {
-                var user = _customerRepo.GetItem(authuid);
-                _userRepo.Insert(new IMS_GiftCardUserEntity()
-                {
-                    UserId = authuid,
-                    GiftCardAccount = phone,
-                    CreateDate = DateTime.Now,
-                    Name = user.Nickname,
-                    CreateUser = authuid
-                });
-            }
-            return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded });
+            //if (cardAccount != null)
+            //{
+            //    return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = true });
+            //}
+            //var is_binded = this.IsPhoneBinded(phone);
+            //if (is_binded)
+            //{
+            //    var user = _customerRepo.GetItem(authuid);
+            //    _userRepo.Insert(new IMS_GiftCardUserEntity()
+            //    {
+            //        UserId = authuid,
+            //        GiftCardAccount = phone,
+            //        CreateDate = DateTime.Now,
+            //        Name = user.Nickname,
+            //        CreateUser = authuid
+            //    });
+            //}
+            return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = cardAccount != null });
         }
 
         [RestfulAuthorize]
@@ -82,7 +82,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone || x.UserId == authuid);
                 if (cardAccount != null)
                 {
-                    if (cardAccount.UserId == authuid && cardAccount.UserId == authuid)
+                    if (cardAccount.UserId == authuid && cardAccount.GiftCardAccount == phone)
                     {
                         return this.RenderError(x => x.Message = "您已绑定此手机号!");
                     }
@@ -102,7 +102,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             amount = balance,
                             phone
                         });
-
                     }
                     catch (GetUserBalanceExcepiton ex)
                     {
@@ -110,7 +109,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         return this.RenderError(r => r.Message = ex.Message);
                     }
                 }
-                return this.RenderError(r => r.Message = "手机号未绑定，请先绑定手机号.");
+                return this.RenderError(r => r.Message = "绑定失败 ，没有团购账户信息.");
             }
             catch (Exception ex)
             {
@@ -151,10 +150,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult Create(string phone, string pwd, string charge_no, string identity_no, int authuid)
         {
-            var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone && x.UserId == authuid);
-            if (cardAccount == null)
+            //var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone && x.UserId == authuid);
+            //if (cardAccount != null)
+            //{
+            //    return this.RenderError(r => r.Message = "用户未绑定手机，请先绑定手机!");
+            //}
+
+            if (IsPhoneBinded(phone))
             {
-                return this.RenderError(r => r.Message = "用户未绑定手机，请先绑定手机!");
+                return this.RenderError(r => r.Message = "账号已创建，不能重复创建，您可以直接充值");
             }
 
             IMS_GiftCardOrderEntity giftCardOrder = _orderRepo.Find(t => t.No == charge_no);
@@ -215,6 +219,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     giftCardOrder.Status = (int)GiftCardOrderStatus.Recharge;
                     giftCardOrder.OwnerUserId = authuid;
                     _orderRepo.Update(giftCardOrder);
+
+                    var user = _customerRepo.Find(x => x.Id == authuid);
+
+                    _userRepo.Insert(new IMS_GiftCardUserEntity()
+                    {
+                        UserId = authuid,
+                        CreateDate = DateTime.Now,
+                        GiftCardAccount = phone,
+                        Name = user.Nickname
+                    });
                     _rechargeRepo.Insert(new IMS_GiftCardRechargeEntity()
                     {
                         OrderNo = giftCardOrder.No,
