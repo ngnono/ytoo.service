@@ -21,11 +21,11 @@ namespace OPCApp.AuthManage.ViewModels
         {
             Model = new OPC_OrgInfo();
             OrgTypeList = new List<KeyValue>() { new KeyValue(0, "组织机构"), new KeyValue(5, "门店"), new KeyValue(10, "专柜") };
-            OrgTypeChangeCommand = new DelegateCommand<int>(OrgTypeChange);
+            OrgTypeChangeCommand = new DelegateCommand<int?>(OrgTypeChange);
            
         }
 
-        public void OrgTypeChange(int orgType)
+        public void OrgTypeChange(int? orgType)
         {
             switch (orgType)
             {
@@ -42,9 +42,15 @@ namespace OPCApp.AuthManage.ViewModels
           
         }
 
-        public DelegateCommand<int> OrgTypeChangeCommand { get; set; }
+        public DelegateCommand<int?> OrgTypeChangeCommand { get; set; }
         public List<KeyValue> OrgTypeList { get; set; }
-        public IList<KeyValue> StoreOrSectionList { get; set; }
+        private IList<KeyValue> _storeOrSectionList;
+        public IList<KeyValue> StoreOrSectionList
+        {
+            get { return _storeOrSectionList; }
+            set { SetProperty(ref _storeOrSectionList, value); }
+        }
+
 
         protected override IBaseDataService<OPC_OrgInfo> GetDataService()
         {
