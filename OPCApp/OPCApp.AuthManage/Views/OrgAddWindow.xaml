@@ -71,7 +71,7 @@
                 <Grid Grid.Row="3" Grid.Column="0" Background="LightGray" Margin="15">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Width="90" Text="关联门店或专柜" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        <ComboBox Foreground="Blue" Width="300" Height="25" ItemsSource="{Binding StoreOrSectionList}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding Model.OrgType}" />
+                        <ComboBox Foreground="Blue" Width="300" Height="25" ItemsSource="{Binding StoreOrSectionList}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding Model.StoreOrSectionID}" />
                     </StackPanel>
                     <TextBox Foreground="Blue" Visibility="Hidden" Width="1" IsEnabled="False" Height="25" Text="{Binding Model.ParentID}" />
                 </Grid>

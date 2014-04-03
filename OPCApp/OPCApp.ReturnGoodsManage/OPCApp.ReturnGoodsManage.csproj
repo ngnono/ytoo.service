@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\OPCApp_Main\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -103,6 +103,9 @@
     <Compile Include="View\PackageInfoView.xaml.cs">
       <DependentUpon>PackageInfoView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ReturnPackageMainManageView.xaml.cs">
+      <DependentUpon>ReturnPackageMainManageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ReturnAcceptCashierView.xaml.cs">
       <DependentUpon>ReturnAcceptCashierView.xaml</DependentUpon>
     </Compile>
@@ -132,13 +135,16 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="ViewModel\" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="View\PackageInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReturnPackageMainManageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\ReturnAcceptCashierView.xaml">
       <SubType>Designer</SubType>
@@ -164,6 +170,59 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\上传.png" />
+    <Resource Include="Image\保存.png" />
+    <Resource Include="Image\修改.png" />
+    <Resource Include="Image\删除.png" />
+    <Resource Include="Image\到达指派.png" />
+    <Resource Include="Image\到达确认.png" />
+    <Resource Include="Image\发布.png" />
+    <Resource Include="Image\取消.png" />
+    <Resource Include="Image\受理.png" />
+    <Resource Include="Image\变更单位.png" />
+    <Resource Include="Image\回单存档.png" />
+    <Resource Include="Image\回单派发.png" />
+    <Resource Include="Image\回单确认.png" />
+    <Resource Include="Image\回单返回.png" />
+    <Resource Include="Image\处理.png" />
+    <Resource Include="Image\审批.png" />
+    <Resource Include="Image\导出.png" />
+    <Resource Include="Image\帮助.png" />
+    <Resource Include="Image\打印.png" />
+    <Resource Include="Image\拒签.png" />
+    <Resource Include="Image\挂失.png" />
+    <Resource Include="Image\指派.png" />
+    <Resource Include="Image\指派送货.png" />
+    <Resource Include="Image\收款确认.png" />
+    <Resource Include="Image\放款.png" />
+    <Resource Include="Image\放款复核.png" />
+    <Resource Include="Image\新增.png" />
+    <Resource Include="Image\明细.png" />
+    <Resource Include="Image\查看.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\查看回单标准.png" />
+    <Resource Include="Image\查询.png" />
+    <Resource Include="Image\申请审批.png" />
+    <Resource Include="Image\移动.png" />
+    <Resource Include="Image\立案.png" />
+    <Resource Include="Image\签单上传.png" />
+    <Resource Include="Image\签收.png" />
+    <Resource Include="Image\结案.png" />
+    <Resource Include="Image\统计.png" />
+    <Resource Include="Image\解挂.png" />
+    <Resource Include="Image\认领.png" />
+    <Resource Include="Image\退回.png" />
+    <Resource Include="Image\销款.png" />
+    <Resource Include="Image\验证.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

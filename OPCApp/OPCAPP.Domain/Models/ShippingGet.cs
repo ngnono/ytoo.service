@@ -15,7 +15,7 @@ namespace OPCApp.Domain.Models
         public DateTime StartGoodsOutDate { get; set; }
         public DateTime EndGoodsOutDate { get; set; }
         public string OutGoodsCode { get; set; }
-        public string SectionId { get; set; }
+        public string StoreId { get; set; }
         public string ShippingStatus { get; set; }
 
         public string CustomerPhone { get; set; }

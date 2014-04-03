@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -15,8 +16,15 @@ namespace OPCApp.AuthManage.ViewModels
             : base("UserView")
         {
             Model = new OPC_AuthUser();
+            OrgList = AppEx.Container.GetInstance<IOrgService>().Search();
         }
 
+        private IList<OPC_OrgInfo> _orgList;
+        public IList<OPC_OrgInfo> OrgList
+        {
+            get { return _orgList; }
+            set { SetProperty(ref _orgList, value); }
+        }
         protected override IBaseDataService<OPC_AuthUser> GetDataService()
         {
             return AppEx.Container.GetInstance<IAuthenticateService>();
