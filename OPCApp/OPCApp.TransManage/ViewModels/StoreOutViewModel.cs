@@ -88,15 +88,17 @@ namespace OPCApp.TransManage.ViewModels
 
         private void ShippSaleHandOver()
         {
-            if (ShipSaleList == null) return;
-            List<OPC_ShippingSale> shipSale = ShipSaleList.Where(e => e.IsSelected).ToList();
-            if (shipSale.Count == 0)
+            if (ShipSaleList == null || ShipSaleList.Count == 0) {
+                MessageBox.Show("请选择快递单", "提示");
+                return; 
+            }
+            var goodsOutCodes = ShipSaleList.Where(e => e.IsSelected).Select(e => e.GoodsOutCode).ToList();
+            if (goodsOutCodes.Count == 0)
             {
                 MessageBox.Show("请选择快递单", "提示");
                 return;
             }
-            List<string> shipNum = shipSale.Select(e => e.SaleOrderNo).ToList();
-            bool isSuccess = AppEx.Container.GetInstance<ITransService>().SetSaleOrderShipped(shipNum);
+            bool isSuccess = AppEx.Container.GetInstance<ITransService>().SetSaleOrderShipped(goodsOutCodes);
             if (isSuccess)
             {
                 MessageBox.Show("完成快递发货交接成功", "提示");
@@ -144,6 +146,7 @@ namespace OPCApp.TransManage.ViewModels
                 return;
             }
             shippingSaleCreateDto.SaleOrderIDs = sale.Select(e => e.SaleOrderNo).ToList();
+            shippingSaleCreateDto.OrderNo = sale[0].OrderNo;
             shippingSaleCreateDto.ShipViaID = ShipVia.Id;
             shippingSaleCreateDto.ShipViaName = ShipVia.Name;
             bool isSuccess = AppEx.Container.GetInstance<ITransService>().SaveShip(ShippingSaleCreateDto);
@@ -234,7 +237,7 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         //打印发货单
-        public void PrintInvoice()
+        public  void PrintInvoice()
         {
             if (SaleList == null || !SaleList.Any())
             {
@@ -248,7 +251,7 @@ namespace OPCApp.TransManage.ViewModels
             ClearList();
             Refresh();
         }
-
+        /*查询快递单*/
         public void PrintExpress()
         {
             if (ShipSaleSelected == null)
@@ -272,41 +275,43 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetShipSaleList()
         {
-            string filter = string.Format("startdate={0}&enddate={1}&shippingCode={2}",
+            string filter = string.Format("startdate={0}&enddate={1}&orderno={2}",
                 Invoice4Get.StartSellDate.ToShortDateString(),
                 Invoice4Get.EndSellDate.ToShortDateString(),
                 Invoice4Get.OrderNo);
             PageResult<OPC_ShippingSale> re = AppEx.Container.GetInstance<ITransService>().GetListShip(filter);
+            if (re==null||re.Result == null || re.Result.ToList().Count == 0) return;
             ShipSaleList = re.Result.ToList();
-            OrderList = new List<Order>();
-            SaleList = new List<OPC_Sale>();
-            InvoiceDetail4List = new List<OPC_SaleDetail>();
             if (ShipSaleList != null && ShipSaleList.Count>0)
             {
-                SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(ShipSaleList[0].GoodsOutCode);
-                if (SaleList != null && SaleList.Any())
-                {
-                    var sale = SaleList.FirstOrDefault();
-                    PageResult<Order> re1 = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
-                    OrderList = re1 == null ? new List<Order>() : re1.Result.ToList();
-                    InvoiceDetail4List =
-                    AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result.ToList();
-                }
+                SearchRaDoc(ShipSaleList[0]);
             }
         }
-
+        
+        /*查询快递单关联单据*/
+        public void SearchRaDoc(OPC_ShippingSale opcShippingSale) 
+        {
+            if (opcShippingSale == null) return;
+            SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(opcShippingSale.GoodsOutCode);
+            if (SaleList != null && SaleList.Any())
+            {
+                var sale = SaleList.FirstOrDefault();
+                PageResult<Order> re1 = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
+                OrderList = re1 == null ? new List<Order>() : re1.Result.ToList();
+                InvoiceDetail4List =
+                AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result.ToList();
+            }
+        }
         public void GetDownShip()
         {
             if (ShipSaleList == null) return;
             OPC_ShippingSale saleCur = ShipSaleList.FirstOrDefault(n => n.IsSelected);
             if (saleCur == null)
             {
-                SaleList = new List<OPC_Sale>();
-                InvoiceDetail4List = new List<OPC_SaleDetail>();
-                OrderList = new List<Order>();
+                this.ClearList();
                 return;
             }
-            SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(saleCur.GoodsOutCode);
+            this.SearchRaDoc(saleCur);
         }
     }
 }
