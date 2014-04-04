@@ -66,7 +66,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Background="LightGray" Width="50" Command="{Binding AddUserCommand}">
+                <Button Background="LightGray" Width="50" Command="{Binding AddCommand}">
                     <StackPanel>
                         <Image Source="/image/新增.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">增加</TextBlock>

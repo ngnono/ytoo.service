@@ -180,7 +180,7 @@ namespace OPCApp.AuthManage.ViewModels
             PrResult.Total = PrResultTemp.TotalCount;
         }
         /*重写 在选择组织结构 才能进行用户增加操作*/
-         protected virtual bool BeforeAdd(OPC_AuthUser t)
+         public override bool BeforeAdd(OPC_AuthUser t)
         {
             var curNode = GetOperationNode();
             if (curNode==null||curNode.OrgId==null)

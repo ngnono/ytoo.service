@@ -18,6 +18,8 @@ namespace OPCApp.Domain.Models
         [Required(ErrorMessage = "ÃÜÂë²»ÄÜÎª¿Õ£¡")]
         public string Password { get; set; }
 
+        public string DataAuthId { get; set; }
+
         public string Phone { get; set; }
         public bool? IsValid { get; set; }
         public string OrgId { get; set; }

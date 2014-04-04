@@ -15,12 +15,6 @@
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                <Button Background="LightGray" Width="50">
-                    <StackPanel>
-                        <Image Source="/image/变更单位.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">返回</TextBlock>
-                    </StackPanel>
-                </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding AuthorizationUserCommand}">
                     <StackPanel>
                         <Image Source="/image/导出.png" Stretch="None" />

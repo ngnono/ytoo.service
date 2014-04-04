@@ -128,7 +128,7 @@ namespace OPCApp.Infrastructure.Mvvm
             }
         }
 
-        protected virtual bool BeforeAdd(T t)
+        public virtual bool BeforeAdd(T t)
         {
             return true;
         }
