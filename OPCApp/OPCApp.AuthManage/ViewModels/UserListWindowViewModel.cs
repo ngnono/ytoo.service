@@ -201,7 +201,6 @@ namespace OPCApp.AuthManage.ViewModels
             SelectedFiledValue = "";
             SelectedFiled = "";
             SetStopUserCommand = new DelegateCommand(SetStopUser);
-            AddUserCommand = new DelegateCommand(AddUser);
             PageIndex = 1;
             PageSize = 10;
             PrResult = new PageResult();

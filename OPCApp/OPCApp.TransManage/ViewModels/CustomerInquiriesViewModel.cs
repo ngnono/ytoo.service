@@ -253,7 +253,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public IList<KeyValue> OrderStatusList { get; set; }
 
-        public IList<KeyValue<string>> PaymentTypeList { get; set; }
+        public IList<KeyValue> PaymentTypeList { get; set; }
 
         public IList<KeyValue> OutGoodsTypeList { get; set; }
 
