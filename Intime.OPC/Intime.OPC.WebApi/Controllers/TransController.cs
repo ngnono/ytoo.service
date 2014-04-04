@@ -31,13 +31,15 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         private readonly ITransService _transService;
 
+         IEnumService _enumService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="TransController" /> class.
         /// </summary>
         /// <param name="transService">The trans service.</param>
-        public TransController(ITransService transService)
+        public TransController(ITransService transService, IEnumService enumService)
         {
             _transService = transService;
+            _enumService = enumService;
         }
 
         /// <summary>
@@ -173,6 +175,11 @@ namespace Intime.OPC.WebApi.Controllers
 
         #endregion
 
+        [HttpGet]
+        public IHttpActionResult GetPayTypeEnums()
+        {
+            return DoFunction(() => { return _enumService.All("PayType"); }, "读取快递单备注失败！");
+        }
 
     }
 }

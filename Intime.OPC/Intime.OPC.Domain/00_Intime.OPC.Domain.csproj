@@ -53,6 +53,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\IEntity.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Models\Mapping\SectionMap.cs" />
     <Compile Include="Models\Mapping\ShipViaMap.cs" />
     <Compile Include="Models\Mapping\StoreMap.cs" />
+    <Compile Include="Dto\Enums.cs" />
     <Compile Include="Models\OPC_ShippingSale.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />

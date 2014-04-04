@@ -24,7 +24,7 @@ namespace Intime.OPC.WebApi.Controllers
             _accountService = accountService;
         }
 
-        [HttpPut]
+        [HttpPost]
         public IHttpActionResult AddUser([FromBody] OPC_AuthUser user)
             //public IHttpActionResult AddUser()
         {
