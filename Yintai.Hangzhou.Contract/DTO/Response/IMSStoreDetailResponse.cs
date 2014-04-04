@@ -28,7 +28,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
                 return string.Empty;
             if (Logo.StartsWith("http://"))
                 return Logo;
-            return Path.Combine(ConfigManager.GetHttpApiImagePath(),
+            return string.Concat(ConfigManager.GetHttpApiImagePath(),
                     Logo,"_100x100.jpg");
         } }
         [DataMember(Name="gift_card")]

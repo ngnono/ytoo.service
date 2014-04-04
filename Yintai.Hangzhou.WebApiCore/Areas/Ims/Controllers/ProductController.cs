@@ -176,7 +176,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 }
                 else
                 {
-                    var valueDesc = categoryEntity.C.SizeType == (int)CategorySizeType.Common ? "均码" : request.Size_Str;
+                    var valueDesc = string.IsNullOrEmpty(request.Size_Str)?"均码":request.Size_Str;
                     var sizevalueEntity = _productPropertyValueRepo.Insert(new ProductPropertyValueEntity()
                     {
                         CreateDate = DateTime.Now,

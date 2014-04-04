@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Yintai.Hangzhou.Contract.DTO.Request
 {
+    [Bind(Include = "productids[],image_ids[]")]
     public class IMSComboCreateRequest:BaseRequest
     {
         public int Product_Type { get; set; }

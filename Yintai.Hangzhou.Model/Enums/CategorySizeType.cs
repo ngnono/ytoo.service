@@ -9,7 +9,6 @@ namespace Yintai.Hangzhou.Model.Enums
     public enum CategorySizeType
     {
         LimitSize = 1,
-        FreeInput = 2,
-        Common = 3
+        FreeInput = 2
     }
 }

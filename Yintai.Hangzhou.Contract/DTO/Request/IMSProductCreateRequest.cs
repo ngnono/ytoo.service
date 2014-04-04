@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Yintai.Hangzhou.Contract.DTO.Request
 {
-    [DataContract]
+    [Bind(Include="siz_ids")]
    public  class IMSProductCreateRequest:BaseRequest
     {
         public int Id { get; set; }

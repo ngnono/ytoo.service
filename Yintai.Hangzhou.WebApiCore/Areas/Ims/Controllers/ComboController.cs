@@ -22,13 +22,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_ComboEntity> _comboRepo;
         private IEFRepository<IMS_Combo2ProductEntity> _combo2productRepo;
         private IResourceRepository _resourceRepo;
+        private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
         public ComboController(IEFRepository<IMS_ComboEntity> comboRepo
             ,IEFRepository<IMS_Combo2ProductEntity> combo2productRepo
-            ,IResourceRepository resourceRepo)
+            ,IResourceRepository resourceRepo,
+            IEFRepository<IMS_AssociateItemsEntity> associateItemRepo)
         {
             _comboRepo = comboRepo;
             _combo2productRepo = combo2productRepo;
             _resourceRepo = resourceRepo;
+            _associateItemRepo = associateItemRepo;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Create(IMSComboCreateRequest request,int authuid)
@@ -50,7 +53,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             (!p.ProductType.HasValue && request.Product_Type==(int)ProductType.FromSystem)));
             if (products.Count() < 1)
                 return this.RenderError(r => r.Message = "商品类型不正确");
-
+            var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia=>ia.UserId == authuid).First();
             using (var ts = new TransactionScope())
             {
                 //step1: create combo
@@ -79,6 +82,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                          ProductId = product.Id
                     });
                 }
+
+                //step2.1 associate combo
+                _associateItemRepo.Insert(new IMS_AssociateItemsEntity()
+                {
+                    AssociateId = associateEntity.Id,
+                    CreateDate = DateTime.Now,
+                    CreateUser = authuid,
+                    ItemId = comboEntity.Id,
+                    ItemType = (int)ComboType.Product,
+                    Status = (int)DataStatus.Normal,
+                    UpdateDate = DateTime.Now,
+                    UpdateUser = authuid
+                });
 
                 //step3: bind images
                 var resources = Context.Set<ResourceEntity>().Where(r => request.Image_Ids.Any(image => image == r.Id));
@@ -183,7 +199,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                         o => o.Id,
                                         i => i.SourceId,
                                         (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() })
-                            .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p, po => {
+                            .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po => {
                                 po.ImageUrl = p.PR==null?string.Empty:p.PR.Name;
                             }));
 
