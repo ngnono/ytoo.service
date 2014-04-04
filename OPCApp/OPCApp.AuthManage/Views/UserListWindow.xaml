@@ -66,7 +66,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Background="LightGray" Width="50" Command="{Binding AddCommand}">
+                <Button Background="LightGray" Width="50" Command="{Binding AddUserCommand}">
                     <StackPanel>
                         <Image Source="/image/新增.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">增加</TextBlock>
@@ -124,7 +124,7 @@
                 <DataGridTextColumn Header="密码" Width="80" Binding="{Binding Password}" />
                 <DataGridTextColumn Header="姓名" Width="150" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="所属机构" Width="150" Binding="{Binding DataAuthName}" />
-                <DataGridCheckBoxColumn Header="是否有效" Width="100" Binding="{Binding IsVaild}" />
+                <DataGridCheckBoxColumn Header="是否有效" Width="100" Binding="{Binding IsValid}" />
             </DataGrid.Columns>
         </DataGrid>
         <CustomControlLibrary:DataPager Grid.Row="3"  Grid.Column="1" x:Name="dataPager" PageSizeList="10,20,30"

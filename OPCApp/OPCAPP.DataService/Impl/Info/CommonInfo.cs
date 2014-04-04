@@ -108,12 +108,15 @@ namespace OPCApp.DataService.Impl.Info
 
         public IList<KeyValue<string>> GetPayMethod()
         {
-            IList<KeyValue<string>> lstKeyValues = new List<KeyValue<string>>();
-            lstKeyValues.Add(new KeyValue<string>("", "全部"));
-            lstKeyValues.Add(new KeyValue<string>("WxPay", "微信支付"));
-            lstKeyValues.Add(new KeyValue<string>("25", "支付宝"));
-            lstKeyValues.Add(new KeyValue<string>("1001", "货到付款"));
-            return lstKeyValues;
+            /*GetPayTypeEnums*/
+            try
+            {
+                List<KeyValue> lst = RestClient.Get<KeyValue>("GetPayTypeEnums").ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

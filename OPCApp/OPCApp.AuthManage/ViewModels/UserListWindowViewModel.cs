@@ -60,8 +60,7 @@ namespace OPCApp.AuthManage.ViewModels
         /*导出用户*/
         public DelegateCommand ExportUserCommand { get; set; }
         /*双击用户列表*/
-        public DelegateCommand DBGridClickCommand { get; set; }
-        public DelegateCommand UpdateUserCommand { get; set; }
+        public DelegateCommand AddUserCommand { get; set; }
 
         public int PageSize { get; set; }
         public int PageIndex { get; set; }
@@ -180,9 +179,17 @@ namespace OPCApp.AuthManage.ViewModels
             PrResult.Models = PrResultTemp.Result.ToList();
             PrResult.Total = PrResultTemp.TotalCount;
         }
-
-        private void DBGridClick()
+        /*重写 在选择组织结构 才能进行用户增加操作*/
+         protected virtual bool BeforeAdd(OPC_AuthUser t)
         {
+            var curNode = GetOperationNode();
+            if (curNode==null||curNode.OrgId==null)
+            {
+                MessageBox.Show("请选择部门", "提示");
+                return false;
+            }
+             t.OrgId = curNode.OrgId;
+             return true;
         }
 
         /*初始化页面固有的数据值*/
@@ -194,18 +201,13 @@ namespace OPCApp.AuthManage.ViewModels
             SelectedFiledValue = "";
             SelectedFiled = "";
             SetStopUserCommand = new DelegateCommand(SetStopUser);
-            DBGridClickCommand = new DelegateCommand(DBGridClick);
+            AddUserCommand = new DelegateCommand(AddUser);
             PageIndex = 1;
             PageSize = 10;
             PrResult = new PageResult();
             CurModel = new OPC_AuthUser();
-            UpdateUserCommand = new DelegateCommand(UpdateUser);
         }
-       // 8900
-        private void UpdateUser()
-        {
-            EditAction(CurModel);
-        }
+ 
 
         private void SetStopUser()
         {
