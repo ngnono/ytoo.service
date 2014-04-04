@@ -11,6 +11,10 @@ namespace OPCApp.Domain.Dto
 
         public double ShippingFee { get; set; }
 
+        public string OrderNo { get; set; }
+
+        public string ShippingStatusName { get; set; }
+
         public string ShippingCode { get; set; }
 
         public int ShipViaID { get; set; }

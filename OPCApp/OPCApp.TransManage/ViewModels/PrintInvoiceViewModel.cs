@@ -52,7 +52,6 @@ namespace OPCApp.TransManage.ViewModels
             get { return invoice4Get; }
             set { SetProperty(ref invoice4Get, value); }
         }
-
         //选择上面行数据时赋值的数据集
 
         public OPC_Sale SaleSelected
@@ -103,14 +102,17 @@ namespace OPCApp.TransManage.ViewModels
             Refresh();
         }
 
-
-        protected virtual void Refresh()
+        public virtual string GetFilter() 
         {
-            string salesfilter = string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}",
-                Invoice4Get.StartSellDate.ToShortDateString(),
-                Invoice4Get.EndSellDate.ToShortDateString(),
-                Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo);
-            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(salesfilter, SearchSaleStatus);
+            return string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}&pageIndex={4}&pageSize={5}",
+          Invoice4Get.StartSellDate.ToShortDateString(),
+          Invoice4Get.EndSellDate.ToShortDateString(),
+          Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo, 1, 50);
+        }
+        protected  void Refresh()
+        {
+         
+            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(this.GetFilter(), SearchSaleStatus);
             SaleList = re.Result;
             if (InvoiceDetail4List != null) InvoiceDetail4List = new List<OPC_SaleDetail>();
         }
