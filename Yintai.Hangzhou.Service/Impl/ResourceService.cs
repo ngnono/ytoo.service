@@ -65,13 +65,14 @@ namespace Yintai.Hangzhou.Service.Impl
         #endregion
 
 
-        private ResourceEntity InnerSave(HttpPostedFileBase files, string key, int sourceId, SourceType sourceType, int createdUid, int count, int defaultNum)
+        private ResourceEntity InnerSave(HttpPostedFileBase files, string key, int sourceId, SourceType sourceType, 
+            int createdUid, int count, int colorPId)
         {
             FileInfor fileInfor;
             var fileuploadResult = FileUploadServiceManager.UploadFile(files, key, out fileInfor, GetFolder(sourceId, sourceType));
             if (fileuploadResult == FileMessage.Success)
             {
-                var entity = InnerSave(createdUid, count == defaultNum, fileInfor, count, sourceId, sourceType);
+                var entity = InnerSave(createdUid, colorPId, fileInfor, count, sourceId, sourceType);
                 //set whether current image is product dimension
                 if (sourceType == SourceType.Product &&
                     files.FileName.Contains("@cc."))
@@ -86,7 +87,7 @@ namespace Yintai.Hangzhou.Service.Impl
             }
         }
 
-        private ResourceEntity InnerSave(int userid, bool isdefault, FileInfor fileInfor, int sortOrder, int sourceId, SourceType sourceType)
+        private ResourceEntity InnerSave(int userid, int  colorPId, FileInfor fileInfor, int sortOrder, int sourceId, SourceType sourceType)
         {
 
             //存储到数据库
@@ -94,7 +95,7 @@ namespace Yintai.Hangzhou.Service.Impl
             {
                 CreatedDate = DateTime.Now,
                 CreatedUser = userid,
-                IsDefault = isdefault,
+                IsDefault = false,
                 Name = fileInfor.FileName, //+ "." + fileInfor.FileExtName,//这里要注意
                 ExtName = fileInfor.FileExtName,
                 Width = fileInfor.Width,
@@ -109,7 +110,8 @@ namespace Yintai.Hangzhou.Service.Impl
                 UpdatedDate = DateTime.Now,
                 UpdatedUser = userid,
                 Domain = String.Empty,
-                IsDimension = false
+                IsDimension = false,
+                ColorId = colorPId
             };
 
             return entity;
@@ -120,11 +122,11 @@ namespace Yintai.Hangzhou.Service.Impl
         /// </summary>
         /// <param name="files">文件流</param>
         /// <param name="createdUid">created userid</param>
-        /// <param name="defaultNum"></param>
+        /// <param name="colorPId"></param>
         /// <param name="sourceId">来源ID</param>
         /// <param name="sourceType">来源类型</param>
         /// <returns></returns>
-        public List<ResourceEntity> Save(HttpFileCollectionBase files, int createdUid, int defaultNum, int sourceId,
+        public List<ResourceEntity> Save(HttpFileCollectionBase files, int createdUid, int colorPId, int sourceId,
                                          SourceType sourceType)
         {
             if (files == null || files.Count == 0)
@@ -158,9 +160,8 @@ namespace Yintai.Hangzhou.Service.Impl
                         //Logger.Warn("switch:" + upload + " ext:" + fileExt + ",ct:" + files[upload].ContentType);
                         if (files[upload].ContentType.IndexOf("audio/x-m4a", StringComparison.OrdinalIgnoreCase) > -1 || fileExt.IndexOf("m4a", System.StringComparison.OrdinalIgnoreCase) > -1 || upload.LastIndexOf("audio", StringComparison.OrdinalIgnoreCase) > -1)
                         {
-                            //Logger.Warn("RUN");
                             var entity2 = InnerSave(files[upload], (sourceType.ToString() + "audio").ToLower(), sourceId, sourceType, createdUid,
-          count, defaultNum);
+          count, colorPId);
 
                             if (entity2 != null)
                                 list.Add(entity2);
@@ -174,7 +175,7 @@ namespace Yintai.Hangzhou.Service.Impl
                 }
 
                 var entity = InnerSave(files[upload], sourceType.ToString().ToLower(), sourceId, sourceType, createdUid,
-count--, defaultNum);
+count--, colorPId);
 
                 if (entity != null)
                     list.Add(entity);

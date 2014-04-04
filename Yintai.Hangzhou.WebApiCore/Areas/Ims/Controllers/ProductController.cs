@@ -98,8 +98,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     UnitPrice = 999999,
                     UpdatedDate = DateTime.Now,
                     UpdatedUser = authuid,
-                    Store_Id = assocateEntity.StoreId
-
+                    Store_Id = assocateEntity.StoreId,
+                    Favorable = string.Empty
 
                 });
                 _productCodeRepo.Insert(new ProductCode2StoreCodeEntity()
@@ -199,7 +199,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
                 var resourceEntity = _resourceService.Save(files
                                         , authuid
-                                        , -1
+                                        , propertyvalueEntity.Id
                                         , productEntity.Id
                                         , SourceType.Product);
                 if (resourceEntity.Count > 0)

@@ -23,6 +23,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public decimal Price { get; set; }
         [Required(ErrorMessage = "分类必填")]
         public int Category_Id { get; set; }
+        
         public int[] Size_Ids { get; set; }
 
         public string Size_Str { get; set; }
