@@ -178,7 +178,14 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetPayTypeEnums()
         {
-            return DoFunction(() => { return _enumService.All("PayType"); }, "读取快递单备注失败！");
+            return DoFunction(() => { return _enumService.All("PayType"); }, "读取付款方式失败！");
+        }
+
+
+        [HttpGet]
+        public IHttpActionResult GetShippingTypeEnums()
+        {
+            return DoFunction(() => { return _enumService.All("ShippingType"); }, "读取发货方式失败！");
         }
 
     }
