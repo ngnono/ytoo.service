@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
@@ -25,7 +26,7 @@ namespace OPCApp.DataService.Impl.Auth
 
         public ResultMsg Edit(OPC_AuthRole model)
         {
-            bool result = RestClient.Post("Role/UpdateRole", model);
+            bool result = RestClient.Put("Role/UpdateRole", model);
             if (result)
             {
                 return ResultMsg.Success();
@@ -35,7 +36,7 @@ namespace OPCApp.DataService.Impl.Auth
 
         public ResultMsg Delete(OPC_AuthRole model)
         {
-            bool result = RestClient.Delete<OPC_AuthRole>("Role/DeleteRole/" + model.Id);
+            bool result = RestClient.Put("Role/DeleteRole",model.Id);
             if (result)
             {
                 return ResultMsg.Success();
@@ -48,6 +49,19 @@ namespace OPCApp.DataService.Impl.Auth
         {
             IList<OPC_AuthRole> result = RestClient.Get<OPC_AuthRole>("Role/SelectRole");
             return new PageResult<OPC_AuthRole>(result, result.Count);
+        }
+
+        public bool SetIsEnable(OPC_AuthRole role)
+        {
+            try
+            {
+                bool bFalg = RestClient.Put("role/Enable", role);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

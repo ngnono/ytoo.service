@@ -33,7 +33,7 @@
                         <TextBlock HorizontalAlignment="Center">导出</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding SetStopUserCommand}">
+                <Button Background="LightGray" Width="50" Command="{Binding SetStopRoleCommand}">
                     <StackPanel>
                         <Image Source="/image/解挂.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">是否启用</TextBlock>

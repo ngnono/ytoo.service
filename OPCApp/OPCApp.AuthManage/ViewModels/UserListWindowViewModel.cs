@@ -60,7 +60,7 @@ namespace OPCApp.AuthManage.ViewModels
         /*导出用户*/
         public DelegateCommand ExportUserCommand { get; set; }
         /*双击用户列表*/
-        public DelegateCommand AddUserCommand { get; set; }
+        public DelegateCommand DelUserCommand { get; set; }
 
         public int PageSize { get; set; }
         public int PageIndex { get; set; }
@@ -94,6 +94,7 @@ namespace OPCApp.AuthManage.ViewModels
             AddOrgCommand = new DelegateCommand(AddOrg);
             EditOrgCommand = new DelegateCommand(EditOrg);
             DeleteOrgCommand = new DelegateCommand(DeleteOrg);
+
             List<OPC_OrgInfo> orgList = AppEx.Container.GetInstance<IOrgService>().Search().ToList();
             Commands = new ReadOnlyCollection<DelegateCommand>(new[]
             {
@@ -201,12 +202,24 @@ namespace OPCApp.AuthManage.ViewModels
             SelectedFiledValue = "";
             SelectedFiled = "";
             SetStopUserCommand = new DelegateCommand(SetStopUser);
+            DelUserCommand=new DelegateCommand(DelUser);
             PageIndex = 1;
             PageSize = 10;
             PrResult = new PageResult();
             CurModel = new OPC_AuthUser();
         }
- 
+
+        public void DelUser()
+        {
+            OPC_AuthUser user = CurModel;
+            if (user == null)
+            {
+                MessageBox.Show("请选择要操作的用户", "提示");
+                return;
+            }
+            DeleteAction(user);
+            SearchAction();
+        }
 
         private void SetStopUser()
         {
@@ -215,11 +228,10 @@ namespace OPCApp.AuthManage.ViewModels
             {
                 MessageBox.Show("请选择要操作的用户", "提示");
                 return;
-                ;
             }
             var iauth = GetDataService() as IAuthenticateService;
-            bool isValid = user.IsValid == true ? true : false;
-            iauth.SetIsStop(user.Id, isValid);
+            iauth.SetIsStop(user);
+            SearchAction();
         }
 
         protected override IBaseDataService<OPC_AuthUser> GetDataService()

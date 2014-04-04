@@ -102,7 +102,7 @@ namespace OPCApp.DataService.Common
         public static bool Post<T>(string url, T data)
         {
             HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
-            return response.IsSuccessStatusCode;
+             return response.IsSuccessStatusCode;
         }
 
         /// <summary>

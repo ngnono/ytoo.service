@@ -79,7 +79,7 @@
                         <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding DeleteCommand}"
+                <Button Background="LightGray" Width="50" Command="{Binding DelUserCommand}"
                         CommandParameter="{Binding Models.CurrentItem}">
                     <StackPanel>
                         <Image Source="/image/删除.png" Stretch="None" />

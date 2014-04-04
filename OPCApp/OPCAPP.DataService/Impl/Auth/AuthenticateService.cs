@@ -17,9 +17,17 @@ namespace OPCApp.DataService.Impl.Auth
             return "OK";
         }
 
-        public bool SetIsStop(int userId, bool isStop)
+        public bool SetIsStop(OPC_AuthUser user)
         {
-            return false;
+            try
+            {
+                bool bFalg = RestClient.Put("account/Enable", user);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public ResultMsg Add(OPC_AuthUser user)
