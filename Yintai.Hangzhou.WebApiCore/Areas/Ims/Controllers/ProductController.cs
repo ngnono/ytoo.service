@@ -59,6 +59,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     ;
             if (categoryEntity == null)
                 return this.RenderError(r => r.Message = "分类不存在");
+            var catSizeType = categoryEntity.C.SizeType ?? (int)CategorySizeType.FreeInput;
             if (categoryEntity.C.SizeType == (int)CategorySizeType.LimitSize
                 && request.Size_Ids.Length < 1)
                 return this.RenderError(r => r.Message = "分类尺码必选");
@@ -373,6 +374,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 .Join(Context.Set<TagEntity>(),o=>o.Tag_Id,i=>i.Id,(o,i)=>new {P=o,C=i})
                                 .Join(Context.Set<BrandEntity>(),o=>o.P.Brand_Id,i=>i.Id,(o,i)=>new {P=o.P,C=o.C,B=i})
                                 .Join(Context.Set<ProductCode2StoreCodeEntity>(),o=>o.P.Id,i=>i.ProductId,(o,i)=>new {P=o.P,C=o.C,B=o.B,PC=i})
+                                .GroupJoin(Context.Set<ResourceEntity>().Where(r=>r.SourceType==(int)SourceType.Product && r.Status==(int)DataStatus.Normal),
+                                            o=>o.P.Id,
+                                            i=>i.SourceId,
+                                            (o,i)=>new {P=o.P,C=o.C,B=o.B,PC=o.PC,PR=i.FirstOrDefault()})
                                 .FirstOrDefault();
             if (productEntity == null)
                 return this.RenderError(r => r.Message = "商品不存在");
@@ -395,7 +400,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                             SizeName = ppv.ValueDesc,
                                             SizeValueId = ppv.Id
                                     });
-
+                                if (productEntity.PR != null)
+                                    p.ImageUrl = productEntity.PR.Name;
                             }));
         }
       

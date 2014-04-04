@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Web.Mvc;
 
 namespace Yintai.Hangzhou.Contract.DTO.Request
 {
@@ -23,7 +24,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public decimal Price { get; set; }
         [Required(ErrorMessage = "分类必填")]
         public int Category_Id { get; set; }
-        
+        [DataMember(Name = "size_ids[]")]
         public int[] Size_Ids { get; set; }
 
         public string Size_Str { get; set; }

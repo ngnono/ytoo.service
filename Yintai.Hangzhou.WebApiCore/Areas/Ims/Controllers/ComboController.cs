@@ -45,7 +45,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r=>r.Message="搭配需要选择私人定制对象");
             if (!Array.Exists<int>((int[])Enum.GetValues(typeof(ProductType)), s=>request.Product_Type==s))
                 return this.RenderError(r=>r.Message="搭配商品类型不正确");
-            var products = Context.Set<ProductEntity>().Where(p=>request.ProductIds.Any(l=>l==p.Id) && p.ProductType==request.Product_Type);
+            var products = Context.Set<ProductEntity>().Where(p=>request.ProductIds.Any(l=>l==p.Id) &&
+                            ((p.ProductType.HasValue && p.ProductType==request.Product_Type) ||
+                            (!p.ProductType.HasValue && request.Product_Type==(int)ProductType.FromSystem)));
             if (products.Count() < 1)
                 return this.RenderError(r => r.Message = "商品类型不正确");
 
@@ -88,7 +90,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 }
 
                 ts.Complete();
-                 return this.RenderSuccess<dynamic>(null);
+                return this.RenderSuccess<dynamic>(c => c.Data = new { 
+                    combo_id = comboEntity.Id
+                });
             }
            
         }
