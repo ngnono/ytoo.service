@@ -13,6 +13,7 @@ using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
 using com.intime.fashion.common.Extension;
 using Yintai.Architecture.Common.Data.EF;
+using Yintai.Hangzhou.WebSupport.Binder;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -42,7 +43,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _productCodeRepo = productCodeRepo;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Create(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
+        public ActionResult Create([InternalJsonArrayAttribute("size_ids")]Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
         {
             if (!ModelState.IsValid)
             {
@@ -224,7 +225,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Update(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
+        public ActionResult Update([InternalJsonArrayAttribute("size_ids")]Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
         {
             if (!ModelState.IsValid)
             {

@@ -14,6 +14,7 @@ using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
 using com.intime.fashion.common.Extension;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.WebSupport.Binder;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -34,7 +35,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _associateItemRepo = associateItemRepo;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Create(IMSComboCreateRequest request,int authuid)
+        public ActionResult Create([InternalJsonArrayAttribute("image_ids,productids")] IMSComboCreateRequest request, int authuid)
         {
             if (request.Image_Ids == null ||
                request.Image_Ids.Length < 1)
@@ -114,7 +115,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Update(IMSComboUpdateRequest request, int authuid)
+        public ActionResult Update([InternalJsonArrayAttribute("image_ids,productids")]IMSComboUpdateRequest request, int authuid)
         {
            
             if (string.IsNullOrEmpty(request.Desc))
@@ -202,6 +203,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po => {
                                 po.ImageUrl = p.PR==null?string.Empty:p.PR.Name;
                             }));
+                oc.Is_Owner = authuid == comboEntity.C.UserId;
+                oc.Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&
+                                    f.FavoriteSourceType == (int)SourceType.Combo &&
+                                    f.FavoriteSourceId == comboEntity.C.Id &&
+                                    f.Status == (int)DataStatus.Normal);
 
             }));
           

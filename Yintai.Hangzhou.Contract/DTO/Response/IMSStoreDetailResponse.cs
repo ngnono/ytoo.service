@@ -35,6 +35,11 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public IEnumerable<IMSGiftCard> GiftCardSaling { get; set; }
         [DataMember(Name="combos")]
         public IEnumerable<IMSCombo> ComboSaling { get; set; }
+
+        [DataMember(Name = "is_owner")]
+        public bool Is_Owner { get; set; }
+        [DataMember(Name = "is_favored")]
+        public bool Is_Favored { get; set; }
     }
     public class IMSGiftCard
     {
