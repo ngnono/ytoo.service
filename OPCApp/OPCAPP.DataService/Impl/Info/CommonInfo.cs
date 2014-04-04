@@ -106,12 +106,13 @@ namespace OPCApp.DataService.Impl.Info
             }
         }
 
-        public IList<KeyValue> GetPayMethod()
+        public IList<KeyValue<string>> GetPayMethod()
         {
-            IList<KeyValue> lstKeyValues = new List<KeyValue>();
-            lstKeyValues.Add(new KeyValue(-1, "全部"));
-            lstKeyValues.Add(new KeyValue(0, "微信支付"));
-            lstKeyValues.Add(new KeyValue(5, "支付宝"));
+            IList<KeyValue<string>> lstKeyValues = new List<KeyValue<string>>();
+            lstKeyValues.Add(new KeyValue<string>("", "全部"));
+            lstKeyValues.Add(new KeyValue<string>("WxPay", "微信支付"));
+            lstKeyValues.Add(new KeyValue<string>("25", "支付宝"));
+            lstKeyValues.Add(new KeyValue<string>("1001", "货到付款"));
             return lstKeyValues;
         }
     }
