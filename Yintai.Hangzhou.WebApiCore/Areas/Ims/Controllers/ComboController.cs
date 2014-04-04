@@ -184,7 +184,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                         i => i.SourceId,
                                         (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() })
                             .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p, po => {
-                                po.ImageUrl = p.PR.Name;
+                                po.ImageUrl = p.PR==null?string.Empty:p.PR.Name;
                             }));
 
             }));
