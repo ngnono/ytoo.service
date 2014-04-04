@@ -8,5 +8,7 @@ namespace Intime.OPC.Service
         PageResult<OPC_OrgInfo> GetAll(int pageIndex, int pageSize = 20);
 
         OPC_OrgInfo AddOrgInfo(OPC_OrgInfo orgInfo);
+
+        OPC_OrgInfo GetOrgInfoByOrgID(string orgID);
     }
 }

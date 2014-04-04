@@ -30,6 +30,8 @@ namespace Intime.OPC.Service
 
             IMappingExpression<OPC_SaleDetail, SaleDetailDto> map2 = Mapper.CreateMap<OPC_SaleDetail, SaleDetailDto>();
 
+
+            Mapper.CreateMap<OPC_AuthUser, AuthUserDto>();
             //todo 销售单明细 匹配
         }
 

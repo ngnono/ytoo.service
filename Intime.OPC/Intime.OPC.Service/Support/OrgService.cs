@@ -24,6 +24,7 @@ namespace Intime.OPC.Service.Support
     {
 
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OrgService"/> class.
         /// </summary>
@@ -40,6 +41,12 @@ namespace Intime.OPC.Service.Support
         public OPC_OrgInfo AddOrgInfo(OPC_OrgInfo orgInfo)
         {
             return ((IOrgInfoRepository) _repository).Add(orgInfo);
+        }
+
+
+        public OPC_OrgInfo GetOrgInfoByOrgID(string orgID)
+        {
+            return ((IOrgInfoRepository) _repository).GetByOrgID(orgID);
         }
     }
 }

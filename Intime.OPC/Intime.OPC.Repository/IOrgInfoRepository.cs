@@ -17,5 +17,7 @@ namespace Intime.OPC.Repository
         PageResult<OPC_OrgInfo> GetAll(int pageIndex, int pageSize);
 
         OPC_OrgInfo Add(OPC_OrgInfo orgInfo);
+
+        OPC_OrgInfo GetByOrgID(string orgID);
     }
 }

@@ -60,7 +60,7 @@ namespace Intime.OPC.WebApi.Controllers
             {
                 pageSize = 20;
             }
-            PageResult<OPC_AuthUser> lst = _accountService.GetUsersByRoleID(roleId,pageIndex,pageSize);
+            var lst = _accountService.GetUsersByRoleID(roleId,pageIndex,pageSize);
 
             return Ok(lst);
         }
@@ -111,10 +111,10 @@ namespace Intime.OPC.WebApi.Controllers
             return InternalServerError();
         }
 
-        public IHttpActionResult Enable(int userId)
+        public IHttpActionResult Enable(int userId,bool stop)
         {
             //TODO:check params
-            if (_accountService.IsStop(userId, false))
+            if (_accountService.IsStop(userId, stop))
             {
                 return Ok();
             }
@@ -130,7 +130,7 @@ namespace Intime.OPC.WebApi.Controllers
                 return BadRequest("请求参数不正确");
             }
 
-            OPC_AuthUser user = _accountService.Get(loginModel.UserName, loginModel.Password);
+            var user = _accountService.Get(loginModel.UserName, loginModel.Password);
 
             if (user == null)
             {

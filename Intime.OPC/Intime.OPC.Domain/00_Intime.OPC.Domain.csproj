@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\IEntity.cs" />
+    <Compile Include="Dto\AuthUserDto.cs" />
     <Compile Include="Dto\ShippingSaleCreateDto.cs" />
     <Compile Include="Dto\ShippingSaleDto.cs" />
     <Compile Include="Dto\OrderDto.cs" />

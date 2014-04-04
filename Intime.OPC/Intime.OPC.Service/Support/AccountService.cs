@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
@@ -23,24 +24,36 @@ namespace Intime.OPC.Service.Support
 
         #region IAccountService Members
 
-        public OPC_AuthUser Get(string userName, string password)
+        public AuthUserDto Get(string userName, string password)
         {
-            return _accountRepository.Get(userName, password);
+            
+            var user= _accountRepository.Get(userName, password);
+            var dto= AutoMapper.Mapper.Map<OPC_AuthUser,AuthUserDto>(user);
+            var org = _orgInfoRepository.GetByOrgID(user.DataAuthId);
+            if (org!=null)
+            {
+                dto.DataAuthName =org.OrgName;
+            }
+            
+            return dto;
         }
 
-        public PageResult<OPC_AuthUser> Select(string orgid, string name, int pageIndex, int pageSize = 20)
+        public PageResult<AuthUserDto> Select(string orgid, string name, int pageIndex, int pageSize = 20)
         {
-            return _accountRepository.GetByOrgId(orgid, name, pageIndex, pageSize);
+            var lst= _accountRepository.GetByOrgId(orgid, name, pageIndex, pageSize);
+            return OpcResult2Result(lst);
         }
 
-        public PageResult<OPC_AuthUser> SelectByLogName(string orgid, string loginName, int pageIndex, int pageSize = 20)
+        public PageResult<AuthUserDto> SelectByLogName(string orgid, string loginName, int pageIndex, int pageSize = 20)
         {
-            return _accountRepository.GetByLoginName(orgid, loginName, pageIndex, pageSize);
+            var lst= _accountRepository.GetByLoginName(orgid, loginName, pageIndex, pageSize);
+            return OpcResult2Result(lst);
         }
 
-        public PageResult<OPC_AuthUser> Select(int pageIndex, int pageSize = 20)
+        public PageResult<AuthUserDto> Select(int pageIndex, int pageSize = 20)
         {
-            return _accountRepository.All(pageIndex, pageSize);
+            var lst = _accountRepository.All(pageIndex, pageSize);
+            return OpcResult2Result(lst);
         }
 
         public bool IsStop(int userId, bool bValid)
@@ -48,9 +61,10 @@ namespace Intime.OPC.Service.Support
             return _accountRepository.SetEnable(userId, bValid);
         }
 
-        public PageResult<OPC_AuthUser> GetUsersByRoleID(int roleId, int pageIndex, int pageSize = 20)
+        public PageResult<AuthUserDto> GetUsersByRoleID(int roleId, int pageIndex, int pageSize = 20)
         {
-            return GetUsersByRoleID(roleId,pageIndex,pageSize);
+            var lst = _accountRepository.GetByRoleId(roleId, pageIndex, pageSize);
+            return OpcResult2Result(lst);
         }
 
         public UserDto GetByUserID(int userID)
@@ -73,12 +87,28 @@ namespace Intime.OPC.Service.Support
             return dto;
         }
 
-        public PageResult<OPC_AuthUser> GetUsersByOrgId(int orgId)
-        {
-            throw new NotImplementedException();
-        }
+     
 
         #endregion
+
+        protected PageResult<AuthUserDto> OpcResult2Result(PageResult<OPC_AuthUser> result)
+        {
+             var lstOrg = _orgInfoRepository.GetAll(1, 10000);
+            IList<AuthUserDto> lstUserDtos=new List<AuthUserDto>();
+
+            foreach (var user in result.Result)
+            {
+                var u = AutoMapper.Mapper.Map<OPC_AuthUser, AuthUserDto>(user);
+                var org = lstUserDtos.FirstOrDefault(t => t.OrgId == user.DataAuthId);
+                if (org!=null)
+                {
+                    u.DataAuthName = org.OrgName;
+                }
+                lstUserDtos.Add(u);
+            }
+
+            return new PageResult<AuthUserDto>(lstUserDtos,result.TotalCount);
+        }
     }
 }
 

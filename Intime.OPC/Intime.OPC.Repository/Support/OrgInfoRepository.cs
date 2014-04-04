@@ -51,5 +51,11 @@ namespace Intime.OPC.Repository.Support
                 return null;
             }
         }
+
+
+        public OPC_OrgInfo GetByOrgID(string orgID)
+        {
+            return Select(t => t.OrgID == orgID).FirstOrDefault();
+        }
     }
 }
