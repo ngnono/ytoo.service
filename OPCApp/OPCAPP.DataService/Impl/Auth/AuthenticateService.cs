@@ -65,11 +65,22 @@ namespace OPCApp.DataService.Impl.Auth
             }
         }
 
+        public ResultMsg ResetPassword(OPC_AuthUser user)
+        {
+            try
+            {
+                bool bFalg = RestClient.Put("account/ResetPassword", user.Id);
+                return new ResultMsg {IsSuccess = bFalg, Msg = "删除错误"};
+            }
+            catch (Exception ex)
+            {
+                return new ResultMsg {IsSuccess = false, Msg = "保存失败"};
+            }
+        }
         public ResultMsg Delete(OPC_AuthUser user)
         {
             try
             {
-                var oo = new {userId = user.Id};
                 bool bFalg = RestClient.Put("account/deleteuser", user.Id);
                 return new ResultMsg {IsSuccess = bFalg, Msg = "删除错误"};
             }
