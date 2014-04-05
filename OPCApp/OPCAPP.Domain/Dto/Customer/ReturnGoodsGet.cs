@@ -8,6 +8,12 @@ namespace OPCApp.Domain.Customer
 {
     public  class ReturnGoodsGet
     {
+        public ReturnGoodsGet()
+        {
+            StartDate = DateTime.Now;
+            EndDate = DateTime.Now;
+        }
+
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
