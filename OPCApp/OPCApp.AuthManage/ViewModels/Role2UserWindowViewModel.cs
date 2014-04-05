@@ -15,7 +15,7 @@ namespace OPCApp.AuthManage.ViewModels
     public class Role2UserWindowViewModel : BindableBase
     {
         private OPC_AuthRole _role;
-        private List<OPC_AuthUser> _rolelist;
+        private List<OPC_AuthRole> _rolelist;
         private List<OPC_AuthUser> _userlist;
 
         public Role2UserWindowViewModel()
@@ -35,7 +35,7 @@ namespace OPCApp.AuthManage.ViewModels
             set { SetProperty(ref _userlist, value); }
         }
 
-        public List<OPC_AuthUser> RoleList
+        public List<OPC_AuthRole> RoleList
         {
             get { return _rolelist; }
             set { SetProperty(ref _rolelist, value); }
@@ -60,13 +60,6 @@ namespace OPCApp.AuthManage.ViewModels
 
         private void Refresh()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Init()
-        {
-            var roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
-            roleDataService.Search(null);
             if (SelectedRole == null)
             {
                 if (UserList == null) return;
@@ -75,6 +68,13 @@ namespace OPCApp.AuthManage.ViewModels
             }
             var menuDataService = AppEx.Container.GetInstance<IRole2UserService>();
             menuDataService.GetUserListByRole(SelectedRole.Id); //所有的 还是有权限
+        }
+
+        public void Init()
+        {
+            var roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
+            RoleList = roleDataService.Search(null).Result.ToList(); ;
+          
         }
 
         private void DeleteUserList()
