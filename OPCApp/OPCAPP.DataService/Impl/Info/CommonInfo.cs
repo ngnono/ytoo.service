@@ -81,10 +81,14 @@ namespace OPCApp.DataService.Impl.Info
 
         public IList<KeyValue> GetOutGoodsMehtod()
         {
-            IList<KeyValue> lstKeyValues = new List<KeyValue>();
-            lstKeyValues.Add(new KeyValue(-1, "全部"));
-            lstKeyValues.Add(new KeyValue(0, "快递"));
-            return lstKeyValues;
+            try
+            {
+                return RestClient.Get<KeyValue>("trans/GetShippingTypeEnums").ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public IList<KeyValue> GetSectionList()
@@ -108,11 +112,15 @@ namespace OPCApp.DataService.Impl.Info
 
         public IList<KeyValue> GetPayMethod()
         {
-            IList<KeyValue> lstKeyValues = new List<KeyValue>();
-            lstKeyValues.Add(new KeyValue(-1, "全部"));
-            lstKeyValues.Add(new KeyValue(0, "微信支付"));
-            lstKeyValues.Add(new KeyValue(5, "支付宝"));
-            return lstKeyValues;
+            /*GetPayTypeEnums*/
+            try
+            {
+               return RestClient.Get<KeyValue>("trans/GetPayTypeEnums").ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

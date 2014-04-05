@@ -7,6 +7,7 @@ using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
+using OPCApp.Infrastructure.Mvvm.Model;
 
 namespace OPCApp.AuthManage.ViewModels
 {
@@ -31,7 +32,7 @@ namespace OPCApp.AuthManage.ViewModels
         public DelegateCommand OkCommand { get; set; }
         public DelegateCommand SearchCommand { get; set; }
         public DelegateCommand CommandGetDown { get; set; }
-        private List<OPC_AuthUser> SelectedUserList { get; set; }
+        public List<OPC_AuthUser> SelectedUserList { get; set; }
 
         public List<OPC_AuthUser> UserList
         {
@@ -48,20 +49,27 @@ namespace OPCApp.AuthManage.ViewModels
             IBaseDataService<OPC_AuthUser> userDataService = GetDataService();
             userDataService.Search(dicFilter);
         }
-
+        public int PageSize { get; set; }
+        public int PageIndex { get; set; }
+        public PageDataResult<OPC_AuthUser> PrResult { get; set; }
         /*初始化页面固有的数据值*/
 
         private void Init()
         {
-            FieldList = new List<string> {"登陆名", "专柜码", "姓名", "门店", "机构"};
+            FieldList = new List<string> { "登陆名", "姓名" };
             /*查询初始化*/
             SelectedFiledValue = "";
             SelectedFiled = "";
+          
+            PageIndex = 1;
+            PageSize = 10;
+            PrResult = new PageDataResult<OPC_AuthUser>();
+          
             SearchCommand = new DelegateCommand(Search);
             CommandGetDown = new DelegateCommand(SelectedUser);
         }
 
-        private void SelectedUser()
+        public void SelectedUser()
         {
             SelectedUserList = UserList.Where(e => e.IsSelected).ToList();
         }

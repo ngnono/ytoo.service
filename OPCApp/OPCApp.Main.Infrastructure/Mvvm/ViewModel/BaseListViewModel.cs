@@ -103,11 +103,14 @@ namespace OPCApp.Infrastructure.Mvvm
         /// <summary>
         ///     Adds the action.
         /// </summary>
-        private void AddAction()
+        public virtual void AddAction()
         {
+
             var w = AppEx.Container.GetInstance<IViewModel>(AddViewModeKey);
+            if(!BeforeAdd((T)w.Model))return;
             if (w.View.ShowDialog() == true)
             {
+              
                 IBaseDataService<T> service = GetDataService();
                 ResultMsg resultMsg = service.Add((T) w.Model);
                 if (resultMsg.IsSuccess)
@@ -123,6 +126,11 @@ namespace OPCApp.Infrastructure.Mvvm
                     MessageBox.Show("添加失败", "失败", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        public virtual bool BeforeAdd(T t)
+        {
+            return true;
         }
 
         /// <summary>

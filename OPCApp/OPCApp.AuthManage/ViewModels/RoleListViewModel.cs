@@ -13,6 +13,8 @@
 // ***********************************************************************
 
 using System.ComponentModel.Composition;
+using System.Windows.Forms;
+using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -35,7 +37,22 @@ namespace OPCApp.AuthManage.ViewModels
         {
             EditViewModeKey = "RoleViewModel";
             AddViewModeKey = "RoleViewModel";
+            SetStopRoleCommand = new DelegateCommand(SetStopRole);
         }
+
+        private void SetStopRole()
+        {
+            if (this.Models==null||this.Models.CurrentItem==null)
+            {
+                MessageBox.Show("请选择要操作的角色", "提示");
+                return;
+            }
+            var iRole = GetDataService() as IRoleDataService;
+            iRole.SetIsEnable((OPC_AuthRole)this.Models.CurrentItem);
+            SearchAction();
+        }
+
+        public DelegateCommand SetStopRoleCommand { get; set; }
 
         protected override void Load()
         {
