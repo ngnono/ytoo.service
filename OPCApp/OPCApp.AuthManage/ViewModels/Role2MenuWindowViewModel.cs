@@ -161,7 +161,21 @@ namespace OPCApp.AuthManage.ViewModels
         {
             var role2MenuService = AppEx.Container.GetInstance<IRole2MenuService>();
             if (SelectedRole == null) return;
-            MenuList = role2MenuService.GetMenuList(SelectedRole.Id);
+            var menus = role2MenuService.GetMenuList(SelectedRole.Id);
+            var menus2xx = new List<OPC_AuthMenu>();
+            foreach (var item in MenuList)
+            {
+                item.IsSelected = false;
+                if (menus != null)
+                {
+                    var menutemp = menus.FirstOrDefault(e => e.Id == item.Id);
+                    item.IsSelected = menutemp != null;
+                }
+                menus2xx.Add(item);
+            }
+            //SelectedMenus = menus.ToList();
+            this.MenuList = menus2xx;
+
         }
 
         /// <summary>
