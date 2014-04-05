@@ -34,7 +34,7 @@ namespace OPCApp.AuthManage.ViewModels
         {
             get
             {
-                AppEx.Container.GetInstance<ILoginManager>().Login("111", "11");
+                AppEx.Container.GetInstance<ILoginManager>().Login("admin", "admin");
                 // Logon(); 
                 // var rest = RestClient.Post("Account/Token", new { UserName ="111", Password = "11" });
                 return _menuDataService.GetMenus();
