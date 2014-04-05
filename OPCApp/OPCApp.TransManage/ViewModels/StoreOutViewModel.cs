@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface.Trans;
+using OPCApp.DataService.IService;
 using OPCApp.Domain.Dto;
 using OPCAPP.Domain.Enums;
 using OPCApp.Domain.Models;

@@ -43,6 +43,7 @@ namespace OPCApp.Domain.Customer
         /// </summary>
         /// <value>The remark.</value>
         public string Remark { get; set; }
+     
 
         /// <summary>
         /// Gets or sets the real rma sum money.
@@ -61,7 +62,7 @@ namespace OPCApp.Domain.Customer
         /// 退货明细 key明细单ID，value 退货数量
         /// </summary>
         /// <value>The return products.</value>
-        private IList<KeyValuePair<int, int>> ReturnProducts { get; set; }
+        public IList<KeyValuePair<int, int>> ReturnProducts { get; set; }
 
       
     }

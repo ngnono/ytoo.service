@@ -7,6 +7,7 @@ using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.DataService.IService;
 using OPCApp.Domain.Customer;
+using OPCAPP.Domain.Dto;
 using OPCAPP.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -26,6 +27,18 @@ namespace OPCApp.Customer.ViewModels
             CommandGetDown = new DelegateCommand(GetOrderDetailByOrderNo);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
             ClearOrInitData();
+            InitCombo();
+        }
+        public IList<KeyValue> BrandList { get; set; }
+
+
+        public IList<KeyValue> PaymentTypeList { get; set; }
+        public void InitCombo()
+        {
+            // OderStatusList=new 
+            BrandList = AppEx.Container.GetInstance<ICommonInfo>().GetBrandList();
+           
+            PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
         }
         public void SetOrderRemark()
         {
@@ -59,6 +72,13 @@ namespace OPCApp.Customer.ViewModels
         }
 
         public ReturnGoodsGet ReturnGoodsGet { get; set; }
+        private List<int> _returnList;
+
+        public List<int> ReturnCountList
+        {
+            get { return _returnList; }
+            set { SetProperty(ref _returnList, value); }
+        }
 
         private void ClearOrInitData()
         {
@@ -93,7 +113,14 @@ namespace OPCApp.Customer.ViewModels
         /*客服退货*/
         private void CustomerReturnGoodsSave()
         {
-
+            var selectOrder = OrderItemList.Where(e => e.IsSelected).ToList();
+            if (selectOrder.Count==0)
+            {
+                MessageBox.Show("请选择销售单明细", "提示");
+                return;
+            }
+            RmaPost.ReturnProducts =
+                selectOrder.Select(e => new KeyValuePair<int, int>(e.StockId, e.NeedReturnCount)).ToList();
             bool bFlag = AppEx.Container.GetInstance<ICustomerReturnGoods>().CustomerReturnGoodsSave(RmaPost);
             MessageBox.Show(bFlag ? "客服退货成功" : "客服退货失败", "提示");
         }

@@ -13,7 +13,7 @@ namespace OPCApp.Domain.Models
         public string SizeValueName { get; set; }
 
         public decimal ItemPrice { get; set; }
-
+        public int StockId { get; set; }
         public int Quantity { get; set; }
 
         public int BrandId { get; set; }
