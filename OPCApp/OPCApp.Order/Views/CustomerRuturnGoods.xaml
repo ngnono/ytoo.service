@@ -17,7 +17,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="200" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="100" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -115,16 +115,14 @@
                     <TextBlock Text="赔偿" Margin="0 5" Height="17" />
                     <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding RmaPost.RealRMASumMoney}" />
-                    <TextBlock Text="退货数量" Margin="0 5" Height="17" />
-                    <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding RmaPost.Count}" />
                   
-                    <Button Height="30" Content="客服退货" Margin="0 5" Width="80"
-                                    Command="{Binding CommandCustomerReturnGoodsSave}" />
+                  
+                    <Button Height="30" Content="客服退货" Margin="20 5 0 5" Width="200"
+                                    Command="{Binding CommandCustomerReturnGoodsSave}" RenderTransformOrigin="1.55,0.5" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="退货备注" Margin="0 5" Height="17" />
-                    <TextBox Height="50" Width="150" Foreground="Blue" Background="White"
+                    <TextBlock Text="  退货备注     " Margin="0 5" Height="17" />
+                    <TextBox Height="50" Width="768" Foreground="Blue" Background="White"
                                      Text="{Binding RmaPost.Remark}" />
                 </StackPanel>
             </StackPanel>

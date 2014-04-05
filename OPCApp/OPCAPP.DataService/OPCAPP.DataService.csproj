@@ -79,6 +79,7 @@
     <Compile Include="Interface\Auth\IRoleDataService.cs" />
     <Compile Include="Interface\ISaleDetail.cs" />
     <Compile Include="Interface\ISaleService.cs" />
+    <Compile Include="Interface\IService\IRemark.cs" />
     <Compile Include="Interface\RMA\IRMACashInService.cs" />
     <Compile Include="Interface\Info\ICommonInfoService.cs" />
     <Compile Include="Interface\Trans\ICustomerReturnGoods.cs" />

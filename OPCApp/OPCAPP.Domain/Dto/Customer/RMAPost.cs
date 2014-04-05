@@ -15,7 +15,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Intime.OPC.Domain.Dto.Custom
+namespace OPCApp.Domain.Customer
 {
     /// <summary>
     /// 生成销售退货单时 接收实体

@@ -5,7 +5,9 @@ using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;
+using OPCApp.DataService.IService;
 using OPCApp.Domain.Customer;
+using OPCAPP.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
@@ -22,9 +24,17 @@ namespace OPCApp.Customer.ViewModels
             CommandCustomerReturnGoodsSave = new DelegateCommand(CustomerReturnGoodsSave);
             CommandReturnGoodsSearch = new DelegateCommand(ReturnGoodsSearch);
             CommandGetDown = new DelegateCommand(GetOrderDetailByOrderNo);
+            CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
             ClearOrInitData();
         }
-
+        public void SetOrderRemark()
+        {
+            //被选择的对象
+            string id = Order.OrderNo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetOrderRemark); //3填写的是订单
+        }
+        public DelegateCommand CommandSetOrderRemark { get; set; }
         public DelegateCommand CommandReturnGoodsSearch { get; set; }
         public DelegateCommand CommandCustomerReturnGoodsSave { get; set; }
         public DelegateCommand CommandGetDown { get; set; }

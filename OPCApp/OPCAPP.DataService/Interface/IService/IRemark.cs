@@ -1,6 +1,6 @@
 ﻿using OPCAPP.Domain.Enums;
 
-namespace OPCApp.TransManage.IService
+namespace OPCApp.DataService.IService
 {
     public interface IRemark
     {

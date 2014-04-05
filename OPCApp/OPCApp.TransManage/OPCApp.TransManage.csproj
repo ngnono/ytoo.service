@@ -79,7 +79,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IService\IRemark.cs" />
     <Compile Include="Models\Remark.cs" />
     <Compile Include="TransManageModule.cs" />
     <Compile Include="IService\IInvoice.cs" />
