@@ -88,9 +88,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ViewModels\CustomerRuturnGoodsViewModel.cs" />
+    <Compile Include="ViewModels\CustomerSelfNetRuturnGoods.cs" />
+    <Compile Include="Views\CustomerSelfNetRuturnGoods.xaml.cs">
+      <DependentUpon>CustomerSelfNetRuturnGoods.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CustomerRuturnGoods.xaml.cs">
       <DependentUpon>CustomerRuturnGoods.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\CustomerSelfNetRuturnGoods.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\CustomerRuturnGoods.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
