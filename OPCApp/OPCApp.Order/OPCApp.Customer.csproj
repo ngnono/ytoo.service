@@ -87,7 +87,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ViewModels\CustomerInquiriesViewModel.cs" />
     <Compile Include="ViewModels\CustomerRuturnGoodsViewModel.cs" />
     <Compile Include="Views\CustomerRuturnGoods.xaml.cs">
       <DependentUpon>CustomerRuturnGoods.xaml</DependentUpon>
