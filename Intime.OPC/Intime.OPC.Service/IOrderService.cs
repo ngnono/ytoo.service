@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service
@@ -65,5 +66,8 @@ namespace Intime.OPC.Service
         /// <param name="endTime">The end time.</param>
         /// <returns>IList{OrderDto}.</returns>
         IList<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime);
+
+
+        IList<OrderItemDto> GetOrderItems(string orderNo);
     }
 }
