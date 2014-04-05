@@ -123,7 +123,15 @@ namespace Intime.OPC.WebApi.Controllers
             return Ok(_orderService.GetOrderByOderNoTime(orderNo,starTime,endTime));
             
         }
-       
+
+        [HttpGet]
+        public IHttpActionResult GetOrderItemsByOrderNo(string orderNo)
+        {
+            //todo 查询订单明细 未实现
+            return DoFunction(() => { return null; }, "读取订单明细失败");
+
+        }
+
 
         #region 备注
         
