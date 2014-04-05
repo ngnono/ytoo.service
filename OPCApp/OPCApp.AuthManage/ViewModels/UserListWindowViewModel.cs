@@ -10,6 +10,7 @@ using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
 using OPCApp.Infrastructure.Mvvm;
+using OPCApp.Infrastructure.Mvvm.Model;
 
 namespace OPCApp.AuthManage.ViewModels
 {
@@ -18,7 +19,7 @@ namespace OPCApp.AuthManage.ViewModels
     public class UserListWindowViewModel : BaseListViewModel<OPC_AuthUser>
     {
         private OPC_AuthUser _curUser;
-        public PageResult _prResult;
+        public PageDataResult<OPC_AuthUser> _prResult;
 
         public UserListWindowViewModel()
             : base("UserListWindow")
@@ -36,7 +37,7 @@ namespace OPCApp.AuthManage.ViewModels
         public NodeInfo NodeInfo { get; private set; }
         public ReadOnlyCollection<DelegateCommand> Commands { get; private set; }
 
-        public PageResult PrResult
+        public PageDataResult<OPC_AuthUser> PrResult
         {
             get { return _prResult; }
             set { SetProperty(ref _prResult, value); }
@@ -61,7 +62,8 @@ namespace OPCApp.AuthManage.ViewModels
         public DelegateCommand ExportUserCommand { get; set; }
         /*双击用户列表*/
         public DelegateCommand DelUserCommand { get; set; }
-
+        public DelegateCommand RePasswordCommand { get; set; }
+   
         public int PageSize { get; set; }
         public int PageIndex { get; set; }
 
@@ -85,6 +87,11 @@ namespace OPCApp.AuthManage.ViewModels
         {
             if (CheckSelection())
             {
+                if (NodeInfo.SelectedNode.OrgId == "100")
+                {
+                    MessageBox.Show("父级组织机构节点不能删除", "提示");
+                    return;
+                }
                 GetOperationNode().DeleteOrg();
             }
         }
@@ -129,7 +136,7 @@ namespace OPCApp.AuthManage.ViewModels
 
         private bool CheckSelection()
         {
-            if (NodeInfo.SelectedNode == null)
+            if (NodeInfo.SelectedNode==null)//建议改后台
             {
                 MessageBox.Show("请选择组织机构节点", "提示");
                 return false;
@@ -176,7 +183,7 @@ namespace OPCApp.AuthManage.ViewModels
             {
                 return;
             }
-            PrResult = new PageResult();
+            PrResult = new PageDataResult<OPC_AuthUser>();
             PrResult.Models = PrResultTemp.Result.ToList();
             PrResult.Total = PrResultTemp.TotalCount;
         }
@@ -205,8 +212,21 @@ namespace OPCApp.AuthManage.ViewModels
             DelUserCommand=new DelegateCommand(DelUser);
             PageIndex = 1;
             PageSize = 10;
-            PrResult = new PageResult();
+            PrResult = new PageDataResult<OPC_AuthUser>();
             CurModel = new OPC_AuthUser();
+            RePasswordCommand = new DelegateCommand(RePassword);
+        }
+
+        private void RePassword()
+        {
+            OPC_AuthUser user = CurModel;
+            if (user == null)
+            {
+                MessageBox.Show("请选择要操作的用户", "提示");
+                return;
+            }
+          var resultMsg=  AppEx.Container.GetInstance<IAuthenticateService>().ResetPassword(user);
+          MessageBox.Show(resultMsg.IsSuccess ? "重置密码成功" : "操作失败", "提示");
         }
 
         public void DelUser()
@@ -239,27 +259,6 @@ namespace OPCApp.AuthManage.ViewModels
             return AppEx.Container.GetInstance<IAuthenticateService>();
         }
 
-        public class PageResult : BindableBase
-        {
-            private List<OPC_AuthUser> _models;
-            public int _total;
-
-            public PageResult()
-            {
-                Models = new List<OPC_AuthUser>();
-            }
-
-            public int Total
-            {
-                get { return _total; }
-                set { SetProperty(ref _total, value); }
-            }
-
-            public List<OPC_AuthUser> Models
-            {
-                get { return _models; }
-                set { SetProperty(ref _models, value); }
-            }
-        }
+     
     }
 }

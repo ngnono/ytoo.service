@@ -109,6 +109,7 @@
     <Compile Include="Log\Log4NetLogger.cs" />
     <Compile Include="MAP\Mapper.cs" />
     <Compile Include="Mvvm\Conts.cs" />
+    <Compile Include="Mvvm\Model\PageResult.cs" />
     <Compile Include="Mvvm\ViewModel\BaseListViewModel.cs" />
     <Compile Include="Mvvm\ViewModel\BaseViewModel.cs" />
     <Compile Include="Mvvm\ViewModel\IViewModel.cs" />
@@ -146,7 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Moudel\" />
-    <Folder Include="Mvvm\Model\" />
     <Folder Include="Mvvm\Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
