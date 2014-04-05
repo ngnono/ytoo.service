@@ -46,5 +46,12 @@ namespace Intime.OPC.Domain.Dto.Custom
         /// </summary>
         /// <value>The order no.</value>
         public string OrderNo { get; set; }
+
+
+        /// <summary>
+        /// 退货数量
+        /// </summary>
+        /// <value>The count.</value>
+        public int Count { get; set; }
     }
 }
