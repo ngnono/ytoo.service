@@ -9,12 +9,12 @@ using OPCApp.Infrastructure.DataService;
 using OPCApp.Infrastructure.Mvvm.View;
 namespace OPCApp.Infrastructure.Mvvm.Model
 {
-    public class PageResult<T> : BindableBase
+    public class PageDataResult<T> : BindableBase
     {
         private List<T> _models;
         public int _total;
 
-        public PageResult()
+        public PageDataResult()
         {
             Models = new List<T>();
         }

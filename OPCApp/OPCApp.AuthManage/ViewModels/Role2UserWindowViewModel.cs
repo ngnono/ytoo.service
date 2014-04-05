@@ -73,8 +73,10 @@ namespace OPCApp.AuthManage.ViewModels
         public void Init()
         {
             var roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
-            RoleList = roleDataService.Search(null).Result.ToList(); ;
-          
+            var re = roleDataService.Search(null).Result;
+            RoleList = re != null ? re.ToList() : new List<OPC_AuthRole>();
+            UserList = new List<OPC_AuthUser>();
+
         }
 
         private void DeleteUserList()
@@ -108,7 +110,11 @@ namespace OPCApp.AuthManage.ViewModels
             var obj = AppEx.Container.GetInstance<UsersWindow>("UsersView");
             if (obj.ShowDialog() == true)
             {
-                UserList = obj.ViewModel.UserList;
+                var seletedUsers = obj.ViewModel.SelectedUserList;
+                if (seletedUsers != null)
+                {
+                   UserList.AddRange(seletedUsers);
+                }
             }
             ;
         }

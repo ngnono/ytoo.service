@@ -1,4 +1,5 @@
-﻿<UserControl xmlns:CustomControlLibrary="clr-namespace:CustomControlLibrary;assembly=CustomControlLibrary"  x:Class="OPCApp.AuthManage.Views.UserListWindow"
+﻿<UserControl xmlns:CustomControlLibrary="clr-namespace:CustomControlLibrary;assembly=CustomControlLibrary" 
+             x:Class="OPCApp.AuthManage.Views.UserListWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -86,7 +87,12 @@
                         <TextBlock HorizontalAlignment="Center">删除</TextBlock>
                     </StackPanel>
                 </Button>
-
+                <Button Background="LightGray" Width="50" Command="{Binding RePasswordCommand}">
+                    <StackPanel>
+                        <Image Source="/image/验证.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">重置密码</TextBlock>
+                    </StackPanel>
+                </Button>
 
             </StackPanel>
         </StackPanel>
