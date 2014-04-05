@@ -5,6 +5,11 @@ namespace Intime.OPC.Domain.Models
 {
     public class OPC_AuthUser : IEntity
     {
+        public OPC_AuthUser()
+        {
+            IsSystem = false;
+        }
+
         public string Name { get; set; }
         public int? SectionId { get; set; }
         public string SectionName { get; set; }
@@ -21,6 +26,8 @@ namespace Intime.OPC.Domain.Models
         public int UpdateUserId { get; set; }
 
         public string DataAuthId { get; set; }
+
+        public bool IsSystem { get; set; }
 
         #region IEntity Members
 

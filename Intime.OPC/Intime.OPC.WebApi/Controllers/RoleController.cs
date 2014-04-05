@@ -84,7 +84,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult DeleteRole(int roleId)
+        public IHttpActionResult DeleteRole([FromBody]int roleId)
         {
             //TODO:check params
             if (_roleService.DeleteById(roleId))
@@ -96,27 +96,21 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult SelectRole(int pageIndex,int pageSize=20)
+        public IHttpActionResult SelectRole()
         {
             //TODO:check params
-            return Ok(_roleService.Select(pageIndex,pageSize));
+            return Ok(_roleService.Select(0,10000).Result);
         }
 
-        public IHttpActionResult Stop(int roleId)
+
+        [HttpPut]
+        public IHttpActionResult Enable([FromBody] OPC_AuthRole role)
         {
-            //TODO:check params
-            if (_roleService.IsStop(roleId, true))
+            if (role==null)
             {
-                return Ok();
+                return BadRequest("角色为空");
             }
-
-            return InternalServerError();
-        }
-
-        public IHttpActionResult Enable(int roleId)
-        {
-            //TODO:check params
-            if (_roleService.IsStop(roleId, false))
+            if (_roleService.IsStop(role.Id, role.IsValid==false))
             {
                 return Ok();
             }

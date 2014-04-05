@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Enums;
+using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 
@@ -25,29 +26,35 @@ namespace Intime.OPC.Service.Support
 
         public void Shipped(string saleOrderNo,int userID)
         {
-           var lst=  _shippingSaleRepository.GetBySaleOrderNo(saleOrderNo,0,10000).Result;
-            foreach (var e in lst)
-            {
-                e.ShippingStatus = EnumSaleOrderStatus.Shipped.AsID();
-                e.UpdateDate = DateTime.Now;
-                e.UpdateUser = userID;
+           var lst=  _shippingSaleRepository.GetBySaleOrderNo(saleOrderNo);
 
-                _shippingSaleRepository.Update(e);
-            }
+           if (lst == null)
+           {
+               throw new ShippingSaleNotExistsException(saleOrderNo);
+           }
+           lst.ShippingStatus = EnumSaleOrderStatus.Shipped.AsID();
+           lst.UpdateDate = DateTime.Now;
+           lst.UpdateUser = userID;
+
+           _shippingSaleRepository.Update(lst);
+           
             
         }
 
         public void PrintExpress(string orderNo, int userId)
         {
-            var lst = _shippingSaleRepository.GetBySaleOrderNo(orderNo,1,10000).Result;
-            foreach (var e in lst)
+            //todo  确定是销售单还是订单
+            var lst = _shippingSaleRepository.GetBySaleOrderNo(orderNo);
+            if (lst==null)
             {
-                e.ShippingStatus = EnumSaleOrderStatus.PrintExpress.AsID();
-                e.UpdateDate = DateTime.Now;
-                e.UpdateUser = userId;
-
-                _shippingSaleRepository.Update(e);
+                throw new ShippingSaleNotExistsException(orderNo);
             }
+                lst.ShippingStatus = EnumSaleOrderStatus.PrintExpress.AsID();
+                lst.UpdateDate = DateTime.Now;
+                lst.UpdateUser = userId;
+
+                _shippingSaleRepository.Update(lst);
+            
         }
     }
 }

@@ -24,10 +24,11 @@ namespace Intime.OPC.WebApi.Controllers
             _accountService = accountService;
         }
 
-        [HttpPut]
+        [HttpPost]
         public IHttpActionResult AddUser([FromBody] OPC_AuthUser user)
             //public IHttpActionResult AddUser()
         {
+            
             //TODO:check params
             if (_accountService.Add(user))
             {
@@ -36,6 +37,21 @@ namespace Intime.OPC.WebApi.Controllers
 
             return InternalServerError();
         }
+
+        [HttpPut]
+        public IHttpActionResult ResetPassword([FromBody] int userId)
+        //public IHttpActionResult AddUser()
+        {
+
+
+            return DoFunction(() =>
+            {
+                _accountService.ResetPassword(userId);
+                return true;
+
+            },"");
+        }
+
 
         [HttpPut]
         public IHttpActionResult UpdateUser([FromBody] OPC_AuthUser user)
@@ -60,13 +76,13 @@ namespace Intime.OPC.WebApi.Controllers
             {
                 pageSize = 20;
             }
-            PageResult<OPC_AuthUser> lst = _accountService.GetUsersByRoleID(roleId,pageIndex,pageSize);
+            var lst = _accountService.GetUsersByRoleID(roleId,pageIndex,pageSize);
 
             return Ok(lst);
         }
 
         [HttpPut]
-        public IHttpActionResult DeleteUser([FromUri] int? userId)
+        public IHttpActionResult DeleteUser([FromBody] int? userId)
         {
             if (userId != 0)
             {
@@ -100,21 +116,16 @@ namespace Intime.OPC.WebApi.Controllers
             }, "查询用户信息失败");
         }
 
-        public IHttpActionResult Stop(int userId)
+
+        [HttpPut]
+        public IHttpActionResult Enable([FromBody] OPC_AuthUser user)
         {
-            //TODO:check params
-            if (_accountService.IsStop(userId, true))
+            if (null==user)
             {
-                return Ok();
+                return BadRequest("用户对象为空");
             }
-
-            return InternalServerError();
-        }
-
-        public IHttpActionResult Enable(int userId)
-        {
             //TODO:check params
-            if (_accountService.IsStop(userId, false))
+            if (_accountService.IsStop(user.Id, !(user.IsValid.Value)))
             {
                 return Ok();
             }
@@ -130,7 +141,7 @@ namespace Intime.OPC.WebApi.Controllers
                 return BadRequest("请求参数不正确");
             }
 
-            OPC_AuthUser user = _accountService.Get(loginModel.UserName, loginModel.Password);
+            var user = _accountService.Get(loginModel.UserName, loginModel.Password);
 
             if (user == null)
             {

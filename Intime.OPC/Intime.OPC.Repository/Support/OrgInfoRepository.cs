@@ -13,6 +13,12 @@ namespace Intime.OPC.Repository.Support
            return  Select(t => t.OrgID.StartsWith(orgid) && t.OrgType == orgtype);
         }
 
+        public bool Create(OPC_OrgInfo entity)
+        {
+            entity.IsDel = false;
+            return base.Create(entity);
+        }
+
         public PageResult<OPC_OrgInfo> GetAll(int pageIndex, int pageSize)
         {
             return Select2<OPC_OrgInfo, string>(t => t.IsDel == false, o => o.OrgID, true, pageIndex, pageSize);
@@ -26,24 +32,30 @@ namespace Intime.OPC.Repository.Support
                 if (orgInfo != null)
                 {
 
-                    var lst=  db.OrgInfos.Where(t => t.ParentID == orgInfo.ParentID).OrderBy(t=>t.OrgID);
-                    var e = lst.LastOrDefault();
+                    var lst=  db.OrgInfos.Where(t => t.ParentID == orgInfo.ParentID).OrderByDescending(t=>t.OrgID);
+                    var e = lst.FirstOrDefault();
                     if (e == null)
                     {
                         orgInfo.OrgID = orgInfo.ParentID + "001";
                     }
                     else
                     {
-                        int d = int.Parse(orgInfo.OrgID);
+                        int d = int.Parse(e.OrgID);
                         orgInfo.OrgID = (d + 1).ToString();
                     }
-
+                    orgInfo.IsDel = false;
                     var a=  db.OrgInfos.Add(orgInfo);
                     db.SaveChanges();
                     return a;
                 }
                 return null;
             }
+        }
+
+
+        public OPC_OrgInfo GetByOrgID(string orgID)
+        {
+            return Select(t => t.OrgID == orgID).FirstOrDefault();
         }
     }
 }

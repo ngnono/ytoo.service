@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Intime.OPC.Domain.Models.Mapping
@@ -7,26 +8,26 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_ShippingSaleCommentMap()
         {
             // Primary Key
-            HasKey(t => t.Id);
+            this.HasKey(t => t.Id);
 
             // Properties
-            Property(t => t.ShippingCode)
+            this.Property(t => t.ShippingCode)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            Property(t => t.Content)
+            this.Property(t => t.Content)
                 .IsRequired()
                 .HasMaxLength(200);
 
             // Table & Column Mappings
-            ToTable("OPC_ShippingSaleComment");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.ShippingCode).HasColumnName("ShippingCode");
-            Property(t => t.Content).HasColumnName("Content");
-            Property(t => t.CreateDate).HasColumnName("CreateDate");
-            Property(t => t.CreateUser).HasColumnName("CreateUser");
-            Property(t => t.UpdateDate).HasColumnName("UpdateDate");
-            Property(t => t.UpdateUser).HasColumnName("UpdateUser");
+            this.ToTable("OPC_ShippingSaleComment");
+            this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.ShippingCode).HasColumnName("ShippingCode");
+            this.Property(t => t.Content).HasColumnName("Content");
+            this.Property(t => t.CreateDate).HasColumnName("CreateDate");
+            this.Property(t => t.CreateUser).HasColumnName("CreateUser");
+            this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
+            this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
         }
     }
 }

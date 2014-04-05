@@ -46,6 +46,7 @@ namespace Intime.OPC.WebApi.Core
             try
             {
                 var o = action();
+                GetLog().Error(o);
                 return Ok(o);
             }
             catch (HttpResponseException ex)

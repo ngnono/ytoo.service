@@ -13,6 +13,20 @@ namespace Intime.OPC.Repository.Support
     {
         #region IAccountRepository Members
 
+        public bool Delete(int id)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var d= db.OPC_AuthUser.FirstOrDefault(t => t.Id==id);
+                if (d!=null && d.IsSystem)
+                {
+                    throw new Exception("系统管理员，不能删除");
+                }
+                return   base.Delete(id);
+            }
+        }
+         
+
         public OPC_AuthUser Get(string userName, string password)
         {
             using (var db = new YintaiHZhouContext())
@@ -41,14 +55,14 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 IQueryable<OPC_AuthUser> lst = db.OPC_AuthRoleUser.Where(t => t.OPC_AuthRoleId == roleId)
-                    .Join(db.OPC_AuthUser.Where(t => t.IsValid == true), t => t.OPC_AuthUserId, o => o.Id, (t, o) => o);
+                    .Join(db.OPC_AuthUser.Where(t => t.IsValid == true && t.IsSystem==false), t => t.OPC_AuthUserId, o => o.Id, (t, o) => o);
                 return lst.ToPageResult(pageIndex, pageSize);
             }
         }
 
        public PageResult<OPC_AuthUser> All(int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.IsValid == true,t=>t.Name,true,pageIndex,pageSize);
+            return Select(t => t.IsValid == true && !t.IsSystem,t=>t.Name,true,pageIndex,pageSize);
         }
 
         #endregion

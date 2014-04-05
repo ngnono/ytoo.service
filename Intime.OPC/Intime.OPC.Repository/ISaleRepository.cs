@@ -111,7 +111,7 @@ namespace Intime.OPC.Repository
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        PageResult<OPC_Sale> GetPrintInvoice(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize,params int[] sectionIds);
+        PageResult<OPC_Sale> GetPrintInvoice(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize, params int[] sectionIds);
 
         /// <summary>
         ///     获得 物流入库 的数据
@@ -132,5 +132,7 @@ namespace Intime.OPC.Repository
         IList<OPC_Sale> GetByOrderNo(string orderID, int sectinID);
 
         PageResult<OPC_Sale> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize,params int[] sectionIds);
+
+        IList<OPC_Sale> GetByShippingCode(string shippingCode);
     }
 }

@@ -126,6 +126,8 @@ namespace Intime.OPC.Repository.Support
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool UpdateSatus(IEnumerable<string> saleNos, EnumSaleOrderStatus saleOrderStatus, int userID)
         {
+            //todo 更新状态为实现
+            throw new Exception("UpdateSatus 未实现");
             using (var db = new YintaiHZhouContext())
             {
                 foreach (var saleNo in saleNos)
@@ -189,6 +191,12 @@ namespace Intime.OPC.Repository.Support
             return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.Shipped, pageIndex, pageSize, sectionIds);
         }
 
+        public IList<OPC_Sale> GetByShippingCode(string shippingCode)
+        {
+            int va = (int) (EnumSaleOrderStatus.Void);
+            return Select(t => t.ShippingCode == shippingCode && t.Status >va);
+        }
+
         #endregion
 
         /// <summary>
@@ -204,21 +212,23 @@ namespace Intime.OPC.Repository.Support
             EnumSaleOrderStatus saleOrderStatus, int pageIndex, int pageSize,params int[] sectionIds)
         {
 
-                Expression<Func<OPC_Sale, bool>> filterExpression = t => t.Status == (int) saleOrderStatus
-                                                                         && t.SellDate >= dtStart
-                                                                         && t.SellDate < dtEnd && sectionIds.Contains(t.SectionId.Value);
-                if (!string.IsNullOrWhiteSpace(orderNo))
+            using (var db = new YintaiHZhouContext())
+            {
+                var query = db.OPC_Sale.Where(t => t.Status == (int) saleOrderStatus
+                                                   && t.SellDate >= dtStart
+                                                   && t.SellDate < dtEnd && sectionIds.Contains(t.SectionId.Value));
+                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
-                    filterExpression=  filterExpression.And(t => t.OrderNo.Contains(orderNo));
+                    query=  query.Where(t => t.OrderNo.Contains(orderNo));
                 }
 
                 if (!string.IsNullOrWhiteSpace(saleId))
                 {
-                    filterExpression=filterExpression.And(t => t.SaleOrderNo.Contains(saleId));
+                    query=query.Where(t => t.SaleOrderNo.Contains(saleId));
                 }
-           
-            return Select(filterExpression, t => t.UpdatedDate, false, pageIndex, pageSize);
-
+                query=  query.OrderByDescending(t => t.CreatedDate);
+                return query.ToPageResult(pageIndex, pageSize);
+            }
         }
     }
 }
