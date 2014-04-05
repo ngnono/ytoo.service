@@ -32,20 +32,20 @@
                         <StackPanel Orientation="Horizontal" Background="LightGray">
 
                             <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                                 </StackPanel>
                             </Button>
 
                             <Button Background="LightGray" Width="50" Command="">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
                                 </StackPanel>
                             </Button>
                             <Button Background="LightGray" Command="{Binding CommandPrintInvoice}">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">打印发货单</TextBlock>
                                 </StackPanel>
@@ -185,25 +185,25 @@
                         <StackPanel Orientation="Horizontal" Background="LightGray">
 
                             <Button Background="LightGray" Command="{Binding CommandSearch}" Width="50">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                                 </StackPanel>
                             </Button>
                             <Button Background="LightGray" Width="50" Command="{Binding CommandPrintView}">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
                                 </StackPanel>
                             </Button>
                             <Button Background="LightGray" Command="{Binding CommandOnlyPrint}">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">打印快递单</TextBlock>
                                 </StackPanel>
                             </Button>
                             <Button Background="LightGray" Command="{Binding CommandPrintExpress}">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">完成快递单打印</TextBlock>
                                 </StackPanel>
@@ -427,26 +427,26 @@
                     <StackPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
                             <Button Background="LightGray" Command="{Binding CommandSearchExpress}" Width="50">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                                 </StackPanel>
                             </Button>
 
                             <Button Background="LightGray" Width="100">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">补打快递预览</TextBlock>
                                 </StackPanel>
                             </Button>
                             <Button Background="LightGray" Width="80">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">补打快递单</TextBlock>
                                 </StackPanel>
                             </Button>
                             <Button Background="LightGray" Width="120" Command="{Binding CommandShippSaleHandOver}">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">完成快递发货交接</TextBlock>
                                 </StackPanel>
