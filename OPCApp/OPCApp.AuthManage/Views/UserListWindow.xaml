@@ -31,7 +31,7 @@
                         </StackPanel>
                     </Button>
                     <Button Background="LightGray" Width="50" Command="{Binding EditOrgCommand}"
-                        CommandParameter="{Binding Models.CurrentItem}">
+                        CommandParameter="{Binding CurModel}">
                         <StackPanel>
                             <Image Source="/image/修改.png" Stretch="None" />
                             <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
@@ -73,13 +73,13 @@
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding EditCommand}"
-                        CommandParameter="{Binding Models.CurrentItem}">
+                        CommandParameter="{Binding CurModel}">
                     <StackPanel>
                         <Image Source="/image/修改.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding DeleteCommand}"
+                <Button Background="LightGray" Width="50" Command="{Binding DelUserCommand}"
                         CommandParameter="{Binding Models.CurrentItem}">
                     <StackPanel>
                         <Image Source="/image/删除.png" Stretch="None" />
@@ -108,6 +108,7 @@
 
         <DataGrid x:Name="dataGrid" Grid.Row="2" MinWidth="600"  Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True"
                   VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                  SelectedItem="{Binding CurModel}"
                   ItemsSource="{Binding Path=ItemsSource,ElementName=dataPager}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
@@ -123,7 +124,7 @@
                 <DataGridTextColumn Header="密码" Width="80" Binding="{Binding Password}" />
                 <DataGridTextColumn Header="姓名" Width="150" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="所属机构" Width="150" Binding="{Binding DataAuthName}" />
-                <DataGridCheckBoxColumn Header="是否有效" Width="100" Binding="{Binding IsVaild}" />
+                <DataGridCheckBoxColumn Header="是否有效" Width="100" Binding="{Binding IsValid}" />
             </DataGrid.Columns>
         </DataGrid>
         <CustomControlLibrary:DataPager Grid.Row="3"  Grid.Column="1" x:Name="dataPager" PageSizeList="10,20,30"

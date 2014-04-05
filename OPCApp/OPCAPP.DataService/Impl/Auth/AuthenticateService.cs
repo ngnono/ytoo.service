@@ -17,9 +17,17 @@ namespace OPCApp.DataService.Impl.Auth
             return "OK";
         }
 
-        public bool SetIsStop(int userId, bool isStop)
+        public bool SetIsStop(OPC_AuthUser user)
         {
-            return false;
+            try
+            {
+                bool bFalg = RestClient.Put("account/Enable", user);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public ResultMsg Add(OPC_AuthUser user)
@@ -35,7 +43,7 @@ namespace OPCApp.DataService.Impl.Auth
                 user.CreateUserId = 1;
                 user.UpdateDate = DateTime.Now;
                 user.UpdateUserId = 1;
-                bool bFalg = RestClient.Put("account/addUser", user);
+                bool bFalg = RestClient.Post("account/addUser", user);
                 return new ResultMsg {IsSuccess = bFalg, Msg = "保存成功"};
             }
             catch (Exception ex)

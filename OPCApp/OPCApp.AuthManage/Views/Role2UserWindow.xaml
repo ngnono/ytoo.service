@@ -5,22 +5,16 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" Width="Auto" Height="Auto">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="57*" />
-            <ColumnDefinition Width="70*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MaxHeight="50" />
-            <RowDefinition Height="Auto" MinHeight="370" />
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                <Button Background="LightGray" Width="50">
-                    <StackPanel>
-                        <Image Source="/image/变更单位.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">返回</TextBlock>
-                    </StackPanel>
-                </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding AuthorizationUserCommand}">
                     <StackPanel>
                         <Image Source="/image/导出.png" Stretch="None" />
@@ -48,7 +42,7 @@
 
             </StackPanel>
         </StackPanel>
-        <DataGrid HorizontalAlignment="Left" Height="Auto" ItemsSource="{Binding RoleList}"
+        <DataGrid HorizontalAlignment="Left"  ItemsSource="{Binding RoleList}" Width="400"
                   SelectedItem="{Binding SelectedRole}" IsReadOnly="True" AutoGenerateColumns="False" Grid.Column="0"
                   Grid.Row="1">
             <i:Interaction.Triggers>
@@ -78,7 +72,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="用户Id" Visibility="Hidden" Binding="{Binding Id}" />
                 <DataGridTextColumn Header="用户名称" Width="80" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="专柜名称" Width="80" Binding="{Binding SectionName}" />
+                <DataGridTextColumn Header="所属机构" Width="80" Binding="{Binding OrgName}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

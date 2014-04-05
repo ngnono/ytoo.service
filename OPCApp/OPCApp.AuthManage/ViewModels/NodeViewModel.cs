@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.AuthManage.ViewModels;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -15,7 +16,7 @@ using OPCApp.Infrastructure.Mvvm;
 
 namespace OPCApp.AuthManage
 {
-    public class NodeViewModel : BindableBase
+    public class NodeViewModel : INotifyPropertyChanged
     {
         /*
          * 省去构造函数，公共方法和一些静态成员
@@ -30,6 +31,7 @@ namespace OPCApp.AuthManage
 
         public NodeViewModel(NodeViewModel parent, OPC_OrgInfo orgInfo)
         {
+            OPC_OrgInfo = orgInfo;
             Parent = parent;
             Name = orgInfo.OrgName;
             ParentId = orgInfo.ParentID;
@@ -39,7 +41,7 @@ namespace OPCApp.AuthManage
             StoreOrSectionName = orgInfo.StoreOrSectionName;
             NodeInfo = parent.NodeInfo;
             children = new ObservableCollection<NodeViewModel>();
-            OPC_OrgInfo = orgInfo;
+          
         }
 
         public IOrgService GetDataService()
@@ -54,10 +56,12 @@ namespace OPCApp.AuthManage
             if (w.View.ShowDialog() == true)
             {
                 var service = GetDataService();
-                ResultMsg resultMsg = service.Add(w.Model as OPC_OrgInfo);
+                var orgInfo = w.Model as OPC_OrgInfo;
+                orgInfo.ParentID = this.OrgId;
+                ResultMsg resultMsg = service.Add(orgInfo);
                 if (resultMsg.IsSuccess)
                 {
-                   this.Parent.Append(resultMsg.Data as OPC_OrgInfo);
+                    AddSubNode(resultMsg.Data as OPC_OrgInfo);
                 }
                 else
                 {
@@ -68,7 +72,8 @@ namespace OPCApp.AuthManage
 
         public void UpdateOrg()
         {
-            var w = AppEx.Container.GetInstance<IViewModel>("OrgViewModel");
+            var w = AppEx.Container.GetInstance<IViewModel>("OrgViewModel") as OrgAddWindowViewMode;
+            w.GetOrgRefreshStoreOrSection(OPC_OrgInfo.OrgType);
             w.Model = OPC_OrgInfo;
             if (w.View.ShowDialog() == true)
             {
@@ -248,7 +253,7 @@ namespace OPCApp.AuthManage
         {
             get
             {
-                return new ObservableCollection<NodeViewModel>(children);
+                return children;
             }
         }
 

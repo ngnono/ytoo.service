@@ -102,7 +102,7 @@ namespace OPCApp.DataService.Common
         public static bool Post<T>(string url, T data)
         {
             HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
-            return response.IsSuccessStatusCode;
+             return response.IsSuccessStatusCode;
         }
 
         /// <summary>
@@ -132,9 +132,9 @@ namespace OPCApp.DataService.Common
             HttpResponseMessage response = Client.PutAsJsonAsync(url, data).Result;
             return response.IsSuccessStatusCode;
         }
-        public static T PutReturnModel<T>(string url, T data)
+        public static T PostReturnModel<T>(string url, T data)
         {
-            HttpResponseMessage response = Client.PutAsJsonAsync(url, data).Result;
+            HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
             return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<T>().Result : default(T); ;
         }
         public static bool Put(string url, object data)
