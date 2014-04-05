@@ -72,6 +72,7 @@
     <Compile Include="MenuGroup.cs" />
     <Compile Include="Models\OPC_Comment.cs" />
     <Compile Include="Models\OPC_OrgInfo.cs" />
+    <Compile Include="Models\OPC_RMAComment.cs" />
     <Compile Include="Models\OPC_ShipComment.cs" />
     <Compile Include="Models\OPC_RMAGet.cs" />
     <Compile Include="Models\OPC_RMA.cs" />
@@ -83,6 +84,8 @@
     <Compile Include="Models\OPC_SaleDetail.cs" />
     <Compile Include="Models\OPC_SaleDetailsComment.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderItem.cs" />
+    <Compile Include="Models\RMA.cs" />
     <Compile Include="Models\ShippingGet.cs" />
     <Compile Include="Models\OrderGet.cs" />
     <Compile Include="Models\Section.cs" />
