@@ -22,26 +22,20 @@
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                <Button Background="LightGray" Width="50">
-                    <StackPanel>
-                        <Image Source="/image/变更单位.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">返回</TextBlock>
-                    </StackPanel>
-                </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/查询.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Command="{Binding CommandRMACashIn}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">退货入收银</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Command="{Binding CommandFinishRMACashIn}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">完成退货入收银</TextBlock>
                     </StackPanel>
