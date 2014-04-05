@@ -30,5 +30,10 @@ namespace Intime.OPC.Repository.Support
         {
             return Select(t => t.Status == 1,t=>t.UpdatedDate,false, pageIndex, pageSize);
         }
+
+        public IList<Brand> GetByIds(int[] brandIds)
+        {
+            return Select(t=>t.Status==1 && brandIds.Contains( t.Id));
+        }
     }
 }

@@ -127,7 +127,7 @@ namespace Intime.OPC.Repository
         /// 读取某个专柜下 某个订单的销售单
         /// </summary>
         /// <param name="orderID">The order identifier.</param>
-        /// <param name="sectinID">The sectin identifier.</param>
+        /// <param name="sectinID">当-1时，查询所有专柜的销售单</param>
         /// <returns>IList{OPC_Sale}.</returns>
         IList<OPC_Sale> GetByOrderNo(string orderID, int sectinID);
 
