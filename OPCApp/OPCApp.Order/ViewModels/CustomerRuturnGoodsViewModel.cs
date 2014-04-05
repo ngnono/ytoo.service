@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.Domain.Customer;
-using OPCAPP.Domain.Dto;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
@@ -17,28 +14,68 @@ namespace OPCApp.Customer.ViewModels
     [Export("CustomerRuturnGoodsViewModel", typeof (CustomerRuturnGoodsViewModel))]
     public class CustomerRuturnGoodsViewModel : BindableBase
     {
-        public DelegateCommand CommandReturnGoodsSearch { get; set; }
-        public DelegateCommand CommandCustomerReturnGoodsSave { get; set; }
-        public RMAPost RmaPost { get; set; }
-        private List<Order> orderList;
-        public List<Order> OrderList
-        {
-            get { return orderList; }
-            set { SetProperty(ref orderList, value); }
-        }
-        public ReturnGoodsGet ReturnGoodsGet { get; set; }
+        private List<Order> _orderList;
+        private List<OrderItem> _orderitemList;
 
         public CustomerRuturnGoodsViewModel()
         {
             CommandCustomerReturnGoodsSave = new DelegateCommand(CustomerReturnGoodsSave);
             CommandReturnGoodsSearch = new DelegateCommand(ReturnGoodsSearch);
+            CommandGetDown = new DelegateCommand(GetOrderDetailByOrderNo);
+            ClearOrInitData();
+        }
+
+        public DelegateCommand CommandReturnGoodsSearch { get; set; }
+        public DelegateCommand CommandCustomerReturnGoodsSave { get; set; }
+        public DelegateCommand CommandGetDown { get; set; }
+        public RMAPost RmaPost { get; set; }
+
+        public List<Order> OrderList
+        {
+            get { return _orderList; }
+            set { SetProperty(ref _orderList, value); }
+        }
+
+        private Order _order;
+        public Order Order
+        {
+            get { return _order; }
+            set { SetProperty(ref _order, value); }
+        }
+        public List<OrderItem> OrderItemList
+        {
+            get { return _orderitemList; }
+            set { SetProperty(ref _orderitemList, value); }
+        }
+
+        public ReturnGoodsGet ReturnGoodsGet { get; set; }
+
+        private void ClearOrInitData()
+        {
+            OrderItemList = new List<OrderItem>();
+            OrderList = new List<Order>();
+        }
+
+        private void GetOrderDetailByOrderNo()
+        {
+            if (Order != null)
+            {
+                this.OrderList.Clear();
+                IList<Order> list = AppEx.Container.GetInstance<ICustomerReturnGoods>()
+                    .ReturnGoodsSearch(ReturnGoodsGet);
+            }
+
         }
 
         private void ReturnGoodsSearch()
         {
             OrderList.Clear();
-            var list = AppEx.Container.GetInstance<ICustomerReturnGoods>().ReturnGoodsSearch(RmaPost);
+            IList<Order> list = AppEx.Container.GetInstance<ICustomerReturnGoods>().ReturnGoodsSearch(ReturnGoodsGet);
             if (OrderList != null)
+            {
+                ClearOrInitData();
+            }
+            else
             {
                 OrderList = list.ToList();
             }
@@ -46,8 +83,8 @@ namespace OPCApp.Customer.ViewModels
 
         private void CustomerReturnGoodsSave()
         {
-          var bFlag=  AppEx.Container.GetInstance<ICustomerReturnGoods>().CustomerReturnGoodsSave(ReturnGoodsGet);
-          MessageBox.Show(bFlag ? "客服退货成功" : "客服退货失败", "提示");
+            bool bFlag = AppEx.Container.GetInstance<ICustomerReturnGoods>().CustomerReturnGoodsSave(RmaPost);
+            MessageBox.Show(bFlag ? "客服退货成功" : "客服退货失败", "提示");
         }
     }
 }

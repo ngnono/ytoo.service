@@ -48,5 +48,6 @@ namespace OPCApp.Domain.Customer
         public string OrderNo { get; set; }
 
         public int Count { get; set; }
+    
     }
 }

@@ -10,7 +10,8 @@ namespace OPCApp.DataService.Interface.Trans
 {
   public  interface ICustomerReturnGoods
     {
-      IList<Order> ReturnGoodsSearch(RMAPost shipComment);
-      bool CustomerReturnGoodsSave(ReturnGoodsGet shipComment);
+      IList<Order> ReturnGoodsSearch(ReturnGoodsGet shipComment);
+      IList<OrderItem> GetOrderDetailByOrderNo(string orderNO);
+      bool CustomerReturnGoodsSave(RMAPost shipComment);
     }
 }

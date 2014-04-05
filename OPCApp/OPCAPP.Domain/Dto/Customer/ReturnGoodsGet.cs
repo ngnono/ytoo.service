@@ -18,5 +18,10 @@ namespace OPCApp.Domain.Customer
         public string   PayType { get; set; }
 
         public int? BandId { get; set; }
+        public override string ToString()
+        {
+
+            return string.Format("StartDate={0}&EndDate={1}&OrderNo={2}&Telephone={2}&PayType={3}&BandId={4}", StartDate,EndDate, OrderNo, Telephone, PayType, BandId);
+        }
     }
 }

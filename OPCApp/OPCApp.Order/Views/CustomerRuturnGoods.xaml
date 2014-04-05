@@ -68,10 +68,17 @@
                     <TextBlock Text="订单" />
                 </StackPanel>
             </StackPanel>
-            <DataGrid Grid.Row="4" ItemsSource="{Binding OrderList}" IsReadOnly="True"
+            <DataGrid Grid.Row="4" ItemsSource="{Binding OrderList}" IsReadOnly="True" SelectedItem="{Binding Order}"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
 
                 <DataGrid.Columns>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
                     <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Width="200" Header="渠道订单号" Binding="{Binding OrderChannelNo}" />
                     <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}"
