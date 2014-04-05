@@ -8,61 +8,60 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_SupplierInfoMap()
         {
             // Primary Key
-            HasKey(t => t.Id);
-            Property(t => t.Id)
-               .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.HasKey(t => t.Id);
+
             // Properties
-            Property(t => t.SupplierNo)
+            this.Property(t => t.SupplierNo)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            Property(t => t.SupplierName)
+            this.Property(t => t.SupplierName)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            Property(t => t.Corporate)
+            this.Property(t => t.Corporate)
                 .HasMaxLength(50);
 
-            Property(t => t.Contact)
+            this.Property(t => t.Contact)
                 .HasMaxLength(20);
 
-            Property(t => t.Contract)
+            this.Property(t => t.Contract)
                 .HasMaxLength(20);
 
-            Property(t => t.Telephone)
+            this.Property(t => t.Telephone)
                 .HasMaxLength(20);
 
-            Property(t => t.Address)
+            this.Property(t => t.Address)
                 .HasMaxLength(100);
 
-            Property(t => t.FaxNo)
+            this.Property(t => t.FaxNo)
                 .HasMaxLength(20);
 
-            Property(t => t.TaxNo)
+            this.Property(t => t.TaxNo)
                 .HasMaxLength(20);
 
-            Property(t => t.Memo)
+            this.Property(t => t.Memo)
                 .HasMaxLength(200);
 
             // Table & Column Mappings
-            ToTable("OPC_SupplierInfo");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.SupplierNo).HasColumnName("SupplierNo");
-            Property(t => t.SupplierName).HasColumnName("SupplierName");
-            Property(t => t.StoreId).HasColumnName("StoreId");
-            Property(t => t.Corporate).HasColumnName("Corporate");
-            Property(t => t.Contact).HasColumnName("Contact");
-            Property(t => t.Contract).HasColumnName("Contract");
-            Property(t => t.Telephone).HasColumnName("Telephone");
-            Property(t => t.Address).HasColumnName("Address");
-            Property(t => t.FaxNo).HasColumnName("FaxNo");
-            Property(t => t.TaxNo).HasColumnName("TaxNo");
-            Property(t => t.Status).HasColumnName("Status");
-            Property(t => t.Memo).HasColumnName("Memo");
-            Property(t => t.CreatedDate).HasColumnName("CreatedDate");
-            Property(t => t.CreatedUser).HasColumnName("CreatedUser");
-            Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
-            Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
+            this.ToTable("OPC_SupplierInfo");
+            this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.SupplierNo).HasColumnName("SupplierNo");
+            this.Property(t => t.SupplierName).HasColumnName("SupplierName");
+            this.Property(t => t.StoreId).HasColumnName("StoreId");
+            this.Property(t => t.Corporate).HasColumnName("Corporate");
+            this.Property(t => t.Contact).HasColumnName("Contact");
+            this.Property(t => t.Contract).HasColumnName("Contract");
+            this.Property(t => t.Telephone).HasColumnName("Telephone");
+            this.Property(t => t.Address).HasColumnName("Address");
+            this.Property(t => t.FaxNo).HasColumnName("FaxNo");
+            this.Property(t => t.TaxNo).HasColumnName("TaxNo");
+            this.Property(t => t.Status).HasColumnName("Status");
+            this.Property(t => t.Memo).HasColumnName("Memo");
+            this.Property(t => t.CreatedDate).HasColumnName("CreatedDate");
+            this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
+            this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
+            this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
         }
     }
 }

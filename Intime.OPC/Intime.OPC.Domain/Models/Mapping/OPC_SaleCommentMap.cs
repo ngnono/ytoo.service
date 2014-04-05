@@ -8,28 +8,26 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_SaleCommentMap()
         {
             // Primary Key
-            HasKey(t => t.Id);
-            Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.HasKey(t => t.Id);
 
             // Properties
-            Property(t => t.SaleOrderNo)
+            this.Property(t => t.SaleOrderNo)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            Property(t => t.Content)
+            this.Property(t => t.Content)
                 .IsRequired()
                 .HasMaxLength(200);
 
             // Table & Column Mappings
-            ToTable("OPC_SaleComment");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.SaleOrderNo).HasColumnName("SaleOrderNo");
-            Property(t => t.Content).HasColumnName("Content");
-            Property(t => t.CreateDate).HasColumnName("CreateDate");
-            Property(t => t.CreateUser).HasColumnName("CreateUser");
-            Property(t => t.UpdateDate).HasColumnName("UpdateDate");
-            Property(t => t.UpdateUser).HasColumnName("UpdateUser");
+            this.ToTable("OPC_SaleComment");
+            this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.SaleOrderNo).HasColumnName("SaleOrderNo");
+            this.Property(t => t.Content).HasColumnName("Content");
+            this.Property(t => t.CreateDate).HasColumnName("CreateDate");
+            this.Property(t => t.CreateUser).HasColumnName("CreateUser");
+            this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
+            this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
         }
     }
 }

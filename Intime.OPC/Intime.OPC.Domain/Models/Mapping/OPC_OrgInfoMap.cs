@@ -8,35 +8,32 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_OrgInfoMap()
         {
             // Primary Key
-            HasKey(t => t.Id);
+            this.HasKey(t => t.Id);
 
             // Properties
-            Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
-            Property(t => t.OrgID)
+            this.Property(t => t.OrgID)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            Property(t => t.OrgName)
+            this.Property(t => t.OrgName)
                 .HasMaxLength(50);
 
-            Property(t => t.ParentID)
+            this.Property(t => t.ParentID)
                 .HasMaxLength(50);
 
-            Property(t => t.StoreOrSectionName)
+            this.Property(t => t.StoreOrSectionName)
                 .HasMaxLength(50);
 
             // Table & Column Mappings
-            ToTable("OPC_OrgInfo");
-            Property(t => t.Id).HasColumnName("ID");
-            Property(t => t.OrgName).HasColumnName("OrgName");
-            Property(t => t.ParentID).HasColumnName("ParentID");
-            Property(t => t.StoreOrSectionID).HasColumnName("StoreOrSectionID");
-            Property(t => t.StoreOrSectionName).HasColumnName("StoreOrSectionName");
-            Property(t => t.OrgType).HasColumnName("OrgType");
-            Property(t => t.IsDel).HasColumnName("IsDel");
-            Property(t => t.OrgID).HasColumnName("OrgID");
+            this.ToTable("OPC_OrgInfo");
+            this.Property(t => t.Id).HasColumnName("ID");
+            this.Property(t => t.OrgID).HasColumnName("OrgID");
+            this.Property(t => t.OrgName).HasColumnName("OrgName");
+            this.Property(t => t.ParentID).HasColumnName("ParentID");
+            this.Property(t => t.StoreOrSectionID).HasColumnName("StoreOrSectionID");
+            this.Property(t => t.StoreOrSectionName).HasColumnName("StoreOrSectionName");
+            this.Property(t => t.OrgType).HasColumnName("OrgType");
+            this.Property(t => t.IsDel).HasColumnName("IsDel");
         }
     }
 }

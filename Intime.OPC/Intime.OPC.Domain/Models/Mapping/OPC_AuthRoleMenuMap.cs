@@ -8,19 +8,18 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_AuthRoleMenuMap()
         {
             // Primary Key
-            HasKey(t => t.Id);
-            Property(t => t.Id)
-               .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.HasKey(t => t.Id);
+
             // Properties
             // Table & Column Mappings
-            ToTable("OPC_AuthRoleMenu");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.OPC_AuthMenuId).HasColumnName("OPC_AuthMenuId");
-            Property(t => t.OPC_AuthRoleId).HasColumnName("OPC_AuthRoleId");
-            Property(t => t.CreateDate).HasColumnName("CreateDate");
-            Property(t => t.CreateUserId).HasColumnName("CreateUserId");
-            Property(t => t.UpdateDate).HasColumnName("UpdateDate");
-            Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
+            this.ToTable("OPC_AuthRoleMenu");
+            this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.OPC_AuthMenuId).HasColumnName("OPC_AuthMenuId");
+            this.Property(t => t.OPC_AuthRoleId).HasColumnName("OPC_AuthRoleId");
+            this.Property(t => t.CreateDate).HasColumnName("CreateDate");
+            this.Property(t => t.CreateUserId).HasColumnName("CreateUserId");
+            this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
+            this.Property(t => t.UpdateUserId).HasColumnName("UpdateUserId");
         }
     }
 }

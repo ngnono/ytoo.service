@@ -3,25 +3,23 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace Intime.OPC.Domain.Models.Mapping
 {
-    public class OPC_SaleLogMap : EntityTypeConfiguration<OPC_SaleLog>
+    public class RMAReasonMap : EntityTypeConfiguration<RMAReason>
     {
-        public OPC_SaleLogMap()
+        public RMAReasonMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.SaleOrderNo)
+            this.Property(t => t.Reason)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(500);
 
             // Table & Column Mappings
-            this.ToTable("OPC_SaleLog");
+            this.ToTable("RMAReason");
             this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.SaleOrderNo).HasColumnName("SaleOrderNo");
+            this.Property(t => t.Reason).HasColumnName("Reason");
             this.Property(t => t.Status).HasColumnName("Status");
-            this.Property(t => t.CreatedDate).HasColumnName("CreatedDate");
-            this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
         }
     }
 }
