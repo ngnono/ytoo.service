@@ -60,6 +60,7 @@
     <Compile Include="Dto\AuthUserDto.cs" />
     <Compile Include="Dto\Custom\ReturnGoodsGet.cs" />
     <Compile Include="Dto\Custom\RMAPost.cs" />
+    <Compile Include="Dto\OrderItemDto.cs" />
     <Compile Include="Dto\ShippingSaleCreateDto.cs" />
     <Compile Include="Dto\ShippingSaleDto.cs" />
     <Compile Include="Dto\OrderDto.cs" />

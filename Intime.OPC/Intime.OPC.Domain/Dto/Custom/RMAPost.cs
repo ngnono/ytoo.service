@@ -11,6 +11,10 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using System.Collections;
+using System.Collections.Generic;
+
 namespace Intime.OPC.Domain.Dto.Custom
 {
     /// <summary>
@@ -18,6 +22,11 @@ namespace Intime.OPC.Domain.Dto.Custom
     /// </summary>
     public class RMAPost
     {
+        public RMAPost()
+        {
+            ReturnProducts=new List<KeyValuePair<int, int>>();
+        }
+
         /// <summary>
         /// Gets or sets the store fee.
         /// </summary>
@@ -49,9 +58,11 @@ namespace Intime.OPC.Domain.Dto.Custom
 
 
         /// <summary>
-        /// 退货数量
+        /// 退货明细 key ID，value 退货数量
         /// </summary>
-        /// <value>The count.</value>
-        public int Count { get; set; }
+        /// <value>The return products.</value>
+        public IList<KeyValuePair<int, int>> ReturnProducts { get; set; }
+
+      
     }
 }
