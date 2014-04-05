@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<ArrayOfItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Item Key="25" Value="支付宝" />
+  <Item Key="1001" Value="货到付款" />
+</ArrayOfItem>
