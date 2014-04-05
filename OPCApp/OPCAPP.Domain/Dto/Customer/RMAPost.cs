@@ -11,13 +11,22 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-namespace OPCApp.Domain.Customer
+
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Intime.OPC.Domain.Dto.Custom
 {
     /// <summary>
     /// 生成销售退货单时 接收实体
     /// </summary>
     public class RMAPost
     {
+        public RMAPost()
+        {
+            ReturnProducts=new List<KeyValuePair<int, int>>();
+        }
+
         /// <summary>
         /// Gets or sets the store fee.
         /// </summary>
@@ -47,7 +56,13 @@ namespace OPCApp.Domain.Customer
         /// <value>The order no.</value>
         public string OrderNo { get; set; }
 
-        public int Count { get; set; }
-    
+
+        /// <summary>
+        /// 退货明细 key明细单ID，value 退货数量
+        /// </summary>
+        /// <value>The return products.</value>
+        private IList<KeyValuePair<int, int>> ReturnProducts { get; set; }
+
+      
     }
 }

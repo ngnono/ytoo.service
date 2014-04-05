@@ -55,7 +55,7 @@ namespace OPCApp.Customer.ViewModels
             OrderItemList = new List<OrderItem>();
             OrderList = new List<Order>();
         }
-
+        /*点击销售单显示明细*/
         private void GetOrderDetailByOrderNo()
         {
             if (Order != null)
@@ -66,7 +66,7 @@ namespace OPCApp.Customer.ViewModels
             }
 
         }
-
+        /*退货单查询*/
         private void ReturnGoodsSearch()
         {
             OrderList.Clear();
@@ -80,9 +80,10 @@ namespace OPCApp.Customer.ViewModels
                 OrderList = list.ToList();
             }
         }
-
+        /*客服退货*/
         private void CustomerReturnGoodsSave()
         {
+
             bool bFlag = AppEx.Container.GetInstance<ICustomerReturnGoods>().CustomerReturnGoodsSave(RmaPost);
             MessageBox.Show(bFlag ? "客服退货成功" : "客服退货失败", "提示");
         }
