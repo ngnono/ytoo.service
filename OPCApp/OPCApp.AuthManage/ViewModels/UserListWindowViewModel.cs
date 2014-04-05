@@ -85,6 +85,11 @@ namespace OPCApp.AuthManage.ViewModels
         {
             if (CheckSelection())
             {
+                if (NodeInfo.SelectedNode.OrgId == "100")
+                {
+                    MessageBox.Show("父级组织机构节点不能删除", "提示");
+                    return;
+                }
                 GetOperationNode().DeleteOrg();
             }
         }
@@ -129,7 +134,7 @@ namespace OPCApp.AuthManage.ViewModels
 
         private bool CheckSelection()
         {
-            if (NodeInfo.SelectedNode == null)
+            if (NodeInfo.SelectedNode==null)//建议改后台
             {
                 MessageBox.Show("请选择组织机构节点", "提示");
                 return false;
