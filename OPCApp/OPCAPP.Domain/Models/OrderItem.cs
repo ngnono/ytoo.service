@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Intime.OPC.Domain.Base;
 
 namespace OPCApp.Domain.Models
 {
