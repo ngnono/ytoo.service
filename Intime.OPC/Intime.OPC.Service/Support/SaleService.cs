@@ -220,6 +220,12 @@ namespace Intime.OPC.Service.Support
             return new PageResult<SaleDto>(lst2.ToList(),lstDtos.Count);
         }
 
+        public IList<SaleDto> GetByShippingCode(string shippingCode)
+        {
+            var sale= _saleRepository.GetByShippingCode(shippingCode);
+            return Mapper.Map<OPC_Sale, SaleDto>(sale);
+        }
+
         public PageResult<SaleDto> GetNoPickUp(string saleId, int userId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize)
         {
             dtStart = dtStart.Date;
@@ -248,6 +254,7 @@ namespace Intime.OPC.Service.Support
                 return true;
             }
             saleOrder.Status = (int) saleOrderStatus;
+            saleOrder.ShippingStatus = saleOrder.Status;
             saleOrder.UpdatedDate = DateTime.Now;
             saleOrder.UpdatedUser = userId;
             _saleRepository.Update(saleOrder);

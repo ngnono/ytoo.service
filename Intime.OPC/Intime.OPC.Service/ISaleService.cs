@@ -191,5 +191,12 @@ namespace Intime.OPC.Service
         /// <param name="orderID">The order identifier.</param>
         /// <returns>IList{OPC_Sale}.</returns>
         PageResult<SaleDto> GetByOrderNo(string orderID, int userid, int pageIndex, int pageSize);
+
+        /// <summary>
+        /// 获得销售单信息
+        /// </summary>
+        /// <param name="shippingCode">快递单号</param>
+        /// <returns>SaleDto.</returns>
+        IList<SaleDto> GetByShippingCode(string shippingCode);
     }
 }

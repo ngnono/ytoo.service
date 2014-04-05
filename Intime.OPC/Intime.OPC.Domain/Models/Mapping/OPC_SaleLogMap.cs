@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Intime.OPC.Domain.Models.Mapping
@@ -7,20 +8,20 @@ namespace Intime.OPC.Domain.Models.Mapping
         public OPC_SaleLogMap()
         {
             // Primary Key
-            HasKey(t => t.Id);
+            this.HasKey(t => t.Id);
 
             // Properties
-            Property(t => t.SaleOrderNo)
+            this.Property(t => t.SaleOrderNo)
                 .IsRequired()
                 .HasMaxLength(50);
 
             // Table & Column Mappings
-            ToTable("OPC_SaleLog");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.SaleOrderNo).HasColumnName("SaleOrderNo");
-            Property(t => t.Status).HasColumnName("Status");
-            Property(t => t.CreatedDate).HasColumnName("CreatedDate");
-            Property(t => t.CreatedUser).HasColumnName("CreatedUser");
+            this.ToTable("OPC_SaleLog");
+            this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.SaleOrderNo).HasColumnName("SaleOrderNo");
+            this.Property(t => t.Status).HasColumnName("Status");
+            this.Property(t => t.CreatedDate).HasColumnName("CreatedDate");
+            this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
         }
     }
 }

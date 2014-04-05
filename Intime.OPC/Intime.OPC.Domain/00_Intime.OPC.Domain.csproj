@@ -53,9 +53,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\IEntity.cs" />
+    <Compile Include="Dto\AuthUserDto.cs" />
     <Compile Include="Dto\ShippingSaleCreateDto.cs" />
     <Compile Include="Dto\ShippingSaleDto.cs" />
     <Compile Include="Dto\OrderDto.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Enums\EnumSaleStatus.cs" />
     <Compile Include="Exception\OrderNoIsNullException.cs" />
     <Compile Include="Exception\OrderNotExistsException.cs" />
+    <Compile Include="Exception\RoleNotExistsExcepion.cs" />
     <Compile Include="Exception\SaleOrderNotExistsException.cs" />
     <Compile Include="Exception\ShippingSaleNotExistsException.cs" />
     <Compile Include="Exception\UserIdConverException.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="Models\Mapping\OPC_ChannelProductMap.cs" />
     <Compile Include="Models\Mapping\OPC_OrderCommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_OrgInfoMap.cs" />
+    <Compile Include="Models\Mapping\OPC_RMACommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMADetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMALogMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMAMap.cs" />
@@ -103,10 +107,16 @@
     <Compile Include="Models\Mapping\OPC_StockMap.cs" />
     <Compile Include="Models\Mapping\OPC_StorePriorityMap.cs" />
     <Compile Include="Models\Mapping\OPC_SupplierInfoMap.cs" />
+    <Compile Include="Models\Mapping\OrderItemMap.cs" />
     <Compile Include="Models\Mapping\OrderMap.cs" />
+    <Compile Include="Models\Mapping\RMAItemMap.cs" />
+    <Compile Include="Models\Mapping\RMAMap.cs" />
+    <Compile Include="Models\Mapping\RMAReasonMap.cs" />
     <Compile Include="Models\Mapping\SectionMap.cs" />
     <Compile Include="Models\Mapping\ShipViaMap.cs" />
     <Compile Include="Models\Mapping\StoreMap.cs" />
+    <Compile Include="Dto\Enums.cs" />
+    <Compile Include="Models\OPC_RMAComment.cs" />
     <Compile Include="Models\OPC_ShippingSale.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />
@@ -130,6 +140,10 @@
     <Compile Include="Models\OPC_StorePriority.cs" />
     <Compile Include="Models\OPC_SupplierInfo.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderItem.cs" />
+    <Compile Include="Models\RMA.cs" />
+    <Compile Include="Models\RMAItem.cs" />
+    <Compile Include="Models\RMAReason.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\ShipVia.cs" />
     <Compile Include="Models\Store.cs" />

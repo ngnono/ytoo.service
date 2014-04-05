@@ -19,5 +19,6 @@ namespace Intime.OPC.Domain.Models
         public int Status { get; set; }
         public string Group { get; set; }
         public Nullable<int> ChannelBrandId { get; set; }
+        public string Channel { get; set; }
     }
 }

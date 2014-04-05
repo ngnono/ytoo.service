@@ -17,29 +17,21 @@ namespace Intime.OPC.Repository.Support
         {
 
                 DateTime dateNow = DateTime.Now;
-
-                Expression<Func<OPC_Sale, bool>> filterExpression =
-               t => t.SellDate >= startDate && t.SellDate < endDate;
-
-                
-                if (startDate != dateNow)
+                using (var db = new YintaiHZhouContext())
                 {
-                    filterExpression = filterExpression.And(p => p.SellDate >= startDate);
+                    var filterExpression = db.OPC_Sale.Where(t => t.SellDate >= startDate && t.SellDate < endDate);
+                    
+                    if (!string.IsNullOrEmpty(orderNo))
+                    {
+                        filterExpression = filterExpression.Where(p => p.OrderNo.Contains(orderNo));
+                    }
+                    if (!string.IsNullOrEmpty(saleOrderNo))
+                    {
+                        filterExpression = filterExpression.Where(p => p.SaleOrderNo.Contains(saleOrderNo));
+                    }
+                    filterExpression = filterExpression.OrderByDescending(t => t.CreatedDate);
+                    return filterExpression.ToPageResult(pageIndex, pageSize);
                 }
-                if (endDate != dateNow)
-                {
-                    filterExpression = filterExpression.And(p => p.SellDate <= endDate);
-                }
-                if (!string.IsNullOrEmpty(orderNo))
-                {
-                    filterExpression = filterExpression.And(p => p.OrderNo.Contains(orderNo));
-                }
-                if (!string.IsNullOrEmpty(saleOrderNo))
-                {
-                    filterExpression = filterExpression.And(p => p.SaleOrderNo.Contains(saleOrderNo));
-                }
-                return Select(filterExpression,t=>t.UpdatedDate,false, pageIndex, pageSize);
-
         }
 
         public bool Finish(Dictionary<string, string> sale)

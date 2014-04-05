@@ -6,7 +6,7 @@ namespace Intime.OPC.Repository
 {
     public interface IShippingSaleRepository : IRepository<OPC_ShippingSale>
     {
-        PageResult<OPC_ShippingSale> GetBySaleOrderNo(string saleNo, int pageIndex, int pageSize = 20);
+        OPC_ShippingSale GetBySaleOrderNo(string saleNo);
 
         PageResult<OPC_ShippingSale> GetByShippingCode(string shippingCode, int pageIndex, int pageSize = 20);
 

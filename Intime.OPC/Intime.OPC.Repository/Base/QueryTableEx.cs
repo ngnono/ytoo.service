@@ -16,8 +16,9 @@ namespace System.Linq
             {
                 pageIndex = 0;
             }
-            int count = source.Count();
             var lst = source.Skip(pageIndex * pageSize).Take(pageSize).ToList();
+            int count = source.Count();
+            
             return new PageResult<T>(lst,count);
         }
     }

@@ -26,10 +26,12 @@ namespace Intime.OPC.Service
             IMappingExpression<OPC_Sale, SaleDto> map = Mapper.CreateMap<OPC_Sale, SaleDto>();
             map.ForMember(d => d.StatusName, opt => opt.MapFrom(t => GetSaleOrderStatusName(t.Status)));
             map.ForMember(d => d.CashStatusName, opt => opt.MapFrom(t => GetCashStatusName(t.CashStatus)));
-            map.ForMember(d => d.ShippingStatus, opt => opt.MapFrom(t => GetSaleOrderStatusName(t.ShippingStatus)));
+            map.ForMember(d => d.ShippingStatusName, opt => opt.MapFrom(t => GetSaleOrderStatusName(t.ShippingStatus)));
 
             IMappingExpression<OPC_SaleDetail, SaleDetailDto> map2 = Mapper.CreateMap<OPC_SaleDetail, SaleDetailDto>();
 
+
+            Mapper.CreateMap<OPC_AuthUser, AuthUserDto>();
             //todo 销售单明细 匹配
         }
 

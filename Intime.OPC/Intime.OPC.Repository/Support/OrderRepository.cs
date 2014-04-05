@@ -33,52 +33,54 @@ namespace Intime.OPC.Repository.Support
             int brandId, int status, string paymentType, string outGoodsType, string shippingContactPhone,
             string expressDeliveryCode, int expressDeliveryCompany, int pageIndex, int pageSize = 20)
         {
-          
-                Expression<Func<Order, bool>> query = t => t.CreateDate >= dtStart && t.CreateDate < dtEnd;
+            using (var db = new YintaiHZhouContext())
+            {
+                
+                var query = db.Orders.Where(t => t.CreateDate >= dtStart && t.CreateDate < dtEnd);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
-                    query = query.And(t => t.OrderNo.Contains(orderNo));
+                    query = query.Where(t => t.OrderNo.Contains(orderNo));
                 }
                 if (!string.IsNullOrWhiteSpace(orderSource))
                 {
-                    query = query.And(t => t.OrderSource == orderSource);
+                    query = query.Where(t => t.OrderSource == orderSource);
                 }
                 if (storeId > 0)
                 {
-                    query = query.And(t => t.StoreId == storeId);
+                    query = query.Where(t => t.StoreId == storeId);
                 }
                 if (brandId > 0)
                 {
-                    query = query.And(t => t.BrandId == brandId);
+                    query = query.Where(t => t.BrandId == brandId);
                 }
                 if (status > -1)
                 {
-                    query = query.And(t => t.Status == status);
+                    query = query.Where(t => t.Status == status);
                 }
                 if (!string.IsNullOrWhiteSpace(paymentType))
                 {
-                    query = query.And(t => t.PaymentMethodCode == paymentType);
+                    query = query.Where(t => t.PaymentMethodCode == paymentType);
                 }
                 if (!string.IsNullOrWhiteSpace(outGoodsType))
                 {
-                    query = query.And(t => t.PaymentMethodCode == outGoodsType);
+                    query = query.Where(t => t.PaymentMethodCode == outGoodsType);
                 }
 
                 if (!string.IsNullOrWhiteSpace(shippingContactPhone))
                 {
-                    query = query.And(t => t.ShippingContactPhone == shippingContactPhone);
+                    query = query.Where(t => t.ShippingContactPhone == shippingContactPhone);
                 }
                 if (!string.IsNullOrWhiteSpace(expressDeliveryCode))
                 {
-                    query = query.And(t => t.ShippingNo == expressDeliveryCode);
+                    query = query.Where(t => t.ShippingNo == expressDeliveryCode);
                 }
                 if (expressDeliveryCompany > -1)
                 {
-                    query = query.And(t => t.ShippingVia == expressDeliveryCompany);
+                    query = query.Where(t => t.ShippingVia == expressDeliveryCompany);
                 }
-
-            return Select(query,t=>t.CreateDate,false, pageIndex, pageSize);
-
+                query = query.OrderByDescending(t => t.CreateDate);
+                return query.ToPageResult(pageIndex, pageSize);
+            }
         }
 
         public Order GetOrderByOrderNo(string orderNo)
@@ -90,12 +92,13 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                Expression<Func<Order, bool>> filter =  t => t.CreateDate >= starTime && t.CreateDate < endTime;
+                var filter = db.Orders.Where( t => t.CreateDate >= starTime && t.CreateDate < endTime);
+               
                 if (string.IsNullOrWhiteSpace(orderNo))
                 {
-                   filter= filter.And(t => t.OrderNo.Contains(orderNo));
+                   filter= filter.Where(t => t.OrderNo.Contains(orderNo));
                 }
-                return db.Orders.Where(filter).ToList();
+                return filter.ToList();
             }
         }
 
