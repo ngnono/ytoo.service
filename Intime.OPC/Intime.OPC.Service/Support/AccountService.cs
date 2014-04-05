@@ -8,6 +8,7 @@ using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
+using Intime.OPC.Service.Security;
 
 namespace Intime.OPC.Service.Support
 {
@@ -15,6 +16,7 @@ namespace Intime.OPC.Service.Support
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IOrgInfoRepository _orgInfoRepository;
+
 
         public AccountService(IAccountRepository accountRepository,IOrgInfoRepository orgInfoRepository):base(accountRepository)
         {
@@ -24,10 +26,32 @@ namespace Intime.OPC.Service.Support
 
         #region IAccountService Members
 
+        public bool Add(OPC_AuthUser t)
+        {
+            t.Password ="123456".MD5CSP();
+            return  base.Add(t);
+        }
+
+        public bool Update(OPC_AuthUser t)
+        {
+            var u = _accountRepository.GetByID(t.Id);
+            if (u==null)
+            {
+                throw new UserNotExistException(t.Id);
+            }
+            t.Password = u.Password;
+           return   base.Update(t);
+        }
+
         public AuthUserDto Get(string userName, string password)
         {
-            
-            var user= _accountRepository.Get(userName, password);
+            if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
+            {
+                throw new Exception("用户或密码为空");
+            }
+
+            var pwd=  password.MD5CSP();
+            var user = _accountRepository.Get(userName, pwd);
             var dto= AutoMapper.Mapper.Map<OPC_AuthUser,AuthUserDto>(user);
             var org = _orgInfoRepository.GetByOrgID(user.DataAuthId);
             if (org!=null)
@@ -87,7 +111,16 @@ namespace Intime.OPC.Service.Support
             return dto;
         }
 
-     
+       
+        public void ResetPassword(int userId)
+        {
+             var u= _accountRepository.GetByID(userId);
+            if (u!=null && !u.IsSystem && u.IsValid==true)
+            {
+                u.Password = "123456".MD5CSP();
+                _accountRepository.Update(u);
+            }
+        }
 
         #endregion
 

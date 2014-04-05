@@ -13,6 +13,8 @@ namespace Intime.OPC.Domain.Models
         public DateTime? UpdateDate { get; set; }
         public int? UpdateUserId { get; set; }
 
+        public bool IsSystem { get; set; }
+
         #region IEntity Members
 
         public int Id { get; set; }

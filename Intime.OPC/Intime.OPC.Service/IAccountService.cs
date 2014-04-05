@@ -17,6 +17,8 @@ namespace Intime.OPC.Service
 
         UserDto GetByUserID(int userID);
 
-       
+
+
+        void ResetPassword(int userId);
     }
 }

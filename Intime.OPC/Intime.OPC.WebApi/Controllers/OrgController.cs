@@ -29,7 +29,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult AddOrg(OPC_OrgInfo orgInfo)
+        public IHttpActionResult AddOrg([FromBody]OPC_OrgInfo orgInfo)
         {
             return DoFunction(() =>
             {
@@ -39,7 +39,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult UpdateOrg(OPC_OrgInfo orgInfo)
+        public IHttpActionResult UpdateOrg([FromBody]OPC_OrgInfo orgInfo)
         {
             return DoFunction(() =>
             {
@@ -49,7 +49,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult DeleteOrg(int orgInfoId)
+        public IHttpActionResult DeleteOrg([FromBody]int orgInfoId)
         {
             return DoFunction(() =>
             {

@@ -21,6 +21,7 @@ namespace Intime.OPC.Service.Support
 
         #region IRoleService Members
 
+       
         public PageResult<OPC_AuthRole> Select(int pageIndex, int pageSize)
         {
             return _repository.GetAll(pageIndex, pageSize);

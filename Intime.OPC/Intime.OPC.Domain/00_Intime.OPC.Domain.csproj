@@ -76,6 +76,7 @@
     <Compile Include="Enums\EnumSaleStatus.cs" />
     <Compile Include="Exception\OrderNoIsNullException.cs" />
     <Compile Include="Exception\OrderNotExistsException.cs" />
+    <Compile Include="Exception\RoleNotExistsExcepion.cs" />
     <Compile Include="Exception\SaleOrderNotExistsException.cs" />
     <Compile Include="Exception\ShippingSaleNotExistsException.cs" />
     <Compile Include="Exception\UserIdConverException.cs" />

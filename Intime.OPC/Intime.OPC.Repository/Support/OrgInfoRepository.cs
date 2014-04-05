@@ -13,7 +13,7 @@ namespace Intime.OPC.Repository.Support
            return  Select(t => t.OrgID.StartsWith(orgid) && t.OrgType == orgtype);
         }
 
-        public override bool Create(OPC_OrgInfo entity)
+        public bool Create(OPC_OrgInfo entity)
         {
             entity.IsDel = false;
             return base.Create(entity);

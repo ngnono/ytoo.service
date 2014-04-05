@@ -36,7 +36,7 @@ namespace Intime.OPC.Repository.Base
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public virtual bool Create(T entity)
+        public  bool Create(T entity)
         {
             using (var db = new YintaiHZhouContext())
             {
@@ -56,7 +56,7 @@ namespace Intime.OPC.Repository.Base
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public virtual bool Update(T entity)
+        public  bool Update(T entity)
         {
             using (var db = new YintaiHZhouContext())
             {
@@ -76,7 +76,7 @@ namespace Intime.OPC.Repository.Base
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public virtual bool Delete(int id)
+        public  bool Delete(int id)
         {
             using (var db = new YintaiHZhouContext())
             {

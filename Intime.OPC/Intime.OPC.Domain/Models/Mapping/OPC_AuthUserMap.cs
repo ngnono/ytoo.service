@@ -49,6 +49,8 @@ namespace Intime.OPC.Domain.Models.Mapping
             Property(t => t.SectionName).HasColumnName("SectionName");
             Property(t => t.OrgName).HasColumnName("OrgName");
             Property(t => t.DataAuthId).HasColumnName("DataAuthId");
+
+            Property(t => t.IsSystem).HasColumnName("IsSystem");
         }
     }
 }

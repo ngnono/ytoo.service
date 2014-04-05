@@ -61,6 +61,7 @@
     <Compile Include="ITransService.cs" />
     <Compile Include="MapConfig.cs" />
     <Compile Include="Map\Mapper.cs" />
+    <Compile Include="Security\EncryptExtensions.cs" />
     <Compile Include="Support\EnumService.cs" />
     <Compile Include="Support\OrgService.cs" />
     <Compile Include="Support\BrandService.cs" />

@@ -12,9 +12,10 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -40,6 +41,10 @@ namespace Intime.OPC.Repository.Support
                 OPC_AuthRole ent = db.OPC_AuthRole.FirstOrDefault(t => t.Id == roleID);
                 if (ent != null)
                 {
+                    if (ent.IsSystem)
+                    {
+                        throw new Exception("超级管理员不能删除");
+                    }
                     ent.IsValid = enable;
                     db.SaveChanges();
 
@@ -49,9 +54,28 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        public bool Delete(int id)
+        {
+            OPC_AuthRole d = base.GetByID(id);
+            if (d == null)
+            {
+                if (d.IsSystem)
+                {
+                    throw new Exception("超级管理员不能删除");
+                }
+                return base.Delete(id);
+            }
+            throw new RoleNotExistsExcepion(id);
+        }
+
         public PageResult<OPC_AuthRole> All(int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.IsValid,t=>t.UpdateDate,false, pageIndex,pageSize);
+            return Select(t => t.IsValid && !t.IsSystem, t => t.UpdateDate, false, pageIndex, pageSize);
+        }
+
+        public PageResult<OPC_AuthRole> GetAll(int pageIndex, int pageSize)
+        {
+            return Select2<OPC_AuthRole, int>(t => t.IsValid && t.IsSystem == false, t => t.Id,true, pageIndex, pageSize);
         }
 
         public PageResult<OPC_AuthRole> GetByUserID(int userID, int pageIndex, int pageSize = 20)
