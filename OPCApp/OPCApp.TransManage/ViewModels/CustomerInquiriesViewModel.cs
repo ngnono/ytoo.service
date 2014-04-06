@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;
@@ -92,6 +93,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetOrder()
         {
+            OrderList = new List<Order>();
             string orderfilter =
                 string.Format(
                     "orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}",
@@ -99,9 +101,11 @@ namespace OPCApp.TransManage.ViewModels
                     string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId, string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status, OrderGet.PaymentType, OrderGet.OutGoodsType,
                     OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
             
-
-
-            OrderList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
+            var re=AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
+            if (re != null)
+            {
+                OrderList = re.ToList();
+            }
         }
 
         public void GetSaleByOrderId()
