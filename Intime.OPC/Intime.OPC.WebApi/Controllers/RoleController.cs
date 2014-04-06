@@ -30,7 +30,8 @@ namespace Intime.OPC.WebApi.Controllers
         {
             try
             {
-                _roleService.SetUsers(roleUserDto);
+                var userID = GetCurrentUserID();
+                _roleService.SetUsers(roleUserDto, userID);
                 return Ok();
             }
             catch (Exception ex)

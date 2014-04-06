@@ -66,17 +66,10 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetUsersByRoleID(int roleId, int pageIndex, int pageSize)
+        public IHttpActionResult GetUsersByRoleID(int roleId)
         {
-            if (pageIndex<1)
-            {
-                pageIndex = 1;
-            }
-            if (pageSize<1)
-            {
-                pageSize = 20;
-            }
-            var lst = _accountService.GetUsersByRoleID(roleId,pageIndex,pageSize);
+
+            var lst = _accountService.GetUsersByRoleID(roleId,1,1000).Result;
 
             return Ok(lst);
         }
