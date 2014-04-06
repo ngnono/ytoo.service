@@ -9,7 +9,7 @@ using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Impl.Trans
 {
-    [Export(typeof (ICustomerInquiriesService))]
+    [Export(typeof(ICustomerReturnGoods))]
     public class CustomerReturnGoodsService : ICustomerReturnGoods
     {
        

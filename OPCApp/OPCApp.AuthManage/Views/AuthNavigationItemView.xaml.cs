@@ -21,9 +21,11 @@
 using System;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CustomControlLibrary;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Regions;
 using OPCApp.AuthManage.ViewModels;
@@ -90,12 +92,41 @@ namespace OPCApp.AuthManage.Views
             var o2 = o1.Parent as Expander;
             o2.IsExpanded = !o2.IsExpanded;
         }
+        private static ProgressBarWindow pbw = new ProgressBarWindow();
+        
+        public static ProgressBarWindow Pbw
+        {
+            get { return pbw; }
+            set { pbw = value; }
+        }
+        private void OnWorkerMethodStart()
+        {
+            ProgressOperateClass myC = new ProgressOperateClass();
+            myC.OnWorkerComplete += new ProgressOperateClass.OnWorkerMethodCompleteDelegate(OnWorkerMethodComplete);
+            ThreadStart tStart = new ThreadStart(myC.WorkerMethod);
+            Thread t = new Thread(tStart);
+            t.Start();
+            pbw.ShowDialog();
+        }
 
+        private void OnWorkerMethodComplete(string message)
+        {
+            pbw.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal,
+            new Action(
+            delegate()
+            {
+                pbw.Hide();
+            }
+            ));
 
+           
+
+        }
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                OnWorkerMethodStart();
                 var o = sender as RadioButton;
                 object o1 = o.CommandParameter;
                 while (regionManager.Regions[RegionNames.MainContentRegion].Views.Count() > 0)
@@ -116,9 +147,11 @@ namespace OPCApp.AuthManage.Views
                         () => AppEx.Container.GetInstance<UserControl>(o1.ToString())
                         );
                 }
+                OnWorkerMethodComplete("");
             }
             catch (Exception ex)
             {
+                OnWorkerMethodComplete("");
                 MessageBox.Show("功能正在开发中", "提示");
             }
         }
