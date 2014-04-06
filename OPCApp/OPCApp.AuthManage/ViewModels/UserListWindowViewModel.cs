@@ -201,11 +201,11 @@ namespace OPCApp.AuthManage.ViewModels
              return true;
         }
 
-        public override bool BeforeEdit(UserAddWindowViewModel vm)
-        {
+        //public override bool BeforeEdit(UserAddWindowViewModel vm)
+        //{
 
-            return true;
-        }
+        //    return true;
+        //}
 
         /*初始化页面固有的数据值*/
 
