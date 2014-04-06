@@ -5,19 +5,22 @@ using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
-using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service.Support
 {
     public class SaleRMAService : BaseService<OPC_SaleRMA>, ISaleRMAService
     {
-        private ISaleDetailRepository _saleDetailRepository;
-        private ISaleRepository _saleRepository;
-        private IOrderItemRepository _orderItemRepository;
-        private IRmaDetailRepository _rmaDetailRepository;
-        private ISectionRepository _sectionRepository;
-        private IRMARepository _rmaRepository;
-        public SaleRMAService(ISaleRMARepository saleRmaRepository, ISaleDetailRepository saleDetailRepository, ISaleRepository saleRepository, IOrderItemRepository orderItemRepository, IRmaDetailRepository rmaDetailRepository, ISectionRepository sectionRepository, IRMARepository rmaRepository) : base(saleRmaRepository)
+        private readonly IOrderItemRepository _orderItemRepository;
+        private readonly IRmaDetailRepository _rmaDetailRepository;
+        private readonly IRMARepository _rmaRepository;
+        private readonly ISaleDetailRepository _saleDetailRepository;
+        private readonly ISaleRepository _saleRepository;
+        private readonly ISectionRepository _sectionRepository;
+
+        public SaleRMAService(ISaleRMARepository saleRmaRepository, ISaleDetailRepository saleDetailRepository,
+            ISaleRepository saleRepository, IOrderItemRepository orderItemRepository,
+            IRmaDetailRepository rmaDetailRepository, ISectionRepository sectionRepository, IRMARepository rmaRepository)
+            : base(saleRmaRepository)
         {
             _saleDetailRepository = saleDetailRepository;
             _saleRepository = saleRepository;
@@ -27,34 +30,41 @@ namespace Intime.OPC.Service.Support
             _rmaRepository = rmaRepository;
         }
 
+        #region ISaleRMAService Members
+
         public void CreateSaleRMA(int userId, RMAPost rma)
         {
-            var saleDetails = _saleDetailRepository.GetByOrderNo(rma.OrderNo).OrderByDescending(t=>t.SaleCount).ToList();
-            var sales = _saleRepository.GetByOrderNo(rma.OrderNo, -1).OrderByDescending(t=>t.SalesCount).ToList();
-            var orderItems =
-                _orderItemRepository.GetByIDs(rma.ReturnProducts.Select<KeyValuePair<int, int>, int>(t => t.Key));
+            List<OPC_SaleDetail> saleDetails =
+                _saleDetailRepository.GetByOrderNo(rma.OrderNo).OrderByDescending(t => t.SaleCount).ToList();
+            List<OPC_Sale> sales =
+                _saleRepository.GetByOrderNo(rma.OrderNo, -1).OrderByDescending(t => t.SalesCount).ToList();
+            IList<OrderItem> orderItems =
+                _orderItemRepository.GetByIDs(rma.ReturnProducts.Select(t => t.Key));
 
-            IList<OPC_RMADetail> lstRmaDetails=new List<OPC_RMADetail>();//生成的退货单明细
-            IList<OPC_SaleDetail> lstSaleDetails=new List<OPC_SaleDetail>();//需要退货的 销售单明细
-            IDictionary<string,decimal> dicSaleOrderNoAcount=new Dictionary<string, decimal>();
+            IList<OPC_RMADetail> lstRmaDetails = new List<OPC_RMADetail>(); //生成的退货单明细
+            IList<OPC_SaleDetail> lstSaleDetails = new List<OPC_SaleDetail>(); //需要退货的 销售单明细
+            IDictionary<string, decimal> dicSaleOrderNoAcount = new Dictionary<string, decimal>();
 
-            var orderCount = ((ISaleRMARepository)_repository).Count(rma.OrderNo) + 1;
-            IList<RmaConfig> lstRmaConfigs=new List<RmaConfig>();
+            int orderCount = ((ISaleRMARepository) _repository).Count(rma.OrderNo) + 1;
+            IList<RmaConfig> lstRmaConfigs = new List<RmaConfig>();
             foreach (var kv in rma.ReturnProducts)
             {
-                var oItem = orderItems.FirstOrDefault(t => t.Id == kv.Key);
-                var details = saleDetails.Where(t => t.StockId == kv.Key).OrderByDescending(t=>t.SaleCount).ToList();
+                OrderItem oItem = orderItems.FirstOrDefault(t => t.Id == kv.Key);
+
+                List<OPC_SaleDetail> details =
+                    saleDetails.Where(t => t.OrderItemId == kv.Key).OrderByDescending(t => t.SaleCount).ToList();
                 int returnCount = kv.Value;
-                var detail = details.FirstOrDefault();
-                while (returnCount>detail.SaleCount)
+                OPC_SaleDetail detail = details.FirstOrDefault();
+                while (returnCount > detail.SaleCount)
                 {
-                    var config = lstRmaConfigs.FirstOrDefault(t => t.SaleOrderNo == detail.SaleOrderNo);
-                    if (config==null)
+                    RmaConfig config = lstRmaConfigs.FirstOrDefault(t => t.SaleOrderNo == detail.SaleOrderNo);
+                    if (config == null)
                     {
                         config = new RmaConfig(userId);
                         config.RmaNo = CreateRmaNo(rma.OrderNo, orderCount);
                         config.SaleOrderNo = detail.SaleOrderNo;
-                        config.OpcSale=sales.FirstOrDefault(t => t.SaleOrderNo == config.SaleOrderNo);
+                        config.RefundAmount = (Decimal) (rma.RealRMASumMoney);
+                        config.OpcSale = sales.FirstOrDefault(t => t.SaleOrderNo == config.SaleOrderNo);
                         config.StoreID = _sectionRepository.GetByID(config.OpcSale.SectionId.Value).StoreId.Value;
                         lstRmaConfigs.Add(config);
                         orderCount++;
@@ -72,9 +82,9 @@ namespace Intime.OPC.Service.Support
                     returnCount = returnCount - detail.SaleCount;
                 }
 
-                if (returnCount>0)
+                if (returnCount > 0)
                 {
-                    var config = lstRmaConfigs.FirstOrDefault(t => t.SaleOrderNo == detail.SaleOrderNo);
+                    RmaConfig config = lstRmaConfigs.FirstOrDefault(t => t.SaleOrderNo == detail.SaleOrderNo);
                     if (config == null)
                     {
                         config = new RmaConfig(userId);
@@ -91,48 +101,46 @@ namespace Intime.OPC.Service.Support
                     lstRmaConfigs.Add(config);
                 }
             }
-
-            
-           
         }
+
+        #endregion
 
         private void Save(IList<RmaConfig> configs)
         {
-            foreach (var config in configs)
+            foreach (RmaConfig config in configs)
             {
                 config.Create();
                 _rmaRepository.Create(config.OpcRma);
                 _repository.Create(config.OpcSaleRma);
-                foreach (var rmaDetail in config.OpcRmaDetails)
+                foreach (OPC_RMADetail rmaDetail in config.OpcRmaDetails)
                 {
                     _rmaDetailRepository.Create(rmaDetail);
                 }
             }
-
         }
 
-        private string CreateRmaNo(string orderNo,int count)
+        private string CreateRmaNo(string orderNo, int count)
         {
             return orderNo + count.ToString().PadLeft(3, '0');
         }
     }
 
-    class RmaConfig
+    internal class RmaConfig
     {
         public RmaConfig(int userId)
         {
             UserId = userId;
-            Details=new List<SubRmaConfig>();
-            OpcRmaDetails=new List<OPC_RMADetail>();
+            Details = new List<SubRmaConfig>();
+            OpcRmaDetails = new List<OPC_RMADetail>();
         }
 
+        public decimal RefundAmount { get; set; }
         public int UserId { get; private set; }
 
         public int StoreID { get; set; }
         public string RmaNo { get; set; }
 
         public string SaleOrderNo { get; set; }
-
 
         public IList<SubRmaConfig> Details { get; set; }
 
@@ -145,10 +153,9 @@ namespace Intime.OPC.Service.Support
 
         public void Create()
         {
-          
-            foreach (var subRmaConfig in Details)
+            foreach (SubRmaConfig subRmaConfig in Details)
             {
-                OpcRmaDetails.Add( subRmaConfig.CreateRmaDetail(UserId,RmaNo));
+                OpcRmaDetails.Add(subRmaConfig.CreateRmaDetail(UserId, RmaNo));
             }
 
             OpcRma = CreateOpcRma(UserId);
@@ -156,7 +163,6 @@ namespace Intime.OPC.Service.Support
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>OPC_RMA.</returns>
@@ -173,10 +179,10 @@ namespace Intime.OPC.Service.Support
             rma.OrderNo = OpcSale.OrderNo;
             rma.Status = EnumRMAStatus.NoDelivery.AsID();
             rma.RMAType = 1;
-            
-            rma.RefundAmount = 0;
+
+            rma.RefundAmount = RefundAmount;
             rma.RMAAmount = ComputeAccount();
-           
+
             //_repository.Create(rma);
             return rma;
         }
@@ -191,7 +197,7 @@ namespace Intime.OPC.Service.Support
 
             rma.OrderNo = OpcSale.OrderNo;
             rma.RealRMASumMoney = ComputeAccount();
-            rma.RMACount = Details.Sum(t=>t.ReturnCount);
+            rma.RMACount = Details.Sum(t => t.ReturnCount);
             rma.RMANo = RmaNo;
             rma.BackDate = DateTime.Now;
             return rma;
@@ -199,10 +205,9 @@ namespace Intime.OPC.Service.Support
 
         public IList<OPC_RMADetail> CreateRmaDetails()
         {
-            var lstDetails=new List<OPC_RMADetail>();
-            foreach (var config in Details)
+            var lstDetails = new List<OPC_RMADetail>();
+            foreach (SubRmaConfig config in Details)
             {
-                
             }
 
             return lstDetails;
@@ -211,7 +216,7 @@ namespace Intime.OPC.Service.Support
         public decimal ComputeAccount()
         {
             decimal m = 0.0m;
-            foreach (var config in Details)
+            foreach (SubRmaConfig config in Details)
             {
                 m += config.ReturnCount*config.OrderItem.ItemPrice;
             }
@@ -224,14 +229,12 @@ namespace Intime.OPC.Service.Support
         public int OrderDetailID { get; set; }
         public int ReturnCount { get; set; }
 
-
         public OPC_SaleDetail OpcSaleDetail { get; set; }
 
         public OrderItem OrderItem { get; set; }
 
-
         /// <summary>
-        /// 生成退货单明细 OPC_RMADetail
+        ///     生成退货单明细 OPC_RMADetail
         /// </summary>
         /// <param name="detail">The detail.</param>
         /// <param name="userId">The user identifier.</param>
@@ -254,6 +257,5 @@ namespace Intime.OPC.Service.Support
 
             return rmaDetail;
         }
-
     }
 }
