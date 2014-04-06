@@ -47,8 +47,9 @@ namespace OPCApp.Infrastructure.Mvvm
             View.Cancel();
         }
 
-        private void OkAction()
+        public void OkAction()
         {
+            BeforeDoOKAction((T) Model);
             IList<ValidationResult> errors = Validate((T) Model);
             if (errors.Count > 0)
             {
@@ -70,6 +71,10 @@ namespace OPCApp.Infrastructure.Mvvm
             //}
             View.CloseView();
             AfterDoOKAction();
+        }
+        public virtual bool BeforeDoOKAction(T t)
+        {
+            return true;
         }
 
         protected abstract IBaseDataService<T> GetDataService();

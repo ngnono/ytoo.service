@@ -15,10 +15,23 @@ namespace OPCApp.AuthManage.ViewModels
         public UserAddWindowViewModel()
             : base("UserView")
         {
-            Model = new OPC_AuthUser();
+           // Model = new OPC_AuthUser();
             OrgList = AppEx.Container.GetInstance<IOrgService>().Search();
+           // OrgInfo = new OPC_OrgInfo();
         }
 
+        private OPC_OrgInfo orgInfo;
+        public OPC_OrgInfo OrgInfo
+        {
+            get { return orgInfo; }
+            set { SetProperty(ref orgInfo, value); }
+        }
+        public override bool BeforeDoOKAction(OPC_AuthUser t)
+        {
+            t.DataAuthId = orgInfo.OrgID;
+            t.DataAuthName = orgInfo.OrgName;
+            return true;
+        } 
         private IList<OPC_OrgInfo> _orgList;
         public IList<OPC_OrgInfo> OrgList
         {

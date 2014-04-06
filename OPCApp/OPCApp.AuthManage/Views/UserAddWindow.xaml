@@ -40,6 +40,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid Grid.Column="0" Grid.Row="0"  Background="LightGray" Margin="10">
                     <StackPanel Orientation="Horizontal">
@@ -58,7 +59,8 @@
                 <Grid Grid.Row="2" Grid.Column="0" Background="LightGray" Margin="10">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Width="90" Text="所属机构" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        <ComboBox Foreground="Blue" Width="350" Height="25" ItemsSource="{ Binding OrgList}" DisplayMemberPath="OrgName" SelectedValuePath="OrgId" SelectedValue="{Binding Model.DataAuthId}" />
+                        <ComboBox Foreground="Blue" Width="350" Height="25" ItemsSource="{ Binding OrgList}" 
+                                  DisplayMemberPath="OrgName" SelectedValuePath="OrgId"  SelectedItem="{Binding OrgInfo}" SelectedValue="{Binding Model.DataAuthId, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="3" Grid.Column="0" Background="LightGray" Margin="10">
@@ -67,6 +69,12 @@
                         <CheckBox Foreground="Blue" Width="350" Height="25" IsChecked="{Binding Model.IsValid }" />
                     </StackPanel>
                     <TextBox Foreground="Blue" Width="350" Height="25" Visibility="Hidden" Text="{Binding Model.OrgId}" Margin="0,4" />
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="0" Background="LightGray" Margin="10">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Width="90" Text="密码" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBox Foreground="Blue" Width="350" Height="25" Text="{Binding Model.Password}" />
+                    </StackPanel>
                 </Grid>
 
 
