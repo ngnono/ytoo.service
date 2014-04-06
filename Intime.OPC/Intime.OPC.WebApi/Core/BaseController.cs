@@ -46,6 +46,7 @@ namespace Intime.OPC.WebApi.Core
             try
             {
                 var o = action();
+                GetLog().Error(o);
                 return Ok(o);
             }
             catch (HttpResponseException ex)
@@ -55,8 +56,14 @@ namespace Intime.OPC.WebApi.Core
             catch (UserIdConverException ex)
             {
                 GetLog().Error(ex);
+
                 return BadRequest("用户未登录或非法用户！");
             }
+            catch (SaleOrderNotExistsException e)
+            {
+                return BadRequest("销售单编号不能为空");
+            }
+
             catch (Exception ex)
             {
                 GetLog().Error(ex);

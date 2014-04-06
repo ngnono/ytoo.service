@@ -196,9 +196,16 @@ namespace OPCApp.AuthManage.ViewModels
                 MessageBox.Show("请选择部门", "提示");
                 return false;
             }
+             if(t==null)t=new OPC_AuthUser();
              t.OrgId = curNode.OrgId;
              return true;
         }
+
+        //public override bool BeforeEdit(UserAddWindowViewModel vm)
+        //{
+
+        //    return true;
+        //}
 
         /*初始化页面固有的数据值*/
 

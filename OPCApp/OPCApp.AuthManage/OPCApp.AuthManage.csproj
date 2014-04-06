@@ -195,6 +195,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Image\agt_action_fail.png" />
+    <Content Include="Image\cancel.png" />
+    <Content Include="Image\cancel_1.png" />
+    <Content Include="Image\fg.jpg" />
+    <Content Include="Image\fileclose.png" />
+    <Content Include="Image\login_title_bg.png" />
+    <Content Include="Image\UIDA登录_03.gif" />
+    <Content Include="Image\UIDA登录_06.gif" />
+    <Content Include="Image\未标题-1_03.gif" />
     <Content Include="Image\1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

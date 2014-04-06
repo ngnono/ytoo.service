@@ -7,8 +7,8 @@
     <ProjectGuid>{006B987F-8E52-45BB-BFF4-6D3DFA278AB9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OPCApp.Order</RootNamespace>
-    <AssemblyName>OPCApp.Order</AssemblyName>
+    <RootNamespace>OPCApp.Customer</RootNamespace>
+    <AssemblyName>OPCApp.Customer</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,6 +50,7 @@
       <HintPath>..\DllFile\MahApps.Metro.Resources.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Controls" />
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.Prism, Version=4.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DllFile\Microsoft.Practices.Prism.dll</HintPath>
@@ -62,12 +63,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DllFile\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
     </Reference>
+    <Reference Include="Prism.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\Prism.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -81,33 +87,21 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OrderModule.cs" />
-    <Compile Include="Model\ModelBase.cs" />
-    <Compile Include="Model\OrderGoodsInfo.cs" />
-    <Compile Include="Model\OrderInfo.cs" />
-    <Compile Include="ViewModels\OrderInfoSearchViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="Views\OrderGoodsInfoView.xaml.cs">
-      <DependentUpon>OrderGoodsInfoView.xaml</DependentUpon>
+    <Compile Include="ViewModels\CustomerRuturnGoodsViewModel.cs" />
+    <Compile Include="ViewModels\CustomerSelfNetRuturnGoods.cs" />
+    <Compile Include="Views\CustomerSelfNetRuturnGoods.xaml.cs">
+      <DependentUpon>CustomerSelfNetRuturnGoods.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\OrderGoodsInfoViewModel.cs" />
-    <Compile Include="Views\OrderInfoSearch.xaml.cs">
-      <DependentUpon>OrderInfoSearch.xaml</DependentUpon>
+    <Compile Include="Views\CustomerRuturnGoods.xaml.cs">
+      <DependentUpon>CustomerRuturnGoods.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\OrderSearch.xaml.cs">
-      <DependentUpon>OrderSearch.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Views\OrderGoodsInfoView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\CustomerSelfNetRuturnGoods.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\OrderInfoSearch.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\CustomerRuturnGoods.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\OrderSearch.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +129,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
+      <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
+      <Name>OPCApp.DataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
+      <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
+      <Name>OPCApp.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OPCApp.Main.Controls\OPCApp.Main.Controls.csproj">
       <Project>{c8950baf-06a5-4af3-964a-55b18b0e0b9f}</Project>
       <Name>OPCApp.Main.Controls</Name>
@@ -143,6 +145,9 @@
       <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
       <Name>OPCApp.Main.Infrastructure</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\查询.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

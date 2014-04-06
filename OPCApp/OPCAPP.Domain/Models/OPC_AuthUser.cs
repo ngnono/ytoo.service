@@ -15,10 +15,10 @@ namespace OPCApp.Domain.Models
         [Required(ErrorMessage = "登陆名不能为空！")]
         public string LogonName { get; set; }
 
-        [Required(ErrorMessage = "密码不能为空！")]
         public string Password { get; set; }
 
         public string DataAuthId { get; set; }
+        public string DataAuthName { get; set; }
 
         public string Phone { get; set; }
         public bool? IsValid { get; set; }

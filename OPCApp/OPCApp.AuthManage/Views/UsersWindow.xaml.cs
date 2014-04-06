@@ -5,41 +5,45 @@ using Microsoft.Practices.Prism.Commands;
 using OPCApp.AuthManage.ViewModels;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.Mvvm;
+using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.AuthManage.Views
 {
     [Export("UsersView", typeof (UsersWindow))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class UsersWindow : MetroWindow
+    public partial class UsersWindow : MetroWindow, IBaseView
 
     {
-        public UsersWindow()
+
+        
+        [ImportingConstructor]
+        public UsersWindow(UsersWindowViewModel viewModel)
         {
             InitializeComponent();
+            ViewModel = viewModel;
+            ViewModel.CancelCommand = new DelegateCommand(Cancel);
+            ViewModel.OkCommand = new DelegateCommand(CloseView);
         }
 
-        [Import("UsersViewModel", typeof (UsersWindowViewModel))]
+
         public UsersWindowViewModel ViewModel
         {
             get { return DataContext as UsersWindowViewModel; }
-            set
-            {
-                DataContext = value;
-                ViewModel.CancelCommand = new DelegateCommand(Cancel);
-                ViewModel.OkCommand = new DelegateCommand(CloseView);
-            }
+            set { DataContext = value; }
         }
+
         public void Query(int size, int pageIndex)
         {
-            var vm = AppEx.Container.GetInstance<IViewModel>("UserListViewModel") as UserListWindowViewModel;
-            vm.PageIndex = pageIndex;
-            vm.PageSize = size;
-            vm.SearchAction();
+            ViewModel.PageIndex = pageIndex;
+            ViewModel.PageSize = size;
+            ViewModel.SearchCommand.Execute();
         }
+
         private void dataPager_PageChanged(object sender, PageChangedEventArgs args)
         {
             Query(args.PageSize, args.PageIndex);
         }
+
         public void Cancel()
         {
             DialogResult = false;
@@ -51,5 +55,6 @@ namespace OPCApp.AuthManage.Views
             DialogResult = true;
             Close();
         }
+
     }
 }

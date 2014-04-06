@@ -11,7 +11,7 @@ using OPCApp.Infrastructure.Mvvm.Model;
 
 namespace OPCApp.AuthManage.ViewModels
 {
-    [Export("UsersViewModel", typeof (UsersWindowViewModel))]
+    [Export(typeof (UsersWindowViewModel))]
     public class UsersWindowViewModel : BindableBase
     {
         /*选择字段*/
@@ -42,16 +42,35 @@ namespace OPCApp.AuthManage.ViewModels
 
         private void Search()
         {
+            int indexFiled = FieldList.IndexOf(SelectedFiled);
             var dicFilter = new Dictionary<string, object>
             {
-                {FieldList.IndexOf(SelectedFiled).ToString(), SelectedFiledValue}
+                {"SearchField", indexFiled == -1 ? 1 : indexFiled},
+                {"SearchValue", SelectedFiledValue},
+                {"pageIndex", PageIndex},
+                {"pageSize", PageSize},
+                {"orgid", ""}
             };
             IBaseDataService<OPC_AuthUser> userDataService = GetDataService();
-            userDataService.Search(dicFilter);
+           var prResultTemp= userDataService.Search(dicFilter);
+           if (prResultTemp == null || prResultTemp.Result == null)
+            {
+                return;
+            }
+            PrResult = new PageDataResult<OPC_AuthUser>();
+            PrResult.Models = prResultTemp.Result.ToList();
+            PrResult.Total = prResultTemp.TotalCount;
         }
         public int PageSize { get; set; }
         public int PageIndex { get; set; }
-        public PageDataResult<OPC_AuthUser> PrResult { get; set; }
+        private PageDataResult<OPC_AuthUser> _prResult;
+
+        public PageDataResult<OPC_AuthUser> PrResult
+        {
+            get { return _prResult; }
+            set { SetProperty(ref _prResult, value); }
+        }
+
         /*初始化页面固有的数据值*/
 
         private void Init()
@@ -71,7 +90,12 @@ namespace OPCApp.AuthManage.ViewModels
 
         public void SelectedUser()
         {
-            SelectedUserList = UserList.Where(e => e.IsSelected).ToList();
+            if (PrResult == null || PrResult.Models == null || PrResult.Models.Count==0)
+            {
+                SelectedUserList = new List<OPC_AuthUser>();
+                return;
+            }
+            SelectedUserList =  PrResult.Models.Where(e => e.IsSelected).ToList();
         }
 
         protected IBaseDataService<OPC_AuthUser> GetDataService()

@@ -15,13 +15,13 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
-                <Button Background="LightGray" Width="50">
+                <Button Background="LightGray" Width="50"  Command="{Binding OkCommand}">
                     <StackPanel>
                         <Image Source="/image/导出.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">确定</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding SetStopUserCommand}">
+                <Button Background="LightGray" Width="50" Command="{Binding CancelCommand}">
                     <StackPanel>
                         <Image Source="/image/解挂.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">取消</TextBlock>
@@ -53,13 +53,22 @@
                   VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                   SelectedItem="{Binding CurModel}"
                   ItemsSource="{Binding Path=ItemsSource,ElementName=dataPager}">
-            <i:Interaction.Triggers>
+            <!--<i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding DBGridClickCommand}" />
                 </i:EventTrigger>
 
-            </i:Interaction.Triggers>
+            </i:Interaction.Triggers>-->
             <DataGrid.Columns>
+                <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="OrgId" Width="50" Binding="{Binding OrgId}" Visibility="Hidden" />
                 <DataGridTextColumn Header="authid" Visibility="Hidden" Width="150" Binding="{Binding DataAuthId}" />
                 <DataGridTextColumn Header="Id" Width="50" Binding="{Binding Id}" Visibility="Hidden" />

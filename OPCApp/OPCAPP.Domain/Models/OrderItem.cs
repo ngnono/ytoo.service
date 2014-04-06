@@ -1,38 +1,41 @@
 using System;
 using System.Collections.Generic;
-using Intime.OPC.Domain.Base;
 
 namespace OPCApp.Domain.Models
 {
     public partial class OrderItem
     {
+        public bool IsSelected { get; set; }
         public int Id { get; set; }
-        public string OrderNo { get; set; }
-        public int ProductId { get; set; }
-        public string ProductDesc { get; set; }
         public string StoreItemNo { get; set; }
-        public string StoreItemDesc { get; set; }
-        public int Quantity { get; set; }
-        public Nullable<decimal> UnitPrice { get; set; }
-        public decimal ItemPrice { get; set; }
-        public decimal ExtendPrice { get; set; }
-        public int BrandId { get; set; }
-        public int StoreId { get; set; }
-        public int CreateUser { get; set; }
-        public System.DateTime CreateDate { get; set; }
-        public int UpdateUser { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public int Status { get; set; }
-        public string ProductName { get; set; }
-        public Nullable<int> Points { get; set; }
-        public string SalesPerson { get; set; }
-        public Nullable<int> SizeId { get; set; }
-        public Nullable<int> ColorId { get; set; }
-        public Nullable<int> SizeValueId { get; set; }
-        public Nullable<int> ColorValueId { get; set; }
+
         public string ColorValueName { get; set; }
         public string SizeValueName { get; set; }
-        public Nullable<int> ProductType { get; set; }
-        public string StoreSalesCode { get; set; }
+
+        public decimal ItemPrice { get; set; }
+        public int StockId { get; set; }
+        public int Quantity { get; set; }
+
+        public int BrandId { get; set; }
+        public string BrandName { get; set; }
+        public string GoodsType { get; set; }
+
+        /// <summary>
+        ///     吊牌价格
+        /// </summary>
+        /// <value>The unit price.</value>
+        public decimal? UnitPrice { get; set; }
+
+        /// <summary>
+        ///     促销价格
+        /// </summary>
+        /// <value>The promotion price.</value>
+        public decimal? PromotionPrice { get; set; }
+
+        public int ProductId { get; set; }
+
+        public int ReturnCount { get; set; }
+
+        public int NeedReturnCount { get; set; }
     }
 }

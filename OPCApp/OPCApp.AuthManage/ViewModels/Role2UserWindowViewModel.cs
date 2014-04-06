@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.AuthManage.Views;
@@ -81,8 +82,19 @@ namespace OPCApp.AuthManage.ViewModels
 
         private void DeleteUserList()
         {
-            if (UserList == null) return;
-            UserList.Remove(e => e.IsSelected);
+            if (UserList == null)
+            {
+                MessageBox.Show("请选择要移除的用户", "提示");
+                return;
+            }
+            if (UserList.Count == 0)
+            {
+                MessageBox.Show("请选择要移除的用户", "提示");
+                return;
+            }
+
+            UserList = UserList.Where(e => e.IsSelected == false).ToList();
+           
         }
 
         private void DBGridClick()
@@ -100,8 +112,18 @@ namespace OPCApp.AuthManage.ViewModels
         private void AuthorizationUser()
         {
             var role2UserService = AppEx.Container.GetInstance<IRole2UserService>();
-            if (SelectedRole == null || SelectedUserIdList == null) return;
-            role2UserService.SetUserByRole(SelectedRole.Id, SelectedUserIdList);
+            if (SelectedRole == null)
+            {
+                MessageBox.Show("请选择要授权的角色", "提示");
+                return;
+            }
+            if (UserList == null || UserList.Count == 0)
+            {
+                MessageBox.Show("请选择要授权的用户", "提示");
+                return;
+            }
+            var userIDs = UserList.Select(e => e.Id).ToList();
+            role2UserService.SetUserByRole(SelectedRole.Id, userIDs);
         }
 
 
@@ -113,7 +135,11 @@ namespace OPCApp.AuthManage.ViewModels
                 var seletedUsers = obj.ViewModel.SelectedUserList;
                 if (seletedUsers != null)
                 {
-                   UserList.AddRange(seletedUsers);
+                    var temp = new List<OPC_AuthUser>();
+                    temp.AddRange(seletedUsers);
+                    temp.AddRange(UserList);
+                    UserList = temp;
+                    //UserList.AddRange(seletedUsers); 有问题不会刷新
                 }
             }
             ;

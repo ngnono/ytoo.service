@@ -9,6 +9,7 @@
 using System;
 using System.ComponentModel.Composition.Hosting;
 using System.Windows;
+using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.MefExtensions;
 using Microsoft.Practices.Prism.Modularity;
 using OPCApp.Infrastructure;
@@ -35,16 +36,24 @@ namespace OPCApp.Main
 
         protected override DependencyObject CreateShell()
         {
-            return Container.GetExportedValue<Shell>();
+            return Container.GetExportedValue<MetroWindow>();
         }
 
         protected override void InitializeShell()
         {
             base.InitializeShell();
             AppEx.Init(Container);
-            Application.Current.MainWindow = (Window) Shell;
-            Application.Current.MainWindow.WindowState = WindowState.Maximized;
-            Application.Current.MainWindow.Show();
+            var logon = AppEx.Container.GetInstance<Login>();
+            //Application.Current.MainWindow.WindowState = WindowState.Maximized;
+            if (logon.ShowDialog() == true)
+            {
+                Application.Current.MainWindow = (Window) Shell;
+                Application.Current.MainWindow.ShowDialog();
+            }
+            else
+            {
+                Application.Current.Shutdown();
+            }
         }
     }
 }

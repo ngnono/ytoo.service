@@ -6,6 +6,7 @@ using Microsoft.Practices.Prism.Commands;
 using OPCAPP.Domain.Enums;
 using OPCApp.TransManage.IService;
 using OPCApp.TransManage.ViewModels;
+using OPCApp.DataService.IService;
 
 namespace OPCApp.TransManage.Views
 {

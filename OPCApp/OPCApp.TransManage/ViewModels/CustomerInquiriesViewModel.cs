@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Trans;
@@ -37,15 +38,15 @@ namespace OPCApp.TransManage.ViewModels
 
         //Tab1选中的Order中的数据集
         private OrderGet orderGet;
-        private IEnumerable<Order> orderList;
+        private IEnumerable<OPCApp.Domain.Models.Order> orderList;
         private IEnumerable<OPC_SaleDetail> saleDetailList;
         private IEnumerable<OPC_Sale> saleList;
-        private Order selectOrder;
+        private OPCApp.Domain.Models.Order selectOrder;
 
         //Tab1选中的Sale中的数据集
         private OPC_Sale selectSale;
 
-        public Order SelectOrder
+        public OPCApp.Domain.Models.Order SelectOrder
         {
             get { return selectOrder; }
             set { SetProperty(ref selectOrder, value); }
@@ -59,7 +60,7 @@ namespace OPCApp.TransManage.ViewModels
 
         //Tab1中Grid数据集1
 
-        public IEnumerable<Order> OrderList
+        public IEnumerable<OPCApp.Domain.Models.Order> OrderList
         {
             get { return orderList; }
             set { SetProperty(ref orderList, value); }
@@ -92,6 +93,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetOrder()
         {
+            OrderList = new List<Order>();
             string orderfilter =
                 string.Format(
                     "orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}",
@@ -99,9 +101,11 @@ namespace OPCApp.TransManage.ViewModels
                     string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId, string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status, OrderGet.PaymentType, OrderGet.OutGoodsType,
                     OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
             
-
-
-            OrderList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
+            var re=AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
+            if (re != null)
+            {
+                OrderList = re.ToList();
+            }
         }
 
         public void GetSaleByOrderId()
