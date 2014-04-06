@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPCApp.Main.Controls", "OPC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPCApp.Main.Infrastructure", "OPCApp.Main.Infrastructure\OPCApp.Main.Infrastructure.csproj", "{55AA526E-1A89-4A8E-B648-8DE5DE2FD1E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPCApp.Order", "OPCApp.Order\OPCApp.Order.csproj", "{006B987F-8E52-45BB-BFF4-6D3DFA278AB9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPCApp.Customer", "OPCApp.Order\OPCApp.Customer.csproj", "{006B987F-8E52-45BB-BFF4-6D3DFA278AB9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPCApp.DataService", "OPCAPP.DataService\OPCApp.DataService.csproj", "{6938948D-192F-473D-92BB-4AE97B115536}"
 EndProject

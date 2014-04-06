@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Intime.OPC.Domain.Base;
 
-namespace Intime.OPC.Domain.Models
+namespace OPCApp.Domain.Models
 {
-    public partial class RMA:IEntity
+    public partial class RMA
     {
         public int Id { get; set; }
         public string RMANo { get; set; }

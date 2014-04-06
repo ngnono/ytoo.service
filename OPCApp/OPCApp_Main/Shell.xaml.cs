@@ -6,7 +6,7 @@ using Microsoft.Practices.Prism.Regions;
 
 namespace OPCApp.Main
 {
-    [Export]
+    [Export(typeof(MetroWindow))]
     public partial class Shell : MetroWindow, IPartImportsSatisfiedNotification
     {
         [Import(AllowRecomposition = false)] public IModuleManager ModuleManager;

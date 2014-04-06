@@ -79,14 +79,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IService\IRemark.cs" />
     <Compile Include="Models\Remark.cs" />
     <Compile Include="TransManageModule.cs" />
     <Compile Include="IService\IInvoice.cs" />
     <Compile Include="IService\ResultMsg.cs" />
     <Compile Include="IService\IPrint.cs" />
     <Compile Include="ViewModels\CustomerInquiriesViewModel.cs" />
-    <Compile Include="ViewModels\CustomerRuturnGoodsViewModel.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
     <Compile Include="ViewModels\RMACashInViewModel.cs" />
     <Compile Include="ViewModels\RemarkViewModel.cs" />
@@ -94,9 +92,6 @@
     <Compile Include="ViewModels\StoreOutViewModel.cs" />
     <Compile Include="ViewModels\StoreInViewModel.cs" />
     <Compile Include="ViewModels\PrintInvoiceViewModel.cs" />
-    <Compile Include="Views\CustomerRuturnGoods.xaml.cs">
-      <DependentUpon>CustomerRuturnGoods.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\CustomerInquiries.xaml.cs">
       <DependentUpon>CustomerInquiries.xaml</DependentUpon>
     </Compile>
@@ -121,10 +116,6 @@
     <Compile Include="Views\PrintInvoice.xaml.cs">
       <DependentUpon>PrintInvoice.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\CustomerRuturnGoods.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\CustomerInquiries.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

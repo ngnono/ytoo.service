@@ -37,15 +37,15 @@ namespace OPCApp.TransManage.ViewModels
 
         //Tab1选中的Order中的数据集
         private OrderGet orderGet;
-        private IEnumerable<Order> orderList;
+        private IEnumerable<OPCApp.Domain.Models.Order> orderList;
         private IEnumerable<OPC_SaleDetail> saleDetailList;
         private IEnumerable<OPC_Sale> saleList;
-        private Order selectOrder;
+        private OPCApp.Domain.Models.Order selectOrder;
 
         //Tab1选中的Sale中的数据集
         private OPC_Sale selectSale;
 
-        public Order SelectOrder
+        public OPCApp.Domain.Models.Order SelectOrder
         {
             get { return selectOrder; }
             set { SetProperty(ref selectOrder, value); }
@@ -59,7 +59,7 @@ namespace OPCApp.TransManage.ViewModels
 
         //Tab1中Grid数据集1
 
-        public IEnumerable<Order> OrderList
+        public IEnumerable<OPCApp.Domain.Models.Order> OrderList
         {
             get { return orderList; }
             set { SetProperty(ref orderList, value); }

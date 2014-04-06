@@ -8,7 +8,7 @@
                        xmlns:controls="clr-namespace:OPCApp.Main.Controls;assembly=OPCApp.Main.Controls"
                        xmlns:controls1="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                        Title="Intime"
-                       d:DesignHeight="300" d:DesignWidth="400">
+                       d:DesignHeight="300" d:DesignWidth="400" WindowState="Maximized">
 
     <Grid x:Name="LayoutRoot"
           Background="#D6DBE9">
