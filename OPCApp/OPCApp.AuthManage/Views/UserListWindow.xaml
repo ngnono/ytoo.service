@@ -124,10 +124,10 @@
             </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="OrgId" Width="50" Binding="{Binding OrgId}" Visibility="Hidden" />
+                <DataGridTextColumn Header="密码" Width="80" Binding="{Binding Password}" Visibility="Hidden" />
                 <DataGridTextColumn Header="authid" Visibility="Hidden" Width="150" Binding="{Binding DataAuthId}" />
                 <DataGridTextColumn Header="Id" Width="50" Binding="{Binding Id}" Visibility="Hidden" />
                 <DataGridTextColumn Width="100" Header="登录名" Binding="{Binding LogonName}" />
-                <DataGridTextColumn Header="密码" Width="80" Binding="{Binding Password}" />
                 <DataGridTextColumn Header="姓名" Width="150" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="所属机构" Width="150" Binding="{Binding DataAuthName}" />
                 <DataGridCheckBoxColumn Header="是否有效" Width="100" Binding="{Binding IsValid}" />
