@@ -26,7 +26,7 @@ namespace Intime.OPC.Domain.Exception
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         public OrderNotExistsException(string orderNo)
-            : base(orderNo)
+            : base(string.Format("订单不存在,订单Id：{0}",orderNo))
         {
             this.OrderNo = orderNo;
         }
