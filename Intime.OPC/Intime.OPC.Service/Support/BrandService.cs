@@ -1,4 +1,5 @@
-﻿using Intime.OPC.Domain;
+﻿using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 
@@ -10,9 +11,9 @@ namespace Intime.OPC.Service.Support
         {
         }
 
-        public PageResult<Brand> GetAll(int pageIndex, int pageSize = 20)
+        public IList<Brand> GetAll()
         {
-            return _repository.GetAll(pageIndex, pageSize);
+            return ((IBrandRepository)_repository).GetAll();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Intime.OPC.Repository
     /// </summary>
     public interface IBrandRepository : IRepository<Brand>
     {
-        PageResult<Brand> GetAll(int pageIndex, int pageSize = 20);
+        IList<Brand> GetAll();
 
         /// <summary>
         /// 获得多个品牌信息
