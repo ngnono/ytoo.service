@@ -1,8 +1,11 @@
-﻿<Window x:Class="CustomControlLibrary.ProgressBarWindow"
+﻿<controls:MetroWindow x:Class="CustomControlLibrary.ProgressBarWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ProgressBarWindow" Height="35" Width="350" WindowStartupLocation="CenterScreen" WindowStyle="None">
-    <Grid Margin="2">
-        <ProgressBar Height="30" HorizontalAlignment="Left" Name="progressBar1" VerticalAlignment="Top" Width="342" IsIndeterminate="True" />
+        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+
+        Title="ProgressBarWindow"  Height="100" Width="100" WindowStartupLocation="CenterScreen" WindowStyle="None" ShowMinButton="False" ShowMaxRestoreButton="False" ShowCloseButton="False" ShowTitleBar="False">
+    <Grid Margin="0">
+        <controls:ProgressRing Grid.Column="0" IsActive="True" />
+
     </Grid>
-    </Window>
+</controls:MetroWindow>

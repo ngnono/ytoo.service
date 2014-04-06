@@ -47,7 +47,7 @@
                   Grid.Row="1">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding DBGridClickCommand}" />
+                    <i:InvokeCommandAction Command="{Binding DbGridClickCommand}" />
                 </i:EventTrigger>
 
             </i:Interaction.Triggers>
@@ -65,14 +65,15 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                      Command="{Binding Path=DataContext.GetSelectedCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
                                       VerticalAlignment="Center" HorizontalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="用户Id" Visibility="Hidden" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="登录名称" Width="80" Binding="{Binding LogonName}" />
                 <DataGridTextColumn Header="用户名称" Width="80" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="所属机构" Width="80" Binding="{Binding OrgName}" />
+                <DataGridTextColumn Header="所属机构" Width="80" Binding="{Binding DataAuthName}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
