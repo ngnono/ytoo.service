@@ -26,6 +26,8 @@ namespace Intime.OPC.Domain.Models
         public string RMAStatus { get; set; }
         public string RMACashStatus { get; set; }
         public string RMANo { get; set; }
+
+        public int StoreId { get; set; }
         public Nullable<decimal> RealRMASumMoney { get; set; }
     }
 }
