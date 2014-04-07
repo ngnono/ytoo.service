@@ -139,7 +139,6 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetSaleDetailBySaleId()
         {
-            SaleDetailList = new List<OPC_SaleDetail>();
             if (SelectSale == null || string.IsNullOrEmpty(SelectSale.Id.ToString()))
             {
                 return;
@@ -211,7 +210,6 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetShipping()
         {
-           
             string shippingfilter =
                 string.Format(
                     "OrderNo={0}&ExpressNo={1}&StartGoodsOutDate={2}&EndGoodsOutDate={3}&OutGoodsCode={4}&StoreId={5}&ShippingStatus={6}&CustomerPhone={7}&BrandId={8}&pageIndex={9}&pageSize={10}",
@@ -220,7 +218,6 @@ namespace OPCApp.TransManage.ViewModels
                     string.IsNullOrEmpty(ShippingGet.ShippingStatus) ? "-1" : ShippingGet.ShippingStatus, ShippingGet.CustomerPhone, string.IsNullOrEmpty(ShippingGet.BrandId) ? "-1" : ShippingGet.BrandId, 1, 100);
             try
             {
-                ShippingList = new List<OPC_ShippingSale>();
                 ShippingList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetShipping(shippingfilter).Result;
             }
             catch (Exception ex)

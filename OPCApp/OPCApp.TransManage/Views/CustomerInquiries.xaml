@@ -36,7 +36,7 @@
                     <StackPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
                             <Button Background="LightGray" Width="50" Command="{Binding CommandGetOrder}">
-                                <StackPanel>
+                                <StackPanel  Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                                 </StackPanel>
@@ -232,7 +232,7 @@
                     <StackPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
                             <Button Background="LightGray" Width="50" Command="{Binding CommandGetShipping}">
-                                <StackPanel>
+                                <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                                 </StackPanel>
@@ -268,7 +268,7 @@
                             <TextBlock Text="  顾客电话" Width="60" Margin="0 5" />
                             <TextBox Width="130" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingGet.CustomerPhone}" />
-                            <TextBlock Text="  发货状态" Width="60" Margin="0 5" />
+                            <TextBlock Text="  发货方式" Width="60" Margin="0 5" />
                             <ComboBox Height="25" ItemsSource="{Binding OutGoodsTypeList}" Width="80"
                                       DisplayMemberPath="Value" SelectedValuePath="Key"
                                       SelectedValue="{Binding ShippingGet.ShippingStatus}" />
