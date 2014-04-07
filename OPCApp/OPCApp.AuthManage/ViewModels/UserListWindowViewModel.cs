@@ -198,6 +198,8 @@ namespace OPCApp.AuthManage.ViewModels
             }
              if(t==null)t=new OPC_AuthUser();
              t.OrgId = curNode.OrgId;
+             t.DataAuthId = curNode.OrgId;
+             t.DataAuthName = curNode.Name;
              return true;
         }
 
