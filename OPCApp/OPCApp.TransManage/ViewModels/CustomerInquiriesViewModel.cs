@@ -230,14 +230,13 @@ namespace OPCApp.TransManage.ViewModels
         {
             try
             {
-                if (SelectShipping == null || string.IsNullOrEmpty(SelectShipping.Id.ToString()))
+                if (SelectShipping == null )
                 {
                     return;
                 }
-                string shippingId = SelectShipping.Id.ToString();
                 //这个工作状态
                 OrderListShipping =
-                    AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderByShippingId(shippingId).Result;
+                    AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderByShippingId(string.Format("shippingNo={0}", SelectShipping.ExpressCode)).Result;
             }
             catch (Exception ex)
             {
