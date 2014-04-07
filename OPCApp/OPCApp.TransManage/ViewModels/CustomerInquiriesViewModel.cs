@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -98,7 +99,9 @@ namespace OPCApp.TransManage.ViewModels
                 string.Format(
                     "orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}",
                     OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString() , OrderGet.EndCreateDate.ToShortDateString() ,
-                    string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId, string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status, OrderGet.PaymentType, OrderGet.OutGoodsType,
+                    string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId, string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status,
+                    string.IsNullOrEmpty(OrderGet.PaymentType) ? "-1" : OrderGet.PaymentType,
+                    string.IsNullOrEmpty(OrderGet.OutGoodsType) ? "-1" : OrderGet.OutGoodsType,
                     OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
             
             var re=AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
@@ -112,21 +115,21 @@ namespace OPCApp.TransManage.ViewModels
         {
             try
             {
-                if (SelectOrder == null || string.IsNullOrEmpty(SelectOrder.Id.ToString()))
+                if (SelectOrder == null || string.IsNullOrEmpty(SelectOrder.Id.ToString(CultureInfo.InvariantCulture)))
                 {
                     return;
                 }
                 string orderNo = string.Format("orderID={0}&pageIndex={1}&pageSize={2}", SelectOrder.OrderNo,1,30);
                 //这个工作状态
                 SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderNo).Result;
-                if (SaleList != null && SaleList.Count() > 0)
+                if (SaleList != null && SaleList.Any())
                 {
                     OPC_Sale sale = SaleList.ToList()[0];
                     SaleDetailList =
                         AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result;
                 }
             }
-            catch (Exception ex)
+            catch
             {
             }
         }
