@@ -108,11 +108,11 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetOrderByShippingSaleNo([FromBody] string shippingNo)
+        public IHttpActionResult GetOrderByShippingSaleNo(string shippingNo)
         {
             return DoFunction(() =>
             {
-                return _orderService.GetOrderByShippingNo(shippingNo, 1, 1000).Result;
+                return _orderService.GetOrderByShippingNo(shippingNo);
 
             }, "通过快递单查询订单失败");
         }
