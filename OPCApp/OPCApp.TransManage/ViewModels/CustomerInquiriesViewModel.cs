@@ -230,14 +230,13 @@ namespace OPCApp.TransManage.ViewModels
         {
             try
             {
-                if (SelectShipping == null || string.IsNullOrEmpty(SelectShipping.Id.ToString()))
+                if (SelectShipping == null )
                 {
                     return;
                 }
-                string shippingId = SelectShipping.Id.ToString();
                 //这个工作状态
                 OrderListShipping =
-                    AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderByShippingId(shippingId).Result;
+                    AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderByShippingId(string.Format("shippingNo={0}", SelectShipping.ExpressCode)).Result;
             }
             catch (Exception ex)
             {
@@ -246,13 +245,12 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetSaleByOrderNoShipping()
         {
-            if (SelectOrderShipping == null || string.IsNullOrEmpty(SelectOrderShipping.Id.ToString()))
+            if (SelectOrderShipping == null)
             {
                 return;
             }
-            string OrderNo = SelectOrderShipping.OrderNo;
-            //这个工作状态
-            SaleListShipping = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(OrderNo).Result;
+            string filter = string.Format("orderID={0}&pageIndex={1}&pageSize={2}", SelectOrderShipping.OrderNo, 1, 300);
+            SaleListShipping = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(filter).Result;
         }
 
         #endregion

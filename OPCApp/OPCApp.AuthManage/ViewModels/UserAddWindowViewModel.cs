@@ -28,8 +28,12 @@ namespace OPCApp.AuthManage.ViewModels
         }
         public override bool BeforeDoOKAction(OPC_AuthUser t)
         {
-            //t.DataAuthId = orgInfo.OrgID;
-            //t.DataAuthName = orgInfo.OrgName;
+            if (OrgInfo==null)
+            {
+                return true;
+            }
+            t.DataAuthId = OrgInfo.OrgID;
+            t.DataAuthName = OrgInfo.OrgName;
             return true;
         } 
         private IList<OPC_OrgInfo> _orgList;

@@ -20,7 +20,7 @@ namespace OPCApp.DataService.Impl.Trans
             }
             catch (Exception ex)
             {
-                return null;
+                return new PageResult<Order>(new List<Order>(), 0);
             }
         }
 
@@ -28,12 +28,12 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                PageResult<OPC_Sale> lst = RestClient.GetPage<OPC_Sale>("sale/GetSaleByOrderNo", orderNo);
+                PageResult<OPC_Sale> lst = RestClient.GetPage<OPC_Sale>("sale/GetSaleByOrderNo",orderNo);
                 return lst;// new PageResult<OPC_Sale>(lst, lst.Count);
             }
             catch (Exception ex)
             {
-                return null;
+                return new PageResult<OPC_Sale>(new List<OPC_Sale>(), 0);
             }
         }
 
@@ -46,7 +46,7 @@ namespace OPCApp.DataService.Impl.Trans
             }
             catch (Exception ex)
             {
-                return null;
+                return new PageResult<OPC_ShippingSale>(new List<OPC_ShippingSale>(),0);
             }
         }
 
@@ -54,12 +54,12 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                IList<Order> lst = RestClient.Get<Order>("order/GetOrderByShippingId", shippingId);
+                IList<Order> lst = RestClient.Get<Order>("order/GetOrderByShippingSaleNo", shippingId);
                 return new PageResult<Order>(lst, lst.Count);
             }
             catch (Exception ex)
             {
-                return null;
+                return new PageResult<Order>(new List<Order>(), 0);
             }
         }
     }

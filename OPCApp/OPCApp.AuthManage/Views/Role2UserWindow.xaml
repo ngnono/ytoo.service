@@ -42,11 +42,11 @@
 
             </StackPanel>
         </StackPanel>
-        <DataGrid HorizontalAlignment="Left"  ItemsSource="{Binding RoleList}" Width="400"
+        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding RoleList}" Width="400"
                   SelectedItem="{Binding SelectedRole}" IsReadOnly="True" AutoGenerateColumns="False" Grid.Column="0"
                   Grid.Row="1">
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
+                <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding DbGridClickCommand}" />
                 </i:EventTrigger>
 
