@@ -249,9 +249,8 @@ namespace OPCApp.TransManage.ViewModels
             {
                 return;
             }
-            string OrderNo = SelectOrderShipping.OrderNo;
-            //这个工作状态
-            SaleListShipping = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(OrderNo).Result;
+            string filter = string.Format("orderID={0}&pageIndex={1}&pageSize={2}", SelectOrderShipping.OrderNo, 1, 300);
+            SaleListShipping = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(filter).Result;
         }
 
         #endregion
