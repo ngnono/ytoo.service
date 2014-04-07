@@ -17,7 +17,7 @@ namespace OPCApp.AuthManage.ViewModels
         {
             Model = new OPC_AuthUser();
             OrgList = AppEx.Container.GetInstance<IOrgService>().Search();
-           // OrgInfo = new OPC_OrgInfo();
+            OrgInfo = new OPC_OrgInfo();
         }
 
         private OPC_OrgInfo orgInfo;

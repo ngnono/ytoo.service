@@ -101,7 +101,7 @@ namespace OPCApp.AuthManage.ViewModels
         {
             var role2UserService = AppEx.Container.GetInstance<IRole2UserService>();
             if (SelectedRole == null) return;
-            UserList = role2UserService.GetUserListByRole(SelectedRole.Id).ToList();
+            UserList = role2UserService.GetUserListByRole(SelectedRole.Id);
         }
 
         private void GetSelected()
@@ -123,8 +123,7 @@ namespace OPCApp.AuthManage.ViewModels
                 return;
             }
             var userIDs = UserList.Select(e => e.Id).ToList();
-           var r= role2UserService.SetUserByRole(SelectedRole.Id, userIDs);
-           MessageBox.Show(r.IsSuccess?"用户授权成功":"用户授权失败", "提示");
+            role2UserService.SetUserByRole(SelectedRole.Id, userIDs);
         }
 
 
