@@ -26,16 +26,14 @@ namespace OPCApp.AuthManage.ViewModels
             get { return orgInfo; }
             set { SetProperty(ref orgInfo, value); }
         }
-        private string authDataId;
-        public string AuthDataId
-        {
-            get { return authDataId; }
-            set { SetProperty(ref authDataId, value); }
-        }
         public override bool BeforeDoOKAction(OPC_AuthUser t)
         {
-            //t.DataAuthId = orgInfo.OrgID;
-            //t.DataAuthName = orgInfo.OrgName;
+            if (OrgInfo==null)
+            {
+                return true;
+            }
+            t.DataAuthId = OrgInfo.OrgID;
+            t.DataAuthName = OrgInfo.OrgName;
             return true;
         } 
         private IList<OPC_OrgInfo> _orgList;

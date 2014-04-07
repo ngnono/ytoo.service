@@ -61,7 +61,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Width="90" Text="所属机构" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         <ComboBox Foreground="Blue" Width="350" Height="25" ItemsSource="{ Binding OrgList}" 
-                                  DisplayMemberPath="OrgName" SelectedValuePath="OrgId" IsSynchronizedWithCurrentItem="True"  SelectedValue="{Binding AuthDataId, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                  DisplayMemberPath="OrgName" SelectedValuePath="OrgId" SelectedItem="{Binding OrgInfo, Mode=TwoWay}"  />
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="3" Grid.Column="0" Background="LightGray" Margin="10">

@@ -203,11 +203,12 @@ namespace OPCApp.AuthManage.ViewModels
              return true;
         }
 
-        //public override bool BeforeEdit(UserAddWindowViewModel vm)
-        //{
-
-        //    return true;
-        //}
+         public override bool BeforeEdit(IViewModel viewModel, OPC_AuthUser model)
+         {
+             var vm = viewModel as UserAddWindowViewModel;
+             vm.OrgInfo=new OPC_OrgInfo(){OrgID = model.DataAuthId,OrgName = model.DataAuthName};
+             return true;
+         }
 
         /*初始化页面固有的数据值*/
 
