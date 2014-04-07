@@ -94,6 +94,12 @@ namespace OPCApp.TransManage.ViewModels
         public void GetOrder()
         {
             OrderList = new List<Order>();
+            if (OrderGet.PaymentType=="-1")
+                OrderGet.PaymentType="";
+            if (OrderGet.OutGoodsType == "-1")
+                OrderGet.OutGoodsType = "";
+            
+
             string orderfilter =
                 string.Format(
                     "orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}",
