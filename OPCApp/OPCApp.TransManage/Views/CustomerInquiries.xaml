@@ -316,7 +316,7 @@
                             <TextBlock Text="   订单信息" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid x:Name="OrderDataGrid1" Grid.Row="6" ItemsSource="{Binding OutOrderList}"
+                    <DataGrid x:Name="OrderDataGrid1" Grid.Row="6" ItemsSource="{Binding OrderListShipping}"
                               IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
                               SelectedItem="{Binding SelectOrderShipping}">
@@ -359,7 +359,7 @@
                             <TextBlock Text="   销售单信息" />
                         </StackPanel>
                     </Grid>
-                    <DataGrid x:Name="SaleDataGrid1" Grid.Row="8" IsReadOnly="True" AutoGenerateColumns="False"
+                    <DataGrid x:Name="SaleDataGrid1" Grid.Row="8" IsReadOnly="True" ItemsSource="{Binding SaleListShipping}" AutoGenerateColumns="False"
                               HorizontalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />

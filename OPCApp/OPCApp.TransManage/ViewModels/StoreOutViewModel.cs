@@ -309,7 +309,9 @@ namespace OPCApp.TransManage.ViewModels
             OPC_ShippingSale saleCur = ShipSaleList.FirstOrDefault(n => n.IsSelected);
             if (saleCur == null)
             {
-                this.ClearList();
+                SaleList = new List<OPC_Sale>();
+                OrderList = new List<Order>();
+                InvoiceDetail4List = new List<OPC_SaleDetail>();
                 return;
             }
             this.SearchRaDoc(saleCur);
