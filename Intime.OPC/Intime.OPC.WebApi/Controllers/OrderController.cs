@@ -112,7 +112,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                return _orderService.GetOrderByShippingNo(shippingNo, 1, 1000);
+                return _orderService.GetOrderByShippingNo(shippingNo, 1, 1000).Result;
 
             }, "通过快递单查询订单失败");
         }
