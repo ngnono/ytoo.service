@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -99,6 +100,17 @@ namespace Intime.OPC.Repository.Support
                    filter= filter.Where(t => t.OrderNo.Contains(orderNo));
                 }
                 return filter.ToList();
+            }
+        }
+
+        public PageResult<Order> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var filter = db.ShippingSales.Where(t => t.ShippingCode == shippingNo).Join(db.Orders,t=>t.OrderNo,o=>o.OrderNo,(t,o)=>o);
+
+                filter.OrderByDescending(t => t.CreateDate);
+                return filter.ToPageResult(pageIndex, pageSize);
             }
         }
 

@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Intime.OPC.WebHost", "In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intime.OPC.Common", "Intime.OPC.Common\Intime.OPC.Common.csproj", "{120944FF-A829-4C64-B938-5AF79875D747}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestService", "TestService\TestService.csproj", "{9ADE844B-3218-4BFD-9A89-75B0C3489CF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{120944FF-A829-4C64-B938-5AF79875D747}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{120944FF-A829-4C64-B938-5AF79875D747}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{120944FF-A829-4C64-B938-5AF79875D747}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ADE844B-3218-4BFD-9A89-75B0C3489CF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ADE844B-3218-4BFD-9A89-75B0C3489CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ADE844B-3218-4BFD-9A89-75B0C3489CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ADE844B-3218-4BFD-9A89-75B0C3489CF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
