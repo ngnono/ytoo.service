@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="0" Grid.Column="0">
                 <StackPanel Orientation="Horizontal" Background="LightGray">
@@ -112,7 +112,7 @@
 
         </StackPanel>
 
-        <DataGrid x:Name="dataGrid" Grid.Row="2" MinWidth="600"  Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid x:Name="dataGrid" Grid.Row="2"  Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True"
                   VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                   SelectedItem="{Binding CurModel}"
                   ItemsSource="{Binding Path=ItemsSource,ElementName=dataPager}">
