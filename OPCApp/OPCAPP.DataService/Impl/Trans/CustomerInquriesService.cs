@@ -28,7 +28,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                PageResult<OPC_Sale> lst = RestClient.GetPage<OPC_Sale>("sale/GetSaleByOrderNo", orderNo);
+                PageResult<OPC_Sale> lst = RestClient.Get<OPC_Sale>("sale/GetSaleByOrderNo",string.Format("OrderID={0}",orderNo),1,1000);
                 return lst;// new PageResult<OPC_Sale>(lst, lst.Count);
             }
             catch (Exception ex)
