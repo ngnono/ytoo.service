@@ -16,7 +16,7 @@ namespace Intime.OPC.Domain.Exception
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         public RoleNotExistsExcepion(int roleId)
-            : base(roleId.ToString())
+            : base(string.Format("角色不存在,角色Id：{0}", roleId))
         {
             this.RoleId = roleId.ToString();
         }

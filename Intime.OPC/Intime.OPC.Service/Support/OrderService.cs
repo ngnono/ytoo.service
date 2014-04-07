@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
@@ -13,11 +15,16 @@ namespace Intime.OPC.Service.Support
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderRemarkRepository _orderRemarkRepository;
-        public OrderService(IOrderRepository orderRepository, IOrderRemarkRepository orderRemarkRepository)
+        private readonly IOrderItemRepository _orderItemRepository;
+        private readonly IBrandRepository _brandRepository;
+
+        public OrderService(IOrderRepository orderRepository, IOrderRemarkRepository orderRemarkRepository, IOrderItemRepository orderItemRepository, IBrandRepository brandRepository)
             : base(orderRepository)
         {
             _orderRepository = _repository as IOrderRepository;
             _orderRemarkRepository = orderRemarkRepository;
+            _orderItemRepository = orderItemRepository;
+            _brandRepository = brandRepository;
         }
 
         public PageResult<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd,
@@ -59,6 +66,25 @@ namespace Intime.OPC.Service.Support
             dtEnd = dtEnd.Date.AddDays(1);
             var lstOrder = _orderRepository.GetOrderByOderNoTime(orderNo, dtStart, dtEnd);
             return Mapper.Map<Order, OrderDto>(lstOrder);
+        }
+
+        public IList<OrderItemDto> GetOrderItems(string orderNo)
+        {
+            var lstOrderItems= _orderItemRepository.GetByOrderNo(orderNo);
+            var lst= Mapper.Map<OrderItem, OrderItemDto>(lstOrderItems);
+            var ids = lst.Select<OrderItemDto, int>(t => t.BrandId).Distinct().ToArray();
+
+            var lstBrand = _brandRepository.GetByIds(ids);
+
+            foreach (var orderItemDto in lst)
+            {
+                var brand = lstBrand.FirstOrDefault(t => t.Id == orderItemDto.BrandId);
+                if (brand!=null)
+                {
+                    orderItemDto.BrandName = brand.Name;
+                }
+            }
+            return lst;
         }
 
         public IList<OPC_OrderComment> GetCommentByOderNo(string orderNo)

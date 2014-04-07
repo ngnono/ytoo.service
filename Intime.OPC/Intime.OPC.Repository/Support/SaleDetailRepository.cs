@@ -14,5 +14,14 @@ namespace Intime.OPC.Repository.Support
         {
             return  Select(t => t.SaleOrderNo == saleOrderNo).ToList();
         }
+
+        public IList<OPC_SaleDetail> GetByOrderNo(string orderNo)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                return db.OPC_Sale.Where(t => t.OrderNo == orderNo).Join(db.OPC_SaleDetail, t => t.SaleOrderNo,
+                    o => o.SaleOrderNo, (t, o) => o).ToList();
+            }
+        }
     }
 }

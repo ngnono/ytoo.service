@@ -32,6 +32,10 @@ namespace Intime.OPC.Service
 
 
             Mapper.CreateMap<OPC_AuthUser, AuthUserDto>();
+            var mapOrderItem= Mapper.CreateMap<OrderItem, OrderItemDto>();
+
+
+            Mapper.CreateMap<OrderItem, RMAItem>();
             //todo 销售单明细 匹配
         }
 

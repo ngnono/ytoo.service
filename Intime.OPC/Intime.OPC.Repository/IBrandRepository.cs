@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 
+using System.Collections.Generic;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 
@@ -22,6 +23,13 @@ namespace Intime.OPC.Repository
     /// </summary>
     public interface IBrandRepository : IRepository<Brand>
     {
-        PageResult<Brand> GetAll(int pageIndex, int pageSize = 20);
+        IList<Brand> GetAll();
+
+        /// <summary>
+        /// 获得多个品牌信息
+        /// </summary>
+        /// <param name="brandIds">The brand ids.</param>
+        /// <returns>IList{Brand}.</returns>
+        IList<Brand> GetByIds(int[] brandIds);
     }
 }

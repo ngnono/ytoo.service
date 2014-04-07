@@ -61,6 +61,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.RMACashStatus).HasColumnName("RMACashStatus");
             this.Property(t => t.RMANo).HasColumnName("RMANo");
             this.Property(t => t.RealRMASumMoney).HasColumnName("RealRMASumMoney");
+            this.Property(t => t.StoreId).HasColumnName("StoreId");
         }
     }
 }
