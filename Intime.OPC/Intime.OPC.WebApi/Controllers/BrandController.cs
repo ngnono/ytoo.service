@@ -23,17 +23,9 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetAll([UserId] int? userId)
         {
- 
-            try
-            {
-                var lst = _brandService.GetAll(1,10000);
-                return Ok(lst.Result);
-            }
-            catch (Exception ex)
-            {
-                this.GetLog().Error(ex);
-                return BadRequest("获得品牌信息失败");
-            }
+
+            return DoFunction(() => _brandService.GetAll(), "获得品牌信息失败");
+           
         }
     }
 }

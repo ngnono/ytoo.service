@@ -183,7 +183,15 @@ namespace Intime.OPC.Repository.Support
 
         public IList<OPC_Sale> GetByOrderNo(string orderID,int sectinID)
         {
-            return Select(t => t.OrderNo == orderID && t.SectionId == sectinID);
+            if (sectinID > -1)
+            {
+                return Select(t => t.OrderNo == orderID && t.SectionId == sectinID);
+            }
+            else
+            {
+                return Select(t => t.OrderNo == orderID);
+            }
+
         }
 
         public PageResult<OPC_Sale> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd,int pageIndex, int pageSize,params int[] sectionIds)

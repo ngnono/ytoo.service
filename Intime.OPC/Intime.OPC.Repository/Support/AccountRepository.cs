@@ -55,14 +55,16 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 IQueryable<OPC_AuthUser> lst = db.OPC_AuthRoleUser.Where(t => t.OPC_AuthRoleId == roleId)
-                    .Join(db.OPC_AuthUser.Where(t => t.IsValid == true && t.IsSystem==false), t => t.OPC_AuthUserId, o => o.Id, (t, o) => o);
+                    .Join(db.OPC_AuthUser.Where(t => t.IsSystem == false), t => t.OPC_AuthUserId, o => o.Id, (t, o) => o);
+                    
+              lst=  lst.OrderBy(t => t.Id);
                 return lst.ToPageResult(pageIndex, pageSize);
             }
         }
 
        public PageResult<OPC_AuthUser> All(int pageIndex, int pageSize = 20)
         {
-            return Select(t => t.IsValid == true && !t.IsSystem,t=>t.Name,true,pageIndex,pageSize);
+            return Select(t =>  !t.IsSystem,t=>t.Name,true,pageIndex,pageSize);
         }
 
         #endregion
@@ -70,7 +72,7 @@ namespace Intime.OPC.Repository.Support
 
        public PageResult<OPC_AuthUser> GetByOrgId(string orgID, int pageIndex, int pageSize)
        {
-           return Select2<OPC_AuthUser, string>(t => t.IsValid==true && t.OrgId == orgID, o => o.Name, true, pageIndex,
+           return Select2<OPC_AuthUser, string>(t =>  t.OrgId == orgID, o => o.Name, true, pageIndex,
                pageSize);
        }
 

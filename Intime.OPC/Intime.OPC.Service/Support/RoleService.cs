@@ -12,11 +12,13 @@ namespace Intime.OPC.Service.Support
     {
         private readonly IRoleRepository _roleRepository;
         private readonly IRoleMenuRepository _roleMenuRepository;
+        private IRoleUserRepository _roleUserRepository;
 
-        public RoleService(IRoleRepository roleRepository,IRoleMenuRepository roleMenuRepository):base(roleRepository)
+        public RoleService(IRoleRepository roleRepository,IRoleMenuRepository roleMenuRepository, IRoleUserRepository roleUserRepository):base(roleRepository)
         {
             _roleRepository = roleRepository;
             _roleMenuRepository = roleMenuRepository;
+            _roleUserRepository = roleUserRepository;
         }
 
         #region IRoleService Members
@@ -47,9 +49,21 @@ namespace Intime.OPC.Service.Support
             return _roleRepository.GetByUserID(userID,pageIndex,pageSize);
         }
 
-        public bool SetUsers(RoleUserDto roleUserDto)
+        public bool SetUsers(RoleUserDto roleUserDto,int userId)
         {
-            throw new NotImplementedException();
+            foreach (var uId in roleUserDto.UserIds)
+            {
+                var userRole = new OPC_AuthRoleUser();
+                userRole.CreateDate = DateTime.Now;
+                userRole.CreateUserId = userId;
+                userRole.UpdateDate = DateTime.Now;
+                userRole.UpdateUserId = userId;
+                userRole.OPC_AuthUserId = uId;
+                userRole.OPC_AuthRoleId = roleUserDto.RoleId;
+
+                _roleUserRepository.Create(userRole);
+            }
+            return true;
         }
 
         #endregion

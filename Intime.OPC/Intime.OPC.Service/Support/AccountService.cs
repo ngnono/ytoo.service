@@ -132,7 +132,7 @@ namespace Intime.OPC.Service.Support
             foreach (var user in result.Result)
             {
                 var u = AutoMapper.Mapper.Map<OPC_AuthUser, AuthUserDto>(user);
-                var org = lstUserDtos.FirstOrDefault(t => t.OrgId == user.DataAuthId);
+                var org = lstOrg.Result.FirstOrDefault(t => t.OrgID == user.DataAuthId);
                 if (org!=null)
                 {
                     u.DataAuthName = org.OrgName;

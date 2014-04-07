@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : OPCApp.Domain
+// Assembly         : 00_Intime.OPC.Domain
 // Author           : Liuyh
-// Created          : 03-20-2014 23:49:37
+// Created          : 03-25-2014 02:12:44
 //
 // Last Modified By : Liuyh
-// Last Modified On : 03-20-2014 23:56:27
+// Last Modified On : 04-05-2014 17:14:49
 // ***********************************************************************
 // <copyright file="EnumRMAStatus.cs" company="">
 //     Copyright (c) . All rights reserved.
@@ -22,46 +22,47 @@ namespace Intime.OPC.Domain.Enums
     public enum EnumRMAStatus
     {
         /// <summary>
-        ///     The no delivery
+        ///     未送货
         /// </summary>
         [Description("未送货")] NoDelivery = 0,
 
-        [Description("物流未收货")]
-        ShipNoReceive = 2,
         /// <summary>
-        ///     The ship receive
+        ///     物流未收货
+        /// </summary>
+        [Description("物流未收货")] ShipNoReceive = 2,
+
+        /// <summary>
+        ///     物流收货
         /// </summary>
         [Description("物流收货")] ShipReceive = 5,
 
         /// <summary>
-        ///     The ship verify
+        ///     物流审核
         /// </summary>
         [Description("物流审核")] ShipVerify = 10,
 
+        /// <summary>
+        ///     物流审核未通过
+        /// </summary>
+        [Description("物流审核未通过")] ShipVerifyNotPass = 15,
 
         /// <summary>
-        ///     The ship verify
+        ///     物流审核通过
         /// </summary>
-        [Description("物流审核未通过")]
-        ShipVerifyNotPass = 15,
-        /// <summary>
-        ///     The ship verify
-        /// </summary>
-        [Description("物流审核通过")]
-        ShipVerifyPass = 20,
+        [Description("物流审核通过")] ShipVerifyPass = 20,
 
         /// <summary>
-        ///     The ship in storage
+        ///     物流入库
         /// </summary>
         [Description("物流入库")] ShipInStorage = 25,
 
         /// <summary>
-        ///     The print rma
+        ///     打印退货单
         /// </summary>
         [Description("打印退货单")] PrintRMA = 30,
 
         /// <summary>
-        ///     The shopping guide receive
+        ///     导购确认收货
         /// </summary>
         [Description("导购确认收货")] ShoppingGuideReceive = 35
     }

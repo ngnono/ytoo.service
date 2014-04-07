@@ -20,7 +20,7 @@ namespace Intime.OPC.Domain.Exception
     public class OrderNoIsNullException : System.Exception
     {
         public OrderNoIsNullException(string orderNo)
-            : base(orderNo)
+            : base(string.Format("订单编号为空",orderNo))
         {
             this.OrderNo = orderNo;
         }

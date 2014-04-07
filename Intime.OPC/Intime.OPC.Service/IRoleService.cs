@@ -48,6 +48,6 @@ namespace Intime.OPC.Repository
         /// <returns>IEnumerable{OPC_AuthRole}.</returns>
         PageResult<OPC_AuthRole> GetByUserID(int userID, int pageIndex, int pageSize = 20);
 
-        bool SetUsers(Domain.Dto.RoleUserDto roleUserDto);
+        bool SetUsers(Domain.Dto.RoleUserDto roleUserDto, int userId);
     }
 }

@@ -26,9 +26,15 @@ namespace Intime.OPC.Repository.Support
     /// </summary>
     public class BrandRepository : BaseRepository<Brand>, IBrandRepository
     {
-        public PageResult<Brand> GetAll(int pageIndex, int pageSize = 20)
+        public IList<Brand> GetAll()
         {
-            return Select(t => t.Status == 1,t=>t.UpdatedDate,false, pageIndex, pageSize);
+
+            return Select(t => t.Status == 1);
+        }
+
+        public IList<Brand> GetByIds(int[] brandIds)
+        {
+            return Select(t=>t.Status==1 && brandIds.Contains( t.Id));
         }
     }
 }
