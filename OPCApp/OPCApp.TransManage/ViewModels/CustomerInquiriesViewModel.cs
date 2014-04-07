@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -95,13 +94,17 @@ namespace OPCApp.TransManage.ViewModels
         public void GetOrder()
         {
             OrderList = new List<Order>();
+            if (OrderGet.PaymentType=="-1")
+                OrderGet.PaymentType="";
+            if (OrderGet.OutGoodsType == "-1")
+                OrderGet.OutGoodsType = "";
+            
+
             string orderfilter =
                 string.Format(
                     "orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}",
                     OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString() , OrderGet.EndCreateDate.ToShortDateString() ,
-                    string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId, string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status,
-                    string.IsNullOrEmpty(OrderGet.PaymentType) ? "-1" : OrderGet.PaymentType,
-                    string.IsNullOrEmpty(OrderGet.OutGoodsType) ? "-1" : OrderGet.OutGoodsType,
+                    string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId, string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status ,OrderGet.PaymentType,OrderGet.OutGoodsType,
                     OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
             
             var re=AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
@@ -115,27 +118,28 @@ namespace OPCApp.TransManage.ViewModels
         {
             try
             {
-                if (SelectOrder == null || string.IsNullOrEmpty(SelectOrder.Id.ToString(CultureInfo.InvariantCulture)))
+                if (SelectOrder == null || string.IsNullOrEmpty(SelectOrder.Id.ToString()))
                 {
                     return;
                 }
                 string orderNo = string.Format("orderID={0}&pageIndex={1}&pageSize={2}", SelectOrder.OrderNo,1,30);
                 //这个工作状态
                 SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderNo).Result;
-                if (SaleList != null && SaleList.Any())
+                if (SaleList != null && SaleList.Count() > 0)
                 {
                     OPC_Sale sale = SaleList.ToList()[0];
                     SaleDetailList =
                         AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result;
                 }
             }
-            catch
+            catch (Exception ex)
             {
             }
         }
 
         public void GetSaleDetailBySaleId()
         {
+            SaleDetailList = new List<OPC_SaleDetail>();
             if (SelectSale == null || string.IsNullOrEmpty(SelectSale.Id.ToString()))
             {
                 return;
@@ -207,6 +211,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetShipping()
         {
+           
             string shippingfilter =
                 string.Format(
                     "OrderNo={0}&ExpressNo={1}&StartGoodsOutDate={2}&EndGoodsOutDate={3}&OutGoodsCode={4}&StoreId={5}&ShippingStatus={6}&CustomerPhone={7}&BrandId={8}&pageIndex={9}&pageSize={10}",
@@ -215,6 +220,7 @@ namespace OPCApp.TransManage.ViewModels
                     string.IsNullOrEmpty(ShippingGet.ShippingStatus) ? "-1" : ShippingGet.ShippingStatus, ShippingGet.CustomerPhone, string.IsNullOrEmpty(ShippingGet.BrandId) ? "-1" : ShippingGet.BrandId, 1, 100);
             try
             {
+                ShippingList = new List<OPC_ShippingSale>();
                 ShippingList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetShipping(shippingfilter).Result;
             }
             catch (Exception ex)
