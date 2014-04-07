@@ -88,6 +88,7 @@
       <DependentUpon>ImageButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="ImageButtonChrome.cs" />
+    <Compile Include="Password.cs" />
     <Compile Include="ProgressOperateClass.cs" />
     <Compile Include="PagingDataGrid.cs" />
     <Compile Include="ProgressBarWindow.xaml.cs">

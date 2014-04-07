@@ -78,6 +78,7 @@
     <Compile Include="AuthModule.cs" />
     <Compile Include="ViewModels\NodeViewModel.cs" />
     <Compile Include="ViewModels\PageResult.cs" />
+    <Compile Include="ViewModels\PasswordBoxBind.cs" />
     <Compile Include="ViewModels\Role2MenuWindowViewModel.cs" />
     <Compile Include="ViewModels\Role2UserWindowViewModel.cs" />
     <Compile Include="ViewModels\RoleListViewModel.cs" />

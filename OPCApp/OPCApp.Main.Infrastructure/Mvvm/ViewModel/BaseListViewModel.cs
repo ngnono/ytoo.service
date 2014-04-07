@@ -132,7 +132,7 @@ namespace OPCApp.Infrastructure.Mvvm
         {
             return true;
         }
-        public virtual bool BeforeEdit(IViewModel t)
+        public virtual bool BeforeEdit(IViewModel t,T model)
         {
             return true;
         }
@@ -150,7 +150,7 @@ namespace OPCApp.Infrastructure.Mvvm
             }
             var w = AppEx.Container.GetInstance<IViewModel>(EditViewModeKey);
             w.Model = model;
-            BeforeEdit(w);
+            BeforeEdit(w,model);
             if (w.View.ShowDialog() == true)
             {
                 IBaseDataService<T> service = GetDataService();
