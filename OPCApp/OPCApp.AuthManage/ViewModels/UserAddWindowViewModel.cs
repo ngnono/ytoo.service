@@ -17,7 +17,7 @@ namespace OPCApp.AuthManage.ViewModels
         {
             Model = new OPC_AuthUser();
             OrgList = AppEx.Container.GetInstance<IOrgService>().Search();
-            OrgInfo = new OPC_OrgInfo();
+           // OrgInfo = new OPC_OrgInfo();
         }
 
         private OPC_OrgInfo orgInfo;
@@ -25,6 +25,12 @@ namespace OPCApp.AuthManage.ViewModels
         {
             get { return orgInfo; }
             set { SetProperty(ref orgInfo, value); }
+        }
+        private string authDataId;
+        public string AuthDataId
+        {
+            get { return authDataId; }
+            set { SetProperty(ref authDataId, value); }
         }
         public override bool BeforeDoOKAction(OPC_AuthUser t)
         {
