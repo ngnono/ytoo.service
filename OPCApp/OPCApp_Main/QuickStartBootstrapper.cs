@@ -50,10 +50,7 @@ namespace OPCApp.Main
                 Application.Current.MainWindow = (Window) Shell;
                 Application.Current.MainWindow.ShowDialog();
             }
-            else
-            {
-                Application.Current.Shutdown();
-            }
+            Application.Current.Shutdown();
         }
     }
 }
