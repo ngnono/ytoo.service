@@ -32,6 +32,6 @@ namespace Intime.OPC.Repository
         Order GetOrderByOrderNo(string orderNo);
 
         IList<Order> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime);
-        PageResult<Order> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize);
+        IList<Order> GetOrderByShippingNo(string shippingNo);
     }
 }
