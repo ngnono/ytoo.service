@@ -245,7 +245,7 @@ namespace OPCApp.TransManage.ViewModels
 
         public void GetSaleByOrderNoShipping()
         {
-            if (SelectOrderShipping == null || string.IsNullOrEmpty(SelectOrderShipping.Id.ToString()))
+            if (SelectOrderShipping == null)
             {
                 return;
             }
