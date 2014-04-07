@@ -150,7 +150,7 @@ namespace OPCApp.Infrastructure.Mvvm
             }
             var w = AppEx.Container.GetInstance<IViewModel>(EditViewModeKey);
             w.Model = model;
-            BeforeEdit(w,model);
+             BeforeEdit(w,model);
             if (w.View.ShowDialog() == true)
             {
                 IBaseDataService<T> service = GetDataService();
