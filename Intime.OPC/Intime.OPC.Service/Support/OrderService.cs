@@ -87,9 +87,9 @@ namespace Intime.OPC.Service.Support
             return lst;
         }
 
-        public PageResult<OrderDto> GetOrderByShippingNo(string shippingNo,int pageIndex, int pageSize)
+        public IList<OrderDto> GetOrderByShippingNo(string shippingNo)
         {
-            var lst= _orderRepository.GetOrderByShippingNo(shippingNo, pageIndex, pageSize);
+            var lst= _orderRepository.GetOrderByShippingNo(shippingNo);
             return Mapper.Map<Order, OrderDto>(lst);
         }
 
