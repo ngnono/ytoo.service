@@ -19,26 +19,26 @@
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/查询.png" Stretch="None" />
                         <TextBlock >查询</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Command="{Binding CommandViewAndPrint}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Command="{Binding CommandOnlyPrint}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">打印销售单</TextBlock>
                     </StackPanel>
                 </Button>
 
                 <Button Background="LightGray" Command="{Binding CommandFinish}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">完成打印销售单</TextBlock>
                     </StackPanel>
