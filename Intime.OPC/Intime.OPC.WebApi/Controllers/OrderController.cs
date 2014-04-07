@@ -95,6 +95,17 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
 
+        [HttpGet]
+        public IHttpActionResult GetOrderItemsByOrderNo(string orderNo)
+        {
+            //todo 查询订单明细 未实现
+            return DoFunction(() =>
+            {
+                return _orderService.GetOrderItems(orderNo);
+                return null;
+            }, "读取订单明细失败");
+
+        }
 
         
 
