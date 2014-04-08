@@ -28,6 +28,7 @@ namespace OPCApp.Main
         public void _init()
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            
         }
 
 
