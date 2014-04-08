@@ -62,6 +62,8 @@
     <Compile Include="Dto\Custom\ReturnGoodsGet.cs" />
     <Compile Include="Dto\Custom\RMAPost.cs" />
     <Compile Include="Dto\OrderItemDto.cs" />
+    <Compile Include="Dto\RMADto.cs" />
+    <Compile Include="Dto\SaleRmaDto.cs" />
     <Compile Include="Dto\ShippingSaleCreateDto.cs" />
     <Compile Include="Dto\ShippingSaleDto.cs" />
     <Compile Include="Dto\OrderDto.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Models\Mapping\OPC_ChannelProductMap.cs" />
     <Compile Include="Models\Mapping\OPC_OrderCommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_OrgInfoMap.cs" />
+    <Compile Include="Models\Mapping\OPC_SaleRMACommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMACommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMADetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMALogMap.cs" />
@@ -120,6 +123,7 @@
     <Compile Include="Models\Mapping\ShipViaMap.cs" />
     <Compile Include="Models\Mapping\StoreMap.cs" />
     <Compile Include="Dto\Enums.cs" />
+    <Compile Include="Models\OPC_SaleRMAComment.cs" />
     <Compile Include="Models\OPC_RMAComment.cs" />
     <Compile Include="Models\OPC_ShippingSale.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />

@@ -13,7 +13,9 @@ namespace Intime.OPC.Service.Support
 
         public IList<Brand> GetAll()
         {
-            return ((IBrandRepository)_repository).GetAll();
+            var lst= ((IBrandRepository)_repository).GetAll();
+            lst.Insert(0,new Brand(){  Id = -1,Name = "全部"});
+            return lst;
         }
     }
 }

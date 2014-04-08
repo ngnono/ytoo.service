@@ -29,10 +29,13 @@ namespace Intime.OPC.Service
             map.ForMember(d => d.ShippingStatusName, opt => opt.MapFrom(t => GetSaleOrderStatusName(t.ShippingStatus)));
 
             IMappingExpression<OPC_SaleDetail, SaleDetailDto> map2 = Mapper.CreateMap<OPC_SaleDetail, SaleDetailDto>();
+            map2.ForMember(d => d.SellCount, opt => opt.MapFrom(t =>t.SaleCount));
 
 
             Mapper.CreateMap<OPC_AuthUser, AuthUserDto>();
             var mapOrderItem= Mapper.CreateMap<OrderItem, OrderItemDto>();
+
+            var mapRma = Mapper.CreateMap<OPC_RMA, RMADto>();
 
 
             Mapper.CreateMap<OrderItem, RMAItem>();
