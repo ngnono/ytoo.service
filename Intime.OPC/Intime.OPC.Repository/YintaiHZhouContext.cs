@@ -98,7 +98,7 @@ namespace Intime.OPC.Repository
             modelBuilder.Configurations.Add(new ShipViaMap());
 
             modelBuilder.Configurations.Add(new StoreMap());
-
+            modelBuilder.Configurations.Add(new BrandMap());
         }
     }
 }
