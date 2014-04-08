@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -11,5 +13,7 @@ namespace Intime.OPC.Repository
         /// <param name="saleOrderNo">The sale order no.</param>
         /// <returns>System.Int32.</returns>
         int Count(string saleOrderNo);
+
+        IList<SaleRmaDto> GetAll(string orderNo, string payType, int? bandId, System.DateTime startTime, System.DateTime endTime, string telephone);
     }
 }

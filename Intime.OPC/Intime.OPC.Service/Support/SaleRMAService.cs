@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
@@ -16,10 +18,11 @@ namespace Intime.OPC.Service.Support
         private readonly ISaleDetailRepository _saleDetailRepository;
         private readonly ISaleRepository _saleRepository;
         private readonly ISectionRepository _sectionRepository;
+        private ISaleRmaCommentRepository _saleRmaCommentRepository;
 
         public SaleRMAService(ISaleRMARepository saleRmaRepository, ISaleDetailRepository saleDetailRepository,
             ISaleRepository saleRepository, IOrderItemRepository orderItemRepository,
-            IRmaDetailRepository rmaDetailRepository, ISectionRepository sectionRepository, IRMARepository rmaRepository)
+            IRmaDetailRepository rmaDetailRepository, ISectionRepository sectionRepository, IRMARepository rmaRepository, ISaleRmaCommentRepository saleRmaCommentRepository)
             : base(saleRmaRepository)
         {
             _saleDetailRepository = saleDetailRepository;
@@ -28,6 +31,7 @@ namespace Intime.OPC.Service.Support
             _rmaDetailRepository = rmaDetailRepository;
             _sectionRepository = sectionRepository;
             _rmaRepository = rmaRepository;
+            _saleRmaCommentRepository = saleRmaCommentRepository;
         }
 
         #region ISaleRMAService Members
@@ -101,6 +105,36 @@ namespace Intime.OPC.Service.Support
                     lstRmaConfigs.Add(config);
                 }
             }
+        }
+
+        public IList<RMADto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request)
+        {
+            //todo 客服退货查询-退货信息
+
+            return null;
+            //var lst = _rmaRepository.GetByReturnGoods(request);
+            //return Mapper.Map<OPC_RMA, RMADto>(request);
+        }
+
+        public IList<SaleRmaDto> GetByReturnGoods(ReturnGoodsGet request)
+        {
+            ISaleRMARepository rep = _repository as ISaleRMARepository;
+
+
+            var lst= rep.GetAll(request.OrderNo, request.PayType, request.BandId, request.StartDate, request.EndDate,
+                request.Telephone);
+            
+            return lst;
+        }
+
+        public void AddComment(OPC_SaleRMAComment comment)
+        {
+            _saleRmaCommentRepository.Create(comment);
+        }
+
+        public IList<OPC_SaleRMAComment> GetCommentByRmaNo(string rmaNo)
+        {
+            return _saleRmaCommentRepository.GetByRmaID(rmaNo);
         }
 
         #endregion

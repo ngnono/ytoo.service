@@ -93,6 +93,14 @@ namespace Intime.OPC.Service.Support
             return Mapper.Map<Order, OrderDto>(lst);
         }
 
+        public IList<OrderDto> GetOrderByReturnGoodsInfo(ReturnGoodsInfoGet request)
+        {
+            var lst = _orderRepository.GetOrder(request.OrderNo,"",request.StartDate,request.EndDate,request.StoreID.Value,
+                -1,-1,request.PayType,"","","",-1,1,1000);
+                   
+            return Mapper.Map<Order, OrderDto>(lst.Result);
+        }
+
         public IList<OPC_OrderComment> GetCommentByOderNo(string orderNo)
         {
             return _orderRemarkRepository.GetByOrderNo(orderNo);

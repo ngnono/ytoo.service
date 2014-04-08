@@ -59,6 +59,7 @@
     <Compile Include="IRepository.cs" />
     <Compile Include="IRmaDetailRepository.cs" />
     <Compile Include="IRMARepository.cs" />
+    <Compile Include="ISaleRmaComment.cs" />
     <Compile Include="ISaleRMARepository.cs" />
     <Compile Include="IRoleRepository.cs" />
     <Compile Include="ISaleDetailRepository.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Support\SaleDetailRepository.cs" />
     <Compile Include="Support\SaleRemarkRepository.cs" />
     <Compile Include="Support\SaleRepository.cs" />
+    <Compile Include="Support\SaleRmaCommentRepository.cs" />
     <Compile Include="Support\SaleRMARepository.cs" />
     <Compile Include="Support\SectionRepository.cs" />
     <Compile Include="Support\ShippingSaleCommentRepository.cs" />

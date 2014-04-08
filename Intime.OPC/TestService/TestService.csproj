@@ -83,7 +83,9 @@
   <ItemGroup>
     <Compile Include="TestBrandService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestBase.cs" />
+    <Compile Include="TestSaleRmaService.cs" />
+    <Compile Include="TestService.cs" />
+    <Compile Include="TestAccountService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intime.OPC.Domain\00_Intime.OPC.Domain.csproj">
@@ -95,9 +97,7 @@
       <Name>02_Intime.OPC.Service</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MEF\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
