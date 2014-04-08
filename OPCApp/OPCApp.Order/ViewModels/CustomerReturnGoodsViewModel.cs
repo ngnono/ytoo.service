@@ -26,10 +26,18 @@ namespace OPCApp.Customer.ViewModels
             CommandReturnGoodsSearch = new DelegateCommand(ReturnGoodsSearch);
             CommandGetDown = new DelegateCommand(GetOrderDetailByOrderNo);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
+            CommandComboSelect = new DelegateCommand(ComboSelect);
             ReturnGoodsGet = new ReturnGoodsGet();
             ClearOrInitData();
             InitCombo();
+            ReturnCountList = new List<int>() { 1, 2, 4 };
         }
+
+        public void ComboSelect()
+        {
+            ReturnCountList = new List<int>() {1,2,4};
+        }
+
         public IList<KeyValue> BrandList { get; set; }
 
 
@@ -48,6 +56,8 @@ namespace OPCApp.Customer.ViewModels
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
             remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetSaleRMARemark); //4填写的是退货单
         }
+
+        public DelegateCommand CommandComboSelect { get; set; }
         public DelegateCommand CommandSetOrderRemark { get; set; }
         public DelegateCommand CommandReturnGoodsSearch { get; set; }
         public DelegateCommand CommandCustomerReturnGoodsSave { get; set; }
@@ -91,9 +101,10 @@ namespace OPCApp.Customer.ViewModels
         {
             if (SaleRma != null)
             {
-                this.SaleRmaList.Clear();
-                IList<OPC_SaleRMA> list = AppEx.Container.GetInstance<ICustomerReturnGoods>()
-                    .ReturnGoodsSearch(ReturnGoodsGet);
+                this.OrderItemList.Clear();
+                IList<OrderItem> list = AppEx.Container.GetInstance<ICustomerReturnGoods>()
+                    .GetOrderDetailByOrderNo(SaleRma.OrderNo);
+                OrderItemList = list.ToList();
             }
 
         }
@@ -125,5 +136,6 @@ namespace OPCApp.Customer.ViewModels
             bool bFlag = AppEx.Container.GetInstance<ICustomerReturnGoods>().CustomerReturnGoodsSave(RmaPost);
             MessageBox.Show(bFlag ? "客服退货成功" : "客服退货失败", "提示");
         }
+
     }
 }

@@ -28,7 +28,7 @@
                     <Button Background="LightGray"  Command="{Binding CommandReturnGoodsSearch}" Width="100">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Image/查询.png" Stretch="None" />
-                            <TextBlock Height="20" FontSize="16" Width="50" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Left">查询</TextBlock>
+                            <TextBlock Height="20" Width="50" VerticalAlignment="Center" HorizontalAlignment="Left">查询</TextBlock>
                         </StackPanel>
                     </Button>
                 
@@ -169,18 +169,33 @@
                     <DataGridTextColumn Header="商品编码" Binding="{Binding ProductId}" />
                     <DataGridTextColumn Header="退货数量" Binding="{Binding ReturnCount}"
                                                 ElementStyle="{StaticResource CellRight}" />
-                    <DataGridComboBoxColumn  Header="需要退货数量" Width="100" x:Name="Gender" SelectedValueBinding="{Binding ReturnCountList, Mode=TwoWay}" DisplayMemberPath="{Binding NeedReturnCount}"></DataGridComboBoxColumn>
                     <DataGridTemplateColumn Header="需要退货数量" Width="1*">
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
-                                <ComboBox SelectedValue="{Binding Path=ReturnCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding Path=ReturnCountList}"/>
+                                <ComboBox  SelectedValue="{Binding Path=NeedReturnCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          
+                      ItemsSource="{Binding Path=ReturnCountList}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Selected">
+                                            <i:InvokeCommandAction Command="{Binding Path=DataContext.CommandComboSelect}" />
+                                        </i:EventTrigger>
+
+                                    </i:Interaction.Triggers>
+
+                                </ComboBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox SelectedValue="{Binding Path=ReturnCount, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding Path=ReturnCountList}"/>
+                                <ComboBox SelectedValue="{Binding Path=NeedReturnCount, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding Path=ReturnCountList}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Selected">
+                                            <i:InvokeCommandAction Command="{Binding  Path=DataContext.CommandComboSelect}" />
+                                        </i:EventTrigger>
+
+                                    </i:Interaction.Triggers>
+                                </ComboBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

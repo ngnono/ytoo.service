@@ -33,7 +33,7 @@ namespace OPCApp.DataService.Impl.Trans
             }
             catch (Exception ex)
             {
-                return null;
+                return new List<OrderItem>();
             }
         }
 

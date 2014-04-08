@@ -6,11 +6,11 @@ namespace OPCApp.TransManage.Views
     /// <summary>
     ///     PrintInvoiceViewModel.xaml 的交互逻辑
     /// </summary>
-    [Export("CustomerRuturnSearch", typeof(UserControl))]
+    [Export("CustomerReturnSearch", typeof(UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class CustomerRuturnSearch
+    public partial class CustomerReturnSearch
     {
-        public CustomerRuturnSearch()
+        public CustomerReturnSearch()
         {
             InitializeComponent();
         }
