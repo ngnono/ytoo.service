@@ -52,13 +52,14 @@
                         <Label.Background>
                             <ImageBrush ImageSource="/Image/UIDA登录_03.gif"></ImageBrush>
                         </Label.Background>
-                        <TextBox Name="logonName" Margin="45 0 0 0" Width="280" Height="50" Padding="20 0 0 0"  HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Left"  FontSize="24" VerticalContentAlignment="Center"  Background="{x:Null}" BorderThickness="0" Text="" >
+                        <StackPanel FocusManager.FocusedElement="{Binding ElementName=logonName}">
+                            <TextBox Name="logonName" Margin="45 0 0 0" Width="280" Height="50" Padding="20 0 0 0"  HorizontalAlignment="Stretch" VerticalAlignment="Center" HorizontalContentAlignment="Left"  FontSize="24" VerticalContentAlignment="Center"  Background="{x:Null}" BorderThickness="0" Text="" Focusable="True" >
 
                             <!--textbox的样式-->
 
                             <!--textbox样式结束-->
                         </TextBox>
-
+                        </StackPanel>
                     </Label>
                     <Label Grid.Row="1" Grid.Column="0" Width="334" Height="50">
                         <Label.Background>
