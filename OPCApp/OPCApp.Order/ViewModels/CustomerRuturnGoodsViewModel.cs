@@ -26,6 +26,7 @@ namespace OPCApp.Customer.ViewModels
             CommandReturnGoodsSearch = new DelegateCommand(ReturnGoodsSearch);
             CommandGetDown = new DelegateCommand(GetOrderDetailByOrderNo);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
+            ReturnGoodsGet = new ReturnGoodsGet();
             ClearOrInitData();
             InitCombo();
         }
@@ -100,7 +101,7 @@ namespace OPCApp.Customer.ViewModels
         private void ReturnGoodsSearch()
         {
             OrderList.Clear();
-            IList<Order> list = AppEx.Container.GetInstance<ICustomerReturnGoods>().ReturnGoodsSearch(ReturnGoodsGet);
+            var list = AppEx.Container.GetInstance<ICustomerReturnGoods>().ReturnGoodsSearch(ReturnGoodsGet);
             if (OrderList != null)
             {
                 ClearOrInitData();
