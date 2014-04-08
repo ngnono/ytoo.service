@@ -60,7 +60,7 @@
             </StackPanel>
             <StackPanel Grid.Row="2">
                 <StackPanel Orientation="Horizontal" Background="LightGray">
-                    <TextBlock Text="退货单" />
+                    <TextBlock Text="订单" />
                 </StackPanel>
             </StackPanel>
             <DataGrid Grid.Row="3" ItemsSource="{Binding RMAList}" IsReadOnly="True" SelectedItem="{Binding Order}"
@@ -79,31 +79,21 @@
                     <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding SaleOrderNo}" />
                     <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}"
                                                 Binding="{Binding PaymentMethodName}" />
-                    <DataGridTextColumn Header="订单来源" Binding="{Binding MustPayTotal}" />
-                    <DataGridTextColumn Header="订单状态" Binding="{Binding MustPayTotal}" />
-                    <DataGridTextColumn Header="商品数量" Binding="{Binding MustPayTotal}" />
-                    <DataGridTextColumn Header="商品金额" Binding="{Binding MustPayTotal}" />
-                    <DataGridTextColumn Header="顾客运费" Binding="{Binding MustPayTotal}" />
                     <DataGridTextColumn Header="应付款总计" Binding="{Binding MustPayTotal}" />
-                    <DataGridTextColumn Header="物流备注" Binding="{Binding MustPayTotal}"/>
-                    <DataGridTextColumn Header="备注时间"
-                                                Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                    <DataGridTextColumn Header="退货总金额" Binding="{Binding RealRMASumMoney}" />
+                    <DataGridTextColumn Header="物流备注" Binding="{Binding TransMemo}"/>
                     <DataGridTextColumn Header="购买时间"
                                                 Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
                     <DataGridTextColumn Header="收货人地址" Binding="{Binding CustomerAddress}" />
                     <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
                     <DataGridTextColumn Header="顾客备注" Binding="{Binding CustomerRemark}" />
-                    <DataGridTextColumn Header="是否要发票" Binding="{Binding IfReceipt}" />
+                    <DataGridCheckBoxColumn Header="是否要发票" Binding="{Binding IfReceipt}" />
                     <DataGridTextColumn Width="100" Header="发票抬头" Binding="{Binding ReceiptHead}" />
                     <DataGridTextColumn Width="200" Header="发票内容" Binding="{Binding ReceiptContent}" />
-                    <DataGridTextColumn Width="200" Header="发票方式" Binding="{Binding ReceiptContent}" />
                     <DataGridTextColumn Header="邮编" Binding="{Binding PostCode}" />
-                    <DataGridTextColumn Header="发货单号" Binding="{Binding PostCode}" />
-                    <DataGridTextColumn Header="快递单号" Binding="{Binding PostCode}" />
-                    <DataGridTextColumn Header="发货时间"   Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                    <DataGridTextColumn Header="发货方式" Binding="{Binding PostCode}" />
-                    <DataGridTextColumn Header="快递公司" Binding="{Binding MustPayTotal}" />
+                    <DataGridTextColumn Header="门店承担运费" Binding="{Binding StoreFee}" />
+                    <DataGridTextColumn Header="顾客所承担运费" Binding="{Binding CustomFee}" />
                     <DataGridTemplateColumn Header="备注录入">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -141,7 +131,7 @@
             </StackPanel>
             <StackPanel Grid.Row="5">
                 <StackPanel Orientation="Horizontal" Background="LightGray">
-                    <TextBlock Text="订单" />
+                    <TextBlock Text="订单明细" />
                 </StackPanel>
             </StackPanel>
             <DataGrid Grid.Row="6" ItemsSource="{Binding OrderList}" IsReadOnly="True" SelectedItem="{Binding Order}"
