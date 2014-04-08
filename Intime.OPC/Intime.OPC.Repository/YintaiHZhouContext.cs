@@ -57,7 +57,7 @@ namespace Intime.OPC.Repository
         public DbSet<ShipVia> ShipVias { get; set; }
        
         public DbSet<Store> Stores { get; set; }
-     
+        public DbSet<OPC_SaleRMAComment> OPC_SaleRMAComments { get; set; }
  
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -98,7 +98,8 @@ namespace Intime.OPC.Repository
             modelBuilder.Configurations.Add(new ShipViaMap());
 
             modelBuilder.Configurations.Add(new StoreMap());
-
+            modelBuilder.Configurations.Add(new BrandMap());
+            modelBuilder.Configurations.Add(new OPC_SaleRMACommentMap());
         }
     }
 }

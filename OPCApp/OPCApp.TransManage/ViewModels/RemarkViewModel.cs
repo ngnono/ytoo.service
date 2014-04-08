@@ -63,6 +63,10 @@ namespace OPCApp.TransManage.ViewModels
                     OPC_ShipComment shipSaleComment = Mapper.Map<OPC_Comment, OPC_ShipComment>(comment);
                     isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteShippingRemark(shipSaleComment);
                     break;
+                case EnumSetRemarkType.SetSaleRMARemark:
+                    var rmaRemark = Mapper.Map<OPC_Comment, OPC_SaleRMAComment>(comment);
+                    isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteSaleRmaRemark(rmaRemark);
+                    break;
             }
             if (!isSuccess)
             {
@@ -95,8 +99,14 @@ namespace OPCApp.TransManage.ViewModels
                         AppEx.Container.GetInstance<IRemarkService>()
                             .GetShipRemark(string.Format("saledetailId={0}", id));
                     Remark4List = Mapper.Map<OPC_ShipComment, OPC_Comment>(shipRemark.Result);
-                    ;
                     break;
+                case EnumSetRemarkType.SetSaleRMARemark:
+                    var rmaRemark =
+                        AppEx.Container.GetInstance<IRemarkService>()
+                            .GetSaleRmaRemark(string.Format("rmaNo={0}", id));
+                    Remark4List = Mapper.Map<OPC_SaleRMAComment, OPC_Comment>(rmaRemark.Result);
+                    break;
+                   
             }
         }
     }

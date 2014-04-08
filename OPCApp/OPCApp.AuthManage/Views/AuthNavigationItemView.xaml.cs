@@ -26,6 +26,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CustomControlLibrary;
+using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Regions;
 using OPCApp.AuthManage.ViewModels;
@@ -153,6 +154,17 @@ namespace OPCApp.AuthManage.Views
             {
                 OnWorkerMethodComplete("");
                 MessageBox.Show("功能正在开发中", "提示");
+            }
+        }
+
+        private void Expander_OnExpanded(object sender, RoutedEventArgs e)
+        {
+            var o = sender as Expander;
+           
+            var oP = o.Parent;
+            foreach (var item in TopLevelListBox.Items)
+            {
+                
             }
         }
     }

@@ -43,6 +43,11 @@ namespace OPCAPP.Domain.Enums
         /// <summary>
         ///     填写快递单备注
         /// </summary>
-        SetShipSaleRemark = 3
+        SetShipSaleRemark = 3,
+         /// <summary>
+        ///     填写退货单备注
+        /// </summary>
+        SetSaleRMARemark = 4
+
     }
 }
