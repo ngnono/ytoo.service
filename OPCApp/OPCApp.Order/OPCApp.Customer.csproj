@@ -87,19 +87,27 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ViewModels\CustomerRuturnGoodsViewModel.cs" />
+    <Compile Include="ViewModels\CustomerRuturnSearchViewModel.cs" />
+    <Compile Include="ViewModels\CustomerReturnGoodsViewModel.cs" />
     <Compile Include="ViewModels\CustomerSelfNetRuturnGoods.cs" />
+    <Compile Include="Views\CustomerReturnSearch.xaml.cs">
+      <DependentUpon>CustomerReturnSearch.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CustomerSelfNetRuturnGoods.xaml.cs">
       <DependentUpon>CustomerSelfNetRuturnGoods.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CustomerRuturnGoods.xaml.cs">
-      <DependentUpon>CustomerRuturnGoods.xaml</DependentUpon>
+    <Compile Include="Views\CustomerReturnGoods.xaml.cs">
+      <DependentUpon>CustomerReturnGoods.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\CustomerReturnSearch.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\CustomerSelfNetRuturnGoods.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CustomerRuturnGoods.xaml">
+    <Page Include="Views\CustomerReturnGoods.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

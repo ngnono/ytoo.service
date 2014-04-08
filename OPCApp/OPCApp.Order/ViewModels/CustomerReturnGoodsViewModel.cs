@@ -14,13 +14,13 @@ using OPCApp.Infrastructure;
 
 namespace OPCApp.Customer.ViewModels
 {
-    [Export("CustomerRuturnGoodsViewModel", typeof(CustomerRuturnGoodsViewModel))]
-    public class CustomerRuturnGoodsViewModel : BindableBase
+    [Export("CustomerReturnGoodsViewModel", typeof(CustomerReturnGoodsViewModel))]
+    public class CustomerReturnGoodsViewModel : BindableBase
     {
         private List<OPC_SaleRMA> _orderList;
         private List<OrderItem> _orderitemList;
 
-        public CustomerRuturnGoodsViewModel()
+        public CustomerReturnGoodsViewModel()
         {
             CommandCustomerReturnGoodsSave = new DelegateCommand(CustomerReturnGoodsSave);
             CommandReturnGoodsSearch = new DelegateCommand(ReturnGoodsSearch);
