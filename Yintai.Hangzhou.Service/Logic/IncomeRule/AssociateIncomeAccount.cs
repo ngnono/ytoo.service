@@ -56,7 +56,7 @@ namespace Yintai.Hangzhou.Service.Logic.IncomeRule
             var account = Context.Set<IMS_AssociateIncomeEntity>().Where(ia => ia.UserId == userId && ia.Status == (int)DataStatus.Normal).FirstOrDefault();
             if (account == null)
             {
-                AccountRepo.Insert(new IMS_AssociateIncomeEntity()
+                account = AccountRepo.Insert(new IMS_AssociateIncomeEntity()
                 {
                     AvailableAmount = 0m,
                     CreateDate = DateTime.Now,

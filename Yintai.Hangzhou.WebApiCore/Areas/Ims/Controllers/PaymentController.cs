@@ -133,7 +133,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
                             }
 
-                            bool isSuccess = false;
+                            bool isSuccess = true;
                             /*
                             var orderItemEntity = Context.Set<OrderItemEntity>().Where(o => o.OrderNo == orderEntity.OrderNo).FirstOrDefault();
                             var expDate = string.Format("{0}之前", DateTime.Today.AddDays(1).ToShortDateString());
@@ -164,8 +164,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 ts.Complete();
                             else
                                 return Content("fail");
-                            ts.Complete();
-
                         }
                         //notify sync async
                         if (orderTransaction != null
