@@ -10,7 +10,7 @@ namespace Intime.OPC.Service
     {
         void CreateSaleRMA(int userId, RMAPost rma);
 
-        IList<RMADto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request);
+        IList<SaleRmaDto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request);
 
 
         IList<SaleRmaDto> GetByReturnGoods(ReturnGoodsGet rquest);

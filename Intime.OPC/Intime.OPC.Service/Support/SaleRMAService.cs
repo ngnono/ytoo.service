@@ -107,13 +107,11 @@ namespace Intime.OPC.Service.Support
             }
         }
 
-        public IList<RMADto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request)
+        public IList<SaleRmaDto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request)
         {
-            //todo 客服退货查询-退货信息
-
-            return null;
-            //var lst = _rmaRepository.GetByReturnGoods(request);
-            //return Mapper.Map<OPC_RMA, RMADto>(request);
+            ISaleRMARepository rep = _repository as ISaleRMARepository;
+           return   rep.GetAll(request.OrderNo, request.SaleOrderNo,request.PayType, request.RmaNo,
+                request.StartDate, request.EndDate, request.RmaStatus, request.StoreID);
         }
 
         public IList<SaleRmaDto> GetByReturnGoods(ReturnGoodsGet request)

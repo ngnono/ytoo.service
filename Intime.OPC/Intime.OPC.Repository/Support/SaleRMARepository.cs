@@ -70,5 +70,71 @@ namespace Intime.OPC.Repository.Support
                 return lstSaleRma;
             }
         }
+
+        public IList<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, DateTime startTime, DateTime endTime,
+            int? rmaStatus, int? storeId)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime);
+                if (!string.IsNullOrWhiteSpace(orderNo))
+                {
+                    query = query.Where(t => t.OrderNo.Contains(orderNo));
+                    query2 = query2.Where(t => t.OrderNo.Contains(orderNo));
+                }
+
+                if (!string.IsNullOrWhiteSpace(saleOrderNo))
+                {
+                    query = query.Where(t => t.SaleOrderNo.Contains(saleOrderNo));
+                }
+
+                if (!string.IsNullOrWhiteSpace(rmaNo))
+                {
+                    query = query.Where(t => t.RMANo.Contains(rmaNo));
+                }
+
+
+                if (!string.IsNullOrWhiteSpace(payType))
+                {
+                    query2 = query2.Where(t => t.PaymentMethodCode == payType);
+                }
+                if (rmaStatus.HasValue)
+                {
+                    query2 = query2.Where(t => t.Status == rmaStatus.Value);
+                }
+
+                if (storeId.HasValue)
+                {
+                    query2 = query2.Where(t => t.StoreId == storeId.Value);
+                }
+
+                var lst = query.Join(query2, t => t.OrderNo, o => o.OrderNo, (t, o) => new { SaleRMA = t, Orders = o }).ToList();
+                var lstSaleRma = new List<SaleRmaDto>();
+                foreach (var t in lst)
+                {
+                    var o = new SaleRmaDto();
+                    o.Id = t.SaleRMA.Id;
+                    o.BuyDate = t.SaleRMA.CreatedDate;
+                    o.CustomFee = t.SaleRMA.CustomFee;
+                    o.CustomerAddress = t.Orders.ShippingAddress;
+                    o.CustomerName = t.Orders.ShippingContactPerson;
+                    o.CustomerPhone = t.Orders.ShippingContactPhone;
+                    o.CustomerRemark = t.SaleRMA.Reason;
+                    o.IfReceipt = t.Orders.NeedInvoice.HasValue ? t.Orders.NeedInvoice.Value : false;
+                    o.MustPayTotal = (double)(t.Orders.TotalAmount);
+                    o.OrderNo = t.SaleRMA.OrderNo;
+                    o.PaymentMethodName = t.Orders.PaymentMethodName;
+                    o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
+                    o.ReceiptContent = t.Orders.InvoiceDetail;
+                    o.ReceiptHead = t.Orders.InvoiceSubject;
+                    o.SaleOrderNo = t.SaleRMA.SaleOrderNo;
+                    o.StoreFee = t.SaleRMA.StoreFee;
+
+                    lstSaleRma.Add(o);
+                }
+                return lstSaleRma;
+            }
+        }
     }
 }

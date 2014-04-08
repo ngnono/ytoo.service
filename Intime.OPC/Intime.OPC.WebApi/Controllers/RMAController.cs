@@ -37,7 +37,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetByReturnGoodsInfo([FromBody] ReturnGoodsInfoGet request)
+        public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoGet request)
         {
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _saleRmaService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");
