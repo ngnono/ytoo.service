@@ -71,7 +71,7 @@ private  IEFRepository<IMS_ComboEntity> _comboRepo;
                 {
                     id = cr.card.Id,
                     desc = cr.card.Name,
-                    image = cr.card.Name.Image320Url(),
+                    image = cr.image.Name.Image320Url(),
                     is_online = true,
                 });
             }

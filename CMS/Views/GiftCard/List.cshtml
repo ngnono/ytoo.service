@@ -1,0 +1,115 @@
+﻿@model GiftCardModel
+
+@{
+    ViewBag.Title = "礼品卡列表";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("首页", "index", "Home")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+@section PageJsSection {
+    <script>
+        function online(e) {
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("Online"))",
+                data: {
+                    id: e.id,
+                },
+                success: function(data) {
+                    if (data["Success"] == true) {
+                        $(e).attr("onclick", "offline(this)");
+                        $(e).text("下线");
+                    } else {
+                        alert('操作失败！');
+                    }
+                },
+                error: function(data, textStatus) {
+                    alert('操作失败！');
+                }
+            });
+        }
+
+        function offline(e) {
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("Offline"))",
+                data: {
+                    id: e.id,
+                },
+                success: function(data) {
+                    if (data["Success"] == true) {
+                        $(e).attr("onclick", "online(this)");
+                        $(e).text("上线");
+
+                    } else {
+                        alert('操作失败！');
+                    }
+                },
+                error: function(data, textStatus) {
+                    alert('操作失败！');
+                }
+            });
+        }
+    </script>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table>
+    <tr>
+        <th>编号</th>
+        <th>
+            名称
+        </th>
+        <th>状态</th>
+        <th>
+            最后更新时间
+        </th>
+        <th>
+            编辑
+        </th>
+    </tr>
+
+    @foreach (var item in Model.CardList)
+    {
+        <tr>
+            <td>
+                <div>
+                    @Html.Label(item.Id.ToString("D"))
+                </div>
+            </td>
+            <td>
+                <div>
+                    @Html.ActionLink2(item.Name, "detail", new { id = item.Id })
+                </div>
+            </td>
+            @if (item.Status == 0)
+            {
+                <td>
+                    <a class="btn" onclick="online(this)" href="javascript:void(0)" id="@item.Id">上线</a>
+                </td>
+            }
+            else
+            {
+                <td>
+                    <a class="btn" onclick="offline(this)" href="javascript:void(0)" id="@item.Id">下线</a>
+
+                </td>
+            }
+            <td>
+                @Html.Label(item.UpdateDate.ToString("s"))
+            </td>
+            <td>
+                @Html.ActionLink2("编辑", "Update", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+<div>@Html.ActionLink("新增", "Create")</div>
+@Html.Partial("PagerPartialView", Model)
