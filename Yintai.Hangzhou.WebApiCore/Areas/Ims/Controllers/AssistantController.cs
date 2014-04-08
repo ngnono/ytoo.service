@@ -3,6 +3,7 @@ using com.intime.fashion.common.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
@@ -25,6 +26,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IFeedbackRepository _feedbackRepo;
         private IEFRepository<IMS_GiftCardEntity> _cardRepo;
         private IResourceRepository _resourceRepo;
+        private IInventoryRepository _inventoryRepo;
         public AssistantController(IEFRepository<IMS_AssociateSaleCodeEntity> salescodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateitemRepo,
             IEFRepository<IMS_AssociateIncomeRequestEntity> incomerequestRepo,
@@ -32,7 +34,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             IEFRepository<IMS_AssociateEntity> associateRepo,
             IFeedbackRepository feedbackRepo,
             IEFRepository<IMS_GiftCardEntity> cardRepo,
-            IResourceRepository resourceRepo
+            IResourceRepository resourceRepo,
+            IInventoryRepository inventoryRepo
             )
         {
             _salescodeRepo = salescodeRepo;
@@ -43,6 +46,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _feedbackRepo = feedbackRepo;
             _cardRepo = cardRepo;
             _resourceRepo = resourceRepo;
+            _inventoryRepo = inventoryRepo;
         }
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request)
@@ -221,11 +225,36 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 .FirstOrDefault();
             if (comboItemEntity == null)
                 return this.RenderError(r => r.Message = "无权操作该搭配");
-            comboItemEntity.Status = (int)DataStatus.Default;
-            comboItemEntity.UpdateDate = DateTime.Now;
-            _associateitemRepo.Update(comboItemEntity);
+            using (var ts = new TransactionScope())
+            {
+                comboItemEntity.Status = request.Is_Online?(int)DataStatus.Normal:(int)DataStatus.Default;
+                comboItemEntity.UpdateDate = DateTime.Now;
+                _associateitemRepo.Update(comboItemEntity);
 
-
+                if (request.Is_Online &&
+                    request.Item_Type == (int)ComboType.Product)
+                {
+                    var inventories = Context.Set<ProductEntity>().Where(p => p.ProductType == (int)ProductType.FromSelf)
+                                    .Join(Context.Set<IMS_Combo2ProductEntity>().Where(ic => ic.ComboId == request.Item_Id),
+                                         o => o.Id,
+                                         i => i.ProductId,
+                                         (o, i) => o)
+                                     .Join(Context.Set<InventoryEntity>(),
+                                                o=>o.Id,
+                                                i=>i.ProductId,
+                                                (o,i)=>i);
+                    foreach (var inventory in inventories)
+                    {
+                        if (inventory.Amount < 1)
+                        {
+                            inventory.Amount = 1;
+                            inventory.UpdateDate = DateTime.Now;
+                            _inventoryRepo.Update(inventory);
+                        }
+                    }
+                }
+                ts.Complete();
+            }
             return this.RenderSuccess<dynamic>(null);
 
         }
@@ -405,20 +434,32 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Update(IMSStoreDetailUpdateRequest request, int authuid)
+        public ActionResult Update_Name(string name, int authuid)
         {
-            if (string.IsNullOrEmpty(request.Name))
+            if (string.IsNullOrEmpty(name))
                 return this.RenderError(r => r.Message = "店铺名称不能为空");
             var userEntity = Context.Set<UserEntity>().Find(authuid);
-            userEntity.Nickname = request.Name;
-            userEntity.Mobile = request.Phone;
+            userEntity.Nickname = name;
             userEntity.UpdatedDate = DateTime.Now;
             userEntity.UpdatedUser = authuid;
 
             _userRepo.Update(userEntity);
             return this.RenderSuccess<dynamic>(c => c.Data = new
             {
-                name = userEntity.Name,
+                name = userEntity.Nickname
+            });
+        }
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Update_Mobile(string mobile, int authuid)
+        {
+            var userEntity = Context.Set<UserEntity>().Find(authuid);
+            userEntity.Mobile = mobile;
+            userEntity.UpdatedDate = DateTime.Now;
+            userEntity.UpdatedUser = authuid;
+
+            _userRepo.Update(userEntity);
+            return this.RenderSuccess<dynamic>(c => c.Data = new
+            {
                 phone = userEntity.Mobile
             });
         }

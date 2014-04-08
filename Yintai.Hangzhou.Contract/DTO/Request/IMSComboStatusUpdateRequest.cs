@@ -12,6 +12,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
     {
         public int Item_Type { get; set; }
         public int Item_Id { get; set; }
-        public string Is_Online { get; set; }
+        public bool Is_Online { get; set; }
     }
 }

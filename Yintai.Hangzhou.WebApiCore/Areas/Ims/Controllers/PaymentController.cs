@@ -62,10 +62,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 var requestSign = sPara["sign"];
                 sPara.Remove("sign");
-                var notifySigned = Util.NotifySign(sPara);
+                if (ConfigManager.IS_PRODUCT_ENV)
+                {
+                    var notifySigned = Util.NotifySignIMS(sPara);
 
-                if (string.Compare(requestSign, notifySigned, true) != 0)
-                    return Content("fail");
+                    if (string.Compare(requestSign, notifySigned, true) != 0)
+                        return Content("fail");
+                }
                 //external order no
                 string out_trade_no = sPara["out_trade_no"];
                 string trade_no = sPara["transaction_id"];
@@ -80,7 +83,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     var orderType = (orderEntity.OrderProductType ?? (int)OrderProductType.SystemProduct) == (int)OrderProductType.SelfProduct ? (int)PaidOrderType.Self_ProductOfSelf : (int)PaidOrderType.Self;
 
                     var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == orderEntity.OrderNo
-                                                && p.PaymentCode == WxPayConfig.PaymentCode
+                                                && p.PaymentCode == WxPayConfig.PAYMENT_CODE4IMS
                                                 && (!p.OrderType.HasValue || p.OrderType.Value == orderType)).FirstOrDefault();
 
                     if (paymentEntity == null)
@@ -130,7 +133,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
                             }
 
-                            bool isSuccess = false;
+                            bool isSuccess = true;
                             /*
                             var orderItemEntity = Context.Set<OrderItemEntity>().Where(o => o.OrderNo == orderEntity.OrderNo).FirstOrDefault();
                             var expDate = string.Format("{0}之前", DateTime.Today.AddDays(1).ToShortDateString());
@@ -161,8 +164,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 ts.Complete();
                             else
                                 return Content("fail");
-                            ts.Complete();
-
                         }
                         //notify sync async
                         if (orderTransaction != null
@@ -192,10 +193,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 var requestSign = sPara["sign"];
                 sPara.Remove("sign");
-                var notifySigned = Util.NotifySign(sPara);
+                if (ConfigManager.IS_PRODUCT_ENV)
+                {
+                    var notifySigned = Util.NotifySignIMS(sPara);
 
-                if (string.Compare(requestSign, notifySigned, true) != 0)
-                    return Content("fail");
+                    if (string.Compare(requestSign, notifySigned, true) != 0)
+                        return Content("fail");
+                }
                 //external order no
                 string out_trade_no = sPara["out_trade_no"];
                 string trade_no = sPara["transaction_id"];
@@ -228,7 +232,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         return Content("success");
                     }
                     var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.TransNo == trade_no
-                                                && p.PaymentCode == WxPayConfig.PaymentCode
+                                                && p.PaymentCode == WxPayConfig.PAYMENT_CODE4IMS
                                                 && (!p.OrderType.HasValue || p.OrderType.Value == (int)PaidOrderType.GiftCard)).FirstOrDefault();
 
                     if (paymentEntity == null)

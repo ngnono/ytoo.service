@@ -8,7 +8,6 @@ using System.Web.Mvc;
 
 namespace Yintai.Hangzhou.Contract.DTO.Request
 {
-    [Bind(Include="siz_ids")]
    public  class IMSProductCreateRequest:BaseRequest
     {
         public int Id { get; set; }
@@ -24,7 +23,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public decimal Price { get; set; }
         [Required(ErrorMessage = "分类必填")]
         public int Category_Id { get; set; }
-        [DataMember(Name = "size_ids[]")]
         public int[] Size_Ids { get; set; }
 
         public string Size_Str { get; set; }

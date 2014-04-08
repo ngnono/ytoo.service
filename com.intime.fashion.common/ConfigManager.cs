@@ -233,7 +233,13 @@ namespace com.intime.fashion.common
             }
         }
 
-
+        public static bool IS_PRODUCT_ENV
+        {
+            get
+            {
+                return bool.Parse(ConfigurationManager.AppSettings["IS_PRODUCT_ENV"]);
+            }
+        }
 
         public static string IMS_DEFAULT_LOGO { get{
             return ConfigurationManager.AppSettings["IMS_Default_LOGO"];

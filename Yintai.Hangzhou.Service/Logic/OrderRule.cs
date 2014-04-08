@@ -287,7 +287,8 @@ namespace Yintai.Hangzhou.Service.Logic
                 {
                     
                     var associateEntity = Context.Set<IMS_AssociateEntity>().Find(request.OrderModel.StoreId);
-                    AssociateIncomeLogic.Create(associateEntity.UserId, orderEntity);
+                    if (associateEntity != null)
+                        AssociateIncomeLogic.Create(associateEntity.UserId, orderEntity);
 
                 }
                 string exOrderNo = string.Empty;
@@ -307,6 +308,7 @@ namespace Yintai.Hangzhou.Service.Logic
                          {
                              ExOrderNo = exOrderNo,
                              OrderNo = orderEntity.OrderNo,
+                             UpdateTime = DateTime.Now
                          });
                     } else
                     {

@@ -47,7 +47,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var linq = Context.Set<UserEntity>().Where(u => u.Id == authuid.Value)
                        .Join(Context.Set<IMS_AssociateEntity>(), o => o.Id, i => i.UserId, (o, i) => i).First();
            
-            var store = GetStoreById(linq.Id);
+            var store = GetStoreById(linq.Id,authuid.Value);
 
             return this.RenderSuccess<IMSStoreDetailResponse>(m => m.Data =store);
 
@@ -155,12 +155,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult Detail(int id, int? authuid)
         {
-            var store = GetStoreById(id);
+            var store = GetStoreById(id,authuid.Value);
             return this.RenderSuccess<IMSStoreDetailResponse>(m => m.Data = store);
 
         }
 
-        private IMSStoreDetailResponse GetStoreById(int storeId)
+        private IMSStoreDetailResponse GetStoreById(int storeId,int authuid)
         {
             var linq = Context.Set<UserEntity>()
                        .Join(Context.Set<IMS_AssociateEntity>().Where(ia=>ia.Id == storeId), o => o.Id, i => i.UserId, (o, i) => new { U = o, Store = i }).First();
@@ -206,7 +206,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 Logo = linq.U.Logo,
                 GiftCardSaling = giftCards,
                 ComboSaling = combos,
-                Mobile = linq.U.Mobile
+                Mobile = linq.U.Mobile,
+                Is_Owner = authuid == linq.U.Id,
+                Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&
+                                    f.FavoriteSourceType == (int)SourceType.Store &&
+                                    f.FavoriteSourceId == storeId &&
+                                    f.Status == (int)DataStatus.Normal)
             };
         }
     }

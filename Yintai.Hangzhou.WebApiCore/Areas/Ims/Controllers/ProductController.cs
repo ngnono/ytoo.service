@@ -13,6 +13,7 @@ using Yintai.Hangzhou.Service.Contract;
 using Yintai.Hangzhou.WebSupport.Mvc;
 using com.intime.fashion.common.Extension;
 using Yintai.Architecture.Common.Data.EF;
+using Yintai.Hangzhou.WebSupport.Binder;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -42,7 +43,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _productCodeRepo = productCodeRepo;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Create(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
+        public ActionResult Create([InternalJsonArrayAttribute("size_ids")]Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
         {
             if (!ModelState.IsValid)
             {
@@ -61,7 +62,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "分类不存在");
             var catSizeType = categoryEntity.C.SizeType ?? (int)CategorySizeType.FreeInput;
             if (categoryEntity.C.SizeType == (int)CategorySizeType.LimitSize
-                && request.Size_Ids.Length < 1)
+                && (request.Size_Ids==null ||request.Size_Ids.Length < 1))
                 return this.RenderError(r => r.Message = "分类尺码必选");
             if (categoryEntity.C.SizeType == (int)CategorySizeType.FreeInput
                 && string.IsNullOrEmpty(request.Size_Str))
@@ -224,7 +225,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Update(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
+        public ActionResult Update([InternalJsonArrayAttribute("size_ids")]Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
         {
             if (!ModelState.IsValid)
             {
@@ -254,6 +255,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 && string.IsNullOrEmpty(request.Size_Str))
                 return this.RenderError(r => r.Message = "分类尺码必选");
 
+            bool isLimitSize = categoryEntity.C.SizeType == (int)CategorySizeType.LimitSize;
             var brandEntity = Context.Set<BrandEntity>().Find(request.Brand_Id);
             if (brandEntity == null)
                 return this.RenderError(r => r.Message = "品牌不存在");
@@ -290,41 +292,23 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 //2.2 update property thereus
                 var colorProperty = Context.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == productEntity.Id && pp.IsColor == true)
                                       .Join(Context.Set<ProductPropertyValueEntity>(), o => o.Id, i => i.PropertyId, (o, i) => i).First();
-                foreach (var size in request.Size_Ids)
+                if (isLimitSize)
                 {
-                    var categoryPropertyValueEntity = categoryEntity.CP.Where(cp => cp.CPV.Id == size).FirstOrDefault();
-                    if (categoryPropertyValueEntity != null)
+                    foreach (var size in request.Size_Ids)
                     {
-                        var propertyValue = propertValues.Where(ppv => ppv.ValueDesc == categoryPropertyValueEntity.CPV.ValueDesc).FirstOrDefault();
-                        if (propertyValue == null)
+                        var categoryPropertyValueEntity = categoryEntity.CP.Where(cp => cp.CPV.Id == size).FirstOrDefault();
+                        if (categoryPropertyValueEntity != null)
                         {
-                            var sizevalueEntity = _productPropertyValueRepo.Insert(new ProductPropertyValueEntity()
-                            {
-                                CreateDate = DateTime.Now,
-                                PropertyId = sizePropertyEntity.Id,
-                                UpdateDate = DateTime.Now,
-                                ValueDesc = categoryPropertyValueEntity.CPV.ValueDesc,
-                                Status = (int)DataStatus.Normal
-                            });
-                            _inventoryRepo.Insert(new InventoryEntity()
-                            {
-                                Amount = 1,
-                                ProductId = productEntity.Id,
-                                PColorId = colorProperty.Id,
-                                PSizeId = sizevalueEntity.Id,
-                                UpdateDate = DateTime.Now,
-                                UpdateUser = authuid
-
-                            });
-                        }
-                        else
-                        {
-                            propertyValue.Status = (int)DataStatus.Normal;
-                            _productPropertyValueRepo.Update(propertyValue);
+                            var propertyValue = propertValues.Where(ppv => ppv.ValueDesc == categoryPropertyValueEntity.CPV.ValueDesc).FirstOrDefault();
+                            UpdateSingleProperty(productEntity.Id, colorProperty.Id, request.Size_Str, sizePropertyEntity.Id, propertyValue);
                         }
                     }
-
-
+                }
+                else
+                {
+                    var propertyValue = propertValues.Where(ppv => ppv.ValueDesc == request.Size_Str).FirstOrDefault();
+                    UpdateSingleProperty(productEntity.Id, colorProperty.Id, request.Size_Str, sizePropertyEntity.Id, propertyValue);
+                    
                 }
                 bool canCommit = true;
                 var currentResourceEntity = Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.SourceId == (int)productEntity.Id && r.Status == (int)DataStatus.Normal).First();
@@ -367,6 +351,41 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
         }
 
+        private void UpdateSingleProperty(int productId,int colorId, string size,int sizeId, ProductPropertyValueEntity propertyValue)
+        {
+            if (propertyValue == null)
+            {
+                var sizevalueEntity = _productPropertyValueRepo.Insert(new ProductPropertyValueEntity()
+                {
+                    CreateDate = DateTime.Now,
+                    PropertyId = sizeId,
+                    UpdateDate = DateTime.Now,
+                    ValueDesc = size,
+                    Status = (int)DataStatus.Normal
+                });
+                _inventoryRepo.Insert(new InventoryEntity()
+                {
+                    Amount = 1,
+                    ProductId = productId,
+                    PColorId = colorId,
+                    PSizeId = sizevalueEntity.Id,
+                    UpdateDate = DateTime.Now,
+                    UpdateUser = 0
+
+                });
+            }
+            else
+            {
+                propertyValue.Status = (int)DataStatus.Normal;
+                _productPropertyValueRepo.Update(propertyValue);
+            }
+        }
+
+        private void UpdateSingleProperty(int p1, string p2)
+        {
+            throw new NotImplementedException();
+        }
+
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Detail(int id, int authuid)
         {
@@ -388,7 +407,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                         , o => o.Id
                                         , i => i.PropertyId
                                         , (o, i) => i)
-                             .FirstOrDefault();
+                             .FirstOrDefault().ToList();
+            
+
             return this.RenderSuccess<Yintai.Hangzhou.Contract.DTO.Response.IMSProductSelfDetailResponse>(r =>
                             r.Data = new IMSProductSelfDetailResponse().FromEntity<IMSProductSelfDetailResponse>(productEntity.P, p => {
                                 p.Brand_Name = productEntity.B.Name;
@@ -396,10 +417,26 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 p.SalesCode = productEntity.PC.StoreProductCode;
                                 p.SizeType = productEntity.C.SizeType.Value;
                                 if (sizeValues != null)
-                                    p.Sizes = sizeValues.Select(ppv => new IMSProductSizeResponse() { 
-                                            SizeName = ppv.ValueDesc,
-                                            SizeValueId = ppv.Id
-                                    });
+                                {
+                                    if (productEntity.C.SizeType == (int)CategorySizeType.LimitSize)
+                                    {
+                                        var catSizeValues = Context.Set<CategoryPropertyEntity>().Where(cp => cp.CategoryId == productEntity.P.Tag_Id && cp.Status == (int)DataStatus.Normal && cp.IsSize == true)
+                                                             .Join(Context.Set<CategoryPropertyValueEntity>().Where(cpv => cpv.Status == (int)DataStatus.Normal),
+                                                                o => o.Id,
+                                                                i => i.PropertyId,
+                                                                (o, i) => i);
+                                        p.Sizes = catSizeValues.ToList().Where(csv => sizeValues.Any(sv => sv.ValueDesc == csv.ValueDesc)).Select(csv => new IMSProductSizeResponse()
+                                        {
+                                            SizeName = csv.ValueDesc,
+                                            SizeValueId = csv.Id
+                                        });
+                                    }
+                                    else {
+                                        var firstSize = sizeValues.FirstOrDefault();
+                                        if (firstSize!=null)
+                                            p.Size_Str = firstSize.ValueDesc;
+                                    }
+                                }
                                 if (productEntity.PR != null)
                                     p.ImageUrl = productEntity.PR.Name;
                             }));

@@ -56,7 +56,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int SizeType { get; set; }
         [DataMember(Name="is_online")]
         public int Status { get; set; }
-
+        [DataMember(Name="size_str")]
+        public string Size_Str { get; set; }
 
     }
     [DataContract]
