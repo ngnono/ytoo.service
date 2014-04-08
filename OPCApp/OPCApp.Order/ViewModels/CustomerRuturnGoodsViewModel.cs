@@ -17,7 +17,7 @@ namespace OPCApp.Customer.ViewModels
     [Export("CustomerRuturnGoodsViewModel", typeof(CustomerRuturnGoodsViewModel))]
     public class CustomerRuturnGoodsViewModel : BindableBase
     {
-        private List<Order> _orderList;
+        private List<OPC_SaleRMA> _orderList;
         private List<OrderItem> _orderitemList;
 
         public CustomerRuturnGoodsViewModel()
@@ -44,9 +44,9 @@ namespace OPCApp.Customer.ViewModels
         public void SetOrderRemark()
         {
             //被选择的对象
-            string id = Order.OrderNo;
+            string id = SaleRma.OrderNo;
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetOrderRemark); //3填写的是订单
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetSaleRMARemark); //4填写的是退货单
         }
         public DelegateCommand CommandSetOrderRemark { get; set; }
         public DelegateCommand CommandReturnGoodsSearch { get; set; }
@@ -54,17 +54,17 @@ namespace OPCApp.Customer.ViewModels
         public DelegateCommand CommandGetDown { get; set; }
         public RMAPost RmaPost { get; set; }
 
-        public List<Order> OrderList
+        public List<OPC_SaleRMA> SaleRmaList
         {
             get { return _orderList; }
             set { SetProperty(ref _orderList, value); }
         }
 
-        private Order _order;
-        public Order Order
+        private OPC_SaleRMA _opcSaleRma;
+        public OPC_SaleRMA SaleRma
         {
-            get { return _order; }
-            set { SetProperty(ref _order, value); }
+            get { return _opcSaleRma; }
+            set { SetProperty(ref _opcSaleRma, value); }
         }
         public List<OrderItem> OrderItemList
         {
@@ -84,15 +84,15 @@ namespace OPCApp.Customer.ViewModels
         private void ClearOrInitData()
         {
             OrderItemList = new List<OrderItem>();
-            OrderList = new List<Order>();
+            SaleRmaList = new List<OPC_SaleRMA>();
         }
         /*点击销售单显示明细*/
         private void GetOrderDetailByOrderNo()
         {
-            if (Order != null)
+            if (SaleRma != null)
             {
-                this.OrderList.Clear();
-                IList<Order> list = AppEx.Container.GetInstance<ICustomerReturnGoods>()
+                this.SaleRmaList.Clear();
+                IList<OPC_SaleRMA> list = AppEx.Container.GetInstance<ICustomerReturnGoods>()
                     .ReturnGoodsSearch(ReturnGoodsGet);
             }
 
@@ -100,15 +100,15 @@ namespace OPCApp.Customer.ViewModels
         /*退货单查询*/
         private void ReturnGoodsSearch()
         {
-            OrderList.Clear();
+            SaleRmaList.Clear();
             var list = AppEx.Container.GetInstance<ICustomerReturnGoods>().ReturnGoodsSearch(ReturnGoodsGet);
-            if (OrderList != null)
+            if (list == null)
             {
                 ClearOrInitData();
             }
             else
             {
-                OrderList = list.ToList();
+                SaleRmaList = list.ToList();
             }
         }
         /*客服退货*/
