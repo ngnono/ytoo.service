@@ -10,23 +10,25 @@ namespace Intime.OPC.WebApi.Controllers
     public class CustomController : BaseController
     {
         private IOrderService _orderService;
+        private ISaleRMAService _saleRmaService;
 
-        public CustomController(IOrderService orderService)
+        public CustomController(IOrderService orderService, ISaleRMAService saleRmaService)
         {
             _orderService = orderService;
+            _saleRmaService = saleRmaService;
         }
 
         [HttpGet]
-        public IHttpActionResult GetOrder([FromBody] ReturnGoodsGet request)
+        public IHttpActionResult GetOrder([FromUri] ReturnGoodsGet request)
         {
-           
             return DoFunction(() =>
             {
                 var userId = GetCurrentUserID();
-                int brandid = request.BandId.HasValue ? request.BandId.Value : -1;
-                return  _orderService.GetOrder(request.OrderNo, "", request.StartDate, request.EndDate, -1, brandid, -1,
-                    request.PayType, "", request.Telephone, "", -1, userId, 1, 10000).Result;
+
+                return _saleRmaService.GetByReturnGoods(request);
             }, "查询订单失败");
         }
+
+      
     }
 }

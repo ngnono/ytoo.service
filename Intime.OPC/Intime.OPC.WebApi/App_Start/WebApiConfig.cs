@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Routing;
 using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 using Intime.OPC.WebApi.Core.MessageHandlers.Signature;
 
@@ -15,8 +16,14 @@ namespace Intime.OPC.WebApi
             // 注册Api默认的路由
             config.Routes.MapHttpRoute("DefaultApi",
                 "api/{controller}/{action}/{id}",
-                new {controller = "home", action = "index", id = RouteParameter.Optional}
+                new { controller = "home", action = "index", id = RouteParameter.Optional }
                 );
+
+            config.Routes.MapHttpRoute("DefaultApi2",
+                "api/{controller}",
+                new { id = System.Web.Http.RouteParameter.Optional }
+                );
+
 
             // WebApi2.1支持的RouteAttribute进行Map
             config.MapHttpAttributeRoutes();
