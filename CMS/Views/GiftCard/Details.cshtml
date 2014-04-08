@@ -1,0 +1,56 @@
+﻿@model GiftCardItemViewModel
+@{
+    ViewBag.Title = "礼品卡详情";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("礼品卡列表", "List")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+<h2>@ViewBag.Title</h2>
+
+<fieldset>
+    <div class="display-label">@Html.Label("编码：")</div>
+    <div class="display-field">@Html.Label(Model.Card.Id.ToString("D"))</div>
+    <div class="display-label">@Html.Label("礼品卡：")</div>
+    <div class="display-field">@Html.Label(Model.Card.Name)</div>
+    <div class="display-field">状态</div>
+    <div class="display-field">@Html.CheckBox("状态", Model.Card.Status == 1)</div>
+</fieldset>
+<div class="display-lable">礼品卡子卡</div>
+<fieldset>
+    <table>
+        <tr>
+            <th>子卡编码</th>
+            <th>面额</th>
+            <th>销售价</th>
+            <th>销售配额</th>
+            <th>状态</th>
+        </tr>
+        @foreach (var item in Model.CardItems)
+        {
+            <tr>
+                <td>@Html.Label(item.Id.ToString())</td>
+                <td>@item.UnitPrice.ToString("c")</td>
+                <td>@item.Price.ToString("c")</td>
+                <td>@item.MaxLimit.ToString("d")</td>
+                @if (item.Status == 1)
+                {
+                    <td>@Html.ActionLink2("下线", "Down", new { id = item.Id })</td>
+                }
+                else
+                {
+                    <td>@Html.ActionLink2("上线", "Up", new { id = item.Id })</td>
+                }
+
+            </tr>
+        }
+    </table>
+</fieldset>
+<p>
+    @*@Html.ActionLink2("回复", "Create", new { commentId = Model.Id }, new { @class = "btn btn-primary" })
+        @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })*@
+</p>
+
