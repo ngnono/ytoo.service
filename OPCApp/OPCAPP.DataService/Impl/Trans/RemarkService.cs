@@ -66,6 +66,21 @@ namespace OPCApp.DataService.Impl.Trans
 
         #region 销售单备注  保存、列表查询  接口实现
 
+        public PageResult<OPC_SaleRMAComment> GetSaleRmaRemark(string rmaId)
+        {
+             try
+            {
+                IList<OPC_SaleRMAComment> lst = RestClient.Get<OPC_SaleRMAComment>("rma/getsalermaremark",
+                    rmaId);
+                return new PageResult<OPC_SaleRMAComment>(lst, lst.Count);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            
+        }
+
         /// <summary>
         ///     销售单备注保存
         /// </summary>
@@ -144,6 +159,20 @@ namespace OPCApp.DataService.Impl.Trans
             catch (Exception ex)
             {
                 return null;
+            }
+        }
+
+
+        public bool WriteSaleRmaRemark(OPC_SaleRMAComment rmaComment)
+        {
+            try
+            {
+                bool bResult = RestClient.Post("rma/AddSaleRmaComment", rmaComment);
+                return bResult;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }

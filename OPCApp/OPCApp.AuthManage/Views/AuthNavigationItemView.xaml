@@ -21,7 +21,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Expander ExpandDirection="Down" Width="Auto">
+                    <Expander ExpandDirection="Down" Width="Auto" Expanded="Expander_OnExpanded">
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal" Width="200">
 

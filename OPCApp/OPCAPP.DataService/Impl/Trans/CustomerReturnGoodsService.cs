@@ -12,12 +12,12 @@ namespace OPCApp.DataService.Impl.Trans
     [Export(typeof(ICustomerReturnGoods))]
     public class CustomerReturnGoodsService : ICustomerReturnGoods
     {
-       
-        public IList<Order> ReturnGoodsSearch(Domain.Customer.ReturnGoodsGet returnGoodsGet)
+
+        public IList<OPC_SaleRMA> ReturnGoodsSearch(Domain.Customer.ReturnGoodsGet returnGoodsGet)
         {
             try
             {
-                return RestClient.Get<Order>("custom/GetOrder", returnGoodsGet.ToString());
+                return RestClient.Get<OPC_SaleRMA>("custom/GetOrder", returnGoodsGet.ToString());
             }
             catch (Exception ex)
             {
