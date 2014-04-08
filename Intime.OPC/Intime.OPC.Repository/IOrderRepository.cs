@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -31,5 +32,6 @@ namespace Intime.OPC.Repository
         Order GetOrderByOrderNo(string orderNo);
 
         IList<Order> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime);
+        PageResult<Order> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize);
     }
 }
