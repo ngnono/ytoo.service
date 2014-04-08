@@ -1028,6 +1028,7 @@
     <Content Include="Views\Category\EditorTemplates\CategoryViewModel.cshtml" />
     <Content Include="Views\Category\EditorTemplates\ShowCategoryViewModel.cshtml" />
     <Content Include="Views\BarCode\Create.cshtml" />
+    <Content Include="Views\Wxmenu\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\themes\webget\easyui\NewFolder1\" />

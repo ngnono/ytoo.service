@@ -27,6 +27,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_GiftCardEntity> _cardRepo;
         private IResourceRepository _resourceRepo;
         private IInventoryRepository _inventoryRepo;
+private  IEFRepository<IMS_ComboEntity> _comboRepo;
         public AssistantController(IEFRepository<IMS_AssociateSaleCodeEntity> salescodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateitemRepo,
             IEFRepository<IMS_AssociateIncomeRequestEntity> incomerequestRepo,
@@ -35,7 +36,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             IFeedbackRepository feedbackRepo,
             IEFRepository<IMS_GiftCardEntity> cardRepo,
             IResourceRepository resourceRepo,
-            IInventoryRepository inventoryRepo
+            IInventoryRepository inventoryRepo,
+            IEFRepository<IMS_ComboEntity> comboRepo
             )
         {
             _salescodeRepo = salescodeRepo;
@@ -47,6 +49,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _cardRepo = cardRepo;
             _resourceRepo = resourceRepo;
             _inventoryRepo = inventoryRepo;
+            _comboRepo = comboRepo;
         }
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request)
@@ -95,6 +98,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 if (l.R == null)
                     return;
                 o.ImageUrl = l.R.Name;
+
 
             }));
             var response = new PagerInfoResponse<IMSComboDetailResponse>(request.PagerRequest, totalCount)
@@ -231,25 +235,32 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 comboItemEntity.UpdateDate = DateTime.Now;
                 _associateitemRepo.Update(comboItemEntity);
 
-                if (request.Is_Online &&
-                    request.Item_Type == (int)ComboType.Product)
+                if (request.Item_Type == (int)ComboType.Product)
                 {
-                    var inventories = Context.Set<ProductEntity>().Where(p => p.ProductType == (int)ProductType.FromSelf)
-                                    .Join(Context.Set<IMS_Combo2ProductEntity>().Where(ic => ic.ComboId == request.Item_Id),
-                                         o => o.Id,
-                                         i => i.ProductId,
-                                         (o, i) => o)
-                                     .Join(Context.Set<InventoryEntity>(),
-                                                o=>o.Id,
-                                                i=>i.ProductId,
-                                                (o,i)=>i);
-                    foreach (var inventory in inventories)
+                    var comboEntity = Context.Set<IMS_ComboEntity>().Find(request.Item_Id);
+                    comboEntity.Status = comboItemEntity.Status;
+                    comboEntity.UpdateDate = DateTime.Now;
+                    _comboRepo.Update(comboEntity);
+
+                    if (request.Is_Online)
                     {
-                        if (inventory.Amount < 1)
+                        var inventories = Context.Set<ProductEntity>().Where(p => p.ProductType == (int)ProductType.FromSelf)
+                                        .Join(Context.Set<IMS_Combo2ProductEntity>().Where(ic => ic.ComboId == request.Item_Id),
+                                             o => o.Id,
+                                             i => i.ProductId,
+                                             (o, i) => o)
+                                         .Join(Context.Set<InventoryEntity>(),
+                                                    o => o.Id,
+                                                    i => i.ProductId,
+                                                    (o, i) => i);
+                        foreach (var inventory in inventories)
                         {
-                            inventory.Amount = 1;
-                            inventory.UpdateDate = DateTime.Now;
-                            _inventoryRepo.Update(inventory);
+                            if (inventory.Amount < 1)
+                            {
+                                inventory.Amount = 1;
+                                inventory.UpdateDate = DateTime.Now;
+                                _inventoryRepo.Update(inventory);
+                            }
                         }
                     }
                 }
