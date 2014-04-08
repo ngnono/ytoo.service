@@ -103,14 +103,13 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
-        public PageResult<Order> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize)
+        public IList<Order> GetOrderByShippingNo(string shippingNo)
         {
             using (var db = new YintaiHZhouContext())
             {
                 var filter = db.ShippingSales.Where(t => t.ShippingCode == shippingNo).Join(db.Orders,t=>t.OrderNo,o=>o.OrderNo,(t,o)=>o);
 
-                filter.OrderByDescending(t => t.CreateDate);
-                return filter.ToPageResult(pageIndex, pageSize);
+                return filter.ToList();
             }
         }
 

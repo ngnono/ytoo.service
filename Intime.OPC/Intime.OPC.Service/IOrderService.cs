@@ -69,6 +69,6 @@ namespace Intime.OPC.Service
 
 
         IList<OrderItemDto> GetOrderItems(string orderNo);
-        PageResult<OrderDto> GetOrderByShippingNo(string shippingNo,int pageIndex, int pageSize);
+        IList<OrderDto> GetOrderByShippingNo(string shippingNo);
     }
 }
