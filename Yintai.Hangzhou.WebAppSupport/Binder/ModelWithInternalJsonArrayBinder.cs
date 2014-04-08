@@ -16,7 +16,7 @@ namespace Yintai.Hangzhou.WebSupport.Binder
         private string[] _inspectedParams;
         private bool _inspecting;
         
-        public ModelWithInternalJsonArrayBinder(string inspectorParas)
+        public ModelWithInternalJsonArrayBinder(string inspectorParas):base()
         { 
             if (!string.IsNullOrEmpty(inspectorParas))
             {
@@ -24,7 +24,36 @@ namespace Yintai.Hangzhou.WebSupport.Binder
                 _inspecting = true;
             }
         }
-
+        /*
+        protected override object CreateModel(ControllerContext controllerContext, ModelBindingContext bindingContext, Type modelType)
+        {
+            var response = base.CreateModel(controllerContext, bindingContext,modelType);
+            
+            if (_inspecting)
+            {
+                var log = ServiceLocator.Current.Resolve<ILog>();
+                foreach (var prop in _inspectedParams)
+                {
+                    log.Debug(prop);
+                    var property = modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(p => p.Name.ToLower() == prop.ToLower()).First();
+                    log.Debug(property);
+                    if (property == null || property.GetValue(response) != null)
+                        continue;
+                   
+                    string[] propValues = controllerContext.HttpContext.Request.Params.GetValues(string.Concat(prop, "[]"));
+                    log.Debug(propValues);
+                    if (propValues != null)
+                    {
+                        var targetValues = Array.ConvertAll<string, int>(propValues, s => int.Parse(s));
+                        
+                        property.SetValue(response, targetValues);
+                        log.Debug(property.GetValue(response));
+                    }
+                }
+            }
+            return response;
+        }
+   */
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             var response =  base.BindModel(controllerContext, bindingContext);
@@ -35,28 +64,30 @@ namespace Yintai.Hangzhou.WebSupport.Binder
                 var modelType = response.GetType();
                 foreach (var prop in _inspectedParams)
                 {
-                    log.Debug(prop);
+                    
                     var property = modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Where(p => p.Name.ToLower() == prop.ToLower()).First();
                     log.Debug(property);
                     if (property == null || property.GetValue(response)!=null)
                         continue;
-                    string[] propValues = controllerContext.HttpContext.Request.Form.GetValues(string.Concat(prop,"[]"));
+                    string[] propValues = controllerContext.HttpContext.Request.Params.GetValues(string.Concat(prop,"[]"));
 
                     if (propValues != null)
                     {
                        var targetValues = Array.ConvertAll<string, int>(propValues,s => int.Parse(s));
                        property.SetValue(response, targetValues);
+                       log.Debug(property.GetValue(response));
                     }
                 }
             }
             return response;
         }
+         
     }
     public class InternalJsonArrayAttribute : CustomModelBinderAttribute
     {
         private string _inspects;
         
-        public InternalJsonArrayAttribute(string inspects) {
+        public InternalJsonArrayAttribute(string inspects) :base(){
             _inspects = inspects;    
         }
 

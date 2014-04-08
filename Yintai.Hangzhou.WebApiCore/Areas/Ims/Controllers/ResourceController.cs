@@ -35,7 +35,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                      , (SourceType)image_type)
                              .Select(r => new { 
                                 id = r.Id,
-                                url = r.Name.Image320Url()
+                                url = image_type==(int)SourceType.CustomerPortrait?r.Name.Image100Url():r.Name.Image320Url()
                              });
             
             return this.RenderSuccess<dynamic>(c => c.Data = resources.First());

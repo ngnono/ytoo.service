@@ -93,7 +93,21 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
             set { }
         }
 
+        [DataMember(Name = "logo_full")]
+        public string Logo_Full
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Logo))
+                    return string.Empty;
+                if (Logo.StartsWith("http://"))
+                    return Logo;
+                return string.Concat(ConfigManager.GetHttpApiImagePath(),
+                    Logo,"_100x100.jpg");
 
+            }
+            set { }
+        }
         [IgnoreDataMember]
         public string BackgroundLogo { get; set; }
 

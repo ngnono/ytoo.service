@@ -405,20 +405,32 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Update(IMSStoreDetailUpdateRequest request, int authuid)
+        public ActionResult Update_Name(string name, int authuid)
         {
-            if (string.IsNullOrEmpty(request.Name))
+            if (string.IsNullOrEmpty(name))
                 return this.RenderError(r => r.Message = "店铺名称不能为空");
             var userEntity = Context.Set<UserEntity>().Find(authuid);
-            userEntity.Nickname = request.Name;
-            userEntity.Mobile = request.Phone;
+            userEntity.Nickname = name;
             userEntity.UpdatedDate = DateTime.Now;
             userEntity.UpdatedUser = authuid;
 
             _userRepo.Update(userEntity);
             return this.RenderSuccess<dynamic>(c => c.Data = new
             {
-                name = userEntity.Name,
+                name = userEntity.Nickname
+            });
+        }
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Update_Mobile(string mobile, int authuid)
+        {
+            var userEntity = Context.Set<UserEntity>().Find(authuid);
+            userEntity.Mobile = mobile;
+            userEntity.UpdatedDate = DateTime.Now;
+            userEntity.UpdatedUser = authuid;
+
+            _userRepo.Update(userEntity);
+            return this.RenderSuccess<dynamic>(c => c.Data = new
+            {
                 phone = userEntity.Mobile
             });
         }

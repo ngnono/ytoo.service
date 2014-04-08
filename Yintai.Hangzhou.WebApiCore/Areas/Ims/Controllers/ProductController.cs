@@ -62,7 +62,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "分类不存在");
             var catSizeType = categoryEntity.C.SizeType ?? (int)CategorySizeType.FreeInput;
             if (categoryEntity.C.SizeType == (int)CategorySizeType.LimitSize
-                && request.Size_Ids.Length < 1)
+                && (request.Size_Ids==null ||request.Size_Ids.Length < 1))
                 return this.RenderError(r => r.Message = "分类尺码必选");
             if (categoryEntity.C.SizeType == (int)CategorySizeType.FreeInput
                 && string.IsNullOrEmpty(request.Size_Str))
