@@ -18,21 +18,21 @@ namespace com.intime.fashion.common.Wxpay
        [JsonProperty("name")]
        public string Name { get; set; }
    }
-   public class WxMenuItemClick
+   public class WxMenuItemClick:WxMenuItemBase
    {
        [JsonProperty("type")]
        public string Type { get; set; }
        [JsonProperty("key")]
        public string Key { get; set; }
    }
-   public class WxMenuItemView
+   public class WxMenuItemView : WxMenuItemBase
    {
        [JsonProperty("type")]
        public string Type { get; set; }
        [JsonProperty("url")]
        public string Url { get; set; }
    }
-   public class WxMenuItemSub
+   public class WxMenuItemSub : WxMenuItemBase
    {
        [JsonProperty("sub_button")]
        public IEnumerable<WxMenuItemBase> SubButtons { get; set; }

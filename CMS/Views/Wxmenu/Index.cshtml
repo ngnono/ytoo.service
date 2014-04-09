@@ -1,5 +1,4 @@
-﻿
-@section HeaderScripts {
+﻿@section HeaderScripts {
     <script src="@Url.Content("~/Content/jstree/jstree.js")" type="text/javascript"></script>
 }
 @section HeaderStyles {
@@ -11,13 +10,13 @@
             "core": {
                 'data': {
                     'url': function (node) {
-                        return "@(Url.Action("ajax_all"))";
+                        return "@(Url.Action("ajax_root"))";
                     },
                     'data': function (node) {
                         return { 'id': node.id };
                     }
                 },
-                'check_callback':true
+                'check_callback': true
             },
             "types": {
                 "#": {
@@ -80,29 +79,55 @@
                     };
                 }
             },
-            "plugins":["contextmenu"]
-           
+            "plugins": ["contextmenu"]
+
         });
 
-        var tree = $('#wx_menutree').jstree(true);
+            var tree = $('#wx_menutree').jstree(true);
+            var isDirty = false;
+            $('#wx_menutree').on("changed.jstree", function (e, data) {
+                if (!data.node)
+                    return;
+                if (data.node.children && data.node.children.length > 0) {
+                    $("#panel_right").hide();
+                    return;
+                }
+                $("#panel_right").show();
+                $("#edit_menu_id").val(data.node.id);
+                $("#edit_menu_url").val('');
+                if (data.node.data && data.node.data.url)
+                    $("#edit_menu_url").val(data.node.data.url);
+            });
+            function new_root_item() {
+                $("#newMenuModal").modal('show');
+            }
 
-        function new_root_item(){
-            $("#newMenuModal").modal('show');
-        }
+            function save_root_item() {
+                var menuName = $("#newMenuModal_name").val();
+                var menuUrl = $("#newMenuModal_url").val();
+                var new_node = $('#wx_menutree').jstree(true).create_node('#', { 'text': menuName, 'data': { 'url': menuUrl }, 'type': 'root' });
+                $("#newMenuModal").modal('hide');
+            }
 
-        function save_root_item() {
-            var menuName = $("#newMenuModal_name").val();
-            var menuUrl = $("#newMenuModal_url").val();
-            var new_node = $('#wx_menutree').jstree(true).create_node('#', {'text':menuName,'data':{'url':menuUrl},'type':'root'});
-            $("#newMenuModal").modal('hide');
-        }
+            function save_menu_item() {
+                var node = tree.get_node($("#edit_menu_id").val());
+                if (!node)
+                    return;
+                var menuUrl=  $("#edit_menu_url").val();
+                if (node.data)
+                    node.data.url = menuUrl;
+                else
+                    node.data = { url: menuUrl };
 
-        function persist_all() {
-            $.ajax({
-                type: "POST",
-                url: "@(Url.Action("ajax_persist"))",
-                data: tree.get_json('#')
-            })
+            }
+            function persist_all() {
+                var postData = { items: tree.get_json('#') };
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: "@(Url.Action("ajax_persist"))",
+                    data: JSON.stringify(postData)
+                })
             .done(function (data) {
                 if (data["Success"] == true) {
                     alert('保存成功');
@@ -113,58 +138,81 @@
             })
             .fail(function (data) {
                 alert('保存失败！');
+            });
+            }
+
+            function publish() {
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("ajax_publish"))"
+                })
+            .done(function (data) {
+                if (data["Success"] == true) {
+                    alert('发布成功');
+                }
+                else {
+                    alert('发布失败！');
+                }
             })
-            .always(function () { });
-       
-        }
+            .fail(function (data) {
+                alert('发布失败！');
+            });
+            }
 
-        function publish() {
 
-        }
-
-       
     </script>
 }
 
-<div>
-    <div class="row">
-        <div class="span3" >
-            <div class="span3">
-                <button class="btn btn-success" onclick="new_root_item();" >增加一级菜单</button>
-                <button class="btn btn-success" onclick="persist_all();" >保存修改</button>
-                <button class="btn btn-success" onclick="publish();" >发布到微信</button>
-            </div>
-            <div class="span3" id="wx_menutree"></div>
+        <div class="span12">
+            <button class="btn btn-success" onclick="new_root_item();">增加一级菜单</button>
+            <button class="btn btn-success" onclick="persist_all();">保存修改</button>
+            <button class="btn btn-success" onclick="publish();">发布到微信</button>
+
         </div>
-        <div class="span3">
+        <div class="span6">
+
+            <div id="wx_menutree"></div>
+        </div>
+        <div class="span4 hide" id="panel_right">
+            <div class="editor-label">
+                跳转链接地址：绝对路径
+            </div>
+            <div class="editor-field">
+                <input type="text" id="edit_menu_url" />
+                <input  type="hidden" id="edit_menu_id" />
+            </div>
+            <div class="editor-field">
+                <button class="btn btn-success" onclick="save_menu_item();">保存</button>
+            </div>
+        </div>
+
+<div>
+<div class="modal hide" id="newMenuModal" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">新加菜单</h4>
+            </div>
+            <div class="modal-body">
+                <div class="editor-label">
+                    菜单名
+                </div>
+                <div class="editor-field">
+                    <input type="text" id="newMenuModal_name" />
+                </div>
+                <div class="editor-label">
+                    跳转链接地址：绝对路径
+                </div>
+                <div class="editor-field">
+                    <input type="text" id="newMenuModal_url" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="save_root_item();">保存</button>
+            </div>
         </div>
     </div>
 </div>
-<div class="modal fade" id="newMenuModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">新加菜单</h4>
-      </div>
-      <div class="modal-body">
-        <div class="editor-label">
-            菜单名
-        </div>
-        <div class="editor-field">
-            <input type="text" id="newMenuModal_name" />
-        </div>
-          <div class="editor-label">
-            跳转链接地址：绝对路径
-        </div>
-        <div class="editor-field">
-            <input type="text" id="newMenuModal_url" />
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="button" class="btn btn-primary" onclick="save_root_item();">保存</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div>

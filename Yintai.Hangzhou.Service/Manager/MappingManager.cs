@@ -482,7 +482,7 @@ namespace Yintai.Hangzhou.Service.Manager
             //ilikecount
             //likemecount
 
-            //LOGO
+            /*
             if (!String.IsNullOrWhiteSpace(target.Logo))
             {
                 if (!target.Logo.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
@@ -490,7 +490,7 @@ namespace Yintai.Hangzhou.Service.Manager
                     target.Logo = ConfigManager.GetHttpApiImagePath() + target.Logo;
                 }
             }
-
+            */
             if (target.Accounts == null || target.Accounts.Count == 0)
             {
                 return target;

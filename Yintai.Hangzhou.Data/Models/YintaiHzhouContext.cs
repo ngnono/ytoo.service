@@ -203,6 +203,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<UserRoleEntity> UserRoles { get; set; }
         public DbSet<VerifyCodeEntity> VerifyCodes { get; set; }
         public DbSet<WXReplyEntity> WXReplies { get; set; }
+        public DbSet<WX_MenuEntity> WXMenus { get; set; }
         public DbSet<VUserEntity> VUsers { get; set; }
         public DbSet<VUserRoleEntity> VUserRoles { get; set; }
 
@@ -337,6 +338,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new UserRoleEntityMap());
             modelBuilder.Configurations.Add(new VerifyCodeEntityMap());
             modelBuilder.Configurations.Add(new WXReplyEntityMap());
+            modelBuilder.Configurations.Add(new WX_MenuEntityMap());
             modelBuilder.Configurations.Add(new VUserEntityMap());
             modelBuilder.Configurations.Add(new VUserRoleEntityMap());
             modelBuilder.Configurations.Add(new Map4BrandMap());

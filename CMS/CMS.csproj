@@ -245,6 +245,7 @@
     <Compile Include="Models\GiftCardViewModel.cs" />
     <Compile Include="Models\HotwordViewModel.cs" />
     <Compile Include="Models\IPagerInfo.cs" />
+    <Compile Include="Models\JsonNetResult.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\Order2SaleReportViewModel.cs" />
     <Compile Include="Models\OrderConfirmReportViewModel.cs" />
@@ -271,6 +272,7 @@
     <Compile Include="Models\TagPropertyViewModel.cs" />
     <Compile Include="Models\TagViewModel.cs" />
     <Compile Include="Models\UserAuthViewModel.cs" />
+    <Compile Include="Models\WxMenuViewModel.cs" />
     <Compile Include="Models\WXReplyViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\AdminAuthorizeAttribute.cs" />

@@ -88,6 +88,8 @@
   <ItemGroup>
     <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
     <Compile Include="Models\Banner.cs" />
+    <Compile Include="Models\Mapping\WX_MenuMap.cs" />
+    <Compile Include="Models\WX_Menu.cs" />
     <Compile Include="Models\IMS_Associate.cs" />
     <Compile Include="Models\IMS_AssociateBrand.cs" />
     <Compile Include="Models\IMS_AssociateIncome.cs" />
