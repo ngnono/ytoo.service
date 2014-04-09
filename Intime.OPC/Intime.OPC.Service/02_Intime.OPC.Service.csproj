@@ -62,6 +62,7 @@
     <Compile Include="ITransService.cs" />
     <Compile Include="MapConfig.cs" />
     <Compile Include="Map\Mapper.cs" />
+    <Compile Include="IRmaService.cs" />
     <Compile Include="Security\EncryptExtensions.cs" />
     <Compile Include="Support\EnumService.cs" />
     <Compile Include="Support\OrgService.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Support\AccountService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\OrderService.cs" />
+    <Compile Include="Support\RmaService.cs" />
     <Compile Include="Support\RoleService.cs" />
     <Compile Include="Support\SaleRMAService.cs" />
     <Compile Include="Support\SaleService.cs" />

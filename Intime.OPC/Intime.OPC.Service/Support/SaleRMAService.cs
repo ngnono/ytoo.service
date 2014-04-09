@@ -92,8 +92,10 @@ namespace Intime.OPC.Service.Support
                     if (config == null)
                     {
                         config = new RmaConfig(userId);
+                        config.Reason = rma.Remark;
                         config.SaleOrderNo = detail.SaleOrderNo;
                         config.OpcSale = sales.FirstOrDefault(t => t.SaleOrderNo == config.SaleOrderNo);
+                        config.RmaNo = CreateRmaNo(rma.OrderNo, orderCount);
                         lstRmaConfigs.Add(config);
                     }
                     var subConfig = new SubRmaConfig();
@@ -102,9 +104,11 @@ namespace Intime.OPC.Service.Support
                     subConfig.OrderDetailID = kv.Key;
                     subConfig.ReturnCount = returnCount;
                     config.Details.Add(subConfig);
-                    lstRmaConfigs.Add(config);
+                    //lstRmaConfigs.Add(config);
                 }
             }
+
+            Save(lstRmaConfigs);
         }
 
         public IList<SaleRmaDto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request)
@@ -117,7 +121,8 @@ namespace Intime.OPC.Service.Support
         public IList<SaleRmaDto> GetByReturnGoods(ReturnGoodsGet request)
         {
             ISaleRMARepository rep = _repository as ISaleRMARepository;
-
+            request.StartDate = request.StartDate.Date;
+            request.EndDate = request.EndDate.Date.AddDays(1);
 
             var lst= rep.GetAll(request.OrderNo, request.PayType, request.BandId, request.StartDate, request.EndDate,
                 request.Telephone);
@@ -133,6 +138,20 @@ namespace Intime.OPC.Service.Support
         public IList<OPC_SaleRMAComment> GetCommentByRmaNo(string rmaNo)
         {
             return _saleRmaCommentRepository.GetByRmaID(rmaNo);
+        }
+
+        public IList<SaleRmaDto> GetByPack(PackageReceiveDto dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+
+            ISaleRMARepository rep = _repository as ISaleRMARepository;
+
+
+            var lst = rep.GetAll(dto.OrderNo,dto.SaleOrderNo, "","", dto.StartDate, dto.EndDate,
+                null,null);
+
+            return lst;
         }
 
         #endregion
@@ -165,6 +184,8 @@ namespace Intime.OPC.Service.Support
             Details = new List<SubRmaConfig>();
             OpcRmaDetails = new List<OPC_RMADetail>();
         }
+
+        public string Reason { get; set; }
 
         public decimal RefundAmount { get; set; }
         public int UserId { get; private set; }
@@ -203,6 +224,7 @@ namespace Intime.OPC.Service.Support
             var rma = new OPC_RMA();
             rma.UserId = userId;
             rma.CreatedDate = DateTime.Now;
+            rma.RMANo = this.RmaNo;
             rma.CreatedUser = userId;
             rma.UpdatedDate = rma.CreatedDate;
             rma.UpdatedUser = userId;
@@ -226,11 +248,13 @@ namespace Intime.OPC.Service.Support
             rma.CreatedUser = UserId;
             rma.UpdatedDate = rma.CreatedDate;
             rma.UpdatedUser = UserId;
-
+            rma.SaleOrderNo = SaleOrderNo;
             rma.OrderNo = OpcSale.OrderNo;
+            rma.SaleRMASource = "客服退货";
             rma.RealRMASumMoney = ComputeAccount();
             rma.RMACount = Details.Sum(t => t.ReturnCount);
             rma.RMANo = RmaNo;
+            rma.Reason = Reason;
             rma.BackDate = DateTime.Now;
             return rma;
         }

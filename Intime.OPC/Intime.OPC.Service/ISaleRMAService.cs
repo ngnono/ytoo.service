@@ -19,5 +19,6 @@ namespace Intime.OPC.Service
         void AddComment(OPC_SaleRMAComment comment);
 
         IList<OPC_SaleRMAComment> GetCommentByRmaNo(string rmaNo);
+        IList<SaleRmaDto> GetByPack(PackageReceiveDto dto);
     }
 }

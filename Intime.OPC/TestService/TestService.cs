@@ -50,7 +50,7 @@ namespace TestService
                  container = new ContainerConfiguration()
                 .WithAssemblies(lstAssemlby.Cast<Assembly>(), conventions)
                 .CreateContainer();
-       
+      
    
             // 设置WebApi的DependencyResolver
            // GlobalConfiguration.Configuration.DependencyResolver = new MefDependencyResolver(container);
@@ -64,9 +64,16 @@ namespace TestService
             if (container==null)
             {
                 RegisterMefDependencyResolver();
+                MapConfig.Config();
             }
             return container.GetExport<T>();
 
+        }
+
+        protected void AssertList<T1>(IList<T1> lst)
+        {
+            Assert.IsNotNull(lst);
+            Assert.AreNotEqual(0, lst.Count);
         }
     }
 }
