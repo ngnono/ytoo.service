@@ -318,6 +318,7 @@ namespace Yintai.Hangzhou.Service
                     response.TemplateId = associateEntity.TemplateId;
                     response.OperateRight = associateEntity.OperateRight;
                     response.AssociateId = associateEntity.Id;
+                    response.MaxComboItems = 4;
                 }
             }
             result.Data = response;

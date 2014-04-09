@@ -41,6 +41,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
                 return ImageUrl.Image320Url();
             }
         }
+        [DataMember(Name="is_online")]
+        public bool IsOnline { get; set; }
+
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
     }
@@ -54,8 +57,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string SalesCode { get; set; }
         [DataMember(Name = "size_type")]
         public int SizeType { get; set; }
-        [DataMember(Name="is_online")]
-        public int Status { get; set; }
+       
         [DataMember(Name="size_str")]
         public string Size_Str { get; set; }
 

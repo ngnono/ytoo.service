@@ -65,7 +65,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     Desc = request.Desc,
                     OnlineDate = DateTime.Now,
                     Price = products.Sum(p => p.Price),
-                    //todo: need replace with template
                     Private2Name = request.Private_To,
                     Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
@@ -195,13 +194,21 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "搭配不存在");
             return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, oc => {
                 oc.Images = comboEntity.CR.ToList().Select(cr => cr.Name.Image320Url());
-                oc.Products = Context.Set<ProductEntity>().Join(Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == id), oo => oo.Id, i => i.ProductId, (oo, i) => oo)
+                oc.Products = Context.Set<ProductEntity>()
+                            .Join(Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == id), oo => oo.Id, i => i.ProductId, (oo, i) => oo)
                             .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image && r.Status == (int)DataStatus.Normal),
                                         o => o.Id,
                                         i => i.SourceId,
                                         (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() })
-                            .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po => {
-                                po.ImageUrl = p.PR==null?string.Empty:p.PR.Name;
+                            .GroupJoin(Context.Set<InventoryEntity>(), o => o.P.Id, i => i.ProductId, (o, i) => new { 
+                                    P=o.P,
+                                    PR=o.PR,
+                                    PI=i.OrderByDescending(pi=>pi.Amount).FirstOrDefault()
+                            })
+                            .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po =>
+                            {
+                                po.ImageUrl = p.PR == null ? string.Empty : p.PR.Name;
+                                po.IsOnline = p.P.Is4Sale??false && p.PI.Amount > 0;
                             }));
                 oc.Is_Owner = authuid == comboEntity.C.UserId;
                 oc.Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&

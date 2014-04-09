@@ -248,5 +248,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
 
          [DataMember(Name = "associate_id")]
         public int? AssociateId { get; set; }
+        [DataMember(Name="max_comboitems")]
+         public int? MaxComboItems { get; set; }
     }
 }

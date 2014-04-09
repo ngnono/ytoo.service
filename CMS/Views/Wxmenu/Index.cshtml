@@ -54,11 +54,6 @@
                             "separator_after": false,
                             "_disabled": false,
                             "label": "重命名",
-                            /*
-                            "shortcut"			: 113,
-                            "shortcut_label"	: 'F2',
-                            "icon"				: "glyphicon glyphicon-leaf",
-                            */
                             "action": function (data) {
                                 var inst = $.jstree.reference(data.reference),
                                     obj = inst.get_node(data.reference);
@@ -95,9 +90,13 @@
         function save_root_item() {
             var menuName = $("#newMenuModal_name").val();
             var menuUrl = $("#newMenuModal_url").val();
-            var new_node = $('#wx_menutree').jstree(true).create_node('#', {'text':menuName,'type':'root'});
+            var new_node = $('#wx_menutree').jstree(true).create_node('#', {'text':menuName,'url':menuUrl,'type':'root'});
             $("#newMenuModal").modal('hide');
         }
+        function persist_all() {
+
+        }
+
        
     </script>
 }
