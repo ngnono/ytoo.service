@@ -92,8 +92,10 @@ namespace Intime.OPC.Service.Support
                     if (config == null)
                     {
                         config = new RmaConfig(userId);
+                        config.Reason = rma.Remark;
                         config.SaleOrderNo = detail.SaleOrderNo;
                         config.OpcSale = sales.FirstOrDefault(t => t.SaleOrderNo == config.SaleOrderNo);
+                        config.RmaNo = CreateRmaNo(rma.OrderNo, orderCount);
                         lstRmaConfigs.Add(config);
                     }
                     var subConfig = new SubRmaConfig();
@@ -102,9 +104,11 @@ namespace Intime.OPC.Service.Support
                     subConfig.OrderDetailID = kv.Key;
                     subConfig.ReturnCount = returnCount;
                     config.Details.Add(subConfig);
-                    lstRmaConfigs.Add(config);
+                    //lstRmaConfigs.Add(config);
                 }
             }
+
+            Save(lstRmaConfigs);
         }
 
         public IList<SaleRmaDto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request)
@@ -166,6 +170,8 @@ namespace Intime.OPC.Service.Support
             OpcRmaDetails = new List<OPC_RMADetail>();
         }
 
+        public string Reason { get; set; }
+
         public decimal RefundAmount { get; set; }
         public int UserId { get; private set; }
 
@@ -203,6 +209,7 @@ namespace Intime.OPC.Service.Support
             var rma = new OPC_RMA();
             rma.UserId = userId;
             rma.CreatedDate = DateTime.Now;
+            rma.RMANo = this.RmaNo;
             rma.CreatedUser = userId;
             rma.UpdatedDate = rma.CreatedDate;
             rma.UpdatedUser = userId;
@@ -226,11 +233,13 @@ namespace Intime.OPC.Service.Support
             rma.CreatedUser = UserId;
             rma.UpdatedDate = rma.CreatedDate;
             rma.UpdatedUser = UserId;
-
+            rma.SaleOrderNo = SaleOrderNo;
             rma.OrderNo = OpcSale.OrderNo;
+            rma.SaleRMASource = "客服退货";
             rma.RealRMASumMoney = ComputeAccount();
             rma.RMACount = Details.Sum(t => t.ReturnCount);
             rma.RMANo = RmaNo;
+            rma.Reason = Reason;
             rma.BackDate = DateTime.Now;
             return rma;
         }
