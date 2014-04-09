@@ -23,5 +23,10 @@ namespace OPCApp.TransManage.Views
             set { DataContext = value; }
             get { return DataContext as CustomerReturnGoodsViewModel; }
         }
+
+        private void cbxList_DropDownOpened(object sender, System.EventArgs e)
+        {
+            ViewModel.ReturnCountList =new List<int>(){5,6,7 };
+        }
     }
 }

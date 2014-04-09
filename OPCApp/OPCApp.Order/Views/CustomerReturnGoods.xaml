@@ -134,8 +134,7 @@
                     <TextBlock Text="订单明细" />
                 </StackPanel>
             </StackPanel>
-            <DataGrid Grid.Row="6" IsReadOnly="True" ItemsSource="{Binding OrderItemList}"
-                              AutoGenerateColumns="False" >
+            <DataGrid Grid.Row="6" IsReadOnly="True" ItemsSource="{Binding OrderItemList}" AutoGenerateColumns="False" >
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                         <DataGridTemplateColumn.CellTemplate>
@@ -169,35 +168,14 @@
                     <DataGridTextColumn Header="商品编码" Binding="{Binding ProductId}" />
                     <DataGridTextColumn Header="退货数量" Binding="{Binding ReturnCount}"
                                                 ElementStyle="{StaticResource CellRight}" />
-                    <DataGridTemplateColumn Header="需要退货数量" Width="1*">
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <ComboBox  SelectedValue="{Binding Path=NeedReturnCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          
-                      ItemsSource="{Binding Path=ReturnCountList}">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Selected">
-                                            <i:InvokeCommandAction Command="{Binding Path=DataContext.CommandComboSelect}" />
-                                        </i:EventTrigger>
-
-                                    </i:Interaction.Triggers>
-
-                                </ComboBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox SelectedValue="{Binding Path=NeedReturnCount, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding Path=ReturnCountList}">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Selected">
-                                            <i:InvokeCommandAction Command="{Binding  Path=DataContext.CommandComboSelect}" />
-                                        </i:EventTrigger>
-
-                                    </i:Interaction.Triggers>
-                                </ComboBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn IsReadOnly="False" Header="需要退货数量" Width="1*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox Tag="cbxList" x:Name="cbxList"  DropDownOpened="cbxList_DropDownOpened"
+                                      ItemsSource="{Binding Path=ReturnCountList,RelativeSource={RelativeSource AncestorType={x:Type UserControl},Mode=FindAncestor}}" 
+                                      Text="{Binding Selection}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
 
