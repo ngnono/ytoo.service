@@ -19,7 +19,27 @@ namespace Intime.OPC.Domain.Dto
         public bool IfReceipt { get; set; }
         public string ReceiptHead { get; set; }
         public string ReceiptContent { get; set; }
-        public Nullable<decimal> StoreFee { get; set; }
-        public Nullable<decimal> CustomFee { get; set; }
+        /// <summary>
+        /// 公司应付
+        /// </summary>
+        /// <value>The store fee.</value>
+        public decimal? StoreFee { get; set; }
+        /// <summary>
+        /// 客户应付
+        /// </summary>
+        /// <value>The custom fee.</value>
+        public decimal? CustomFee { get; set; }
+
+        /// <summary>
+        /// 退貨日期
+        /// </summary>
+        /// <value>The create date.</value>
+        public DateTime CreateDate { get; set; }
+
+        /// <summary>
+        /// 客服同意时间
+        /// </summary>
+        /// <value>The service agree date.</value>
+        public DateTime ServiceAgreeDate { get; set; }
     }
 }
