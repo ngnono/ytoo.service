@@ -363,9 +363,13 @@ private  IEFRepository<IMS_ComboEntity> _comboRepo;
             if (incomeAccountEntity == null)
                 return this.RenderError(r => r.Message = "账户内可提现金额不足！");
             if (incomeAccountEntity.AvailableAmount < request.Amount)
-                return this.RenderError(r => r.Message = "账户内可体现金额不足!");
-            var incomeRequestHistory = Context.Set<IMS_AssociateIncomeRequestEntity>().Where(iair => iair.UserId == authuid && iair.Status != (int)AssociateIncomeRequestStatus.Failed);
-            var availLimitAmount = ConfigManager.IMS_MAX_REQUEST_AMOUNT_MON - incomeRequestHistory.Sum(l => l.Amount);
+                return this.RenderError(r => r.Message = "账户内可提现金额不足!");
+            var thisMonth = DateTime.Parse(DateTime.Today.ToString("yyyy-MM-01"));
+            var incomeRequestHistory = Context.Set<IMS_AssociateIncomeRequestEntity>().Where(iair => iair.UserId == authuid && 
+                            iair.Status != (int)AssociateIncomeRequestStatus.Failed &&
+                            iair.CreateDate>thisMonth);
+            var requestedAmount = incomeRequestHistory.Sum(l=>(decimal?)l.Amount)??0m;
+            var availLimitAmount = ConfigManager.IMS_MAX_REQUEST_AMOUNT_MON - requestedAmount;
             if (request.Amount > availLimitAmount)
                 return this.RenderError(r => r.Message = string.Format("每月累计提现额度为:{0},本月还可提现:{1}",
                                 ConfigManager.IMS_MAX_REQUEST_AMOUNT_MON,
@@ -383,6 +387,7 @@ private  IEFRepository<IMS_ComboEntity> _comboRepo;
                 BankNo = request.Bank_No,
                 BankCode = request.Bank_Code,
                 Status = (int)AssociateIncomeRequestStatus.Requesting,
+                BankAccountName = request.User_Name,
                 UpdateDate = DateTime.Now,
                 UserId = authuid
 

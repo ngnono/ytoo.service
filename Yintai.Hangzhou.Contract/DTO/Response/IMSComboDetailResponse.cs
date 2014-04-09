@@ -20,7 +20,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name = "private_desc")]
         public string Private2Name { get; set; }
         [DataMember(Name = "is_online")]
-        public int Status { get; set; }
+        public bool Status_B { get {
+            return Status == 1 ? true : false;
+        } }
         [DataMember(Name = "user_id")]
         public int UserId { get; set; }
         [DataMember(Name = "create_date")]
@@ -52,5 +54,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
 
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
+        [IgnoreDataMember]
+        public int Status { get; set; }
     }
 }

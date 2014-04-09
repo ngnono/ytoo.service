@@ -225,6 +225,7 @@
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\UserAuthController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WxmenuController.cs" />
     <Compile Include="Controllers\WXReplyController.cs" />
     <Compile Include="Dto\Product\ListDto.cs" />
     <Compile Include="Dto\Resource\ListDto.cs" />
