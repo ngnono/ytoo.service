@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Windows.Controls;
+using OPCApp.Customer.ViewModels;
 
 namespace OPCApp.TransManage.Views
 {
@@ -16,10 +18,10 @@ namespace OPCApp.TransManage.Views
         }
 
         [Import("CustomerReturnGoodsViewModel")]
-        public object ViewModel
+        public CustomerReturnGoodsViewModel ViewModel
         {
             set { DataContext = value; }
-            get { return DataContext; }
+            get { return DataContext as CustomerReturnGoodsViewModel; }
         }
     }
 }
