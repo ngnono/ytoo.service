@@ -48,9 +48,11 @@
     <Compile Include="BaseInfo\StoreInfo.cs" />
     <Compile Include="Base\DomainBase.cs" />
     <Compile Include="Dto\Customer\OPC_SaleRMA.cs" />
+    <Compile Include="Dto\Customer\PackageReceiveDto.cs" />
     <Compile Include="Dto\Customer\ReturnGoodsGet.cs" />
     <Compile Include="Dto\Customer\RMADto.cs" />
     <Compile Include="Dto\Customer\RMAPost.cs" />
+    <Compile Include="Dto\Customer\SaleRmaDto.cs" />
     <Compile Include="Dto\KeyValue.cs" />
     <Compile Include="Dto\RoleMenuDto.cs" />
     <Compile Include="Dto\RoleUserDto.cs" />
