@@ -15,6 +15,7 @@
 using System;
 using System.Web.Http;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Core;
@@ -31,15 +32,19 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         private readonly ITransService _transService;
 
+        private ISaleRMAService _saleRmaService;
+        private IRmaService _rmaService;
          IEnumService _enumService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="TransController" /> class.
         /// </summary>
         /// <param name="transService">The trans service.</param>
-        public TransController(ITransService transService, IEnumService enumService)
+        public TransController(ITransService transService, IEnumService enumService, ISaleRMAService saleRmaService, IRmaService rmaService)
         {
             _transService = transService;
             _enumService = enumService;
+            _saleRmaService = saleRmaService;
+            _rmaService = rmaService;
         }
 
         /// <summary>
@@ -140,6 +145,34 @@ namespace Intime.OPC.WebApi.Controllers
                 return _transService.CreateShippingSale(userId, shippingSaleDto);
             }, "读取快递单备注失败！");
         }
+
+        #region 包裹签收
+
+        //PackageReceiveDto
+
+        /// <summary>
+        /// 查询退货收货单信息    退货包裹管理-包裹签收
+        /// </summary>
+        /// <param name="dto">The dto.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetSaleRmaByPack([FromBody]PackageReceiveDto dto)
+        {
+            return DoFunction(() => { return _saleRmaService.GetByPack(dto); }, "查询收货单信息失败！");
+        }
+
+        /// <summary>
+        /// 查询退货单
+        /// </summary>
+        /// <param name="dto">The dto.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetRmaByPack([FromBody]PackageReceiveDto dto)
+        {
+            return DoFunction(() => { return _rmaService.GetAll(dto); }, "查询退货单失败！");
+        }
+
+        #endregion
 
         #region 备注
 

@@ -18,6 +18,7 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Base;
 
@@ -43,6 +44,18 @@ namespace Intime.OPC.Repository.Base
                 if (entity != null)
                 {
                     IDbSet<T> set = db.Set<T>();
+
+                    var errors= db.Entry(entity).GetValidationResult();
+                    if (!errors.IsValid)
+                    {
+                        StringBuilder strb=new StringBuilder();
+                        foreach (var err in errors.ValidationErrors)
+                        {
+                            strb.AppendLine(string.Format("property:{0} Error:{1}", err.PropertyName, err.ErrorMessage));
+
+                        }
+                        throw new Exception(strb.ToString());
+                    }
                     set.Add(entity);
                     db.SaveChanges();
                     return true;
