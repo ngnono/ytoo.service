@@ -121,7 +121,8 @@ namespace Intime.OPC.Service.Support
         public IList<SaleRmaDto> GetByReturnGoods(ReturnGoodsGet request)
         {
             ISaleRMARepository rep = _repository as ISaleRMARepository;
-
+            request.StartDate = request.StartDate.Date;
+            request.EndDate = request.EndDate.Date.AddDays(1);
 
             var lst= rep.GetAll(request.OrderNo, request.PayType, request.BandId, request.StartDate, request.EndDate,
                 request.Telephone);
@@ -137,6 +138,20 @@ namespace Intime.OPC.Service.Support
         public IList<OPC_SaleRMAComment> GetCommentByRmaNo(string rmaNo)
         {
             return _saleRmaCommentRepository.GetByRmaID(rmaNo);
+        }
+
+        public IList<SaleRmaDto> GetByPack(PackageReceiveDto dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+
+            ISaleRMARepository rep = _repository as ISaleRMARepository;
+
+
+            var lst = rep.GetAll(dto.OrderNo,dto.SaleOrderNo, "","", dto.StartDate, dto.EndDate,
+                null,null);
+
+            return lst;
         }
 
         #endregion

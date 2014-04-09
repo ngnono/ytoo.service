@@ -86,6 +86,8 @@
     <Compile Include="TestSaleRmaService.cs" />
     <Compile Include="TestService.cs" />
     <Compile Include="TestAccountService.cs" />
+    <Compile Include="TestTransService.cs" />
+    <Compile Include="TestRmaService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intime.OPC.Domain\00_Intime.OPC.Domain.csproj">
