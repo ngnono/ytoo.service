@@ -32,7 +32,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             , IProductPropertyValueRepository productPropertyValueRepo
             , IInventoryRepository inventoryRepo
             , IResourceRepository resourceRepo
-            ,IEFRepository<ProductCode2StoreCodeEntity> productCodeRepo)
+            , IEFRepository<ProductCode2StoreCodeEntity> productCodeRepo)
         {
             _resourceService = resourceService;
             _productRepo = productRepo;
@@ -62,7 +62,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "分类不存在");
             var catSizeType = categoryEntity.C.SizeType ?? (int)CategorySizeType.FreeInput;
             if (categoryEntity.C.SizeType == (int)CategorySizeType.LimitSize
-                && (request.Size_Ids==null ||request.Size_Ids.Length < 1))
+                && (request.Size_Ids == null || request.Size_Ids.Length < 1))
                 return this.RenderError(r => r.Message = "分类尺码必选");
             if (categoryEntity.C.SizeType == (int)CategorySizeType.FreeInput
                 && string.IsNullOrEmpty(request.Size_Str))
@@ -177,7 +177,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 }
                 else
                 {
-                    var valueDesc = string.IsNullOrEmpty(request.Size_Str)?"均码":request.Size_Str;
+                    var valueDesc = string.IsNullOrEmpty(request.Size_Str) ? "均码" : request.Size_Str;
                     var sizevalueEntity = _productPropertyValueRepo.Insert(new ProductPropertyValueEntity()
                     {
                         CreateDate = DateTime.Now,
@@ -289,6 +289,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     propertyValue.Status = (int)DataStatus.Deleted;
                     _productPropertyValueRepo.Update(propertyValue);
                 }
+                var inventories = Context.Set<InventoryEntity>().Where(i => i.ProductId == productEntity.Id);
+                foreach (var inventory in inventories)
+                {
+                    inventory.Amount = 0;
+                    _inventoryRepo.Update(inventory);
+                }
                 //2.2 update property thereus
                 var colorProperty = Context.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == productEntity.Id && pp.IsColor == true)
                                       .Join(Context.Set<ProductPropertyValueEntity>(), o => o.Id, i => i.PropertyId, (o, i) => i).First();
@@ -308,7 +314,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 {
                     var propertyValue = propertValues.Where(ppv => ppv.ValueDesc == request.Size_Str).FirstOrDefault();
                     UpdateSingleProperty(productEntity.Id, colorProperty.Id, request.Size_Str, sizePropertyEntity.Id, propertyValue);
-                    
+
                 }
                 bool canCommit = true;
                 var currentResourceEntity = Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.SourceId == (int)productEntity.Id && r.Status == (int)DataStatus.Normal).First();
@@ -351,7 +357,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
         }
 
-        private void UpdateSingleProperty(int productId,int colorId, string size,int sizeId, ProductPropertyValueEntity propertyValue)
+        private void UpdateSingleProperty(int productId, int colorId, string size, int sizeId, ProductPropertyValueEntity propertyValue)
         {
             if (propertyValue == null)
             {
@@ -376,27 +382,32 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
             else
             {
+                var inventory = Context.Set<InventoryEntity>().Where(i => i.ProductId == productId && i.PColorId == colorId && i.PSizeId == sizeId).FirstOrDefault();
+                if (inventory != null)
+                {
+                    inventory.Amount = 1;
+                    _inventoryRepo.Update(inventory);
+                }
                 propertyValue.Status = (int)DataStatus.Normal;
                 _productPropertyValueRepo.Update(propertyValue);
             }
+
+
+
         }
 
-        private void UpdateSingleProperty(int p1, string p2)
-        {
-            throw new NotImplementedException();
-        }
 
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Detail(int id, int authuid)
         {
-            var productEntity = Context.Set<ProductEntity>().Where(p=>p.Id==id && p.Status!=(int)DataStatus.Deleted)
-                                .Join(Context.Set<TagEntity>(),o=>o.Tag_Id,i=>i.Id,(o,i)=>new {P=o,C=i})
-                                .Join(Context.Set<BrandEntity>(),o=>o.P.Brand_Id,i=>i.Id,(o,i)=>new {P=o.P,C=o.C,B=i})
-                                .Join(Context.Set<ProductCode2StoreCodeEntity>(),o=>o.P.Id,i=>i.ProductId,(o,i)=>new {P=o.P,C=o.C,B=o.B,PC=i})
-                                .GroupJoin(Context.Set<ResourceEntity>().Where(r=>r.SourceType==(int)SourceType.Product && r.Status==(int)DataStatus.Normal),
-                                            o=>o.P.Id,
-                                            i=>i.SourceId,
-                                            (o,i)=>new {P=o.P,C=o.C,B=o.B,PC=o.PC,PR=i.FirstOrDefault()})
+            var productEntity = Context.Set<ProductEntity>().Where(p => p.Id == id && p.Status != (int)DataStatus.Deleted)
+                                .Join(Context.Set<TagEntity>(), o => o.Tag_Id, i => i.Id, (o, i) => new { P = o, C = i })
+                                .Join(Context.Set<BrandEntity>(), o => o.P.Brand_Id, i => i.Id, (o, i) => new { P = o.P, C = o.C, B = i })
+                                .Join(Context.Set<ProductCode2StoreCodeEntity>(), o => o.P.Id, i => i.ProductId, (o, i) => new { P = o.P, C = o.C, B = o.B, PC = i })
+                                .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Status == (int)DataStatus.Normal),
+                                            o => o.P.Id,
+                                            i => i.SourceId,
+                                            (o, i) => new { P = o.P, C = o.C, B = o.B, PC = o.PC, PR = i.FirstOrDefault() })
                                 .FirstOrDefault();
             if (productEntity == null)
                 return this.RenderError(r => r.Message = "商品不存在");
@@ -408,10 +419,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                         , i => i.PropertyId
                                         , (o, i) => i)
                              .FirstOrDefault().ToList();
-            
+
 
             return this.RenderSuccess<Yintai.Hangzhou.Contract.DTO.Response.IMSProductSelfDetailResponse>(r =>
-                            r.Data = new IMSProductSelfDetailResponse().FromEntity<IMSProductSelfDetailResponse>(productEntity.P, p => {
+                            r.Data = new IMSProductSelfDetailResponse().FromEntity<IMSProductSelfDetailResponse>(productEntity.P, p =>
+                            {
                                 p.Brand_Name = productEntity.B.Name;
                                 p.Category_Name = productEntity.C.Name;
                                 p.SalesCode = productEntity.PC.StoreProductCode;
@@ -431,9 +443,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                             SizeValueId = csv.Id
                                         });
                                     }
-                                    else {
+                                    else
+                                    {
                                         var firstSize = sizeValues.FirstOrDefault();
-                                        if (firstSize!=null)
+                                        if (firstSize != null)
                                             p.Size_Str = firstSize.ValueDesc;
                                     }
                                 }
@@ -441,7 +454,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     p.ImageUrl = productEntity.PR.Name;
                             }));
         }
-      
-       
+
+
     }
 }
