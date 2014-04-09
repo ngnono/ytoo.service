@@ -15,5 +15,7 @@ namespace Intime.OPC.Repository
         int Count(string saleOrderNo);
 
         IList<SaleRmaDto> GetAll(string orderNo, string payType, int? bandId, System.DateTime startTime, System.DateTime endTime, string telephone);
+
+        IList<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, System.DateTime startTime, System.DateTime endTime, int? rmaStatus, int? storeId);
     }
 }
