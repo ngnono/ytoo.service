@@ -26,7 +26,16 @@ namespace OPCApp.TransManage.Views
 
         private void cbxList_DropDownOpened(object sender, System.EventArgs e)
         {
-            ViewModel.ReturnCountList =new List<int>(){5,6,7 };
+            if (ViewModel.OrderItem != null)
+            {
+                var count = ViewModel.OrderItem.Quantity;
+                var list = new List<int>();
+                for (int i = 1; i < count+1; i++)
+                {
+                    list.Add(i);
+                }
+                ViewModel.ReturnCountList = list;
+            }
         }
     }
 }
