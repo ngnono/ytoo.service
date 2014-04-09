@@ -83,17 +83,42 @@
             "plugins":["contextmenu"]
            
         });
+
         var tree = $('#wx_menutree').jstree(true);
+
         function new_root_item(){
             $("#newMenuModal").modal('show');
         }
+
         function save_root_item() {
             var menuName = $("#newMenuModal_name").val();
             var menuUrl = $("#newMenuModal_url").val();
-            var new_node = $('#wx_menutree').jstree(true).create_node('#', {'text':menuName,'url':menuUrl,'type':'root'});
+            var new_node = $('#wx_menutree').jstree(true).create_node('#', {'text':menuName,'data':{'url':menuUrl},'type':'root'});
             $("#newMenuModal").modal('hide');
         }
+
         function persist_all() {
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("ajax_persist"))",
+                data: tree.get_json('#')
+            })
+            .done(function (data) {
+                if (data["Success"] == true) {
+                    alert('保存成功');
+                }
+                else {
+                    alert('保存失败！');
+                }
+            })
+            .fail(function (data) {
+                alert('保存失败！');
+            })
+            .always(function () { });
+       
+        }
+
+        function publish() {
 
         }
 
@@ -106,6 +131,8 @@
         <div class="span3" >
             <div class="span3">
                 <button class="btn btn-success" onclick="new_root_item();" >增加一级菜单</button>
+                <button class="btn btn-success" onclick="persist_all();" >保存修改</button>
+                <button class="btn btn-success" onclick="publish();" >发布到微信</button>
             </div>
             <div class="span3" id="wx_menutree"></div>
         </div>

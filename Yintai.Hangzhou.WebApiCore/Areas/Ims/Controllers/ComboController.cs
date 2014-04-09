@@ -15,18 +15,19 @@ using Yintai.Hangzhou.WebSupport.Mvc;
 using com.intime.fashion.common.Extension;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.WebSupport.Binder;
+using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
-    public class ComboController:RestfulController
+    public class ComboController : RestfulController
     {
         private IEFRepository<IMS_ComboEntity> _comboRepo;
         private IEFRepository<IMS_Combo2ProductEntity> _combo2productRepo;
         private IResourceRepository _resourceRepo;
         private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
         public ComboController(IEFRepository<IMS_ComboEntity> comboRepo
-            ,IEFRepository<IMS_Combo2ProductEntity> combo2productRepo
-            ,IResourceRepository resourceRepo,
+            , IEFRepository<IMS_Combo2ProductEntity> combo2productRepo
+            , IResourceRepository resourceRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateItemRepo)
         {
             _comboRepo = comboRepo;
@@ -44,17 +45,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 request.ProductIds.Length < 1)
                 return this.RenderError(r => r.Message = "搭配需要至少一个商品");
             if (string.IsNullOrEmpty(request.Desc))
-                return this.RenderError(r=>r.Message="搭配需要描述");
-            if (string.IsNullOrEmpty(request.Private_To))
-                return this.RenderError(r=>r.Message="搭配需要选择私人定制对象");
-            if (!Array.Exists<int>((int[])Enum.GetValues(typeof(ProductType)), s=>request.Product_Type==s))
-                return this.RenderError(r=>r.Message="搭配商品类型不正确");
-            var products = Context.Set<ProductEntity>().Where(p=>request.ProductIds.Any(l=>l==p.Id) &&
-                            ((p.ProductType.HasValue && p.ProductType==request.Product_Type) ||
-                            (!p.ProductType.HasValue && request.Product_Type==(int)ProductType.FromSystem)));
+                return this.RenderError(r => r.Message = "搭配需要描述");
+            if (!Array.Exists<int>((int[])Enum.GetValues(typeof(ProductType)), s => request.Product_Type == s))
+                return this.RenderError(r => r.Message = "搭配商品类型不正确");
+            var products = Context.Set<ProductEntity>().Where(p => request.ProductIds.Any(l => l == p.Id) &&
+                            ((p.ProductType.HasValue && p.ProductType == request.Product_Type) ||
+                            (!p.ProductType.HasValue && request.Product_Type == (int)ProductType.FromSystem)));
             if (products.Count() < 1)
                 return this.RenderError(r => r.Message = "商品类型不正确");
-            var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia=>ia.UserId == authuid).First();
+            var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
             using (var ts = new TransactionScope())
             {
                 //step1: create combo
@@ -65,7 +64,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     Desc = request.Desc,
                     OnlineDate = DateTime.Now,
                     Price = products.Sum(p => p.Price),
-                    Private2Name = request.Private_To,
+                    Private2Name = request.Private_To ?? string.Empty,
                     Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
                     UpdateUser = authuid,
@@ -77,9 +76,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 //step2: create combo2product
                 foreach (var product in products)
                 {
-                    _combo2productRepo.Insert(new IMS_Combo2ProductEntity() { 
-                         ComboId = comboEntity.Id,
-                         ProductId = product.Id
+                    _combo2productRepo.Insert(new IMS_Combo2ProductEntity()
+                    {
+                        ComboId = comboEntity.Id,
+                        ProductId = product.Id
                     });
                 }
 
@@ -106,17 +106,18 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 }
 
                 ts.Complete();
-                return this.RenderSuccess<dynamic>(c => c.Data = new { 
+                return this.RenderSuccess<dynamic>(c => c.Data = new
+                {
                     combo_id = comboEntity.Id
                 });
             }
-           
+
         }
 
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Update([InternalJsonArrayAttribute("image_ids,productids")]IMSComboUpdateRequest request, int authuid)
         {
-           
+
             if (string.IsNullOrEmpty(request.Desc))
                 return this.RenderError(r => r.Message = "搭配需要描述");
             if (string.IsNullOrEmpty(request.Private_To))
@@ -140,9 +141,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 comboEntity.UpdateDate = DateTime.Now;
                 if (!noProduct)
                 {
-                    var products = Context.Set<ProductEntity>().Where(p=>request.ProductIds.Contains(p.Id));
+                    var products = Context.Set<ProductEntity>().Where(p => request.ProductIds.Contains(p.Id));
                     comboEntity.Price = products.Sum(p => p.Price);
-                    _combo2productRepo.Delete(icp=>icp.ComboId==comboEntity.Id);
+                    _combo2productRepo.Delete(icp => icp.ComboId == comboEntity.Id);
                     foreach (var product in products)
                     {
                         _combo2productRepo.Insert(new IMS_Combo2ProductEntity()
@@ -151,7 +152,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             ProductId = product.Id
                         });
                     }
-                } 
+                }
                 _comboRepo.Update(comboEntity);
 
 
@@ -160,7 +161,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 if (!noImage)
                 {
                     var newresources = Context.Set<ResourceEntity>().Where(r => request.Image_Ids.Any(image => image == r.Id));
-                    var oldresources = Context.Set<ResourceEntity>().Where(r=>r.SourceType==(int)SourceType.Combo && r.SourceId==comboEntity.Id);
+                    var oldresources = Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Combo && r.SourceId == comboEntity.Id);
                     foreach (var oldResource in oldresources)
                     {
                         oldResource.Status = (int)DataStatus.Deleted;
@@ -183,7 +184,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
         }
         [RestfulAuthorize]
-        public ActionResult Detail(int id,int authuid)
+        public ActionResult Detail(int id, int authuid)
         {
             var comboEntity = Context.Set<IMS_ComboEntity>().Where(ic => ic.Id == id)
                               .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.Status == (int)DataStatus.Normal && r.SourceType == (int)SourceType.Combo),
@@ -192,7 +193,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     (o, i) => new { C = o, CR = i.OrderByDescending(ir => ir.SortOrder) }).FirstOrDefault();
             if (comboEntity == null)
                 return this.RenderError(r => r.Message = "搭配不存在");
-            return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, oc => {
+            return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, oc =>
+            {
                 oc.Images = comboEntity.CR.ToList().Select(cr => cr.Name.Image320Url());
                 oc.Products = Context.Set<ProductEntity>()
                             .Join(Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == id), oo => oo.Id, i => i.ProductId, (oo, i) => oo)
@@ -200,15 +202,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                         o => o.Id,
                                         i => i.SourceId,
                                         (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() })
-                            .GroupJoin(Context.Set<InventoryEntity>(), o => o.P.Id, i => i.ProductId, (o, i) => new { 
-                                    P=o.P,
-                                    PR=o.PR,
-                                    PI=i.OrderByDescending(pi=>pi.Amount).FirstOrDefault()
+                            .GroupJoin(Context.Set<InventoryEntity>(), o => o.P.Id, i => i.ProductId, (o, i) => new
+                            {
+                                P = o.P,
+                                PR = o.PR,
+                                PI = i.OrderByDescending(pi => pi.Amount).FirstOrDefault()
                             })
                             .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po =>
                             {
                                 po.ImageUrl = p.PR == null ? string.Empty : p.PR.Name;
-                                po.IsOnline = p.P.Is4Sale??false && p.PI.Amount > 0;
+                                po.IsOnline = p.P.Is4Sale ?? false && p.PI.Amount > 0;
                             }));
                 oc.Is_Owner = authuid == comboEntity.C.UserId;
                 oc.Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&
@@ -217,7 +220,55 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     f.Status == (int)DataStatus.Normal);
 
             }));
-          
+
+        }
+
+        [RestfulAuthorize]
+        public ActionResult Detail4P(int id, int authuid)
+        {
+            var linq = Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == id)
+                      .Join(Context.Set<ProductEntity>().Where(p => p.Is4Sale == true && p.Status == (int)DataStatus.Normal),
+                              o => o.ProductId,
+                              i => i.Id,
+                              (o, i) => i)
+                      .Join(Context.Set<BrandEntity>(), o => o.Brand_Id, i => i.Id, (o, i) => new { P = o, B = i });
+
+
+            var response = new PagerInfoResponse<GetProductInfo4PResponse>(new PagerRequest(), linq.Count())
+            {
+                Items = linq.ToList().Select(l => new GetProductInfo4PResponse().FromEntity<GetProductInfo4PResponse>(l.P, res =>
+                {
+                    res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == l.P.Id && pi.Amount > 0).GroupBy(pi => pi.PColorId)
+                                    .Select(pi => pi.Key)
+                                    .Join(Context.Set<ProductPropertyValueEntity>(), o => o, i => i.Id, (o, i) => i)
+                                    .GroupJoin(Context.Set<ResourceEntity>().Where(pr => pr.SourceType == (int)SourceType.Product && pr.Type == (int)ResourceType.Image && pr.SourceId == l.P.Id), o => o.Id, i => i.ColorId, (o, i) => new { C = o, CR = i.FirstOrDefault() })
+                                    .ToList()
+                                    .Where(ll => ll.CR != null)
+                                    .Select(color => new SaleColorPropertyResponse()
+                                    {
+                                        ColorId = color.C.Id,
+                                        ColorName = color.C.ValueDesc,
+                                        Resource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(color.CR),
+                                        Sizes = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == l.P.Id && pi.PColorId == color.C.Id)
+                                                .Join(Context.Set<ProductPropertyValueEntity>(), o => o.PSizeId, i => i.Id, (o, i) => new { PI = o, PPV = i }).ToList()
+                                                .Select(pi => new SaleSizePropertyResponse()
+                                                {
+                                                    Is4Sale = pi.PI.Amount > 0,
+                                                    SizeId = pi.PI.PSizeId,
+                                                    SizeName = pi.PPV.ValueDesc
+                                                })
+
+                                    });
+                    if (l.B != null)
+                    {
+                        res.BrandId = l.B.Id;
+                        res.BrandName = l.B.Name;
+                        res.Brand2Name = l.B.EnglishName;
+                    }
+                     })).ToList<GetProductInfo4PResponse>()
+                };
+            return this.RenderSuccess<PagerInfoResponse<GetProductInfo4PResponse>>(m => m.Data = response);
+
         }
     }
 }
