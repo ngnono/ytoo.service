@@ -137,6 +137,14 @@
                                                 Binding="{Binding OutGoodsDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="快递公司" Width="150" Binding="{Binding ExpressCompany}" />
                             <DataGridTextColumn Header="客服备注" Visibility="Hidden" Binding="{Binding ShippingCode}" />
+                            <DataGridTemplateColumn Header="备注录入">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="录入"
+                                    Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -308,6 +316,14 @@
                             <DataGridTextColumn Header="发货方式" Binding="{Binding GoodsOutType}" />
                             <DataGridTextColumn Header="快递公司" Binding="{Binding ShipCompanyName}" />
                             <DataGridTextColumn Header="快递员" Binding="{Binding ShipManName}" />
+                            <DataGridTemplateColumn Header="备注录入">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="录入"
+                                    Command="{Binding Path=DataContext.CommandSetShipSaleRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
 
                     </DataGrid>

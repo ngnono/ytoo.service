@@ -63,16 +63,19 @@
     <Compile Include="Impl\Info\CommonInfo.cs" />
     <Compile Include="Impl\Info\StoreService.cs" />
     <Compile Include="Impl\LoginManager.cs" />
+    <Compile Include="Impl\RMA\PackageService.cs" />
     <Compile Include="Impl\RMA\RMACashInService.cs" />
-    <Compile Include="Impl\Trans\CustomerReturnGoodsService.cs" />
+    <Compile Include="Impl\Customer\CustomerReturnGoodsService.cs" />
     <Compile Include="Impl\Trans\RemarkService.cs" />
-    <Compile Include="Impl\Trans\CustomerInquriesService.cs" />
+    <Compile Include="Impl\Customer\CustomerInquriesService.cs" />
     <Compile Include="Impl\Trans\TransService.cs" />
     <Compile Include="Interface\Auth\IOrgService.cs" />
     <Compile Include="Interface\Auth\IRole2MenuService.cs" />
     <Compile Include="Interface\Auth\IRole2UserService.cs" />
     <Compile Include="Interface\Auth\IAuthenticateService.cs" />
     <Compile Include="Interface\Auth\IMenuDataService.cs" />
+    <Compile Include="Interface\Customer\ICustomerInquriesService.cs" />
+    <Compile Include="Interface\Customer\ICustomerReturnGoods.cs" />
     <Compile Include="Interface\Info\IStoreDataService.cs" />
     <Compile Include="Interface\IOrderService.cs" />
     <Compile Include="Interface\IRole.cs" />
@@ -80,11 +83,10 @@
     <Compile Include="Interface\ISaleDetail.cs" />
     <Compile Include="Interface\ISaleService.cs" />
     <Compile Include="Interface\IService\IRemark.cs" />
+    <Compile Include="Interface\RMA\IPackageService.cs" />
     <Compile Include="Interface\RMA\IRMACashInService.cs" />
     <Compile Include="Interface\Info\ICommonInfoService.cs" />
-    <Compile Include="Interface\Trans\ICustomerReturnGoods.cs" />
     <Compile Include="Interface\Trans\IRemarkService.cs" />
-    <Compile Include="Interface\Trans\ICustomerInquriesService.cs" />
     <Compile Include="Interface\Trans\ITransService.cs" />
     <Compile Include="Interface\Trans\RmaPost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -103,9 +105,7 @@
       <Name>OPCApp.Main.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Impl\Customer\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

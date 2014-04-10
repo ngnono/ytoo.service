@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using OPCApp.DataService.Common;
-using OPCApp.DataService.Interface.Trans;
+using OPCApp.DataService.Interface.Customer;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
-namespace OPCApp.DataService.Impl.Trans
+namespace OPCApp.DataService.Impl.Customer
 {
     [Export(typeof (ICustomerInquiriesService))]
     public class CustomerInquiriesService : ICustomerInquiriesService

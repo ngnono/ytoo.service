@@ -6,8 +6,11 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.DataService.Interface.Customer;
 using OPCApp.DataService.Interface.Trans;
+using OPCApp.DataService.IService;
 using OPCAPP.Domain.Dto;
+using OPCAPP.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
@@ -29,10 +32,31 @@ namespace OPCApp.TransManage.ViewModels
             CommandGetShipping = new DelegateCommand(GetShipping);
             CommandGetOrderByShippingId = new DelegateCommand(GetOrderByShippingId);
             CommandGetSaleByOrderNoShipping = new DelegateCommand(GetSaleByOrderNoShipping);
+            CommandSetRemark = new DelegateCommand(SetRemarkOrder);
+            CommandSetShipSaleRemark = new DelegateCommand(ShipSaleRemark);
             InitCombo();
             _orderGet = new OrderGet();
             ShippingGet = new ShippingGet();
         }
+
+        public void SetRemarkOrder()
+        {
+            //被选择的对象
+            string id = SelectOrder.OrderNo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetOrderRemark);
+        }
+
+        public DelegateCommand CommandSetShipSaleRemark { get; set; }
+
+        public void ShipSaleRemark()
+        {
+            //被选择的对象
+            string id = SelectShipping.ExpressCode;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetShipSaleRemark);
+        }
+        public DelegateCommand CommandSetRemark { get; set; }
 
         #region Tab1页签
 
