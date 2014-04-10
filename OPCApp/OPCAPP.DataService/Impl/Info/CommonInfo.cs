@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
-using OPCAPP.Domain.Dto;
+using OPCApp.Domain.Dto;
 using OPCApp.Domain.Models;
 
 namespace OPCApp.DataService.Impl.Info

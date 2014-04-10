@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface.Trans;
-using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Enums;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.TransManage.ViewModels

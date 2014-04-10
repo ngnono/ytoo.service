@@ -1,4 +1,4 @@
-﻿namespace OPCAPP.Domain.Dto
+﻿namespace OPCApp.Domain.Dto
 {
     public class KeyValue<TKey>
     {
