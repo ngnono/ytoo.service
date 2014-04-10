@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OPCApp.ReturnGoodsManage</RootNamespace>
     <AssemblyName>OPCApp.ReturnGoodsManage</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -59,10 +60,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="OPCApp.PackageManage, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\OPCApp.PackageManage.dll</HintPath>
-    </Reference>
     <Reference Include="Prism.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\Prism.Interfaces.dll</HintPath>
@@ -100,29 +97,30 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModel\ReturnPackageMainViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageManageViewModel.cs" />
-    <Compile Include="View\PackageInfoView.xaml.cs">
+    <Compile Include="Views\PackageInfoView.xaml.cs">
       <DependentUpon>PackageInfoView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReturnPackageMainManageView.xaml.cs">
+    <Compile Include="Views\ReturnPackageMainManageView.xaml.cs">
       <DependentUpon>ReturnPackageMainManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReturnAcceptCashierView.xaml.cs">
+    <Compile Include="Views\ReturnAcceptCashierView.xaml.cs">
       <DependentUpon>ReturnAcceptCashierView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReturnGoodsEntryPrintView.xaml.cs">
+    <Compile Include="Views\ReturnGoodsEntryPrintView.xaml.cs">
       <DependentUpon>ReturnGoodsEntryPrintView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReturnPackageManageView.xaml.cs">
+    <Compile Include="Views\ReturnPackageManageView.xaml.cs">
       <DependentUpon>ReturnPackageManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReturnPackagePrintExpressageView.xaml.cs">
+    <Compile Include="Views\ReturnPackagePrintExpressageView.xaml.cs">
       <DependentUpon>ReturnPackagePrintExpressageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReturnPackageVerifyView.xaml.cs">
+    <Compile Include="Views\ReturnPackageVerifyView.xaml.cs">
       <DependentUpon>ReturnPackageVerifyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ShoppingGuideReturnGoodsReceiving.xaml.cs">
+    <Compile Include="Views\ShoppingGuideReturnGoodsReceiving.xaml.cs">
       <DependentUpon>ShoppingGuideReturnGoodsReceiving.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -136,45 +134,35 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
-      <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
-      <Name>OPCApp.DataService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
-      <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
-      <Name>OPCApp.Domain</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="View\PackageInfoView.xaml">
+    <Page Include="Views\PackageInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ReturnPackageMainManageView.xaml">
+    <Page Include="Views\ReturnPackageMainManageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\ReturnAcceptCashierView.xaml">
+    <Page Include="Views\ReturnAcceptCashierView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ReturnGoodsEntryPrintView.xaml">
+    <Page Include="Views\ReturnGoodsEntryPrintView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ReturnPackageManageView.xaml">
+    <Page Include="Views\ReturnPackageManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ReturnPackagePrintExpressageView.xaml">
+    <Page Include="Views\ReturnPackagePrintExpressageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ReturnPackageVerifyView.xaml">
+    <Page Include="Views\ReturnPackageVerifyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ShoppingGuideReturnGoodsReceiving.xaml">
+    <Page Include="Views\ShoppingGuideReturnGoodsReceiving.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -231,6 +219,20 @@
     <Resource Include="Image\退回.png" />
     <Resource Include="Image\销款.png" />
     <Resource Include="Image\验证.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
+      <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
+      <Name>OPCApp.DataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
+      <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
+      <Name>OPCApp.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Main.Infrastructure.csproj">
+      <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
+      <Name>OPCApp.Main.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
