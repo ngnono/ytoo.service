@@ -6,6 +6,10 @@ namespace Intime.OPC.Domain.Dto
     {
         public int Id { get; set; }
         public string SaleOrderNo { get; set; }
+
+
+
+        public int RMACount { get; set; }
         public string PaymentMethodName { get; set; }
         public double MustPayTotal { get; set; }
         public Nullable<decimal> RealRMASumMoney { get; set; }

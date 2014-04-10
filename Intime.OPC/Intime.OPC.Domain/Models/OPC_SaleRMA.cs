@@ -29,5 +29,9 @@ namespace Intime.OPC.Domain.Models
 
         public int StoreId { get; set; }
         public Nullable<decimal> RealRMASumMoney { get; set; }
+
+        public string RmaCashNum { get; set; }
+
+        public DateTime? RmaCashDate { get; set; }
     }
 }

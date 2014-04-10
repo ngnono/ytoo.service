@@ -21,5 +21,7 @@ namespace Intime.OPC.Domain.Models
         public int CreatedUser { get; set; }
         public DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
+
+        public int OrderItemId { get; set; }
     }
 }
