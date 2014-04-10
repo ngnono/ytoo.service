@@ -21,7 +21,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string Private2Name { get; set; }
         [DataMember(Name = "is_online")]
         public bool Status_B { get {
-            return Status == 1 ? true : false;
+            return Status == 1 && (!ExpireDate.HasValue || ExpireDate>DateTime.Now) ? true : false;
         } }
         [DataMember(Name = "user_id")]
         public int UserId { get; set; }
@@ -51,10 +51,19 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public bool Is_Owner { get; set; }
          [DataMember(Name = "is_favored")]
         public bool Is_Favored { get; set; }
+        [DataMember(Name="expire_in")]
+         public int? ExpiredIn { get {
+             if (!ExpireDate.HasValue)
+                 return null;
+             var expireSpan = (int)((ExpireDate.Value - DateTime.Now).TotalSeconds);
+             return expireSpan < 0 ? 0 : expireSpan ;
+         } }
 
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
         [IgnoreDataMember]
         public int Status { get; set; }
+        [IgnoreDataMember]
+        public DateTime? ExpireDate { get; set; }
     }
 }

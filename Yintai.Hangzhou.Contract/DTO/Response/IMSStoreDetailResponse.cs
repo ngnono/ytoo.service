@@ -72,11 +72,23 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
                 return null;
             return ProductImageUrls.Select(i => i.Image160Url());
         } }
-
+        [DataMember(Name = "expire_in")]
+        public int? ExpiredIn
+        {
+            get
+            {
+                if (!ExpireDate.HasValue)
+                    return null;
+                var expireSpan = (int)((ExpireDate.Value - DateTime.Now).TotalSeconds);
+                return expireSpan < 0 ? 0 : expireSpan;
+            }
+        }
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
         [IgnoreDataMember]
         public IEnumerable<string> ProductImageUrls { get; set; }
+        [IgnoreDataMember]
+        public DateTime? ExpireDate { get; set; }
 
 
     }

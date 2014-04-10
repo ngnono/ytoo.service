@@ -17,6 +17,7 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime UpdateDate { get; set; }
         public int UpdateUser { get; set; }
         public Nullable<int> ProductType { get; set; }
+        public DateTime? ExpireDate { get; set; }
 
         #region Overrides of BaseEntity
 

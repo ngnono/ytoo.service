@@ -76,6 +76,20 @@ namespace Yintai.Hangzhou.Service.Logic
             };
           
         }
+        public static OrderComputeResult ComputeAmount(IEnumerable<ProductEntity> linq, int quantity)
+        {
+            var amount = linq.Sum(l=>(decimal?)l.Price*quantity);
+
+            return new OrderComputeResult()
+            {
+                TotalAmount = amount??0m,
+                ExtendPrice = amount??0m,
+                TotalFee = 0m,
+                TotalPoints = 0,
+                TotalQuantity = quantity
+            };
+
+        }
         public static OrderComputeResult ComputeFee()
         {
             return new OrderComputeResult()

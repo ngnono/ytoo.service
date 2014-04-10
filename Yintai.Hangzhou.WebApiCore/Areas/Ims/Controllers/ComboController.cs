@@ -16,6 +16,7 @@ using com.intime.fashion.common.Extension;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
+using Yintai.Hangzhou.Service.Logic;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -268,6 +269,28 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                      })).ToList<GetProductInfo4PResponse>()
                 };
             return this.RenderSuccess<PagerInfoResponse<GetProductInfo4PResponse>>(m => m.Data = response);
+
+        }
+
+        [RestfulAuthorize]
+        public ActionResult ComputeAmount(int combo_id)
+        {
+            var linq = Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == combo_id)
+                     .Join(Context.Set<ProductEntity>().Where(p => p.Is4Sale == true && p.Status == (int)DataStatus.Normal),
+                             o => o.ProductId,
+                             i => i.Id,
+                             (o, i) => i);
+
+            var model = OrderRule.ComputeAmount(linq, 1);
+
+            return this.RenderSuccess<dynamic>(m => m.Data = new
+            {
+                totalquantity = model.TotalQuantity,
+                totalfee = model.TotalFee,
+                totalpoints = model.TotalPoints,
+                totalamount = model.TotalAmount,
+                extendprice = model.ExtendPrice
+            });
 
         }
     }
