@@ -10,8 +10,10 @@ namespace Intime.OPC.Service.Support
 {
     public class RmaService:BaseService<OPC_RMA>, IRmaService
     {
-        public RmaService(IRMARepository repository) : base(repository)
+        private IRmaDetailRepository _rmaDetailRepository;
+        public RmaService(IRMARepository repository, IRmaDetailRepository rmaDetailRepository) : base(repository)
         {
+            _rmaDetailRepository = rmaDetailRepository;
         }
 
         #region IRmaService Members
@@ -23,6 +25,12 @@ namespace Intime.OPC.Service.Support
             var rep = (IRMARepository) _repository;
             IList<OPC_RMA> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate);
             return Mapper.Map<OPC_RMA, RMADto>(lst);
+        }
+
+        public IList<RmaDetail> GetDetails(string rmaNo)
+        {
+            var lst= _rmaDetailRepository.GetByRmaNo(rmaNo);
+            return Mapper.Map<OPC_RMADetail, RmaDetail>(lst);
         }
 
         #endregion

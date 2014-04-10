@@ -9,5 +9,6 @@ namespace Intime.OPC.Repository
 {
     public interface IRmaDetailRepository:IRepository<OPC_RMADetail>
     {
+        IList<OPC_RMADetail> GetByRmaNo(string rmaNo);
     }
 }
