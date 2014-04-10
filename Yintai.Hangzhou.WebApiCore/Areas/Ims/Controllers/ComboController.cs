@@ -276,10 +276,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult ComputeAmount(int combo_id)
         {
             var linq = Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == combo_id)
-                     .Join(Context.Set<ProductEntity>().Where(p => p.Is4Sale == true && p.Status == (int)DataStatus.Normal),
+                     .Join(Context.Set<ProductEntity>().Where(p => p.Is4Sale == true && p.Status == (int)DataStatus.Normal
+                                        && Context.Set<InventoryEntity>().Where(i=>i.Amount>0).Any(i=>i.ProductId==p.Id)),
                              o => o.ProductId,
                              i => i.Id,
                              (o, i) => i);
+                     
 
             var model = OrderRule.ComputeAmount(linq, 1);
 
