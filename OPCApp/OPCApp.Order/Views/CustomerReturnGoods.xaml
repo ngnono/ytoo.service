@@ -65,18 +65,15 @@
             </StackPanel>
             <DataGrid Grid.Row="3" ItemsSource="{Binding SaleRmaList}" IsReadOnly="True" SelectedItem="{Binding SaleRma}"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding CommandGetDown}" />
+                    </i:EventTrigger>
 
+                </i:Interaction.Triggers>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding SaleOrderNo}" />
+                  
+                    <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}"
                                                 Binding="{Binding PaymentMethodName}" />
                     <DataGridTextColumn Header="应付款总计" Binding="{Binding MustPayTotal}" />
@@ -134,7 +131,7 @@
                     <TextBlock Text="订单明细" />
                 </StackPanel>
             </StackPanel>
-            <DataGrid Grid.Row="6"  ItemsSource="{Binding OrderItemList}" SelectedItem="{Binding OrderItem}"  AutoGenerateColumns="False" >
+            <DataGrid Grid.Row="6" CanUserAddRows="False"  ItemsSource="{Binding OrderItemList}"  SelectedItem="{Binding OrderItem}"  AutoGenerateColumns="False" >
                 <DataGrid.Columns>
                     <DataGridTemplateColumn IsReadOnly="True"  Header="选中" SortMemberPath="IsSelected" Width="60">
                         <DataGridTemplateColumn.CellTemplate>
@@ -145,7 +142,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="款号" Width="150" Binding="{Binding SectionNumber}"
+                    <DataGridTextColumn IsReadOnly="True" Header="款号" Width="150" Binding="{Binding StoreItemNo}"
                                                 ElementStyle="{StaticResource CellRight}" />
                     <DataGridTextColumn IsReadOnly="True" Header="规格" Binding="{Binding SizeValueName}"
                                                 ElementStyle="{StaticResource CellRight}" />

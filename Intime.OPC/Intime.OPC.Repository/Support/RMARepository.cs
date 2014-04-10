@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -21,7 +23,7 @@ namespace Intime.OPC.Repository.Support
             //}
         }
 
-        public IList<OPC_RMA> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime)
+        public IList<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime)
         {
             using (var db=new YintaiHZhouContext())
             {
@@ -34,7 +36,40 @@ namespace Intime.OPC.Repository.Support
                 {
                     query = query.Where(t => t.SaleOrderNo.Contains(saleOrderNo));
                 }
-                return query.ToList();
+               var lst= query.Join(db.OPC_SaleRMA, o => o.RMANo, t => t.RMANo, (t, o) =>new { Rma = t, SaleRma = o })
+                .Join(db.Stores, t => t.Rma.StoreId, o => o.Id, (t, o) => new { Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma })
+                .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo, (t, o) => new { Rma = t.Rma,StoreName = t.StoreName, SaleRma=t.SaleRma,Sale=o }).ToList();
+
+               var lstSaleRma = new List<RMADto>();
+               foreach (var t in lst)
+               {
+                   var o = new RMADto();
+                   o.Id = t.Rma.Id;
+                   o.OrderNo = t.Rma.OrderNo;
+                   o.SaleOrderNo = t.Rma.SaleOrderNo;
+                   o.CashDate = t.Sale.CashDate;
+                   o.CashNum = t.Sale.CashNum;
+                   o.Count = t.Rma.Count;
+                   o.CreatedDate = t.Rma.CreatedDate;
+                   o.RMAAmount = t.Rma.RMAAmount;
+                   o.RMANo = t.Rma.RMANo;
+                   //o.RMAReason = t.Rma.re;
+                   o.RMAType = t.Rma.RMAType;
+                   o.RefundAmount = t.Rma.RefundAmount;
+                   o.RmaCashDate = t.Rma.RmaCashDate;
+
+                   o.RmaCashStatusName = t.SaleRma.RMACashStatus;
+                   EnumRMAStatus status = (EnumRMAStatus) (t.Rma.Status);
+                   o.StatusName =status.GetDescription();
+                   o.SourceDesc = t.Rma.SourceDesc;
+                   o.RmaStatusName = t.SaleRma.RMAStatus;
+                   o.StoreName = t.StoreName;
+                   o.专柜码 = "";
+
+                   lstSaleRma.Add(o);
+               }
+
+                return lstSaleRma;
             }
         }
     }

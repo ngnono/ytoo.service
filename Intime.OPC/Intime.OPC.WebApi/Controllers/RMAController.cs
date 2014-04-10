@@ -10,10 +10,12 @@ namespace Intime.OPC.WebApi.Controllers
     public class RMAController : BaseController
     {
         private ISaleRMAService _saleRmaService;
+        private IRmaService _rmaService;
 
-        public RMAController(ISaleRMAService saleRmaService)
+        public RMAController(ISaleRMAService saleRmaService, IRmaService rmaService)
         {
             _saleRmaService = saleRmaService;
+            _rmaService = rmaService;
         }
 
         /// <summary>
@@ -29,8 +31,6 @@ namespace Intime.OPC.WebApi.Controllers
             return DoAction(() => { _saleRmaService.CreateSaleRMA(user,request);}, "生成销售退货单失败");
         }
 
-
-        //
         /// <summary>
         /// Gets the order by return goods information.
         /// </summary>
@@ -42,6 +42,19 @@ namespace Intime.OPC.WebApi.Controllers
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _saleRmaService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");
         }
+
+        /// <summary>
+        /// 根据退货单号 获得退货明细
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetRmaDetailByRmaNo( string rmaNo)
+        {
+            var userId = GetCurrentUserID();
+            return DoFunction(() => { return _rmaService.GetDetails(rmaNo) ; }, "查询订单信息失败");
+        }
+
 
         #region 备注
 

@@ -37,6 +37,7 @@ namespace Intime.OPC.Service
 
             var mapRma = Mapper.CreateMap<OPC_RMA, RMADto>();
 
+            var mapRmaDetail = Mapper.CreateMap<OPC_RMADetail, RmaDetail>();
 
             Mapper.CreateMap<OrderItem, RMAItem>();
             //todo 销售单明细 匹配

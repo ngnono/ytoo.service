@@ -85,10 +85,10 @@
                     <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Header="销售单号" Binding="{Binding SaleOrderNo}" />
                     <DataGridTextColumn Header="门店" Binding="{Binding StoreName}" />
-                    <DataGridTextColumn Header="退货原因" Binding="{Binding RejectReason}" />
+                    <DataGridTextColumn Header="退货原因" Binding="{Binding RMAReason}" />
                     <DataGridTextColumn Header="退货状态" Binding="{Binding StatusName}" />
-                    <DataGridTextColumn Header="退货单状态" Binding="{Binding PrintTemplate}" />
-                    <DataGridTextColumn Header="退货收银状态" Binding="{Binding ContractNumber}" />
+                    <DataGridTextColumn Header="退货单状态" Binding="{Binding RmaStatusName}" />
+                    <DataGridTextColumn Header="退货收银状态" Binding="{Binding RmaCashStatusName}" />
                     <DataGridTextColumn Header="要求退货时间" Binding="{Binding Address}" />
                     <DataGridTextColumn Header="退货总金额" Binding="{Binding ContractName}" />
                     <DataGridTextColumn Header="退货总数" Binding="{Binding ContractPhone}" />
