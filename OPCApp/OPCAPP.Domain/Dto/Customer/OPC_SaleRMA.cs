@@ -3,6 +3,7 @@ using System;
 
 namespace OPCApp.Domain.Customer
 {
+    //客服退货 订单
     public partial class OPC_SaleRMA
     {
         public int Id { get; set; }

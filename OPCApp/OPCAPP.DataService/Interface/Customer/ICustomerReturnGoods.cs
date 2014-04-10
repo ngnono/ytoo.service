@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using OPCApp.Domain.Customer;
 using OPCApp.Domain.Models;
 
-namespace OPCApp.DataService.Interface.Trans
+namespace OPCApp.DataService.Interface.Customer
 {
   public  interface ICustomerReturnGoods
     {

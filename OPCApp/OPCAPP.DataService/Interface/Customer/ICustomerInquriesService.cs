@@ -1,7 +1,7 @@
 ﻿using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
-namespace OPCApp.DataService.Interface.Trans
+namespace OPCApp.DataService.Interface.Customer
 {
     public interface ICustomerInquiriesService
     {

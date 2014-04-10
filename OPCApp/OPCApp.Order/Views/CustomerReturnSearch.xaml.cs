@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.Composition;
 using System.Windows.Controls;
+using OPCApp.Customer.ViewModels;
 
-namespace OPCApp.TransManage.Views
+namespace OPCApp.Customer.Views
 {
     /// <summary>
     ///     PrintInvoiceViewModel.xaml 的交互逻辑
@@ -15,11 +16,11 @@ namespace OPCApp.TransManage.Views
             InitializeComponent();
         }
 
-        [Import("CustomerRuturnSearchViewModel")]
-        public object ViewModel
+        [Import("CustomerReturnSearchViewModel")]
+        public CustomerReturnSearchViewModel ViewModel
         {
             set { DataContext = value; }
-            get { return DataContext; }
+            get { return DataContext as CustomerReturnSearchViewModel; }
         }
     }
 }

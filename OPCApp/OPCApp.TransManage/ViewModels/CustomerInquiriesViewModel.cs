@@ -6,8 +6,11 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.DataService.Interface.Customer;
 using OPCApp.DataService.Interface.Trans;
+using OPCApp.DataService.IService;
 using OPCAPP.Domain.Dto;
+using OPCAPP.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
@@ -29,65 +32,86 @@ namespace OPCApp.TransManage.ViewModels
             CommandGetShipping = new DelegateCommand(GetShipping);
             CommandGetOrderByShippingId = new DelegateCommand(GetOrderByShippingId);
             CommandGetSaleByOrderNoShipping = new DelegateCommand(GetSaleByOrderNoShipping);
+            CommandSetRemark = new DelegateCommand(SetRemarkOrder);
+            CommandSetShipSaleRemark = new DelegateCommand(ShipSaleRemark);
             InitCombo();
-            orderGet = new OrderGet();
+            _orderGet = new OrderGet();
             ShippingGet = new ShippingGet();
         }
+
+        public void SetRemarkOrder()
+        {
+            //被选择的对象
+            string id = SelectOrder.OrderNo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetOrderRemark);
+        }
+
+        public DelegateCommand CommandSetShipSaleRemark { get; set; }
+
+        public void ShipSaleRemark()
+        {
+            //被选择的对象
+            string id = SelectShipping.ExpressCode;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetShipSaleRemark);
+        }
+        public DelegateCommand CommandSetRemark { get; set; }
 
         #region Tab1页签
 
         //Tab1选中的Order中的数据集
-        private OrderGet orderGet;
-        private IEnumerable<OPCApp.Domain.Models.Order> orderList;
-        private IEnumerable<OPC_SaleDetail> saleDetailList;
-        private IEnumerable<OPC_Sale> saleList;
-        private OPCApp.Domain.Models.Order selectOrder;
+        private OrderGet _orderGet;
+        private IEnumerable<OPCApp.Domain.Models.Order> _orderList;
+        private IEnumerable<OPC_SaleDetail> _saleDetailList;
+        private IEnumerable<OPC_Sale> _saleList;
+        private OPCApp.Domain.Models.Order _selectOrder;
 
         //Tab1选中的Sale中的数据集
-        private OPC_Sale selectSale;
+        private OPC_Sale _selectSale;
 
         public OPCApp.Domain.Models.Order SelectOrder
         {
-            get { return selectOrder; }
-            set { SetProperty(ref selectOrder, value); }
+            get { return _selectOrder; }
+            set { SetProperty(ref _selectOrder, value); }
         }
 
         public OPC_Sale SelectSale
         {
-            get { return selectSale; }
-            set { SetProperty(ref selectSale, value); }
+            get { return _selectSale; }
+            set { SetProperty(ref _selectSale, value); }
         }
 
         //Tab1中Grid数据集1
 
         public IEnumerable<OPCApp.Domain.Models.Order> OrderList
         {
-            get { return orderList; }
-            set { SetProperty(ref orderList, value); }
+            get { return _orderList; }
+            set { SetProperty(ref _orderList, value); }
         }
 
         //Tab1中Grid数据集2
 
         public IEnumerable<OPC_Sale> SaleList
         {
-            get { return saleList; }
-            set { SetProperty(ref saleList, value); }
+            get { return _saleList; }
+            set { SetProperty(ref _saleList, value); }
         }
 
         //Tab1中Grid数据集3
 
         public IEnumerable<OPC_SaleDetail> SaleDetailList
         {
-            get { return saleDetailList; }
-            set { SetProperty(ref saleDetailList, value); }
+            get { return _saleDetailList; }
+            set { SetProperty(ref _saleDetailList, value); }
         }
 
         //界面查询条件
 
         public OrderGet OrderGet
         {
-            get { return orderGet; }
-            set { SetProperty(ref orderGet, value); }
+            get { return _orderGet; }
+            set { SetProperty(ref _orderGet, value); }
         }
 
 
