@@ -219,7 +219,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                    }
                }
                else {
-                   isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "CancelOrders", dealCode = linq.OrderNo}, null
+                   isSuccess = true;
+                   if (!linq.OrderProductType.HasValue || linq.OrderProductType.Value==(int)OrderProductType.SystemProduct)
+                    isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "CancelOrders", dealCode = linq.OrderNo }, null
                   , null);
                    
                }
@@ -414,16 +416,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     Operation = "申请线上退货"
                 });
                 string exRMANo = string.Empty;
-                bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "Agree_Refund", jsonSales = new { Data = new List<dynamic>() { erpRma } } }, r => exRMANo = r.orders_refund_frt_sid
+                bool isSuccess = true;
+                bool isSelfOrder = orderEntity.OrderProductType == (int)OrderProductType.SelfProduct;
+                if (!isSelfOrder)
+                    isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "Agree_Refund", jsonSales = new { Data = new List<dynamic>() { erpRma } } }, r => exRMANo = r.orders_refund_frt_sid
                   , null);
                 if (isSuccess)
                 {
-                    _rmaexRepo.Insert(new RMA2ExEntity()
+                    if (!isSelfOrder)
                     {
-                        ExRMA = exRMANo??string.Empty,
-                        RMANo = newRma.RMANo,
-                        UpdateDate = DateTime.Now
-                    });
+                        _rmaexRepo.Insert(new RMA2ExEntity()
+                        {
+                            ExRMA = exRMANo ?? string.Empty,
+                            RMANo = newRma.RMANo,
+                            UpdateDate = DateTime.Now
+                        });
+                    }
                     ts.Complete();
                     return this.RenderSuccess<MyRMAResponse>(r => r.Data = new MyRMAResponse().FromEntity<MyRMAResponse>(newRma));
                 }

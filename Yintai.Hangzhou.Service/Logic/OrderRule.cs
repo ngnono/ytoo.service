@@ -296,13 +296,13 @@ namespace Yintai.Hangzhou.Service.Logic
                 bool isSuccess = true;
                 if (!isSelfOrder)
                 {
-                    ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "DivideOrderToSaleFromJSON", OrdersJSON = erpOrder }, r => exOrderNo = r.order_no
+                   isSuccess= ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "DivideOrderToSaleFromJSON", OrdersJSON = erpOrder }, r => exOrderNo = r.order_no
                     , null);
                 }
                 if (isSuccess)
                 {
                     
-                    if (isSelfOrder)
+                    if (!isSelfOrder)
                     {
                         var exOrderEntity = _orderexRepo.Insert(new Order2ExEntity()
                          {
