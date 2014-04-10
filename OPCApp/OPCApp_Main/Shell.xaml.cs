@@ -1,5 +1,6 @@
 using System.ComponentModel.Composition;
 using System.Reflection;
+using System.Windows;
 using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
@@ -21,6 +22,11 @@ namespace OPCApp.Main
 
         public void OnImportsSatisfied()
         {
+        }
+
+        private void NavigationItemsControl_OnLoaded(object sender, RoutedEventArgs e)
+        {
+           
         }
     }
 }

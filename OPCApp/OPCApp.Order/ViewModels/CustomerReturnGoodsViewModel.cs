@@ -4,11 +4,12 @@ using System.Linq;
 using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.DataService.Interface.Customer;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.DataService.IService;
 using OPCApp.Domain.Customer;
-using OPCAPP.Domain.Dto;
-using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Dto;
+using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 

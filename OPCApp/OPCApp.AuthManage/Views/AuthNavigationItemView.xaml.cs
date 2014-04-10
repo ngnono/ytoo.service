@@ -47,6 +47,7 @@ namespace OPCApp.AuthManage.Views
             ViewMode = viewModel;
             ViewMode.ClickCommand = new DelegateCommand(clickCommand);
             ViewMode.MenuClickCommand = new DelegateCommand<string>(menuClickCommand);
+            //ViewMode.GetMenus();
         }
 
         public AuthNavaeigationItemViewModel ViewMode
@@ -166,6 +167,11 @@ namespace OPCApp.AuthManage.Views
             {
                 
             }
+        }
+
+        private void AuthNavigationItemView_OnLoaded(object sender, RoutedEventArgs e)
+        {
+           ViewMode.GetMenus();
         }
     }
 }
