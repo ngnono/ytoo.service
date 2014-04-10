@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
 using System.Web.Mvc;
+using com.intime.o2o.data.exchange.IT;
+using com.intime.o2o.data.exchange.IT.Request;
+using com.intime.o2o.data.exchange.IT.Request.Entity;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.DTO.Response;
@@ -28,6 +31,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_GiftCardUserEntity> _userRepo;
         private IEFRepository<IMS_GiftCardItemEntity> _itemRepo;
         private IEFRepository<IMS_GiftCardRechargeEntity> _rechargeRepo;
+        private IApiClient _apiClient;
 
         public GiftCardController(
             ICustomerRepository customerRepo,
@@ -38,7 +42,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             IEFRepository<IMS_GiftCardTransfersEntity> transRepo,
             IEFRepository<IMS_GiftCardUserEntity> userRepo,
             IEFRepository<IMS_GiftCardItemEntity> itemRepo,
-            IEFRepository<IMS_GiftCardRechargeEntity> rechargeRepo)
+            IEFRepository<IMS_GiftCardRechargeEntity> rechargeRepo,
+            IApiClient client
+            )
         {
             this._customerRepo = customerRepo;
             this._resourceRepo = resourceRepo;
@@ -49,29 +55,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             this._userRepo = userRepo;
             this._itemRepo = itemRepo;
             this._rechargeRepo = rechargeRepo;
+            this._apiClient = client;
         }
 
         [RestfulAuthorize]
         public ActionResult IsBind(string phone, int authuid)
         {
             var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone);
-            //if (cardAccount != null)
-            //{
-            //    return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = true });
-            //}
-            //var is_binded = this.IsPhoneBinded(phone);
-            //if (is_binded)
-            //{
-            //    var user = _customerRepo.GetItem(authuid);
-            //    _userRepo.Insert(new IMS_GiftCardUserEntity()
-            //    {
-            //        UserId = authuid,
-            //        GiftCardAccount = phone,
-            //        CreateDate = DateTime.Now,
-            //        Name = user.Nickname,
-            //        CreateUser = authuid
-            //    });
-            //}
             return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = cardAccount != null });
         }
 
@@ -189,32 +179,26 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             try
             {
-                dynamic rechargeRsp = null;
-#if !DEBUG
-                bool result =
-                    !ITServiceHelper.SendHttpMessage(
-                        new Request(
-                            new
-                            {
-                                phone,
-                                idcard = identity_no,
-                                amount = orderTran.Amount,
-                                discount = giftCardOrder.Amount - orderTran.Amount,
-                                transcode = orderTran.TransNo,
-                                totalpay = orderTran.Amount,
-                                storeid = GIFTCARD_STORE_ID,
-                                password = pwd
-                            }), r => rechargeRsp = r, null);
-                if (!result || rechargeRsp == null)
+                var rechargeRequest = new RechargeRequest()
                 {
-                    return this.RenderError(r => r.Message = "充值失败，请稍候重试.");
+                    Data = new RechargeEntity()
+                    {
+                        Phone = phone,
+                        Amount = int.Parse((orderTran.Amount * 100).ToString()),
+                        Discount = int.Parse(((giftCardOrder.Amount - orderTran.Amount) * 100).ToString()),
+                        IdCard = identity_no,
+                        Password = pwd,
+                        StoreCode = GIFTCARD_STORE_ID,
+                        TotalPay = int.Parse(orderTran.Amount.ToString()),
+                        TransCode = orderTran.TransNo
+                    }
+                };
+                var rsp = _apiClient.Post(rechargeRequest);
+                if (!rsp.Status)
+                {
+                    return this.RenderError(r => r.Message = rsp.Message);
                 }
 
-                if (rechargeRsp.code != "200")
-                {
-                    return this.RenderError(r => r.Message = rechargeRsp.message);
-                }
-#endif
                 using (var ts = new TransactionScope())
                 {
                     giftCardOrder.Status = (int)GiftCardOrderStatus.Recharge;
@@ -287,31 +271,26 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
             try
             {
-#if !DEBUG
-
-                dynamic rechargeRsp = null;
-                bool result =
-                    !ITServiceHelper.SendHttpMessage(
-                        new Request(
-                            new
-                            {
-                                phone = cardUser.GiftCardAccount,
-                                amount = orderTran.Amount,
-                                discount = order.Amount - orderTran.Amount,
-                                transcode = orderTran.TransNo,
-                                totalpay = orderTran.Amount,
-                                storeid = GIFTCARD_STORE_ID
-                            }), r => rechargeRsp = r, null);
-                if (!result || rechargeRsp == null)
+                var rechargeRequest = new RechargeRequest()
                 {
-                    return this.RenderError(r => r.Message = "充值失败，请稍候重试.");
-                }
-
-                if (rechargeRsp.code != "200")
+                    Data = new RechargeEntity()
+                    {
+                        Phone = cardUser.GiftCardAccount,
+                        Amount = int.Parse((orderTran.Amount * 100).ToString()),
+                        Discount = int.Parse(((order.Amount - orderTran.Amount) * 100).ToString()),
+                        //IdCard = ,
+                        //Password = "wangxiaohua",
+                        StoreCode = GIFTCARD_STORE_ID,
+                        TotalPay = int.Parse(orderTran.Amount.ToString()),
+                        TransCode = orderTran.TransNo
+                    }
+                };
+                var rsp = _apiClient.Post(rechargeRequest);
+                if (!rsp.Status)
                 {
-                    return this.RenderError(r => r.Message = rechargeRsp.message);
+                    return this.RenderError(r => r.Message = rsp.Message);
                 }
-#endif
+                
                 var transfer = _transRepo.Find(x => x.IsDecline == 0 && x.IsActive == 0);
 
                 using (var ts = new TransactionScope())
@@ -508,28 +487,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return this.RenderError(r => r.Message = "该用户未绑定储值卡.");
             }
-#if !DEBUG
-            dynamic rsp = null;
-            if (
-                !ITServiceHelper.SendHttpMessage(
-                    new Request(new { phone = cardAccount.GiftCardAccount, oldpassword = pwd_old, newpassword = pwd_new }), r => rsp = r, null) ||
-                rsp == null)
-            {
 
-                return this.RenderError(r => r.Message = "修改密码失败，请稍候重试.");
-            }
-            if (rsp.code != 200)
+            var changePwdRequest = new ChangePasswordRequest() { Data = new { oldpassword = pwd_old, newpassword = pwd_new, phone = cardAccount.GiftCardAccount } };
+
+            var result = _apiClient.Post(changePwdRequest);
+            if (result.Status)
             {
-                return this.RenderError(r => r.Message = rsp.message);
+                return this.RenderSuccess<dynamic>(null);
             }
-#else
-            var rnd = new Random(Guid.NewGuid().GetHashCode()).Next(0, 100) % 2 == 0;
-            if (rnd)
-            {
-                return this.RenderError(r => r.Message = "旧密码不正确，无法修改!");
-            }
-#endif
-            return this.RenderSuccess<dynamic>(null);
+            return this.RenderError(r => r.Message = result.ErrorMessage);
         }
 
         [RestfulAuthorize]
@@ -540,21 +506,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return this.RenderError(r => r.Message = "该用户未绑定储值卡!");
             }
-#if !DEBUG
-            dynamic rsp = null;
-            if (
-                !ITServiceHelper.SendHttpMessage(
-                    new Request(new { phone = cardAccount.GiftCardAccount, newpassword = pwd_new }), r => rsp = r, null) ||
-                rsp == null)
-            {
 
-                return this.RenderError(r => r.Message = "充值密码失败，请稍候重试.");
-            }
-            if (rsp.code != 200)
+            var resetPwdRequest = new ResetPasswordRequest() {Data = new
             {
-                return this.RenderError(r => r.Message = rsp.message);
+                phone = cardAccount.GiftCardAccount,
+                newpassword = pwd_new
+            }};
+
+            var rsp = _apiClient.Post(resetPwdRequest);
+            if (!rsp.Status)
+            {
+                return this.RenderError(r => r.Message = rsp.ErrorMessage);
             }
-#endif
+
             return this.RenderSuccess<dynamic>(null);
         }
         [RestfulAuthorize]
@@ -574,15 +538,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
         private bool IsPhoneBinded(string phone)
         {
-#if DEBUG
-            return true;
-#endif
-            dynamic bindRsp = null;
-            if (!ITServiceHelper.SendHttpMessage(new Request(new { phone }), r => bindRsp = r, null) || bindRsp == null)
-            {
-                return false;
-            }
-            return bindRsp.Data.result == 1;
+            return _apiClient.Post(new ValidatePhoneRequest() {Data =  new {phone}}).Status;
         }
 
         private PagerInfoResponse<dynamic> ListItemsReceived(IMSGiftcardListRequest request, int authuid)
@@ -689,17 +645,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
         private dynamic GetUserAccountBalance(string phone)
         {
-#if DEBUG
-            return new Random(5000).NextDouble();
-#endif
-            dynamic balanceRsp = null;
-            if (
-                !ITServiceHelper.SendHttpMessage(new Request(new { phone }),
-                    r => balanceRsp = r.Data, null) || balanceRsp == null || balanceRsp.Code != 200)
+
+            var balanceRequest = new QueryAccountBalanceRequest() {Data = new {phone}};
+            var result = _apiClient.Post(balanceRequest);
+            if(result.Status)
             {
-                throw new GetUserBalanceExcepiton("获取账号余额失败，请稍候重试");
+                return result.Balance;
             }
-            return balanceRsp.Data.balance;
+            throw new GetUserBalanceExcepiton(result.ErrorMessage);
         }
     }
 

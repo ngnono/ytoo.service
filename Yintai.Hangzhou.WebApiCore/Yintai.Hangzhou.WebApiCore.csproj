@@ -137,6 +137,10 @@
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.o2o.data.exchange\com.intime.o2o.data.exchange.csproj">
+      <Project>{6dfef1cf-0b94-420e-82a7-c6cabba3624a}</Project>
+      <Name>com.intime.o2o.data.exchange</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11F8922E-2EEB-4229-BA7C-1D44843C4EDA}</Project>
       <Name>Yintai.Hangzhou.Contract</Name>

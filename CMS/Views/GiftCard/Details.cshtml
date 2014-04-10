@@ -16,8 +16,8 @@
     <div class="display-field">@Html.Label(Model.Card.Id.ToString("D"))</div>
     <div class="display-label">@Html.Label("礼品卡：")</div>
     <div class="display-field">@Html.Label(Model.Card.Name)</div>
-    <div class="display-field">状态</div>
-    <div class="display-field">@Html.CheckBox("状态", Model.Card.Status == 1)</div>
+    <div class="display-label">状态</div>
+    <div class="display-field">@Html.Label(Model.Card.Status == 1?"上线":"下线")</div>
 </fieldset>
 <div class="display-lable">礼品卡子卡</div>
 <fieldset>
@@ -28,14 +28,24 @@
             <th>销售价</th>
             <th>销售配额</th>
             <th>状态</th>
+            <th>操作</th>
         </tr>
         @foreach (var item in Model.CardItems)
         {
             <tr>
-                <td>@Html.Label(item.Id.ToString())</td>
+                <td>@Html.Label(item.Id.ToString("d"))</td>
                 <td>@item.UnitPrice.ToString("c")</td>
                 <td>@item.Price.ToString("c")</td>
                 <td>@item.MaxLimit.ToString("d")</td>
+                @if (item.Status == 1)
+                {
+                    <td>上线</td>
+                }
+                else
+                {
+                    <td>下线</td>
+                }
+
                 @if (item.Status == 1)
                 {
                     <td>@Html.ActionLink2("下线", "Down", new { id = item.Id })</td>
@@ -49,8 +59,4 @@
         }
     </table>
 </fieldset>
-<p>
-    @*@Html.ActionLink2("回复", "Create", new { commentId = Model.Id }, new { @class = "btn btn-primary" })
-        @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })*@
-</p>
 
