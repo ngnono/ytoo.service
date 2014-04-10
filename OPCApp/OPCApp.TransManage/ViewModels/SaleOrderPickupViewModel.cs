@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.Composition;
-using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Enums;
 
 namespace OPCApp.TransManage.ViewModels
 {

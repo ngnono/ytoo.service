@@ -7,7 +7,7 @@ using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.DataService.IService;
 using OPCApp.Domain.Dto;
-using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using OPCApp.TransManage.IService;
