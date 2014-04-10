@@ -5,7 +5,7 @@ using System.Linq;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.Domain.Dto;
-using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 

@@ -1,4 +1,4 @@
-﻿using OPCAPP.Domain.Enums;
+﻿using OPCApp.Domain.Enums;
 
 namespace OPCApp.DataService.IService
 {

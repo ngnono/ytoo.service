@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Trans;
-using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 

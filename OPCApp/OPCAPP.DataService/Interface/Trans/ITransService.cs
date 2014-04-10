@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using OPCApp.Domain.Dto;
-using OPCAPP.Domain.Enums;
+using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 

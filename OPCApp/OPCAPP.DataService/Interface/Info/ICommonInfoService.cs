@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using OPCAPP.Domain.Dto;
+using OPCApp.Domain.Dto;
 using OPCApp.Domain.Models;
 
 namespace OPCApp.DataService.Interface.Trans
