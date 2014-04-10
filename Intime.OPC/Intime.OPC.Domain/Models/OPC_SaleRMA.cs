@@ -30,6 +30,6 @@ namespace Intime.OPC.Domain.Models
         public int StoreId { get; set; }
         public Nullable<decimal> RealRMASumMoney { get; set; }
 
-
+        public DateTime? ServiceAgreeTime { get; set; }
     }
 }

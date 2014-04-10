@@ -25,6 +25,8 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.OrderNo)
                 .HasMaxLength(50);
 
+         
+
             this.Property(t => t.SaleRMASource)
                 .IsRequired()
                 .HasMaxLength(20);
@@ -63,7 +65,9 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.RMANo).HasColumnName("RMANo");
             this.Property(t => t.RealRMASumMoney).HasColumnName("RealRMASumMoney");
             this.Property(t => t.StoreId).HasColumnName("StoreId");
-            
+            this.Property(t => t.ServiceAgreeTime).HasColumnName("AgreeDate");
+
+
         }
     }
 }
