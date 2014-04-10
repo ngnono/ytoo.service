@@ -6,6 +6,8 @@ namespace Intime.OPC.Domain.Dto
     {
         public int Id { get; set; }
         public string SaleOrderNo { get; set; }
+
+        public int RMACount { get; set; }
         public string PaymentMethodName { get; set; }
         public double MustPayTotal { get; set; }
         public Nullable<decimal> RealRMASumMoney { get; set; }
@@ -40,6 +42,6 @@ namespace Intime.OPC.Domain.Dto
         /// 客服同意时间
         /// </summary>
         /// <value>The service agree date.</value>
-        public DateTime ServiceAgreeDate { get; set; }
+        public DateTime? ServiceAgreeDate { get; set; }
     }
 }
