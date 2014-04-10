@@ -16,7 +16,7 @@
 /// The Enums namespace.
 /// </summary>
 
-namespace OPCAPP.Domain.Enums
+namespace OPCApp.Domain.Enums
 {
     /// <summary>
     ///     收银状态

@@ -14,7 +14,7 @@
 
 using System.ComponentModel;
 
-namespace OPCAPP.Domain.Enums
+namespace OPCApp.Domain.Enums
 {
     /// <summary>
     ///     订单状态
