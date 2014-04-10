@@ -27,12 +27,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
         private ICustomerRepository _customerRepo;
         private ICustomerDataService _customerService;
+        private IEFRepository<IMS_InviteCodeEntity> _inviteRepo;
         public StoreController(IEFRepository<IMS_AssociateEntity> associateRepo,
             IEFRepository<IMS_AssociateBrandEntity> associateBrandRepo,
             IEFRepository<IMS_AssociateSaleCodeEntity> associateSaleCodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateItemRepo,
             ICustomerRepository customerRepo,
-            ICustomerDataService customerService)
+            ICustomerDataService customerService,
+            IEFRepository<IMS_InviteCodeEntity> inviteRepo)
         {
             _associateRepo = associateRepo;
             _associateBrandRepo = associateBrandRepo;
@@ -40,6 +42,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _associateItemRepo = associateItemRepo;
             _customerRepo = customerRepo;
             _customerService = customerService;
+            _inviteRepo = inviteRepo;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult My(int? authuid)
@@ -79,6 +82,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 var initialBrands = Context.Set<IMS_SectionBrandEntity>().Where(isb => isb.SectionId == inviteEntity.Sec.SectionId);
                 var initialSaleCodes = Context.Set<IMS_SalesCodeEntity>().Where(isc => isc.SectionId == inviteEntity.Sec.SectionId);
                 var sectionEntity = Context.Set<SectionEntity>().Find(inviteEntity.Sec.SectionId);
+                //2.0 disable invite code
+                inviteEntity.Inv.IsBinded = 1;
+                inviteEntity.Inv.UpdateDate = DateTime.Now;
+                _inviteRepo.Update(inviteEntity.Inv);
+
                 //2.1 update user level to daogou
                 exitUserEntity.UserLevel = (int)UserLevel.DaoGou;
                 exitUserEntity.UpdatedDate = DateTime.Now;
