@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using OPCApp.Customer.ViewModels;
 
-namespace OPCApp.TransManage.Views
+namespace OPCApp.Customer.Views
 {
     /// <summary>
     ///     PrintInvoiceViewModel.xaml 的交互逻辑

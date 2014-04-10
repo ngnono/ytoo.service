@@ -100,6 +100,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModel\ReturnPackageManageViewModel.cs" />
     <Compile Include="View\PackageInfoView.xaml.cs">
       <DependentUpon>PackageInfoView.xaml</DependentUpon>
     </Compile>
@@ -135,7 +136,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModel\" />
+    <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
+      <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
+      <Name>OPCApp.DataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
+      <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
+      <Name>OPCApp.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="View\PackageInfoView.xaml">
