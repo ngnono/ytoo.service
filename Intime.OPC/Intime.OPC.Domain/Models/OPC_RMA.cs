@@ -44,5 +44,9 @@ namespace Intime.OPC.Domain.Models
         public int UpdatedUser { get; set; }
 
         public int StoreId { get; set; }
+
+        public string RmaCashNum { get; set; }
+
+        public DateTime? RmaCashDate { get; set; }
     }
 }
