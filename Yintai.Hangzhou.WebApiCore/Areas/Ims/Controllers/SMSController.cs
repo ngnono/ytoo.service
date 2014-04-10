@@ -1,4 +1,5 @@
-﻿using com.intime.fashion.common.IT;
+﻿using com.intime.o2o.data.exchange.IT;
+using com.intime.o2o.data.exchange.IT.Request;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Yintai.Hangzhou.WebSupport.Mvc;
@@ -7,11 +8,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
     public class SMSController:RestfulController
     {
+        private IApiClient _client ;
+        public SMSController(IApiClient client)
+        {
+            this._client = client;
+        }
+
         static readonly Regex regex = new Regex(@"^(13[0-9]|15[0-9]|18[0-9])\d{8}$",RegexOptions.Compiled);
         [RestfulAuthorize]
         public ActionResult Send(string phone, string text)
         {
-#if !DEBUG
             if (string.IsNullOrEmpty(text))
             {
                 return this.RenderError(r => r.Message = "text is empty");
@@ -21,14 +27,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "Incorrect phone number");
             }
 
-            dynamic sendRsp = null;
+            var rsp = _client.Post(new SMSSendRequest()
+            {
+                Data = new { mobile  = phone, content = text}
+            });
 
-            if (!ITServiceHelper.SendHttpMessage(new Request(new {phone, text}), r => sendRsp = r.Data, null) ||
-                sendRsp == null || sendRsp.GetHashCode() != 200)
+            if (!rsp.Status)
             {
                 return this.RenderError(r => r.Message = "Failed to send sms message, please try again.");
             }
-#endif
+            
             return this.RenderSuccess<dynamic>(null);
         }
     }

@@ -56,6 +56,7 @@
     <Compile Include="IT\Request\Entity\RechargeRequest.cs" />
     <Compile Include="IT\Request\QueryAccountBalanceRequest.cs" />
     <Compile Include="IT\Request\ResetPasswordRequest.cs" />
+    <Compile Include="IT\Request\SMSSendRequest.cs" />
     <Compile Include="IT\Request\ValidatePhoneRequest.cs" />
     <Compile Include="IT\Response.cs" />
     <Compile Include="IT\Response\AccountBalanceResponse.cs" />
