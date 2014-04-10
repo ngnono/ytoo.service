@@ -67,7 +67,13 @@ namespace Intime.OPC.Service.Support
                         config = new RmaConfig(userId);
                         config.RmaNo = CreateRmaNo(rma.OrderNo, orderCount);
                         config.SaleOrderNo = detail.SaleOrderNo;
-                        config.RefundAmount = (Decimal) (rma.RealRMASumMoney);
+                        config.RefundAmount = (Decimal)(rma.RealRMASumMoney);
+                        config.StoreFee = (Decimal)rma.StoreFee;
+                        config.CustomFee = (Decimal)rma.CustomFee;
+                        rma.RealRMASumMoney = 0;
+                        rma.StoreFee = 0;
+                        rma.CustomFee = 0;
+
                         config.OpcSale = sales.FirstOrDefault(t => t.SaleOrderNo == config.SaleOrderNo);
                         config.StoreID = _sectionRepository.GetByID(config.OpcSale.SectionId.Value).StoreId.Value;
                         lstRmaConfigs.Add(config);
@@ -94,6 +100,12 @@ namespace Intime.OPC.Service.Support
                         config = new RmaConfig(userId);
                         config.Reason = rma.Remark;
                         config.SaleOrderNo = detail.SaleOrderNo;
+                        config.RefundAmount = (Decimal)(rma.RealRMASumMoney);
+                        config.StoreFee = (Decimal)rma.StoreFee;
+                        config.CustomFee = (Decimal)rma.CustomFee;
+                        rma.RealRMASumMoney = 0;
+                        rma.StoreFee = 0;
+                        rma.CustomFee = 0;
                         config.OpcSale = sales.FirstOrDefault(t => t.SaleOrderNo == config.SaleOrderNo);
                         config.RmaNo = CreateRmaNo(rma.OrderNo, orderCount);
                         lstRmaConfigs.Add(config);
@@ -147,7 +159,6 @@ namespace Intime.OPC.Service.Support
 
             ISaleRMARepository rep = _repository as ISaleRMARepository;
 
-
             var lst = rep.GetAll(dto.OrderNo,dto.SaleOrderNo, "","", dto.StartDate, dto.EndDate,
                 null,null);
 
@@ -186,7 +197,8 @@ namespace Intime.OPC.Service.Support
         }
 
         public string Reason { get; set; }
-
+        public decimal CustomFee { get; set; }
+        public decimal StoreFee { get; set; }
         public decimal RefundAmount { get; set; }
         public int UserId { get; private set; }
 
@@ -194,6 +206,7 @@ namespace Intime.OPC.Service.Support
         public string RmaNo { get; set; }
 
         public string SaleOrderNo { get; set; }
+
 
         public IList<SubRmaConfig> Details { get; set; }
 
@@ -250,6 +263,8 @@ namespace Intime.OPC.Service.Support
             rma.UpdatedUser = UserId;
             rma.SaleOrderNo = SaleOrderNo;
             rma.OrderNo = OpcSale.OrderNo;
+            rma.StoreFee = StoreFee;
+            rma.CustomFee = CustomFee;
             rma.SaleRMASource = "客服退货";
             rma.RealRMASumMoney = ComputeAccount();
             rma.RMACount = Details.Sum(t => t.ReturnCount);
@@ -310,7 +325,7 @@ namespace Intime.OPC.Service.Support
             rmaDetail.RMANo = rmaNo;
             rmaDetail.Amount = rmaDetail.Price*rmaDetail.BackCount;
             rmaDetail.RefundDate = DateTime.Now;
-
+            rmaDetail.OrderItemId = OrderDetailID;
             return rmaDetail;
         }
     }

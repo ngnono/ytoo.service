@@ -20,7 +20,7 @@ namespace Intime.OPC.Domain.Dto
         public decimal Amount { get; set; }
 
         /// <summary>
-        ///     产品销售码
+        /// 产品销售码 (商品编码)
         /// </summary>
         /// <value>The product sale code.</value>
         public string ProdSaleCode { get; set; }
@@ -56,10 +56,5 @@ namespace Intime.OPC.Domain.Dto
         /// <value>The name of the color value.</value>
         public string 商品编码 { get; set; }
 
-        /// <summary>
-        ///     专柜码
-        /// </summary>
-        /// <value>The name of the color value.</value>
-        public string 专柜码 { get; set; }
     }
 }

@@ -158,7 +158,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetSaleRmaByPack([FromBody]PackageReceiveDto dto)
         {
-            return DoFunction(() => { return _saleRmaService.GetByPack(dto); }, "查询收货单信息失败！");
+            return DoFunction(() => { return _saleRmaService.GetByPack(dto); }, "查询退货收货单信息失败！");
         }
 
         /// <summary>
