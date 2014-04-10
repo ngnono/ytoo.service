@@ -1,4 +1,5 @@
-﻿using com.intime.o2o.data.exchange.IT;
+﻿using System;
+using com.intime.o2o.data.exchange.IT;
 using com.intime.o2o.data.exchange.IT.Request;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
@@ -27,16 +28,24 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "Incorrect phone number");
             }
 
-            var rsp = _client.Post(new SMSSendRequest()
+            try
             {
-                Data = new { mobile  = phone, content = text}
-            });
+                var rsp = _client.Post(new SMSSendRequest()
+                {
+                    Data = new {mobile = phone, content = text}
+                });
 
-            if (!rsp.Status)
-            {
-                return this.RenderError(r => r.Message = "Failed to send sms message, please try again.");
+                if (!rsp.Status)
+                {
+                    return this.RenderError(r => r.Message = "Failed to send sms message, please try again.");
+                }
             }
-            
+            catch (Exception ex)
+            {
+                this.Logger.Error(ex);
+                return this.RenderError(r => r.Message = "发送短信失败，请联系管理员!");
+            }
+
             return this.RenderSuccess<dynamic>(null);
         }
     }
