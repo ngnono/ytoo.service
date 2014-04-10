@@ -26,10 +26,18 @@ namespace OPCApp.Customer.ViewModels
             CommandReturnGoodsSearch = new DelegateCommand(ReturnGoodsSearch);
             CommandGetDown = new DelegateCommand(GetOrderDetailByOrderNo);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
+            CommandComboSelect = new DelegateCommand(ComboSelect);
             ReturnGoodsGet = new ReturnGoodsGet();
             ClearOrInitData();
             InitCombo();
+            RmaPost = new RMAPost();
         }
+
+        public void ComboSelect()
+        {
+            ReturnCountList = new List<int>() {1,2,4};
+        }
+
         public IList<KeyValue> BrandList { get; set; }
 
 
@@ -48,6 +56,8 @@ namespace OPCApp.Customer.ViewModels
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
             remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetSaleRMARemark); //4填写的是退货单
         }
+
+        public DelegateCommand CommandComboSelect { get; set; }
         public DelegateCommand CommandSetOrderRemark { get; set; }
         public DelegateCommand CommandReturnGoodsSearch { get; set; }
         public DelegateCommand CommandCustomerReturnGoodsSave { get; set; }
@@ -81,6 +91,12 @@ namespace OPCApp.Customer.ViewModels
             set { SetProperty(ref _returnList, value); }
         }
 
+        private OrderItem _orderItem;
+        public OrderItem OrderItem
+        {
+            get { return _orderItem; }
+            set { SetProperty(ref _orderItem, value); }
+        }
         private void ClearOrInitData()
         {
             OrderItemList = new List<OrderItem>();
@@ -91,9 +107,10 @@ namespace OPCApp.Customer.ViewModels
         {
             if (SaleRma != null)
             {
-                this.SaleRmaList.Clear();
-                IList<OPC_SaleRMA> list = AppEx.Container.GetInstance<ICustomerReturnGoods>()
-                    .ReturnGoodsSearch(ReturnGoodsGet);
+                this.OrderItemList.Clear();
+                IList<OrderItem> list = AppEx.Container.GetInstance<ICustomerReturnGoods>()
+                    .GetOrderDetailByOrderNo(SaleRma.OrderNo);
+                OrderItemList = list.ToList();
             }
 
         }
@@ -115,15 +132,24 @@ namespace OPCApp.Customer.ViewModels
         private void CustomerReturnGoodsSave()
         {
             var selectOrder = OrderItemList.Where(e => e.IsSelected).ToList();
-            if (selectOrder.Count==0)
+            if (SaleRma==null)
+            {
+                MessageBox.Show("请选择订单", "提示");
+                return;
+            }
+            if (selectOrder.Count == 0)
             {
                 MessageBox.Show("请选择销售单明细", "提示");
                 return;
             }
-            RmaPost.ReturnProducts =
-                selectOrder.Select(e => new KeyValuePair<int, int>(e.StockId, e.NeedReturnCount)).ToList();
+            var list =
+                selectOrder.Select<OrderItem, KeyValuePair<int, int>>(
+                    e => new KeyValuePair<int, int>(e.Id, e.NeedReturnCount)).ToList<KeyValuePair<int, int>>();
+            RmaPost.OrderNo = SaleRma.OrderNo;
+            RmaPost.ReturnProducts = list;
             bool bFlag = AppEx.Container.GetInstance<ICustomerReturnGoods>().CustomerReturnGoodsSave(RmaPost);
             MessageBox.Show(bFlag ? "客服退货成功" : "客服退货失败", "提示");
         }
+
     }
 }

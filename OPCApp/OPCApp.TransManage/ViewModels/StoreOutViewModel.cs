@@ -130,9 +130,14 @@ namespace OPCApp.TransManage.ViewModels
         private void SetShippingRemark()
         {
             //被选择的对象
-            string id = SaleSelected.SaleOrderNo;
+            if (ShipSaleSelected == null)
+            {
+                MessageBox.Show("请选择快递单", "提示");
+                return;
+            }
+            string id = ShipSaleSelected.ExpressCode;
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetShipSaleRemark); //4填写的是订单
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetShipSaleRemark); //填写的是快递单
         }
 
         /*生成*/

@@ -70,7 +70,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
              try
             {
-                IList<OPC_SaleRMAComment> lst = RestClient.Get<OPC_SaleRMAComment>("rma/getsalermaremark",
+                IList<OPC_SaleRMAComment> lst = RestClient.Get<OPC_SaleRMAComment>("rma/GetCommentByRmaNo",
                     rmaId);
                 return new PageResult<OPC_SaleRMAComment>(lst, lst.Count);
             }

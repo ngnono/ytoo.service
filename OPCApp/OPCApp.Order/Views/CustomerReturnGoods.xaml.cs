@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Windows.Controls;
+using OPCApp.Customer.ViewModels;
 
 namespace OPCApp.TransManage.Views
 {
@@ -16,10 +18,24 @@ namespace OPCApp.TransManage.Views
         }
 
         [Import("CustomerReturnGoodsViewModel")]
-        public object ViewModel
+        public CustomerReturnGoodsViewModel ViewModel
         {
             set { DataContext = value; }
-            get { return DataContext; }
+            get { return DataContext as CustomerReturnGoodsViewModel; }
+        }
+
+        private void cbxList_DropDownOpened(object sender, System.EventArgs e)
+        {
+            if (ViewModel.OrderItem != null)
+            {
+                var count = ViewModel.OrderItem.Quantity;
+                var list = new List<int>();
+                for (int i = 1; i < count+1; i++)
+                {
+                    list.Add(i);
+                }
+                ViewModel.ReturnCountList = list;
+            }
         }
     }
 }

@@ -49,22 +49,27 @@ namespace OPCApp.TransManage.ViewModels
             {
                 case EnumSetRemarkType.SetSaleRemark:
                     OPC_SaleComment salecomment = Mapper.Map<OPC_Comment, OPC_SaleComment>(comment);
+                    salecomment.SaleOrderNo = comment.RelationId;
                     isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteSaleRemark(salecomment);
                     break;
                 case EnumSetRemarkType.SetSaleDetailRemark:
                     OPC_SaleDetailsComment saledetailscomment = Mapper.Map<OPC_Comment, OPC_SaleDetailsComment>(comment);
+                    saledetailscomment.SaleDetailId = id;
                     isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteSaleDetailsRemark(saledetailscomment);
                     break;
                 case EnumSetRemarkType.SetOrderRemark:
                     OPC_OrderComment orderComment = Mapper.Map<OPC_Comment, OPC_OrderComment>(comment);
+                    orderComment.OrderNo = id;
                     isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteOrderRemark(orderComment);
                     break;
                 case EnumSetRemarkType.SetShipSaleRemark:
                     OPC_ShipComment shipSaleComment = Mapper.Map<OPC_Comment, OPC_ShipComment>(comment);
+                    shipSaleComment.ShippingCode = comment.RelationId;
                     isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteShippingRemark(shipSaleComment);
                     break;
                 case EnumSetRemarkType.SetSaleRMARemark:
                     var rmaRemark = Mapper.Map<OPC_Comment, OPC_SaleRMAComment>(comment);
+                    rmaRemark.RMANo = comment.RelationId;
                     isSuccess = AppEx.Container.GetInstance<IRemarkService>().WriteSaleRmaRemark(rmaRemark);
                     break;
             }
@@ -97,7 +102,7 @@ namespace OPCApp.TransManage.ViewModels
                 case EnumSetRemarkType.SetShipSaleRemark:
                     PageResult<OPC_ShipComment> shipRemark =
                         AppEx.Container.GetInstance<IRemarkService>()
-                            .GetShipRemark(string.Format("saledetailId={0}", id));
+                            .GetShipRemark(string.Format("shippingSaleNo={0}", id));
                     Remark4List = Mapper.Map<OPC_ShipComment, OPC_Comment>(shipRemark.Result);
                     break;
                 case EnumSetRemarkType.SetSaleRMARemark:

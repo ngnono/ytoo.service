@@ -30,9 +30,12 @@ namespace TestService
         public void TestCreateSaleRma()
         {
             RMAPost post=new RMAPost();
-            post.CustomFee = 50;
-            post.StoreFee = 1;
-            post.ReturnProducts.Add(new KeyValuePair<int, int>(6,4 ));
+            post.CustomFee = 123123;
+            post.StoreFee = 123;
+            post.ReturnProducts.Add(new KeyValuePair<int, int>(5,1 ));
+            post.ReturnProducts.Add(new KeyValuePair<int, int>(6, 13));
+            post.RealRMASumMoney = 123123;
+
             post.OrderNo = "114201404086";
             post.Remark = "test";
 
