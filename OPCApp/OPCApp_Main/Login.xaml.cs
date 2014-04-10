@@ -57,6 +57,7 @@ namespace OPCApp.Main
                 MessageBox.Show("用户名或者密码错误", "提示");
                 return;
             }
+            
             DialogResult = true;
         }
 

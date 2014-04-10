@@ -6,7 +6,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:controls="clr-namespace:OPCApp.Main.Controls;assembly=OPCApp.Main.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="250">
+             d:DesignHeight="300" d:DesignWidth="250" Loaded="AuthNavigationItemView_OnLoaded">
 
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
