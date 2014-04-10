@@ -17,6 +17,7 @@ using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.common;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -70,8 +71,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     UpdateDate = DateTime.Now,
                     UpdateUser = authuid,
                     UserId = authuid,
-                    ProductType = request.Product_Type
-
+                    ProductType = request.Product_Type,
+                    ExpireDate = DateTime.Now.AddDays(ConfigManager.COMBO_EXPIRED_DAYS)
                 });
 
                 //step2: create combo2product

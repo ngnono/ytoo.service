@@ -252,6 +252,7 @@ private  IEFRepository<IMS_ComboEntity> _comboRepo;
                     var comboEntity = Context.Set<IMS_ComboEntity>().Find(request.Item_Id);
                     comboEntity.Status = comboItemEntity.Status;
                     comboEntity.UpdateDate = DateTime.Now;
+                    comboEntity.ExpireDate = DateTime.Now.AddDays(ConfigManager.COMBO_EXPIRED_DAYS);
                     _comboRepo.Update(comboEntity);
 
                     if (request.Is_Online)
