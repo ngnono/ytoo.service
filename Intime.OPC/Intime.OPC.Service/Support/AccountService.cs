@@ -52,7 +52,12 @@ namespace Intime.OPC.Service.Support
 
             var pwd=  password.MD5CSP();
             var user = _accountRepository.Get(userName, pwd);
+            if (user==null)
+            {
+                throw new Exception("用户名或密码不正确");
+            }
             var dto= AutoMapper.Mapper.Map<OPC_AuthUser,AuthUserDto>(user);
+           
             var org = _orgInfoRepository.GetByOrgID(user.DataAuthId);
             if (org!=null)
             {
