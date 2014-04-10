@@ -222,8 +222,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                }
                else {
                    isSuccess = true;
-                   if (!linq.OrderProductType.HasValue || linq.OrderProductType.Value==(int)OrderProductType.SystemProduct)
-                    isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "CancelOrders", dealCode = linq.OrderNo }, null
+                   if (ConfigManager.IS_PRODUCT_ENV && (!linq.OrderProductType.HasValue || linq.OrderProductType.Value==(int)OrderProductType.SystemProduct))
+                        isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "CancelOrders", dealCode = linq.OrderNo }, null
                   , null);
                    
                }
@@ -420,12 +420,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 string exRMANo = string.Empty;
                 bool isSuccess = true;
                 bool isSelfOrder = orderEntity.OrderProductType == (int)OrderProductType.SelfProduct;
-                if (!isSelfOrder)
+                if (!isSelfOrder && ConfigManager.IS_PRODUCT_ENV)
                     isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "Agree_Refund", jsonSales = new { Data = new List<dynamic>() { erpRma } } }, r => exRMANo = r.orders_refund_frt_sid
                   , null);
                 if (isSuccess)
                 {
-                    if (!isSelfOrder)
+                    if (!isSelfOrder && ConfigManager.IS_PRODUCT_ENV)
                     {
                         _rmaexRepo.Insert(new RMA2ExEntity()
                         {

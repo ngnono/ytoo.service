@@ -308,7 +308,7 @@ namespace Yintai.Hangzhou.Service.Logic
                 string exOrderNo = string.Empty;
 
                 bool isSuccess = true;
-                if (!isSelfOrder)
+                if (!isSelfOrder && ConfigManager.IS_PRODUCT_ENV)
                 {
                    isSuccess= ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "DivideOrderToSaleFromJSON", OrdersJSON = erpOrder }, r => exOrderNo = r.order_no
                     , null);
@@ -316,7 +316,7 @@ namespace Yintai.Hangzhou.Service.Logic
                 if (isSuccess)
                 {
                     
-                    if (!isSelfOrder)
+                    if (!isSelfOrder && ConfigManager.IS_PRODUCT_ENV)
                     {
                         var exOrderEntity = _orderexRepo.Insert(new Order2ExEntity()
                          {
