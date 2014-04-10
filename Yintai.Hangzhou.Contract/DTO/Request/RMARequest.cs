@@ -23,6 +23,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public string ContactPhone { get; set; }
         public string Products { get; set; }
         public IEnumerable<RMAProductDetailRequest> Products2 { get {
+            if (string.IsNullOrEmpty(Products))
+                return null;
             return JsonConvert.DeserializeObject<IEnumerable<RMAProductDetailRequest>>(Products);
         } }
   
