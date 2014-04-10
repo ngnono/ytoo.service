@@ -4,7 +4,7 @@ using System.Windows.Documents;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface;
 using OPCApp.DataService.Interface.Trans;
-using OPCAPP.Domain.Dto;
+using OPCApp.Domain.Dto;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
