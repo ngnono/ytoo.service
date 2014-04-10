@@ -77,7 +77,6 @@ namespace com.intime.jobscheduler.Job.Income
             int successCount = 0;
             int size = JobConfig.DEFAULT_PAGE_SIZE; ;
             int lastCursor = 0;
-            int serialNo = 1;
 
 
             while (cursor < totalCount)

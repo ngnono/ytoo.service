@@ -14,14 +14,14 @@ using Yintai.Hangzhou.Service.Logic;
 namespace com.intime.jobscheduler.Job.Order
 {
     [DisallowConcurrentExecution]
-    class AutoChangeIncomeStatusJob:IJob
+    class AutoDisableComboJob:IJob
     {
-        private void Query(DateTime benchTime, Action<IQueryable<IMS_AssociateIncomeHistoryEntity>> callback)
+        private void Query(DateTime benchTime, Action<IQueryable<IMS_ComboEntity>> callback)
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var orders = db.Set<IMS_AssociateIncomeHistoryEntity>().Where(ot => ot.Status == (int)AssociateIncomeStatus.Frozen
-                            && ot.CreateDate < benchTime);
+                var orders = db.Set<IMS_ComboEntity>().Where(ot => ot.Status == (int)DataStatus.Normal
+                            && ot.ExpireDate < benchTime);
 
                 if (callback != null)
                     callback(orders);
@@ -55,7 +55,7 @@ namespace com.intime.jobscheduler.Job.Order
             sw.Start();
             while (cursor < totalCount)
             {
-                List<IMS_AssociateIncomeHistoryEntity> oneTimeList = null;
+                List<IMS_ComboEntity> oneTimeList = null;
                 Query(benchTime, orders =>
                 {
                     oneTimeList = orders.Where(a => a.Id > lastCursor).OrderBy(a => a.Id).Take(size).ToList();
@@ -68,27 +68,25 @@ namespace com.intime.jobscheduler.Job.Order
                         {
                             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
                             {
-                                var rmaEntity = db.Set<RMAEntity>().Where(r => r.OrderNo == order.SourceNo
-                                            && r.Status != (int)RMAStatus.Void
-                                            && r.Status != (int)RMAStatus.Reject).FirstOrDefault();
-                                bool incomeIsAvail = rmaEntity == null ? true : false;
-                                bool isSuccess = false;
-                                if (incomeIsAvail)
-                                {
-                                   isSuccess= AssociateIncomeLogic.Avail(order.SourceNo);
-                                }
-                                else
-                                {
-                                    isSuccess =AssociateIncomeLogic.Void(order.SourceNo);
-                                }
+                                order.Status = (int)DataStatus.Default;
+                                order.UpdateDate = DateTime.Now;
+                                db.Entry(order).State = System.Data.EntityState.Modified;
 
-                                if (isSuccess)
+                                var associateItemEntity = db.Set<IMS_AssociateItemsEntity>().Where(ia => ia.ItemType == (int)ComboType.Product
+                                                && ia.ItemId == order.Id
+                                                && ia.Status == (int)DataStatus.Normal).FirstOrDefault();
+                                if (associateItemEntity != null)
                                 {
-                                    ts.Complete();
-                                    successCount++;
+                                    associateItemEntity.Status = (int)DataStatus.Default;
+                                    associateItemEntity.UpdateDate = DateTime.Now;
+                                    db.Entry(associateItemEntity).State = System.Data.EntityState.Modified;
                                 }
-                                else
-                                    log.Error(string.Format("order:{0} cannot convert income to avail/void", order.SourceNo));
+                                db.SaveChanges();
+
+                                ts.Complete();
+                                
+                                successCount++;
+                                
                             }
                         }
                     }
@@ -103,7 +101,7 @@ namespace com.intime.jobscheduler.Job.Order
             }
 
             sw.Stop();
-            log.Info(string.Format("total income history:{0},{1} converted incomes in {2} => {3} docs/s", totalCount, successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+            log.Info(string.Format("total combo can be disabled:{0},{1} disabled combos in {2} => {3} docs/s", totalCount, successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
         }
     }
 }

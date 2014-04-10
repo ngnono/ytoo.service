@@ -484,7 +484,7 @@ namespace com.intime.jobscheduler.Job
                                 Description = l.C.Description,
                                 Status = l.C.Status,
                                 SortOrder = l.C.SortOrder,
-                                SizeType = l.C.SizeType??(int)CategorySizeType.Common,
+                                SizeType = l.C.SizeType??(int)CategorySizeType.FreeInput,
                                 Sizes = l.CP.Select(lcp=>new ESSize(){
                                          Id = lcp.CPV.Id,
                                          Name = lcp.CPV.ValueDesc

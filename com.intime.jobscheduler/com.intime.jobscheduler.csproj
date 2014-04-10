@@ -164,6 +164,7 @@
     <Compile Include="Job\ApnsNotificationCommonJob.cs" />
     <Compile Include="Job\ApnsNotificationJob.cs" />
     <Compile Include="Job\AutoConvertOrderStatus.cs" />
+    <Compile Include="Job\Combo\AutoDisableComboJob.cs" />
     <Compile Include="Job\CouponStatusSyncJob.cs" />
     <Compile Include="Job\Erp\BrandSyncJob.cs" />
     <Compile Include="Job\Erp\CategorySyncJob.cs" />
