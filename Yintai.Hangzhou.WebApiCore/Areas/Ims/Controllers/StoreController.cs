@@ -44,6 +44,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _customerService = customerService;
             _inviteRepo = inviteRepo;
         }
+
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult My(int? authuid)
         {
