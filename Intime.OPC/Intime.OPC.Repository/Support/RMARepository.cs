@@ -62,7 +62,7 @@ namespace Intime.OPC.Repository.Support
                    EnumRMAStatus status = (EnumRMAStatus) (t.Rma.Status);
                    o.StatusName =status.GetDescription();
                    o.SourceDesc = t.Rma.SourceDesc;
-                   o.RmaName = t.SaleRma.RMAStatus;
+                   o.RmaStatusName = t.SaleRma.RMAStatus;
                    o.StoreName = t.StoreName;
                    o.专柜码 = "";
 

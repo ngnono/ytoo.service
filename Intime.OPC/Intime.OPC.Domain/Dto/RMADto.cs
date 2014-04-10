@@ -68,7 +68,7 @@ namespace Intime.OPC.Domain.Dto
         /// 退货状态
         /// </summary>
         /// <value>The name of the rma cash status.</value>
-        public string RmaName { get; set; }
+        public string RmaStatusName { get; set; }
 
         /// <summary>
         /// 专柜码
