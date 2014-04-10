@@ -110,6 +110,18 @@ private  IEFRepository<IMS_ComboEntity> _comboRepo;
         }
 
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Combos_Online_Count(int authuid)
+        {
+            var linq = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                       .Join(Context.Set<IMS_AssociateItemsEntity>().Where(ia => ia.ItemType == (int)ComboType.Product && ia.Status == (int)DataStatus.Normal),
+                                            o => o.Id, i => i.AssociateId,
+                                            (o, i) => i);
+
+            return this.RenderSuccess<dynamic>(c => c.Data = new { 
+                total_count = linq.Count()
+            });
+        }
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Products(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<ProductEntity>().Where(ia => ia.CreatedUser == authuid && ia.ProductType == (int)ProductType.FromSelf)
