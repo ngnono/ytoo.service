@@ -15,12 +15,6 @@ namespace OPCApp.ReturnGoodsManage.View
             InitializeComponent();
 
         }
-        //[Import("ReturnPackageManageViewModel")]
-        //public ReturnPackageManageViewModel ViewModel
-        //{
-        //    set { DataContext = value; }
-        //    get { return DataContext as ReturnPackageManageViewModel; }
-        //}
        
     }
 }

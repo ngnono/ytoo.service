@@ -2,6 +2,7 @@
 
 namespace OPCApp.Domain.Customer
 {
+    //退货单
     public class RMADto
     {
         public int Id { get; set; }
@@ -16,11 +17,17 @@ namespace OPCApp.Domain.Customer
         public string OrderNo { get; set; }
         public int RMAType { get; set; }
         public int Status { get; set; }
-        public int StatusName { get; set; }
+        /// <summary>
+        /// 退货原因
+        /// </summary>
+        public string StatusName { get; set; }
         public decimal RMAAmount { get; set; }
         public string BankName { get; set; }
         public string BankAccount { get; set; }
         public string BankCard { get; set; }
+        /// <summary>
+        /// 退货原因
+        /// </summary>
         public string RejectReason { get; set; }
         public decimal? RebatePostfee { get; set; }
         public decimal? Chargepostfee { get; set; }

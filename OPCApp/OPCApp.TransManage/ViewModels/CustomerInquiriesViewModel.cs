@@ -30,64 +30,64 @@ namespace OPCApp.TransManage.ViewModels
             CommandGetOrderByShippingId = new DelegateCommand(GetOrderByShippingId);
             CommandGetSaleByOrderNoShipping = new DelegateCommand(GetSaleByOrderNoShipping);
             InitCombo();
-            orderGet = new OrderGet();
+            _orderGet = new OrderGet();
             ShippingGet = new ShippingGet();
         }
 
         #region Tab1页签
 
         //Tab1选中的Order中的数据集
-        private OrderGet orderGet;
-        private IEnumerable<OPCApp.Domain.Models.Order> orderList;
-        private IEnumerable<OPC_SaleDetail> saleDetailList;
-        private IEnumerable<OPC_Sale> saleList;
-        private OPCApp.Domain.Models.Order selectOrder;
+        private OrderGet _orderGet;
+        private IEnumerable<OPCApp.Domain.Models.Order> _orderList;
+        private IEnumerable<OPC_SaleDetail> _saleDetailList;
+        private IEnumerable<OPC_Sale> _saleList;
+        private OPCApp.Domain.Models.Order _selectOrder;
 
         //Tab1选中的Sale中的数据集
-        private OPC_Sale selectSale;
+        private OPC_Sale _selectSale;
 
         public OPCApp.Domain.Models.Order SelectOrder
         {
-            get { return selectOrder; }
-            set { SetProperty(ref selectOrder, value); }
+            get { return _selectOrder; }
+            set { SetProperty(ref _selectOrder, value); }
         }
 
         public OPC_Sale SelectSale
         {
-            get { return selectSale; }
-            set { SetProperty(ref selectSale, value); }
+            get { return _selectSale; }
+            set { SetProperty(ref _selectSale, value); }
         }
 
         //Tab1中Grid数据集1
 
         public IEnumerable<OPCApp.Domain.Models.Order> OrderList
         {
-            get { return orderList; }
-            set { SetProperty(ref orderList, value); }
+            get { return _orderList; }
+            set { SetProperty(ref _orderList, value); }
         }
 
         //Tab1中Grid数据集2
 
         public IEnumerable<OPC_Sale> SaleList
         {
-            get { return saleList; }
-            set { SetProperty(ref saleList, value); }
+            get { return _saleList; }
+            set { SetProperty(ref _saleList, value); }
         }
 
         //Tab1中Grid数据集3
 
         public IEnumerable<OPC_SaleDetail> SaleDetailList
         {
-            get { return saleDetailList; }
-            set { SetProperty(ref saleDetailList, value); }
+            get { return _saleDetailList; }
+            set { SetProperty(ref _saleDetailList, value); }
         }
 
         //界面查询条件
 
         public OrderGet OrderGet
         {
-            get { return orderGet; }
-            set { SetProperty(ref orderGet, value); }
+            get { return _orderGet; }
+            set { SetProperty(ref _orderGet, value); }
         }
 
 

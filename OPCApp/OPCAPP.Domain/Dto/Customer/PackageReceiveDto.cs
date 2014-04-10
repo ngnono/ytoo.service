@@ -8,6 +8,7 @@ using OPCApp.Domain.Models;
 
 namespace OPCApp.Domain.Customer
 {
+    //退货包裹签收确认
    public  class PackageReceiveDto
     {
        public PackageReceiveDto()

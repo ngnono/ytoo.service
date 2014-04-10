@@ -1,7 +1,7 @@
 ﻿using System;
-
-namespace Intime.OPC.Domain.Dto
+namespace OPCApp.Domain.Customer
 {
+    //功能：退货包裹管理 退货包裹签收确认  收货单
     public class SaleRmaDto
     {
         public int Id { get; set; }
@@ -41,5 +41,9 @@ namespace Intime.OPC.Domain.Dto
         /// </summary>
         /// <value>The service agree date.</value>
         public DateTime ServiceAgreeDate { get; set; }
+        /// <summary>
+        /// 退货总数量
+        /// </summary>
+        public int RMACount { get; set; }
     }
 }
