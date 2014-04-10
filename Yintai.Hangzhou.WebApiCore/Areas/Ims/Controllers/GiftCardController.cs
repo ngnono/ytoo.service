@@ -42,8 +42,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             IEFRepository<IMS_GiftCardTransfersEntity> transRepo,
             IEFRepository<IMS_GiftCardUserEntity> userRepo,
             IEFRepository<IMS_GiftCardItemEntity> itemRepo,
-            IEFRepository<IMS_GiftCardRechargeEntity> rechargeRepo,
-            IApiClient client
+            IEFRepository<IMS_GiftCardRechargeEntity> rechargeRepo
             )
         {
             this._customerRepo = customerRepo;
@@ -55,7 +54,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             this._userRepo = userRepo;
             this._itemRepo = itemRepo;
             this._rechargeRepo = rechargeRepo;
-            this._apiClient = client;
+            this._apiClient = new DefaultApiClient();
         }
 
         [RestfulAuthorize]
