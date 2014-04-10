@@ -139,7 +139,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
                 o.RMAs = dbContext.Set<RMAEntity>().Where(r => r.OrderNo == o.OrderNo).OrderByDescending(r => r.CreateDate)
                         .ToList()
-                        .Select(r => new MyRMAResponse().FromEntity<MyRMAResponse>(r));
+                        .Select(r => new MyRMAResponse().FromEntity<MyRMAResponse>(r, ro => {
+                            ro.CanVoid = RMARule.CanVoid(ro.Status);
+                        }));
 
                 o.Outbounds = dbContext.Set<OutboundEntity>().Where(ob => ob.SourceType == (int)OutboundType.Order && ob.SourceNo == o.OrderNo)
                               .Join(dbContext.Set<ShipViaEntity>(),ob=>ob.ShippingVia,i=>i.Id,(ob,i)=>new {OB=ob,OS=i})

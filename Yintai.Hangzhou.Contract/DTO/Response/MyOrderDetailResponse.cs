@@ -171,6 +171,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public decimal? ChargeGiftFee { get; set; }
         [DataMember(Name = "mailaddress")]
         public string MailAddress { get; set; }
+        [DataMember(Name = "canvoid")]
+        public bool CanVoid { get; set; }
 
     }
     [DataContract]
