@@ -32,7 +32,7 @@ namespace TestService
             RMAPost post=new RMAPost();
             post.CustomFee = 123123;
             post.StoreFee = 123;
-            post.ReturnProducts.Add(new KeyValuePair<int, int>(5,1 ));
+            post.ReturnProducts.Add(new KeyValuePair<int, int>(7,1 ));
             post.ReturnProducts.Add(new KeyValuePair<int, int>(6, 13));
             post.RealRMASumMoney = 123123;
 

@@ -98,6 +98,6 @@ namespace Intime.OPC.Domain.Dto
         /// 退货收银时间
         /// </summary>
         /// <value>The cash number.</value>
-        public string RmaCashDate { get; set; }
+        public DateTime? RmaCashDate { get; set; }
     }
 }

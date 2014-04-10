@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -6,9 +8,12 @@ namespace Intime.OPC.Repository.Support
 {
     public class RmaDetailRepository : BaseRepository<OPC_RMADetail>, IRmaDetailRepository
     {
-        public IList<OPC_RMADetail> GetByRmaNo(string rmaNo)
+        public IList<RmaDetail> GetByRmaNo(string rmaNo)
         {
-            return Select(t => t.RMANo == rmaNo);
+            using (var db = new YintaiHZhouContext())
+            {
+                return null;
+            }
         }
     }
 }

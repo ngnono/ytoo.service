@@ -23,14 +23,14 @@ namespace Intime.OPC.Service.Support
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository) _repository;
-            IList<OPC_RMA> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate);
-            return Mapper.Map<OPC_RMA, RMADto>(lst);
+            IList<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate);
+            return lst;
         }
 
         public IList<RmaDetail> GetDetails(string rmaNo)
         {
             var lst= _rmaDetailRepository.GetByRmaNo(rmaNo);
-            return Mapper.Map<OPC_RMADetail, RmaDetail>(lst);
+            return lst;
         }
 
         #endregion

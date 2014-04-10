@@ -326,7 +326,7 @@ namespace Intime.OPC.Service.Support
             rmaDetail.RMANo = rmaNo;
             rmaDetail.Amount = rmaDetail.Price*rmaDetail.BackCount;
             rmaDetail.RefundDate = DateTime.Now;
-
+            rmaDetail.OrderItemId = OrderDetailID;
             return rmaDetail;
         }
     }

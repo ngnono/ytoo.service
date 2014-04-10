@@ -22,5 +22,12 @@ namespace TestService
             var lst = Service.GetAll(dto);
            AssertList<RMADto>(lst);
         }
+        [TestMethod]
+        public void TestGetDetails_rmaNo()
+        {
+            var lst = Service.GetDetails("114201404086001");
+            AssertList<RmaDetail>(lst);
+        }
+       
     }
 }
