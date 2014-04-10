@@ -159,7 +159,6 @@ namespace Intime.OPC.Service.Support
 
             ISaleRMARepository rep = _repository as ISaleRMARepository;
 
-
             var lst = rep.GetAll(dto.OrderNo,dto.SaleOrderNo, "","", dto.StartDate, dto.EndDate,
                 null,null);
 

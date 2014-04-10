@@ -44,6 +44,6 @@ namespace Intime.OPC.Domain.Dto
         /// 客服同意时间
         /// </summary>
         /// <value>The service agree date.</value>
-        public DateTime ServiceAgreeDate { get; set; }
+        public DateTime? ServiceAgreeDate { get; set; }
     }
 }

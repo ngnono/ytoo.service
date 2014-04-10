@@ -64,7 +64,8 @@ namespace Intime.OPC.Repository.Support
                     o.ReceiptHead = t.Orders.InvoiceSubject;
                     o.SaleOrderNo = t.SaleRMA.SaleOrderNo;
                     o.StoreFee = t.SaleRMA.StoreFee;
-                    
+                    o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
+                  
                     lstSaleRma.Add(o);
                 }
                 return lstSaleRma;
