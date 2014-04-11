@@ -24,7 +24,7 @@ namespace com.intime.o2o.data.exchange.IT.Response
             var slices = this.Data.ParseDesc();
             if (slices.Length > 2)
             {
-                _balance = int.Parse(slices[1]);
+                _balance = decimal.Parse(slices[1])/100;
                 SetMessage(slices[0], slices[2]);
             }
             else if (slices.Length > 1)
