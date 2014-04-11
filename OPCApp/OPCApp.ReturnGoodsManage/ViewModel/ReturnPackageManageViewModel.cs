@@ -1,71 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.RMA;
 using OPCApp.Domain.Customer;
-using Microsoft.Practices.Prism.Mvvm;
-using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.ReturnGoodsManage.ViewModel
 {
-   [Export("ReturnPackageManageViewModel", typeof(ReturnPackageManageViewModel))]
+    [Export("ReturnPackageManageViewModel", typeof (ReturnPackageManageViewModel))]
     public class ReturnPackageManageViewModel : BindableBase
     {
-       public PackageReceiveDto PackageReceiveDto { get; set; }
-       private List<SaleRmaDto> _saleRmaList;
-       public List<SaleRmaDto> SaleRmaList
-       {
-           get { return _saleRmaList; }
-           set { SetProperty(ref _saleRmaList, value); }
-       }
+        private List<RMADto> _rmaDtos;
+        private List<SaleRmaDto> _saleRmaList;
+        private List<RmaDetail> rmaDetails;
 
-       public RMADto rmaDto;
+        public RMADto rmaDto;
 
-       public RMADto RmaDto
-       {
-           get { return rmaDto; }
-           set { SetProperty(ref rmaDto, value); }
-       }
-       private List<RMADto> _rmaDtos;
+        public ReturnPackageManageViewModel()
+        {
+            CommandSearch = new DelegateCommand(SearchRmaAndSaleRma);
+            CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaSaleDetailByRma);
+            PackageReceiveDto = new PackageReceiveDto();
+        }
 
-       public List<RMADto> RamList
-       {
-           get { return _rmaDtos; }
-           set { SetProperty(ref _rmaDtos, value); }
-       }
+        private PackageReceiveDto packageReceiveDto;
+        public PackageReceiveDto PackageReceiveDto
+        {
+            get { return packageReceiveDto; }
+            set { SetProperty(ref packageReceiveDto, value); }
+        }
 
-       private List<RmaDetail> rmaDetails;
+        public List<SaleRmaDto> SaleRmaList
+        {
+            get { return _saleRmaList; }
+            set { SetProperty(ref _saleRmaList, value); }
+        }
 
-       public List<RmaDetail> RmaDetailList
-       {
-           get { return rmaDetails; }
-           set { SetProperty(ref rmaDetails, value); }
-       }
-       public DelegateCommand CommandSearch { get; set; }
-       public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
+        public RMADto RmaDto
+        {
+            get { return rmaDto; }
+            set { SetProperty(ref rmaDto, value); }
+        }
 
-       public ReturnPackageManageViewModel()
-       {
-           CommandSearch = new DelegateCommand(SearchRmaAndSaleRma);
-           CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaSaleDetailByRma);
-           PackageReceiveDto = new PackageReceiveDto();
-       }
+        public List<RMADto> RamList
+        {
+            get { return _rmaDtos; }
+            set { SetProperty(ref _rmaDtos, value); }
+        }
 
-       public void GetRmaSaleDetailByRma()
-       {
-           if (rmaDto != null)
-           {
-               RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(rmaDto.RMANo).ToList();
-           }
-       }
+        public List<RmaDetail> RmaDetailList
+        {
+            get { return rmaDetails; }
+            set { SetProperty(ref rmaDetails, value); }
+        }
 
-       private void SearchRmaAndSaleRma()
-       {
-           RamList = AppEx.Container.GetInstance<IPackageService>().GetRma(PackageReceiveDto).ToList();
-           SaleRmaList = AppEx.Container.GetInstance<IPackageService>().GetSaleRma(PackageReceiveDto).ToList();
-       }
+        public DelegateCommand CommandSearch { get; set; }
+        public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
+
+        public void GetRmaSaleDetailByRma()
+        {
+            if (rmaDto != null)
+            {
+                RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(rmaDto.RMANo).ToList();
+            }
+        }
+
+        private void SearchRmaAndSaleRma()
+        {
+            RamList = AppEx.Container.GetInstance<IPackageService>().GetRma(PackageReceiveDto).ToList();
+            SaleRmaList = AppEx.Container.GetInstance<IPackageService>().GetSaleRma(PackageReceiveDto).ToList();
+        }
     }
 }
