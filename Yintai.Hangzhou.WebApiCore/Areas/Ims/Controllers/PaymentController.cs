@@ -210,16 +210,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 if (trade_status == 0)
                 {
                     var tradeNos = out_trade_no.Split('-');
-                    if (tradeNos.Length < 2)
+                    if (tradeNos.Length < 3)
                     {
                         Log.Error(string.Format("order paid, but trade_no:{0} not follow the correct format", out_trade_no));
                         return Content("fail");
                     }
                     var trackOrderSource = false;
-                    if (tradeNos.Length >= 3)
+                    if (tradeNos.Length >= 4)
                         trackOrderSource = true;
-                    var giftcardId = int.Parse(tradeNos[0]);
-                    var orderUserId = int.Parse(tradeNos[1]);
+                    var giftcardId = int.Parse(tradeNos[1]);
+                    var orderUserId = int.Parse(tradeNos[2]);
                     var giftCardEntity = Context.Set<IMS_GiftCardItemEntity>().Find(giftcardId);
                     if (null == giftCardEntity)
                     {
@@ -276,7 +276,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
                             if (trackOrderSource)
                             {
-                                int assocateId = int.Parse(tradeNos[2]);
+                                int assocateId = int.Parse(tradeNos[3]);
                                 var associatEntity = Context.Set<IMS_AssociateEntity>().Find(assocateId);
                                 if (associatEntity != null)
                                 {
