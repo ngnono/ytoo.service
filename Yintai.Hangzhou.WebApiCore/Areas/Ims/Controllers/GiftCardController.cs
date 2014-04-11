@@ -162,7 +162,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "该礼品卡已充值!");
             }
 
-            var orderItem = _itemRepo.Find(t => t.GiftCardId == giftCardOrder.GiftCardItemId);
+            var orderItem = _itemRepo.Find(t => t.Id == giftCardOrder.GiftCardItemId);
 
             if (orderItem == null)
             {

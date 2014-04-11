@@ -1037,6 +1037,7 @@
     <Content Include="Views\GiftCard\Create.cshtml" />
     <Content Include="Views\GiftCard\Details.cshtml" />
     <Content Include="Views\GiftCard\List.cshtml" />
+    <Content Include="Views\GiftCard\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\themes\webget\easyui\NewFolder1\" />
