@@ -25,5 +25,19 @@ namespace OPCApp.DataService.Impl.Trans
                 return false;
             }
         }
+
+
+        public IList<RMADto> GetRmaByRmaOder(string rmaNo)
+        {
+            try
+            {
+                var lst = RestClient.Get<RMADto>("rma/GetByRmaNo", string.Format("RmaNo={0}", rmaNo));
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                return new  List<RMADto>();
+            }
+        }
     }
 }

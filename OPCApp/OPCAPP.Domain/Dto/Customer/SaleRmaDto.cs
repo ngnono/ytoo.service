@@ -18,6 +18,7 @@ namespace OPCApp.Domain.Customer
         public decimal? OrderTransFee { get; set; }
         public double MustPayTotal { get; set; }
         public Nullable<decimal> RealRMASumMoney { get; set; }
+        public string RmaNo { get; set; }
         public string OrderNo { get; set; }
         public string TransMemo { get; set; }
         public DateTime BuyDate { get; set; }

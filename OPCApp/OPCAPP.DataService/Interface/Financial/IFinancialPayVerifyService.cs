@@ -13,6 +13,6 @@ namespace OPCApp.DataService.Interface.Financial
     {
         //退货付款确认  
         bool ReturnGoodsPayVerify(string rmaNo,decimal money);
-
+        IList<RMADto> GetRmaByRmaOder(string rmaNo);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 
 using Microsoft.Practices.Prism.Mvvm;
@@ -10,6 +11,8 @@ using OPCApp.Domain.Customer;
 using OPCApp.Infrastructure;
 using OPCApp.Domain.Customer;
 using OPCApp.Domain.Dto;
+using OPCApp.DataService.Interface.Trans;
+using OPCApp.DataService.Interface.Financial;
 
 namespace OPCApp.Financial.ViewModels
 {
@@ -53,14 +56,70 @@ namespace OPCApp.Financial.ViewModels
            set { SetProperty(ref rmaDetails, value); }
        }
        public DelegateCommand CommandSearch { get; set; }
+       public DelegateCommand CommandGetRmaByOrder { get; set; }
        public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
+       public DelegateCommand CommandCustomerReturnGoodsSave { get; set; }
+       public DelegateCommand CommandGetRmaDetailByRma { get; set; }
 
        public ReturnGoodsPaymentVerifyViewModel()
        {
            CommandSearch = new DelegateCommand(SearchRmaAndSaleRma);
            CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaSaleDetailByRma);
            ReturnGoodsPayDto = new ReturnGoodsPayDto();
+           CommandCustomerReturnGoodsSave = new DelegateCommand(CustomerReturnGoodsSave);
+           CommandGetRmaByOrder = new DelegateCommand(GetRmaByOrder);
+           CommandGetRmaDetailByRma = new DelegateCommand(GetRmaDetailByRma);
            InitCombo();
+       }
+
+       public void GetRmaDetailByRma()
+       {
+           if (RmaDto == null)
+           {
+               MessageBox.Show("请选择退货单", "提示");
+               return;
+           }
+           RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(RmaDto.RMANo).ToList();
+       }
+
+       public void GetRmaByOrder()
+       {
+            if (SaleRma == null)
+           {
+               MessageBox.Show("请选择收货单", "提示");
+               return;
+           }
+            RamList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByRmaOder(SaleRma.RmaNo).ToList();
+       }
+
+       public decimal rmaDecimal;
+       public decimal RmaDecimal
+       {
+           get { return rmaDecimal; }
+           set { SetProperty(ref rmaDecimal, value); }
+       }
+
+       private SaleRmaDto saleRma;
+       public SaleRmaDto SaleRma
+       {
+           get { return saleRma; }
+           set { SetProperty(ref saleRma, value); }
+       }
+
+       public void CustomerReturnGoodsSave()
+       {
+           if (RmaDecimal == 0)
+           {
+               MessageBox.Show("实退总金额必须大于0", "提示");
+               return;
+           }
+           if (SaleRma == null)
+           {
+               MessageBox.Show("请选择收货单", "提示");
+               return;
+           }
+          bool falg= AppEx.Container.GetInstance<IFinancialPayVerify>().ReturnGoodsPayVerify(SaleRma.RmaNo,rmaDecimal);
+          MessageBox.Show(falg ? "退货付款确认成功" : "退货付款确认失败", "提示");
        }
        public void InitCombo()
        {
