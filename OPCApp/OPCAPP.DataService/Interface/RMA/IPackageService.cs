@@ -12,6 +12,9 @@ namespace OPCApp.DataService.Interface.RMA
         //退货包裹管理的 退货包裹确认 查询收货单
         IList<SaleRmaDto> GetSaleRma(PackageReceiveDto packageReceiveDto);
         //退货包裹管理的 退货包裹确认 查询退货单
-        IList<OPC_RMA> GetRma(PackageReceiveDto packageReceiveDto);
+        IList<RMADto> GetRma(PackageReceiveDto packageReceiveDto);
+        //退货包裹管理的 退货包裹确认  查询退货单明细 通过退货单
+        IList<RmaDetail> GetRmaDetailByRma(string rmaNo);
+
     }
 }

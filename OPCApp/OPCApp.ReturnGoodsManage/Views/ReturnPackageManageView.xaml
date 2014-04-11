@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                 Height="AUTO" Width="AUTO" Background="LightGray">
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             Height="AUTO" Width="AUTO" Background="LightGray">
     <Grid Background="#FFE5E5E5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -45,7 +46,7 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="2">
             <Label Content="收货单" />
-            <DataGrid ItemsSource="{Binding SaleRmaDtos}" AutoGenerateColumns="False"
+            <DataGrid ItemsSource="{Binding SaleRmaList}" AutoGenerateColumns="False"
                         RenderTransformOrigin="0.5,0.5" >
                 <DataGrid.RenderTransform>
                     <TransformGroup>
@@ -69,9 +70,16 @@
         <GridSplitter Height="5" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Bottom" />
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="4">
             <Label Content="退货单" />
-            <DataGrid ItemsSource="{Binding expressCompanyGroup, Mode=TwoWay}" AutoGenerateColumns="False"
+            <DataGrid ItemsSource="{Binding RmaList, Mode=TwoWay}" AutoGenerateColumns="False"
                         RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2"
-                        SelectedIndex="{Binding selectedIndex, Mode=TwoWay}">
+                        SelectedItem="{Binding RmaDto}"
+                        >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding CommandDbClick}" />
+                    </i:EventTrigger>
+
+                </i:Interaction.Triggers>
                 <DataGrid.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -121,14 +129,14 @@
                     </TransformGroup>
                 </DataGrid.RenderTransform>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="款号" Binding="{Binding ExpressType}" />
-                    <DataGridTextColumn Header="规格" Binding="{Binding ExpressName}" />
-                    <DataGridTextColumn Header="色码" Binding="{Binding Address}" />
-                    <DataGridTextColumn Header="退货价格" Binding="{Binding ContractName}" />
-                    <DataGridTextColumn Header="退货数量" Binding="{Binding ContractPhone}" />
-                    <DataGridTextColumn Header="品牌" Binding="{Binding IsEnabled}" />
-                    <DataGridTextColumn Header="商品编码" Binding="{Binding PrintTemplate}" />
-                    <DataGridTextColumn Header="专柜码" Binding="{Binding ContractNumber}" />
+                    <DataGridTextColumn Header="款号" Binding="{Binding StoreItemNo}" />
+                    <DataGridTextColumn Header="规格" Binding="{Binding SizeValueName}" />
+                    <DataGridTextColumn Header="色码" Binding="{Binding ColorValueName}" />
+                    <DataGridTextColumn Header="退货价格" Binding="{Binding Price}" />
+                    <DataGridTextColumn Header="退货数量" Binding="{Binding BackCount}" />
+                    <DataGridTextColumn Header="品牌" Binding="{Binding BrandName}" />
+                    <DataGridTextColumn Header="商品编码" Binding="{Binding ProdSaleCode}" />
+                    <DataGridTextColumn Header="专柜码" Binding="{Binding SectionCode}" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>

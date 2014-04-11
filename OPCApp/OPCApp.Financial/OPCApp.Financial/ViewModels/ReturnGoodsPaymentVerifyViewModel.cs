@@ -1,18 +1,19 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using Microsoft.Practices.Prism.Commands;
+
+using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.RMA;
 using OPCApp.Domain.Customer;
-using Microsoft.Practices.Prism.Mvvm;
-using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
-namespace OPCApp.ReturnGoodsManage.ViewModel
+
+namespace OPCApp.Financial.ViewModels
 {
-   [Export("ReturnPackageManageViewModel", typeof(ReturnPackageManageViewModel))]
-    public class ReturnPackageManageViewModel : BindableBase
+   [Export("ReturnPackageManageViewModel", typeof(ReturnGoodsPaymentVerifyViewModel))]
+    public class ReturnGoodsPaymentVerifyViewModel : BindableBase
     {
        public PackageReceiveDto PackageReceiveDto { get; set; }
        private List<SaleRmaDto> _saleRmaList;
@@ -47,7 +48,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
        public DelegateCommand CommandSearch { get; set; }
        public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
 
-       public ReturnPackageManageViewModel()
+       public ReturnGoodsPaymentVerifyViewModel()
        {
            CommandSearch = new DelegateCommand(SearchRmaAndSaleRma);
            CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaSaleDetailByRma);
