@@ -31,5 +31,11 @@ namespace Intime.OPC.Domain.Models
         public Nullable<decimal> RealRMASumMoney { get; set; }
 
         public DateTime? ServiceAgreeTime { get; set; }
+
+        /// <summary>
+        /// Ó¦ÍË×Ü½ð¶î
+        /// </summary>
+        /// <value>The recoverable sum money.</value>
+        public Decimal? RecoverableSumMoney { get; set; }
     }
 }
