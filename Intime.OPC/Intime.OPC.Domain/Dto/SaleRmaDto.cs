@@ -61,5 +61,7 @@ namespace Intime.OPC.Domain.Dto
         /// 赔偿 暂定[应退总金额]
         /// </summary>
         public decimal? CompensationFee { get; set; }
+
+        public string RmaNo { get; set; }
     }
 }
