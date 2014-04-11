@@ -135,10 +135,6 @@ namespace OPCApp.Financial.ViewModels
            }
        }
 
-       private void SearchRmaAndSaleRma()
-       {
-           RamList = AppEx.Container.GetInstance<IPackageService>().GetRma(PackageReceiveDto).ToList();
-           SaleRmaList = AppEx.Container.GetInstance<IPackageService>().GetSaleRma(PackageReceiveDto).ToList();
-       }
+     
     }
 }

@@ -27,17 +27,12 @@ namespace OPCApp.Customer.ViewModels
             CommandReturnGoodsSearch = new DelegateCommand(ReturnGoodsSearch);
             CommandGetDown = new DelegateCommand(GetOrderDetailByOrderNo);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
-            CommandComboSelect = new DelegateCommand(ComboSelect);
             ReturnGoodsGet = new ReturnGoodsGet();
             ClearOrInitData();
             InitCombo();
             RmaPost = new RMAPost();
         }
 
-        public void ComboSelect()
-        {
-            ReturnCountList = new List<int>() {1,2,4};
-        }
 
         public IList<KeyValue> BrandList { get; set; }
 
@@ -63,7 +58,11 @@ namespace OPCApp.Customer.ViewModels
         public DelegateCommand CommandReturnGoodsSearch { get; set; }
         public DelegateCommand CommandCustomerReturnGoodsSave { get; set; }
         public DelegateCommand CommandGetDown { get; set; }
-        public RMAPost RmaPost { get; set; }
+        private RMAPost rmaPost;
+        public RMAPost RmaPost {
+            get { return rmaPost; }
+            set { SetProperty(ref rmaPost, value); }
+        }
 
         public List<OPC_SaleRMA> SaleRmaList
         {
@@ -150,6 +149,13 @@ namespace OPCApp.Customer.ViewModels
             RmaPost.ReturnProducts = list;
             bool bFlag = AppEx.Container.GetInstance<ICustomerReturnGoods>().CustomerReturnGoodsSave(RmaPost);
             MessageBox.Show(bFlag ? "客服退货成功" : "客服退货失败", "提示");
+            if (bFlag)
+            {
+                ClearOrInitData();
+                RmaPost = new RMAPost();
+                ReturnGoodsSearch();
+
+            }
         }
 
     }
