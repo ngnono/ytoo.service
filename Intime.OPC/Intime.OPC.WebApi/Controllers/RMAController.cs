@@ -80,8 +80,35 @@ namespace Intime.OPC.WebApi.Controllers
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _rmaService.GetDetails(rmaNo) ; }, "查询订单信息失败");
         }
+        #region 退货付款确认
+        
+        
 
+        /// <summary>
+        ///  查询退货单信息 退货付款确认
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetRmaByReturnGoodPay([FromBody]ReturnGoodsPay request)
+        {
+            var userId = GetCurrentUserID();
+            return DoFunction(() => { return _saleRmaService.GetByReturnGoodPay(request); }, "查询退货单信息失败");
+        }
 
+        /// <summary>
+        ///  退货付款确认
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult CompensateVerify([FromBody]CompensateVerifyRequest request)
+        {
+            var userId = GetCurrentUserID();
+            return DoAction(() => {  _saleRmaService.CompensateVerify(request.RmaNo, request.Money); }, "查询退货单信息失败");
+        }
+
+        #endregion
         #region 备注
 
         /// <summary>
@@ -119,5 +146,11 @@ namespace Intime.OPC.WebApi.Controllers
 
 
         #endregion
+    }
+
+    public class CompensateVerifyRequest
+    {
+        public string RmaNo { get; set; }
+        public decimal Money { get; set; }
     }
 }

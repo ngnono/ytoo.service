@@ -32,5 +32,14 @@ namespace Intime.OPC.Service
         /// </summary>
         /// <param name="rmaNo">The rma no.</param>
         void ShippingReceiveGoods(string rmaNo);
+
+        IList<SaleRmaDto> GetByReturnGoodPay(ReturnGoodsPay request);
+
+        /// <summary>
+        /// 退货付款确认
+        /// </summary>
+        /// <param name="ramNo">The ram no.</param>
+        /// <param name="money">The money.</param>
+        void CompensateVerify(string ramNo, decimal money);
     }
 }

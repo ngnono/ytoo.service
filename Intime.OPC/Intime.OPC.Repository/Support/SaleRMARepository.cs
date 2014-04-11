@@ -65,7 +65,10 @@ namespace Intime.OPC.Repository.Support
                     o.SaleOrderNo = t.SaleRMA.SaleOrderNo;
                     o.StoreFee = t.SaleRMA.StoreFee;
                     o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
-                  
+                    o.OrderSource = t.Orders.OrderSource;
+                    o.OrderTransFee = t.Orders.ShippingFee;
+                    o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
+                    o.RecoverableSumMoney = t.SaleRMA.RecoverableSumMoney;
                     lstSaleRma.Add(o);
                 }
                 return lstSaleRma;
