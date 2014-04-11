@@ -23,7 +23,7 @@ namespace Intime.OPC.Repository.Support
             //}
         }
 
-        public IList<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime)
+        public IList<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus)
         {
             using (var db=new YintaiHZhouContext())
             {
@@ -36,7 +36,7 @@ namespace Intime.OPC.Repository.Support
                 {
                     query = query.Where(t => t.SaleOrderNo.Contains(saleOrderNo));
                 }
-               var lst= query.Join(db.OPC_SaleRMA, o => o.RMANo, t => t.RMANo, (t, o) =>new { Rma = t, SaleRma = o })
+               var lst= query.Join(db.OPC_SaleRMA.Where(e=>e.Status==rmaStatus.AsID() && e.RMAStatus==returnGoodsStatus.GetDescription()), o => o.RMANo, t => t.RMANo, (t, o) =>new { Rma = t, SaleRma = o })
                 .Join(db.Stores, t => t.Rma.StoreId, o => o.Id, (t, o) => new { Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma })
                 .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo, (t, o) => new { Rma = t.Rma,StoreName = t.StoreName, SaleRma=t.SaleRma,Sale=o })
                 .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo, (t, o) => new { Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = t.Sale,payTyp=o.PaymentMethodName }).ToList();

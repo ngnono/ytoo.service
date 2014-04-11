@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Core;
@@ -34,7 +35,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <summary>
         /// Gets the order by return goods information.
         /// </summary>
-        /// <param name="request">The request.</param>
+        /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
         //[HttpGet]
         //public IHttpActionResult GetByReturnGoodsInfo([FromBody] ReturnGoodsInfoGet request)
@@ -44,11 +45,28 @@ namespace Intime.OPC.WebApi.Controllers
         //}
 
 
+        /// <summary>
+        ///  根据订单号获得退货单信息  客服退货查询
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
         [HttpGet]
         public IHttpActionResult GetByOrderNo(string orderNo)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _rmaService.GetByOrderNo(orderNo); }, "查询订单信息失败");
+            return DoFunction(() => { return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess); }, "查询订单信息失败");
+        }
+
+        /// <summary>
+        ///  根据订单号获得退货单信息  包裹签收
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult GetRmaByOrderNo(string orderNo)
+        {
+            var userId = GetCurrentUserID();
+            return DoFunction(() => { return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess); }, "查询订单信息失败");
         }
 
         /// <summary>

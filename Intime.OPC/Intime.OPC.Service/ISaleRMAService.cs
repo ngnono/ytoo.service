@@ -26,5 +26,11 @@ namespace Intime.OPC.Service
         /// </summary>
         /// <param name="rmaNo">The rma no.</param>
         void AgreeReturnGoods(string rmaNo);
+
+        /// <summary>
+        /// 物流收货确认
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        void ShippingReceiveGoods(string rmaNo);
     }
 }

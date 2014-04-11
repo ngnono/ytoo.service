@@ -73,11 +73,11 @@ namespace Intime.OPC.Repository.Support
         }
 
         public IList<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, DateTime startTime, DateTime endTime,
-            int? rmaStatus, int? storeId)
+            int? rmaStatus, int? storeId, string returnGoodsStatus)
         {
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus==returnGoodsStatus);
                 var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -94,7 +94,7 @@ namespace Intime.OPC.Repository.Support
                 {
                     query = query.Where(t => t.RMANo.Contains(rmaNo));
                 }
-
+               
 
                 if (!string.IsNullOrWhiteSpace(payType))
                 {

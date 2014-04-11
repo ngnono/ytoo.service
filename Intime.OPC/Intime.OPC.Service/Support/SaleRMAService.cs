@@ -128,7 +128,7 @@ namespace Intime.OPC.Service.Support
         {
             ISaleRMARepository rep = _repository as ISaleRMARepository;
            return   rep.GetAll(request.OrderNo, request.SaleOrderNo,request.PayType, request.RmaNo,
-                request.StartDate, request.EndDate, request.RmaStatus, request.StoreID);
+                request.StartDate, request.EndDate, request.RmaStatus, request.StoreID,"");
         }
 
         public IList<SaleRmaDto> GetByReturnGoods(ReturnGoodsGet request)
@@ -161,7 +161,7 @@ namespace Intime.OPC.Service.Support
             ISaleRMARepository rep = _repository as ISaleRMARepository;
 
             var lst = rep.GetAll(dto.OrderNo,dto.SaleOrderNo, "","", dto.StartDate, dto.EndDate,
-                null,null);
+                EnumRMAStatus.NoDelivery.AsID(),null,EnumReturnGoodsStatus.ServiceApprove.GetDescription());
 
             return lst;
         }
@@ -185,11 +185,37 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("快递单状态错误，无法退货,退货单号:" + rmaNo);
             }
+            if (saleRma.Status>EnumRMAStatus.NoDelivery.AsID())
+            {
+                throw new Exception("快递单已经确认过，退货单号:" + rmaNo);
+            }
             saleRma.RMAStatus = EnumReturnGoodsStatus.ServiceApprove.GetDescription();
             rep.Update(saleRma);
         }
 
-
+        public void ShippingReceiveGoods(string rmaNo)
+        {
+            var rep = (ISaleRMARepository)_repository;
+            var saleRma = rep.GetByRmaNo(rmaNo);
+            if (saleRma == null)
+            {
+                throw new Exception("快递单不存在,退货单号:" + rmaNo);
+            }
+            if (saleRma.RMAStatus.IsNull())
+            {
+                throw new Exception("客服未确认,退货单号:" + rmaNo);
+            }
+            if (saleRma.Status>=EnumRMAStatus.ShipReceive.AsID())
+            {
+                throw new Exception("该退货单已经确认,退货单号:" + rmaNo);
+            }
+            if (saleRma.Status <EnumRMAStatus.ShipNoReceive.AsID())
+            {
+                throw new Exception("正在等待财务审核，无法退货,退货单号:" + rmaNo);
+            }
+            saleRma.Status = EnumRMAStatus.ShipReceive.AsID();
+            rep.Update(saleRma);
+        }
 
         private void Save(IList<RmaConfig> configs)
         {
@@ -295,6 +321,10 @@ namespace Intime.OPC.Service.Support
             rma.RMANo = RmaNo;
             rma.Reason = Reason;
             rma.BackDate = DateTime.Now;
+            if (RefundAmount==0)
+            {
+                rma.Status = EnumRMAStatus.ShipNoReceive.AsID();
+            }
             return rma;
         }
 

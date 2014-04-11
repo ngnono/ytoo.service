@@ -50,5 +50,26 @@ namespace Intime.OPC.WebApi.Controllers
                
             }, "查询订单失败");
         }
+
+        /// <summary>
+        /// 物流确认收货
+        /// </summary>
+        /// <param name="rmaNos">The rma nos.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult ShippingReceiveGoods([FromBody]IEnumerable<string> rmaNos)
+        {
+            return DoAction(() =>
+            {
+                var userId = GetCurrentUserID();
+                foreach (var rmaNo in rmaNos)
+                {
+                    _saleRmaService.ShippingReceiveGoods(rmaNo);
+                }
+
+            }, "查询订单失败");
+        }
+
+
     }
 }
