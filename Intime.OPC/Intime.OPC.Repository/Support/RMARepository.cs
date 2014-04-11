@@ -54,6 +54,8 @@ namespace Intime.OPC.Repository.Support
                    o.CreatedDate = t.Rma.CreatedDate;
                    o.RMAAmount = t.Rma.RMAAmount;
                    o.RMANo = t.Rma.RMANo;
+                   o.BackDate = t.SaleRma.BackDate;
+
                    //o.RMAReason = t.Rma.re;
                    o.RMAType = t.Rma.RMAType;
                    o.RefundAmount = t.Rma.RefundAmount;
