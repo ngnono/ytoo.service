@@ -11,6 +11,7 @@ namespace OPCApp.Financial.Views
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class ReturnGoodsPaymentVerify:UserControl
     {
+
         public ReturnGoodsPaymentVerify()
         {
             InitializeComponent();

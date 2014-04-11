@@ -8,21 +8,28 @@ using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.RMA;
 using OPCApp.Domain.Customer;
 using OPCApp.Infrastructure;
-
+using OPCApp.Domain.Customer;
+using OPCApp.Domain.Dto;
 
 namespace OPCApp.Financial.ViewModels
 {
    [Export("ReturnPackageManageViewModel", typeof(ReturnGoodsPaymentVerifyViewModel))]
     public class ReturnGoodsPaymentVerifyViewModel : BindableBase
     {
-       public PackageReceiveDto PackageReceiveDto { get; set; }
+       private OPCApp.Domain.Customer.ReturnGoodsPayDto returnGoodsDto;
+       public ReturnGoodsPayDto ReturnGoodsPayDto
+        {
+            get { return returnGoodsDto; }
+            set { SetProperty(ref returnGoodsDto, value); }
+        }
        private List<SaleRmaDto> _saleRmaList;
        public List<SaleRmaDto> SaleRmaList
        {
            get { return _saleRmaList; }
            set { SetProperty(ref _saleRmaList, value); }
        }
-
+       public IList<KeyValue> StoreList { get; set; }
+       public IList<KeyValue> PaymentTypeList { get; set; }
        public RMADto rmaDto;
 
        public RMADto RmaDto
@@ -52,9 +59,15 @@ namespace OPCApp.Financial.ViewModels
        {
            CommandSearch = new DelegateCommand(SearchRmaAndSaleRma);
            CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaSaleDetailByRma);
-           PackageReceiveDto = new PackageReceiveDto();
+           ReturnGoodsPayDto = new ReturnGoodsPayDto();
+           InitCombo();
        }
-
+       public void InitCombo()
+       {
+           // OderStatusList=new 
+           StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
+           PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
+       }
        public void GetRmaSaleDetailByRma()
        {
            if (rmaDto != null)

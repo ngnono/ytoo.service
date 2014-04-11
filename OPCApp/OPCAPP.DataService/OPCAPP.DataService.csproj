@@ -60,6 +60,7 @@
     <Compile Include="Impl\Auth\AuthenticateService.cs" />
     <Compile Include="Impl\Auth\MenuDataService.cs" />
     <Compile Include="Impl\Auth\RoleDataService.cs" />
+    <Compile Include="Impl\Financial\FinancialPayVerifyService.cs" />
     <Compile Include="Impl\Info\CommonInfo.cs" />
     <Compile Include="Impl\Info\StoreService.cs" />
     <Compile Include="Impl\LoginManager.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Interface\Auth\IRoleDataService.cs" />
     <Compile Include="Interface\ISaleDetail.cs" />
     <Compile Include="Interface\ISaleService.cs" />
+    <Compile Include="Interface\Financial\IFinancialPayVerifyService.cs" />
     <Compile Include="Interface\IService\IRemark.cs" />
     <Compile Include="Interface\RMA\IPackageService.cs" />
     <Compile Include="Interface\RMA\IRMACashInService.cs" />
