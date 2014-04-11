@@ -24,7 +24,7 @@ namespace com.intime.o2o.data.exchange.IT
         public DefaultApiClient()
         {
             var baseAddressStr = ConfigurationManager.AppSettings["intime.o2o.api.url"] ?? string.Empty;
-            if (_baseAddress == null || string.IsNullOrWhiteSpace(baseAddressStr))
+            if (baseAddressStr == null || string.IsNullOrWhiteSpace(baseAddressStr))
             {
                 throw new ConfigurationErrorsException("not found [intime.o2o.api.url]");
             }
@@ -73,7 +73,7 @@ namespace com.intime.o2o.data.exchange.IT
 
                 if (result.IsSuccessStatusCode)
                 {
-                    string s = result.Content.ReadAsStringAsync().Result;
+                    var rst = result.Content.ReadAsStringAsync().Result;
                     return result.Content.ReadAsAsync<TResponse>().Result;
                 }
             }
