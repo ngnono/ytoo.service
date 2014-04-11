@@ -21,6 +21,6 @@ namespace OPCApp.Customer.Views
         {
             set { DataContext = value; }
             get { return DataContext as CustomerReturnSearchViewModel; }
-        }
+        }     
     }
 }
