@@ -23,5 +23,10 @@ namespace Intime.OPC.Domain.Models
         public int UpdatedUser { get; set; }
 
         public int OrderItemId { get; set; }
+
+        /// <summary>
+        /// зЈЙёТы
+        /// </summary>
+        public string SectionCode { get; set; }
     }
 }

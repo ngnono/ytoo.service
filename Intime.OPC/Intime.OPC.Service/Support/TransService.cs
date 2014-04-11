@@ -90,6 +90,7 @@ namespace Intime.OPC.Service.Support
 
         public bool CreateShippingSale(int userId, ShippingSaleCreateDto shippingSaleDto)
         {
+            
             var dt = DateTime.Now;
             var order = _orderRepository.GetOrderByOrderNo(shippingSaleDto.OrderNo);
             foreach (var saleID in shippingSaleDto.SaleOrderIDs)

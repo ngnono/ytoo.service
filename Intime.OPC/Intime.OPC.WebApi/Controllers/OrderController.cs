@@ -18,6 +18,7 @@ using System.Web.Http;
 using System.Web.UI.WebControls;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service;
@@ -142,6 +143,13 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return Ok(_orderService.GetOrderByOderNoTime(orderNo,starTime,endTime));
             
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetByReturnGoodsInfo([FromBody] ReturnGoodsInfoGet request)
+        {
+            var userId = GetCurrentUserID();
+            return DoFunction(() => { return _orderService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");
         }
        
 

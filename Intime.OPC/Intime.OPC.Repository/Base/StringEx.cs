@@ -12,5 +12,10 @@ namespace Intime.OPC.Repository.Base
         {
             return !string.IsNullOrWhiteSpace(s);
         }
+
+        public static bool IsNull(this string s)
+        {
+            return string.IsNullOrWhiteSpace(s);
+        }
     }
 }
