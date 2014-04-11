@@ -249,6 +249,13 @@ namespace Intime.OPC.Service.Support
             rep.Update(saleRma);
         }
 
+        public IList<SaleRmaDto> GetByRmaNo(string rmaNo)
+        {
+            ISaleRMARepository rep = _repository as ISaleRMARepository;
+            return rep.GetAll("", "", "", rmaNo, new DateTime(2000,1,1),DateTime.Now.Date.AddDays(1),
+                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerify.GetDescription());
+        }
+
         private void Save(IList<RmaConfig> configs)
         {
             foreach (RmaConfig config in configs)

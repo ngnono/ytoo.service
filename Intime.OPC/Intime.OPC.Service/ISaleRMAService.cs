@@ -41,5 +41,7 @@ namespace Intime.OPC.Service
         /// <param name="ramNo">The ram no.</param>
         /// <param name="money">The money.</param>
         void CompensateVerify(string ramNo, decimal money);
+
+        IList<SaleRmaDto> GetByRmaNo(string rmaNo);
     }
 }

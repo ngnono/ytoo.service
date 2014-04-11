@@ -97,6 +97,19 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
+        ///  查询退货单 退货付款确认
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetByRmaNo(string rmaNo)
+        {
+            var userId = GetCurrentUserID();
+            return DoFunction(() => { return _saleRmaService.GetByRmaNo(rmaNo); }, "查询退货单信息失败");
+        }
+
+
+        /// <summary>
         ///  退货付款确认
         /// </summary>
         /// <param name="request">The request.</param>
