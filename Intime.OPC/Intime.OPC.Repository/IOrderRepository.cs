@@ -33,5 +33,7 @@ namespace Intime.OPC.Repository
 
         IList<Order> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime);
         IList<Order> GetOrderByShippingNo(string shippingNo);
+
+        IList<Order> GetByReturnGoodsInfo(Domain.Dto.Custom.ReturnGoodsInfoGet request);
     }
 }
