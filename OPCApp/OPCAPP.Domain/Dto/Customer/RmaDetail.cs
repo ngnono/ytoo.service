@@ -51,7 +51,7 @@ namespace OPCApp.Domain.Customer
         /// <summary>
         /// 专柜码
         /// </summary>
-        public string SecitonCode { get; set; }
+        public string SectionCode { get; set; }
 
         /// <summary>
         ///     商品编码
