@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using com.intime.o2o.data.exchange.IT;
 using com.intime.o2o.data.exchange.IT.Request;
 using System.Text.RegularExpressions;
@@ -9,13 +10,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
     public class SMSController:RestfulController
     {
+        private string IT_SMS_BASE_URL = ConfigurationManager.AppSettings["IT_SMS_BASE_URL"];
+        private string IT_SMS_SECRET_KEY = ConfigurationManager.AppSettings["IT_SMS_SECRET_KEY"];
+        private string IT_SMS_FROM = ConfigurationManager.AppSettings["IT_SMS_FROM"];
         private IApiClient _client ;
-        public SMSController(IApiClient client)
+        public SMSController()
         {
-            this._client = client;
+            this._client = new DefaultApiClient(IT_SMS_BASE_URL,IT_SMS_SECRET_KEY,IT_SMS_FROM);
         }
 
-        static readonly Regex regex = new Regex(@"^(13[0-9]|15[0-9]|18[0-9])\d{8}$",RegexOptions.Compiled);
+        //static readonly Regex regex = new Regex(@"^(13[0-9]|15[0-9]|18[0-9])\d{8}$",RegexOptions.Compiled);
         [RestfulAuthorize]
         public ActionResult Send(string phone, string text)
         {
@@ -23,10 +27,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return this.RenderError(r => r.Message = "text is empty");
             }
-            if (!regex.IsMatch(phone))
-            {
-                return this.RenderError(r => r.Message = "Incorrect phone number");
-            }
+            //if (!regex.IsMatch(phone))
+            //{
+            //    return this.RenderError(r => r.Message = "Incorrect phone number");
+            //}
 
             try
             {
