@@ -50,6 +50,7 @@
     <Compile Include="Dto\Customer\OPC_SaleRMA.cs" />
     <Compile Include="Dto\Customer\PackageReceiveDto.cs" />
     <Compile Include="Dto\Customer\ReturnGoodsGet.cs" />
+    <Compile Include="Dto\Customer\RmaDetail.cs" />
     <Compile Include="Dto\Customer\RMADto.cs" />
     <Compile Include="Dto\Customer\RMAPost.cs" />
     <Compile Include="Dto\Customer\SaleRmaDto.cs" />

@@ -27,16 +27,30 @@ namespace OPCApp.DataService.Impl.Trans
         }
 
         //退货包裹管理的 退货包裹确认 查询退货单
-        public IList<OPC_RMA> GetRma(PackageReceiveDto packageReceiveDto)
+        public IList<RMADto> GetRma(PackageReceiveDto packageReceiveDto)
         {
             try
             {
-                IList<OPC_RMA> lst = RestClient.Get<OPC_RMA>("trans/GetRmaByPack", packageReceiveDto.ToString());
+                IList<RMADto> lst = RestClient.Get<RMADto>("trans/GetRmaByPack", packageReceiveDto.ToString());
                 return lst;
             }
             catch (Exception ex)
             {
-                return new List<OPC_RMA>();
+                return new List<RMADto>();
+            }
+        }
+
+
+        public IList<RmaDetail> GetRmaDetailByRma(string rmaNo)
+        {
+            try
+            {
+                IList<RmaDetail> lst = RestClient.Get<RmaDetail>("rma/GetRmaDetailByRmaNo", string.Format("rmaNo={0}", rmaNo));
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                return new List<RmaDetail>();
             }
         }
     }

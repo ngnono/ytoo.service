@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Intime.OPC.Domain.Dto
+namespace OPCApp.Domain.Customer
 {
     public class RMADto
     {
