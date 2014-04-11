@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Configuration;
+using System.Runtime.CompilerServices;
 using com.intime.fashion.common.Extension;
 using com.intime.fashion.common.IT;
 using System;
@@ -21,7 +22,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
     public class GiftCardController : RestfulController
     {
-        private static string GIFTCARD_STORE_ID = "1000000";
+        private static string GIFTCARD_STORE_ID = ConfigurationManager.AppSettings["GIFTCARD_STORE_ID"];
         private ICustomerRepository _customerRepo;
         private IResourceRepository _resourceRepo;
         private IEFRepository<OrderTransactionEntity> _orderTranRepo;
@@ -140,12 +141,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult Create(string phone, string pwd, string charge_no, string identity_no, int authuid)
         {
-            //var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone && x.UserId == authuid);
-            //if (cardAccount != null)
-            //{
-            //    return this.RenderError(r => r.Message = "用户未绑定手机，请先绑定手机!");
-            //}
-
             if (IsPhoneBinded(phone))
             {
                 return this.RenderError(r => r.Message = "账号已创建，不能重复创建，您可以直接充值");
@@ -162,7 +157,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "该礼品卡已充值!");
             }
 
-            var orderItem = _itemRepo.Find(t => t.GiftCardId == giftCardOrder.GiftCardItemId);
+            var orderItem = _itemRepo.Find(giftCardOrder.GiftCardItemId);
 
             if (orderItem == null)
             {
@@ -183,12 +178,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     Data = new RechargeEntity()
                     {
                         Phone = phone,
-                        Amount = int.Parse((orderTran.Amount * 100).ToString()),
-                        Discount = int.Parse(((giftCardOrder.Amount - orderTran.Amount) * 100).ToString()),
+                        Amount = Convert.ToInt32(orderItem.UnitPrice * 100),
+                        Discount = Convert.ToInt32((orderItem.UnitPrice - orderTran.Amount) * 100),
                         IdCard = identity_no,
                         Password = pwd,
                         StoreCode = GIFTCARD_STORE_ID,
-                        TotalPay = int.Parse(orderTran.Amount.ToString()),
+                        TotalPay = Convert.ToInt32(orderTran.Amount*100),
                         TransCode = orderTran.TransNo
                     }
                 };
@@ -275,12 +270,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     Data = new RechargeEntity()
                     {
                         Phone = cardUser.GiftCardAccount,
-                        Amount = int.Parse((orderTran.Amount * 100).ToString()),
-                        Discount = int.Parse(((order.Amount - orderTran.Amount) * 100).ToString()),
-                        //IdCard = ,
-                        //Password = "wangxiaohua",
+                        Amount = Convert.ToInt32(orderItem.UnitPrice * 100),
+                        Discount = Convert.ToInt32((orderItem.UnitPrice - orderTran.Amount) * 100),
                         StoreCode = GIFTCARD_STORE_ID,
-                        TotalPay = int.Parse(orderTran.Amount.ToString()),
+                        TotalPay = Convert.ToInt32(orderTran.Amount * 100),
                         TransCode = orderTran.TransNo
                     }
                 };
