@@ -176,7 +176,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Latest_GiftCard(int giftcardid, int timestamp, int authuid)
         {
             var benchTime = new DateTime(1970, 1, 1).AddSeconds(timestamp);
-            var order = _orderRepo.Find(x => x.GiftCardItemId == giftcardid && x.CreateDate >= benchTime && x.CreateUser == authuid);
+            var order = _orderRepo.Get(x => x.GiftCardItemId == giftcardid && x.CreateDate >= benchTime && x.CreateUser == authuid).OrderByDescending(x=>x.CreateDate).FirstOrDefault();
             if (order == null)
             {
                 return this.RenderError(r => r.Message = "无购买记录");

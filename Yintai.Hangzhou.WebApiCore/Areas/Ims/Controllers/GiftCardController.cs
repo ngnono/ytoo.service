@@ -353,7 +353,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Transfer_Detail(string charge_no, int authuid)
         {
             var trans =
-                _transRepo.Get(x => x.OrderNo == charge_no && x.ToUserId == authuid)
+                _transRepo.Get(x => x.OrderNo == charge_no )
                     .OrderByDescending(t => t.CreateDate)
                     .FirstOrDefault();
             if (trans == null)
@@ -366,6 +366,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return this.RenderError(r => r.Message = "无效的用户!");
             }
+
 
             var order = _orderRepo.Find(x => x.No == charge_no);
             if (order == null)
@@ -429,7 +430,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Send(string charge_no, string comment, string phone, int authuid)
         {
             var order = _orderRepo.Find(x => x.No == charge_no);
-            if (order.Status != (int)GiftCardOrderStatus.Create)
+            if (order.Status == (int)GiftCardOrderStatus.Recharge)
             {
                 return this.RenderError(r => r.Message = "该礼品卡已经充值了，不能赠送");
             }
@@ -607,11 +608,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     purchase_date = o.order.CreateDate,
-                    charge_date = o.recharge != null ? o.recharge.CreateDate.ToString("yyyy-MM-dd hh:mm:ss") : "null",
+                    charge_date = o.recharge != null ? o.recharge.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null",
                     status_i = SetStatusForBuyer(o.order, o.ransfer, o.recharge),
                     verify_phone = o.recharge != null ? o.recharge.ChargePhone : "null",
-                    send_date = o.ransfer != null ? o.ransfer.CreateDate.ToString("yyyy-MM-dd hh:mm:ss") : "null",
-                    //receive_date = o.ransfer != null && o.ransfer.IsActive == 1 ? o.ransfer.CreateDate.ToString("yyyy-MM-dd hh:mm:ss") : "null"
+                    send_date = o.ransfer != null ? o.ransfer.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null",
+                    receive_date = o.ransfer != null && o.ransfer.IsActive == 1 ? o.ransfer.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null"
                 });
             }
             return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };
@@ -700,6 +701,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         /// 创建
         /// </summary>
         Create = 0,
+
+        /// <summary>
+        /// 已支付
+        /// </summary>
+        Paid = 1,
 
         /// <summary>
         /// 充值
