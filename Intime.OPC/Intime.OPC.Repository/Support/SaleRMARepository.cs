@@ -137,5 +137,10 @@ namespace Intime.OPC.Repository.Support
                 return lstSaleRma;
             }
         }
+
+        public OPC_SaleRMA GetByRmaNo(string rmaNo)
+        {
+            return  Select(t => t.RMANo == rmaNo).FirstOrDefault();
+        }
     }
 }

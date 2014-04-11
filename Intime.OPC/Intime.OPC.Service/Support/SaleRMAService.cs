@@ -7,6 +7,7 @@ using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
+using Intime.OPC.Repository.Base;
 
 namespace Intime.OPC.Service.Support
 {
@@ -166,6 +167,29 @@ namespace Intime.OPC.Service.Support
         }
 
         #endregion
+
+
+        /// <summary>
+        /// 客服同意退货
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        public void AgreeReturnGoods(string rmaNo)
+        {
+            var rep = (ISaleRMARepository)_repository;
+            var saleRma = rep.GetByRmaNo(rmaNo);
+            if (saleRma==null)
+            {
+                throw new Exception("快递单不存在,退货单号:"+rmaNo);
+            }
+            if (saleRma.RMAStatus.IsNotNull())
+            {
+                throw new Exception("快递单状态错误，无法退货,退货单号:" + rmaNo);
+            }
+            saleRma.RMAStatus = EnumReturnGoodsStatus.ServiceApprove.GetDescription();
+            rep.Update(saleRma);
+        }
+
+
 
         private void Save(IList<RmaConfig> configs)
         {

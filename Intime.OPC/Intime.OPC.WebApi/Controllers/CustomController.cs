@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Service;
@@ -11,11 +12,13 @@ namespace Intime.OPC.WebApi.Controllers
     {
         private IOrderService _orderService;
         private ISaleRMAService _saleRmaService;
+        private IRmaService _rmaService;
 
-        public CustomController(IOrderService orderService, ISaleRMAService saleRmaService)
+        public CustomController(IOrderService orderService, ISaleRMAService saleRmaService, IRmaService rmaService)
         {
             _orderService = orderService;
             _saleRmaService = saleRmaService;
+            _rmaService = rmaService;
         }
 
         [HttpGet]
@@ -29,6 +32,23 @@ namespace Intime.OPC.WebApi.Controllers
             }, "查询订单失败");
         }
 
-      
+        /// <summary>
+        /// 客服同意退货
+        /// </summary>
+        /// <param name="rmaNos">The rma nos.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult AgreeReturnGoods([FromBody]IEnumerable<string> rmaNos)
+        {
+            return DoAction(() =>
+            {
+                var userId = GetCurrentUserID();
+                foreach (var rmaNo in rmaNos)
+                {
+                    _saleRmaService.AgreeReturnGoods(rmaNo);
+                }
+               
+            }, "查询订单失败");
+        }
     }
 }

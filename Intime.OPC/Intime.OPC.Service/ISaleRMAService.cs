@@ -20,5 +20,11 @@ namespace Intime.OPC.Service
 
         IList<OPC_SaleRMAComment> GetCommentByRmaNo(string rmaNo);
         IList<SaleRmaDto> GetByPack(PackageReceiveDto dto);
+
+        /// <summary>
+        /// 客服同意退货
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        void AgreeReturnGoods(string rmaNo);
     }
 }
