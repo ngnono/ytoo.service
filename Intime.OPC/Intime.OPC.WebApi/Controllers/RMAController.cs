@@ -36,11 +36,19 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
+        //[HttpGet]
+        //public IHttpActionResult GetByReturnGoodsInfo([FromBody] ReturnGoodsInfoGet request)
+        //{
+        //    var userId = GetCurrentUserID();
+        //    return DoFunction(() => { return _saleRmaService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");
+        //}
+
+
         [HttpGet]
-        public IHttpActionResult GetByReturnGoodsInfo([FromBody] ReturnGoodsInfoGet request)
+        public IHttpActionResult GetByOrderNo(string orderNo)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _saleRmaService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");
+            return DoFunction(() => { return _rmaService.GetByOrderNo(orderNo); }, "查询订单信息失败");
         }
 
         /// <summary>

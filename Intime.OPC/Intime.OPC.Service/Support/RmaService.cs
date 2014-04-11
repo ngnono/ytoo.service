@@ -33,6 +33,13 @@ namespace Intime.OPC.Service.Support
             return lst;
         }
 
+        public IList<RMADto> GetByOrderNo(string orderNo)
+        {
+            var rep = (IRMARepository)_repository;
+            IList<RMADto> lst = rep.GetAll(orderNo, "", new DateTime(2000,1,1), DateTime.Now.Date.AddDays(1));
+            return lst;
+        }
+
         #endregion
     }
 }

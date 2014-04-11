@@ -326,6 +326,7 @@ namespace Intime.OPC.Service.Support
             rmaDetail.Amount = rmaDetail.Price*rmaDetail.BackCount;
             rmaDetail.RefundDate = DateTime.Now;
             rmaDetail.OrderItemId = OrderDetailID;
+            rmaDetail.SectionCode = OpcSaleDetail.SectionCode;
             return rmaDetail;
         }
     }

@@ -28,6 +28,13 @@ namespace TestService
             var lst = Service.GetDetails("114201404086001");
             AssertList<RmaDetail>(lst);
         }
+
+        [TestMethod]
+        public void TestGetByOrderNo()
+        {
+            var lst = Service.GetByOrderNo("114201404086");
+            AssertList<RMADto>(lst);
+        }
        
     }
 }
