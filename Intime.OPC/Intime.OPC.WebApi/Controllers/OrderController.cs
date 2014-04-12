@@ -146,7 +146,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetByReturnGoodsInfo([FromBody] ReturnGoodsInfoGet request)
+        public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoGet request)
         {
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _orderService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");

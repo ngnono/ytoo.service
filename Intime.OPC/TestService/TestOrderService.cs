@@ -13,6 +13,9 @@ namespace TestService
         [TestMethod]
         public void TestGetByReturnGoodsInfo()
         {
+            
+
+
             ReturnGoodsInfoGet goods=new ReturnGoodsInfoGet();
             goods.StartDate = new DateTime(2010, 1, 1);
             goods.EndDate = DateTime.Now.Date.AddDays(1);

@@ -91,7 +91,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetRmaByReturnGoodPay([FromBody]ReturnGoodsPay request)
+        public IHttpActionResult GetRmaByReturnGoodPay([FromUri]ReturnGoodsPay request)
         {
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _saleRmaService.GetByReturnGoodPay(request); }, "查询退货单信息失败");
