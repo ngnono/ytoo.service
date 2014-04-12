@@ -44,8 +44,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                var lst = RestClient.Get<SaleRmaDto>("rma/GetRmaByReturnGoodPay", returnGoodsPay.ToString());
-                return lst;
+                var lst = RestClient.GetPage<SaleRmaDto>("rma/GetRmaByReturnGoodPay", returnGoodsPay.ToString());
+                return lst.Result;
             }
             catch (Exception ex)
             {
