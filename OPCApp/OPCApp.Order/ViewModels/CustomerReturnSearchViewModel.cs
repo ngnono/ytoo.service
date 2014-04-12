@@ -5,13 +5,18 @@ using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Customer;
+using OPCApp.DataService.Interface.Customer;
+using OPCApp.DataService.Interface.Trans;
+using OPCApp.DataService.IService;
 using OPCApp.Domain.Customer;
+using OPCApp.Domain.Dto;
+using OPCApp.Domain.Enums;
+using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.Customer.ViewModels
 {
-    [Export("CustomerReturnSearchViewModel", typeof (CustomerReturnSearchViewModel))]
-    public class CustomerReturnSearchViewModel : BindableBase
+    public class CustomerReturnSearchViewModel:BindableBase
     {
         private OrderDto _orderDto;
         private List<OrderDto> _orderDtoList;
@@ -26,9 +31,15 @@ namespace OPCApp.Customer.ViewModels
             CommandSearchRmaDtoInfo = new DelegateCommand(SearchRmaDtoListInfo);
             CommandAgreeReturnGoods = new DelegateCommand(SetAgreeReturnGoods);
             CommandGetRmaDetailByRmaNo = new DelegateCommand(GetRmaDetailByRmaNo);
-            //RMADto = new RMADto();
         }
-
+        public IList<KeyValue> StoreList { get; set; }
+        public IList<KeyValue> PaymentTypeList { get; set; }
+        public void InitCombo()
+        {
+            // OderStatusList=new 
+            StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
+            PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
+        }
         public RMADto RMADto
         {
             get { return _rmaDto; }
@@ -63,7 +74,11 @@ namespace OPCApp.Customer.ViewModels
         public DelegateCommand CommandSearchGoodsInfo { get; set; }
         public DelegateCommand CommandSearchRmaDtoInfo { get; set; }
         public DelegateCommand CommandGetRmaDetailByRmaNo { get; set; }
-        public ReturnGoodsInfoGet ReturnGoodsInfoGet { get; set; }
+        private ReturnGoodsInfoGet returnGoodsInfo;
+        public ReturnGoodsInfoGet ReturnGoodsInfoGet {
+            get { return returnGoodsInfo; }
+            set { SetProperty(ref returnGoodsInfo, value); }
+        }
 
         public void GetRmaDetailByRmaNo()
         {
@@ -114,5 +129,6 @@ namespace OPCApp.Customer.ViewModels
             var rmaList= AppEx.Container.GetInstance<ICustomerReturnSearch>().GetRmaByOrderNo(OrderDto.OrderNo).ToList();
             RMADtoList = rmaList;
         }
+
     }
 }

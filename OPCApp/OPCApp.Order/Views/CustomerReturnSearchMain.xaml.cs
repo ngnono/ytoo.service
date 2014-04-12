@@ -9,18 +9,18 @@ namespace OPCApp.Customer.Views
     /// </summary>
     [Export("CustomerReturnSearch", typeof(UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class CustomerReturnSearch
+    public partial class CustomerReturnSearchMain
     {
-        public CustomerReturnSearch()
+        public CustomerReturnSearchMain()
         {
             InitializeComponent();
         }
 
-        [Import("CustomerReturnSearchViewModel")]
-        public CustomerReturnSearchViewModel ViewModel
+        [Import("CustomerReturnGoodsMainViewModel")]
+        public CustomerReturnGoodsMainViewModel ViewModel
         {
             set { DataContext = value; }
-            get { return DataContext as CustomerReturnSearchViewModel; }
+            get { return DataContext as CustomerReturnGoodsMainViewModel; }
         }     
     }
 }
