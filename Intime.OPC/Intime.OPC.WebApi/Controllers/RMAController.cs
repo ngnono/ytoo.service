@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
@@ -204,5 +205,16 @@ namespace Intime.OPC.WebApi.Controllers
     {
         public string RmaNo { get; set; }
         public decimal Money { get; set; }
+    }
+
+    public class PackageVerifyRequest
+    {
+        public PackageVerifyRequest()
+        {
+            RmaNos=new List<string>();
+        }
+
+        public IList<string> RmaNos { get; set; }
+        public bool Pass { get; set; }
     }
 }

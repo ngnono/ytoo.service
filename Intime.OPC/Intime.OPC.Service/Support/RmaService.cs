@@ -54,5 +54,15 @@ namespace Intime.OPC.Service.Support
         }
 
         #endregion
+
+
+        public IList<RMADto> GetAllPackVerify(PackageReceiveDto dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+            var rep = (IRMARepository)_repository;
+            IList<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipVerify, EnumReturnGoodsStatus.ServiceApprove);
+            return lst;
+        }
     }
 }

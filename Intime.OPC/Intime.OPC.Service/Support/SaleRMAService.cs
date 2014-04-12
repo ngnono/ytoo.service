@@ -256,6 +256,29 @@ namespace Intime.OPC.Service.Support
                 EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerify.GetDescription());
         }
 
+        public void PackageVerify(string rmaNo,bool passed)
+        {
+            var rep = (ISaleRMARepository)_repository;
+            var saleRma = rep.GetByRmaNo(rmaNo);
+            if (saleRma == null)
+            {
+                throw new Exception("快递单不存在,退货单号:" + rmaNo);
+            }
+            if (saleRma.RMAStatus.IsNull())
+            {
+                throw new Exception("客服未确认,退货单号:" + rmaNo);
+            }
+            if (saleRma.RMAStatus !=EnumRMAStatus.ShipVerify.GetDescription())
+            {
+                throw new Exception("该退货单已经确认或正在财务审核,退货单号:" + rmaNo);
+            }
+            string  rmastaturs=passed?EnumRMAStatus.ShipVerifyPass.GetDescription():EnumRMAStatus.ShipVerifyNotPass.GetDescription();
+
+            saleRma.RMAStatus = rmastaturs;
+          
+            rep.Update(saleRma);
+        }
+
         private void Save(IList<RmaConfig> configs)
         {
             foreach (RmaConfig config in configs)

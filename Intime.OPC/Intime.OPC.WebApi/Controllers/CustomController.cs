@@ -14,6 +14,7 @@ namespace Intime.OPC.WebApi.Controllers
         private ISaleRMAService _saleRmaService;
         private IRmaService _rmaService;
 
+
         public CustomController(IOrderService orderService, ISaleRMAService saleRmaService, IRmaService rmaService)
         {
             _orderService = orderService;
@@ -70,6 +71,41 @@ namespace Intime.OPC.WebApi.Controllers
             }, "查询订单失败");
         }
 
+        #region 退货包裹审核
 
+        /// <summary>
+        ///  查询退货单信息
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetRmaPackVerifyByPack([FromUri]PackageReceiveDto request)
+        {
+            var userId = GetCurrentUserID();
+            return DoFunction(() => { return _rmaService.GetAllPackVerify(request); }, "查询退货单信息失败");
+        }
+
+       
+
+
+        /// <summary>
+        ///  退货包裹审核
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult PackageVerify([FromBody]PackageVerifyRequest request)
+        {
+            var userId = GetCurrentUserID();
+            return DoAction(() =>
+            {
+                foreach (var rmaNo in request.RmaNos)
+                {
+                    _saleRmaService.PackageVerify(rmaNo, request.Pass);
+                }
+                
+            }, "查询退货单信息失败");
+        }
+        #endregion
     }
 }

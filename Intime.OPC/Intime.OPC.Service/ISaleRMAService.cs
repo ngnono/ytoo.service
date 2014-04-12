@@ -43,5 +43,7 @@ namespace Intime.OPC.Service
         void CompensateVerify(string ramNo, decimal money);
 
         IList<SaleRmaDto> GetByRmaNo(string rmaNo);
+
+        void PackageVerify(string ramNo, bool passed);
     }
 }
