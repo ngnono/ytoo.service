@@ -83,7 +83,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModels\ReturnGoodsCompensateVerifyViewModel.cs" />
     <Compile Include="ViewModels\ReturnGoodsPaymentVerifyViewModel.cs" />
+    <Compile Include="Views\ReturnGoodsCompensateVerify.xaml.cs">
+      <DependentUpon>ReturnGoodsCompensateVerify.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReturnGoodsPaymentVerify.xaml.cs">
       <DependentUpon>ReturnGoodsPaymentVerify.xaml</DependentUpon>
     </Compile>
@@ -95,6 +99,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\ReturnGoodsCompensateVerify.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ReturnGoodsPaymentVerify.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -12,6 +12,12 @@ namespace OPCApp.Domain.Customer
     /// </summary>
     public class ReturnGoodsPayDto
     {
+        public ReturnGoodsPayDto()
+        {
+            StartDate = DateTime.Now;
+            EndDate = DateTime.Now;
+        }
+
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 

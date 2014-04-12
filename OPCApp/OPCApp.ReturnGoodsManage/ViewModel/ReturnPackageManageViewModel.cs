@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.RMA;
@@ -26,14 +27,22 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaSaleDetailByRma);
             PackageReceiveDto = new PackageReceiveDto();
             CommandSetSaleRmaRemark = new DelegateCommand(SetSaleRmaRemark);
+            CommandSetRmaRemark = new DelegateCommand(SetRmaRemark);
+            CommandReceivingGoodsSubmit = new DelegateCommand(ReceivingGoodsSubmit);
         }
-
-        public void SetSaleRmaRemark()
+        //退货单备注
+        public void SetRmaRemark()
         {
-            //被选择的对象
             string id = RmaDto.RMANo;
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.);
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetRMARemark);
+        }
+        //收货单备注
+        public void SetSaleRmaRemark()
+        {
+            string id = SaleRma.RmaNo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetSaleRMARemark);
         }
 
         private PackageReceiveDto packageReceiveDto;
@@ -49,6 +58,12 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             set { SetProperty(ref _saleRmaList, value); }
         }
 
+        private SaleRmaDto _saleRma;
+        public SaleRmaDto SaleRma
+        {
+            get { return _saleRma; }
+            set { SetProperty(ref _saleRma, value); }
+        }
         public RMADto RmaDto
         {
             get { return rmaDto; }
@@ -67,15 +82,36 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             set { SetProperty(ref rmaDetails, value); }
         }
 
+        public DelegateCommand CommandSetSaleRmaRemark { get; set; }
+        public DelegateCommand CommandReceivingGoodsSubmit { get; set; }
         public DelegateCommand CommandSearch { get; set; }
         public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
-        public DelegateCommand CommandSetSaleRmaRemark { get; set; }
+        public DelegateCommand CommandSetRmaRemark { get; set; }
 
         public void GetRmaSaleDetailByRma()
         {
             if (rmaDto != null)
             {
                 RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(rmaDto.RMANo).ToList();
+            }
+        }
+
+        public void ReceivingGoodsSubmit()
+        {
+            var saleRmaSelected = SaleRmaList.Where(e => e.IsSelected).ToList();
+            if (saleRmaSelected.Count==0)
+            {
+                MessageBox.Show("请勾选收货单", "提示");
+                return;
+            }
+            bool flag =
+                AppEx.Container.GetInstance<IPackageService>()
+                    .ReceivingGoodsSubmit(saleRmaSelected.Select(e => e.RmaNo).ToList());
+            MessageBox.Show(flag ? "确认收货成功" : "确认收货失败", "提示");
+            if (flag)
+            {
+                RmaDetailList.Clear();
+                SearchRmaAndSaleRma();
             }
         }
 

@@ -6,6 +6,7 @@ namespace OPCApp.Domain.Customer
     public class SaleRmaDto
     {
         public int Id { get; set; }
+        public bool IsSelected { get; set; }
         public string SaleOrderNo { get; set; }
         public string PaymentMethodName { get; set; }
         /// <summary>

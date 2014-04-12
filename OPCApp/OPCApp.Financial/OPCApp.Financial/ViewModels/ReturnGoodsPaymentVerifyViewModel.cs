@@ -7,7 +7,9 @@ using Microsoft.Practices.Prism.Commands;
 
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.RMA;
+using OPCApp.DataService.IService;
 using OPCApp.Domain.Customer;
+using OPCApp.Domain.Enums;
 using OPCApp.Infrastructure;
 using OPCApp.Domain.Customer;
 using OPCApp.Domain.Dto;
@@ -60,16 +62,22 @@ namespace OPCApp.Financial.ViewModels
        public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
        public DelegateCommand CommandCustomerReturnGoodsSave { get; set; }
        public DelegateCommand CommandGetRmaDetailByRma { get; set; }
-
+       public DelegateCommand CommandSetRmaRemark { get; set; }
        public ReturnGoodsPaymentVerifyViewModel()
        {
-           CommandSearch = new DelegateCommand(SearchRmaAndSaleRma);
+           CommandSearch = new DelegateCommand(SearchSaleRma);
            CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaSaleDetailByRma);
            ReturnGoodsPayDto = new ReturnGoodsPayDto();
            CommandCustomerReturnGoodsSave = new DelegateCommand(CustomerReturnGoodsSave);
            CommandGetRmaByOrder = new DelegateCommand(GetRmaByOrder);
            CommandGetRmaDetailByRma = new DelegateCommand(GetRmaDetailByRma);
+           CommandSetRmaRemark = new DelegateCommand(SetRmaRemark);
            InitCombo();
+       }
+
+       public void SearchSaleRma()
+       {
+           SaleRmaList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByReturnGoodPay(ReturnGoodsPayDto).ToList();
        }
 
        public void GetRmaDetailByRma()
@@ -134,7 +142,12 @@ namespace OPCApp.Financial.ViewModels
                RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(rmaDto.RMANo).ToList();
            }
        }
-
+       public void SetRmaRemark()
+       {
+           string id = RmaDto.RMANo;
+           var remarkWin = AppEx.Container.GetInstance<IRemark>();
+           remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetRMARemark);
+       }
      
     }
 }

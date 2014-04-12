@@ -75,6 +75,7 @@ namespace OPCApp.Customer.ViewModels
 
         public void SetAgreeReturnGoods()
         {
+            if (RMADtoList == null)return;
             List<RMADto> rmaSelectedList = RMADtoList.Where(e => e.IsSelected).ToList();
             if (rmaSelectedList.Count == 0)
             {
