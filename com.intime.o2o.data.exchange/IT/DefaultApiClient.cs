@@ -129,12 +129,12 @@ namespace com.intime.o2o.data.exchange.IT
 
         private string ComputeHash(string privateKey, string message)
         {
-            var key = Encoding.ASCII.GetBytes(privateKey);
+            var key = Encoding.UTF8.GetBytes(privateKey);
 
             using (var hmac = new HMACSHA1(key))
             {
                 hmac.Initialize();
-                var hash = hmac.ComputeHash(Encoding.ASCII.GetBytes(message));
+                var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(message));
                 return Convert.ToBase64String(hash);
             }
         }

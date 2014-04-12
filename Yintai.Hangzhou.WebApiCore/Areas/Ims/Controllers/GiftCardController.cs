@@ -193,6 +193,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     return this.RenderError(r => r.Message = rsp.Message);
                 }
 
+                var transfer = _transRepo.Find(x => x.OrderNo == charge_no && x.IsActive == 0 && x.IsDecline == 0);
+
                 using (var ts = new TransactionScope())
                 {
                     giftCardOrder.Status = (int)GiftCardOrderStatus.Recharge;
@@ -216,6 +218,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         CreateDate = DateTime.Now,
                         CreateUser = authuid
                     });
+
+                    if (transfer != null)
+                    {
+                        transfer.ToUserId = authuid;
+                        transfer.OperateDate = DateTime.Now;
+                        transfer.OperateUser = authuid;
+                        transfer.IsActive = 1;
+                        _transRepo.Update(transfer);
+                    }
+
                     ts.Complete();
                 }
 
@@ -382,6 +394,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             {
                                 comment = trans.Comment,
                                 sender = user.Name,
+                                from_phone = trans.FromPhone,
                                 phone = trans.Phone,
                                 amount = order.Price,
                                 status = (int)this.SetStatus4Receiver(order, trans)
