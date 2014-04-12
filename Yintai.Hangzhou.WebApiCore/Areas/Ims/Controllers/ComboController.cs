@@ -122,8 +122,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             if (string.IsNullOrEmpty(request.Desc))
                 return this.RenderError(r => r.Message = "搭配需要描述");
-            if (string.IsNullOrEmpty(request.Private_To))
-                return this.RenderError(r => r.Message = "搭配需要选择私人定制对象");
             if (!Array.Exists<int>((int[])Enum.GetValues(typeof(ProductType)), s => request.Product_Type == s))
                 return this.RenderError(r => r.Message = "搭配商品类型不正确");
 
@@ -137,7 +135,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 //step1: 更新combo
 
-                comboEntity.Private2Name = request.Private_To;
+                comboEntity.Private2Name = request.Private_To??string.Empty;
                 comboEntity.ProductType = request.Product_Type;
                 comboEntity.Desc = request.Desc;
                 comboEntity.UpdateDate = DateTime.Now;
