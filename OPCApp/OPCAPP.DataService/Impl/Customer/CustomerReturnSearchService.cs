@@ -52,8 +52,8 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                var lst=RestClient.Get<RMADto>("rma/GetByOrderNo", string.Format("orderNo={0}", orderNo));
-                return lst;
+                var lst=RestClient.GetPage<RMADto>("rma/GetByOrderNo", string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNo,1,300));
+                return lst.Result;
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                return RestClient.Post("custem/AgreeReturnGoods", rmaNos);
+                return RestClient.Post("custom/AgreeReturnGoods", rmaNos);
             }
             catch (Exception ex)
             {

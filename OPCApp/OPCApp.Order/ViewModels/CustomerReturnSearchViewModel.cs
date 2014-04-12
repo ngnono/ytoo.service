@@ -13,6 +13,7 @@ using OPCApp.Domain.Dto;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
+using System;
 
 namespace OPCApp.Customer.ViewModels
 {
@@ -102,12 +103,20 @@ namespace OPCApp.Customer.ViewModels
             {
                 MessageBox.Show("请选择退货单", "提示");
                 return;
-            }           
-            bool falg =
-                AppEx.Container.GetInstance<ICustomerReturnSearch>()
-                    .AgreeReturnGoods(rmaSelectedList.Select(e => e.RMANo).ToList());
-            MessageBox.Show(falg ? "同意退回成功" : "同意退回失败", "提示");
-            if (falg)
+            }
+            bool flag = false;
+            try
+            {
+                flag =
+                    AppEx.Container.GetInstance<ICustomerReturnSearch>()
+                        .AgreeReturnGoods(rmaSelectedList.Select(e => e.RMANo).ToList());
+            }
+            catch(Exception Ex)
+            {
+
+            }
+            MessageBox.Show(flag ? "客服同意退货成功" : "客服同意退货失败", "提示");
+            if (flag)
             {
                 RmaDetailList.Clear();
                 RMADtoList.Clear();
