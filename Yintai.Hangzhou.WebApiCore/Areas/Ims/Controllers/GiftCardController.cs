@@ -295,7 +295,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     return this.RenderError(r => r.Message = rsp.Message);
                 }
                 
-                var transfer = _transRepo.Find(x => x.IsDecline == 0 && x.IsActive == 0);
+                var transfer = _transRepo.Find(x => x.IsDecline == 0 && x.IsActive == 0 && x.OrderNo == charge_no);
 
                 using (var ts = new TransactionScope())
                 {
@@ -573,7 +573,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     status_i = SetStatus4Receiver(o.order, o.transfer),
-                    operation_date = o.transfer.OperateDate.ToString("yyyy-MM-dd HH:mm:ss")
+                    operation_date = o.transfer.OperateDate.ToString()
                 });
             }
             return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };
@@ -625,11 +625,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     purchase_date = o.order.CreateDate,
-                    charge_date = o.recharge != null ? o.recharge.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null",
+                    charge_date = o.recharge != null ? o.recharge.CreateDate.ToString() : "null",
                     status_i = SetStatusForBuyer(o.order, o.transfer, o.recharge),
                     verify_phone = o.transfer != null ? o.transfer.Phone : "null",
-                    send_date = o.transfer != null ? o.transfer.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null",
-                    receive_date = o.transfer != null && o.transfer.IsActive == 1 ? o.transfer.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null"
+                    send_date = o.transfer != null ? o.transfer.CreateDate.ToString() : "null",
+                    receive_date = o.transfer != null && o.transfer.IsActive == 1 ? o.transfer.CreateDate.ToString() : "null"
                 });
             }
             return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };
