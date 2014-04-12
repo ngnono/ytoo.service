@@ -60,6 +60,7 @@
     <Compile Include="IRepository.cs" />
     <Compile Include="IRmaDetailRepository.cs" />
     <Compile Include="IRMARepository.cs" />
+    <Compile Include="IRmaCommentRepository.cs" />
     <Compile Include="ISaleRmaComment.cs" />
     <Compile Include="ISaleRMARepository.cs" />
     <Compile Include="IRoleRepository.cs" />

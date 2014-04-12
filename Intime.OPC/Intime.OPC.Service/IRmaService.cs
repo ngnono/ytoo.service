@@ -2,6 +2,7 @@
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
+using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service
 {
@@ -24,5 +25,9 @@ namespace Intime.OPC.Service
         /// <param name="returnGoodsStatus">退货状态</param>
         /// <returns>IList{RMADto}.</returns>
         IList<RMADto> GetByOrderNo(string orderNo,EnumRMAStatus rmaStatus,EnumReturnGoodsStatus returnGoodsStatus);
+
+        void AddComment(OPC_RMAComment comment);
+
+        IList<OPC_RMAComment> GetCommentByRmaNo(string rmaNo);
     }
 }
