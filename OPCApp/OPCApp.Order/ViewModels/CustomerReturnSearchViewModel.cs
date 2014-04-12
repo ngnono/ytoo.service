@@ -31,6 +31,7 @@ namespace OPCApp.Customer.ViewModels
             CommandSearchRmaDtoInfo = new DelegateCommand(SearchRmaDtoListInfo);
             CommandAgreeReturnGoods = new DelegateCommand(SetAgreeReturnGoods);
             CommandGetRmaDetailByRmaNo = new DelegateCommand(GetRmaDetailByRmaNo);
+            this.InitCombo();
         }
         public IList<KeyValue> StoreList { get; set; }
         public IList<KeyValue> PaymentTypeList { get; set; }
