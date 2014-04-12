@@ -34,6 +34,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_GiftCardRechargeEntity> _rechargeRepo;
         private IApiClient _apiClient;
 
+        private string _dateFormmat = "yyyy-MM-dd HH:mm";
+
         public GiftCardController(
             ICustomerRepository customerRepo,
             IResourceRepository resourceRepo,
@@ -183,7 +185,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         IdCard = identity_no,
                         Password = pwd,
                         StoreCode = GIFTCARD_STORE_ID,
-                        TotalPay = Convert.ToInt32(orderTran.Amount*100),
+                        TotalPay = Convert.ToInt32(orderTran.Amount * 100),
                         TransCode = orderTran.TransNo
                     }
                 };
@@ -294,8 +296,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 {
                     return this.RenderError(r => r.Message = rsp.Message);
                 }
-                
-                var transfer = _transRepo.Find(x => x.IsDecline == 0 && x.IsActive == 0);
+
+                var transfer = _transRepo.Find(x => x.IsDecline == 0 && x.IsActive == 0 && x.OrderNo == charge_no);
 
                 using (var ts = new TransactionScope())
                 {
@@ -350,12 +352,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return this.RenderError(r => r.Message = "您无权查看别人的礼品卡!");
             }
+
+            var transfer = _transRepo.Find(x => x.OrderNo == charge_no && x.ToUserId == authuid);
+
             return
                 this.RenderSuccess<dynamic>(
                     c =>
                         c.Data =
                             new
                             {
+                                sender = transfer != null ? transfer.FromPhone : null,
                                 phone = user.GiftCardAccount,
                                 amount = order.Amount
                             });
@@ -365,7 +371,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Transfer_Detail(string charge_no, int authuid)
         {
             var trans =
-                _transRepo.Get(x => x.OrderNo == charge_no )
+                _transRepo.Get(x => x.OrderNo == charge_no)
                     .OrderByDescending(t => t.CreateDate)
                     .FirstOrDefault();
             if (trans == null)
@@ -453,7 +459,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "您已经赠送了此礼品卡，请通知好友领取！");
             }
 
-            var cardUser = _userRepo.Find(x=>x.UserId == authuid);
+            var cardUser = _userRepo.Find(x => x.UserId == authuid);
 
             var preTran = _transRepo.Find(x => x.OrderNo == charge_no && x.IsActive == 0 && x.IsDecline == 0);
 
@@ -480,7 +486,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     PreTransferId = preTran == null ? 0 : preTran.Id,
                     OperateDate = DateTime.Now,
                     OperateUser = authuid,
-                    FromPhone = cardUser == null? from_phone:cardUser.GiftCardAccount,
+                    FromPhone = cardUser == null ? from_phone : cardUser.GiftCardAccount,
                 });
                 ts.Complete();
             }
@@ -516,11 +522,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "该用户未绑定储值卡!");
             }
 
-            var resetPwdRequest = new ResetPasswordRequest() {Data = new
+            var resetPwdRequest = new ResetPasswordRequest()
             {
-                phone = cardAccount.GiftCardAccount,
-                newpassword = pwd_new
-            }};
+                Data = new
+                    {
+                        phone = cardAccount.GiftCardAccount,
+                        newpassword = pwd_new
+                    }
+            };
 
             var rsp = _apiClient.Post(resetPwdRequest);
             if (!rsp.Status)
@@ -547,7 +556,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
         private bool IsPhoneBinded(string phone)
         {
-            return _apiClient.Post(new ValidatePhoneRequest() {Data =  new {phone}}).Status;
+            return _apiClient.Post(new ValidatePhoneRequest() { Data = new { phone } }).Status;
         }
 
         private PagerInfoResponse<dynamic> ListItemsReceived(IMSGiftcardListRequest request, int authuid)
@@ -557,12 +566,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var orders =
                 _transRepo.Get(x => x.ToUserId == authuid)
                     .OrderByDescending(t => t.CreateDate)
-                    .Skip((request.Page - 1)*request.Pagesize)
+                    .Skip((request.Page - 1) * request.Pagesize)
                     .Take(request.Pagesize)
-                    .Join(_orderRepo.Get(o => o.Status != (int) GiftCardOrderStatus.Void), x => x.OrderNo, o => o.No,
-                        (x, o) => new {transfer = x, order = o})
-                    .Join(_customerRepo.GetAll(), t => t.transfer.FromUserId, u => u.Id,
-                        (o, u) => new {o.order, o.transfer, user = u});
+                    .Join(_orderRepo.Get(o => o.Status != (int)GiftCardOrderStatus.Void), x => x.OrderNo, o => o.No,
+                        (x, o) => new { transfer = x, order = o });
             dynamic items = new List<dynamic>();
             foreach (var o in orders)
             {
@@ -573,7 +580,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     status_i = SetStatus4Receiver(o.order, o.transfer),
-                    operation_date = o.transfer.OperateDate.ToString("yyyy-MM-dd HH:mm:ss")
+                    receive_date = o.transfer.OperateDate.ToString(_dateFormmat)
                 });
             }
             return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };
@@ -588,7 +595,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
             if (transfers.IsActive == 1)
             {
-                if (_transRepo.Get(x => x.FromUserId == transfers.ToUserId).Any())
+                if (_transRepo.Get(x => x.FromUserId == transfers.ToUserId && x.OrderNo == order.No).Any())
                 {
                     return GiftCardListItemStatus.ReTransfer;
                 }
@@ -625,11 +632,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     purchase_date = o.order.CreateDate,
-                    charge_date = o.recharge != null ? o.recharge.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null",
+                    charge_date = o.recharge != null ? o.recharge.CreateDate.ToString(_dateFormmat) : "null",
                     status_i = SetStatusForBuyer(o.order, o.transfer, o.recharge),
                     verify_phone = o.transfer != null ? o.transfer.Phone : "null",
-                    send_date = o.transfer != null ? o.transfer.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null",
-                    receive_date = o.transfer != null && o.transfer.IsActive == 1 ? o.transfer.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null"
+                    send_date = o.transfer != null ? o.transfer.CreateDate.ToString(_dateFormmat) : "null",
+                    receive_date = o.transfer != null && o.transfer.IsActive == 1 ? o.transfer.CreateDate.ToString(_dateFormmat) : "null"
                 });
             }
             return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };
@@ -656,9 +663,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private dynamic GetUserAccountBalance(string phone)
         {
 
-            var balanceRequest = new QueryAccountBalanceRequest() {Data = new {phone}};
+            var balanceRequest = new QueryAccountBalanceRequest() { Data = new { phone } };
             var result = _apiClient.Post(balanceRequest);
-            if(result.Status)
+            if (result.Status)
             {
                 return result.Balance;
             }
