@@ -61,7 +61,7 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="5">
             <Label Content="退货单" />
-            <DataGrid  ItemsSource="{Binding RmaList, Mode=TwoWay}" AutoGenerateColumns="False"
+            <DataGrid  ItemsSource="{Binding RmaList, Mode=TwoWay}" IsReadOnly="True" AutoGenerateColumns="False"
                         RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2"
                         SelectedItem="{Binding RmaDto}"
                         >
@@ -122,7 +122,7 @@
         <GridSplitter Height="5" HorizontalAlignment="Stretch" Grid.Row="6" VerticalAlignment="Bottom" />
         <StackPanel Orientation="Vertical" Margin="0,1"  Grid.Row="6">
             <Label Content="退货明细" />
-            <DataGrid ItemsSource="{Binding RmaDetailList, Mode=TwoWay}" AutoGenerateColumns="False"
+            <DataGrid ItemsSource="{Binding RmaDetailList, Mode=TwoWay}" AutoGenerateColumns="False" IsReadOnly="True"
                         RenderTransformOrigin="0.5,0.5"
                         Margin="0,0,0,-78">
                 <DataGrid.RenderTransform>
