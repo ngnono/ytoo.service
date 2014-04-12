@@ -33,7 +33,7 @@ namespace TestService
         [TestMethod]
         public void TestGetByOrderNo()
         {
-            var lst = Service.GetByOrderNo("114201404086",EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess);
+            var lst = Service.GetByOrderNo("114201404087",EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess);
             AssertList<RMADto>(lst);
         }
        
