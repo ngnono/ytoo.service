@@ -9,13 +9,10 @@ namespace OPCApp.Customer.ViewModels
     {
         [Import]
         public CustomerReturnSearchRmaViewModel CustomerReturnSearchRmaViewModel;
-        //[Import]
-        //public CustomerReturnSearchFinancialViewModel CustomerReturnSearchFinancialViewModel;
-        //[Import]
-        //public CustomerReturnSearchTransViewModel CustomerReturnSearchTransViewModel;
-        public CustomerReturnGoodsMainViewModel()
-        {
-            //CustomerReturnSearchRmaViewModel=new CustomerReturnSearchRmaViewModel();
-        }
+        [Import]
+        public CustomerReturnSearchFinancialViewModel CustomerReturnSearchFinancialViewModel;
+        [Import]
+        public CustomerReturnSearchTransViewModel CustomerReturnSearchTransViewModel;
+      
     }
 }

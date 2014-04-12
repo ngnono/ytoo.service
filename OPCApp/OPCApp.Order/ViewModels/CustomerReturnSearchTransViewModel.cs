@@ -15,7 +15,7 @@ using OPCApp.Infrastructure;
 
 namespace OPCApp.Customer.ViewModels
 {
-    [Export("CustomerReturnSearchTransViewModel", typeof(CustomerReturnSearchTransViewModel))]
+    [Export(typeof(CustomerReturnSearchTransViewModel))]
     public class CustomerReturnSearchTransViewModel : CustomerReturnSearchViewModel
     {
        
