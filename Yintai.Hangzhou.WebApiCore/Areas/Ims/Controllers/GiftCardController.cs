@@ -569,9 +569,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     .Skip((request.Page - 1) * request.Pagesize)
                     .Take(request.Pagesize)
                     .Join(_orderRepo.Get(o => o.Status != (int)GiftCardOrderStatus.Void), x => x.OrderNo, o => o.No,
-                        (x, o) => new { transfer = x, order = o })
-                    .Join(_customerRepo.GetAll(), t => t.transfer.FromUserId, u => u.Id,
-                        (o, u) => new { o.order, o.transfer, user = u });
+                        (x, o) => new { transfer = x, order = o });
             dynamic items = new List<dynamic>();
             foreach (var o in orders)
             {
@@ -582,7 +580,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     status_i = SetStatus4Receiver(o.order, o.transfer),
-                    operation_date = o.transfer.OperateDate.ToString(_dateFormmat)
+                    receive_date = o.transfer.OperateDate.ToString(_dateFormmat)
                 });
             }
             return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };
