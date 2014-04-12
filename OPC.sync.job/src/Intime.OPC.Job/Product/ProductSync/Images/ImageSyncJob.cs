@@ -122,6 +122,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Images
                 p.UpdatedDate = DateTime.Now;
                 p.UpdatedUser = SystemDefine.SystemUser;
                 db.SaveChanges();
+                
             }
         }
 

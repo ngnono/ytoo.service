@@ -144,6 +144,10 @@
     <Compile Include="Product\ProductSync\SystemDefine.cs" />
     <Compile Include="Product\StockAggregate\StockAttregateJob.cs" />
     <Compile Include="Product\StockAggregate\StockModel.cs" />
+    <Compile Include="RMASplit\Models\Detail.cs" />
+    <Compile Include="RMASplit\Models\Head.cs" />
+    <Compile Include="RMASplit\Models\OrderStatus.cs" />
+    <Compile Include="RMASplit\Models\Payment.cs" />
     <Compile Include="Trade\SplitOrder\IOrderStockStore.cs" />
     <Compile Include="Trade\SplitOrder\IOrderStore.cs" />
     <Compile Include="Trade\SplitOrder\ISaleOrderStore.cs" />

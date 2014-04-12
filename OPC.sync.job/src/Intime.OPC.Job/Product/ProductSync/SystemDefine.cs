@@ -12,5 +12,7 @@ namespace Intime.OPC.Job.Product.ProductSync
         /// 银泰百货渠道名称
         /// </summary>
         public const string IntimeChannel = "Intime";
+
+        public static System.Exception OrderFinishSplitStatusCode { get; set; }
     }
 }
