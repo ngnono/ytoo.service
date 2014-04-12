@@ -18,10 +18,18 @@ namespace TestService
     [TestClass]
     public class TestService<T>
     {
-
+        private T _t;
         protected T Service
         {
-            get { return GetInstance<T>(); }
+            get
+            {
+                if (_t==null)
+                {
+                 _t=    GetInstance<T>();
+                }
+                return _t;
+
+            }
 
         }
 

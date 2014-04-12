@@ -74,5 +74,7 @@ namespace Intime.OPC.Service
         //IList<OrderDto> GetOrderByReturnGoodsInfo(ReturnGoodsInfoGet request);
 
         PageResult<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request);
+
+        PageResult<OrderDto> GetShippingBackByReturnGoodsInfo(ReturnGoodsInfoRequest request);
     }
 }

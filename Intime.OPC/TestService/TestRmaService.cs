@@ -1,4 +1,5 @@
 ﻿using System;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
@@ -33,7 +34,13 @@ namespace TestService
         [TestMethod]
         public void TestGetByOrderNo()
         {
-            var lst = Service.GetByOrderNo("114201404087",EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess,1,1000);
+            var lst = Service.GetByOrderNo("1142014041211", EnumRMAStatus.NoDelivery, EnumReturnGoodsStatus.NoProcess, 1, 1000);
+            AssertList<RMADto>(lst);
+        }
+        [TestMethod]
+        public void TestGetByRmaNo()
+        {
+            var lst = Service.GetByRmaNo("1142014041211001");
             AssertList<RMADto>(lst);
         }
        

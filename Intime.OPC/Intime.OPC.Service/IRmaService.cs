@@ -27,6 +27,10 @@ namespace Intime.OPC.Service
         /// <returns>IList{RMADto}.</returns>
         PageResult<RMADto> GetByOrderNo(string orderNo, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus, int pageIndex, int pageSize);
 
+        PageResult<RMADto> GetByRmaNo(string rmaNo);
+
+
+
         void AddComment(OPC_RMAComment comment);
 
         IList<OPC_RMAComment> GetCommentByRmaNo(string rmaNo);

@@ -145,16 +145,34 @@ namespace Intime.OPC.WebApi.Controllers
             
         }
 
+        #region 客服退货查询-退货信息
+        
+       
+
         [HttpGet]
         public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
         {
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _orderService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");
         }
-       
+
+        #endregion
+
+        #region 客服退货查询-物流退回
+
+
+
+        [HttpGet]
+        public IHttpActionResult GetShippingBackByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
+        {
+            var userId = GetCurrentUserID();
+            return DoFunction(() => { return _orderService.GetShippingBackByReturnGoodsInfo(request); }, "查询订单信息失败");
+        }
+
+        #endregion
 
         #region 备注
-        
+
         /// <summary>
         ///  增加订单备注
         /// </summary>

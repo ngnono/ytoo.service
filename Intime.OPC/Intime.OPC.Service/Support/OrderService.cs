@@ -93,6 +93,11 @@ namespace Intime.OPC.Service.Support
             //return Mapper.Map<Order, OrderDto>(lst.Result);
         }
 
+        public PageResult<OrderDto> GetShippingBackByReturnGoodsInfo(ReturnGoodsInfoRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
         //public IList<OrderDto> GetByReturnGoodsInfReturnGoodsInfoRequestet request)
         //{
         //    var lst = _orderRepository.GetByReturnGoodsInfo(request);

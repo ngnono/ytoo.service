@@ -24,5 +24,7 @@ namespace Intime.OPC.Domain.Models
         public Nullable<int> CreateUser { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateUser { get; set; }
+
+        public string RmaNo { get; set; }
     }
 }

@@ -128,12 +128,12 @@ namespace Intime.OPC.Repository.Support
                     query2 = query2.Where(t => t.StoreId == storeId.Value);
                 }
 
-               // var lst = query.Join(query2, t => t.OrderNo, o => o.OrderNo, (t, o) => new { SaleRMA = t, Orders = o }).ToList();
-                var q = from t in query2
-                        join o in query on t.OrderNo equals o.OrderNo into cs
-                        select new { SaleRMA = cs.FirstOrDefault(), Orders = t };
-                q = q.OrderBy(t=>t.Orders.OrderNo);
-                var lst = q.ToPageResult(pageIndex,pageSize);
+                var lst = query.Join(query2, t => t.OrderNo, o => o.OrderNo, (t, o) => new { SaleRMA = t, Orders = o }).OrderByDescending(t=>t.Orders.CreateDate).ToPageResult(pageIndex,pageSize);
+                //var q = from t in query2
+                //        join o in query on t.OrderNo equals o.OrderNo into cs
+                //        select new { SaleRMA = cs.FirstOrDefault(), Orders = t };
+                //q = q.OrderBy(t=>t.Orders.OrderNo);
+                //var lst = q.ToPageResult(pageIndex,pageSize);
 
 
                 var lstSaleRma = new List<SaleRmaDto>();
@@ -168,6 +168,8 @@ namespace Intime.OPC.Repository.Support
                         o.StoreFee = t.SaleRMA.StoreFee;
                         o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
                         o.CustomerRemark = t.SaleRMA.Reason;
+                        o.RmaNo = t.SaleRMA.RMANo;
+                       
                     }
 
                     lstSaleRma.Add(o);

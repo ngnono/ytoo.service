@@ -45,6 +45,14 @@ namespace Intime.OPC.Service.Support
             return lst;
         }
 
+        public PageResult<RMADto> GetByRmaNo(string rmaNo)
+        {
+            var rep = (IRMARepository)_repository;
+            var lst = rep.GetByRmaNo(rmaNo);
+          
+            return lst;
+        }
+
         public void AddComment(OPC_RMAComment comment)
         {
             _rmaCommentRepository.Create(comment);

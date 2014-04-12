@@ -209,5 +209,9 @@ namespace Intime.OPC.Service.Support
             return  Mapper.Map<OPC_Sale, SaleDto>(lstSales);
            
         }
+
+        public int UserId
+        {
+            get; set; }
     }
 }

@@ -23,5 +23,7 @@ namespace Intime.OPC.Repository
         /// <param name="returnGoodsStatus">退货状态</param>
         /// <returns>IList{RMADto}.</returns>
         PageResult<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus,int pageIndex,int pageSize);
+
+        PageResult<RMADto> GetByRmaNo(string rmaNo);
     }
 }

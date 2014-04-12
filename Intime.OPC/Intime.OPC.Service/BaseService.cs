@@ -26,5 +26,7 @@ namespace Intime.OPC.Service
         {
             return _repository.Delete(id);
         }
+
+        public int UserId { get; set; }
     }
 }

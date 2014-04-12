@@ -71,6 +71,7 @@
     <Compile Include="Dto\OrderItemDto.cs" />
     <Compile Include="Dto\RmaDetail.cs" />
     <Compile Include="Dto\RMADto.cs" />
+    <Compile Include="Dto\RmaExpressDto.cs" />
     <Compile Include="Dto\SaleRmaDto.cs" />
     <Compile Include="Dto\ShippingSaleCreateDto.cs" />
     <Compile Include="Dto\ShippingSaleDto.cs" />

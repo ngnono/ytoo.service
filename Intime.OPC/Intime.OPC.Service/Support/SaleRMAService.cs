@@ -36,6 +36,7 @@ namespace Intime.OPC.Service.Support
             _rmaRepository = rmaRepository;
             _saleRmaCommentRepository = saleRmaCommentRepository;
             _accountService = accountService;
+            
         }
 
         #region ISaleRMAService Members
@@ -130,6 +131,7 @@ namespace Intime.OPC.Service.Support
         public PageResult<SaleRmaDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
             ISaleRMARepository rep = _repository as ISaleRMARepository;
+
            return   rep.GetAll(request.OrderNo, request.SaleOrderNo,request.PayType, request.RmaNo,
                 request.StartDate, request.EndDate, request.RmaStatus, request.StoreID, "", request.pageIndex, request.pageSize);
         }
@@ -164,7 +166,7 @@ namespace Intime.OPC.Service.Support
             dto.EndDate = dto.EndDate.Date.AddDays(1);
 
             ISaleRMARepository rep = _repository as ISaleRMARepository;
-
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = rep.GetAll(dto.OrderNo,dto.SaleOrderNo, "","", dto.StartDate, dto.EndDate,
                 EnumRMAStatus.NoDelivery.AsID(),null,EnumReturnGoodsStatus.ServiceApprove.GetDescription(),dto.pageIndex,dto.pageSize);
 
@@ -186,15 +188,16 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("快递单不存在,退货单号:"+rmaNo);
             }
-            if (saleRma.RMAStatus.IsNotNull())
+            if (saleRma.RMAStatus != EnumReturnGoodsStatus.NoProcess.GetDescription())
             {
-                throw new Exception("快递单状态错误，无法退货,退货单号:" + rmaNo);
+                throw new Exception("快递单已经确认过，退货单号:" + rmaNo);
             }
             if (saleRma.Status>EnumRMAStatus.NoDelivery.AsID())
             {
                 throw new Exception("快递单已经确认过，退货单号:" + rmaNo);
             }
             saleRma.RMAStatus = EnumReturnGoodsStatus.ServiceApprove.GetDescription();
+            saleRma.ServiceAgreeTime = DateTime.Now;
             rep.Update(saleRma);
         }
 
@@ -225,9 +228,9 @@ namespace Intime.OPC.Service.Support
             dto.EndDate = dto.EndDate.Date.AddDays(1);
 
             ISaleRMARepository rep = _repository as ISaleRMARepository;
-
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = rep.GetAll(dto.OrderNo,"", dto.PayType, "", dto.StartDate, dto.EndDate,
-                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerifyPass.GetDescription(),dto.pageIndex,dto.pageSize);
+                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.ServiceApprove.GetDescription(),dto.pageIndex,dto.pageSize);
 
             return lst;
         }
@@ -235,6 +238,7 @@ namespace Intime.OPC.Service.Support
         public void CompensateVerify(string rmaNo, decimal money)
         {
             var rep = (ISaleRMARepository)_repository;
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var saleRma = rep.GetByRmaNo(rmaNo);
             if (saleRma == null)
             {
@@ -244,12 +248,12 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("客服未确认,退货单号:" + rmaNo);
             }
-            if (saleRma.Status > EnumReturnGoodsStatus.CompensateVerify.AsID())
+            if (saleRma.Status > EnumReturnGoodsStatus.PayVerify.AsID())
             {
                 throw new Exception("该退货单已经确认,退货单号:" + rmaNo);
             }
            
-            saleRma.Status = EnumReturnGoodsStatus.CompensateVerifyPass.AsID();
+            saleRma.Status = EnumReturnGoodsStatus.PayVerify.AsID();
             saleRma.RealRMASumMoney = money;
             rep.Update(saleRma);
         }
@@ -257,8 +261,9 @@ namespace Intime.OPC.Service.Support
         public PageResult<SaleRmaDto> GetByRmaNo(string rmaNo, int pageIndex, int pageSize)
         {
             ISaleRMARepository rep = _repository as ISaleRMARepository;
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             return rep.GetAll("", "", "", rmaNo, new DateTime(2000,1,1),DateTime.Now.Date.AddDays(1),
-                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerify.GetDescription(),pageIndex,pageSize);
+                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.ServiceApprove.GetDescription(),pageIndex,pageSize);
         }
 
         public void PackageVerify(string rmaNo,bool passed)
@@ -425,16 +430,15 @@ namespace Intime.OPC.Service.Support
             rma.RMACount = Details.Sum(t => t.ReturnCount);
             rma.RMANo = RmaNo;
             rma.Reason = Reason;
-            rma.CompensationFee = RefundAmount;
+            rma.CompensationFee = ComputeAccount();
             rma.BackDate = DateTime.Now;
-            if (RefundAmount == 0)
+            rma.StoreId = OpcRma.StoreId;
+            rma.RecoverableSumMoney = RefundAmount - ComputeAccount();
+            if (rma.RecoverableSumMoney <= 0)
             {
                 rma.Status = EnumRMAStatus.ShipNoReceive.AsID();
             }
-            else
-            {
-                rma.RMAStatus = EnumReturnGoodsStatus.CompensateVerify.GetDescription();
-            }
+            rma.RMAStatus = EnumReturnGoodsStatus.PayVerify.GetDescription();
             return rma;
         }
 
