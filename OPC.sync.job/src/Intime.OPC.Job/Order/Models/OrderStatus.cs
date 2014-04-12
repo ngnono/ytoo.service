@@ -8,7 +8,9 @@ namespace Intime.OPC.Job.Order.Models
 {
     public class OrderStatus
     {
+        //订单号
         public string id { get; set; }
+       //状态
         public int status { get; set; }
         public IList<Head> head{get;set;}
         public IList<Detail> detail { get; set; }
