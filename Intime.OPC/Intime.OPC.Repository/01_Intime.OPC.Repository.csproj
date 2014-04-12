@@ -82,6 +82,7 @@
     <Compile Include="Support\OrderRemarkRepository.cs" />
     <Compile Include="Support\OrderRepository.cs" />
     <Compile Include="Support\OrgInfoRepository.cs" />
+    <Compile Include="Support\RmaCommentRepository.cs" />
     <Compile Include="Support\RmaDetailRepository.cs" />
     <Compile Include="Support\RMARepository.cs" />
     <Compile Include="Support\RoleMenuRepository.cs" />
