@@ -27,10 +27,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return this.RenderError(r => r.Message = "text is empty");
             }
-            //if (!regex.IsMatch(phone))
-            //{
-            //    return this.RenderError(r => r.Message = "Incorrect phone number");
-            //}
 
             try
             {

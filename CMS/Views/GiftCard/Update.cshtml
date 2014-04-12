@@ -36,8 +36,7 @@
             <th>面额</th>
             <th>销售价</th>
             <th>销售配额</th>
-            <th>状态</th>
-            <th>操作</th>
+            <th>上线</th>
         </tr>
         @foreach (var item in Model.CardItems)
         {
@@ -46,24 +45,7 @@
                 <td>@Html.TextBox("amount", item.UnitPrice)</td>
                 <td>@Html.TextBox("price", item.Price)</td>
                 <td>@Html.TextBox("quota", item.MaxLimit)</td>
-                @if (item.Status == 1)
-                {
-                    <td>上线</td>
-                }
-                else
-                {
-                    <td>下线</td>
-                }
-
-                @if (item.Status == 1)
-                {
-                    <td>@Html.ActionLink2("下线", "Down", new { id = item.Id })</td>
-                }
-                else
-                {
-                    <td>@Html.ActionLink2("上线", "Up", new { id = item.Id })</td>
-                }
-
+                <td>@Html.CheckBox("status",item.Status==1)</td>
             </tr>
         }
     </table>

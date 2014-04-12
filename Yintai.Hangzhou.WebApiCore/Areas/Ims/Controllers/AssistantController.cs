@@ -60,19 +60,20 @@ private  IEFRepository<IMS_ComboEntity> _comboRepo;
             var cards = new List<dynamic>();     
             var linq =
                 _cardRepo.Get(x => x.Status == 1)
-                    .OrderByDescending(x => x.UpdateDate)
+                    .OrderByDescending(x => x.Id)
                     .Skip(page*pagesize)
                     .Take(pagesize)
-                    .GroupJoin(_resourceRepo.Get(x => x.SourceType == (int) SourceType.GiftCard), c => c.Id,
+                    .GroupJoin(Context.Set<IMS_AssociateItemsEntity>().Where(x=>x.ItemType == (int)ComboType.GiftCard),card=>card.Id,item=>item.ItemId,(c,i)=>new{id=c.Id,desc=c.Name,sale = i.FirstOrDefault()})
+                    .GroupJoin(_resourceRepo.Get(x => x.SourceType == (int) SourceType.GiftCard), c => c.id,
                         s => s.SourceId, (c, rs) => new {card = c, image= rs.FirstOrDefault()});
             foreach (var cr in linq)
             {
                 cards.Add(new
                 {
-                    id = cr.card.Id,
-                    desc = cr.card.Name,
+                    id = cr.card.id,
+                    desc = cr.card.desc,
                     image = cr.image.Name.Image320Url(),
-                    is_online = true,
+                    is_online = cr.card.sale != null && cr.card.sale.Status == (int)DataStatus.Normal,
                 });
             }
             var rsp = new PagerInfoResponse<dynamic>(request.PagerRequest, count) {Items = cards};
