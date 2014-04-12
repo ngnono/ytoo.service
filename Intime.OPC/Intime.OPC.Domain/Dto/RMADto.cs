@@ -17,7 +17,11 @@ namespace Intime.OPC.Domain.Dto
         /// </summary>
         /// <value>The count.</value>
         public int? Count { get; set; }
-       
+
+        /// <summary>
+        /// 赔偿金额
+        /// </summary>
+        /// <value>The refund amount.</value>
         public decimal RefundAmount { get; set; }
 
         public string OrderNo { get; set; }
@@ -50,7 +54,7 @@ namespace Intime.OPC.Domain.Dto
         public string  RMAReason { get; set; }
         public string ContactPerson { get; set; }
         /// <summary>
-        /// 退货时间
+        /// 要求退货时间
         /// </summary>
         /// <value>The created date.</value>
         public DateTime CreatedDate { get; set; }
@@ -99,5 +103,17 @@ namespace Intime.OPC.Domain.Dto
         /// </summary>
         /// <value>The cash number.</value>
         public DateTime? RmaCashDate { get; set; }
+
+        /// <summary>
+        /// 退货时间
+        /// </summary>
+        /// <value>The back date.</value>
+        public System.DateTime BackDate { get; set; }
+
+        /// <summary>
+        /// 支付方式
+        /// </summary>
+        /// <value>The cash number.</value>
+        public string PayType { get; set; }
     }
 }

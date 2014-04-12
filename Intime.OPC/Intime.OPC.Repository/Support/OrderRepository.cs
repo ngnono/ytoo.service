@@ -18,6 +18,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -108,6 +109,65 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var filter = db.ShippingSales.Where(t => t.ShippingCode == shippingNo).Join(db.Orders,t=>t.OrderNo,o=>o.OrderNo,(t,o)=>o);
+
+                return filter.ToList();
+            }
+        }
+
+        public IList<Order> GetByReturnGoodsInfo(ReturnGoodsInfoGet request)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var filter = db.Orders.Where(t => t.CreateDate >= request.StartDate && t.CreateDate < request.EndDate);
+
+                if (request.OrderNo.IsNotNull())
+                {
+                    filter = filter.Where(t => t.OrderNo.Contains(request.OrderNo));
+                }
+                if (request.PayType.IsNotNull())
+                {
+                    filter = filter.Where(t => t.PaymentMethodCode == request.PayType);
+                }
+if (request.SaleOrderNo.IsNotNull())
+                {
+                    filter = filter.Join(db.OPC_Sale.Where(t => t.SaleOrderNo.Contains(request.SaleOrderNo)),
+                        t => t.OrderNo, o => o.OrderNo, (t, o) => t);
+                }
+
+                IQueryable<OPC_RMA> filter2 = null;
+
+                if (request.RmaNo.IsNotNull())
+                {
+                     filter2 = db.OPC_RMA.Where(t => t.RMANo.Contains(request.RmaNo));
+                }
+
+                if (request.RmaStatus.HasValue)
+                {
+                    if (filter2 != null)
+                    {
+                        filter2 = filter2.Where(t => t.Status == request.RmaStatus.Value);
+                    }
+                    else
+                    {
+                        filter2 = db.OPC_RMA.Where(t => t.Status == request.RmaStatus.Value);
+                    }
+                }
+
+                if (request.StoreID.HasValue)
+                {
+                    if (filter2 != null)
+                    {
+                        filter2 = filter2.Where(t => t.StoreId == request.StoreID.Value);
+                    }
+                    else
+                    {
+                        filter2 = db.OPC_RMA.Where(t => t.StoreId == request.StoreID.Value);
+                    }
+                }
+                if (filter2!=null)
+                {
+                    filter = Queryable.Join(filter, filter2, t => t.OrderNo, o => o.OrderNo, (t, o) => t);
+                }
 
                 return filter.ToList();
             }

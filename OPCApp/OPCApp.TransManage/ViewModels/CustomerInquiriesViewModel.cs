@@ -280,12 +280,12 @@ namespace OPCApp.TransManage.ViewModels
         #endregion
 
         public IList<KeyValue> StoreList { get; set; }
-
+        public IList<KeyValue> PaymentTypeList { get; set; }
         public IList<KeyValue> BrandList { get; set; }
 
         public IList<KeyValue> OrderStatusList { get; set; }
 
-        public IList<KeyValue> PaymentTypeList { get; set; }
+      
 
         public IList<KeyValue> OutGoodsTypeList { get; set; }
 

@@ -67,7 +67,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.StoreId).HasColumnName("StoreId");
             this.Property(t => t.ServiceAgreeTime).HasColumnName("CustomerAuthDate");
 
-
+            this.Property(t => t.RecoverableSumMoney).HasColumnName("RecoverableSumMoney");
         }
     }
 }

@@ -18,6 +18,9 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.CashNum)
                 .HasMaxLength(50);
 
+            this.Property(t => t.SectionCode)
+                .HasMaxLength(50);
+
             this.Property(t => t.ProdSaleCode)
                 .HasMaxLength(50);
 
@@ -39,6 +42,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
             this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
             this.Property(t => t.OrderItemId).HasColumnName("OrderItemId");
+            this.Property(t => t.SectionCode).HasColumnName("SectionCode");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Enums;
 using Intime.OPC.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -27,6 +28,13 @@ namespace TestService
         {
             var lst = Service.GetDetails("114201404086001");
             AssertList<RmaDetail>(lst);
+        }
+
+        [TestMethod]
+        public void TestGetByOrderNo()
+        {
+            var lst = Service.GetByOrderNo("114201404086",EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess);
+            AssertList<RMADto>(lst);
         }
        
     }

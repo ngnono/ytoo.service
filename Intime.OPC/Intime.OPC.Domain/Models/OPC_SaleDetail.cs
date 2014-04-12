@@ -22,5 +22,7 @@ namespace Intime.OPC.Domain.Models
         public Nullable<int> UpdatedUser { get; set; }
 
         public int?  OrderItemId { get; set; }
+
+        public string SectionCode { get; set; }
     }
 }

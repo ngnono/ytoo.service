@@ -1,9 +1,10 @@
 ﻿using System;
 
-namespace Intime.OPC.Domain.Dto
+namespace OPCApp.Domain.Customer
 {
     public class RMADto
     {
+        public bool IsSelected { get; set; }
         public int Id { get; set; }
         public string SaleOrderNo { get; set; }
         /// <summary>

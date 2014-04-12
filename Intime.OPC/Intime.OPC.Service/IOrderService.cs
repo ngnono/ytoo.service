@@ -71,6 +71,8 @@ namespace Intime.OPC.Service
         IList<OrderItemDto> GetOrderItems(string orderNo);
         IList<OrderDto> GetOrderByShippingNo(string shippingNo);
 
-        IList<OrderDto> GetOrderByReturnGoodsInfo(ReturnGoodsInfoGet request);
+        //IList<OrderDto> GetOrderByReturnGoodsInfo(ReturnGoodsInfoGet request);
+
+        IList<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request);
     }
 }

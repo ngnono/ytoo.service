@@ -22,7 +22,7 @@ namespace OPCApp.DataService.Impl.Customer
             }
             catch (Exception ex)
             {
-                return null;
+                return new  List<OPC_SaleRMA>();
             }
         }
 

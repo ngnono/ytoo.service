@@ -65,7 +65,10 @@ namespace Intime.OPC.Repository.Support
                     o.SaleOrderNo = t.SaleRMA.SaleOrderNo;
                     o.StoreFee = t.SaleRMA.StoreFee;
                     o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
-                  
+                    o.OrderSource = t.Orders.OrderSource;
+                    o.OrderTransFee = t.Orders.ShippingFee;
+                    o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
+                    o.RecoverableSumMoney = t.SaleRMA.RecoverableSumMoney;
                     lstSaleRma.Add(o);
                 }
                 return lstSaleRma;
@@ -73,11 +76,11 @@ namespace Intime.OPC.Repository.Support
         }
 
         public IList<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, DateTime startTime, DateTime endTime,
-            int? rmaStatus, int? storeId)
+            int? rmaStatus, int? storeId, string returnGoodsStatus)
         {
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus==returnGoodsStatus);
                 var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -94,7 +97,7 @@ namespace Intime.OPC.Repository.Support
                 {
                     query = query.Where(t => t.RMANo.Contains(rmaNo));
                 }
-
+               
 
                 if (!string.IsNullOrWhiteSpace(payType))
                 {
@@ -136,6 +139,11 @@ namespace Intime.OPC.Repository.Support
                 }
                 return lstSaleRma;
             }
+        }
+
+        public OPC_SaleRMA GetByRmaNo(string rmaNo)
+        {
+            return  Select(t => t.RMANo == rmaNo).FirstOrDefault();
         }
     }
 }
