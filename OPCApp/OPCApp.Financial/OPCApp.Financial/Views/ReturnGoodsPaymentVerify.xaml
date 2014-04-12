@@ -136,8 +136,14 @@
                     <DataGridTextColumn Header="专柜码" Binding="{Binding ContractPhone}" />
                     <DataGridTextColumn Header="退货时间" Binding="{Binding IsEnabled}" />
                     <DataGridTextColumn Header="支付方式" Binding="{Binding PrintTemplate}" />
-                    <DataGridTextColumn Header="备注" Binding="{Binding ContractNumber}" />
-                    <DataGridTextColumn Header="备注时间" Binding="{Binding ContractNumber}" />
+                    <DataGridTemplateColumn Header="备注录入">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="录入"
+                                    Command="{Binding Path=DataContext.CommandSetRmaRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>

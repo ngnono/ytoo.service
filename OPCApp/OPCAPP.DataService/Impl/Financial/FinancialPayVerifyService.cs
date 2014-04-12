@@ -39,5 +39,34 @@ namespace OPCApp.DataService.Impl.Trans
                 return new  List<RMADto>();
             }
         }
+
+        public IList<SaleRmaDto> GetRmaByReturnGoodPay(ReturnGoodsPayDto returnGoodsPay)
+        {
+            try
+            {
+                var lst = RestClient.Get<SaleRmaDto>("rma/GetRmaByReturnGoodPay", returnGoodsPay.ToString());
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                return new List<SaleRmaDto>();
+            }
+        }
+
+
+        public bool FinancialVerifyPass(List<string> rmaNoList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool FinancialVerifyNoPass(List<string> rmaNoList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<RMADto> GetRmaByFilter(PackageReceiveDto packageReceive)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
