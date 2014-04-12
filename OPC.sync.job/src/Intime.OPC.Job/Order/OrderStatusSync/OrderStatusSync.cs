@@ -99,6 +99,8 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                 p.UpdateDate = DateTime.Now;
                 p.UpdateUser = SystemDefine.SystemUser;
                 db.SaveChanges();
+                Log.InfoFormat("完成订单状态更新,orderNo:{0},status:{1}", p.OrderNo, SystemDefine.OrderFinishSplitStatusCode);
+
             }
         }
 
