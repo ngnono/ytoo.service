@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,14 +17,13 @@ namespace TestService
         [TestMethod]
         public void TestGetByReturnGoods()
         {
-            ReturnGoodsGet request=new ReturnGoodsGet();
+            ReturnGoodsRequest request=new ReturnGoodsRequest();
 
             request.StartDate = new DateTime(2010, 1, 1);
             request.EndDate = DateTime.Now.Date.AddDays(1);
 
-            var lst=  Service.GetByReturnGoods(request);
-            Assert.IsNotNull(lst);
-            Assert.AreNotEqual(lst.Count,0);
+            var lst=  Service.GetByReturnGoods(request,1);
+            AssertList<SaleRmaDto>(lst);
         }
 
         [TestMethod]
@@ -46,7 +46,7 @@ namespace TestService
         public void TestGetByPack_PackageReceiveDto()
         {
 
-            PackageReceiveDto dto = new PackageReceiveDto();
+            PackageReceiveRequest dto = new PackageReceiveRequest();
             dto.StartDate = new DateTime(2014, 4, 1);
             dto.EndDate = DateTime.Now.Date;
             dto.OrderNo = "114";
@@ -54,7 +54,7 @@ namespace TestService
 
             var lst = Service.GetByPack(dto);
             Assert.IsNotNull(lst);
-            Assert.AreNotEqual(0, lst.Count);
+            Assert.AreNotEqual(0, lst.TotalCount);
         }
     }
 }

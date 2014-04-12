@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
@@ -12,7 +13,7 @@ namespace Intime.OPC.Repository.Support
 {
     public class RMARepository : BaseRepository<OPC_RMA>, IRMARepository
     {
-        public IList<OPC_RMA> GetByReturnGoods(ReturnGoodsInfoGet request)
+        public PageResult<OPC_RMA> GetByReturnGoods(ReturnGoodsInfoRequest request)
         {
             //todo 为实现
             return null;
@@ -23,7 +24,7 @@ namespace Intime.OPC.Repository.Support
             //}
         }
 
-        public IList<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus)
+        public PageResult<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus,int pageIdex,int pageSize)
         {
             int status = rmaStatus.AsID();
             string des = returnGoodsStatus.GetDescription();
@@ -40,13 +41,15 @@ namespace Intime.OPC.Repository.Support
                 }
 
 
-                var lst = query.Join(db.OPC_SaleRMA.Where(e => e.Status == status && e.RMAStatus == des), o => o.RMANo, t => t.RMANo, (t, o) => new { Rma = t, SaleRma = o })
+                var lst2 = query.Join(db.OPC_SaleRMA.Where(e => e.Status == status && e.RMAStatus == des), o => o.RMANo, t => t.RMANo, (t, o) => new { Rma = t, SaleRma = o })
                 .Join(db.Stores, t => t.Rma.StoreId, o => o.Id, (t, o) => new { Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma })
                 .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo, (t, o) => new { Rma = t.Rma,StoreName = t.StoreName, SaleRma=t.SaleRma,Sale=o })
-                .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo, (t, o) => new { Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = t.Sale,payTyp=o.PaymentMethodName }).ToList();
+                .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo, (t, o) => new { Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = t.Sale,payTyp=o.PaymentMethodName })
+                .OrderByDescending(t=>t.Rma.CreatedDate);
 
+                var lst = lst2.ToPageResult(pageIdex, pageSize);
                var lstSaleRma = new List<RMADto>();
-               foreach (var t in lst)
+               foreach (var t in lst.Result)
                {
                    var o = new RMADto();
                    o.Id = t.Rma.Id;
@@ -76,7 +79,7 @@ namespace Intime.OPC.Repository.Support
                    lstSaleRma.Add(o);
                }
 
-                return lstSaleRma;
+                return new PageResult<RMADto>(lstSaleRma,lst.TotalCount);
             }
         }
     }

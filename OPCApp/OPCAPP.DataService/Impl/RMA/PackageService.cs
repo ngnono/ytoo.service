@@ -65,5 +65,44 @@ namespace OPCApp.DataService.Impl.Trans
                 return false;
             }
         }
+
+      #region 退货包裹审核
+        public bool TransVerifyPass(List<string> rmaNoList)
+        {
+            try
+            {
+                return RestClient.Post("custom/PackageVerify", new { RmaNos = rmaNoList, Pass = true });
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool TransVerifyNoPass(List<string> rmaNoList)
+        {
+            try
+            {
+                return RestClient.Post("custom/PackageVerify", new { RmaNos = rmaNoList, Pass = false });
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public IList<RMADto> GetRmaByFilter(PackageReceiveDto packageReceive)
+        {
+            try
+            {
+                var lst = RestClient.Get<RMADto>("custom/GetRmaPackVerifyByPack", packageReceive.ToString());
+                return lst;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
+        }
+#endregion
     }
 }

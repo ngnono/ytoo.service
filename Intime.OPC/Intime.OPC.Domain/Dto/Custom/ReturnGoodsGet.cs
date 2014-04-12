@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Domain.Dto.Custom
 {
-    public  class ReturnGoodsGet
+    public  class ReturnGoodsRequest: BaseRequest
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

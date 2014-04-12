@@ -39,12 +39,12 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
-        //[HttpGet]
-        //public IHttpActionResult GetByReturnGoodsInfo([FromBody] ReturnGoodsInfoGet request)
-        //{
-        //    var userId = GetCurrentUserID();
-        //    return DoFunction(() => { return _saleRmaService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");
-        //}
+        [HttpGet]
+        public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
+        {
+            var userId = GetCurrentUserID();
+            return DoFunction(() => { return _saleRmaService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");
+        }
 
 
         /// <summary>
@@ -53,10 +53,10 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="orderNo"></param>
         /// <returns></returns>
         [HttpGet]
-        public IHttpActionResult GetByOrderNo(string orderNo)
+        public IHttpActionResult GetByOrderNo(string orderNo,int pageIndex,int pageSize)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess); }, "查询订单信息失败");
+            return DoFunction(() => { return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess,pageIndex,pageSize); }, "查询订单信息失败");
         }
 
         /// <summary>
@@ -65,10 +65,10 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="orderNo"></param>
         /// <returns></returns>
         [HttpGet]
-        public IHttpActionResult GetRmaByOrderNo(string orderNo)
+        public IHttpActionResult GetRmaByOrderNo(string orderNo, int pageIndex, int pageSize)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess); }, "查询订单信息失败");
+            return DoFunction(() => { return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess,pageIndex,pageSize); }, "查询订单信息失败");
         }
 
         /// <summary>
@@ -77,10 +77,10 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetRmaDetailByRmaNo( string rmaNo)
+        public IHttpActionResult GetRmaDetailByRmaNo(string rmaNo, int pageIndex, int pageSize)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _rmaService.GetDetails(rmaNo) ; }, "查询订单信息失败");
+            return DoFunction(() => { return _rmaService.GetDetails(rmaNo,pageIndex,pageSize) ; }, "查询订单信息失败");
         }
         #region 财务赔偿审核
 
@@ -91,7 +91,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetByFinaceDto([FromUri]FinaceDto request)
+        public IHttpActionResult GetByFinaceDto([FromUri]FinaceRequest request)
         {
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _saleRmaService.GetByFinaceDto(request); }, "查询退货单信息失败");
@@ -125,7 +125,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetRmaByReturnGoodPay([FromUri]ReturnGoodsPay request)
+        public IHttpActionResult GetRmaByReturnGoodPay([FromUri]ReturnGoodsPayRequest request)
         {
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _saleRmaService.GetByReturnGoodPay(request); }, "查询退货单信息失败");
@@ -137,10 +137,10 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetByRmaNo(string rmaNo)
+        public IHttpActionResult GetByRmaNo(string rmaNo, int pageIndex, int pageSize)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _saleRmaService.GetByRmaNo(rmaNo); }, "查询退货单信息失败");
+            return DoFunction(() => { return _saleRmaService.GetByRmaNo(rmaNo,pageIndex,pageSize); }, "查询退货单信息失败");
         }
 
 

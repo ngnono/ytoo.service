@@ -90,7 +90,7 @@ namespace Intime.OPC.Repository.Support
             return Select(t => t.OrderNo == orderNo).FirstOrDefault();
         }
 
-        public IList<Order> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime)
+        public PageResult<Order> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime, int pageIndex, int pageSize)
         {
             using (var db = new YintaiHZhouContext())
             {
@@ -100,21 +100,22 @@ namespace Intime.OPC.Repository.Support
                 {
                    filter= filter.Where(t => t.OrderNo.Contains(orderNo));
                 }
-                return filter.ToList();
+                filter = filter.OrderByDescending(t => t.CreateDate);
+                return filter.ToPageResult(pageIndex,pageSize);
             }
         }
 
-        public IList<Order> GetOrderByShippingNo(string shippingNo)
+        public PageResult<Order> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize)
         {
             using (var db = new YintaiHZhouContext())
             {
                 var filter = db.ShippingSales.Where(t => t.ShippingCode == shippingNo).Join(db.Orders,t=>t.OrderNo,o=>o.OrderNo,(t,o)=>o);
-
-                return filter.ToList();
+                filter = filter.OrderByDescending(t => t.CreateDate);
+                return filter.ToPageResult(pageIndex,pageSize);
             }
         }
 
-        public IList<Order> GetByReturnGoodsInfo(ReturnGoodsInfoGet request)
+        public PageResult<Order> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
             using (var db = new YintaiHZhouContext())
             {
@@ -128,7 +129,7 @@ namespace Intime.OPC.Repository.Support
                 {
                     filter = filter.Where(t => t.PaymentMethodCode == request.PayType);
                 }
-if (request.SaleOrderNo.IsNotNull())
+                if (request.SaleOrderNo.IsNotNull())
                 {
                     filter = filter.Join(db.OPC_Sale.Where(t => t.SaleOrderNo.Contains(request.SaleOrderNo)),
                         t => t.OrderNo, o => o.OrderNo, (t, o) => t);
@@ -168,8 +169,8 @@ if (request.SaleOrderNo.IsNotNull())
                 {
                     filter = Queryable.Join(filter, filter2, t => t.OrderNo, o => o.OrderNo, (t, o) => t);
                 }
-
-                return filter.ToList();
+                filter = filter.OrderByDescending(t => t.CreateDate);
+                return filter.ToPageResult(request.pageIndex,request.pageSize);
             }
         }
 

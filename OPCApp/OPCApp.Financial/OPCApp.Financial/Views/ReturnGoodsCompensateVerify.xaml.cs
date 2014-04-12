@@ -18,10 +18,10 @@ namespace OPCApp.Financial.Views
 
         }
         [Import("ReturnGoodsCompensateVerifyViewModel")]
-        public OPCApp.Financial.ViewModels.ReturnGoodsPaymentVerifyViewModel ViewModel
+        public OPCApp.Financial.ViewModels.ReturnGoodsCompensateVerifyViewModel ViewModel
         {
             set { DataContext = value; }
-            get { return DataContext as ReturnGoodsPaymentVerifyViewModel; }
+            get { return DataContext as ReturnGoodsCompensateVerifyViewModel; }
         }
     }
 }
