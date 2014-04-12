@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
@@ -9,7 +10,7 @@ namespace Intime.OPC.Repository
 {
     public interface IRMARepository : IRepository<OPC_RMA>
     {
-        IList<OPC_RMA> GetByReturnGoods(ReturnGoodsInfoGet request);
+        PageResult<OPC_RMA> GetByReturnGoods(ReturnGoodsInfoRequest request);
 
         /// <summary>
         /// Gets all.
@@ -21,6 +22,6 @@ namespace Intime.OPC.Repository
         /// <param name="rmaStatus">退货单状态</param>
         /// <param name="returnGoodsStatus">退货状态</param>
         /// <returns>IList{RMADto}.</returns>
-        IList<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime,EnumRMAStatus rmaStatus,EnumReturnGoodsStatus returnGoodsStatus);
+        PageResult<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus,int pageIndex,int pageSize);
     }
 }

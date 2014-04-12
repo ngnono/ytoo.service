@@ -14,7 +14,7 @@ namespace TestService
         public void TestGetAll_PackageReceiveDto()
         {
             //IList<RMADto> GetAll(PackageReceiveDto dto);
-            PackageReceiveDto dto=new PackageReceiveDto();
+            PackageReceiveRequest dto=new PackageReceiveRequest();
             dto.StartDate = new DateTime(2014, 4, 1);
             dto.EndDate = DateTime.Now.Date;
             dto.OrderNo = "114";
@@ -26,14 +26,14 @@ namespace TestService
         [TestMethod]
         public void TestGetDetails_rmaNo()
         {
-            var lst = Service.GetDetails("114201404086001");
+            var lst = Service.GetDetails("114201404086001",1,1000);
             AssertList<RmaDetail>(lst);
         }
 
         [TestMethod]
         public void TestGetByOrderNo()
         {
-            var lst = Service.GetByOrderNo("114201404087",EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess);
+            var lst = Service.GetByOrderNo("114201404087",EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess,1,1000);
             AssertList<RMADto>(lst);
         }
        

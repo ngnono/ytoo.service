@@ -16,13 +16,20 @@ namespace TestService
             
 
 
-            ReturnGoodsInfoGet goods=new ReturnGoodsInfoGet();
+            ReturnGoodsInfoRequest goods=new ReturnGoodsInfoRequest();
             goods.StartDate = new DateTime(2010, 1, 1);
             goods.EndDate = DateTime.Now.Date.AddDays(1);
             
 
             var lst = Service.GetByReturnGoodsInfo(goods);
             AssertList<OrderDto>(lst);
+        }
+
+         [TestMethod]
+        public void TestGetOrderItemsByOrderNo()
+         {
+             var lst = Service.GetOrderItems("1142014041211",1,1000);
+            AssertList<OrderItemDto>(lst);
         }
     }
 }

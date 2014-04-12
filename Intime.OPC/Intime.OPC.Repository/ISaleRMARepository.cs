@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
@@ -15,7 +16,7 @@ namespace Intime.OPC.Repository
         /// <returns>System.Int32.</returns>
         int Count(string saleOrderNo);
 
-        IList<SaleRmaDto> GetAll(string orderNo, string payType, int? bandId, System.DateTime startTime, System.DateTime endTime, string telephone);
+        PageResult<SaleRmaDto> GetAll(string orderNo, string payType, int? bandId, System.DateTime startTime, System.DateTime endTime, string telephone,int pageIndex,int pageSize);
 
         /// <summary>
         /// Gets all.
@@ -31,7 +32,7 @@ namespace Intime.OPC.Repository
         /// <param name="rmaStatus">The rma status.</param>
         /// <param name="returnGoodsStatus">The return goods status.</param>
         /// <returns>IList{SaleRmaDto}.</returns>
-        IList<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, System.DateTime startTime, System.DateTime endTime, int? rmaStatus, int? storeId,string returnGoodsStatus);
+        PageResult<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, System.DateTime startTime, System.DateTime endTime, int? rmaStatus, int? storeId, string returnGoodsStatus, int pageIndex, int pageSize);
 
         OPC_SaleRMA GetByRmaNo(string rmaNo);
     }

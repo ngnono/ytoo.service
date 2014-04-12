@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
@@ -22,25 +23,25 @@ namespace Intime.OPC.Service.Support
 
         #region IRmaService Members
 
-        public IList<RMADto> GetAll(PackageReceiveDto dto)
+        public PageResult<RMADto> GetAll(PackageReceiveRequest dto)
         {
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
-            IList<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.NoDelivery, EnumReturnGoodsStatus.ServiceApprove);
+            var lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.NoDelivery, EnumReturnGoodsStatus.ServiceApprove,dto.pageIndex,dto.pageSize);
             return lst;
         }
 
-        public IList<RmaDetail> GetDetails(string rmaNo)
+        public PageResult<RmaDetail> GetDetails(string rmaNo,int pageIndex,int pageSize)
         {
-            var lst = _rmaDetailRepository.GetByRmaNo(rmaNo);
+            var lst = _rmaDetailRepository.GetByRmaNo(rmaNo,pageIndex,pageSize);
             return lst;
         }
 
-        public IList<RMADto> GetByOrderNo(string orderNo, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus)
+        public PageResult<RMADto> GetByOrderNo(string orderNo, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus,int pageIndex,int pageSize)
         {
             var rep = (IRMARepository)_repository;
-            IList<RMADto> lst = rep.GetAll(orderNo, "", new DateTime(2000, 1, 1), DateTime.Now.Date.AddDays(1), rmaStatus, returnGoodsStatus);
+            var  lst = rep.GetAll(orderNo, "", new DateTime(2000, 1, 1), DateTime.Now.Date.AddDays(1), rmaStatus, returnGoodsStatus,pageIndex,pageSize);
             return lst;
         }
 
@@ -57,12 +58,12 @@ namespace Intime.OPC.Service.Support
         #endregion
 
 
-        public IList<RMADto> GetAllPackVerify(PackageReceiveDto dto)
+        public PageResult<RMADto> GetAllPackVerify(PackageReceiveRequest dto)
         {
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
-            IList<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipVerify, EnumReturnGoodsStatus.ServiceApprove);
+            PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipVerify, EnumReturnGoodsStatus.ServiceApprove,dto.pageIndex,dto.pageSize);
             return lst;
         }
     }

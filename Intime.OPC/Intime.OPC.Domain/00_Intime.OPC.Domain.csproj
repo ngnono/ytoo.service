@@ -59,6 +59,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Base\BaseRequest.cs" />
     <Compile Include="Base\IEntity.cs" />
     <Compile Include="Dto\AuthUserDto.cs" />
     <Compile Include="Dto\Custom\FinaceDto.cs" />

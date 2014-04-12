@@ -1,11 +1,12 @@
 ﻿using System;
+using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Domain.Dto.Custom
 {
     /// <summary>
     /// 客户服务-客服退货查询-退货信息
     /// </summary>
-    public class ReturnGoodsInfoGet
+    public class ReturnGoodsInfoRequest : BaseRequest
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

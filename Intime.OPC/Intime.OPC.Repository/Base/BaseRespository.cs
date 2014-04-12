@@ -21,6 +21,8 @@ using System.Linq.Expressions;
 using System.Text;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Base;
+using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Exception;
 
 namespace Intime.OPC.Repository.Base
 {
@@ -115,6 +117,26 @@ namespace Intime.OPC.Repository.Base
         }
 
         #endregion
+
+
+        protected UserDto CurrentUser { get; private set; }
+
+        public void SetCurrentUser(UserDto dto)
+        {
+            CurrentUser = dto;
+        }
+
+        /// <summary>
+        /// 验证用户
+        /// </summary>
+        /// <exception cref="UserNotValidException">-1</exception>
+        protected void CheckUser()
+        {
+            if (CurrentUser == null)
+            {
+                throw new UserNotValidException(-1);
+            }
+        }
 
         /// <summary>
         ///     Selects the specified filter.

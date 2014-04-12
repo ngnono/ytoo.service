@@ -23,13 +23,14 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetOrder([FromUri] ReturnGoodsGet request)
+        public IHttpActionResult GetOrder([FromUri] ReturnGoodsRequest request)
         {
             return DoFunction(() =>
             {
                 var userId = GetCurrentUserID();
-
-                return _saleRmaService.GetByReturnGoods(request);
+                int brandid = request.BandId.HasValue ? request.BandId.Value : -1;
+               
+                return _saleRmaService.GetByReturnGoods(request,userId);
             }, "查询订单失败");
         }
 
@@ -79,7 +80,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetRmaPackVerifyByPack([FromUri]PackageReceiveDto request)
+        public IHttpActionResult GetRmaPackVerifyByPack([FromUri]PackageReceiveRequest request)
         {
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _rmaService.GetAllPackVerify(request); }, "查询退货单信息失败");

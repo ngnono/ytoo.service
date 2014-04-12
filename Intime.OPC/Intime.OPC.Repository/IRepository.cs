@@ -14,6 +14,7 @@
 
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Base;
+using Intime.OPC.Domain.Dto;
 
 namespace Intime.OPC.Repository
 {
@@ -23,6 +24,7 @@ namespace Intime.OPC.Repository
     /// <typeparam name="T"></typeparam>
     public interface IRepository<T> where T : class, IEntity
     {
+        void SetCurrentUser(UserDto dto);
         /// <summary>
         ///     Creates the specified entity.
         /// </summary>

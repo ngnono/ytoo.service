@@ -31,9 +31,9 @@ namespace Intime.OPC.Repository
 
         Order GetOrderByOrderNo(string orderNo);
 
-        IList<Order> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime);
-        IList<Order> GetOrderByShippingNo(string shippingNo);
+        PageResult<Order> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime, int pageIndex, int pageSize);
+        PageResult<Order> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize);
 
-        IList<Order> GetByReturnGoodsInfo(Domain.Dto.Custom.ReturnGoodsInfoGet request);
+        PageResult<Order> GetByReturnGoodsInfo(Domain.Dto.Custom.ReturnGoodsInfoRequest request);
     }
 }
