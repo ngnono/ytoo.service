@@ -97,7 +97,7 @@
                         >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding CommandGetRmaDetailByRma,ElementName=DataGrid1}" />
+                        <i:InvokeCommandAction Command="{Binding CommandGetRmaDetailByRma}" />
                     </i:EventTrigger>
 
                 </i:Interaction.Triggers>
