@@ -45,8 +45,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                IList<RmaDetail> lst = RestClient.Get<RmaDetail>("rma/GetRmaDetailByRmaNo", string.Format("rmaNo={0}", rmaNo));
-                return lst;
+                var lst = RestClient.GetPage<RmaDetail>("rma/GetRmaDetailByRmaNo", string.Format("rmaNo={0}&pageIndex={1}&pageSize={2}", rmaNo,1,300));
+                return lst.Result;
             }
             catch (Exception ex)
             {
