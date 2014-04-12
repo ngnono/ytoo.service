@@ -144,10 +144,10 @@
     <Compile Include="Product\ProductSync\SystemDefine.cs" />
     <Compile Include="Product\StockAggregate\StockAttregateJob.cs" />
     <Compile Include="Product\StockAggregate\StockModel.cs" />
-    <Compile Include="RMASplit\Models\Detail.cs" />
-    <Compile Include="RMASplit\Models\Head.cs" />
-    <Compile Include="RMASplit\Models\OrderStatus.cs" />
-    <Compile Include="RMASplit\Models\Payment.cs">
+    <Compile Include="Order\Models\Detail.cs" />
+    <Compile Include="Order\Models\Head.cs" />
+    <Compile Include="Order\Models\OrderStatus.cs" />
+    <Compile Include="Order\Models\Payment.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Trade\SplitOrder\IOrderStockStore.cs" />
@@ -193,7 +193,9 @@
       <Name>Intime.OPC.Domain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="RMASplit\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

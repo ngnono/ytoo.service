@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Intime.OPC.Job.RMASplit.Models
+namespace Intime.OPC.Job.Order.Models
 {
     public class OrderStatus
     {
