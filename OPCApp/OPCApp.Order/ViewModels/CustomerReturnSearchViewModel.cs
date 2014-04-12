@@ -115,7 +115,7 @@ namespace OPCApp.Customer.ViewModels
             {
 
             }
-            MessageBox.Show(flag ? "退货成功" : "退货失败", "提示");
+            MessageBox.Show(flag ? "客服同意退货成功" : "客服同意退货失败", "提示");
             if (flag)
             {
                 RmaDetailList.Clear();
@@ -123,10 +123,10 @@ namespace OPCApp.Customer.ViewModels
             }
         }
 
-        public void SearchGoodsInfo()
+        public virtual void SearchGoodsInfo()
         {
             OrderDtoList =
-                AppEx.Container.GetInstance<ICustomerReturnSearch>().ReturnGoodsSearch(ReturnGoodsInfoGet).ToList();
+                AppEx.Container.GetInstance<ICustomerReturnSearch>().ReturnGoodsRmaSearch(ReturnGoodsInfoGet).ToList();
         }
 
         public void SearchRmaDtoListInfo()
