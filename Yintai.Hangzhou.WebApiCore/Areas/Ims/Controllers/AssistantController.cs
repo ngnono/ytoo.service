@@ -28,6 +28,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IResourceRepository _resourceRepo;
         private IInventoryRepository _inventoryRepo;
 private  IEFRepository<IMS_ComboEntity> _comboRepo;
+private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
         public AssistantController(IEFRepository<IMS_AssociateSaleCodeEntity> salescodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateitemRepo,
             IEFRepository<IMS_AssociateIncomeRequestEntity> incomerequestRepo,
@@ -37,7 +38,8 @@ private  IEFRepository<IMS_ComboEntity> _comboRepo;
             IEFRepository<IMS_GiftCardEntity> cardRepo,
             IResourceRepository resourceRepo,
             IInventoryRepository inventoryRepo,
-            IEFRepository<IMS_ComboEntity> comboRepo
+            IEFRepository<IMS_ComboEntity> comboRepo,
+            IEFRepository<IMS_AssociateIncomeEntity> incomeRepo
             )
         {
             _salescodeRepo = salescodeRepo;
@@ -50,6 +52,7 @@ private  IEFRepository<IMS_ComboEntity> _comboRepo;
             _resourceRepo = resourceRepo;
             _inventoryRepo = inventoryRepo;
             _comboRepo = comboRepo;
+            _incomeRepo = incomeRepo;
         }
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request)
@@ -393,20 +396,29 @@ private  IEFRepository<IMS_ComboEntity> _comboRepo;
                         FirstOrDefault();
             if (bankEntity == null)
                 return this.RenderError(r => r.Message = "银行不支持提现");
-            _incomerequestRepo.Insert(new IMS_AssociateIncomeRequestEntity()
+            using (var ts = new TransactionScope())
             {
-                Amount = request.Amount,
-                BankName = bankEntity.Name,
-                CreateDate = DateTime.Now,
-                BankNo = request.Bank_No,
-                BankCode = request.Bank_Code,
-                Status = (int)AssociateIncomeRequestStatus.Requesting,
-                BankAccountName = request.User_Name,
-                UpdateDate = DateTime.Now,
-                UserId = authuid
+                _incomerequestRepo.Insert(new IMS_AssociateIncomeRequestEntity()
+                {
+                    Amount = request.Amount,
+                    BankName = bankEntity.Name,
+                    CreateDate = DateTime.Now,
+                    BankNo = request.Bank_No,
+                    BankCode = request.Bank_Code,
+                    Status = (int)AssociateIncomeRequestStatus.Requesting,
+                    BankAccountName = request.User_Name,
+                    UpdateDate = DateTime.Now,
+                    UserId = authuid
 
 
-            });
+                });
+
+                incomeAccountEntity.AvailableAmount -= request.Amount;
+                incomeAccountEntity.UpdateDate = DateTime.Now;
+                _incomeRepo.Update(incomeAccountEntity);
+
+                ts.Complete();
+            }
 
             return this.RenderSuccess<dynamic>(null);
         }
