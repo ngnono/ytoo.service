@@ -9,12 +9,15 @@ using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service.Support
 {
-    public class RmaService:BaseService<OPC_RMA>, IRmaService
+    public class RmaService : BaseService<OPC_RMA>, IRmaService
     {
         private IRmaDetailRepository _rmaDetailRepository;
-        public RmaService(IRMARepository repository, IRmaDetailRepository rmaDetailRepository) : base(repository)
+        private IRmaCommentRepository _rmaCommentRepository;
+        public RmaService(IRMARepository repository, IRmaDetailRepository rmaDetailRepository, IRmaCommentRepository rmaCommentRepository)
+            : base(repository)
         {
             _rmaDetailRepository = rmaDetailRepository;
+            _rmaCommentRepository = rmaCommentRepository;
         }
 
         #region IRmaService Members
@@ -23,25 +26,34 @@ namespace Intime.OPC.Service.Support
         {
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
-            var rep = (IRMARepository) _repository;
-            IList<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate,EnumRMAStatus.NoDelivery,EnumReturnGoodsStatus.ServiceApprove);
+            var rep = (IRMARepository)_repository;
+            IList<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.NoDelivery, EnumReturnGoodsStatus.ServiceApprove);
             return lst;
         }
 
         public IList<RmaDetail> GetDetails(string rmaNo)
         {
-            var lst= _rmaDetailRepository.GetByRmaNo(rmaNo);
+            var lst = _rmaDetailRepository.GetByRmaNo(rmaNo);
             return lst;
         }
 
         public IList<RMADto> GetByOrderNo(string orderNo, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus)
         {
             var rep = (IRMARepository)_repository;
-            IList<RMADto> lst = rep.GetAll(orderNo, "", new DateTime(2000,1,1), DateTime.Now.Date.AddDays(1),rmaStatus,returnGoodsStatus);
+            IList<RMADto> lst = rep.GetAll(orderNo, "", new DateTime(2000, 1, 1), DateTime.Now.Date.AddDays(1), rmaStatus, returnGoodsStatus);
             return lst;
         }
 
-     
+        public void AddComment(OPC_RMAComment comment)
+        {
+            _rmaCommentRepository.Create(comment);
+        }
+
+        public IList<OPC_RMAComment> GetCommentByRmaNo(string rmaNo)
+        {
+            return _rmaCommentRepository.GetByRmaID(rmaNo);
+        }
+
         #endregion
 
 
