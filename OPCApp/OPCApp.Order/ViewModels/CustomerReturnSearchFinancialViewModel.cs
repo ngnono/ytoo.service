@@ -15,7 +15,7 @@ using OPCApp.Infrastructure;
 
 namespace OPCApp.Customer.ViewModels
 {
-    [Export("CustomerReturnSearchFinancialViewModel", typeof(CustomerReturnSearchFinancialViewModel))]
+    [Export(typeof(CustomerReturnSearchFinancialViewModel))]
     public class CustomerReturnSearchFinancialViewModel : CustomerReturnSearchViewModel
     {
 
