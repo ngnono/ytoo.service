@@ -427,7 +427,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Send(string charge_no, string comment, string phone, int authuid)
+        public ActionResult Send(string charge_no, string comment, string from_phone, string phone, int authuid)
         {
             var order = _orderRepo.Find(x => x.No == charge_no);
             if (order.Status == (int)GiftCardOrderStatus.Recharge)
@@ -439,6 +439,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return this.RenderError(r => r.Message = "您已经赠送了此礼品卡，请通知好友领取！");
             }
+
+            var cardUser = _userRepo.Find(x=>x.UserId == authuid);
 
             var preTran = _transRepo.Find(x => x.OrderNo == charge_no && x.IsActive == 0 && x.IsDecline == 0);
 
@@ -465,6 +467,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     PreTransferId = preTran == null ? 0 : preTran.Id,
                     OperateDate = DateTime.Now,
                     OperateUser = authuid,
+                    FromPhone = cardUser == null? from_phone:cardUser.GiftCardAccount,
                 });
                 ts.Complete();
             }
@@ -546,16 +549,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     .Join(_orderRepo.Get(o => o.Status != (int) GiftCardOrderStatus.Void), x => x.OrderNo, o => o.No,
                         (x, o) => new {transfer = x, order = o})
                     .Join(_customerRepo.GetAll(), t => t.transfer.FromUserId, u => u.Id,
-                        (o, u) => new {o.order, o.transfer, user = u})
-                    .Join(_userRepo.GetAll(), x => x.user.Id, cu => cu.UserId,
-                        (x, u) => new {x.order, x.transfer, x.user, card_user = u});
+                        (o, u) => new {o.order, o.transfer, user = u});
             dynamic items = new List<dynamic>();
             foreach (var o in orders)
             {
                 items.Add(new
                 {
                     from = o.transfer.FromNickName,
-                    from_phone = o.card_user.GiftCardAccount,
+                    from_phone = o.transfer.FromPhone,
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     status_i = SetStatus4Receiver(o.order, o.transfer),

@@ -15,7 +15,6 @@
     <script>
         $(document).ready(function() {
             $("#btn_add").click(function () {
-                @*var row = '<tr class="rowItem"><td>@Html.TextBoxFor(x=>x.Template.Amount)</td><td>@Html.TextBoxFor(x=>x.Template.Price)</td><td>@Html.TextBoxFor(x=>x.Template.Quota)</td><td>@Html.CheckBoxFor(x=>x.IsPublished)</td><td><a href="javascript:void(0)" onclick="removetr(this)">删除</a></td>';*@
                 var row = '<tr class="rowItem"><td><input name="amount" type="text" /></td><td><input name="price" type="text"/></td><td><input name="quota" type="text"/></td><td><input name="status" type="checkbox"/> </td><td><a href="javascript:void(0)" onclick="removetr(this)">删除</a></td></tr>';
                 $("tr:last").before(row);
             });

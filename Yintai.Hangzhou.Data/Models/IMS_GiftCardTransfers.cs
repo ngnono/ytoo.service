@@ -18,8 +18,8 @@ namespace Yintai.Hangzhou.Data.Models
         public int CreateUser { get; set; }
         public System.DateTime OperateDate { get; set; }
         public int OperateUser { get; set; }
-
         public string FromNickName { get; set; }
+        public string FromPhone { get; set; }
 
         #region Overrides of BaseEntity
 
