@@ -53,5 +53,17 @@ namespace OPCApp.DataService.Impl.Trans
                 return new List<RmaDetail>();
             }
         }
+        //物流确认收货
+        public bool ReceivingGoodsSubmit(List<string> listRmoNo)
+        {
+            try
+            {
+                return RestClient.Post("rma/ShippingReceiveGoods", listRmoNo);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

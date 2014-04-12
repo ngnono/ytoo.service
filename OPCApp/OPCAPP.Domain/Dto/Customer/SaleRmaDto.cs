@@ -5,6 +5,7 @@ namespace OPCApp.Domain.Customer
     //功能：退货付款确认 收货单
     public class SaleRmaDto
     {
+        public bool IsSelected { get; set; }
         public int Id { get; set; }
         public string SaleOrderNo { get; set; }
         public string PaymentMethodName { get; set; }

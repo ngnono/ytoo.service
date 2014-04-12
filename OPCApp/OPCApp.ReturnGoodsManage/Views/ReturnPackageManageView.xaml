@@ -29,6 +29,12 @@
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
+                <Button Background="LightGray" Width="100" Command="{Binding CommandReceivingGoodsSubmit}">
+                    <StackPanel>
+                        <Image Source="/Image/回单确认.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">物流收货确认</TextBlock>
+                    </StackPanel>
+                </Button>
 
             </StackPanel>
         </StackPanel>
@@ -46,7 +52,7 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="2">
             <Label Content="收货单" />
-            <DataGrid ItemsSource="{Binding SaleRmaList}" AutoGenerateColumns="False"
+            <DataGrid ItemsSource="{Binding SaleRmaList}" AutoGenerateColumns="False" SelectedItem="{Binding SaleRma}"
                         RenderTransformOrigin="0.5,0.5" >
                 <DataGrid.RenderTransform>
                     <TransformGroup>
@@ -57,6 +63,15 @@
                     </TransformGroup>
                 </DataGrid.RenderTransform>
                 <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="订单号" Visibility="Hidden" Binding="{Binding RmaNo}" />
                     <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Header="生成退货单时间" Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     <DataGridTextColumn Header="顾客应付运费" Binding="{Binding CustomFee}" />
@@ -64,6 +79,14 @@
                     <DataGridTextColumn Header="退货总数量" Binding="{Binding RMACount}" />
                     <DataGridTextColumn Header="退货总金额" Binding="{Binding RealRMASumMoney}" />
                     <DataGridTextColumn Header="客服同意退货时间" Binding="{Binding ServiceAgreeDate}" />
+                    <DataGridTemplateColumn Header="备注录入">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="录入"
+                                    Command="{Binding Path=DataContext.CommandSetSaleRmaRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
@@ -89,6 +112,7 @@
                     </TransformGroup>
                 </DataGrid.RenderTransform>
                 <DataGrid.Columns>
+                    
                     <DataGridTextColumn Header="退货单号" Binding="{Binding RMANo}" />
                     <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Header="销售单号" Binding="{Binding SaleOrderNo}" />
@@ -113,7 +137,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetSaleRmaRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                    Command="{Binding Path=DataContext.CommandSetRmaRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
