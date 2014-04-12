@@ -12,9 +12,11 @@ namespace Intime.OPC.Service.Support
     public class RmaService:BaseService<OPC_RMA>, IRmaService
     {
         private IRmaDetailRepository _rmaDetailRepository;
-        public RmaService(IRMARepository repository, IRmaDetailRepository rmaDetailRepository) : base(repository)
+        private IRmaCommentRepository _rmaCommentRepository;
+        public RmaService(IRMARepository repository, IRmaDetailRepository rmaDetailRepository, IRmaCommentRepository rmaCommentRepository) : base(repository)
         {
             _rmaDetailRepository = rmaDetailRepository;
+            _rmaCommentRepository = rmaCommentRepository;
         }
 
         #region IRmaService Members
@@ -41,7 +43,16 @@ namespace Intime.OPC.Service.Support
             return lst;
         }
 
-     
+        public void AddComment(OPC_RMAComment comment)
+        {
+            _rmaCommentRepository.Create(comment);
+        }
+
+        public IList<OPC_RMAComment> GetCommentByRmaNo(string rmaNo)
+        {
+            return _rmaCommentRepository.GetByRmaID(rmaNo);
+        }
+
         #endregion
     }
 }

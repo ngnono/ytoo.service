@@ -13,6 +13,7 @@ namespace Intime.OPC.WebApi.Controllers
         private ISaleRMAService _saleRmaService;
         private IRmaService _rmaService;
 
+
         public RMAController(ISaleRMAService saleRmaService, IRmaService rmaService)
         {
             _saleRmaService = saleRmaService;
@@ -153,6 +154,44 @@ namespace Intime.OPC.WebApi.Controllers
             return base.DoFunction(() =>
             {
                 return _saleRmaService.GetCommentByRmaNo(rmaNo);
+
+            }, "查询退货单备注失败！");
+        }
+
+
+        #endregion
+
+        #region 退货单 备注
+
+        /// <summary>
+        ///  增加退货单备注
+        /// </summary>
+        /// <param name="sale">The sale.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult AddRmaComment([FromBody] OPC_RMAComment comment)
+        {
+            return DoAction(() =>
+            {
+
+                comment.CreateDate = DateTime.Now;
+                comment.CreateUser = this.GetCurrentUserID();
+                comment.UpdateDate = comment.CreateDate;
+                comment.UpdateUser = comment.CreateUser;
+                _rmaService.AddComment(comment);
+            }, "增加退货单备注失败");
+        }
+        /// <summary>
+        /// 查询退货单备注
+        /// </summary>
+        /// <param name="rmaNo">The order no.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetRmaCommentByRmaNo(string rmaNo)
+        {
+            return base.DoFunction(() =>
+            {
+                return _rmaService.GetCommentByRmaNo(rmaNo);
 
             }, "查询退货单备注失败！");
         }
