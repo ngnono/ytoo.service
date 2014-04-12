@@ -95,7 +95,6 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                         break;
 
                 }
-                p.Status=0;
 
                 p.UpdateDate = DateTime.Now;
                 p.UpdateUser = SystemDefine.SystemUser;

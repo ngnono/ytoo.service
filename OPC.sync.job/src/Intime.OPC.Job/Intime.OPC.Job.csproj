@@ -101,7 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Order\OrderStatusSync\OrderStatusSync.cs" />
-    <Compile Include="Order\OrderStatusSync\Sale.cs" />
     <Compile Include="Product\ProductSync\ICategorySyncProcessor.cs" />
     <Compile Include="Product\ProductSync\IBrandSyncProcessor.cs" />
     <Compile Include="Product\ProductSync\IChannelMapper.cs" />

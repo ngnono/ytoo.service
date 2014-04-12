@@ -108,7 +108,7 @@ namespace Intime.OPC.Job.Product.StockAggregate
         #endregion
     }
 
-    public class AbstractStockHandler : IStockAttregateProcessor
+    public abstract class AbstractStockHandler : IStockAttregateProcessor
     {
         protected IEnumerable<IStockAttregateProcessor> _processors;
         protected AbstractStockHandler(IEnumerable<IStockAttregateProcessor> processors)

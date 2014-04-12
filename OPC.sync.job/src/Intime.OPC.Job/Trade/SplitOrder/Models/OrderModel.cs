@@ -6,7 +6,7 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Models
     /// <summary>
     /// 订单信息表
     /// </summary>
-    public class OrderModel : Order
+    public class OrderModel : Intime.OPC.Domain.Models.Order
     {
         private readonly IEnumerable<OrderItemModel> _items;
 
