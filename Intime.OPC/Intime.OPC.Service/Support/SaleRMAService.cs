@@ -222,7 +222,7 @@ namespace Intime.OPC.Service.Support
             ISaleRMARepository rep = _repository as ISaleRMARepository;
 
             var lst = rep.GetAll(dto.OrderNo,"", dto.PayType, "", dto.StartDate, dto.EndDate,
-                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerify.GetDescription());
+                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerifyPass.GetDescription());
 
             return lst;
         }
@@ -277,6 +277,41 @@ namespace Intime.OPC.Service.Support
             saleRma.RMAStatus = rmastaturs;
           
             rep.Update(saleRma);
+        }
+
+        public IList<SaleRmaDto> GetByFinaceDto(FinaceDto dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+
+            ISaleRMARepository rep = _repository as ISaleRMARepository;
+
+            var lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, "", "", dto.StartDate, dto.EndDate,
+                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerify.GetDescription());
+
+            return lst;
+        }
+
+        public void FinaceVerify(string rmaNo, bool pass)
+        {
+            string rmastaturs = pass ? EnumRMAStatus.ShipVerifyPass.GetDescription() : EnumRMAStatus.ShipVerifyNotPass.GetDescription();
+
+            var rep = (ISaleRMARepository)_repository;
+            var saleRma = rep.GetByRmaNo(rmaNo);
+            if (saleRma == null)
+            {
+                throw new Exception("快递单不存在,退货单号:" + rmaNo);
+            }
+ 
+            if (saleRma.RMAStatus == EnumReturnGoodsStatus.CompensateVerify.GetDescription())
+            {
+                saleRma.RMAStatus = rmastaturs;
+                rep.Update(saleRma);
+                return;
+            }
+            throw new Exception("该退货单已经确认或客服正在确认,退货单号:" + rmaNo);
+            
+           
         }
 
         private void Save(IList<RmaConfig> configs)

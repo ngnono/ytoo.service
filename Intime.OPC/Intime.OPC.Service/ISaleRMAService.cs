@@ -45,5 +45,9 @@ namespace Intime.OPC.Service
         IList<SaleRmaDto> GetByRmaNo(string rmaNo);
 
         void PackageVerify(string ramNo, bool passed);
+
+        IList<SaleRmaDto> GetByFinaceDto(FinaceDto request);
+
+        void FinaceVerify(string rmaNo, bool pass);
     }
 }
