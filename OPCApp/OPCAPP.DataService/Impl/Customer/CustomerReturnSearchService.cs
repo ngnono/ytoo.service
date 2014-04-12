@@ -13,8 +13,8 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                IList<OrderDto> lst = RestClient.Get<OrderDto>("rma/GetByReturnGoodsInfo", goodInfoGet.ToString());
-                return lst;
+                var lst = RestClient.GetPage<OrderDto>("rma/GetByReturnGoodsInfo", goodInfoGet.ToString());
+                return lst.Result;
             }
             catch (Exception ex)
             {
@@ -26,6 +26,7 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
+
               return RestClient.Get<RMADto>("rma/GetByOrderNo", string.Format("orderNo={0}", orderNo));
             }
             catch (Exception ex)
