@@ -106,7 +106,7 @@ namespace OPCApp.Customer.ViewModels
             bool falg =
                 AppEx.Container.GetInstance<ICustomerReturnSearch>()
                     .AgreeReturnGoods(rmaSelectedList.Select(e => e.RMANo).ToList());
-            MessageBox.Show(falg ? "退货成功" : "退货失败", "提示");
+            MessageBox.Show(falg ? "同意退回成功" : "同意退回失败", "提示");
             if (falg)
             {
                 RmaDetailList.Clear();
@@ -114,10 +114,10 @@ namespace OPCApp.Customer.ViewModels
             }
         }
 
-        public void SearchGoodsInfo()
+        public virtual void SearchGoodsInfo()
         {
             OrderDtoList =
-                AppEx.Container.GetInstance<ICustomerReturnSearch>().ReturnGoodsSearch(ReturnGoodsInfoGet).ToList();
+                AppEx.Container.GetInstance<ICustomerReturnSearch>().ReturnGoodsRmaSearch(ReturnGoodsInfoGet).ToList();
         }
 
         public void SearchRmaDtoListInfo()
