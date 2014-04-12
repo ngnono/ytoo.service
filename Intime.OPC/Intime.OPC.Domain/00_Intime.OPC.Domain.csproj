@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="Base\IEntity.cs" />
     <Compile Include="Dto\AuthUserDto.cs" />
+    <Compile Include="Dto\Custom\FinaceDto.cs" />
     <Compile Include="Dto\Custom\PackageReceiveDto.cs" />
     <Compile Include="Dto\Custom\ReturnGoodsInfoGet.cs" />
     <Compile Include="Dto\Custom\ReturnGoodsGet.cs" />
