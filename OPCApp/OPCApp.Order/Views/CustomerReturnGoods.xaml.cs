@@ -28,7 +28,8 @@ namespace OPCApp.TransManage.Views
         {
             if (ViewModel.OrderItem != null)
             {
-                var count = ViewModel.OrderItem.Quantity;
+                var orderItem = ViewModel.OrderItem;
+                var count = orderItem.Quantity-orderItem.ReturnCount;
                 var list = new List<int>();
                 for (int i = 1; i < count+1; i++)
                 {

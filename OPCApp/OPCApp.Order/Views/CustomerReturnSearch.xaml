@@ -10,10 +10,10 @@
     <Grid>
         <controls:MetroAnimatedSingleRowTabControl HorizontalAlignment="Left">
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
+                <!--<i:EventTrigger EventName="SelectionChanged">
                     <si:CallMethodAction MethodName="SelectionChanged" TargetObject="{Binding}" />
-                    <!--<i:InvokeCommandAction Command="{Binding CommandSelectionChanged}" CommandParameter="{Binding SelectedIndex,ElementName="tabControlName"}"></i:InvokeCommandAction>-->
-                </i:EventTrigger>
+                    --><!--<i:InvokeCommandAction Command="{Binding CommandSelectionChanged}" CommandParameter="{Binding SelectedIndex,ElementName="tabControlName"}"></i:InvokeCommandAction>--><!--
+                </i:EventTrigger>-->
             </i:Interaction.Triggers>
             <TabItem Header="退货信息" Custom:ControlsHelper.HeaderFontSize="18">
                 <Grid>
@@ -89,12 +89,12 @@
                     
                     <DataGrid Grid.Row="4" Height="400" ItemsSource="{Binding OrderDtoList}" IsReadOnly="True"
                               AutoGenerateColumns="False" 
-                              x:Name="DataGrid1"
+                              Name="DataGrid1"
                               HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding OrderDto}"                              
                              >
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding CommandSearchRmaDtoInfo,ElementName=DataGrid1}" />
+                                <i:InvokeCommandAction Command="{Binding CommandSearchRmaDtoInfo}" />
                             </i:EventTrigger>
 
                         </i:Interaction.Triggers>
@@ -132,20 +132,22 @@
                         </StackPanel>
                     </StackPanel>
                     
-                    <DataGrid Grid.Row="6" Height="400" ItemsSource="{Binding RMADtoList}" IsReadOnly="True"
+                    <DataGrid Grid.Row="6" Height="400"  ItemsSource="{Binding RMADtoList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" 
                               SelectedItem="{Binding RMADto}"
-                              x:Name="dataGridRma">
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding CommandGetRmaDetailByRmaNo,ElementName=dataGridRma}" />
-                        </i:EventTrigger>
-                        
+                              Name="dataGridRma">
+                
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding CommandGetRmaDetailByRmaNo}" />
+                            </i:EventTrigger>
+
+                        </i:Interaction.Triggers>
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      Command="{Binding Path=DataContext.CommandGetDown,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
                                       VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
