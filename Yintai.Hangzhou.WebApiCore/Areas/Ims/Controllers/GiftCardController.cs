@@ -345,7 +345,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             new
                             {
                                 phone = user.GiftCardAccount,
-                                amount = order.Price
+                                amount = order.Amount
                             });
         }
 
@@ -541,22 +541,25 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var orders =
                 _transRepo.Get(x => x.ToUserId == authuid)
                     .OrderByDescending(t => t.CreateDate)
-                    .Skip((request.Page - 1) * request.Pagesize)
+                    .Skip((request.Page - 1)*request.Pagesize)
                     .Take(request.Pagesize)
-                    .Join(_orderRepo.Get(o => o.Status != (int)GiftCardOrderStatus.Void), x => x.OrderNo, o => o.No,
-                        (x, o) => new { transfer = x, order = o })
+                    .Join(_orderRepo.Get(o => o.Status != (int) GiftCardOrderStatus.Void), x => x.OrderNo, o => o.No,
+                        (x, o) => new {transfer = x, order = o})
                     .Join(_customerRepo.GetAll(), t => t.transfer.FromUserId, u => u.Id,
-                        (o, u) => new { o.order, o.transfer, user = u });
+                        (o, u) => new {o.order, o.transfer, user = u})
+                    .Join(_userRepo.GetAll(), x => x.user.Id, cu => cu.UserId,
+                        (x, u) => new {x.order, x.transfer, x.user, card_user = u});
             dynamic items = new List<dynamic>();
             foreach (var o in orders)
             {
                 items.Add(new
                 {
-                    from = o.user.Nickname,
+                    from = o.transfer.FromNickName,
+                    from_phone = o.card_user.GiftCardAccount,
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     status_i = SetStatus4Receiver(o.order, o.transfer),
-                    operation_date = o.transfer.OperateDate.ToString("yyyy-MM-dd hh:mm:ss")
+                    operation_date = o.transfer.OperateDate.ToString("yyyy-MM-dd HH:mm:ss")
                 });
             }
             return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };
@@ -597,7 +600,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         (o, trans) =>
                             new { order = o, tran = trans.OrderByDescending(x => x.CreateDate).FirstOrDefault() })
                     .GroupJoin(_rechargeRepo.Get(r => r.ChargeUserId == authuid), ot => ot.order.No, r => r.OrderNo,
-                        (ot, r) => new { order = ot.order, ransfer = ot.tran, recharge = r.FirstOrDefault() });
+                        (ot, r) => new { order = ot.order, transfer = ot.tran, recharge = r.FirstOrDefault() });
 
 
             var items = new List<dynamic>();
@@ -609,10 +612,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     amount = o.order.Amount,
                     purchase_date = o.order.CreateDate,
                     charge_date = o.recharge != null ? o.recharge.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null",
-                    status_i = SetStatusForBuyer(o.order, o.ransfer, o.recharge),
-                    verify_phone = o.recharge != null ? o.recharge.ChargePhone : "null",
-                    send_date = o.ransfer != null ? o.ransfer.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null",
-                    receive_date = o.ransfer != null && o.ransfer.IsActive == 1 ? o.ransfer.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null"
+                    status_i = SetStatusForBuyer(o.order, o.transfer, o.recharge),
+                    verify_phone = o.transfer != null ? o.transfer.Phone : "null",
+                    send_date = o.transfer != null ? o.transfer.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null",
+                    receive_date = o.transfer != null && o.transfer.IsActive == 1 ? o.transfer.CreateDate.ToString("yyyy-MM-dd HH:mm:ss") : "null"
                 });
             }
             return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };

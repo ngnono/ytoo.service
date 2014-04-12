@@ -22,6 +22,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Comment)
                 .HasMaxLength(50);
 
+            this.Property(t => t.FromNickName)
+                .HasMaxLength(50);
+
             // Table & Column Mappings
             this.ToTable("IMS_GiftCardTransfers");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -37,6 +40,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.CreateUser).HasColumnName("CreateUser");
             this.Property(t => t.OperateDate).HasColumnName("OperateDate");
             this.Property(t => t.OperateUser).HasColumnName("OperateUser");
+            this.Property(t => t.FromNickName).HasColumnName("FromNickName");
 		Init();
         }
 

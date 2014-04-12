@@ -19,6 +19,8 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime OperateDate { get; set; }
         public int OperateUser { get; set; }
 
+        public string FromNickName { get; set; }
+
         #region Overrides of BaseEntity
 
         /// <summary>
