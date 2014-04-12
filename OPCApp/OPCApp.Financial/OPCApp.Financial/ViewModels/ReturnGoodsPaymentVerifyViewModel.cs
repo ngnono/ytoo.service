@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -84,7 +85,7 @@ namespace OPCApp.Financial.ViewModels
        {
            if (RmaDto == null)
            {
-               MessageBox.Show("请选择退货单", "提示");
+               //MessageBox.Show("请选择退货单", "提示");
                return;
            }
            RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(RmaDto.RMANo).ToList();
@@ -94,10 +95,17 @@ namespace OPCApp.Financial.ViewModels
        {
             if (SaleRma == null)
            {
-               MessageBox.Show("请选择收货单", "提示");
                return;
            }
-            RamList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByRmaOder(SaleRma.RmaNo).ToList();
+           try
+           {
+               RamList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByRmaOder(SaleRma.RmaNo).ToList();
+           }
+           catch
+           {
+               
+           }
+          
        }
 
        public decimal rmaDecimal;
