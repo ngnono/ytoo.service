@@ -9,6 +9,7 @@ using System.Composition.Hosting.Core;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
+using Intime.OPC.Domain;
 using Intime.OPC.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -74,6 +75,12 @@ namespace TestService
         {
             Assert.IsNotNull(lst);
             Assert.AreNotEqual(0, lst.Count);
+        }
+
+        protected void AssertList<T1>(PageResult<T1> lst)
+        {
+            Assert.IsNotNull(lst);
+            Assert.AreNotEqual(0, lst.TotalCount);
         }
     }
 }

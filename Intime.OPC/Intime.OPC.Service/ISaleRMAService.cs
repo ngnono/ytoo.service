@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Models;
@@ -10,16 +11,16 @@ namespace Intime.OPC.Service
     {
         void CreateSaleRMA(int userId, RMAPost rma);
 
-        IList<SaleRmaDto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request);
+        PageResult<SaleRmaDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request);
 
 
-        IList<SaleRmaDto> GetByReturnGoods(ReturnGoodsGet rquest);
+        PageResult<SaleRmaDto> GetByReturnGoods(ReturnGoodsRequest rquest,int userId);
 
 
         void AddComment(OPC_SaleRMAComment comment);
 
         IList<OPC_SaleRMAComment> GetCommentByRmaNo(string rmaNo);
-        IList<SaleRmaDto> GetByPack(PackageReceiveDto dto);
+        PageResult<SaleRmaDto> GetByPack(PackageReceiveRequest dto);
 
         /// <summary>
         /// 客服同意退货
@@ -33,7 +34,7 @@ namespace Intime.OPC.Service
         /// <param name="rmaNo">The rma no.</param>
         void ShippingReceiveGoods(string rmaNo);
 
-        IList<SaleRmaDto> GetByReturnGoodPay(ReturnGoodsPay request);
+        PageResult<SaleRmaDto> GetByReturnGoodPay(ReturnGoodsPayRequest request);
 
         /// <summary>
         /// 退货付款确认
@@ -42,6 +43,12 @@ namespace Intime.OPC.Service
         /// <param name="money">The money.</param>
         void CompensateVerify(string ramNo, decimal money);
 
-        IList<SaleRmaDto> GetByRmaNo(string rmaNo);
+        PageResult<SaleRmaDto> GetByRmaNo(string rmaNo,int pageIndex,int pageSize);
+
+        void PackageVerify(string ramNo, bool passed);
+
+        PageResult<SaleRmaDto> GetByFinaceDto(FinaceRequest request);
+
+        void FinaceVerify(string rmaNo, bool pass);
     }
 }

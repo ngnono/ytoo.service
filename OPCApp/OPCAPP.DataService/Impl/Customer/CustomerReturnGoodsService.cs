@@ -18,7 +18,8 @@ namespace OPCApp.DataService.Impl.Customer
         {
             try
             {
-                return RestClient.Get<OPC_SaleRMA>("custom/GetOrder", returnGoodsGet.ToString());
+                var lst= RestClient.GetPage<OPC_SaleRMA>("custom/GetOrder", returnGoodsGet.ToString());
+                return lst.Result;
             }
             catch (Exception ex)
             {

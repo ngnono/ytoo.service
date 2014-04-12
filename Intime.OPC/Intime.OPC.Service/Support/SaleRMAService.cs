@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
@@ -20,10 +21,11 @@ namespace Intime.OPC.Service.Support
         private readonly ISaleRepository _saleRepository;
         private readonly ISectionRepository _sectionRepository;
         private ISaleRmaCommentRepository _saleRmaCommentRepository;
+        private IAccountService _accountService;
 
         public SaleRMAService(ISaleRMARepository saleRmaRepository, ISaleDetailRepository saleDetailRepository,
             ISaleRepository saleRepository, IOrderItemRepository orderItemRepository,
-            IRmaDetailRepository rmaDetailRepository, ISectionRepository sectionRepository, IRMARepository rmaRepository, ISaleRmaCommentRepository saleRmaCommentRepository)
+            IRmaDetailRepository rmaDetailRepository, ISectionRepository sectionRepository, IRMARepository rmaRepository, ISaleRmaCommentRepository saleRmaCommentRepository, IAccountService accountService)
             : base(saleRmaRepository)
         {
             _saleDetailRepository = saleDetailRepository;
@@ -33,6 +35,7 @@ namespace Intime.OPC.Service.Support
             _sectionRepository = sectionRepository;
             _rmaRepository = rmaRepository;
             _saleRmaCommentRepository = saleRmaCommentRepository;
+            _accountService = accountService;
         }
 
         #region ISaleRMAService Members
@@ -40,7 +43,7 @@ namespace Intime.OPC.Service.Support
         public void CreateSaleRMA(int userId, RMAPost rma)
         {
             List<OPC_SaleDetail> saleDetails =
-                _saleDetailRepository.GetByOrderNo(rma.OrderNo).OrderByDescending(t => t.SaleCount).ToList();
+                _saleDetailRepository.GetByOrderNo(rma.OrderNo,1,1000).Result.OrderByDescending(t => t.SaleCount).ToList();
             List<OPC_Sale> sales =
                 _saleRepository.GetByOrderNo(rma.OrderNo, -1).OrderByDescending(t => t.SalesCount).ToList();
             IList<OrderItem> orderItems =
@@ -124,21 +127,22 @@ namespace Intime.OPC.Service.Support
             Save(lstRmaConfigs);
         }
 
-        public IList<SaleRmaDto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request)
+        public PageResult<SaleRmaDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
             ISaleRMARepository rep = _repository as ISaleRMARepository;
            return   rep.GetAll(request.OrderNo, request.SaleOrderNo,request.PayType, request.RmaNo,
-                request.StartDate, request.EndDate, request.RmaStatus, request.StoreID,"");
+                request.StartDate, request.EndDate, request.RmaStatus, request.StoreID, "", request.pageIndex, request.pageSize);
         }
 
-        public IList<SaleRmaDto> GetByReturnGoods(ReturnGoodsGet request)
+        public PageResult<SaleRmaDto> GetByReturnGoods(ReturnGoodsRequest request, int userId)
         {
+       
             ISaleRMARepository rep = _repository as ISaleRMARepository;
             request.StartDate = request.StartDate.Date;
             request.EndDate = request.EndDate.Date.AddDays(1);
-
+            rep.SetCurrentUser(_accountService.GetByUserID(userId));
             var lst= rep.GetAll(request.OrderNo, request.PayType, request.BandId, request.StartDate, request.EndDate,
-                request.Telephone);
+                request.Telephone,request.pageIndex,request.pageSize);
             
             return lst;
         }
@@ -150,10 +154,11 @@ namespace Intime.OPC.Service.Support
 
         public IList<OPC_SaleRMAComment> GetCommentByRmaNo(string rmaNo)
         {
+       
             return _saleRmaCommentRepository.GetByRmaID(rmaNo);
         }
 
-        public IList<SaleRmaDto> GetByPack(PackageReceiveDto dto)
+        public PageResult<SaleRmaDto> GetByPack(PackageReceiveRequest dto)
         {
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
@@ -161,7 +166,7 @@ namespace Intime.OPC.Service.Support
             ISaleRMARepository rep = _repository as ISaleRMARepository;
 
             var lst = rep.GetAll(dto.OrderNo,dto.SaleOrderNo, "","", dto.StartDate, dto.EndDate,
-                EnumRMAStatus.NoDelivery.AsID(),null,EnumReturnGoodsStatus.ServiceApprove.GetDescription());
+                EnumRMAStatus.NoDelivery.AsID(),null,EnumReturnGoodsStatus.ServiceApprove.GetDescription(),dto.pageIndex,dto.pageSize);
 
             return lst;
         }
@@ -214,7 +219,7 @@ namespace Intime.OPC.Service.Support
             rep.Update(saleRma);
         }
 
-        public IList<SaleRmaDto> GetByReturnGoodPay(ReturnGoodsPay dto)
+        public PageResult<SaleRmaDto> GetByReturnGoodPay(ReturnGoodsPayRequest dto)
         {
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
@@ -222,7 +227,7 @@ namespace Intime.OPC.Service.Support
             ISaleRMARepository rep = _repository as ISaleRMARepository;
 
             var lst = rep.GetAll(dto.OrderNo,"", dto.PayType, "", dto.StartDate, dto.EndDate,
-                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerify.GetDescription());
+                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerifyPass.GetDescription(),dto.pageIndex,dto.pageSize);
 
             return lst;
         }
@@ -249,11 +254,69 @@ namespace Intime.OPC.Service.Support
             rep.Update(saleRma);
         }
 
-        public IList<SaleRmaDto> GetByRmaNo(string rmaNo)
+        public PageResult<SaleRmaDto> GetByRmaNo(string rmaNo, int pageIndex, int pageSize)
         {
             ISaleRMARepository rep = _repository as ISaleRMARepository;
             return rep.GetAll("", "", "", rmaNo, new DateTime(2000,1,1),DateTime.Now.Date.AddDays(1),
-                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerify.GetDescription());
+                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerify.GetDescription(),pageIndex,pageSize);
+        }
+
+        public void PackageVerify(string rmaNo,bool passed)
+        {
+            var rep = (ISaleRMARepository)_repository;
+            var saleRma = rep.GetByRmaNo(rmaNo);
+            if (saleRma == null)
+            {
+                throw new Exception("快递单不存在,退货单号:" + rmaNo);
+            }
+            if (saleRma.RMAStatus.IsNull())
+            {
+                throw new Exception("客服未确认,退货单号:" + rmaNo);
+            }
+            if (saleRma.RMAStatus !=EnumRMAStatus.ShipVerify.GetDescription())
+            {
+                throw new Exception("该退货单已经确认或正在财务审核,退货单号:" + rmaNo);
+            }
+            string  rmastaturs=passed?EnumRMAStatus.ShipVerifyPass.GetDescription():EnumRMAStatus.ShipVerifyNotPass.GetDescription();
+
+            saleRma.RMAStatus = rmastaturs;
+          
+            rep.Update(saleRma);
+        }
+
+        public PageResult<SaleRmaDto> GetByFinaceDto(FinaceRequest dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+
+            ISaleRMARepository rep = _repository as ISaleRMARepository;
+
+            var lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, "", "", dto.StartDate, dto.EndDate,
+                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerify.GetDescription(),dto.pageIndex,dto.pageSize);
+
+            return lst;
+        }
+
+        public void FinaceVerify(string rmaNo, bool pass)
+        {
+            string rmastaturs = pass ? EnumRMAStatus.ShipVerifyPass.GetDescription() : EnumRMAStatus.ShipVerifyNotPass.GetDescription();
+
+            var rep = (ISaleRMARepository)_repository;
+            var saleRma = rep.GetByRmaNo(rmaNo);
+            if (saleRma == null)
+            {
+                throw new Exception("快递单不存在,退货单号:" + rmaNo);
+            }
+ 
+            if (saleRma.RMAStatus == EnumReturnGoodsStatus.CompensateVerify.GetDescription())
+            {
+                saleRma.RMAStatus = rmastaturs;
+                rep.Update(saleRma);
+                return;
+            }
+            throw new Exception("该退货单已经确认或客服正在确认,退货单号:" + rmaNo);
+            
+           
         }
 
         private void Save(IList<RmaConfig> configs)
@@ -274,6 +337,9 @@ namespace Intime.OPC.Service.Support
         {
             return orderNo + count.ToString().PadLeft(3, '0');
         }
+
+
+       
     }
 
     internal class RmaConfig

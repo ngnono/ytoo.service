@@ -30,7 +30,7 @@ namespace OPCApp.Domain.Customer
 
         public override string ToString()
         {
-            return string.Format("OrderNo={0}&StartDate={1}&EndDate={2}&RmaNo={3}&SaleOrderNo={4}&RmaStatus={5}&PayType={6}&StoreID={7}", OrderNo, StartDate, EndDate, RmaNo, SaleOrderNo, RmaStatus, PayType, StoreID);
+            return string.Format("OrderNo={0}&StartDate={1}&EndDate={2}&RmaNo={3}&SaleOrderNo={4}&RmaStatus={5}&PayType={6}&StoreID={7}&pageIndex={8}&pageSize={9}", OrderNo, StartDate, EndDate, RmaNo, SaleOrderNo, RmaStatus, PayType, StoreID,1,300);
         }
     }
 }

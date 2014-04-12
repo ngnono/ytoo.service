@@ -97,23 +97,23 @@ namespace Intime.OPC.WebApi.Controllers
 
 
         [HttpGet]
-        public IHttpActionResult GetOrderItemsByOrderNo(string orderNo)
+        public IHttpActionResult GetOrderItemsByOrderNo(string orderNo, int pageIndex, int pageSize)
         {
             //todo 查询订单明细 未实现
             return DoFunction(() =>
             {
-                return _orderService.GetOrderItems(orderNo);
+                return _orderService.GetOrderItems(orderNo,pageIndex,pageSize);
                 return null;
             }, "读取订单明细失败");
 
         }
 
         [HttpGet]
-        public IHttpActionResult GetOrderByShippingSaleNo(string shippingNo)
+        public IHttpActionResult GetOrderByShippingSaleNo(string shippingNo, int pageIndex, int pageSize)
         {
             return DoFunction(() =>
             {
-                return _orderService.GetOrderByShippingNo(shippingNo);
+                return _orderService.GetOrderByShippingNo(shippingNo,pageIndex,pageSize);
 
             }, "通过快递单查询订单失败");
         }
@@ -139,14 +139,14 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="endTime">The end time.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetOrderByOderNoTime(string orderNo,DateTime starTime,DateTime endTime)
+        public IHttpActionResult GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime, int pageIndex, int pageSize)
         {
-            return Ok(_orderService.GetOrderByOderNoTime(orderNo,starTime,endTime));
+            return Ok(_orderService.GetOrderByOderNoTime(orderNo,starTime,endTime,pageIndex,pageSize));
             
         }
 
         [HttpGet]
-        public IHttpActionResult GetByReturnGoodsInfo([FromBody] ReturnGoodsInfoGet request)
+        public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
         {
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _orderService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");

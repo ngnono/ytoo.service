@@ -156,7 +156,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="dto">The dto.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetSaleRmaByPack([FromBody]PackageReceiveDto dto)
+        public IHttpActionResult GetSaleRmaByPack([FromUri]PackageReceiveRequest dto)
         {
             return DoFunction(() => { return _saleRmaService.GetByPack(dto); }, "查询退货收货单信息失败！");
         }
@@ -167,7 +167,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="dto">The dto.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetRmaByPack([FromBody]PackageReceiveDto dto)
+        public IHttpActionResult GetRmaByPack([FromUri]PackageReceiveRequest dto)
         {
             return DoFunction(() => { return _rmaService.GetAll(dto); }, "查询退货单失败！");
         }

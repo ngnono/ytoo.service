@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Domain.Dto.Custom
 {
     /// <summary>
     /// 退货付款确认
     /// </summary>
-    public class ReturnGoodsPay
+    public class ReturnGoodsPayRequest : BaseRequest
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

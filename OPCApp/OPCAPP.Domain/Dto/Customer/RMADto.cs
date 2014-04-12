@@ -100,10 +100,5 @@ namespace OPCApp.Domain.Customer
         /// </summary>
         /// <value>The cash number.</value>
         public DateTime? RmaCashDate { get; set; }
-
-        /// <summary>
-        /// 支付方式
-        /// </summary>
-        public string PaymentName { get; set; }
     }
 }

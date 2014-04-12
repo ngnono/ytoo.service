@@ -65,14 +65,14 @@ namespace Intime.OPC.Service
         /// <param name="starTime">The star time.</param>
         /// <param name="endTime">The end time.</param>
         /// <returns>IList{OrderDto}.</returns>
-        IList<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime);
+        PageResult<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime, int pageIndex, int pageSize);
 
 
-        IList<OrderItemDto> GetOrderItems(string orderNo);
-        IList<OrderDto> GetOrderByShippingNo(string shippingNo);
+        PageResult<OrderItemDto> GetOrderItems(string orderNo, int pageIndex, int pageSize);
+        PageResult<OrderDto> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize);
 
         //IList<OrderDto> GetOrderByReturnGoodsInfo(ReturnGoodsInfoGet request);
 
-        IList<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request);
+        PageResult<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request);
     }
 }

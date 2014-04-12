@@ -60,40 +60,28 @@ namespace Intime.OPC.Service.Support
             return _orderRemarkRepository.Create(comment);
         }
 
-        public IList<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime dtStart, DateTime dtEnd)
+        public PageResult<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime dtStart, DateTime dtEnd,int pageIndex,int pageSize)
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
-            var lstOrder = _orderRepository.GetOrderByOderNoTime(orderNo, dtStart, dtEnd);
+            var lstOrder = _orderRepository.GetOrderByOderNoTime(orderNo, dtStart, dtEnd,pageIndex,pageSize);
             return Mapper.Map<Order, OrderDto>(lstOrder);
         }
 
-        public IList<OrderItemDto> GetOrderItems(string orderNo)
+        public PageResult<OrderItemDto> GetOrderItems(string orderNo,int pageIndex,int pageSize)
         {
-            var lstOrderItems= _orderItemRepository.GetByOrderNo(orderNo);
-            var lst= Mapper.Map<OrderItem, OrderItemDto>(lstOrderItems);
-            var ids = lst.Select<OrderItemDto, int>(t => t.BrandId).Distinct().ToArray();
+            var lstOrderItems= _orderItemRepository.GetByOrderNo(orderNo,pageIndex,pageSize);
 
-            var lstBrand = _brandRepository.GetByIds(ids);
-
-            foreach (var orderItemDto in lst)
-            {
-                var brand = lstBrand.FirstOrDefault(t => t.Id == orderItemDto.BrandId);
-                if (brand!=null)
-                {
-                    orderItemDto.BrandName = brand.Name;
-                }
-            }
-            return lst;
+            return lstOrderItems;
         }
 
-        public IList<OrderDto> GetOrderByShippingNo(string shippingNo)
+        public PageResult<OrderDto> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize)
         {
-            var lst= _orderRepository.GetOrderByShippingNo(shippingNo);
+            var lst= _orderRepository.GetOrderByShippingNo(shippingNo,pageIndex,pageSize);
             return Mapper.Map<Order, OrderDto>(lst);
         }
 
-        public IList<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request)
+        public PageResult<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
 
             var lst = _orderRepository.GetByReturnGoodsInfo(request);
@@ -105,7 +93,7 @@ namespace Intime.OPC.Service.Support
             //return Mapper.Map<Order, OrderDto>(lst.Result);
         }
 
-        //public IList<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoGet request)
+        //public IList<OrderDto> GetByReturnGoodsInfReturnGoodsInfoRequestet request)
         //{
         //    var lst = _orderRepository.GetByReturnGoodsInfo(request);
         //    return Mapper.Map<Order, OrderDto>(lst);
