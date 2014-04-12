@@ -4,7 +4,9 @@ using System.Linq;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.RMA;
+using OPCApp.DataService.IService;
 using OPCApp.Domain.Customer;
+using OPCApp.Domain.Enums;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.ReturnGoodsManage.ViewModel
@@ -23,6 +25,15 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             CommandSearch = new DelegateCommand(SearchRmaAndSaleRma);
             CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaSaleDetailByRma);
             PackageReceiveDto = new PackageReceiveDto();
+            CommandSetSaleRmaRemark = new DelegateCommand(SetSaleRmaRemark);
+        }
+
+        public void SetSaleRmaRemark()
+        {
+            //被选择的对象
+            string id = RmaDto.RMANo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.);
         }
 
         private PackageReceiveDto packageReceiveDto;
@@ -58,6 +69,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
 
         public DelegateCommand CommandSearch { get; set; }
         public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
+        public DelegateCommand CommandSetSaleRmaRemark { get; set; }
 
         public void GetRmaSaleDetailByRma()
         {

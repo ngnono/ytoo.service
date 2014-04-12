@@ -47,7 +47,11 @@ namespace OPCApp.Domain.Enums
          /// <summary>
         ///     填写退货单备注
         /// </summary>
-        SetSaleRMARemark = 4
+        SetSaleRMARemark = 4,
+          /// <summary>
+        ///     填写退货单备注
+        /// </summary>
+        SetRMARemark = 5
 
     }
 }

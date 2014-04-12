@@ -78,7 +78,6 @@
                     <DataGridTextColumn Header="退货总金额" Binding="{Binding CompensationFee}" />
                     <DataGridTextColumn Header="应退总金额" Binding="{Binding RealRMASumMoney}" />
                     <DataGridTextColumn Header="生成退货单时间" Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                   
                     <DataGridTextColumn Header="客服同意退货时间" Binding="{Binding ServiceAgreeDate}" />
                 </DataGrid.Columns>
             </DataGrid>

@@ -81,6 +81,33 @@ namespace OPCApp.DataService.Impl.Trans
             
         }
 
+        public bool WriteRmaRemark(OPC_SaleRMAComment RmaComment)
+        {
+            try
+            {
+                bool bResult = RestClient.Post("rma/AddRmaComment", RmaComment);
+                return bResult;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public PageResult<OPC_SaleRMAComment> GetRmaRemark(string rmaId)
+        {
+            try
+            {
+                IList<OPC_SaleRMAComment> lst = RestClient.Get<OPC_SaleRMAComment>("rma/GetRmaCommentByRmaNo",
+                    rmaId);
+                return new PageResult<OPC_SaleRMAComment>(lst, lst.Count);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         ///     销售单备注保存
         /// </summary>
