@@ -26,6 +26,7 @@ namespace OPCApp.Customer.ViewModels
             CommandSearchRmaDtoInfo = new DelegateCommand(SearchRmaDtoListInfo);
             CommandAgreeReturnGoods = new DelegateCommand(SetAgreeReturnGoods);
             CommandGetRmaDetailByRmaNo = new DelegateCommand(GetRmaDetailByRmaNo);
+            //RMADto = new RMADto();
         }
 
         public RMADto RMADto
@@ -75,13 +76,17 @@ namespace OPCApp.Customer.ViewModels
 
         public void SetAgreeReturnGoods()
         {
-            if (RMADtoList == null)return;
-            List<RMADto> rmaSelectedList = RMADtoList.Where(e => e.IsSelected).ToList();
+            if (RMADtoList == null) {
+                MessageBox.Show("请选择退货单", "提示");
+                return;
+            }
+
+            List<RMADto> rmaSelectedList = RMADtoList.Where(e => e.IsSelected).ToList();          
             if (rmaSelectedList.Count == 0)
             {
                 MessageBox.Show("请选择退货单", "提示");
                 return;
-            }
+            }           
             bool falg =
                 AppEx.Container.GetInstance<ICustomerReturnSearch>()
                     .AgreeReturnGoods(rmaSelectedList.Select(e => e.RMANo).ToList());
@@ -103,10 +108,11 @@ namespace OPCApp.Customer.ViewModels
         {
             if (OrderDto == null)
             {
-                RmaDetailList.Clear();
+                if (RmaDetailList!=null) RmaDetailList.Clear();
                 return;
-            }
-            RMADtoList = AppEx.Container.GetInstance<ICustomerReturnSearch>().GetRmaByOrderNo(OrderDto.OrderNo).ToList();
+            } 
+            var rmaList= AppEx.Container.GetInstance<ICustomerReturnSearch>().GetRmaByOrderNo(OrderDto.OrderNo).ToList();
+            RMADtoList = rmaList;
         }
     }
 }
