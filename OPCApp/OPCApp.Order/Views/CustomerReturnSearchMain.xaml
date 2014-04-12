@@ -1,0 +1,23 @@
+﻿<UserControl xmlns:Views="clr-namespace:OPCApp.Customer.Views"  x:Class="OPCApp.Customer.Views.CustomerReturnSearchMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             Height="AUTO" Width="AUTO" Background="LightGray">
+
+    <Grid>
+        <controls:MetroAnimatedSingleRowTabControl HorizontalAlignment="Left">
+            <TabItem Header="退货信息" Custom:ControlsHelper.HeaderFontSize="18">
+                <Views:CustomerReturnSearchCommon  DataContext="{Binding CustomerReturnSearchRmaViewModel}"/>
+            </TabItem>
+            <TabItem Header="物流退回" Custom:ControlsHelper.HeaderFontSize="18">
+                <Views:CustomerReturnSearchCommon  DataContext="{Binding CustomerReturnSearchTransViewModel}" />
+            </TabItem>
+            <TabItem Header="退货赔偿退回" Custom:ControlsHelper.HeaderFontSize="18">
+                <Views:CustomerReturnSearchCommon  DataContext="{Binding CustomerReturnSearchFinancialViewModel}"/>
+            </TabItem>
+        </controls:MetroAnimatedSingleRowTabControl>
+    </Grid>
+
+
+</UserControl>

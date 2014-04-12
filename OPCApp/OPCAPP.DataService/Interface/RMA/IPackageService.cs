@@ -17,7 +17,12 @@ namespace OPCApp.DataService.Interface.RMA
         IList<RmaDetail> GetRmaDetailByRma(string rmaNo);
         //退货包裹管理的 物流收货确认
         bool ReceivingGoodsSubmit(List<string> rmaNosList);
-     
+        //退货包裹审核
+        bool TransVerifyPass(List<string> rmaNoList);
+        bool TransVerifyNoPass(List<string> rmaNoList);
 
+        //退回付款确认 查询 退货单列表
+        IList<RMADto> GetRmaByFilter(PackageReceiveDto packageReceive);
+        //退货包裹审核
     }
 }

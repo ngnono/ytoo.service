@@ -87,11 +87,18 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ViewModels\CustomerRuturnSearchViewModel.cs" />
+    <Compile Include="ViewModels\CustomerReturnSearchViewModel.cs" />
+    <Compile Include="ViewModels\CustomerReturnSearchFinancialViewModel.cs" />
+    <Compile Include="ViewModels\CustomerReturnSearchTransViewModel.cs" />
+    <Compile Include="ViewModels\CustomerRuturnSearchRMAViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnGoodsViewModel.cs" />
     <Compile Include="ViewModels\CustomerSelfNetRuturnGoods.cs" />
-    <Compile Include="Views\CustomerReturnSearch.xaml.cs">
-      <DependentUpon>CustomerReturnSearch.xaml</DependentUpon>
+    <Compile Include="ViewModels\CustomerReturnGoodsMainViewModel.cs" />
+    <Compile Include="Views\CustomerReturnSearchMain.xaml.cs">
+      <DependentUpon>CustomerReturnSearchMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomerReturnSearchCommon.xaml.cs">
+      <DependentUpon>CustomerReturnSearchCommon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomerSelfNetRuturnGoods.xaml.cs">
       <DependentUpon>CustomerSelfNetRuturnGoods.xaml</DependentUpon>
@@ -99,7 +106,11 @@
     <Compile Include="Views\CustomerReturnGoods.xaml.cs">
       <DependentUpon>CustomerReturnGoods.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\CustomerReturnSearch.xaml">
+    <Page Include="Views\CustomerReturnSearchMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CustomerReturnSearchCommon.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
