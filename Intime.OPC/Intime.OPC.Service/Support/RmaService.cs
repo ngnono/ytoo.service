@@ -130,12 +130,13 @@ namespace Intime.OPC.Service.Support
             rep.Update(rma);
 
             saleRma.RMACashStatus = EnumRMACashStatus.SendCash.GetDescription();
+            saleRma.RMAStatus = EnumReturnGoodsStatus.Valid.GetDescription();
             _saleRmaRepository.Update(saleRma);
 
             //更新库存
             foreach (var detail in lstDetail.Result)
             {
-                var stock = _stockRepository.GetByID(detail.Id);
+                var stock = _stockRepository.GetByID(detail.StockId.Value);
                 stock.Count += detail.BackCount;
                 _stockRepository.Update(stock);
             }
@@ -150,6 +151,42 @@ namespace Intime.OPC.Service.Support
             _saleRmaRepository.Update(saleRma);
 
           
+        }
+
+        public PageResult<RMADto> GetRmaReturnByExpress(RmaExpressRequest dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+            var rep = (IRMARepository)_repository;
+            PageResult<RMADto> lst = rep.GetByPackPrintPress(dto.OrderNo, "", dto.StartDate, dto.EndDate, EnumRMAStatus.ShipVerifyPass.AsID(), dto.pageIndex, dto.pageSize);
+            return lst;
+        }
+
+        public void SetRmaShipInStorage(string rmaNo)
+        {
+            var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
+
+            saleRma.Status = EnumRMAStatus.ShipInStorage.AsID();
+            _saleRmaRepository.Update(saleRma);
+
+        }
+
+        public PageResult<RMADto> GetRmaPrintByExpress(RmaExpressRequest dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+            var rep = (IRMARepository)_repository;
+            PageResult<RMADto> lst = rep.GetByPackPrintPress(dto.OrderNo, "", dto.StartDate, dto.EndDate, EnumRMAStatus.ShipVerifyPass.AsID(), dto.pageIndex, dto.pageSize);
+            return lst;
+        }
+
+        public void SetRmaPint(string rmaNo)
+        {
+            var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
+
+            saleRma.Status = EnumRMAStatus.PrintRMA.AsID();
+            _saleRmaRepository.Update(saleRma);
+
         }
     }
 }

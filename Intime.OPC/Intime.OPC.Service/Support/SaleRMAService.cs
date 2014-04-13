@@ -296,9 +296,9 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("该退货单已经确认或正在财务审核,退货单号:" + rmaNo);
             }
-            string  rmastaturs=passed?EnumRMAStatus.ShipVerifyPass.GetDescription():EnumRMAStatus.ShipVerifyNotPass.GetDescription();
+            var  rmastaturs=passed?EnumRMAStatus.ShipVerifyPass.AsID():EnumRMAStatus.ShipVerifyNotPass.AsID();
 
-            saleRma.RMAStatus = rmastaturs;
+            saleRma.Status = rmastaturs;
           
             rep.Update(saleRma);
         }

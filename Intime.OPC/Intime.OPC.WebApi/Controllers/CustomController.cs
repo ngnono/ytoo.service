@@ -100,7 +100,7 @@ namespace Intime.OPC.WebApi.Controllers
                 foreach (string rmaNo in request.RmaNos)
                 {
                     _saleRmaService.PackageVerify(rmaNo, request.Pass);
-                    _shippingSaleService.CreateRmaShipping(rmaNo, UserID);
+                    //_shippingSaleService.CreateRmaShipping(rmaNo, UserID);
                 }
             }, "查询退货单信息失败");
         }
