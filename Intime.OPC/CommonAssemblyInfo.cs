@@ -10,5 +10,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Z.L.H")]
 [assembly: AssemblyProduct("Intime.OPC.WebApi")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
-[assembly: AssemblyVersion("0.5")]
-[assembly: AssemblyFileVersion("0.5")]
+[assembly: AssemblyVersion("0.6")]
+[assembly: AssemblyFileVersion("0.6")]
