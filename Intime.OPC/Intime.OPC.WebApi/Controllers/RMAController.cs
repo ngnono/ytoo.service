@@ -255,14 +255,5 @@ namespace Intime.OPC.WebApi.Controllers
         public decimal Money { get; set; }
     }
 
-    public class PackageVerifyRequest
-    {
-        public PackageVerifyRequest()
-        {
-            RmaNos=new List<string>();
-        }
-
-        public IList<string> RmaNos { get; set; }
-        public bool Pass { get; set; }
-    }
+    
 }

@@ -148,7 +148,7 @@ namespace Intime.OPC.Service.Support
         public PageResult<ShippingSaleDto> GetRmaByPackPrintPress(RmaExpressRequest request)
         {
           var lst=   _shippingSaleRepository.GetByOrderNo(request.OrderNo, request.StartDate, request.EndDate, request.pageIndex,
-                request.pageSize);
+                request.pageSize,EnumRmaShippingStatus.NoPrint.AsID());
 
             IList<ShippingSaleDto> lstDtos=new List<ShippingSaleDto>();
             foreach (var shippingSale in lst.Result)
@@ -161,6 +161,22 @@ namespace Intime.OPC.Service.Support
          return new PageResult<ShippingSaleDto>(lstDtos,lst.TotalCount);
 
 
+        }
+
+        public PageResult<ShippingSaleDto> GetRmaShippingPrintedByPack(RmaExpressRequest request)
+        {
+            var lst = _shippingSaleRepository.GetByOrderNo(request.OrderNo, request.StartDate, request.EndDate, request.pageIndex,
+                 request.pageSize, EnumRmaShippingStatus.Printed.AsID());
+
+            IList<ShippingSaleDto> lstDtos = new List<ShippingSaleDto>();
+            foreach (var shippingSale in lst.Result)
+            {
+                var o = AutoMapper.Mapper.Map<OPC_ShippingSale, ShippingSaleDto>(shippingSale);
+                EnumRmaShippingStatus rmaShippingStatus = (EnumRmaShippingStatus)shippingSale.ShippingStatus;
+                o.PrintStatus = rmaShippingStatus.GetDescription();
+                lstDtos.Add(o);
+            }
+            return new PageResult<ShippingSaleDto>(lstDtos, lst.TotalCount);
         }
     }
 }

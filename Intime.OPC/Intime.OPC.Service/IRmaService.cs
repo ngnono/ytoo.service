@@ -49,5 +49,22 @@ namespace Intime.OPC.Service
         /// <param name="request">The request.</param>
         /// <returns>PageResult{RMADto}.</returns>
         PageResult<RMADto> GetRmaByPackPrintPress(RmaExpressRequest request);
+
+
+
+        /// <summary>
+        /// 退货入收银  查询 退货单
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>PageResult{RMADto}.</returns>
+        PageResult<RMADto> GetRmaCashByExpress(RmaExpressRequest request);
+
+        /// <summary>
+        /// 退货入收银
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        void SetRmaCash(string rmaNo);
+
+        void SetRmaCashOver(string rmaNo);
     }
 }

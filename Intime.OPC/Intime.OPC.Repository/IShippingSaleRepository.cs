@@ -37,6 +37,6 @@ namespace Intime.OPC.Repository
         OPC_ShippingSale GetByRmaNo(string rmaNo);
 
         PageResult<OPC_ShippingSale> GetByOrderNo(string orderNo, DateTime startDate, DateTime endDate, int pageIndex,
-            int pageSize);
+            int pageSize,int shippingStatus);
     }
 }

@@ -138,7 +138,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult PintRmaShipping(string shippingCode)
         {
-            return DoAction(() => { _shippingSaleService.PintRmaShipping(shippingCode); }, "查询退货单信息失败");
+            return DoAction(() => _shippingSaleService.PintRmaShipping(shippingCode), "查询退货单信息失败");
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult PintRmaShippingOver(string shippingCode)
         {
-            return DoAction(() => { _shippingSaleService.PintRmaShippingOver(shippingCode); }, "查询退货单信息失败");
+            return DoAction(() => _shippingSaleService.PintRmaShippingOver(shippingCode), "查询退货单信息失败");
         }
 
         [HttpGet]
@@ -161,6 +161,24 @@ namespace Intime.OPC.WebApi.Controllers
                 return _shippingSaleService.GetRmaByPackPrintPress(request);
             }, "查询退货单信息失败");
         }
+        #endregion
+
+        #region 包裹退回-快递交接
+        /// <summary>
+        /// 查询快递
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>IHttpActionResult.</returns>
+         [HttpGet]
+        public IHttpActionResult GetRmaShippingPrintedByPack([FromUri] RmaExpressRequest request)
+        {
+            return DoFunction(() =>
+            {
+                _shippingSaleService.UserId = UserID;
+                return _shippingSaleService.GetRmaShippingPrintedByPack(request);
+            }, "查询退货单信息失败");
+        }
+        
         #endregion
     }
 

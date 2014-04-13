@@ -99,5 +99,7 @@ namespace Intime.OPC.Domain.Dto
         /// </summary>
         /// <value>The shipping method.</value>
         public string RmaNo { get; set; }
+
+        public string OrderNo { get; set; }
     }
 }

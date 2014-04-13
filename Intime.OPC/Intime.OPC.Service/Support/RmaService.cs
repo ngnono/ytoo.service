@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
@@ -12,13 +13,20 @@ namespace Intime.OPC.Service.Support
 {
     public class RmaService : BaseService<OPC_RMA>, IRmaService
     {
-        private IRmaDetailRepository _rmaDetailRepository;
-        private IRmaCommentRepository _rmaCommentRepository;
-        public RmaService(IRMARepository repository, IRmaDetailRepository rmaDetailRepository, IRmaCommentRepository rmaCommentRepository)
+        private readonly IRmaDetailRepository _rmaDetailRepository;
+        private readonly IRmaCommentRepository _rmaCommentRepository;
+        private readonly IConnectProduct _connectProduct;
+        private readonly ISaleRMARepository _saleRmaRepository;
+        private IStockRepository _stockRepository;
+        public RmaService(IRMARepository repository, IRmaDetailRepository rmaDetailRepository, IRmaCommentRepository rmaCommentRepository, IConnectProduct connectProduct, ISaleRMARepository saleRmaRepository, IStockRepository stockRepository)
             : base(repository)
         {
             _rmaDetailRepository = rmaDetailRepository;
             _rmaCommentRepository = rmaCommentRepository;
+            _connectProduct = connectProduct;
+            _saleRmaRepository = saleRmaRepository;
+            _stockRepository = stockRepository;
+            
         }
 
         #region IRmaService Members
@@ -96,6 +104,52 @@ namespace Intime.OPC.Service.Support
             var rep = (IRMARepository)_repository;
             PageResult<RMADto> lst = rep.GetByPackPrintPress(dto.OrderNo, "", dto.StartDate, dto.EndDate,EnumRMAStatus.ShipReceive, dto.pageIndex, dto.pageSize);
             return lst;
+        }
+
+        public PageResult<RMADto> GetRmaCashByExpress(RmaExpressRequest dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+            var rep = (IRMARepository)_repository;
+            PageResult<RMADto> lst = rep.GetByPackPrintPress(dto.OrderNo, "", dto.StartDate, dto.EndDate, EnumRMAStatus.ShipVerifyPass, dto.pageIndex, dto.pageSize);
+            return lst;
+        }
+
+        public void SetRmaCash(string rmaNo)
+        {
+            var rep = (IRMARepository)_repository;
+
+            var rma = rep.GetByRmaNo2(rmaNo);
+            var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
+
+            var lstDetail=  _rmaDetailRepository.GetByRmaNo(rmaNo, 1, 1000);
+           
+            var cashNo=_connectProduct.GetCashNo(saleRma.OrderNo, rmaNo, saleRma.RealRMASumMoney.Value);
+            rma.RmaCashNum = cashNo;
+            rma.RmaCashDate = DateTime.Now;
+            rep.Update(rma);
+
+            saleRma.RMACashStatus = EnumRMACashStatus.SendCash.GetDescription();
+            _saleRmaRepository.Update(saleRma);
+
+            //更新库存
+            foreach (var detail in lstDetail.Result)
+            {
+                var stock = _stockRepository.GetByID(detail.Id);
+                stock.Count += detail.BackCount;
+                _stockRepository.Update(stock);
+            }
+
+        }
+
+        public void SetRmaCashOver(string rmaNo)
+        {
+            var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
+
+            saleRma.RMACashStatus = EnumRMACashStatus.CashOver.GetDescription();
+            _saleRmaRepository.Update(saleRma);
+
+          
         }
     }
 }

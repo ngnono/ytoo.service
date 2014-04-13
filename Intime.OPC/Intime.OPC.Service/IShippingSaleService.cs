@@ -34,5 +34,6 @@ namespace Intime.OPC.Service
         void PintRmaShipping(string shippingCode);
 
         PageResult<ShippingSaleDto> GetRmaByPackPrintPress(RmaExpressRequest request);
+        PageResult<ShippingSaleDto> GetRmaShippingPrintedByPack(RmaExpressRequest request);
     }
 }

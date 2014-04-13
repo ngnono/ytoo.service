@@ -233,5 +233,11 @@ namespace Intime.OPC.Repository.Support
                 return new PageResult<RMADto>(lstSaleRma, lst.TotalCount);
             }
         }
+
+
+        public OPC_RMA GetByRmaNo2(string rmaNo)
+        {
+            return Select(t => t.RMANo == rmaNo).FirstOrDefault();
+        }
     }
 }
