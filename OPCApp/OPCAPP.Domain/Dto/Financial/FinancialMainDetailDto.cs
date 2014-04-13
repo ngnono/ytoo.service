@@ -170,9 +170,6 @@ namespace OPCAPP.Domain.Dto.Financial
         public DateTime ApplyRmaDate { get; set; }
         #endregion
        
-        public override string ToString()
-        {
-            return "";
-        }
+
     }
 }
