@@ -21,19 +21,19 @@
 
 
                 <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
-                    <StackPanel>
+                    <StackPanel  Orientation="Horizontal">
                         <Image Source="/Image/查询.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="80" Command="{Binding CommandTransVerify}">
-                    <StackPanel>
+                    <StackPanel  Orientation="Horizontal">
                         <Image Source="/Image/收款确认.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">物流审核</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="120" Command="{Binding CommandTransVerifyNotPass}">
-                    <StackPanel>
+                    <StackPanel  Orientation="Horizontal">
                         <Image Source="/Image/退回.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">物流审核未通过</TextBlock>
                     </StackPanel>

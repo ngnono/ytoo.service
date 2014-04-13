@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,17 +13,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OPCApp.Financial.ViewModels;
 
 namespace OPCApp.Financial.Views
 {
     /// <summary>
     /// WebSiteCashierSearchView.xaml 的交互逻辑
     /// </summary>
+    [Export("WebSiteCashierSearchView", typeof(UserControl))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class WebSiteCashierSearchView : UserControl
     {
         public WebSiteCashierSearchView()
         {
             InitializeComponent();
+        }
+        [Import("WebSiteCashierSearchViewModel")]
+        public OPCApp.Financial.ViewModels.WebSiteCashierSearchViewModel ViewModel
+        {
+            set { DataContext = value; }
+            get { return DataContext as WebSiteCashierSearchViewModel; }
         }
     }
 }

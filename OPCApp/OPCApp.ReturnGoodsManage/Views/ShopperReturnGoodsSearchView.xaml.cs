@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OPCApp.ReturnGoodsManage.View
+namespace OPCApp.ReturnGoodsManage.Views
 {
     /// <summary>
     /// ShopperReturnGoodsSearchView.xaml 的交互逻辑

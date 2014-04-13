@@ -103,6 +103,7 @@
     <Compile Include="ViewModel\ReturnAcceptCashierViewModel.cs" />
     <Compile Include="ViewModel\ReturnGoodsEntryPrintViewModel.cs" />
     <Compile Include="ViewModel\ReturnGoodsInStorageViewModel.cs" />
+    <Compile Include="ViewModel\ReturnPackagePrintExpressageConnectViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackagePrintExpressageViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageVerifyViewViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageMainViewModel.cs" />
@@ -129,6 +130,9 @@
     <Compile Include="Views\ReturnPackageManageView.xaml.cs">
       <DependentUpon>ReturnPackageManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ReturnPackagePrintExpressageConnectView.xaml.cs">
+      <DependentUpon>ReturnPackagePrintExpressageConnectView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReturnPackagePrintExpressageView.xaml.cs">
       <DependentUpon>ReturnPackagePrintExpressageView.xaml</DependentUpon>
     </Compile>
@@ -137,9 +141,6 @@
     </Compile>
     <Compile Include="Views\ShopperReturnGoodsSearchView.xaml.cs">
       <DependentUpon>ShopperReturnGoodsSearchView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ShoppingGuideReturnGoodsReceiving.xaml.cs">
-      <DependentUpon>ShoppingGuideReturnGoodsReceiving.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -180,6 +181,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ReturnPackagePrintExpressageConnectView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ReturnPackagePrintExpressageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -189,12 +194,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ShopperReturnGoodsSearchView.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ShoppingGuideReturnGoodsReceiving.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

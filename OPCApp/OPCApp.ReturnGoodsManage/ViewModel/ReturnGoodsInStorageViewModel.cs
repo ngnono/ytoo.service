@@ -21,18 +21,30 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
          /// </summary>
         public DelegateCommand CommandReturnGoodsConfirm { get; set; }
         public ReturnGoodsInStorageViewModel()
-        {   
-            CommandReturnGoodsConfirm = new DelegateCommand(ReturnGoodsConfirm);
+        {
+            CommandReturnGoodsConfirm = new DelegateCommand(ReturnGoodsInStorage);
         }
 
-        private void ReturnGoodsConfirm()
+        private void ReturnGoodsInStorage()
         {
-            throw new NotImplementedException();
+            if (VerifyRmaSelected())
+            {
+                var rmaList = GetRmoNoList();
+                bool falg = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().SetReturnGoodsInStorage(rmaList);
+            }
         }
 
         public override void SearchRma()
         {
-            CustomReturnGoodsUserControlViewModel.RmaList = null;
+            try
+            {
+                CustomReturnGoodsUserControlViewModel.RmaList = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().GetRmaForReturnInStorage(this.ReturnGoodsCommonSearchDto).ToList();
+
+            }
+            catch
+            {
+
+            }
         }
     }
 }

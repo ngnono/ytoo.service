@@ -12,7 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 
-namespace OPCAPP.Domain.BaseInfo
+namespace OPCApp.Domain.BaseInfo
 {
     /// <summary>
     ///     专柜信息

@@ -70,7 +70,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             set { SetProperty(ref rmaDto, value); }
         }
 
-        public List<RMADto> RamList
+        public List<RMADto> RmaList
         {
             get { return _rmaDtos; }
             set { SetProperty(ref _rmaDtos, value); }
@@ -117,7 +117,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
 
         private void SearchRmaAndSaleRma()
         {
-            RamList = AppEx.Container.GetInstance<IPackageService>().GetRma(PackageReceiveDto).ToList();
+            RmaList = AppEx.Container.GetInstance<IPackageService>().GetRma(PackageReceiveDto).ToList();
             SaleRmaList = AppEx.Container.GetInstance<IPackageService>().GetSaleRma(PackageReceiveDto).ToList();
         }
     }

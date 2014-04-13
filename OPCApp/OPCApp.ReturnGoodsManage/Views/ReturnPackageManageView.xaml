@@ -46,7 +46,7 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="2">
             <Label Content="收货单" />
-            <DataGrid ItemsSource="{Binding SaleRmaList}" AutoGenerateColumns="False"
+            <DataGrid ItemsSource="{Binding SaleRmaList}" AutoGenerateColumns="False" CanUserAddRows="True" IsReadOnly="True"
                         RenderTransformOrigin="0.5,0.5" >
                 <DataGrid.RenderTransform>
                     <TransformGroup>
@@ -79,12 +79,12 @@
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="4">
             <Label Content="退货单" />
             <DataGrid ItemsSource="{Binding RmaList, Mode=TwoWay}" AutoGenerateColumns="False"
-                        RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" IsReadOnly="True" CanUserAddRows="False"
+                        RenderTransformOrigin="0.5,0.5" IsReadOnly="True" CanUserAddRows="False"
                         SelectedItem="{Binding RmaDto}"
                         >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding CommandDbClick}" />
+                        <i:InvokeCommandAction Command="{Binding GetRmaSaleDetailByRma}" />
                     </i:EventTrigger>
 
                 </i:Interaction.Triggers>
@@ -133,7 +133,7 @@
             <Label Content="退货明细" />
             <DataGrid ItemsSource="{Binding RmaDetailList, Mode=TwoWay}" AutoGenerateColumns="False"
                         RenderTransformOrigin="0.5,0.5"
-                        SelectedIndex="{Binding selectedIndex, Mode=TwoWay}" Margin="0,0,0,-78">
+                         Margin="0">
                 <DataGrid.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
