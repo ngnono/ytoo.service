@@ -135,9 +135,6 @@
     <Compile Include="Views\ReturnPackageVerifyView.xaml.cs">
       <DependentUpon>ReturnPackageVerifyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ShopperReturnGoodsSearchView.xaml.cs">
-      <DependentUpon>ShopperReturnGoodsSearchView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ShoppingGuideReturnGoodsReceiving.xaml.cs">
       <DependentUpon>ShoppingGuideReturnGoodsReceiving.xaml</DependentUpon>
     </Compile>
@@ -187,10 +184,6 @@
     <Page Include="Views\ReturnPackageVerifyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ShopperReturnGoodsSearchView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ShoppingGuideReturnGoodsReceiving.xaml">
       <Generator>MSBuild:Compile</Generator>
