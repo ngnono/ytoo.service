@@ -9,6 +9,7 @@ using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
+using Intime.OPC.Service.Map;
 
 namespace Intime.OPC.Service.Support
 {
@@ -111,8 +112,18 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception(string.Format("快递单不存在,快递单号:{0}", shippingCode));
             }
-            shipping.ShippingStatus = EnumRmaShippingStatus.PrintOver.AsID();
-            _shippingSaleRepository.Update(shipping);
+            if (shipping.ShippingStatus == EnumRmaShippingStatus.NoPrint.AsID())
+            {
+                throw new Exception(string.Format("快递单未打印,快递单号:{0}", shippingCode));
+            }
+            if (shipping.ShippingStatus > EnumRmaShippingStatus.NoPrint.AsID())
+            {
+                 shipping.ShippingStatus = EnumRmaShippingStatus.PrintOver.AsID();
+                shipping.UpdateDate = DateTime.Now;
+                shipping.UpdateUser = UserId;
+                _shippingSaleRepository.Update(shipping);
+            }
+           
         }
 
         public void PintRmaShipping(string shippingCode)
@@ -122,8 +133,34 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception(string.Format("快递单不存在,快递单号:{0}", shippingCode));
             }
-            shipping.ShippingStatus = EnumRmaShippingStatus.Printed.AsID();
-            _shippingSaleRepository.Update(shipping);
+            if (shipping.ShippingStatus == EnumRmaShippingStatus.NoPrint.AsID() || shipping.ShippingStatus == EnumRmaShippingStatus.Printed.AsID() 
+                )
+            {
+                shipping.ShippingStatus = EnumRmaShippingStatus.Printed.AsID();
+                shipping.UpdateDate = DateTime.Now;
+                shipping.UpdateUser = UserId;
+                _shippingSaleRepository.Update(shipping);
+            }
+
+            
+        }
+
+        public PageResult<ShippingSaleDto> GetRmaByPackPrintPress(RmaExpressRequest request)
+        {
+          var lst=   _shippingSaleRepository.GetByOrderNo(request.OrderNo, request.StartDate, request.EndDate, request.pageIndex,
+                request.pageSize);
+
+            IList<ShippingSaleDto> lstDtos=new List<ShippingSaleDto>();
+            foreach (var shippingSale in lst.Result)
+            {
+                var o = AutoMapper.Mapper.Map<OPC_ShippingSale, ShippingSaleDto>(shippingSale);
+                EnumRmaShippingStatus rmaShippingStatus = (EnumRmaShippingStatus) shippingSale.ShippingStatus;
+                o.PrintStatus = rmaShippingStatus.GetDescription();
+                lstDtos.Add(o);
+            }
+         return new PageResult<ShippingSaleDto>(lstDtos,lst.TotalCount);
+
+
         }
     }
 }

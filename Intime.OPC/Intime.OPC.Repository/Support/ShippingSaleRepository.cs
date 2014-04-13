@@ -87,6 +87,18 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        public PageResult<OPC_ShippingSale> GetByOrderNo(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var lst=
+                    db.ShippingSales.Where(
+                        t => t.CreateDate >= startDate && t.CreateDate < endDate && t.OrderNo.Contains(orderNo))
+                        .OrderByDescending(t => t.CreateDate);
+                return lst.ToPageResult(pageIndex, pageSize);
+            }
+        }
+
         #endregion
 
         public PageResult<OPC_ShippingSale> GetShippingSale(string saleOrderNo, string expressNo,
