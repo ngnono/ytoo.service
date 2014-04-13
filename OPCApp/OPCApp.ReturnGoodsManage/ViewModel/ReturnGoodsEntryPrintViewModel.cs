@@ -30,6 +30,10 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
                 var rmaNos = GetRmoNoList();
                 var falg = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().PrintReturnGoodsComplete(rmaNos);
                 MessageBox.Show(falg ? "设置打印完成" : "设置打印完成失败", "提示");
+                if (falg)
+                {
+                    Refresh();
+                }
             }
         }
 

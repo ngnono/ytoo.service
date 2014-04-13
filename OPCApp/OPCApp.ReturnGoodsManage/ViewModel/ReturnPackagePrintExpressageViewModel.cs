@@ -140,7 +140,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
                 MessageBox.Show("请先保存快递信息", "提示");
                 return;
             }
-            bool falg = AppEx.Container.GetInstance<IPackageService>().ShipPrintComplete(ShipSaleSelected.RmaNo);
+            bool falg = AppEx.Container.GetInstance<IPackageService>().ShipPrintComplete(ShipSaleSelected.ExpressCode);
             MessageBox.Show(falg ? "操作成功" : "操作失败", "提示");
             if (falg)
             {
@@ -149,6 +149,19 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
         }
         public void OnlyPrint()
         {
+            if (ShipSaleSelected == null)
+            {
+                MessageBox.Show("请选择快递单", "提示");
+                return;
+            }
+            if (string.IsNullOrEmpty(ShipSaleSelected.RmaNo))
+            {
+                MessageBox.Show("请先保存快递信息", "提示");
+                return;
+            }
+            bool falg = AppEx.Container.GetInstance<IPackageService>().ShipPrint(ShipSaleSelected.ExpressCode);
+            MessageBox.Show(falg ? "操作成功" : "操作失败", "提示");
+           
         }
 
         public void PrintView()

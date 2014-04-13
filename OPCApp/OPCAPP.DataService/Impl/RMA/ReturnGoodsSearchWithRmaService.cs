@@ -20,8 +20,8 @@ namespace OPCApp.DataService.Impl.RMA
         {
             try
             {
-                IList<RMADto> lst = RestClient.Get<RMADto>("trans/GetRmaCashByExpress", returnGoodsCommonSearchDto.ToString());
-                return lst;
+                var lst = RestClient.GetPage<RMADto>("trans/GetRmaCashByExpress", returnGoodsCommonSearchDto.ToString());
+                return lst.Result;
             }
             catch (Exception ex)
             {
@@ -57,11 +57,26 @@ namespace OPCApp.DataService.Impl.RMA
         #region 退货入库
         public bool SetReturnGoodsInStorage(List<string> listRmaNo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return RestClient.Post("trans/SetRmaShipInStorage", listRmaNo);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         public IList<RMADto> GetRmaForReturnInStorage(ReturnGoodsCommonSearchDto returnGoodsCommonSearchDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var lst = RestClient.GetPage<RMADto>("trans/GetRmaReturnByExpress", returnGoodsCommonSearchDto.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
         }
         #endregion
 
@@ -76,12 +91,27 @@ namespace OPCApp.DataService.Impl.RMA
 
         public bool PrintReturnGoodsComplete(List<string> listRmaNo)
         {
-            throw new NotImplementedException();
+             try
+            {
+                return RestClient.Post("trans/SetRmaPint", listRmaNo);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public IList<RMADto> GetRmaForReturnPrintDoc(ReturnGoodsCommonSearchDto returnGoodsCommonSearchDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var lst = RestClient.GetPage<RMADto>("trans/GetRmaPrintByExpress", returnGoodsCommonSearchDto.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
         }
 
        

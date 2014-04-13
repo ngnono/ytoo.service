@@ -38,7 +38,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
        }
        private List<RMADto> _rmaDtos;
 
-       public List<RMADto> RamList
+       public List<RMADto> RmaList
        {
            get { return _rmaDtos; }
            set { SetProperty(ref _rmaDtos, value); }
@@ -52,7 +52,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
            set { SetProperty(ref rmaDetails, value); }
        }
        public DelegateCommand CommandSearch { get; set; }
-       public DelegateCommand CommandGetRmaDetailByRma { get; set; }
+       public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
        public DelegateCommand CommandTransVerifyPass { get; set; }
        public DelegateCommand CommandTransVerifyNoPass { get; set; }
        public DelegateCommand CommandSetRmaRemark { get; set; }
@@ -60,7 +60,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
        {
            CommandSearch = new DelegateCommand(SearchRma);
            PackageReceiveDto = new PackageReceiveDto();
-           CommandGetRmaDetailByRma = new DelegateCommand(GetRmaDetailByRma);
+           CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaDetailByRma);
            CommandTransVerifyPass = new DelegateCommand(TransVerifyPass);
            CommandTransVerifyNoPass = new DelegateCommand(TransVerifyNoPass);
            CommandSetRmaRemark = new DelegateCommand(SetRmaRemark);
@@ -73,12 +73,12 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
        }
        public void TransVerifyNoPass()
        {
-           if (RamList==null)
+           if (RmaList==null)
            {
                MessageBox.Show("请选择退货单", "提示");
                return;
            }
-           var rmaSelectedList = RamList.Where(e => e.IsSelected).ToList();
+           var rmaSelectedList = RmaList.Where(e => e.IsSelected).ToList();
            if (rmaSelectedList.Count==0)
            { 
                MessageBox.Show("请选择退货单", "提示");
@@ -89,12 +89,12 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
        }
        public void TransVerifyPass()
        {
-           if (RamList == null)
+           if (RmaList == null)
            {
                MessageBox.Show("请选择退货单", "提示");
                return;
            }
-           var rmaSelectedList = RamList.Where(e => e.IsSelected).ToList();
+           var rmaSelectedList = RmaList.Where(e => e.IsSelected).ToList();
            if (rmaSelectedList.Count == 0)
            {
                MessageBox.Show("请选择退货单", "提示");
@@ -116,7 +116,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
 
        public void SearchRma()
        {
-           RamList = AppEx.Container.GetInstance<IPackageService>().GetRmaByFilter(PackageReceiveDto).ToList();
+           RmaList = AppEx.Container.GetInstance<IPackageService>().GetRmaByFilter(PackageReceiveDto).ToList();
        }
 
     

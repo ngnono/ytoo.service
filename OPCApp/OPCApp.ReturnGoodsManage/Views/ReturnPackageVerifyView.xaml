@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                 Height="AUTO" Width="AUTO" Background="LightGray">
+               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"   
+             Height="AUTO" Width="AUTO" Background="LightGray">
     <Grid Background="#FFE5E5E5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -26,13 +27,13 @@
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="80" Command="{Binding CommandTransVerify}">
+                <Button Background="LightGray" Width="80" Command="{Binding CommandTransVerifyPass}">
                     <StackPanel  Orientation="Horizontal">
                         <Image Source="/Image/收款确认.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">物流审核</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="120" Command="{Binding CommandTransVerifyNotPass}">
+                <Button Background="LightGray" Width="120" Command="{Binding CommandTransVerifyNoPass}">
                     <StackPanel  Orientation="Horizontal">
                         <Image Source="/Image/退回.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">物流审核未通过</TextBlock>
@@ -56,9 +57,9 @@
         <GridSplitter Height="5" HorizontalAlignment="Stretch" Grid.Row="3" VerticalAlignment="Bottom" />
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="2">
             <Label Content="退货单" />
-            <DataGrid ItemsSource="{Binding expressCompanyGroup, Mode=TwoWay}" AutoGenerateColumns="False"
+            <DataGrid ItemsSource="{Binding RmaList, Mode=TwoWay}" IsReadOnly="True" AutoGenerateColumns="False"  SelectedItem="{Binding RmaDto}"
                         RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2"
-                        SelectedIndex="{Binding selectedIndex, Mode=TwoWay}">
+                       >
                 <DataGrid.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -67,14 +68,30 @@
                         <TranslateTransform Y="-1.996" />
                     </TransformGroup>
                 </DataGrid.RenderTransform>
-                <DataGrid.Columns>
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding CommandGetRmaSaleDetailByRma}" />
+                    </i:EventTrigger>
+
+                </i:Interaction.Triggers>
+
+                    <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="退货单号" Binding="{Binding RMANo}" />
                     <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Header="销售单号" Binding="{Binding SaleOrderNo}" />
                     <DataGridTextColumn Header="门店" Binding="{Binding StoreName}" />
                     <DataGridTextColumn Header="退货原因" Binding="{Binding RMAReason}" />
-                    <DataGridTextColumn Header="退货状态" Binding="{Binding StatusName}" />
-                    <DataGridTextColumn Header="退货单状态" Binding="{Binding RmaStatusName}" />
+                    <DataGridTextColumn Header="退货状态" Binding="{Binding RmaStatusName}" />
+                    <DataGridTextColumn Header="退货单状态" Binding="{Binding StatusName}" />
                     <DataGridTextColumn Header="退货收银状态" Binding="{Binding RmaCashStatusName}" />
                     <DataGridTextColumn Header="退货总金额" Binding="{Binding RMAAmount}" />
                     <DataGridTextColumn Header="退货总数" Binding="{Binding Count}" />
@@ -100,9 +117,9 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,1"  Grid.Row="4">
             <Label Content="退货明细" />
-            <DataGrid ItemsSource="{Binding expressCompanyGroup, Mode=TwoWay}" AutoGenerateColumns="False"
+            <DataGrid ItemsSource="{Binding RmaDetailList, Mode=TwoWay}" AutoGenerateColumns="False" IsReadOnly="True"
                         RenderTransformOrigin="0.5,0.5"
-                        SelectedIndex="{Binding selectedIndex, Mode=TwoWay}" Margin="0,0,0,-78">
+                        Margin="0,0,0,-78">
                 <DataGrid.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
