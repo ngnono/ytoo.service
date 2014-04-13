@@ -130,6 +130,18 @@ namespace OPCApp.DataService.Impl.Trans
         {
             throw new NotImplementedException();
         }
+      #endregion
+        #region 完成快递单交接
+        public IList<RMADto> GetRmaForPrintExpressConnect(string rmaNo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Order> GetOrderForPrintExpressConnect(string orderNo)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     
     }
