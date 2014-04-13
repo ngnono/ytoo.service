@@ -402,7 +402,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 sender = user.Name,
                                 from_phone = trans.FromPhone,
                                 phone = trans.Phone,
-                                amount = order.Price,
+                                amount = order.Amount,
                                 status = (int)this.SetStatus4Receiver(order, trans)
                             });
         }
@@ -545,13 +545,28 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var trans = _transRepo.Find(x => x.OrderNo == charge_no && x.IsDecline == 0 && x.IsActive == 0);
             if (trans != null)
             {
-                trans.IsDecline = 1;
-                trans.ToUserId = authuid;
-                trans.OperateDate = DateTime.Now;
-                trans.OperateUser = authuid;
-                _transRepo.Update(trans);
+                using (var ts = new TransactionScope())
+                {
+                    trans.IsDecline = 1;
+                    trans.ToUserId = authuid;
+                    trans.OperateDate = DateTime.Now;
+                    trans.OperateUser = authuid;
+                    _transRepo.Update(trans);
+
+                    var preTrans = _transRepo.Find(x => x.Id == trans.PreTransferId);
+                    if (preTrans != null)
+                    {
+                        preTrans.IsActive = 0;
+                        preTrans.OperateDate = DateTime.Now;
+                        preTrans.OperateUser = authuid;
+                        preTrans.ToUserId = null;
+                        _transRepo.Update(preTrans);
+                    }
+                    ts.Complete();
+                    return this.RenderSuccess<dynamic>(null);
+                }
             }
-            return this.RenderSuccess<dynamic>(null);
+            return this.RenderError(x => x.Message = "没有赠送信息！");
         }
 
         private bool IsPhoneBinded(string phone)
