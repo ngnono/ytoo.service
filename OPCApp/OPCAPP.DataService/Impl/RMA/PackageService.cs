@@ -5,6 +5,7 @@ using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.RMA;
 using OPCApp.Domain.Customer;
 using OPCApp.Domain.Models;
+using OPCApp.Domain.ReturnGoods;
 
 namespace OPCApp.DataService.Impl.Trans
 {
@@ -103,6 +104,33 @@ namespace OPCApp.DataService.Impl.Trans
                 return new List<RMADto>();
             }
         }
-#endregion
+      #endregion
+      #region 退回打印快递单
+        public IList<OPC_ShippingSale> GetShipListWithReturnGoods(RmaExpressDto rmaExpress)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateShipWithReturnExpress(RmaExpressSaveDto rmaExpressSaveDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<RMADto> GetRmaForPrintExpress(string rmaNo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ShipPrintComplete(string rmaNO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ShipPrint(string rmaNo)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+    
     }
 }
