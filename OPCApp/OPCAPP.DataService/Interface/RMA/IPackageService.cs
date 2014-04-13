@@ -37,6 +37,7 @@ namespace OPCApp.DataService.Interface.RMA
         //打印快递单完成
         IList<RMADto> GetRmaForPrintExpressConnect(string rmaNo);
         IList<Order> GetOrderForPrintExpressConnect(string orderNo);
-
+        IList<OPC_ShippingSale> GetShipListWithReturnGoodsConnect(RmaExpressDto rmaExpress);
+        bool ShipPrintComplateConnect(string shipNo);    
     }
 }
