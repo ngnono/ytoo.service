@@ -22,5 +22,7 @@ namespace OPCApp.TransManage.Properties {
                 return defaultInstance;
             }
         }
+
+        public string OPC_ConnectionString { get; set; }
     }
 }
