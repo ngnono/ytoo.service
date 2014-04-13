@@ -121,7 +121,7 @@
                         <DataGridTextColumn Header="退货类型" Binding="{Binding RMAType}" />
                         <DataGridTextColumn Header="专柜码" Binding="{Binding ContractPhone}" />
                         <DataGridTextColumn Header="退货时间" Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                        <DataGridTextColumn Header="支付方式" Binding="{Binding PaymentName}" />
+                    <DataGridTextColumn Header="支付方式" Binding="{Binding PayType}" />
                         <DataGridTemplateColumn Header="备注录入">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
