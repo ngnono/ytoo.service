@@ -82,7 +82,7 @@
                         >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding CommandGetRmaSaleDetailByRma,Mode=OneWayToSource}" />
+                        <i:InvokeCommandAction Command="{Binding CommandGetRmaSaleDetailByRma}" />
                     </i:EventTrigger>
 
                 </i:Interaction.Triggers>
