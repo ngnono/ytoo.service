@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="OPCApp.ReturnGoodsManage.View.ShopperReturnGoodsSearchView"
+﻿<UserControl x:Class="OPCApp.ReturnGoodsManage.Views.ShopperReturnGoodsSearchView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
         <StackPanel HorizontalAlignment="Left" Background="LightGray">
             <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
-                <StackPanel>
+                <StackPanel  Orientation="Horizontal">
                     <Image Source="/Image/查询.png" Stretch="None" />
                     <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                 </StackPanel>

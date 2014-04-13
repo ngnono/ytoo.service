@@ -17,9 +17,9 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                var lst = RestClient.GetPage<SaleRmaDto>("trans/GetSaleRmaByPack",
+                IList<SaleRmaDto> lst = RestClient.Get<SaleRmaDto>("trans/GetSaleRmaByPack",
                     packageReceiveDto.ToString());
-                return lst.Result;
+                return lst;
             }
             catch (Exception ex)
             {
@@ -32,8 +32,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                var lst = RestClient.GetPage<RMADto>("trans/GetRmaByPack", packageReceiveDto.ToString());
-                return lst.Result;
+                IList<RMADto> lst = RestClient.Get<RMADto>("trans/GetRmaByPack", packageReceiveDto.ToString());
+                return lst;
             }
             catch (Exception ex)
             {
@@ -46,8 +46,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                var lst = RestClient.GetPage<RmaDetail>("rma/GetRmaDetailByRmaNo", string.Format("rmaNo={0}&pageIndex={1}&pageSize={2}", rmaNo,1,300));
-                return lst.Result;
+                IList<RmaDetail> lst = RestClient.Get<RmaDetail>("rma/GetRmaDetailByRmaNo", string.Format("rmaNo={0}", rmaNo));
+                return lst;
             }
             catch (Exception ex)
             {
@@ -130,6 +130,18 @@ namespace OPCApp.DataService.Impl.Trans
         {
             throw new NotImplementedException();
         }
+      #endregion
+        #region 完成快递单交接
+        public IList<RMADto> GetRmaForPrintExpressConnect(string rmaNo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Order> GetOrderForPrintExpressConnect(string orderNo)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     
     }

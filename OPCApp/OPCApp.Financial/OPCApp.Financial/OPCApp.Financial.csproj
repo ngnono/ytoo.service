@@ -83,6 +83,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModels\WebSiteSalesStatisticsViewModel.cs" />
+    <Compile Include="ViewModels\WebSiteReturnGoodsStatisticsViewModel.cs" />
+    <Compile Include="ViewModels\WebSiteCashierSearchViewModel.cs" />
     <Compile Include="ViewModels\ReturnGoodsCompensateVerifyViewModel.cs" />
     <Compile Include="ViewModels\ReturnGoodsPaymentVerifyViewModel.cs" />
     <Compile Include="Views\ReturnGoodsCompensateVerify.xaml.cs">

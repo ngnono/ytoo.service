@@ -10,6 +10,9 @@ namespace OPCApp.Domain.Models
         /// </summary>
         public string RmaNo { get; set; }
 
+        ///订单
+        public string OrderNo { get; set; }
+
         /// <summary>
         ///     发货单ID
         /// </summary>
