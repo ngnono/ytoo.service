@@ -19,6 +19,7 @@ using System;
 
 namespace OPCApp.ReturnGoodsManage.ViewModel
 {
+    [Export(typeof(ReturnPackagePrintExpressViewModel))]
     public class ReturnPackagePrintExpressViewModel:BindableBase
     {
         private List<OPC_ShippingSale> _shipList;

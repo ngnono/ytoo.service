@@ -27,9 +27,17 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
            get { return _customerPackageVerifyViewModel; }
            set { SetProperty(ref _customerPackageVerifyViewModel, value); }
        }
+       private ReturnPackagePrintExpressViewModel _returnPackagePrintExpressViewModel;
+       [Import]
+       public ReturnPackagePrintExpressViewModel ReturnPackagePrintExpressViewModel
+       {
+           get { return _returnPackagePrintExpressViewModel; }
+           set { SetProperty(ref _returnPackagePrintExpressViewModel, value); }
+       }
        public ReturnPackageMainViewModel()
        {
-               
        }
-    }
+
+    
+   }
 }
