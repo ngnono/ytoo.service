@@ -57,6 +57,8 @@
     <Compile Include="Dto\Customer\RMADto.cs" />
     <Compile Include="Dto\Customer\RMAPost.cs" />
     <Compile Include="Dto\Customer\SaleRmaDto.cs" />
+    <Compile Include="Dto\Financial\FinancialInfoGet.cs" />
+    <Compile Include="Dto\Financial\FinancialMainDetailDto.cs" />
     <Compile Include="Dto\KeyValue.cs" />
     <Compile Include="Dto\ReturnGoods\ReturnGoodsCommonSearchDto.cs" />
     <Compile Include="Dto\ReturnGoods\RmaExpressDto.cs" />

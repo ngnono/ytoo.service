@@ -102,7 +102,6 @@
     <Compile Include="IService\IPrint.cs" />
     <Compile Include="ViewModels\CustomerInquiriesViewModel.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
-    <Compile Include="ViewModels\RMACashInViewModel.cs" />
     <Compile Include="ViewModels\RemarkViewModel.cs" />
     <Compile Include="ViewModels\SaleOrderPickupViewModel.cs" />
     <Compile Include="ViewModels\StoreOutViewModel.cs" />

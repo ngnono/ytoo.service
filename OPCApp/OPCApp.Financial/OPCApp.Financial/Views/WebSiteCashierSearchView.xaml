@@ -36,11 +36,11 @@
                 <TextBlock Text="  至" Margin="0 5" />
                 <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsPayDto.EndDate}" />
                 <TextBlock Margin="0 5" Text="  门店"></TextBlock>
-                <ComboBox Width="150" ></ComboBox>
+                <ComboBox Width="150" SelectedItem="{Binding StoreName}"></ComboBox>
                 <TextBlock Margin="0 5" Text="  支付方式"></TextBlock>
-                <ComboBox Width="150"></ComboBox>
+                <ComboBox Width="150" SelectedItem="{Binding PayType}"></ComboBox>
                 <TextBlock Margin="0 5" Text="  财务类型"></TextBlock>
-                <ComboBox Width="150"></ComboBox>
+                <ComboBox Width="150" SelectedItem="{Binding FinancialType}"></ComboBox>
             </StackPanel>
         </StackPanel>
         <DataGrid Grid.Row="2" Name="DataGrid1" ItemsSource="{Binding RmaList, Mode=TwoWay}" AutoGenerateColumns="False"
@@ -57,23 +57,23 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="门店" Binding="{Binding StoreName}" />
                 <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
-                <DataGridTextColumn Header="渠道订单号" Binding="{Binding OrderNo}" />
-                <DataGridTextColumn Header="销售单号" Binding="{Binding OrderNo}" />
-                <DataGridTextColumn Header="支付方式" Binding="{Binding PaymentName}" />
-                <DataGridTextColumn Header="订单来源" Binding="{Binding PaymentName}" />
-                <DataGridTextColumn Header="购买时间" Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                <DataGridTextColumn Header="类型" Binding="{Binding BrandName}" />
-                <DataGridTextColumn Header="品牌" Binding="{Binding BrandName}" />
-                <DataGridTextColumn Header="款号" Binding="{Binding StoreItemNo}" />
-                <DataGridTextColumn Header="规格" Binding="{Binding SizeValueName}" />
-                <DataGridTextColumn Header="色码" Binding="{Binding ColorValueName}" />
-                <DataGridTextColumn Header="数量" Binding="{Binding ColorValueName}" />
-                <DataGridTextColumn Header="吊牌价" Binding="{Binding Price}" />
-                <DataGridTextColumn Header="销售价" Binding="{Binding Price}" />
-                <DataGridTextColumn Header="销售金额" Binding="{Binding Price}" />
+                <DataGridTextColumn Header="渠道订单号" Binding="{Binding OrderChannelNo}" />
+                <DataGridTextColumn Header="销售单号" Binding="{Binding SaleOrderNo}" />
+                <DataGridTextColumn Header="支付方式" Binding="{Binding PaymentMethodName}" />
+                <DataGridTextColumn Header="订单来源" Binding="{Binding OrderSouce}" />
+                <DataGridTextColumn Header="购买时间" Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                <DataGridTextColumn Header="类型" Binding="{Binding DetailType}" />
+                <DataGridTextColumn Header="品牌" Binding="{Binding Brand}" />
+                <DataGridTextColumn Header="款号" Binding="{Binding StyleNo}" />
+                <DataGridTextColumn Header="规格" Binding="{Binding Size}" />
+                <DataGridTextColumn Header="色码" Binding="{Binding Color}" />
+                <DataGridTextColumn Header="数量" Binding="{Binding SellCount}" />
+                <DataGridTextColumn Header="吊牌价" Binding="{Binding LabelPrice}" />
+                <DataGridTextColumn Header="销售价" Binding="{Binding SalePrice}" />
+                <DataGridTextColumn Header="销售金额" Binding="{Binding SaleTotalPrice}" />
                 <DataGridTextColumn Header="专柜码" Binding="{Binding SectionCode}" />
-                <DataGridTextColumn Header="收银流水" Binding="{Binding SectionCode}" />
-                <DataGridTextColumn Header="退货收银流水" Binding="{Binding SectionCode}" />
+                <DataGridTextColumn Header="收银流水" Binding="{Binding CashNum}" />
+                <DataGridTextColumn Header="退货收银流水" Binding="{Binding RmaCashNum}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

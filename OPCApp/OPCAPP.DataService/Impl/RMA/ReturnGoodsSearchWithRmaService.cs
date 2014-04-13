@@ -83,6 +83,23 @@ namespace OPCApp.DataService.Impl.RMA
         {
             throw new NotImplementedException();
         }
+
+       
+
+        #endregion
+
+        #region 导购退货收货查询
+        public IList<RMADto> GetRmaForShopperReturnOrReceivingPrintDoc(ReturnGoodsCommonSearchDto returnGoodsCommonSearchDto)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region 已经完成退货单查询
+        public IList<RMADto> GetRmaForCompletedReturnGoods(ReturnGoodsCommonSearchDto returnGoodsCommonSearchDto)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
