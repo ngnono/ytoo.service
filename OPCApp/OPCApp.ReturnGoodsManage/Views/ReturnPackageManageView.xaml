@@ -55,6 +55,14 @@
             <DataGrid ItemsSource="{Binding SaleRmaList}" AutoGenerateColumns="False" CanUserAddRows="True" IsReadOnly="True"
                         >
                 <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Header="生成退货单时间" Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     <DataGridTextColumn Header="顾客应付运费" Binding="{Binding CustomFee}" />
@@ -88,14 +96,7 @@
                 </i:Interaction.Triggers>
                
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                  
                     <DataGridTextColumn Header="退货单号" Binding="{Binding RMANo}" />
                     <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Header="销售单号" Binding="{Binding SaleOrderNo}" />
