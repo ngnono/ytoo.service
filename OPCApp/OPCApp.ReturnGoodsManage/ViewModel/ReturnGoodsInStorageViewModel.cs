@@ -36,7 +36,15 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
 
         public override void SearchRma()
         {
-            CustomReturnGoodsUserControlViewModel.RmaList = null;
+            try
+            {
+                CustomReturnGoodsUserControlViewModel.RmaList = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().GetRmaForReturnInStorage(this.ReturnGoodsCommonSearchDto).ToList();
+
+            }
+            catch
+            {
+
+            }
         }
     }
 }
