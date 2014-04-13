@@ -92,7 +92,7 @@ namespace Intime.OPC.Repository.Support
                     o.RmaCashDate = t.Rma.RmaCashDate;
                     o.PayType = t.payTyp;
                     o.RmaCashStatusName = t.SaleRma.RMACashStatus;
-                    EnumRMAStatus status2 = (EnumRMAStatus) (t.Rma.Status);
+                    EnumRMAStatus status2 = (EnumRMAStatus) (t.SaleRma.Status);
                     o.StatusName = status2.GetDescription();
                     o.SourceDesc = t.Rma.SourceDesc;
                     o.RmaStatusName = t.SaleRma.RMAStatus;
@@ -232,6 +232,7 @@ namespace Intime.OPC.Repository.Support
                     o.RMAType = t.Rma.RMAType;
                     o.RefundAmount = t.Rma.RefundAmount;
                     o.RmaCashDate = t.Rma.RmaCashDate;
+                    o.RmaCashNum = t.Rma.RmaCashNum;
                     o.PayType = t.payTyp;
                     o.RmaCashStatusName = t.SaleRma.RMACashStatus;
                     EnumRMAStatus status2 = (EnumRMAStatus)(t.Rma.Status);
@@ -249,6 +250,152 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        public PageResult<RMADto> GetRmaReturnByExpress(string orderNo, DateTime startTime, DateTime endTime, int pageIndex, int pageSize)
+        {
+            int stat = EnumRMAStatus.ShipVerifyPass.AsID();
+            var rmaCashStatus = EnumCashStatus.CashOver.GetDescription();
+            using (var db = new YintaiHZhouContext())
+            {
+                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var saleQuery =
+                    db.OPC_SaleRMA.Where(
+                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMACashStatus == rmaCashStatus && t.Status==stat);
+                
+                if (orderNo.IsNotNull())
+                {
+                    query = query.Where(t => t.OrderNo.Contains(orderNo));
+                }
+                
+
+
+                var lst2 = query.Join(saleQuery, o => o.RMANo,
+                    t => t.RMANo, (t, o) => new {Rma = t, SaleRma = o})
+                    .Join(db.Stores, t => t.Rma.StoreId, o => o.Id,
+                        (t, o) => new {Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma})
+                    .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
+                        (t, o) => new {Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = o})
+                    .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo,
+                        (t, o) =>
+                            new
+                            {
+                                Rma = t.Rma,
+                                StoreName = t.StoreName,
+                                SaleRma = t.SaleRma,
+                                Sale = t.Sale,
+                                payTyp = o.PaymentMethodName
+                            })
+                    .OrderByDescending(t => t.Rma.CreatedDate);
+
+                var lst = lst2.ToPageResult(pageIndex, pageSize);
+                var lstSaleRma = new List<RMADto>();
+                foreach (var t in lst.Result)
+                {
+                    var o = new RMADto();
+                    o.Id = t.Rma.Id;
+                    o.OrderNo = t.Rma.OrderNo;
+                    o.SaleOrderNo = t.Rma.SaleOrderNo;
+                    o.CashDate = t.Sale.CashDate;
+                    o.CashNum = t.Sale.CashNum;
+                    o.Count = t.SaleRma.RMACount;
+                    o.CreatedDate = t.Rma.CreatedDate;
+                    o.RMAAmount = t.Rma.RMAAmount;
+                    o.RMANo = t.Rma.RMANo;
+                    o.BackDate = t.SaleRma.BackDate;
+
+                    o.RMAReason = t.SaleRma.Reason;
+                    o.RMAType = t.Rma.RMAType;
+                    o.RefundAmount = t.Rma.RefundAmount;
+                    o.RmaCashDate = t.Rma.RmaCashDate;
+                    o.RmaCashNum = t.Rma.RmaCashNum;
+                    o.PayType = t.payTyp;
+                    o.RmaCashStatusName = t.SaleRma.RMACashStatus;
+                    EnumRMAStatus status2 = (EnumRMAStatus) (t.Rma.Status);
+                    o.StatusName = status2.GetDescription();
+                    o.SourceDesc = t.Rma.SourceDesc;
+                    o.RmaStatusName = t.SaleRma.RMAStatus;
+                    o.StoreName = t.StoreName;
+                    o.专柜码 = "";
+
+
+                    lstSaleRma.Add(o);
+                }
+
+                return new PageResult<RMADto>(lstSaleRma, lst.TotalCount);
+            }
+        }
+
+        public PageResult<RMADto> GetRmaPrintByExpress(string orderNo, DateTime startTime, DateTime endTime, int pageIndex, int pageSize)
+        {
+            int stat = EnumRMAStatus.ShipInStorage.AsID();
+            var rmaCashStatus = EnumCashStatus.CashOver.GetDescription();
+            string rmaStatus = EnumReturnGoodsStatus.Valid.GetDescription();
+            using (var db = new YintaiHZhouContext())
+            {
+                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var saleQuery =
+                    db.OPC_SaleRMA.Where(
+                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMACashStatus == rmaCashStatus && t.Status == stat && t.RMAStatus == rmaStatus);
+
+                if (orderNo.IsNotNull())
+                {
+                    query = query.Where(t => t.OrderNo.Contains(orderNo));
+                }
+
+                var lst2 = query.Join(saleQuery, o => o.RMANo,
+                    t => t.RMANo, (t, o) => new { Rma = t, SaleRma = o })
+                    .Join(db.Stores, t => t.Rma.StoreId, o => o.Id,
+                        (t, o) => new { Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma })
+                    .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
+                        (t, o) => new { Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = o })
+                    .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo,
+                        (t, o) =>
+                            new
+                            {
+                                Rma = t.Rma,
+                                StoreName = t.StoreName,
+                                SaleRma = t.SaleRma,
+                                Sale = t.Sale,
+                                payTyp = o.PaymentMethodName
+                            })
+                    .OrderByDescending(t => t.Rma.CreatedDate);
+
+                var lst = lst2.ToPageResult(pageIndex, pageSize);
+                var lstSaleRma = new List<RMADto>();
+                foreach (var t in lst.Result)
+                {
+                    var o = new RMADto();
+                    o.Id = t.Rma.Id;
+                    o.OrderNo = t.Rma.OrderNo;
+                    o.SaleOrderNo = t.Rma.SaleOrderNo;
+                    o.CashDate = t.Sale.CashDate;
+                    o.CashNum = t.Sale.CashNum;
+                    o.Count = t.SaleRma.RMACount;
+                    o.CreatedDate = t.Rma.CreatedDate;
+                    o.RMAAmount = t.Rma.RMAAmount;
+                    o.RMANo = t.Rma.RMANo;
+                    o.BackDate = t.SaleRma.BackDate;
+
+                    o.RMAReason = t.SaleRma.Reason;
+                    o.RMAType = t.Rma.RMAType;
+                    o.RefundAmount = t.Rma.RefundAmount;
+                    o.RmaCashDate = t.Rma.RmaCashDate;
+                    o.RmaCashNum = t.Rma.RmaCashNum;
+                    o.PayType = t.payTyp;
+                    o.RmaCashStatusName = t.SaleRma.RMACashStatus;
+                    EnumRMAStatus status2 = (EnumRMAStatus)(t.Rma.Status);
+                    o.StatusName = status2.GetDescription();
+                    o.SourceDesc = t.Rma.SourceDesc;
+                    o.RmaStatusName = t.SaleRma.RMAStatus;
+                    o.StoreName = t.StoreName;
+                    o.专柜码 = "";
+
+
+                    lstSaleRma.Add(o);
+                }
+
+                return new PageResult<RMADto>(lstSaleRma, lst.TotalCount);
+            }
+        }
 
         public OPC_RMA GetByRmaNo2(string rmaNo)
         {

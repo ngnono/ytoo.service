@@ -171,7 +171,7 @@ namespace Intime.OPC.Service.Support
             ISaleRMARepository rep = _repository as ISaleRMARepository;
             rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = rep.GetAll(dto.OrderNo,dto.SaleOrderNo, "","", dto.StartDate, dto.EndDate,
-                EnumRMAStatus.NoDelivery.AsID(),null,"",dto.pageIndex,dto.pageSize);
+                EnumRMAStatus.ShipNoReceive.AsID(),null,"",dto.pageIndex,dto.pageSize);
 
             return lst;
         }
@@ -216,7 +216,7 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("客服未确认,退货单号:" + rmaNo);
             }
-            if (saleRma.Status!=EnumRMAStatus.ShipReceive.AsID())
+            if (saleRma.Status!=EnumRMAStatus.ShipNoReceive.AsID())
             {
                 throw new Exception("该退货单已经确认或正在审核,退货单号:" + rmaNo);
             }
@@ -292,7 +292,7 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("客服未确认,退货单号:" + rmaNo);
             }
-            if (saleRma.RMAStatus !=EnumRMAStatus.ShipReceive.GetDescription())
+            if (saleRma.Status !=EnumRMAStatus.ShipReceive.AsID())
             {
                 throw new Exception("该退货单已经确认或正在财务审核,退货单号:" + rmaNo);
             }
