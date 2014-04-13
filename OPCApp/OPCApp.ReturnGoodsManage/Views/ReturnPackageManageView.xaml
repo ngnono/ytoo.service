@@ -29,6 +29,12 @@
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
+                <Button Background="LightGray" Width="50" Command="{Binding ReceivingGoodsSubmit}">
+                    <StackPanel>
+                        <Image Source="/Image/回单确认.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">物流收货确认</TextBlock>
+                    </StackPanel>
+                </Button>
 
             </StackPanel>
         </StackPanel>
@@ -47,15 +53,8 @@
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="2">
             <Label Content="收货单" />
             <DataGrid ItemsSource="{Binding SaleRmaList}" AutoGenerateColumns="False" CanUserAddRows="True" IsReadOnly="True"
-                        RenderTransformOrigin="0.5,0.5" >
-                <DataGrid.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform />
-                        <SkewTransform AngleY="-0.208" />
-                        <RotateTransform />
-                        <TranslateTransform Y="-1.996" />
-                    </TransformGroup>
-                </DataGrid.RenderTransform>
+                        >
+              
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Header="生成退货单时间" Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
@@ -84,7 +83,7 @@
                         >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding GetRmaSaleDetailByRma}" />
+                        <i:InvokeCommandAction Command="{Binding DataContext.GetRmaSaleDetailByRma}" />
                     </i:EventTrigger>
 
                 </i:Interaction.Triggers>
