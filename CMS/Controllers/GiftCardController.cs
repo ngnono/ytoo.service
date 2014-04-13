@@ -102,31 +102,70 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Controllers
 
         public ActionResult Update(int id)
         {
-            var card = _cardRepo.Find(x => x.Id == id);
+            IMS_GiftCardEntity card = _cardRepo.Find(x => x.Id == id);
             if (card == null)
             {
                 return RedirectToAction("List");
             }
-            var items = _itemRepo.Get(x => x.GiftCardId == id);
-            return this.View(new GiftCardItemViewModel() {Card = card, CardItems = items});
+            return this.View(card);
         }
 
-        public ActionResult Upate(GiftCardItemViewModel model)
+        public JsonResult Items(int id)
         {
-            if (ModelState.IsValid)
+            var items =
+                _itemRepo.Get(x => x.GiftCardId == id)
+                    .Select(
+                        x =>
+                            new
+                            {
+                                id = x.Id,
+                                amount = x.UnitPrice,
+                                price = x.Price,
+                                status = x.Status,
+                                quota = x.MaxLimit
+                            });
+            return this.Json(new {success = true, items},JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult Update()
+        {
+            using (var ts = new TransactionScope())
             {
-                using (var ts = new TransactionScope())
+                var para = HttpContext.Request["items"];
+                int cardId;
+                if (string.IsNullOrEmpty(HttpContext.Request["card_id"]) || !int.TryParse(HttpContext.Request["card_id"],out cardId))
                 {
-                    _cardRepo.Update(model.Card);
-                    foreach (var item in model.CardItems)
-                    {
-                        _itemRepo.Update(item);
-                    }
-                    ts.Complete();
+                    return this.FailResponse("无效的礼品卡!");
                 }
-                return this.RedirectToAction("List");
+                
+                var items = JsonConvert.DeserializeObject<dynamic>(para);
+                foreach (var item in items)
+                {
+                    var id = int.Parse(item.id.ToString());
+                    IMS_GiftCardItemEntity card = _itemRepo.Find(id);
+                    if (card != null)
+                    {
+                        card.Price = item.price;
+                        card.Status = item.status == "true" ? 1 : 0;
+                        card.MaxLimit = item.quota;
+                        _itemRepo.Update(card);
+                        continue;
+                    }
+
+                    this._itemRepo.Insert(new IMS_GiftCardItemEntity()
+                    {
+                        GiftCardId = cardId,
+                        MaxLimit = item.quota,
+                        Price = item.price,
+                        UnitPrice = item.amount,
+                        Status = item.status == "true" ? 1 : 0
+                    });
+                }
+
+                ts.Complete();
             }
-            return this.View("Update", model);
+            return this.SuccessResponse();
         }
 
         [HttpPost]

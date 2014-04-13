@@ -1,4 +1,4 @@
-﻿@model GiftCardItemViewModel
+﻿@model Yintai.Hangzhou.Data.Models.IMS_GiftCardEntity
 @{
     ViewBag.Title = "礼品卡详情";
 }
@@ -11,22 +11,123 @@
 }
 
 @section PageJsSection {
-    
+    <script>
+
+        function add_rows(items) {
+            for (var idx in items) {
+                var item = items[idx];
+                var row = '<tr class="item"><td>'
+                    + item["id"] + '<input name="id" type="hidden" value="'
+                    + item.id + '" /></td><td>'
+                    + item.amount + ' <input type="hidden" name="amount" id="amount" value="'
+                    + item.amount + '" </td><td><input name="price" type="text" value="'
+                    + item.price + '"/></td><td><input name="quota" type="text" value="'
+                    + item.quota + '"/></td><td>';
+
+                if (item.status == 1) {
+                    row += '<input name="status" type="checkbox" checked="checked"/> </td><td>';
+                } else {
+                    row += '<input name="status" type="checkbox" /> </td><td>';
+                }
+                row += '<a href="javascript:void(0)" onclick="removetr(this)" >删除</a></td></tr>';
+                $("#tr_add").before(row);
+            }
+        }
+
+        function load_items() {
+            $.ajax({
+                type: "GET",
+                url: "@(Url.Action("Items", "GiftCard"))",
+                data: { id: "@(Model.Id)" },
+                success: function (data) {
+                    add_rows(data["items"]);
+                },
+                error: function (data) {
+                    alert('加载失败！');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $("#btn_add").click(function () {
+                var row = '<tr class="item"><td>-1<input name="id" type="hidden" value="-1" /></td><td><input name="amount" type="text" /></td><td><input name="price" type="text"/></td><td><input name="quota" type="text"/></td><td><input name="status" type="checkbox"/> </td><td><a href="javascript:void(0)" onclick="removetr(this)">删除</a></td></tr>';
+                $("tr:last").before(row);
+            });
+
+            
+
+            $('#submitBtn').click(function () {
+                var data = [];
+                var valid = true;
+                $('.item').each(function () {
+                    var o = {};
+                    $(this).find('input').each(function () {
+                        var key = $(this).attr("name");
+                        if ($(this).attr("type") == "checkbox") {
+                            o[key] = $(this).prop("checked");
+                        } else {
+                            var val = $(this).val();
+                            if (!parseInt(val)) {
+                                alert("必须是数字");
+                                $(this).val("");
+                                $(this).focus();
+                                valid = false;
+                                return false;
+                            }
+                            o[key] = val;
+                        }
+                    });
+                    data.push(o);
+                });
+                if (!valid) {
+                    return false;
+                }
+                var jsonStr = JSON.stringify(data);
+                
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("Update", "GiftCard"))",
+                    data: {
+                        card_id: "@Model.Id",
+                        items: jsonStr
+                    },
+                    success: function (result) {
+                        if (result["success"] == true) {
+                            $('.item').remove();
+                            add_rows(result["items"]);
+                        } else {
+                            alert(result["message"]);
+                        }
+                    },
+                    error: function () {
+                        alert('修改失败！');
+                    }
+                });
+            });
+            //$("#btn_add").trigger("click");
+            load_items();
+        });
+
+        function removetr(e) {
+            $(e).parent().parent().remove();
+        }
+    </script>
+
 }
 
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Update", "GiftCard", FormMethod.Post))
 {
     @Html.ValidationSummary(true)
     <fieldset>
         <div class="display-label">@Html.Label("编码：")</div>
-        <div class="display-field">@Html.Label(Model.Card.Id.ToString("D"))</div>
+        <div class="display-field">@Html.Label(Model.Id.ToString("D"))</div>
         <div class="display-label">@Html.Label("礼品卡：")</div>
-        <div class="display-field">@Html.Label(Model.Card.Name)</div>
+        <div class="display-field">@Html.Label(Model.Name)</div>
         <div class="display-label">状态</div>
-        <div class="display-field">@Html.Label(Model.Card.Status == 1 ? "上线" : "下线")</div>
+        <div class="display-field">@Html.Label(Model.Status == 1 ? "上线" : "下线")</div>
+        <input type="hidden" name="cardId" id="cardId" value="@Model.Id" />
     </fieldset>
-    
 }
 
 <fieldset>
@@ -37,19 +138,12 @@
             <th>销售价</th>
             <th>销售配额</th>
             <th>上线</th>
+            <th>操作</th>
         </tr>
-        @foreach (var item in Model.CardItems)
-        {
-            <tr>
-                <td>@Html.Label(item.Id.ToString("d")) @Html.Hidden("id", item.Id) @Html.Hidden("giftcardId", item.GiftCardId.ToString("D"))</td>
-                <td>@Html.TextBox("amount", item.UnitPrice)</td>
-                <td>@Html.TextBox("price", item.Price)</td>
-                <td>@Html.TextBox("quota", item.MaxLimit)</td>
-                <td>@Html.CheckBox("status",item.Status==1)</td>
-            </tr>
-        }
+        <tr id="tr_add" class="rowlink"><td colspan="6"><input id="btn_add" type="button" value="增加子卡" /></td></tr>
     </table>
 </fieldset>
-
-
-
+<p>
+    <input id="submitBtn" type="button" value="提交" class="btn btn-primary" />
+    @Html.ActionLink2("返回", "details", new { id = Model.Id }, new { @class = "btn" })
+</p>
