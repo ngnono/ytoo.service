@@ -66,7 +66,7 @@
     <Compile Include="Impl\Info\StoreService.cs" />
     <Compile Include="Impl\LoginManager.cs" />
     <Compile Include="Impl\RMA\PackageService.cs" />
-    <Compile Include="Impl\RMA\RMACashInService.cs" />
+    <Compile Include="Impl\RMA\ReturnGoodsSearchWithRmaService.cs" />
     <Compile Include="Impl\Customer\CustomerReturnGoodsService.cs" />
     <Compile Include="Impl\Trans\RemarkService.cs" />
     <Compile Include="Impl\Customer\CustomerInquriesService.cs" />
@@ -88,7 +88,7 @@
     <Compile Include="Interface\Financial\IFinancialPayVerifyService.cs" />
     <Compile Include="Interface\IService\IRemark.cs" />
     <Compile Include="Interface\RMA\IPackageService.cs" />
-    <Compile Include="Interface\RMA\IRMACashInService.cs" />
+    <Compile Include="Interface\RMA\IReturnGoodsSearchWithRma.cs" />
     <Compile Include="Interface\Info\ICommonInfoService.cs" />
     <Compile Include="Interface\Trans\IRemarkService.cs" />
     <Compile Include="Interface\Trans\ITransService.cs" />

@@ -15,9 +15,9 @@ namespace OPCAPP.Domain.Dto.ReturnGoods
           EndDate = DateTime.Now;
       }
 
+      public string OrderNo { get; set; }
       public DateTime StartDate { get; set; }
       public DateTime EndDate { get; set; }
-      public string OrderNo { get; set; }
       public override string ToString()
       {
           return string.Format("StartDate={0}&EndDate={1}&OrderNo={2}&pageIndex={3}&pageSize={4}",StartDate,EndDate,OrderNo,1,300);

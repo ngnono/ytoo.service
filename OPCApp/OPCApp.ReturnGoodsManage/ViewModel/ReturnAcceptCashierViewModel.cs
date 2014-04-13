@@ -1,4 +1,6 @@
-﻿using Microsoft.Practices.Prism.Commands;
+﻿using System;
+using System.Windows;
+using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.RMA;
 using OPCApp.Domain.Customer;
@@ -23,25 +25,43 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
         public DelegateCommand CommandReturnAcceptCashierConfirm { get; set; }
         public ReturnAcceptCashierViewModel()
         {
-          
-            CommandSearch = new DelegateCommand(SearchRma);
             CommandReturnAcceptCashier = new DelegateCommand(ReturnAcceptCashier);
             CommandReturnAcceptCashierConfirm = new DelegateCommand(ReturnAcceptCashierConfirm);
         }
 
         private void ReturnAcceptCashierConfirm()
         {
-            throw new System.NotImplementedException();
+            if (VerifyRmaSelected())
+            {
+                var listRmaNo = GetRmoNoList();
+                var falg = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().SetReturnGoodsComplete(listRmaNo);
+                MessageBox.Show(falg?"退货入收银成功":"退货入收银失败", "提示");
+                Refresh();
+            }
         }
 
         private void ReturnAcceptCashier()
         {
-            throw new System.NotImplementedException();
+            if (VerifyRmaSelected())
+            {
+                var listRmaNo = GetRmoNoList();
+                var falg = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().SetReturnGoodsComplete(listRmaNo);
+                MessageBox.Show(falg ? "完成退货入收银成功" : "完成退货入收银失败", "提示");
+                Refresh();
+            }
         }
 
         public override void SearchRma()
         {
-            CustomReturnGoodsUserControlViewModel.RmaList = null;
+            try
+            {
+                CustomReturnGoodsUserControlViewModel.RmaList = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().GetRmaForReturnCash(this.ReturnGoodsCommonSearchDto).ToList();
+
+            }
+            catch 
+            {
+                
+            }
         }
     }
 }
