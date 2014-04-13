@@ -97,10 +97,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModel\CustomReturnGoodsUserControlViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackagePrintExpressageViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageVerifyViewViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageMainViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageManageViewModel.cs" />
+    <Compile Include="ViewModel\ShopperReturnGoodsSearchViewModel.cs" />
+    <Compile Include="Views\CustomReturnGoodsUserControl.xaml.cs">
+      <DependentUpon>CustomReturnGoodsUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PackageInfoView.xaml.cs">
       <DependentUpon>PackageInfoView.xaml</DependentUpon>
     </Compile>
@@ -136,6 +141,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\CustomReturnGoodsUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\PackageInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -165,8 +174,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ShoppingGuideReturnGoodsReceiving.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
