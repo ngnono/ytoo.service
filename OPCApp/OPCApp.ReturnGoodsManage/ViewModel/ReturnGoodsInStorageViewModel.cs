@@ -27,7 +27,11 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
 
         private void ReturnGoodsInStorage()
         {
-            throw new NotImplementedException();
+            if (VerifyRmaSelected())
+            {
+                var rmaList = GetRmoNoList();
+                bool falg = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().SetReturnGoodsInStorage(rmaList);
+            }
         }
 
         public override void SearchRma()

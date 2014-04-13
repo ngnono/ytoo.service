@@ -53,5 +53,12 @@ namespace OPCApp.DataService.Impl.RMA
             }
         }
         #endregion
+
+        #region 退货入库
+        public bool SetReturnGoodsInStorage(List<string> listRmaNo)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }
