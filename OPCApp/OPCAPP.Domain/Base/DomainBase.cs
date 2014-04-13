@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace OPCAPP.Domain.Base
+namespace OPCApp.Domain.Base
 {
     public class DomainBase : INotifyDataErrorInfo, INotifyPropertyChanged
     {

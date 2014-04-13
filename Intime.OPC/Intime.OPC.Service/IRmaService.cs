@@ -27,10 +27,44 @@ namespace Intime.OPC.Service
         /// <returns>IList{RMADto}.</returns>
         PageResult<RMADto> GetByOrderNo(string orderNo, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus, int pageIndex, int pageSize);
 
+        PageResult<RMADto> GetByRmaNo(string rmaNo);
+
+
+
         void AddComment(OPC_RMAComment comment);
 
         IList<OPC_RMAComment> GetCommentByRmaNo(string rmaNo);
 
+        /// <summary>
+        /// 退货包裹审核 查询退货单
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>PageResult{RMADto}.</returns>
         PageResult<RMADto> GetAllPackVerify(PackageReceiveRequest request);
+
+        PageResult<RMADto> GetByFinaceDto(FinaceRequest request);
+        /// <summary>
+        /// 包裹退回-打印快递单
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>PageResult{RMADto}.</returns>
+        PageResult<RMADto> GetRmaByPackPrintPress(RmaExpressRequest request);
+
+
+
+        /// <summary>
+        /// 退货入收银  查询 退货单
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>PageResult{RMADto}.</returns>
+        PageResult<RMADto> GetRmaCashByExpress(RmaExpressRequest request);
+
+        /// <summary>
+        /// 退货入收银
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        void SetRmaCash(string rmaNo);
+
+        void SetRmaCashOver(string rmaNo);
     }
 }

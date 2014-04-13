@@ -33,6 +33,9 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.ShippingCode)
                 .HasMaxLength(50);
 
+            this.Property(t => t.RmaNo)
+                .HasMaxLength(50);
+
             this.Property(t => t.ShippingRemark)
                 .HasMaxLength(500);
 
@@ -56,6 +59,8 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.CreateUser).HasColumnName("CreateUser");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
+
+            this.Property(t => t.RmaNo).HasColumnName("RmaNo");
         }
     }
 }

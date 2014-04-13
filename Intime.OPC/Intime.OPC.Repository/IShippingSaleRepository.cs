@@ -10,6 +10,7 @@ namespace Intime.OPC.Repository
 
         PageResult<OPC_ShippingSale> GetByShippingCode(string shippingCode, int pageIndex, int pageSize = 20);
 
+       
         PageResult<OPC_ShippingSale> Get(string shippingCode, DateTime startTime, DateTime endTime, int shippingStatus,
             int pageIndex, int pageSize = 20);
 
@@ -32,5 +33,10 @@ namespace Intime.OPC.Repository
             DateTime endGoodsOutDate,
             string outGoodsCode, int sectionId, int shippingStatus, string customerPhone, int brandId, int pageIndex,
             int pageSize);
+
+        OPC_ShippingSale GetByRmaNo(string rmaNo);
+
+        PageResult<OPC_ShippingSale> GetByOrderNo(string orderNo, DateTime startDate, DateTime endDate, int pageIndex,
+            int pageSize,int shippingStatus);
     }
 }

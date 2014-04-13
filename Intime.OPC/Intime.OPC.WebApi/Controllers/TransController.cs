@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
@@ -221,5 +222,63 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() => { return _enumService.All("ShippingType"); }, "读取发货方式失败！");
         }
 
+
+        #region 退货入收银
+
+        /// <summary>
+        /// 查询 退货单
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetRmaCashByExpress([FromUri] RmaExpressRequest request)
+        {
+            return DoFunction(() =>
+            {
+                _rmaService.UserId = UserID;
+                return _rmaService.GetRmaCashByExpress(request);
+            }, "查询退货单信息失败");
+        }
+
+
+        /// <summary>
+        /// 入收银
+        /// </summary>
+        /// <param name="rmaNos">The rma nos.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult SetRmaCash([FromBody]IEnumerable<string> rmaNos)
+        {
+            return DoAction(() =>
+            {
+                _rmaService.UserId = UserID;
+                foreach (var rmaNo in rmaNos)
+                {
+                    _rmaService.SetRmaCash(rmaNo);
+                }
+                 
+            }, "查询退货单信息失败");
+        }
+
+        /// <summary>
+        /// 完成入收银
+        /// </summary>
+        /// <param name="rmaNos">The rma nos.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult SetRmaCashOver([FromBody]IEnumerable<string> rmaNos)
+        {
+            return DoAction(() =>
+            {
+                _rmaService.UserId = UserID;
+                foreach (var rmaNo in rmaNos)
+                {
+                    _rmaService.SetRmaCashOver(rmaNo);
+                }
+
+            }, "查询退货单信息失败");
+        }
+
+        #endregion
     }
 }

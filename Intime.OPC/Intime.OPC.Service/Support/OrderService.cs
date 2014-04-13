@@ -83,7 +83,8 @@ namespace Intime.OPC.Service.Support
 
         public PageResult<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
-
+            request.StartDate = request.StartDate.Date;
+            request.EndDate = request.EndDate.Date.AddDays(1);
             var lst = _orderRepository.GetByReturnGoodsInfo(request);
                return Mapper.Map<Order, OrderDto>(lst);
 
@@ -91,6 +92,11 @@ namespace Intime.OPC.Service.Support
             //    -1,-1,request.PayType,"","","",-1,1,1000);
                    
             //return Mapper.Map<Order, OrderDto>(lst.Result);
+        }
+
+        public PageResult<OrderDto> GetShippingBackByReturnGoodsInfo(ReturnGoodsInfoRequest request)
+        {
+            throw new NotImplementedException();
         }
 
         //public IList<OrderDto> GetByReturnGoodsInfReturnGoodsInfoRequestet request)

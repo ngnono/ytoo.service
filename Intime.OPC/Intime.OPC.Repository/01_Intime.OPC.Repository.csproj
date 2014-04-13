@@ -67,7 +67,6 @@
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrgInfoRepository.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="IRmaCommentRepository.cs" />
     <Compile Include="IRmaDetailRepository.cs" />
     <Compile Include="IRMARepository.cs" />
     <Compile Include="IRmaCommentRepository.cs" />
@@ -81,6 +80,7 @@
     <Compile Include="IShippingSaleRepository.cs" />
     <Compile Include="IShippingSaleCommentRepository.cs" />
     <Compile Include="IShipViaRepository.cs" />
+    <Compile Include="IStockRepository.cs" />
     <Compile Include="IStoreRepository.cs" />
     <Compile Include="ITransRepository.cs" />
     <Compile Include="IRoleUserRepository.cs" />
@@ -106,6 +106,7 @@
     <Compile Include="Support\ShippingSaleCommentRepository.cs" />
     <Compile Include="Support\ShippingSaleRepository.cs" />
     <Compile Include="Support\ShipViaRepository.cs" />
+    <Compile Include="Support\StockRepository.cs" />
     <Compile Include="Support\StoreRepository.cs" />
     <Compile Include="Support\TransRepository.cs" />
     <Compile Include="YintaiHZhouContext.cs" />

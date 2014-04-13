@@ -45,6 +45,11 @@ namespace Intime.OPC.Service
 
         PageResult<SaleRmaDto> GetByRmaNo(string rmaNo,int pageIndex,int pageSize);
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="ramNo">The ram no.</param>
+        /// <param name="passed">if set to <c>true</c> [passed].</param>
         void PackageVerify(string ramNo, bool passed);
 
         PageResult<SaleRmaDto> GetByFinaceDto(FinaceRequest request);

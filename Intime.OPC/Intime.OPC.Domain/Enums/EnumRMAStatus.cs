@@ -22,9 +22,9 @@ namespace Intime.OPC.Domain.Enums
     public enum EnumRMAStatus
     {
         /// <summary>
-        ///     未送货
+        ///     未收货
         /// </summary>
-        [Description("未送货")] NoDelivery = 0,
+        [Description("未收货")] NoDelivery = 0,
 
         /// <summary>
         ///     物流未收货
@@ -36,10 +36,10 @@ namespace Intime.OPC.Domain.Enums
         /// </summary>
         [Description("物流收货")] ShipReceive = 5,
 
-        /// <summary>
-        ///     物流审核
-        /// </summary>
-        [Description("物流审核")] ShipVerify = 10,
+        ///// <summary>
+        /////     物流审核
+        ///// </summary>
+        //[Description("物流审核")] ShipVerify = 10,
 
         /// <summary>
         ///     物流审核未通过

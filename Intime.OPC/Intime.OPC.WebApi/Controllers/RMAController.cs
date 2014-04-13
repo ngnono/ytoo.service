@@ -56,7 +56,7 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetByOrderNo(string orderNo,int pageIndex,int pageSize)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.ShipNoReceive, EnumReturnGoodsStatus.NoProcess,pageIndex,pageSize); }, "查询订单信息失败");
+            return DoFunction(() => { return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.NoDelivery, EnumReturnGoodsStatus.NoProcess,pageIndex,pageSize); }, "查询订单信息失败");
         }
 
         /// <summary>
@@ -94,7 +94,12 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetByFinaceDto([FromUri]FinaceRequest request)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _saleRmaService.GetByFinaceDto(request); }, "查询退货单信息失败");
+            return DoFunction(() =>
+            {
+                _rmaService.UserId = userId;
+                //return _saleRmaService.GetByFinaceDto(request);
+                return _rmaService.GetByFinaceDto(request);
+            }, "查询退货单信息失败");
         }
 
         [HttpPost]
@@ -128,7 +133,11 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetRmaByReturnGoodPay([FromUri]ReturnGoodsPayRequest request)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _saleRmaService.GetByReturnGoodPay(request); }, "查询退货单信息失败");
+            return DoFunction(() =>
+            {
+                _saleRmaService.UserId = userId;
+                return _saleRmaService.GetByReturnGoodPay(request);
+            }, "查询退货单信息失败");
         }
 
         /// <summary>
@@ -140,7 +149,12 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetByRmaNo(string rmaNo, int pageIndex, int pageSize)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _saleRmaService.GetByRmaNo(rmaNo,pageIndex,pageSize); }, "查询退货单信息失败");
+            return DoFunction(() =>
+            {
+                _rmaService.UserId = userId;
+                return _rmaService.GetByRmaNo(rmaNo);
+                
+            }, "查询退货单信息失败");
         }
 
 
@@ -241,14 +255,5 @@ namespace Intime.OPC.WebApi.Controllers
         public decimal Money { get; set; }
     }
 
-    public class PackageVerifyRequest
-    {
-        public PackageVerifyRequest()
-        {
-            RmaNos=new List<string>();
-        }
-
-        public IList<string> RmaNos { get; set; }
-        public bool Pass { get; set; }
-    }
+    
 }

@@ -28,6 +28,10 @@ namespace Intime.OPC.Domain.Enums
         /// </summary>
         [Description("客服批准")] ServiceApprove = 5,
 
+
+        [Description("付款确认")]
+        PayVerify = 7,
+
         /// <summary>
         ///     The compensate verify
         /// </summary>

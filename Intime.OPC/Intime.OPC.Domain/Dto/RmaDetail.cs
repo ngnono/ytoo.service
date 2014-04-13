@@ -51,10 +51,10 @@ namespace Intime.OPC.Domain.Dto
         public string ColorValueName { get; set; }
 
         /// <summary>
-        ///     商品编码
+        /// 专柜码
         /// </summary>
         /// <value>The name of the color value.</value>
-        public string 商品编码 { get; set; }
+        public string SectionCode { get; set; }
 
     }
 }

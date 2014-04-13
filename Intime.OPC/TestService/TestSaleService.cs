@@ -11,7 +11,9 @@ namespace TestService
         public void TestGetSaleDetail()
         {
            var lst= Service.GetSaleOrderDetails("114201404087-001", 1, 1, 1000);
+           Debug(lst);
             Assert.IsNotNull(lst);
+            
         }
     }
 }

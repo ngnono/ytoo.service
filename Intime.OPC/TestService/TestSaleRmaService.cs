@@ -56,5 +56,28 @@ namespace TestService
             Assert.IsNotNull(lst);
             Assert.AreNotEqual(0, lst.TotalCount);
         }
+
+        [TestMethod]
+        public void TestGetByReturnGoodPay()
+        {
+            var dto = new ReturnGoodsPayRequest();
+            dto.StartDate = new DateTime(2014, 4, 1);
+            dto.EndDate = DateTime.Now.Date;
+            dto.pageIndex = 1;
+            dto.pageSize = 100;
+            Service.UserId = 1;
+            var lst = Service.GetByReturnGoodPay(dto);
+            Assert.IsNotNull(lst);
+            Assert.AreNotEqual(0, lst.TotalCount);
+        }
+        [TestMethod]
+        public void TestGetByRmaNo()
+        {
+
+            Service.UserId = 1;
+            var lst = Service.GetByRmaNo("1142014041211001", 1, 100);
+            Assert.IsNotNull(lst);
+            Assert.AreNotEqual(0, lst.TotalCount);
+        }
     }
 }

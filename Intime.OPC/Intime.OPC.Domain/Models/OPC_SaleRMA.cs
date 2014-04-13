@@ -49,7 +49,7 @@ namespace Intime.OPC.Domain.Models
         public DateTime? ServiceAgreeTime { get; set; }
 
         /// <summary>
-        /// Ó¦ÍË×Ü½ð¶î
+        /// Åâ³¥
         /// </summary>
         /// <value>The recoverable sum money.</value>
         public Decimal? RecoverableSumMoney { get; set; }

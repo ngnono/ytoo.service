@@ -8,7 +8,7 @@ namespace Intime.OPC.Service
 {
     public interface IService
     {
-       
+        int UserId { get; set; }
     }
 
     public interface ICanAdd<T>
