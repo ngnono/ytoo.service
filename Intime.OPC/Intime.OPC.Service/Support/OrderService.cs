@@ -83,7 +83,8 @@ namespace Intime.OPC.Service.Support
 
         public PageResult<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
-
+            request.StartDate = request.StartDate.Date;
+            request.EndDate = request.EndDate.Date.AddDays(1);
             var lst = _orderRepository.GetByReturnGoodsInfo(request);
                return Mapper.Map<Order, OrderDto>(lst);
 

@@ -22,11 +22,11 @@ namespace Intime.OPC.Repository
         /// <param name="rmaStatus">退货单状态</param>
         /// <param name="returnGoodsStatus">退货状态</param>
         /// <returns>IList{RMADto}.</returns>
-        PageResult<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus,int pageIndex,int pageSize);
+        PageResult<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime, int? rmaStatus, string returnGoodsStatus,int pageIndex,int pageSize);
 
         PageResult<RMADto> GetByRmaNo(string rmaNo);
 
         OPC_RMA GetByRmaNo2(string rmaNo);
-        PageResult<RMADto> GetByPackPrintPress(string orderNo, string saleOrderNo, DateTime dateTime1, DateTime dateTime2, EnumRMAStatus rmaStatus, int pageIndex, int pageSize);
+        PageResult<RMADto> GetByPackPrintPress(string orderNo, string saleOrderNo, DateTime dateTime1, DateTime dateTime2, int? rmaStatus, int pageIndex, int pageSize);
     }
 }

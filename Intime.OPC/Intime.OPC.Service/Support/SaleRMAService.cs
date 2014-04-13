@@ -108,10 +108,13 @@ namespace Intime.OPC.Service.Support
                         config.RefundAmount = (Decimal)(rma.RealRMASumMoney);
                         config.StoreFee = (Decimal)rma.StoreFee;
                         config.CustomFee = (Decimal)rma.CustomFee;
+                        
                         rma.RealRMASumMoney = 0;
                         rma.StoreFee = 0;
                         rma.CustomFee = 0;
+
                         config.OpcSale = sales.FirstOrDefault(t => t.SaleOrderNo == config.SaleOrderNo);
+                        config.StoreID = _sectionRepository.GetByID(config.OpcSale.SectionId.Value).StoreId.Value;
                         config.RmaNo = CreateRmaNo(rma.OrderNo, orderCount);
                         lstRmaConfigs.Add(config);
                     }
@@ -168,7 +171,7 @@ namespace Intime.OPC.Service.Support
             ISaleRMARepository rep = _repository as ISaleRMARepository;
             rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = rep.GetAll(dto.OrderNo,dto.SaleOrderNo, "","", dto.StartDate, dto.EndDate,
-                EnumRMAStatus.NoDelivery.AsID(),null,EnumReturnGoodsStatus.ServiceApprove.GetDescription(),dto.pageIndex,dto.pageSize);
+                EnumRMAStatus.NoDelivery.AsID(),null,"",dto.pageIndex,dto.pageSize);
 
             return lst;
         }
@@ -253,8 +256,19 @@ namespace Intime.OPC.Service.Support
                 throw new Exception("该退货单已经确认,退货单号:" + rmaNo);
             }
            
-            saleRma.Status = EnumReturnGoodsStatus.PayVerify.AsID();
+            
             saleRma.RealRMASumMoney = money;
+            saleRma.RecoverableSumMoney = saleRma.RealRMASumMoney - saleRma.CompensationFee;
+            if (saleRma.RecoverableSumMoney > 0)
+            {
+                saleRma.RMAStatus = EnumReturnGoodsStatus.CompensateVerify.GetDescription();
+            }
+            else
+            {
+                saleRma.RMAStatus = EnumReturnGoodsStatus.PayVerify.GetDescription();
+                saleRma.Status = EnumRMAStatus.ShipNoReceive.AsID();
+            }
+
             rep.Update(saleRma);
         }
 
@@ -316,6 +330,10 @@ namespace Intime.OPC.Service.Support
             if (saleRma.RMAStatus == EnumReturnGoodsStatus.CompensateVerify.GetDescription())
             {
                 saleRma.RMAStatus = rmastaturs;
+                if (pass)
+                {
+                    saleRma.Status = EnumRMAStatus.ShipNoReceive.AsID();
+                }
                 rep.Update(saleRma);
                 return;
             }
@@ -406,7 +424,6 @@ namespace Intime.OPC.Service.Support
             rma.OrderNo = OpcSale.OrderNo;
             rma.Status = EnumRMAStatus.NoDelivery.AsID();
             rma.RMAType = 1;
-
             
 
             rma.RefundAmount = RefundAmount;
@@ -437,17 +454,18 @@ namespace Intime.OPC.Service.Support
             rma.StoreId = OpcRma.StoreId;
             rma.RecoverableSumMoney = RefundAmount - ComputeAccount();
             rma.RMACashStatus = EnumRMACashStatus.NoCash.GetDescription();
-
-            if (rma.RecoverableSumMoney <= 0)
-            {
-                rma.Status = EnumRMAStatus.ShipNoReceive.AsID();
-                rma.RMAStatus = EnumReturnGoodsStatus.PayVerify.GetDescription();
-            }
-            else
-            {
-                rma.RMAStatus = EnumReturnGoodsStatus.CompensateVerify.GetDescription();
-            }
-            
+            rma.SectionId = OpcSale.SectionId;
+            //if (rma.RecoverableSumMoney <= 0)
+            //{
+            //    rma.Status = EnumRMAStatus.NoDelivery.AsID();
+            //    // rma.RMAStatus = EnumReturnGoodsStatus.PayVerify.GetDescription();
+            //}
+            //else
+            //{
+            //    //rma.RMAStatus = EnumReturnGoodsStatus.ServiceApprove.GetDescription();
+            //}
+            rma.Status = EnumRMAStatus.NoDelivery.AsID();
+            rma.RMAStatus = EnumReturnGoodsStatus.NoProcess.GetDescription();
             return rma;
         }
 

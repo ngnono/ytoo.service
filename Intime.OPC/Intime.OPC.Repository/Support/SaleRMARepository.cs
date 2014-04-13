@@ -96,7 +96,11 @@ namespace Intime.OPC.Repository.Support
             CheckUser();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus==returnGoodsStatus);
+                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                if (returnGoodsStatus.IsNotNull())
+                {
+                    query = query.Where(t => t.RMAStatus == returnGoodsStatus);
+                }
                 var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -142,7 +146,7 @@ namespace Intime.OPC.Repository.Support
                 {
                     var o = new SaleRmaDto();
                     o.Id = t.Orders.Id;
-
+                    
                     o.CustomerAddress = t.Orders.ShippingAddress;
                     o.CustomerName = t.Orders.ShippingContactPerson;
                     o.CustomerPhone = t.Orders.ShippingContactPhone;
@@ -164,14 +168,14 @@ namespace Intime.OPC.Repository.Support
                         o.CustomFee = t.SaleRMA.CustomFee;
                         o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
                         o.RecoverableSumMoney = t.SaleRMA.RecoverableSumMoney;
-                        o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
+                        o.CreateDate = t.SaleRMA.CreatedDate;
                         o.SaleOrderNo = t.SaleRMA.SaleOrderNo;
                         o.StoreFee = t.SaleRMA.StoreFee;
                         o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
                         o.CustomerRemark = t.SaleRMA.Reason;
                         o.RmaNo = t.SaleRMA.RMANo;
                         o.RMACount =t.SaleRMA.RMACount.HasValue? 0: t.SaleRMA.RMACount.Value;
-                        
+                        o.CompensationFee = t.SaleRMA.CompensationFee;
                     }
 
                     lstSaleRma.Add(o);

@@ -118,9 +118,14 @@ namespace Intime.OPC.Repository.Support
 
         public PageResult<Order> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
+            //todo 查询所有有退货的订单
             using (var db = new YintaiHZhouContext())
             {
-                var filter = db.Orders.Where(t => t.CreateDate >= request.StartDate && t.CreateDate < request.EndDate);
+                var des = EnumReturnGoodsStatus.NoProcess.GetDescription();
+                
+                var filter2 = db.OPC_SaleRMA.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus==des); ;
+
+                var filter = db.Orders.Where(t => true);
 
                 if (request.OrderNo.IsNotNull())
                 {
@@ -136,41 +141,27 @@ namespace Intime.OPC.Repository.Support
                         t => t.OrderNo, o => o.OrderNo, (t, o) => t);
                 }
 
-                IQueryable<OPC_RMA> filter2 = null;
-
+                
                 if (request.RmaNo.IsNotNull())
                 {
-                     filter2 = db.OPC_RMA.Where(t => t.RMANo.Contains(request.RmaNo));
+                    filter2 = filter2.Where(t => t.RMANo == request.RmaNo);
                 }
 
                 if (request.RmaStatus.HasValue)
                 {
-                    if (filter2 != null)
-                    {
-                        filter2 = filter2.Where(t => t.Status == request.RmaStatus.Value);
-                    }
-                    else
-                    {
-                        filter2 = db.OPC_RMA.Where(t => t.Status == request.RmaStatus.Value);
-                    }
+                    filter2 = filter2.Where(t => t.Status == request.RmaStatus.Value);
+                    
                 }
 
                 if (request.StoreID.HasValue)
                 {
-                    if (filter2 != null)
-                    {
-                        filter2 = filter2.Where(t => t.StoreId == request.StoreID.Value);
-                    }
-                    else
-                    {
-                        filter2 = db.OPC_RMA.Where(t => t.StoreId == request.StoreID.Value);
-                    }
+                    filter2 = filter2.Where(t => t.StoreId == request.StoreID.Value);
                 }
-                if (filter2!=null)
-                {
-                    filter = Queryable.Join(filter, filter2, t => t.OrderNo, o => o.OrderNo, (t, o) => t);
-                }
-                filter = filter.OrderByDescending(t => t.CreateDate);
+
+                var orderIds = filter2.ToList().Select<OPC_SaleRMA, string>(t => t.OrderNo).Distinct().ToList();
+
+                filter = filter.Where(t => orderIds.Contains(t.OrderNo)).OrderByDescending(t=>t.CreateDate);
+
                 return filter.ToPageResult(request.pageIndex,request.pageSize);
             }
         }
