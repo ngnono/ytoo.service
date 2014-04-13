@@ -16,7 +16,7 @@ namespace OPCApp.ReturnGoodsManage.View
             InitializeComponent();
         }
 
-        [Import("ReturnAcceptCashierViewModel")]
+        [Import(typeof(ReturnAcceptCashierViewModel))]
         public ReturnAcceptCashierViewModel ViewModel
         {
             set { DataContext = value; }

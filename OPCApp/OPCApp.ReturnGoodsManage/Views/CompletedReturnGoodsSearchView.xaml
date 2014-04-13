@@ -13,15 +13,17 @@
             <RowDefinition Height="35" />
             <RowDefinition Height="200*" />
         </Grid.RowDefinitions>
-        <StackPanel HorizontalAlignment="Left" Background="LightGray" Grid.Row="0" Orientation="Horizontal">
-            <Button Margin="5" Background="LightGray" Width="50" Command="{Binding CommandSearch}">
-                <StackPanel>
-                    <Image Source="/Image/查询.png" Stretch="None" />
-                    <TextBlock HorizontalAlignment="Center">查询</TextBlock>
-                </StackPanel>
-            </Button>           
-        </StackPanel>
+        <StackPanel Grid.Row="0">
+            <StackPanel Orientation="Horizontal" Background="LightGray">
 
+                <Button Margin="5" Background="LightGray" Width="50" Command="{Binding CommandSearch}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Image/查询.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,1" Grid.Row="1" Background="LightGray">
             <TextBlock Text="物流收货时间" VerticalAlignment="Center"  Margin="2 5" />
             <DatePicker Width="150" Margin="2 5" Foreground="Blue" SelectedDate="{Binding ReturnGoodsCommonSearchDto.StartDate}" />

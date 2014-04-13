@@ -11,7 +11,7 @@ using OPCApp.ReturnGoodsManage.Common;
 
 namespace OPCApp.ReturnGoodsManage.ViewModel
 {
-     [Export("ReturnAcceptCashierViewModel", typeof(ReturnAcceptCashierViewModel))]
+     [Export(typeof(ReturnAcceptCashierViewModel))]
     public class ReturnAcceptCashierViewModel : BaseReturnGoodsSearchCommonWithRma
     {
          /// <summary>
@@ -23,7 +23,8 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
          /// 完成退货入收银
          /// </summary>
         public DelegateCommand CommandReturnAcceptCashierConfirm { get; set; }
-        public ReturnAcceptCashierViewModel()
+
+         public ReturnAcceptCashierViewModel() : base()
         {
             CommandReturnAcceptCashier = new DelegateCommand(ReturnAcceptCashier);
             CommandReturnAcceptCashierConfirm = new DelegateCommand(ReturnAcceptCashierConfirm);
