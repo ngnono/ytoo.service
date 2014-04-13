@@ -84,6 +84,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BaseReturnGoodsSearchCommonWithRma.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -98,6 +99,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModel\CustomReturnGoodsUserControlViewModel.cs" />
+    <Compile Include="ViewModel\ReturnAcceptCashierViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackagePrintExpressageViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageVerifyViewViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageMainViewModel.cs" />
