@@ -158,7 +158,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
         {
             ClearData();
             ShipSaleList =
-                AppEx.Container.GetInstance<IPackageService>().GetShipListWithReturnGoods(RmaExpressDto).ToList();
+                AppEx.Container.GetInstance<IPackageService>().GetShipListWithReturnGoodsConnect(RmaExpressDto).ToList();
         }
 
         private void SetShippingRemark()
@@ -186,7 +186,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
                 MessageBox.Show("请先保存快递信息", "提示");
                 return;
             }
-            bool flag = AppEx.Container.GetInstance<IPackageService>().ShipPrintComplete(ShipSaleSelected.RmaNo);
+            bool flag = AppEx.Container.GetInstance<IPackageService>().ShipPrintComplateConnect(ShipSaleSelected.ExpressCode);
             MessageBox.Show(flag ? "操作成功" : "操作失败", "提示");
             if (flag)
             {
