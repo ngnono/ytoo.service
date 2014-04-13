@@ -13,7 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OPCApp.ReturnGoodsManage.ViewModel
-{     
+{
+  [Export(typeof(CustomReturnGoodsUserControlViewModel))]
    public class CustomReturnGoodsUserControlViewModel : BindableBase
     {
        

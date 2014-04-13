@@ -15,11 +15,11 @@ namespace OPCApp.ReturnGoodsManage.Views
         {
             InitializeComponent();
         }
-        //[Import(typeof(ShopperReturnGoodsSearchViewModel))]
-        //public ShopperReturnGoodsSearchViewModel ViewModel
-        //{
-        //    set { DataContext = value; }
-        //    get { return DataContext as ShopperReturnGoodsSearchViewModel; }
-        //}
+        [Import(typeof(ShopperReturnGoodsSearchViewModel))]
+        public ShopperReturnGoodsSearchViewModel ViewModel
+        {
+            set { DataContext = value; }
+            get { return DataContext as ShopperReturnGoodsSearchViewModel; }
+        }
     }
 }
