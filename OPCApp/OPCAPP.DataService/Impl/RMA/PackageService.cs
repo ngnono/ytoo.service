@@ -17,9 +17,9 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                IList<SaleRmaDto> lst = RestClient.Get<SaleRmaDto>("trans/GetSaleRmaByPack",
+                var lst = RestClient.GetPage<SaleRmaDto>("trans/GetSaleRmaByPack",
                     packageReceiveDto.ToString());
-                return lst;
+                return lst.Result;
             }
             catch (Exception ex)
             {
@@ -32,8 +32,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                IList<RMADto> lst = RestClient.Get<RMADto>("trans/GetRmaByPack", packageReceiveDto.ToString());
-                return lst;
+                var lst = RestClient.GetPage<RMADto>("trans/GetRmaByPack", packageReceiveDto.ToString());
+                return lst.Result;
             }
             catch (Exception ex)
             {
@@ -46,8 +46,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                IList<RmaDetail> lst = RestClient.Get<RmaDetail>("rma/GetRmaDetailByRmaNo", string.Format("rmaNo={0}", rmaNo));
-                return lst;
+                var lst = RestClient.GetPage<RmaDetail>("rma/GetRmaDetailByRmaNo", string.Format("rmaNo={0}&pageIndex={1}&pageSize={2}", rmaNo,1,300));
+                return lst.Result;
             }
             catch (Exception ex)
             {
