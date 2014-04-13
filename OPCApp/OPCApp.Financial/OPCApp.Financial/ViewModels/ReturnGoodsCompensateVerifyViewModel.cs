@@ -87,6 +87,10 @@ namespace OPCApp.Financial.ViewModels
            }
            var falg = AppEx.Container.GetInstance<IFinancialPayVerify>().FinancialVerifyNoPass(rmaSelectedList.Select(e=>e.RMANo).ToList());
            MessageBox.Show(falg ? "设置审核未通过成功" : "设置审核未通过失败", "提示");
+           if (falg) {
+               SearchRma();
+           }
+          
        }
        public void FinancialVerifyPass()
        {
@@ -103,6 +107,10 @@ namespace OPCApp.Financial.ViewModels
            }
            var falg = AppEx.Container.GetInstance<IFinancialPayVerify>().FinancialVerifyPass(rmaSelectedList.Select(e => e.RMANo).ToList());
            MessageBox.Show(falg ? "设置审核通过成功" : "设置审核通过失败", "提示");
+           if (falg)
+           {
+               SearchRma();
+           }
        }
 
        public void GetRmaDetailByRma()
@@ -117,6 +125,10 @@ namespace OPCApp.Financial.ViewModels
 
        public void SearchRma()
        {
+           if (RmaDetailList != null)
+           {
+               this.RmaDetailList.Clear();
+           }  
            RmaList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByFilter(PackageReceiveDto).ToList();
        }
 
