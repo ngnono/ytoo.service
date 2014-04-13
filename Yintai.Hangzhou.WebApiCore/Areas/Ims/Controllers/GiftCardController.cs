@@ -592,9 +592,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 {
                     from = o.transfer.FromNickName,
                     from_phone = o.transfer.FromPhone,
+                    verify_phone = o.transfer != null ? o.transfer.Phone : "null",
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     status_i = SetStatus4Receiver(o.order, o.transfer),
+                    send_date = o.transfer != null ? o.transfer.CreateDate.ToString(_dateFormmat) : "null",
                     receive_date = o.transfer.OperateDate.ToString(_dateFormmat)
                 });
             }
