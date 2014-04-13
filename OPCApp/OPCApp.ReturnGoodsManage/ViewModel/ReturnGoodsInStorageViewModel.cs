@@ -21,11 +21,11 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
          /// </summary>
         public DelegateCommand CommandReturnGoodsConfirm { get; set; }
         public ReturnGoodsInStorageViewModel()
-        {   
-            CommandReturnGoodsConfirm = new DelegateCommand(ReturnGoodsConfirm);
+        {
+            CommandReturnGoodsConfirm = new DelegateCommand(ReturnGoodsInStorage);
         }
 
-        private void ReturnGoodsConfirm()
+        private void ReturnGoodsInStorage()
         {
             throw new NotImplementedException();
         }
