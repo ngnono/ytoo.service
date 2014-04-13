@@ -78,6 +78,12 @@ namespace OPCApp.Financial.ViewModels
 
        public void SearchSaleRma()
        {
+           if (RmaDetailList != null) {
+               RmaDetailList.Clear();
+           }
+           if (RmaList != null) {
+               RmaList.Clear();
+           }
            SaleRmaList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByReturnGoodPay(ReturnGoodsPayDto).ToList();
        }
 
@@ -95,6 +101,8 @@ namespace OPCApp.Financial.ViewModels
        {
             if (SaleRma == null)
            {
+               this.RmaList.Clear();
+               this.RmaDetailList.Clear();
                return;
            }
            try
@@ -136,6 +144,9 @@ namespace OPCApp.Financial.ViewModels
            }
           bool falg= AppEx.Container.GetInstance<IFinancialPayVerify>().ReturnGoodsPayVerify(SaleRma.RmaNo,rmaDecimal);
           MessageBox.Show(falg ? "退货付款确认成功" : "退货付款确认失败", "提示");
+          if (falg) {
+              SearchSaleRma();
+          }
        }
        public void InitCombo()
        {

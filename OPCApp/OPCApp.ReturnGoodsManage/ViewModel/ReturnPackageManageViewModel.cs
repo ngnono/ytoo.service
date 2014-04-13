@@ -12,7 +12,7 @@ using OPCApp.Infrastructure;
 
 namespace OPCApp.ReturnGoodsManage.ViewModel
 {
-    [Export("ReturnPackageManageViewModel", typeof (ReturnPackageManageViewModel))]
+    [Export(typeof (ReturnPackageManageViewModel))]
     public class ReturnPackageManageViewModel : BindableBase
     {
         private List<RMADto> _rmaDtos;
