@@ -1,10 +1,10 @@
 using System;
-
+using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Domain.Dto
 {
     //退货包裹管理 打应快递单
-    public class RmaExpressDto
+    public class RmaExpressRequest : BaseRequest
     {
 
         public string OrderNo { get; set; }

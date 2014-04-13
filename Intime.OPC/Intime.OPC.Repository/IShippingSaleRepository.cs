@@ -32,5 +32,7 @@ namespace Intime.OPC.Repository
             DateTime endGoodsOutDate,
             string outGoodsCode, int sectionId, int shippingStatus, string customerPhone, int brandId, int pageIndex,
             int pageSize);
+
+        OPC_ShippingSale GetByRmaNo(string rmaNo);
     }
 }

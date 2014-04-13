@@ -12,6 +12,7 @@ using System.Reflection;
 using Intime.OPC.Domain;
 using Intime.OPC.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 
 namespace TestService
 {
@@ -87,8 +88,21 @@ namespace TestService
 
         protected void AssertList<T1>(PageResult<T1> lst)
         {
+            Debug(lst);
             Assert.IsNotNull(lst);
+            
             Assert.AreNotEqual(0, lst.TotalCount);
+        }
+
+        protected void Debug(object obj)
+        {
+
+            string json =obj==null?"对象为空": JsonConvert.SerializeObject(obj);
+            System.Diagnostics.Debug.WriteLine("");
+            System.Diagnostics.Debug.WriteLine("");
+            System.Diagnostics.Debug.WriteLine(json);
+            System.Diagnostics.Debug.WriteLine("");
+            System.Diagnostics.Debug.WriteLine("");
         }
     }
 }

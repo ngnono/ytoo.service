@@ -82,6 +82,7 @@ namespace Intime.OPC.Repository.Support
                         o.StoreFee = t.SaleRMA.StoreFee;
                         o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
                         o.CustomerRemark = t.SaleRMA.Reason;
+                        o.RmaNo = t.SaleRMA.RMANo;
                     }
                     lstSaleRma.Add(o);
                 }
@@ -112,16 +113,16 @@ namespace Intime.OPC.Repository.Support
                 {
                     query = query.Where(t => t.RMANo.Contains(rmaNo));
                 }
-               
+                if (rmaStatus.HasValue)
+                {
+                    query = query.Where(t => t.Status == rmaStatus.Value);
+                }
 
                 if (!string.IsNullOrWhiteSpace(payType))
                 {
                     query2 = query2.Where(t => t.PaymentMethodCode == payType);
                 }
-                if (rmaStatus.HasValue)
-                {
-                    query2 = query2.Where(t => t.Status == rmaStatus.Value);
-                }
+               
 
                 if (storeId.HasValue)
                 {
@@ -145,7 +146,7 @@ namespace Intime.OPC.Repository.Support
                     o.CustomerAddress = t.Orders.ShippingAddress;
                     o.CustomerName = t.Orders.ShippingContactPerson;
                     o.CustomerPhone = t.Orders.ShippingContactPhone;
-
+                   
                     o.IfReceipt = t.Orders.NeedInvoice.HasValue ? t.Orders.NeedInvoice.Value : false;
                     o.MustPayTotal = (double)(t.Orders.TotalAmount);
                     o.OrderNo = t.Orders.OrderNo;
@@ -169,7 +170,8 @@ namespace Intime.OPC.Repository.Support
                         o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
                         o.CustomerRemark = t.SaleRMA.Reason;
                         o.RmaNo = t.SaleRMA.RMANo;
-                       
+                        o.RMACount =t.SaleRMA.RMACount.HasValue? 0: t.SaleRMA.RMACount.Value;
+                        
                     }
 
                     lstSaleRma.Add(o);

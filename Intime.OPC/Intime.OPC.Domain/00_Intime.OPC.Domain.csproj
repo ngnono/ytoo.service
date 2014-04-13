@@ -86,6 +86,7 @@
     <Compile Include="Enums\EnumOrgType.cs" />
     <Compile Include="Enums\EnumReturnGoodsStatus.cs" />
     <Compile Include="Enums\EnumRMACashStatus.cs" />
+    <Compile Include="Enums\EnumRmaShippingStatus.cs" />
     <Compile Include="Enums\EnumRMAStatus.cs" />
     <Compile Include="Enums\EnumSaleOrderStatus.cs" />
     <Compile Include="Enums\EnumSaleStatus.cs" />

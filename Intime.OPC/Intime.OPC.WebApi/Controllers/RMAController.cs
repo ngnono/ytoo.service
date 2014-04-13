@@ -94,7 +94,12 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetByFinaceDto([FromUri]FinaceRequest request)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _saleRmaService.GetByFinaceDto(request); }, "查询退货单信息失败");
+            return DoFunction(() =>
+            {
+                _rmaService.UserId = userId;
+                //return _saleRmaService.GetByFinaceDto(request);
+                return _rmaService.GetByFinaceDto(request);
+            }, "查询退货单信息失败");
         }
 
         [HttpPost]

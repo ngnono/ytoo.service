@@ -35,6 +35,19 @@ namespace Intime.OPC.Service
 
         IList<OPC_RMAComment> GetCommentByRmaNo(string rmaNo);
 
+        /// <summary>
+        /// 退货包裹审核 查询退货单
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>PageResult{RMADto}.</returns>
         PageResult<RMADto> GetAllPackVerify(PackageReceiveRequest request);
+
+        PageResult<RMADto> GetByFinaceDto(FinaceRequest request);
+        /// <summary>
+        /// 包裹退回-打印快递单
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>PageResult{RMADto}.</returns>
+        PageResult<RMADto> GetRmaByPackPrintPress(RmaExpressRequest request);
     }
 }

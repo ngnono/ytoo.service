@@ -79,6 +79,14 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        public OPC_ShippingSale GetByRmaNo(string rmaNo)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                return db.ShippingSales.FirstOrDefault(t => t.RmaNo == rmaNo);
+            }
+        }
+
         #endregion
 
         public PageResult<OPC_ShippingSale> GetShippingSale(string saleOrderNo, string expressNo,

@@ -278,7 +278,7 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("客服未确认,退货单号:" + rmaNo);
             }
-            if (saleRma.RMAStatus !=EnumRMAStatus.ShipVerify.GetDescription())
+            if (saleRma.RMAStatus !=EnumRMAStatus.ShipReceive.GetDescription())
             {
                 throw new Exception("该退货单已经确认或正在财务审核,退货单号:" + rmaNo);
             }
@@ -295,7 +295,7 @@ namespace Intime.OPC.Service.Support
             dto.EndDate = dto.EndDate.Date.AddDays(1);
 
             ISaleRMARepository rep = _repository as ISaleRMARepository;
-
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, "", "", dto.StartDate, dto.EndDate,
                 EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.CompensateVerify.GetDescription(),dto.pageIndex,dto.pageSize);
 
@@ -304,7 +304,7 @@ namespace Intime.OPC.Service.Support
 
         public void FinaceVerify(string rmaNo, bool pass)
         {
-            string rmastaturs = pass ? EnumRMAStatus.ShipVerifyPass.GetDescription() : EnumRMAStatus.ShipVerifyNotPass.GetDescription();
+            string rmastaturs = pass ? EnumReturnGoodsStatus.CompensateVerifyPass.GetDescription() : EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
 
             var rep = (ISaleRMARepository)_repository;
             var saleRma = rep.GetByRmaNo(rmaNo);
@@ -407,6 +407,8 @@ namespace Intime.OPC.Service.Support
             rma.Status = EnumRMAStatus.NoDelivery.AsID();
             rma.RMAType = 1;
 
+            
+
             rma.RefundAmount = RefundAmount;
             rma.RMAAmount = ComputeAccount();
 
@@ -434,11 +436,18 @@ namespace Intime.OPC.Service.Support
             rma.BackDate = DateTime.Now;
             rma.StoreId = OpcRma.StoreId;
             rma.RecoverableSumMoney = RefundAmount - ComputeAccount();
+            rma.RMACashStatus = EnumRMACashStatus.NoCash.GetDescription();
+
             if (rma.RecoverableSumMoney <= 0)
             {
                 rma.Status = EnumRMAStatus.ShipNoReceive.AsID();
+                rma.RMAStatus = EnumReturnGoodsStatus.PayVerify.GetDescription();
             }
-            rma.RMAStatus = EnumReturnGoodsStatus.PayVerify.GetDescription();
+            else
+            {
+                rma.RMAStatus = EnumReturnGoodsStatus.CompensateVerify.GetDescription();
+            }
+            
             return rma;
         }
 

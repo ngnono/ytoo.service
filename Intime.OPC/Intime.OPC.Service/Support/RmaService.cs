@@ -66,12 +66,35 @@ namespace Intime.OPC.Service.Support
         #endregion
 
 
+        /// <summary>
+        /// Gets all pack verify.
+        /// </summary>
+        /// <param name="dto">The dto.</param>
+        /// <returns>PageResult{RMADto}.</returns>
         public PageResult<RMADto> GetAllPackVerify(PackageReceiveRequest dto)
         {
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
-            PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipVerify, EnumReturnGoodsStatus.ServiceApprove,dto.pageIndex,dto.pageSize);
+            PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipReceive, EnumReturnGoodsStatus.ServiceApprove,dto.pageIndex,dto.pageSize);
+            return lst;
+        }
+
+        public PageResult<RMADto> GetByFinaceDto(FinaceRequest dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+            var rep = (IRMARepository)_repository;
+            PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.NoDelivery, EnumReturnGoodsStatus.CompensateVerify, dto.pageIndex, dto.pageSize);
+            return lst;
+        }
+
+        public PageResult<RMADto> GetRmaByPackPrintPress(RmaExpressRequest dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+            var rep = (IRMARepository)_repository;
+            PageResult<RMADto> lst = rep.GetByPackPrintPress(dto.OrderNo, "", dto.StartDate, dto.EndDate,EnumRMAStatus.ShipReceive, dto.pageIndex, dto.pageSize);
             return lst;
         }
     }

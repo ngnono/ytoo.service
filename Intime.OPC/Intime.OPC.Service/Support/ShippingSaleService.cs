@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
@@ -14,9 +15,13 @@ namespace Intime.OPC.Service.Support
     public class ShippingSaleService :BaseService<OPC_ShippingSale>, IShippingSaleService
     {
         private readonly IShippingSaleRepository _shippingSaleRepository;
-        public ShippingSaleService(IShippingSaleRepository repository):base(repository)
+        private readonly IOrderRepository _orderRepository;
+        private ISaleRMARepository _saleRmaRepository;
+        public ShippingSaleService(IShippingSaleRepository repository, IOrderRepository orderRepository, ISaleRMARepository saleRmaRepository):base(repository)
         {
             _shippingSaleRepository = repository;
+            _orderRepository = orderRepository;
+            _saleRmaRepository = saleRmaRepository;
         }
 
         public PageResult<OPC_ShippingSale> GetByShippingCode(string shippingCode,int pageIndex,int pageSize=20)
@@ -55,6 +60,70 @@ namespace Intime.OPC.Service.Support
 
                 _shippingSaleRepository.Update(lst);
             
+        }
+
+        public void CreateRmaShipping(string rmaNo,int userId)
+        {
+            var dt = DateTime.Now;
+            var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
+            var order = _orderRepository.GetOrderByOrderNo(saleRma.OrderNo);
+       
+            var sale = new OPC_ShippingSale();
+            sale.RmaNo = rmaNo;
+            sale.CreateDate = dt;
+            sale.CreateUser = userId;
+            sale.UpdateDate = dt;
+            sale.UpdateUser = userId;
+            sale.OrderNo = saleRma.OrderNo;
+
+            sale.ShippingStatus = EnumSaleOrderStatus.PrintInvoice.AsID();
+            sale.ShipViaName = "";
+            sale.BrandId = order.BrandId;
+            sale.ShippingAddress = order.ShippingAddress;
+            sale.ShippingContactPerson = order.ShippingContactPerson;
+            sale.ShippingContactPhone = order.ShippingContactPhone;
+            sale.StoreId = order.StoreId;
+
+            var bl = _shippingSaleRepository.Create(sale);
+            
+        }
+
+        public void UpdateRmaShipping(RmaExpressSaveDto request)
+        {
+            var shipping =_shippingSaleRepository.GetByRmaNo(request.RmaNo);
+            if (shipping==null)
+            {
+                throw new Exception(string.Format("快递单不存在,快递单号:{0}",request.ShippingCode));
+            }
+
+            shipping.ShipViaId = request.ShipViaID;
+            shipping.ShipViaName = request.ShipViaName;
+            shipping.ShippingFee =(decimal) (request.ShippingFee);
+            shipping.ShippingCode = request.ShippingCode;
+            _shippingSaleRepository.Update(shipping);
+
+        }
+
+        public void PintRmaShippingOver(string shippingCode)
+        {
+            var shipping = _shippingSaleRepository.GetByShippingCode(shippingCode, 1, 100).Result.FirstOrDefault();
+            if (shipping == null)
+            {
+                throw new Exception(string.Format("快递单不存在,快递单号:{0}", shippingCode));
+            }
+            shipping.ShippingStatus = EnumRmaShippingStatus.PrintOver.AsID();
+            _shippingSaleRepository.Update(shipping);
+        }
+
+        public void PintRmaShipping(string shippingCode)
+        {
+            var shipping = _shippingSaleRepository.GetByShippingCode(shippingCode,1,100).Result.FirstOrDefault();
+            if (shipping == null)
+            {
+                throw new Exception(string.Format("快递单不存在,快递单号:{0}", shippingCode));
+            }
+            shipping.ShippingStatus = EnumRmaShippingStatus.Printed.AsID();
+            _shippingSaleRepository.Update(shipping);
         }
     }
 }

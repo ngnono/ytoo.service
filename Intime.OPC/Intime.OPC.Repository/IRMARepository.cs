@@ -25,5 +25,7 @@ namespace Intime.OPC.Repository
         PageResult<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus,int pageIndex,int pageSize);
 
         PageResult<RMADto> GetByRmaNo(string rmaNo);
+
+        PageResult<RMADto> GetByPackPrintPress(string orderNo, string saleOrderNo, DateTime dateTime1, DateTime dateTime2, EnumRMAStatus rmaStatus, int pageIndex, int pageSize);
     }
 }

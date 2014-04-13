@@ -43,6 +43,18 @@ namespace TestService
             var lst = Service.GetByRmaNo("1142014041211001");
             AssertList<RMADto>(lst);
         }
+
+          [TestMethod]
+        public void TestGetByFinaceDto()
+        {
+              FinaceRequest dto=new FinaceRequest();
+              dto.StartDate = new DateTime(2000,  1, 1);
+              dto.EndDate = DateTime.Now.Date.AddDays(1);
+              dto.pageIndex = 1;
+              dto.pageSize = 1000;
+              var lst = Service.GetByFinaceDto(dto);
+            AssertList<RMADto>(lst);
+        }
        
     }
 }

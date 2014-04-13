@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 
@@ -61,7 +62,7 @@ namespace Intime.OPC.Repository
         /// </summary>
         /// <param name="saleOrderNo">The sale order no.</param>
         /// <returns>IList{OPC_SaleDetail}.</returns>
-        PageResult<OPC_SaleDetail> GetSaleOrderDetails(string saleOrderNo, int pageIndex, int pageSize);
+        PageResult<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int pageIndex, int pageSize);
 
         /// <summary>
         ///     获得 未提货 的数据

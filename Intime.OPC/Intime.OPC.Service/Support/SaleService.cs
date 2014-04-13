@@ -68,8 +68,8 @@ namespace Intime.OPC.Service.Support
                 throw new SaleOrderNotExistsException(saleOrderNo);
             }
 
-            var  lst = _saleRepository.GetSaleOrderDetails(saleOrderNo,pageIndex,pageSize);
-            return Mapper.Map<OPC_SaleDetail, SaleDetailDto>(lst);
+            return _saleRepository.GetSaleOrderDetails(saleOrderNo,pageIndex,pageSize);
+            
         }
 
         public bool SetSaleOrderPickUp(string saleOrderNo, int userId)
