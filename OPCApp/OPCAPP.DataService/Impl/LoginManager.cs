@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
 // Assembly         : OPCApp.DataService
 // Author           : Liuyh
-// Created          : 03-15-2014 23:37:39
+// Created          : 03-15-2014 
 //
 // Last Modified By : Liuyh
-// Last Modified On : 03-16-2014 21:42:12
+// Last Modified On : 03-16-2014 
 // ***********************************************************************
 // <copyright file="LoginManager.cs" company="">
 //     Copyright (c) . All rights reserved.
@@ -16,7 +16,7 @@ using System;
 using System.ComponentModel.Composition;
 using OPCApp.DataService.Common;
 using OPCApp.Domain;
-using OPCAPP.Domain;
+using OPCApp.Domain;
 using OPCApp.Infrastructure.Interfaces;
 
 namespace OPCApp.DataService.Impl
