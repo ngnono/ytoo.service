@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
 // Assembly         : OPCApp.Domain
 // Author           : Liuyh
-// Created          : 03-16-2014 20:40:15
+// Created          : 03-16-2014 
 //
 // Last Modified By : Liuyh
-// Last Modified On : 03-16-2014 20:46:36
+// Last Modified On : 03-16-2014 
 // ***********************************************************************
 // <copyright file="LoginModel.cs" company="">
 //     Copyright (c) . All rights reserved.
@@ -15,7 +15,7 @@
 using System;
 using OPCApp.Infrastructure.Interfaces;
 
-namespace OPCAPP.Domain
+namespace OPCApp.Domain
 {
     /// <summary>
     ///     Class LoginModel.
