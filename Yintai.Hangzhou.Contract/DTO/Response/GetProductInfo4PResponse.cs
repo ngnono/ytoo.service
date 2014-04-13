@@ -64,6 +64,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string Brand2Name { get; set; }
         [DataMember(Name="skucode")]
         public string SkuCode { get; set; }
+        [DataMember(Name = "product_type")]
+        public int ProductType_I { get {
+            return ProductType ?? (int)Yintai.Hangzhou.Model.Enums.ProductType.FromSystem;
+        } }
+        [IgnoreDataMember]
+        public Nullable<int> ProductType { get; set; }
        
     }
     [DataContract]
