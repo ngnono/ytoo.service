@@ -303,7 +303,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
             return this.RenderSuccess<dynamic>(c => c.Data = new
             {
                 received_amount = incomeEntity.ReceivedAmount,
-                frozen_amount = incomeEntity.TotalAmount - incomeEntity.AvailableAmount,
+                frozen_amount = incomeEntity.TotalAmount - incomeEntity.AvailableAmount-incomeEntity.RequestAmount-incomeEntity.ReceivedAmount,
                 request_amount = incomeEntity.RequestAmount,
                 avail_amount = incomeEntity.AvailableAmount
 
@@ -414,6 +414,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                 });
 
                 incomeAccountEntity.AvailableAmount -= request.Amount;
+                incomeAccountEntity.RequestAmount += request.Amount;
                 incomeAccountEntity.UpdateDate = DateTime.Now;
                 _incomeRepo.Update(incomeAccountEntity);
 

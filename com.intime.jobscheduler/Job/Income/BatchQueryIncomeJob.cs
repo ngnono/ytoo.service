@@ -174,7 +174,6 @@ namespace com.intime.jobscheduler.Job.Income
                 var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId).First();
                 incomeAccount.RequestAmount -= request.Amount;
                 incomeAccount.AvailableAmount += request.Amount;
-                incomeAccount.TotalAmount += request.Amount;
                 incomeAccount.UpdateDate = DateTime.Now;
                 db.Entry(incomeAccount).State = System.Data.EntityState.Modified;
                 
@@ -209,7 +208,6 @@ namespace com.intime.jobscheduler.Job.Income
                 var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId).First();
                 incomeAccount.RequestAmount -= request.Amount;
                 incomeAccount.AvailableAmount += request.Amount;
-                incomeAccount.TotalAmount += request.Amount;
                 incomeAccount.UpdateDate = DateTime.Now;
                 db.Entry(incomeAccount).State = System.Data.EntityState.Modified;
             }
