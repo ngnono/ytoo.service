@@ -91,6 +91,15 @@
     <Compile Include="Views\ReturnGoodsPaymentVerify.xaml.cs">
       <DependentUpon>ReturnGoodsPaymentVerify.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WebSiteCashierSearchView.xaml.cs">
+      <DependentUpon>WebSiteCashierSearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WebSiteReturnGoodsStatisticsView.xaml.cs">
+      <DependentUpon>WebSiteReturnGoodsStatisticsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WebSiteSalesStatisticsView.xaml.cs">
+      <DependentUpon>WebSiteSalesStatisticsView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -104,6 +113,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ReturnGoodsPaymentVerify.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WebSiteCashierSearchView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WebSiteReturnGoodsStatisticsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WebSiteSalesStatisticsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

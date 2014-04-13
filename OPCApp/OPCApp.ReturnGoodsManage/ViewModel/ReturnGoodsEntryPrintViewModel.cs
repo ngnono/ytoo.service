@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 
 namespace OPCApp.ReturnGoodsManage.ViewModel
 {
-    [Export(typeof(ShopperReturnGoodsSearchViewModel))]
-    public class ShopperReturnGoodsSearchViewModel : BaseReturnGoodsSearchCommonWithRma
-    {        
-        public ShopperReturnGoodsSearchViewModel()
+    [Export(typeof(ReturnGoodsEntryPrintViewModel))]
+    public class ReturnGoodsEntryPrintViewModel : BaseReturnGoodsSearchCommonWithRma
+    {
+        public ReturnGoodsEntryPrintViewModel()
         {          
             
         }

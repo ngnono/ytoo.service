@@ -13,16 +13,26 @@ using System.Threading.Tasks;
 
 namespace OPCApp.ReturnGoodsManage.ViewModel
 {
-    [Export(typeof(ShopperReturnGoodsSearchViewModel))]
-    public class ShopperReturnGoodsSearchViewModel : BaseReturnGoodsSearchCommonWithRma
+      [Export(typeof(ReturnGoodsInStorageViewModel))]
+    public class ReturnGoodsInStorageViewModel : BaseReturnGoodsSearchCommonWithRma
     {        
-        public ShopperReturnGoodsSearchViewModel()
-        {          
-            
+         /// <summary>
+         /// 退货入库
+         /// </summary>
+        public DelegateCommand CommandReturnGoodsConfirm { get; set; }
+        public ReturnGoodsInStorageViewModel()
+        {   
+            CommandReturnGoodsConfirm = new DelegateCommand(ReturnGoodsConfirm);
         }
+
+        private void ReturnGoodsConfirm()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void SearchRma()
         {
             CustomReturnGoodsUserControlViewModel.RmaList = null;
-        }     
+        }
     }
 }
