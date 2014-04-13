@@ -15,6 +15,7 @@ namespace OPCApp.DataService.Interface.RMA
         IList<RMADto> GetRmaForReturnCash(ReturnGoodsCommonSearchDto returnGoodsCommonSearchDto);
         bool SetReturnGoodsCash(List<string>listRmaNo);
         bool SetReturnGoodsComplete(List<string> listRmaNo);
+        bool SetReturnGoodsInStorage(List<string> listRmaNo);
 
     }
 }
