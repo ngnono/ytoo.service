@@ -45,7 +45,7 @@ namespace OPCApp.Financial.ViewModels
        }
        private List<RMADto> _rmaDtos;
 
-       public List<RMADto> RamList
+       public List<RMADto> RmaList
        {
            get { return _rmaDtos; }
            set { SetProperty(ref _rmaDtos, value); }
@@ -99,7 +99,7 @@ namespace OPCApp.Financial.ViewModels
            }
            try
            {
-               RamList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByRmaOder(SaleRma.RmaNo).ToList();
+               RmaList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByRmaOder(SaleRma.RmaNo).ToList();
            }
            catch
            {

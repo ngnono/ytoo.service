@@ -82,8 +82,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                var lst = RestClient.Get<RMADto>("rma/GetByFinaceDto", packageReceive.ToString());
-                return lst;
+                var lst = RestClient.GetPage<RMADto>("rma/GetByFinaceDto", packageReceive.ToString());
+                return lst.Result;
             }
             catch (Exception ex)
             {

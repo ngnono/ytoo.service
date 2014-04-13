@@ -90,8 +90,8 @@
                     <DataGridTextColumn Header="销售单号" Binding="{Binding SaleOrderNo}" />
                     <DataGridTextColumn Header="门店" Binding="{Binding StoreName}" />
                     <DataGridTextColumn Header="退货原因" Binding="{Binding RMAReason}" />
-                    <DataGridTextColumn Header="退货状态" Binding="{Binding StatusName}" />
-                    <DataGridTextColumn Header="退货单状态" Binding="{Binding RmaStatusName}" />
+                    <DataGridTextColumn Header="退货状态" Binding="{Binding RmaStatusName}" />
+                    <DataGridTextColumn Header="退货单状态" Binding="{Binding StatusName}" />
                     <DataGridTextColumn Header="退货收银状态" Binding="{Binding RmaCashStatusName}" />
                     <DataGridTextColumn Header="退货总金额" Binding="{Binding RMAAmount}" />
                     <DataGridTextColumn Header="退货总数" Binding="{Binding Count}" />
@@ -99,11 +99,11 @@
                     <DataGridTextColumn Header="收银时间" Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     <DataGridTextColumn Header="退货收银流水号" Binding="{Binding RmaCashNum}" />
                     <DataGridTextColumn Header="退货收银时间" Binding="{Binding RmaCashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                    <DataGridTextColumn Header="要求退货时间" Binding="{Binding Address}" />
+                    <DataGridTextColumn Header="要求退货时间" Binding="{Binding BackDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     <DataGridTextColumn Header="退货类型" Binding="{Binding RMAType}" />
                     <DataGridTextColumn Header="专柜码" Binding="{Binding ContractPhone}" />
                     <DataGridTextColumn Header="退货时间" Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                    <DataGridTextColumn Header="支付方式" Binding="{Binding PaymentName}" />
+                    <DataGridTextColumn Header="支付方式" Binding="{Binding PayType}" />
                     <DataGridTemplateColumn Header="备注录入">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -119,7 +119,7 @@
         <StackPanel Orientation="Vertical" Margin="0,1"  Grid.Row="4">
             <Label Content="退货明细" />
             <DataGrid ItemsSource="{Binding RmaDetailList, Mode=TwoWay}" AutoGenerateColumns="False" IsReadOnly="True"
-                        RenderTransformOrigin="0.5,0.5"
+                  CanUserAddRows="False"   RenderTransformOrigin="0.5,0.5"
                         Margin="0,0,0,-78">
                 <DataGrid.RenderTransform>
                     <TransformGroup>

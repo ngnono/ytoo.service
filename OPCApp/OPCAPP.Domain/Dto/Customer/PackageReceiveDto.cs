@@ -25,7 +25,7 @@ namespace OPCApp.Domain.Customer
         public string SaleOrderNo { get; set; }
        public override string ToString()
        {
-           return string.Format("StartDate={0}&EndDate={1}&OrderNo={2}&SaleOrderNo={3}", StartDate, EndDate, OrderNo, SaleOrderNo);
+           return string.Format("StartDate={0}&EndDate={1}&OrderNo={2}&SaleOrderNo={3}&pageIndex={4}&pageSize={5}", StartDate, EndDate, OrderNo, SaleOrderNo,1,300);
        }
     }
 }
