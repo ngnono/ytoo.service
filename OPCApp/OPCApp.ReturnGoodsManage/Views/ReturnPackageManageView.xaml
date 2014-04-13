@@ -29,7 +29,7 @@
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="80" Command="{Binding ReceivingGoodsSubmit}">
+                <Button Background="LightGray" Width="80" Command="{Binding CommandReceivingGoodsSubmit}">
                     <StackPanel  Orientation="Horizontal" >
                         <Image Source="/Image/回单确认.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">物流收货确认</TextBlock>
@@ -82,7 +82,7 @@
                         >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding GetRmaSaleDetailByRma,Mode=OneWayToSource}" />
+                        <i:InvokeCommandAction Command="{Binding CommandGetRmaSaleDetailByRma,Mode=OneWayToSource}" />
                     </i:EventTrigger>
 
                 </i:Interaction.Triggers>
@@ -92,7 +92,6 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                            Command="{Binding Path=DataContext.GetRmaSaleDetailByRma,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
                                       VerticalAlignment="Center" HorizontalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
