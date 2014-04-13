@@ -217,7 +217,9 @@
     <Resource Include="Image\变更单位.png" />
     <Resource Include="Image\回单存档.png" />
     <Resource Include="Image\回单派发.png" />
-    <Resource Include="Image\回单确认.png" />
+    <Resource Include="Image\回单确认.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Image\回单返回.png" />
     <Resource Include="Image\处理.png" />
     <Resource Include="Image\审批.png" />
