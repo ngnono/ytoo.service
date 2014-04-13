@@ -103,6 +103,7 @@
     <Compile Include="ViewModel\ReturnAcceptCashierViewModel.cs" />
     <Compile Include="ViewModel\ReturnGoodsEntryPrintViewModel.cs" />
     <Compile Include="ViewModel\ReturnGoodsInStorageViewModel.cs" />
+    <Compile Include="ViewModel\ReturnPackagePrintExpressageConnectViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackagePrintExpressageViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageVerifyViewViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageMainViewModel.cs" />
@@ -128,6 +129,9 @@
     </Compile>
     <Compile Include="Views\ReturnPackageManageView.xaml.cs">
       <DependentUpon>ReturnPackageManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReturnPackagePrintExpressageConnectView.xaml.cs">
+      <DependentUpon>ReturnPackagePrintExpressageConnectView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReturnPackagePrintExpressageView.xaml.cs">
       <DependentUpon>ReturnPackagePrintExpressageView.xaml</DependentUpon>
@@ -176,6 +180,10 @@
     <Page Include="Views\ReturnPackageManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReturnPackagePrintExpressageConnectView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ReturnPackagePrintExpressageView.xaml">
       <SubType>Designer</SubType>
