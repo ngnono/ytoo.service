@@ -1,15 +1,25 @@
-﻿using System.Windows.Controls;
+﻿using System.ComponentModel.Composition;
+using System.Windows.Controls;
+using OPCApp.ReturnGoodsManage.ViewModel;
 
-namespace OPCApp.ReturnGoodsManage.View
+namespace OPCApp.ReturnGoodsManage.Views
 {
     /// <summary>
-    ///     ShoppingGuideReturnGoodsReceiving.xaml 的交互逻辑
+    /// ShopperReturnGoodsSearchView.xaml 的交互逻辑
     /// </summary>
-    public partial class ShoppingGuideReturnGoodsReceiving : UserControl
+    [Export("ShopperReturnGoodsSearchView", typeof(UserControl))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public partial class ShopperReturnGoodsSearchView : UserControl
     {
-        public ShoppingGuideReturnGoodsReceiving()
+        public ShopperReturnGoodsSearchView()
         {
             InitializeComponent();
         }
+        //[Import(typeof(ShopperReturnGoodsSearchViewModel))]
+        //public ShopperReturnGoodsSearchViewModel ViewModel
+        //{
+        //    set { DataContext = value; }
+        //    get { return DataContext as ShopperReturnGoodsSearchViewModel; }
+        //}
     }
 }
