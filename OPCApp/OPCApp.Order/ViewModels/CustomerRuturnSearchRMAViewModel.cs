@@ -11,17 +11,8 @@ using OPCApp.Infrastructure;
 namespace OPCApp.Customer.ViewModels
 {
     [Export(typeof(CustomerReturnSearchRmaViewModel))]
-    public class CustomerReturnSearchRmaViewModel :BindableBase// CustomerReturnSearchViewModel
+    public class CustomerReturnSearchRmaViewModel : CustomerReturnSearchViewModel
     {
-        private ReturnGoodsInfoGet returnGoodsInfo;
-        public ReturnGoodsInfoGet ReturnGoodsInfoGet
-        {
-            get { return returnGoodsInfo; }
-            set { SetProperty(ref returnGoodsInfo, value); }
-        }
-        public CustomerReturnSearchRmaViewModel():base()
-        {
-            ReturnGoodsInfoGet = new ReturnGoodsInfoGet();
-        }
+       
     }
 }

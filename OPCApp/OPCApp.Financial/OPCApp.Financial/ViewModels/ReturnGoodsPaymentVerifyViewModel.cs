@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -44,7 +45,7 @@ namespace OPCApp.Financial.ViewModels
        }
        private List<RMADto> _rmaDtos;
 
-       public List<RMADto> RamList
+       public List<RMADto> RmaList
        {
            get { return _rmaDtos; }
            set { SetProperty(ref _rmaDtos, value); }
@@ -77,6 +78,12 @@ namespace OPCApp.Financial.ViewModels
 
        public void SearchSaleRma()
        {
+           if (RmaDetailList != null) {
+               RmaDetailList.Clear();
+           }
+           if (RmaList != null) {
+               RmaList.Clear();
+           }
            SaleRmaList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByReturnGoodPay(ReturnGoodsPayDto).ToList();
        }
 
@@ -84,7 +91,7 @@ namespace OPCApp.Financial.ViewModels
        {
            if (RmaDto == null)
            {
-               MessageBox.Show("请选择退货单", "提示");
+               //MessageBox.Show("请选择退货单", "提示");
                return;
            }
            RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(RmaDto.RMANo).ToList();
@@ -94,10 +101,19 @@ namespace OPCApp.Financial.ViewModels
        {
             if (SaleRma == null)
            {
-               MessageBox.Show("请选择收货单", "提示");
+               this.RmaList.Clear();
+               this.RmaDetailList.Clear();
                return;
            }
-            RamList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByRmaOder(SaleRma.RmaNo).ToList();
+           try
+           {
+               RmaList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByRmaOder(SaleRma.RmaNo).ToList();
+           }
+           catch
+           {
+               
+           }
+          
        }
 
        public decimal rmaDecimal;
@@ -128,6 +144,9 @@ namespace OPCApp.Financial.ViewModels
            }
           bool falg= AppEx.Container.GetInstance<IFinancialPayVerify>().ReturnGoodsPayVerify(SaleRma.RmaNo,rmaDecimal);
           MessageBox.Show(falg ? "退货付款确认成功" : "退货付款确认失败", "提示");
+          if (falg) {
+              SearchSaleRma();
+          }
        }
        public void InitCombo()
        {

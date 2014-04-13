@@ -5,6 +5,10 @@ namespace OPCApp.Domain.Models
     public class OPC_ShippingSale
     {
         public bool IsSelected { get; set; }
+        /// <summary>
+        /// 退货单号
+        /// </summary>
+        public string RmaNo { get; set; }
 
         /// <summary>
         ///     发货单ID

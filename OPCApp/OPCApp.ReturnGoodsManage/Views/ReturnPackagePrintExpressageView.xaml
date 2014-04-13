@@ -4,112 +4,214 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Background="#FFE5E5E5" Margin="0,0,-542,-93">
+             Height="Auto" Width="Auto">
+    <Grid Background="#FFE5E5E5" Margin="1">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="260*" />
-            <ColumnDefinition Width="260*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="200*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ToolBar Grid.ColumnSpan="4" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top"
-                 Width="{Binding RelativeSource={RelativeSource AncestorType=Grid},Path=ActualWidth}">
-            <Button Content="返回" Command="" />
-            <Button Content="打印" Command="" />
-            <Button Content="打印快递单" Command="" />
-            <Button Content="快递单完成打印" Command="" />
-        </ToolBar>
-        <StackPanel Orientation="Horizontal" Margin="0,1" Grid.ColumnSpan="2" Grid.Row="1">
-            <Label Content=" " />
-            <CheckBox VerticalAlignment="Center" />
-            <Label Content="物流收货时间:" Width="80" />
-            <DatePicker Width="80" />
-            <Label Content=" 至 " />
-            <DatePicker Width="80" />
-            <Label Content=" " />
-            <CheckBox VerticalAlignment="Center" />
-            <Label Content="订单号:" />
-            <TextBox Width="150" Controls:TextboxHelper.Watermark="输入订单号"
-                     Text="{Binding searchText, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-            <Button Content="查询" Width="80" Command="{Binding SearchCommand}" />
+
+        <StackPanel Grid.Row="0">
+            <StackPanel Orientation="Horizontal" Background="LightGray">
+
+                <Button Background="LightGray" Command="{Binding CommandSearch}" Width="50">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/image/查询.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Background="LightGray" Width="100" Command="{Binding CommandPrintView}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/image/打印.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Background="LightGray" Width="100" Command="{Binding CommandOnlyPrint}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/image/打印.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">打印快递单</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Background="LightGray" Command="{Binding CommandPrintExpress}" Width="150">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/image/打印.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">完成快递单打印</TextBlock>
+                    </StackPanel>
+                </Button>
+
+
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <TextBlock Text="物流收货时间" Margin="0 5" Width="80" />
+            <DatePicker Width="130" Foreground="Blue" SelectedDate="{Binding RmaExpressDto.StartDate}" />
+            <TextBlock Text=" 至 " Margin="0 5" Width="20" />
+            <DatePicker Width="130" Foreground="Blue" SelectedDate="{Binding RmaExpressDto.EndDate}" />
+            <TextBlock Text="订单号" Width="60" Margin="0 5" />
+            <TextBox Width="130" Foreground="Blue" Margin="2" Background="White" Text="{Binding RmaExpressDto.OrderNo}" />
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <StackPanel Orientation="Horizontal" Background="LightGray">
+                <TextBlock Text="快递单" />
+            </StackPanel>
+        </StackPanel>
+        <DataGrid Grid.Row="3" ItemsSource="{Binding ShipSaleList}" IsReadOnly="True" Height="150"
+                              SelectedItem="{Binding ShipSaleSelected}"
+                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding CommandGetRmaByRmaNo}" />
+                </i:EventTrigger>
+
+            </i:Interaction.Triggers>
+            <DataGrid.Columns>
+               
+                <DataGridTextColumn Width="130" Header="单号" Visibility="Hidden"
+                                                Binding="{Binding RmaNo}" />
+                <DataGridTextColumn Width="130" Header="发货单号" Binding="{Binding GoodsOutCode}" />
+                <DataGridTextColumn Width="200" Header="快递公司名称" Binding="{Binding ShipCompanyName}" />
+                <DataGridTextColumn Header="发货状态" Binding="{Binding ShippingStatus}" />
+                <DataGridTextColumn Header="发货时间"
+                                                Binding="{Binding GoodsOutDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                <DataGridTextColumn Header="快递公司取件人" Binding="{Binding ShipManName}" />
+                <DataGridTextColumn Header="打印状态" Binding="{Binding PrintStatus}" />
+                <DataGridTextColumn Header="快递单号" Binding="{Binding ExpressCode}" />
+                <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
+                <DataGridTextColumn Width="200" Header="收货人地址" Binding="{Binding CustomerAddress}" />
+                <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
+                <DataGridTextColumn Header="邮编" Binding="{Binding ShippingZipCode}" />
+                <DataGridTextColumn Header="配送方式" Binding="{Binding ShippingMethod}" />
+                <DataGridTextColumn Header="支付快递公司运费" Binding="{Binding ShipViaExpressFee}" />
+                <DataGridTextColumn Header="顾客支付运费" Binding="{Binding ExpressFee}" />
+                <DataGridTemplateColumn Header="备注录入">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="录入"
+                                                Command="{Binding Path=DataContext.CommandSetShippingRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+        </DataGrid>
+        <StackPanel Grid.Row="4">
+            <StackPanel Orientation="Horizontal" Background="LightGray">
+                <TextBlock Text="退货单" />
+            </StackPanel>
         </StackPanel>
 
-        <Grid Name="gridRightColumn" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" Width="842"
-              RenderTransformOrigin="0.496,0.554">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="8*" />
-                <RowDefinition Height="5*" />
-                <RowDefinition Height="9*" />
-            </Grid.RowDefinitions>
-            <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="0">
-                <Label Content="收货单" />
-                <DataGrid ItemsSource="{Binding expressCompanyGroup, Mode=TwoWay}" AutoGenerateColumns="False"
-                          RenderTransformOrigin="0.5,0.5" SelectedIndex="{Binding selectedIndex, Mode=TwoWay}">
-                    <DataGrid.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform />
-                            <SkewTransform AngleY="-0.208" />
-                            <RotateTransform />
-                            <TranslateTransform Y="-1.996" />
-                        </TransformGroup>
-                    </DataGrid.RenderTransform>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="订单号" Binding="{Binding ExpressType}" />
-                        <DataGridTextColumn Header="渠道订单号" Binding="{Binding ExpressName}" />
-                        <DataGridTextColumn Header="生成退货单时间" Binding="{Binding Address}" />
-                        <DataGridTextColumn Header="顾客应付运费" Binding="{Binding ContractName}" />
-                        <DataGridTextColumn Header="公司应付运费" Binding="{Binding ContractPhone}" />
-                        <DataGridTextColumn Header="退货总数量" Binding="{Binding IsEnabled}" />
-                        <DataGridTextColumn Header="退货总金额" Binding="{Binding PrintTemplate}" />
-                        <DataGridTextColumn Header="客服同意退货时间" Binding="{Binding ContractNumber}" />
-                    </DataGrid.Columns>
-                </DataGrid>
+        <DataGrid Grid.Row="5" Height="100"  ItemsSource="{Binding RMADtoList}" SelectionMode="Single" IsReadOnly="True"
+                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" 
+                              SelectedItem="{Binding RMADto}" VerticalScrollBarVisibility="Auto"
+                              Name="dataGridRma">
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding CommandGetRmaDetailByRmaNo}" />
+                </i:EventTrigger>
+
+            </i:Interaction.Triggers>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Width="150" Header="退货单号" Binding="{Binding RMANo}" />
+                <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
+                <DataGridTextColumn Width="150" Header="销售单号" Binding="{Binding SaleOrderNo}" />
+                <DataGridTextColumn Width="150" Header="门店" Binding="{Binding StoreName}" />
+                <DataGridTextColumn Width="150" Header="退货原因" Binding="{Binding RMAReason}" />
+                <DataGridTextColumn Width="150" Header="退货状态" Binding="{Binding RmaStatusName}" />
+                <DataGridTextColumn Width="150" Header="退货单状态" Binding="{Binding StatusName}" />
+                <DataGridTextColumn Width="150" Header="退货收银状态" Binding="{Binding RmaCashStatusName}" />
+
+                <DataGridTextColumn Header="要求退货时间"
+                                                Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+
+                <DataGridTextColumn Width="150" Header="退货总金额" Binding="{Binding RMAAmount}" />
+                <DataGridTextColumn Width="150" Header="退货总数" Binding="{Binding Count}" />
+                <DataGridTextColumn Width="150" Header="退货赔偿金额" Binding="{Binding RefundAmount}"  Foreground="Red"/>
+
+                <DataGridTextColumn Width="150" Header="收银流水号" Binding="{Binding CashNum}"  Foreground="Red"/>
+                <DataGridTextColumn Header="收银时间"
+                                                Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                <DataGridTextColumn Width="150" Header="退货类型" Binding="{Binding RMAType}"  Foreground="Red"/>
+                <DataGridTextColumn Width="150" Header="专柜码" Binding="{Binding 专柜码}"  Foreground="Red"/>
+                <DataGridTextColumn Header="退货时间"
+                                                Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+
+
+                <DataGridTextColumn Header="支付方式" Binding="{Binding  PayType}" />
+                <DataGridTemplateColumn Header="备注录入">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="录入"
+                                    Command="{Binding Path=DataContext.CommandSetRmaRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="6" Background="LightGray">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="快递公司" Margin="0 10" />
+                <ComboBox Height="25" ItemsSource="{Binding ShipViaList}" Width="130"
+                                      DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding ShipVia}" />
+                <TextBlock Text="实际运费" Margin="0 10" />
+                <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
+                                     Text="{Binding ShippingSaleCreateDto.ShippingFee}" />
+                <TextBlock Text="快递单号" Margin="0,10" />
+                <TextBox Height="25"  Width="150" Foreground="Blue" Background="White"
+                                     Text="{Binding ShippingSaleCreateDto.ShippingCode}" />
+                <Button Height="25"   Content="保存" Margin="5 5" Width="100"
+                                    Command="{Binding CommandSaveShip}" />
             </StackPanel>
-            <GridSplitter Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="1">
-                <StackPanel Orientation="Horizontal" Margin="0,1">
-                    <Label Content="  快递公司" />
-                    <ComboBox Width="100" />
-                    <Label Content="  实际运费" />
-                    <ComboBox Width="100" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="1,3">
-                    <Label Content="  快递员   " />
-                    <ComboBox Width="100" />
-                    <Label Content="  快递单号" />
-                    <ComboBox Width="100" />
-                </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="7">
+            <StackPanel Orientation="Horizontal" Background="LightGray">
+                <TextBlock Text="退货明细" />
             </StackPanel>
-            <GridSplitter Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
-            <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="2">
-                <Label Content="退货明细" />
-                <DataGrid ItemsSource="{Binding expressCompanyGroup, Mode=TwoWay}" AutoGenerateColumns="False"
-                          RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2"
-                          SelectedIndex="{Binding selectedIndex, Mode=TwoWay}" Margin="0,0,0,-78">
-                    <DataGrid.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform />
-                            <SkewTransform AngleY="-0.208" />
-                            <RotateTransform />
-                            <TranslateTransform Y="-1.996" />
-                        </TransformGroup>
-                    </DataGrid.RenderTransform>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="款号" Binding="{Binding ExpressType}" />
-                        <DataGridTextColumn Header="规格" Binding="{Binding ExpressName}" />
-                        <DataGridTextColumn Header="色码" Binding="{Binding Address}" />
-                        <DataGridTextColumn Header="退货价格" Binding="{Binding ContractName}" />
-                        <DataGridTextColumn Header="退货数量" Binding="{Binding ContractPhone}" />
-                        <DataGridTextColumn Header="品牌" Binding="{Binding IsEnabled}" />
-                        <DataGridTextColumn Header="商品编码" Binding="{Binding PrintTemplate}" />
-                        <DataGridTextColumn Header="专柜码" Binding="{Binding ContractNumber}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </StackPanel>
-        </Grid>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Margin="0,1"  Grid.Row="8">
+            <DataGrid ItemsSource="{Binding RmaDetailList, Mode=TwoWay}" AutoGenerateColumns="False"
+                        RenderTransformOrigin="0.5,0.5" 
+                        SelectedIndex="{Binding selectedIndex, Mode=TwoWay}" Margin="0,0,0,-78">
+                <DataGrid.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform />
+                        <SkewTransform AngleY="-0.208" />
+                        <RotateTransform />
+                        <TranslateTransform Y="-1.996" />
+                    </TransformGroup>
+                </DataGrid.RenderTransform>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="款号" Binding="{Binding StoreItemNo}" />
+                    <DataGridTextColumn Header="规格" Binding="{Binding SizeValueName}" />
+                    <DataGridTextColumn Header="色码" Binding="{Binding ColorValueName}" />
+                    <DataGridTextColumn Header="退货价格" Binding="{Binding Price}" />
+                    <DataGridTextColumn Header="退货数量" Binding="{Binding BackCount}" />
+                    <DataGridTextColumn Header="品牌" Binding="{Binding BrandName}" />
+                    <DataGridTextColumn Header="商品编码" Binding="{Binding ProdSaleCode}" />
+                    <DataGridTextColumn Header="专柜码" Binding="{Binding SectionCode}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
     </Grid>
 </UserControl>

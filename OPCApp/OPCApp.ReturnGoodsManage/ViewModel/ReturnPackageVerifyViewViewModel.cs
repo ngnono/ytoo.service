@@ -17,7 +17,7 @@ using OPCApp.DataService.Interface.Trans;
 
 namespace OPCApp.ReturnGoodsManage.ViewModels
 {
-   [Export("ReturnPackageVerifyViewViewModel", typeof(ReturnPackageVerifyViewViewModel))]
+   [Export(typeof(ReturnPackageVerifyViewViewModel))]
     public class ReturnPackageVerifyViewViewModel : BindableBase
     {
         private PackageReceiveDto _packageReceiveDto;

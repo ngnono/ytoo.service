@@ -9,12 +9,38 @@ namespace OPCApp.DataService.Customer
     [Export(typeof (ICustomerReturnSearch))]
     public class CustomerReturnSearchService : ICustomerReturnSearch
     {
-        public IList<OrderDto> ReturnGoodsSearch(ReturnGoodsInfoGet goodInfoGet)
+        //laoda 物流退回 订单查询
+        public IList<OrderDto> ReturnGoodsTransSearch(ReturnGoodsInfoGet goodInfoGet)
         {
             try
             {
-                IList<OrderDto> lst = RestClient.Get<OrderDto>("order/GetByReturnGoodsInfo", goodInfoGet.ToString());
-                return lst;
+                var lst = RestClient.GetPage<OrderDto>("order/GetByReturnTransGoodsInfo", goodInfoGet.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<OrderDto>();
+            }
+        }
+        //lao da 退货赔偿退回
+        public IList<OrderDto> ReturnGoodsFinancialSearch(ReturnGoodsInfoGet goodInfoGet)
+        {
+            try
+            {
+                var lst = RestClient.GetPage<OrderDto>("order/GetByReturnFinancialGoodsInfo", goodInfoGet.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<OrderDto>();
+            }
+        }
+        public IList<OrderDto> ReturnGoodsRmaSearch(ReturnGoodsInfoGet goodInfoGet)
+        {
+            try
+            {
+                var lst = RestClient.GetPage<OrderDto>("order/GetByReturnGoodsInfo", goodInfoGet.ToString());
+                return lst.Result;
             }
             catch (Exception ex)
             {
@@ -26,8 +52,8 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                var lst=RestClient.Get<RMADto>("rma/GetByOrderNo", string.Format("orderNo={0}", orderNo));
-                return lst;
+                var lst=RestClient.GetPage<RMADto>("rma/GetByOrderNo", string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNo,1,300));
+                return lst.Result;
             }
             catch (Exception ex)
             {
@@ -54,7 +80,7 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                return RestClient.Post("custem/AgreeReturnGoods", rmaNos);
+                return RestClient.Post("custom/AgreeReturnGoods", rmaNos);
             }
             catch (Exception ex)
             {

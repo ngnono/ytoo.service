@@ -84,6 +84,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BaseReturnGoodsSearchCommonWithRma.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -97,20 +98,33 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModel\CompletedReturnGoodsSearchViewModel.cs" />
+    <Compile Include="ViewModel\CustomReturnGoodsUserControlViewModel.cs" />
+    <Compile Include="ViewModel\ReturnAcceptCashierViewModel.cs" />
+    <Compile Include="ViewModel\ReturnGoodsEntryPrintViewModel.cs" />
+    <Compile Include="ViewModel\ReturnGoodsInStorageViewModel.cs" />
+    <Compile Include="ViewModel\ReturnPackagePrintExpressageViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageVerifyViewViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageMainViewModel.cs" />
     <Compile Include="ViewModel\ReturnPackageManageViewModel.cs" />
-    <Compile Include="Views\PackageInfoView.xaml.cs">
-      <DependentUpon>PackageInfoView.xaml</DependentUpon>
+    <Compile Include="ViewModel\ShopperReturnGoodsSearchViewModel.cs" />
+    <Compile Include="Views\CompletedReturnGoodsSearchView.xaml.cs">
+      <DependentUpon>CompletedReturnGoodsSearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomReturnGoodsUserControl.xaml.cs">
+      <DependentUpon>CustomReturnGoodsUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReturnGoodsEntryPrintView.xaml.cs">
+      <DependentUpon>ReturnGoodsEntryPrintView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReturnGoodsInStorageView.xaml.cs">
+      <DependentUpon>ReturnGoodsInStorageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReturnPackageMainManageView.xaml.cs">
       <DependentUpon>ReturnPackageMainManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReturnAcceptCashierView.xaml.cs">
       <DependentUpon>ReturnAcceptCashierView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ReturnGoodsEntryPrintView.xaml.cs">
-      <DependentUpon>ReturnGoodsEntryPrintView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReturnPackageManageView.xaml.cs">
       <DependentUpon>ReturnPackageManageView.xaml</DependentUpon>
@@ -120,6 +134,9 @@
     </Compile>
     <Compile Include="Views\ReturnPackageVerifyView.xaml.cs">
       <DependentUpon>ReturnPackageVerifyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShopperReturnGoodsSearchView.xaml.cs">
+      <DependentUpon>ShopperReturnGoodsSearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShoppingGuideReturnGoodsReceiving.xaml.cs">
       <DependentUpon>ShoppingGuideReturnGoodsReceiving.xaml</DependentUpon>
@@ -135,19 +152,27 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\PackageInfoView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\CompletedReturnGoodsSearchView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CustomReturnGoodsUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ReturnGoodsEntryPrintView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ReturnGoodsInStorageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ReturnPackageMainManageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ReturnAcceptCashierView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ReturnGoodsEntryPrintView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -163,9 +188,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ShoppingGuideReturnGoodsReceiving.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\ShopperReturnGoodsSearchView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ShoppingGuideReturnGoodsReceiving.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

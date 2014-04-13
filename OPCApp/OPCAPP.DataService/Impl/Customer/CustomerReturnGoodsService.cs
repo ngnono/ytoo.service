@@ -31,7 +31,8 @@ namespace OPCApp.DataService.Impl.Customer
         {
             try
             {
-                return RestClient.Get<OrderItem>("order/GetOrderItemsByOrderNo", string.Format("orderNo={0}", orderNO));
+                 var lst=RestClient.GetPage<OrderItem>("order/GetOrderItemsByOrderNo", string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNO,1,300));
+                 return lst.Result;
             }
             catch (Exception ex)
             {

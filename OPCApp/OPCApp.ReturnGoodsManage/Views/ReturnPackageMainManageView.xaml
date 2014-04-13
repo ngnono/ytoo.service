@@ -10,11 +10,11 @@
             <TabItem Header="退货包裹签收确认" Controls:ControlsHelper.HeaderFontSize="18">
                 <View:ReturnPackageManageView DataContext="{Binding ReturnPackageManageViewModel}" />
             </TabItem>
-            <TabItem Header="退货包裹审核" Controls:ControlsHelper.HeaderFontSize="18">
+            <TabItem Header="退货包裹审核" DataContext="{Binding ReturnPackageVerifyViewViewModel}"  Controls:ControlsHelper.HeaderFontSize="18">
                 <View:ReturnPackageVerifyView />
             </TabItem>
             <TabItem Header="包裹退回-打印快递单" Controls:ControlsHelper.HeaderFontSize="18">
-
+                <View:ReturnPackagePrintExpressageView  DataContext="{Binding ReturnPackagePrintExpressViewModel}"/>
             </TabItem>
             <TabItem Header="包裹退回-快递交接" Controls:ControlsHelper.HeaderFontSize="18">
 

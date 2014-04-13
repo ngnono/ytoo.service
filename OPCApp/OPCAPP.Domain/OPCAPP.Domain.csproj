@@ -58,6 +58,8 @@
     <Compile Include="Dto\Customer\RMAPost.cs" />
     <Compile Include="Dto\Customer\SaleRmaDto.cs" />
     <Compile Include="Dto\KeyValue.cs" />
+    <Compile Include="Dto\ReturnGoods\ReturnGoodsCommonSearchDto.cs" />
+    <Compile Include="Dto\ReturnGoods\RmaExpressDto.cs" />
     <Compile Include="Dto\RoleMenuDto.cs" />
     <Compile Include="Dto\RoleUserDto.cs" />
     <Compile Include="Dto\SaleDetailDto.cs" />

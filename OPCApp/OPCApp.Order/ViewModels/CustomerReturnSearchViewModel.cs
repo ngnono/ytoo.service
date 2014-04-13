@@ -13,6 +13,7 @@ using OPCApp.Domain.Dto;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
+using System;
 
 namespace OPCApp.Customer.ViewModels
 {
@@ -31,6 +32,7 @@ namespace OPCApp.Customer.ViewModels
             CommandSearchRmaDtoInfo = new DelegateCommand(SearchRmaDtoListInfo);
             CommandAgreeReturnGoods = new DelegateCommand(SetAgreeReturnGoods);
             CommandGetRmaDetailByRmaNo = new DelegateCommand(GetRmaDetailByRmaNo);
+            this.InitCombo();
         }
         public IList<KeyValue> StoreList { get; set; }
         public IList<KeyValue> PaymentTypeList { get; set; }
@@ -101,22 +103,30 @@ namespace OPCApp.Customer.ViewModels
             {
                 MessageBox.Show("请选择退货单", "提示");
                 return;
-            }           
-            bool falg =
-                AppEx.Container.GetInstance<ICustomerReturnSearch>()
-                    .AgreeReturnGoods(rmaSelectedList.Select(e => e.RMANo).ToList());
-            MessageBox.Show(falg ? "退货成功" : "退货失败", "提示");
-            if (falg)
+            }
+            bool flag = false;
+            try
+            {
+                flag =
+                    AppEx.Container.GetInstance<ICustomerReturnSearch>()
+                        .AgreeReturnGoods(rmaSelectedList.Select(e => e.RMANo).ToList());
+            }
+            catch(Exception Ex)
+            {
+
+            }
+            MessageBox.Show(flag ? "客服同意退货成功" : "客服同意退货失败", "提示");
+            if (flag)
             {
                 RmaDetailList.Clear();
                 RMADtoList.Clear();
             }
         }
 
-        public void SearchGoodsInfo()
+        public virtual void SearchGoodsInfo()
         {
             OrderDtoList =
-                AppEx.Container.GetInstance<ICustomerReturnSearch>().ReturnGoodsSearch(ReturnGoodsInfoGet).ToList();
+                AppEx.Container.GetInstance<ICustomerReturnSearch>().ReturnGoodsRmaSearch(ReturnGoodsInfoGet).ToList();
         }
 
         public void SearchRmaDtoListInfo()

@@ -80,9 +80,9 @@
             </StackPanel>
         </StackPanel>
 
-        <DataGrid Grid.Row="4" Height="400" ItemsSource="{Binding OrderDtoList}" IsReadOnly="True"
+        <DataGrid Grid.Row="4" MinHeight="200"  ItemsSource="{Binding OrderDtoList}" IsReadOnly="True"
                               AutoGenerateColumns="False" 
-                              Name="DataGrid1"
+                              Name="DataGrid1" VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding OrderDto}"                              
                              >
             <i:Interaction.Triggers>
@@ -118,16 +118,15 @@
                 <DataGridTextColumn Header="快递公司" Binding="{Binding ExpressCompany}" />
             </DataGrid.Columns>
         </DataGrid>
-
         <StackPanel Grid.Row="5">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <TextBlock Text="退货单" />
             </StackPanel>
         </StackPanel>
 
-        <DataGrid Grid.Row="6" Height="400"  ItemsSource="{Binding RMADtoList}" IsReadOnly="True"
+        <DataGrid Grid.Row="6" Height="200"  ItemsSource="{Binding RMADtoList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" 
-                              SelectedItem="{Binding RMADto}"
+                              SelectedItem="{Binding RMADto}" VerticalScrollBarVisibility="Auto"
                               Name="dataGridRma">
 
             <i:Interaction.Triggers>
@@ -173,7 +172,7 @@
                 <DataGridTextColumn Header="支付方式" Binding="{Binding  PayType}" />
             </DataGrid.Columns>
         </DataGrid>
-
+   
         <StackPanel Grid.Row="7">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <TextBlock Text="退货明细" />

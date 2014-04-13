@@ -39,7 +39,7 @@ namespace OPCApp.Financial.ViewModels
        }
        private List<RMADto> _rmaDtos;
 
-       public List<RMADto> RamList
+       public List<RMADto> RmaList
        {
            get { return _rmaDtos; }
            set { SetProperty(ref _rmaDtos, value); }
@@ -74,12 +74,12 @@ namespace OPCApp.Financial.ViewModels
        }
        public void FinancialVerifyNoPass()
        {
-           if (RamList==null)
+           if (RmaList==null)
            {
                MessageBox.Show("请选择退货单", "提示");
                return;
            }
-           var rmaSelectedList = RamList.Where(e => e.IsSelected).ToList();
+           var rmaSelectedList = RmaList.Where(e => e.IsSelected).ToList();
            if (rmaSelectedList.Count==0)
            { 
                MessageBox.Show("请选择退货单", "提示");
@@ -87,15 +87,19 @@ namespace OPCApp.Financial.ViewModels
            }
            var falg = AppEx.Container.GetInstance<IFinancialPayVerify>().FinancialVerifyNoPass(rmaSelectedList.Select(e=>e.RMANo).ToList());
            MessageBox.Show(falg ? "设置审核未通过成功" : "设置审核未通过失败", "提示");
+           if (falg) {
+               SearchRma();
+           }
+          
        }
        public void FinancialVerifyPass()
        {
-           if (RamList == null)
+           if (RmaList == null)
            {
                MessageBox.Show("请选择退货单", "提示");
                return;
            }
-           var rmaSelectedList = RamList.Where(e => e.IsSelected).ToList();
+           var rmaSelectedList = RmaList.Where(e => e.IsSelected).ToList();
            if (rmaSelectedList.Count == 0)
            {
                MessageBox.Show("请选择退货单", "提示");
@@ -103,6 +107,10 @@ namespace OPCApp.Financial.ViewModels
            }
            var falg = AppEx.Container.GetInstance<IFinancialPayVerify>().FinancialVerifyPass(rmaSelectedList.Select(e => e.RMANo).ToList());
            MessageBox.Show(falg ? "设置审核通过成功" : "设置审核通过失败", "提示");
+           if (falg)
+           {
+               SearchRma();
+           }
        }
 
        public void GetRmaDetailByRma()
@@ -117,7 +125,11 @@ namespace OPCApp.Financial.ViewModels
 
        public void SearchRma()
        {
-           RamList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByFilter(PackageReceiveDto).ToList();
+           if (RmaDetailList != null)
+           {
+               this.RmaDetailList.Clear();
+           }  
+           RmaList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByFilter(PackageReceiveDto).ToList();
        }
 
     

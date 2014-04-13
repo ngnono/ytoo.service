@@ -11,6 +11,7 @@ using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using OPCApp.TransManage.IService;
 using OPCApp.TransManage.Models;
+using OPCApp.TransManage.Print;
 
 namespace OPCApp.TransManage.ViewModels
 {
@@ -144,13 +145,20 @@ namespace OPCApp.TransManage.ViewModels
 
         public void CommandViewAndPrintExecute()
         {
-            //var selectdata = Invoice4List.Where(n => n.IsSelected == true).Select(e=>e.ID).ToList();
-            //List<InvoiceDetail4Get> detail4get;
-            //foreach (Invoice data in selectdata)
-            //{
-            //    detail4get
-            //    detail4get.Add(data.ID);
-            //}
+            IPrint pr = new PrintWin();
+            string xsdName = "InvoiceDataSet";
+            string rdlcName = "Print//PrintInvoice.rdlc";
+
+            PrintModel invoiceModel = new PrintModel();
+            List<OPC_Sale> salelist = new List<OPC_Sale>();
+            salelist.Add(SaleSelected);
+            invoiceModel.SaleDT = salelist;
+            List<Order> orderlist = new List<Order>();
+            Order Order = new Order();
+            orderlist.Add(Order);
+            invoiceModel.OrderDT = orderlist;
+            invoiceModel.SaleDetailDT = InvoiceDetail4List;
+            pr.Print(xsdName, rdlcName, invoiceModel, true);
         }
 
         /*打印销售单*/

@@ -20,7 +20,7 @@ namespace OPCApp.Domain.Dto
         public int ShipViaID { get; set; }
 
         public string ShipViaName { get; set; }
-
+        public string RmaNo { get; set; }
         public IList<string> SaleOrderIDs { get; set; }
     }
 }

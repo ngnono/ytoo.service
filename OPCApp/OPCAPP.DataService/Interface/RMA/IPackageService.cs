@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using OPCApp.Domain.Customer;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
+using OPCApp.Domain.ReturnGoods;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Interface.RMA
@@ -24,5 +25,16 @@ namespace OPCApp.DataService.Interface.RMA
         //退回付款确认 查询 退货单列表
         IList<RMADto> GetRmaByFilter(PackageReceiveDto packageReceive);
         //退货包裹审核
+
+        //打印快递单
+        IList<OPC_ShippingSale> GetShipListWithReturnGoods(RmaExpressDto rmaExpress);
+        bool UpdateShipWithReturnExpress(RmaExpressSaveDto rmaExpressSaveDto);
+        IList<RMADto> GetRmaForPrintExpress(string rmaNo);
+
+        bool ShipPrintComplete(string rmaNO);
+        bool ShipPrint(string rmaNo);
+       
+        //打印快递单
+
     }
 }
