@@ -30,7 +30,7 @@
 
             </StackPanel>
         </StackPanel>
-        <DataGrid x:Name="gri2" HorizontalAlignment="Left"  ItemsSource="{Binding RoleList}"
+        <DataGrid x:Name="gri2" HorizontalAlignment="Left" ItemsSource="{Binding RoleList}"
                   SelectedItem="{Binding SelectedRole}"
                   IsReadOnly="True" AutoGenerateColumns="False" Grid.Row="1" VerticalAlignment="Top" Grid.Column="0">
 
@@ -46,7 +46,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <DataGrid x:Name="gri1" HorizontalAlignment="Left" ItemsSource="{Binding MenuList}"
-                  AutoGenerateColumns="False" Grid.Row="1" 
+                  AutoGenerateColumns="False" Grid.Row="1"
                   Grid.Column="1" VerticalAlignment="Top">
 
             <DataGrid.Columns>
@@ -62,11 +62,10 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="菜单名称" Width="400"  Binding="{Binding MenuName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="菜单名称" Width="400" Binding="{Binding MenuName}" IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
-       
-     
+
 
     </Grid>
 </UserControl>

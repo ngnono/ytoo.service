@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using OPCApp.Domain.Customer;
-using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Domain.ReturnGoods;
-using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Interface.RMA
 {
@@ -33,11 +30,11 @@ namespace OPCApp.DataService.Interface.RMA
 
         bool ShipPrintComplete(string rmaNO);
         bool ShipPrint(string rmaNo);
-       
+
         //打印快递单完成
         IList<RMADto> GetRmaForPrintExpressConnect(string rmaNo);
         IList<Order> GetOrderForPrintExpressConnect(string orderNo);
         IList<OPC_ShippingSale> GetShipListWithReturnGoodsConnect(RmaExpressDto rmaExpress);
-        bool ShipPrintComplateConnect(string shipNo);    
+        bool ShipPrintComplateConnect(string shipNo);
     }
 }

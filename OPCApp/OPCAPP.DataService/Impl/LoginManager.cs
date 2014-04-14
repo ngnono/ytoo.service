@@ -16,7 +16,6 @@ using System;
 using System.ComponentModel.Composition;
 using OPCApp.DataService.Common;
 using OPCApp.Domain;
-using OPCApp.Domain;
 using OPCApp.Infrastructure.Interfaces;
 
 namespace OPCApp.DataService.Impl

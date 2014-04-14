@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Controls;
 using OPCApp.Customer.ViewModels;
+using OPCApp.Domain.Models;
 
 namespace OPCApp.TransManage.Views
 {
     /// <summary>
     ///     PrintInvoiceViewModel.xaml 的交互逻辑
     /// </summary>
-    [Export("CustomerReturnGoods", typeof(UserControl))]
+    [Export("CustomerReturnGoods", typeof (UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class CustomerReturnGoods
     {
@@ -24,14 +26,14 @@ namespace OPCApp.TransManage.Views
             get { return DataContext as CustomerReturnGoodsViewModel; }
         }
 
-        private void cbxList_DropDownOpened(object sender, System.EventArgs e)
+        private void cbxList_DropDownOpened(object sender, EventArgs e)
         {
             if (ViewModel.OrderItem != null)
             {
-                var orderItem = ViewModel.OrderItem;
-                var count = orderItem.Quantity-orderItem.ReturnCount;
+                OrderItem orderItem = ViewModel.OrderItem;
+                int count = orderItem.Quantity - orderItem.ReturnCount;
                 var list = new List<int>();
-                for (int i = 1; i < count+1; i++)
+                for (int i = 1; i < count + 1; i++)
                 {
                     list.Add(i);
                 }

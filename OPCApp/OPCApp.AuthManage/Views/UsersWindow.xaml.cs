@@ -3,8 +3,6 @@ using CustomControlLibrary;
 using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.AuthManage.ViewModels;
-using OPCApp.Infrastructure;
-using OPCApp.Infrastructure.Mvvm;
 using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.AuthManage.Views
@@ -14,8 +12,6 @@ namespace OPCApp.AuthManage.Views
     public partial class UsersWindow : MetroWindow, IBaseView
 
     {
-
-        
         [ImportingConstructor]
         public UsersWindow(UsersWindowViewModel viewModel)
         {
@@ -32,18 +28,6 @@ namespace OPCApp.AuthManage.Views
             set { DataContext = value; }
         }
 
-        public void Query(int size, int pageIndex)
-        {
-            ViewModel.PageIndex = pageIndex;
-            ViewModel.PageSize = size;
-            ViewModel.SearchCommand.Execute();
-        }
-
-        private void dataPager_PageChanged(object sender, PageChangedEventArgs args)
-        {
-            Query(args.PageSize, args.PageIndex);
-        }
-
         public void Cancel()
         {
             DialogResult = false;
@@ -56,5 +40,16 @@ namespace OPCApp.AuthManage.Views
             Close();
         }
 
+        public void Query(int size, int pageIndex)
+        {
+            ViewModel.PageIndex = pageIndex;
+            ViewModel.PageSize = size;
+            ViewModel.SearchCommand.Execute();
+        }
+
+        private void dataPager_PageChanged(object sender, PageChangedEventArgs args)
+        {
+            Query(args.PageSize, args.PageIndex);
+        }
     }
 }

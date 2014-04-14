@@ -11,5 +11,6 @@ namespace OPCApp.DataService.Interface.Customer
 
         PageResult<OPC_ShippingSale> GetShipping(string filter);
         PageResult<Order> GetOrderByShippingId(string shippingId);
+        bool SetCustomerMoneyGoods(string rmaNo);
     }
 }

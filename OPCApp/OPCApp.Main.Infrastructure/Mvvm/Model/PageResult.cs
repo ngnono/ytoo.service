@@ -1,12 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Windows;
-using System.Windows.Input;
-using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
-using OPCApp.Infrastructure.DataService;
-using OPCApp.Infrastructure.Mvvm.View;
+
 namespace OPCApp.Infrastructure.Mvvm.Model
 {
     public class PageDataResult<T> : BindableBase
@@ -31,5 +25,4 @@ namespace OPCApp.Infrastructure.Mvvm.Model
             set { SetProperty(ref _models, value); }
         }
     }
-
 }

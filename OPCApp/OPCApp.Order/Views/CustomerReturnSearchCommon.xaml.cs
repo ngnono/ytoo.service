@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.Composition;
-using System.Windows.Controls;
-using OPCApp.Customer.ViewModels;
-
-namespace OPCApp.Customer.Views
+﻿namespace OPCApp.Customer.Views
 {
     /// <summary>
     ///     PrintInvoiceViewModel.xaml 的交互逻辑
@@ -15,7 +11,5 @@ namespace OPCApp.Customer.Views
         {
             InitializeComponent();
         }
-
-    
     }
 }

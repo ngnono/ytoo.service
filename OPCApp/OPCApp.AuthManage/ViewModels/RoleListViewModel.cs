@@ -40,19 +40,19 @@ namespace OPCApp.AuthManage.ViewModels
             SetStopRoleCommand = new DelegateCommand(SetStopRole);
         }
 
+        public DelegateCommand SetStopRoleCommand { get; set; }
+
         private void SetStopRole()
         {
-            if (this.Models==null||this.Models.CurrentItem==null)
+            if (Models == null || Models.CurrentItem == null)
             {
                 MessageBox.Show("请选择要操作的角色", "提示");
                 return;
             }
             var iRole = GetDataService() as IRoleDataService;
-            iRole.SetIsEnable((OPC_AuthRole)this.Models.CurrentItem);
+            iRole.SetIsEnable((OPC_AuthRole) Models.CurrentItem);
             SearchAction();
         }
-
-        public DelegateCommand SetStopRoleCommand { get; set; }
 
         protected override void Load()
         {

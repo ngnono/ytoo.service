@@ -1,66 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace CustomControlLibrary {
+namespace CustomControlLibrary
+{
     /// <summary>
-    /// ImageButton.xaml 的交互逻辑
+    ///     ImageButton.xaml 的交互逻辑
     /// </summary>
-    public partial class ImageButton : Button {
-        public ImageButton() {
+    public partial class ImageButton : Button
+    {
+        public static readonly DependencyProperty ImageSourceProperty =
+            DependencyProperty.Register("ImageSource", typeof (ImageSource), typeof (ImageButton),
+                new UIPropertyMetadata(null));
+
+        public static readonly DependencyProperty GrayImageSourceProperty =
+            DependencyProperty.Register("GrayImageSource", typeof (ImageSource), typeof (ImageButton),
+                new UIPropertyMetadata(null));
+
+        public ImageButton()
+        {
             InitializeComponent();
 
-            this.Style = this.FindResource("ImageButtonStyle") as Style;
-            this.IsEnabledChanged += new DependencyPropertyChangedEventHandler(ImageButton_IsEnabledChanged);
-        }
-
-        void ImageButton_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e) {
-            if (this.IsEnabled && ImageSource != null) {
-                innerImage.Source = ImageSource;
-            } else if (!this.IsEnabled && GrayImageSource != null) {
-                innerImage.Source = GrayImageSource;
-            }
+            Style = FindResource("ImageButtonStyle") as Style;
+            IsEnabledChanged += ImageButton_IsEnabledChanged;
         }
 
 
-
-        public ImageSource ImageSource {
-            get { return (ImageSource)GetValue(ImageSourceProperty); }
+        public ImageSource ImageSource
+        {
+            get { return (ImageSource) GetValue(ImageSourceProperty); }
             set { SetValue(ImageSourceProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ImageSource.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ImageSourceProperty =
-            DependencyProperty.Register("ImageSource", typeof(ImageSource), typeof(ImageButton), new UIPropertyMetadata(null));
 
 
-
-        public ImageSource GrayImageSource {
-            get { return (ImageSource)GetValue(GrayImageSourceProperty); }
+        public ImageSource GrayImageSource
+        {
+            get { return (ImageSource) GetValue(GrayImageSourceProperty); }
             set { SetValue(GrayImageSourceProperty, value); }
         }
 
+        private void ImageButton_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsEnabled && ImageSource != null)
+            {
+                innerImage.Source = ImageSource;
+            }
+            else if (!IsEnabled && GrayImageSource != null)
+            {
+                innerImage.Source = GrayImageSource;
+            }
+        }
+
         // Using a DependencyProperty as the backing store for GrayImageSource.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty GrayImageSourceProperty =
-            DependencyProperty.Register("GrayImageSource", typeof(ImageSource), typeof(ImageButton), new UIPropertyMetadata(null));
 
 
-        public override void OnApplyTemplate() {
+        public override void OnApplyTemplate()
+        {
             base.OnApplyTemplate();
 
-            if (this.IsEnabled && ImageSource != null) {
+            if (IsEnabled && ImageSource != null)
+            {
                 innerImage.Source = ImageSource;
-            } else if (!this.IsEnabled && GrayImageSource != null) {
+            }
+            else if (!IsEnabled && GrayImageSource != null)
+            {
                 innerImage.Source = GrayImageSource;
             }
         }

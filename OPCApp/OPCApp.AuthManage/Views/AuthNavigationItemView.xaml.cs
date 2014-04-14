@@ -25,8 +25,8 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using CustomControlLibrary;
-using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Regions;
 using OPCApp.AuthManage.ViewModels;
@@ -38,6 +38,7 @@ namespace OPCApp.AuthManage.Views
     [Export]
     public partial class AuthNavigationItemView : UserControl, IPartImportsSatisfiedNotification
     {
+        private static ProgressBarWindow pbw = new ProgressBarWindow();
         [Import] public IRegionManager regionManager;
 
         [ImportingConstructor]
@@ -54,6 +55,12 @@ namespace OPCApp.AuthManage.Views
         {
             get { return DataContext as AuthNavaeigationItemViewModel; }
             set { DataContext = value; }
+        }
+
+        public static ProgressBarWindow Pbw
+        {
+            get { return pbw; }
+            set { pbw = value; }
         }
 
         void IPartImportsSatisfiedNotification.OnImportsSatisfied()
@@ -94,36 +101,25 @@ namespace OPCApp.AuthManage.Views
             var o2 = o1.Parent as Expander;
             o2.IsExpanded = !o2.IsExpanded;
         }
-        private static ProgressBarWindow pbw = new ProgressBarWindow();
-        
-        public static ProgressBarWindow Pbw
-        {
-            get { return pbw; }
-            set { pbw = value; }
-        }
+
         private void OnWorkerMethodStart()
         {
-            ProgressOperateClass myC = new ProgressOperateClass();
-            myC.OnWorkerComplete += new ProgressOperateClass.OnWorkerMethodCompleteDelegate(OnWorkerMethodComplete);
-            ThreadStart tStart = new ThreadStart(myC.WorkerMethod);
-            Thread t = new Thread(tStart);
+            var myC = new ProgressOperateClass();
+            myC.OnWorkerComplete += OnWorkerMethodComplete;
+            ThreadStart tStart = myC.WorkerMethod;
+            var t = new Thread(tStart);
             t.Start();
             pbw.ShowDialog();
         }
 
         private void OnWorkerMethodComplete(string message)
         {
-            pbw.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal,
-            new Action(
-            delegate()
-            {
-                pbw.Hide();
-            }
-            ));
-
-           
-
+            pbw.Dispatcher.Invoke(DispatcherPriority.Normal,
+                new Action(
+                    delegate { pbw.Hide(); }
+                    ));
         }
+
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -161,17 +157,16 @@ namespace OPCApp.AuthManage.Views
         private void Expander_OnExpanded(object sender, RoutedEventArgs e)
         {
             var o = sender as Expander;
-           
-            var oP = o.Parent;
-            foreach (var item in TopLevelListBox.Items)
+
+            DependencyObject oP = o.Parent;
+            foreach (object item in TopLevelListBox.Items)
             {
-                
             }
         }
 
         private void AuthNavigationItemView_OnLoaded(object sender, RoutedEventArgs e)
         {
-           ViewMode.GetMenus();
+            ViewMode.GetMenus();
         }
     }
 }

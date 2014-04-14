@@ -15,6 +15,7 @@ namespace OPCApp.AuthManage.ViewModels
     public class UsersWindowViewModel : BindableBase
     {
         /*选择字段*/
+        private PageDataResult<OPC_AuthUser> _prResult;
         private List<OPC_AuthUser> _userList;
 
         public UsersWindowViewModel()
@@ -40,6 +41,15 @@ namespace OPCApp.AuthManage.ViewModels
             set { SetProperty(ref _userList, value); }
         }
 
+        public int PageSize { get; set; }
+        public int PageIndex { get; set; }
+
+        public PageDataResult<OPC_AuthUser> PrResult
+        {
+            get { return _prResult; }
+            set { SetProperty(ref _prResult, value); }
+        }
+
         private void Search()
         {
             int indexFiled = FieldList.IndexOf(SelectedFiled);
@@ -52,8 +62,8 @@ namespace OPCApp.AuthManage.ViewModels
                 {"orgid", ""}
             };
             IBaseDataService<OPC_AuthUser> userDataService = GetDataService();
-           var prResultTemp= userDataService.Search(dicFilter);
-           if (prResultTemp == null || prResultTemp.Result == null)
+            PageResult<OPC_AuthUser> prResultTemp = userDataService.Search(dicFilter);
+            if (prResultTemp == null || prResultTemp.Result == null)
             {
                 return;
             }
@@ -61,41 +71,32 @@ namespace OPCApp.AuthManage.ViewModels
             PrResult.Models = prResultTemp.Result.ToList();
             PrResult.Total = prResultTemp.TotalCount;
         }
-        public int PageSize { get; set; }
-        public int PageIndex { get; set; }
-        private PageDataResult<OPC_AuthUser> _prResult;
-
-        public PageDataResult<OPC_AuthUser> PrResult
-        {
-            get { return _prResult; }
-            set { SetProperty(ref _prResult, value); }
-        }
 
         /*初始化页面固有的数据值*/
 
         private void Init()
         {
-            FieldList = new List<string> { "登陆名", "姓名" };
+            FieldList = new List<string> {"登陆名", "姓名"};
             /*查询初始化*/
             SelectedFiledValue = "";
             SelectedFiled = "";
-          
+
             PageIndex = 1;
             PageSize = 10;
             PrResult = new PageDataResult<OPC_AuthUser>();
-          
+
             SearchCommand = new DelegateCommand(Search);
             CommandGetDown = new DelegateCommand(SelectedUser);
         }
 
         public void SelectedUser()
         {
-            if (PrResult == null || PrResult.Models == null || PrResult.Models.Count==0)
+            if (PrResult == null || PrResult.Models == null || PrResult.Models.Count == 0)
             {
                 SelectedUserList = new List<OPC_AuthUser>();
                 return;
             }
-            SelectedUserList =  PrResult.Models.Where(e => e.IsSelected).ToList();
+            SelectedUserList = PrResult.Models.Where(e => e.IsSelected).ToList();
         }
 
         protected IBaseDataService<OPC_AuthUser> GetDataService()

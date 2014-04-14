@@ -72,6 +72,7 @@ namespace OPCApp.Infrastructure.Mvvm
             View.CloseView();
             AfterDoOKAction();
         }
+
         public virtual bool BeforeDoOKAction(T t)
         {
             return true;

@@ -1,24 +1,23 @@
-﻿using OPCApp.Financial.ViewModels;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Windows.Controls;
+using OPCApp.Financial.ViewModels;
 
 namespace OPCApp.Financial.Views
 {
     /// <summary>
     ///     ReturnPackageManageView.xaml 的交互逻辑
     /// </summary>
-    [Export("ReturnGoodsPaymentVerify", typeof(UserControl))]
+    [Export("ReturnGoodsPaymentVerify", typeof (UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class ReturnGoodsPaymentVerify:UserControl
+    public partial class ReturnGoodsPaymentVerify : UserControl
     {
-
         public ReturnGoodsPaymentVerify()
         {
             InitializeComponent();
-
         }
+
         [Import("ReturnPackageManageViewModel")]
-        public OPCApp.Financial.ViewModels.ReturnGoodsPaymentVerifyViewModel ViewModel
+        public ReturnGoodsPaymentVerifyViewModel ViewModel
         {
             set { DataContext = value; }
             get { return DataContext as ReturnGoodsPaymentVerifyViewModel; }

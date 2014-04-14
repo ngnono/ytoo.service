@@ -21,7 +21,7 @@
                 <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/查询.png" Stretch="None" />
-                        <TextBlock >查询</TextBlock>
+                        <TextBlock>查询</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Command="{Binding CommandViewAndPrint}">
@@ -66,7 +66,7 @@
         </StackPanel>
 
 
-        <DataGrid Grid.Row="3"  ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False"
+        <DataGrid Grid.Row="3" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False"
                   HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">

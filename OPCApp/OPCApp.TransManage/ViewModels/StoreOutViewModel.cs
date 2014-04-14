@@ -10,7 +10,6 @@ using OPCApp.Domain.Dto;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
-using OPCApp.TransManage.IService;
 
 namespace OPCApp.TransManage.ViewModels
 {
@@ -89,11 +88,12 @@ namespace OPCApp.TransManage.ViewModels
 
         private void ShippSaleHandOver()
         {
-            if (ShipSaleList == null || ShipSaleList.Count == 0) {
+            if (ShipSaleList == null || ShipSaleList.Count == 0)
+            {
                 MessageBox.Show("请选择快递单", "提示");
-                return; 
+                return;
             }
-            var goodsOutCodes = ShipSaleList.Where(e => e.IsSelected).Select(e => e.GoodsOutCode).ToList();
+            List<string> goodsOutCodes = ShipSaleList.Where(e => e.IsSelected).Select(e => e.GoodsOutCode).ToList();
             if (goodsOutCodes.Count == 0)
             {
                 MessageBox.Show("请选择快递单", "提示");
@@ -167,8 +167,9 @@ namespace OPCApp.TransManage.ViewModels
                 GetShipSaleList();
             }
         }
+
         /// <summary>
-        ///   查询
+        ///     查询
         /// </summary>
         public void SearchOrderBySale()
         {
@@ -243,7 +244,7 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         //打印发货单
-        public  void PrintInvoice()
+        public void PrintInvoice()
         {
             if (SaleList == null || !SaleList.Any())
             {
@@ -257,7 +258,9 @@ namespace OPCApp.TransManage.ViewModels
             ClearList();
             Refresh();
         }
+
         /*查询快递单*/
+
         public void PrintExpress()
         {
             if (ShipSaleSelected == null)
@@ -286,28 +289,30 @@ namespace OPCApp.TransManage.ViewModels
                 Invoice4Get.EndSellDate.ToShortDateString(),
                 Invoice4Get.OrderNo);
             PageResult<OPC_ShippingSale> re = AppEx.Container.GetInstance<ITransService>().GetListShip(filter);
-            if (re==null||re.Result == null || re.Result.ToList().Count == 0) return;
+            if (re == null || re.Result == null || re.Result.ToList().Count == 0) return;
             ShipSaleList = re.Result.ToList();
-            if (ShipSaleList != null && ShipSaleList.Count>0)
+            if (ShipSaleList != null && ShipSaleList.Count > 0)
             {
                 SearchRaDoc(ShipSaleList[0]);
             }
         }
-        
+
         /*查询快递单关联单据*/
-        public void SearchRaDoc(OPC_ShippingSale opcShippingSale) 
+
+        public void SearchRaDoc(OPC_ShippingSale opcShippingSale)
         {
             if (opcShippingSale == null) return;
             SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(opcShippingSale.GoodsOutCode);
             if (SaleList != null && SaleList.Any())
             {
-                var sale = SaleList.FirstOrDefault();
+                OPC_Sale sale = SaleList.FirstOrDefault();
                 PageResult<Order> re1 = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
                 OrderList = re1 == null ? new List<Order>() : re1.Result.ToList();
                 InvoiceDetail4List =
-                AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result.ToList();
+                    AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result.ToList();
             }
         }
+
         public void GetDownShip()
         {
             if (ShipSaleList == null) return;
@@ -319,7 +324,7 @@ namespace OPCApp.TransManage.ViewModels
                 InvoiceDetail4List = new List<OPC_SaleDetail>();
                 return;
             }
-            this.SearchRaDoc(saleCur);
+            SearchRaDoc(saleCur);
         }
     }
 }

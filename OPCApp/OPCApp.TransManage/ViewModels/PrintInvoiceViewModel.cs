@@ -9,7 +9,6 @@ using OPCApp.DataService.IService;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
-using OPCApp.TransManage.IService;
 using OPCApp.TransManage.Models;
 using OPCApp.TransManage.Print;
 
@@ -54,6 +53,7 @@ namespace OPCApp.TransManage.ViewModels
             get { return invoice4Get; }
             set { SetProperty(ref invoice4Get, value); }
         }
+
         //选择上面行数据时赋值的数据集
 
         public OPC_Sale SaleSelected
@@ -104,17 +104,17 @@ namespace OPCApp.TransManage.ViewModels
             Refresh();
         }
 
-        public virtual string GetFilter() 
+        public virtual string GetFilter()
         {
             return string.Format("startdate={0}&enddate={1}&orderno={2}&saleorderno={3}&pageIndex={4}&pageSize={5}",
-          Invoice4Get.StartSellDate.ToShortDateString(),
-          Invoice4Get.EndSellDate.ToShortDateString(),
-          Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo, 1, 50);
+                Invoice4Get.StartSellDate.ToShortDateString(),
+                Invoice4Get.EndSellDate.ToShortDateString(),
+                Invoice4Get.OrderNo, Invoice4Get.SaleOrderNo, 1, 50);
         }
-        protected  void Refresh()
+
+        protected void Refresh()
         {
-         
-            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(this.GetFilter(), SearchSaleStatus);
+            PageResult<OPC_Sale> re = AppEx.Container.GetInstance<ITransService>().Search(GetFilter(), SearchSaleStatus);
             SaleList = re.Result;
             if (InvoiceDetail4List != null) InvoiceDetail4List = new List<OPC_SaleDetail>();
         }
@@ -149,12 +149,12 @@ namespace OPCApp.TransManage.ViewModels
             string xsdName = "InvoiceDataSet";
             string rdlcName = "Print//PrintInvoice.rdlc";
 
-            PrintModel invoiceModel = new PrintModel();
-            List<OPC_Sale> salelist = new List<OPC_Sale>();
+            var invoiceModel = new PrintModel();
+            var salelist = new List<OPC_Sale>();
             salelist.Add(SaleSelected);
             invoiceModel.SaleDT = salelist;
-            List<Order> orderlist = new List<Order>();
-            Order Order = new Order();
+            var orderlist = new List<Order>();
+            var Order = new Order();
             orderlist.Add(Order);
             invoiceModel.OrderDT = orderlist;
             invoiceModel.SaleDetailDT = InvoiceDetail4List;

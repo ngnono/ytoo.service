@@ -17,7 +17,7 @@ namespace OPCApp.DataService.Interface.Trans
 
         bool WriteRmaRemark(OPC_SaleRMAComment saleRmaComment);
         PageResult<OPC_SaleRMAComment> GetRmaRemark(string rmaId);
-        
+
         bool WriteSaleDetailsRemark(OPC_SaleDetailsComment saleDetailsComment);
         PageResult<OPC_SaleDetailsComment> GetSaleDetailsRemark(string saleDetailId);
     }

@@ -39,7 +39,8 @@ namespace OPCApp.DataService.Impl
         {
             try
             {
-                string paras = string.Format("UserId={0}", AppEx.LoginModel.UserID); //AppEx.LoginModel.UserID); //1 update curUserId 
+                string paras = string.Format("UserId={0}", AppEx.LoginModel.UserID);
+                    //AppEx.LoginModel.UserID); //1 update curUserId 
                 IList<OPC_AuthMenu> listMenu = RestClient.Get<OPC_AuthMenu>("menu/loadmenu", paras);
                 List<OPC_AuthMenu> groupMenu1 = listMenu.Where(e => e.PraentMenuId == e.Id).ToList();
                 List<MenuGroup> groupMenu =
@@ -61,7 +62,7 @@ namespace OPCApp.DataService.Impl
             }
             catch (Exception ex)
             {
-                return null;
+                return new List<MenuGroup>();
             }
         }
 
@@ -75,7 +76,7 @@ namespace OPCApp.DataService.Impl
             }
             catch (Exception ex)
             {
-                return null;
+                return new List<OPC_AuthMenu>();
             }
         }
     }

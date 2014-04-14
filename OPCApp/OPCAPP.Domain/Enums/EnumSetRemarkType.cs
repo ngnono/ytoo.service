@@ -44,14 +44,15 @@ namespace OPCApp.Domain.Enums
         ///     填写快递单备注
         /// </summary>
         SetShipSaleRemark = 3,
-         /// <summary>
+
+        /// <summary>
         ///     填写退货单备注
         /// </summary>
         SetSaleRMARemark = 4,
-          /// <summary>
+
+        /// <summary>
         ///     填写退货单备注
         /// </summary>
         SetRMARemark = 5
-
     }
 }

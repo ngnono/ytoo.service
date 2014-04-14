@@ -68,7 +68,7 @@ namespace OPCApp.DataService.Impl.Trans
 
         public PageResult<OPC_SaleRMAComment> GetSaleRmaRemark(string rmaId)
         {
-             try
+            try
             {
                 IList<OPC_SaleRMAComment> lst = RestClient.Get<OPC_SaleRMAComment>("rma/GetCommentByRmaNo",
                     rmaId);
@@ -78,7 +78,6 @@ namespace OPCApp.DataService.Impl.Trans
             {
                 return null;
             }
-            
         }
 
         public bool WriteRmaRemark(OPC_SaleRMAComment RmaComment)

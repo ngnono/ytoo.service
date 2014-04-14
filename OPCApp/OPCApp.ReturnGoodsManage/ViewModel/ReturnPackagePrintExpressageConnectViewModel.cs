@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
@@ -39,34 +38,10 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             CommandSetRmaRemark = new DelegateCommand(SetRmaRemark);
             CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
 
-            CommandGetRmaOrOrderByShipNo = new DelegateCommand(GetRmaOrOrderByShipNo); 
+            CommandGetRmaOrOrderByShipNo = new DelegateCommand(GetRmaOrOrderByShipNo);
             InitCombo();
         }
 
-        private void SetOrderRemark()
-        {
-            string id = RMADto.RMANo;
-            var remarkWin = AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetOrderRemark);
-        }
-
-        private void GetRmaOrOrderByShipNo()
-        {
-            if (ShipSaleSelected != null)
-            {
-                RMADtoList =
-                    AppEx.Container.GetInstance<IPackageService>()
-                        .GetRmaForPrintExpressConnect(ShipSaleSelected.RmaNo)
-                        .ToList();
-                OrderList =
-                    AppEx.Container.GetInstance<IPackageService>()
-                        .GetOrderForPrintExpressConnect(ShipSaleSelected.OrderNo)
-                        .ToList();
-            }
-            ClearData();
-        }
-
-   
 
         public OPC_ShippingSale ShipSaleSelected
         {
@@ -139,13 +114,35 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
 
         public DelegateCommand CommandSetOrderRemark { get; set; }
 
+        private void SetOrderRemark()
+        {
+            string id = RMADto.RMANo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetOrderRemark);
+        }
+
+        private void GetRmaOrOrderByShipNo()
+        {
+            if (ShipSaleSelected != null)
+            {
+                RMADtoList =
+                    AppEx.Container.GetInstance<IPackageService>()
+                        .GetRmaForPrintExpressConnect(ShipSaleSelected.RmaNo)
+                        .ToList();
+                OrderList =
+                    AppEx.Container.GetInstance<IPackageService>()
+                        .GetOrderForPrintExpressConnect(ShipSaleSelected.OrderNo)
+                        .ToList();
+            }
+            ClearData();
+        }
+
         public void SetRmaRemark()
         {
             string id = RMADto.RMANo;
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
             remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetRMARemark);
         }
-
 
 
         private void ClearData()
@@ -186,7 +183,8 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
                 MessageBox.Show("请先保存快递信息", "提示");
                 return;
             }
-            bool flag = AppEx.Container.GetInstance<IPackageService>().ShipPrintComplateConnect(ShipSaleSelected.ExpressCode);
+            bool flag =
+                AppEx.Container.GetInstance<IPackageService>().ShipPrintComplateConnect(ShipSaleSelected.ExpressCode);
             MessageBox.Show(flag ? "操作成功" : "操作失败", "提示");
             if (flag)
             {

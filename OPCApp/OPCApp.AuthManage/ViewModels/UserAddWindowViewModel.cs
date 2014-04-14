@@ -12,6 +12,9 @@ namespace OPCApp.AuthManage.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserAddWindowViewModel : BaseViewModel<OPC_AuthUser>
     {
+        private IList<OPC_OrgInfo> _orgList;
+        private OPC_OrgInfo orgInfo;
+
         public UserAddWindowViewModel()
             : base("UserView")
         {
@@ -20,28 +23,29 @@ namespace OPCApp.AuthManage.ViewModels
             OrgInfo = new OPC_OrgInfo();
         }
 
-        private OPC_OrgInfo orgInfo;
         public OPC_OrgInfo OrgInfo
         {
             get { return orgInfo; }
             set { SetProperty(ref orgInfo, value); }
         }
+
+        public IList<OPC_OrgInfo> OrgList
+        {
+            get { return _orgList; }
+            set { SetProperty(ref _orgList, value); }
+        }
+
         public override bool BeforeDoOKAction(OPC_AuthUser t)
         {
-            if (OrgInfo==null)
+            if (OrgInfo == null)
             {
                 return true;
             }
             t.DataAuthId = OrgInfo.OrgID;
             t.DataAuthName = OrgInfo.OrgName;
             return true;
-        } 
-        private IList<OPC_OrgInfo> _orgList;
-        public IList<OPC_OrgInfo> OrgList
-        {
-            get { return _orgList; }
-            set { SetProperty(ref _orgList, value); }
         }
+
         protected override IBaseDataService<OPC_AuthUser> GetDataService()
         {
             return AppEx.Container.GetInstance<IAuthenticateService>();

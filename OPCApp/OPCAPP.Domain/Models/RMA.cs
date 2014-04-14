@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 
 namespace OPCApp.Domain.Models
 {
-    public partial class RMA
+    public class RMA
     {
         public int Id { get; set; }
         public string RMANo { get; set; }
@@ -13,27 +12,27 @@ namespace OPCApp.Domain.Models
         public string Reason { get; set; }
         public decimal RMAAmount { get; set; }
         public int CreateUser { get; set; }
-        public System.DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public int UpdateUser { get; set; }
-        public System.DateTime UpdateDate { get; set; }
+        public DateTime UpdateDate { get; set; }
         public string BankName { get; set; }
         public string BankAccount { get; set; }
         public string BankCard { get; set; }
         public string RejectReason { get; set; }
-        public Nullable<decimal> rebatepostfee { get; set; }
-        public Nullable<decimal> chargepostfee { get; set; }
-        public Nullable<decimal> ActualAmount { get; set; }
+        public decimal? rebatepostfee { get; set; }
+        public decimal? chargepostfee { get; set; }
+        public decimal? ActualAmount { get; set; }
         public string GiftReason { get; set; }
         public string InvoiceReason { get; set; }
         public string RebatePointReason { get; set; }
         public string PostalFeeReason { get; set; }
-        public Nullable<decimal> ChargeGiftFee { get; set; }
+        public decimal? ChargeGiftFee { get; set; }
         public string ContactPhone { get; set; }
-        public Nullable<int> ShipviaId { get; set; }
+        public int? ShipviaId { get; set; }
         public string ShipNo { get; set; }
-        public Nullable<int> UserId { get; set; }
+        public int? UserId { get; set; }
         public string MailAddress { get; set; }
-        public Nullable<int> RMAReason { get; set; }
+        public int? RMAReason { get; set; }
         public string ContactPerson { get; set; }
     }
 }

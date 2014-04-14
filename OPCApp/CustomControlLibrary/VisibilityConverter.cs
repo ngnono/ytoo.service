@@ -1,17 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Data;
+using System.Globalization;
 using System.Windows;
+using System.Windows.Data;
 
-namespace CustomControlLibrary {
-    public class VisibilityConverter :IValueConverter{
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+namespace CustomControlLibrary
+{
+    public class VisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             bool result = true;
-            try {
+            try
+            {
                 result = System.Convert.ToBoolean(value);
-            } catch {}
+            }
+            catch
+            {
+            }
 
             Visibility v;
             if (result) v = Visibility.Visible;
@@ -19,7 +24,8 @@ namespace CustomControlLibrary {
             return v;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotImplementedException();
         }
     }

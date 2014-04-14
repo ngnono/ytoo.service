@@ -40,8 +40,8 @@ namespace OPCApp.DataService.Impl.Trans
             }
             try
             {
-                PageResult<OPC_Sale> lst = RestClient.GetPage<OPC_Sale>(url, salesfilter );
-                return lst;// new PageResult<OPC_Sale>(lst, lst.Count);
+                PageResult<OPC_Sale> lst = RestClient.GetPage<OPC_Sale>(url, salesfilter);
+                return lst; // new PageResult<OPC_Sale>(lst, lst.Count);
             }
             catch (Exception ex)
             {
@@ -53,8 +53,9 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                PageResult<OPC_ShippingSale> shipSales = RestClient.GetPage<OPC_ShippingSale>("trans/GetShippingSale", filter + "&pageIndex=1&pageSize=50");
-                return shipSales;// new PageResult<OPC_ShippingSale>(shipSales, shipSales.Count);
+                PageResult<OPC_ShippingSale> shipSales = RestClient.GetPage<OPC_ShippingSale>("trans/GetShippingSale",
+                    filter + "&pageIndex=1&pageSize=50");
+                return shipSales; // new PageResult<OPC_ShippingSale>(shipSales, shipSales.Count);
             }
             catch (Exception ex)
             {

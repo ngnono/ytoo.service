@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Windows.Documents;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface;
 using OPCApp.DataService.Interface.Trans;
@@ -16,18 +15,28 @@ namespace OPCApp.AuthManage.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class OrgAddWindowViewMode : BaseViewModel<OPC_OrgInfo>
     {
+        private IList<KeyValue> _storeOrSectionList;
+
         public OrgAddWindowViewMode()
             : base("OrgView")
         {
             Model = new OPC_OrgInfo();
-            OrgTypeList = new List<KeyValue>() { new KeyValue(0, "组织机构"), new KeyValue(5, "门店"), new KeyValue(10, "专柜") };
+            OrgTypeList = new List<KeyValue> {new KeyValue(0, "组织机构"), new KeyValue(5, "门店"), new KeyValue(10, "专柜")};
             OrgTypeChangeCommand = new DelegateCommand<int?>(OrgTypeChange);
-           
+        }
+
+        public DelegateCommand<int?> OrgTypeChangeCommand { get; set; }
+        public List<KeyValue> OrgTypeList { get; set; }
+
+        public IList<KeyValue> StoreOrSectionList
+        {
+            get { return _storeOrSectionList; }
+            set { SetProperty(ref _storeOrSectionList, value); }
         }
 
         public void OrgTypeChange(int? orgType)
         {
-           GetOrgRefreshStoreOrSection(orgType);
+            GetOrgRefreshStoreOrSection(orgType);
         }
 
         public void GetOrgRefreshStoreOrSection(int? orgType)
@@ -44,16 +53,6 @@ namespace OPCApp.AuthManage.ViewModels
                     StoreOrSectionList = new List<KeyValue>();
                     break;
             }
-
-        }
-
-        public DelegateCommand<int?> OrgTypeChangeCommand { get; set; }
-        public List<KeyValue> OrgTypeList { get; set; }
-        private IList<KeyValue> _storeOrSectionList;
-        public IList<KeyValue> StoreOrSectionList
-        {
-            get { return _storeOrSectionList; }
-            set { SetProperty(ref _storeOrSectionList, value); }
         }
 
 

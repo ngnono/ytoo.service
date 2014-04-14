@@ -1,20 +1,19 @@
-
-using System.ComponentModel.DataAnnotations;
+ï»¿using System.ComponentModel.DataAnnotations;
 
 namespace OPCApp.Domain.Models
 {
     public class OPC_OrgInfo
     {
         public string OrgID { get; set; }
-          [Required(ErrorMessage = "×éÖ¯»ú¹¹Ãû³Æ²»ÄÜÎª¿Õ£¡")]
+
+        [Required(ErrorMessage = "ï¿½ï¿½Ö¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½Îªï¿½Õ£ï¿½")]
         public string OrgName { get; set; }
+
         public string ParentID { get; set; }
         public int? StoreOrSectionID { get; set; }
         public string StoreOrSectionName { get; set; }
         public int? OrgType { get; set; }
         public bool? IsDel { get; set; }
-
-
 
         #region IEntity Members
 

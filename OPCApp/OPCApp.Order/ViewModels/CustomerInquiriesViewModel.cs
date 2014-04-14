@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Customer;
@@ -19,23 +18,8 @@ namespace OPCApp.Customer.ViewModels
     [Export("CustomerInquiriesViewModel", typeof (CustomerInquiriesViewModel))]
     public class CustomerInquiriesViewModel : BindableBase
     {
-
         private CustomerReturnSearchRmaViewModel _customerReturnSearchRmaViewModel;
-        [Import]
-        public CustomerReturnSearchRmaViewModel CustomerReturnSearchRmaViewModel
-        {
-            get
-            {
-                _customerReturnSearchRmaViewModel.IsShowCustomerAgreeBtn = false;
-                return _customerReturnSearchRmaViewModel;
-            }
-            set
-            {
-              
-                SetProperty(ref _customerReturnSearchRmaViewModel, value);
-                _customerReturnSearchRmaViewModel.IsShowCustomerAgreeBtn = false;
-            }
-        }
+
         public CustomerInquiriesViewModel()
         {
             //CustomerReturnSearchRmaViewModel.IsShowCustomerAgreeBtn = true;
@@ -55,38 +39,58 @@ namespace OPCApp.Customer.ViewModels
             ShippingGet = new ShippingGet();
         }
 
-        public void SetRemarkOrder()
+        [Import]
+        public CustomerReturnSearchRmaViewModel CustomerReturnSearchRmaViewModel
         {
-            //被选择的对象
-            string id = SelectOrder.OrderNo;
-            var remarkWin = AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetOrderRemark);
+            get
+            {
+                _customerReturnSearchRmaViewModel.IsShowCustomerAgreeBtn = false;
+                _customerReturnSearchRmaViewModel.IsShowCustomerReViewBtn = false;
+                return _customerReturnSearchRmaViewModel;
+            }
+            set
+            {
+                SetProperty(ref _customerReturnSearchRmaViewModel, value);
+                //_customerReturnSearchRmaViewModel.IsShowCustomerAgreeBtn = false;
+            }
         }
 
         public DelegateCommand CommandSetShipSaleRemark { get; set; }
 
-        public void ShipSaleRemark()
-        {
-            //被选择的对象
-            string id = SelectShipping.ExpressCode;
-            var remarkWin = AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetShipSaleRemark);
-        }
         public DelegateCommand CommandSetRemark { get; set; }
+
+        public IList<KeyValue> StoreList { get; set; }
+        public IList<KeyValue> PaymentTypeList { get; set; }
+        public IList<KeyValue> BrandList { get; set; }
+
+        public IList<KeyValue> OrderStatusList { get; set; }
+
+
+        public IList<KeyValue> OutGoodsTypeList { get; set; }
+
+        public List<ShipVia> ShipViaList { get; set; }
+
+        public DelegateCommand CommandGetOrder { get; set; }
+        public DelegateCommand CommandGetSaleByOrderId { get; set; }
+        public DelegateCommand CommandGetSaleDetailBySaleId { get; set; }
+
+        public DelegateCommand CommandGetShipping { get; set; }
+        public DelegateCommand CommandGetOrderByShippingId { get; set; }
+        public DelegateCommand CommandGetSaleByOrderNoShipping { get; set; }
 
         #region Tab1页签
 
         //Tab1选中的Order中的数据集
         private OrderGet _orderGet;
-        private IEnumerable<OPCApp.Domain.Models.Order> _orderList;
+        private IEnumerable<Order> _orderList;
         private IEnumerable<OPC_SaleDetail> _saleDetailList;
         private IEnumerable<OPC_Sale> _saleList;
-        private OPCApp.Domain.Models.Order _selectOrder;
+        private Order _selectOrder;
 
         //Tab1选中的Sale中的数据集
         private OPC_Sale _selectSale;
 
-        public OPCApp.Domain.Models.Order SelectOrder
+        public Order SelectOrder
         {
             get { return _selectOrder; }
             set { SetProperty(ref _selectOrder, value); }
@@ -100,7 +104,7 @@ namespace OPCApp.Customer.ViewModels
 
         //Tab1中Grid数据集1
 
-        public IEnumerable<OPCApp.Domain.Models.Order> OrderList
+        public IEnumerable<Order> OrderList
         {
             get { return _orderList; }
             set { SetProperty(ref _orderList, value); }
@@ -134,20 +138,23 @@ namespace OPCApp.Customer.ViewModels
         public void GetOrder()
         {
             OrderList = new List<Order>();
-            if (OrderGet.PaymentType=="-1")
-                OrderGet.PaymentType="";
+            if (OrderGet.PaymentType == "-1")
+                OrderGet.PaymentType = "";
             if (OrderGet.OutGoodsType == "-1")
                 OrderGet.OutGoodsType = "";
-            
+
 
             string orderfilter =
                 string.Format(
                     "orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}",
-                    OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString() , OrderGet.EndCreateDate.ToShortDateString() ,
-                    string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId, string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status ,OrderGet.PaymentType,OrderGet.OutGoodsType,
+                    OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString(),
+                    OrderGet.EndCreateDate.ToShortDateString(),
+                    string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId,
+                    string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status,
+                    OrderGet.PaymentType, OrderGet.OutGoodsType,
                     OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
-            
-            var re=AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
+
+            IList<Order> re = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
             if (re != null)
             {
                 OrderList = re.ToList();
@@ -162,7 +169,7 @@ namespace OPCApp.Customer.ViewModels
                 {
                     return;
                 }
-                string orderNo = string.Format("orderID={0}&pageIndex={1}&pageSize={2}", SelectOrder.OrderNo,1,30);
+                string orderNo = string.Format("orderID={0}&pageIndex={1}&pageSize={2}", SelectOrder.OrderNo, 1, 30);
                 //这个工作状态
                 SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderNo).Result;
                 if (SaleList != null && SaleList.Count() > 0)
@@ -254,15 +261,18 @@ namespace OPCApp.Customer.ViewModels
                 string.Format(
                     "OrderNo={0}&ExpressNo={1}&StartGoodsOutDate={2}&EndGoodsOutDate={3}&OutGoodsCode={4}&StoreId={5}&ShippingStatus={6}&CustomerPhone={7}&BrandId={8}&pageIndex={9}&pageSize={10}",
                     ShippingGet.OrderNo, ShippingGet.ExpressNo, ShippingGet.StartGoodsOutDate.ToShortDateString(),
-                    ShippingGet.EndGoodsOutDate.ToShortDateString(), ShippingGet.OutGoodsCode, string.IsNullOrEmpty(ShippingGet.StoreId) ? "-1" : ShippingGet.StoreId,
-                    string.IsNullOrEmpty(ShippingGet.ShippingStatus) ? "-1" : ShippingGet.ShippingStatus, ShippingGet.CustomerPhone, string.IsNullOrEmpty(ShippingGet.BrandId) ? "-1" : ShippingGet.BrandId, 1, 100);
+                    ShippingGet.EndGoodsOutDate.ToShortDateString(), ShippingGet.OutGoodsCode,
+                    string.IsNullOrEmpty(ShippingGet.StoreId) ? "-1" : ShippingGet.StoreId,
+                    string.IsNullOrEmpty(ShippingGet.ShippingStatus) ? "-1" : ShippingGet.ShippingStatus,
+                    ShippingGet.CustomerPhone, string.IsNullOrEmpty(ShippingGet.BrandId) ? "-1" : ShippingGet.BrandId, 1,
+                    100);
             try
             {
-                ShippingList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetShipping(shippingfilter).Result;
+                ShippingList =
+                    AppEx.Container.GetInstance<ICustomerInquiriesService>().GetShipping(shippingfilter).Result;
             }
             catch (Exception ex)
             {
-                
             }
         }
 
@@ -270,13 +280,15 @@ namespace OPCApp.Customer.ViewModels
         {
             try
             {
-                if (SelectShipping == null )
+                if (SelectShipping == null)
                 {
                     return;
                 }
                 //这个工作状态
                 OrderListShipping =
-                    AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderByShippingId(string.Format("shippingNo={0}", SelectShipping.ExpressCode)).Result;
+                    AppEx.Container.GetInstance<ICustomerInquiriesService>()
+                        .GetOrderByShippingId(string.Format("shippingNo={0}", SelectShipping.ExpressCode))
+                        .Result;
             }
             catch (Exception ex)
             {
@@ -295,25 +307,21 @@ namespace OPCApp.Customer.ViewModels
 
         #endregion
 
-        public IList<KeyValue> StoreList { get; set; }
-        public IList<KeyValue> PaymentTypeList { get; set; }
-        public IList<KeyValue> BrandList { get; set; }
+        public void SetRemarkOrder()
+        {
+            //被选择的对象
+            string id = SelectOrder.OrderNo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetOrderRemark);
+        }
 
-        public IList<KeyValue> OrderStatusList { get; set; }
-
-      
-
-        public IList<KeyValue> OutGoodsTypeList { get; set; }
-
-        public List<ShipVia> ShipViaList { get; set; }
-
-        public DelegateCommand CommandGetOrder { get; set; }
-        public DelegateCommand CommandGetSaleByOrderId { get; set; }
-        public DelegateCommand CommandGetSaleDetailBySaleId { get; set; }
-
-        public DelegateCommand CommandGetShipping { get; set; }
-        public DelegateCommand CommandGetOrderByShippingId { get; set; }
-        public DelegateCommand CommandGetSaleByOrderNoShipping { get; set; }
+        public void ShipSaleRemark()
+        {
+            //被选择的对象
+            string id = SelectShipping.ExpressCode;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetShipSaleRemark);
+        }
 
         public void InitCombo()
         {

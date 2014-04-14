@@ -1,13 +1,11 @@
-using System;
-using OPCApp.Domain.Models;
+ï»¿using System;
 
 namespace OPCApp.Domain.ReturnGoods
 {
-    //ÍË»õ°ü¹ü¹ÜÀí ´òÓ¦¿ìµÝµ¥
+    //ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ó¦ï¿½ï¿½Ýµï¿½
     public class RmaExpressDto
     {
-
-         public RmaExpressDto()
+        public RmaExpressDto()
         {
             StartDate = DateTime.Now;
             EndDate = DateTime.Now;
@@ -16,24 +14,25 @@ namespace OPCApp.Domain.ReturnGoods
         public string OrderNo { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+
         public override string ToString()
         {
-            return string.Format("StartDate={0}&EndDate={1}&OrderNo={2}&pageIndex={3}&pageSize={4}", StartDate, EndDate, OrderNo,1,300);
+            return string.Format("StartDate={0}&EndDate={1}&OrderNo={2}&pageIndex={3}&pageSize={4}", StartDate, EndDate,
+                OrderNo, 1, 300);
         }
     }
 
     public class RmaExpressSaveDto
     {
-        /*¿ìµÝ¹«Ë¾ID*/
+        /*ï¿½ï¿½Ý¹ï¿½Ë¾ID*/
         public int ShipViaID { get; set; }
-        /*¿ìµÝ¹«Ë¾*/
+        /*ï¿½ï¿½Ý¹ï¿½Ë¾*/
         public string ShipViaName { get; set; }
-        /*Êµ¼ÊÔË·Ñ*/
+        /*Êµï¿½ï¿½ï¿½Ë·ï¿½*/
         public double ShippingFee { get; set; }
-        /*¿ìµÝµ¥ºÅ*/
+        /*ï¿½ï¿½Ýµï¿½ï¿½ï¿½*/
         public string ShippingCode { get; set; }
-        /*ÍË»õµ¥*/
+        /*ï¿½Ë»ï¿½ï¿½ï¿½*/
         public string RmaNo { get; set; }
     }
-
 }

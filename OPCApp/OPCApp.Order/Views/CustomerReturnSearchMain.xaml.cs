@@ -7,7 +7,7 @@ namespace OPCApp.Customer.Views
     /// <summary>
     ///     PrintInvoiceViewModel.xaml 的交互逻辑
     /// </summary>
-    [Export("CustomerReturnSearch", typeof(UserControl))]
+    [Export("CustomerReturnSearch", typeof (UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class CustomerReturnSearchMain
     {
@@ -21,6 +21,6 @@ namespace OPCApp.Customer.Views
         {
             set { DataContext = value; }
             get { return DataContext as CustomerReturnGoodsMainViewModel; }
-        }     
+        }
     }
 }

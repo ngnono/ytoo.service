@@ -1,11 +1,6 @@
 ﻿using System.Collections.Generic;
-using Intime.OPC.ApiClient.Annotations;
 using OPCApp.Domain.Customer;
 using OPCAPP.Domain.Dto.ReturnGoods;
-using OPCApp.Domain.Enums;
-using OPCApp.Domain.Models;
-using OPCApp.Infrastructure;
-
 
 namespace OPCApp.DataService.Interface.RMA
 {
@@ -13,7 +8,7 @@ namespace OPCApp.DataService.Interface.RMA
     {
         //退货入收银
         IList<RMADto> GetRmaForReturnCash(ReturnGoodsCommonSearchDto returnGoodsCommonSearchDto);
-        bool SetReturnGoodsCash(List<string>listRmaNo);
+        bool SetReturnGoodsCash(List<string> listRmaNo);
         bool SetReturnGoodsComplete(List<string> listRmaNo);
         //退货入库
         bool SetReturnGoodsInStorage(List<string> listRmaNo);
@@ -26,6 +21,5 @@ namespace OPCApp.DataService.Interface.RMA
         IList<RMADto> GetRmaForShopperReturnOrReceivingPrintDoc(ReturnGoodsCommonSearchDto returnGoodsCommonSearchDto);
         //已完成退货单查询
         IList<RMADto> GetRmaForCompletedReturnGoods(ReturnGoodsCommonSearchDto returnGoodsCommonSearchDto);
-       
     }
 }

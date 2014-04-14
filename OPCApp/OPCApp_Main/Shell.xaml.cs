@@ -7,7 +7,7 @@ using Microsoft.Practices.Prism.Regions;
 
 namespace OPCApp.Main
 {
-    [Export(typeof(MetroWindow))]
+    [Export(typeof (MetroWindow))]
     public partial class Shell : MetroWindow, IPartImportsSatisfiedNotification
     {
         [Import(AllowRecomposition = false)] public IModuleManager ModuleManager;
@@ -26,7 +26,6 @@ namespace OPCApp.Main
 
         private void NavigationItemsControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-           
         }
     }
 }

@@ -23,15 +23,15 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Background="LightGray">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Background="LightGray">
 
-                    <Button Background="LightGray"  Command="{Binding CommandReturnGoodsSearch}" Width="100">
+                    <Button Background="LightGray" Command="{Binding CommandReturnGoodsSearch}" Width="100">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Image/查询.png" Stretch="None" />
                             <TextBlock Height="20" Width="50" VerticalAlignment="Center" HorizontalAlignment="Left">查询</TextBlock>
                         </StackPanel>
                     </Button>
-                
+
 
                 </StackPanel>
             </StackPanel>
@@ -39,23 +39,23 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="购买时间" Margin="0 5" />
                     <DatePicker Width="150" Foreground="Blue"
-                                        SelectedDate="{Binding ReturnGoodsGet.StartDate}" />
+                                SelectedDate="{Binding ReturnGoodsGet.StartDate}" />
                     <TextBlock Text="至" Margin="0 5" />
                     <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsGet.EndDate}" />
                     <TextBlock Text="订单号" Margin="0 5" />
                     <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ReturnGoodsGet.OrderNo}" />
+                             Text="{Binding ReturnGoodsGet.OrderNo}" />
                     <TextBlock Text="顾客电话" Margin="0 5" />
                     <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ReturnGoodsGet.Telephone}" />
+                             Text="{Binding ReturnGoodsGet.Telephone}" />
                     <TextBlock Text="品牌" Margin="0 5" Width="60" />
                     <ComboBox Height="25" ItemsSource="{Binding BrandList}" Width="130"
-                                      DisplayMemberPath="Value" SelectedValuePath="Key"
-                                      SelectedValue="{Binding ReturnGoodsGet.BandId}" />
+                              DisplayMemberPath="Value" SelectedValuePath="Key"
+                              SelectedValue="{Binding ReturnGoodsGet.BandId}" />
                     <TextBlock Text="支付方式" Width="60" Margin="0 5" />
                     <ComboBox Height="25" ItemsSource="{Binding PaymentTypeList}" Width="100"
-                                      DisplayMemberPath="Value" SelectedValuePath="Key"
-                                      SelectedValue="{Binding ReturnGoodsGet.PayType}" />
+                              DisplayMemberPath="Value" SelectedValuePath="Key"
+                              SelectedValue="{Binding ReturnGoodsGet.PayType}" />
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Row="2">
@@ -63,8 +63,9 @@
                     <TextBlock Text="订单" />
                 </StackPanel>
             </StackPanel>
-            <DataGrid Grid.Row="3" ItemsSource="{Binding SaleRmaList}" IsReadOnly="True" SelectedItem="{Binding SaleRma}"
-                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+            <DataGrid Grid.Row="3" ItemsSource="{Binding SaleRmaList}" IsReadOnly="True"
+                      SelectedItem="{Binding SaleRma}"
+                      AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding CommandGetDown}" />
@@ -72,15 +73,15 @@
 
                 </i:Interaction.Triggers>
                 <DataGrid.Columns>
-                  
+
                     <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}"
-                                                Binding="{Binding PaymentMethodName}" />
+                                        Binding="{Binding PaymentMethodName}" />
                     <DataGridTextColumn Header="应付款总计" Binding="{Binding MustPayTotal}" />
                     <DataGridTextColumn Header="退货总金额" Binding="{Binding RealRMASumMoney}" />
-                    <DataGridTextColumn Header="物流备注" Binding="{Binding TransMemo}"/>
+                    <DataGridTextColumn Header="物流备注" Binding="{Binding TransMemo}" />
                     <DataGridTextColumn Header="购买时间"
-                                                Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                        Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
                     <DataGridTextColumn Header="收货人地址" Binding="{Binding CustomerAddress}" />
                     <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
@@ -95,7 +96,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="录入"
-                                                Command="{Binding Path=DataContext.CommandSetOrderRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                        Command="{Binding Path=DataContext.CommandSetOrderRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -108,22 +109,22 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="门店承担运费" Margin="0 5" Height="17" />
                     <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding RmaPost.StoreFee}" />
+                             Text="{Binding RmaPost.StoreFee}" />
                     <TextBlock Text="顾客承担运费" Margin="0 5" Height="17" />
                     <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding RmaPost.CustomFee}" />
+                             Text="{Binding RmaPost.CustomFee}" />
                     <TextBlock Text="赔偿" Margin="0 5" Height="17" />
                     <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding RmaPost.RealRMASumMoney}" />
-                  
-                  
+                             Text="{Binding RmaPost.RealRMASumMoney}" />
+
+
                     <Button Height="30" Content="客服退货" FontSize="14" Margin="20 5 0 5" Width="200"
-                                    Command="{Binding CommandCustomerReturnGoodsSave}" RenderTransformOrigin="1.55,0.5" />
+                            Command="{Binding CommandCustomerReturnGoodsSave}" RenderTransformOrigin="1.55,0.5" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="  退货备注     " Margin="0 5" Height="17" />
                     <TextBox Height="50" Width="768" Foreground="Blue" Background="White"
-                                     Text="{Binding RmaPost.Remark}" />
+                             Text="{Binding RmaPost.Remark}" />
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Row="5">
@@ -131,40 +132,41 @@
                     <TextBlock Text="订单明细" />
                 </StackPanel>
             </StackPanel>
-            <DataGrid Grid.Row="6" CanUserAddRows="False"  ItemsSource="{Binding OrderItemList}"  SelectedItem="{Binding OrderItem}"  AutoGenerateColumns="False" >
+            <DataGrid Grid.Row="6" CanUserAddRows="False" ItemsSource="{Binding OrderItemList}"
+                      SelectedItem="{Binding OrderItem}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn IsReadOnly="True"  Header="选中" SortMemberPath="IsSelected" Width="60">
+                    <DataGridTemplateColumn IsReadOnly="True" Header="选中" SortMemberPath="IsSelected" Width="60">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      Command="{Binding Path=DataContext.CommandGetDownDetail,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                          Command="{Binding Path=DataContext.CommandGetDownDetail,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                          VerticalAlignment="Center" HorizontalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="款号" Width="150" Binding="{Binding StoreItemNo}"
-                                                ElementStyle="{StaticResource CellRight}" />
+                                        ElementStyle="{StaticResource CellRight}" />
                     <DataGridTextColumn IsReadOnly="True" Header="规格" Binding="{Binding SizeValueName}"
-                                                ElementStyle="{StaticResource CellRight}" />
+                                        ElementStyle="{StaticResource CellRight}" />
                     <DataGridTextColumn IsReadOnly="True" Header="色码" Binding="{Binding ColorValueName}" />
                     <DataGridTextColumn IsReadOnly="True" Header="销售价" Binding="{Binding ItemPrice}"
-                                                ElementStyle="{StaticResource CellRight}" />
+                                        ElementStyle="{StaticResource CellRight}" />
                     <DataGridTextColumn IsReadOnly="True" Header="销售数量" Binding="{Binding Quantity}"
-                                                ElementStyle="{StaticResource CellRight}" />
+                                        ElementStyle="{StaticResource CellRight}" />
                     <DataGridTextColumn IsReadOnly="True" Header="分类" Binding="{Binding GoodsType}"
-                                                ElementStyle="{StaticResource CellRight}" />
+                                        ElementStyle="{StaticResource CellRight}" />
                     <DataGridTextColumn IsReadOnly="True" Header="品牌" Binding="{Binding BrandName}"
-                                                ElementStyle="{StaticResource CellRight}" />
+                                        ElementStyle="{StaticResource CellRight}" />
                     <DataGridTextColumn IsReadOnly="True" Header="吊牌价" Binding="{Binding UnitPrice}"
-                                                ElementStyle="{StaticResource CellRight}" />
+                                        ElementStyle="{StaticResource CellRight}" />
                     <DataGridTextColumn IsReadOnly="True" Header="现价" Binding="{Binding ItemPrice}"
-                                                ElementStyle="{StaticResource CellRight}" />
+                                        ElementStyle="{StaticResource CellRight}" />
 
                     <DataGridTextColumn IsReadOnly="True" Header="促销价格" Binding="{Binding PromotionPrice}"
-                                                ElementStyle="{StaticResource CellRight}" />
+                                        ElementStyle="{StaticResource CellRight}" />
                     <DataGridTextColumn Header="商品编码" Binding="{Binding ProductId}" />
                     <DataGridTextColumn IsReadOnly="True" Header="退货数量" Binding="{Binding ReturnCount}"
-                                                ElementStyle="{StaticResource CellRight}" />
+                                        ElementStyle="{StaticResource CellRight}" />
                     <DataGridTemplateColumn IsReadOnly="False" Header="需要退货数量" Width="1*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -173,12 +175,12 @@
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
-                                <ComboBox Tag="cbxList" x:Name="cbxList"  DropDownOpened="cbxList_DropDownOpened"
-                                      ItemsSource="{Binding Path=DataContext.ReturnCountList,RelativeSource={RelativeSource AncestorType={x:Type UserControl},Mode=FindAncestor}}" 
-                                      SelectedValue="{Binding NeedReturnCount}" />
+                                <ComboBox Tag="cbxList" x:Name="cbxList" DropDownOpened="cbxList_DropDownOpened"
+                                          ItemsSource="{Binding Path=DataContext.ReturnCountList,RelativeSource={RelativeSource AncestorType={x:Type UserControl},Mode=FindAncestor}}"
+                                          SelectedValue="{Binding NeedReturnCount}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
-                   
+
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
 
