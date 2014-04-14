@@ -163,12 +163,25 @@ namespace Intime.OPC.WebApi.Controllers
 
 
         [HttpGet]
-        public IHttpActionResult GetShippingBackByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
+        public IHttpActionResult GetByReturnGoodsShippingBack([FromUri] ReturnGoodsInfoRequest request)
         {
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _orderService.GetShippingBackByReturnGoodsInfo(request); }, "查询订单信息失败");
         }
 
+        #endregion
+
+        #region 客服退货查询-退货赔偿退回
+        [HttpGet]
+        public IHttpActionResult GetByReturnGoodsCompensate([FromUri] ReturnGoodsInfoRequest request)
+        {
+            var userId = GetCurrentUserID();
+            return DoFunction(() => _orderService.GetSaleRmaByReturnGoodsCompensate(request));
+            //return DoFunction(() => _saleRmaService.GetByReturnGoodsCompensate(request));
+            //return _orderService.GetShippingBackByReturnGoodsInfo(request);
+        }
+
+        //ReturnGoodsInfoRequest
         #endregion
 
         #region 备注
