@@ -46,8 +46,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                IList<RmaDetail> lst = RestClient.Get<RmaDetail>("rma/GetRmaDetailByRmaNo", string.Format("rmaNo={0}", rmaNo));
-                return lst;
+                var lst = RestClient.GetPage<RmaDetail>("rma/GetRmaDetailByRmaNo", string.Format("rmaNo={0}&pageIndex={1}&pageSize={2}", rmaNo,1,300));
+                return lst.Result;
             }
             catch (Exception ex)
             {
@@ -59,7 +59,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                return RestClient.Post("rma/ShippingReceiveGoods", listRmoNo);
+                return RestClient.Post("custom/ShippingReceiveGoods", listRmoNo);
             }
             catch (Exception ex)
             {
@@ -96,8 +96,8 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                var lst = RestClient.Get<RMADto>("custom/GetRmaPackVerifyByPack", packageReceive.ToString());
-                return lst;
+                var lst = RestClient.GetPage<RMADto>("custom/GetRmaPackVerifyByPack", packageReceive.ToString());
+                return lst.Result;
             }
             catch (Exception ex)
             {
@@ -108,41 +108,116 @@ namespace OPCApp.DataService.Impl.Trans
       #region 退回打印快递单
         public IList<OPC_ShippingSale> GetShipListWithReturnGoods(RmaExpressDto rmaExpress)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var lst = RestClient.GetPage<OPC_ShippingSale>("custom/GetRmaByPackPrintPress", rmaExpress.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<OPC_ShippingSale>();
+            }
         }
 
         public bool UpdateShipWithReturnExpress(RmaExpressSaveDto rmaExpressSaveDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return RestClient.Post("custom/UpdateShipRmaVia",rmaExpressSaveDto);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public IList<RMADto> GetRmaForPrintExpress(string rmaNo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var lst = RestClient.GetPage<RMADto>("custom/GetRmaByPackPrintPress", string.Format("rmaNo={0}&pageIndex={1},pageSize={2}",rmaNo,1,300));
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
         }
 
-        public bool ShipPrintComplete(string rmaNO)
+        public bool ShipPrintComplete(string shippingCode)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return RestClient.Post("custom/PintRmaShipping", new { shippingCode = shippingCode });
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
-        public bool ShipPrint(string rmaNo)
+        public bool ShipPrint(string shippingCode)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return RestClient.Post("custom/PintRmaShippingOver", new { shippingCode = shippingCode });
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
       #endregion
         #region 完成快递单交接
         public IList<RMADto> GetRmaForPrintExpressConnect(string rmaNo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var lst = RestClient.GetPage<RMADto>("custom/GetRmaByPackPrintPress", string.Format("rmaNo={0}&pageIndex={1},pageSize={2}", rmaNo, 1, 300));
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
         }
 
         public IList<Order> GetOrderForPrintExpressConnect(string orderNo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var order = RestClient.GetSingle<Order>("order/GetOrderByOderNo", string.Format("orderNo={0}", orderNo));
+                return  new List<Order>(){ order};
+            }
+            catch (Exception ex)
+            {
+                return new List<Order>();
+            }
         }
 
+        public IList<OPC_ShippingSale> GetShipListWithReturnGoodsConnect(RmaExpressDto rmaExpress)
+        {
+            try
+            {
+                var lst = RestClient.GetPage<OPC_ShippingSale>("custom/GetRmaShippingPrintedByPack", rmaExpress.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<OPC_ShippingSale>();
+            }
+        }
+        public bool ShipPrintComplateConnect(string shippingCode)
+        {
+            try
+            {
+                return RestClient.Post("custom/PintRmaShippingOverConnect", new { shippingCode = shippingCode });
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         #endregion
-    
     }
 }

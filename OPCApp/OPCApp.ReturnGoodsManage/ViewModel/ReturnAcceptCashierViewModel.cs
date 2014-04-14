@@ -35,7 +35,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             if (VerifyRmaSelected())
             {
                 var listRmaNo = GetRmoNoList();
-                var falg = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().SetReturnGoodsComplete(listRmaNo);
+                var falg = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().SetReturnGoodsCash(listRmaNo);
                 MessageBox.Show(falg?"退货入收银成功":"退货入收银失败", "提示");
                 Refresh();
             }

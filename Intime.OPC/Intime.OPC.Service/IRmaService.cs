@@ -66,5 +66,30 @@ namespace Intime.OPC.Service
         void SetRmaCash(string rmaNo);
 
         void SetRmaCashOver(string rmaNo);
+        /// <summary>
+        /// 退货入库  查询 退货单
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>PageResult{RMADto}.</returns>
+        PageResult<RMADto> GetRmaReturnByExpress(RmaExpressRequest request);
+
+        /// <summary>
+        /// 退货入库
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        void SetRmaShipInStorage(string rmaNo);
+
+        /// <summary>
+        /// 打印退货单，（物流审核通过）
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>PageResult{RMADto}.</returns>
+        PageResult<RMADto> GetRmaPrintByExpress(RmaExpressRequest request);
+
+        /// <summary>
+        /// 设置打印状态
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        void SetRmaPint(string rmaNo);
     }
 }
