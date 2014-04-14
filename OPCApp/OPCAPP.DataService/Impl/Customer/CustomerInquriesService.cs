@@ -69,7 +69,7 @@ namespace OPCApp.DataService.Impl.Customer
         {
             try
             {
-                return RestClient.Post("rma/SetSaleRmaServiceApprove", string.Format("rmaNo={0}", rmaNo));
+                return RestClient.Post("custom/AgreeReturnGoods", string.Format("rmaNo={0}", rmaNo));
             }
             catch (Exception ex)
             {
