@@ -30,7 +30,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var linq = Context.Set<FavoriteEntity>().Where(f => f.Status == (int)DataStatus.Normal && f.User_Id == authuid
                 && f.FavoriteSourceType == (int)SourceType.Store)
                         .Join(Context.Set<IMS_AssociateEntity>(), o => o.FavoriteSourceId, i => i.Id, (o, i) => i)
-                        .Join(Context.Set<UserEntity>().Where(u => u.Id == authuid), o => o.UserId, i => i.Id, (o, i) => new { A = o, U = i });
+                        .Join(Context.Set<UserEntity>(), o => o.UserId, i => i.Id, (o, i) => new { A = o, U = i });
 
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
@@ -129,17 +129,28 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 default:
                     return this.RenderError(r => r.Message = "收藏类型不支持");
             }
-            _favorRepo.Insert(new FavoriteEntity()
+            var favorEntity = Context.Set<FavoriteEntity>().Where(f => f.FavoriteSourceType == sourceType &&
+                        f.FavoriteSourceId == request.Id &&
+                        f.Store_Id == request.StoreId).FirstOrDefault();
+            if (favorEntity == null)
             {
-                CreatedDate = DateTime.Now,
-                CreatedUser = authuid,
-                Description = string.Empty,
-                FavoriteSourceId = request.Id,
-                Status = (int)DataStatus.Normal,
-                User_Id = authuid,
-                Store_Id = request.StoreId,
-                FavoriteSourceType = sourceType
-            });
+                _favorRepo.Insert(new FavoriteEntity()
+                {
+                    CreatedDate = DateTime.Now,
+                    CreatedUser = authuid,
+                    Description = string.Empty,
+                    FavoriteSourceId = request.Id,
+                    Status = (int)DataStatus.Normal,
+                    User_Id = authuid,
+                    Store_Id = request.StoreId,
+                    FavoriteSourceType = sourceType
+                });
+            }
+            else
+            {
+                favorEntity.Status = (int)DataStatus.Normal;
+                _favorRepo.Update(favorEntity);
+            }
             return this.RenderSuccess<dynamic>(null);
         }
 
@@ -163,6 +174,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
             var favorEntity = Context.Set<FavoriteEntity>().Where(f => f.FavoriteSourceType == sourceType
                             && f.FavoriteSourceId == request.Type
+                            && f.Store_Id == request.StoreId
                             && f.User_Id == authuid).FirstOrDefault();
             if (favorEntity == null)
                 return this.RenderSuccess<dynamic>(null);
