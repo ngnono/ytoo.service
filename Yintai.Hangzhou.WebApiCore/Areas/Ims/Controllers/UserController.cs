@@ -38,7 +38,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var result = linq.ToList().Select(l => new
             {
                 id = l.A.Id,
-                image = l.U.Logo,
+                image = l.U.Logo.Image100Url(),
                 name = l.U.Nickname,
                 phone = l.U.Mobile
             });
