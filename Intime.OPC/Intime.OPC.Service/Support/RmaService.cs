@@ -18,7 +18,8 @@ namespace Intime.OPC.Service.Support
         private readonly IConnectProduct _connectProduct;
         private readonly ISaleRMARepository _saleRmaRepository;
         private IStockRepository _stockRepository;
-        public RmaService(IRMARepository repository, IRmaDetailRepository rmaDetailRepository, IRmaCommentRepository rmaCommentRepository, IConnectProduct connectProduct, ISaleRMARepository saleRmaRepository, IStockRepository stockRepository)
+        private IAccountService _accountService;
+        public RmaService(IRMARepository repository, IRmaDetailRepository rmaDetailRepository, IRmaCommentRepository rmaCommentRepository, IConnectProduct connectProduct, ISaleRMARepository saleRmaRepository, IStockRepository stockRepository, IAccountService accountService)
             : base(repository)
         {
             _rmaDetailRepository = rmaDetailRepository;
@@ -26,7 +27,7 @@ namespace Intime.OPC.Service.Support
             _connectProduct = connectProduct;
             _saleRmaRepository = saleRmaRepository;
             _stockRepository = stockRepository;
-            
+            _accountService = accountService;
         }
 
         #region IRmaService Members
@@ -46,10 +47,10 @@ namespace Intime.OPC.Service.Support
             return lst;
         }
 
-        public PageResult<RMADto> GetByOrderNo(string orderNo, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus,int pageIndex,int pageSize)
+        public PageResult<RMADto> GetByOrderNo(string orderNo, int? rmaStatus, string returnGoodsStatus, int pageIndex, int pageSize)
         {
             var rep = (IRMARepository)_repository;
-            var  lst = rep.GetAll(orderNo, "", new DateTime(2000, 1, 1), DateTime.Now.Date.AddDays(1), rmaStatus.AsID(), returnGoodsStatus.GetDescription(),pageIndex,pageSize);
+            var lst = rep.GetAll(orderNo, "", new DateTime(2000, 1, 1), DateTime.Now.Date.AddDays(1), rmaStatus, returnGoodsStatus, pageIndex, pageSize);
             return lst;
         }
 
@@ -192,8 +193,9 @@ namespace Intime.OPC.Service.Support
         {
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
-
+            var userDto=  _accountService.GetByUserID(UserId);
             var rep = (IRMARepository)_repository;
+            rep.SetCurrentUser(userDto);
             var lst = rep.GetRmaByShoppingGuide(dto.OrderNo, dto.StartDate, dto.EndDate, dto.pageIndex, dto.pageSize);
             return lst;
 
@@ -204,9 +206,13 @@ namespace Intime.OPC.Service.Support
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
 
+          
             var rep = (IRMARepository)_repository;
+            var userDto = _accountService.GetByUserID(UserId);
+            rep.SetCurrentUser(userDto);
             var lst = rep.GetRmaByAllOver(dto.OrderNo, dto.StartDate, dto.EndDate, dto.pageIndex, dto.pageSize);
             return lst;
         }
+
     }
 }

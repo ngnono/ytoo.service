@@ -404,7 +404,7 @@ namespace Intime.OPC.Repository.Support
             string rmaStatus = EnumReturnGoodsStatus.Valid.GetDescription();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId) && CurrentUser.SectionIDs.Contains(t.SectionId.Value));
+                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
                 var saleQuery =
                     db.OPC_SaleRMA.Where(
                         t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus == rmaStatus && CurrentUser.StoreIDs.Contains(t.StoreId) && CurrentUser.SectionIDs.Contains(t.SectionId.Value ));
@@ -474,13 +474,14 @@ namespace Intime.OPC.Repository.Support
         {
             CheckUser();
             var lstSection = CurrentUser.SectionIDs;
-            string rmaStatus = EnumReturnGoodsStatus.Valid.GetDescription();
+           
+            int rma = EnumRMAStatus.ShoppingGuideReceive.AsID();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId) && CurrentUser.SectionIDs.Contains(t.SectionId.Value));
+                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
                 var saleQuery =
                     db.OPC_SaleRMA.Where(
-                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus == rmaStatus && CurrentUser.StoreIDs.Contains(t.StoreId) && CurrentUser.SectionIDs.Contains(t.SectionId.Value));
+                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.Status==rma && CurrentUser.StoreIDs.Contains(t.StoreId) && CurrentUser.SectionIDs.Contains(t.SectionId.Value));
 
                 if (orderNo.IsNotNull())
                 {

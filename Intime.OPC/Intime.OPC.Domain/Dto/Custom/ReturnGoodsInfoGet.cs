@@ -24,5 +24,11 @@ namespace Intime.OPC.Domain.Dto.Custom
         public string PayType { get; set; }
 
         public int? StoreID { get; set; }
+
+        public void FormatDate()
+        {
+            StartDate = StartDate.Date;
+            EndDate = EndDate.Date.AddDays(1);
+        }
     }
 }

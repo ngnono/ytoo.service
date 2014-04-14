@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
@@ -117,6 +118,27 @@ namespace Intime.OPC.WebApi.Controllers
                     () => { return _rmaService.GetByOrderNo(orderNo, null, returnGoodsStatus, pageIndex, pageSize); },
                     "查询订单信息失败");
         }
+
+        /// <summary>
+        /// 客服同意商品退回
+        /// </summary>
+        /// <param name="rmaNo">The rma no.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult SetSaleRmaServiceAgreeGoodsBack([FromBody] IEnumerable<string> rmaNos)
+        {
+            int userId = GetCurrentUserID();
+            
+            return DoAction(() =>
+            {
+                foreach (var rmaNo in rmaNos)
+                {
+                    _saleRmaService.SetSaleRmaServiceAgreeGoodsBack(rmaNo);
+                }
+            });
+        }
+
+
 
         #endregion
 

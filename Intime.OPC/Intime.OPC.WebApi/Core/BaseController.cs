@@ -83,7 +83,7 @@ namespace Intime.OPC.WebApi.Core
             }
         }
 
-        protected IHttpActionResult DoAction(Action action, string falseMeg)
+        protected IHttpActionResult DoAction(Action action, string falseMeg="")
         {
             try
             {

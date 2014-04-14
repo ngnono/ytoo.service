@@ -55,5 +55,13 @@ namespace Intime.OPC.Service
         PageResult<SaleRmaDto> GetByFinaceDto(FinaceRequest request);
 
         void FinaceVerify(string rmaNo, bool pass);
+        /// <summary>
+        /// 客服退货查询
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>PageResult{SaleRmaDto}.</returns>
+        PageResult<SaleRmaDto> GetByReturnGoodsCompensate(ReturnGoodsInfoRequest request);
+
+        void SetSaleRmaServiceAgreeGoodsBack(string rmaNo);
     }
 }
