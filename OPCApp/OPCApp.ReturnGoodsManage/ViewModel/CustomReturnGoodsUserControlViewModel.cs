@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 namespace OPCApp.ReturnGoodsManage.ViewModel
 {
   [Export(typeof(CustomReturnGoodsUserControlViewModel))]
+  [PartCreationPolicy(CreationPolicy.NonShared)]
    public class CustomReturnGoodsUserControlViewModel : BindableBase
     {
        
