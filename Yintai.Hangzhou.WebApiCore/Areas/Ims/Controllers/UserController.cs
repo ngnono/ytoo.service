@@ -173,7 +173,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     return this.RenderError(r => r.Message = "收藏类型不支持");
             }
             var favorEntity = Context.Set<FavoriteEntity>().Where(f => f.FavoriteSourceType == sourceType
-                            && f.FavoriteSourceId == request.Type
+                            && f.FavoriteSourceId == request.Id
                             && f.Store_Id == request.StoreId
                             && f.User_Id == authuid).FirstOrDefault();
             if (favorEntity == null)
