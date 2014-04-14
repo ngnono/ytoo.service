@@ -131,10 +131,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="zxing">
       <HintPath>..\packages\ZXing.Net.0.12.0.0\lib\net40\zxing.dll</HintPath>
     </Reference>
@@ -1050,6 +1046,10 @@
     <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Architecture.Framework\Yintai.Architecture.Framework\Yintai.Architecture.Framework.csproj">
+      <Project>{11d4830c-fd83-48b8-96de-6f51c9c2576c}</Project>
+      <Name>Yintai.Architecture.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
