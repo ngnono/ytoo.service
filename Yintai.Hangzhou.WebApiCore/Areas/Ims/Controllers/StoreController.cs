@@ -86,6 +86,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 //2.0 disable invite code
                 inviteEntity.Inv.IsBinded = 1;
                 inviteEntity.Inv.UpdateDate = DateTime.Now;
+                inviteEntity.Inv.UserId = authuid.Value;
                 _inviteRepo.Update(inviteEntity.Inv);
 
                 //2.1 update user level to daogou
