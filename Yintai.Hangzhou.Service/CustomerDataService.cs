@@ -203,8 +203,6 @@ namespace Yintai.Hangzhou.Service
 
                 var customerEntity = _customerRepository.Find(userId);
                 customerEntity.LastLoginDate = DateTime.Now;
-                customerEntity.Nickname = request.OutsiteNickname;
-
                 _customerRepository.Update(customerEntity);
             }
 
