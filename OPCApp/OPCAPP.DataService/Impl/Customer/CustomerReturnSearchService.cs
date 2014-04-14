@@ -14,7 +14,7 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                var lst = RestClient.GetPage<OrderDto>("order/GetByReturnTransGoodsInfo", goodInfoGet.ToString());
+                var lst = RestClient.GetPage<OrderDto>("order/GetByReturnGoodsShippingBack", goodInfoGet.ToString());
                 return lst.Result;
             }
             catch (Exception ex)
@@ -27,7 +27,7 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                var lst = RestClient.GetPage<OrderDto>("order/GetByReturnFinancialGoodsInfo", goodInfoGet.ToString());
+                var lst = RestClient.GetPage<OrderDto>("order/GetByReturnGoodsCompensate", goodInfoGet.ToString());
                 return lst.Result;
             }
             catch (Exception ex)
