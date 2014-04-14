@@ -104,13 +104,13 @@ namespace OPCApp.Customer.ViewModels
                 return;
             }
             List<RMADto> rmaSelectedList = RMADtoList.Where(e => e.IsSelected).ToList();
-            if (rmaSelectedList.Count != 1)
-            {
-                MessageBox.Show("请选择一条退货单进行赔偿金额复审", "提示");
-                return;
-            }
-            bool flag = AppEx.Container.GetInstance<ICustomerInquiriesService>().SetCustomerMoneyGoods(RMADto.RMANo);
-            MessageBox.Show(flag ? "设置赔偿金额复审成功" : "设置赔偿金额复审失败", "提示");
+            //if (rmaSelectedList.Count != 1)
+            //{
+            //    MessageBox.Show("请选择一条退货单进行赔偿金额复审", "提示");
+            //    return;
+            //}
+            bool flag = AppEx.Container.GetInstance<ICustomerReturnSearch>().AgreeReturnGoods(rmaSelectedList.Select(e => e.RMANo).ToList());
+            MessageBox.Show(flag ? "客服同意退货成功" : "客服同意退货失败", "提示");
             if (flag)
             {
                 SearchRmaDtoListInfo();
@@ -134,7 +134,7 @@ namespace OPCApp.Customer.ViewModels
             }
         }
 
-        public void SetAgreeReturnGoods()
+        public virtual void SetAgreeReturnGoods()
         {
             if (RMADtoList == null)
             {
@@ -152,17 +152,17 @@ namespace OPCApp.Customer.ViewModels
             try
             {
                 flag =
-                    AppEx.Container.GetInstance<ICustomerReturnSearch>()
-                        .AgreeReturnGoods(rmaSelectedList.Select(e => e.RMANo).ToList());
+                    AppEx.Container.GetInstance<ICustomerInquiriesService>()
+                        .SetCustomerMoneyGoods(rmaSelectedList.Select(e => e.RMANo).ToList());
             }
             catch (Exception Ex)
             {
             }
-            MessageBox.Show(flag ? "客服同意退货成功" : "客服同意退货失败", "提示");
+            MessageBox.Show(flag ? "设置赔偿金额复审成功" : "设置赔偿金额复审失败", "提示");
+          
             if (flag)
             {
-                RmaDetailList.Clear();
-                RMADtoList.Clear();
+                SearchRmaDtoListInfo();
             }
         }
 

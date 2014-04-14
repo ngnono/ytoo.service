@@ -6,5 +6,9 @@ namespace OPCApp.Customer.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CustomerReturnSearchRmaViewModel : CustomerReturnSearchViewModel
     {
+        public CustomerReturnSearchRmaViewModel()
+        {
+            IsShowCustomerReViewBtn = false;
+        }
     }
 }
