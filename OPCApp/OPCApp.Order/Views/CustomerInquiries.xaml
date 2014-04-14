@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="OPCApp.Customer.Views.CustomerInquiries"
+﻿<UserControl xmlns:Views="clr-namespace:OPCApp.Customer.Views"  x:Class="OPCApp.Customer.Views.CustomerInquiries"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls"
@@ -8,7 +8,7 @@
              Height="AUTO" Width="AUTO" Background="LightGray">
 
     <Grid>
-        <controls:MetroAnimatedSingleRowTabControl x:Name="tabControlName" Grid.Row="1" Grid.ColumnSpan="2">
+        <controls:MetroAnimatedSingleRowTabControl x:Name="tabControlName" Grid.Row="0" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <si:CallMethodAction MethodName="SelectionChanged" TargetObject="{Binding}" />
@@ -404,6 +404,9 @@
                     </DataGrid>
 
                 </Grid>
+            </TabItem>
+            <TabItem Header="退货信息" Custom:ControlsHelper.HeaderFontSize="18">
+                <Views:CustomerReturnSearchCommon   DataContext="{Binding CustomerReturnSearchRmaViewModel}"/>
             </TabItem>
         </controls:MetroAnimatedSingleRowTabControl>
     </Grid>

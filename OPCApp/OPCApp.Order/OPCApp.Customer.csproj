@@ -87,6 +87,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ContorlVisibilityConVerter.cs" />
     <Compile Include="ViewModels\CustomerInquiriesViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnSearchViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnSearchFinancialViewModel.cs" />

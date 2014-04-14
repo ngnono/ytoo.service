@@ -5,8 +5,11 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:si="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
+             xmlns:common="clr-namespace:OPCApp.Customer.Common"
              Height="AUTO" Width="AUTO" Background="LightGray">
-
+    <UserControl.Resources>
+        <common:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></common:BoolToVisibilityConverter>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -31,7 +34,7 @@
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Width="100" Background="LightGray" Command="{Binding CommandAgreeReturnGoods}">
+                <Button Width="100" Background="LightGray" Visibility="{Binding IsShowCustomerAgreeBtn, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource  BoolToVisibilityConverter}}" Command="{Binding CommandAgreeReturnGoods}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/到达确认.png" Stretch="None" />
                         <TextBlock Width="100" HorizontalAlignment="Center">客服同意商品退货</TextBlock>

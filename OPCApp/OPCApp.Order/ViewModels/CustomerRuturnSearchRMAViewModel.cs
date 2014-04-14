@@ -11,6 +11,7 @@ using OPCApp.Infrastructure;
 namespace OPCApp.Customer.ViewModels
 {
     [Export(typeof(CustomerReturnSearchRmaViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CustomerReturnSearchRmaViewModel : CustomerReturnSearchViewModel
     {
        
