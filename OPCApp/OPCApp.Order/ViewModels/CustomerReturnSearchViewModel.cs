@@ -24,6 +24,11 @@ namespace OPCApp.Customer.ViewModels
         private List<RmaDetail> _rmaDetails;
         private RMADto _rmaDto;
         private List<RMADto> _rmaDtoList;
+        private bool _isShowCustomerAgree;
+        public bool IsShowCustomerAgreeBtn {
+            get { return _isShowCustomerAgree; }
+            set { SetProperty(ref _isShowCustomerAgree, value); }
+        }
 
         public CustomerReturnSearchViewModel()
         {
@@ -32,15 +37,18 @@ namespace OPCApp.Customer.ViewModels
             CommandSearchRmaDtoInfo = new DelegateCommand(SearchRmaDtoListInfo);
             CommandAgreeReturnGoods = new DelegateCommand(SetAgreeReturnGoods);
             CommandGetRmaDetailByRmaNo = new DelegateCommand(GetRmaDetailByRmaNo);
+            IsShowCustomerAgreeBtn = true;
             this.InitCombo();
         }
         public IList<KeyValue> StoreList { get; set; }
+        public IList<KeyValue> GetReturnDocStatusList { get; set; }
         public IList<KeyValue> PaymentTypeList { get; set; }
         public void InitCombo()
         {
             // OderStatusList=new 
             StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
             PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
+            GetReturnDocStatusList = AppEx.Container.GetInstance<ICommonInfo>().GetReturnDocStatusList();
         }
         public RMADto RMADto
         {

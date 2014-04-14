@@ -14,15 +14,31 @@ using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
-namespace OPCApp.TransManage.ViewModels
+namespace OPCApp.Customer.ViewModels
 {
     [Export("CustomerInquiriesViewModel", typeof (CustomerInquiriesViewModel))]
     public class CustomerInquiriesViewModel : BindableBase
     {
-        // public List<object> OderStatusList { get; set; }
 
+        private CustomerReturnSearchRmaViewModel _customerReturnSearchRmaViewModel;
+        [Import]
+        public CustomerReturnSearchRmaViewModel CustomerReturnSearchRmaViewModel
+        {
+            get
+            {
+                _customerReturnSearchRmaViewModel.IsShowCustomerAgreeBtn = false;
+                return _customerReturnSearchRmaViewModel;
+            }
+            set
+            {
+              
+                SetProperty(ref _customerReturnSearchRmaViewModel, value);
+                _customerReturnSearchRmaViewModel.IsShowCustomerAgreeBtn = false;
+            }
+        }
         public CustomerInquiriesViewModel()
         {
+            //CustomerReturnSearchRmaViewModel.IsShowCustomerAgreeBtn = true;
             //Tab 订单查询         CommandGetSaleByOrderId
             CommandGetOrder = new DelegateCommand(GetOrder);
             CommandGetSaleByOrderId = new DelegateCommand(GetSaleByOrderId);
