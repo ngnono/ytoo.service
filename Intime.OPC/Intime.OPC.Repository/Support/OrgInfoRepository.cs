@@ -10,7 +10,7 @@ namespace Intime.OPC.Repository.Support
     {
         public IList<OPC_OrgInfo> GetByOrgType(string orgid, int orgtype)
         {
-           return  Select(t => t.OrgID.StartsWith(orgid) && t.OrgType == orgtype);
+           return  Select(t => t.OrgID.StartsWith(orgid) && t.OrgType == orgtype && t.StoreOrSectionID.HasValue);
         }
 
         public bool Create(OPC_OrgInfo entity)

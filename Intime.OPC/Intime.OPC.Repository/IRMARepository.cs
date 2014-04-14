@@ -30,5 +30,8 @@ namespace Intime.OPC.Repository
         PageResult<RMADto> GetByPackPrintPress(string orderNo, string saleOrderNo, DateTime dateTime1, DateTime dateTime2, int? rmaStatus, int pageIndex, int pageSize);
         PageResult<RMADto> GetRmaReturnByExpress(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize);
         PageResult<RMADto> GetRmaPrintByExpress(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize);
+        PageResult<RMADto> GetRmaByShoppingGuide(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize);
+
+        PageResult<RMADto> GetRmaByAllOver(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize);
     }
 }

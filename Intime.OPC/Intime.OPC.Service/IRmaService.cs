@@ -91,5 +91,9 @@ namespace Intime.OPC.Service
         /// </summary>
         /// <param name="rmaNo">The rma no.</param>
         void SetRmaPint(string rmaNo);
+
+        PageResult<RMADto> GetRmaByShoppingGuide(ShoppingGuideRequest request);
+
+        PageResult<RMADto> GetRmaByAllOver(ShoppingGuideRequest request);
     }
 }

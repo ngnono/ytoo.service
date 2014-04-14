@@ -187,5 +187,26 @@ namespace Intime.OPC.Service.Support
             _saleRmaRepository.Update(saleRma);
 
         }
+
+        public PageResult<RMADto> GetRmaByShoppingGuide(ShoppingGuideRequest dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+
+            var rep = (IRMARepository)_repository;
+            var lst = rep.GetRmaByShoppingGuide(dto.OrderNo, dto.StartDate, dto.EndDate, dto.pageIndex, dto.pageSize);
+            return lst;
+
+        }
+
+        public PageResult<RMADto> GetRmaByAllOver(ShoppingGuideRequest dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+
+            var rep = (IRMARepository)_repository;
+            var lst = rep.GetRmaByAllOver(dto.OrderNo, dto.StartDate, dto.EndDate, dto.pageIndex, dto.pageSize);
+            return lst;
+        }
     }
 }

@@ -191,6 +191,44 @@ namespace Intime.OPC.WebApi.Controllers
              return DoAction(() => _shippingSaleService.PintRmaShippingOverConnect(shippingCode), "查询退货单信息失败");
          }
         #endregion
+
+
+        #region 导购退货收货查询
+         /// <summary>
+         /// 查询退货信息
+         /// </summary>
+         /// <param name="request">The request.</param>
+         /// <returns>IHttpActionResult.</returns>
+          [HttpGet]
+        public IHttpActionResult GetRmaByShoppingGuide([FromUri] ShoppingGuideRequest request)
+        {
+            return DoFunction(() =>
+            {
+                _rmaService.UserId = UserID;
+                return _rmaService.GetRmaByShoppingGuide(request);
+            }, "查询退货单信息失败");
+        }
+        
+        #endregion
+
+
+          #region 已完成退货单查询
+          /// <summary>
+          ///已完成退货单查询
+          /// </summary>
+          /// <param name="request">The request.</param>
+          /// <returns>IHttpActionResult.</returns>
+          [HttpGet]
+          public IHttpActionResult GetRmaByAllOver([FromUri] ShoppingGuideRequest request)
+          {
+              return DoFunction(() =>
+              {
+                  _rmaService.UserId = UserID;
+                  return _rmaService.GetRmaByAllOver(request);
+              }, "查询退货单信息失败");
+          }
+
+          #endregion
     }
 
    

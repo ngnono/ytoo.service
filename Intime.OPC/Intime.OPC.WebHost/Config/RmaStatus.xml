@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ArrayOfItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Item Key="-1" Value="全部" />
+  <Item Key="0" Value="未收货" />
+  <Item Key="2" Value="物流未收货" />
+  <Item Key="5" Value="物流收货" />
+  <Item Key="10" Value="物流审核" />
+  <Item Key="15" Value="物流审核未通过" />
+  <Item Key="20" Value="物流审核通过" />
+  <Item Key="25" Value="物流入库" />
+  <Item Key="30" Value="打印退货单" />
+  <Item Key="35" Value="导购确认收货" />
+</ArrayOfItem>
