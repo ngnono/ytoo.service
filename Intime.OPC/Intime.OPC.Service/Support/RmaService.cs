@@ -84,7 +84,7 @@ namespace Intime.OPC.Service.Support
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
-            PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipReceive.AsID(), EnumReturnGoodsStatus.ServiceApprove.GetDescription(),dto.pageIndex,dto.pageSize);
+            PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipReceive.AsID(), "",dto.pageIndex,dto.pageSize);
             return lst;
         }
 
@@ -122,23 +122,12 @@ namespace Intime.OPC.Service.Support
             var rma = rep.GetByRmaNo2(rmaNo);
             var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
 
-            var lstDetail=  _rmaDetailRepository.GetByRmaNo(rmaNo, 1, 1000);
-           
             var cashNo=_connectProduct.GetCashNo(saleRma.OrderNo, rmaNo, saleRma.RealRMASumMoney.Value);
             rma.RmaCashNum = cashNo;
             rma.RmaCashDate = DateTime.Now;
             rep.Update(rma);
 
-            saleRma.RMACashStatus = EnumRMACashStatus.SendCash.GetDescription();
-            _saleRmaRepository.Update(saleRma);
-
-            //更新库存
-            foreach (var detail in lstDetail.Result)
-            {
-                var stock = _stockRepository.GetByID(detail.Id);
-                stock.Count += detail.BackCount;
-                _stockRepository.Update(stock);
-            }
+            
 
         }
 
@@ -147,9 +136,56 @@ namespace Intime.OPC.Service.Support
             var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
 
             saleRma.RMACashStatus = EnumRMACashStatus.CashOver.GetDescription();
+            saleRma.RMAStatus = EnumReturnGoodsStatus.Valid.GetDescription();
             _saleRmaRepository.Update(saleRma);
 
-          
+
+            var lstDetail = _rmaDetailRepository.GetByRmaNo(rmaNo, 1, 1000);
+
+            //更新库存
+            foreach (var detail in lstDetail.Result)
+            {
+                var stock = _stockRepository.GetByID(detail.StockId.Value);
+                stock.Count += detail.BackCount;
+                _stockRepository.Update(stock);
+            }
+        }
+
+        public PageResult<RMADto> GetRmaReturnByExpress(RmaExpressRequest dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+            var rep = (IRMARepository)_repository;
+            PageResult<RMADto> lst = rep.GetRmaReturnByExpress(dto.OrderNo, dto.StartDate, dto.EndDate, dto.pageIndex, dto.pageSize);
+            return lst;
+        }
+
+        public void SetRmaShipInStorage(string rmaNo)
+        {
+            var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
+
+            saleRma.Status = EnumRMAStatus.ShipInStorage.AsID();
+            _saleRmaRepository.Update(saleRma);
+
+        }
+
+        public PageResult<RMADto> GetRmaPrintByExpress(RmaExpressRequest dto)
+        {
+            dto.StartDate = dto.StartDate.Date;
+            dto.EndDate = dto.EndDate.Date.AddDays(1);
+            var rep = (IRMARepository)_repository;
+          // PageResult<RMADto> lst = rep.GetByPackPrintPress(dto.OrderNo, "", dto.StartDate, dto.EndDate, EnumRMAStatus.ShipInStorage.AsID(), dto.pageIndex, dto.pageSize);
+            var lst = rep.GetRmaPrintByExpress(dto.OrderNo, dto.StartDate, dto.EndDate, dto.pageIndex, dto.pageSize);
+            return lst;
+        }
+
+        public void SetRmaPint(string rmaNo)
+        {
+            var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
+
+            saleRma.Status = EnumRMAStatus.PrintRMA.AsID();
+            _saleRmaRepository.Update(saleRma);
+
         }
     }
 }

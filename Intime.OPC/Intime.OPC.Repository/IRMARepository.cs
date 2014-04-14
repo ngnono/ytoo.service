@@ -28,5 +28,7 @@ namespace Intime.OPC.Repository
 
         OPC_RMA GetByRmaNo2(string rmaNo);
         PageResult<RMADto> GetByPackPrintPress(string orderNo, string saleOrderNo, DateTime dateTime1, DateTime dateTime2, int? rmaStatus, int pageIndex, int pageSize);
+        PageResult<RMADto> GetRmaReturnByExpress(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize);
+        PageResult<RMADto> GetRmaPrintByExpress(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize);
     }
 }

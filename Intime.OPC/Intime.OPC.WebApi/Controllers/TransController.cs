@@ -280,5 +280,77 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         #endregion
+
+
+        #region 退货入库
+
+        /// <summary>
+        /// 查询 退货单
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetRmaReturnByExpress([FromUri] RmaExpressRequest request)
+        {
+            return DoFunction(() =>
+            {
+                _rmaService.UserId = UserID;
+                return _rmaService.GetRmaReturnByExpress(request);
+            }, "查询退货单信息失败");
+        }
+
+
+        /// <summary>
+        /// 退货入库
+        /// </summary>
+        /// <param name="rmaNos">The rma nos.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpPost]
+        public IHttpActionResult SetRmaShipInStorage([FromBody]IEnumerable<string> rmaNos)
+        {
+            return DoAction(() =>
+            {
+                _rmaService.UserId = UserID;
+                foreach (var rmaNo in rmaNos)
+                {
+                    _rmaService.SetRmaShipInStorage(rmaNo);
+                }
+
+            }, "查询退货单信息失败");
+        }
+
+        #endregion
+
+        #region  打印退货单
+
+         /// <summary>
+        /// 查询 退货单
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetRmaPrintByExpress([FromUri] RmaExpressRequest request)
+        {
+            return DoFunction(() =>
+            {
+                _rmaService.UserId = UserID;
+                return _rmaService.GetRmaPrintByExpress(request);
+            }, "查询退货单信息失败");
+        }
+
+        [HttpPost]
+        public IHttpActionResult SetRmaPint([FromBody]IEnumerable<string> rmaNos)
+        {
+            return DoAction(() =>
+            {
+                _rmaService.UserId = UserID;
+                foreach (var rmaNo in rmaNos)
+                {
+                    _rmaService.SetRmaPint(rmaNo);
+                }
+
+            }, "查询退货单信息失败");
+        }
+        #endregion
     }
 }

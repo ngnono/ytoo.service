@@ -112,13 +112,10 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception(string.Format("快递单不存在,快递单号:{0}", shippingCode));
             }
+           
             if (shipping.ShippingStatus == EnumRmaShippingStatus.NoPrint.AsID())
             {
-                throw new Exception(string.Format("快递单未打印,快递单号:{0}", shippingCode));
-            }
-            if (shipping.ShippingStatus > EnumRmaShippingStatus.NoPrint.AsID())
-            {
-                 shipping.ShippingStatus = EnumRmaShippingStatus.PrintOver.AsID();
+                 shipping.ShippingStatus = EnumRmaShippingStatus.Printed.AsID();
                 shipping.UpdateDate = DateTime.Now;
                 shipping.UpdateUser = UserId;
                 _shippingSaleRepository.Update(shipping);
@@ -128,19 +125,19 @@ namespace Intime.OPC.Service.Support
 
         public void PintRmaShipping(string shippingCode)
         {
-            var shipping = _shippingSaleRepository.GetByShippingCode(shippingCode,1,100).Result.FirstOrDefault();
-            if (shipping == null)
-            {
-                throw new Exception(string.Format("快递单不存在,快递单号:{0}", shippingCode));
-            }
-            if (shipping.ShippingStatus == EnumRmaShippingStatus.NoPrint.AsID() || shipping.ShippingStatus == EnumRmaShippingStatus.Printed.AsID() 
-                )
-            {
-                shipping.ShippingStatus = EnumRmaShippingStatus.Printed.AsID();
-                shipping.UpdateDate = DateTime.Now;
-                shipping.UpdateUser = UserId;
-                _shippingSaleRepository.Update(shipping);
-            }
+            //var shipping = _shippingSaleRepository.GetByShippingCode(shippingCode,1,100).Result.FirstOrDefault();
+            //if (shipping == null)
+            //{
+            //    throw new Exception(string.Format("快递单不存在,快递单号:{0}", shippingCode));
+            //}
+            //if (shipping.ShippingStatus == EnumRmaShippingStatus.NoPrint.AsID() || shipping.ShippingStatus == EnumRmaShippingStatus.Printed.AsID() 
+            //    )
+            //{
+            //    shipping.ShippingStatus = EnumRmaShippingStatus.Printed.AsID();
+            //    shipping.UpdateDate = DateTime.Now;
+            //    shipping.UpdateUser = UserId;
+            //    _shippingSaleRepository.Update(shipping);
+            //}
 
             
         }
@@ -177,6 +174,22 @@ namespace Intime.OPC.Service.Support
                 lstDtos.Add(o);
             }
             return new PageResult<ShippingSaleDto>(lstDtos, lst.TotalCount);
+        }
+
+        public void PintRmaShippingOverConnect(string shippingCode)
+        {
+            var shipping = _shippingSaleRepository.GetByShippingCode(shippingCode, 1, 100).Result.FirstOrDefault();
+            if (shipping == null)
+            {
+                throw new Exception(string.Format("快递单不存在,快递单号:{0}", shippingCode));
+            }
+            if (shipping.ShippingStatus ==EnumRmaShippingStatus.Printed.AsID())
+            {
+                shipping.ShippingStatus = EnumRmaShippingStatus.PrintOver.AsID();
+                shipping.UpdateDate = DateTime.Now;
+                shipping.UpdateUser = UserId;
+                _shippingSaleRepository.Update(shipping);
+            }
         }
     }
 }
