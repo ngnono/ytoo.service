@@ -115,12 +115,31 @@ namespace OPCApp.DataService.Impl.Info
             /*GetPayTypeEnums*/
             try
             {
-               return RestClient.Get<KeyValue>("trans/GetPayTypeEnums").ToList();
+                return RestClient.Get<KeyValue>("trans/GetPayTypeEnums").ToList();
             }
             catch (Exception ex)
             {
                 return null;
             }
+        }
+
+
+        public IList<KeyValue> GetReturnDocStatusList()
+        {
+            try
+            {
+                return RestClient.Get<KeyValue>("trans/GetRmaStatus").ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        //退货类型
+        public IList<KeyValue> GetFinancialTypeList()
+        {
+            throw new NotImplementedException();
         }
     }
 }

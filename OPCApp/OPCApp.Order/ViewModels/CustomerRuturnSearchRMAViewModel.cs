@@ -1,18 +1,10 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Windows;
-using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Mvvm;
-using OPCApp.DataService.Customer;
-using OPCApp.Domain.Customer;
-using OPCApp.Infrastructure;
+﻿using System.ComponentModel.Composition;
 
 namespace OPCApp.Customer.ViewModels
 {
-    [Export(typeof(CustomerReturnSearchRmaViewModel))]
+    [Export(typeof (CustomerReturnSearchRmaViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CustomerReturnSearchRmaViewModel : CustomerReturnSearchViewModel
     {
-       
     }
 }

@@ -7,8 +7,7 @@ namespace OPCApp.ReturnGoodsManage.View
     /// <summary>
     ///     ReturnAcceptCashierView.xaml 的交互逻辑
     /// </summary>
-    /// 
-    [Export("ReturnPackageMainManageView", typeof(UserControl))]
+    [Export("ReturnPackageMainManageView", typeof (UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class ReturnPackageMainManageView : UserControl
     {
@@ -16,6 +15,7 @@ namespace OPCApp.ReturnGoodsManage.View
         {
             InitializeComponent();
         }
+
         [Import("ReturnPackageMainViewModel")]
         public ReturnPackageMainViewModel ViewModel
         {

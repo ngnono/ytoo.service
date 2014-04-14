@@ -14,5 +14,7 @@ namespace OPCApp.DataService.Interface.Trans
         IList<KeyValue> GetPayMethod();
         IList<KeyValue> GetOutGoodsMehtod();
         IList<KeyValue> GetSectionList();
+        IList<KeyValue> GetReturnDocStatusList();
+        IList<KeyValue> GetFinancialTypeList();
     }
 }

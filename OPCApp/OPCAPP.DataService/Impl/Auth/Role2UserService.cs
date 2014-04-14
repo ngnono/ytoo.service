@@ -37,7 +37,7 @@ namespace OPCApp.DataService.Impl.Auth
             }
             catch (Exception ex)
             {
-                return null;
+                return new List<OPC_AuthUser>();
             }
         }
     }

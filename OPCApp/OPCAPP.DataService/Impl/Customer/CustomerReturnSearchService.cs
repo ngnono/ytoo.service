@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using OPCApp.DataService.Common;
 using OPCApp.Domain.Customer;
+using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Customer
 {
@@ -14,32 +15,8 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                var lst = RestClient.GetPage<OrderDto>("order/GetByReturnTransGoodsInfo", goodInfoGet.ToString());
-                return lst.Result;
-            }
-            catch (Exception ex)
-            {
-                return new List<OrderDto>();
-            }
-        }
-        //lao da 退货赔偿退回
-        public IList<OrderDto> ReturnGoodsFinancialSearch(ReturnGoodsInfoGet goodInfoGet)
-        {
-            try
-            {
-                var lst = RestClient.GetPage<OrderDto>("order/GetByReturnFinancialGoodsInfo", goodInfoGet.ToString());
-                return lst.Result;
-            }
-            catch (Exception ex)
-            {
-                return new List<OrderDto>();
-            }
-        }
-        public IList<OrderDto> ReturnGoodsRmaSearch(ReturnGoodsInfoGet goodInfoGet)
-        {
-            try
-            {
-                var lst = RestClient.GetPage<OrderDto>("order/GetByReturnGoodsInfo", goodInfoGet.ToString());
+                PageResult<OrderDto> lst = RestClient.GetPage<OrderDto>("order/GetByOrderNoShippingBack",
+                    goodInfoGet.ToString());
                 return lst.Result;
             }
             catch (Exception ex)
@@ -48,11 +25,69 @@ namespace OPCApp.DataService.Customer
             }
         }
 
+        //lao da 退货赔偿退回
+        public IList<OrderDto> ReturnGoodsFinancialSearch(ReturnGoodsInfoGet goodInfoGet)
+        {
+            try
+            {
+                PageResult<OrderDto> lst = RestClient.GetPage<OrderDto>("rma/GetByOrderNoReturnGoodsCompensation",
+                    goodInfoGet.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<OrderDto>();
+            }
+        }
+
+        public IList<OrderDto> ReturnGoodsRmaSearch(ReturnGoodsInfoGet goodInfoGet)
+        {
+            try
+            {
+                PageResult<OrderDto> lst = RestClient.GetPage<OrderDto>("order/GetByReturnGoodsInfo",
+                    goodInfoGet.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<OrderDto>();
+            }
+        }
+
+        public IList<RMADto> GetRmaTransByOrderNo(string orderNo)
+        {
+            try
+            {
+                PageResult<RMADto> lst = RestClient.GetPage<RMADto>("rma/GetByOrderNoShippingBack",
+                    string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNo, 1, 300));
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
+        }
+
+        public IList<RMADto> GetRmaFinancialByOrderNo(string orderNo)
+        {
+            try
+            {
+                PageResult<RMADto> lst = RestClient.GetPage<RMADto>("rma/GetByOrderNoReturnGoodsCompensation",
+                    string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNo, 1, 300));
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
+        }
+
         public IList<RMADto> GetRmaByOrderNo(string orderNo)
         {
             try
             {
-                var lst=RestClient.GetPage<RMADto>("rma/GetByOrderNo", string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNo,1,300));
+                PageResult<RMADto> lst = RestClient.GetPage<RMADto>("rma/GetByOrderNo",
+                    string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNo, 1, 300));
                 return lst.Result;
             }
             catch (Exception ex)
@@ -66,8 +101,8 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                var lst = RestClient.GetPage<RmaDetail>("rma/GetRmaDetailByRmaNo",
-                    string.Format("rmaNo={0}&pageIndex={1}&pageSize={2}", rmaNo,1,300));
+                PageResult<RmaDetail> lst = RestClient.GetPage<RmaDetail>("rma/GetRmaDetailByRmaNo",
+                    string.Format("rmaNo={0}&pageIndex={1}&pageSize={2}", rmaNo, 1, 300));
                 return lst.Result;
             }
             catch (Exception ex)
@@ -80,7 +115,7 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                return RestClient.Post("custom/AgreeReturnGoods", rmaNos);
+                return RestClient.Post("rma/SetSaleRmaServiceAgreeGoodsBack", rmaNos);
             }
             catch (Exception ex)
             {

@@ -58,7 +58,12 @@
     <Compile Include="Dto\Customer\RMAPost.cs" />
     <Compile Include="Dto\Customer\SaleRmaDto.cs" />
     <Compile Include="Dto\Financial\FinancialInfoGet.cs" />
-    <Compile Include="Dto\Financial\FinancialMainDetailDto.cs" />
+    <Compile Include="Dto\Financial\SearchCashierDto.cs" />
+    <Compile Include="Dto\Financial\SearchStatistics.cs" />
+    <Compile Include="Dto\Financial\WebSiteBaseDto.cs" />
+    <Compile Include="Dto\Financial\WebSiteReturnGoodsStatisticsDto.cs" />
+    <Compile Include="Dto\Financial\WebSiteSalesStatisticsDto.cs" />
+    <Compile Include="Dto\Financial\WebSiteCashierSearchDto.cs" />
     <Compile Include="Dto\KeyValue.cs" />
     <Compile Include="Dto\ReturnGoods\ReturnGoodsCommonSearchDto.cs" />
     <Compile Include="Dto\ReturnGoods\RmaExpressDto.cs" />

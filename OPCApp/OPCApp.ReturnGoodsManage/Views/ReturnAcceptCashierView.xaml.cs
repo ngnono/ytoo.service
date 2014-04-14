@@ -1,13 +1,13 @@
-﻿using OPCApp.ReturnGoodsManage.ViewModel;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Windows.Controls;
+using OPCApp.ReturnGoodsManage.ViewModel;
 
 namespace OPCApp.ReturnGoodsManage.View
 {
     /// <summary>
     ///     ReturnAcceptCashierView.xaml 的交互逻辑
     /// </summary>
-    [Export("ReturnAcceptCashierView", typeof(UserControl))]
+    [Export("ReturnAcceptCashierView", typeof (UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class ReturnAcceptCashierView : UserControl
     {
@@ -16,7 +16,7 @@ namespace OPCApp.ReturnGoodsManage.View
             InitializeComponent();
         }
 
-        [Import(typeof(ReturnAcceptCashierViewModel))]
+        [Import(typeof (ReturnAcceptCashierViewModel))]
         public ReturnAcceptCashierViewModel ViewModel
         {
             set { DataContext = value; }

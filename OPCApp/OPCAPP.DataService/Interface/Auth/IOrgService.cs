@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Intime.OPC.ApiClient.Annotations;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure.DataService;
 

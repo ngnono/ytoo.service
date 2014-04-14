@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using OPCApp.Infrastructure.Interfaces;
+using OPCApp.Infrastructure;
 
 namespace OPCApp.Main
 {
@@ -16,7 +16,7 @@ namespace OPCApp.Main
     [Export]
     public partial class Login : Window
     {
-        [Import(typeof (ILoginManager))] public ILoginManager LoginManager;
+        // [Import(typeof (ILoginManager))] public ILoginManager LoginManager;
 
         public Login()
         {
@@ -28,7 +28,6 @@ namespace OPCApp.Main
         public void _init()
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            
         }
 
 
@@ -51,13 +50,22 @@ namespace OPCApp.Main
                 MessageBox.Show("用户名为空", "提示");
                 return;
             }
-            ILoginModel model = LoginManager.Login(name, pwd);
-            if (model == null)
+            bool bl = false;
+            try
+            {
+                bl = AppEx.Login(name, pwd);
+            }
+            catch
+            {
+                MessageBox.Show("登陆失败", "提示");
+                return;
+            }
+            if (!bl)
             {
                 MessageBox.Show("用户名或者密码错误", "提示");
                 return;
             }
-            
+
             DialogResult = true;
         }
 

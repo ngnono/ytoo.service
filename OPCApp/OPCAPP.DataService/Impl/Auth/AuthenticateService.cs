@@ -7,6 +7,7 @@ using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
+
 namespace OPCApp.DataService.Impl.Auth
 {
     [Export(typeof (IAuthenticateService))]
@@ -77,6 +78,7 @@ namespace OPCApp.DataService.Impl.Auth
                 return new ResultMsg {IsSuccess = false, Msg = "保存失败"};
             }
         }
+
         public ResultMsg Delete(OPC_AuthUser user)
         {
             try
@@ -98,12 +100,13 @@ namespace OPCApp.DataService.Impl.Auth
             {
                 string strParmas = iDicFilter.Keys.Aggregate("",
                     (current, key) => current + string.Format("{0}={1}&", key, iDicFilter[key]));
-                PageResult<OPC_AuthUser> lst = RestClient.GetPage<OPC_AuthUser>("account/selectuser",strParmas.Trim('&'));
+                PageResult<OPC_AuthUser> lst = RestClient.GetPage<OPC_AuthUser>("account/selectuser",
+                    strParmas.Trim('&'));
                 return lst;
             }
             catch (Exception ex)
             {
-                return null;
+                return new PageResult<OPC_AuthUser>(new List<OPC_AuthUser>(), 0);
             }
         }
     }

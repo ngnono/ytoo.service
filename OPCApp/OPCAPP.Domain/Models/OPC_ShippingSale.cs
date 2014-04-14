@@ -5,12 +5,13 @@ namespace OPCApp.Domain.Models
     public class OPC_ShippingSale
     {
         public bool IsSelected { get; set; }
+
         /// <summary>
-        /// 退货单号
+        ///     退货单号
         /// </summary>
         public string RmaNo { get; set; }
 
-        ///订单
+        /// 订单
         public string OrderNo { get; set; }
 
         /// <summary>

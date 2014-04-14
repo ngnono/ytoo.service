@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace OPCApp.Domain.Customer
 {
     public class RmaDetail
@@ -19,7 +20,7 @@ namespace OPCApp.Domain.Customer
         public decimal Amount { get; set; }
 
         /// <summary>
-        /// 产品销售码 (商品编码)
+        ///     产品销售码 (商品编码)
         /// </summary>
         /// <value>The product sale code.</value>
         public string ProdSaleCode { get; set; }
@@ -48,8 +49,9 @@ namespace OPCApp.Domain.Customer
         /// </summary>
         /// <value>The name of the color value.</value>
         public string ColorValueName { get; set; }
+
         /// <summary>
-        /// 专柜码
+        ///     专柜码
         /// </summary>
         public string SectionCode { get; set; }
 
@@ -58,6 +60,5 @@ namespace OPCApp.Domain.Customer
         /// </summary>
         /// <value>The name of the color value.</value>
         public string 商品编码 { get; set; }
-
     }
 }

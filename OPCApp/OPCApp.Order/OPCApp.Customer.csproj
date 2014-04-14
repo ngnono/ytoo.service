@@ -87,6 +87,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ContorlVisibilityConVerter.cs" />
+    <Compile Include="ViewModels\CustomerInquiriesViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnSearchViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnSearchFinancialViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnSearchTransViewModel.cs" />
@@ -94,6 +96,9 @@
     <Compile Include="ViewModels\CustomerReturnGoodsViewModel.cs" />
     <Compile Include="ViewModels\CustomerSelfNetRuturnGoods.cs" />
     <Compile Include="ViewModels\CustomerReturnGoodsMainViewModel.cs" />
+    <Compile Include="Views\CustomerInquiries.xaml.cs">
+      <DependentUpon>CustomerInquiries.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CustomerReturnSearchMain.xaml.cs">
       <DependentUpon>CustomerReturnSearchMain.xaml</DependentUpon>
     </Compile>
@@ -106,6 +111,10 @@
     <Compile Include="Views\CustomerReturnGoods.xaml.cs">
       <DependentUpon>CustomerReturnGoods.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\CustomerInquiries.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\CustomerReturnSearchMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -170,6 +179,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\到达确认.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\发布.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

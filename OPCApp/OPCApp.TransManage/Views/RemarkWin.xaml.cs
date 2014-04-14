@@ -3,10 +3,9 @@ using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Windows;
 using Microsoft.Practices.Prism.Commands;
-using OPCApp.Domain.Enums;
-using OPCApp.TransManage.IService;
-using OPCApp.TransManage.ViewModels;
 using OPCApp.DataService.IService;
+using OPCApp.Domain.Enums;
+using OPCApp.TransManage.ViewModels;
 
 namespace OPCApp.TransManage.Views
 {

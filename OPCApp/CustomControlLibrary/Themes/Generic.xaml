@@ -11,7 +11,7 @@
                                StrokeThickness="1"
                                Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
                                StrokeDashArray="1 2"
-                               SnapsToDevicePixels="true"/>
+                               SnapsToDevicePixels="true" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -19,43 +19,43 @@
     <Style x:Key="ImageButtonStyle"
            TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle"
-                Value="{StaticResource ButtonFocusVisual}"/>
+                Value="{StaticResource ButtonFocusVisual}" />
         <Setter Property="Background"
-                Value="{x:Null}"/>
+                Value="{x:Null}" />
         <Setter Property="BorderBrush"
-                Value="{x:Null}"/>
+                Value="{x:Null}" />
         <Setter Property="BorderThickness"
-                Value="1"/>
+                Value="1" />
         <Setter Property="Foreground"
-                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="HorizontalContentAlignment"
-                Value="Center"/>
+                Value="Center" />
         <Setter Property="VerticalContentAlignment"
-                Value="Center"/>
+                Value="Center" />
         <Setter Property="Padding"
-                Value="1"/>
+                Value="1" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ButtonBase}">
                     <local:ImageButtonChrome x:Name="Chrome"
-                                        Background="{TemplateBinding Background}"
-                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                        RenderDefaulted="{TemplateBinding Button.IsDefaulted}"
-                                        RenderMouseOver="{TemplateBinding IsMouseOver}"
-                                        RenderPressed="{TemplateBinding IsPressed}"
-                                        SnapsToDevicePixels="true">
+                                             Background="{TemplateBinding Background}"
+                                             BorderBrush="{TemplateBinding BorderBrush}"
+                                             RenderDefaulted="{TemplateBinding Button.IsDefaulted}"
+                                             RenderMouseOver="{TemplateBinding IsMouseOver}"
+                                             RenderPressed="{TemplateBinding IsPressed}"
+                                             SnapsToDevicePixels="true">
                         <ContentPresenter Margin="{TemplateBinding Padding}" Name="PART_ContentPresenter"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           RecognizesAccessKey="True"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </local:ImageButtonChrome>
                     <ControlTemplate.Triggers>
                         <Trigger Property="ToggleButton.IsChecked"
                                  Value="true">
                             <Setter TargetName="Chrome"
                                     Property="RenderPressed"
-                                    Value="true"/>
+                                    Value="true" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -67,79 +67,82 @@
     <local:VisibilityConverter x:Key="visibilityConverter" />
     <Style x:Key="{x:Type local:PagingDataGrid}" TargetType="{x:Type local:PagingDataGrid}">
         <Setter Property="Background"
-                      Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
         <Setter Property="Foreground"
-                      Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="BorderBrush" Value="#FF688CAF" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected" />
         <Setter Property="ScrollViewer.CanContentScroll"
-                      Value="true"/>
+                Value="true" />
         <Setter Property="ScrollViewer.PanningMode"
-                Value="Both"/>
+                Value="Both" />
         <Setter Property="Stylus.IsFlicksEnabled"
-                Value="False"/>
+                Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:PagingDataGrid}">
                     <Border Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      SnapsToDevicePixels="True"
-                      Padding="{TemplateBinding Padding}">
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True"
+                            Padding="{TemplateBinding Padding}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ScrollViewer Grid.Row="0"   
-                                Focusable="false"
-                                Name="DG_ScrollViewer">
+                            <ScrollViewer Grid.Row="0"
+                                          Focusable="false"
+                                          Name="DG_ScrollViewer">
                                 <ScrollViewer.Template>
                                     <ControlTemplate TargetType="{x:Type ScrollViewer}">
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
 
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
                                             <Button Command="{x:Static DataGrid.SelectAllCommand}"
-                                                Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=CellsPanelHorizontalOffset}"
-                                                Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type DataGrid}, ResourceId=DataGridSelectAllButtonStyle}}"
-                                                Focusable="false"
-                                                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=HeadersVisibility, Converter={x:Static DataGrid.HeadersVisibilityConverter}, ConverterParameter={x:Static DataGridHeadersVisibility.All}}" />
-                                            <DataGridColumnHeadersPresenter Grid.Column="1" 
-                                                           Name="PART_ColumnHeadersPresenter"
-                                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=HeadersVisibility, Converter={x:Static DataGrid.HeadersVisibilityConverter}, ConverterParameter={x:Static DataGridHeadersVisibility.Column}}"/>
+                                                    Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=CellsPanelHorizontalOffset}"
+                                                    Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type DataGrid}, ResourceId=DataGridSelectAllButtonStyle}}"
+                                                    Focusable="false"
+                                                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=HeadersVisibility, Converter={x:Static DataGrid.HeadersVisibilityConverter}, ConverterParameter={x:Static DataGridHeadersVisibility.All}}" />
+                                            <DataGridColumnHeadersPresenter Grid.Column="1"
+                                                                            Name="PART_ColumnHeadersPresenter"
+                                                                            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=HeadersVisibility, Converter={x:Static DataGrid.HeadersVisibilityConverter}, ConverterParameter={x:Static DataGridHeadersVisibility.Column}}" />
 
-                                            <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" Grid.Row="1" Grid.ColumnSpan="2" CanContentScroll="{TemplateBinding CanContentScroll}" />
+                                            <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" Grid.Row="1"
+                                                                    Grid.ColumnSpan="2"
+                                                                    CanContentScroll="{TemplateBinding CanContentScroll}" />
 
                                             <ScrollBar Grid.Row="1" Grid.Column="2" Name="PART_VerticalScrollBar"
-                                                 Orientation="Vertical"
-                                                 Maximum="{TemplateBinding ScrollableHeight}"
-                                                 ViewportSize="{TemplateBinding ViewportHeight}"
-                                                 Value="{Binding Path=VerticalOffset, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
-                                                 Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                                                       Orientation="Vertical"
+                                                       Maximum="{TemplateBinding ScrollableHeight}"
+                                                       ViewportSize="{TemplateBinding ViewportHeight}"
+                                                       Value="{Binding Path=VerticalOffset, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
+                                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
 
                                             <Grid Grid.Row="2" Grid.Column="1">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=NonFrozenColumnsViewportHorizontalOffset}"/>
-                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition
+                                                        Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=NonFrozenColumnsViewportHorizontalOffset}" />
+                                                    <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
                                                 <ScrollBar Grid.Column="1"
-                                                       Name="PART_HorizontalScrollBar"
-                                                       Orientation="Horizontal"
-                                                       Maximum="{TemplateBinding ScrollableWidth}"
-                                                       ViewportSize="{TemplateBinding ViewportWidth}"
-                                                       Value="{Binding Path=HorizontalOffset, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
-                                                       Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                                                           Name="PART_HorizontalScrollBar"
+                                                           Orientation="Horizontal"
+                                                           Maximum="{TemplateBinding ScrollableWidth}"
+                                                           ViewportSize="{TemplateBinding ViewportWidth}"
+                                                           Value="{Binding Path=HorizontalOffset, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
+                                                           Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />
 
                                             </Grid>
                                         </Grid>
@@ -147,43 +150,58 @@
                                 </ScrollViewer.Template>
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </ScrollViewer>
-                            
+
                             <!--分页控件-->
-                            <Grid Grid.Row="1" Visibility="{Binding IsShowPaging,RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource visibilityConverter}}">
+                            <Grid Grid.Row="1"
+                                  Visibility="{Binding IsShowPaging,RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource visibilityConverter}}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <ComboBox Grid.Column="0"  VerticalAlignment="Center" x:Name="PART_PageSizeList"
-                                      MinWidth="40" Margin="5,0,0,0"
-                                      ItemsSource="{Binding PageSizeItemsSource,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}" 
-                                      SelectedItem="{Binding PageSize,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" Margin="5,0,0,0">
+                                <ComboBox Grid.Column="0" VerticalAlignment="Center" x:Name="PART_PageSizeList"
+                                          MinWidth="40" Margin="5,0,0,0"
+                                          ItemsSource="{Binding PageSizeItemsSource,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}"
+                                          SelectedItem="{Binding PageSize,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal"
+                                            Margin="5,0,0,0">
 
                                     <local:ImageButton x:Name="PART_FirstPage"
-                                        ImageSource="/CustomControlLibrary;component/Images/pagination_first.gif" 
-                                        GrayImageSource="/CustomControlLibrary;component/Images/pagination_first_gray.gif" />
+                                                       ImageSource="/CustomControlLibrary;component/Images/pagination_first.gif"
+                                                       GrayImageSource="/CustomControlLibrary;component/Images/pagination_first_gray.gif" />
                                     <local:ImageButton x:Name="PART_PerviousPage"
-                                        ImageSource="/CustomControlLibrary;component/Images/pagination_prev.gif" 
-                                        GrayImageSource="/CustomControlLibrary;component/Images/pagination_prev_gray.gif" />
+                                                       ImageSource="/CustomControlLibrary;component/Images/pagination_prev.gif"
+                                                       GrayImageSource="/CustomControlLibrary;component/Images/pagination_prev_gray.gif" />
 
-                                    <TextBlock Text="Page "  VerticalAlignment="Center"/>
-                                    <TextBox Width="30" Text="{Binding PageIndex,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}" x:Name="PART_PageIndex" />
-                                    <TextBlock Text=" of "  VerticalAlignment="Center"/>
-                                    <TextBlock Text="{Binding PageCount,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}"  VerticalAlignment="Center"/>
+                                    <TextBlock Text="Page " VerticalAlignment="Center" />
+                                    <TextBox Width="30"
+                                             Text="{Binding PageIndex,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}"
+                                             x:Name="PART_PageIndex" />
+                                    <TextBlock Text=" of " VerticalAlignment="Center" />
+                                    <TextBlock
+                                        Text="{Binding PageCount,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}"
+                                        VerticalAlignment="Center" />
 
                                     <local:ImageButton x:Name="PART_NextPage"
-                                        ImageSource="/CustomControlLibrary;component/Images/pagination_next.gif" 
-                                        GrayImageSource="/CustomControlLibrary;component/Images/pagination_next_gray.gif" />
+                                                       ImageSource="/CustomControlLibrary;component/Images/pagination_next.gif"
+                                                       GrayImageSource="/CustomControlLibrary;component/Images/pagination_next_gray.gif" />
                                     <local:ImageButton x:Name="PART_LastPage"
-                                        ImageSource="/CustomControlLibrary;component/Images/pagination_last.gif" 
-                                        GrayImageSource="/CustomControlLibrary;component/Images/pagination_last_gray.gif" />
+                                                       ImageSource="/CustomControlLibrary;component/Images/pagination_last.gif"
+                                                       GrayImageSource="/CustomControlLibrary;component/Images/pagination_last_gray.gif" />
                                     <local:ImageButton x:Name="PART_Refresh"
-                                        ImageSource="/CustomControlLibrary;component/Images/pagination_load.png" />
+                                                       ImageSource="/CustomControlLibrary;component/Images/pagination_load.png" />
                                 </StackPanel>
-                                <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="5,0,5,0" >
-                                    Display <TextBlock Text="{Binding Start,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" /> to <TextBlock Text="{Binding End,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" /> of <TextBlock Text="{Binding Total,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" /> items
+                                <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="5,0,5,0">
+                                    Display
+                                    <TextBlock
+                                        Text="{Binding Start,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" />
+                                    to
+                                    <TextBlock
+                                        Text="{Binding End,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" />
+                                    of
+                                    <TextBlock
+                                        Text="{Binding Total,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" />
+                                    items
                                 </TextBlock>
                             </Grid>
                         </Grid>
@@ -193,7 +211,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsGrouping" Value="true">
-                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -203,7 +221,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeadersPresenter}">
                     <Grid>
-                        <DataGridColumnHeader IsHitTestVisible="False" Name="PART_FillerColumnHeader"/>
+                        <DataGridColumnHeader IsHitTestVisible="False" Name="PART_FillerColumnHeader" />
                         <ItemsPresenter />
                     </Grid>
                 </ControlTemplate>
@@ -213,44 +231,44 @@
 
 
     <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
-        <Setter Property="Width" Value="8"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Cursor" Value="SizeWE"/>
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="SizeWE" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border Padding="{TemplateBinding Padding}"
-                        Background="{TemplateBinding Background}"/>
+                            Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <Style x:Key="RowHeaderGripperStyle" TargetType="{x:Type Thumb}">
-        <Setter Property="Height" Value="8"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Cursor" Value="SizeNS"/>
+        <Setter Property="Height" Value="8" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="SizeNS" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border Padding="{TemplateBinding Padding}"
-                      Background="{TemplateBinding Background}"/>
+                            Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <Style x:Key="{x:Static DataGridColumnHeader.ColumnFloatingHeaderStyleKey}" TargetType="{x:Type Control}">
-        <Setter Property="Opacity" Value="0.6"></Setter>
-        <Setter Property="BorderBrush" Value="#FF688CAF"></Setter>
-        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="Opacity" Value="0.6" />
+        <Setter Property="BorderBrush" Value="#FF688CAF" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Control}">
                     <Border BorderThickness="{TemplateBinding BorderThickness}"
-                              BorderBrush="{TemplateBinding BorderBrush}"
-                              Padding ="{TemplateBinding Padding}"
-                              Background="{TemplateBinding Background}">
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}">
                         <Grid>
                             <Canvas Name="PART_VisualBrushCanvas" Margin="{TemplateBinding Margin}" />
                         </Grid>
@@ -266,10 +284,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Separator}">
                     <Border Background="{TemplateBinding Background}"
-                              BorderBrush="{TemplateBinding BorderBrush}"
-                              BorderThickness="{TemplateBinding BorderThickness}"
-                              SnapsToDevicePixels="True">
-                    </Border>
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -277,7 +294,7 @@
 
     <Style x:Key="{x:Type DataGridRow}" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
-        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
         <Setter Property="ValidationErrorTemplate">
             <Setter.Value>
@@ -290,31 +307,33 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridRow}">
                     <Border x:Name="DGR_Border"
-                      Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      SnapsToDevicePixels="True">
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
                         <SelectiveScrollingGrid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <DataGridCellsPresenter Grid.Column="1"
-                                             ItemsPanel="{TemplateBinding ItemsPanel}"
-                                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 
-                            <DataGridDetailsPresenter  SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=AreRowDetailsFrozen, Converter={x:Static DataGrid.RowDetailsScrollingConverter}, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}}"
-                                                Grid.Column="1" Grid.Row="1"
-                                                Visibility="{TemplateBinding DetailsVisibility}" />
+                            <DataGridDetailsPresenter
+                                SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=AreRowDetailsFrozen, Converter={x:Static DataGrid.RowDetailsScrollingConverter}, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}}"
+                                Grid.Column="1" Grid.Row="1"
+                                Visibility="{TemplateBinding DetailsVisibility}" />
 
-                            <DataGridRowHeader SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical"  Grid.RowSpan="2"
-                                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=HeadersVisibility, Converter={x:Static DataGrid.HeadersVisibilityConverter}, ConverterParameter={x:Static DataGridHeadersVisibility.Row}}"/>
+                            <DataGridRowHeader SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical"
+                                               Grid.RowSpan="2"
+                                               Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=HeadersVisibility, Converter={x:Static DataGrid.HeadersVisibilityConverter}, ConverterParameter={x:Static DataGridHeadersVisibility.Row}}" />
                         </SelectiveScrollingGrid>
                     </Border>
                 </ControlTemplate>
@@ -332,8 +351,8 @@
         </Setter>
     </Style>
 
-    <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" 
-                       Color="#FF000000" />
+    <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}"
+                     Color="#FF000000" />
 
     <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent" />
@@ -342,11 +361,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridCell}">
-                    <Border Background="{TemplateBinding Background}" 
-                      BorderBrush="{TemplateBinding BorderBrush}"  
-                      BorderThickness="{TemplateBinding BorderThickness}" 
-                      SnapsToDevicePixels="True">
-                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -368,19 +387,18 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <ContentPresenter Margin="1,1,1,1"
-                                Content="{TemplateBinding SelectionBoxItem}"
-                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                IsHitTestVisible="false" />
+                                      Content="{TemplateBinding SelectionBoxItem}"
+                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                      ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                      IsHitTestVisible="false" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
 
 
     <Style x:Key="{x:Type DataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
@@ -390,26 +408,26 @@
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
                     <Grid>
                         <theme:DataGridHeaderBorder SortDirection="{TemplateBinding SortDirection}"
-                                            IsHovered="{TemplateBinding IsMouseOver}"
-                                            IsPressed="{TemplateBinding IsPressed}"
-                                            IsClickable="{TemplateBinding CanUserSort}"
-                                            Background="{TemplateBinding Background}"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            Padding ="{TemplateBinding Padding}"
-                                            SeparatorVisibility="{TemplateBinding SeparatorVisibility}"
-                                            SeparatorBrush="{TemplateBinding SeparatorBrush}">
+                                                    IsHovered="{TemplateBinding IsMouseOver}"
+                                                    IsPressed="{TemplateBinding IsPressed}"
+                                                    IsClickable="{TemplateBinding CanUserSort}"
+                                                    Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    Padding="{TemplateBinding Padding}"
+                                                    SeparatorVisibility="{TemplateBinding SeparatorVisibility}"
+                                                    SeparatorBrush="{TemplateBinding SeparatorBrush}">
                             <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
                         </theme:DataGridHeaderBorder>
 
                         <Thumb x:Name="PART_LeftHeaderGripper"
-                                HorizontalAlignment="Left"
-                                Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                               HorizontalAlignment="Left"
+                               Style="{StaticResource ColumnHeaderGripperStyle}" />
                         <Thumb x:Name="PART_RightHeaderGripper"
-                                HorizontalAlignment="Right"
-                                Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                               HorizontalAlignment="Right"
+                               Style="{StaticResource ColumnHeaderGripperStyle}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -422,18 +440,19 @@
                 <ControlTemplate TargetType="{x:Type DataGridRowHeader}">
                     <Grid>
                         <theme:DataGridHeaderBorder IsSelected="{TemplateBinding IsRowSelected}"
-                                         IsHovered ="{TemplateBinding IsMouseOver}"
-                                         IsPressed="{TemplateBinding IsPressed}"
-                                         Background="{TemplateBinding Background}"
-                                         BorderBrush="{TemplateBinding BorderBrush}"
-                                         BorderThickness="{TemplateBinding BorderThickness}"
-                                         Padding ="{TemplateBinding Padding}"
-                                         Orientation="Horizontal"
-                                         SeparatorVisibility="{TemplateBinding SeparatorVisibility}"
-                                         SeparatorBrush="{TemplateBinding SeparatorBrush}">
+                                                    IsHovered="{TemplateBinding IsMouseOver}"
+                                                    IsPressed="{TemplateBinding IsPressed}"
+                                                    Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    Padding="{TemplateBinding Padding}"
+                                                    Orientation="Horizontal"
+                                                    SeparatorVisibility="{TemplateBinding SeparatorVisibility}"
+                                                    SeparatorBrush="{TemplateBinding SeparatorBrush}">
 
                             <StackPanel Orientation="Horizontal">
-                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                  VerticalAlignment="Center" />
                                 <Control SnapsToDevicePixels="false"
                                          Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=(Validation.HasError), Converter={StaticResource bool2VisibilityConverter}}"
                                          Template="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=ValidationErrorTemplate}" />
@@ -441,10 +460,10 @@
                         </theme:DataGridHeaderBorder>
                         <Thumb x:Name="PART_TopHeaderGripper"
                                VerticalAlignment="Top"
-                               Style="{StaticResource RowHeaderGripperStyle}"/>
+                               Style="{StaticResource RowHeaderGripperStyle}" />
                         <Thumb x:Name="PART_BottomHeaderGripper"
                                VerticalAlignment="Bottom"
-                               Style="{StaticResource RowHeaderGripperStyle}"/>
+                               Style="{StaticResource RowHeaderGripperStyle}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

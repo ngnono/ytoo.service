@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
+
 namespace OPCApp.DataService.Impl.Auth
 {
-    [Export(typeof(IOrgService))]
+    [Export(typeof (IOrgService))]
     public class OrgService : IOrgService
     {
-        private string _nameP;
-        public string Name {
-            get { return this._nameP; } 
-            set { _nameP = value; }
-        }
+        public string Name { get; set; }
 
         public ResultMsg Add(OPC_OrgInfo org)
         {
@@ -27,8 +23,8 @@ namespace OPCApp.DataService.Impl.Auth
                     return new ResultMsg {IsSuccess = false, Msg = "增加错误"};
                 }
 
-                var ent = RestClient.PostReturnModel("org/addOrg", org);
-                return new ResultMsg {IsSuccess = ent!=null, Msg = "保存成功",Data = ent};
+                OPC_OrgInfo ent = RestClient.PostReturnModel("org/addOrg", org);
+                return new ResultMsg {IsSuccess = ent != null, Msg = "保存成功", Data = ent};
             }
             catch (Exception ex)
             {
@@ -53,7 +49,7 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                var oo = new { orgInfoId = org.Id };
+                var oo = new {orgInfoId = org.Id};
                 bool bFalg = RestClient.Put("org/deleteorg", org.Id);
                 return new ResultMsg {IsSuccess = bFalg, Msg = "删除错误"};
             }
@@ -68,12 +64,12 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                var lst = RestClient.Get<OPC_OrgInfo>("org/getall","");
+                IList<OPC_OrgInfo> lst = RestClient.Get<OPC_OrgInfo>("org/getall", "");
                 return lst;
             }
             catch (Exception ex)
             {
-                return null;
+                return new List<OPC_OrgInfo>();
             }
         }
 

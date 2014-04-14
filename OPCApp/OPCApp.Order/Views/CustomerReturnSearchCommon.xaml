@@ -5,8 +5,11 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:si="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
+             xmlns:common="clr-namespace:OPCApp.Customer.Common"
              Height="AUTO" Width="AUTO" Background="LightGray">
-
+    <UserControl.Resources>
+        <common:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -31,10 +34,20 @@
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Width="100" Background="LightGray" Command="{Binding CommandAgreeReturnGoods}">
+                <Button Width="100" Background="LightGray"
+                        Visibility="{Binding IsShowCustomerAgreeBtn, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource  BoolToVisibilityConverter}}"
+                        Command="{Binding CommandAgreeReturnGoods}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/到达确认.png" Stretch="None" />
                         <TextBlock Width="100" HorizontalAlignment="Center">客服同意商品退货</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Width="100" Background="LightGray"
+                        Visibility="{Binding IsShowCustomerReViewBtn, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource  BoolToVisibilityConverter}}"
+                        Command="{Binding CommandSetCustomerMoneyReviewGoods}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/image/发布.png" Stretch="None" />
+                        <TextBlock Width="100" HorizontalAlignment="Center">修改赔偿金额复审</TextBlock>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -43,32 +56,33 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="　　订单号" Margin="0 5" />
                 <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ReturnGoodsInfoGet.OrderNo}" />
+                         Text="{Binding ReturnGoodsInfoGet.OrderNo}" />
                 <TextBlock Text="　退货单号" Margin="0 5" />
                 <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ReturnGoodsInfoGet.RmaNo}" />
+                         Text="{Binding ReturnGoodsInfoGet.RmaNo}" />
                 <TextBlock Text="　销售单号" Margin="0 5" />
                 <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ReturnGoodsInfoGet.SaleOrderNo}" />
+                         Text="{Binding ReturnGoodsInfoGet.SaleOrderNo}" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="2">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <TextBlock Text="退货单状态" Margin="0 5" />
-                <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ReturnGoodsInfoGet.RmaStatus}" />
+                <ComboBox Height="25" ItemsSource="{Binding GetReturnDocStatusList}" Width="100"
+                          DisplayMemberPath="Value" SelectedValuePath="Key"
+                          SelectedValue="{Binding ReturnGoodsInfoGet.RmaStatus}" />
                 <TextBlock Text="　支付方式" Margin="0 5" />
                 <ComboBox Height="25" ItemsSource="{Binding PaymentTypeList}" Width="100"
-                                      DisplayMemberPath="Value" SelectedValuePath="Key"
-                                      SelectedValue="{Binding ReturnGoodsInfoGet.PayType}" />
+                          DisplayMemberPath="Value" SelectedValuePath="Key"
+                          SelectedValue="{Binding ReturnGoodsInfoGet.PayType}" />
                 <TextBlock Text="　　　门店" Margin="0 5" />
                 <ComboBox Height="25" ItemsSource="{Binding StoreList}" Width="150"
-                                      DisplayMemberPath="Value" SelectedValuePath="Key"
-                                      SelectedValue="{Binding ReturnGoodsInfoGet.StoreId}" />
+                          DisplayMemberPath="Value" SelectedValuePath="Key"
+                          SelectedValue="{Binding ReturnGoodsInfoGet.StoreId}" />
                 <TextBlock Text="　退货时间" Margin="0 5" />
                 <DatePicker Width="150" Foreground="Blue"
-                                        SelectedDate="{Binding ReturnGoodsInfoGet.StartDate}" />
+                            SelectedDate="{Binding ReturnGoodsInfoGet.StartDate}" />
                 <TextBlock Text="至" Margin="0 5" />
                 <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsInfoGet.EndDate}" />
             </StackPanel>
@@ -80,11 +94,10 @@
             </StackPanel>
         </StackPanel>
 
-        <DataGrid Grid.Row="4" MinHeight="200"  ItemsSource="{Binding OrderDtoList}" IsReadOnly="True"
-                              AutoGenerateColumns="False" 
-                              Name="DataGrid1" VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding OrderDto}"                              
-                             >
+        <DataGrid Grid.Row="4" MinHeight="200" ItemsSource="{Binding OrderDtoList}" IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  Name="DataGrid1" VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding OrderDto}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding CommandSearchRmaDtoInfo}" />
@@ -114,7 +127,8 @@
                 <DataGridTextColumn Header="邮编" Binding="{Binding PostCode}" />
                 <DataGridTextColumn Header="发货单号" Binding="{Binding ShippingNo}" />
                 <DataGridTextColumn Header="快递单号" Binding="{Binding ExpressNo}" />
-                <DataGridTextColumn Header="发货时间" Binding="{Binding OutGoodsDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                <DataGridTextColumn Header="发货时间"
+                                    Binding="{Binding OutGoodsDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                 <DataGridTextColumn Header="快递公司" Binding="{Binding ExpressCompany}" />
             </DataGrid.Columns>
         </DataGrid>
@@ -124,10 +138,10 @@
             </StackPanel>
         </StackPanel>
 
-        <DataGrid Grid.Row="6" Height="200"  ItemsSource="{Binding RMADtoList}" IsReadOnly="True"
-                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" 
-                              SelectedItem="{Binding RMADto}" VerticalScrollBarVisibility="Auto"
-                              Name="dataGridRma">
+        <DataGrid Grid.Row="6" Height="200" ItemsSource="{Binding RMADtoList}" IsReadOnly="True"
+                  AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
+                  SelectedItem="{Binding RMADto}" VerticalScrollBarVisibility="Auto"
+                  Name="dataGridRma">
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
@@ -154,36 +168,36 @@
                 <DataGridTextColumn Width="150" Header="退货收银状态" Binding="{Binding RmaCashStatusName}" />
 
                 <DataGridTextColumn Header="要求退货时间"
-                                                Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                    Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
 
                 <DataGridTextColumn Width="150" Header="退货总金额" Binding="{Binding RMAAmount}" />
                 <DataGridTextColumn Width="150" Header="退货总数" Binding="{Binding Count}" />
-                <DataGridTextColumn Width="150" Header="退货赔偿金额" Binding="{Binding RefundAmount}"  Foreground="Red"/>
+                <DataGridTextColumn Width="150" Header="退货赔偿金额" Binding="{Binding RefundAmount}" Foreground="Red" />
 
-                <DataGridTextColumn Width="150" Header="收银流水号" Binding="{Binding CashNum}"  Foreground="Red"/>
+                <DataGridTextColumn Width="150" Header="收银流水号" Binding="{Binding CashNum}" Foreground="Red" />
                 <DataGridTextColumn Header="收银时间"
-                                                Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                <DataGridTextColumn Width="150" Header="退货类型" Binding="{Binding RMAType}"  Foreground="Red"/>
-                <DataGridTextColumn Width="150" Header="专柜码" Binding="{Binding 专柜码}"  Foreground="Red"/>
+                                    Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                <DataGridTextColumn Width="150" Header="退货类型" Binding="{Binding RMAType}" Foreground="Red" />
+                <DataGridTextColumn Width="150" Header="专柜码" Binding="{Binding 专柜码}" Foreground="Red" />
                 <DataGridTextColumn Header="退货时间"
-                                                Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                    Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
 
 
                 <DataGridTextColumn Header="支付方式" Binding="{Binding  PayType}" />
             </DataGrid.Columns>
         </DataGrid>
-   
+
         <StackPanel Grid.Row="7">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <TextBlock Text="退货明细" />
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Vertical" Margin="0,1"  Grid.Row="8">
-            <Label Content="退货明细" />
+        <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="8">
+
             <DataGrid ItemsSource="{Binding RmaDetailList, Mode=TwoWay}" AutoGenerateColumns="False"
-                        RenderTransformOrigin="0.5,0.5" 
-                        SelectedIndex="{Binding selectedIndex, Mode=TwoWay}" Margin="0,0,0,-78">
+                      RenderTransformOrigin="0.5,0.5"
+                      SelectedIndex="{Binding selectedIndex, Mode=TwoWay}" Margin="0,0,0,-78">
                 <DataGrid.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />

@@ -1,35 +1,31 @@
-﻿using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Mvvm;
-using OPCApp.DataService.Interface.RMA;
-using OPCApp.Domain.Customer;
-using OPCApp.Infrastructure;
-using OPCApp.ReturnGoodsManage.Common;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Practices.Prism.Commands;
+using OPCApp.DataService.Interface.RMA;
+using OPCApp.Infrastructure;
+using OPCApp.ReturnGoodsManage.Common;
 
 namespace OPCApp.ReturnGoodsManage.ViewModel
 {
-      [Export(typeof(ReturnGoodsInStorageViewModel))]
+    [Export(typeof (ReturnGoodsInStorageViewModel))]
     public class ReturnGoodsInStorageViewModel : BaseReturnGoodsSearchCommonWithRma
-    {        
-         /// <summary>
-         /// 退货入库
-         /// </summary>
-        public DelegateCommand CommandReturnGoodsConfirm { get; set; }
+    {
         public ReturnGoodsInStorageViewModel()
         {
             CommandReturnGoodsConfirm = new DelegateCommand(ReturnGoodsInStorage);
         }
 
+        /// <summary>
+        ///     退货入库
+        /// </summary>
+        public DelegateCommand CommandReturnGoodsConfirm { get; set; }
+
         private void ReturnGoodsInStorage()
         {
             if (VerifyRmaSelected())
             {
-                var rmaList = GetRmoNoList();
+                List<string> rmaList = GetRmoNoList();
                 bool falg = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().SetReturnGoodsInStorage(rmaList);
             }
         }
@@ -38,12 +34,13 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
         {
             try
             {
-                CustomReturnGoodsUserControlViewModel.RmaList = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().GetRmaForReturnInStorage(this.ReturnGoodsCommonSearchDto).ToList();
-
+                CustomReturnGoodsUserControlViewModel.RmaList =
+                    AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>()
+                        .GetRmaForReturnInStorage(ReturnGoodsCommonSearchDto)
+                        .ToList();
             }
             catch
             {
-
             }
         }
     }

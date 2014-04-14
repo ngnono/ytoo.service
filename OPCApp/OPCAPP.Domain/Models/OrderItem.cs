@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-
 namespace OPCApp.Domain.Models
 {
-    public partial class OrderItem
+    public class OrderItem
     {
         public bool IsSelected { get; set; }
         public int Id { get; set; }

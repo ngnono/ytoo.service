@@ -43,10 +43,6 @@ namespace OPCApp.Infrastructure.Mvvm
         private readonly ObservableCollection<T> _Collection;
 
         private int _total;
-        private  int Total {
-            get { return _total; }
-            set { SetProperty(ref _total, value); }
-        }
 
         /// <summary>
         ///     The _view
@@ -69,6 +65,12 @@ namespace OPCApp.Infrastructure.Mvvm
             _Collection = new ObservableCollection<T>();
             Models = new ListCollectionView(_Collection);
             View.DataContext = this;
+        }
+
+        private int Total
+        {
+            get { return _total; }
+            set { SetProperty(ref _total, value); }
         }
 
 
@@ -105,12 +107,10 @@ namespace OPCApp.Infrastructure.Mvvm
         /// </summary>
         public virtual void AddAction()
         {
-
             var w = AppEx.Container.GetInstance<IViewModel>(AddViewModeKey);
-            if(!BeforeAdd((T)w.Model))return;
+            if (!BeforeAdd((T) w.Model)) return;
             if (w.View.ShowDialog() == true)
             {
-              
                 IBaseDataService<T> service = GetDataService();
                 ResultMsg resultMsg = service.Add((T) w.Model);
                 if (resultMsg.IsSuccess)
@@ -132,7 +132,8 @@ namespace OPCApp.Infrastructure.Mvvm
         {
             return true;
         }
-        public virtual bool BeforeEdit(IViewModel t,T model)
+
+        public virtual bool BeforeEdit(IViewModel t, T model)
         {
             return true;
         }
@@ -150,7 +151,7 @@ namespace OPCApp.Infrastructure.Mvvm
             }
             var w = AppEx.Container.GetInstance<IViewModel>(EditViewModeKey);
             w.Model = model;
-             BeforeEdit(w,model);
+            BeforeEdit(w, model);
             if (w.View.ShowDialog() == true)
             {
                 IBaseDataService<T> service = GetDataService();

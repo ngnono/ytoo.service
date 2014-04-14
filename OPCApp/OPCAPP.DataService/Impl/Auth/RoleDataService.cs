@@ -36,7 +36,7 @@ namespace OPCApp.DataService.Impl.Auth
 
         public ResultMsg Delete(OPC_AuthRole model)
         {
-            bool result = RestClient.Put("Role/DeleteRole",model.Id);
+            bool result = RestClient.Put("Role/DeleteRole", model.Id);
             if (result)
             {
                 return ResultMsg.Success();

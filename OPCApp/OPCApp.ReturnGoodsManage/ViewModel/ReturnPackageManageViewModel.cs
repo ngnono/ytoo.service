@@ -16,7 +16,9 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
     public class ReturnPackageManageViewModel : BindableBase
     {
         private List<RMADto> _rmaDtos;
+        private SaleRmaDto _saleRma;
         private List<SaleRmaDto> _saleRmaList;
+        private PackageReceiveDto packageReceiveDto;
         private List<RmaDetail> rmaDetails;
 
         public RMADto rmaDto;
@@ -30,22 +32,9 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             CommandSetRmaRemark = new DelegateCommand(SetRmaRemark);
             CommandReceivingGoodsSubmit = new DelegateCommand(ReceivingGoodsSubmit);
         }
-        //退货单备注
-        public void SetRmaRemark()
-        {
-            string id = RmaDto.RMANo;
-            var remarkWin = AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetRMARemark);
-        }
-        //收货单备注
-        public void SetSaleRmaRemark()
-        {
-            string id = SaleRma.RmaNo;
-            var remarkWin = AppEx.Container.GetInstance<IRemark>();
-            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetSaleRMARemark);
-        }
 
-        private PackageReceiveDto packageReceiveDto;
+        //退货单备注
+
         public PackageReceiveDto PackageReceiveDto
         {
             get { return packageReceiveDto; }
@@ -58,12 +47,12 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             set { SetProperty(ref _saleRmaList, value); }
         }
 
-        private SaleRmaDto _saleRma;
         public SaleRmaDto SaleRma
         {
             get { return _saleRma; }
             set { SetProperty(ref _saleRma, value); }
         }
+
         public RMADto RmaDto
         {
             get { return rmaDto; }
@@ -88,6 +77,21 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
         public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
         public DelegateCommand CommandSetRmaRemark { get; set; }
 
+        public void SetRmaRemark()
+        {
+            string id = RmaDto.RMANo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetRMARemark);
+        }
+
+        //收货单备注
+        public void SetSaleRmaRemark()
+        {
+            string id = SaleRma.RmaNo;
+            var remarkWin = AppEx.Container.GetInstance<IRemark>();
+            remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetSaleRMARemark);
+        }
+
         public void GetRmaSaleDetailByRma()
         {
             if (rmaDto != null)
@@ -98,8 +102,8 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
 
         public void ReceivingGoodsSubmit()
         {
-            var saleRmaSelected = SaleRmaList.Where(e => e.IsSelected).ToList();
-            if (saleRmaSelected.Count==0)
+            List<SaleRmaDto> saleRmaSelected = SaleRmaList.Where(e => e.IsSelected).ToList();
+            if (saleRmaSelected.Count == 0)
             {
                 MessageBox.Show("请勾选收货单", "提示");
                 return;

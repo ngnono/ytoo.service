@@ -15,8 +15,8 @@ namespace OPCApp.DataService.Impl.Customer
         {
             try
             {
-                PageResult<Order> lst = RestClient.Get<Order>("order/getorder", orderfilter,1,100);
-                return lst;//new PageResult<Order>(lst, lst.Count);
+                PageResult<Order> lst = RestClient.Get<Order>("order/getorder", orderfilter, 1, 100);
+                return lst; //new PageResult<Order>(lst, lst.Count);
             }
             catch (Exception ex)
             {
@@ -28,8 +28,8 @@ namespace OPCApp.DataService.Impl.Customer
         {
             try
             {
-                PageResult<OPC_Sale> lst = RestClient.GetPage<OPC_Sale>("sale/GetSaleByOrderNo",orderNo);
-                return lst;// new PageResult<OPC_Sale>(lst, lst.Count);
+                PageResult<OPC_Sale> lst = RestClient.GetPage<OPC_Sale>("sale/GetSaleByOrderNo", orderNo);
+                return lst; // new PageResult<OPC_Sale>(lst, lst.Count);
             }
             catch (Exception ex)
             {
@@ -41,12 +41,13 @@ namespace OPCApp.DataService.Impl.Customer
         {
             try
             {
-                PageResult<OPC_ShippingSale> lst = RestClient.GetPage<OPC_ShippingSale>("trans/GetShipping", shippingfilter);
-                return lst;// new PageResult<OPC_ShippingSale>(lst, lst.Count);
+                PageResult<OPC_ShippingSale> lst = RestClient.GetPage<OPC_ShippingSale>("trans/GetShipping",
+                    shippingfilter);
+                return lst; // new PageResult<OPC_ShippingSale>(lst, lst.Count);
             }
             catch (Exception ex)
             {
-                return new PageResult<OPC_ShippingSale>(new List<OPC_ShippingSale>(),0);
+                return new PageResult<OPC_ShippingSale>(new List<OPC_ShippingSale>(), 0);
             }
         }
 
@@ -60,6 +61,19 @@ namespace OPCApp.DataService.Impl.Customer
             catch (Exception ex)
             {
                 return new PageResult<Order>(new List<Order>(), 0);
+            }
+        }
+
+        //赔偿金额退回审核
+        public bool SetCustomerMoneyGoods(string rmaNo)
+        {
+            try
+            {
+                return RestClient.Post("custom/AgreeReturnGoods", string.Format("rmaNo={0}", rmaNo));
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }

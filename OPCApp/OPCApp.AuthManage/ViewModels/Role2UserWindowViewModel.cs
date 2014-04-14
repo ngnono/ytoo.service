@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
@@ -74,10 +73,9 @@ namespace OPCApp.AuthManage.ViewModels
         public void Init()
         {
             var roleDataService = AppEx.Container.GetInstance<IRoleDataService>();
-            var re = roleDataService.Search(null).Result;
+            IList<OPC_AuthRole> re = roleDataService.Search(null).Result;
             RoleList = re != null ? re.ToList() : new List<OPC_AuthRole>();
             UserList = new List<OPC_AuthUser>();
-
         }
 
         private void DeleteUserList()
@@ -94,7 +92,6 @@ namespace OPCApp.AuthManage.ViewModels
             }
 
             UserList = UserList.Where(e => e.IsSelected == false).ToList();
-           
         }
 
         private void DBGridClick()
@@ -122,7 +119,7 @@ namespace OPCApp.AuthManage.ViewModels
                 MessageBox.Show("请选择要授权的用户", "提示");
                 return;
             }
-            var userIDs = UserList.Select(e => e.Id).ToList();
+            List<int> userIDs = UserList.Select(e => e.Id).ToList();
             role2UserService.SetUserByRole(SelectedRole.Id, userIDs);
         }
 
@@ -132,7 +129,7 @@ namespace OPCApp.AuthManage.ViewModels
             var obj = AppEx.Container.GetInstance<UsersWindow>("UsersView");
             if (obj.ShowDialog() == true)
             {
-                var seletedUsers = obj.ViewModel.SelectedUserList;
+                List<OPC_AuthUser> seletedUsers = obj.ViewModel.SelectedUserList;
                 if (seletedUsers != null)
                 {
                     var temp = new List<OPC_AuthUser>();

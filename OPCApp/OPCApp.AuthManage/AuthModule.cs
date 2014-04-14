@@ -3,7 +3,6 @@ using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
 using OPCApp.AuthManage.Views;
-using OPCApp.DataService.Interface;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.AuthManage
@@ -17,6 +16,5 @@ namespace OPCApp.AuthManage
         {
             RegionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, typeof (AuthNavigationItemView));
         }
-
     }
 }

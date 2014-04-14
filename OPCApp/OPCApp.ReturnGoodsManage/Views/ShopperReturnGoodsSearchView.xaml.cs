@@ -1,26 +1,13 @@
-﻿using OPCApp.ReturnGoodsManage.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.ComponentModel.Composition;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using OPCApp.ReturnGoodsManage.ViewModel;
 
 namespace OPCApp.ReturnGoodsManage.Views
 {
     /// <summary>
-    /// ShopperReturnGoodsSearchView.xaml 的交互逻辑
+    ///     ShopperReturnGoodsSearchView.xaml 的交互逻辑
     /// </summary>
-    [Export("ShopperReturnGoodsSearchView", typeof(UserControl))]
+    [Export("ShopperReturnGoodsSearchView", typeof (UserControl))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class ShopperReturnGoodsSearchView : UserControl
     {
@@ -28,7 +15,8 @@ namespace OPCApp.ReturnGoodsManage.Views
         {
             InitializeComponent();
         }
-      [Import(typeof(ShopperReturnGoodsSearchViewModel))]
+
+        [Import(typeof (ShopperReturnGoodsSearchViewModel))]
         public ShopperReturnGoodsSearchViewModel ViewModel
         {
             set { DataContext = value; }

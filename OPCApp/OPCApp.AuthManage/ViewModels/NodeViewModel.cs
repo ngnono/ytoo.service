@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -21,13 +17,12 @@ namespace OPCApp.AuthManage
         /*
          * 省去构造函数，公共方法和一些静态成员
          * */
+
         public NodeViewModel(NodeInfo info)
         {
             children = new ObservableCollection<NodeViewModel>();
             NodeInfo = info;
         }
-
-        public OPC_OrgInfo OPC_OrgInfo { get; set; }
 
         public NodeViewModel(NodeViewModel parent, OPC_OrgInfo orgInfo)
         {
@@ -36,17 +31,18 @@ namespace OPCApp.AuthManage
             Name = orgInfo.OrgName;
             ParentId = orgInfo.ParentID;
             OrgId = orgInfo.OrgID;
-            OrgType = orgInfo.OrgType ;
+            OrgType = orgInfo.OrgType;
             StoreOrSectionId = orgInfo.StoreOrSectionID;
             StoreOrSectionName = orgInfo.StoreOrSectionName;
             NodeInfo = parent.NodeInfo;
             children = new ObservableCollection<NodeViewModel>();
-          
         }
+
+        public OPC_OrgInfo OPC_OrgInfo { get; set; }
 
         public IOrgService GetDataService()
         {
-           return AppEx.Container.GetInstance<IOrgService>();
+            return AppEx.Container.GetInstance<IOrgService>();
         }
 
         public void AddOrg()
@@ -55,9 +51,9 @@ namespace OPCApp.AuthManage
             w.Model = new OPC_OrgInfo();
             if (w.View.ShowDialog() == true)
             {
-                var service = GetDataService();
+                IOrgService service = GetDataService();
                 var orgInfo = w.Model as OPC_OrgInfo;
-                orgInfo.ParentID = this.OrgId;
+                orgInfo.ParentID = OrgId;
                 ResultMsg resultMsg = service.Add(orgInfo);
                 if (resultMsg.IsSuccess)
                 {
@@ -78,10 +74,10 @@ namespace OPCApp.AuthManage
             if (w.View.ShowDialog() == true)
             {
                 IBaseDataService<OPC_OrgInfo> service = GetDataService();
-                ResultMsg resultMsg = service.Edit((OPC_OrgInfo)w.Model);
+                ResultMsg resultMsg = service.Edit((OPC_OrgInfo) w.Model);
                 if (resultMsg.IsSuccess)
                 {
-                    this.Update(w.Model as OPC_OrgInfo);
+                    Update(w.Model as OPC_OrgInfo);
                 }
                 else
                 {
@@ -99,7 +95,7 @@ namespace OPCApp.AuthManage
                 ResultMsg r = service.Delete(OPC_OrgInfo);
                 if (r.IsSuccess)
                 {
-                   this.Remove();
+                    Remove();
                 }
                 else
                 {
@@ -110,29 +106,26 @@ namespace OPCApp.AuthManage
 
         #region 字段
 
-        string _name;
+        private readonly ObservableCollection<NodeViewModel> children;
+        private bool _isExpanded;
+        private bool _isSelected;
+        private string _name;
         private string _orgId;
         private int? _orgType;
         private string _parentId;
         private int? _storeOrSectionId;
         private string _storeOrSectionName;
-        bool _isExpanded;
-        bool _isSelected;
-         ObservableCollection<NodeViewModel> children;
 
         #endregion
-
 
         #region 属性
 
         public NodeInfo NodeInfo { get; private set; }
         public NodeViewModel Parent { get; private set; }
+
         public string StoreOrSectionName
         {
-            get
-            {
-                return _storeOrSectionName;
-            }
+            get { return _storeOrSectionName; }
             set
             {
                 if (_storeOrSectionName != value)
@@ -142,12 +135,10 @@ namespace OPCApp.AuthManage
                 }
             }
         }
+
         public int? StoreOrSectionId
         {
-            get
-            {
-                return _storeOrSectionId;
-            }
+            get { return _storeOrSectionId; }
             set
             {
                 if (_storeOrSectionId != value)
@@ -157,12 +148,10 @@ namespace OPCApp.AuthManage
                 }
             }
         }
+
         public int? OrgType
         {
-            get
-            {
-                return _orgType;
-            }
+            get { return _orgType; }
             set
             {
                 if (_orgType != value)
@@ -172,12 +161,10 @@ namespace OPCApp.AuthManage
                 }
             }
         }
+
         public string ParentId
         {
-            get
-            {
-                return _parentId;
-            }
+            get { return _parentId; }
             set
             {
                 if (_parentId != value)
@@ -187,12 +174,10 @@ namespace OPCApp.AuthManage
                 }
             }
         }
+
         public string Name
         {
-            get
-            {
-                return _name;
-            }
+            get { return _name; }
             set
             {
                 if (_name != value)
@@ -202,12 +187,10 @@ namespace OPCApp.AuthManage
                 }
             }
         }
+
         public string OrgId
         {
-            get
-            {
-                return _orgId;
-            }
+            get { return _orgId; }
             set
             {
                 if (_orgId != value)
@@ -220,10 +203,7 @@ namespace OPCApp.AuthManage
 
         public bool IsExpanded
         {
-            get
-            {
-                return _isExpanded;
-            }
+            get { return _isExpanded; }
             set
             {
                 if (_isExpanded != value)
@@ -251,15 +231,10 @@ namespace OPCApp.AuthManage
 
         public ObservableCollection<NodeViewModel> Children
         {
-            get
-            {
-                return children;
-            }
+            get { return children; }
         }
 
-
         #endregion
-
 
         #region 方法
 
@@ -272,7 +247,6 @@ namespace OPCApp.AuthManage
             }
         }
 
-  
 
         public NodeViewModel AddSubNode(OPC_OrgInfo opcOrgInfo)
         {
@@ -284,7 +258,7 @@ namespace OPCApp.AuthManage
 
         public void AddNodeViewModel(NodeViewModel nv)
         {
-            children.Insert(0,nv);
+            children.Insert(0, nv);
         }
 
         public void Append(OPC_OrgInfo opcOrgInfo)
@@ -292,6 +266,7 @@ namespace OPCApp.AuthManage
             IsExpanded = true;
             children.Add(new NodeViewModel(this, opcOrgInfo));
         }
+
         public void Update(OPC_OrgInfo orgInfo)
         {
             Name = orgInfo.OrgName;
@@ -306,7 +281,7 @@ namespace OPCApp.AuthManage
         {
             if (Parent != null)
             {
-                var idx = Parent.children.IndexOf(this);
+                int idx = Parent.children.IndexOf(this);
                 if (idx > 0)
                 {
                     Parent.children.RemoveAt(idx);
@@ -315,11 +290,12 @@ namespace OPCApp.AuthManage
                 IsSelected = true;
             }
         }
+
         public void MoveDown()
         {
             if (Parent != null)
             {
-                var idx = Parent.children.IndexOf(this);
+                int idx = Parent.children.IndexOf(this);
                 if (idx < Parent.children.Count - 1)
                 {
                     Parent.children.RemoveAt(idx);
@@ -333,7 +309,7 @@ namespace OPCApp.AuthManage
 
         #region 私有方法
 
-        void RefreshInfoCount(int addition)
+        private void RefreshInfoCount(int addition)
         {
             //if (NodeInfo != null)
             //    //NodeInfo.SetCount(NodeInfo.Count + addition);
@@ -378,7 +354,8 @@ namespace OPCApp.AuthManage
 
     public class NodeInfo : BindableBase
     {
-        NodeViewModel _selectedNode;
+        private NodeViewModel _selectedNode;
+
         public NodeViewModel SelectedNode
         {
             get { return _selectedNode; }
@@ -392,7 +369,7 @@ namespace OPCApp.AuthManage
                 }
             }
         }
-      
+
 
         public event EventHandler SelectedNodeChanged;
 
@@ -401,7 +378,6 @@ namespace OPCApp.AuthManage
             if (SelectedNodeChanged != null)
                 SelectedNodeChanged(this, EventArgs.Empty);
         }
-
 
         #region INotifyPropertyChanged Members
 

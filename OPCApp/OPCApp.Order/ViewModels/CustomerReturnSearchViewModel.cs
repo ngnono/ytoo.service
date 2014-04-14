@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Microsoft.Practices.Prism.Commands;
@@ -7,20 +7,19 @@ using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Customer;
 using OPCApp.DataService.Interface.Customer;
 using OPCApp.DataService.Interface.Trans;
-using OPCApp.DataService.IService;
 using OPCApp.Domain.Customer;
 using OPCApp.Domain.Dto;
-using OPCApp.Domain.Enums;
-using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
-using System;
 
 namespace OPCApp.Customer.ViewModels
 {
-    public class CustomerReturnSearchViewModel:BindableBase
+    public class CustomerReturnSearchViewModel : BindableBase
     {
+        private bool _isShowCustomerAgree;
+        private bool _isShowCustomerReViewBtn;
         private OrderDto _orderDto;
         private List<OrderDto> _orderDtoList;
+        private ReturnGoodsInfoGet _returnGoodsInfo;
         private List<RmaDetail> _rmaDetails;
         private RMADto _rmaDto;
         private List<RMADto> _rmaDtoList;
@@ -32,16 +31,30 @@ namespace OPCApp.Customer.ViewModels
             CommandSearchRmaDtoInfo = new DelegateCommand(SearchRmaDtoListInfo);
             CommandAgreeReturnGoods = new DelegateCommand(SetAgreeReturnGoods);
             CommandGetRmaDetailByRmaNo = new DelegateCommand(GetRmaDetailByRmaNo);
-            this.InitCombo();
+            CommandSetCustomerMoneyReviewGoods = new DelegateCommand(SetCustomerMoneyGoods);
+            IsShowCustomerAgreeBtn = true;
+            _isShowCustomerReViewBtn = true;
+            InitCombo();
         }
-        public IList<KeyValue> StoreList { get; set; }
-        public IList<KeyValue> PaymentTypeList { get; set; }
-        public void InitCombo()
+
+        public bool IsShowCustomerAgreeBtn
         {
-            // OderStatusList=new 
-            StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
-            PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
+            get { return _isShowCustomerAgree; }
+            set { SetProperty(ref _isShowCustomerAgree, value); }
         }
+
+        public bool IsShowCustomerReViewBtn
+        {
+            get { return _isShowCustomerReViewBtn; }
+            set { SetProperty(ref _isShowCustomerReViewBtn, value); }
+        }
+
+        public DelegateCommand CommandSetCustomerMoneyReviewGoods { get; set; }
+
+        public IList<KeyValue> StoreList { get; set; }
+        public IList<KeyValue> GetReturnDocStatusList { get; set; }
+        public IList<KeyValue> PaymentTypeList { get; set; }
+
         public RMADto RMADto
         {
             get { return _rmaDto; }
@@ -76,10 +89,40 @@ namespace OPCApp.Customer.ViewModels
         public DelegateCommand CommandSearchGoodsInfo { get; set; }
         public DelegateCommand CommandSearchRmaDtoInfo { get; set; }
         public DelegateCommand CommandGetRmaDetailByRmaNo { get; set; }
-        private ReturnGoodsInfoGet returnGoodsInfo;
-        public ReturnGoodsInfoGet ReturnGoodsInfoGet {
-            get { return returnGoodsInfo; }
-            set { SetProperty(ref returnGoodsInfo, value); }
+
+        public ReturnGoodsInfoGet ReturnGoodsInfoGet
+        {
+            get { return _returnGoodsInfo; }
+            set { SetProperty(ref _returnGoodsInfo, value); }
+        }
+
+        private void SetCustomerMoneyGoods()
+        {
+            if (RMADtoList == null)
+            {
+                MessageBox.Show("请选择退货单", "提示");
+                return;
+            }
+            List<RMADto> rmaSelectedList = RMADtoList.Where(e => e.IsSelected).ToList();
+            if (rmaSelectedList.Count != 1)
+            {
+                MessageBox.Show("请选择一条退货单进行赔偿金额复审", "提示");
+                return;
+            }
+            bool flag = AppEx.Container.GetInstance<ICustomerInquiriesService>().SetCustomerMoneyGoods(RMADto.RMANo);
+            MessageBox.Show(flag ? "设置赔偿金额复审成功" : "设置赔偿金额复审失败", "提示");
+            if (flag)
+            {
+                SearchRmaDtoListInfo();
+            }
+        }
+
+        public void InitCombo()
+        {
+            // OderStatusList=new 
+            StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
+            PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
+            GetReturnDocStatusList = AppEx.Container.GetInstance<ICommonInfo>().GetReturnDocStatusList();
         }
 
         public void GetRmaDetailByRmaNo()
@@ -93,12 +136,13 @@ namespace OPCApp.Customer.ViewModels
 
         public void SetAgreeReturnGoods()
         {
-            if (RMADtoList == null) {
+            if (RMADtoList == null)
+            {
                 MessageBox.Show("请选择退货单", "提示");
                 return;
             }
 
-            List<RMADto> rmaSelectedList = RMADtoList.Where(e => e.IsSelected).ToList();          
+            List<RMADto> rmaSelectedList = RMADtoList.Where(e => e.IsSelected).ToList();
             if (rmaSelectedList.Count == 0)
             {
                 MessageBox.Show("请选择退货单", "提示");
@@ -111,9 +155,8 @@ namespace OPCApp.Customer.ViewModels
                     AppEx.Container.GetInstance<ICustomerReturnSearch>()
                         .AgreeReturnGoods(rmaSelectedList.Select(e => e.RMANo).ToList());
             }
-            catch(Exception Ex)
+            catch (Exception Ex)
             {
-
             }
             MessageBox.Show(flag ? "客服同意退货成功" : "客服同意退货失败", "提示");
             if (flag)
@@ -129,16 +172,18 @@ namespace OPCApp.Customer.ViewModels
                 AppEx.Container.GetInstance<ICustomerReturnSearch>().ReturnGoodsRmaSearch(ReturnGoodsInfoGet).ToList();
         }
 
-        public void SearchRmaDtoListInfo()
+        public virtual void SearchRmaDtoListInfo()
         {
+            if (RmaDetailList != null)
+                RmaDetailList.Clear();
             if (OrderDto == null)
             {
-                if (RmaDetailList!=null) RmaDetailList.Clear();
+                if (RmaDetailList != null) RmaDetailList.Clear();
                 return;
-            } 
-            var rmaList= AppEx.Container.GetInstance<ICustomerReturnSearch>().GetRmaByOrderNo(OrderDto.OrderNo).ToList();
+            }
+            List<RMADto> rmaList =
+                AppEx.Container.GetInstance<ICustomerReturnSearch>().GetRmaByOrderNo(OrderDto.OrderNo).ToList();
             RMADtoList = rmaList;
         }
-
     }
 }

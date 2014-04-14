@@ -1,4 +1,4 @@
-﻿<UserControl xmlns:CustomControlLibrary="clr-namespace:CustomControlLibrary;assembly=CustomControlLibrary" 
+﻿<UserControl xmlns:CustomControlLibrary="clr-namespace:CustomControlLibrary;assembly=CustomControlLibrary"
              x:Class="OPCApp.AuthManage.Views.UserListWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -20,38 +20,38 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-            <StackPanel Grid.Row="0" Grid.Column="0">
-                <StackPanel Orientation="Horizontal" Background="LightGray">
-                    <Button Background="LightGray" Width="50" Command="{Binding AddOrgCommand}">
-                        <StackPanel>
-                            <Image Source="/image/新增.png" Stretch="None" />
-                            <TextBlock HorizontalAlignment="Center">增加</TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button Background="LightGray" Width="50" Command="{Binding EditOrgCommand}"
+        <StackPanel Grid.Row="0" Grid.Column="0">
+            <StackPanel Orientation="Horizontal" Background="LightGray">
+                <Button Background="LightGray" Width="50" Command="{Binding AddOrgCommand}">
+                    <StackPanel>
+                        <Image Source="/image/新增.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">增加</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Background="LightGray" Width="50" Command="{Binding EditOrgCommand}"
                         CommandParameter="{Binding CurModel}">
-                        <StackPanel>
-                            <Image Source="/image/修改.png" Stretch="None" />
-                            <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button Background="LightGray" Width="50" Command="{Binding DeleteOrgCommand}"
+                    <StackPanel>
+                        <Image Source="/image/修改.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Background="LightGray" Width="50" Command="{Binding DeleteOrgCommand}"
                         CommandParameter="{Binding Models.CurrentItem}">
-                        <StackPanel>
-                            <Image Source="/image/删除.png" Stretch="None" />
-                            <TextBlock HorizontalAlignment="Center">删除</TextBlock>
-                        </StackPanel>
-                    </Button>
+                    <StackPanel>
+                        <Image Source="/image/删除.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">删除</TextBlock>
+                    </StackPanel>
+                </Button>
 
 
-                </StackPanel>
             </StackPanel>
-            <TreeView  Grid.Row="1" Grid.RowSpan="3" ItemTemplate="{StaticResource dtTreeView}"
+        </StackPanel>
+        <TreeView Grid.Row="1" Grid.RowSpan="3" ItemTemplate="{StaticResource dtTreeView}"
                   ItemsSource="{Binding Nodes.Children}"
-                  ItemContainerStyle="{StaticResource stTreeViewItem}"/>
+                  ItemContainerStyle="{StaticResource stTreeViewItem}" />
         <StackPanel Grid.Row="0" Grid.Column="1">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <Button Background="LightGray" Width="50">
@@ -97,7 +97,7 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1"  Grid.Column="1" Margin="0,1">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="0,1">
             <Label Content=" 查找字段:" Margin="0,14,0,10" />
             <ComboBox Width="100" ItemsSource="{Binding FieldList}" Height="20" SelectedItem="{Binding SelectedFiled}"
                       SelectedIndex="0" />
@@ -112,7 +112,7 @@
 
         </StackPanel>
 
-        <DataGrid x:Name="dataGrid" Grid.Row="2"  Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid x:Name="dataGrid" Grid.Row="2" Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True"
                   VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                   SelectedItem="{Binding CurModel}"
                   ItemsSource="{Binding Path=ItemsSource,ElementName=dataPager}">
@@ -133,9 +133,9 @@
                 <DataGridCheckBoxColumn Header="是否有效" Width="100" Binding="{Binding IsValid}" />
             </DataGrid.Columns>
         </DataGrid>
-        <CustomControlLibrary:DataPager Grid.Row="3"  Grid.Column="1" x:Name="dataPager" PageSizeList="10,20,30"
-                       ItemsSource="{Binding PrResult.Models}"
-                       Total="{Binding PrResult.Total}"
-                       PageChanged="dataPager_PageChanged" />
+        <CustomControlLibrary:DataPager Grid.Row="3" Grid.Column="1" x:Name="dataPager" PageSizeList="10,20,30"
+                                        ItemsSource="{Binding PrResult.Models}"
+                                        Total="{Binding PrResult.Total}"
+                                        PageChanged="dataPager_PageChanged" />
     </Grid>
 </UserControl>

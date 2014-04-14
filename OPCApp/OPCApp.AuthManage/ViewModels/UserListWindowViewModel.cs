@@ -4,7 +4,6 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
 using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -63,7 +62,7 @@ namespace OPCApp.AuthManage.ViewModels
         /*双击用户列表*/
         public DelegateCommand DelUserCommand { get; set; }
         public DelegateCommand RePasswordCommand { get; set; }
-   
+
         public int PageSize { get; set; }
         public int PageIndex { get; set; }
 
@@ -136,7 +135,7 @@ namespace OPCApp.AuthManage.ViewModels
 
         private bool CheckSelection()
         {
-            if (NodeInfo.SelectedNode==null)//建议改后台
+            if (NodeInfo.SelectedNode == null) //建议改后台
             {
                 MessageBox.Show("请选择组织机构节点", "提示");
                 return false;
@@ -187,28 +186,30 @@ namespace OPCApp.AuthManage.ViewModels
             PrResult.Models = PrResultTemp.Result.ToList();
             PrResult.Total = PrResultTemp.TotalCount;
         }
+
         /*重写 在选择组织结构 才能进行用户增加操作*/
-         public override bool BeforeAdd(OPC_AuthUser t)
+
+        public override bool BeforeAdd(OPC_AuthUser t)
         {
-            var curNode = GetOperationNode();
-            if (curNode==null||curNode.OrgId==null)
+            NodeViewModel curNode = GetOperationNode();
+            if (curNode == null || curNode.OrgId == null)
             {
                 MessageBox.Show("请选择部门", "提示");
                 return false;
             }
-             if(t==null)t=new OPC_AuthUser();
-             t.OrgId = curNode.OrgId;
-             t.DataAuthId = curNode.OrgId;
-             t.DataAuthName = curNode.Name;
-             return true;
+            if (t == null) t = new OPC_AuthUser();
+            t.OrgId = curNode.OrgId;
+            t.DataAuthId = curNode.OrgId;
+            t.DataAuthName = curNode.Name;
+            return true;
         }
 
-         public override bool BeforeEdit(IViewModel viewModel, OPC_AuthUser model)
-         {
-             var vm = viewModel as UserAddWindowViewModel;
-             vm.OrgInfo=new OPC_OrgInfo(){OrgID = model.DataAuthId,OrgName = model.DataAuthName};
-             return true;
-         }
+        public override bool BeforeEdit(IViewModel viewModel, OPC_AuthUser model)
+        {
+            var vm = viewModel as UserAddWindowViewModel;
+            vm.OrgInfo = new OPC_OrgInfo {OrgID = model.DataAuthId, OrgName = model.DataAuthName};
+            return true;
+        }
 
         /*初始化页面固有的数据值*/
 
@@ -219,7 +220,7 @@ namespace OPCApp.AuthManage.ViewModels
             SelectedFiledValue = "";
             SelectedFiled = "";
             SetStopUserCommand = new DelegateCommand(SetStopUser);
-            DelUserCommand=new DelegateCommand(DelUser);
+            DelUserCommand = new DelegateCommand(DelUser);
             PageIndex = 1;
             PageSize = 10;
             PrResult = new PageDataResult<OPC_AuthUser>();
@@ -235,8 +236,8 @@ namespace OPCApp.AuthManage.ViewModels
                 MessageBox.Show("请选择要操作的用户", "提示");
                 return;
             }
-          var resultMsg=  AppEx.Container.GetInstance<IAuthenticateService>().ResetPassword(user);
-          MessageBox.Show(resultMsg.IsSuccess ? "重置密码成功" : "操作失败", "提示");
+            ResultMsg resultMsg = AppEx.Container.GetInstance<IAuthenticateService>().ResetPassword(user);
+            MessageBox.Show(resultMsg.IsSuccess ? "重置密码成功" : "操作失败", "提示");
         }
 
         public void DelUser()
@@ -268,7 +269,5 @@ namespace OPCApp.AuthManage.ViewModels
         {
             return AppEx.Container.GetInstance<IAuthenticateService>();
         }
-
-     
     }
 }

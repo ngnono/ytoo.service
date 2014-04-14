@@ -24,13 +24,13 @@
 
 
                 <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
-                    <StackPanel  Orientation="Horizontal" >
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/查询.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="80" Command="{Binding CommandReceivingGoodsSubmit}">
-                    <StackPanel  Orientation="Horizontal" >
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/回单确认.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">物流收货确认</TextBlock>
                     </StackPanel>
@@ -47,24 +47,26 @@
                 <TextBlock Text="  订单号" Margin="0 5" />
                 <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding PackageReceiveDto.OrderNo}" />
                 <TextBlock Text="销售单" Margin="0 5" />
-                <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding PackageReceiveDto.SaleOrderNo}" />
+                <TextBox Width="150" Foreground="Blue" Background="White"
+                         Text="{Binding PackageReceiveDto.SaleOrderNo}" />
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="2">
             <Label Content="收货单" />
-            <DataGrid ItemsSource="{Binding SaleRmaList}" AutoGenerateColumns="False" CanUserAddRows="True" IsReadOnly="True"
-                        >
+            <DataGrid ItemsSource="{Binding SaleRmaList}" AutoGenerateColumns="False" CanUserAddRows="True"
+                      IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                          VerticalAlignment="Center" HorizontalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
-                    <DataGridTextColumn Header="生成退货单时间" Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                    <DataGridTextColumn Header="生成退货单时间"
+                                        Binding="{Binding CreateDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     <DataGridTextColumn Header="顾客应付运费" Binding="{Binding CustomFee}" />
                     <DataGridTextColumn Header="公司应付运费" Binding="{Binding StoreFee}" />
                     <DataGridTextColumn Header="退货总数量" Binding="{Binding RMACount}" />
@@ -74,7 +76,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetRmaRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                        Command="{Binding Path=DataContext.CommandSetRmaRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -85,18 +87,17 @@
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="4">
             <Label Content="退货单" />
             <DataGrid ItemsSource="{Binding RmaList, Mode=TwoWay}" AutoGenerateColumns="False"
-                         IsReadOnly="True"
-                        SelectedItem="{Binding RmaDto}"
-                        >
+                      IsReadOnly="True"
+                      SelectedItem="{Binding RmaDto}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding CommandGetRmaSaleDetailByRma}" />
                     </i:EventTrigger>
 
                 </i:Interaction.Triggers>
-               
+
                 <DataGrid.Columns>
-                  
+
                     <DataGridTextColumn Header="退货单号" Binding="{Binding RMANo}" />
                     <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                     <DataGridTextColumn Header="销售单号" Binding="{Binding SaleOrderNo}" />
@@ -121,7 +122,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="录入"
-                                    Command="{Binding Path=DataContext.CommandSetSaleRmaRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                        Command="{Binding Path=DataContext.CommandSetSaleRmaRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -129,11 +130,11 @@
             </DataGrid>
         </StackPanel>
         <GridSplitter Height="5" HorizontalAlignment="Stretch" Grid.Row="5" VerticalAlignment="Bottom" />
-        <StackPanel Orientation="Vertical" Margin="0,1"  Grid.Row="6">
+        <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="6">
             <Label Content="退货明细" />
             <DataGrid ItemsSource="{Binding RmaDetailList, Mode=TwoWay}" AutoGenerateColumns="False"
-                        RenderTransformOrigin="0.5,0.5"
-                         Margin="0">
+                      RenderTransformOrigin="0.5,0.5"
+                      Margin="0">
                 <DataGrid.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
@@ -154,5 +155,5 @@
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
-        </Grid>
+    </Grid>
 </UserControl>

@@ -1,13 +1,13 @@
 ﻿<Window x:Class="OPCApp.TransManage.Print.PrintWin"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:rv="clr-namespace:Microsoft.Reporting.WinForms;assembly=Microsoft.ReportViewer.WinForms" 
+        xmlns:rv="clr-namespace:Microsoft.Reporting.WinForms;assembly=Microsoft.ReportViewer.WinForms"
         Title="MainWindow" Height="600" Width="800">
-    <Grid  xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+    <Grid xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
           xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration">
 
         <wfi:WindowsFormsHost>
-            <rv:ReportViewer x:Name="_reportViewer" Visible="False"/>
+            <rv:ReportViewer x:Name="_reportViewer" Visible="False" />
         </wfi:WindowsFormsHost>
     </Grid>
 </Window>
