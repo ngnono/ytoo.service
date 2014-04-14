@@ -135,5 +135,10 @@ namespace OPCApp.DataService.Impl.Info
                 return null;
             }
         }
+        //退货类型
+        public IList<KeyValue> GetFinancialTypeList()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

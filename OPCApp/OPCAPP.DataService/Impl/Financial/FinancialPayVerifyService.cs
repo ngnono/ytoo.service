@@ -6,6 +6,7 @@ using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface.Financial;
 using OPCApp.DataService.Interface.RMA;
 using OPCApp.Domain.Customer;
+using OPCAPP.Domain.Dto.Financial;
 using OPCApp.Domain.Models;
 
 namespace OPCApp.DataService.Impl.Trans
@@ -88,6 +89,22 @@ namespace OPCApp.DataService.Impl.Trans
             catch (Exception ex)
             {
                 return new List<RMADto>();
+            }
+        }
+        //
+
+        // 网上收银流水对账查询
+
+        public IList<WebSiteCashierSearchDto> GetCashierStatistics(SearchCashierDto searchCashierDto)
+        {
+            try
+            {
+                var lst = RestClient.GetPage<WebSiteCashierSearchDto>("rma/GetByFinaceDto", searchCashierDto.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<WebSiteCashierSearchDto>();
             }
         }
     }

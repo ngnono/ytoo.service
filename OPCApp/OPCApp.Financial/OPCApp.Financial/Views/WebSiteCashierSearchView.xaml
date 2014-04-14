@@ -20,7 +20,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Background="LightGray" Width="50" Command="{Binding }">
+                <Button Background="LightGray" Width="50" Command="{Binding CommandExport}">
                     <StackPanel>
                         <Image Source="/Image/导出.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">导出</TextBlock>
@@ -32,27 +32,27 @@
         <StackPanel Grid.Row="1" Background="LightGray">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="购买时间" Margin="0 5" />
-                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsPayDto.StartDate}" />
+                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding SearchCashierDto.StartTime}" />
                 <TextBlock Text="  至" Margin="0 5" />
-                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsPayDto.EndDate}" />
+                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding SearchCashierDto.EndTime}" />
                 <TextBlock Margin="0 5" Text="  门店"></TextBlock>
-                <ComboBox Width="150" SelectedItem="{Binding StoreName}"></ComboBox>
+                <ComboBox Width="150" ItemsSource="{Binding StoreList}"
+                               DisplayMemberPath="Value" SelectedValuePath="Key"
+                          SelectedValue="{Binding StoreId}"></ComboBox>
                 <TextBlock Margin="0 5" Text="  支付方式"></TextBlock>
-                <ComboBox Width="150" SelectedItem="{Binding PayType}"></ComboBox>
+                <ComboBox Width="150" ItemsSource="{Binding StoreList}"
+                             DisplayMemberPath="Value" SelectedValuePath="Key"
+                          SelectedValue="{Binding PayType}"></ComboBox>
                 <TextBlock Margin="0 5" Text="  财务类型"></TextBlock>
-                <ComboBox Width="150" SelectedItem="{Binding FinancialType}"></ComboBox>
+                <ComboBox Width="150" 
+                             DisplayMemberPath="Value" SelectedValuePath="Key"
+                          ItemsSource="{Binding FinancialType}" SelectedValue="{Binding FinancialType}"></ComboBox>
             </StackPanel>
         </StackPanel>
-        <DataGrid Grid.Row="2" Name="DataGrid1" ItemsSource="{Binding RmaList, Mode=TwoWay}" AutoGenerateColumns="False"
+        <DataGrid Grid.Row="2" Name="DataGrid1" ItemsSource="{Binding WebSiteCashierSearchDtos, Mode=TwoWay}" AutoGenerateColumns="False"
                         CanUserAddRows="False" IsReadOnly="True"
-                        SelectedItem="{Binding RmaDto}"
+                     
                         >
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding CommandGetRmaDetailByRma}" />
-                </i:EventTrigger>
-
-            </i:Interaction.Triggers>
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="门店" Binding="{Binding StoreName}" />

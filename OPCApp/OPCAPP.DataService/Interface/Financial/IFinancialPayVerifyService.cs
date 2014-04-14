@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using OPCApp.DataService.Interface.RMA;
 using OPCApp.Domain.Customer;
+using OPCAPP.Domain.Dto.Financial;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -21,5 +22,9 @@ namespace OPCApp.DataService.Interface.Financial
 
         //退回付款确认 查询 退货单列表
         IList<RMADto> GetRmaByFilter(PackageReceiveDto packageReceive);
+
+        // 网上收银流水对账查询
+
+        IList<WebSiteCashierSearchDto> GetCashierStatistics(SearchCashierDto searchCashierDto);
     }
 }
