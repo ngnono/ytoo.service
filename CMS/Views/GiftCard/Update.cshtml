@@ -1,6 +1,6 @@
 ﻿@model Yintai.Hangzhou.Data.Models.IMS_GiftCardEntity
 @{
-    ViewBag.Title = "礼品卡详情";
+    ViewBag.Title = "编辑礼品卡";
 }
 @section PageBread
 {
@@ -17,7 +17,7 @@
             for (var idx in items) {
                 var item = items[idx];
                 var row = '<tr class="item"><td>'
-                    + item["id"] + '<input name="id" type="hidden" value="'
+                    + item.id + '<input name="id" type="hidden" value="'
                     + item.id + '" /></td><td>'
                     + item.amount + ' <input type="hidden" name="amount" id="amount" value="'
                     + item.amount + '" </td><td><input name="price" type="text" value="'
@@ -92,11 +92,12 @@
                         items: jsonStr
                     },
                     success: function (result) {
-                        if (result["success"] == true) {
-                            $('.item').remove();
-                            add_rows(result["items"]);
+                        var rsp = result["Success"];
+                        if (result["Success"] == true) {
+                            alert(true);
+                            window.location.href = '@Url.Action("Detail",new{id=Model.Id})';
                         } else {
-                            alert(result["message"]);
+                            alert(result["Message"]);
                         }
                     },
                     error: function () {
@@ -145,5 +146,5 @@
 </fieldset>
 <p>
     <input id="submitBtn" type="button" value="提交" class="btn btn-primary" />
-    @Html.ActionLink2("返回", "details", new { id = Model.Id }, new { @class = "btn" })
+    @Html.ActionLink2("返回", "detail", new { id = Model.Id }, new { @class = "btn" })
 </p>
