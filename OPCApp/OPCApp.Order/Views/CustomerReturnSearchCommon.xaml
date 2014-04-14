@@ -56,8 +56,9 @@
         <StackPanel Grid.Row="2">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <TextBlock Text="退货单状态" Margin="0 5" />
-                <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding ReturnGoodsInfoGet.RmaStatus}" />
+                <ComboBox Height="25" ItemsSource="{Binding GetReturnDocStatusList}" Width="100"
+                                      DisplayMemberPath="Value" SelectedValuePath="Key"
+                                      SelectedValue="{Binding ReturnGoodsInfoGet.RmaStatus}" />
                 <TextBlock Text="　支付方式" Margin="0 5" />
                 <ComboBox Height="25" ItemsSource="{Binding PaymentTypeList}" Width="100"
                                       DisplayMemberPath="Value" SelectedValuePath="Key"

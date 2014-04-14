@@ -35,12 +35,14 @@ namespace OPCApp.Customer.ViewModels
             this.InitCombo();
         }
         public IList<KeyValue> StoreList { get; set; }
+        public IList<KeyValue> GetReturnDocStatusList { get; set; }
         public IList<KeyValue> PaymentTypeList { get; set; }
         public void InitCombo()
         {
             // OderStatusList=new 
             StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
             PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
+            GetReturnDocStatusList = AppEx.Container.GetInstance<ICommonInfo>().GetReturnDocStatusList();
         }
         public RMADto RMADto
         {

@@ -122,5 +122,18 @@ namespace OPCApp.DataService.Impl.Info
                 return null;
             }
         }
+
+
+        public IList<KeyValue> GetReturnDocStatusList()
+        {
+            try
+            {
+                return RestClient.Get<KeyValue>("trans/GetRmaStatus").ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

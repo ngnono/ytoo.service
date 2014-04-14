@@ -14,7 +14,7 @@ using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
-namespace OPCApp.TransManage.ViewModels
+namespace OPCApp.Customer.ViewModels
 {
     [Export("CustomerInquiriesViewModel", typeof (CustomerInquiriesViewModel))]
     public class CustomerInquiriesViewModel : BindableBase
