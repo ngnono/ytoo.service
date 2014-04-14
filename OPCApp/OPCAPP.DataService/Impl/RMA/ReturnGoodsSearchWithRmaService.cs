@@ -121,14 +121,30 @@ namespace OPCApp.DataService.Impl.RMA
         #region 导购退货收货查询
         public IList<RMADto> GetRmaForShopperReturnOrReceivingPrintDoc(ReturnGoodsCommonSearchDto returnGoodsCommonSearchDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var lst = RestClient.GetPage<RMADto>("custom/GetRmaByShoppingGuide", returnGoodsCommonSearchDto.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
         }
         #endregion
 
         #region 已经完成退货单查询
         public IList<RMADto> GetRmaForCompletedReturnGoods(ReturnGoodsCommonSearchDto returnGoodsCommonSearchDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var lst = RestClient.GetPage<RMADto>("custom/GetRmaByAllOver", returnGoodsCommonSearchDto.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
         }
         #endregion
     }

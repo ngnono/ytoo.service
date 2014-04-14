@@ -184,7 +184,7 @@
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Margin="0,1"  Grid.Row="8">
-       
+            <Label Content="退货明细" />
             <DataGrid ItemsSource="{Binding RmaDetailList, Mode=TwoWay}" AutoGenerateColumns="False"
                         RenderTransformOrigin="0.5,0.5" 
                         SelectedIndex="{Binding selectedIndex, Mode=TwoWay}" Margin="0,0,0,-78">

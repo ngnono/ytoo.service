@@ -20,6 +20,7 @@ using OPCApp.DataService.Common;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain;
 using OPCApp.Domain.Models;
+using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Impl
 {
@@ -38,7 +39,7 @@ namespace OPCApp.DataService.Impl
         {
             try
             {
-                string paras = string.Format("UserId={0}", 1); //AppEx.LoginModel.UserID); //1 update curUserId 
+                string paras = string.Format("UserId={0}", AppEx.LoginModel.UserID); //AppEx.LoginModel.UserID); //1 update curUserId 
                 IList<OPC_AuthMenu> listMenu = RestClient.Get<OPC_AuthMenu>("menu/loadmenu", paras);
                 List<OPC_AuthMenu> groupMenu1 = listMenu.Where(e => e.PraentMenuId == e.Id).ToList();
                 List<MenuGroup> groupMenu =

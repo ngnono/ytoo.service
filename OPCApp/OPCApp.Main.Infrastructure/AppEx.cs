@@ -14,9 +14,16 @@ namespace OPCApp.Infrastructure
         public static void Init(CompositionContainer container)
         {
             Container = new MefContainer(container);
-            var loginManager = Container.GetInstance<ILoginManager>();
+            logManager = Container.GetInstance<ILoginManager>();
 
             Config = new DefaultConfig();
         }
+        static ILoginManager logManager;
+
+        public static bool  Login(string userName,string password) {
+           LoginModel= logManager.Login(userName, password);
+           return logManager.IsLogin;
+        }
+
     }
 }

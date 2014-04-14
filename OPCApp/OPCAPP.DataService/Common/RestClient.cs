@@ -17,9 +17,16 @@ using System.Collections.Generic;
 using System.Net.Http;
 using Intime.OPC.ApiClient;
 using OPCApp.Infrastructure;
+using System.Net;
 
 namespace OPCApp.DataService.Common
 {
+    public static class  HttpResponseMessageExtend{
+    public static bool VerificationResponse(this HttpResponseMessage response)
+    {
+        return response.StatusCode == HttpStatusCode.OK;
+    }        
+}
     /// <summary>
     ///     Class RestClient.
     /// </summary>
@@ -70,26 +77,26 @@ namespace OPCApp.DataService.Common
         {
             string url = string.Format("{0}?{1}", address, urlParams);
             HttpResponseMessage response = Client.GetAsync(url).Result;
-           return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
+           return response.VerificationResponse() ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
         }
 
         public static PageResult<T> GetPage<T>(string address, string urlParams)
         {
             string url = string.Format("{0}?{1}", address, urlParams);
             HttpResponseMessage response = Client.GetAsync(url).Result;
-            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<PageResult<T>>().Result : new PageResult<T>(null, 10);
+            return response.VerificationResponse() ? response.Content.ReadAsAsync<PageResult<T>>().Result : new PageResult<T>(null, 10);
         }
         public static PageResult<T> Get<T>(string address, string urlParams, int pageIndex, int pageSize)
         {
             string url = string.Format("{0}?{1}&pageIndex={2}&pageSize={3}", address, urlParams, pageIndex, pageSize);
             HttpResponseMessage response = Client.GetAsync(url).Result;
-            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<PageResult<T>>().Result: new PageResult<T>(null,10);
+            return response.VerificationResponse() ? response.Content.ReadAsAsync<PageResult<T>>().Result: new PageResult<T>(null,10);
         }
         public static T GetSingle<T>(string address, string urlParams = "")
         {
             string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}", address, urlParams);
             HttpResponseMessage response = Client.GetAsync(url).Result;
-            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<T>().Result : default(T);
+            return response.VerificationResponse() ? response.Content.ReadAsAsync<T>().Result : default(T);
         }
 
         /// <summary>
@@ -102,7 +109,7 @@ namespace OPCApp.DataService.Common
         public static bool Post<T>(string url, T data)
         {
             HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
-             return response.IsSuccessStatusCode;
+             return response.VerificationResponse();
         }
 
         /// <summary>
@@ -116,7 +123,7 @@ namespace OPCApp.DataService.Common
         public static TResult Post<T, TResult>(string url, T data)
         {
             HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
-            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<TResult>().Result : default(TResult);
+            return response.VerificationResponse() ? response.Content.ReadAsAsync<TResult>().Result : default(TResult);
         }
 
 
@@ -130,17 +137,17 @@ namespace OPCApp.DataService.Common
         public static bool Put<T>(string url, T data)
         {
             HttpResponseMessage response = Client.PutAsJsonAsync(url, data).Result;
-            return response.IsSuccessStatusCode;
+            return response.VerificationResponse();
         }
         public static T PostReturnModel<T>(string url, T data)
         {
             HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
-            return response.IsSuccessStatusCode ? response.Content.ReadAsAsync<T>().Result : default(T); ;
+            return response.VerificationResponse() ? response.Content.ReadAsAsync<T>().Result : default(T); ;
         }
         public static bool Put(string url, object data)
         {
             HttpResponseMessage response = Client.PutAsJsonAsync(url, data).Result;
-            return response.IsSuccessStatusCode;
+            return response.VerificationResponse();
         }
 
         /// <summary>
@@ -152,7 +159,7 @@ namespace OPCApp.DataService.Common
         public static bool Delete<T>(string url)
         {
             HttpResponseMessage response = Client.DeleteAsync(url).Result;
-            return response.IsSuccessStatusCode;
+            return response.VerificationResponse();
         }
     }
 }
