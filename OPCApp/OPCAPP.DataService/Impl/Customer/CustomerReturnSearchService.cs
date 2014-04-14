@@ -47,6 +47,31 @@ namespace OPCApp.DataService.Customer
                 return new List<OrderDto>();
             }
         }
+        public IList<RMADto> GetRmaTransByOrderNo(string orderNo)
+        {
+            try
+            {
+                var lst = RestClient.GetPage<RMADto>("rma/GetByOrderNoShippingBack", string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNo, 1, 300));
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
+        }
+
+        public IList<RMADto> GetRmaFinancialByOrderNo(string orderNo)
+        {
+            try
+            {
+                var lst = RestClient.GetPage<RMADto>("rma/GetByOrderNoReturnGoodsCompensation", string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNo, 1, 300));
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<RMADto>();
+            }
+        }
 
         public IList<RMADto> GetRmaByOrderNo(string orderNo)
         {

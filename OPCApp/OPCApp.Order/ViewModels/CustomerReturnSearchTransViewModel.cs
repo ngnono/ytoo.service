@@ -24,5 +24,15 @@ namespace OPCApp.Customer.ViewModels
             OrderDtoList =
               AppEx.Container.GetInstance<ICustomerReturnSearch>().ReturnGoodsTransSearch(ReturnGoodsInfoGet).ToList();
         }
+        public override void SearchRmaDtoListInfo()
+        {
+            if (OrderDto == null)
+            {
+                if (RmaDetailList != null) RmaDetailList.Clear();
+                return;
+            }
+            var rmaList = AppEx.Container.GetInstance<ICustomerReturnSearch>().GetRmaTransByOrderNo(OrderDto.OrderNo).ToList();
+            RMADtoList = rmaList;
+        }
     }
 }

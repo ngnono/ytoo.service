@@ -137,7 +137,7 @@ namespace OPCApp.Customer.ViewModels
                 AppEx.Container.GetInstance<ICustomerReturnSearch>().ReturnGoodsRmaSearch(ReturnGoodsInfoGet).ToList();
         }
 
-        public void SearchRmaDtoListInfo()
+        public virtual void SearchRmaDtoListInfo()
         {
             if (OrderDto == null)
             {

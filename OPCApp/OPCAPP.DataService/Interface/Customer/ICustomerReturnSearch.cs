@@ -19,5 +19,7 @@ namespace OPCApp.DataService.Customer
       IList<RMADto> GetRmaByOrderNo(string orderNo);
       IList<RmaDetail> GetRmaDetailByRmaNo(string rmaNo);
       bool AgreeReturnGoods(List<string> rmaNos);
-    }
+      IList<RMADto> GetRmaTransByOrderNo(string orderNo);
+      IList<RMADto> GetRmaFinancialByOrderNo(string orderNo);
+  }
 }
