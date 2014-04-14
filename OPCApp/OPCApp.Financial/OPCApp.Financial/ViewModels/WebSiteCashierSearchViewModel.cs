@@ -43,7 +43,7 @@ namespace OPCApp.Financial.ViewModels
        public IList<KeyValue> FinancialTypeList { get; set; }
        public void InitCombo()
        {
-           // OderStatusList=new 
+           SearchCashierDto = new SearchCashierDto();
            StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
 
            PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();

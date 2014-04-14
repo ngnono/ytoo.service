@@ -107,5 +107,33 @@ namespace OPCApp.DataService.Impl.Trans
                 return new List<WebSiteCashierSearchDto>();
             }
         }
+        // 网站退货明细统计
+
+        public IList<WebSiteReturnGoodsStatisticsDto> GetReturnGoodsStatistics(SearchStatistics searchStatistics)
+        {
+            try
+            {
+                var lst = RestClient.GetPage<WebSiteReturnGoodsStatisticsDto>("rma/GetByFinaceDto", searchStatistics.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<WebSiteReturnGoodsStatisticsDto>();
+            }
+        }
+        //网站销售明细统计
+
+        public IList<WebSiteSalesStatisticsDto> GetSalesStatistics(SearchStatistics searchStatistics)
+        {
+            try
+            {
+                var lst = RestClient.GetPage<WebSiteSalesStatisticsDto>("rma/GetByFinaceDto", searchStatistics.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<WebSiteSalesStatisticsDto>();
+            }
+        }
     }
 }

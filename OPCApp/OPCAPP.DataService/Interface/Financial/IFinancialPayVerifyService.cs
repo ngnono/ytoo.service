@@ -26,5 +26,12 @@ namespace OPCApp.DataService.Interface.Financial
         // 网上收银流水对账查询
 
         IList<WebSiteCashierSearchDto> GetCashierStatistics(SearchCashierDto searchCashierDto);
+
+        // 网站退货明细统计
+
+        IList<WebSiteReturnGoodsStatisticsDto> GetReturnGoodsStatistics(SearchStatistics searchStatistics);
+        //网站销售明细统计
+
+        IList<WebSiteSalesStatisticsDto> GetSalesStatistics(SearchStatistics searchStatistics);
     }
 }
