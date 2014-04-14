@@ -65,16 +65,23 @@ namespace OPCApp.DataService.Impl.Customer
         }
 
         //赔偿金额退回审核
-        public bool SetCustomerMoneyGoods(string rmaNo)
+        public bool SetCustomerMoneyGoods(List<string> rmaNoList)
         {
             try
             {
-                return RestClient.Post("custom/AgreeReturnGoods", string.Format("rmaNo={0}", rmaNo));
+                return RestClient.Post("custom/AgreeReturnGoods", rmaNoList);
             }
             catch (Exception ex)
             {
                 return false;
             }
         }
+
+        #region ICustomerInquiriesService 成员
+
+
+       
+
+        #endregion
     }
 }

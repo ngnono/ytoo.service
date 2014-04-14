@@ -11,6 +11,10 @@ namespace OPCApp.Customer.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CustomerReturnSearchTransViewModel : CustomerReturnSearchViewModel
     {
+        public CustomerReturnSearchTransViewModel()
+        {
+            IsShowCustomerReViewBtn = false;
+        }
         public override void SearchGoodsInfo()
         {
             OrderDtoList =
