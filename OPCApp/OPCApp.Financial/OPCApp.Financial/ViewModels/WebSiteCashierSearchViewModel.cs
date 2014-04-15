@@ -62,6 +62,7 @@ namespace OPCApp.Financial.ViewModels
 
         private void Search()
         {
+            
             WebSiteCashierSearchDtos =
                 AppEx.Container.GetInstance<IFinancialPayVerify>().GetCashierStatistics(SearchCashierDto).ToList();
         }
