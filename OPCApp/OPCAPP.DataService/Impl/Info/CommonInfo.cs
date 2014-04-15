@@ -139,7 +139,14 @@ namespace OPCApp.DataService.Impl.Info
         //退货类型
         public IList<KeyValue> GetFinancialTypeList()
         {
-            throw new NotImplementedException();
+            try
+            {//接口不对
+                return RestClient.Get<KeyValue>("trans/GetRmaStatus").ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }
