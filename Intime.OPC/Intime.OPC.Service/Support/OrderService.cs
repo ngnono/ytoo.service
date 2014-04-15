@@ -21,8 +21,9 @@ namespace Intime.OPC.Service.Support
         private readonly IBrandRepository _brandRepository;
         private IAccountService _accountService;
         private ISaleDetailRepository _saleDetailRepository;
+        private ISaleRMARepository _saleRmaRepository;
 
-        public OrderService(IOrderRepository orderRepository, IOrderRemarkRepository orderRemarkRepository, IOrderItemRepository orderItemRepository, IBrandRepository brandRepository, IAccountService accountService, ISaleDetailRepository saleDetailRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderRemarkRepository orderRemarkRepository, IOrderItemRepository orderItemRepository, IBrandRepository brandRepository, IAccountService accountService, ISaleDetailRepository saleDetailRepository, ISaleRMARepository saleRmaRepository)
             : base(orderRepository)
         {
             _orderRepository = _repository as IOrderRepository;
@@ -31,6 +32,7 @@ namespace Intime.OPC.Service.Support
             _brandRepository = brandRepository;
             _accountService = accountService;
             _saleDetailRepository = saleDetailRepository;
+            _saleRmaRepository = saleRmaRepository;
         }
 
         public PageResult<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd,
@@ -166,6 +168,13 @@ namespace Intime.OPC.Service.Support
             var lstOrderItems = _orderItemRepository.GetOrderItemsAutoBack(orderNo, pageIndex, pageSize);
 
             return lstOrderItems;
+        }
+
+        public void SetSaleOrderVoid(string saleOrderNo)
+        {
+            _orderItemRepository.SetSaleOrderVoid(saleOrderNo);
+            _saleRmaRepository.SetVoidBySaleOrder(saleOrderNo);
+
         }
 
         public IList<OPC_OrderComment> GetCommentByOderNo(string orderNo)

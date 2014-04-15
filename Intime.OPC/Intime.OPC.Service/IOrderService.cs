@@ -85,5 +85,6 @@ namespace Intime.OPC.Service
         ReturnGoodsStatListDto WebSiteStatReturnDetail(SearchStatRequest request);
         CashierList WebSiteCashier(SearchCashierRequest request);
         PageResult<OrderItemDto> GetOrderItemsAutoBack(string orderNo, int pageIndex, int pageSize);
+        void SetSaleOrderVoid(string saleOrderNo);
     }
 }
