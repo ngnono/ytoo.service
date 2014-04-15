@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using AutoMapper;
 using Intime.OPC.Domain;
@@ -286,6 +287,23 @@ namespace Intime.OPC.Repository.Support
                     lstDtos.Add(o);
                 }
                 return new PageResult<OrderItemDto>(lstDtos, list.TotalCount);
+            }
+        }
+
+        public void SetSaleOrderVoid(string saleOrderNo)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var sale = db.OPC_Sale.Where(t => t.SaleOrderNo == saleOrderNo).FirstOrDefault();
+                if (sale == null)
+                {
+                    throw new Exception("销售单不存在，销售单号:"+saleOrderNo);
+                }
+                sale.Status = EnumSaleOrderStatus.Void.AsID();
+                
+                db.OPC_Sale.AddOrUpdate(sale);
+            
+                db.SaveChanges();
             }
         }
 

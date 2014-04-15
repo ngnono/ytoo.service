@@ -37,5 +37,6 @@ namespace Intime.OPC.Repository
 
         OPC_SaleRMA GetByRmaNo(string rmaNo);
         PageResult<SaleRmaDto> GetOrderAutoBack(ReturnGoodsRequest request);
+        void SetVoidBySaleOrder(string saleOrderNo);
     }
 }

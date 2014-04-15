@@ -38,15 +38,15 @@
                 <TextBlock Margin="0 5" Text="  门店" />
                 <ComboBox Width="150" ItemsSource="{Binding StoreList}"
                           DisplayMemberPath="Value" SelectedValuePath="Key"
-                          SelectedValue="{Binding StoreId}" />
+                          SelectedValue="{Binding SearchCashierDto.StoreId}" />
                 <TextBlock Margin="0 5" Text="  支付方式" />
-                <ComboBox Width="150" ItemsSource="{Binding StoreList}"
+                <ComboBox Width="150" ItemsSource="{Binding PaymentTypeList}"
                           DisplayMemberPath="Value" SelectedValuePath="Key"
                           SelectedValue="{Binding PayType}" />
                 <TextBlock Margin="0 5" Text="  财务类型" />
                 <ComboBox Width="150"
                           DisplayMemberPath="Value" SelectedValuePath="Key"
-                          ItemsSource="{Binding FinancialType}" SelectedValue="{Binding FinancialType}" />
+                          ItemsSource="{Binding FinancialTypeList}" SelectedValue="{Binding SearchCashierDto.FinancialType}" />
             </StackPanel>
         </StackPanel>
         <DataGrid Grid.Row="2" Name="DataGrid1" ItemsSource="{Binding WebSiteCashierSearchDtos, Mode=TwoWay}"

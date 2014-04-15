@@ -203,7 +203,14 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult SetSaleOrderVoid([FromBody] IEnumerable<string> saleOrderNos)
         {
             //todo 缺货提醒-缺货订单 取消销售单
-            return DoAction(() => { });
+            return DoAction(() =>
+            {
+                foreach (var saleOrderNo in saleOrderNos)
+                {
+                    _orderService.SetSaleOrderVoid(saleOrderNo);
+                }
+
+            });
         }
 
         #endregion
@@ -228,7 +235,7 @@ namespace Intime.OPC.WebApi.Controllers
         //SearchStatRequest
 
         [HttpGet]
-        public IHttpActionResult WebSiteStatSaleDetail([FromBody] SearchStatRequest request)
+        public IHttpActionResult WebSiteStatSaleDetail([FromUri] SearchStatRequest request)
         {
             return DoFunction(() => _orderService.WebSiteStatSaleDetail(request));
         }
@@ -239,7 +246,7 @@ namespace Intime.OPC.WebApi.Controllers
         //SearchStatRequest
 
         [HttpGet]
-        public IHttpActionResult WebSiteStatReturnDetail([FromBody] SearchStatRequest request)
+        public IHttpActionResult WebSiteStatReturnDetail([FromUri] SearchStatRequest request)
         {
             return DoFunction(() => _orderService.WebSiteStatReturnDetail(request));
         }
@@ -250,7 +257,7 @@ namespace Intime.OPC.WebApi.Controllers
         //SearchStatRequest
 
         [HttpGet]
-        public IHttpActionResult WebSiteCashier([FromBody] SearchCashierRequest request)
+        public IHttpActionResult WebSiteCashier([FromUri] SearchCashierRequest request)
         {
             return DoFunction(() => _orderService.WebSiteCashier(request));
         }
