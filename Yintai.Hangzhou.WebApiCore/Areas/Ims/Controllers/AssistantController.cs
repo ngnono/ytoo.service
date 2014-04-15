@@ -427,7 +427,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
         public ActionResult Order_GiftCards(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
-                        Where(iai => iai.AssociateUserId == authuid && iai.SourceType == (int)AssociateOrderType.Product)
+                        Where(iai => iai.AssociateUserId == authuid && iai.SourceType == (int)AssociateOrderType.GiftCard)
                         .Join(Context.Set<IMS_GiftCardOrderEntity>(), o => o.SourceNo, i => i.No, (o, i) => new
                         {
                             A = o,
