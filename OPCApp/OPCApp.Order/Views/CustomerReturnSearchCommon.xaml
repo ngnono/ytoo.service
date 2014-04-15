@@ -36,7 +36,7 @@
                 </Button>
                 <Button Width="100" Background="LightGray"
                         Visibility="{Binding IsShowCustomerAgreeBtn, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource  BoolToVisibilityConverter}}"
-                        Command="{Binding CommandAgreeReturnGoods}">
+                        Command="{Binding CommandSetCustomerMoneyReviewGoods}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/到达确认.png" Stretch="None" />
                         <TextBlock Width="100" HorizontalAlignment="Center">客服同意商品退货</TextBlock>
@@ -44,7 +44,7 @@
                 </Button>
                 <Button Width="100" Background="LightGray"
                         Visibility="{Binding IsShowCustomerReViewBtn, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource  BoolToVisibilityConverter}}"
-                        Command="{Binding CommandSetCustomerMoneyReviewGoods}">
+                        Command="{Binding CommandAgreeReturnGoods}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/发布.png" Stretch="None" />
                         <TextBlock Width="100" HorizontalAlignment="Center">修改赔偿金额复审</TextBlock>

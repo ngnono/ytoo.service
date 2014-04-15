@@ -175,10 +175,10 @@
                           DisplayMemberPath="Name" SelectedValuePath="Id" SelectedItem="{Binding ShipVia}" />
                 <TextBlock Text="实际运费" Margin="0 10" />
                 <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
-                         Text="{Binding ShippingSaleCreateDto.ShippingFee}" />
+                         Text="{Binding RmaExpressSaveDto.ShippingFee}" />
                 <TextBlock Text="快递单号" Margin="0,10" />
                 <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
-                         Text="{Binding ShippingSaleCreateDto.ShippingCode}" />
+                         Text="{Binding RmaExpressSaveDto.ShippingCode}" />
                 <Button Height="25" Content="保存" Margin="5 5" Width="100"
                         Command="{Binding CommandSaveShip}" />
             </StackPanel>
