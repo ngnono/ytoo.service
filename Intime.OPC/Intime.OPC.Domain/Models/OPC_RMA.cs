@@ -47,6 +47,7 @@ namespace Intime.OPC.Domain.Models
 
         public string RmaCashNum { get; set; }
 
+        public Nullable<int> SectionId { get; set; }
         public DateTime? RmaCashDate { get; set; }
     }
 }

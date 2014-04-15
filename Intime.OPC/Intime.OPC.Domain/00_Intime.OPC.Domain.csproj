@@ -69,6 +69,7 @@
     <Compile Include="Dto\Custom\ReturnGoodsGet.cs" />
     <Compile Include="Dto\Custom\ReturnGoodsPay.cs" />
     <Compile Include="Dto\Custom\RMAPost.cs" />
+    <Compile Include="Dto\Custom\ShoppingGuideRequest.cs" />
     <Compile Include="Dto\OrderItemDto.cs" />
     <Compile Include="Dto\RmaDetail.cs" />
     <Compile Include="Dto\RMADto.cs" />

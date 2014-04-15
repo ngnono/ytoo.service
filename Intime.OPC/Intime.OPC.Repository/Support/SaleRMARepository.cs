@@ -26,8 +26,8 @@ namespace Intime.OPC.Repository.Support
             CheckUser();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMA.Where(t =>true);
-                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
+                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var query2 = db.Orders.Where(t => CurrentUser.StoreIDs.Contains(t.StoreId));
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     query = query.Where(t => t.OrderNo.Contains(orderNo));
@@ -101,7 +101,7 @@ namespace Intime.OPC.Repository.Support
                 {
                     query = query.Where(t => t.RMAStatus == returnGoodsStatus);
                 }
-                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime);
+                var query2 = db.Orders.Where(t=>true);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     query = query.Where(t => t.OrderNo.Contains(orderNo));

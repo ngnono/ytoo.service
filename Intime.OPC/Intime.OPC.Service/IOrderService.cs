@@ -76,5 +76,7 @@ namespace Intime.OPC.Service
         PageResult<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request);
 
         PageResult<OrderDto> GetShippingBackByReturnGoodsInfo(ReturnGoodsInfoRequest request);
+
+        PageResult<OrderDto> GetSaleRmaByReturnGoodsCompensate(ReturnGoodsInfoRequest request);
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
@@ -83,8 +84,7 @@ namespace Intime.OPC.Service.Support
 
         public PageResult<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
-            request.StartDate = request.StartDate.Date;
-            request.EndDate = request.EndDate.Date.AddDays(1);
+            request.FormatDate();
             var lst = _orderRepository.GetByReturnGoodsInfo(request);
                return Mapper.Map<Order, OrderDto>(lst);
 
@@ -96,14 +96,22 @@ namespace Intime.OPC.Service.Support
 
         public PageResult<OrderDto> GetShippingBackByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
-            throw new NotImplementedException();
+            request.FormatDate();
+
+            string returnGoodsStatus = "";
+            int status = EnumRMAStatus.ShipVerifyNotPass.AsID();
+            var lst = _orderRepository.GetBySaleRma(request, status, returnGoodsStatus);
+            return Mapper.Map<Order, OrderDto>(lst);
         }
 
-        //public IList<OrderDto> GetByReturnGoodsInfReturnGoodsInfoRequestet request)
-        //{
-        //    var lst = _orderRepository.GetByReturnGoodsInfo(request);
-        //    return Mapper.Map<Order, OrderDto>(lst);
-        //}
+        public PageResult<OrderDto> GetSaleRmaByReturnGoodsCompensate(ReturnGoodsInfoRequest request)
+        {
+            request.FormatDate();
+
+            string returnGoodsStatus = EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
+            var lst = _orderRepository.GetBySaleRma(request, null, returnGoodsStatus);
+            return Mapper.Map<Order, OrderDto>(lst);
+        }
 
         public IList<OPC_OrderComment> GetCommentByOderNo(string orderNo)
         {

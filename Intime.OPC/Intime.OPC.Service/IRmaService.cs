@@ -25,7 +25,7 @@ namespace Intime.OPC.Service
         /// <param name="rmaStatus">退货单状态</param>
         /// <param name="returnGoodsStatus">退货状态</param>
         /// <returns>IList{RMADto}.</returns>
-        PageResult<RMADto> GetByOrderNo(string orderNo, EnumRMAStatus rmaStatus, EnumReturnGoodsStatus returnGoodsStatus, int pageIndex, int pageSize);
+        PageResult<RMADto> GetByOrderNo(string orderNo, int? rmaStatus, string returnGoodsStatus, int pageIndex, int pageSize);
 
         PageResult<RMADto> GetByRmaNo(string rmaNo);
 
@@ -91,5 +91,10 @@ namespace Intime.OPC.Service
         /// </summary>
         /// <param name="rmaNo">The rma no.</param>
         void SetRmaPint(string rmaNo);
+
+        PageResult<RMADto> GetRmaByShoppingGuide(ShoppingGuideRequest request);
+
+        PageResult<RMADto> GetRmaByAllOver(ShoppingGuideRequest request);
+       
     }
 }
