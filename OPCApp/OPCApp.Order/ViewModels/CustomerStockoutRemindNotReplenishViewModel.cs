@@ -18,11 +18,19 @@ using OPCApp.Infrastructure;
 namespace OPCApp.Customer.ViewModels
 {
 
-    [Export(typeof(CustomerStockoutRemindNotReplenishViewModel))]
+    [Export(typeof(CustomerStockoutRemindCommonViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class CustomerStockoutRemindNotReplenishViewModel : BindableBase
+    public class CustomerStockoutRemindCommonViewModel : BindableBase
     {
-        public CustomerStockoutRemindNotReplenishViewModel()
+        private CustomerReturnGoodsUserControlViewModel _customerReturnGoodsUserControlViewModel;
+
+        [Import(typeof(CustomerReturnGoodsUserControlViewModel))]
+        public CustomerReturnGoodsUserControlViewModel CustomerReturnGoodsUserControlViewModel
+        {
+            get { return _customerReturnGoodsUserControlViewModel; }
+            set { SetProperty(ref _customerReturnGoodsUserControlViewModel, value); }
+        }
+        public CustomerStockoutRemindCommonViewModel()
         {
             CommandGetOrder = new DelegateCommand(GetOrder);
             CommandGetSaleByOrderId = new DelegateCommand(GetSaleByOrderId);

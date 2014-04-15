@@ -8,13 +8,22 @@ using Microsoft.Practices.Prism.Mvvm;
 
 namespace OPCApp.Customer.ViewModels
 {
-    [Export("CustomerReturnGoodsMainViewModel", typeof(CustomerReturnGoodsMainViewModel))]
+    [Export(typeof(CustomerReturnGoodsMainViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public  class CustomerStockoutRemindViewModel:BindableBase
     {
+
+        private CustomerStockoutRemindNotReplenishViewModel _customerStockoutRemindNotReplenishViewModel;
+
+        [Import(typeof(CustomerStockoutRemindNotReplenishViewModel))]
+        public CustomerStockoutRemindNotReplenishViewModel CustomerStockoutRemindNotReplenishViewModel
+        {
+            get { return _customerStockoutRemindNotReplenishViewModel; }
+            set { SetProperty(ref _customerStockoutRemindNotReplenishViewModel, value); }
+        }
         private CustomerStockoutRemindCommonViewModel _customerStockoutRemindCommonViewModel;
 
-        [Import]
+        [Import(typeof(CustomerStockoutRemindCommonViewModel))]
         public CustomerStockoutRemindCommonViewModel CustomerReturnSearchFinancialViewModel
         {
             get { return _customerStockoutRemindCommonViewModel; }
