@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -35,5 +36,8 @@ namespace Intime.OPC.Repository
         PageResult<Order> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize);
 
         PageResult<Order> GetByReturnGoodsInfo(Domain.Dto.Custom.ReturnGoodsInfoRequest request);
+
+        PageResult<Order> GetBySaleRma(ReturnGoodsInfoRequest request, int? rmaStatus, string returnGoodsStatus);
+        PageResult<Order> GetByOutOfStockNotify(OutOfStockNotifyRequest request, int orderstatus);
     }
 }

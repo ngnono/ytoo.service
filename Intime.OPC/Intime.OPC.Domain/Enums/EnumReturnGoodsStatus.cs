@@ -47,6 +47,9 @@ namespace Intime.OPC.Domain.Enums
         /// </summary>
         [Description("赔偿审核未通过")] CompensateVerifyFailed =20,
 
+
+        [Description("客服同意商品退回")]
+        ServiceAgreeGoodsBack = 22,
         /// <summary>
         ///     The valid
         /// </summary>

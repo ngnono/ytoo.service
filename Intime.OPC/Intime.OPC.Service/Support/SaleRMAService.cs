@@ -342,6 +342,41 @@ namespace Intime.OPC.Service.Support
            
         }
 
+        public PageResult<SaleRmaDto> GetByReturnGoodsCompensate(ReturnGoodsInfoRequest request)
+        {
+            ISaleRMARepository rep = _repository as ISaleRMARepository;
+
+            string status = EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
+
+            return rep.GetAll(request.OrderNo, request.SaleOrderNo, request.PayType, request.RmaNo,
+                 request.StartDate, request.EndDate, request.RmaStatus, request.StoreID, status, request.pageIndex, request.pageSize);
+        }
+
+        public void SetSaleRmaServiceAgreeGoodsBack(string rmaNo)
+        {
+             var rep = (ISaleRMARepository)_repository;
+            var rma = rep.GetByRmaNo(rmaNo);
+            if (rma == null)
+            {
+                throw new Exception(string.Format("退货收货单不存在，退货单号{0}",rmaNo));
+            }
+            rma.RMAStatus = EnumReturnGoodsStatus.ServiceAgreeGoodsBack.GetDescription();
+            rep.Update(rma);
+        }
+
+        public PageResult<SaleRmaDto> GetOrderAutoBack(ReturnGoodsRequest request)
+        {
+            ISaleRMARepository rep = _repository as ISaleRMARepository;
+
+            request.StartDate = request.StartDate.Date;
+            request.EndDate = request.EndDate.Date.AddDays(1);
+
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
+            var lst = rep.GetOrderAutoBack(request);
+
+            return lst;
+        }
+
         private void Save(IList<RmaConfig> configs)
         {
             foreach (RmaConfig config in configs)

@@ -7,10 +7,10 @@ namespace Intime.OPC.Domain.Enums
     /// </summary>
     public enum EnumRmaShippingStatus
     {
-        [Description("未打印")] NoPrint = 100,
+        [Description("未发货")] NoPrint = 100,
 
-        [Description("已打印")] Printed = 105,
+        [Description("已发货")] Printed = 105,
 
-        [Description("打印完成")] PrintOver = 110,
+        [Description("发货完成")] PrintOver = 110,
     }
 }

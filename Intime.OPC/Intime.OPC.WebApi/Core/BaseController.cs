@@ -65,7 +65,7 @@ namespace Intime.OPC.WebApi.Core
             }
             throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
-        protected IHttpActionResult DoFunction(Func<dynamic> action, string falseMeg)
+        protected IHttpActionResult DoFunction(Func<dynamic> action, string falseMeg="")
         {
             try
             {
@@ -94,7 +94,7 @@ namespace Intime.OPC.WebApi.Core
             }
         }
 
-        protected IHttpActionResult DoAction(Action action, string falseMeg)
+        protected IHttpActionResult DoAction(Action action, string falseMeg="")
         {
             try
             {

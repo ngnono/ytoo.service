@@ -61,6 +61,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
 
             this.Property(t => t.RmaNo).HasColumnName("RmaNo");
+            this.Property(t => t.PrintTimes).HasColumnName("PrintTimes");
         }
     }
 }

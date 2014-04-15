@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
@@ -187,6 +188,78 @@ namespace Intime.OPC.Repository.Support
         public OPC_SaleRMA GetByRmaNo(string rmaNo)
         {
             return  Select(t => t.RMANo == rmaNo).FirstOrDefault();
+        }
+
+        public PageResult<SaleRmaDto> GetOrderAutoBack(ReturnGoodsRequest request)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var query = db.OPC_SaleRMA.Where(t => true);
+                var query2 = db.Orders.Where(t => CurrentUser.StoreIDs.Contains(t.StoreId) && t.CreateDate>=request.StartDate && t.CreateDate<request.EndDate);
+                var queryRMA = db.RMAs.Where(t => true);
+                if (request.OrderNo.IsNotNull())
+                {
+                    query = query.Where(t => t.OrderNo.Contains(request.OrderNo));
+                    query2 = query2.Where(t => t.OrderNo.Contains(request.OrderNo));
+                    queryRMA = queryRMA.Where(t => t.OrderNo.Contains(request.OrderNo));
+                }
+
+
+                if (request.PayType.IsNotNull())
+                {
+                    query2 = query2.Where(t => t.PaymentMethodCode == request.PayType);
+                }
+
+                if (request.BandId.HasValue)
+                {
+                    query2 = query2.Where(t => t.BrandId == request.BandId.Value);
+                }
+               var  query3 = Queryable.Join(query2, queryRMA, t => t.OrderNo, o => o.OrderNo,
+                    (t, o) => new {Order = t, RMA = o});
+
+               var q = from t in query3
+                        join o in query on t.Order.OrderNo equals o.OrderNo into cs
+                        select new { SaleRMA = cs.FirstOrDefault(), Orders = t.Order,RMA=t.RMA };
+                q = q.OrderByDescending(t => t.Orders.CreateDate);
+                var lst = q.ToPageResult(request.pageIndex, request.pageSize);
+                var lstSaleRma = new List<SaleRmaDto>();
+                foreach (var t in lst.Result)
+                {
+                    var o = new SaleRmaDto();
+                    o.Id = t.Orders.Id;
+
+                    o.CustomerAddress = t.Orders.ShippingAddress;
+                    o.CustomerName = t.Orders.ShippingContactPerson;
+                    o.CustomerPhone = t.Orders.ShippingContactPhone;
+
+                    o.IfReceipt = t.Orders.NeedInvoice.HasValue ? t.Orders.NeedInvoice.Value : false;
+                    o.MustPayTotal = (double)(t.Orders.TotalAmount);
+                    o.OrderNo = t.Orders.OrderNo;
+                    o.PaymentMethodName = t.Orders.PaymentMethodName;
+
+                    o.ReceiptContent = t.Orders.InvoiceDetail;
+                    o.ReceiptHead = t.Orders.InvoiceSubject;
+
+                    o.OrderSource = t.Orders.OrderSource;
+                    o.OrderTransFee = t.Orders.ShippingFee;
+
+                    if (t.SaleRMA != null)
+                    {
+                        o.BuyDate = t.SaleRMA.CreatedDate;
+                        o.CustomFee = t.SaleRMA.CustomFee;
+                        o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
+                        o.RecoverableSumMoney = t.SaleRMA.RecoverableSumMoney;
+                        o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
+                        o.SaleOrderNo = t.SaleRMA.SaleOrderNo;
+                        o.StoreFee = t.SaleRMA.StoreFee;
+                        o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
+                        o.CustomerRemark = t.SaleRMA.Reason;
+                        o.RmaNo = t.SaleRMA.RMANo;
+                    }
+                    lstSaleRma.Add(o);
+                }
+                return new PageResult<SaleRmaDto>(lstSaleRma, lst.TotalCount);
+            }
         }
     }
 }

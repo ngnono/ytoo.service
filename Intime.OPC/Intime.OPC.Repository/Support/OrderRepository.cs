@@ -166,8 +166,106 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
+        public PageResult<Order> GetBySaleRma(ReturnGoodsInfoRequest request,int? rmaStatus,string returnGoodsStatus)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                
 
- 
+                var filter2 = db.OPC_SaleRMA.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate );
+                if (returnGoodsStatus.IsNotNull())
+                {
+                    filter2 = filter2.Where(t => t.RMAStatus == returnGoodsStatus);
+                }
+
+                if (rmaStatus.HasValue)
+                {
+                    filter2 = filter2.Where(t => t.Status == rmaStatus.Value);
+                }
+
+                var filter = db.Orders.Where(t => true);
+
+                if (request.OrderNo.IsNotNull())
+                {
+                    filter = filter.Where(t => t.OrderNo.Contains(request.OrderNo));
+                }
+                if (request.PayType.IsNotNull())
+                {
+                    filter = filter.Where(t => t.PaymentMethodCode == request.PayType);
+                }
+                if (request.SaleOrderNo.IsNotNull())
+                {
+                    filter = filter.Join(db.OPC_Sale.Where(t => t.SaleOrderNo.Contains(request.SaleOrderNo)),
+                        t => t.OrderNo, o => o.OrderNo, (t, o) => t);
+                }
+
+
+                if (request.RmaNo.IsNotNull())
+                {
+                    filter2 = filter2.Where(t => t.RMANo == request.RmaNo);
+                }
+
+                if (request.RmaStatus.HasValue)
+                {
+                    filter2 = filter2.Where(t => t.Status == request.RmaStatus.Value);
+
+                }
+
+                if (request.StoreID.HasValue)
+                {
+                    filter2 = filter2.Where(t => t.StoreId == request.StoreID.Value);
+                }
+
+                var orderIds = filter2.ToList().Select<OPC_SaleRMA, string>(t => t.OrderNo).Distinct().ToList();
+
+                filter = filter.Where(t => orderIds.Contains(t.OrderNo)).OrderByDescending(t => t.CreateDate);
+
+                return filter.ToPageResult(request.pageIndex, request.pageSize);
+            }
+        }
+
+        public PageResult<Order> GetByOutOfStockNotify(OutOfStockNotifyRequest request, int orderstatus)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var filter2 = db.OPC_Sale.Where(t=>true);
+
+                var filter = db.Orders.Where(t => t.CreateDate >= request.StartDate && t.CreateDate  < request.EndDate && t.Status==orderstatus);
+                if (request.OrderNo.IsNotNull())
+                {
+                    filter2 = filter2.Where(t => t.OrderNo==request.OrderNo);
+                    filter = filter.Where(t => t.OrderNo == request.OrderNo);
+                }
+
+                if (request.SaleOrderStatus.HasValue)
+                {
+                    filter2 = filter2.Where(t => t.Status == request.SaleOrderStatus.Value);
+                }
+
+                if (request.PayType.IsNotNull())
+                {
+                    filter = filter.Where(t => t.PaymentMethodCode == request.PayType);
+                }
+
+                if (request.SaleOrderStatus.HasValue)
+                {
+                    filter2 = filter2.Where(t => t.Status == request.SaleOrderStatus.Value);
+                }
+
+
+
+                if (request.StoreId.HasValue)
+                {
+                    filter = filter.Where(t => t.StoreId==request.StoreId.Value);
+                }
+                filter=  Queryable.Join(filter, filter2, t => t.OrderNo, o => o.OrderNo, (t, o) => t);
+
+                filter = filter.OrderByDescending(t => t.CreateDate);
+   
+                return filter.ToPageResult(request.pageIndex, request.pageSize);
+            }
+        }
+
         #endregion
     }
 }
