@@ -38,6 +38,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 create_date = l.Order.CreateDate,
                 status = ((OrderStatus)l.Order.Status).ToFriendlyString(),
                 status_i = l.Order.Status,
+                shipping_name = l.Order.ShippingContactPerson,
                 products = l.OI.ToList().Select(p=>new {
                     id = p.OI.ProductId,
                     name = p.OI.ProductName,
