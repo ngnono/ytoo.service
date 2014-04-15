@@ -469,6 +469,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                     order_no = l.A.SourceNo,
                     amount = l.O.TotalAmount,
                     create_date = l.O.CreateDate,
+                    shipping_name = l.O.ShippingContactPerson,
                     status = ((OrderStatus)l.O.Status).ToFriendlyString()
                 }).ToList<dynamic>()
             };
