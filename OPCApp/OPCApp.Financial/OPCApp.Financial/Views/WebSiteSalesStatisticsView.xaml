@@ -32,9 +32,9 @@
         <StackPanel Grid.Row="1" Background="LightGray">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="购买时间" Margin="0 5" />
-                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsPayDto.StartTime}" />
+                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding SearchCashierDto.StartTime}" />
                 <TextBlock Text="  至" Margin="0 5" />
-                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsPayDto.EndTime}" />
+                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding SearchCashierDto.EndTime}" />
             </StackPanel>
         </StackPanel>
         <DataGrid Grid.Row="2" Name="DataGrid1" ItemsSource="{Binding WebSiteSalesStatisticsDtos, Mode=TwoWay}"

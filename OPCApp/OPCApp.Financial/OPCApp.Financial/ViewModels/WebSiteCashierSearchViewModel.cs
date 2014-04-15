@@ -57,7 +57,7 @@ namespace OPCApp.Financial.ViewModels
 
         private void ExportExcel()
         {
-            throw new NotImplementedException();
+           
         }
 
         private void Search()
