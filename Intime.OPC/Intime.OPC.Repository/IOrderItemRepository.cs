@@ -20,5 +20,6 @@ namespace Intime.OPC.Repository
         SaleDetailStatListDto WebSiteStatSaleDetail(SearchStatRequest request);
         ReturnGoodsStatListDto WebSiteStatReturnGoods(SearchStatRequest request);
         CashierList WebSiteCashier(SearchCashierRequest request);
+        PageResult<OrderItemDto> GetOrderItemsAutoBack(string orderNo, int pageIndex, int pageSize);
     }
 }

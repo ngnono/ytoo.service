@@ -291,6 +291,8 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         #endregion
+
+        
     }
 
     public class CompensateVerifyRequest

@@ -364,6 +364,19 @@ namespace Intime.OPC.Service.Support
             rep.Update(rma);
         }
 
+        public PageResult<SaleRmaDto> GetOrderAutoBack(ReturnGoodsRequest request)
+        {
+            ISaleRMARepository rep = _repository as ISaleRMARepository;
+
+            request.StartDate = request.StartDate.Date;
+            request.EndDate = request.EndDate.Date.AddDays(1);
+
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
+            var lst = rep.GetOrderAutoBack(request);
+
+            return lst;
+        }
+
         private void Save(IList<RmaConfig> configs)
         {
             foreach (RmaConfig config in configs)

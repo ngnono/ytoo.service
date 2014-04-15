@@ -227,6 +227,8 @@ namespace Intime.OPC.WebApi.Controllers
         #endregion
 
 
+
+
           #region 已完成退货单查询
           /// <summary>
           ///已完成退货单查询
@@ -243,6 +245,32 @@ namespace Intime.OPC.WebApi.Controllers
               }, "查询退货单信息失败");
           }
 
+          #endregion
+
+          #region  网络自助退货
+          [HttpGet]
+          public IHttpActionResult GetOrderAutoBack([FromUri] ReturnGoodsRequest request)
+          {
+              return DoFunction(() =>
+              {
+                  int brandid = request.BandId.HasValue ? request.BandId.Value : -1;
+
+                  return _saleRmaService.GetOrderAutoBack(request);
+              }, "查询订单失败");
+          }
+          [HttpGet]
+          public IHttpActionResult GetOrderItemsByOrderNoAutoBack(string orderNo, int pageIndex, int pageSize)
+          {
+              //todo 查询订单明细 未实现
+              return DoFunction(() =>
+              {
+                  return _orderService.GetOrderItemsAutoBack(orderNo, pageIndex, pageSize);
+                  return null;
+              }, "读取订单明细失败");
+
+          }
+
+          
           #endregion
     }
 

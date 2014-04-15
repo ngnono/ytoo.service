@@ -161,6 +161,13 @@ namespace Intime.OPC.Service.Support
             return lst;
         }
 
+        public PageResult<OrderItemDto> GetOrderItemsAutoBack(string orderNo, int pageIndex, int pageSize)
+        {
+            var lstOrderItems = _orderItemRepository.GetOrderItemsAutoBack(orderNo, pageIndex, pageSize);
+
+            return lstOrderItems;
+        }
+
         public IList<OPC_OrderComment> GetCommentByOderNo(string orderNo)
         {
             return _orderRemarkRepository.GetByOrderNo(orderNo);

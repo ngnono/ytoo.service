@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 
@@ -35,5 +36,6 @@ namespace Intime.OPC.Repository
         PageResult<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, System.DateTime startTime, System.DateTime endTime, int? rmaStatus, int? storeId, string returnGoodsStatus, int pageIndex, int pageSize);
 
         OPC_SaleRMA GetByRmaNo(string rmaNo);
+        PageResult<SaleRmaDto> GetOrderAutoBack(ReturnGoodsRequest request);
     }
 }
