@@ -140,8 +140,8 @@ namespace OPCApp.DataService.Impl.Info
         public IList<KeyValue> GetFinancialTypeList()
         {
             try
-            {//接口不对
-                return RestClient.Get<KeyValue>("trans/GetRmaStatus").ToList();
+            {
+                return RestClient.Get<KeyValue>("trans/GetFinancialEnums").ToList();
             }
             catch (Exception ex)
             {
