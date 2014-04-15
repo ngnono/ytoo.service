@@ -100,7 +100,7 @@ namespace OPCApp.DataService.Impl.Trans
             try
             {
                 PageResult<WebSiteCashierSearchDto> lst =
-                    RestClient.GetPage<WebSiteCashierSearchDto>("rma/GetByFinaceDto", searchCashierDto.ToString());
+                    RestClient.GetPage<WebSiteCashierSearchDto>("order/WebSiteCashier", searchCashierDto.ToString());
                 return lst.Result;
             }
             catch (Exception ex)
@@ -116,7 +116,7 @@ namespace OPCApp.DataService.Impl.Trans
             try
             {
                 PageResult<WebSiteReturnGoodsStatisticsDto> lst =
-                    RestClient.GetPage<WebSiteReturnGoodsStatisticsDto>("rma/GetByFinaceDto",
+                    RestClient.GetPage<WebSiteReturnGoodsStatisticsDto>("order/WebSiteStatReturnDetail",
                         searchStatistics.ToString());
                 return lst.Result;
             }
@@ -133,7 +133,7 @@ namespace OPCApp.DataService.Impl.Trans
             try
             {
                 PageResult<WebSiteSalesStatisticsDto> lst =
-                    RestClient.GetPage<WebSiteSalesStatisticsDto>("rma/GetByFinaceDto", searchStatistics.ToString());
+                    RestClient.GetPage<WebSiteSalesStatisticsDto>("order/WebSiteStatSaleDetail", searchStatistics.ToString());
                 return lst.Result;
             }
             catch (Exception ex)

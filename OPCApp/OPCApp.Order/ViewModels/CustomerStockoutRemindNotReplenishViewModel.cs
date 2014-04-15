@@ -156,7 +156,7 @@ namespace OPCApp.Customer.ViewModels
                     OrderGet.PaymentType, OrderGet.OutGoodsType,
                     OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
 
-            var re = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrder(orderfilter).Result;
+            var re = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderNoReplenish(orderfilter).Result;
             if (re != null)
             {
                 OrderList = re.ToList();

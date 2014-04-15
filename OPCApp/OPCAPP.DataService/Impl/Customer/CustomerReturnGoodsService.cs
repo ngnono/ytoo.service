@@ -56,8 +56,8 @@ namespace OPCApp.DataService.Impl.Customer
         public IList<OrderItem> GetOrderDetailByOrderNoWithSelf(string orderNo)
         {
             try
-            {//接口不对
-                PageResult<OrderItem> lst = RestClient.GetPage<OrderItem>("order/GetOrderItemsByOrderNo",
+            {
+                PageResult<OrderItem> lst = RestClient.GetPage<OrderItem>("custom/GetOrderItemsByOrderNoAutoBack",
                     string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNo, 1, 300));
                 return lst.Result;
             }
@@ -70,8 +70,8 @@ namespace OPCApp.DataService.Impl.Customer
         public IList<OPC_SaleRMA> ReturnGoodsSearchForSelf(ReturnGoodsGet returnGoodsGet)
         {
             try
-            {//接口不对
-                PageResult<OPC_SaleRMA> lst = RestClient.GetPage<OPC_SaleRMA>("custom/GetOrder",
+            {
+                PageResult<OPC_SaleRMA> lst = RestClient.GetPage<OPC_SaleRMA>("custom/GetOrderAutoBack",
                     returnGoodsGet.ToString());
                 return lst.Result;
             }
