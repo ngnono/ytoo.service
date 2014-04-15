@@ -36,7 +36,7 @@
                 <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding SearchCashierDto.EndTime}" />
             </StackPanel>
         </StackPanel>
-        <DataGrid Grid.Row="2" Name="DataGrid1" ItemsSource="{Binding WebSiteSalesStatisticsDtos, Mode=TwoWay}"
+        <DataGrid Grid.Row="2" Name="DataGrid1" ItemsSource="{Binding WebSiteReturnGoodsStatisticsDtos, Mode=TwoWay}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False" IsReadOnly="True">
 

@@ -32,22 +32,15 @@
         <StackPanel Grid.Row="1" Background="LightGray">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="购买时间" Margin="0 5" />
-                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsPayDto.StartDate}" />
+                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsPayDto.StartTime}" />
                 <TextBlock Text="  至" Margin="0 5" />
-                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsPayDto.EndDate}" />
+                <DatePicker Width="150" Foreground="Blue" SelectedDate="{Binding ReturnGoodsPayDto.EndTime}" />
             </StackPanel>
         </StackPanel>
-        <DataGrid Grid.Row="2" Name="DataGrid1" ItemsSource="{Binding RmaList, Mode=TwoWay}"
+        <DataGrid Grid.Row="2" Name="DataGrid1" ItemsSource="{Binding WebSiteSalesStatisticsDtos, Mode=TwoWay}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False" IsReadOnly="True"
-                  SelectedItem="{Binding RmaDto}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding CommandGetRmaDetailByRma}" />
-                </i:EventTrigger>
-
-            </i:Interaction.Triggers>
-
+                >
             <DataGrid.Columns>
 
                 <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
