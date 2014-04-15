@@ -51,6 +51,7 @@ namespace OPCApp.DataService.Impl.Customer
                 return false;
             }
         }
+        #region 自主退货
         //自主退货明细查询
         public IList<OrderItem> GetOrderDetailByOrderNoWithSelf(string orderNo)
         {
@@ -79,5 +80,32 @@ namespace OPCApp.DataService.Impl.Customer
                 return new List<OPC_SaleRMA>();
             }
         }
+        //自助退货  退货审核通过
+        public bool CustomerReturnGoodsSelfPass(RMAPost rmaPost)
+        {
+            try
+            {//接口不对
+                return RestClient.Post("rma/CreateSaleRMA", rmaPost);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        //自助退货 拒绝退货申请
+        public bool CustomerReturnGoodsSelfReject(RMAPost rmaPost)
+        {
+            try
+            {//接口不对
+                return RestClient.Post("rma/CreateSaleRMA", rmaPost);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        }
+
+        #endregion
     }
 }

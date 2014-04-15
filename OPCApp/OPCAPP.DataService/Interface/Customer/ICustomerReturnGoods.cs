@@ -12,5 +12,7 @@ namespace OPCApp.DataService.Interface.Customer
         IList<OrderItem> GetOrderDetailByOrderNoWithSelf(string orderNo);
 
         IList<OPC_SaleRMA> ReturnGoodsSearchForSelf(ReturnGoodsGet returnGoodsGet);
+        bool CustomerReturnGoodsSelfPass(RMAPost rmaPost);
+        bool CustomerReturnGoodsSelfReject(RMAPost rmaPost);
     }
 }
