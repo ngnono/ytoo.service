@@ -1,4 +1,5 @@
-﻿using OPCApp.Domain.Models;
+﻿using System.Collections.Generic;
+using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
 namespace OPCApp.DataService.Interface.Customer
@@ -12,5 +13,6 @@ namespace OPCApp.DataService.Interface.Customer
         PageResult<OPC_ShippingSale> GetShipping(string filter);
         PageResult<Order> GetOrderByShippingId(string shippingId);
         bool SetCustomerMoneyGoods(string rmaNo);
+        bool SetCannotReplenish(List<string> saleOrderNoList);
     }
 }

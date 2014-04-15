@@ -76,5 +76,11 @@ namespace OPCApp.DataService.Impl.Customer
                 return false;
             }
         }
+        #region 缺货提醒
+        public bool SetCannotReplenish(List<string> saleOrderNoList)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }
