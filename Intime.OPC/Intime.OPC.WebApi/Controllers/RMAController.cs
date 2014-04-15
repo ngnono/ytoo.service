@@ -13,11 +13,13 @@ namespace Intime.OPC.WebApi.Controllers
     {
         private readonly IRmaService _rmaService;
         private readonly ISaleRMAService _saleRmaService;
+        private IShippingSaleService _shippingSaleService;
 
-        public RMAController(ISaleRMAService saleRmaService, IRmaService rmaService)
+        public RMAController(ISaleRMAService saleRmaService, IRmaService rmaService, IShippingSaleService shippingSaleService)
         {
             _saleRmaService = saleRmaService;
             _rmaService = rmaService;
+            _shippingSaleService = shippingSaleService;
         }
 
         /// <summary>
@@ -127,13 +129,12 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult SetSaleRmaServiceAgreeGoodsBack([FromBody] IEnumerable<string> rmaNos)
         {
-            int userId = GetCurrentUserID();
-            
             return DoAction(() =>
             {
                 foreach (var rmaNo in rmaNos)
                 {
                     _saleRmaService.SetSaleRmaServiceAgreeGoodsBack(rmaNo);
+                    _shippingSaleService.CreateRmaShipping(rmaNo, UserID);
                 }
             });
         }

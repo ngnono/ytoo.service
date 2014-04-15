@@ -184,6 +184,36 @@ namespace Intime.OPC.WebApi.Controllers
         //ReturnGoodsInfoRequest
         #endregion
 
+        #region 缺货提醒-缺货订单
+
+        /// <summary>
+        /// Gets the order by oder no time.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetOrderByOutOfStockNotify([FromBody] OutOfStockNotifyRequest request)
+        {
+            return DoFunction(() => _orderService.GetOrderByOutOfStockNotify(request));
+        }
+
+        #endregion
+
+        #region 缺货提醒-已取消订单
+
+        /// <summary>
+        /// Gets the order by oder no time.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetOrderOfVoid([FromBody] OutOfStockNotifyRequest request)
+        {
+            return DoFunction(() => _orderService.GetOrderOfVoid(request));
+        }
+
+        #endregion
+
         #region 备注
 
         /// <summary>

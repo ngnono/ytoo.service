@@ -140,20 +140,28 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="shippingCode">The shipping code.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult PintRmaShipping(string shippingCode)
+        public IHttpActionResult PintRmaShipping([FromBody] IEnumerable<string> shippingCodes)
         {
-            return DoAction(() => _shippingSaleService.PintRmaShipping(shippingCode), "查询退货单信息失败");
+            return DoAction(() =>
+            {
+                foreach (var shippingCode in shippingCodes)
+                    _shippingSaleService.PintRmaShipping(shippingCode);
+            });
         }
 
         /// <summary>
         /// 打印完成
         /// </summary>
         /// <param name="shippingCode">The shipping code.</param>
-        /// <returns>IHttpActionResult.</returns>
+        /// <returns>IHttpActionResult.</returns>PintRmaShippingOver
         [HttpPost]
-        public IHttpActionResult PintRmaShippingOver(string shippingCode)
+        public IHttpActionResult PintRmaShippingOver([FromBody] IEnumerable<string> shippingCodes)
         {
-            return DoAction(() => _shippingSaleService.PintRmaShippingOver(shippingCode), "查询退货单信息失败");
+            return DoAction(() =>
+            {
+                foreach (var shippingCode in shippingCodes)
+                    _shippingSaleService.PintRmaShippingOver(shippingCode);
+            });
         }
 
         [HttpGet]
@@ -189,10 +197,13 @@ namespace Intime.OPC.WebApi.Controllers
          /// <param name="shippingCode">The shipping code.</param>
          /// <returns>IHttpActionResult.</returns>
          [HttpPost]
-         public IHttpActionResult PintRmaShippingOverConnect(string shippingCode)
+         public IHttpActionResult PintRmaShippingOverConnect([FromBody] IEnumerable<string> shippingCodes)
          {
-
-             return DoAction(() => _shippingSaleService.PintRmaShippingOverConnect(shippingCode), "查询退货单信息失败");
+             return DoAction(() =>
+             {
+                 foreach (var shippingCode in shippingCodes)
+                     _shippingSaleService.PintRmaShippingOverConnect(shippingCode);
+             });
          }
         #endregion
 

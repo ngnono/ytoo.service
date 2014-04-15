@@ -94,8 +94,12 @@ namespace Intime.OPC.Repository.Support
             {
                 var lst =
                     db.ShippingSales.Where(
-                        t => t.CreateDate >= startDate && t.CreateDate < endDate && t.ShippingStatus==shippingStatus && t.OrderNo.Contains(orderNo))
-                        .OrderByDescending(t => t.CreateDate);
+                        t => t.CreateDate >= startDate && t.CreateDate < endDate && t.ShippingStatus==shippingStatus );
+                if (orderNo.IsNotNull())
+                {
+                    lst = lst.Where(t=>t.OrderNo.Contains(orderNo));
+                }
+                 lst=lst.OrderByDescending(t => t.CreateDate);
                 return lst.ToPageResult(pageIndex, pageSize);
             }
         }

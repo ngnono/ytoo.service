@@ -63,6 +63,7 @@
     <Compile Include="Base\IEntity.cs" />
     <Compile Include="Dto\AuthUserDto.cs" />
     <Compile Include="Dto\Custom\FinaceDto.cs" />
+    <Compile Include="Dto\Custom\OutOfStockNotifyRequest.cs" />
     <Compile Include="Dto\Custom\PackageReceiveDto.cs" />
     <Compile Include="Dto\Custom\PackageVerifyRequest.cs" />
     <Compile Include="Dto\Custom\ReturnGoodsInfoGet.cs" />

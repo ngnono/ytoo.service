@@ -18,14 +18,16 @@ namespace Intime.OPC.Service.Support
         private readonly IOrderRemarkRepository _orderRemarkRepository;
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IBrandRepository _brandRepository;
+        private IAccountService _accountService;
 
-        public OrderService(IOrderRepository orderRepository, IOrderRemarkRepository orderRemarkRepository, IOrderItemRepository orderItemRepository, IBrandRepository brandRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderRemarkRepository orderRemarkRepository, IOrderItemRepository orderItemRepository, IBrandRepository brandRepository, IAccountService accountService)
             : base(orderRepository)
         {
             _orderRepository = _repository as IOrderRepository;
             _orderRemarkRepository = orderRemarkRepository;
             _orderItemRepository = orderItemRepository;
             _brandRepository = brandRepository;
+            _accountService = accountService;
         }
 
         public PageResult<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd,
@@ -110,6 +112,24 @@ namespace Intime.OPC.Service.Support
 
             string returnGoodsStatus = EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
             var lst = _orderRepository.GetBySaleRma(request, null, returnGoodsStatus);
+            return Mapper.Map<Order, OrderDto>(lst);
+        }
+
+        public PageResult<OrderDto> GetOrderByOutOfStockNotify(OutOfStockNotifyRequest request)
+        {
+            request.FormatDate();
+
+            int orderstatus =EnumOderStatus.StockOut.AsID();
+            var lst = _orderRepository.GetByOutOfStockNotify(request,orderstatus);
+            return Mapper.Map<Order, OrderDto>(lst);
+        }
+
+        public PageResult<OrderDto> GetOrderOfVoid(OutOfStockNotifyRequest request)
+        {
+            request.FormatDate();
+
+            int orderstatus = EnumOderStatus.Void.AsID();
+            var lst = _orderRepository.GetByOutOfStockNotify(request, orderstatus);
             return Mapper.Map<Order, OrderDto>(lst);
         }
 

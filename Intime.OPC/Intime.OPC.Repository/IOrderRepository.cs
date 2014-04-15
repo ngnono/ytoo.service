@@ -38,5 +38,6 @@ namespace Intime.OPC.Repository
         PageResult<Order> GetByReturnGoodsInfo(Domain.Dto.Custom.ReturnGoodsInfoRequest request);
 
         PageResult<Order> GetBySaleRma(ReturnGoodsInfoRequest request, int? rmaStatus, string returnGoodsStatus);
+        PageResult<Order> GetByOutOfStockNotify(OutOfStockNotifyRequest request, int orderstatus);
     }
 }
