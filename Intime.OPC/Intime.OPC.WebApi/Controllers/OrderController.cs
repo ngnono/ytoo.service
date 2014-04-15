@@ -19,6 +19,7 @@ using System.Web.UI.WebControls;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Dto.Financial;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service;
@@ -210,6 +211,40 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetOrderOfVoid([FromBody] OutOfStockNotifyRequest request)
         {
             return DoFunction(() => _orderService.GetOrderOfVoid(request));
+        }
+
+        #endregion
+
+
+        #region 网站销售明细统计
+        //SearchStatRequest
+
+        [HttpGet]
+        public IHttpActionResult WebSiteStatSaleDetail([FromBody] SearchStatRequest request)
+        {
+            return DoFunction(() => _orderService.WebSiteStatSaleDetail(request));
+        }
+
+        #endregion
+
+        #region 网站退货明细统计
+        //SearchStatRequest
+
+        [HttpGet]
+        public IHttpActionResult WebSiteStatReturnDetail([FromBody] SearchStatRequest request)
+        {
+            return DoFunction(() => _orderService.WebSiteStatReturnDetail(request));
+        }
+
+        #endregion
+
+        #region  网上收银流水对账查询
+        //SearchStatRequest
+
+        [HttpGet]
+        public IHttpActionResult WebSiteCashier([FromBody] SearchCashierRequest request)
+        {
+            return DoFunction(() => _orderService.WebSiteCashier(request));
         }
 
         #endregion

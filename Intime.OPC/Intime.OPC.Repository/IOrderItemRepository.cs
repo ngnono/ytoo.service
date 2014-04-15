@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Financial;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -15,5 +16,9 @@ namespace Intime.OPC.Repository
         /// <param name="ids">The ids.</param>
         /// <returns>IList{OrderItem}.</returns>
         IList<OrderItem> GetByIDs(IEnumerable<int> ids);
+
+        SaleDetailStatListDto WebSiteStatSaleDetail(SearchStatRequest request);
+        ReturnGoodsStatListDto WebSiteStatReturnGoods(SearchStatRequest request);
+        CashierList WebSiteCashier(SearchCashierRequest request);
     }
 }

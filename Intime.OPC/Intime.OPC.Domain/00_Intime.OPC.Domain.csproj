@@ -70,7 +70,13 @@
     <Compile Include="Dto\Custom\ReturnGoodsGet.cs" />
     <Compile Include="Dto\Custom\ReturnGoodsPay.cs" />
     <Compile Include="Dto\Custom\RMAPost.cs" />
+    <Compile Include="Dto\Financial\SearchCashierRequest.cs" />
+    <Compile Include="Dto\Financial\SearchStatRequest.cs" />
     <Compile Include="Dto\Custom\ShoppingGuideRequest.cs" />
+    <Compile Include="Dto\Financial\WebSiteBaseDto.cs" />
+    <Compile Include="Dto\Financial\WebSiteCashierSearchDto.cs" />
+    <Compile Include="Dto\Financial\ReturnGoodsStatDto.cs" />
+    <Compile Include="Dto\Financial\SaleDetailStatDto.cs" />
     <Compile Include="Dto\OrderItemDto.cs" />
     <Compile Include="Dto\RmaDetail.cs" />
     <Compile Include="Dto\RMADto.cs" />

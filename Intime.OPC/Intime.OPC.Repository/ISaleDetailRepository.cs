@@ -1,4 +1,5 @@
 ﻿using Intime.OPC.Domain;
+using Intime.OPC.Domain.Dto.Financial;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
