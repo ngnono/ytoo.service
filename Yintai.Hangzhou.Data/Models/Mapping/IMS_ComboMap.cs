@@ -13,7 +13,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             // Properties
             this.Property(t => t.Desc)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(128);
 
             this.Property(t => t.Private2Name)
                 .IsRequired()

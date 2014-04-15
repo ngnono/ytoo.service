@@ -5,6 +5,8 @@ using System.Runtime.Serialization;
 using System.Text;
 using Yintai.Hangzhou.Contract.Response;
 using com.intime.fashion.common.Extension;
+using Yintai.Hangzhou.Model.Enums;
+using com.intime.fashion.common;
 
 namespace Yintai.Hangzhou.Contract.DTO.Response
 {
@@ -19,8 +21,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string BankNo { get; set; }
         [DataMember(Name="amount")]
         public decimal Amount { get; set; }
-        [DataMember(Name = "status")]
+        [DataMember(Name = "status_i")]
         public int Status { get; set; }
+        [DataMember(Name="status")]
+        public string Status_S { get {
+           return ((AssociateIncomeTransferStatus)Status).ToFriendlyString();
+        } }
         [DataMember(Name="create_date")]
         public System.DateTime CreateDate { get; set; }
         

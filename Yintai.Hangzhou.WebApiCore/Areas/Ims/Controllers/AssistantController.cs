@@ -314,7 +314,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
         public ActionResult Income_Received(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<IMS_AssociateIncomeRequestEntity>().
-                        Where(iair => iair.UserId == authuid && iair.Status == (int)AssociateIncomeRequestStatus.Transferred);
+                        Where(iair => iair.UserId == authuid);
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
             linq = linq.OrderByDescending(l => l.CreateDate).Skip(skipCount).Take(request.Pagesize);
