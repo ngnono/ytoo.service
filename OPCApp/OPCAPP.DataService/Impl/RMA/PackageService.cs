@@ -119,7 +119,7 @@ namespace OPCApp.DataService.Impl.Trans
             try
             {
                 PageResult<OPC_ShippingSale> lst = RestClient.GetPage<OPC_ShippingSale>(
-                    "custom/GetRmaByPackPrintPress", rmaExpress.ToString());
+                    "custom/GetRmaShippingByPackPrintPress", rmaExpress.ToString());
                 return lst.Result;
             }
             catch (Exception ex)
@@ -158,7 +158,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                return RestClient.Post("custom/PintRmaShipping", new {shippingCode});
+                return RestClient.Post("custom/PintRmaShippingOver", new List<string> {shippingCode});
             }
             catch (Exception ex)
             {
@@ -170,7 +170,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                return RestClient.Post("custom/PintRmaShippingOver", new {shippingCode});
+                return RestClient.Post("custom/PintRmaShipping", new List<string>{ shippingCode});
             }
             catch (Exception ex)
             {
@@ -227,7 +227,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                return RestClient.Post("custom/PintRmaShippingOverConnect", new {shippingCode});
+                return RestClient.Post("custom/PintRmaShippingOverConnect", new List<string>{shippingCode});
             }
             catch (Exception ex)
             {

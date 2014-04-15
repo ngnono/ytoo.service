@@ -25,13 +25,13 @@
                         <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Margin="5" Command="{Binding CommandReturnAcceptCashierConfirm}">
+                <Button Margin="5" Background="LightGray" Command="{Binding CommandReturnAcceptCashierConfirm}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/放款复核.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">退货入收银</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Margin="5" Command="{Binding CommandReturnAcceptCashier}">
+                <Button Margin="5" Background="LightGray" Command="{Binding CommandReturnAcceptCashier}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/收款确认.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">完成退货入收银</TextBlock>

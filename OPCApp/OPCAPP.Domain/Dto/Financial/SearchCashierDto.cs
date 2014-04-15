@@ -13,7 +13,7 @@ namespace OPCAPP.Domain.Dto.Financial
 
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public int StoreId { get; set; }
+        public int? StoreId { get; set; }
         public string PayType { get; set; }
         public string FinancialType { get; set; }
 

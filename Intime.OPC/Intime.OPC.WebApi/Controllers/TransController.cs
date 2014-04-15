@@ -358,16 +358,5 @@ namespace Intime.OPC.WebApi.Controllers
             }, "查询退货单信息失败");
         }
         #endregion
-
-
-        /// <summary>
-        /// 退货单状态
-        /// </summary>
-        /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
-        public IHttpActionResult GetRmaStatus()
-        {
-            return DoFunction(() => { return _enumService.All("RmaStatus"); }, "读取退货单状态失败！");
-        }
     }
 }

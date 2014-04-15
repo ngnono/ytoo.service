@@ -2,6 +2,7 @@
 {
     public class WebSiteCashierSearchDto : WebSiteBaseDto
     {
+        public int Count { get; set; }
         /// <summary>
         ///     退货单号
         /// </summary>

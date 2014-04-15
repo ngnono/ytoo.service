@@ -49,6 +49,7 @@
     <Compile Include="Base\DomainBase.cs" />
     <Compile Include="Dto\Customer\OPC_SaleRMA.cs" />
     <Compile Include="Dto\Customer\OrderDto.cs" />
+    <Compile Include="Dto\Customer\OutOfStockNotifyRequest.cs" />
     <Compile Include="Dto\Customer\PackageReceiveDto.cs" />
     <Compile Include="Dto\Customer\ReturnGoodsGet.cs" />
     <Compile Include="Dto\Customer\ReturnGoodsInfoGet.cs" />

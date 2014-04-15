@@ -165,7 +165,7 @@ namespace Intime.OPC.WebApi.Controllers
 
 
         [HttpGet]
-        public IHttpActionResult GetByReturnGoodsShippingBack([FromUri] ReturnGoodsInfoRequest request)
+        public IHttpActionResult GetShippingBackByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
         {
             var userId = GetCurrentUserID();
             return DoFunction(() => { return _orderService.GetShippingBackByReturnGoodsInfo(request); }, "查询订单信息失败");

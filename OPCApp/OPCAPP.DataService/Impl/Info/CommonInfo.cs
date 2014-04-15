@@ -139,7 +139,14 @@ namespace OPCApp.DataService.Impl.Info
         //退货类型
         public IList<KeyValue> GetFinancialTypeList()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return RestClient.Get<KeyValue>("trans/GetFinancialEnums").ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

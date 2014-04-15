@@ -94,8 +94,12 @@
     <Compile Include="ViewModels\CustomerReturnSearchTransViewModel.cs" />
     <Compile Include="ViewModels\CustomerRuturnSearchRMAViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnGoodsViewModel.cs" />
-    <Compile Include="ViewModels\CustomerSelfNetRuturnGoods.cs" />
+    <Compile Include="ViewModels\CustomerSelfNetReturnGoodsViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnGoodsMainViewModel.cs" />
+    <Compile Include="ViewModels\CustomerStockoutRemindNotReplenishViewModel.cs" />
+    <Compile Include="ViewModels\CustomerStockoutRemindCommonViewModel.cs" />
+    <Compile Include="ViewModels\CustomerStockoutRemindViewModel.cs" />
+    <Compile Include="ViewModels\CustomerReturnGoodsUserControlViewModel.cs" />
     <Compile Include="Views\CustomerInquiries.xaml.cs">
       <DependentUpon>CustomerInquiries.xaml</DependentUpon>
     </Compile>
@@ -105,11 +109,23 @@
     <Compile Include="Views\CustomerReturnSearchCommon.xaml.cs">
       <DependentUpon>CustomerReturnSearchCommon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CustomerSelfNetRuturnGoods.xaml.cs">
-      <DependentUpon>CustomerSelfNetRuturnGoods.xaml</DependentUpon>
+    <Compile Include="Views\CustomerSelfNetReturnGoods.xaml.cs">
+      <DependentUpon>CustomerSelfNetReturnGoods.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomerReturnGoods.xaml.cs">
       <DependentUpon>CustomerReturnGoods.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomerStockoutRemind.xaml.cs">
+      <DependentUpon>CustomerStockoutRemind.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomerStockoutRemindNotReplenish.xaml.cs">
+      <DependentUpon>CustomerStockoutRemindNotReplenish.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomerStockoutRemindCommon.xaml.cs">
+      <DependentUpon>CustomerStockoutRemindCommon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomReturnGoodsUserControl.xaml.cs">
+      <DependentUpon>CustomReturnGoodsUserControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\CustomerInquiries.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -123,11 +139,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CustomerSelfNetRuturnGoods.xaml">
+    <Page Include="Views\CustomerSelfNetReturnGoods.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\CustomerReturnGoods.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CustomerStockoutRemind.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CustomerStockoutRemindNotReplenish.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CustomerStockoutRemindCommon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CustomReturnGoodsUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -172,6 +204,10 @@
     <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Main.Infrastructure.csproj">
       <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
       <Name>OPCApp.Main.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.ReturnGoodsManage\OPCApp.ReturnGoodsManage.csproj">
+      <Project>{3F264666-C1DC-4FC3-B2AC-D99B68B250A4}</Project>
+      <Name>OPCApp.ReturnGoodsManage</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

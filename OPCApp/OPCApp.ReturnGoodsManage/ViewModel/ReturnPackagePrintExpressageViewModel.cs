@@ -133,8 +133,14 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
 
         private void ClearRmaData()
         {
-            RmaDetailList.Clear();
-            RMADtoList.Clear();
+            if (RmaDetailList != null)
+            {
+                RmaDetailList.Clear();
+            }
+            if (RMADtoList != null)
+            {
+                RMADtoList.Clear();
+            }
         }
 
         private void SearchShip()
@@ -166,10 +172,30 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             }
             try
             {
-                RMADtoList =
+                if (ShipVia == null) {
+                    MessageBox.Show("请选择快递公司", "提示");
+                    return;
+                }
+                if (RmaExpressSaveDto == null || string.IsNullOrEmpty(RmaExpressSaveDto.ShippingCode))
+                {
+                    MessageBox.Show("请录入快递单号", "提示");
+                    return;
+                }
+                if (RmaExpressSaveDto == null || RmaExpressSaveDto.ShippingFee==0)
+                {
+                    MessageBox.Show("请录入运费", "提示");
+                    return;
+                }
+                RmaExpressSaveDto.ShipViaID = ShipVia.Id;
+                RmaExpressSaveDto.ShipViaName = ShipVia.Name;
+                RmaExpressSaveDto.RmaNo = ShipSaleSelected.RmaNo;
+                bool falg =
                     AppEx.Container.GetInstance<IPackageService>()
-                        .GetRmaForPrintExpress(ShipSaleSelected.RmaNo)
-                        .ToList();
+                        .UpdateShipWithReturnExpress(RmaExpressSaveDto);
+                if (falg) {
+                    SearchShip();
+                }
+                        
             }
             catch
             {
@@ -183,7 +209,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
                 MessageBox.Show("请选择快递单", "提示");
                 return;
             }
-            if (string.IsNullOrEmpty(ShipSaleSelected.RmaNo))
+            if (string.IsNullOrEmpty(ShipSaleSelected.ExpressCode))
             {
                 MessageBox.Show("请先保存快递信息", "提示");
                 return;
@@ -203,7 +229,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
                 MessageBox.Show("请选择快递单", "提示");
                 return;
             }
-            if (string.IsNullOrEmpty(ShipSaleSelected.RmaNo))
+            if (string.IsNullOrEmpty(ShipSaleSelected.ExpressCode))
             {
                 MessageBox.Show("请先保存快递信息", "提示");
                 return;

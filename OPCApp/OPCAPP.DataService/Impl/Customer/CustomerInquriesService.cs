@@ -64,23 +64,61 @@ namespace OPCApp.DataService.Impl.Customer
             }
         }
 
+        //public bool SetCustomerMoneyGoods(List<string> rmaNoList)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         //赔偿金额退回审核
         public bool SetCustomerMoneyGoods(List<string> rmaNoList)
         {
             try
             {
-                return RestClient.Post("custom/AgreeReturnGoods", rmaNoList);
+                return RestClient.Post("rma/SetSaleRmaServiceApprove",rmaNoList);
             }
             catch (Exception ex)
             {
                 return false;
             }
         }
+        #region 缺货提醒
+        public bool SetCannotReplenish(List<string> saleOrderNoList)
+        {
+            try
+            {
+                return RestClient.Post("order/saleOrderNoList", saleOrderNoList);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        //tab1查缺货订单
+        public PageResult<Order> GetOrderStockout(string orderfilter)
+        {
+            try
+            {
+                PageResult<Order> lst = RestClient.Get<Order>("order/GetOrderByOutOfStockNotify", orderfilter, 1, 100);
+                return lst; //new PageResult<Order>(lst, lst.Count);
+            }
+            catch (Exception ex)
+            {
+                return new PageResult<Order>(new List<Order>(), 0);
+            }
+        }
 
-        #region ICustomerInquiriesService 成员
-
-
-       
+        public PageResult<Order> GetOrderNoReplenish(string orderfilter)
+        {
+            try
+            {
+                PageResult<Order> lst = RestClient.Get<Order>("order/GetOrderOfVoid", orderfilter, 1, 100);
+                return lst; //new PageResult<Order>(lst, lst.Count);
+            }
+            catch (Exception ex)
+            {
+                return new PageResult<Order>(new List<Order>(), 0);
+            }
+        }
 
         #endregion
     }
