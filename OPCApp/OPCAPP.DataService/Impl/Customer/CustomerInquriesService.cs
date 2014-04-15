@@ -64,12 +64,17 @@ namespace OPCApp.DataService.Impl.Customer
             }
         }
 
+        //public bool SetCustomerMoneyGoods(List<string> rmaNoList)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         //赔偿金额退回审核
-        public bool SetCustomerMoneyGoods(string rmaNo)
+        public bool SetCustomerMoneyGoods(List<string> rmaNoList)
         {
             try
             {
-                return RestClient.Post("rma/SetSaleRmaServiceApprove", string.Format("rmaNo={0}", rmaNo));
+                return RestClient.Post("rma/SetSaleRmaServiceApprove",rmaNoList);
             }
             catch (Exception ex)
             {
