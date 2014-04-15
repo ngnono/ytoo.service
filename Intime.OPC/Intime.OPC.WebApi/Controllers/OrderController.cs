@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Http;
 using System.Web.UI.WebControls;
@@ -196,6 +197,13 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetOrderByOutOfStockNotify([FromBody] OutOfStockNotifyRequest request)
         {
             return DoFunction(() => _orderService.GetOrderByOutOfStockNotify(request));
+        }
+
+        [HttpPost]
+        public IHttpActionResult SetSaleOrderVoid([FromBody] IEnumerable<string> saleOrderNos)
+        {
+            //todo 缺货提醒-缺货订单 取消销售单
+            return DoAction(() => { });
         }
 
         #endregion
