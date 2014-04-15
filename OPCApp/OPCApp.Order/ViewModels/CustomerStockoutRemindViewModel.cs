@@ -8,7 +8,7 @@ using Microsoft.Practices.Prism.Mvvm;
 
 namespace OPCApp.Customer.ViewModels
 {
-    [Export(typeof(CustomerReturnGoodsMainViewModel))]
+    [Export(typeof(CustomerStockoutRemindViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public  class CustomerStockoutRemindViewModel:BindableBase
     {
