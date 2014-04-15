@@ -16,11 +16,11 @@ namespace OPCApp.Financial.Views
             InitializeComponent();
         }
 
-        [Import("WebSiteCashierSearchViewModel")]
-        public WebSiteCashierSearchViewModel ViewModel
+        [Import("WebSiteReturnGoodsStatisticsViewModel")]
+        public WebSiteReturnGoodsStatisticsViewModel ViewModel
         {
             set { DataContext = value; }
-            get { return DataContext as WebSiteCashierSearchViewModel; }
+            get { return DataContext as WebSiteReturnGoodsStatisticsViewModel; }
         }
     }
 }
