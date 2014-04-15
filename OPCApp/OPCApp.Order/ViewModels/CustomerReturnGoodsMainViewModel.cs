@@ -4,6 +4,7 @@ using Microsoft.Practices.Prism.Mvvm;
 namespace OPCApp.Customer.ViewModels
 {
     [Export("CustomerReturnGoodsMainViewModel", typeof (CustomerReturnGoodsMainViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CustomerReturnGoodsMainViewModel : BindableBase
     {
         private CustomerReturnSearchRmaViewModel _customerReturnSearch;

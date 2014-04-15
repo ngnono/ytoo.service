@@ -16,6 +16,7 @@ using OPCApp.Infrastructure;
 namespace OPCApp.Customer.ViewModels
 {
     [Export("CustomerInquiriesViewModel", typeof (CustomerInquiriesViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CustomerInquiriesViewModel : BindableBase
     {
         private CustomerReturnSearchRmaViewModel _customerReturnSearchRmaViewModel;

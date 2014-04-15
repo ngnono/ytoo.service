@@ -96,6 +96,8 @@
     <Compile Include="ViewModels\CustomerReturnGoodsViewModel.cs" />
     <Compile Include="ViewModels\CustomerSelfNetRuturnGoods.cs" />
     <Compile Include="ViewModels\CustomerReturnGoodsMainViewModel.cs" />
+    <Compile Include="ViewModels\CustomerStockoutRemindCommonViewModel.cs" />
+    <Compile Include="ViewModels\CustomerStockoutRemindViewModel.cs" />
     <Compile Include="Views\CustomerInquiries.xaml.cs">
       <DependentUpon>CustomerInquiries.xaml</DependentUpon>
     </Compile>
@@ -110,6 +112,12 @@
     </Compile>
     <Compile Include="Views\CustomerReturnGoods.xaml.cs">
       <DependentUpon>CustomerReturnGoods.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomerStockoutRemind.xaml.cs">
+      <DependentUpon>CustomerStockoutRemind.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomerStockoutRemindCommon.xaml.cs">
+      <DependentUpon>CustomerStockoutRemindCommon.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\CustomerInquiries.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -128,6 +136,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\CustomerReturnGoods.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CustomerStockoutRemind.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CustomerStockoutRemindCommon.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

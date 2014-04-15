@@ -16,6 +16,7 @@ using OPCApp.Infrastructure;
 namespace OPCApp.Customer.ViewModels
 {
     [Export("CustomerReturnGoodsViewModel", typeof (CustomerReturnGoodsViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CustomerReturnGoodsViewModel : BindableBase
     {
         private OPC_SaleRMA _opcSaleRma;
