@@ -115,7 +115,7 @@ namespace OPCApp.DataService.Customer
         {
             try
             {
-                return RestClient.Post("custom/AgreeReturnGoods", rmaNos);
+                return RestClient.Post("rma/SetSaleRmaServiceAgreeGoodsBack", rmaNos);
             }
             catch (Exception ex)
             {

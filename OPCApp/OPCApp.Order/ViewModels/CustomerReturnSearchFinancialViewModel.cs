@@ -4,6 +4,8 @@ using System.Linq;
 using OPCApp.DataService.Customer;
 using OPCApp.Domain.Customer;
 using OPCApp.Infrastructure;
+using System.Windows.Forms;
+using System;
 
 namespace OPCApp.Customer.ViewModels
 {
@@ -11,6 +13,7 @@ namespace OPCApp.Customer.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CustomerReturnSearchFinancialViewModel : CustomerReturnSearchViewModel
     {
+ 
         public override void SearchGoodsInfo()
         {
             OrderDtoList =
@@ -30,5 +33,6 @@ namespace OPCApp.Customer.ViewModels
                 AppEx.Container.GetInstance<ICustomerReturnSearch>().GetRmaFinancialByOrderNo(OrderDto.OrderNo).ToList();
             RMADtoList = rmaList;
         }
+      
     }
 }
