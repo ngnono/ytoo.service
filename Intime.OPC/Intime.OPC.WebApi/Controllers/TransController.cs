@@ -222,6 +222,12 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() => { return _enumService.All("ShippingType"); }, "读取发货方式失败！");
         }
 
+        [HttpGet]
+        public IHttpActionResult GetFinancialEnums()
+        {
+            return DoFunction(() => { return _enumService.All("Financial"); }, "读取类型失败！");
+        }
+
 
         #region 退货入收银
 
@@ -352,16 +358,5 @@ namespace Intime.OPC.WebApi.Controllers
             }, "查询退货单信息失败");
         }
         #endregion
-
-
-        /// <summary>
-        /// 退货单状态
-        /// </summary>
-        /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
-        public IHttpActionResult GetRmaStatus()
-        {
-            return DoFunction(() => { return _enumService.All("RmaStatus"); }, "读取退货单状态失败！");
-        }
     }
 }

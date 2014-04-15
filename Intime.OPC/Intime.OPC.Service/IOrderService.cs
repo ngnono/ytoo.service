@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Dto.Financial;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service
@@ -78,5 +79,11 @@ namespace Intime.OPC.Service
         PageResult<OrderDto> GetShippingBackByReturnGoodsInfo(ReturnGoodsInfoRequest request);
 
         PageResult<OrderDto> GetSaleRmaByReturnGoodsCompensate(ReturnGoodsInfoRequest request);
+        PageResult<OrderDto> GetOrderByOutOfStockNotify(OutOfStockNotifyRequest request);
+        PageResult<OrderDto> GetOrderOfVoid(OutOfStockNotifyRequest request);
+        SaleDetailStatListDto WebSiteStatSaleDetail(SearchStatRequest request);
+        ReturnGoodsStatListDto WebSiteStatReturnDetail(SearchStatRequest request);
+        CashierList WebSiteCashier(SearchCashierRequest request);
+        PageResult<OrderItemDto> GetOrderItemsAutoBack(string orderNo, int pageIndex, int pageSize);
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Dto.Financial;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 

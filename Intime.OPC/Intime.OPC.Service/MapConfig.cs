@@ -18,6 +18,7 @@ namespace Intime.OPC.Service
             map3.ForMember(t => t.GoodsOutDate, o => o.MapFrom(t1 => t1.CreateDate));
 
             map3.ForMember(t => t.ShipCompanyName, o => o.MapFrom(t1 => t1.ShipViaName));
+            map3.ForMember(t => t.PrintStatus, o => o.MapFrom(t1 => t1.PrintTimes > 0 ? string.Format("{0}次",t1.PrintTimes) : "未打印"));
 
 
             IMappingExpression<Order, OrderDto> map1 = Mapper.CreateMap<Order, OrderDto>();

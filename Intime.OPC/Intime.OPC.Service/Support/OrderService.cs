@@ -4,6 +4,7 @@ using System.Linq;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Dto.Financial;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
@@ -18,14 +19,18 @@ namespace Intime.OPC.Service.Support
         private readonly IOrderRemarkRepository _orderRemarkRepository;
         private readonly IOrderItemRepository _orderItemRepository;
         private readonly IBrandRepository _brandRepository;
+        private IAccountService _accountService;
+        private ISaleDetailRepository _saleDetailRepository;
 
-        public OrderService(IOrderRepository orderRepository, IOrderRemarkRepository orderRemarkRepository, IOrderItemRepository orderItemRepository, IBrandRepository brandRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderRemarkRepository orderRemarkRepository, IOrderItemRepository orderItemRepository, IBrandRepository brandRepository, IAccountService accountService, ISaleDetailRepository saleDetailRepository)
             : base(orderRepository)
         {
             _orderRepository = _repository as IOrderRepository;
             _orderRemarkRepository = orderRemarkRepository;
             _orderItemRepository = orderItemRepository;
             _brandRepository = brandRepository;
+            _accountService = accountService;
+            _saleDetailRepository = saleDetailRepository;
         }
 
         public PageResult<OrderDto> GetOrder(string orderNo, string orderSource, DateTime dtStart, DateTime dtEnd,
@@ -111,6 +116,56 @@ namespace Intime.OPC.Service.Support
             string returnGoodsStatus = EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
             var lst = _orderRepository.GetBySaleRma(request, null, returnGoodsStatus);
             return Mapper.Map<Order, OrderDto>(lst);
+        }
+
+        public PageResult<OrderDto> GetOrderByOutOfStockNotify(OutOfStockNotifyRequest request)
+        {
+            request.FormatDate();
+
+            int orderstatus =EnumOderStatus.StockOut.AsID();
+            var lst = _orderRepository.GetByOutOfStockNotify(request,orderstatus);
+            return Mapper.Map<Order, OrderDto>(lst);
+        }
+
+        public PageResult<OrderDto> GetOrderOfVoid(OutOfStockNotifyRequest request)
+        {
+            request.FormatDate();
+
+            int orderstatus = EnumOderStatus.Void.AsID();
+            var lst = _orderRepository.GetByOutOfStockNotify(request, orderstatus);
+            return Mapper.Map<Order, OrderDto>(lst);
+        }
+
+        public SaleDetailStatListDto WebSiteStatSaleDetail(SearchStatRequest request)
+        {
+            request.FormatDate();
+            var lst = _orderItemRepository.WebSiteStatSaleDetail(request);
+            lst.Stat();
+            return lst;
+
+        }
+
+        public ReturnGoodsStatListDto WebSiteStatReturnDetail(SearchStatRequest request)
+        {
+            request.FormatDate();
+            var lst = _orderItemRepository.WebSiteStatReturnGoods(request);
+            lst.Stat();
+            return lst;
+        }
+
+        public CashierList WebSiteCashier(SearchCashierRequest request)
+        {
+            request.FormatDate();
+            var lst = _orderItemRepository.WebSiteCashier(request);
+            lst.Stat();
+            return lst;
+        }
+
+        public PageResult<OrderItemDto> GetOrderItemsAutoBack(string orderNo, int pageIndex, int pageSize)
+        {
+            var lstOrderItems = _orderItemRepository.GetOrderItemsAutoBack(orderNo, pageIndex, pageSize);
+
+            return lstOrderItems;
         }
 
         public IList<OPC_OrderComment> GetCommentByOderNo(string orderNo)

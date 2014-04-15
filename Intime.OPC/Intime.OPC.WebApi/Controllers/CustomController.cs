@@ -34,8 +34,6 @@ namespace Intime.OPC.WebApi.Controllers
             }, "查询订单失败");
         }
 
-        #region 客服退货查询-物流退回
-
         /// <summary>
         ///     客服同意退货
         /// </summary>
@@ -53,8 +51,6 @@ namespace Intime.OPC.WebApi.Controllers
                 }
             }, "查询订单失败");
         }
-
-        #endregion
 
         /// <summary>
         ///     物流确认收货
@@ -140,20 +136,28 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="shippingCode">The shipping code.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult PintRmaShipping(string shippingCode)
+        public IHttpActionResult PintRmaShipping([FromBody] IEnumerable<string> shippingCodes)
         {
-            return DoAction(() => _shippingSaleService.PintRmaShipping(shippingCode), "查询退货单信息失败");
+            return DoAction(() =>
+            {
+                foreach (var shippingCode in shippingCodes)
+                    _shippingSaleService.PintRmaShipping(shippingCode);
+            });
         }
 
         /// <summary>
         /// 打印完成
         /// </summary>
         /// <param name="shippingCode">The shipping code.</param>
-        /// <returns>IHttpActionResult.</returns>
+        /// <returns>IHttpActionResult.</returns>PintRmaShippingOver
         [HttpPost]
-        public IHttpActionResult PintRmaShippingOver(string shippingCode)
+        public IHttpActionResult PintRmaShippingOver([FromBody] IEnumerable<string> shippingCodes)
         {
-            return DoAction(() => _shippingSaleService.PintRmaShippingOver(shippingCode), "查询退货单信息失败");
+            return DoAction(() =>
+            {
+                foreach (var shippingCode in shippingCodes)
+                    _shippingSaleService.PintRmaShippingOver(shippingCode);
+            });
         }
 
         [HttpGet]
@@ -189,10 +193,13 @@ namespace Intime.OPC.WebApi.Controllers
          /// <param name="shippingCode">The shipping code.</param>
          /// <returns>IHttpActionResult.</returns>
          [HttpPost]
-         public IHttpActionResult PintRmaShippingOverConnect(string shippingCode)
+         public IHttpActionResult PintRmaShippingOverConnect([FromBody] IEnumerable<string> shippingCodes)
          {
-
-             return DoAction(() => _shippingSaleService.PintRmaShippingOverConnect(shippingCode), "查询退货单信息失败");
+             return DoAction(() =>
+         {
+                 foreach (var shippingCode in shippingCodes)
+                     _shippingSaleService.PintRmaShippingOverConnect(shippingCode);
+             });
          }
         #endregion
 
@@ -216,6 +223,8 @@ namespace Intime.OPC.WebApi.Controllers
         #endregion
 
 
+
+
           #region 已完成退货单查询
           /// <summary>
           ///已完成退货单查询
@@ -232,6 +241,32 @@ namespace Intime.OPC.WebApi.Controllers
               }, "查询退货单信息失败");
           }
 
+          #endregion
+
+          #region  网络自助退货
+          [HttpGet]
+          public IHttpActionResult GetOrderAutoBack([FromUri] ReturnGoodsRequest request)
+          {
+              return DoFunction(() =>
+              {
+                  int brandid = request.BandId.HasValue ? request.BandId.Value : -1;
+
+                  return _saleRmaService.GetOrderAutoBack(request);
+              }, "查询订单失败");
+          }
+          [HttpGet]
+          public IHttpActionResult GetOrderItemsByOrderNoAutoBack(string orderNo, int pageIndex, int pageSize)
+          {
+              //todo 查询订单明细 未实现
+              return DoFunction(() =>
+              {
+                  return _orderService.GetOrderItemsAutoBack(orderNo, pageIndex, pageSize);
+                  return null;
+              }, "读取订单明细失败");
+
+          }
+
+          
           #endregion
     }
 
