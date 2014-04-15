@@ -51,5 +51,33 @@ namespace OPCApp.DataService.Impl.Customer
                 return false;
             }
         }
+        //自主退货明细查询
+        public IList<OrderItem> GetOrderDetailByOrderNoWithSelf(string orderNo)
+        {
+            try
+            {//接口不对
+                PageResult<OrderItem> lst = RestClient.GetPage<OrderItem>("order/GetOrderItemsByOrderNo",
+                    string.Format("orderNo={0}&pageIndex={1}&pageSize={2}", orderNo, 1, 300));
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<OrderItem>();
+            }
+        }
+        //自主退货明细查询
+        public IList<OPC_SaleRMA> ReturnGoodsSearchForSelf(ReturnGoodsGet returnGoodsGet)
+        {
+            try
+            {//接口不对
+                PageResult<OPC_SaleRMA> lst = RestClient.GetPage<OPC_SaleRMA>("custom/GetOrder",
+                    returnGoodsGet.ToString());
+                return lst.Result;
+            }
+            catch (Exception ex)
+            {
+                return new List<OPC_SaleRMA>();
+            }
+        }
     }
 }

@@ -104,7 +104,7 @@ namespace OPCApp.Customer.ViewModels
             remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetSaleRMARemark); //4填写的是退货单
         }
 
-        private void ClearOrInitData()
+        public void ClearOrInitData()
         {
             OrderItemList = new List<OrderItem>();
             SaleRmaList = new List<OPC_SaleRMA>();
@@ -112,7 +112,7 @@ namespace OPCApp.Customer.ViewModels
 
         /*点击销售单显示明细*/
 
-        private void GetOrderDetailByOrderNo()
+        public virtual  void GetOrderDetailByOrderNo()
         {
             if (SaleRma != null)
             {
@@ -125,7 +125,7 @@ namespace OPCApp.Customer.ViewModels
 
         /*退货单查询*/
 
-        private void ReturnGoodsSearch()
+        public  virtual  void ReturnGoodsSearch()
         {
             SaleRmaList.Clear();
             IList<OPC_SaleRMA> list =

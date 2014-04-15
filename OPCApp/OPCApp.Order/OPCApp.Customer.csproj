@@ -94,7 +94,7 @@
     <Compile Include="ViewModels\CustomerReturnSearchTransViewModel.cs" />
     <Compile Include="ViewModels\CustomerRuturnSearchRMAViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnGoodsViewModel.cs" />
-    <Compile Include="ViewModels\CustomerSelfNetRuturnGoods.cs" />
+    <Compile Include="ViewModels\CustomerSelfNetReturnGoodsViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnGoodsMainViewModel.cs" />
     <Compile Include="ViewModels\CustomerStockoutRemindNotReplenishViewModel.cs" />
     <Compile Include="ViewModels\CustomerStockoutRemindCommonViewModel.cs" />
@@ -109,8 +109,8 @@
     <Compile Include="Views\CustomerReturnSearchCommon.xaml.cs">
       <DependentUpon>CustomerReturnSearchCommon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CustomerSelfNetRuturnGoods.xaml.cs">
-      <DependentUpon>CustomerSelfNetRuturnGoods.xaml</DependentUpon>
+    <Compile Include="Views\CustomerSelfNetReturnGoods.xaml.cs">
+      <DependentUpon>CustomerSelfNetReturnGoods.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomerReturnGoods.xaml.cs">
       <DependentUpon>CustomerReturnGoods.xaml</DependentUpon>
@@ -139,7 +139,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CustomerSelfNetRuturnGoods.xaml">
+    <Page Include="Views\CustomerSelfNetReturnGoods.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
