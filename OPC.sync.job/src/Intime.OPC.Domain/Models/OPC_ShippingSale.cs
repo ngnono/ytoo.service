@@ -19,9 +19,11 @@ namespace Intime.OPC.Domain.Models
         public Nullable<decimal> ShippingFee { get; set; }
         public Nullable<int> ShippingStatus { get; set; }
         public string ShippingRemark { get; set; }
+        public string RMANo { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<int> CreateUser { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateUser { get; set; }
+        public Nullable<int> PrintTimes { get; set; }
     }
 }

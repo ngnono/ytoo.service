@@ -7,7 +7,9 @@ namespace Intime.OPC.Domain.Models
     {
         public int Id { get; set; }
         public string RMANo { get; set; }
+        public int OrderItemId { get; set; }
         public string CashNum { get; set; }
+        public string SectionCode { get; set; }
         public Nullable<int> StockId { get; set; }
         public int Status { get; set; }
         public int BackCount { get; set; }

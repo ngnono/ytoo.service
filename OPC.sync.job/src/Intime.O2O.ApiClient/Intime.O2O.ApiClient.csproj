@@ -53,6 +53,17 @@
     <Compile Include="DefaultApiClient.cs" />
     <Compile Include="Request\GetBrandByIdRequest.cs" />
     <Compile Include="Request\GetBrandByIdRequestData.cs" />
+    <Compile Include="Domain\Detail.cs" />
+    <Compile Include="Domain\Head.cs" />
+    <Compile Include="Domain\OrderStatus.cs" />
+    <Compile Include="Domain\OrderStatusResult.cs" />
+    <Compile Include="Domain\Payment.cs" />
+    <Compile Include="Request\GetBrandByIdRequest.cs" />
+    <Compile Include="Request\GetBrandByIdRequestData.cs" />
+    <Compile Include="Request\GetOrderStatusByIdRequest.cs" />
+    <Compile Include="Request\GetOrderStatusByIdRequestData.cs" />
+    <Compile Include="Request\GetOrderStatusRequest.cs" />
+    <Compile Include="Request\GetOrderStatusRequestData.cs" />
     <Compile Include="Request\GetProductImagesRequest.cs" />
     <Compile Include="Request\GetProductImagesRequestData.cs" />
     <Compile Include="Request\GetSectionByIdRequestData.cs" />
@@ -70,6 +81,8 @@
     <Compile Include="Request\GetStoreByIdRequestData.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="Domain\Brand.cs" />
+    <Compile Include="Response\GetOrderStatusByIdResponse.cs" />
+    <Compile Include="Response\GetOrderStatusResponse.cs" />
     <Compile Include="Response\GetProductImagesResponse.cs" />
     <Compile Include="Response\GetSectionByIdResponse.cs" />
     <Compile Include="Response\GetStoreByIdResponse.cs" />

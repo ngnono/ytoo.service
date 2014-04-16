@@ -93,6 +93,7 @@ namespace Intime.OPC.Domain.Models
         public DbSet<OPC_SaleDetail> OPC_SaleDetail { get; set; }
         public DbSet<OPC_SaleLog> OPC_SaleLog { get; set; }
         public DbSet<OPC_SaleRMA> OPC_SaleRMA { get; set; }
+        public DbSet<OPC_SaleRMAComment> OPC_SaleRMAComment { get; set; }
         public DbSet<OPC_ShippingSale> OPC_ShippingSale { get; set; }
         public DbSet<OPC_ShippingSaleComment> OPC_ShippingSaleComment { get; set; }
         public DbSet<OPC_SKU> OPC_SKU { get; set; }
@@ -155,6 +156,7 @@ namespace Intime.OPC.Domain.Models
         public DbSet<UserAuth> UserAuths { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<VerifyCode> VerifyCodes { get; set; }
+        public DbSet<WX_Menu> WX_Menu { get; set; }
         public DbSet<WXReply> WXReplies { get; set; }
         public DbSet<VUser> VUsers { get; set; }
         public DbSet<VUserRole> VUserRoles { get; set; }
@@ -238,6 +240,7 @@ namespace Intime.OPC.Domain.Models
             modelBuilder.Configurations.Add(new OPC_SaleDetailMapper());
             modelBuilder.Configurations.Add(new OPC_SaleLogMapper());
             modelBuilder.Configurations.Add(new OPC_SaleRMAMapper());
+            modelBuilder.Configurations.Add(new OPC_SaleRMACommentMapper());
             modelBuilder.Configurations.Add(new OPC_ShippingSaleMapper());
             modelBuilder.Configurations.Add(new OPC_ShippingSaleCommentMapper());
             modelBuilder.Configurations.Add(new OPC_SKUMapper());
@@ -300,9 +303,12 @@ namespace Intime.OPC.Domain.Models
             modelBuilder.Configurations.Add(new UserAuthMapper());
             modelBuilder.Configurations.Add(new UserRoleMapper());
             modelBuilder.Configurations.Add(new VerifyCodeMapper());
+            modelBuilder.Configurations.Add(new WX_MenuMapper());
             modelBuilder.Configurations.Add(new WXReplyMapper());
             modelBuilder.Configurations.Add(new VUserMapper());
             modelBuilder.Configurations.Add(new VUserRoleMapper());
         }
+
+        public Category Category { get; set; }
     }
 }

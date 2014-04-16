@@ -107,6 +107,7 @@ namespace Intime.OPC.Domain.Models.Mapping
 
             this.Property(t => t.RmaCashNum).HasColumnName("RmaCashNum");
             this.Property(t => t.RmaCashDate).HasColumnName("RmaCashDate");
+            this.Property(t => t.SectionId).HasColumnName("SectionId");
         }
     }
 }

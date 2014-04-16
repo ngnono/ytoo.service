@@ -4,7 +4,7 @@ namespace Intime.O2O.ApiClient.Request
 {
     public class GetProductImagesRequest : Request<GetProductImagesRequestData, GetProductImagesResponse>
     {
-        public override string GetResourceUri()
+        public override string GetOrderStatusUri()
         {
             return "commodity/queryImages";
         }

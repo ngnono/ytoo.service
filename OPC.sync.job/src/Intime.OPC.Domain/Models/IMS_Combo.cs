@@ -17,5 +17,6 @@ namespace Intime.OPC.Domain.Models
         public System.DateTime UpdateDate { get; set; }
         public int UpdateUser { get; set; }
         public Nullable<int> ProductType { get; set; }
+        public Nullable<System.DateTime> ExpireDate { get; set; }
     }
 }

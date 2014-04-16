@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
@@ -27,8 +28,8 @@ namespace Intime.OPC.Repository.Support
             CheckUser();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMA.Where(t =>true);
-                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
+                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var query2 = db.Orders.Where(t => CurrentUser.StoreIDs.Contains(t.StoreId));
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     query = query.Where(t => t.OrderNo.Contains(orderNo));
@@ -102,7 +103,7 @@ namespace Intime.OPC.Repository.Support
                 {
                     query = query.Where(t => t.RMAStatus == returnGoodsStatus);
                 }
-                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime);
+                var query2 = db.Orders.Where(t=>true);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     query = query.Where(t => t.OrderNo.Contains(orderNo));
@@ -259,6 +260,21 @@ namespace Intime.OPC.Repository.Support
                     lstSaleRma.Add(o);
                 }
                 return new PageResult<SaleRmaDto>(lstSaleRma, lst.TotalCount);
+            }
+        }
+
+        public void SetVoidBySaleOrder(string saleOrderNo)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var lst= db.OPC_SaleRMA.Where(t => t.SaleOrderNo == saleOrderNo).ToList();
+                foreach (var sale in lst)
+                {
+                    sale.Status = EnumRMAStatus.OutofStack.AsID();
+                    sale.RMAStatus = EnumReturnGoodsStatus.Valid.GetDescription();
+                    sale.RMACashStatus = EnumCashStatus.CashOver.GetDescription();
+                }
+                db.SaveChanges();
             }
         }
     }

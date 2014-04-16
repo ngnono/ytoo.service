@@ -28,6 +28,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
         {
             if (string.IsNullOrWhiteSpace(channelBrandId))
             {
+
                 Log.WarnFormat("品牌Id参数错误，brandId:{0}", channelBrandId);
                 return null;
             }

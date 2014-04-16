@@ -62,6 +62,9 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.ContactPerson)
                 .HasMaxLength(20);
 
+            this.Property(t => t.RMACashNum)
+                .HasMaxLength(50);
+
             // Table & Column Mappings
             this.ToTable("OPC_RMA");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -69,6 +72,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.RMANo).HasColumnName("RMANo");
             this.Property(t => t.IsInquirer).HasColumnName("IsInquirer");
             this.Property(t => t.SourceDesc).HasColumnName("SourceDesc");
+            this.Property(t => t.SectionId).HasColumnName("SectionId");
             this.Property(t => t.StoreId).HasColumnName("StoreId");
             this.Property(t => t.Count).HasColumnName("Count");
             this.Property(t => t.RefundAmount).HasColumnName("RefundAmount");
@@ -101,6 +105,8 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
             this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
             this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
+            this.Property(t => t.RMACashNum).HasColumnName("RMACashNum");
+            this.Property(t => t.RMACashDate).HasColumnName("RMACashDate");
         }
     }
 }

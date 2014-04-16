@@ -18,6 +18,9 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.CashNum)
                 .HasMaxLength(50);
 
+            this.Property(t => t.SectionCode)
+                .HasMaxLength(50);
+
             this.Property(t => t.ProdSaleCode)
                 .HasMaxLength(50);
 
@@ -25,7 +28,9 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.ToTable("OPC_RMADetail");
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.RMANo).HasColumnName("RMANo");
+            this.Property(t => t.OrderItemId).HasColumnName("OrderItemId");
             this.Property(t => t.CashNum).HasColumnName("CashNum");
+            this.Property(t => t.SectionCode).HasColumnName("SectionCode");
             this.Property(t => t.StockId).HasColumnName("StockId");
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.BackCount).HasColumnName("BackCount");

@@ -57,7 +57,7 @@ namespace Intime.O2O.ApiClient
 
         public TResponse Post<TRequest, TResponse>(Request<TRequest, TResponse> request)
         {
-            var resourceUri = request.GetResourceUri();
+            var resourceUri = request.GetOrderStatusUri();
 
             using (var client = GetHttpClient())
             {
@@ -72,6 +72,8 @@ namespace Intime.O2O.ApiClient
 
                 if (result.IsSuccessStatusCode)
                 {
+                    var rst = result.Content.ReadAsStringAsync().Result;    
+
                     return result.Content.ReadAsAsync<TResponse>().Result;
                 }
             }

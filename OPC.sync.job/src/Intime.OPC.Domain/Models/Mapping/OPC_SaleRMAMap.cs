@@ -46,6 +46,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.BackDate).HasColumnName("BackDate");
             this.Property(t => t.StoreId).HasColumnName("StoreId");
             this.Property(t => t.Status).HasColumnName("Status");
+            this.Property(t => t.CustomerAuthDate).HasColumnName("CustomerAuthDate");
             this.Property(t => t.CreatedDate).HasColumnName("CreatedDate");
             this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
             this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
@@ -62,6 +63,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.RMACashStatus).HasColumnName("RMACashStatus");
             this.Property(t => t.RMANo).HasColumnName("RMANo");
             this.Property(t => t.RealRMASumMoney).HasColumnName("RealRMASumMoney");
+            this.Property(t => t.RecoverableSumMoney).HasColumnName("RecoverableSumMoney");
         }
     }
 }

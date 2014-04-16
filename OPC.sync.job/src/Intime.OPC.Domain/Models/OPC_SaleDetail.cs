@@ -8,6 +8,7 @@ namespace Intime.OPC.Domain.Models
         public int Id { get; set; }
         public string SaleOrderNo { get; set; }
         public Nullable<int> OrderItemID { get; set; }
+        public string SectionCode { get; set; }
         public int Status { get; set; }
         public int StockId { get; set; }
         public int SaleCount { get; set; }

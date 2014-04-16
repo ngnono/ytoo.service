@@ -76,17 +76,6 @@ namespace Intime.OPC.WebApi.Core
             {
                 return new StatusCodeResult(HttpStatusCode.Unauthorized, this);
             }
-            catch (UserIdConverException ex)
-            {
-                GetLog().Error(ex);
-
-                return BadRequest("用户未登录或非法用户！");
-            }
-            catch (SaleOrderNotExistsException e)
-            {
-                return BadRequest("销售单编号不能为空");
-            }
-
             catch (Exception ex)
             {
                 GetLog().Error(ex);

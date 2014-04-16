@@ -11,6 +11,7 @@ namespace Intime.OPC.Domain.Models
         public System.DateTime BackDate { get; set; }
         public int StoreId { get; set; }
         public int Status { get; set; }
+        public Nullable<System.DateTime> CustomerAuthDate { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public int CreatedUser { get; set; }
         public System.DateTime UpdatedDate { get; set; }
@@ -27,5 +28,6 @@ namespace Intime.OPC.Domain.Models
         public string RMACashStatus { get; set; }
         public string RMANo { get; set; }
         public Nullable<decimal> RealRMASumMoney { get; set; }
+        public Nullable<decimal> RecoverableSumMoney { get; set; }
     }
 }

@@ -26,8 +26,6 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs
 
             _allSynchronizer.Sync();
 
-         //   _productPicSynchronizer.Sync();
-
             Log.Info("完成同步");
         }
     }

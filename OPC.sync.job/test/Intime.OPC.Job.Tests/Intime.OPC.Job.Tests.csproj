@@ -81,6 +81,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Order\OrderTest.cs" />
     <Compile Include="Product\UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Trade\OrderSplit\Strategys\OneStoreHasEnoughSplitStrategyTests.cs" />

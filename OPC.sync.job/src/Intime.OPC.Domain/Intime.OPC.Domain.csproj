@@ -190,6 +190,7 @@
     <Compile Include="Models\Mapping\OPC_SaleDetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleLogMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleMap.cs" />
+    <Compile Include="Models\Mapping\OPC_SaleRMACommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleRMAMap.cs" />
     <Compile Include="Models\Mapping\OPC_ShippingSaleCommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_ShippingSaleMap.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Models\Mapping\VUserMap.cs" />
     <Compile Include="Models\Mapping\VUserRoleMap.cs" />
     <Compile Include="Models\Mapping\WXReplyMap.cs" />
+    <Compile Include="Models\Mapping\WX_MenuMap.cs" />
     <Compile Include="Models\NotificationLog.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />
@@ -276,6 +278,7 @@
     <Compile Include="Models\OPC_SaleDetail.cs" />
     <Compile Include="Models\OPC_SaleLog.cs" />
     <Compile Include="Models\OPC_SaleRMA.cs" />
+    <Compile Include="Models\OPC_SaleRMAComment.cs" />
     <Compile Include="Models\OPC_ShippingSale.cs" />
     <Compile Include="Models\OPC_ShippingSaleComment.cs" />
     <Compile Include="Models\OPC_SKU.cs" />
@@ -342,6 +345,7 @@
     <Compile Include="Models\VUser.cs" />
     <Compile Include="Models\VUserRole.cs" />
     <Compile Include="Models\WXReply.cs" />
+    <Compile Include="Models\WX_Menu.cs" />
     <Compile Include="Models\YintaiHZhouContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -8,7 +8,7 @@ namespace Intime.O2O.ApiClient.Request
     /// </summary>
     public class GetStoresRequest : Request<GetStoresRequestData, GetStoresResponse>
     {
-        public override string GetResourceUri()
+        public override string GetOrderStatusUri()
         {
             return "stores/queryStores";
         }

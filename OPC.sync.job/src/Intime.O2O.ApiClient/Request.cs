@@ -45,6 +45,6 @@ namespace Intime.O2O.ApiClient
         /// <summary>
         /// 资源地址
         /// </summary>
-        public abstract string GetResourceUri();
+        public abstract string GetOrderStatusUri();
     }
 }

@@ -10,6 +10,7 @@ namespace Intime.OPC.Domain.Models
         public string RMANo { get; set; }
         public Nullable<bool> IsInquirer { get; set; }
         public string SourceDesc { get; set; }
+        public Nullable<int> SectionId { get; set; }
         public Nullable<int> StoreId { get; set; }
         public Nullable<int> Count { get; set; }
         public decimal RefundAmount { get; set; }
@@ -42,5 +43,7 @@ namespace Intime.OPC.Domain.Models
         public int CreatedUser { get; set; }
         public System.DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
+        public string RMACashNum { get; set; }
+        public Nullable<System.DateTime> RMACashDate { get; set; }
     }
 }

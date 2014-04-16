@@ -4,7 +4,7 @@ namespace Intime.O2O.ApiClient.Request
 {
     public class GetBrandByIdRequest : Request<GetBrandByIdRequestData, GetBrandByIdResponse>
     {
-        public override string GetResourceUri()
+        public override string GetOrderStatusUri()
         {
             return "brand/queryBrandById";
         }
