@@ -300,8 +300,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error("_apiClient.Post Error:");
-                    Logger.Error("*************************");
                     Logger.Error(ex);
                     return this.RenderError(r => r.Message = ex.Message);
                 }
@@ -455,7 +453,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Send(string charge_no, string comment, string from_phone, string phone, int authuid)
+        public ActionResult Send(string charge_no, string comment, string from, string phone, int authuid)
         {
             var order = _orderRepo.Find(x => x.No == charge_no);
             if (order.Status == (int)GiftCardOrderStatus.Recharge)
@@ -495,7 +493,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     PreTransferId = preTran == null ? 0 : preTran.Id,
                     OperateDate = DateTime.Now,
                     OperateUser = authuid,
-                    FromPhone = cardUser == null ? from_phone : cardUser.GiftCardAccount,
+                    FromNickName = from,
+                    FromPhone = from,
                 });
                 ts.Complete();
             }
