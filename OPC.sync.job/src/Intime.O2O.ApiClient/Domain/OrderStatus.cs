@@ -8,26 +8,16 @@ using System.Threading.Tasks;
 namespace Intime.O2O.ApiClient.Domain
 {
 
-       [DataContract]
+    [DataContract]
     public class OrderStatus
     {
-        //订单号
-        [DataMember(Name = "ID")]
-        public string id { get; set; }
+        //返回值  成功 1
+        [DataMember(Name = "RET")]
+        public string ret { get; set; }
 
-       //状态
-        [DataMember(Name = "STATUS")]
-        public int status { get; set; }
-
-        [DataMember(Name = "HEAD")]
-
-        public IList<Head> head{get;set;}
-
-        [DataMember(Name = "DETAIL")]
-        public IList<Detail> detail { get; set; }
-        
-        [DataMember(Name = "PAYMENT")]
-        public IList<Payment> payment { get; set; }
+       //执行状态，中文
+        [DataMember(Name = "DESC")]
+        public string desc { get; set; }
 
     }
 }

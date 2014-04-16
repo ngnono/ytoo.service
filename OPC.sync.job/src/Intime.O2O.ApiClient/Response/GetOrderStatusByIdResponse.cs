@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Intime.O2O.ApiClient.Response
 {
-    public class GetOrderStatusResponse : Response<OrderStatus>
+    public class GetOrderStatusByIdResponse : Response<OrderStatusResult>
     {
     }
 }
