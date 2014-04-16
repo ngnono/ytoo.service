@@ -139,7 +139,11 @@ namespace Yintai.Hangzhou.Service.Impl
             //检查扩展名
             foreach (string upload in files)
             {
-                if (!files[upload].HasFile()) continue;
+                if (!files[upload].HasFile())
+                {
+                    Logger.Debug(string.Format("{0} no file data",upload));
+                    continue;
+                }
 
                 /*
                  *  1.获取存储的文件名

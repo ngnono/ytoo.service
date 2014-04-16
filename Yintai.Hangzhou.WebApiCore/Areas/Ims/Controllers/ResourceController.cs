@@ -37,8 +37,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 id = r.Id,
                                 url = image_type==(int)SourceType.CustomerPortrait?r.Name.Image100Url():r.Name.Image320Url()
                              });
-            
-            return this.RenderSuccess<dynamic>(c => c.Data = resources.First());
+            if (resources != null && resources.Count() > 0)
+                return this.RenderSuccess<dynamic>(c => c.Data = resources.First());
+            else
+                return this.RenderError(r => r.Message = "图片不可识别");
         }
     }
 }
