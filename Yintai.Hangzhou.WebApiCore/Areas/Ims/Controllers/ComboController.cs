@@ -211,7 +211,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po =>
                             {
                                 po.ImageUrl = p.PR == null ? string.Empty : p.PR.Name;
-                                po.IsOnline = (p.P.Is4Sale??false)==true && p.PI.Amount>0;
+                                po.IsOnline = p.P.Status==(int)DataStatus.Normal && (p.P.Is4Sale??false)==true && p.PI.Amount>0;
                             }));
                 oc.Is_Owner = authuid == comboEntity.C.UserId;
                 oc.Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&
@@ -227,7 +227,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Detail4P(int id, int authuid)
         {
             var linq = Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == id)
-                      .Join(Context.Set<ProductEntity>().Where(p => p.Is4Sale == true && p.Status == (int)DataStatus.Normal),
+                      .Join(Context.Set<ProductEntity>(),
                               o => o.ProductId,
                               i => i.Id,
                               (o, i) => i)
@@ -253,7 +253,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                                 .Join(Context.Set<ProductPropertyValueEntity>().Where(ppv=>ppv.Status==(int)DataStatus.Normal), o => o.PSizeId, i => i.Id, (o, i) => new { PI = o, PPV = i }).ToList()
                                                 .Select(pi => new SaleSizePropertyResponse()
                                                 {
-                                                    Is4Sale = pi.PI.Amount > 0,
+                                                    Is4Sale =l.P.Status==(int)DataStatus.Normal && (l.P.Is4Sale??false)==true && pi.PI.Amount > 0 ,
                                                     SizeId = pi.PI.PSizeId,
                                                     SizeName = pi.PPV.ValueDesc
                                                 })

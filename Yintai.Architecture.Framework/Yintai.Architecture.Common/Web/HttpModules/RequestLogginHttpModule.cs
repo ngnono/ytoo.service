@@ -90,7 +90,7 @@ namespace Yintai.Architecture.Common.Web.HttpModules
                 sb.AppendFormat("{0} : {1}", key, unvalid_request.Form[key]);
                 sb.AppendLine();
             }
-            if (unvalid_request.Headers["Content-Type"].IndexOf("multipart/form-data")<0)
+            if (unvalid_request.Headers["Content-Type"] != null && unvalid_request.Headers["Content-Type"].IndexOf("multipart/form-data") < 0)
             {
                 var sr = new StreamReader(context.Context.Request.InputStream);
                 var rawBody = sr.ReadToEnd();
