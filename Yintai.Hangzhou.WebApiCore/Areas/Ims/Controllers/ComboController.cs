@@ -179,7 +179,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 }
 
                 ts.Complete();
-                return this.RenderSuccess<dynamic>(null);
+                return this.RenderSuccess<dynamic>(c => c.Data = new { 
+                    combo_id = request.Id
+                });
             }
 
         }
