@@ -24,7 +24,7 @@ namespace OPCApp.Customer.ViewModels
         private CustomerStockoutRemindCommonViewModel _customerStockoutRemindCommonViewModel;
 
         [Import(typeof(CustomerStockoutRemindCommonViewModel))]
-        public CustomerStockoutRemindCommonViewModel CustomerReturnSearchFinancialViewModel
+        public CustomerStockoutRemindCommonViewModel CustomerStockoutRemindCommonViewModel
         {
             get { return _customerStockoutRemindCommonViewModel; }
             set { SetProperty(ref _customerStockoutRemindCommonViewModel, value); }

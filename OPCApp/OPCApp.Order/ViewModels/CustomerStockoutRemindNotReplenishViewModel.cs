@@ -10,6 +10,7 @@ using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Customer;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.DataService.IService;
+using OPCApp.Domain.Customer;
 using OPCApp.Domain.Dto;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
@@ -18,9 +19,10 @@ using OPCApp.Infrastructure;
 namespace OPCApp.Customer.ViewModels
 {
 
-    [Export(typeof(CustomerStockoutRemindCommonViewModel))]
+    [Export(typeof(CustomerStockoutRemindNotReplenishViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class CustomerStockoutRemindCommonViewModel : BindableBase
+    
+    public class CustomerStockoutRemindNotReplenishViewModel : BindableBase
     {
         private CustomerReturnGoodsUserControlViewModel _customerReturnGoodsUserControlViewModel;
 
@@ -30,17 +32,22 @@ namespace OPCApp.Customer.ViewModels
             get { return _customerReturnGoodsUserControlViewModel; }
             set { SetProperty(ref _customerReturnGoodsUserControlViewModel, value); }
         }
-        public CustomerStockoutRemindCommonViewModel()
+        public CustomerStockoutRemindNotReplenishViewModel()
         {
             CommandGetOrder = new DelegateCommand(GetOrder);
             CommandGetSaleByOrderId = new DelegateCommand(GetSaleByOrderId);
             CommandGetSaleDetailBySaleId = new DelegateCommand(GetSaleDetailBySaleId);
             CommandCannotReplenish=new DelegateCommand(CannotReplenish);
             InitCombo();
-            _orderGet = new OrderGet();
+            OutOfStockNotifyRequest = new OutOfStockNotifyRequest();
         }
 
-       
+        private OutOfStockNotifyRequest _outOfStockNotifyRequest;
+        public OutOfStockNotifyRequest OutOfStockNotifyRequest
+        {
+            get { return _outOfStockNotifyRequest; }
+            set { SetProperty(ref _outOfStockNotifyRequest, value); }
+        }
 
         public DelegateCommand CommandSetRemark { get; set; }
 
@@ -140,23 +147,9 @@ namespace OPCApp.Customer.ViewModels
         public void GetOrder()
         {
             OrderList = new List<Order>();
-            if (OrderGet.PaymentType == "-1")
-                OrderGet.PaymentType = "";
-            if (OrderGet.OutGoodsType == "-1")
-                OrderGet.OutGoodsType = "";
 
 
-            string orderfilter =
-                string.Format(
-                    "orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}",
-                    OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString(),
-                    OrderGet.EndCreateDate.ToShortDateString(),
-                    string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId,
-                    string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status,
-                    OrderGet.PaymentType, OrderGet.OutGoodsType,
-                    OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
-
-            var re = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderNoReplenish(orderfilter).Result;
+            var re = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderNoReplenish(OutOfStockNotifyRequest.ToString()).Result;
             if (re != null)
             {
                 OrderList = re.ToList();
@@ -213,11 +206,11 @@ namespace OPCApp.Customer.ViewModels
         {
             // OderStatusList=new 
             StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
-            BrandList = AppEx.Container.GetInstance<ICommonInfo>().GetBrandList();
+            //BrandList = AppEx.Container.GetInstance<ICommonInfo>().GetBrandList();
             OrderStatusList = AppEx.Container.GetInstance<ICommonInfo>().GetOrderStatus();
             PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
-            OutGoodsTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetOutGoodsMehtod();
-            ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
+            OutGoodsTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetRmaSaleStatus();
+            //ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
         }
     }
 }

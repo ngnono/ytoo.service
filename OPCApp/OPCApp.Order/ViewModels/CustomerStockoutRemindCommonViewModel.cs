@@ -10,6 +10,7 @@ using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface.Customer;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.DataService.IService;
+using OPCApp.Domain.Customer;
 using OPCApp.Domain.Dto;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
@@ -18,34 +19,33 @@ using OPCApp.Infrastructure;
 namespace OPCApp.Customer.ViewModels
 {
 
-    [Export(typeof(CustomerStockoutRemindNotReplenishViewModel))]
+    [Export(typeof(CustomerStockoutRemindCommonViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class CustomerStockoutRemindNotReplenishViewModel : BindableBase
+    public class CustomerStockoutRemindCommonViewModel : BindableBase
     {
-        public CustomerStockoutRemindNotReplenishViewModel()
+
+        public CustomerStockoutRemindCommonViewModel()
         {
             CommandGetOrder = new DelegateCommand(GetOrder);
             CommandGetSaleByOrderId = new DelegateCommand(GetSaleByOrderId);
             CommandGetSaleDetailBySaleId = new DelegateCommand(GetSaleDetailBySaleId);
-            CommandCannotReplenish=new DelegateCommand(CannotReplenish);
+            CommandCannotReplenish = new DelegateCommand(CannotReplenish);
             InitCombo();
-            _orderGet = new OrderGet();
+            OutOfStockNotifyRequest = new OutOfStockNotifyRequest();
         }
 
-       
+
 
         public DelegateCommand CommandSetRemark { get; set; }
 
         public IList<KeyValue> StoreList { get; set; }
         public IList<KeyValue> PaymentTypeList { get; set; }
-        public IList<KeyValue> BrandList { get; set; }
 
         public IList<KeyValue> OrderStatusList { get; set; }
 
 
         public IList<KeyValue> OutGoodsTypeList { get; set; }
 
-        public List<ShipVia> ShipViaList { get; set; }
 
         public DelegateCommand CommandGetOrder { get; set; }
         public DelegateCommand CommandGetSaleByOrderId { get; set; }
@@ -59,7 +59,7 @@ namespace OPCApp.Customer.ViewModels
         #region Tab1页签
 
         //Tab1选中的Order中的数据集
-        private OrderGet _orderGet;
+        private OutOfStockNotifyRequest _outOfStockNotifyRequest;
         private List<Order> _orderList;
         private List<OPC_SaleDetail> _saleDetailList;
         private List<OPC_Sale> _saleList;
@@ -106,21 +106,21 @@ namespace OPCApp.Customer.ViewModels
 
         //界面查询条件
 
-        public OrderGet OrderGet
+        public OutOfStockNotifyRequest OutOfStockNotifyRequest
         {
-            get { return _orderGet; }
-            set { SetProperty(ref _orderGet, value); }
+            get { return _outOfStockNotifyRequest; }
+            set { SetProperty(ref _outOfStockNotifyRequest, value); }
         }
         private void CannotReplenish()
         {
-            if (SaleList == null && !SaleList.Any())
+            if (SaleList == null || !SaleList.Any())
             {
                 MessageBox.Show("请选择销售单", "提示");
                 return;
             }
             var saleListSelected = SaleList.Where(e => e.IsSelected).ToList();
-            var falg = AppEx.Container.GetInstance<ICustomerInquiriesService>().SetCannotReplenish(saleListSelected.Select(e=>e.SaleOrderNo).ToList());
-            MessageBox.Show(falg?"设置取销售单成功":"设置取消销售单失败","提示");
+            var falg = AppEx.Container.GetInstance<ICustomerInquiriesService>().SetCannotReplenish(saleListSelected.Select(e => e.SaleOrderNo).ToList());
+            MessageBox.Show(falg ? "设置取销售单成功" : "设置取消销售单失败", "提示");
             if (falg)
             {
                 SaleList = new List<OPC_Sale>();
@@ -132,23 +132,7 @@ namespace OPCApp.Customer.ViewModels
         public void GetOrder()
         {
             OrderList = new List<Order>();
-            if (OrderGet.PaymentType == "-1")
-                OrderGet.PaymentType = "";
-            if (OrderGet.OutGoodsType == "-1")
-                OrderGet.OutGoodsType = "";
-
-
-            string orderfilter =
-                string.Format(
-                    "orderNo={0}&orderSource={1}&startCreateDate={2}&endCreateDate={3}&storeId={4}&BrandId={5}&status={6}&paymentType={7}&outGoodsType={8}&shippingContactPhone={9}&expressDeliveryCode={10}&expressDeliveryCompany={11}",
-                    OrderGet.OrderNo, OrderGet.OrderSource, OrderGet.StartCreateDate.ToShortDateString(),
-                    OrderGet.EndCreateDate.ToShortDateString(),
-                    string.IsNullOrEmpty(OrderGet.StoreId) ? "-1" : OrderGet.StoreId,
-                    string.IsNullOrEmpty(OrderGet.BrandId) ? "-1" : OrderGet.BrandId, OrderGet.Status,
-                    OrderGet.PaymentType, OrderGet.OutGoodsType,
-                    OrderGet.ShippingContactPhone, OrderGet.ExpressDeliveryCode, OrderGet.ExpressDeliveryCompany);
-
-            var re = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderStockout(orderfilter).Result;
+            var re = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetOrderStockout(OutOfStockNotifyRequest.ToString()).Result;
             if (re != null)
             {
                 OrderList = re.ToList();
@@ -163,7 +147,7 @@ namespace OPCApp.Customer.ViewModels
                 {
                     return;
                 }
-                string orderNo = string.Format("orderID={0}&pageIndex={1}&pageSize={2}", SelectOrder.OrderNo, 1, 30);
+                string orderNo = string.Format("orderID={0}&pageIndex={1}&pageSize={2}", SelectOrder.OrderNo, 1, 300);
                 //这个工作状态
                 SaleList = AppEx.Container.GetInstance<ICustomerInquiriesService>().GetSaleByOrderNo(orderNo).Result.ToList();
                 if (SaleList != null && SaleList.Any())
@@ -205,12 +189,11 @@ namespace OPCApp.Customer.ViewModels
         {
             // OderStatusList=new 
             StoreList = AppEx.Container.GetInstance<ICommonInfo>().GetStoreList();
-            BrandList = AppEx.Container.GetInstance<ICommonInfo>().GetBrandList();
             OrderStatusList = AppEx.Container.GetInstance<ICommonInfo>().GetOrderStatus();
             PaymentTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetPayMethod();
-            OutGoodsTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetOutGoodsMehtod();
-            ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
+            OutGoodsTypeList = AppEx.Container.GetInstance<ICommonInfo>().GetSaleOrderStatus();
         }
     }
+   
 }
 

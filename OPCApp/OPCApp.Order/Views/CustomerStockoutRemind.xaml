@@ -10,7 +10,7 @@
     <Grid>
         <controls:MetroAnimatedSingleRowTabControl  Grid.Row="0">
             <TabItem Header="订单信息" Custom:ControlsHelper.HeaderFontSize="18">
-                <Views:CustomerStockoutRemindCommon DataContext="{Binding CustomerReturnSearchFinancialViewModel}"/>
+                <Views:CustomerStockoutRemindCommon DataContext="{Binding CustomerStockoutRemindCommonViewModel}"/>
             </TabItem>
             <TabItem Header="已取消订单（无法补货）" Custom:ControlsHelper.HeaderFontSize="18">
                 <Views:CustomerStockoutRemindNotReplenish DataContext="{Binding CustomerStockoutRemindNotReplenishViewModel}"/>
