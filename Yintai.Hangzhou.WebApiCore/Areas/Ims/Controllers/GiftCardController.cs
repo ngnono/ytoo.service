@@ -466,8 +466,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "您已经赠送了此礼品卡，请通知好友领取！");
             }
 
-            var cardUser = _userRepo.Find(x => x.UserId == authuid);
-
             var preTran = _transRepo.Find(x => x.OrderNo == charge_no && x.IsActive == 0 && x.IsDecline == 0);
 
             using (var ts = new TransactionScope())
@@ -675,13 +673,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 {
                     return GiftCardListItemStatus.Refuse;
                 }
-                return GiftCardListItemStatus.Sent;
-            }
-            if (recharge == null)
-            {
-                return GiftCardListItemStatus.None;
-            }
-            return GiftCardListItemStatus.Recharged;
+                if (transfer.IsActive == 1)
+                {
+                    if (recharge != null)
+                    {
+                        return GiftCardListItemStatus.Recharged;
+                    }
+                    return GiftCardListItemStatus.Sent;
+                }
+           }
+            return GiftCardListItemStatus.None;
         }
 
 
