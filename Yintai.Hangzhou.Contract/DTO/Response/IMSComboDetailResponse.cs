@@ -44,7 +44,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
             }
         }
         [DataMember(Name="images")]
-        public IEnumerable<string> Images { get; set; }
+        public IEnumerable<dynamic> Images { get; set; }
         [DataMember(Name="products")]
         public IEnumerable<IMSProductDetailResponse> Products { get; set; }
         [DataMember(Name="is_owner")]

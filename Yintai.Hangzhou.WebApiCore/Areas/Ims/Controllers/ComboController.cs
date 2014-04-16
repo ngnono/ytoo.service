@@ -195,7 +195,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "搭配不存在");
             return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, oc =>
             {
-                oc.Images = comboEntity.CR.ToList().Select(cr => cr.Name.Image320Url());
+                oc.Images = comboEntity.CR.ToList().Select(cr => new {id = cr.Id,name = cr.Name.Image320Url()});
                 oc.Products = Context.Set<ProductEntity>()
                             .Join(Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == id), oo => oo.Id, i => i.ProductId, (oo, i) => oo)
                             .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image && r.Status == (int)DataStatus.Normal),
