@@ -12,6 +12,12 @@ namespace OPCApp.Domain.Customer
     /// </summary>
     public class OutOfStockNotifyRequest
     {
+        public OutOfStockNotifyRequest()
+        {
+            StartDate = DateTime.Now;
+            EndDate = DateTime.Now;
+        }
+
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
@@ -24,11 +30,9 @@ namespace OPCApp.Domain.Customer
         public string PayType { get; set; }
 
         public int? StoreId { get; set; }
-
-        public void FormatDate()
+        public override string ToString()
         {
-            StartDate = StartDate.Date;
-            EndDate = EndDate.Date.AddDays(1);
+            return string.Format("StartDate={0}&EndDate={1}& OrderNo={2}&SaleOrderNo={3}&SaleOrderStatus={4}&PayType={5}&StoreId={6}&pageIndex={7}&pageSize={8}", StartDate, EndDate, OrderNo, SaleOrderNo, SaleOrderStatus, PayType, StoreId, 1, 300);
         }
     }
 }

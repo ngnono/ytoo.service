@@ -78,7 +78,28 @@ namespace OPCApp.DataService.Impl.Info
         #endregion
 
         /*物流公司*/
-
+        public IList<KeyValue> GetRmaSaleStatus()
+        {
+            try
+            {
+                return RestClient.Get<KeyValue>("trans/GetRmaStatusEnums").ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public IList<KeyValue> GetSaleOrderStatus()
+        {
+            try
+            {
+                return RestClient.Get<KeyValue>("trans/GetSaleStatusEnums").ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         public IList<KeyValue> GetOutGoodsMehtod()
         {
             try
