@@ -258,7 +258,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                                 .Select(pi => new SaleSizePropertyResponse()
                                                 {
                                                     SizeId = pi.PI.PSizeId,
-                                                    SizeName = pi.PPV.ValueDesc
+                                                    SizeName = pi.PPV.ValueDesc,
+                                                    Is4Sale = true
                                                 })
 
                                     });
