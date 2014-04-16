@@ -42,7 +42,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 products = l.OI.ToList().Select(p=>new {
                     id = p.OI.ProductId,
                     name = p.OI.ProductName,
-                    price = p.OI.UnitPrice,
+                    price = p.OI.ItemPrice,
                     image = p.R.Name.Image320Url()
                 })
             });
