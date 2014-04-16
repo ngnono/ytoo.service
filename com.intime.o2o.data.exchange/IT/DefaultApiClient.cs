@@ -19,33 +19,13 @@ namespace com.intime.o2o.data.exchange.IT
         private readonly string _privateKey;
         private readonly string _from;
         private readonly Random _random = new Random();
-        private readonly MediaTypeFormatter _mediaTypeFormatter = new JsonMediaTypeFormatter();
+        private readonly JsonMediaTypeFormatter _mediaTypeFormatter;
+
 
         public DefaultApiClient()
+            : this(ConfigurationManager.AppSettings["intime.o2o.api.url"], ConfigurationManager.AppSettings["intime.o2o.api.key"], ConfigurationManager.AppSettings["intime.o2o.api.from"])
         {
-            var baseAddressStr = ConfigurationManager.AppSettings["intime.o2o.api.url"] ?? string.Empty;
-            if (baseAddressStr == null || string.IsNullOrWhiteSpace(baseAddressStr))
-            {
-                throw new ConfigurationErrorsException("not found [intime.o2o.api.url]");
-            }
 
-            _baseAddress = new Uri(baseAddressStr);
-
-            var privateKey = ConfigurationManager.AppSettings["intime.o2o.api.key"] ?? string.Empty;
-            if (privateKey == null || string.IsNullOrWhiteSpace(privateKey))
-            {
-                throw new ConfigurationErrorsException("not found [intime.o2o.api.key]");
-            }
-
-            _privateKey = privateKey;
-
-            var from = ConfigurationManager.AppSettings["intime.o2o.api.from"] ?? string.Empty;
-            if (from == null || string.IsNullOrWhiteSpace(privateKey))
-            {
-                throw new ConfigurationErrorsException("not found [intime.o2o.api.from]");
-            }
-
-            _from = from;
         }
 
         public DefaultApiClient(string baseAddress, string privateKey, string from)
@@ -53,6 +33,10 @@ namespace com.intime.o2o.data.exchange.IT
             _privateKey = privateKey;
             _baseAddress = new Uri(baseAddress);
             _from = from;
+            _mediaTypeFormatter = new JsonMediaTypeFormatter
+            {
+                SerializerSettings = { NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore }
+            };
         }
 
 
@@ -68,13 +52,19 @@ namespace com.intime.o2o.data.exchange.IT
 
                 //计算签名
                 request.Sign = Sign(request);
-
-                var result = client.PostAsJsonAsync(resourceUri, request).Result;
-
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    var rst = result.Content.ReadAsStringAsync().Result;
-                    return result.Content.ReadAsAsync<TResponse>().Result;
+                    var result = client.PostAsync(resourceUri, request, _mediaTypeFormatter).Result;
+
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var rst = result.Content.ReadAsStringAsync().Result;
+                        return result.Content.ReadAsAsync<TResponse>().Result;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var str = ex.Message;
                 }
             }
 

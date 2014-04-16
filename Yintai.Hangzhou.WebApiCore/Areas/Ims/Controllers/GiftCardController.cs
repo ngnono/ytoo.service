@@ -259,7 +259,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return this.RenderError(r => r.Message = string.Format("无效的充值卡编码： ({0})", charge_no));
             }
-
             if (order.Status == (int)GiftCardOrderStatus.Recharge)
             {
                 return this.RenderError(r => r.Message = "礼品卡已经充值，不能重复充值");
@@ -271,7 +270,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return this.RenderError(r => r.Message = "不存在的礼品卡!");
             }
-
             OrderTransactionEntity orderTran = _orderTranRepo.Find(x => x.OrderNo == order.No);
             if (orderTran == null)
             {
@@ -279,7 +277,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
             try
             {
-                var rechargeRequest = new RechargeRequest()
+                var rechargeRequest = new RechargeRequest
                 {
                     Data = new RechargeEntity()
                     {
@@ -291,10 +289,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         TransCode = orderTran.TransNo
                     }
                 };
-                var rsp = _apiClient.Post(rechargeRequest);
-                if (!rsp.Status)
+                try
                 {
-                    return this.RenderError(r => r.Message = rsp.Message);
+                    var rsp = _apiClient.Post(rechargeRequest);
+
+                    if (!rsp.Status)
+                    {
+                        return this.RenderError(r => r.Message = rsp.ErrorMessage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                    return this.RenderError(r => r.Message = ex.Message);
                 }
 
                 var transfer = _transRepo.Find(x => x.IsDecline == 0 && x.IsActive == 0 && x.OrderNo == charge_no);
@@ -446,7 +453,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Send(string charge_no, string comment, string from_phone, string phone, int authuid)
+        public ActionResult Send(string charge_no, string comment, string from, string phone, int authuid)
         {
             var order = _orderRepo.Find(x => x.No == charge_no);
             if (order.Status == (int)GiftCardOrderStatus.Recharge)
@@ -486,7 +493,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     PreTransferId = preTran == null ? 0 : preTran.Id,
                     OperateDate = DateTime.Now,
                     OperateUser = authuid,
-                    FromPhone = cardUser == null ? from_phone : cardUser.GiftCardAccount,
+                    FromNickName = from,
+                    FromPhone = from,
                 });
                 ts.Complete();
             }
