@@ -238,7 +238,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 Items = linq.ToList().Select(l => new GetProductInfo4PResponse().FromEntity<GetProductInfo4PResponse>(l.P, res =>
                 {
-                    res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == l.P.Id && pi.Amount > 0).GroupBy(pi => pi.PColorId)
+                    
+                    res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == l.P.Id &&
+                                                l.P.Is4Sale.HasValue && l.P.Is4Sale==true &&
+                                                l.P.Status == (int)DataStatus.Normal &&
+                                                pi.Amount > 0).GroupBy(pi => pi.PColorId)
                                     .Select(pi => pi.Key)
                                     .Join(Context.Set<ProductPropertyValueEntity>(), o => o, i => i.Id, (o, i) => i)
                                     .GroupJoin(Context.Set<ResourceEntity>().Where(pr => pr.SourceType == (int)SourceType.Product && pr.Type == (int)ResourceType.Image && pr.SourceId == l.P.Id), o => o.Id, i => i.ColorId, (o, i) => new { C = o, CR = i.FirstOrDefault() })
@@ -250,9 +254,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                         Resource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(color.CR),
                                         Sizes = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == l.P.Id && pi.PColorId == color.C.Id)
                                                 .Join(Context.Set<ProductPropertyValueEntity>().Where(ppv=>ppv.Status==(int)DataStatus.Normal), o => o.PSizeId, i => i.Id, (o, i) => new { PI = o, PPV = i }).ToList()
+                                                .Where(pi=>pi.PI.Amount>0)
                                                 .Select(pi => new SaleSizePropertyResponse()
                                                 {
-                                                    Is4Sale =l.P.Status==(int)DataStatus.Normal && (l.P.Is4Sale??false)==true && pi.PI.Amount > 0 ,
                                                     SizeId = pi.PI.PSizeId,
                                                     SizeName = pi.PPV.ValueDesc
                                                 })

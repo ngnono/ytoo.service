@@ -320,6 +320,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     Resource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(color.CR),
                                     Sizes = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id && pi.PColorId == color.C.Id)
                                             .Join(Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Status == (int)DataStatus.Normal), o => o.PSizeId, i => i.Id, (o, i) => new { PI = o, PPV = i }).ToList()
+                                            .Where(pi=>pi.PI.Amount>0)
                                             .Select(pi => new SaleSizePropertyResponse() { 
                                                  Is4Sale = pi.PI.Amount>0,
                                                   SizeId=pi.PI.PSizeId,
