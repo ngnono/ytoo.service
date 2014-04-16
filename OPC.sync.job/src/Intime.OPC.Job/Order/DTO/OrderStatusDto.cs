@@ -5,11 +5,11 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Intime.O2O.ApiClient.Domain
+namespace Intime.OPC.Job.Order.Models
 {
 
-    [DataContract]
-    public class OrderStatus
+
+    public class OrderStatusDto
     {
         //返回值  成功 1
         [DataMember(Name = "RET")]
@@ -19,9 +19,5 @@ namespace Intime.O2O.ApiClient.Domain
         [DataMember(Name = "DESC")]
         public string desc { get; set; }
 
-
-        public string id { get; set; }
-
-        public string Id { get; set; }
     }
 }

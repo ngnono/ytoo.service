@@ -1,5 +1,6 @@
 ﻿using Common.Logging;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Job.Order.Repository;
 using Intime.OPC.Job.Product.ProductSync;
 using Quartz;
 using System;
@@ -16,6 +17,8 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private DateTime benchTime = DateTime.Now.AddMinutes(-20);
+        private readonly IRemoteRepository _remoteRepository=new RemoteRepository();
+
         private void DoQuery(Action<IQueryable<Intime.OPC.Domain.Models.OPC_Sale>> callback)
         {
             using (var context = new YintaiHZhouContext())
@@ -53,11 +56,23 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                 foreach (var opc_sale in oneTimeList)
                 {
                     Process(opc_sale);
+                    
                 }
                 cursor += size;
             }
+
+
         }
 
+        /// <summary>
+        /// 同步订单
+        /// </summary>
+        /// <param name="opc_sale"></param>
+        private void ProcessToProduct(Domain.Models.OPC_Sale opc_sale)
+        {
+            
+
+        }
         private void Process(Domain.Models.OPC_Sale opc_sale)
         {
             using (var db = new YintaiHZhouContext())

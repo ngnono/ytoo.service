@@ -10,42 +10,42 @@ namespace Intime.O2O.ApiClient.Domain
     public class Detail
     {
         [DataMember(Name = "ID")]
-        public string id { get; set; }
+        public string Id { get; set; }
         [DataMember(Name = "PRODUCTID")]
-        public string productid { get; set; }
+        public string ProductId { get; set; }
         [DataMember(Name = "PRODUCTNAME")]
-        public string productname { get; set; }
+        public string ProductName { get; set; }
         [DataMember(Name = "PRICE")]
 
-        public decimal price { get; set; }
+        public decimal Price { get; set; }
         [DataMember(Name = "DISCOUNT")]
 
-        public decimal discount { get; set; }
+        public decimal Discount { get; set; }
         [DataMember(Name = "VIPDISCOUNT")]
 
-        public int vipdiscount { get; set; }
+        public int VipDiscount { get; set; }
         [DataMember(Name = "QUANTITY")]
 
-        public int quantity { get; set; }
+        public int Quantity { get; set; }
         [DataMember(Name = "TOTAL")]
 
-        public decimal total { get; set; }
+        public decimal Total { get; set; }
         [DataMember(Name = "ROWNO")]
 
-        public int rowno { get; set; }
+        public int RowNo { get; set; }
 
         [DataMember(Name = "COMCODE")]
 
-        public string comcode { get; set; }
+        public string ComCode { get; set; }
         [DataMember(Name = "COUNTER")]
 
-        public string counter { get; set; }
+        public string Counter { get; set; }
         [DataMember(Name = "MEMO")]
 
-        public string memo { get; set; }
+        public string Memo { get; set; }
         [DataMember(Name = "STORENO")]
 
-        public string storeno { get; set; }
+        public string StoreNo { get; set; }
 
     }
 }

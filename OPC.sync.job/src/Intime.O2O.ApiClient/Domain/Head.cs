@@ -11,61 +11,61 @@ namespace Intime.O2O.ApiClient.Domain
     {
         //订单号
         [DataMember(Name = "ID")]
-        public string id { get; set; }
+        public string Id { get; set; }
         //同订单号
         [DataMember(Name = "MAINID")]
-        public string mainid { get; set; }
+        public string MainId { get; set; }
         //标识  1
         [DataMember(Name = "FLAG")]
 
-        public int flag { get;set;}
+        public int Flag { get;set;}
         [DataMember(Name = "CREATETIME")]
 
-        public DateTime createtime { get; set; }
+        public DateTime CreateTime { get; set; }
         [DataMember(Name = "PAYTIME")]
 
         //收银时间
-        public DateTime paytime { get; set; }
+        public DateTime PayTime { get; set; }
         [DataMember(Name = "TYPE")]
 
         //   1
-        public int type { get; set; }
+        public int Type { get; set; }
         [DataMember(Name = "STATUS")]
 
         //状态
-        public int status { get; set; }
+        public int Status { get; set; }
         [DataMember(Name = "QUANTITY")]
 
         //数量
-        public int quantity { get; set; }
+        public int Quantity { get; set; }
         [DataMember(Name = "DISCOUNT")]
 
 
-        public decimal discount { get; set; }
+        public decimal Discount { get; set; }
         [DataMember(Name = "TOTAL")]
 
-        public decimal total { get; set; }
+        public decimal Total { get; set; }
         [DataMember(Name = "VIPNO")]
 
-        public string vipno { get; set; }
+        public string VipNo { get; set; }
         [DataMember(Name = "VIPMEMO")]
 
-        public string vipmemo { get; set; }
+        public string VipMemo { get; set; }
         [DataMember(Name = "STRORENO")]
 
-        public string storeno { get; set; }
+        public string StoreNo { get; set; }
         [DataMember(Name = "OLDID")]
 
-        public string oldid { get; set; }
+        public string OldId { get; set; }
         [DataMember(Name = "OPERID")]
 
-        public string operid { get; set; }
+        public string OperId { get; set; }
         [DataMember(Name = "OPERNAME")]
 
-        public string opername { get; set; }
+        public string OperName { get; set; }
         [DataMember(Name = "OPERTIME")]
 
-        public string opertime { get; set; }
+        public string OperTime { get; set; }
 
 
     }

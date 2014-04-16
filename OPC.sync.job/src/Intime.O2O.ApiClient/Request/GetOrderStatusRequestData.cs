@@ -13,21 +13,16 @@ namespace Intime.O2O.ApiClient.Request
     {
         //订单号
         [DataMember(Name = "ID")]
-        public string id { get; set; }
-
+        public string Id { get; set; }
         //状态
         [DataMember(Name = "STATUS")]
-        public int status { get; set; }
-
+        public int Status { get; set; }
         [DataMember(Name = "HEAD")]
-
-        public IList<Head> head { get; set; }
-
+        public Head Head { get; set; }
         [DataMember(Name = "DETAIL")]
-        public IList<Detail> detail { get; set; }
-
+        public Detail Detail { get; set; }
         [DataMember(Name = "PAYMENT")]
-        public IList<Payment> payment { get; set; }
+        public PayMent PayMent { get; set; }
 
     }
 }

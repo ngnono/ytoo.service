@@ -7,34 +7,34 @@ using System.Text;
 namespace Intime.O2O.ApiClient.Domain
 {
     [DataContract]
-    public class Payment
+    public class PayMent
     {
         [DataMember(Name = "ID")]
-        public string id { get; set; }
+        public string Id { get; set; }
         [DataMember(Name = "TYPE")]
 
-        public string type { get; set; }
+        public string Type { get; set; }
         [DataMember(Name = "TYPEID")]
 
-        public int typeid { get; set; }
+        public int TypeId { get; set; }
         [DataMember(Name = "TYPENAME")]
 
-        public string typename { get; set; }
+        public string TypeName { get; set; }
         [DataMember(Name = "NO")]
 
-        public string no { get; set; }
+        public string No { get; set; }
         [DataMember(Name = "AMOUNT")]
 
-        public decimal amount { get; set; }
+        public decimal Amount { get; set; }
         [DataMember(Name = "ROWNO")]
 
-        public int rowno { get; set; }
+        public int RowNo { get; set; }
         [DataMember(Name = "MENO")]
 
-        public string memo { get; set; }
+        public string Memo { get; set; }
         [DataMember(Name = "STORENO")]
 
-        public string storeno { get; set; }
+        public string StoreNo { get; set; }
 
     }
 }
