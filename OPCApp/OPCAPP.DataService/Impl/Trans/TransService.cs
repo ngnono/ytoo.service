@@ -45,7 +45,7 @@ namespace OPCApp.DataService.Impl.Trans
             }
             catch (Exception ex)
             {
-                return null;
+                return new PageResult<OPC_Sale>(new List<OPC_Sale>(),0);
             }
         }
 
@@ -59,7 +59,7 @@ namespace OPCApp.DataService.Impl.Trans
             }
             catch (Exception ex)
             {
-                return null;
+                return new PageResult<OPC_ShippingSale>(new List<OPC_ShippingSale>(), 0); ;
             }
         }
 
@@ -74,7 +74,7 @@ namespace OPCApp.DataService.Impl.Trans
             }
             catch (Exception ex)
             {
-                return null;
+                return new PageResult<Order>(new List<Order>(), 0); ;
             }
         }
 

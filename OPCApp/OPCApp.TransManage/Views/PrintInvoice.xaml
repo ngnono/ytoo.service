@@ -11,7 +11,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="200" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -66,7 +67,7 @@
         </StackPanel>
 
 
-        <DataGrid Grid.Row="3" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False"
+        <DataGrid  MinHeight="200" Grid.Row="3" ItemsSource="{Binding SaleList}" IsReadOnly="True" AutoGenerateColumns="False"
                   HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
@@ -118,14 +119,14 @@
             </DataGrid.Columns>
 
         </DataGrid>
+        <GridSplitter Height="4" HorizontalAlignment="Stretch" Grid.Row="4" VerticalAlignment="Bottom" />
 
-
-        <StackPanel Grid.Row="4">
+        <StackPanel Grid.Row="5">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <TextBlock Text="   销售明细" />
             </StackPanel>
         </StackPanel>
-        <DataGrid Grid.Row="5" IsReadOnly="True" ItemsSource="{Binding InvoiceDetail4List}" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="6" IsReadOnly="True" ItemsSource="{Binding InvoiceDetail4List}" AutoGenerateColumns="False">
             <DataGrid.Columns>
 
                 <DataGridTextColumn Header="款号" Width="150" Binding="{Binding StyleNo}"

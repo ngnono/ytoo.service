@@ -211,7 +211,7 @@ namespace OPCApp.TransManage.ViewModels
             ShipSaleList = new List<OPC_ShippingSale>();
             SaleList = new List<OPC_Sale>();
             OrderList = new List<Order>();
-            InvoiceDetail4List = new List<OPC_SaleDetail>();
+           // InvoiceDetail4List = new List<OPC_SaleDetail>();
         }
 
         public void SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -308,8 +308,8 @@ namespace OPCApp.TransManage.ViewModels
                 OPC_Sale sale = SaleList.FirstOrDefault();
                 PageResult<Order> re1 = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
                 OrderList = re1 == null ? new List<Order>() : re1.Result.ToList();
-                InvoiceDetail4List =
-                    AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result.ToList();
+                //InvoiceDetail4List =
+                //    AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result.ToList();
             }
         }
 
@@ -321,7 +321,7 @@ namespace OPCApp.TransManage.ViewModels
             {
                 SaleList = new List<OPC_Sale>();
                 OrderList = new List<Order>();
-                InvoiceDetail4List = new List<OPC_SaleDetail>();
+                //InvoiceDetail4List = new List<OPC_SaleDetail>();
                 return;
             }
             SearchRaDoc(saleCur);

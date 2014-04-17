@@ -328,7 +328,7 @@
                                     Command="{Binding CommandSaveShip}" />
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Grid.Row="7">
+                    <!--<StackPanel Grid.Row="7">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
                             <TextBlock Text="   销售明细" />
                         </StackPanel>
@@ -359,13 +359,13 @@
                             <DataGridTextColumn Header="商品编码" Binding="{Binding ProductNo}" />
                         </DataGrid.Columns>
 
-                    </DataGrid>
-                    <StackPanel Grid.Row="9">
+                    </DataGrid>-->
+                    <StackPanel Grid.Row="7">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
                             <TextBlock Text="订单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="10" ItemsSource="{Binding OrderList}" IsReadOnly="True"
+                    <DataGrid Grid.Row="8" ItemsSource="{Binding OrderList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
 
                         <DataGrid.Columns>
@@ -570,7 +570,7 @@
                         </DataGrid.Columns>
 
                     </DataGrid>
-                    <StackPanel Grid.Row="6">
+                    <!--<StackPanel Grid.Row="6">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
                             <TextBlock Text="   销售明细" />
                         </StackPanel>
@@ -601,13 +601,13 @@
                             <DataGridTextColumn Header="商品编码" Binding="{Binding ProductNo}" />
                         </DataGrid.Columns>
 
-                    </DataGrid>
-                    <StackPanel Grid.Row="8">
+                    </DataGrid>-->
+                    <StackPanel Grid.Row="6">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
                             <TextBlock Text="订单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="9" ItemsSource="{Binding OrderList}" IsReadOnly="True"
+                    <DataGrid Grid.Row="7" ItemsSource="{Binding OrderList}" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
 
                         <DataGrid.Columns>
