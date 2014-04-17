@@ -81,6 +81,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
                         (RMAs==null || !RMAs.Any(r=>new int[]{(int)RMAStatus.Created,(int)RMAStatus.CustomerConfirmed,(int)RMAStatus.PackageReceived,(int)RMAStatus.PassConfirmed}.Any(status=>status==r.Status)));
             }
         }
+        [DataMember(Name="is_owner")]
+          public bool IsOwner { get; set; }
+
         [IgnoreDataMember]
         public bool IsDaoGou { get; set; }
 

@@ -161,6 +161,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                   ShipNo = ob.OB.ShippingNo
                              });
                 o.IsDaoGou = isDaogou;
+                o.IsOwner = linq.O.CustomerId == authUser.Id;
             });
             return this.RenderSuccess<MyOrderDetailResponse>(r => r.Data=result);
         }
