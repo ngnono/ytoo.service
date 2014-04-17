@@ -95,7 +95,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     RecommendUser = authuid,
                     SkuCode = request.Sku_Code,
                     SortOrder = 1,
-                    Status = (int)DataStatus.Default,
+                    Status = (int)DataStatus.Normal,
                     Tag_Id = request.Category_Id,
                     UnitPrice = 999999,
                     UpdatedDate = DateTime.Now,
