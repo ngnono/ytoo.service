@@ -14,6 +14,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="150" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0">
@@ -24,61 +25,40 @@
                             <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                         </StackPanel>
                     </Button>
-                    <Button Background="LightGray" Width="150" Command="{Binding CommandCannotReplenish}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/image/查询.png" Stretch="None" />
-                            <TextBlock HorizontalAlignment="Center">无法补货取消销售单</TextBlock>
-                        </StackPanel>
-                    </Button>
+                 
+                    
                 </StackPanel>
             </StackPanel>
             <Grid Grid.Row="1" Background="LightGray">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="订单号" Width="60" Margin="0 5" />
-                    <TextBox Width="130" Foreground="Blue" Background="White" Text="{Binding OrderGet.OrderNo}" />
-                    <TextBlock Text="渠道订单号" Width="60" Margin="0 5" />
-                    <TextBox Width="100" Foreground="Blue" Background="White"
-                                     Text="{Binding OrderGet.OrderSource}" />
-                    <TextBlock Text="购买时间" Margin="0 5" Width="60" />
-                    <DatePicker Width="100" Foreground="Blue" SelectedDate="{Binding OrderGet.StartCreateDate}" />
+                    <TextBox Width="100" Foreground="Blue" Background="White" Text="{Binding OutOfStockNotifyRequest.OrderNo}" />
+                    <TextBlock Text="退货单号" Width="60" Margin="0 5" />
+                    <TextBox Width="150" Foreground="Blue" Background="White"
+                                     Text="{Binding OutOfStockNotifyRequest.SaleOrderNo}" />
+                    <TextBlock Text="退货时间" Margin="0 5" Width="60" />
+                    <DatePicker Width="120" Foreground="Blue" SelectedDate="{Binding OutOfStockNotifyRequest.StartDate}" />
                     <TextBlock Text=" 至 " Margin="0 5" Width="20" />
-                    <DatePicker Width="120" Foreground="Blue" SelectedDate="{Binding OrderGet.EndCreateDate}" />
-                    <TextBlock Text="门店" Margin="0 5" Width="60" />
-                    <ComboBox Height="25" ItemsSource="{Binding StoreList}" Width="150"
-                                      DisplayMemberPath="Value" SelectedValuePath="Key"
-                                      SelectedValue="{Binding OrderGet.StoreId}" />
-                    <TextBlock Text="品牌" Margin="0 5" Width="60" />
-                    <ComboBox Height="25" ItemsSource="{Binding BrandList}" Width="130"
-                                      DisplayMemberPath="Value" SelectedValuePath="Key"
-                                      SelectedValue="{Binding OrderGet.BrandId}" />
+                    <DatePicker Width="120" Foreground="Blue" SelectedDate="{Binding OutOfStockNotifyRequest.EndDate}" />
+
+
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="2" Background="LightGray">
                 <StackPanel Orientation="Horizontal">
 
-                    <TextBlock Text="订单状态" Width="60" Margin="0 5" />
-                    <ComboBox Height="25" ItemsSource="{Binding OrderStatusList}" Width="130"
+                    <TextBlock Text="退货单状态" Margin="0 5" Width="60" />
+                    <ComboBox Height="25" ItemsSource="{Binding OutGoodsTypeList}" Width="100"
                                       DisplayMemberPath="Value" SelectedValuePath="Key"
-                                      SelectedValue="{Binding OrderGet.Status}" />
+                                      SelectedValue="{Binding OutOfStockNotifyRequest.SaleOrderStatus}" />
+                    <TextBlock Text="门店" Margin="0 5" Width="60" />
+                    <ComboBox Height="25" ItemsSource="{Binding StoreList}" Width="150"
+                                      DisplayMemberPath="Value" SelectedValuePath="Key"
+                                      SelectedValue="{Binding OutOfStockNotifyRequest.StoreId}" />
                     <TextBlock Text="支付方式" Width="60" Margin="0 5" />
-                    <ComboBox Height="25" ItemsSource="{Binding PaymentTypeList}" Width="100"
+                    <ComboBox Height="25" ItemsSource="{Binding PaymentTypeList}" Width="120"
                                       DisplayMemberPath="Value" SelectedValuePath="Key"
                                       SelectedValue="{Binding OrderGet.PaymentType}" />
-                    <TextBlock Text="顾客电话" Margin="0 5" Width="60" />
-                    <TextBox Width="100" Foreground="Blue" Background="White"
-                                     Text="{Binding OrderGet.ShippingContactPhone}" />
-                    <TextBlock Text="发货方式" Margin="0 5" Width="60" />
-                    <ComboBox Height="25" ItemsSource="{Binding OutGoodsTypeList}" Width="80"
-                                      DisplayMemberPath="Value" SelectedValuePath="Key"
-                                      SelectedValue="{Binding OrderGet.OutGoodsType}" />
-
-                    <TextBlock Text="快递单号" Margin="0 5" Width="60" />
-                    <TextBox Width="150" Foreground="Blue" Background="White"
-                                     Text="{Binding OrderGet.ExpressDeliveryCode}" />
-                    <TextBlock Text="快递公司" Width="60" />
-                    <ComboBox Height="25" ItemsSource="{Binding ShipViaList}" Width="130"
-                                      DisplayMemberPath="Name" SelectedValuePath="Id"
-                                      SelectedValue="{Binding OrderGet.ExpressDeliveryCompany}" />
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="3">
@@ -136,7 +116,12 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-             <Views:CustomReturnGoodsUserControl Grid.Row="5" DataContext="{Binding }"/>
+            <Grid Grid.Row="5">
+                <StackPanel Orientation="Horizontal" Background="LightGray">
+                    <TextBlock Text=" 退货单" />
+                </StackPanel>
+            </Grid>
+            <Views:CustomReturnGoodsUserControl Grid.Row="6" DataContext="{Binding CustomerReturnGoodsUserControlViewModel}"/>
          
         </Grid>
     </Grid>

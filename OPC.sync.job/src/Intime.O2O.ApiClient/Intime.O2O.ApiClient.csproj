@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultApiClient.cs" />
+    <Compile Include="Request\GetBrandByIdRequest.cs" />
+    <Compile Include="Request\GetBrandByIdRequestData.cs" />
     <Compile Include="Domain\Detail.cs" />
     <Compile Include="Domain\Head.cs" />
     <Compile Include="Domain\OrderStatus.cs" />

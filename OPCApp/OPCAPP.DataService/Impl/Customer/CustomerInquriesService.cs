@@ -98,7 +98,7 @@ namespace OPCApp.DataService.Impl.Customer
         {
             try
             {
-                PageResult<Order> lst = RestClient.Get<Order>("order/GetOrderByOutOfStockNotify", orderfilter, 1, 100);
+                PageResult<Order> lst = RestClient.GetPage<Order>("order/GetOrderByOutOfStockNotify", orderfilter);
                 return lst; //new PageResult<Order>(lst, lst.Count);
             }
             catch (Exception ex)

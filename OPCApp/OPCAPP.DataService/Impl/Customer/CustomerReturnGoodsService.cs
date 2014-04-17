@@ -84,8 +84,8 @@ namespace OPCApp.DataService.Impl.Customer
         public bool CustomerReturnGoodsSelfPass(RMAPost rmaPost)
         {
             try
-            {//接口不对
-                return RestClient.Post("rma/CreateSaleRMA", rmaPost);
+            {
+                return RestClient.Post("rma/CreateSaleRmaAuto", rmaPost);
             }
             catch (Exception ex)
             {

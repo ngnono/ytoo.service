@@ -24,7 +24,7 @@ namespace OPCApp.Customer.ViewModels
             CommandCustomerReturnGoodsSeftReject = new DelegateCommand(SetCustomerReturnGoodsSeftReject);
         }
 
-        private void SetCustomerReturnGoodsSeftReject()
+        private void SetCustomerReturnGoodsPass()
         {
             List<OrderItem> selectOrder = OrderItemList.Where(e => e.IsSelected).ToList();
             if (SaleRma == null)
@@ -56,7 +56,7 @@ namespace OPCApp.Customer.ViewModels
 
         public DelegateCommand CommandCustomerReturnGoodsPass { get; set; }
 
-        private void SetCustomerReturnGoodsPass()
+        private void SetCustomerReturnGoodsSeftReject()
         {
             List<OrderItem> selectOrder = OrderItemList.Where(e => e.IsSelected).ToList();
             if (SaleRma == null)

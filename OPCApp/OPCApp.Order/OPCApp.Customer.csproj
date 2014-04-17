@@ -96,8 +96,8 @@
     <Compile Include="ViewModels\CustomerReturnGoodsViewModel.cs" />
     <Compile Include="ViewModels\CustomerSelfNetReturnGoodsViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnGoodsMainViewModel.cs" />
-    <Compile Include="ViewModels\CustomerStockoutRemindNotReplenishViewModel.cs" />
     <Compile Include="ViewModels\CustomerStockoutRemindCommonViewModel.cs" />
+    <Compile Include="ViewModels\CustomerStockoutRemindNotReplenishViewModel.cs" />
     <Compile Include="ViewModels\CustomerStockoutRemindViewModel.cs" />
     <Compile Include="ViewModels\CustomerReturnGoodsUserControlViewModel.cs" />
     <Compile Include="Views\CustomerInquiries.xaml.cs">
