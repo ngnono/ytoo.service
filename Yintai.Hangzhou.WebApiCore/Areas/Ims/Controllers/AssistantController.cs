@@ -87,7 +87,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
         public ActionResult Combos(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
-                       .Join(Context.Set<IMS_AssociateItemsEntity>().Where(ia => ia.ItemType == (int)ComboType.Product), o => o.Id, i => i.AssociateId, (o, i) => i)
+                       .Join(Context.Set<IMS_AssociateItemsEntity>().Where(ia => ia.ItemType == (int)ComboType.Product && ia.Status!=(int)DataStatus.Deleted), o => o.Id, i => i.AssociateId, (o, i) => i)
                        .Join(Context.Set<IMS_ComboEntity>(), o => o.ItemId, i => i.Id, (o, i) => i)
                        .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Combo && r.Status == (int)DataStatus.Normal)
                                 , o => o.Id

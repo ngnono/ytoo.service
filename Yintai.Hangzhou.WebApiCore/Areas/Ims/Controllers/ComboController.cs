@@ -185,6 +185,35 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
 
         }
+
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Delete(int id, int authuid)
+        {
+
+            var comboEntity = Context.Set<IMS_ComboEntity>().Find(id);
+            if (comboEntity == null)
+                return this.RenderError(r => r.Message = "搭配不存在");
+            using (var ts = new TransactionScope())
+            {
+                comboEntity.Status = (int)DataStatus.Deleted;
+                comboEntity.UpdateDate = DateTime.Now;
+                comboEntity.UpdateUser = authuid;
+                _comboRepo.Update(comboEntity);
+
+                var associateItemEntity = Context.Set<IMS_AssociateItemsEntity>().Where(ia => ia.ItemType == (int)ComboType.Product &&
+                            ia.ItemId == id).FirstOrDefault();
+                if (associateItemEntity != null)
+                {
+                    associateItemEntity.Status = (int)DataStatus.Deleted;
+                    associateItemEntity.UpdateDate = DateTime.Now;
+                    associateItemEntity.UpdateUser = authuid;
+                    _associateItemRepo.Update(associateItemEntity);
+                }
+
+                ts.Complete();
+            }
+                return this.RenderSuccess<dynamic>(null);
+        }
         [RestfulAuthorize]
         public ActionResult Detail(int id, int authuid)
         {

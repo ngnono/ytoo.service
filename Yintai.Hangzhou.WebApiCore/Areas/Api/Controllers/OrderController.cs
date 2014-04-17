@@ -110,7 +110,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         public ActionResult Detail(MyOrderDetailRequest request, UserModel authUser)
         {
             var dbContext = Context;
-            var linq = dbContext.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo && o.CustomerId == authUser.Id)
+            var linq = dbContext.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo)
                         .GroupJoin(dbContext.Set<OrderItemEntity>(),
                             o => o.OrderNo,
                             i => i.OrderNo,
@@ -119,6 +119,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             if (linq == null)
             {
                 return this.RenderError(m => m.Message = "订单号不存在");
+            }
+            if (linq.O.CustomerId != authUser.Id) 
+            {
+                var associateEntity = dbContext.Set<IMS_AssociateIncomeHistoryEntity>().Where(im => im.SourceType == (int)AssociateOrderType.Product &&
+                                    im.SourceNo == request.OrderNo &&
+                                    im.AssociateUserId == authUser.Id).FirstOrDefault();
+                if (associateEntity==null)
+                    return this.RenderError(m => m.Message = "订单号不存在");
             }
             var result = new MyOrderDetailResponse().FromEntity<MyOrderDetailResponse>(linq.O, o =>
             {
