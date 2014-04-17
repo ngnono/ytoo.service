@@ -110,15 +110,26 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         public ActionResult Detail(MyOrderDetailRequest request, UserModel authUser)
         {
             var dbContext = Context;
-            var linq = dbContext.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo && o.CustomerId == authUser.Id)
+            var linq = dbContext.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo)
                         .GroupJoin(dbContext.Set<OrderItemEntity>(),
                             o => o.OrderNo,
                             i => i.OrderNo,
                             (o, i) => new { O = o, OI = i })
                         .FirstOrDefault();
+           
             if (linq == null)
             {
                 return this.RenderError(m => m.Message = "订单号不存在");
+            }
+            var isDaogou = false;
+            if (linq.O.CustomerId != authUser.Id) 
+            {
+                var associateEntity = dbContext.Set<IMS_AssociateIncomeHistoryEntity>().Where(im => im.SourceType == (int)AssociateOrderType.Product &&
+                                    im.SourceNo == request.OrderNo &&
+                                    im.AssociateUserId == authUser.Id).FirstOrDefault();
+                if (associateEntity==null)
+                    return this.RenderError(m => m.Message = "订单号不存在");
+                isDaogou = true;
             }
             var result = new MyOrderDetailResponse().FromEntity<MyOrderDetailResponse>(linq.O, o =>
             {
@@ -149,7 +160,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                  ShipViaName = ob.OS.Name,
                                   ShipNo = ob.OB.ShippingNo
                              });
-
+                o.IsDaoGou = isDaogou;
+                o.IsOwner = linq.O.CustomerId == authUser.Id;
             });
             return this.RenderSuccess<MyOrderDetailResponse>(r => r.Data=result);
         }
