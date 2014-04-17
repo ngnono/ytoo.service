@@ -31,7 +31,7 @@ namespace Intime.O2O.ApiClient.Domain
         public int RowNo { get; set; }
         [DataMember(Name = "MENO")]
 
-        public string Memo { get; set; }
+        public string  Memo { get; set; }
         [DataMember(Name = "STORENO")]
 
         public string StoreNo { get; set; }

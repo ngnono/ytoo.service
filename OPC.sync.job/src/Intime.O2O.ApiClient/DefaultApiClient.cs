@@ -57,7 +57,7 @@ namespace Intime.O2O.ApiClient
 
         public TResponse Post<TRequest, TResponse>(Request<TRequest, TResponse> request)
         {
-            var resourceUri = request.GetOrderStatusUri();
+            var resourceUri = request.GetResourceUri();
 
             using (var client = GetHttpClient())
             {

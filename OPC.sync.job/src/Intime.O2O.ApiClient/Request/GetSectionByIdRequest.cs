@@ -7,7 +7,7 @@ namespace Intime.O2O.ApiClient.Request
     /// </summary>
     public class GetSectionByIdRequest : Request<GetSectionByIdRequestData, GetSectionByIdResponse>
     {
-        public override string GetOrderStatusUri()
+        public override string GetResourceUri()
         {
             return "counter/queryCounterById";
         }

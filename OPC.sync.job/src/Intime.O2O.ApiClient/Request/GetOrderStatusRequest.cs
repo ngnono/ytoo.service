@@ -10,7 +10,7 @@ namespace Intime.O2O.ApiClient.Request
 {
     public class GetOrderStatusRequest : Request<GetOrderStatusRequestData, GetOrderStatusResponse>
     {
-        public override string GetOrderStatusUri()
+        public override string GetResourceUri()
         {
             return "production/addorder";
         }
