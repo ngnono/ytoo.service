@@ -116,10 +116,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                             i => i.OrderNo,
                             (o, i) => new { O = o, OI = i })
                         .FirstOrDefault();
+           
             if (linq == null)
             {
                 return this.RenderError(m => m.Message = "订单号不存在");
             }
+            var isDaogou = false;
             if (linq.O.CustomerId != authUser.Id) 
             {
                 var associateEntity = dbContext.Set<IMS_AssociateIncomeHistoryEntity>().Where(im => im.SourceType == (int)AssociateOrderType.Product &&
@@ -127,6 +129,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     im.AssociateUserId == authUser.Id).FirstOrDefault();
                 if (associateEntity==null)
                     return this.RenderError(m => m.Message = "订单号不存在");
+                isDaogou = true;
             }
             var result = new MyOrderDetailResponse().FromEntity<MyOrderDetailResponse>(linq.O, o =>
             {
@@ -157,7 +160,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                  ShipViaName = ob.OS.Name,
                                   ShipNo = ob.OB.ShippingNo
                              });
-
+                o.IsDaoGou = isDaogou;
             });
             return this.RenderSuccess<MyOrderDetailResponse>(r => r.Data=result);
         }

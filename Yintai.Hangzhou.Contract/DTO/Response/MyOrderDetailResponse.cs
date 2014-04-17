@@ -70,16 +70,19 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
      
         [DataMember(Name="canvoid")]
         public bool CanVoid { get {
-           return new int[]{(int)OrderStatus.Create}.Any(status => status == Status);
+            return (!IsDaoGou) &&
+               new int[]{(int)OrderStatus.Create}.Any(status => status == Status);
         } }
           [DataMember(Name = "canrma")]
         public bool CanRMA {
             get {
-                return Status == (int)OrderStatus.Shipped &&
+                return  (!IsDaoGou) &&
+                        Status == (int)OrderStatus.Shipped &&
                         (RMAs==null || !RMAs.Any(r=>new int[]{(int)RMAStatus.Created,(int)RMAStatus.CustomerConfirmed,(int)RMAStatus.PackageReceived,(int)RMAStatus.PassConfirmed}.Any(status=>status==r.Status)));
             }
         }
-
+        [IgnoreDataMember]
+        public bool IsDaoGou { get; set; }
 
     }
     [DataContract]
