@@ -65,7 +65,7 @@ namespace Intime.O2O.ApiClient.Domain
         public string OperName { get; set; }
         [DataMember(Name = "OPERTIME")]
 
-        public string OperTime { get; set; }
+        public DateTime OperTime { get; set; }
 
 
     }
