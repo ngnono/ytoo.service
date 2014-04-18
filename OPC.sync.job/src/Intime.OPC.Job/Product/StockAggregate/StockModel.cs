@@ -31,13 +31,24 @@ namespace Intime.OPC.Job.Product.StockAggregate
             {
                 throw new ArgumentException("stocks");
             }
+            var skuId = stocks.First().SkuId;
 
-            var price = stocks.Where(x => x.Count > 0).Min(x => x.Price);
-            var amount = stocks.Where(x => x.Price == price).Sum(x => x.Count);
-            return new StockModel { 
-               SkuId = stocks.First().SkuId,
-               Count = amount.Value,
-               Price = price
+            if (stocks.Any(x => x.Count > 0))
+            {
+                var price = stocks.Where(x => x.Count >= 0).Min(x => x.Price);
+                var amount = stocks.Where(x => x.Price == price).Sum(x => x.Count);
+                return new StockModel
+                {
+                    SkuId = skuId,
+                    Count = amount.Value,
+                    Price = price
+                };
+            }
+            return new StockModel
+            {
+                Count = 0,
+                SkuId = skuId,
+                Price = stocks.Max(x => x.Price)
             };
         }
 
@@ -91,10 +102,13 @@ namespace Intime.OPC.Job.Product.StockAggregate
 
         public void Process(StockModel stock)
         {
-            using (var db = new YintaiHZhouContext()) {
-                var product = db.Products.Join(db.OPC_SKU.Where(x=>x.Id==stock.SkuId),p=>p.Id,x=>x.ProductId,(x,p)=>x).FirstOrDefault();
-                if (null != product) {
-                    if (!product.Is4Sale.HasValue || !product.Is4Sale.Value || product.Price != stock.Price) {
+            using (var db = new YintaiHZhouContext())
+            {
+                var product = db.Products.Join(db.OPC_SKU.Where(x => x.Id == stock.SkuId), p => p.Id, x => x.ProductId, (x, p) => x).FirstOrDefault();
+                if (null != product)
+                {
+                    if (!product.Is4Sale.HasValue || !product.Is4Sale.Value || product.Price != stock.Price)
+                    {
                         product.Is4Sale = true;
                         product.Price = stock.Price;
                         product.UpdatedDate = DateTime.Now;

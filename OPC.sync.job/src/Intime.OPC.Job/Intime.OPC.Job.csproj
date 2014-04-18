@@ -102,6 +102,7 @@
   <ItemGroup>
     <Compile Include="Order\DTO\OrderStatusDetail.cs" />
     <Compile Include="Order\DTO\OrderStatusResultDto.cs" />
+    <Compile Include="Order\OrderStatusSync\OrderNotifyJob.cs" />
     <Compile Include="Order\OrderStatusSync\OrderStatusSync.cs" />
     <Compile Include="Order\Repository\IRemoteRepository.cs" />
     <Compile Include="Order\Repository\RemoteRepository.cs" />

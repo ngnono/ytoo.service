@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Job.Trade.SplitOrder.Supports
@@ -53,6 +54,40 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
 
                 return true;
             }
+        }
+
+        /// <summary>
+        /// 查询订单是否已经拆过单
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public bool SearchSaleOrderByOrderNo(string orderNo)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var saleOrder = db.OPC_Sale.FirstOrDefault(x => x.OrderNo == orderNo);
+                if (saleOrder!=null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 保存拆单失败的订单
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <param name="ErrorReason"></param>
+        /// <returns></returns>
+        public bool SaveSplitErrorOder(string orderNo, string ErrorReason)
+        {
+            using (var db = new YintaiHZhouContext())
+            { 
+                //建完表，生成实体，实现保存
+
+            }            
+            return true;
         }
     }
 }

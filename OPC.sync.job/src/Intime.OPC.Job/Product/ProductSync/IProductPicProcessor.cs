@@ -1,4 +1,5 @@
 ﻿using Intime.OPC.Domain.Models;
+using System;
 
 namespace Intime.OPC.Job.Product.ProductSync
 {
@@ -14,6 +15,6 @@ namespace Intime.OPC.Job.Product.ProductSync
         /// <param name="channelColorId">花色id</param>
         /// <param name="channelUrl">图片地址</param>
         /// <returns>保存后的本地资源实体</returns>
-        Resource Sync(string channelProductId, string channelColorId, string channelUrl);
+        Resource Sync(string channelProductId, string channelColorId, string channelUrl, string Id, int SeqNo,DateTime WriteTime);
     }
 }

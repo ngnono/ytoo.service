@@ -7,7 +7,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Synchronizers
         public DateTime GetLast(string key)
         {
             //TODO:修改时间
-            return new DateTime(2013, 11, 15);
+            return DateTime.Now.AddDays(-3);
         }
 
         public void Update(string key, DateTime dateTime)

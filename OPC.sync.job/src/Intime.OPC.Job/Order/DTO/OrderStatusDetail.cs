@@ -14,11 +14,11 @@ namespace Intime.OPC.Job.Order.Models
         public string Id { get; set; }
         //状态
         public int Status { get; set; }
-        public HeadDto Head { get; set; }
+        public List<HeadDto> Head { get; set; }
 
-        public DetailDto Detail { get; set; }
+        public List<DetailDto> Detail { get; set; }
 
-        public PayMentDto PayMent { get; set; }
+        public List<PayMentDto> PayMent { get; set; }
 
 
     }

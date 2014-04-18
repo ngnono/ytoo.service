@@ -25,11 +25,12 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
         {
             using (var context = new YintaiHZhouContext())
             {
-                var minx = context.OPC_Sale.Where(t => t.UpdatedDate > benchTime && t.Status > 0 ).Min(t=>t.Status);
-                var linq = context.OPC_Sale.Where(t => t.UpdatedDate > benchTime && t.Status==minx).AsQueryable();
+                //
+                var minx = context.OPC_Sale.Where(t => t.UpdatedDate > benchTime && t.Status > 0 );//.Min(t=>t.Status);
+                //var linq = context.OPC_Sale.Where(t => t.UpdatedDate > benchTime && t.Status==minx).AsQueryable();
                 
                 if (callback != null)
-                    callback(linq);
+                    callback(minx);
             }
         }
 
@@ -37,14 +38,15 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
 
         public void Execute(IJobExecutionContext context)
         {
+            var totalCount = 0;
+#if !DEBUG
             JobDataMap data = context.JobDetail.JobDataMap;
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
-            var totalCount = 0;
 
             if (!isRebuild)
                 benchTime = data.GetDateTime("benchtime");
-
+#endif
             DoQuery(skus =>
             {
                 totalCount = skus.Count();
@@ -57,90 +59,11 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                 DoQuery(r => oneTimeList = r.OrderBy(t => t.OrderNo).Skip(cursor).Take(size).ToList());
                 foreach (var opc_sale in oneTimeList)
                 {
-                    Process(opc_sale);
-                    ProcessToProduct(opc_sale);
+                    Process(opc_sale);          // 本地订单状态同步
                 }
                 cursor += size;
             }
 
-
-        }
-
-        /// <summary>
-        /// 同步订单
-        /// </summary>
-        /// <param name="opc_sale"></param>
-        private void ProcessToProduct(Domain.Models.OPC_Sale opc_sale)
-        {
-            OPC_SaleDetail opc_SaleDetail;
-            Intime.OPC.Domain.Models.Section section;
-            //Intime.OPC.Domain.Models
-            using (var db = new YintaiHZhouContext())
-            {
-                opc_SaleDetail = db.OPC_SaleDetail.FirstOrDefault(t => t.SaleOrderNo == opc_sale.SaleOrderNo);
-                section = db.Sections.FirstOrDefault(a => a.Id == opc_sale.SectionId);
-                //order = db.Orders.FirstOrDefault(b => b.OrderNo == opc_sale.OrderNo);
-            }
-            OrderStatusDetail opc_saleorderStatusDetail = new OrderStatusDetail
-            {
-                Id = opc_sale.OrderNo,
-                Status = opc_sale.Status,
-                Head = new HeadDto
-                {
-                    Id = opc_sale.OrderNo,
-                    MainId = opc_sale.OrderNo,
-                    Flag = 0,
-                    CreateTime = opc_sale.CreatedDate,
-                    PayTime = opc_sale.CashDate??DateTime.Now,
-                    Type = opc_sale.SalesType,
-                    Status = opc_sale.Status,
-                    Quantity = opc_sale.SalesCount,
-                    Discount = 0,
-                    Total = opc_sale.SalesAmount,
-                    VipNo = "",
-                    VipMemo = "",
-                    StoreNo = section.StoreCode,
-                    OldId = "",
-                    OperId = opc_sale.CreatedUser.ToString(),
-                    OperName = "",
-                    OperTime = opc_sale.CreatedDate
-                },
-                Detail = new DetailDto
-                {
-                    Id = opc_sale.OrderNo,
-                    ProductId = "",
-                    ProductName = "",
-                    Price = opc_SaleDetail.Price,
-                    Discount = opc_SaleDetail.Price,
-                    VipDiscount = 0,
-                    Quantity = opc_SaleDetail.SaleCount,
-                    Total = opc_SaleDetail.Price,
-                    RowNo = 1,
-                    ComCode = "",
-                    Counter = "",
-                    Memo = "",
-                    StoreNo = section.StoreCode
-                },
-                PayMent = new PayMentDto
-                {
-                    Id = opc_sale.OrderNo,
-                    Type = "",
-                    TypeId = 25,//order.PaymentMethodCode,
-                    TypeName ="",
-                    No = "",
-                    Amount = opc_sale.SalesAmount,
-                    RowNo = 1,
-                    Memo = "",
-                    StoreNo = section.StoreCode
-                }
-
-            };
-            var dataResult = _remoteRepository.GetOderStatus(opc_saleorderStatusDetail);
-            if (dataResult==null)
-            {
-                var res = dataResult.desc;
-                Log.InfoFormat("订单信息查询失败,orderNo:{0},status:{1}", opc_sale.OrderNo,opc_sale.Status);
-            }
 
         }
         private void Process(Domain.Models.OPC_Sale opc_sale)

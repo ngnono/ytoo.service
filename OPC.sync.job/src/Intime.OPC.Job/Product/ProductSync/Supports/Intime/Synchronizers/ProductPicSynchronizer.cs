@@ -48,7 +48,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Synchronizers
                 {
                     try
                     {
-                        _productPicProcessor.Sync(product.ProductId, product.ColorId, product.Url);                      
+                        _productPicProcessor.Sync(product.ProductId, product.ColorId, product.Url,product.Id,product.SeqNo,product.WriteTime);                      
 
                     }
                     catch (Exception ex)

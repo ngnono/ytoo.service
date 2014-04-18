@@ -14,6 +14,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
     public class RemoteRepository : IRemoteRepository
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private string _dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         private readonly IApiClient _apiClient;
 
         static RemoteRepository()
@@ -113,7 +114,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
                 {
                     PageIndex = pageIndex,
                     PageSize = pageSize,
-                    LastUpdate = lastUpdateDateTime.ToString("yyyy-MM-dd")
+                    LastUpdate = lastUpdateDateTime.ToString(_dateTimeFormat)
                 }
             });
 
@@ -123,7 +124,9 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
                 return null;
             }
 
-            return AutoMapper.Mapper.Map<IEnumerable<O2O.ApiClient.Domain.Product>, IEnumerable<ProductDto>>(result.Data);
+            var products = AutoMapper.Mapper.Map<IEnumerable<O2O.ApiClient.Domain.Product>, IEnumerable<ProductDto>>(result.Data);
+            return products.GroupBy(x=>x.ProductId,x=>x).Select(product => product.ToList().OrderByDescending(x => x.ProductId).FirstOrDefault());
+            
         }
 
         public SectionDto GetSectionById(string sectionid, string storeNo)
@@ -160,7 +163,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
                 {
                     PageIndex = pageIndex,
                     PageSize = pageSize,
-                    LastUpdate = lastUpdateDateTime.ToString("yyyy-MM-dd")
+                    LastUpdate = lastUpdateDateTime.ToString(_dateTimeFormat)
                 }
             });
 
@@ -170,7 +173,9 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
                 return null;
             }
 
-            return AutoMapper.Mapper.Map<IEnumerable<ProductImage>, IEnumerable<ProductImageDto>>(result.Data);
+//            return AutoMapper.Mapper.Map<IEnumerable<ProductImage>, IEnumerable<ProductImageDto>>(result.Data);
+            return AutoMapper.Mapper.Map<IEnumerable<ProductImage>, IEnumerable<ProductImageDto>>(result.Data).GroupBy(x => x.GroupByKey, x => x).Select(x => x.ToList().OrderByDescending(y => y.WriteTime).FirstOrDefault());
+
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             _channelMapper = channelMapper;
         }
 
-        public Resource Sync(string channelProductId, string channelColorId, string channelUrl)
+        public Resource Sync(string channelProductId, string channelColorId, string channelUrl, string Id, int SeqNo, DateTime WriteTime)
         {
             var productMap = _channelMapper.GetMapByChannelValue(channelProductId, ChannelMapType.ProductId);
             if (productMap == null)
@@ -40,48 +40,53 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             }
 
             // 判断是否需要同步图片
-            if (Synced(colorIdMap.LocalId, channelUrl))
+            if (Synced(colorIdMap.LocalId, channelUrl, SeqNo, WriteTime))
             {
                 Log.InfoFormat("商品图片已经同步，远程的图片地址没有发生变化无需同步,productId:[{0}],colorId:[{1}],url:[{2}]", channelProductId, channelColorId, channelUrl);
                 return null;
             }
 
             string filePath;
-
-            // 下载远程图片
-            try
-            {
-                filePath = FetchRemotePic(channelUrl);
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorFormat("同步商品图片出错，下载图片出错,productId:[{0}],colorId:[{1}],url:[{2}]", channelProductId, channelColorId, channelUrl);
-                return null;
-            }
-
-            //resize pics
-            var file = new FileInfo(filePath);
-            FileInfor uploadFile;
-            var uploadResult = FileUploadServiceManager.UploadFile(file, "product", out uploadFile, string.Empty);
-            if (uploadResult != FileMessage.Success)
-            {
-                Log.ErrorFormat("上传文件失败:{0}", filePath);
-                File.Delete(filePath);
-                return null;
-            }
+            FileInfor uploadFile=null;
 
             using (var db = new YintaiHZhouContext())
             {
                 //查找是否已经同步图片
-                var resourceExt = db.Resources.FirstOrDefault(r => r.ColorId == colorIdMap.LocalId);
+                var resourceExt = db.Resources.FirstOrDefault(r => r.ColorId == colorIdMap.LocalId && r.SourceId == productMap.LocalId && r.SortOrder == SeqNo);
+
+                // 下载远程图片
+                if (resourceExt == null || resourceExt.UpdatedDate != WriteTime)
+                {
+                    try
+                    {
+                        filePath = FetchRemotePic(channelUrl);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.ErrorFormat("同步商品图片出错，下载图片出错,productId:[{0}],colorId:[{1}],url:[{2}]", channelProductId, channelColorId, channelUrl);
+                        return null;
+                    }
+
+                    //resize pics
+                    var file = new FileInfo(filePath);
+
+                    var uploadResult = FileUploadServiceManager.UploadFile(file, "product", out uploadFile, string.Empty);
+                    if (uploadResult != FileMessage.Success)
+                    {
+                        Log.ErrorFormat("上传文件失败:{0}", filePath);
+                        File.Delete(filePath);
+                        return null;
+                    }
+                }
 
                 if (resourceExt == null)
                 {
+
                     var newResource = new Resource()
                     {
                         ColorId = colorIdMap.LocalId,
-                        SourceId = 0,
-                        SourceType = 0,
+                        SourceId = productMap.LocalId,
+                        SourceType = 1,
                         ContentSize = uploadFile.FileSize,
                         CreatedDate = DateTime.Now,
                         CreatedUser = SystemDefine.SystemUser,
@@ -89,10 +94,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         ExtName = uploadFile.FileExtName,
                         Height = uploadFile.Height,
                         IsDefault = false,
-                        UpdatedDate = DateTime.Now,
+                        UpdatedDate = WriteTime,
                         Name = uploadFile.FileName,
-                        Status = 0,
-                        SortOrder = 0,
+                        Status = 1,
+                        SortOrder = SeqNo,
                         Size = string.Format("{0}x{1}", uploadFile.Width, uploadFile.Height),
                         Type = (int)uploadFile.ResourceType,
                         Width = uploadFile.Width,
@@ -111,29 +116,34 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
 
                     return newResource;
                 }
+                else
+                {
+                    if (resourceExt.UpdatedDate!=WriteTime)
+                    {
+                        resourceExt.ContentSize = uploadFile.FileSize;
+                        resourceExt.CreatedDate = DateTime.Now;
+                        resourceExt.CreatedUser = SystemDefine.SystemUser;
 
+                        resourceExt.ExtName = uploadFile.FileExtName;
+                        resourceExt.Height = uploadFile.Height;
+                        resourceExt.IsDefault = false;
+                        resourceExt.UpdatedDate = WriteTime;
+                        resourceExt.Name = uploadFile.FileName;
 
-                resourceExt.ContentSize = uploadFile.FileSize;
-                resourceExt.CreatedDate = DateTime.Now;
-                resourceExt.CreatedUser = SystemDefine.SystemUser;
+                        resourceExt.Size = string.Format("{0}x{1}", uploadFile.Width, uploadFile.Height);
+                        resourceExt.Type = (int)uploadFile.ResourceType;
+                        resourceExt.Width = uploadFile.Width;
 
-                resourceExt.ExtName = uploadFile.FileExtName;
-                resourceExt.Height = uploadFile.Height;
-                resourceExt.IsDefault = false;
-                resourceExt.UpdatedDate = DateTime.Now;
-                resourceExt.Name = uploadFile.FileName;
+                        db.SaveChanges();
 
-                resourceExt.Size = string.Format("{0}x{1}", uploadFile.Width, uploadFile.Height);
-                resourceExt.Type = (int)uploadFile.ResourceType;
-                resourceExt.Width = uploadFile.Width;
+                        // 更新最后的图片地址
+                        _channelMapper.UpdateMapByLocal(colorIdMap.LocalId.ToString(CultureInfo.InvariantCulture), ChannelMapType.ProductPic, channelUrl);
 
-                db.SaveChanges();
-
-                // 更新最后的图片地址
-                _channelMapper.UpdateMapByLocal(colorIdMap.LocalId.ToString(CultureInfo.InvariantCulture), ChannelMapType.ProductPic, channelUrl);
-
-                return resourceExt;
+                        return resourceExt;
+                    }                    
+                }
             }
+            return null;
         }
 
         private static string FetchRemotePic(string url)
@@ -162,12 +172,12 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
         }
 
 
-        private bool Synced(int colorId, string channelUrl)
+        private bool Synced(int colorId, string channelUrl, int SeqNo, DateTime WriteTime)
         {
             using (var db = new YintaiHZhouContext())
             {
-                //查找是否已经同步图片
-                var resourceExt = db.Resources.FirstOrDefault(r => r.ColorId == colorId);
+                //查找是否已经存在图片
+                var resourceExt = db.Resources.FirstOrDefault(r => r.ColorId == colorId && r.SortOrder==SeqNo );
 
                 if (resourceExt == null)
                 {

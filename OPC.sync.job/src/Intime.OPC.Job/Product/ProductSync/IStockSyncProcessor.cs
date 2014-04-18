@@ -17,7 +17,10 @@ namespace Intime.OPC.Job.Product.ProductSync
         /// <param name="channelPrice">渠道价格</param>
         /// <param name="sourceStockId">渠道库存Id</param>
         /// <param name="商品销售码">MIS销售码</param>
+        /// <param name="ProductName">商品名称</param>
+        /// <param name="SectionCode">专柜码</param>
+        /// <param name="StoreCode">门店码</param>
         /// <returns>转换后的本地库存信息</returns>
-        OPC_Stock Sync(int skuId, string channelSectionId, string channelStoreNo, int channelCount, decimal channelPrice, string sourceStockId, string productSaleCode);
+        OPC_Stock Sync(int skuId, string channelSectionId, string channelStoreNo, int channelCount, decimal channelPrice, string sourceStockId, string productSaleCode,string productName,string sectionCode,string storeCode);
     }
 }

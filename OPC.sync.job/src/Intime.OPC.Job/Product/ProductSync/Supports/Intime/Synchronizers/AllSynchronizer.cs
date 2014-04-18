@@ -29,7 +29,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Synchronizers
         private readonly IUpdateDateStore _updateDateStore;
         private readonly string _lastUpdateDateTimeKey = string.Empty;
 
-        private const int PageSize = 20;
+        private const int PageSize = 2000;
 
         public AllSynchronizer(IRemoteRepository remoteRepository, IUpdateDateStore updateDateStore)
         {
@@ -118,7 +118,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Synchronizers
 
                         // 同步库存
                         var stock = _stockSyncProcessor.Sync(sku.Id, product.SectionId, product.StoreNo,
-                            product.Stock ?? 0, product.CurrentPrice, product.ProductId, product.PosCode);
+                            product.Stock ?? 0, product.CurrentPrice, product.ProductId, product.PosCode, product.ProductName, product.SectionId,product.StoreNo);
 
                         if (stock == null)
                         {

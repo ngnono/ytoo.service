@@ -17,6 +17,5 @@ namespace Intime.OPC.Job.Order.Repository
         /// <returns>信息</returns>
         OrderStatusResultDto GetOrderStatusById(string id, string storeno);
 
-        OrderStatusDto GetOderStatus(OrderStatusDetail orderStatusDetail);
     }
 }

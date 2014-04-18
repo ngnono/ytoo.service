@@ -200,8 +200,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     return null;
                 }
 
-                proudctExt.BarCode = string.Empty;
-                 
+                proudctExt.BarCode = string.Empty;                 
                 proudctExt.Store_Id = section.StoreId ?? 0;
                 proudctExt.Brand_Id = brand == null ? 0 : brand.Id;
                 proudctExt.Tag_Id = 0;

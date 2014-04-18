@@ -14,7 +14,7 @@ namespace Intime.OPC.Job.Product.StockAggregate
     public class StockAttregateJob : IJob
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private DateTime benchTime = DateTime.Now.AddMinutes(-5);
+        private DateTime benchTime = DateTime.Now.AddMinutes(-300);
         private void DoQuery(Action<IQueryable<OPC_SKU>> callback)
         {
             using (var context = new YintaiHZhouContext())
@@ -46,14 +46,16 @@ namespace Intime.OPC.Job.Product.StockAggregate
 
         public void Execute(IJobExecutionContext context)
         {
+            var totalCount = 0;
+#if !DEBUG
             JobDataMap data = context.JobDetail.JobDataMap;
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
-            var totalCount = 0;
+            
  
             if (!isRebuild)
                 benchTime = data.GetDateTime("benchtime");
-
+#endif
             DoQuery(skus =>
             {
                 totalCount = skus.Count();

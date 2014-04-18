@@ -21,7 +21,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             _channelMapper = channelMapper;
         }
 
-        public OPC_Stock Sync(int skuId, string channelSectionId, string channelStoreNo, int channelCount, decimal channelPrice, string sourceStockId, string productSaleCode)
+        public OPC_Stock Sync(int skuId, string channelSectionId, string channelStoreNo, int channelCount, decimal channelPrice, string sourceStockId, string productSaleCode,string productName,string sectionCode,string storeCode)
         {
             using (var db = new YintaiHZhouContext())
             {
@@ -60,6 +60,9 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         Count = channelCount,
                         SourceStockId = sourceStockId ?? string.Empty,
                         ProdSaleCode = productSaleCode,
+                        ProductName=productName,
+                        SectionCode=sectionCode,
+                        StoreCode=storeCode,
                         Status = 1,
                         IsDel = false,
                         CreatedDate = DateTime.Now,
