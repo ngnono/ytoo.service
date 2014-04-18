@@ -32,5 +32,19 @@ namespace Intime.O2O.ApiClient.Domain
         /// </summary>
         [DataMember(Name = "COLORID")]
         public string ColorId { get; set; }
+
+        /// <summary>
+        /// 在信息部系统主键
+        /// </summary>
+        [DataMember(Name = "ID")]
+        public string Id { get; set; }
+
+
+        /// <summary>
+        /// 商品图片写入时间
+        /// </summary>
+        [DataMember(Name = "WRITETIME")]
+        public System.DateTime WriteTime { get; set; }
+
     }
 }

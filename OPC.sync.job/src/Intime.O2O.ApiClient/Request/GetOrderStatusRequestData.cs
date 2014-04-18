@@ -18,11 +18,11 @@ namespace Intime.O2O.ApiClient.Request
         [DataMember(Name = "STATUS")]
         public int Status { get; set; }
         [DataMember(Name = "HEAD")]
-        public Head Head { get; set; }
+        public List<Head> Head { get; set; }
         [DataMember(Name = "DETAIL")]
-        public Detail Detail { get; set; }
+        public List<Detail> Detail { get; set; }
         [DataMember(Name = "PAYMENT")]
-        public PayMent PayMent { get; set; }
+        public List<PayMent> PayMent { get; set; }
 
     }
 }

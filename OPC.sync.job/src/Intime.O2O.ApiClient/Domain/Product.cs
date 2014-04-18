@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Runtime.Serialization;
 
 namespace Intime.O2O.ApiClient.Domain
@@ -9,6 +10,19 @@ namespace Intime.O2O.ApiClient.Domain
     [DataContract]
     public class Product
     {
+        /// <summary>
+        /// 在信息部系统主键
+        /// </summary>
+        [DataMember(Name = "ID")]
+        public string Id { get; set; }
+
+
+        /// <summary>
+        /// 商品图片写入时间
+        /// </summary>
+        [DataMember(Name = "WRITETIME")]
+        public string WriteTime { get; set; }
+
         /// <summary>
         /// 商品编码
         /// </summary>
@@ -25,7 +39,7 @@ namespace Intime.O2O.ApiClient.Domain
         /// 专柜Id
         /// </summary>
         [DataMember(Name = "COUNTERID")]
-        public int? SectionId { get; set; }
+        public string SectionId { get; set; }
 
         /// <summary>
         /// 品牌Id
@@ -79,7 +93,7 @@ namespace Intime.O2O.ApiClient.Domain
         /// 库存量
         /// </summary>
         [DataMember(Name = "STOCK")]
-        public int? Stock { get; set; }
+        public decimal Stock { get; set; }
 
         /// <summary>
         /// 标签价格
@@ -103,31 +117,31 @@ namespace Intime.O2O.ApiClient.Domain
         /// 内部唯一码
         /// </summary>
         [DataMember(Name = "PRODUCTID")]
-        public long? ProductId { get; set; }
+        public Int64? ProductId { get; set; }
 
         /// <summary>
         /// 一级工业分类Id
         /// </summary>
         [DataMember(Name = "CATEGORYID1")]
-        public int? CategoryId1 { get; set; }
+        public string CategoryId1 { get; set; }
 
         /// <summary>
         /// 二级工业分类Id
         /// </summary>
         [DataMember(Name = "CATEGORYID2")]
-        public int? CategoryId2 { get; set; }
+        public string CategoryId2 { get; set; }
 
         /// <summary>
         /// 三级工业分类Id
         /// </summary>
         [DataMember(Name = "CATEGORYID3")]
-        public int? CategoryId3 { get; set; }
+        public string CategoryId3 { get; set; }
 
         /// <summary>
         /// 四级工业分类Id
         /// </summary>
         [DataMember(Name = "CATEGORYID4")]
-        public int? CategoryId4 { get; set; }
+        public string CategoryId4 { get; set; }
 
         /// <summary>
         /// 一级工业分类名称

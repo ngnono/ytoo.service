@@ -52,13 +52,11 @@
   <ItemGroup>
     <Compile Include="DefaultApiClient.cs" />
     <Compile Include="Request\GetBrandByIdRequest.cs" />
-    <Compile Include="Request\GetBrandByIdRequestData.cs" />
     <Compile Include="Domain\Detail.cs" />
     <Compile Include="Domain\Head.cs" />
     <Compile Include="Domain\OrderStatus.cs" />
     <Compile Include="Domain\OrderStatusResult.cs" />
     <Compile Include="Domain\Payment.cs" />
-    <Compile Include="Request\GetBrandByIdRequest.cs" />
     <Compile Include="Request\GetBrandByIdRequestData.cs" />
     <Compile Include="Request\GetOrderStatusByIdRequest.cs" />
     <Compile Include="Request\GetOrderStatusByIdRequestData.cs" />
@@ -79,6 +77,7 @@
     <Compile Include="Request\GetProductsRequest.cs" />
     <Compile Include="Request\GetStoreByIdRequest.cs" />
     <Compile Include="Request\GetStoreByIdRequestData.cs" />
+    <Compile Include="Request\OrderNotifyRequest.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="Domain\Brand.cs" />
     <Compile Include="Response\GetOrderStatusByIdResponse.cs" />
