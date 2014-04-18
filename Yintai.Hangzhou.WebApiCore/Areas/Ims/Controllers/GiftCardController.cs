@@ -154,7 +154,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "不存在该礼品卡!");
             }
 
-            if (_rechargeRepo.Find(x => x.OrderNo == giftCardOrder.No) != null)
+            if (giftCardOrder.Status == (int) GiftCardOrderStatus.Recharge)
             {
                 return this.RenderError(r => r.Message = "该礼品卡已充值!");
             }
@@ -195,6 +195,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     return this.RenderError(r => r.Message = rsp.Message);
                 }
 
+                //允许多次赠送会有bug
                 var transfer = _transRepo.Find(x => x.OrderNo == charge_no && x.IsActive == 0 && x.IsDecline == 0);
 
                 using (var ts = new TransactionScope())
@@ -261,7 +262,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
             if (order.Status == (int)GiftCardOrderStatus.Recharge)
             {
-                return this.RenderError(r => r.Message = "礼品卡已经充值，不能重复充值");
+                return this.RenderError(r => r.Message = "礼品卡已经充值!");
             }
 
             var orderItem = _itemRepo.Find(order.GiftCardItemId);
@@ -369,6 +370,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             new
                             {
                                 sender = transfer != null ? transfer.FromPhone : null,
+                                trans_id = transfer != null ? transfer.Id : 0,
                                 phone = user.GiftCardAccount,
                                 amount = order.Amount
                             });
@@ -410,7 +412,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 from_phone = trans.FromPhone,
                                 phone = trans.Phone,
                                 amount = order.Amount,
-                                status = (int)this.SetStatus4Receiver(order, trans)
+                                trans_id = trans.Id,
+                                status = (int)this.SetStatus4Receiver(order, trans,_rechargeRepo.Find(x=>x.OrderNo == order.No))
                             });
         }
 
@@ -452,6 +455,54 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = rsp);
         }
 
+        [RestfulAuthorize]
+        public ActionResult Send(string comment, string from, string phone, string charge_no, int trans_id, int authuid)
+        {
+            var order = _orderRepo.Find(x => x.No == charge_no);
+            if (order == null)
+            {
+                return this.RenderError(r => r.Message = "无效的charge_no，找不到对应的礼品卡!");
+            }
+
+            if (order.Status == (int)GiftCardOrderStatus.Recharge)
+            {
+                return this.RenderError(r => r.Message = "该礼品卡已经充值了，不能赠送");
+            }
+
+            IMS_GiftCardTransfersEntity preTrans = _transRepo.Find(trans_id);
+            using (var ts = new TransactionScope())
+            {
+                if (preTrans != null)
+                {
+                    preTrans.IsActive = 1;
+                    preTrans.ToUserId = authuid;
+                    preTrans.OperateDate = DateTime.Now;
+                    preTrans.OperateUser = authuid;
+                    _transRepo.Update(preTrans);
+                }
+                _transRepo.Insert(new IMS_GiftCardTransfersEntity()
+                {
+                    Phone = phone,
+                    Comment = comment,
+                    CreateDate = DateTime.Now,
+                    CreateUser = authuid,
+                    FromUserId = authuid,
+                    OrderNo = order.No,
+                    IsActive = 0,
+                    IsDecline = 0,
+                    PreTransferId = preTrans == null ? 0 : preTrans.Id,
+                    OperateDate = DateTime.Now,
+                    OperateUser = authuid,
+                    FromNickName = from,
+                    FromPhone = from,
+                });
+                ts.Complete();
+            }
+
+            return this.RenderSuccess<dynamic>(null);
+        }
+
+        [Obsolete("请使用 Send(string comment, string from, string phone, string charge_no, int trans_id, int authuid)")]
         [RestfulAuthorize]
         public ActionResult Send(string charge_no, string comment, string from, string phone, int authuid)
         {
@@ -545,6 +596,39 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             return this.RenderSuccess<dynamic>(null);
         }
+
+
+        [RestfulAuthorize]
+        public ActionResult Refuse(int trans_id, int authuid)
+        {
+            var trans = _transRepo.Find(trans_id);
+            if (trans == null)
+            {
+                return this.RenderError(x => x.Message = "没有赠送信息！");
+            }
+            using (var ts = new TransactionScope())
+            {
+                trans.IsDecline = 1;
+                trans.ToUserId = authuid;
+                trans.OperateDate = DateTime.Now;
+                trans.OperateUser = authuid;
+                _transRepo.Update(trans);
+
+                var preTrans = _transRepo.Find(x => x.Id == trans.PreTransferId);
+                if (preTrans != null)
+                {
+                    preTrans.IsActive = 0;
+                    preTrans.OperateDate = DateTime.Now;
+                    preTrans.OperateUser = authuid;
+                    preTrans.ToUserId = null;
+                    _transRepo.Update(preTrans);
+                }
+                ts.Complete();
+                return this.RenderSuccess<dynamic>(null);
+            }
+        }
+
+        [Obsolete("请使用refuse(int trans_id, int authuid)")]
         [RestfulAuthorize]
         public ActionResult Refuse(string charge_no, int authuid)
         {
@@ -590,18 +674,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     .Skip((request.Page - 1) * request.Pagesize)
                     .Take(request.Pagesize)
                     .Join(_orderRepo.Get(o => o.Status != (int)GiftCardOrderStatus.Void), x => x.OrderNo, o => o.No,
-                        (x, o) => new { transfer = x, order = o });
+                        (x, o) => new { transfer = x, order = o })
+                    .GroupJoin(_rechargeRepo.GetAll(), x => x.order.No, r => r.OrderNo,
+                        (x, r) => new { x.transfer, x.order, recharge = r.FirstOrDefault() });
             dynamic items = new List<dynamic>();
             foreach (var o in orders)
             {
                 items.Add(new
                 {
+                    recharged = o.order.Status == (int)GiftCardOrderStatus.Recharge,
+                    trans_id = o.transfer == null ? o.transfer.Id : 0,
                     from = o.transfer.FromNickName,
                     from_phone = o.transfer.FromPhone,
                     verify_phone = o.transfer != null ? o.transfer.Phone : "null",
                     card_no = o.order.No,
                     amount = o.order.Amount,
-                    status_i = SetStatus4Receiver(o.order, o.transfer),
+                    status_i = SetStatus4Receiver(o.order, o.transfer, o.recharge),
                     send_date = o.transfer != null ? o.transfer.CreateDate.ToString(_dateFormmat) : "null",
                     receive_date = o.transfer.OperateDate.ToString(_dateFormmat)
                 });
@@ -610,23 +698,27 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
         }
 
-        private GiftCardListItemStatus SetStatus4Receiver(IMS_GiftCardOrderEntity order, IMS_GiftCardTransfersEntity transfers)
+        private GiftCardListItemStatus SetStatus4Receiver(IMS_GiftCardOrderEntity order, IMS_GiftCardTransfersEntity transfers, IMS_GiftCardRechargeEntity recharge)
         {
             if (transfers.IsDecline == 1)
             {
                 return GiftCardListItemStatus.Refuse;
             }
-            if (transfers.IsActive == 1)
+
+            if (recharge != null)
             {
-                if (_transRepo.Get(x => x.FromUserId == transfers.ToUserId && x.OrderNo == order.No).Any())
-                {
-                    return GiftCardListItemStatus.ReTransfer;
-                }
-                if (order.Status == (int)GiftCardOrderStatus.Recharge)
+                if (recharge.ChargeUserId == transfers.ToUserId)
                 {
                     return GiftCardListItemStatus.Received;
                 }
             }
+
+            var trans = _transRepo.Get(x => x.PreTransferId == transfers.Id);
+            if (trans.Any(x => x.IsActive == 1))
+            {
+                return GiftCardListItemStatus.ReTransfer;
+            }
+
             return GiftCardListItemStatus.None;
         }
 
@@ -642,9 +734,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     .Take(pageSize)
                     .GroupJoin(_transRepo.Get(x => x.FromUserId == authuid), o => o.No, x => x.OrderNo,
                         (o, trans) =>
-                            new { order = o, tran = trans.OrderByDescending(x => x.CreateDate).FirstOrDefault() })
+                            new { order = o, transfer = trans.OrderByDescending(x => x.CreateDate).FirstOrDefault() })
                     .GroupJoin(_rechargeRepo.Get(r => r.ChargeUserId == authuid), ot => ot.order.No, r => r.OrderNo,
-                        (ot, r) => new { order = ot.order, transfer = ot.tran, recharge = r.FirstOrDefault() });
+                        (ot, r) => new { order = ot.order, transfer = ot.transfer, recharge = r.FirstOrDefault() });
 
 
             var items = new List<dynamic>();
@@ -652,11 +744,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 items.Add(new
                 {
+                    recharged = o.order.Status == (int)GiftCardOrderStatus.Recharge,
+                    trans_id = o.transfer == null ? o.transfer.Id : 0,
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     purchase_date = o.order.CreateDate,
                     charge_date = o.recharge != null ? o.recharge.CreateDate.ToString(_dateFormmat) : "null",
-                    status_i = SetStatusForBuyer(o.order, o.transfer, o.recharge),
+                    status_i = SetStatusForBuyer(o.order, o.recharge),
                     verify_phone = o.transfer != null ? o.transfer.Phone : "null",
                     send_date = o.transfer != null ? o.transfer.CreateDate.ToString(_dateFormmat) : "null",
                     receive_date = o.transfer != null && o.transfer.IsActive == 1 ? o.transfer.CreateDate.ToString(_dateFormmat) : "null"
@@ -665,26 +759,30 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             return new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = items };
         }
 
-        private GiftCardListItemStatus SetStatusForBuyer(IMS_GiftCardOrderEntity order, IMS_GiftCardTransfersEntity transfer, IMS_GiftCardRechargeEntity recharge)
+        private GiftCardListItemStatus SetStatusForBuyer(IMS_GiftCardOrderEntity order, IMS_GiftCardRechargeEntity recharge)
         {
-            if (transfer != null)
+
+            if (order.Status == (int)GiftCardOrderStatus.Recharge)
             {
-                if (transfer.IsDecline == 1)
+                if (recharge.ChargeUserId != order.PurchaseUserId)
                 {
-                    return GiftCardListItemStatus.Refuse;
-                }
-                if (transfer.IsActive == 1)
-                {
-                    if (recharge != null)
-                    {
-                        return GiftCardListItemStatus.Recharged;
-                    }
                     return GiftCardListItemStatus.Sent;
                 }
-           }
+                return GiftCardListItemStatus.Recharged;
+            }
+
+            var trans = _transRepo.Get(x => x.OrderNo == order.No);
+            if (!trans.Any())
+            {
+                return GiftCardListItemStatus.None;
+            }
+
+            if (trans.All(x => x.IsDecline == 1))
+            {
+                return GiftCardListItemStatus.Refuse;
+            }
             return GiftCardListItemStatus.None;
         }
-
 
         private dynamic GetUserAccountBalance(string phone)
         {
