@@ -23,8 +23,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int Status { get; set; }
         [DataMember(Name="amount")]
         public decimal TotalAmount { get; set; }
-
-        [IgnoreDataMember]
+        [DataMember(Name = "create_date")]
         public DateTime CreateDate { get; set; }
     }
 }

@@ -218,14 +218,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Detail(int id, int authuid)
         {
             var comboEntity = Context.Set<IMS_ComboEntity>().Where(ic => ic.Id == id)
+                              .Join(Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.ItemType == (int)ComboType.Product),
+                                            o => o.Id,
+                                            i => i.ItemId,
+                                            (o, i) => new { C=o,A=i})
                               .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.Status == (int)DataStatus.Normal && r.SourceType == (int)SourceType.Combo),
-                                    o => o.Id,
+                                    o => o.C.Id,
                                     i => i.SourceId,
-                                    (o, i) => new { C = o, CR = i.OrderByDescending(ir => ir.SortOrder) }).FirstOrDefault();
+                                    (o, i) => new { C = o.C,A=o.A, CR = i.OrderByDescending(ir => ir.SortOrder) }).FirstOrDefault();
             if (comboEntity == null)
                 return this.RenderError(r => r.Message = "搭配不存在");
             return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, oc =>
             {
+                oc.StoreId = comboEntity.A.AssociateId;
                 oc.Images = comboEntity.CR.ToList().Select(cr => new {id = cr.Id,name = cr.Name.Image320Url()});
                 oc.Products = Context.Set<ProductEntity>()
                             .Join(Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == id), oo => oo.Id, i => i.ProductId, (oo, i) => oo)
@@ -242,7 +247,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po =>
                             {
                                 po.ImageUrl = p.PR == null ? string.Empty : p.PR.Name;
-                                po.IsOnline = p.P.Status==(int)DataStatus.Normal && (p.P.Is4Sale??false)==true && p.PI.Amount>0;
+                                po.IsOnline = p.P.Status==(int)DataStatus.Normal && (p.P.Is4Sale??false)==true && p.PI!=null && p.PI.Amount>0;
                             }));
                 oc.Is_Owner = authuid == comboEntity.C.UserId;
                 oc.Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&

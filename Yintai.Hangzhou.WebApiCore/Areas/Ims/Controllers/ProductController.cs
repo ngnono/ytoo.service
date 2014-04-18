@@ -148,11 +148,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
                 if (categoryEntity.C.SizeType == (int)CategorySizeType.LimitSize)
                 {
+                    var hasValidSize = false;
                     foreach (var size in request.Size_Ids)
                     {
                         var categoryPropertyValueEntity = categoryEntity.CP.Where(cp => cp.CPV.Id == size).FirstOrDefault();
                         if (categoryPropertyValueEntity != null)
                         {
+                            hasValidSize = true;
                             var sizevalueEntity = _productPropertyValueRepo.Insert(new ProductPropertyValueEntity()
                             {
                                 CreateDate = DateTime.Now,
@@ -174,6 +176,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         }
 
                     }
+                    if (!hasValidSize)
+                        return this.RenderError(r => r.Message = "尺码传入不正确");
                 }
                 else
                 {

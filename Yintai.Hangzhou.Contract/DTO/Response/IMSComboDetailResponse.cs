@@ -58,7 +58,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
              var expireSpan = (int)((ExpireDate.Value - DateTime.Now).TotalSeconds);
              return expireSpan < 0 ? 0 : expireSpan ;
          } }
-
+        [DataMember(Name="store_id")]
+        public int StoreId { get; set; }
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
         [IgnoreDataMember]
