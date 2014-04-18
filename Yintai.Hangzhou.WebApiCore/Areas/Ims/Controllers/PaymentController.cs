@@ -63,9 +63,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 var requestSign = sPara["sign"];
                 sPara.Remove("sign");
                 var notifySigned = Util.NotifySignIMS(sPara);
-
-                if (string.Compare(requestSign, notifySigned, true) != 0)
-                    return Content("fail");
+                if (ConfigManager.IS_PRODUCT_ENV)
+                {
+                    if (string.Compare(requestSign, notifySigned, true) != 0)
+                        return Content("fail");
+                }
                 //external order no
                 string out_trade_no = sPara["out_trade_no"];
                 string trade_no = sPara["transaction_id"];
