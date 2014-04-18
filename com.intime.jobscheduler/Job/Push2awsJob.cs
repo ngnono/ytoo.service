@@ -32,13 +32,12 @@ namespace com.intime.jobscheduler.Job
             var client = new ElasticClient(new ConnectionSettings(new Uri(esUrl))
                                     .SetDefaultIndex(esIndex)
                                     .SetMaximumAsyncConnections(10));
-            ConnectionStatus connectionStatus;
-            if (!client.TryConnect(out connectionStatus))
+            if (client == null)
             {
-                log.Fatal(string.Format("Could not connect to {0}:\r\n{1}",
-                    esUrl, connectionStatus.Error.OriginalException.Message));
+                log.Info("client create faile");
                 return;
             }
+           
             if (needRebuild)
             {
                 var response = client.DeleteIndex(esIndex);
