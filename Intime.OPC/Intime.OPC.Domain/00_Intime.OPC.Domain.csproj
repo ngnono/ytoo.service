@@ -73,7 +73,6 @@
     <Compile Include="Dto\Custom\ShoppingGuideRequest.cs" />
     <Compile Include="Dto\Financial\SearchCashierRequest.cs" />
     <Compile Include="Dto\Financial\SearchStatRequest.cs" />
-    <Compile Include="Dto\Custom\ShoppingGuideRequest.cs" />
     <Compile Include="Dto\Financial\WebSiteBaseDto.cs" />
     <Compile Include="Dto\Financial\WebSiteCashierSearchDto.cs" />
     <Compile Include="Dto\Financial\ReturnGoodsStatDto.cs" />

@@ -33,7 +33,6 @@ namespace Intime.OPC.Domain.Enums
         /// <summary>
         ///     The cash over
         /// </summary>
-        [Description("完成收银")]
-        CashOver = 10
+        [Description("完成收银")]  CashOver = 10
     }
 }

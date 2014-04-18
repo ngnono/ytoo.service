@@ -22,13 +22,18 @@ namespace Intime.OPC.Domain.Enums
     public enum EnumCashStatus
     {
         /// <summary>
-        ///     The no shipp
+        ///     The no cash
         /// </summary>
         [Description("未送收银")] NoCash = 0,
 
         /// <summary>
-        ///     The shipped
+        ///     The send cash
         /// </summary>
-        [Description("完成收银")] CashOver = 5
+        [Description("已送收银")] SendCash = 5,
+        /// <summary>
+        ///     The cash over
+        /// </summary>
+        [Description("完成收银")] CashOver = 10
+
     }
 }
