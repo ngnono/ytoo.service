@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intime.OPC.Domain.Models.Mapping
 {
@@ -19,9 +15,6 @@ namespace Intime.OPC.Domain.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(50);
 
-            this.Property(t => t.Reason)
-                .HasMaxLength(200);
-
             // Table & Column Mappings
             this.ToTable("OPC_OrderSplitLog");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -29,8 +22,6 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.Reason).HasColumnName("Reason");
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.CreateDate).HasColumnName("CreateDate");
-
         }
-
     }
 }

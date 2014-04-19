@@ -101,10 +101,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Order\DTO\OrderStatusDetail.cs" />
     <Compile Include="Order\DTO\OrderStatusResultDto.cs" />
     <Compile Include="Order\OrderStatusSync\OrderNotifyJob.cs" />
-    <Compile Include="Order\OrderStatusSync\OrderStatusSyncToHtm5.cs" />
     <Compile Include="Order\OrderStatusSync\OrderStatusSyncJob.cs" />
     <Compile Include="Order\Repository\IOrderRemoteRepository.cs" />
     <Compile Include="Order\Repository\OrderRemoteRepository.cs" />
@@ -151,12 +149,7 @@
     <Compile Include="Product\ProductSync\SystemDefine.cs" />
     <Compile Include="Product\StockAggregate\StockAttregateJob.cs" />
     <Compile Include="Product\StockAggregate\StockModel.cs" />
-    <Compile Include="Order\DTO\DetailDto.cs" />
-    <Compile Include="Order\DTO\HeadDto.cs" />
     <Compile Include="Order\DTO\OrderStatusDto.cs" />
-    <Compile Include="Order\DTO\PaymentDto.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Trade\SplitOrder\IOrderStockStore.cs" />
     <Compile Include="Trade\SplitOrder\IOrderStore.cs" />
     <Compile Include="Trade\SplitOrder\ISaleOrderStore.cs" />
@@ -185,6 +178,7 @@
       <Link>AutoMapper.Net4.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="job-description.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

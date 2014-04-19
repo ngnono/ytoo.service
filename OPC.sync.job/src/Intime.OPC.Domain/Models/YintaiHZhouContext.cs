@@ -15,6 +15,8 @@ namespace Intime.OPC.Domain.Models
             : base("Name=YintaiHZhouContext")
         {
         }
+
+        public DbSet<OPC_OrderSplitLog> OPC_OrderSplitLogs { get; set; }
         public DbSet<OPC_SaleOrderNotificationLog> OPC_SaleOrderNotificationLogs { get; set; }
         public DbSet<AdminAccessRight> AdminAccessRights { get; set; }
         public DbSet<Banner> Banners { get; set; }
@@ -165,6 +167,7 @@ namespace Intime.OPC.Domain.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Configurations.Add(new OPC_OrderSplitLogMapper());
             modelBuilder.Configurations.Add(new OPC_SaleOrderNotificationLogMapper());
             modelBuilder.Configurations.Add(new AdminAccessRightMapper());
             modelBuilder.Configurations.Add(new BannerMapper());
