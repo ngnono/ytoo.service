@@ -15,18 +15,18 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
 {
 
     [DisallowConcurrentExecution]
-    public class OrderStatusSync : IJob
+    public class OrderStatusSyncToHtm5 : IJob
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private DateTime benchTime = DateTime.Now.AddMinutes(-20);
-        private readonly IRemoteRepository _remoteRepository=new RemoteRepository();
+        private readonly IOrderRemoteRepository _remoteRepository=new OrderRemoteRepository();
 
         private void DoQuery(Action<IQueryable<Intime.OPC.Domain.Models.OPC_Sale>> callback)
         {
             using (var context = new YintaiHZhouContext())
             {
                 //
-                var minx = context.OPC_Sale.Where(t => t.UpdatedDate > benchTime && t.Status > 0 );//.Min(t=>t.Status);
+                var minx = context.OPC_Sale.Where(t => t.UpdatedDate > benchTime && t.Status > 2 );//.Min(t=>t.Status);
                 //var linq = context.OPC_Sale.Where(t => t.UpdatedDate > benchTime && t.Status==minx).AsQueryable();
                 
                 if (callback != null)
@@ -43,6 +43,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
             JobDataMap data = context.JobDetail.JobDataMap;
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
+             _benchTime = DateTime.Now.AddMinutes(-interval);
 
             if (!isRebuild)
                 benchTime = data.GetDateTime("benchtime");

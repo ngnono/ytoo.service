@@ -80,6 +80,7 @@
       <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -103,9 +104,10 @@
     <Compile Include="Order\DTO\OrderStatusDetail.cs" />
     <Compile Include="Order\DTO\OrderStatusResultDto.cs" />
     <Compile Include="Order\OrderStatusSync\OrderNotifyJob.cs" />
-    <Compile Include="Order\OrderStatusSync\OrderStatusSync.cs" />
-    <Compile Include="Order\Repository\IRemoteRepository.cs" />
-    <Compile Include="Order\Repository\RemoteRepository.cs" />
+    <Compile Include="Order\OrderStatusSync\OrderStatusSyncToHtm5.cs" />
+    <Compile Include="Order\OrderStatusSync\OrderStatusSyncJob.cs" />
+    <Compile Include="Order\Repository\IOrderRemoteRepository.cs" />
+    <Compile Include="Order\Repository\OrderRemoteRepository.cs" />
     <Compile Include="Product\ProductSync\ICategorySyncProcessor.cs" />
     <Compile Include="Product\ProductSync\IBrandSyncProcessor.cs" />
     <Compile Include="Product\ProductSync\IChannelMapper.cs" />

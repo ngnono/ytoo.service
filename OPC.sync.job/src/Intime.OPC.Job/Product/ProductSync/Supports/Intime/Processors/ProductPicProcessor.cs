@@ -39,15 +39,8 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 return null;
             }
 
-            // 判断是否需要同步图片
-            if (Synced(colorIdMap.LocalId, channelUrl, SeqNo, WriteTime))
-            {
-                Log.InfoFormat("商品图片已经同步，远程的图片地址没有发生变化无需同步,productId:[{0}],colorId:[{1}],url:[{2}]", channelProductId, channelColorId, channelUrl);
-                return null;
-            }
-
             string filePath;
-            FileInfor uploadFile=null;
+            FileInfor uploadFile = null;
 
             using (var db = new YintaiHZhouContext())
             {
@@ -88,59 +81,48 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         SourceId = productMap.LocalId,
                         SourceType = 1,
                         ContentSize = uploadFile.FileSize,
-                        CreatedDate = DateTime.Now,
-                        CreatedUser = SystemDefine.SystemUser,
+
                         Domain = string.Empty,
                         ExtName = uploadFile.FileExtName,
                         Height = uploadFile.Height,
                         IsDefault = false,
-                        UpdatedDate = WriteTime,
+
                         Name = uploadFile.FileName,
                         Status = 1,
                         SortOrder = SeqNo,
                         Size = string.Format("{0}x{1}", uploadFile.Width, uploadFile.Height),
                         Type = (int)uploadFile.ResourceType,
                         Width = uploadFile.Width,
-                        ChannelPicId = 0
+                        ChannelPicId = 0,
+                        CreatedDate = DateTime.Now,
+                        CreatedUser = SystemDefine.SystemUser,
+                        UpdatedUser = SystemDefine.SystemUser,
+                        UpdatedDate = DateTime.Now,
                     };
                     db.Resources.Add(newResource);
                     db.SaveChanges();
-
-                    //保存映射关系
-                    _channelMapper.CreateMap(new ChannelMap()
-                    {
-                        LocalId = colorIdMap.LocalId,
-                        ChannnelValue = channelUrl,
-                        MapType = ChannelMapType.ProductPic
-                    });
 
                     return newResource;
                 }
                 else
                 {
-                    if (resourceExt.UpdatedDate!=WriteTime)
-                    {
-                        resourceExt.ContentSize = uploadFile.FileSize;
-                        resourceExt.CreatedDate = DateTime.Now;
-                        resourceExt.CreatedUser = SystemDefine.SystemUser;
 
-                        resourceExt.ExtName = uploadFile.FileExtName;
-                        resourceExt.Height = uploadFile.Height;
-                        resourceExt.IsDefault = false;
-                        resourceExt.UpdatedDate = WriteTime;
-                        resourceExt.Name = uploadFile.FileName;
+                    resourceExt.ContentSize = uploadFile.FileSize;
+                    resourceExt.UpdatedUser = SystemDefine.SystemUser;
+                    resourceExt.UpdatedDate = DateTime.Now;
+                    resourceExt.ExtName = uploadFile.FileExtName;
+                    resourceExt.Height = uploadFile.Height;
+                    resourceExt.IsDefault = false;
+                    resourceExt.UpdatedDate = DateTime.Now;
+                    resourceExt.Name = uploadFile.FileName;
 
-                        resourceExt.Size = string.Format("{0}x{1}", uploadFile.Width, uploadFile.Height);
-                        resourceExt.Type = (int)uploadFile.ResourceType;
-                        resourceExt.Width = uploadFile.Width;
+                    resourceExt.Size = string.Format("{0}x{1}", uploadFile.Width, uploadFile.Height);
+                    resourceExt.Type = (int)uploadFile.ResourceType;
+                    resourceExt.Width = uploadFile.Width;
 
-                        db.SaveChanges();
+                    db.SaveChanges();
 
-                        // 更新最后的图片地址
-                        _channelMapper.UpdateMapByLocal(colorIdMap.LocalId.ToString(CultureInfo.InvariantCulture), ChannelMapType.ProductPic, channelUrl);
-
-                        return resourceExt;
-                    }                    
+                    return resourceExt;
                 }
             }
             return null;
@@ -169,29 +151,6 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                }).Wait();
 
             return path;
-        }
-
-
-        private bool Synced(int colorId, string channelUrl, int SeqNo, DateTime WriteTime)
-        {
-            using (var db = new YintaiHZhouContext())
-            {
-                //查找是否已经存在图片
-                var resourceExt = db.Resources.FirstOrDefault(r => r.ColorId == colorId && r.SortOrder==SeqNo );
-
-                if (resourceExt == null)
-                {
-                    return false;
-                }
-
-                var resourceMap = _channelMapper.GetMapByLocal(colorId.ToString(CultureInfo.InvariantCulture), ChannelMapType.ProductPic);
-                if (resourceMap == null)
-                {
-                    return false;
-                }
-
-                return resourceMap.ChannnelValue == channelUrl;
-            }
         }
     }
 }
