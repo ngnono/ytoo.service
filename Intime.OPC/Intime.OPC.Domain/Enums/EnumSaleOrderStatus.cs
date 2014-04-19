@@ -75,6 +75,10 @@ namespace Intime.OPC.Domain.Enums
         ///     已发货
         /// </summary>
         [Description("已发货")] Shipped = 40,
+        /// <summary>
+        /// 订单完成
+        /// </summary>
+        [Description("订单完成")] SaleCompletion = 900,
 
         [Description("取消")] Void = -10
     }
