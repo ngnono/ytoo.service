@@ -34,7 +34,30 @@ namespace Intime.OPC.WebApi.Controllers
             //todo 客服退货 生成销售退货单
             return DoAction(() => { _saleRmaService.CreateSaleRMA(user, request); }, "生成销售退货单失败");
         }
+        #region 网络自助退货
 
+
+        /// <summary>
+        ///      网络自助退货 生成销售退货单
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult CreateSaleRmaAuto([FromBody] RMAPost request)
+        {
+            int user = GetCurrentUserID();
+            //todo 客服退货 生成销售退货单
+            return DoAction(() => { _saleRmaService.CreateSaleRmaAuto(user, request); }, "生成销售退货单失败");
+        }
+
+
+        //[HttpPost]
+        //public IHttpActionResult UnAgreeReturnGoodsAuto()
+        //{
+
+        //}
+
+        #endregion
         /// <summary>
         ///     Gets the order by return goods information.
         /// </summary>

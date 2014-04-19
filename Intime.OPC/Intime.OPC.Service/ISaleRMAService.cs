@@ -64,5 +64,6 @@ namespace Intime.OPC.Service
 
         void SetSaleRmaServiceAgreeGoodsBack(string rmaNo);
         PageResult<SaleRmaDto> GetOrderAutoBack(ReturnGoodsRequest request);
+        void CreateSaleRmaAuto(int user, RMAPost request);
     }
 }

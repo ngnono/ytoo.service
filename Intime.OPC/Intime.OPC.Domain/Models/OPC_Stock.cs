@@ -19,5 +19,10 @@ namespace Intime.OPC.Domain.Models
         public System.DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
         public string ProdSaleCode { get; set; }
+
+        public string StoreCode { get; set; }
+
+        public string SectionCode { get; set; }
+        public string ProductName { get; set; }
     }
 }
