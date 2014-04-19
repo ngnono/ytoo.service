@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Common.Logging;
+﻿using Common.Logging;
 using Intime.O2O.ApiClient;
 using Intime.O2O.ApiClient.Domain;
 using Intime.O2O.ApiClient.Request;
-using Intime.O2O.ApiClient.Response;
-using Intime.OPC.Job.Order.Models;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Job.Order.Models;
+using System.Linq;
 
 namespace Intime.OPC.Job.Order.Repository
 {
@@ -20,11 +16,6 @@ namespace Intime.OPC.Job.Order.Repository
         static OrderRemoteRepository()
         {
             AutoMapper.Mapper.CreateMap<OrderStatus, OrderStatusDto>();
-
-            AutoMapper.Mapper.CreateMap<Head, HeadDto>();
-            AutoMapper.Mapper.CreateMap<Detail, DetailDto>();
-            AutoMapper.Mapper.CreateMap<PayMent, PayMentDto>();
-
             AutoMapper.Mapper.CreateMap<OrderStatusResult, OrderStatusResultDto>();
 
         }
@@ -41,20 +32,20 @@ namespace Intime.OPC.Job.Order.Repository
 
         public OrderStatusResultDto GetOrderStatusById(OPC_Sale saleOrder)
         {
-            Intime.OPC.Domain.Models.OPC_Stock opc_Stock; ;
+            OPC_Stock opcStock; ;
 
             using (var db = new YintaiHZhouContext())
             {
 
-                opc_Stock = db.OPC_Stock.FirstOrDefault(a => a.SectionId == saleOrder.SectionId);
+                opcStock = db.OPC_Stock.FirstOrDefault(a => a.SectionId == saleOrder.SectionId);
 
             }
             var result = _apiClient.Post(new GetOrderStatusByIdRequest()
             {
-                Data = new GetOrderStatusByIdRequestData()
+                Data = new 
                 {
-                    Id = saleOrder.SaleOrderNo,
-                    StoreNo = opc_Stock.StoreCode
+                    id = saleOrder.SaleOrderNo,
+                    storeno = opcStock.StoreCode
                 }
             });
 
