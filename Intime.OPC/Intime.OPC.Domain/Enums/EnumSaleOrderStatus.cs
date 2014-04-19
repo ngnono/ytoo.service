@@ -27,9 +27,10 @@ namespace Intime.OPC.Domain.Enums
         [Description("未提货")] NoPickUp = 0,
 
         /// <summary>
-        ///     通知单品
+        /// 通知单品
         /// </summary>
-        [Description("通知单品")] NotifyProduct = 1,
+        [Description("通知单品")]
+        NotifySingleProduct = 1,
 
         /// <summary>
         ///     打印销售单
@@ -56,6 +57,8 @@ namespace Intime.OPC.Domain.Enums
         /// </summary>
         [Description("导购提货")] ShoppingGuidePickUp = 20,
 
+        [Description("导购确认发货")]
+        SaleGuideSend = 22,
         /// <summary>
         ///     物流入库
         /// </summary>
@@ -75,6 +78,9 @@ namespace Intime.OPC.Domain.Enums
         ///     已发货
         /// </summary>
         [Description("已发货")] Shipped = 40,
+
+
+       
 
         [Description("取消")] Void = -10
     }
