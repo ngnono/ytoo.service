@@ -194,7 +194,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetOrderByOutOfStockNotify([FromBody] OutOfStockNotifyRequest request)
+        public IHttpActionResult GetOrderByOutOfStockNotify([FromUri] OutOfStockNotifyRequest request)
         {
             return DoFunction(() => _orderService.GetOrderByOutOfStockNotify(request));
         }
@@ -223,7 +223,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpGet]
-        public IHttpActionResult GetOrderOfVoid([FromBody] OutOfStockNotifyRequest request)
+        public IHttpActionResult GetOrderOfVoid([FromUri] OutOfStockNotifyRequest request)
         {
             return DoFunction(() => _orderService.GetOrderOfVoid(request));
         }

@@ -43,8 +43,101 @@ namespace Intime.OPC.Service.Support
 
         public void CreateSaleRMA(int userId, RMAPost rma)
         {
+            CreateSaleRmaSub(userId, rma, "客服退货");
+            //List<OPC_SaleDetail> saleDetails =
+            //    _saleDetailRepository.GetByOrderNo(rma.OrderNo,1,1000).Result.OrderByDescending(t => t.SaleCount).ToList();
+            //List<OPC_Sale> sales =
+            //    _saleRepository.GetByOrderNo(rma.OrderNo, -1).OrderByDescending(t => t.SalesCount).ToList();
+            //IList<OrderItem> orderItems =
+            //    _orderItemRepository.GetByIDs(rma.ReturnProducts.Select(t => t.Key));
+
+            //IList<OPC_RMADetail> lstRmaDetails = new List<OPC_RMADetail>(); //生成的退货单明细
+            //IList<OPC_SaleDetail> lstSaleDetails = new List<OPC_SaleDetail>(); //需要退货的 销售单明细
+            //IDictionary<string, decimal> dicSaleOrderNoAcount = new Dictionary<string, decimal>();
+
+            //int orderCount = ((ISaleRMARepository) _repository).Count(rma.OrderNo) + 1;
+            //IList<RmaConfig> lstRmaConfigs = new List<RmaConfig>();
+            //foreach (var kv in rma.ReturnProducts)
+            //{
+            //    OrderItem oItem = orderItems.FirstOrDefault(t => t.Id == kv.Key);
+
+            //    List<OPC_SaleDetail> details =
+            //        saleDetails.Where(t => t.OrderItemId == kv.Key).OrderByDescending(t => t.SaleCount).ToList();
+            //    int returnCount = kv.Value;
+            //    OPC_SaleDetail detail = details.FirstOrDefault();
+            //    while (returnCount > detail.SaleCount)
+            //    {
+            //        RmaConfig config = lstRmaConfigs.FirstOrDefault(t => t.SaleOrderNo == detail.SaleOrderNo);
+            //        if (config == null)
+            //        {
+            //            config = new RmaConfig(userId);
+            //            config.RmaNo = CreateRmaNo(rma.OrderNo, orderCount);
+            //            config.SaleOrderNo = detail.SaleOrderNo;
+            //            config.RefundAmount = (Decimal)(rma.RealRMASumMoney);
+            //            config.StoreFee = (Decimal)rma.StoreFee;
+            //            config.CustomFee = (Decimal)rma.CustomFee;
+            //            rma.RealRMASumMoney = 0;
+            //            rma.StoreFee = 0;
+            //            rma.CustomFee = 0;
+
+            //            config.OpcSale = sales.FirstOrDefault(t => t.SaleOrderNo == config.SaleOrderNo);
+            //            config.StoreID = _sectionRepository.GetByID(config.OpcSale.SectionId.Value).StoreId.Value;
+            //            lstRmaConfigs.Add(config);
+            //            orderCount++;
+            //        }
+            //        var subConfig = new SubRmaConfig();
+            //        subConfig.OpcSaleDetail = detail;
+            //        subConfig.OrderItem = oItem;
+            //        subConfig.OrderDetailID = kv.Key;
+            //        subConfig.ReturnCount = detail.SaleCount;
+            //        config.Details.Add(subConfig);
+            //        lstRmaConfigs.Add(config);
+
+            //        details.Remove(detail);
+            //        detail = details.FirstOrDefault();
+            //        returnCount = returnCount - detail.SaleCount;
+            //    }
+
+            //    if (returnCount > 0)
+            //    {
+            //        RmaConfig config = lstRmaConfigs.FirstOrDefault(t => t.SaleOrderNo == detail.SaleOrderNo);
+            //        if (config == null)
+            //        {
+            //            config = new RmaConfig(userId);
+            //            config.Reason = rma.Remark;
+            //            config.SaleOrderNo = detail.SaleOrderNo;
+            //            config.RefundAmount = (Decimal)(rma.RealRMASumMoney);
+            //            config.StoreFee = (Decimal)rma.StoreFee;
+            //            config.CustomFee = (Decimal)rma.CustomFee;
+                        
+            //            rma.RealRMASumMoney = 0;
+            //            rma.StoreFee = 0;
+            //            rma.CustomFee = 0;
+
+            //            config.OpcSale = sales.FirstOrDefault(t => t.SaleOrderNo == config.SaleOrderNo);
+            //            config.StoreID = _sectionRepository.GetByID(config.OpcSale.SectionId.Value).StoreId.Value;
+            //            config.RmaNo = CreateRmaNo(rma.OrderNo, orderCount);
+            //            lstRmaConfigs.Add(config);
+            //        }
+            //        var subConfig = new SubRmaConfig();
+            //        subConfig.OpcSaleDetail = detail;
+            //        subConfig.OrderItem = oItem;
+            //        subConfig.OrderDetailID = kv.Key;
+            //        subConfig.ReturnCount = returnCount;
+            //        config.Details.Add(subConfig);
+            //        //lstRmaConfigs.Add(config);
+            //    }
+            //}
+
+            //Save(lstRmaConfigs);
+        }
+
+
+
+        private void CreateSaleRmaSub(int userId, RMAPost rma,string saleSource)
+        {
             List<OPC_SaleDetail> saleDetails =
-                _saleDetailRepository.GetByOrderNo(rma.OrderNo,1,1000).Result.OrderByDescending(t => t.SaleCount).ToList();
+                _saleDetailRepository.GetByOrderNo(rma.OrderNo, 1, 1000).Result.OrderByDescending(t => t.SaleCount).ToList();
             List<OPC_Sale> sales =
                 _saleRepository.GetByOrderNo(rma.OrderNo, -1).OrderByDescending(t => t.SalesCount).ToList();
             IList<OrderItem> orderItems =
@@ -54,7 +147,7 @@ namespace Intime.OPC.Service.Support
             IList<OPC_SaleDetail> lstSaleDetails = new List<OPC_SaleDetail>(); //需要退货的 销售单明细
             IDictionary<string, decimal> dicSaleOrderNoAcount = new Dictionary<string, decimal>();
 
-            int orderCount = ((ISaleRMARepository) _repository).Count(rma.OrderNo) + 1;
+            int orderCount = ((ISaleRMARepository)_repository).Count(rma.OrderNo) + 1;
             IList<RmaConfig> lstRmaConfigs = new List<RmaConfig>();
             foreach (var kv in rma.ReturnProducts)
             {
@@ -70,6 +163,7 @@ namespace Intime.OPC.Service.Support
                     if (config == null)
                     {
                         config = new RmaConfig(userId);
+                        config.SaleRmaSource = saleSource;
                         config.RmaNo = CreateRmaNo(rma.OrderNo, orderCount);
                         config.SaleOrderNo = detail.SaleOrderNo;
                         config.RefundAmount = (Decimal)(rma.RealRMASumMoney);
@@ -103,12 +197,13 @@ namespace Intime.OPC.Service.Support
                     if (config == null)
                     {
                         config = new RmaConfig(userId);
+                        config.SaleRmaSource = saleSource;
                         config.Reason = rma.Remark;
                         config.SaleOrderNo = detail.SaleOrderNo;
                         config.RefundAmount = (Decimal)(rma.RealRMASumMoney);
                         config.StoreFee = (Decimal)rma.StoreFee;
                         config.CustomFee = (Decimal)rma.CustomFee;
-                        
+
                         rma.RealRMASumMoney = 0;
                         rma.StoreFee = 0;
                         rma.CustomFee = 0;
@@ -377,6 +472,11 @@ namespace Intime.OPC.Service.Support
             return lst;
         }
 
+        public void CreateSaleRmaAuto(int user, RMAPost request)
+        {
+            CreateSaleRmaSub(user, request, "网络自助退货");
+        }
+
         private void Save(IList<RmaConfig> configs)
         {
             foreach (RmaConfig config in configs)
@@ -407,6 +507,7 @@ namespace Intime.OPC.Service.Support
             UserId = userId;
             Details = new List<SubRmaConfig>();
             OpcRmaDetails = new List<OPC_RMADetail>();
+            SaleRmaSource = "客服退货";
         }
 
         public string Reason { get; set; }
@@ -420,7 +521,7 @@ namespace Intime.OPC.Service.Support
 
         public string SaleOrderNo { get; set; }
 
-
+        public string SaleRmaSource { get; set; }
         public IList<SubRmaConfig> Details { get; set; }
 
         public OPC_Sale OpcSale { get; set; }
@@ -479,7 +580,7 @@ namespace Intime.OPC.Service.Support
             rma.OrderNo = OpcSale.OrderNo;
             rma.StoreFee = StoreFee;
             rma.CustomFee = CustomFee;
-            rma.SaleRMASource = "客服退货";
+            rma.SaleRMASource = SaleRmaSource;
             rma.RealRMASumMoney = RefundAmount;
             rma.RMACount = Details.Sum(t => t.ReturnCount);
             rma.RMANo = RmaNo;

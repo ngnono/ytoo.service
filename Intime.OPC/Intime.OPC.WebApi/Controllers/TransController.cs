@@ -228,6 +228,25 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() => { return _enumService.All("Financial"); }, "读取类型失败！");
         }
 
+        /// <summary>
+        /// 获得销售单类型
+        /// </summary>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetSaleStatusEnums()
+        {
+            return DoFunction(() => { return _enumService.All("SaleStatus"); }, "读取销售单类型失败！");
+        }
+
+        /// <summary>
+        /// 获得退货单类型
+        /// </summary>
+        /// <returns>IHttpActionResult.</returns>
+        [HttpGet]
+        public IHttpActionResult GetRmaStatusEnums()
+        {
+            return DoFunction(() => { return _enumService.All("RmaStatus"); }, "读取退货单类型失败！");
+        }
 
         #region 退货入收银
 
