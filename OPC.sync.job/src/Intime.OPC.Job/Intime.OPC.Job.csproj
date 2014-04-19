@@ -103,7 +103,7 @@
   <ItemGroup>
     <Compile Include="Order\DTO\OrderStatusResultDto.cs" />
     <Compile Include="Order\OrderStatusSync\OrderNotifyJob.cs" />
-    <Compile Include="Order\OrderStatusSync\OrderStatusSyncToHtm5.cs" />
+    <Compile Include="Order\OrderStatusSync\OrderStatusSyncJob.cs" />
     <Compile Include="Order\Repository\IOrderRemoteRepository.cs" />
     <Compile Include="Order\Repository\OrderRemoteRepository.cs" />
     <Compile Include="Product\ProductSync\ICategorySyncProcessor.cs" />
@@ -178,6 +178,7 @@
       <Link>AutoMapper.Net4.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="job-description.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
