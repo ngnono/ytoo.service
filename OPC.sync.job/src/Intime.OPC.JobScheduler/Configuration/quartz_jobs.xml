@@ -8,70 +8,142 @@
         <overwrite-existing-data>true</overwrite-existing-data>
     </processing-directives>
 
+    <!--订单状态同步任务-->
+    <schedule>
+        <trigger>
+            <cron>
+                <name>OrderStatusJobTigger</name>
+                <group>OrderStatusTiggerGroup</group>
+                <description>订单状态同步任务触发器</description>
+                <job-name>OrderStatusJob</job-name>
+                <job-group>OrderStatusGroup</job-group>
+                <misfire-instruction>SmartPolicy</misfire-instruction>
+                <cron-expression>0/20 * * * * ?</cron-expression>
+            </cron>
+        </trigger>
+        <job>
+            <name>OrderStatusJob</name>
+            <group>OrderStatusGroup</group>
+            <description>订单状态同步任务</description>
+            <job-type>Intime.OPC.Job.Order.OrderStatusSync.OrderStatusSyncJob, Intime.OPC.Job</job-type>
+            <durable>true</durable>
+            <recover>false</recover>
+        </job>
+    </schedule>
+
+    <!--订单通知任务-->
+    <schedule>
+        <trigger>
+            <cron>
+                <name>OrderNotifyJobTigger</name>
+                <group>OrderNotifyJobTiggerGroup</group>
+                <description>订单状态同步任务触发器</description>
+                <job-name>OrderNotifyJob</job-name>
+                <job-group>OrderNotifyJobGroup</job-group>
+                <misfire-instruction>SmartPolicy</misfire-instruction>
+                <cron-expression>0/20 * * * * ?</cron-expression>
+            </cron>
+        </trigger>
+        <job>
+            <name>OrderNotifyJob</name>
+            <group>OrderNotifyJobGroup</group>
+            <description>订单状态同步任务</description>
+            <job-type>Intime.OPC.Job.Order.OrderStatusSync.OrderNotifyJob, Intime.OPC.Job</job-type>
+            <durable>true</durable>
+            <recover>false</recover>
+        </job>
+    </schedule>
+
+    <!--订单通知html5任务-->
+    <schedule>
+        <trigger>
+            <cron>
+                <name>OrderStatusSyncToHtm5JobTigger</name>
+                <group>OrderStatusSyncToHtm5JobTiggerGroup</group>
+                <description>订单状态同步任务触发器</description>
+                <job-name>OrderStatusSyncToHtm5Job</job-name>
+                <job-group>OrderStatusSyncToHtm5JobGroup</job-group>
+                <misfire-instruction>SmartPolicy</misfire-instruction>
+                <cron-expression>0/20 * * * * ?</cron-expression>
+            </cron>
+        </trigger>
+        <job>
+            <name>OrderStatusSyncToHtm5Job</name>
+            <group>OrderStatusSyncToHtm5JobGroup</group>
+            <description>订单状态同步任务</description>
+            <job-type>Intime.OPC.Job.Order.OrderStatusSync.OrderStatusSyncToHtm5, Intime.OPC.Job</job-type>
+            <durable>true</durable>
+            <recover>false</recover>
+        </job>
+    </schedule>
+
+    <!--拆单任务-->
     <schedule>
         <trigger>
             <cron>
                 <name>SpitOrderTigger</name>
-                <group>SpitOrder</group>
-                <description>every 2 seconds</description>
-                <job-name>OPC-SpitOrderJob</job-name>
-                <job-group>OrderProcess</job-group>
+                <group>SpitOrderTiggerGroup</group>
+                <description>拆单任务触发器</description>
+                <job-name>SpitOrderJob</job-name>
+                <job-group>SpitOrderJobGroup</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
                 <cron-expression>0/59 * * * * ?</cron-expression>
             </cron>
         </trigger>
         <job>
-            <name>OPC-SpitOrderJob</name>
-            <group>OrderProcess</group>
-            <description>every 3 seconds process the order</description>
+            <name>SpitOrderJob</name>
+            <group>SpitOrderJobGroup</group>
+            <description>拆单任务</description>
             <job-type>Intime.OPC.Job.Trade.SplitOrder.SplitOrderJob, Intime.OPC.Job</job-type>
             <durable>true</durable>
             <recover>false</recover>
         </job>
     </schedule>
 
+    <!--商品同步任务-->
     <schedule>
         <trigger>
             <cron>
-                <name>ProductSync</name>
-                <group>ProductSync</group>
-                <description>every 2 seconds</description>
+                <name>ProductSyncTigger</name>
+                <group>ProductSyncTiggerGroup</group>
+                <description>商品同步触发器</description>
                 <job-name>ProductSyncJob</job-name>
-                <job-group>ProductSync</job-group>
+                <job-group>ProductSyncJobGroup</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
                 <cron-expression>0/10 * * * * ?</cron-expression>
             </cron>
         </trigger>
         <job>
             <name>ProductSyncJob</name>
-            <group>ProductSync</group>
-            <description>every 3 seconds process the order</description>
+            <group>ProductSyncJobGroup</group>
+            <description>商品全量同步</description>
             <job-type>Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs.AllSyncJob, Intime.OPC.Job</job-type>
             <durable>true</durable>
             <recover>false</recover>
         </job>
     </schedule>
 
+    <!--商品图片同步任务-->
     <schedule>
         <trigger>
             <cron>
-                <name>ProductPicSync</name>
-                <group>ProductPicSync</group>
-                <description>every 2 seconds</description>
+                <name>ProductPicSyncTigger</name>
+                <group>ProductPicSyncTiggerGroup</group>
+                <description>商品图片更新触发器</description>
                 <job-name>ProductPicSyncJob</job-name>
-                <job-group>ProductPicSync</job-group>
+                <job-group>ProductPicSyncJobGroup</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
                 <cron-expression>0/50 * * * * ?</cron-expression>
             </cron>
         </trigger>
         <job>
             <name>ProductPicSyncJob</name>
-            <group>ProductPicSync</group>
-            <description>every 3 seconds process the order</description>
+            <group>ProductPicSyncJobGroup</group>
+            <description>商品图片更新</description>
             <job-type>Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs.ProductPicSyncJob, Intime.OPC.Job</job-type>
             <durable>true</durable>
             <recover>false</recover>
         </job>
     </schedule>
-  
+
 </job-scheduling-data>
