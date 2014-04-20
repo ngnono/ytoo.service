@@ -252,8 +252,13 @@ namespace Intime.OPC.Repository.Support
             {
                 IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => t.Status == (int) saleOrderStatus
                                                                     && t.SellDate >= dtStart
-                                                                    && t.SellDate < dtEnd &&
-                                                                    sectionIds.Contains(t.SectionId.Value));
+                                                                    && t.SellDate < dtEnd);
+
+                if (sectionIds!=null)
+                {
+                    query = query.Where(t => sectionIds.Contains(t.SectionId.Value));
+                }
+
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     query = query.Where(t => t.OrderNo.Contains(orderNo));

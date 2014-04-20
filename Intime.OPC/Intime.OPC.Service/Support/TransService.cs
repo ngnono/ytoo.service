@@ -168,13 +168,13 @@ namespace Intime.OPC.Service.Support
         {
             startDate = startDate.Date;
             endDate = endDate.Date.AddDays(1);
-             var user = _accountService.GetByUserID(userid);
-            if (user.SectionIDs.Count == 0)
-            {
-                throw new UnauthorizedAccessException();
-            }
+            // var user = _accountService.GetByUserID(userid);
+            //if (user.SectionIDs.Count == 0)
+            //{
+            //    throw new UnauthorizedAccessException();
+            //}
 
-            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate,endDate,pageIndex,pageSize,user.SectionIDs.ToArray());
+            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate,endDate,pageIndex,pageSize,null);
             return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
