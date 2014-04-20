@@ -69,6 +69,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Synchronizers
 
                 foreach (var product in products)
                 {
+                    if (string.IsNullOrEmpty(product.ProductId)) {
+                        Log.ErrorFormat("Failed to sync product, productid is empty {0}",product.ProductCode);
+                        continue;
+                    }
                     try
                     {
                         //同步商品
@@ -117,8 +121,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Synchronizers
 
 
                         // 同步库存
-                        var stock = _stockSyncProcessor.Sync(sku.Id, product.SectionId, product.StoreNo,
-                            product.Stock ?? 0, product.CurrentPrice, product.ProductId, product.PosCode, product.ProductName, product.SectionId,product.StoreNo);
+                        var stock = _stockSyncProcessor.Sync(sku.Id, product);
 
                         if (stock == null)
                         {

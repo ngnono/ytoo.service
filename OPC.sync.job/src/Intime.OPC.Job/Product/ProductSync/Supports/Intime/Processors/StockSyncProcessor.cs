@@ -3,6 +3,7 @@ using System.Linq;
 
 using Common.Logging;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository.DTO;
 
 namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
 {
@@ -21,8 +22,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             _channelMapper = channelMapper;
         }
 
-        public OPC_Stock Sync(int skuId, string channelSectionId, string channelStoreNo, int channelCount, decimal channelPrice, string sourceStockId, string productSaleCode,string productName,string sectionCode,string storeCode)
-        {
+        public OPC_Stock Sync(int skuId, ProductDto product) {
             using (var db = new YintaiHZhouContext())
             {
                 /**
@@ -31,10 +31,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                  * 2. 检查商品Id映射关系
                  */
                 // 同步门店相关信息
-                var sectionExt = _sectionSyncProcessor.Sync(channelSectionId, channelStoreNo);
+                var sectionExt = _sectionSyncProcessor.Sync(product.SectionId, product.StoreNo);
                 if (sectionExt == null)
                 {
-                    Log.ErrorFormat("同步库存时发生错误,专柜sectionId:{0}不存在", channelStoreNo);
+                    Log.ErrorFormat("同步库存时发生错误,专柜sectionId:{0}不存在", product.SectionId);
                     return null;
                 }
 
@@ -56,13 +56,14 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     {
                         SkuId = skuExt.Id,
                         SectionId = sectionExt.Id,
-                        Price = channelPrice,
-                        Count = channelCount,
-                        SourceStockId = sourceStockId ?? string.Empty,
-                        ProdSaleCode = productSaleCode,
-                        ProductName=productName,
-                        SectionCode=sectionCode,
-                        StoreCode=storeCode,
+                        Price = product.CurrentPrice,
+                        Count = Convert.ToInt32( decimal.Floor( product.Stock??0)),
+                        SourceStockId = product.ProductId,
+                        ProdSaleCode = product.PosCode,
+                        ProductName = product.ProductName,
+                        SectionCode = product.SectionId,
+                        StoreCode = product.StoreNo,
+                        ProductCode = product.ProductCode,
                         Status = 1,
                         IsDel = false,
                         CreatedDate = DateTime.Now,
@@ -79,10 +80,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     return newStock;
                 }
 
-                stockExt.Price = channelPrice;
-                stockExt.Count = channelCount;
-                stockExt.SourceStockId = sourceStockId ?? string.Empty;
-                stockExt.ProdSaleCode = productSaleCode;
+                stockExt.Price = product.CurrentPrice;
+                stockExt.Count = Convert.ToInt32(decimal.Floor(product.Stock ?? 0));
+                stockExt.SourceStockId = product.ProductId;
+                stockExt.ProdSaleCode = product.PosCode;
                 stockExt.CreatedDate = DateTime.Now;
                 stockExt.CreatedUser = SystemDefine.SystemUser;
                 stockExt.UpdatedDate = DateTime.Now;
