@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Intime.OPC.Job.Order.DTO;
 
 namespace Intime.OPC.Job.Order.OrderStatusSync
 {
@@ -11,7 +12,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
 
         public NoneOperationStatusProcessor(Domain.Enums.EnumSaleOrderStatus enumSaleOrderStatus) : base(enumSaleOrderStatus) { }
 
-        public override void Process(string saleOrderNo, Models.OrderStatusResultDto statusResult)
+        public override void Process(string saleOrderNo, OrderStatusResultDto statusResult)
         {
             
         }
