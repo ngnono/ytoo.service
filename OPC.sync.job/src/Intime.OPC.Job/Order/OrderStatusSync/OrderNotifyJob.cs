@@ -128,11 +128,18 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
             using (var db = new YintaiHZhouContext())
             {
                 var order = db.OPC_Sale.FirstOrDefault(x => x.Id == saleOrder.Id);
-                if (order == null || order.Status != 0)
+                if (order == null)
                 {
-                    Logger.Error(string.Format("Invalid order status ({0})",saleOrder.OrderNo));
+                    Logger.Error(string.Format("Invalid order ({0})",saleOrder.OrderNo));
                     return;
                 }
+
+                if (order.Status != 1 && order.Status != 0)
+                {
+                    Logger.Error(string.Format("Invalid order status ({0})", saleOrder.OrderNo));
+                    return;
+                }
+
                 order.Status = 1;
                 order.UpdatedDate = DateTime.Now;
                 order.UpdatedUser = -10000;
