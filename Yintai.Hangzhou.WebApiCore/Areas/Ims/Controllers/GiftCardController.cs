@@ -154,7 +154,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "不存在该礼品卡!");
             }
 
-            if (giftCardOrder.Status == (int) GiftCardOrderStatus.Recharge)
+            if (giftCardOrder.Status == (int)GiftCardOrderStatus.Recharge)
             {
                 return this.RenderError(r => r.Message = "该礼品卡已充值!");
             }
@@ -413,7 +413,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 phone = trans.Phone,
                                 amount = order.Amount,
                                 trans_id = trans.Id,
-                                status = (int)this.SetStatus4Receiver(order, trans,_rechargeRepo.Find(x=>x.OrderNo == order.No))
+                                status = (int)this.SetStatus4Receiver(order, trans, _rechargeRepo.Find(x => x.OrderNo == order.No))
                             });
         }
 
@@ -597,6 +597,28 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             return this.RenderSuccess<dynamic>(null);
         }
 
+        [RestfulAuthorize]
+        public ActionResult Trans_Detail(int trans_id, int authuid)
+        {
+            var trans = _transRepo.Find(trans_id);
+            if (trans == null)
+            {
+                this.RenderError(r => r.Message = "不存在的赠送记录");
+            }
+
+            var order = _orderRepo.Find(x => x.No == trans.OrderNo);
+            var recharge = _rechargeRepo.Find(x => x.OrderNo == trans.OrderNo);
+
+            return this.RenderSuccess<dynamic>(r => r.Data = new
+            {
+                comment = trans.Comment,
+                sender = trans.FromNickName,
+                from_phone = trans.FromPhone,
+                phone = trans.Phone,
+                amount = order.Amount,
+                status = this.SetStatus4Receiver(order, trans, recharge),
+            });
+        }
 
         [RestfulAuthorize]
         public ActionResult Refuse(int trans_id, int authuid)
