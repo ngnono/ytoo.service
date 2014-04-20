@@ -34,5 +34,7 @@ namespace Intime.OPC.Domain.Dto
         public string StatusName { get; set; }
 
         public string CashStatusName { get; set; }
+
+        public string StoreName { get; set; }
     }
 }

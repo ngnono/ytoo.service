@@ -272,6 +272,32 @@ namespace Intime.OPC.Repository.Support
             return Select(t => t.OrderNo == orderID);
         }
 
+        public IList<SaleDto> GetByOrderNo2(string orderID)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var query = db.OPC_Sale.Where(t => t.OrderNo == orderID);
+                var qq = from sale in query
+                    join s in db.Sections on sale.SectionId equals s.Id into cs
+                    select new {Sale = sale, Section = cs.FirstOrDefault()};
+
+                var filter = from q in qq
+                    join s in db.Stores on q.Section.StoreId equals s.Id into mm
+                    select new { Sale=q.Sale,Store=mm.FirstOrDefault()};
+
+
+                var lst = filter.ToList();
+                var lstDto = new List<SaleDto>();
+                foreach (var s in lst)
+                {
+                    var o=Mapper.Map<OPC_Sale, SaleDto>(s.Sale);
+                    o.StoreName = s.Store.Name;
+                    lstDto.Add(o);
+                }
+                return lstDto;
+            }
+        }
+
         public PageResult<OPC_Sale> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd,
             int pageIndex, int pageSize, params int[] sectionIds)
         {

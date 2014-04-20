@@ -185,6 +185,9 @@ namespace Intime.OPC.Service.Support
             {
                 throw new OrderNoIsNullException(orderID);
             }
+            var lst = _saleRepository.GetByOrderNo2(orderID);
+            return new PageResult<SaleDto>(lst, lst.Count);
+           
            
             //IList<SaleDto> lstDtos=new List<SaleDto>();
             //foreach (var sectionID in user.SectionIDs)
@@ -196,10 +199,12 @@ namespace Intime.OPC.Service.Support
             //    }
             //}
 
-            var lst = _saleRepository.GetByOrderNo(orderID, -1);
-            var lstDtos = Mapper.Map<OPC_Sale, SaleDto>(lst);
-            var lst2= lstDtos.Page(pageIndex, pageSize);
-            return new PageResult<SaleDto>(lst2.ToList(),lstDtos.Count);
+            //var lst = _saleRepository.GetByOrderNo(orderID, -1);
+            //var lstDtos = Mapper.Map<OPC_Sale, SaleDto>(lst);
+           
+            //var lst2= lstDtos.Page(pageIndex, pageSize);
+
+           // return new PageResult<SaleDto>(lst2.ToList(),lstDtos.Count);
         }
 
         public IList<SaleDto> GetByShippingCode(string shippingCode)

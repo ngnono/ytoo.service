@@ -56,6 +56,10 @@ namespace System.Linq
             {
                 pageIndex = 0;
             }
+            if (pageIndex==0)
+            {
+                return query.Take(pageSize);
+            }
             return query.Skip((pageIndex * pageSize)).Take(pageSize);
         }
 
