@@ -19,7 +19,8 @@ namespace Intime.OPC.Domain.Models.Mapping
                 .HasMaxLength(50);
             this.Property(t => t.ProductName)
                 .HasMaxLength(50);
-
+            this.Property(t => t.ProductCode)
+               .HasMaxLength(50);
 
 
             // Table & Column Mappings
@@ -41,6 +42,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.StoreCode).HasColumnName("StoreCode");
             this.Property(t => t.SectionCode).HasColumnName("SectionCode");
             this.Property(t => t.ProductName).HasColumnName("ProductName");
+            this.Property(t => t.ProductCode).HasColumnName("ProductCode");
         }
     }
 }

@@ -24,5 +24,7 @@ namespace Intime.OPC.Domain.Models
 
         public string SectionCode { get; set; }
         public string ProductName { get; set; }
+
+        public string ProductCode { get; set; }
     }
 }

@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using AutoMapper;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
@@ -86,21 +87,50 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var query =
-                    db.OPC_SaleDetail.Where(t => t.SaleOrderNo == saleOrderNo)
-                        .Join(db.OrderItems, t => t.OrderItemId, o => o.Id, (t, o) => new {Sale = t, OrderItem = o})
-                        .Join(db.Brands, t => t.OrderItem.BrandId, o => o.Id,
-                            (t, o) => new {t.Sale, t.OrderItem, BrandName = o.Name})
-                        .OrderByDescending(t => t.Sale.CreatedDate);
-                var lst = query.ToPageResult(pageIndex, pageSize);
+                    db.OPC_SaleDetail.Where(t => t.SaleOrderNo == saleOrderNo);
+                  
+                        //.Join(db.OrderItems, t => t.OrderItemId, o => o.Id, (t, o) => new {Sale = t, OrderItem = o})
+                        //.Join(db.Brands, t => t.OrderItem.BrandId, o => o.Id,
+                        //    (t, o) => new {t.Sale, t.OrderItem, BrandName = o.Name});
+                var qq = from q in db.OrderItems
+                    join b in db.Brands on q.BrandId equals b.Id into bb
+                    
+                
+                    select new {OrderItems=q,Brand=bb.FirstOrDefault()};
+
+
+
+                var filter = from q in query
+                    join o in qq on q.OrderItemId equals o.OrderItems.Id into oo
+                    join p in db.OPC_Stock on q.StockId equals p.Id into pp
+
+                    select new {OrderItem=oo.FirstOrDefault(),Sale=q,Stock=pp.FirstOrDefault()};
+
+
+                var lst3 = filter.OrderByDescending(t => t.Sale.CreatedDate);
+                var lst = lst3.ToPageResult(pageIndex, pageSize);
                 var lstDto = new List<SaleDetailDto>();
                 foreach (var t in lst.Result)
                 {
                     SaleDetailDto o = Mapper.Map<OPC_SaleDetail, SaleDetailDto>(t.Sale);
-                    o.Brand = t.BrandName;
-                    o.Color = t.OrderItem.ColorValueName;
-                    o.Size = t.OrderItem.SizeValueName;
-                    o.ProductNo = t.OrderItem.StoreSalesCode;
-                    o.StyleNo = t.OrderItem.StoreItemNo;
+                    if (t.OrderItem!=null)
+                    {
+                        
+                        o.Color = t.OrderItem.OrderItems.ColorValueName;
+                        o.Size = t.OrderItem.OrderItems.SizeValueName;
+                        o.ProductNo = t.OrderItem.OrderItems.StoreSalesCode;
+                        if (t.OrderItem.Brand!=null)
+                        {
+                            o.Brand = t.OrderItem.Brand.Name;
+                        }
+                    }
+                    
+                    //o.StyleNo=t.Stock.ProductCode
+                    //o.StyleNo = t.OrderItem.StoreItemNo;
+                    if (t.Stock!=null)
+                    {
+                        o.StyleNo = t.Stock.ProductCode;
+                    }
                     lstDto.Add(o);
                 }
                 return new PageResult<SaleDetailDto>(lstDto, lst.TotalCount);
