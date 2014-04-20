@@ -6,7 +6,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Synchronizers
     {
         public DateTime GetLast(string key)
         {
+#if DEBUG
             //TODO:修改时间
+            return DateTime.Now.AddDays(-2);
+#endif
             return DateTime.Now.AddHours(-2);
         }
 
