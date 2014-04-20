@@ -102,7 +102,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Order\DTO\OrderStatusResultDto.cs" />
-    <Compile Include="Order\OrderStatusSync\NoneOperationStatusProcessor.cs" />
+    <Compile Include="Order\OrderStatusSync\NoneOperationStatusProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Order\StockNotExistsException.cs" />
     <Compile Include="Order\OrderStatusSync\OrderNotifyJob.cs" />
     <Compile Include="Order\OrderStatusSync\OrderStatusSyncJob.cs" />
