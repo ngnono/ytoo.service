@@ -11,6 +11,7 @@ namespace Intime.OPC.Domain.Models
         public string ProductName { get; set; }
         public string SectionCode { get; set; }
         public string StoreCode { get; set; }
+        public string ProductCode { get; set; }
         public int SectionId { get; set; }
         public Nullable<int> Count { get; set; }
         public decimal Price { get; set; }
