@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ServiceProcess;
+using Intime.OPC.Job.Order.OrderStatusSync;
+using Intime.OPC.Job.Trade.SplitOrder;
 
 namespace Intime.OPC.JobScheduler
 {
@@ -13,7 +15,8 @@ namespace Intime.OPC.JobScheduler
 
             if (args.Length > 0)
             {
-                new MainJobService().Start();
+                var job = new OrderNotifyJob();
+                job.Execute(null);
             }
             else
             {

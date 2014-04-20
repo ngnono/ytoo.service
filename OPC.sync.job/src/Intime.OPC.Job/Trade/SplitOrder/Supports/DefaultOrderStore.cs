@@ -18,7 +18,7 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
             using (var db = new YintaiHZhouContext())
             {
                 // 只是获取支付成功的订单
-                var orders = db.Orders.Where(c => c.Status == 1).Take(1).ToList();
+                var orders = db.Orders.Where(x => x.Status == 1 && (!db.OPC_OrderSplitLog.Any(l => x.OrderNo == l.OrderNo) || db.OPC_OrderSplitLog.Any(l => l.OrderNo == x.OrderNo && l.Status != 1))).Take(20).ToList();
 
                 result.AddRange(from order in orders
                                 let items = (from item in db.OrderItems
@@ -28,7 +28,6 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
                                              {
                                                  SkuId = sku.Id,
                                                  Id = item.Id,
-
                                                  BrandId = item.BrandId,
                                                  OrderNo = item.OrderNo,
                                                  Quantity = item.Quantity,
@@ -50,25 +49,6 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
             }
 
             return result;
-        }
-
-
-        public bool UpdateStatus(int orderId, int statusCode)
-        {
-            using (var db = new YintaiHZhouContext())
-            {
-                var order = db.Orders.FirstOrDefault(c => c.Id == orderId);
-
-                if (order != null)
-                {
-                    order.Status = statusCode;
-                    db.SaveChanges();
-
-                    return true;
-                }
-
-                return false;
-            }
         }
     }
 }

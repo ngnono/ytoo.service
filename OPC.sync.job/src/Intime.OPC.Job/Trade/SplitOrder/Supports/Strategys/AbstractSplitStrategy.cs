@@ -29,15 +29,15 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports.Strategys
                 //var saleDetails = ProcessOrderItem2SectionSaleDetail(item, sectionStocks[item.SkuId]);
                 var saleDetails = ProcessOrderItem2SectionSaleDetail(item, sectionStocks[item.SkuId].Where(x => x.Price == item.ItemPrice));
 
-                if (saleDetails == null)
+                          if (saleDetails == null)
                 {
                     throw new NullReferenceException("detailInfo");
                 }
 
-                if (saleDetails.Count == 0)
-                {
-                    throw new ApplicationException("saleDetails length is 0");
-                }
+                //if (saleDetails.Count == 0)
+                //{
+                //    throw new ApplicationException("saleDetails length is 0");
+                //}
 
                 /**
                  * 遍历添加拆分后的销售清单项
@@ -61,7 +61,6 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports.Strategys
             var index = 1;
             foreach (var sectionId in sectionId2SaleDetails.Keys)
             {
-
                 var saleOrderInfo = ProcessSaleOrder(index, order, sectionId, sectionId2SaleDetails[sectionId]);
 
                 if (saleOrderInfo == null)
@@ -98,10 +97,11 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports.Strategys
         {
             var saleOrderNo = GenerateSaleId(order.OrderNo, index);
 
-            // 设置销售详情各项的SaleOrderNo
+            // 设置销售详情各项的SaleOrderNo 
+            //增加计算销售单总金额
             foreach (var detail in details)
             {
-                detail.SaleOrderNo = saleOrderNo;
+                detail.SaleOrderNo = saleOrderNo;                
             }
 
             var result = new SaleOrderModel(details)
@@ -110,7 +110,7 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports.Strategys
                 SaleOrderNo = saleOrderNo,
                 Status = SystemDefine.SaleOrderDefaultStatus,
                 SellDate = order.CreateDate,
-                SalesAmount = details.Sum(c => c.Price),
+                SalesAmount = details.Sum(c => c.Price * c.SaleCount), 
                 SalesCount = details.Sum(c => c.SaleCount),
                 SectionId = sectionId,
                 CreatedDate = DateTime.Now,

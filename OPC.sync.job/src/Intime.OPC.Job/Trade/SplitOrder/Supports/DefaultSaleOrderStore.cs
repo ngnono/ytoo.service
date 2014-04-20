@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Intime.OPC.Domain.Models;
+using System.Transactions;
 
 namespace Intime.OPC.Job.Trade.SplitOrder.Supports
 {
@@ -14,64 +15,45 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
         {
             using (var db = new YintaiHZhouContext())
             {
-                // 遍历保存销售单
-                foreach (var saleOrderModel in saleOrders)
+                using (var ts = new TransactionScope())
                 {
-                    // TODO：检查订单是否已经被拆分，防止两个程序启动写入双份
-                    var saleOrder = new OPC_Sale()
+                    // 遍历保存销售单
+                    foreach (var saleOrderModel in saleOrders)
                     {
-                        OrderNo = saleOrderModel.OrderNo,
-                        SaleOrderNo = saleOrderModel.SaleOrderNo,
-                        SalesType = 0,
-                        Status = saleOrderModel.Status,
-                        SellDate = saleOrderModel.SellDate,
-                        SalesAmount = saleOrderModel.SalesAmount,
-                        SalesCount = saleOrderModel.SalesCount,
-                        SectionId = saleOrderModel.SectionId,
-                        CreatedDate = saleOrderModel.CreatedDate,
-                        CreatedUser = saleOrderModel.CreatedUser,
-                        UpdatedDate = saleOrderModel.CreatedDate,
-                        UpdatedUser = saleOrderModel.CreatedUser,
-                        CashDate = SplitOrderUtils.GetDefaultDateTime(),
-                        RemarkDate = SplitOrderUtils.GetDefaultDateTime()
-                    };
-                    db.OPC_Sale.Add(saleOrder);
+                        // TODO：检查订单是否已经被拆分，防止两个程序启动写入双份
+                        var saleOrder = new OPC_Sale()
+                        {
+                            OrderNo = saleOrderModel.OrderNo,
+                            SaleOrderNo = saleOrderModel.SaleOrderNo,
+                            SalesType = 0,
+                            Status = saleOrderModel.Status,
+                            SellDate = saleOrderModel.SellDate,
+                            SalesAmount = saleOrderModel.SalesAmount, //是明细累加出的总金额
+                            SalesCount = saleOrderModel.SalesCount,
+                            SectionId = saleOrderModel.SectionId,
+                            CreatedDate = saleOrderModel.CreatedDate,
+                            CreatedUser = saleOrderModel.CreatedUser,
+                            UpdatedDate = saleOrderModel.CreatedDate,
+                            UpdatedUser = saleOrderModel.CreatedUser,
+                            CashDate = SplitOrderUtils.GetDefaultDateTime(),
+                            RemarkDate = SplitOrderUtils.GetDefaultDateTime()
+                        };
+                        db.OPC_Sale.Add(saleOrder);
 
-                    db.SaveChanges();
-
-                    // 保存销售单详情
-                    foreach (var saleDetail in saleOrderModel.Items)
-                    {
-                        saleDetail.UpdatedDate = DateTime.UtcNow;
-                        saleDetail.Remark = String.Empty;
-                        saleDetail.UpdatedUser = SystemDefine.SysUserId;
-
-                        db.OPC_SaleDetail.Add(saleDetail);
+                        // 保存销售单详情
+                        foreach (var saleDetail in saleOrderModel.Items)
+                        {
+                            saleDetail.UpdatedDate = DateTime.UtcNow;
+                            saleDetail.Remark = String.Empty;
+                            saleDetail.UpdatedUser = SystemDefine.SysUserId;
+                            db.OPC_SaleDetail.Add(saleDetail);
+                        }
                     }
+                    db.SaveChanges();
+                    ts.Complete();
                 }
-
-                db.SaveChanges();
-
                 return true;
             }
-        }
-
-        /// <summary>
-        /// 查询订单是否已经拆过单
-        /// </summary>
-        /// <param name="orderNo"></param>
-        /// <returns></returns>
-        public bool SearchSaleOrderByOrderNo(string orderNo)
-        {
-            using (var db = new YintaiHZhouContext())
-            {
-                var saleOrder = db.OPC_Sale.FirstOrDefault(x => x.OrderNo == orderNo);
-                if (saleOrder!=null)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         /// <summary>
@@ -80,11 +62,19 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
         /// <param name="orderNo"></param>
         /// <param name="ErrorReason"></param>
         /// <returns></returns>
-        public bool SaveSplitErrorOder(string orderNo, string ErrorReason)
+        public bool SaveSplitOrderLog(string orderNo, string reason,int status)
         {
             using (var db = new YintaiHZhouContext())
             { 
-                //建完表，生成实体，实现保存
+                var opc_OrderSplitLog = new OPC_OrderSplitLog
+                {
+                    OrderNo=orderNo,
+                    Reason = reason,
+                    Status = status,
+                    CreateDate=DateTime.Now
+                };
+                db.OPC_OrderSplitLog.Add(opc_OrderSplitLog);
+                db.SaveChanges();
 
             }            
             return true;

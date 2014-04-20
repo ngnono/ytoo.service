@@ -14,7 +14,6 @@ namespace Intime.OPC.Job.Trade.SplitOrder
     public class SplitOrderProcessor
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private IOrderStore _orderStore = new DefaultOrderStore();
         private IOrderStockStore _orderStockStore = new DefaultOrderStockStore();
         private ISaleOrderStore _saleOrderStore = new DefaultSaleOrderStore();
@@ -30,87 +29,70 @@ namespace Intime.OPC.Job.Trade.SplitOrder
         /// </summary>
         public void Process()
         {
-            /**=======================================================
-             * 
-             * 拆单逻辑简介:
-             * 
-             * 1. 获取订单待处理的订单信息
-             * 2. 从订单中获取所有的SKU
-             * 3. 根据SKU获取专柜的库存列表
-             * 4. 调用拆单的策略链条进行拆单
-             * 5. 根据拆单后的结果进行处理，保存销售单
-             =========================================================*/
-
             var orders = _orderStore.GetPendingOrders().ToList();
 
             Log.InfoFormat("获取订单数量{0}", orders.Count);
 
             foreach (var order in orders)
             {
-                if (order.Items == null || !order.Items.Any())
+                try
                 {
-                    Log.ErrorFormat("orderId:{0},商品清单为空,请进行排查", order.OrderNo);
-                    //订单状态不更新，存库
-                    _saleOrderStore.SaveSplitErrorOder(order.OrderNo,"商品清单为空");
-                    //_orderStore.UpdateStatus(order.Id, SystemDefine.OrderSplitStockInvalid);
-                    continue;
+                    ProcessOrder(order);
                 }
-
-                //判断销售单表里是否存在同单号订单，存在的跳过
-                
-                if (_saleOrderStore.SearchSaleOrderByOrderNo(order.OrderNo))
+                catch (OrderSplitException e)
                 {
-                    Log.ErrorFormat("orderId:{0},已经拆过单子,请进行排查确认", order.OrderNo);
-                    _saleOrderStore.SaveSplitErrorOder(order.OrderNo, "已经拆过单子");
-                    continue;
+                    _saleOrderStore.SaveSplitOrderLog(order.OrderNo, e.Message, (int)e.Status);
                 }
-
-                // 提取订单中的SKU列表
-                var skus = order.Items.Select(item => item.SkuId).ToList();
-
-                // 获取专柜的库存列表
-                var stocks = _orderStockStore.GetStocksBySkus(skus);
-
-                if (stocks == null || stocks.Count == 0)
+                catch (Exception ex)
                 {
-                    Log.ErrorFormat("orderId:{0},skus:{1}专柜库存不足,请进行排查", order.OrderNo, String.Join(",", skus));
-                    //订单状态不更新，存库
-                    _saleOrderStore.SaveSplitErrorOder(order.OrderNo, String.Join(",", skus)+"专柜库存不足");
-                    //_orderStore.UpdateStatus(order.Id, SystemDefine.OrderSplitStockInvalid);
-                    continue;
+                    Log.Error(ex);
                 }
-
-                var splitResult = Spit(order, stocks);
-
-                //处理拆单异常,进行状态的保存
-                if (splitResult.HasException)
-                {
-                    Log.ErrorFormat("orderId:{0},skus:{1}拆单返回库存错误,请进行排查", order.OrderNo, String.Join(",", skus));
-                    //订单状态不更新，存库
-                    //_orderStore.UpdateStatus(order.Id, SystemDefine.OrderSplitStockInvalid);
-                    _saleOrderStore.SaveSplitErrorOder(order.OrderNo, String.Join(",", skus) + "拆单返回库存不足");
-
-                    continue;
-                }
-
-                //保存数据
-                if (!_saleOrderStore.Save(splitResult.SaleOrderInfos))
-                {
-                    // 保存销售单出错不进行，任何状态的更新
-                    _saleOrderStore.SaveSplitErrorOder(order.OrderNo, "拆单保存销售单错误");
-                    Log.ErrorFormat("orderId:{0},拆单保存销售单错误,请进行排查", order.OrderNo);
-                    continue;
-                }
-
-                // 更新库存
-                _orderStockStore.UpdateStock(splitResult.SaleOrderInfos);
-                Log.InfoFormat("更新库存完成,orderNo:{0}", order.OrderNo);
-
-
-                // 更新订单为拆单完成 ，2014-4-18 大红门 不更新Order 状态
-                //_orderStore.UpdateStatus(order.Id, SystemDefine.OrderFinishSplitStatusCode);
-                //Log.InfoFormat("更拆单后的订单状态,orderNo:{0},status:{1}", order.OrderNo, SystemDefine.OrderFinishSplitStatusCode);
             }
+        }
+
+        /**=======================================================
+         * 
+         * 拆单逻辑简介:
+         * 
+         * 1. 获取订单待处理的订单信息
+         * 2. 从订单中获取所有的SKU
+         * 3. 根据SKU获取专柜的库存列表
+         * 4. 调用拆单的策略链条进行拆单
+         * 5. 根据拆单后的结果进行处理，保存销售单
+         =========================================================*/
+        private void ProcessOrder(OrderModel order)
+        {
+            if (order.Items == null || !order.Items.Any())
+            {
+                throw new OrderSplitException(string.Format("orderId:{0},商品清单为空,请进行排查", order.OrderNo), OrderSplitErrorStatus.InvalidItems);
+            }
+
+            // 提取订单中的SKU列表
+            var skus = order.Items.Select(item => item.SkuId).ToList();
+
+            // 获取专柜的库存列表
+            var stocks = _orderStockStore.GetStocksBySkus(skus);
+
+            if (stocks == null || stocks.Count == 0)
+            {
+                throw new OrderSplitException(string.Format("orderId:{0},skus:{1}专柜库存不足,请进行排查", order.OrderNo, String.Join(",", skus)), OrderSplitErrorStatus.InsufficientStock);
+            }
+
+            var splitResult = Spit(order, stocks);
+
+            //处理拆单异常,进行状态的保存
+            if (splitResult.HasException)
+            {
+                throw new OrderSplitException(splitResult.Exception.Message, OrderSplitErrorStatus.SplitError);
+            }
+
+            //保存数据
+            _saleOrderStore.Save(splitResult.SaleOrderInfos);
+
+            // 更新库存
+            _orderStockStore.UpdateStock(splitResult.SaleOrderInfos);
+            Log.InfoFormat("更新库存完成,orderNo:{0}", order.OrderNo);
+            _saleOrderStore.SaveSplitOrderLog(order.OrderNo, "拆单完成", 1);
         }
 
         private SpliltResultModel Spit(OrderModel order, SectionStocksModel stocks)
@@ -166,5 +148,25 @@ namespace Intime.OPC.Job.Trade.SplitOrder
 
             _saleOrderStore = saleOrderStore;
         }
+    }
+
+    public class OrderSplitException : Exception
+    {
+
+        public OrderSplitErrorStatus Status { get; private set; }
+
+        public OrderSplitException(string message, OrderSplitErrorStatus status)
+            : base(message)
+        {
+            this.Status = status;
+        }
+    }
+
+    public enum OrderSplitErrorStatus
+    {
+        InvalidItems = -1,
+        InsufficientStock = -2,
+        SplitError = -3,
+        UnKown = -4,
     }
 }

@@ -61,7 +61,6 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports.Strategys
                         StockId = stock.Id,
                         Price = stock.Price,
                         OrderItemID= orderItem.Id,
-                        //ProductSalCode //TODO:数据中目前没有此值，稍后进行设置
                         CreatedDate = DateTime.Now,
                         CreatedUser = SystemDefine.SysUserId
                     });

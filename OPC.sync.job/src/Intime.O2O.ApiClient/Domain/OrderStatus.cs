@@ -19,9 +19,6 @@ namespace Intime.O2O.ApiClient.Domain
         [DataMember(Name = "DESC")]
         public string desc { get; set; }
 
-
-        public string id { get; set; }
-
         public string Id { get; set; }
     }
 }

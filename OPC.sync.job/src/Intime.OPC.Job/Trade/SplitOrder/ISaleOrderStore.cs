@@ -15,18 +15,11 @@ namespace Intime.OPC.Job.Trade.SplitOrder
         bool Save(IEnumerable<SaleOrderModel> saleOrders);
 
         /// <summary>
-        /// 查询订单是否已经拆过单
-        /// </summary>
-        /// <param name="orderNo"></param>
-        /// <returns></returns>
-        bool SearchSaleOrderByOrderNo(string orderNo);
-
-        /// <summary>
         /// 保存拆单失败的订单
         /// </summary>
         /// <param name="orderNo"></param>
         /// <param name="ErrorReason"></param>
         /// <returns></returns>
-        bool SaveSplitErrorOder(string orderNo, string ErrorReason);
+        bool SaveSplitOrderLog(string orderNo, string ErrorReason,int status);
     }
 }

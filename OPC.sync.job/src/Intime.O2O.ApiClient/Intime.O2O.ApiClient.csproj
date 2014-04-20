@@ -59,9 +59,6 @@
     <Compile Include="Domain\Payment.cs" />
     <Compile Include="Request\GetBrandByIdRequestData.cs" />
     <Compile Include="Request\GetOrderStatusByIdRequest.cs" />
-    <Compile Include="Request\GetOrderStatusByIdRequestData.cs" />
-    <Compile Include="Request\GetOrderStatusRequest.cs" />
-    <Compile Include="Request\GetOrderStatusRequestData.cs" />
     <Compile Include="Request\GetProductImagesRequest.cs" />
     <Compile Include="Request\GetProductImagesRequestData.cs" />
     <Compile Include="Request\GetSectionByIdRequestData.cs" />
