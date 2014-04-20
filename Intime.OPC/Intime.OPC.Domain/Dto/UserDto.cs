@@ -25,7 +25,7 @@ namespace Intime.OPC.Domain.Dto
         /// </summary>
         public UserDto()
         {
-            SectionIDs = new List<int>();
+            SectionID = new List<int>();
             StoreIDs = new List<int>();
         }
 
@@ -39,7 +39,7 @@ namespace Intime.OPC.Domain.Dto
         /// Gets or sets the section i ds.
         /// </summary>
         /// <value>The section i ds.</value>
-        public IList<int> SectionIDs { get; set; }
+        public IList<int> SectionID { get; set; }
         /// <summary>
         /// Gets or sets the store i ds.
         /// </summary>

@@ -400,14 +400,14 @@ namespace Intime.OPC.Repository.Support
         public PageResult<RMADto> GetRmaByShoppingGuide(string orderNo, DateTime startTime, DateTime endTime, int pageIndex, int pageSize)
         {
             CheckUser();
-            var lstSection = CurrentUser.SectionIDs;
+            //var lstSection = CurrentUser.SectionIDs;
             string rmaStatus = EnumReturnGoodsStatus.Valid.GetDescription();
             using (var db = new YintaiHZhouContext())
             {
                 var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
                 var saleQuery =
                     db.OPC_SaleRMA.Where(
-                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus == rmaStatus && CurrentUser.StoreIDs.Contains(t.StoreId) && CurrentUser.SectionIDs.Contains(t.SectionId.Value ));
+                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus == rmaStatus && CurrentUser.StoreIDs.Contains(t.StoreId));
 
                 if (orderNo.IsNotNull())
                 {
@@ -473,7 +473,7 @@ namespace Intime.OPC.Repository.Support
         public PageResult<RMADto> GetRmaByAllOver(string orderNo, DateTime startTime, DateTime endTime, int pageIndex, int pageSize)
         {
             CheckUser();
-            var lstSection = CurrentUser.SectionIDs;
+            //var lstSection = CurrentUser.SectionIDs;
            
             int rma = EnumRMAStatus.ShoppingGuideReceive.AsID();
             using (var db = new YintaiHZhouContext())
@@ -481,7 +481,7 @@ namespace Intime.OPC.Repository.Support
                 var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
                 var saleQuery =
                     db.OPC_SaleRMA.Where(
-                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.Status==rma && CurrentUser.StoreIDs.Contains(t.StoreId) && CurrentUser.SectionIDs.Contains(t.SectionId.Value));
+                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.Status==rma && CurrentUser.StoreIDs.Contains(t.StoreId));
 
                 if (orderNo.IsNotNull())
                 {
