@@ -14,13 +14,9 @@ namespace Intime.OPC.Domain.Enums
         [Description("未送收银")] NoCash = 0,
 
         /// <summary>
-        ///     The send cash
-        /// </summary>
-        [Description("已送收银")] SendCash = 5,
-        /// <summary>
         ///     The cash over
         /// </summary>
-        [Description("完成收银")] CashOver = 10
+        [Description("完成收银")] Cashed = 10
 
     }
 }

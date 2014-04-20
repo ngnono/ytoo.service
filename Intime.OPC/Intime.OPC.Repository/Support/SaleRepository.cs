@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using AutoMapper;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
@@ -85,24 +86,54 @@ namespace Intime.OPC.Repository.Support
             //    pageIndex, pageSize);
             using (var db = new YintaiHZhouContext())
             {
-                var query= Queryable.Join(
-                    Queryable.Join(db.OPC_SaleDetail.Where(t => t.SaleOrderNo == saleOrderNo), db.OrderItems,
-                        t => t.OrderItemId, o => o.Id, (t, o) => new {Sale = t, OrderItem = o}), db.Brands,
-                    t => t.OrderItem.BrandId, o => o.Id,
-                    (t, o) => new {Sale = t.Sale, OrderItem = t.OrderItem, BrandName = o.Name}).OrderByDescending(t=>t.Sale.CreatedDate);
-                var lst = query.ToPageResult(pageIndex,pageSize);
+                var query =
+                    db.OPC_SaleDetail.Where(t => t.SaleOrderNo == saleOrderNo);
+                  
+                        //.Join(db.OrderItems, t => t.OrderItemId, o => o.Id, (t, o) => new {Sale = t, OrderItem = o})
+                        //.Join(db.Brands, t => t.OrderItem.BrandId, o => o.Id,
+                        //    (t, o) => new {t.Sale, t.OrderItem, BrandName = o.Name});
+                var qq = from q in db.OrderItems
+                    join b in db.Brands on q.BrandId equals b.Id into bb
+                    
+                
+                    select new {OrderItems=q,Brand=bb.FirstOrDefault()};
+
+
+
+                var filter = from q in query
+                    join o in qq on q.OrderItemId equals o.OrderItems.Id into oo
+                    join p in db.OPC_Stock on q.StockId equals p.Id into pp
+
+                    select new {OrderItem=oo.FirstOrDefault(),Sale=q,Stock=pp.FirstOrDefault()};
+
+
+                var lst3 = filter.OrderByDescending(t => t.Sale.CreatedDate);
+                var lst = lst3.ToPageResult(pageIndex, pageSize);
                 var lstDto = new List<SaleDetailDto>();
                 foreach (var t in lst.Result)
                 {
-                    var o = Mapper.Map<OPC_SaleDetail, SaleDetailDto>(t.Sale);
-                    o.Brand = t.BrandName;
-                    o.Color = t.OrderItem.ColorValueName;
-                    o.Size = t.OrderItem.SizeValueName;
-                    o.ProductNo = t.OrderItem.StoreSalesCode;
-                    o.StyleNo = t.OrderItem.StoreItemNo;
+                    SaleDetailDto o = Mapper.Map<OPC_SaleDetail, SaleDetailDto>(t.Sale);
+                    if (t.OrderItem!=null)
+                    {
+                        
+                        o.Color = t.OrderItem.OrderItems.ColorValueName;
+                        o.Size = t.OrderItem.OrderItems.SizeValueName;
+                        o.ProductNo = t.OrderItem.OrderItems.StoreSalesCode;
+                        if (t.OrderItem.Brand!=null)
+                        {
+                            o.Brand = t.OrderItem.Brand.Name;
+                        }
+                    }
+                    
+                    //o.StyleNo=t.Stock.ProductCode
+                    //o.StyleNo = t.OrderItem.StoreItemNo;
+                    if (t.Stock!=null)
+                    {
+                        o.StyleNo = t.Stock.ProductCode;
+                    }
                     lstDto.Add(o);
                 }
-                return new PageResult<SaleDetailDto>(lstDto,lst.TotalCount);
+                return new PageResult<SaleDetailDto>(lstDto, lst.TotalCount);
             }
         }
 
@@ -139,8 +170,28 @@ namespace Intime.OPC.Repository.Support
         public PageResult<OPC_Sale> GetNoPickUp(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
             int pageIndex, int pageSize, params int[] sectionIds)
         {
-            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.NoPickUp, pageIndex, pageSize,
-                sectionIds);
+            //return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.NoPickUp, pageIndex, pageSize,
+            //    sectionIds);
+            int saleOrderStatus = EnumSaleOrderStatus.NotifyProduct.AsID();
+            int cashStatus = EnumSaleOrderCashStatus.CashOver.AsID();
+            using (var db = new YintaiHZhouContext())
+            {
+                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => t.Status == saleOrderStatus
+                                                                    && t.SellDate >= dtStart
+                                                                    && t.SellDate < dtEnd && t.CashStatus == cashStatus);
+
+                if (!string.IsNullOrWhiteSpace(orderNo))
+                {
+                    query = query.Where(t => t.OrderNo.Contains(orderNo));
+                }
+
+                if (!string.IsNullOrWhiteSpace(saleId))
+                {
+                    query = query.Where(t => t.SaleOrderNo.Contains(saleId));
+                }
+                query = query.OrderByDescending(t => t.CreatedDate);
+                return query.ToPageResult(pageIndex, pageSize);
+            }
         }
 
         /// <summary>
@@ -254,7 +305,7 @@ namespace Intime.OPC.Repository.Support
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
 
-                if (sectionIds!=null)
+                if (sectionIds != null)
                 {
                     query = query.Where(t => sectionIds.Contains(t.SectionId.Value));
                 }

@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\EnumCashStatus.cs" />
-    <Compile Include="Enums\EnumOderStatus.cs" />
+    <Compile Include="Enums\EnumOrderStatus.cs" />
     <Compile Include="Enums\EnumOrgType.cs" />
     <Compile Include="Enums\EnumReturnGoodsStatus.cs" />
     <Compile Include="Enums\EnumRmaShippingStatus.cs" />

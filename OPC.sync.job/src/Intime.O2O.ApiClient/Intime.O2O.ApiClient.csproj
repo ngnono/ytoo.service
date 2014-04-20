@@ -54,7 +54,6 @@
     <Compile Include="Request\GetBrandByIdRequest.cs" />
     <Compile Include="Domain\Detail.cs" />
     <Compile Include="Domain\Head.cs" />
-    <Compile Include="Domain\OrderStatus.cs" />
     <Compile Include="Domain\OrderStatusResult.cs" />
     <Compile Include="Domain\Payment.cs" />
     <Compile Include="Request\GetBrandByIdRequestData.cs" />
@@ -78,7 +77,6 @@
     <Compile Include="Response.cs" />
     <Compile Include="Domain\Brand.cs" />
     <Compile Include="Response\GetOrderStatusByIdResponse.cs" />
-    <Compile Include="Response\GetOrderStatusResponse.cs" />
     <Compile Include="Response\GetProductImagesResponse.cs" />
     <Compile Include="Response\GetSectionByIdResponse.cs" />
     <Compile Include="Response\GetStoreByIdResponse.cs" />

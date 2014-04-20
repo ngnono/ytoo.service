@@ -102,6 +102,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Order\DTO\OrderStatusResultDto.cs" />
+    <Compile Include="Order\OrderStatusSync\NoneOperationStatusProcessor.cs" />
+    <Compile Include="Order\StockNotExistsException.cs" />
     <Compile Include="Order\OrderStatusSync\OrderNotifyJob.cs" />
     <Compile Include="Order\OrderStatusSync\OrderStatusSyncJob.cs" />
     <Compile Include="Order\Repository\IOrderRemoteRepository.cs" />
@@ -182,6 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="Order\OrderStatusSync\SaleOrderStatusSyncJob.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

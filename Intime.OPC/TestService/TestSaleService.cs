@@ -25,5 +25,15 @@ namespace TestService
             Assert.IsNotNull(lst);
 
         }
+
+        [TestMethod]
+        public void TestGetNoPickUp()
+        {
+            var lst = Service.GetNoPickUp("", 1, "", new DateTime(2000, 1, 1), DateTime.Now.Date, 1, 50);
+            Debug(lst);
+            Assert.IsNotNull(lst);
+
+        }
+        //
     }
 }
