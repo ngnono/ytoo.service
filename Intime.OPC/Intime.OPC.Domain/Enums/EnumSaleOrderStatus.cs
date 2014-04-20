@@ -1,18 +1,4 @@
-﻿// ***********************************************************************
-// Assembly         : OPCApp.Domain
-// Author           : Liuyh
-// Created          : 03-20-2014 22:49:04
-//
-// Last Modified By : Liuyh
-// Last Modified On : 03-20-2014 23:09:08
-// ***********************************************************************
-// <copyright file="EnumSaleOrderStatue.cs" company="">
-//     Copyright (c) . All rights reserved.
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
-
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Intime.OPC.Domain.Enums
 {
@@ -22,20 +8,29 @@ namespace Intime.OPC.Domain.Enums
     public enum EnumSaleOrderStatus
     {
         /// <summary>
+        ///     无
+        /// </summary>
+        [Description("无")] None = 0,
+
+        /// <summary>
         ///     未提货
         /// </summary>
         [Description("未提货")] NoPickUp = 0,
 
         /// <summary>
-        /// 通知单品
+        ///     通知单品
         /// </summary>
-        [Description("通知单品")]
-        NotifySingleProduct = 1,
+        [Description("通知单品")] NotifyProduct = 1,
 
         /// <summary>
         ///     打印销售单
         /// </summary>
         [Description("打印销售单")] PrintSale = 2,
+
+        /// <summary>
+        ///     商品已被专柜导购的单品系统获取到
+        /// </summary>
+        [Description("商品已被专柜导购的单品系统获取到")] Fetched = 21,
 
         /// <summary>
         ///     缺货
@@ -57,8 +52,6 @@ namespace Intime.OPC.Domain.Enums
         /// </summary>
         [Description("导购提货")] ShoppingGuidePickUp = 20,
 
-        [Description("导购确认发货")]
-        SaleGuideSend = 22,
         /// <summary>
         ///     物流入库
         /// </summary>
@@ -79,8 +72,10 @@ namespace Intime.OPC.Domain.Enums
         /// </summary>
         [Description("已发货")] Shipped = 40,
 
-
-       
+        /// <summary>
+        ///     订单完成
+        /// </summary>
+        [Description("订单完成")] SaleCompletion = 900,
 
         [Description("取消")] Void = -10
     }
