@@ -97,6 +97,7 @@
     <Compile Include="Enums\EnumRMACashStatus.cs" />
     <Compile Include="Enums\EnumRmaShippingStatus.cs" />
     <Compile Include="Enums\EnumRMAStatus.cs" />
+    <Compile Include="Enums\EnumSaleOrderCashStatus.cs" />
     <Compile Include="Enums\EnumSaleOrderStatus.cs" />
     <Compile Include="Enums\EnumSaleStatus.cs" />
     <Compile Include="Exception\OrderNoIsNullException.cs" />

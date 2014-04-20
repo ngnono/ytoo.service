@@ -31,7 +31,6 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
                         if (stock != null) stock.Count = stock.Count - item.SaleCount;
                     }
                 }
-
                 db.SaveChanges();
                 return true;
             }

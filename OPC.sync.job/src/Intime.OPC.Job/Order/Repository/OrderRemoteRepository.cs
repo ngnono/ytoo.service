@@ -1,58 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Common.Logging;
+﻿using Common.Logging;
 using Intime.O2O.ApiClient;
 using Intime.O2O.ApiClient.Domain;
 using Intime.O2O.ApiClient.Request;
-using Intime.O2O.ApiClient.Response;
-using Intime.OPC.Job.Order.Models;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Job.Order.Models;
+using System.Linq;
 
 namespace Intime.OPC.Job.Order.Repository
 {
-    public class RemoteRepository : IRemoteRepository
+    public class OrderRemoteRepository : IOrderRemoteRepository
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private readonly IApiClient _apiClient;
 
-        static RemoteRepository()
+        static OrderRemoteRepository()
         {
             AutoMapper.Mapper.CreateMap<OrderStatus, OrderStatusDto>();
-
-            AutoMapper.Mapper.CreateMap<Head, HeadDto>();
-            AutoMapper.Mapper.CreateMap<Detail, DetailDto>();
-            AutoMapper.Mapper.CreateMap<PayMent, PayMentDto>();
-
             AutoMapper.Mapper.CreateMap<OrderStatusResult, OrderStatusResultDto>();
 
         }
 
-        public RemoteRepository()
+        public OrderRemoteRepository()
         {
             _apiClient = new DefaultApiClient();
         }
 
-        public RemoteRepository(IApiClient apiClient)
+        public OrderRemoteRepository(IApiClient apiClient)
         {
             _apiClient = apiClient;
         }
 
-        public OrderStatusResultDto GetOrderStatusById(string Id, string storeNo)
+        public OrderStatusResultDto GetOrderStatusById(OPC_Sale saleOrder)
         {
+            OPC_Stock opcStock; ;
+
+            using (var db = new YintaiHZhouContext())
+            {
+
+                opcStock = db.OPC_Stock.FirstOrDefault(a => a.SectionId == saleOrder.SectionId);
+
+            }
             var result = _apiClient.Post(new GetOrderStatusByIdRequest()
             {
-                Data = new GetOrderStatusByIdRequestData()
+                Data = new 
                 {
-                    Id=Id,
-                    StoreNo = storeNo
+                    id = saleOrder.SaleOrderNo,
+                    storeno = opcStock.StoreCode
                 }
             });
 
             if (!result.Status)
             {
-                Log.ErrorFormat("获取门店信息出错,message:{0}", result.Message);
+                Log.ErrorFormat("查询订单信息失败,message:{0}", result.Message);
                 return null;
             }
 

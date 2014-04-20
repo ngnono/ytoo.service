@@ -56,6 +56,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\EnumCashStatus.cs" />
+    <Compile Include="Enums\EnumOderStatus.cs" />
+    <Compile Include="Enums\EnumOrgType.cs" />
+    <Compile Include="Enums\EnumReturnGoodsStatus.cs" />
+    <Compile Include="Enums\EnumRmaShippingStatus.cs" />
+    <Compile Include="Enums\EnumRMAStatus.cs" />
+    <Compile Include="Enums\EnumSaleOrderStatus.cs" />
+    <Compile Include="Enums\EnumSaleStatus.cs" />
     <Compile Include="Models\AdminAccessRight.cs" />
     <Compile Include="Models\Banner.cs" />
     <Compile Include="Models\Brand.cs" />
@@ -181,6 +189,7 @@
     <Compile Include="Models\Mapping\OPC_ChannelMapMap.cs" />
     <Compile Include="Models\Mapping\OPC_ChannelProductMap.cs" />
     <Compile Include="Models\Mapping\OPC_OrderCommentMap.cs" />
+    <Compile Include="Models\Mapping\OPC_OrderSplitLogMap.cs" />
     <Compile Include="Models\Mapping\OPC_OrgInfoMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMACommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMADetailMap.cs" />
@@ -190,6 +199,7 @@
     <Compile Include="Models\Mapping\OPC_SaleDetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleLogMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleMap.cs" />
+    <Compile Include="Models\Mapping\OPC_SaleOrderNotificationLogMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleRMACommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleRMAMap.cs" />
     <Compile Include="Models\Mapping\OPC_ShippingSaleCommentMap.cs" />
@@ -268,6 +278,7 @@
     <Compile Include="Models\OPC_ChannelMap.cs" />
     <Compile Include="Models\OPC_ChannelProduct.cs" />
     <Compile Include="Models\OPC_OrderComment.cs" />
+    <Compile Include="Models\OPC_OrderSplitLog.cs" />
     <Compile Include="Models\OPC_OrgInfo.cs" />
     <Compile Include="Models\OPC_RMA.cs" />
     <Compile Include="Models\OPC_RMAComment.cs" />
@@ -277,6 +288,7 @@
     <Compile Include="Models\OPC_SaleComment.cs" />
     <Compile Include="Models\OPC_SaleDetail.cs" />
     <Compile Include="Models\OPC_SaleLog.cs" />
+    <Compile Include="Models\OPC_SaleOrderNotificationLog.cs" />
     <Compile Include="Models\OPC_SaleRMA.cs" />
     <Compile Include="Models\OPC_SaleRMAComment.cs" />
     <Compile Include="Models\OPC_ShippingSale.cs" />
