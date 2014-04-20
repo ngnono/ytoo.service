@@ -178,7 +178,7 @@ namespace Intime.OPC.Repository.Support
             {
                 IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => t.Status == saleOrderStatus
                                                                     && t.SellDate >= dtStart
-                                                                    && t.SellDate < dtEnd && t.CashStatus == cashStatus);
+                                                                    && t.SellDate < dtEnd);
 
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
