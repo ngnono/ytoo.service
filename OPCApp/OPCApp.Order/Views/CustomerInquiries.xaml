@@ -51,7 +51,7 @@
                             <TextBox Width="100" Foreground="Blue" Background="White"
                                      Text="{Binding OrderGet.OrderSource}" />
                             <TextBlock Text="购买时间" Margin="0 5" Width="60" />
-                            <DatePicker Width="100" Foreground="Blue" SelectedDate="{Binding OrderGet.StartCreateDate}" />
+                            <DatePicker Width="120" Foreground="Blue" SelectedDate="{Binding OrderGet.StartCreateDate}" />
                             <TextBlock Text=" 至 " Margin="0 5" Width="20" />
                             <DatePicker Width="120" Foreground="Blue" SelectedDate="{Binding OrderGet.EndCreateDate}" />
                             <TextBlock Text="门店" Margin="0 5" Width="60" />
@@ -76,7 +76,7 @@
                                       DisplayMemberPath="Value" SelectedValuePath="Key"
                                       SelectedValue="{Binding OrderGet.PaymentType}" />
                             <TextBlock Text="顾客电话" Margin="0 5" Width="60" />
-                            <TextBox Width="100" Foreground="Blue" Background="White"
+                            <TextBox Width="120" Foreground="Blue" Background="White"
                                      Text="{Binding OrderGet.ShippingContactPhone}" />
                             <TextBlock Text="发货方式" Margin="0 5" Width="60" />
                             <ComboBox Height="25" ItemsSource="{Binding OutGoodsTypeList}" Width="80"
