@@ -85,16 +85,17 @@ namespace Intime.OPC.Repository.Support
             //    pageIndex, pageSize);
             using (var db = new YintaiHZhouContext())
             {
-                var query= Queryable.Join(
-                    Queryable.Join(db.OPC_SaleDetail.Where(t => t.SaleOrderNo == saleOrderNo), db.OrderItems,
-                        t => t.OrderItemId, o => o.Id, (t, o) => new {Sale = t, OrderItem = o}), db.Brands,
-                    t => t.OrderItem.BrandId, o => o.Id,
-                    (t, o) => new {Sale = t.Sale, OrderItem = t.OrderItem, BrandName = o.Name}).OrderByDescending(t=>t.Sale.CreatedDate);
-                var lst = query.ToPageResult(pageIndex,pageSize);
+                var query =
+                    db.OPC_SaleDetail.Where(t => t.SaleOrderNo == saleOrderNo)
+                        .Join(db.OrderItems, t => t.OrderItemId, o => o.Id, (t, o) => new {Sale = t, OrderItem = o})
+                        .Join(db.Brands, t => t.OrderItem.BrandId, o => o.Id,
+                            (t, o) => new {t.Sale, t.OrderItem, BrandName = o.Name})
+                        .OrderByDescending(t => t.Sale.CreatedDate);
+                var lst = query.ToPageResult(pageIndex, pageSize);
                 var lstDto = new List<SaleDetailDto>();
                 foreach (var t in lst.Result)
                 {
-                    var o = Mapper.Map<OPC_SaleDetail, SaleDetailDto>(t.Sale);
+                    SaleDetailDto o = Mapper.Map<OPC_SaleDetail, SaleDetailDto>(t.Sale);
                     o.Brand = t.BrandName;
                     o.Color = t.OrderItem.ColorValueName;
                     o.Size = t.OrderItem.SizeValueName;
@@ -102,7 +103,7 @@ namespace Intime.OPC.Repository.Support
                     o.StyleNo = t.OrderItem.StoreItemNo;
                     lstDto.Add(o);
                 }
-                return new PageResult<SaleDetailDto>(lstDto,lst.TotalCount);
+                return new PageResult<SaleDetailDto>(lstDto, lst.TotalCount);
             }
         }
 
@@ -139,8 +140,28 @@ namespace Intime.OPC.Repository.Support
         public PageResult<OPC_Sale> GetNoPickUp(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
             int pageIndex, int pageSize, params int[] sectionIds)
         {
-            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.NoPickUp, pageIndex, pageSize,
-                sectionIds);
+            //return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.NoPickUp, pageIndex, pageSize,
+            //    sectionIds);
+            int saleOrderStatus = EnumSaleOrderStatus.NotifyProduct.AsID();
+            int cashStatus = EnumSaleOrderCashStatus.CashOver.AsID();
+            using (var db = new YintaiHZhouContext())
+            {
+                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => t.Status == saleOrderStatus
+                                                                    && t.SellDate >= dtStart
+                                                                    && t.SellDate < dtEnd && t.CashStatus == cashStatus);
+
+                if (!string.IsNullOrWhiteSpace(orderNo))
+                {
+                    query = query.Where(t => t.OrderNo.Contains(orderNo));
+                }
+
+                if (!string.IsNullOrWhiteSpace(saleId))
+                {
+                    query = query.Where(t => t.SaleOrderNo.Contains(saleId));
+                }
+                query = query.OrderByDescending(t => t.CreatedDate);
+                return query.ToPageResult(pageIndex, pageSize);
+            }
         }
 
         /// <summary>
@@ -254,7 +275,7 @@ namespace Intime.OPC.Repository.Support
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
 
-                if (sectionIds!=null)
+                if (sectionIds != null)
                 {
                     query = query.Where(t => sectionIds.Contains(t.SectionId.Value));
                 }
