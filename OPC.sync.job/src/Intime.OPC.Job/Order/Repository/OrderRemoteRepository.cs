@@ -15,9 +15,7 @@ namespace Intime.OPC.Job.Order.Repository
 
         static OrderRemoteRepository()
         {
-            AutoMapper.Mapper.CreateMap<OrderStatus, OrderStatusDto>();
             AutoMapper.Mapper.CreateMap<OrderStatusResult, OrderStatusResultDto>();
-
         }
 
         public OrderRemoteRepository()
@@ -36,13 +34,17 @@ namespace Intime.OPC.Job.Order.Repository
 
             using (var db = new YintaiHZhouContext())
             {
-
                 opcStock = db.OPC_Stock.FirstOrDefault(a => a.SectionId == saleOrder.SectionId);
-
             }
+
+            if (opcStock == null)
+            {
+                throw new StockNotExistsException(string.Format(""));
+            }
+
             var result = _apiClient.Post(new GetOrderStatusByIdRequest()
             {
-                Data = new 
+                Data = new
                 {
                     id = saleOrder.SaleOrderNo,
                     storeno = opcStock.StoreCode
@@ -54,13 +56,6 @@ namespace Intime.OPC.Job.Order.Repository
                 Log.ErrorFormat("查询订单信息失败,message:{0}", result.Message);
                 return null;
             }
-
-            if (result.Data == null || string.IsNullOrEmpty(result.Data.Id))
-            {
-                Log.ErrorFormat("信息为空,message:{0}", result.Message);
-                return null;
-            }
-
             return AutoMapper.Mapper.Map<OrderStatusResult, OrderStatusResultDto>(result.Data);
         }
     }

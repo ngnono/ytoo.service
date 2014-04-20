@@ -15,8 +15,6 @@ namespace Intime.OPC.Domain.Models
             : base("Name=YintaiHZhouContext")
         {
         }
-
-        public DbSet<OPC_OrderSplitLog> OPC_OrderSplitLogs { get; set; }
         public DbSet<OPC_SaleOrderNotificationLog> OPC_SaleOrderNotificationLogs { get; set; }
         public DbSet<AdminAccessRight> AdminAccessRights { get; set; }
         public DbSet<Banner> Banners { get; set; }

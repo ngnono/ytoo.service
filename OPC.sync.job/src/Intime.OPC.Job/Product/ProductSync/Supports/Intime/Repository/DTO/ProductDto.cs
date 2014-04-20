@@ -9,6 +9,19 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository.DTO
     public class ProductDto
     {
         /// <summary>
+        /// 在信息部系统主键
+        /// </summary>
+        [DataMember(Name = "ID")]
+        public string Id { get; set; }
+
+
+        /// <summary>
+        /// 商品图片写入时间
+        /// </summary>
+        [DataMember(Name = "WRITETIME")]
+        public string WriteTime { get; set; }
+
+        /// <summary>
         /// 商品编码
         /// </summary>
         [DataMember(Name = "PRODUCTCODE")]
@@ -78,7 +91,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository.DTO
         /// 库存量
         /// </summary>
         [DataMember(Name = "STOCK")]
-        public int? Stock { get; set; }
+        public decimal? Stock { get; set; }
 
         /// <summary>
         /// 标签价格
