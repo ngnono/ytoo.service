@@ -102,9 +102,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Order\DTO\OrderStatusResultDto.cs" />
+    <Compile Include="Order\OrderStatusSync\AbstractOrderNotificationEntity.cs" />
+    <Compile Include="Order\OrderStatusSync\AbstractSaleOrderStatusProcessor.cs" />
+    <Compile Include="Order\OrderStatusSync\CashedSaleOrderStatusProcessor.cs" />
+    <Compile Include="Order\OrderStatusSync\CreateOrderNotificationEntity.cs" />
     <Compile Include="Order\OrderStatusSync\NoneOperationStatusProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Order\OrderStatusSync\PaidOrderNotificationEntity.cs" />
+    <Compile Include="Order\OrderStatusSync\SaleOrderStatusProcessorFactory.cs" />
+    <Compile Include="Order\OrderStatusSync\ShoppingGuidePickUpSaleOrderStatusProcessor.cs" />
     <Compile Include="Order\StockNotExistsException.cs" />
     <Compile Include="Order\OrderStatusSync\OrderNotifyJob.cs" />
     <Compile Include="Order\OrderStatusSync\OrderStatusSyncJob.cs" />
@@ -153,7 +160,6 @@
     <Compile Include="Product\ProductSync\SystemDefine.cs" />
     <Compile Include="Product\StockAggregate\StockAttregateJob.cs" />
     <Compile Include="Product\StockAggregate\StockModel.cs" />
-    <Compile Include="Order\DTO\OrderStatusDto.cs" />
     <Compile Include="Trade\SplitOrder\IOrderStockStore.cs" />
     <Compile Include="Trade\SplitOrder\IOrderStore.cs" />
     <Compile Include="Trade\SplitOrder\ISaleOrderStore.cs" />

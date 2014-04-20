@@ -3,8 +3,8 @@ using Intime.O2O.ApiClient;
 using Intime.O2O.ApiClient.Domain;
 using Intime.O2O.ApiClient.Request;
 using Intime.OPC.Domain.Models;
-using Intime.OPC.Job.Order.Models;
 using System.Linq;
+using Intime.OPC.Job.Order.DTO;
 
 namespace Intime.OPC.Job.Order.Repository
 {
