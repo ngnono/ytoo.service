@@ -17,14 +17,14 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
     public class SaleOrderStatusSyncJob : IJob
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private DateTime _dateTime = DateTime.Now.AddDays(-5);
+        private DateTime _benchTime = DateTime.Now.AddDays(-5);
         private readonly IOrderRemoteRepository _remoteRepository = new OrderRemoteRepository();
 
         private void DoQuery(Action<IQueryable<OPC_Sale>> callback)
         {
             using (var context = new YintaiHZhouContext())
             {
-                var linq = context.OPC_Sale.Where(t => t.UpdatedDate > _dateTime && t.Status > 0 && t.Status < (int)EnumSaleOrderStatus.SaleCompletion);
+                var linq = context.OPC_Sale.Where(t => t.UpdatedDate > _benchTime && t.Status > 0 && t.Status < (int)EnumSaleOrderStatus.SaleCompletion);
                 if (callback != null)
                     callback(linq);
             }
@@ -38,11 +38,10 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
 #if !DEBUG
             JobDataMap data = context.JobDetail.JobDataMap;
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
-            var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
-             _benchTime = DateTime.Now.AddMinutes(-interval);
-
-            if (!isRebuild)
-                benchTime = data.GetDateTime("benchtime");
+            var interval = data.ContainsKey("intervalOfDays") ? data.GetInt("intervalOfDays") : 5;
+             _benchTime = DateTime.Now.AddDays(-interval);
+             if (isRebuild)
+                 _benchTime = _benchTime.AddMonths(-2);
 #endif
             DoQuery(saleOrders =>
             {

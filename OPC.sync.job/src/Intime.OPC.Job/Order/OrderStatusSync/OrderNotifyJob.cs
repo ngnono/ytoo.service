@@ -13,7 +13,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
     public class OrderNotifyJob : IJob
     {
         private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
-        private DateTime _benchTime = DateTime.Now.AddMinutes(-1600);
+        private DateTime _benchTime = DateTime.Now.AddMinutes(-20);
 
         private void DoQuery(Action<IQueryable<OPC_Sale>> callback, int orderStatus, NotificationStatus status)
         {
@@ -36,10 +36,10 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
 #if !DEBUG
             JobDataMap data = context.JobDetail.JobDataMap;
             var isRebuild = data.ContainsKey("isRebuild") && data.GetBoolean("isRebuild");
-            var interval = data.ContainsKey("intervalOfMins") ? data.GetInt("intervalOfMins") : 5 * 60;
+            var interval = data.ContainsKey("intervalOfMins") ? data.GetInt("intervalOfMins") : 2 ;
             _benchTime = DateTime.Now.AddMinutes(-interval);
-            if (!isRebuild)
-                _benchTime = data.GetDateTime("benchtime");
+            if (isRebuild)
+                _benchTime = _benchTime.AddMonths(-2);
 #endif
 
             var totalCount = 0;

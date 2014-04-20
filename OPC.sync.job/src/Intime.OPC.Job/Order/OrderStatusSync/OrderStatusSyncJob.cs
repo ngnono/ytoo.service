@@ -41,8 +41,8 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
             var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
              _benchTime = DateTime.Now.AddMinutes(-interval);
 
-            if (!isRebuild)
-                _benchTime = data.GetDateTime("benchtime");
+            if (isRebuild)
+                _benchTime = _benchTime.AddMonths(-2);
 #endif
             DoQuery(skus =>
             {
