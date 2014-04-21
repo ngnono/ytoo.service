@@ -228,6 +228,12 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() => { return _enumService.All("Financial"); }, "读取类型失败！");
         }
 
+
+        [HttpGet]
+        public IHttpActionResult GetOrderStatusEnums()
+        {
+            return DoFunction(() => { return _enumService.All("OrderStatus"); });
+        }
         /// <summary>
         /// 获得销售单类型
         /// </summary>
