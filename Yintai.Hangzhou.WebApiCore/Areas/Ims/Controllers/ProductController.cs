@@ -215,7 +215,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     {
                         id = productEntity.Id,
                         image = resourceEntity.First().Name.Image320Url(),
-                        price = productEntity.Price
+                        price = productEntity.Price,
+                        brand_name = brandEntity.Name,
+                        category_name = categoryEntity.C.Name
+
                     });
                 }
                 else
