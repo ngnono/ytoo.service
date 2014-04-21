@@ -621,7 +621,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Refuse(int trans_id, int authuid)
+        public ActionResult RefuseByTransId(int trans_id, int authuid)
         {
             var trans = _transRepo.Find(trans_id);
             if (trans == null)
