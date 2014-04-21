@@ -195,5 +195,23 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
             return this.RenderSuccess<dynamic>(r => r.Data = new { charge_no = order.No, amount = order.Amount, create_date = order.CreateDate });
         }
+
+        [RestfulAuthorize]
+        public ActionResult Latest_Address(int authuid)
+        {
+            var benchTime = DateTime.Today.AddMonths(-1);
+            var orderEntity = Context.Set<OrderEntity>().Where(o => o.CustomerId == authuid && o.CreateDate >= benchTime)
+                                .OrderByDescending(o=>o.CreateDate).FirstOrDefault();
+            if (orderEntity != null)
+                return this.RenderSuccess<dynamic>(r => r.Data = new
+                {
+                    full_address = orderEntity.ShippingAddress,
+                    contact_phone = orderEntity.ShippingContactPhone,
+                    contact_person = orderEntity.ShippingContactPerson,
+                    zip_code = orderEntity.ShippingZipCode
+                });
+            else
+                return this.RenderSuccess<dynamic>(r => r.Data = new { });
+        }
     }
 }
