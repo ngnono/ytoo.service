@@ -18,9 +18,6 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.ExCatCode)
                 .HasMaxLength(10);
 
-            this.Property(t => t.Channel)
-                .HasMaxLength(50);
-
             // Table & Column Mappings
             this.ToTable("Category");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -30,7 +27,6 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.TagId).HasColumnName("TagId");
-            this.Property(t => t.Channel).HasColumnName("Channel");
         }
     }
 }
