@@ -203,7 +203,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 proudctExt.BarCode = string.Empty;                 
                 proudctExt.Store_Id = section.StoreId ?? 0;
                 proudctExt.Brand_Id = brand == null ? 0 : brand.Id;
-                proudctExt.Tag_Id = 0;
+                //proudctExt.Tag_Id = 0;
                 proudctExt.SkuCode = string.Empty;
                 proudctExt.Name = channelProduct.ProductName ?? string.Empty;
                 proudctExt.UnitPrice = channelProduct.LabelPrice;

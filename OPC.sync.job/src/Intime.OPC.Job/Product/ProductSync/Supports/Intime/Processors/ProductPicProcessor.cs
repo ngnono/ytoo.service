@@ -45,7 +45,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             using (var db = new YintaiHZhouContext())
             {
                 //查找是否已经同步图片
-                var resourceExt = db.Resources.FirstOrDefault(r => r.ColorId == colorIdMap.LocalId && r.SourceId == productMap.LocalId && r.SortOrder == SeqNo);
+                var resourceExt = db.Resources.FirstOrDefault(r => r.ColorId == colorIdMap.LocalId && r.SourceId == productMap.LocalId && r.SortOrder == SeqNo && r.SourceType == 1);
 
                 // 下载远程图片
                 if (resourceExt == null || resourceExt.UpdatedDate != WriteTime)
@@ -57,6 +57,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     catch (Exception ex)
                     {
                         Log.ErrorFormat("同步商品图片出错，下载图片出错,productId:[{0}],colorId:[{1}],url:[{2}]", channelProductId, channelColorId, channelUrl);
+                        Log.Error(ex);
                         return null;
                     }
 
