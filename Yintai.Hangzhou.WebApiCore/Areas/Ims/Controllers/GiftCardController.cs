@@ -456,7 +456,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Send(string comment, string from, string phone, string charge_no, int trans_id, int authuid)
+        public ActionResult SendEx(string comment, string from, string phone, string charge_no, int trans_id, int authuid)
         {
             var order = _orderRepo.Find(x => x.No == charge_no);
             if (order == null)
@@ -598,7 +598,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Trans_Detail(int trans_id, int authuid)
+        public ActionResult Trans_Detail2(int trans_id, int authuid)
         {
             var trans = _transRepo.Find(trans_id);
             if (trans == null)
@@ -784,7 +784,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private GiftCardListItemStatus SetStatusForBuyer(IMS_GiftCardOrderEntity order, IMS_GiftCardRechargeEntity recharge)
         {
 
-            if (order.Status == (int)GiftCardOrderStatus.Recharge)
+            if (order.Status == (int)GiftCardOrderStatus.Recharge && recharge != null)
             {
                 if (recharge.ChargeUserId != order.PurchaseUserId)
                 {
