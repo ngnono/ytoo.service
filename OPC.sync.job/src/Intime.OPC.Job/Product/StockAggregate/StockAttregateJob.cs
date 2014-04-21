@@ -14,12 +14,12 @@ namespace Intime.OPC.Job.Product.StockAggregate
     public class StockAttregateJob : IJob
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private DateTime benchTime = DateTime.Now.AddMinutes(-300);
+        private DateTime _benchTime = DateTime.Now.AddMinutes(-300);
         private void DoQuery(Action<IQueryable<OPC_SKU>> callback)
         {
             using (var context = new YintaiHZhouContext())
             {
-                var linq = context.OPC_SKU.Where(x=>context.OPC_Stock.Any(t=>t.UpdatedDate > benchTime && t.SkuId == x.Id)).AsQueryable(); 
+                var linq = context.OPC_SKU.Where(x=>context.OPC_Stock.Any(t=>t.UpdatedDate > _benchTime && t.SkuId == x.Id)).AsQueryable(); 
                 if (callback != null)
                     callback(linq);
             }
@@ -50,11 +50,10 @@ namespace Intime.OPC.Job.Product.StockAggregate
 #if !DEBUG
             JobDataMap data = context.JobDetail.JobDataMap;
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
-            var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
-            
- 
-            if (!isRebuild)
-                benchTime = data.GetDateTime("benchtime");
+            var interval = data.ContainsKey("intervalOfMins") ? data.GetInt("intervalOfMins") : 5;
+            _benchTime = DateTime.Now.AddMinutes(-5);
+            if (isRebuild)
+                _benchTime = _benchTime.AddMonths(-2);
 #endif
             DoQuery(skus =>
             {

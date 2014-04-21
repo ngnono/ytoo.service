@@ -1,9 +1,8 @@
 ﻿using Common.Logging;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
-using Intime.OPC.Job.Order.Models;
+using Intime.OPC.Job.Order.DTO;
 using Intime.OPC.Job.Order.Repository;
-using Intime.OPC.Job.Product.ProductSync;
 using Quartz;
 using System;
 using System.Collections.Generic;
@@ -18,14 +17,14 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
     public class SaleOrderStatusSyncJob : IJob
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private DateTime benchTime = DateTime.Now.AddDays(-5);
+        private DateTime _benchTime = DateTime.Now.AddDays(-5);
         private readonly IOrderRemoteRepository _remoteRepository = new OrderRemoteRepository();
 
-        private void DoQuery(Action<IQueryable<Intime.OPC.Domain.Models.OPC_Sale>> callback)
+        private void DoQuery(Action<IQueryable<OPC_Sale>> callback)
         {
             using (var context = new YintaiHZhouContext())
             {
-                var linq = context.OPC_Sale.Where(t => t.UpdatedDate > benchTime && t.Status > 0 && t.Status < (int)EnumSaleOrderStatus.SaleCompletion);
+                var linq = context.OPC_Sale.Where(t => t.UpdatedDate > _benchTime && t.Status > 0 && t.Status < (int)EnumSaleOrderStatus.ShipInStorage);
                 if (callback != null)
                     callback(linq);
             }
@@ -39,11 +38,10 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
 #if !DEBUG
             JobDataMap data = context.JobDetail.JobDataMap;
             var isRebuild = data.ContainsKey("isRebuild") ? data.GetBoolean("isRebuild") : false;
-            var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
-             _benchTime = DateTime.Now.AddMinutes(-interval);
-
-            if (!isRebuild)
-                benchTime = data.GetDateTime("benchtime");
+            var interval = data.ContainsKey("intervalOfDays") ? data.GetInt("intervalOfDays") : 5;
+             _benchTime = DateTime.Now.AddDays(-interval);
+             if (isRebuild)
+                 _benchTime = _benchTime.AddMonths(-2);
 #endif
             DoQuery(saleOrders =>
             {
@@ -53,7 +51,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
             int size = 20;
             while (cursor < totalCount)
             {
-                List<Intime.OPC.Domain.Models.OPC_Sale> oneTimeList = null;
+                List<OPC_Sale> oneTimeList = null;
                 DoQuery(r => oneTimeList = r.OrderBy(t => t.OrderNo).Skip(cursor).Take(size).ToList());
                 foreach (var opc_sale in oneTimeList)
                 {
@@ -62,7 +60,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                 cursor += size;
             }
         }
-        private void Process(Domain.Models.OPC_Sale opc_Sale)
+        private void Process(OPC_Sale opc_Sale)
         {
             OrderStatusResultDto saleStatus = null;
             try
@@ -73,7 +71,6 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
             catch (Exception e)
             {
                 Log.Error(e);
-                return;
             }
         }
 
@@ -84,67 +81,5 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
         }
 
         #endregion
-    }
-
-    public class SaleOrderStatusProcessorFactory
-    {
-        public static AbstractSaleOrderStatusProcessor Create(int status)
-        {
-            switch (status)
-            {
-                case 31:
-                    return new CashedSaleOrderStatusProcessor(EnumSaleOrderStatus.None);
-                case 32:
-                    return new ShoppingGuidePickUpSaleOrderStatusProcessor(EnumSaleOrderStatus.ShoppingGuidePickUp);
-                default: return new NoneOperationStatusProcessor(EnumSaleOrderStatus.None);
-            }
-        }
-    }
-
-    public abstract class AbstractSaleOrderStatusProcessor
-    {
-        protected EnumSaleOrderStatus _status;
-        protected AbstractSaleOrderStatusProcessor(EnumSaleOrderStatus status)
-        {
-            this._status = status;
-        }
-        public abstract void Process(string saleOrderNo, OrderStatusResultDto statusResult);
-    }
-
-    public class ShoppingGuidePickUpSaleOrderStatusProcessor : AbstractSaleOrderStatusProcessor
-    {
-        public ShoppingGuidePickUpSaleOrderStatusProcessor(EnumSaleOrderStatus status) : base(status) { }
-        public override void Process(string saleOrderNo, OrderStatusResultDto statusResult)
-        {
-            using (var db = new YintaiHZhouContext())
-            {
-
-                var saleOrder = db.OPC_Sale.FirstOrDefault(o => o.SaleOrderNo == saleOrderNo);
-                if (saleOrder.Status != (int)EnumSaleOrderStatus.PrintSale) return;
-                saleOrder.Status = (int)_status;
-                saleOrder.UpdatedDate = DateTime.Now;
-                saleOrder.UpdatedUser = -100;
-                db.SaveChanges();
-            }
-        }
-    }
-
-    public class CashedSaleOrderStatusProcessor : AbstractSaleOrderStatusProcessor
-    {
-        public CashedSaleOrderStatusProcessor(EnumSaleOrderStatus status) : base(status) { }
-        public override void Process(string saleOrderNo, OrderStatusResultDto statusResult)
-        {
-            using (var db = new YintaiHZhouContext())
-            {
-                var saleOrder = db.OPC_Sale.FirstOrDefault(t => t.SaleOrderNo == saleOrderNo);
-                saleOrder.CashStatus = (int)EnumCashStatus.Cashed;
-                saleOrder.UpdatedDate = DateTime.Now;
-                saleOrder.UpdatedUser = SystemDefine.SystemUser;
-                saleOrder.CashNum = statusResult.PosSeqNo;
-                saleOrder.CashDate = statusResult.PosTime;
-                saleOrder.UpdatedUser = -100;
-                db.SaveChanges();
-            }
-        }
     }
 }

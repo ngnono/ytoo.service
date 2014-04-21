@@ -132,6 +132,9 @@ namespace Intime.OPC.Repository
         /// <returns>IList{OPC_Sale}.</returns>
         IList<OPC_Sale> GetByOrderNo(string orderID, int sectinID);
 
+        IList<SaleDto> GetByOrderNo2(string orderID);
+        
+
         PageResult<OPC_Sale> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize,params int[] sectionIds);
 
         IList<OPC_Sale> GetByShippingCode(string shippingCode);

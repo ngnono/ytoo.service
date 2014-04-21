@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Intime.OPC.Job.Order.Models;
 using Intime.O2O.ApiClient.Domain;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Job.Order.DTO;
 
 namespace Intime.OPC.Job.Order.Repository
 {
