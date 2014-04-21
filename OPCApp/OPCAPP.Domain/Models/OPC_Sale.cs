@@ -35,5 +35,10 @@ namespace OPCApp.Domain.Models
         public DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
         public string StatusName { get; set; }
+
+        /// <summary>
+        /// це╣Й
+        /// </summary>
+        public string StoreName { get; set; }
     }
 }
