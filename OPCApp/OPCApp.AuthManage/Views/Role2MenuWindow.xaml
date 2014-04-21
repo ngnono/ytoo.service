@@ -51,6 +51,7 @@
 
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Header="id" Visibility="Hidden" Width="50" Binding="{Binding Id}" />
+                <DataGridCheckBoxColumn Header="id" Visibility="Hidden" Width="50" Binding="{Binding PraentMenuId}" />
                 <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
