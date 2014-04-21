@@ -10,7 +10,7 @@ namespace OPCApp.Domain.Models
         public int Id { get; set; }
         public string OrderNo { get; set; }
         public string SaleOrderNo { get; set; }
-        public int SalesType { get; set; }
+        public string SalesType { get; set; }
         public int? ShipViaId { get; set; }
         public int Status { get; set; }
         public string ShippingCode { get; set; }
@@ -35,5 +35,10 @@ namespace OPCApp.Domain.Models
         public DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
         public string StatusName { get; set; }
+
+        /// <summary>
+        /// це╣Й
+        /// </summary>
+        public string StoreName { get; set; }
     }
 }

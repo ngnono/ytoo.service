@@ -18,14 +18,14 @@
                 <job-name>OrderStatusJob</job-name>
                 <job-group>OrderStatusGroup</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
-                <cron-expression>0/20 * * * * ?</cron-expression>
+                <cron-expression>0/30 * * * * ?</cron-expression>
             </cron>
         </trigger>
         <job>
             <name>OrderStatusJob</name>
             <group>OrderStatusGroup</group>
             <description>订单状态同步任务</description>
-            <job-type>Intime.OPC.Job.Order.OrderStatusSync.OrderStatusSyncJob, Intime.OPC.Job</job-type>
+            <job-type>Intime.OPC.Job.Order.OrderStatusSync.SaleOrderStatusSyncJob, Intime.OPC.Job</job-type>
             <durable>true</durable>
             <recover>false</recover>
         </job>
@@ -41,7 +41,7 @@
                 <job-name>OrderNotifyJob</job-name>
                 <job-group>OrderNotifyJobGroup</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
-                <cron-expression>0/20 * * * * ?</cron-expression>
+                <cron-expression>0/59 * * * * ?</cron-expression>
             </cron>
         </trigger>
         <job>
@@ -54,24 +54,24 @@
         </job>
     </schedule>
 
-    <!--订单通知html5任务-->
+    <!--库存叠加job-->
     <schedule>
         <trigger>
             <cron>
-                <name>OrderStatusSyncToHtm5JobTigger</name>
-                <group>OrderStatusSyncToHtm5JobTiggerGroup</group>
-                <description>订单状态同步任务触发器</description>
-                <job-name>OrderStatusSyncToHtm5Job</job-name>
-                <job-group>OrderStatusSyncToHtm5JobGroup</job-group>
+                <name>StockAttregateJobTigger</name>
+                <group>StockAttregateJobTiggerGroup</group>
+                <description>库存叠加JOB同步任务触发器</description>
+                <job-name>StockAttregateJob</job-name>
+                <job-group>StockAttregateJob</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
-                <cron-expression>0/20 * * * * ?</cron-expression>
+                <cron-expression>0 0/5 * * * ?</cron-expression>
             </cron>
         </trigger>
         <job>
-            <name>OrderStatusSyncToHtm5Job</name>
-            <group>OrderStatusSyncToHtm5JobGroup</group>
-            <description>订单状态同步任务</description>
-            <job-type>Intime.OPC.Job.Order.OrderStatusSync.OrderStatusSyncToHtm5, Intime.OPC.Job</job-type>
+            <name>StockAttregateJob</name>
+            <group>StockAttregateJob</group>
+            <description>库存叠加JOB</description>
+            <job-type>Intime.OPC.Job.Product.StockAggregate.StockAttregateJob, Intime.OPC.Job</job-type>
             <durable>true</durable>
             <recover>false</recover>
         </job>
@@ -87,7 +87,7 @@
                 <job-name>SpitOrderJob</job-name>
                 <job-group>SpitOrderJobGroup</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
-                <cron-expression>0/59 * * * * ?</cron-expression>
+                <cron-expression>0 0/3 * * * ?</cron-expression>
             </cron>
         </trigger>
         <job>
@@ -110,7 +110,7 @@
                 <job-name>ProductSyncJob</job-name>
                 <job-group>ProductSyncJobGroup</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
-                <cron-expression>0/10 * * * * ?</cron-expression>
+                <cron-expression>0 0/30 * * * ?</cron-expression>
             </cron>
         </trigger>
         <job>
@@ -133,7 +133,7 @@
                 <job-name>ProductPicSyncJob</job-name>
                 <job-group>ProductPicSyncJobGroup</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
-                <cron-expression>0/50 * * * * ?</cron-expression>
+                <cron-expression>0 0/30 * * * ?</cron-expression>
             </cron>
         </trigger>
         <job>
@@ -145,5 +145,7 @@
             <recover>false</recover>
         </job>
     </schedule>
+  
+  
 
 </job-scheduling-data>

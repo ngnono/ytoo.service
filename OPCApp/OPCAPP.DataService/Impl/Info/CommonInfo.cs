@@ -68,11 +68,15 @@ namespace OPCApp.DataService.Impl.Info
 
         public IList<KeyValue> GetOrderStatus()
         {
-            IList<KeyValue> lstKeyValues = new List<KeyValue>();
-            lstKeyValues.Add(new KeyValue(-1, "全部"));
-            lstKeyValues.Add(new KeyValue(0, "未发货"));
-            lstKeyValues.Add(new KeyValue(5, "已发货"));
-            return lstKeyValues;
+
+            try
+            {
+                return RestClient.Get<KeyValue>("trans/GetOrderStatusEnums").ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         #endregion
