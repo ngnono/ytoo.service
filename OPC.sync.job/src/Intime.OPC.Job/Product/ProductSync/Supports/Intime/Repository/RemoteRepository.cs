@@ -125,7 +125,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
             }
 
             var products = AutoMapper.Mapper.Map<IEnumerable<O2O.ApiClient.Domain.Product>, IEnumerable<ProductDto>>(result.Data);
-            return products.GroupBy(x => x.ProductId, x => x).Select(product => product.ToList().OrderByDescending(x => x.WriteTime).FirstOrDefault());
+            return products.GroupBy(x => string.Format("{0}-{1}-{2}", x.ProductId,x.StoreNo,x.SectionId), x => x).Select(product => product.ToList().OrderByDescending(x => x.WriteTime).FirstOrDefault());
             
         }
 

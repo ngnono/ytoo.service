@@ -20,7 +20,7 @@ namespace Intime.O2O.ApiClient.Domain
         /// <summary>
         /// 商品图片写入时间
         /// </summary>
-        [DataMember(Name = "WRITETIME")]
+        [DataMember(Name = "WRITE_TIME")]
         public string WriteTime { get; set; }
 
         /// <summary>
