@@ -539,5 +539,21 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
             return this.RenderSuccess<dynamic>(null);
         }
 
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Latest_BankInfo(int authuid)
+        {
+            var bankInfo = Context.Set<IMS_AssociateIncomeRequestEntity>().Where(ia => ia.UserId == authuid).OrderByDescending(ia => ia.CreateDate).FirstOrDefault();
+            if (bankInfo != null)
+                return this.RenderSuccess<dynamic>(c => c.Data = new
+                {
+                    bank = bankInfo.BankName,
+                    bank_code = bankInfo.BankCode,
+                    bank_no = bankInfo.BankNo,
+                    user_name = bankInfo.BankAccountName
+                });
+            else
+                return this.RenderSuccess<dynamic>(c => c.Data = new { });
+        }
+
     }
 }
