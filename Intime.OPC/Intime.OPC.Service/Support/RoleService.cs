@@ -53,15 +53,20 @@ namespace Intime.OPC.Service.Support
         {
             foreach (var uId in roleUserDto.UserIds)
             {
-                var userRole = new OPC_AuthRoleUser();
-                userRole.CreateDate = DateTime.Now;
-                userRole.CreateUserId = userId;
-                userRole.UpdateDate = DateTime.Now;
-                userRole.UpdateUserId = userId;
-                userRole.OPC_AuthUserId = uId;
-                userRole.OPC_AuthRoleId = roleUserDto.RoleId;
+                bool bl = _roleUserRepository.UserHasRole(uId, roleUserDto.RoleId);
+                if (!bl)
+                {
+                    var userRole = new OPC_AuthRoleUser();
+                    userRole.CreateDate = DateTime.Now;
+                    userRole.CreateUserId = userId;
+                    userRole.UpdateDate = DateTime.Now;
+                    userRole.UpdateUserId = userId;
+                    userRole.OPC_AuthUserId = uId;
+                    userRole.OPC_AuthRoleId = roleUserDto.RoleId;
 
-                _roleUserRepository.Create(userRole);
+                    _roleUserRepository.Create(userRole);
+                }
+                
             }
             return true;
         }
