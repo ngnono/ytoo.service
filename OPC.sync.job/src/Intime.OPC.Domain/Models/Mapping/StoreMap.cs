@@ -38,9 +38,6 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.RMAPhone)
                 .HasMaxLength(20);
 
-            this.Property(t => t.Channel)
-                .HasMaxLength(50);
-
             // Table & Column Mappings
             this.ToTable("Store");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -66,7 +63,6 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.RMAZipCode).HasColumnName("RMAZipCode");
             this.Property(t => t.RMAPerson).HasColumnName("RMAPerson");
             this.Property(t => t.RMAPhone).HasColumnName("RMAPhone");
-            this.Property(t => t.Channel).HasColumnName("Channel");
         }
     }
 }

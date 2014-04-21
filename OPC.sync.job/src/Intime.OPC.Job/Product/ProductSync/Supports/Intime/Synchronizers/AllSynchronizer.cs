@@ -135,6 +135,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Synchronizers
                     {
                         // 这里异常处理防止接口出现问题，造成别的商品同步也会出现问题
                         Log.ErrorFormat("同步商品发生异常,proudctId:{0}", product.ProductId);
+                        Log.Error(ex);
                     }
                 }
 

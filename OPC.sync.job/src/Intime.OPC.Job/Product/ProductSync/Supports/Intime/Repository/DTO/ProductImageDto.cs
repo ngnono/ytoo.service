@@ -42,7 +42,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository.DTO
         /// <summary>
         /// 商品图片写入时间
         /// </summary>
-        [DataMember(Name = "WRITETIME")]
+        [DataMember(Name = "WRITE_TIME")]
         public System.DateTime WriteTime { get; set; }
 
         public string GroupByKey

@@ -28,6 +28,5 @@ namespace Intime.OPC.Domain.Models
         public string RMAZipCode { get; set; }
         public string RMAPerson { get; set; }
         public string RMAPhone { get; set; }
-        public string Channel { get; set; }
     }
 }

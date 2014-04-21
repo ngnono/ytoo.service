@@ -35,8 +35,6 @@ namespace Intime.OPC.Domain.Models.Mapping
                 .IsFixedLength()
                 .HasMaxLength(1);
 
-            this.Property(t => t.Channel)
-                .HasMaxLength(50);
 
             // Table & Column Mappings
             this.ToTable("Brand");
@@ -53,7 +51,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.Group).HasColumnName("Group");
             this.Property(t => t.ChannelBrandId).HasColumnName("ChannelBrandId");
-            this.Property(t => t.Channel).HasColumnName("Channel");
+
         }
     }
 }
