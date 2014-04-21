@@ -25,7 +25,7 @@
                 <Button Background="LightGray" Width="50" Command="{Binding OKCommand}">
                     <StackPanel>
                         <Image Source="/Image/保存.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">保存</TextBlock>
+                        <TextBlock HorizontalAlignment="Center">保存设置</TextBlock>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -44,7 +44,7 @@
                 <Grid Grid.Column="0" Grid.Row="0" Background="LightGray" Margin="10">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Width="90" Text="用户Key" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        <TextBox Foreground="Blue" Width="350" Height="25" 
+                        <TextBox Foreground="Blue" Width="350" Height="25" Text="{Binding Model.UserKey}"
                                  Margin="0,4" />
                     </StackPanel>
                 </Grid>
@@ -52,7 +52,7 @@
                 <Grid Grid.Row="1" Grid.Column="0" Background="LightGray" Margin="10">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Width="90" Text="口令" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        <TextBox Foreground="Blue" Width="350" Height="25"  Margin="0,4" />
+                        <TextBox Foreground="Blue" Width="350" Height="25" Text="{Binding Model.Password}" Margin="0,4" />
                     </StackPanel>
                 </Grid>
 
@@ -60,13 +60,13 @@
                 <Grid Grid.Row="2" Grid.Column="0" Background="LightGray" Margin="10">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Width="90" Text="服务器地址" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        <TextBox Foreground="Blue" Width="350" Height="25" Margin="0,4" />
+                        <TextBox Foreground="Blue" Width="350" Height="25" Text="{Binding Model.ServiceUrl}" Margin="0,4" />
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="3" Grid.Column="0" Background="LightGray" Margin="10">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Width="90" Text="版本号" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        <TextBox Foreground="Blue" Width="350" Height="25"  Margin="0,4" />
+                        <TextBox Foreground="Blue" Width="350" Height="25" Text="{Binding Model.Version}" Margin="0,4" />
                     </StackPanel>
                 </Grid>
 
