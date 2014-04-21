@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.Infrastructure;
 
 namespace OPCApp.Main.ViewModels
 {
@@ -26,7 +27,8 @@ namespace OPCApp.Main.ViewModels
         public ConfigViewModel()
         {
             Model=new UserConfig();
-       //     OKCommand = new DelegateCommand(SaveConfig);
+            ReadConfig();
+            //     OKCommand = new DelegateCommand(SaveConfig);
         }
 
         public void ReadConfig()
@@ -44,7 +46,12 @@ namespace OPCApp.Main.ViewModels
             cfa.AppSettings.Settings["consumerSecret"].Value = Model.Password;
             cfa.AppSettings.Settings["apiAddress"].Value =Model.ServiceUrl;
             cfa.AppSettings.Settings["version"].Value = Model.Version;
-            cfa.Save();  
+            cfa.Save();
+            AppEx.Config.Password = Model.Password;
+            AppEx.Config.ServiceUrl = Model.ServiceUrl;
+            AppEx.Config.UserKey = Model.UserKey;
+            AppEx.Config.Version = Model.Version;
+
         }
 
     }

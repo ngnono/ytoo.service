@@ -22,6 +22,10 @@ namespace OPCApp.Domain
     /// </summary>
     public class LoginModel : ILoginModel
     {
+        public LoginModel()
+        {
+        }
+
         public LoginModel(int userId, string userName, string token, string shoppeId, DateTime expires)
         {
             UserID = userId;
@@ -60,5 +64,7 @@ namespace OPCApp.Domain
         /// </summary>
         /// <value>The shoppe identifier.</value>
         public string ShoppeID { get; private set; }
+
+        public int ErrorCode { get;  set; }
     }
 }

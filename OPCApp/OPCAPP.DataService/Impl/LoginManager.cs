@@ -53,7 +53,8 @@ namespace OPCApp.DataService.Impl
             TokenModel tk = RestClient.Post<LoginInfo, TokenModel>("account/token", info);
             if (null == tk)
             {
-                return null;
+                var lm = new LoginModel {ErrorCode = RestClient.CurStatusCode};
+                return lm;
             }
             IsLogin = true;
             RestClient.SetToken(tk.AccessToken);

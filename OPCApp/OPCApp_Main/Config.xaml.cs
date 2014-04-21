@@ -20,6 +20,8 @@ namespace OPCApp.Main
     /// <summary>
     /// Config.xaml 的交互逻辑
     /// </summary>
+    [Export(typeof(Config))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class Config
     {
         public ConfigViewModel ViewModel
@@ -47,6 +49,11 @@ namespace OPCApp.Main
         {
             this.DialogResult = true;
             this.Close();
+        }
+
+        public void WirteConfig()
+        {
+           ViewModel.WriteConfig();
         }
     }
 }
