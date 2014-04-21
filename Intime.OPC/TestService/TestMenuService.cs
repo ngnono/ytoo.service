@@ -10,14 +10,14 @@ namespace TestService
 {
     
     [TestClass]
-    public class TestAccountService : TestService<IAccountService>
+    public class TestMenuService : TestService<IMenuService>
     {
 
         [TestMethod]
         public void TestGet()
         {
-            var dd = Service.Get("wxh", "123456");
-            Assert.AreEqual(dd.Name,"wxh");
+            var dd = Service.SelectByUserID(0);
+            Assert.IsNotNull(dd);
         }
     }
 }

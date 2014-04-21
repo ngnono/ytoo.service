@@ -28,7 +28,7 @@ namespace Intime.OPC.Service.Support
 
         public bool Add(OPC_AuthUser t)
         {
-            t.Password ="123456".MD5CSP();
+            t.Password = t.Password.MD5CSP();
             return  base.Add(t);
         }
 
