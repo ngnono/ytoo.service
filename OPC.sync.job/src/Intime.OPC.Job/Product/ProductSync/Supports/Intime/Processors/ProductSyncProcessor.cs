@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 
@@ -24,6 +25,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
         private readonly ICategorySyncProcessor _categorySyncProcessor;
         private readonly ISectionSyncProcessor _sectionSyncProcessor;
         private readonly IChannelMapper _channelMapper;
+        private readonly int DefaultTagId = int.Parse(ConfigurationManager.AppSettings["ERPSYN_DEFAULT_TAG"]);
 
         public ProductSyncProcessor(IRemoteRepository remoteRepository, IChannelMapper channelMapper)
         {
@@ -236,7 +238,8 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                             x.ChannelCategoryCode == channelProduct.CategoryId2 ||
                             x.ChannelCategoryCode == channelProduct.CategoryId3 ||
                             x.ChannelCategoryCode == channelProduct.CategoryId4);
-                return map == null ? 0 : map.TagId;
+
+                return map == null ? DefaultTagId : map.TagId;
             }
         }
 
