@@ -46,4 +46,11 @@ namespace Intime.OPC.Domain.Dto
         /// <value>The store i ds.</value>
         public IList<int> StoreIDs { get; set; }
     }
+
+    public class ChangePasswordDto
+    {
+        public int UserID { get; set; }
+        public string OldPassword { get; set; }
+        public string NewPassword { get; set; }
+    }
 }

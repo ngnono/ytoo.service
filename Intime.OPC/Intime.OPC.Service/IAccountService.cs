@@ -20,5 +20,6 @@ namespace Intime.OPC.Service
 
 
         void ResetPassword(int userId);
+        void ChangePassword(int userid, string oldpassword, string newpassword);
     }
 }

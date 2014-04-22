@@ -97,7 +97,7 @@ namespace Intime.OPC.Repository.Support
                     dto.SectionCode = o.SaleDetail.SectionCode;
                     dto.SellCount = o.SaleDetail.SaleCount;
                     dto.Size = o.OrderItem.SizeValueName;
-                    dto.StoreName = o.Stroe.Name;
+                    dto.StoreName = o.Stroe==null?"": o.Stroe.Name;
                     dto.StyleNo = o.OrderItem.StoreItemNo;
 
                     lstDto.Add(dto);

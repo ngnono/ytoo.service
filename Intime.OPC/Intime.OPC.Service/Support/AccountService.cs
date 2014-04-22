@@ -127,6 +127,21 @@ namespace Intime.OPC.Service.Support
             }
         }
 
+        public void ChangePassword(int userid, string oldpassword, string newpassword)
+        {
+            var u = _accountRepository.GetByID(userid);
+            if (u == null)
+            {
+                throw new Exception("用户不存在");
+            }
+            if (u.Password != oldpassword)
+            {
+                throw new Exception("密码不正确");
+            }
+            u.Password = newpassword.MD5CSP();
+            _accountRepository.Update(u);
+        }
+
         #endregion
 
         protected PageResult<AuthUserDto> OpcResult2Result(PageResult<OPC_AuthUser> result)
