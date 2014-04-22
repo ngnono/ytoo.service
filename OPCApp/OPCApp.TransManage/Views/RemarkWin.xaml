@@ -30,17 +30,17 @@
         </Grid>
         <Grid Grid.Row="2">
             <StackPanel Orientation="Horizontal" Background="LightGray" HorizontalAlignment="Right" Width="175">
-                <Button Background="LightGray" Width="50" Margin="0 0 30 0" Command="{Binding CommandBack}">
+                <Button Background="LightGray" Width="Auto" Margin="0 0 30 0" Command="{Binding CommandBack}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/删除.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">取消</TextBlock>
+                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">取消</TextBlock>
                     </StackPanel>
                 </Button>
 
-                <Button Background="LightGray" Width="50" Command="{Binding CommandSave}">
+                <Button Background="LightGray" Width="Auto" Command="{Binding CommandSave}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/保存.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">保存</TextBlock>
+                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">保存</TextBlock>
                     </StackPanel>
                 </Button>
             </StackPanel>

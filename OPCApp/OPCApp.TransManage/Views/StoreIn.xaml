@@ -20,22 +20,22 @@
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
 
-                <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
+                <Button Background="LightGray" Width="Auto" Command="{Binding CommandSearch}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/查询.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding CommandSoldOut}">
+                <Button Background="LightGray" Width="Auto" Command="{Binding CommandSoldOut}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">缺货</TextBlock>
+                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">缺货</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Command="{Binding CommandStoreInSure}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">销售单入库确认</TextBlock>
+                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">销售单入库确认</TextBlock>
                     </StackPanel>
                 </Button>
 
