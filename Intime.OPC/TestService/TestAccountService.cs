@@ -25,5 +25,12 @@ namespace TestService
             var dd = Service.DeleteById(20);
             Assert.AreNotEqual(dd,true);
         }
+
+        [TestMethod]
+        public void TestGetUsersByRoleID()
+        {
+            var dd = Service.GetUsersByRoleID(6,1,1000);
+            Assert.AreEqual(dd, "wxh");
+        }
     }
 }
