@@ -42,12 +42,12 @@ namespace OPCApp.Main
             string pwd = logonPwd.Password;
             if (string.IsNullOrEmpty(name))
             {
-                MessageBox.Show("用户名为空", "提示");
+                MessageBox.Show("登录名为空", "提示");
                 return;
             }
             if (string.IsNullOrEmpty(pwd))
             {
-                MessageBox.Show("用户名为空", "提示");
+                MessageBox.Show("密码为空", "提示");
                 return;
             }
             bool bl = false;
