@@ -621,7 +621,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulAuthorize]
-        public ActionResult Refuse(int trans_id, int authuid)
+        public ActionResult RefuseByTransId(int trans_id, int authuid)
         {
             var trans = _transRepo.Find(trans_id);
             if (trans == null)
@@ -767,7 +767,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 items.Add(new
                 {
                     recharged = o.order.Status == (int)GiftCardOrderStatus.Recharge,
-                    trans_id = o.transfer == null ? o.transfer.Id : 0,
+                    trans_id = o.transfer != null ? o.transfer.Id : 0,
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     purchase_date = o.order.CreateDate,
