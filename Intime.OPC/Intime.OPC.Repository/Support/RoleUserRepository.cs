@@ -1,4 +1,5 @@
-﻿using Intime.OPC.Domain.Models;
+﻿using System.Linq;
+using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
 namespace Intime.OPC.Repository.Support
@@ -9,6 +10,16 @@ namespace Intime.OPC.Repository.Support
         {
             var lst = Select(t => t.OPC_AuthRoleId == roleId && t.OPC_AuthUserId == uId);
             return lst.Count != 0;
+        }
+
+        public void DeleteByUserID(int id)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var lst = db.OPC_AuthRoleUser.Where(t => t.OPC_AuthUserId == id).ToList();
+                db.OPC_AuthRoleUser.RemoveRange(lst);
+                db.SaveChanges();
+            }
         }
     }
 }

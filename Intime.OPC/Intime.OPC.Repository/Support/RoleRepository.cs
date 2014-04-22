@@ -75,7 +75,7 @@ namespace Intime.OPC.Repository.Support
 
         public PageResult<OPC_AuthRole> GetAll(int pageIndex, int pageSize)
         {
-            return Select2<OPC_AuthRole, int>(t => t.IsValid && t.IsSystem == false, t => t.Id,true, pageIndex, pageSize);
+            return Select2<OPC_AuthRole, int>(t => t.IsSystem == false, t => t.Id,true, pageIndex, pageSize);
         }
 
         public PageResult<OPC_AuthRole> GetByUserID(int userID, int pageIndex, int pageSize = 20)
