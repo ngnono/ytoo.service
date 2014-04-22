@@ -96,8 +96,8 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                bool bFalg = RestClient.Put("account/deleteuser", user.Id);
-                return new ResultMsg {IsSuccess = bFalg, Msg = "删除错误"};
+                bool bFlag = RestClient.Put("account/deleteuser", user.Id);
+                return new ResultMsg {IsSuccess = bFlag, Msg = "删除错误"};
             }
             catch (Exception ex)
             {
