@@ -53,6 +53,12 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
 
+        [HttpPost]
+        public IHttpActionResult ChangePassword(int userid, string oldpassword,string newpassword)
+        {
+            return DoAction(() => _accountService.ChangePassword(userid, oldpassword, newpassword));
+        }
+
         [HttpPut]
         public IHttpActionResult UpdateUser([FromBody] OPC_AuthUser user)
         {
