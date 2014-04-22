@@ -57,8 +57,13 @@
     <Reference Include="Microsoft.Practices.Prism.Mvvm">
       <HintPath>..\..\OPCApp\DllFile\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ReportViewer.WinForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\Microsoft.ReportViewer.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Prism.Interfaces">
       <HintPath>..\..\OPCApp\DllFile\Prism.Interfaces.dll</HintPath>
@@ -68,9 +73,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows.Forms">
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -250,10 +253,6 @@
     <Resource Include="image\验证.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OPCApp.BaseInfoManage\OPCApp.BaseInfoManage.csproj">
-      <Project>{23d22b9e-465d-415c-92ea-52b93465a55e}</Project>
-      <Name>OPCApp.BaseInfoManage</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
       <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
       <Name>OPCApp.Common</Name>

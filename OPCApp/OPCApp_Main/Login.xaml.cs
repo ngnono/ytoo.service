@@ -66,12 +66,21 @@ namespace OPCApp.Main
             }
             if (!bl)
             {
-                if (AppEx.LoginModel.ErrorCode == 404)
+                if (AppEx.LoginModel !=null && AppEx.LoginModel.ErrorCode >= 400)
                 {
-                    var config = AppEx.Container.GetInstance<Config>();
-                    if (config.ShowDialog() == true)
+                    try
                     {
-                        config.WirteConfig();
+                        var config = AppEx.Container.GetInstance<Config>();
+                        if (config.ShowDialog() == true)
+                        {
+                            config.WirteConfig();
+                            //重启应用
+
+                        }
+                    }
+                    catch(Exception Ex)
+                    {
+                        MessageBox.Show("修改配置文件，保存失败，请把配置文件只读属性去掉！");
                     }
                     return;
                 }

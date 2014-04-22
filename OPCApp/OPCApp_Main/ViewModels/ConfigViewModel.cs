@@ -41,16 +41,23 @@ namespace OPCApp.Main.ViewModels
 
         public void WriteConfig()
         {
-            Configuration cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            cfa.AppSettings.Settings["consumerKey"].Value = Model.UserKey;
-            cfa.AppSettings.Settings["consumerSecret"].Value = Model.Password;
-            cfa.AppSettings.Settings["apiAddress"].Value =Model.ServiceUrl;
-            cfa.AppSettings.Settings["version"].Value = Model.Version;
-            cfa.Save();
-            AppEx.Config.Password = Model.Password;
-            AppEx.Config.ServiceUrl = Model.ServiceUrl;
-            AppEx.Config.UserKey = Model.UserKey;
-            AppEx.Config.Version = Model.Version;
+            try
+            {
+                Configuration cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                cfa.AppSettings.Settings["consumerKey"].Value = Model.UserKey;
+                cfa.AppSettings.Settings["consumerSecret"].Value = Model.Password;
+                cfa.AppSettings.Settings["apiAddress"].Value = Model.ServiceUrl;
+                cfa.AppSettings.Settings["version"].Value = Model.Version;
+                cfa.Save();
+                AppEx.Config.Password = Model.Password;
+                AppEx.Config.ServiceUrl = Model.ServiceUrl;
+                AppEx.Config.UserKey = Model.UserKey;
+                AppEx.Config.Version = Model.Version;
+            }
+            catch (Exception Ex)
+            {
+                throw Ex;    
+            }
 
         }
 

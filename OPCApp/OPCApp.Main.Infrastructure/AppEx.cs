@@ -20,6 +20,11 @@ namespace OPCApp.Infrastructure
             Config = new DefaultConfig();
         }
 
+        public static void InitConfig()
+        {
+            Config = new DefaultConfig();
+
+        }
         public static bool Login(string userName, string password)
         {
             LoginModel = logManager.Login(userName, password);

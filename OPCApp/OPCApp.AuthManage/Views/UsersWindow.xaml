@@ -18,13 +18,13 @@
                 <Button Background="LightGray" Width="Auto" Command="{Binding OkCommand}">
                     <StackPanel>
                         <Image Source="/Image/保存.png" Stretch="None" />
-                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">确定</TextBlock>
+                        <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">确定</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="Auto" Command="{Binding CancelCommand}">
                     <StackPanel>
                         <Image Source="/Image/删除.png" Stretch="None" />
-                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">取消</TextBlock>
+                        <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">取消</TextBlock>
                     </StackPanel>
                 </Button>
 
