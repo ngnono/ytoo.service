@@ -34,6 +34,7 @@ namespace com.intime.fashion.common
         private static readonly string _grouphttpaction_exchange = ConfigurationManager.AppSettings["grouphttpaction_exchange"];
         private static string _appStoreNoInGroup = ConfigurationManager.AppSettings["appstorenoingroup"];
         public static readonly int COMBO_EXPIRED_DAYS = int.Parse(ConfigurationManager.AppSettings["COMBO_EXPIRED_DAYS"]);
+        public static readonly int MAX_COMBO_ONLINE = int.Parse(ConfigurationManager.AppSettings["MAX_COMBO_ONLINE"]);
         public static int GetCacheSeed()
         {
             var t = GetAppConfigParamsValueOrDefault("cacheseedfactory", "1");

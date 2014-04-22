@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.intime.fashion.common;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -316,7 +317,7 @@ namespace Yintai.Hangzhou.Service
                     response.TemplateId = associateEntity.TemplateId;
                     response.OperateRight = associateEntity.OperateRight;
                     response.AssociateId = associateEntity.Id;
-                    response.MaxComboItems = 4;
+                    response.MaxComboItems = ConfigManager.MAX_COMBO_ONLINE;
                 }
             }
             result.Data = response;
