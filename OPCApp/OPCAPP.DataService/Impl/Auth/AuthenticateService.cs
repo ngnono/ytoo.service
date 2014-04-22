@@ -83,12 +83,12 @@ namespace OPCApp.DataService.Impl.Auth
         {
             try
             {
-                bool bFalg = RestClient.Post("account/ChangePassword",new {userid=user.Id,oldpassword=user.Password,newPwd=newPwd});
-                return new ResultMsg { IsSuccess = bFalg, Msg = "删除错误" };
+                bool bFalg = RestClient.Post("account/ChangePassword", new { UserID = user.Id, OldPassword = user.Password, NewPassword= newPwd });
+                return new ResultMsg { IsSuccess = bFalg, Msg = "修改密码错误" };
             }
             catch (Exception ex)
             {
-                return new ResultMsg { IsSuccess = false, Msg = "保存失败" };
+                return new ResultMsg { IsSuccess = false, Msg = "操作失败" };
             }
         }
 

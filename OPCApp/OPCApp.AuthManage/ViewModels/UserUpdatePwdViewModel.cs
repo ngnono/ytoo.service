@@ -13,6 +13,7 @@ using OPCApp.Infrastructure;
 namespace OPCApp.AuthManage.ViewModels
 {
     [Export(typeof(UserUpdatePwdViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserUpdatePwdViewModel : BindableBase
     {
         private UpdatePwdModel _modelConfig;
