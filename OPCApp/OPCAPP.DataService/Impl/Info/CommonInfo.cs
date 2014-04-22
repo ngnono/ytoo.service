@@ -153,7 +153,7 @@ namespace OPCApp.DataService.Impl.Info
         {
             try
             {
-                return RestClient.Get<KeyValue>("trans/GetRmaStatus").ToList();
+                return RestClient.Get<KeyValue>("trans/GetRmaStatusEnums").ToList();
             }
             catch (Exception ex)
             {
