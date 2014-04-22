@@ -28,34 +28,34 @@
 
 
                 <Button Background="LightGray" Width="Auto">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/导出.png" Stretch="None" />
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">导出</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="Auto" Command="{Binding SetStopRoleCommand}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/解挂.png" Stretch="None" />
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">是否启用</TextBlock>
                     </StackPanel>
                 </Button>
 
                 <Button Background="LightGray" Width="Auto" Command="{Binding AddCommand}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/新增.png" Stretch="None" />
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">增加</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="Auto" Command="{Binding EditCommand}"
                         CommandParameter="{Binding Models.CurrentItem}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/修改.png" Stretch="None" />
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">编辑</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="Auto" Command="{Binding DeleteCommand}"
                         CommandParameter="{Binding Models.CurrentItem}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/删除.png" Stretch="None" />
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">删除</TextBlock>
                     </StackPanel>

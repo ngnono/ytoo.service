@@ -15,7 +15,7 @@
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                <Button Background="LightGray" Width="100" Command="{Binding AuthorizationUserCommand}">
+                <Button Background="LightGray" Width="Auto" Command="{Binding AuthorizationUserCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/导出.png" Stretch="None" />
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">授权用户角色</TextBlock>
@@ -27,7 +27,7 @@
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">添加用户</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="100" Command="{Binding DeleteCommand}">
+                <Button Background="LightGray" Width="Auto" Command="{Binding DeleteCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/删除.png" Stretch="None" />
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">删除选中用户</TextBlock>
