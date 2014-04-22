@@ -178,20 +178,9 @@
     <Resource Include="Image\20140223054759683_easyicon_net_48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Image\保存.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\删除.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Image\变更单位.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\打印.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\导出.png" />
@@ -210,9 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\处理.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Image\查询.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\验证.png" />
@@ -246,6 +232,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon166.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\查询.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\打印.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\保存.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\删除.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
