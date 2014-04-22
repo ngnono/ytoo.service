@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
 using Microsoft.Practices.Prism.Commands;
+using OPCApp.AuthManage.Views;
 using OPCApp.DataService.Interface;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
@@ -29,6 +30,7 @@ namespace OPCApp.AuthManage.ViewModels
             InitUser();
         }
 
+        public DelegateCommand UpdatePwdCommand { get; set; }
         public DelegateCommand AddOrgCommand { get; set; }
         public DelegateCommand EditOrgCommand { get; set; }
         public DelegateCommand DeleteOrgCommand { get; set; }
@@ -100,7 +102,7 @@ namespace OPCApp.AuthManage.ViewModels
             AddOrgCommand = new DelegateCommand(AddOrg);
             EditOrgCommand = new DelegateCommand(EditOrg);
             DeleteOrgCommand = new DelegateCommand(DeleteOrg);
-
+         
             List<OPC_OrgInfo> orgList = AppEx.Container.GetInstance<IOrgService>().Search().ToList();
             Commands = new ReadOnlyCollection<DelegateCommand>(new[]
             {
@@ -226,6 +228,7 @@ namespace OPCApp.AuthManage.ViewModels
             PrResult = new PageDataResult<OPC_AuthUser>();
             CurModel = new OPC_AuthUser();
             RePasswordCommand = new DelegateCommand(RePassword);
+            UpdatePwdCommand = new DelegateCommand(UpdatePassWord);
         }
 
         private void RePassword()
@@ -268,6 +271,22 @@ namespace OPCApp.AuthManage.ViewModels
         protected override IBaseDataService<OPC_AuthUser> GetDataService()
         {
             return AppEx.Container.GetInstance<IAuthenticateService>();
+        }
+
+        private void UpdatePassWord()
+        {
+            OPC_AuthUser user = CurModel;
+            if (user == null)
+            {
+                MessageBox.Show("请选择要操作的用户", "提示");
+                return;
+            }
+            var userPadWin = AppEx.Container.GetInstance<UserUpdatePwd>();
+            if (userPadWin.ShowDialog() == true)
+            {
+                ResultMsg resultMsg = AppEx.Container.GetInstance<IAuthenticateService>().UpdatePassword(user,userPadWin.ViewModel.Model.NewPassword);
+                MessageBox.Show(resultMsg.IsSuccess ? "重置密码成功" : "操作失败", "提示");
+            }
         }
     }
 }

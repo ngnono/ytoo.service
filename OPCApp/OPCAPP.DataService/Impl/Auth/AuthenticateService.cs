@@ -79,6 +79,19 @@ namespace OPCApp.DataService.Impl.Auth
             }
         }
 
+        public ResultMsg UpdatePassword(OPC_AuthUser user, string newPwd)
+        {
+            try
+            {
+                bool bFalg = RestClient.Post("account/ChangePassword",new {userid=user.Id,oldpassword=user.Password,newPwd=newPwd});
+                return new ResultMsg { IsSuccess = bFalg, Msg = "删除错误" };
+            }
+            catch (Exception ex)
+            {
+                return new ResultMsg { IsSuccess = false, Msg = "保存失败" };
+            }
+        }
+
         public ResultMsg Delete(OPC_AuthUser user)
         {
             try

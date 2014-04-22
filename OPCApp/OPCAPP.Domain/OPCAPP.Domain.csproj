@@ -112,6 +112,7 @@
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\ShipVia.cs" />
     <Compile Include="Models\Store.cs" />
+    <Compile Include="Models\UpdatePwdModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="RoleMenuDto.cs" />

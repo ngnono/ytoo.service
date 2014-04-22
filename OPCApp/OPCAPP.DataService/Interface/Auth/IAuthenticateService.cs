@@ -8,5 +8,7 @@ namespace OPCApp.DataService.Interface
         string Login(string userName, string password);
         bool SetIsStop(OPC_AuthUser user);
         ResultMsg ResetPassword(OPC_AuthUser user);
+
+        ResultMsg UpdatePassword(OPC_AuthUser user,string newPwd);
     }
 }
