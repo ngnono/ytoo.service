@@ -42,9 +42,14 @@ namespace OPCApp.DataService.Impl
                 string paras = string.Format("UserId={0}", AppEx.LoginModel.UserID);
                     //AppEx.LoginModel.UserID); //1 update curUserId 
                 IList<OPC_AuthMenu> listMenu = RestClient.Get<OPC_AuthMenu>("menu/loadmenu", paras);
+                if (listMenu!=null)
+                {
+                    listMenu = GetDistnct(listMenu.ToList());
+                }
+              
                 List<OPC_AuthMenu> groupMenu1 = listMenu.Where(e => e.PraentMenuId == e.Id).ToList();
                 List<MenuGroup> groupMenu =
-                    groupMenu1.Select(e => new MenuGroup {Id = e.Id, Sort = e.Sort, MenuName = e.MenuName})
+                    groupMenu1.Distinct().Select(e => new MenuGroup {Id = e.Id, Sort = e.Sort, MenuName = e.MenuName})
                         .OrderBy(e => e.Sort)
                         .ToList();
                 foreach (MenuGroup grpMenu in groupMenu)
@@ -64,6 +69,29 @@ namespace OPCApp.DataService.Impl
             {
                 return new List<MenuGroup>();
             }
+        }
+        /// <summary>
+        /// 待修改
+        /// </summary>
+        /// <param name="listMenu"></param>
+        /// <returns></returns>
+        private List<OPC_AuthMenu> GetDistnct(List<OPC_AuthMenu> listMenu)
+        {
+            var list = new List<OPC_AuthMenu>();
+            var listKey = new List<int>();
+            foreach (var item in listMenu)
+            {
+                if (listKey.Contains(item.Id))
+                {
+                    continue;
+                }
+                else
+                {
+                    list.Add(item);
+                    listKey.Add(item.Id);
+                }
+            }
+            return list;
         }
 
         public IEnumerable<OPC_AuthMenu> GetMenuList()
