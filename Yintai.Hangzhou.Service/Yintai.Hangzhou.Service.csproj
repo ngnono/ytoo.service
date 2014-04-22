@@ -102,6 +102,7 @@
     <Compile Include="Impl\UserRightService.cs" />
     <Compile Include="Impl\UserService.cs" />
     <Compile Include="Logic\AssociateIncomeLogic.cs" />
+    <Compile Include="Logic\ComboLogic.cs" />
     <Compile Include="Logic\IncomeRule\AssociateIncomeAccount.cs" />
     <Compile Include="Logic\IncomeRule\IIncomeRule.cs" />
     <Compile Include="Logic\IncomeRule\IncomeRuleFix.cs" />

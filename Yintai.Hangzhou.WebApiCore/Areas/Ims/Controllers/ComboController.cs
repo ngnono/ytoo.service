@@ -56,6 +56,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             if (products.Count() < 1)
                 return this.RenderError(r => r.Message = "商品类型不正确");
             var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
+            var canOnline = ComboLogic.IfCanOnline(authuid);
             using (var ts = new TransactionScope())
             {
                 //step1: create combo
@@ -67,7 +68,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     OnlineDate = DateTime.Now,
                     Price = products.Sum(p => p.Price),
                     Private2Name = request.Private_To ?? string.Empty,
-                    Status = (int)DataStatus.Normal,
+                    Status = canOnline?(int)DataStatus.Normal:(int)DataStatus.Default,
                     UpdateDate = DateTime.Now,
                     UpdateUser = authuid,
                     UserId = authuid,
@@ -334,5 +335,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             });
 
         }
+
+       
     }
 }

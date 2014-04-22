@@ -12,6 +12,7 @@ using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
+using Yintai.Hangzhou.Service.Logic;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
@@ -245,6 +246,11 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                                 .FirstOrDefault();
             if (comboItemEntity == null)
                 return this.RenderError(r => r.Message = "无权操作该搭配");
+            if (request.Item_Type == (int)ComboType.Product && request.Is_Online)
+            {
+                if (!ComboLogic.IfCanOnline(authuid))
+                    return this.RenderError(r => r.Message = "店铺上线搭配数量超出限制！");
+            }
             using (var ts = new TransactionScope())
             {
                 comboItemEntity.Status = request.Is_Online?(int)DataStatus.Normal:(int)DataStatus.Default;
