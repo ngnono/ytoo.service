@@ -15,16 +15,16 @@
 
         <StackPanel Orientation="Horizontal" Background="LightGray" Grid.Row="0">
 
-            <Button Background="LightGray" Width="50" Command="{Binding CancelCommand}">
-                <StackPanel>
+            <Button Background="LightGray" Width="Auto" Command="{Binding CancelCommand}">
+                <StackPanel Orientation="Horizontal">
                     <Image Source="/Image/删除.png" Stretch="None" />
-                    <TextBlock HorizontalAlignment="Center">取消</TextBlock>
+                    <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">取消</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Background="LightGray" Width="50" Command="{Binding OKCommand}">
-                <StackPanel>
+            <Button Background="LightGray" Width="Auto" Command="{Binding OKCommand}">
+                <StackPanel Orientation="Horizontal">
                     <Image Source="/Image/保存.png" Stretch="None" />
-                    <TextBlock HorizontalAlignment="Center">保存</TextBlock>
+                    <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">保存</TextBlock>
                 </StackPanel>
             </Button>
         </StackPanel>

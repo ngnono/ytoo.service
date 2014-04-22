@@ -16,27 +16,27 @@
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
                 <Button Background="LightGray" Width="100" Command="{Binding AuthorizationUserCommand}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/导出.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">授权用户角色</TextBlock>
+                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">授权用户角色</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding AddUserWindowCommand}">
-                    <StackPanel>
+                <Button Background="LightGray" Width="Auto" Command="{Binding AddUserWindowCommand}">
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/解挂.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">添加用户</TextBlock>
+                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">添加用户</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="100" Command="{Binding DeleteCommand}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/删除.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">删除选中用户</TextBlock>
+                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">删除选中用户</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="50" Command="{Binding RefreshCommand}">
-                    <StackPanel>
+                <Button Background="LightGray" Width="Auto" Command="{Binding RefreshCommand}">
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/image/处理.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">刷新</TextBlock>
+                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">刷新</TextBlock>
                     </StackPanel>
                 </Button>
 
