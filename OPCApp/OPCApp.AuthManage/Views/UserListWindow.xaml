@@ -87,6 +87,12 @@
                         <TextBlock HorizontalAlignment="Center">删除</TextBlock>
                     </StackPanel>
                 </Button>
+                <Button Background="LightGray" Width="50" Command="{Binding UpdatePwdCommand}">
+                    <StackPanel>
+                        <Image Source="/image/新增.png" Stretch="None" />
+                        <TextBlock HorizontalAlignment="Center">修改密码</TextBlock>
+                    </StackPanel>
+                </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding RePasswordCommand}">
                     <StackPanel>
                         <Image Source="/image/验证.png" Stretch="None" />

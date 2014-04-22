@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using System.Windows.Controls;
+using OPCApp.Customer.ViewModels;
 
 namespace OPCApp.Customer.Views
 {
@@ -15,11 +16,11 @@ namespace OPCApp.Customer.Views
             InitializeComponent();
         }
 
-        [Import("CustomerInquiriesViewModel")]
-        public object ViewModel
+        [Import(typeof(CustomerInquiriesViewModel))]
+        public CustomerInquiriesViewModel ViewModel
         {
             set { DataContext = value; }
-            get { return DataContext; }
+            get { return DataContext as CustomerInquiriesViewModel; }
         }
     }
 }
