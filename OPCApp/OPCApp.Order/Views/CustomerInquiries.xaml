@@ -35,10 +35,10 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" Background="LightGray">
-                            <Button Background="LightGray" Width="50" Command="{Binding CommandGetOrder}">
+                            <Button Background="LightGray" Width="Auto" Command="{Binding CommandGetOrder}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
-                                    <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                                    <TextBlock HorizontalAlignment="Center"  FontFamily="雅黑" FontSize="18">查询</TextBlock>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
@@ -242,7 +242,7 @@
                             <Button Background="LightGray" Width="50" Command="{Binding CommandGetShipping}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
-                                    <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                                    <TextBlock HorizontalAlignment="Center"  FontFamily="雅黑" FontSize="18">查询</TextBlock>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
@@ -406,7 +406,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="退货信息" Custom:ControlsHelper.HeaderFontSize="18">
+            <TabItem Header="退货信息" Custom:ControlsHelper.HeaderFontSize="18" >
                 <Views:CustomerReturnSearchCommon DataContext="{Binding CustomerReturnSearchRmaViewModel}" />
             </TabItem>
         </controls:MetroAnimatedSingleRowTabControl>
