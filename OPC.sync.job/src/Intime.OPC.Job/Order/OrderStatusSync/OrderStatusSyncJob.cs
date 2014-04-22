@@ -16,17 +16,17 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
     public class OrderStatusSyncJob : IJob
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private DateTime _benchTime = DateTime.Now.AddMinutes(-20);
-
-        private void DoQuery(Action<IQueryable<OPC_Sale>> callback)
+        private DateTime _benchTime = DateTime.Now.AddMinutes(-30);
+        
+        public void DoQuery(Action<IQueryable<Domain.Models.Order>> callback)
         {
             using (var context = new YintaiHZhouContext())
             {
-                //
-                var minx = context.OPC_Sale.Where(t => t.UpdatedDate > _benchTime && t.Status > 2 );//.Min(t=>t.Status);
-                
+                var linq =
+                    context.Orders.Where(
+                        o => o.Status != 0 && o.Status != -10 && o.Status != 10 && o.Status != 19 && o.Status != 18 && o.CreateDate >= _benchTime);
                 if (callback != null)
-                    callback(minx);
+                    callback(linq);
             }
         }
 
@@ -38,11 +38,11 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
 #if !DEBUG
             JobDataMap data = context.JobDetail.JobDataMap;
             var isRebuild = data.ContainsKey("isRebuild") && data.GetBoolean("isRebuild");
-            var interval = data.ContainsKey("intervalOfSecs") ? data.GetInt("intervalOfSecs") : 5 * 60;
+            var interval = data.ContainsKey("intervalOfMins") ? data.GetInt("intervalOfMins") : 5 * 60;
              _benchTime = DateTime.Now.AddMinutes(-interval);
 
             if (isRebuild)
-                _benchTime = _benchTime.AddMonths(-2);
+                _benchTime = _benchTime.AddMonths(-3);
 #endif
             DoQuery(skus =>
             {
@@ -52,11 +52,11 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
             int size = 20;
             while (cursor < totalCount)
             {
-                List<OPC_Sale> oneTimeList = null;
+                List<Domain.Models.Order> oneTimeList = null;
                 DoQuery(r => oneTimeList = r.OrderBy(t => t.OrderNo).Skip(cursor).Take(size).ToList());
-                foreach (var opcSale in oneTimeList)
+                foreach (var order in oneTimeList)
                 {
-                    SetOrderStatusBySaleOrder(opcSale);
+                    SetOrderStatus(order);
                 }
                 cursor += size;
             }
@@ -68,50 +68,58 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
         /// 目前实现有很大的问题 wxh备注 2014-04-20 0:17:43
         /// </summary>
         /// <param name="opcSale"></param>
-        private void SetOrderStatusBySaleOrder(OPC_Sale opcSale)
+        private void SetOrderStatus(Domain.Models.Order order)
         {
             using (var db = new YintaiHZhouContext())
             {
-                var p = db.Orders.FirstOrDefault(t => t.OrderNo == opcSale.OrderNo);
-                switch(opcSale.Status)
-                {
-                    case 0:
-                        p.Status = 0;
-                        break;
-                    case 5:
-                        break;
-                    case 10:
-                        p.Status = 10;
-                        break;
-                    case 15:
-                        break;
-                    case 20:
-                        p.Status = 20;
-                        break;
-                    case 25:
-                        p.Status = 25;
-                        break;
-                    case 30:
-                        p.Status = 30;
-                        break;
-                    case 35:
-                        p.Status = 350;
-                        break;
-                    case 40:
-                        p.Status = 40;
-                        break;
-                    default:
-                        p.Status = opcSale.Status;
-                        break;
-
-                }
-
+                var p = db.Orders.FirstOrDefault(t => t.OrderNo == order.OrderNo);
+                var saleOrders = db.OPC_Sale.Where(sa => sa.OrderNo == p.OrderNo).ToList();
+                var status = CheckStatus(saleOrders);
+                if (status == order.Status || status == NoStatus)
+                    return;
                 p.UpdateDate = DateTime.Now;
                 p.UpdateUser = SystemDefine.SystemUser;
                 db.SaveChanges();
                 Log.InfoFormat("完成订单状态更新,orderNo:{0},status:{1}", p.OrderNo, SystemDefine.OrderFinishSplitStatusCode);
-
             }
+        }
+
+        private const int NoStatus = -10000;
+        private const int Shipped = 15;
+        private const int PreparePack = 14;
+        private const int OrderPrinted = 13;
+        private const int AgentConfirmed = 11;
+
+        private int CheckStatus(IEnumerable<OPC_Sale> saleOrders)
+        {
+            if (saleOrders == null || !saleOrders.Any())
+            {
+                return NoStatus;
+            }
+            //已发货
+            if (saleOrders.Any(x => x.Status == 40))
+            {
+                return Shipped;
+            }
+            if (saleOrders.Any(x => x.Status == 35))
+            {
+                return PreparePack;
+            }
+
+            if (saleOrders.Any(x => x.Status == 30))
+            {
+                return OrderPrinted;
+            }
+            if (saleOrders.Any(x => x.Status == 25 || x.Status == 20 || x.Status == 15))
+            {
+                return OrderPrinted;
+            }
+
+            if (saleOrders.Any(x => x.Status == 2 || x.Status == 21))
+            {
+                return AgentConfirmed;
+            }
+            return NoStatus;
         }
 
         #endregion

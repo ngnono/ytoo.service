@@ -57,11 +57,24 @@ namespace OPCApp.Main
             }
             catch
             {
-                MessageBox.Show("登陆失败", "提示");
-                return;
+
+                var config = AppEx.Container.GetInstance<Config>();
+                if (config.ShowDialog() == true)
+                {
+                    config.WirteConfig();
+                }
             }
             if (!bl)
             {
+                if (AppEx.LoginModel.ErrorCode == 404)
+                {
+                    var config = AppEx.Container.GetInstance<Config>();
+                    if (config.ShowDialog() == true)
+                    {
+                        config.WirteConfig();
+                    }
+                    return;
+                }
                 MessageBox.Show("用户名或者密码错误", "提示");
                 return;
             }

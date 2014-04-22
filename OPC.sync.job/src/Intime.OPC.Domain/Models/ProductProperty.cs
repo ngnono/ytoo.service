@@ -15,6 +15,5 @@ namespace Intime.OPC.Domain.Models
         public Nullable<bool> IsColor { get; set; }
         public Nullable<bool> IsSize { get; set; }
         public Nullable<int> ChannelPropertyId { get; set; }
-        public string Channel { get; set; }
     }
 }

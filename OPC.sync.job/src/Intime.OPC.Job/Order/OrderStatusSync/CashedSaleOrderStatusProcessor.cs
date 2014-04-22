@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
@@ -19,6 +21,8 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
         /// <param name="statusResult"></param>
         public override void Process(string saleOrderNo, OrderStatusResultDto statusResult)
         {
+
+
             using (var db = new YintaiHZhouContext())
             {
                 var saleOrder = db.OPC_Sale.FirstOrDefault(t => t.SaleOrderNo == saleOrderNo);
@@ -29,7 +33,19 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                 saleOrder.CashDate = statusResult.PosTime;
                 saleOrder.UpdatedUser = -100;
                 db.SaveChanges();
+
+                //var slices = ParseProductIdAndPosCode(statusResult.PosSeqNo)
+
+                //foreach (var VARIABLE in saleOrderNo)
+                //{
+                    
+                //}
             }
         }
+
+        //private IList<KeyValuePair<string, string>> ParseProductIdAndPosCode(string strPosSeq)
+        //{
+        //    var splices = strPosSeq.Split()
+        //}
     }
 }

@@ -62,7 +62,6 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         Status = 1,
                         UpdateDate = DateTime.Now,
                         UpdateUser = SystemDefine.SystemUser,
-                        Channel = SystemDefine.IntimeChannel
                     };
 
                     db.Sections.Add(newSection);

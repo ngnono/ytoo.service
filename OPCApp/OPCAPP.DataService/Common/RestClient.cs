@@ -34,6 +34,12 @@ namespace OPCApp.DataService.Common
     /// </summary>
     public class RestClient
     {
+        //[UsedImplicitly]
+        private static int curStatuscode;
+        public static int CurStatusCode {
+            get { return curStatuscode; } 
+        }
+
         /// <summary>
         ///     The base URL
         /// </summary>
@@ -47,11 +53,11 @@ namespace OPCApp.DataService.Common
         {
             get
             {
-                if (_client == null)
+                if (_client == null||curStatuscode==404)
                 {
-                    string baseUrl = AppEx.Config.GetValue("apiAddress");
-                    string consumerKey = AppEx.Config.GetValue("consumerKey");
-                    string consumerSecret = AppEx.Config.GetValue("consumerSecret");
+                    string baseUrl = AppEx.Config.ServiceUrl;
+                    string consumerKey = AppEx.Config.UserKey;
+                    string consumerSecret = AppEx.Config.Password;
 
                     var factory = new DefaultApiHttpClientFactory(new Uri(baseUrl), consumerKey, consumerSecret);
                     _client = factory.Create();
@@ -79,6 +85,7 @@ namespace OPCApp.DataService.Common
         {
             string url = string.Format("{0}?{1}", address, urlParams);
             HttpResponseMessage response = Client.GetAsync(url).Result;
+            curStatuscode =(int) response.StatusCode;
             return response.VerificationResponse() ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
         }
 
@@ -86,6 +93,7 @@ namespace OPCApp.DataService.Common
         {
             string url = string.Format("{0}?{1}", address, urlParams);
             HttpResponseMessage response = Client.GetAsync(url).Result;
+            curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse()
                 ? response.Content.ReadAsAsync<PageResult<T>>().Result
                 : new PageResult<T>(null, 10);
@@ -95,6 +103,7 @@ namespace OPCApp.DataService.Common
         {
             string url = string.Format("{0}?{1}&pageIndex={2}&pageSize={3}", address, urlParams, pageIndex, pageSize);
             HttpResponseMessage response = Client.GetAsync(url).Result;
+            curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse()
                 ? response.Content.ReadAsAsync<PageResult<T>>().Result
                 : new PageResult<T>(null, 10);
@@ -104,6 +113,7 @@ namespace OPCApp.DataService.Common
         {
             string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}", address, urlParams);
             HttpResponseMessage response = Client.GetAsync(url).Result;
+            curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse() ? response.Content.ReadAsAsync<T>().Result : default(T);
         }
 
@@ -117,6 +127,7 @@ namespace OPCApp.DataService.Common
         public static bool Post<T>(string url, T data)
         {
             HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
+            curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse();
         }
 
@@ -131,6 +142,7 @@ namespace OPCApp.DataService.Common
         public static TResult Post<T, TResult>(string url, T data)
         {
             HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
+            curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse() ? response.Content.ReadAsAsync<TResult>().Result : default(TResult);
         }
 
@@ -145,12 +157,14 @@ namespace OPCApp.DataService.Common
         public static bool Put<T>(string url, T data)
         {
             HttpResponseMessage response = Client.PutAsJsonAsync(url, data).Result;
+            curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse();
         }
 
         public static T PostReturnModel<T>(string url, T data)
         {
             HttpResponseMessage response = Client.PostAsJsonAsync(url, data).Result;
+            curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse() ? response.Content.ReadAsAsync<T>().Result : default(T);
             ;
         }
@@ -158,6 +172,7 @@ namespace OPCApp.DataService.Common
         public static bool Put(string url, object data)
         {
             HttpResponseMessage response = Client.PutAsJsonAsync(url, data).Result;
+            curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse();
         }
 
@@ -170,6 +185,7 @@ namespace OPCApp.DataService.Common
         public static bool Delete<T>(string url)
         {
             HttpResponseMessage response = Client.DeleteAsync(url).Result;
+            curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse();
         }
     }

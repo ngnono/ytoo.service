@@ -50,5 +50,9 @@ namespace OPCApp.Infrastructure.Interfaces
         /// </summary>
         /// <value>The shoppe identifier.</value>
         string ShoppeID { get; }
+        /// <summary>
+        /// 错误码
+        /// </summary>
+        int ErrorCode { get; }
     }
 }

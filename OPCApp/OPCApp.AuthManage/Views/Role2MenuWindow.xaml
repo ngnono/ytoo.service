@@ -45,12 +45,13 @@
                 <DataGridTextColumn Header="角色名称" Width="*" Binding="{Binding Name}" />
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="gri1" HorizontalAlignment="Left" ItemsSource="{Binding MenuList}"
+        <DataGrid x:Name="gri1" HorizontalAlignment="Left" ItemsSource="{Binding MenuList}" IsReadOnly="True" CanUserAddRows="False"
                   AutoGenerateColumns="False" Grid.Row="1"
                   Grid.Column="1" VerticalAlignment="Top">
 
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Header="id" Visibility="Hidden" Width="50" Binding="{Binding Id}" />
+                <DataGridCheckBoxColumn Header="id" Visibility="Hidden" Width="50" Binding="{Binding PraentMenuId}" />
                 <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -62,7 +63,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="菜单名称" Width="400" Binding="{Binding MenuName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="菜单名称" Width="400" Binding="{Binding MenuName}"  IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
 

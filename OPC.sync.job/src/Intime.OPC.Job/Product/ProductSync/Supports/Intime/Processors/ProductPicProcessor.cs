@@ -1,12 +1,10 @@
-﻿using System.Globalization;
+﻿using Common.Logging;
+using Intime.OPC.Domain.Models;
+using Intime.OPC.Job.Product.ProductSync.Models;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-
-using Common.Logging;
-using Intime.OPC.Domain.Models;
-using System;
-using Intime.OPC.Job.Product.ProductSync.Models;
 using Yintai.Hangzhou.Contract.Images;
 using Yintai.Hangzhou.Service.Manager;
 
@@ -41,12 +39,16 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
 
             string filePath;
             FileInfor uploadFile = null;
-
+            Resource resource = null;
             using (var db = new YintaiHZhouContext())
             {
                 //查找是否已经同步图片
-                var resourceExt = db.Resources.FirstOrDefault(r => r.ColorId == colorIdMap.LocalId && r.SourceId == productMap.LocalId && r.SortOrder == SeqNo);
-
+                var resourceExt = db.Resources.FirstOrDefault(r => r.ColorId == colorIdMap.LocalId && r.SourceId == productMap.LocalId && r.SortOrder == SeqNo && r.SourceType == 1);
+                var product = db.Products.FirstOrDefault(x => x.Id == productMap.LocalId);
+                if (product == null)
+                {
+                    return null;
+                }
                 // 下载远程图片
                 if (resourceExt == null || resourceExt.UpdatedDate != WriteTime)
                 {
@@ -57,6 +59,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     catch (Exception ex)
                     {
                         Log.ErrorFormat("同步商品图片出错，下载图片出错,productId:[{0}],colorId:[{1}],url:[{2}]", channelProductId, channelColorId, channelUrl);
+                        Log.Error(ex);
                         return null;
                     }
 
@@ -74,19 +77,16 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
 
                 if (resourceExt == null)
                 {
-
                     var newResource = new Resource()
                     {
                         ColorId = colorIdMap.LocalId,
                         SourceId = productMap.LocalId,
                         SourceType = 1,
                         ContentSize = uploadFile.FileSize,
-
                         Domain = string.Empty,
                         ExtName = uploadFile.FileExtName,
                         Height = uploadFile.Height,
                         IsDefault = false,
-
                         Name = uploadFile.FileName,
                         Status = 1,
                         SortOrder = SeqNo,
@@ -100,13 +100,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         UpdatedDate = DateTime.Now,
                     };
                     db.Resources.Add(newResource);
-                    db.SaveChanges();
-
-                    return newResource;
+                    resource = newResource;
                 }
                 else
                 {
-
                     resourceExt.ContentSize = uploadFile.FileSize;
                     resourceExt.UpdatedUser = SystemDefine.SystemUser;
                     resourceExt.UpdatedDate = DateTime.Now;
@@ -115,17 +112,20 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     resourceExt.IsDefault = false;
                     resourceExt.UpdatedDate = DateTime.Now;
                     resourceExt.Name = uploadFile.FileName;
-
                     resourceExt.Size = string.Format("{0}x{1}", uploadFile.Width, uploadFile.Height);
                     resourceExt.Type = (int)uploadFile.ResourceType;
                     resourceExt.Width = uploadFile.Width;
-
-                    db.SaveChanges();
-
-                    return resourceExt;
+                    resource = resourceExt;
                 }
+                if (!product.IsHasImage)
+                {
+                    product.IsHasImage = true;
+                    product.UpdatedDate = DateTime.Now;
+                    product.UpdatedUser = SystemDefine.SystemUser;
+                }
+                db.SaveChanges();
+                return resource;
             }
-            return null;
         }
 
         private static string FetchRemotePic(string url)

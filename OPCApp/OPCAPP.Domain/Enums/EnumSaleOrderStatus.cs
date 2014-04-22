@@ -27,6 +27,15 @@ namespace OPCApp.Domain.Enums
         [Description("未提货")] NoPickUp = 0,
 
         /// <summary>
+        ///     通知单品
+        /// </summary>
+        [Description("通知单品")] NotifyProduct = 1,
+
+        /// <summary>
+        ///     打印销售单
+        /// </summary>
+        [Description("打印销售单")] PrintSale = 2,
+        /// <summary>
         ///     The stock out
         /// </summary>
         [Description("缺货")] StockOut = 5,

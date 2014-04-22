@@ -12,6 +12,5 @@ namespace Intime.OPC.Domain.Models
         public int Status { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public int TagId { get; set; }
-        public string Channel { get; set; }
     }
 }

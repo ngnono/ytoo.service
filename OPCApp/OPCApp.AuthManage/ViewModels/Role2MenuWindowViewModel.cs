@@ -191,8 +191,11 @@ namespace OPCApp.AuthManage.ViewModels
         private void AuthorizationUser()
         {
             var role2UserService = AppEx.Container.GetInstance<IRole2MenuService>();
-            if (SelectedRole == null || SelectedMenuIdList == null) return;
-            role2UserService.SetMenuByRole(SelectedRole.Id, SelectedMenuIdList);
+            if (SelectedRole == null || MenuList == null) return;
+            SelectedMenuIdList = MenuList.Where(n => n.IsSelected).Select(e => e.Id).ToList();
+            var parentIdSelectedMenu = MenuList.Where(e => e.IsSelected).Select(e => e.PraentMenuId).Distinct().ToList();
+            parentIdSelectedMenu.AddRange(SelectedMenuIdList);
+            role2UserService.SetMenuByRole(SelectedRole.Id, parentIdSelectedMenu);
         }
     }
 }
