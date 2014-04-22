@@ -537,6 +537,32 @@
       </cron>
     </trigger>
 
+    <job>
+      <name>IMS_AutoOffline</name>
+      <group>Item</group>
+      <description>auto offline combo after 7 days</description>
+      <job-type>com.intime.jobscheduler.Job.Combo.AutoDisableComboJob, com.intime.jobscheduler</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>intervalOfDays</key>
+          <value>1</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>IMS_AutoOffline-daily</name>
+        <group>Item</group>
+        <description>every day</description>
+        <job-name>IMS_AutoOffline</job-name>
+        <job-group>Item</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 40 13 * * ?</cron-expression>
+      </cron>
+    </trigger>
   </schedule>
 
 </job-scheduling-data>
