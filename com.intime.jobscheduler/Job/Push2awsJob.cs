@@ -995,7 +995,8 @@ namespace com.intime.jobscheduler.Job
                                 ShareCount = p.ShareCount,
                                 RecommendUserId = p.RecommendUser,
                                 Section=section.FirstOrDefault(),
-                                UpcCode = p.SkuCode
+                                UpcCode = p.SkuCode,
+                                IsSystem = (!p.ProductType.HasValue)||p.ProductType==(int)ProductType.FromSystem
 
                             };
                 int totalCount = prods.Count();
