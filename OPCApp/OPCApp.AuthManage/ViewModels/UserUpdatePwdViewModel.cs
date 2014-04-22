@@ -27,7 +27,7 @@ namespace OPCApp.AuthManage.ViewModels
 
         public UserUpdatePwdViewModel()
         {
-           // Model = new UpdatePwdModel();
+           Model = new UpdatePwdModel();
         }
 
      

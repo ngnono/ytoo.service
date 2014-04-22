@@ -282,6 +282,7 @@ namespace OPCApp.AuthManage.ViewModels
                 return;
             }
             var userPadWin = AppEx.Container.GetInstance<UserUpdatePwd>();
+            userPadWin.ViewModel.Model.LogonName = user.LogonName;
             if (userPadWin.ShowDialog() == true)
             {
                 ResultMsg resultMsg = AppEx.Container.GetInstance<IAuthenticateService>().UpdatePassword(user,userPadWin.ViewModel.Model.NewPassword);

@@ -44,7 +44,7 @@
                 <Grid Grid.Column="0" Grid.Row="0" Background="LightGray" Margin="10">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Width="90" Text="用户名" HorizontalAlignment="Center"  VerticalAlignment="Center" />
-                        <TextBox Foreground="Blue" Width="350" Height="25" IsReadOnly="True" Text="{Binding Model.LogonName}"
+                        <TextBox Foreground="Blue" Width="350" Height="25" IsEnabled="False" Text="{Binding Model.LogonName}"
                                  Margin="0,4" />
                     </StackPanel>
                 </Grid>
