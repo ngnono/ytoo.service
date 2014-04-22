@@ -44,7 +44,7 @@ namespace OPCApp.DataService.Impl
                 IList<OPC_AuthMenu> listMenu = RestClient.Get<OPC_AuthMenu>("menu/loadmenu", paras);
                 if (listMenu!=null)
                 {
-                    listMenu = GetDistnct(listMenu.ToList());
+                    listMenu = GetDistinct(listMenu.ToList());
                 }
               
                 List<OPC_AuthMenu> groupMenu1 = listMenu.Where(e => e.PraentMenuId == e.Id).ToList();
@@ -75,7 +75,7 @@ namespace OPCApp.DataService.Impl
         /// </summary>
         /// <param name="listMenu"></param>
         /// <returns></returns>
-        private List<OPC_AuthMenu> GetDistnct(List<OPC_AuthMenu> listMenu)
+        private List<OPC_AuthMenu> GetDistinct(List<OPC_AuthMenu> listMenu)
         {
             var list = new List<OPC_AuthMenu>();
             var listKey = new List<int>();
