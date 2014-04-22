@@ -17,7 +17,7 @@ namespace OPCApp.Customer.Views
         }
 
         [Import(typeof(CustomerInquiriesViewModel))]
-        public object ViewModel
+        public CustomerInquiriesViewModel ViewModel
         {
             set { DataContext = value; }
             get { return DataContext as CustomerInquiriesViewModel; }

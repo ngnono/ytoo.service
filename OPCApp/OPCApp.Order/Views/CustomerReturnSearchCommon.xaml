@@ -94,7 +94,7 @@
             </StackPanel>
         </StackPanel>
 
-        <DataGrid Grid.Row="4" MinHeight="200" ItemsSource="{Binding OrderDtoList}" IsReadOnly="True"
+        <DataGrid Grid.Row="4" MinHeight="150" ItemsSource="{Binding OrderDtoList}" IsReadOnly="True"
                   AutoGenerateColumns="False"
                   Name="DataGrid1" VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding OrderDto}">
@@ -138,7 +138,7 @@
             </StackPanel>
         </StackPanel>
 
-        <DataGrid Grid.Row="6" Height="200" ItemsSource="{Binding RMADtoList}" IsReadOnly="True"
+        <DataGrid Grid.Row="6" Height="150" ItemsSource="{Binding RMADtoList}" IsReadOnly="True"
                   AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto"
                   SelectedItem="{Binding RMADto}" VerticalScrollBarVisibility="Auto"
                   Name="dataGridRma">
