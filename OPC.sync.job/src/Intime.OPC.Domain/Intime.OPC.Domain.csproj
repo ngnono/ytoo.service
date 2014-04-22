@@ -186,6 +186,7 @@
     <Compile Include="Models\Mapping\OPC_AuthRoleMenuMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleUserMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthUserMap.cs" />
+    <Compile Include="Models\Mapping\OPC_CategoryMapMap.cs" />
     <Compile Include="Models\Mapping\OPC_ChannelMapMap.cs" />
     <Compile Include="Models\Mapping\OPC_ChannelProductMap.cs" />
     <Compile Include="Models\Mapping\OPC_OrderCommentMap.cs" />
@@ -275,6 +276,7 @@
     <Compile Include="Models\OPC_AuthRoleMenu.cs" />
     <Compile Include="Models\OPC_AuthRoleUser.cs" />
     <Compile Include="Models\OPC_AuthUser.cs" />
+    <Compile Include="Models\OPC_CategoryMap.cs" />
     <Compile Include="Models\OPC_ChannelMap.cs" />
     <Compile Include="Models\OPC_ChannelProduct.cs" />
     <Compile Include="Models\OPC_OrderComment.cs" />

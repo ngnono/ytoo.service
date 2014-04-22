@@ -16,7 +16,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
     public class OrderStatusSyncJob : IJob
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private DateTime _benchTime = DateTime.Now.AddMinutes(-30);
+        private DateTime _benchTime = DateTime.Now.AddDays(-1);
         
         public void DoQuery(Action<IQueryable<Domain.Models.Order>> callback)
         {

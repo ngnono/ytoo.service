@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 using Common.Logging;
@@ -23,6 +25,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
         private readonly ICategorySyncProcessor _categorySyncProcessor;
         private readonly ISectionSyncProcessor _sectionSyncProcessor;
         private readonly IChannelMapper _channelMapper;
+        private readonly int DefaultTagId = int.Parse(ConfigurationManager.AppSettings["ERPSYN_DEFAULT_TAG"]);
 
         public ProductSyncProcessor(IRemoteRepository remoteRepository, IChannelMapper channelMapper)
         {
@@ -122,14 +125,14 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             /**
              * 检查并同步分类,目前集团分类信息为空，所以同步商品不成功，只是提供警告 
              */
-            var category = _categorySyncProcessor.Sync(channelProduct.CategoryId4, channelProduct.Category4);
-            if (category == null)
-            {
-                //如果分类为空，设置一个默认值
-                Log.WarnFormat("同步商品对应分类失败:[{0}],categoryId:[{1}],category:[{2}]", channelProduct.ProductId, channelProduct.CategoryId4, channelProduct.Category4);
-            }
+            //var category = _categorySyncProcessor.Sync(channelProduct.CategoryId4, channelProduct.Category4);
+            //if (category == null)
+            //{
+            //    //如果分类为空，设置一个默认值
+            //    Log.WarnFormat("同步商品对应分类失败:[{0}],categoryId:[{1}],category:[{2}]", channelProduct.ProductId, channelProduct.CategoryId4, channelProduct.Category4);
+            //}
 
-
+            var tagId = FetchTagId(channelProduct);
 
             using (var db = new YintaiHZhouContext())
             {
@@ -157,7 +160,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         RecommendUser = 0,
                         SortOrder = 0,
                         Status = 1,
-                        Tag_Id = 0,
+                        Tag_Id = tagId,
                         BarCode = string.Empty,
                         Favorable = "1",
                         UpdatedDate = DateTime.Now,
@@ -185,10 +188,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         MapType = ChannelMapType.ProductId
                     });
 
-                    if (category == null)
-                    {
-                        CategoriesMap(newProduct.Id);
-                    }
+                    //if (category == null)
+                    //{
+                    //    CategoriesMap(newProduct.Id);
+                    //}
                     return newProduct;
                 }
 
@@ -203,7 +206,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 proudctExt.BarCode = string.Empty;                 
                 proudctExt.Store_Id = section.StoreId ?? 0;
                 proudctExt.Brand_Id = brand == null ? 0 : brand.Id;
-                //proudctExt.Tag_Id = 0;
+                proudctExt.Tag_Id = tagId;
                 proudctExt.SkuCode = string.Empty;
                 proudctExt.Name = channelProduct.ProductName ?? string.Empty;
                 proudctExt.UnitPrice = channelProduct.LabelPrice;
@@ -213,10 +216,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 proudctExt.UpdatedDate = DateTime.Now;
                 proudctExt.UpdatedUser = SystemDefine.SystemUser;
 
-                if (category == null)
-                {
-                    CategoriesMap(proudctExt.Id);
-                }
+                //if (category == null)
+                //{
+                //    CategoriesMap(proudctExt.Id);
+                //}
 
                 db.SaveChanges();
                 return proudctExt;
@@ -224,23 +227,39 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             
         }
 
-        private void CategoriesMap(int productId)
+        private int FetchTagId(ProductDto channelProduct)
         {
             using (var db = new YintaiHZhouContext())
             {
-                var category = db.Categories.FirstOrDefault();
-                var productMap = new ProductMap()
-                {
-                    ProductId = productId,
-                    ChannelPId=productId,
-                    Channel="ERP",
-                    UpdateDate=DateTime.Now
+                var map =
+                    db.OPC_CategoryMaps.FirstOrDefault(
+                        x =>
+                            x.ChannelCategoryCode == channelProduct.CategoryId1 ||
+                            x.ChannelCategoryCode == channelProduct.CategoryId2 ||
+                            x.ChannelCategoryCode == channelProduct.CategoryId3 ||
+                            x.ChannelCategoryCode == channelProduct.CategoryId4);
 
-                };
-                db.ProductMaps.Add(productMap);
-
-                db.SaveChanges();
+                return map == null ? DefaultTagId : map.TagId;
             }
         }
+
+        //private void CategoriesMap(int productId)
+        //{
+        //    using (var db = new YintaiHZhouContext())
+        //    {
+        //        var category = db.Categories.FirstOrDefault();
+        //        var productMap = new ProductMap()
+        //        {
+        //            ProductId = productId,
+        //            ChannelPId=productId,
+        //            Channel="ERP",
+        //            UpdateDate=DateTime.Now
+
+        //        };
+        //        db.ProductMaps.Add(productMap);
+
+        //        db.SaveChanges();
+        //    }
+        //}
     }
 }
