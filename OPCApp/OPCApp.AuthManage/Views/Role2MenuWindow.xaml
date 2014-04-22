@@ -18,13 +18,13 @@
                 <Button Background="LightGray" Width="Auto" Command="{Binding AuthorizationUserCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/导出.png" Stretch="None" />
-                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">授权角色</TextBlock>
+                        <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">授权角色</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding AuthorizationRefreshCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/导出.png" Stretch="None" />
-                        <TextBlock FontFamily="雅黑" FontSize="18" HorizontalAlignment="Center">刷新</TextBlock>
+                        <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">刷新</TextBlock>
                     </StackPanel>
                 </Button>
 

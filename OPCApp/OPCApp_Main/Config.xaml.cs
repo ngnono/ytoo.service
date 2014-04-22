@@ -53,7 +53,14 @@ namespace OPCApp.Main
 
         public void WirteConfig()
         {
-           ViewModel.WriteConfig();
+            try
+            {
+                ViewModel.WriteConfig();
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show("保存配置文件失败："+Ex.Message);
+            }
         }
     }
 }

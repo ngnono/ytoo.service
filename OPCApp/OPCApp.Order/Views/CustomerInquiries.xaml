@@ -38,7 +38,7 @@
                             <Button Background="LightGray" Width="Auto" Command="{Binding CommandGetOrder}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
-                                    <TextBlock HorizontalAlignment="Center"  FontFamily="雅黑" FontSize="18">查询</TextBlock>
+                                    <TextBlock HorizontalAlignment="Center"  FontFamily="宋体" FontSize="18">查询</TextBlock>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
@@ -242,7 +242,7 @@
                             <Button Background="LightGray" Width="50" Command="{Binding CommandGetShipping}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
-                                    <TextBlock HorizontalAlignment="Center"  FontFamily="雅黑" FontSize="18">查询</TextBlock>
+                                    <TextBlock HorizontalAlignment="Center"  FontFamily="宋体" FontSize="18">查询</TextBlock>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
