@@ -164,15 +164,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             else
                                 return Content("fail");
                         }
-                        //notify sync async
-                        if (orderTransaction != null
-                            && orderType == (int)OrderProductType.SystemProduct)
-                        {
-                            Task.Factory.StartNew(() =>
-                            {
-                                OrderRule.OrderPaid2Erp(orderTransaction);
-                            });
-                        }
+                       
                     }
 
                 }

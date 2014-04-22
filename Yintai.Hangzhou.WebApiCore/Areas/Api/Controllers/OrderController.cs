@@ -337,17 +337,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 }
             }
             request.Reason = string.Format("{0}-{1}", dbContext.Set<RMAReasonEntity>().Find(request.RMAReason).Reason, request.Reason ?? string.Empty);
-            var erpRma = new
-            {
-                dealCode = orderEntity.OrderNo,
-                CUSTOMER_FRT = "0",
-                COMPANY_FRT = "0",
-                REAL_NAME = orderEntity.ShippingContactPerson,
-                USER_SID = "0",
-
-                Detail = new List<dynamic>()
-            };
-            
+          
             using (var ts = new TransactionScope())
             {
                 decimal rmaAmount = 0;
@@ -409,15 +399,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                         
 
                     });
-                    var exInventory = Context.Set<InventoryEntity>().Where(i => i.ProductId == orderItemEntity.ProductId && i.PColorId == orderItemEntity.ColorValueId && i.PSizeId == orderItemEntity.SizeValueId).FirstOrDefault();
-                    if (exInventory == null)
-                        return this.RenderError(r => r.Message = string.Format("{0} no channel product", orderItemEntity.ProductId));
-                    erpRma.Detail.Add(new
-                    {
-                        SelectPro_detail_sid = exInventory.ChannelInventoryId,
-                        RefundNum = orderItemEntity.Quantity,
-                        REFUND_REASON = request.Reason
-                    });
+                    
                 }
                 newRma.RMAAmount = rmaAmount;
                 _rmaRepo.Update(newRma);
@@ -431,21 +413,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 });
                 string exRMANo = string.Empty;
                 bool isSuccess = true;
-                bool isSelfOrder = orderEntity.OrderProductType == (int)OrderProductType.SelfProduct;
-                if (!isSelfOrder && ConfigManager.IS_PRODUCT_ENV)
-                    isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "Agree_Refund", jsonSales = new { Data = new List<dynamic>() { erpRma } } }, r => exRMANo = r.orders_refund_frt_sid
-                  , null);
+
                 if (isSuccess)
                 {
-                    if (!isSelfOrder && ConfigManager.IS_PRODUCT_ENV)
-                    {
-                        _rmaexRepo.Insert(new RMA2ExEntity()
-                        {
-                            ExRMA = exRMANo ?? string.Empty,
-                            RMANo = newRma.RMANo,
-                            UpdateDate = DateTime.Now
-                        });
-                    }
+                    
                     ts.Complete();
                     return this.RenderSuccess<MyRMAResponse>(r => r.Data = new MyRMAResponse().FromEntity<MyRMAResponse>(newRma));
                 }

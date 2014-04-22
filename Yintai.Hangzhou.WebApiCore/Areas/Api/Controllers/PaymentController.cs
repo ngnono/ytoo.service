@@ -124,11 +124,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 ts.Complete();
                                
                             }
-                            //notify sync async
-                            Task.Factory.StartNew(() =>
-                            {
-                                OrderRule.OrderPaid2Erp(orderTransaction);
-                            });
+                           
                         }
 
                     }
@@ -214,11 +210,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 ts.Complete();
                                
                             }
-                            //notify sync async
-                            Task.Factory.StartNew(() =>
-                            {
-                                OrderRule.OrderPaid2Erp(orderTransaction);
-                            });
+                           
                         }
 
                     }
@@ -337,14 +329,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                             ts.Complete();
 
                         }
-                        //notify sync async
-                        if (orderTransaction != null)
-                        {
-                            Task.Factory.StartNew(() =>
-                            {
-                                OrderRule.OrderPaid2Erp(orderTransaction);
-                            });
-                        }
+                        
                     }
 
                 }
@@ -444,14 +429,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                            
                            
                         }
-                        //notify sync async
-                        if (orderTransaction != null)
-                        {
-                            Task.Factory.StartNew(() =>
-                            {
-                                OrderRule.OrderPaid2Erp(orderTransaction, false);
-                            });
-                        }
+                       
                     }
 
                 }
@@ -527,14 +505,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
 
                         }
-                        //notify sync async
-                        if (orderTransaction != null)
-                        {
-                            Task.Factory.StartNew(() =>
-                            {
-                                OrderRule.OrderPaid2Erp(orderTransaction, false);
-                            });
-                        }
+                        
                     }
 
                 }
@@ -620,14 +591,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                            
 
                         }
-                        //notify sync async
-                        if (orderTransaction != null)
-                        {
-                            Task.Factory.StartNew(() =>
-                            {
-                                OrderRule.OrderPaid2Erp(orderTransaction);
-                            });
-                        }
+                       
                     }
 
                 }
@@ -713,14 +677,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
 
                         }
-                        //notify sync async
-                        if (orderTransaction != null)
-                        {
-                            Task.Factory.StartNew(() =>
-                            {
-                                OrderRule.OrderPaid2Erp(orderTransaction);
-                            });
-                        }
+                      
                     }
 
                 }

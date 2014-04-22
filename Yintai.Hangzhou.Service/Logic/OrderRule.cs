@@ -135,51 +135,7 @@ namespace Yintai.Hangzhou.Service.Logic
             var orderNo = OrderRule.CreateCode(0);
             var otherFee = OrderRule.ComputeFee();
 
-            var erpOrder = new
-            {
-                orderSource = request.Channel??string.Empty,
-                dealPayType = request.OrderModel.Payment.PaymentCode,
-                shipType = request.OrderModel.ShippingType,
-                needInvoice = request.OrderModel.NeedInvoice ? 1 : 0,
-                invoiceTitle = request.OrderModel.InvoiceTitle??string.Empty,
-                invoiceMemo = request.OrderModel.InvoiceDetail??string.Empty,
-                orderMemo = request.OrderModel.Memo??string.Empty,
-                lastUpdateTime = DateTime.Now.ToString(ErpServiceHelper.DATE_FORMAT),
-                payTime = string.Empty,
-                recvfeeReturnTime = string.Empty,
-                dealState = "STATE_WG_WAIT_PAY",
-                buyerName = authUser.Nickname??string.Empty,
-                sellerConsignmentTime = string.Empty,
-                receiverPostcode = "",
-                freight = 0,
-                couponFee = "0",
-                comboInfo = string.Empty,
-                dealRateState = "DEAL_RATE_NO_EVAL",
-                totalCash = "0",
-                dealNote = request.OrderModel.Memo??string.Empty,
-                dealFlag = string.Empty,
-                dealCode = orderNo,
-                createTime = DateTime.Now.ToString(ErpServiceHelper.DATE_FORMAT),
-                receiverMobile = request.OrderModel.ShippingAddress==null?string.Empty:request.OrderModel.ShippingAddress.ShippingContactPhone,
-
-                receiverPhone = request.OrderModel.ShippingAddress == null ? string.Empty : request.OrderModel.ShippingAddress.ShippingContactPhone,
-                receiverName = request.OrderModel.ShippingAddress == null ? string.Empty : request.OrderModel.ShippingAddress.ShippingContactPerson,
-
-                dealPayFeeTicket = "0",
-                dealNoteType = "UN_LABEL",
-                recvfeeTime = string.Empty,
-                dealPayFeeTotal = totalAmount,
-                ppCodId = string.Empty,
-
-
-                receiverAddress = request.OrderModel.ShippingAddress == null ? string.Empty : request.OrderModel.ShippingAddress.ShippingAddress,
-                transportType = "TRANSPORT_NONE",
-                wuliuId = "0",
-
-                vipCard = string.Empty,
-                itemList = new List<dynamic>()
-
-            };
+          
             using (var ts = new TransactionScope())
             {
                 var orderEntity = _orderRepo.Insert(new OrderEntity()
@@ -267,26 +223,7 @@ namespace Yintai.Hangzhou.Service.Logic
                         var sectionEntity = Context.Set<SectionEntity>().Find(product.SectionId.Value);
                         saleCodeId = sectionEntity.ChannelSectionId;
                     }
-                    erpOrder.itemList.Add(new
-                    {
-                        itemName = productEntity.Name,
-                        itemFlag = string.Empty,
-                        itemCode = string.Empty,
-                        account = string.Empty,
-
-                        refundStateDesc = string.Empty,
-                        itemAdjustPrice = "0",
-                        itemRetailPrice = productEntity.UnitPrice,
-                        tradePropertymask = "256",
-                        itemDealState = "STATE_WG_WAIT_PAY",
-
-                        itemDealCount = product.Quantity,
-                        skuId = inventoryEntity.ChannelInventoryId,
-                        itemDealPrice = productEntity.Price,
-
-                        storeId = storeId.HasValue?storeId.ToString():string.Empty,
-                        saleCodeSid = saleCodeId.HasValue?saleCodeId.ToString():string.Empty
-                    });
+                  
                 }
                 _orderLogRepo.Insert(new OrderLogEntity()
                 {
@@ -308,26 +245,11 @@ namespace Yintai.Hangzhou.Service.Logic
                 string exOrderNo = string.Empty;
 
                 bool isSuccess = true;
-                if (!isSelfOrder && ConfigManager.IS_PRODUCT_ENV)
-                {
-                   isSuccess= ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "DivideOrderToSaleFromJSON", OrdersJSON = erpOrder }, r => exOrderNo = r.order_no
-                    , null);
-                }
                 if (isSuccess)
                 {
                     
-                    if (!isSelfOrder && ConfigManager.IS_PRODUCT_ENV)
-                    {
-                        var exOrderEntity = _orderexRepo.Insert(new Order2ExEntity()
-                         {
-                             ExOrderNo = exOrderNo,
-                             OrderNo = orderEntity.OrderNo,
-                             UpdateTime = DateTime.Now
-                         });
-                    } else
-                    {
-                        exOrderNo = orderEntity.OrderNo;
-                    }
+                    
+                    exOrderNo = orderEntity.OrderNo;
                     ts.Complete();
                     createSuccess = true;
                     return CommonUtil.RenderSuccess<OrderResponse>(m => m.Data = new OrderResponse().FromEntity<OrderResponse>(orderEntity,o=>o.ExOrderNo=exOrderNo));
@@ -338,6 +260,7 @@ namespace Yintai.Hangzhou.Service.Logic
                 }
             }
         }
+        [Obsolete]
         public static bool OrderPaid2Erp(OrderTransactionEntity order,bool isOnlinePay = true)
         {
             string vipCard = string.Empty;
