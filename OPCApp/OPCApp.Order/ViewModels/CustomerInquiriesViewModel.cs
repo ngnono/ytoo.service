@@ -15,7 +15,7 @@ using OPCApp.Infrastructure;
 
 namespace OPCApp.Customer.ViewModels
 {
-    [Export("CustomerInquiriesViewModel", typeof (CustomerInquiriesViewModel))]
+    [Export(typeof (CustomerInquiriesViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CustomerInquiriesViewModel : BindableBase
     {
