@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Core;
@@ -54,9 +55,9 @@ namespace Intime.OPC.WebApi.Controllers
 
 
         [HttpPost]
-        public IHttpActionResult ChangePassword(int userid, string oldpassword,string newpassword)
+        public IHttpActionResult ChangePassword( [FromBody]ChangePasswordDto dto)
         {
-            return DoAction(() => _accountService.ChangePassword(userid, oldpassword, newpassword));
+            return DoAction(() => _accountService.ChangePassword(dto.UserID, dto.OldPassword, dto.NewPassword));
         }
 
         [HttpPut]
