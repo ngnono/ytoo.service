@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.DataService.Interface;
@@ -195,7 +196,16 @@ namespace OPCApp.AuthManage.ViewModels
             SelectedMenuIdList = MenuList.Where(n => n.IsSelected).Select(e => e.Id).ToList();
             var parentIdSelectedMenu = MenuList.Where(e => e.IsSelected).Select(e => e.PraentMenuId).Distinct().ToList();
             parentIdSelectedMenu.AddRange(SelectedMenuIdList);
-            role2UserService.SetMenuByRole(SelectedRole.Id, parentIdSelectedMenu);
+            var result = role2UserService.SetMenuByRole(SelectedRole.Id, parentIdSelectedMenu);
+            if (result.IsSuccess)
+            {
+                MessageBox.Show("资源授权成功！", "银泰OPC终端", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+
+                MessageBox.Show(result.Msg, "银泰OPC终端", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

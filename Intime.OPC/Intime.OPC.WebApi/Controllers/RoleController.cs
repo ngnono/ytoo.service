@@ -96,7 +96,7 @@ namespace Intime.OPC.WebApi.Controllers
             return InternalServerError();
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult SelectRole()
         {
             //TODO:check params

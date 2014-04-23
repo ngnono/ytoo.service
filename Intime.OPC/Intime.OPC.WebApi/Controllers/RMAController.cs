@@ -63,7 +63,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
         {
             int userId = GetCurrentUserID();
@@ -75,7 +75,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="orderNo"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetByOrderNo(string orderNo, int pageIndex, int pageSize)
         {
             int userId = GetCurrentUserID();
@@ -93,7 +93,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="orderNo"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaByOrderNo(string orderNo, int pageIndex, int pageSize)
         {
             int userId = GetCurrentUserID();
@@ -111,7 +111,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaDetailByRmaNo(string rmaNo, int pageIndex, int pageSize)
         {
             int userId = GetCurrentUserID();
@@ -120,7 +120,7 @@ namespace Intime.OPC.WebApi.Controllers
 
         #region 客服退货查询-物流退回
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetByOrderNoShippingBack(string orderNo, int pageIndex, int pageSize)
         {
             int userId = GetCurrentUserID();
@@ -133,7 +133,7 @@ namespace Intime.OPC.WebApi.Controllers
 
         #region 客服退货查询-退货赔偿退回
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetByOrderNoReturnGoodsCompensation(string orderNo, int pageIndex, int pageSize)
         {
             int userId = GetCurrentUserID();
@@ -174,8 +174,8 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
-        public IHttpActionResult GetByFinaceDto([FromUri] FinaceRequest request)
+        [HttpPost]
+        public IHttpActionResult GetByFinaceDto(FinaceRequest request)
         {
             int userId = GetCurrentUserID();
             return DoFunction(() =>
@@ -208,8 +208,8 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
-        public IHttpActionResult GetRmaByReturnGoodPay([FromUri] ReturnGoodsPayRequest request)
+        [HttpPost]
+        public IHttpActionResult GetRmaByReturnGoodPay(ReturnGoodsPayRequest request)
         {
             int userId = GetCurrentUserID();
             return DoFunction(() =>
@@ -224,7 +224,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetByRmaNo(string rmaNo, int pageIndex, int pageSize)
         {
             int userId = GetCurrentUserID();
@@ -274,7 +274,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="rmaNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetCommentByRmaNo(string rmaNo)
         {
             return base.DoFunction(() => { return _saleRmaService.GetCommentByRmaNo(rmaNo); }, "查询退货单备注失败！");
@@ -307,7 +307,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="rmaNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaCommentByRmaNo(string rmaNo)
         {
             return base.DoFunction(() => { return _rmaService.GetCommentByRmaNo(rmaNo); }, "查询退货单备注失败！");

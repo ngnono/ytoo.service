@@ -13,7 +13,7 @@ namespace Intime.OPC.WebApi.Controllers
             _sectionRepository = repository;
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetAll()
         {
             return DoFunction(() => _sectionRepository.GetAll(0, 10000).Result, "获得专柜信息失败");
