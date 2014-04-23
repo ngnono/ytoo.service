@@ -41,7 +41,9 @@ namespace Yintai.Hangzhou.Model.ES
         public string UpcCode { get; set; }
         public bool IsSystem { get; set; }
         public decimal DiscountRate { get{
-            return UnitPrice.HasValue ? (int)(Price / UnitPrice * 100) : 100;
+            if (!UnitPrice.HasValue || UnitPrice.Value <= 0m)
+                return 100;
+            return (int)(Price / UnitPrice * 100);
         } }
     }
 }
