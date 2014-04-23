@@ -12,17 +12,17 @@ namespace Intime.OPC.Service
             _repository = repository;
         }
 
-        public  bool Update(T t)
+        public virtual  bool Update(T t)
         {
             return _repository.Update(t);
         }
 
-        public  bool Add(T t)
+        public virtual bool Add(T t)
         {
             return _repository.Update(t);
         }
 
-        public  bool DeleteById(int id)
+        public virtual bool DeleteById(int id)
         {
             return _repository.Delete(id);
         }
