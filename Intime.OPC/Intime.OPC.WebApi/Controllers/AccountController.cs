@@ -28,13 +28,10 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult AddUser([FromBody] OPC_AuthUser user)
         {
-            
-            //TODO:check params
-            if (_accountService.Add(user))
+           if (_accountService.Add(user))
             {
                 return Ok();
             }
-
             return InternalServerError();
         }
 
