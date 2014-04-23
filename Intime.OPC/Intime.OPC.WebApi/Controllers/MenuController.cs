@@ -69,7 +69,7 @@ namespace Intime.OPC.WebApi.Controllers
             return null;
         }
 
-        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpPost]
         public IHttpActionResult LoadMenuByRoleID(int roleId, [UserId] int? userId)
         {
             if (userId.HasValue)
