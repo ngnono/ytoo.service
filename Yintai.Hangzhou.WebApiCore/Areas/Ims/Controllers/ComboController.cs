@@ -94,7 +94,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     CreateUser = authuid,
                     ItemId = comboEntity.Id,
                     ItemType = (int)ComboType.Product,
-                    Status = (int)DataStatus.Normal,
+                    Status = canOnline ? (int)DataStatus.Normal : (int)DataStatus.Default,
                     UpdateDate = DateTime.Now,
                     UpdateUser = authuid
                 });
