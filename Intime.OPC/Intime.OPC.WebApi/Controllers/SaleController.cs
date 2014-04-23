@@ -27,14 +27,14 @@ namespace Intime.OPC.WebApi.Controllers
             _shippingSaleService = shippingSaleService;
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSaleRemarks(string saleId, [UserId] int userId)
         {
             //todo data Ahorization
             return Ok(_saleService.GetRemarksBySaleNo(saleId));
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSaleOrderDetails(string saleOrderNo)
         {
             return DoFunction(() =>
@@ -82,11 +82,13 @@ namespace Intime.OPC.WebApi.Controllers
                 }
                 catch (SaleOrderNotExistsException ex)
                 {
+                    GetLog().Error(ex);
                     //_logger.WriteError(ex.Message);
                 }
                 catch (Exception e)
                 {
                     //_logger.WriteError(e.Message);
+                    GetLog().Error(e);
                     return InternalServerError();
                 }
             }
@@ -134,11 +136,11 @@ namespace Intime.OPC.WebApi.Controllers
                 }
                 catch (SaleOrderNotExistsException ex)
                 {
-                    //return new StatusCodeResult(HttpStatusCode.BadRequest,new HttpRequestMessage());
+                    GetLog().Error(ex);
                 }
                 catch (Exception e)
                 {
-                    //  _logger.WriteError(e.Message);
+                    GetLog().Error(e);
                     return InternalServerError();
                 }
             }
@@ -315,7 +317,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="saleId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSaleNoPickUp(DateTime startDate, DateTime endDate, string saleOrderNo,
             string orderNo, int pageIndex, int pageSize)
         {
@@ -326,7 +328,7 @@ namespace Intime.OPC.WebApi.Controllers
             }, "读取未提货数据失败");
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSalePickup(string orderCode, string saleOrderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize)
         {
 

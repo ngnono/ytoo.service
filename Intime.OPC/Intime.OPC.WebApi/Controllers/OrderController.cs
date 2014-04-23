@@ -67,7 +67,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="expressDeliveryCompany">The express delivery company.</param>
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetOrder(string orderNo,
             string orderSource,
             DateTime startCreateDate,
@@ -98,7 +98,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetOrderItemsByOrderNo(string orderNo, int pageIndex, int pageSize)
         {
             //todo 查询订单明细 未实现
@@ -110,7 +110,7 @@ namespace Intime.OPC.WebApi.Controllers
 
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetOrderByShippingSaleNo(string shippingNo, int pageIndex, int pageSize)
         {
             return DoFunction(() =>
@@ -127,7 +127,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetOrderByOderNo(string orderNo)
         {
           return  Ok(  _orderService.GetOrderByOrderNo(orderNo));
@@ -140,7 +140,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="starTime">The star time.</param>
         /// <param name="endTime">The end time.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime, int pageIndex, int pageSize)
         {
             return Ok(_orderService.GetOrderByOderNoTime(orderNo,starTime,endTime,pageIndex,pageSize));
@@ -148,10 +148,10 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         #region 客服退货查询-退货信息
-        
-       
 
-        [HttpGet]
+
+
+        [HttpPost]
         public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
         {
             var userId = GetCurrentUserID();
@@ -164,7 +164,7 @@ namespace Intime.OPC.WebApi.Controllers
 
 
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetShippingBackByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
         {
             var userId = GetCurrentUserID();
@@ -174,7 +174,7 @@ namespace Intime.OPC.WebApi.Controllers
         #endregion
 
         #region 客服退货查询-退货赔偿退回
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetByReturnGoodsCompensate([FromUri] ReturnGoodsInfoRequest request)
         {
             var userId = GetCurrentUserID();
@@ -193,7 +193,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetOrderByOutOfStockNotify([FromUri] OutOfStockNotifyRequest request)
         {
             return DoFunction(() => _orderService.GetOrderByOutOfStockNotify(request));
@@ -222,7 +222,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetOrderOfVoid([FromUri] OutOfStockNotifyRequest request)
         {
             return DoFunction(() => _orderService.GetOrderOfVoid(request));
@@ -234,7 +234,7 @@ namespace Intime.OPC.WebApi.Controllers
         #region 网站销售明细统计
         //SearchStatRequest
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult WebSiteStatSaleDetail([FromUri] SearchStatRequest request)
         {
             return DoFunction(() => _orderService.WebSiteStatSaleDetail(request));
@@ -245,7 +245,7 @@ namespace Intime.OPC.WebApi.Controllers
         #region 网站退货明细统计
         //SearchStatRequest
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult WebSiteStatReturnDetail([FromUri] SearchStatRequest request)
         {
             return DoFunction(() => _orderService.WebSiteStatReturnDetail(request));
@@ -256,7 +256,7 @@ namespace Intime.OPC.WebApi.Controllers
         #region  网上收银流水对账查询
         //SearchStatRequest
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult WebSiteCashier([FromUri] SearchCashierRequest request)
         {
             return DoFunction(() => _orderService.WebSiteCashier(request));
@@ -290,7 +290,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetCommentByOderNo(string orderNo)
         {
             return base.DoFunction(() =>

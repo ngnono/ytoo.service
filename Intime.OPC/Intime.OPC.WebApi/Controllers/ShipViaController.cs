@@ -18,10 +18,10 @@ namespace Intime.OPC.WebApi.Controllers
             _shipViaService = shipViaService;
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetAll()
         {
-            return DoFunction(()=>_shipViaService.GetAll(1,10000).Result, "获得品牌信息失败");
+            return DoFunction(()=>_shipViaService.GetAll(1,10000).Result, "获取物流信息失败");
             
         }
     }

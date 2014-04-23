@@ -48,7 +48,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
-        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpPost]
         public IHttpActionResult LoadMenu()
         {
             return DoFunction(() =>
@@ -81,13 +81,14 @@ namespace Intime.OPC.WebApi.Controllers
                 }
                 catch (Exception ex)
                 {
+                    this.GetLog().Error(ex);
                     return BadRequest("获得用户菜单失败");
                 }
             }
             return BadRequest("用户名未登录，或用户名为空");
         }
 
-        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpPost]
         public IHttpActionResult GetMenuList([UserId] int? userId)
         {
             if (userId.HasValue)
@@ -99,6 +100,7 @@ namespace Intime.OPC.WebApi.Controllers
                 }
                 catch (Exception ex)
                 {
+                    GetLog().Error(ex);
                     return BadRequest("获得用户菜单失败");
                 }
             }
