@@ -340,7 +340,7 @@ namespace Intime.OPC.WebApi.Controllers
                 "查询快递单信息失败");
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetShipped(string saleOrderNo, string orderNo,  DateTime startDate, DateTime endDate, int pageIndex, int pageSize)
         {
 
@@ -357,7 +357,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="saleId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSalePrintSale(DateTime startDate, DateTime endDate, string saleOrderNo,
             string orderNo, int pageIndex, int pageSize)
         {
@@ -375,7 +375,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="saleId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSalePrintInvoice(DateTime startDate, DateTime endDate,
             string orderNo, string saleOrderNo, int pageIndex, int pageSize)
         {
@@ -392,7 +392,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="saleId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSalePrintExpress(DateTime startDate, DateTime endDate, 
             string orderNo,string saleOrderNo, int pageIndex, int pageSize)
         {
@@ -409,7 +409,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="saleId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSaleShipInStorage(DateTime startDate, DateTime endDate, string saleOrderNo,
             string orderNo, int pageIndex, int pageSize)
         {
@@ -420,7 +420,7 @@ namespace Intime.OPC.WebApi.Controllers
             }, "读取物流入库数据失败");
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSaleByOrderNo(string orderID,int pageIndex, int pageSize)
         {
             return DoFunction(() =>
