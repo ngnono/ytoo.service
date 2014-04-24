@@ -18,7 +18,7 @@ namespace Intime.OPC.WebApi.Controllers
             _orgServiceService = orgService;
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetAll()
         {
             return DoFunction(() =>
