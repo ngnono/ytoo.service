@@ -459,7 +459,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "该礼品卡已经充值了，不能赠送");
             }
 
-            IMS_GiftCardTransfersEntity preTrans = _transRepo.Find(trans_id.HasValue?trans_id.Value:-1);
+            IMS_GiftCardTransfersEntity preTrans = _transRepo.Find(trans_id.HasValue ? trans_id.Value : -1);
             var newTrans = new IMS_GiftCardTransfersEntity()
             {
                 Phone = phone,
@@ -605,7 +605,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         preTrans.IsActive = 0;
                         preTrans.OperateDate = DateTime.Now;
                         preTrans.OperateUser = authuid;
-                        preTrans.ToUserId = null;
+                        //preTrans.ToUserId = null;
                         _transRepo.Update(preTrans);
                     }
                     ts.Complete();
