@@ -58,8 +58,10 @@ namespace Intime.OPC.Repository
        
         public DbSet<Store> Stores { get; set; }
         public DbSet<OPC_SaleRMAComment> OPC_SaleRMAComments { get; set; }
- 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+
+         public DbSet<PaymentMethod> PaymentMethods { get; set; }
+
+         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
           
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
@@ -100,6 +102,7 @@ namespace Intime.OPC.Repository
             modelBuilder.Configurations.Add(new StoreMap());
             modelBuilder.Configurations.Add(new BrandMap());
             modelBuilder.Configurations.Add(new OPC_SaleRMACommentMap());
+            modelBuilder.Configurations.Add(new PaymentMethodMap());
         }
     }
 }

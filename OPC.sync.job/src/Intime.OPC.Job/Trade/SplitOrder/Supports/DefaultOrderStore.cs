@@ -22,6 +22,7 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
                     db.Orders.Where(
                         x =>
                             x.Status == 1 &&
+                            (!x.OrderProductType.HasValue || x.OrderProductType.Value == 1) &&
                             !db.OPC_OrderSplitLog.Any(log => log.OrderNo == x.OrderNo && log.Status == -1) &&
                             (!db.OPC_OrderSplitLog.Any(l => x.OrderNo == l.OrderNo) ||
                              db.OPC_OrderSplitLog.Any(l => l.OrderNo == x.OrderNo && l.Status != 1))).Take(20).ToList();

@@ -60,6 +60,7 @@
     <Compile Include="Base\QueryTableEx.cs" />
     <Compile Include="Base\StringEx.cs" />
     <Compile Include="IBrandRepository.cs" />
+    <Compile Include="IPaymentMethodRepository.cs" />
     <Compile Include="IMenuRepository.cs" />
     <Compile Include="IAccountRepository.cs" />
     <Compile Include="IOrderItemRepository.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="IStoreRepository.cs" />
     <Compile Include="ITransRepository.cs" />
     <Compile Include="IRoleUserRepository.cs" />
+    <Compile Include="Support\PaymentMethodRepository.cs" />
     <Compile Include="Support\BrandRepository.cs" />
     <Compile Include="Support\MenuRepository.cs" />
     <Compile Include="Support\AccountRepository.cs" />

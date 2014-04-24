@@ -23,5 +23,19 @@ namespace Intime.OPC.Service.Support
                 return lst;
             }
         }
+
+        public IList<Item> All(Type enumType)
+        {
+            IList<Item> lst=new List<Item>();
+            var arr = Enum.GetValues(enumType);
+            foreach (Enum s in arr)
+            {
+                var ii = new Item();
+                ii.Key = s.AsID().ToString();
+                ii.Value = s.GetDescription();
+                lst.Add(ii);
+            }
+            return lst;
+        }
     }
 }

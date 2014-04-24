@@ -17,7 +17,9 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Repository;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Core;
 
@@ -36,16 +38,18 @@ namespace Intime.OPC.WebApi.Controllers
         private ISaleRMAService _saleRmaService;
         private IRmaService _rmaService;
          IEnumService _enumService;
+        private IPaymentMethodRepository _paymentMethodRepository;
         /// <summary>
         ///     Initializes a new instance of the <see cref="TransController" /> class.
         /// </summary>
         /// <param name="transService">The trans service.</param>
-        public TransController(ITransService transService, IEnumService enumService, ISaleRMAService saleRmaService, IRmaService rmaService)
+        public TransController(ITransService transService, IEnumService enumService, ISaleRMAService saleRmaService, IRmaService rmaService, IPaymentMethodRepository paymentMethodRepository)
         {
             _transService = transService;
             _enumService = enumService;
             _saleRmaService = saleRmaService;
             _rmaService = rmaService;
+            _paymentMethodRepository = paymentMethodRepository;
         }
 
         /// <summary>
@@ -53,7 +57,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="saleNo">销售单编号</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpPost]
+        [HttpPost] //ddd
         public IHttpActionResult GetShippingSaleBySaleOrderNo(string saleOrderNo)
         {
             return DoFunction(() => { return _transService.GetShippingSaleBySaleNo(saleOrderNo); }, "查询快递单信息失败");
@@ -70,6 +74,7 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() => { return _transService.GetSaleByShippingSaleNo(shippingSaleNo); }, "查询销售单信息失败");
         }
 
+        //ddd
         /// <summary>
         /// Gets the shipping sale.
         /// </summary>
@@ -135,7 +140,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="comment">The comment.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpPost]
+        [HttpPost] //dddd
         public IHttpActionResult CreateShippingSale([FromBody]ShippingSaleCreateDto shippingSaleDto)
         {
             return base.DoFunction(() =>
@@ -211,27 +216,48 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetPayTypeEnums()
         {
-            return DoFunction(() => { return _enumService.All("PayType"); }, "读取付款方式失败！");
+           // return DoFunction(() => { return _enumService.All("PayType"); }, "读取付款方式失败！");
+            return DoFunction(() =>
+            {
+               var lst=  _paymentMethodRepository.GetAll(1, 1000);
+                var lstDto = new List<Item>();
+                foreach (var t in lst.Result)
+                {
+                    var ii = new Item();
+                    ii.Key = t.Code;
+                    ii.Value = t.Name;
+                    lstDto.Add(ii);
+                }
+                return lstDto;
+            });
         }
 
 
         [HttpPost]
         public IHttpActionResult GetShippingTypeEnums()
         {
+           
             return DoFunction(() => { return _enumService.All("ShippingType"); }, "读取发货方式失败！");
         }
 
         [HttpPost]
         public IHttpActionResult GetFinancialEnums()
         {
-            return DoFunction(() => { return _enumService.All("Financial"); }, "读取类型失败！");
+            return DoFunction(() =>
+            {
+                return _enumService.All("Financial");
+            }, "读取类型失败！");
         }
 
 
         [HttpPost]
         public IHttpActionResult GetOrderStatusEnums()
         {
-            return DoFunction(() => { return _enumService.All("OrderStatus"); });
+            return DoFunction(() =>
+            {
+                return _enumService.All(typeof (EnumOderStatus));
+               // return _enumService.All("OrderStatus");
+            });
         }
         /// <summary>
         /// 获得销售单类型
@@ -240,7 +266,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetSaleStatusEnums()
         {
-            return DoFunction(() => { return _enumService.All("SaleStatus"); }, "读取销售单类型失败！");
+            return DoFunction(() =>
+            {
+                return _enumService.All(typeof (EnumSaleStatus));
+               // return _enumService.All("SaleStatus");
+            }, "读取销售单类型失败！");
         }
 
         /// <summary>
@@ -250,7 +280,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetRmaStatusEnums()
         {
-            return DoFunction(() => { return _enumService.All("RmaStatus"); }, "读取退货单类型失败！");
+            return DoFunction(() =>
+            {
+                return _enumService.All(typeof(EnumRMAStatus));
+                return _enumService.All("RmaStatus");
+            }, "读取退货单类型失败！");
         }
 
         #region 退货入收银

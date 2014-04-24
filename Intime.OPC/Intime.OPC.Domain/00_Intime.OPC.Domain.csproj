@@ -136,6 +136,7 @@
     <Compile Include="Models\Mapping\OPC_SupplierInfoMap.cs" />
     <Compile Include="Models\Mapping\OrderItemMap.cs" />
     <Compile Include="Models\Mapping\OrderMap.cs" />
+    <Compile Include="Models\Mapping\PaymentMethodMap.cs" />
     <Compile Include="Models\Mapping\RMAItemMap.cs" />
     <Compile Include="Models\Mapping\RMAMap.cs" />
     <Compile Include="Models\Mapping\RMAReasonMap.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Models\OPC_SupplierInfo.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
+    <Compile Include="Models\PaymentMethod.cs" />
     <Compile Include="Models\RMA.cs" />
     <Compile Include="Models\RMAItem.cs" />
     <Compile Include="Models\RMAReason.cs" />
