@@ -35,6 +35,11 @@ namespace Intime.OPC.Job.Trade.SplitOrder
 
             foreach (var order in orders)
             {
+                if (order.OrderProductType.HasValue && order.OrderProductType.Value != 1)
+                {
+                    Log.InfoFormat("自拍商品订单{0},暂不处理",order.OrderNo);
+                    continue;
+                }
                 try
                 {
                     ProcessOrder(order);

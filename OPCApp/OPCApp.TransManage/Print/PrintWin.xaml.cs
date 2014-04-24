@@ -27,7 +27,6 @@ namespace OPCApp.TransManage.Print
         public void Print(string xsdName, string rdlcName, PrintModel dtList, bool isFast)
         {
             var myRptDS = new ReportDataSource();
-            var dt = new DataTable();
             myRptDS = new ReportDataSource(xsdName, dtList.SaleDetailDT); //创建的数据源名称(xsd文件的名称),数据集
             myRptDS.Name = "SaleDetailDT";
             _reportViewer.LocalReport.DataSources.Add(myRptDS);
