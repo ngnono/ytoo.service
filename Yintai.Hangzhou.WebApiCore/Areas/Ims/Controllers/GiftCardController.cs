@@ -639,7 +639,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 items.Add(new
                 {
                     recharged = o.order.Status == (int)GiftCardOrderStatus.Recharge,
-                    trans_id = o.transfer == null ? o.transfer.Id : 0,
+                    trans_id = o.transfer != null ? o.transfer.Id : 0,
                     from = o.transfer.FromNickName,
                     from_phone = o.transfer.FromPhone,
                     verify_phone = o.transfer != null ? o.transfer.Phone : "null",
@@ -670,7 +670,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
 
             var trans = _transRepo.Get(x => x.PreTransferId == transfers.Id);
-            if (trans.Any(x => x.IsActive != 1))
+            if (trans.Any(x => x.IsActive != 1 && x.IsDecline != 1))
             {
                 return GiftCardListItemStatus.ReTransfer;
             }
