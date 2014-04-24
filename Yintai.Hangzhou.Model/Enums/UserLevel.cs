@@ -26,10 +26,8 @@ namespace Yintai.Hangzhou.Model.Enums
         /// </summary>
         [Description("达人")]
         Daren = 2,
+        [Description("导购")]
+        DaoGou = 4
 
-        ///// <summary>
-        ///// 店长
-        ///// </summary>
-        //Manager = 4,
     }
 }

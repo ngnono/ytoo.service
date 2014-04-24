@@ -101,6 +101,13 @@
     <Compile Include="Impl\ShareService.cs" />
     <Compile Include="Impl\UserRightService.cs" />
     <Compile Include="Impl\UserService.cs" />
+    <Compile Include="Logic\AssociateIncomeLogic.cs" />
+    <Compile Include="Logic\ComboLogic.cs" />
+    <Compile Include="Logic\IncomeRule\AssociateIncomeAccount.cs" />
+    <Compile Include="Logic\IncomeRule\IIncomeRule.cs" />
+    <Compile Include="Logic\IncomeRule\IncomeRuleFix.cs" />
+    <Compile Include="Logic\IncomeRule\IncomeRuleFlatten.cs" />
+    <Compile Include="Logic\IncomeRule\IncomeRuleFlex.cs" />
     <Compile Include="Logic\OrderRule.cs" />
     <Compile Include="Logic\RMARule.cs" />
     <Compile Include="Logic\StorePromotionRule.cs" />
@@ -148,6 +155,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

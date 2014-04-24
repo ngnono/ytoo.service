@@ -66,6 +66,9 @@ namespace Yintai.Hangzhou.Model.Enums
         CustomerThumbBackground = 12,
         //ProductAudio = 12,
 
-        PMessage = 13
+        PMessage = 13,
+
+        GiftCard = 14,
+        Combo = 15
     }
 }

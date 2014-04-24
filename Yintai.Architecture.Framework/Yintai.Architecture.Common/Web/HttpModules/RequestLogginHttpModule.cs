@@ -54,10 +54,7 @@ namespace Yintai.Architecture.Common.Web.HttpModules
             
             string form = unvalid_request.Form.ToJson();
             string query = unvalid_request.QueryString.ToJson();
-            var rawBody = string.Empty;
-            var sr = new StreamReader(context.Context.Request.InputStream);
-            rawBody = sr.ReadToEnd();
-            context.Context.Request.InputStream.Position = 0;
+            
             //logging the Request
             var sb = new StringBuilder();
 
@@ -93,8 +90,14 @@ namespace Yintai.Architecture.Common.Web.HttpModules
                 sb.AppendFormat("{0} : {1}", key, unvalid_request.Form[key]);
                 sb.AppendLine();
             }
-            sb.AppendLine("[ rawbody ]");
-            sb.AppendLine(rawBody);
+            if (unvalid_request.Headers["Content-Type"] != null && unvalid_request.Headers["Content-Type"].IndexOf("multipart/form-data") < 0)
+            {
+                var sr = new StreamReader(context.Context.Request.InputStream);
+                var rawBody = sr.ReadToEnd();
+                context.Context.Request.InputStream.Position = 0;
+                sb.AppendLine("[ rawbody ]");
+                sb.AppendLine(rawBody);
+            }
             _log.Debug(sb.ToString());
         }
 

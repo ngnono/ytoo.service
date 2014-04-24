@@ -151,7 +151,7 @@ namespace com.intime.jobscheduler.Job
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (!result.IsValid)
+                    if (result != null && !result.IsValid)
                     {
                         foreach (var item in result.Items)
                         {
@@ -472,17 +472,23 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = from p in db.Tags
-                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
-                            select new ESTag()
+                var propertyLinq = db.Set<CategoryPropertyEntity>().Where(cp=>cp.IsSize == true)
+                                   .Join(db.Set<CategoryPropertyValueEntity>(),o=>o.Id,i=>i.PropertyId,(o,i)=>new {CP=o,CPV=i});
+                var prods = db.Tags.Where(p=>p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                            .GroupJoin(propertyLinq,o=>o.Id,i=>i.CP.CategoryId,(o,i)=>new {C=o,CP=i})
+                            .Select(l=>new ESTag()
                             {
-                                Id = p.Id,
-                                Name = p.Name,
-                                Description = p.Description,
-                                Status = p.Status,
-                                SortOrder = p.SortOrder
-
-                            };
+                                Id = l.C.Id,
+                                Name =l.C.Name,
+                                Description = l.C.Description,
+                                Status = l.C.Status,
+                                SortOrder = l.C.SortOrder,
+                                SizeType = l.C.SizeType??(int)CategorySizeType.FreeInput,
+                                Sizes = l.CP.Select(lcp=>new ESSize(){
+                                         Id = lcp.CPV.Id,
+                                         Name = lcp.CPV.ValueDesc
+                                })
+                            });
 
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESTag>();
@@ -561,7 +567,7 @@ namespace com.intime.jobscheduler.Job
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (!result.IsValid)
+                    if (result!=null && !result.IsValid)
                     {
                         foreach (var item in result.Items)
                         {
@@ -988,7 +994,9 @@ namespace com.intime.jobscheduler.Job
                                 ShareCount = p.ShareCount,
                                 RecommendUserId = p.RecommendUser,
                                 Section=section.FirstOrDefault(),
-                                UpcCode = p.SkuCode
+                                UpcCode = p.SkuCode,
+                                IsSystem = (!p.ProductType.HasValue)||p.ProductType==(int)ProductType.FromSystem
+
                             };
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESProduct>();

@@ -43,5 +43,21 @@ namespace com.intime.fashion.common
         public static ILog Log { get {
             return ServiceLocator.Current.Resolve<ILog>();
         } }
+        public static string MD5_Encode(string value,Encoding encode)
+        {
+
+            byte[] hashData = System.Security.Cryptography.MD5.Create().ComputeHash((encode.GetBytes(value)));
+            var hashText = new StringBuilder();
+            foreach (byte b in hashData)
+            {
+                hashText.Append(b.ToString("x2"));
+            }
+            return hashText.ToString();
+        }
+
+        public static int Yuan2Fen(decimal input)
+        {
+            return (int)(input * 100);
+        }
     }
 }

@@ -206,19 +206,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                  // call erp service to void rma
                  var rmaMap = Context.Set<RMA2ExEntity>().Where(r=>r.RMANo == rmaEntity.RMANo).FirstOrDefault();
                  if (rmaMap == null || string.IsNullOrEmpty(rmaMap.ExRMA))
-                    ts.Complete();
-                 var erpRma = new List<dynamic>() { new {
+                     ts.Complete();
+                 else
+                 {
+                     var erpRma = new List<dynamic>() { new {
                      Orders_refund_frt_sid = rmaMap.ExRMA,
                      REAL_NAME = authUser.Nickname,
                      USER_SID = "0"
 
-                 }};
-                 bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "Cancel_Refund", jsonRefunds = new { Data =erpRma } }, null
-                 , null);
-                 if (isSuccess)
-                    ts.Complete();
-                 else
-                    return this.RenderError(r => r.Message = "退货单取消失败！");
+                    }};
+                     bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "Cancel_Refund", jsonRefunds = new { Data = erpRma } }, null
+                     , null);
+                     if (isSuccess)
+                         ts.Complete();
+                     else
+                         return this.RenderError(r => r.Message = "退货单取消失败！");
+                 }
              }
 
              return this.RenderSuccess<RMAInfoResponse>(null);

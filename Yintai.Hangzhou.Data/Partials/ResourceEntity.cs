@@ -17,7 +17,7 @@ namespace Yintai.Hangzhou.Data.Models
                 return Path.Combine(Domain, Name);
             }
         }
-
+       
       
       
     }
