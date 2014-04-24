@@ -10,6 +10,7 @@ using OPCApp.Domain.Dto;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
+using OPCApp.TransManage.Print;
 
 namespace OPCApp.TransManage.ViewModels
 {
@@ -41,7 +42,27 @@ namespace OPCApp.TransManage.ViewModels
             CommandShippSaleHandOver = new DelegateCommand(ShippSaleHandOver);
             ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
             ShippingSaleCreateDto = new ShippingSaleCreateDto();
+            CommandFHDPrintView = new DelegateCommand(FHDPrintView);
+            CommandFHDPrint = new DelegateCommand(FHDPrintView);
         }
+
+        public DelegateCommand CommandFHDPrint { get; set; }
+
+        private void FHDPrintView()
+        {
+            if (SaleList == null)
+            {
+                MessageBox.Show("请选择销售单", "提示");
+                return;
+            }
+            IPrint pr = new PrintWin();
+            var rdlcName = "Print//ReportFHD.rdlc";
+
+          
+            pr.PrintFHD(rdlcName, SaleList.Where(e=>e.IsSelected).ToList());
+        }
+
+        public DelegateCommand CommandFHDPrintView { get; set; }
 
         public OPC_ShippingSale ShipSaleSelected
         {
@@ -117,13 +138,44 @@ namespace OPCApp.TransManage.ViewModels
 
         public void OnlyPrint()
         {
-//李写
+            if (ShipSaleSelected == null)
+            {
+                MessageBox.Show("请选择快递单", "提示");
+                return;
+            }
+            IPrint pr = new PrintWin();
+            var rdlcName = "Print//ReportForSF.rdlc";
+
+            var printModel = new PrintExpressModel()
+            {
+                CustomerAddress = OrderList[0].CustomerAddress,
+                CustomerName = OrderList[0].CustomerName,
+                CustomerPhone = OrderList[0].CustomerPhone,
+                ExpressFee = ShipSaleSelected.ExpressFee.ToString("f2")
+            };
+            pr.PrintExpress(rdlcName, printModel);
         }
 
         /*打印预览*/
 
         private void PrintView()
         {
+            if (ShipSaleSelected == null)
+            {
+                MessageBox.Show("请选择快递单", "提示");
+                return;
+            }
+            IPrint pr = new PrintWin();
+            var rdlcName = "Print//ReportForSF.rdlc";
+
+            var printModel = new PrintExpressModel()
+            {
+                CustomerAddress = OrderList[0].CustomerAddress,
+                CustomerName = OrderList[0].CustomerName,
+                CustomerPhone = OrderList[0].CustomerPhone,
+                ExpressFee = ShipSaleSelected.ExpressFee.ToString("f2")
+            };
+            pr.PrintExpress(rdlcName, printModel);
         }
 
         //发货单备注
