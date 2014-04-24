@@ -11,6 +11,7 @@ using com.intime.o2o.data.exchange.IT;
 using com.intime.o2o.data.exchange.IT.Request;
 using com.intime.o2o.data.exchange.IT.Request.Entity;
 using Yintai.Architecture.Common.Data.EF;
+using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Data.Models;
@@ -459,6 +460,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
 
             IMS_GiftCardTransfersEntity preTrans = _transRepo.Find(trans_id.HasValue?trans_id.Value:-1);
+            var newTrans = new IMS_GiftCardTransfersEntity()
+            {
+                Phone = phone,
+                Comment = comment,
+                CreateDate = DateTime.Now,
+                CreateUser = authuid,
+                FromUserId = authuid,
+                OrderNo = order.No,
+                IsActive = 0,
+                IsDecline = 0,
+                PreTransferId = preTrans == null ? 0 : preTrans.Id,
+                OperateDate = DateTime.Now,
+                OperateUser = authuid,
+                FromNickName = from,
+                FromPhone = from,
+            };
             using (var ts = new TransactionScope())
             {
                 if (preTrans != null)
@@ -469,26 +486,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     preTrans.OperateUser = authuid;
                     _transRepo.Update(preTrans);
                 }
-                _transRepo.Insert(new IMS_GiftCardTransfersEntity()
-                {
-                    Phone = phone,
-                    Comment = comment,
-                    CreateDate = DateTime.Now,
-                    CreateUser = authuid,
-                    FromUserId = authuid,
-                    OrderNo = order.No,
-                    IsActive = 0,
-                    IsDecline = 0,
-                    PreTransferId = preTrans == null ? 0 : preTrans.Id,
-                    OperateDate = DateTime.Now,
-                    OperateUser = authuid,
-                    FromNickName = from,
-                    FromPhone = from,
-                });
+                newTrans = _transRepo.Insert(newTrans);
                 ts.Complete();
             }
 
-            return this.RenderSuccess<dynamic>(null);
+            return this.RenderSuccess<dynamic>(r => r.Data = new {trans_id = newTrans.Id});
         }
 
         [RestfulAuthorize]
