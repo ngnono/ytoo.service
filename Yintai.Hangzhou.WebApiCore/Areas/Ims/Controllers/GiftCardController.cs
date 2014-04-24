@@ -576,7 +576,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     preTrans.IsActive = 0;
                     preTrans.OperateDate = DateTime.Now;
                     preTrans.OperateUser = authuid;
-                    preTrans.ToUserId = null;
+                    //preTrans.ToUserId = null;
                     _transRepo.Update(preTrans);
                 }
                 ts.Complete();
@@ -670,7 +670,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
 
             var trans = _transRepo.Get(x => x.PreTransferId == transfers.Id);
-            if (trans.Any(x => x.IsActive == 1))
+            if (trans.Any(x => x.IsActive != 1))
             {
                 return GiftCardListItemStatus.ReTransfer;
             }
