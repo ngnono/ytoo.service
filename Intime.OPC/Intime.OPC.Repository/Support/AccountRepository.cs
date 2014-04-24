@@ -80,7 +80,7 @@ namespace Intime.OPC.Repository.Support
        {
            using (var db = new YintaiHZhouContext())
            {
-               var lst = db.OPC_AuthUser.Where(t => true);
+               var lst = db.OPC_AuthUser.Where(t => !t.IsSystem);
                if (!string.IsNullOrWhiteSpace(loginName))
                {
                    lst = lst.Where(t => t.LogonName.Contains(loginName));
@@ -99,7 +99,7 @@ namespace Intime.OPC.Repository.Support
 
             using (var db = new YintaiHZhouContext())
             {
-                var lst = db.OPC_AuthUser.Where(t=>true);
+                var lst = db.OPC_AuthUser.Where(t=>t.IsSystem==false);
                 if (!string.IsNullOrWhiteSpace(name))
                 {
                     lst = lst.Where(t => t.Name.Contains(name));

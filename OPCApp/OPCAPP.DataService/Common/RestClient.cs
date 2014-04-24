@@ -92,7 +92,7 @@ namespace OPCApp.DataService.Common
         public static PageResult<T> GetPage<T>(string address, string urlParams)
         {
             string url = string.Format("{0}?{1}&timestamp={2}", address, urlParams, GetTimeStamp());
-            HttpResponseMessage response = Client.PostAsync(url, null).Result;
+            HttpResponseMessage response = Client.PostAsync(url,null).Result;
             curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse()
                 ? response.Content.ReadAsAsync<PageResult<T>>().Result
