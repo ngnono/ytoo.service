@@ -215,7 +215,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
             this._maxPageSize = maxPageSize;
         }
 
-
         public int Page { get; set; }
 
         public int Pagesize { get; set; }

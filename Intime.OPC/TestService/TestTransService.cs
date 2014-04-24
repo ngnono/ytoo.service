@@ -1,4 +1,5 @@
 ﻿using System;
+using Intime.OPC.Domain.Enums;
 using Intime.OPC.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Converters;
@@ -25,6 +26,17 @@ namespace TestService
             Assert.IsNotNull(lst);
 
             Assert.AreNotEqual(lst.TotalCount, 0);
+        }
+
+        [TestMethod]
+        public void TestGetEnum()
+        {
+            var lst = Enum.GetValues(typeof (EnumOderStatus));
+            var lst2 = Enum.GetNames(typeof (EnumOderStatus));
+            foreach (var v in lst)
+            {
+                Console.WriteLine(v);
+            }
         }
     }
 }

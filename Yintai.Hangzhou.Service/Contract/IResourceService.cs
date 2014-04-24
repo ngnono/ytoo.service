@@ -20,7 +20,6 @@ namespace Yintai.Hangzhou.Service.Contract
         /// <returns></returns>
         List<ResourceEntity> Save(HttpFileCollectionBase files, int createdUid, int colorPid, int sourceId, SourceType sourceType);
 
-      
         /// <summary>
         /// upload resources to stage folder
         /// </summary>
