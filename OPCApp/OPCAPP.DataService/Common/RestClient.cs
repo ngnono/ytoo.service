@@ -83,7 +83,7 @@ namespace OPCApp.DataService.Common
         /// <returns></returns>
         public static IList<T> Get<T>(string address, string urlParams = "")
         {
-            string url = string.Format("{0}?{1}", address, urlParams);
+            string url = string.Format("{0}?{1}&timestamp={2}", address, urlParams, GetTimeStamp());
             HttpResponseMessage response = Client.GetAsync(url).Result;
             curStatuscode =(int) response.StatusCode;
             return response.VerificationResponse() ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
@@ -91,8 +91,8 @@ namespace OPCApp.DataService.Common
 
         public static PageResult<T> GetPage<T>(string address, string urlParams)
         {
-            string url = string.Format("{0}?{1}", address, urlParams);
-            HttpResponseMessage response = Client.GetAsync(url).Result;
+            string url = string.Format("{0}?{1}&timestamp={2}", address, urlParams, GetTimeStamp());
+            HttpResponseMessage response = Client.PostAsync(url, null).Result;
             curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse()
                 ? response.Content.ReadAsAsync<PageResult<T>>().Result
@@ -101,7 +101,7 @@ namespace OPCApp.DataService.Common
 
         public static PageResult<T> Get<T>(string address, string urlParams, int pageIndex, int pageSize)
         {
-            string url = string.Format("{0}?{1}&pageIndex={2}&pageSize={3}", address, urlParams, pageIndex, pageSize);
+            string url = string.Format("{0}?{1}&pageIndex={2}&pageSize={3}&timestamp={4}", address, urlParams, pageIndex, pageSize, GetTimeStamp());
             HttpResponseMessage response = Client.GetAsync(url).Result;
             curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse()
@@ -111,7 +111,7 @@ namespace OPCApp.DataService.Common
 
         public static T GetSingle<T>(string address, string urlParams = "")
         {
-            string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}", address, urlParams);
+            string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}&timestamp={2}", address, urlParams, GetTimeStamp());
             HttpResponseMessage response = Client.GetAsync(url).Result;
             curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse() ? response.Content.ReadAsAsync<T>().Result : default(T);
@@ -187,6 +187,15 @@ namespace OPCApp.DataService.Common
             HttpResponseMessage response = Client.DeleteAsync(url).Result;
             curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse();
+        }
+
+        private static string GetTimeStamp()
+        {
+            Int64 retval = 0;
+            var st = new DateTime(1970, 1, 1);
+            var t = (DateTime.Now.ToUniversalTime() - st);
+            retval = (Int64)(t.TotalMilliseconds + 0.5);
+            return retval.ToString();
         }
     }
 }

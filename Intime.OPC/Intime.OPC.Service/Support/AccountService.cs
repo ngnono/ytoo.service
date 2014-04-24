@@ -16,12 +16,20 @@ namespace Intime.OPC.Service.Support
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IOrgInfoRepository _orgInfoRepository;
+        private IRoleUserRepository _roleUserRepository;
 
 
-        public AccountService(IAccountRepository accountRepository,IOrgInfoRepository orgInfoRepository):base(accountRepository)
+        public AccountService(IAccountRepository accountRepository,IOrgInfoRepository orgInfoRepository, IRoleUserRepository roleUserRepository):base(accountRepository)
         {
             _accountRepository = accountRepository;
             _orgInfoRepository = orgInfoRepository;
+            _roleUserRepository = roleUserRepository;
+        }
+
+        public override bool DeleteById(int id)
+        {
+            _roleUserRepository.DeleteByUserID(id);
+            return base.DeleteById(id);
         }
 
         #region IAccountService Members
