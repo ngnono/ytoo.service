@@ -84,7 +84,7 @@ namespace OPCApp.DataService.Common
         public static IList<T> Get<T>(string address, string urlParams = "")
         {
             string url = string.Format("{0}?{1}&timestamp={2}", address, urlParams, GetTimeStamp());
-            HttpResponseMessage response = Client.GetAsync(url).Result;
+            HttpResponseMessage response = Client.PostAsync(url,null).Result;
             curStatuscode =(int) response.StatusCode;
             return response.VerificationResponse() ? response.Content.ReadAsAsync<List<T>>().Result : new List<T>();
         }
@@ -102,7 +102,7 @@ namespace OPCApp.DataService.Common
         public static PageResult<T> Get<T>(string address, string urlParams, int pageIndex, int pageSize)
         {
             string url = string.Format("{0}?{1}&pageIndex={2}&pageSize={3}&timestamp={4}", address, urlParams, pageIndex, pageSize, GetTimeStamp());
-            HttpResponseMessage response = Client.GetAsync(url).Result;
+            HttpResponseMessage response = Client.PostAsync(url,null).Result;
             curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse()
                 ? response.Content.ReadAsAsync<PageResult<T>>().Result
@@ -112,7 +112,7 @@ namespace OPCApp.DataService.Common
         public static T GetSingle<T>(string address, string urlParams = "")
         {
             string url = string.IsNullOrWhiteSpace(urlParams) ? address : string.Format("{0}?{1}&timestamp={2}", address, urlParams, GetTimeStamp());
-            HttpResponseMessage response = Client.GetAsync(url).Result;
+            HttpResponseMessage response = Client.PostAsync(url,null).Result;
             curStatuscode = (int)response.StatusCode;
             return response.VerificationResponse() ? response.Content.ReadAsAsync<T>().Result : default(T);
         }

@@ -140,21 +140,23 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                  * 同步商品基本信息,
                  * 说明 productId为商品唯一标识
                  *      productCode为商品的款编号
+                 *      商品款号加上品牌id唯一标识
                  */
-
-                var productCodeMap = _channelMapper.GetMapByChannelValue(channelProduct.ProductCode, ChannelMapType.ProductCode);
+                var mapKey = string.Format("{1}-{0}", channelProduct.ProductCode, brand.Id);
+                var productCodeMap = _channelMapper.GetMapByChannelValue(mapKey, ChannelMapType.ProductCode);
 
                 if (productCodeMap == null)
                 {
                     var newProduct = new Domain.Models.Product()
                     {
-                        Brand_Id = brand == null ? 0 : brand.Id,
-                        Name = channelProduct.ProductName ?? string.Empty,
+                        ProductType = 1,
+                        Brand_Id = brand.Id,
+                        Name = string.IsNullOrEmpty(channelProduct.ProductName)?string.Format("{0}-{1}",brand.Name,channelProduct.ProductCode):channelProduct.ProductName,
                         UnitPrice = channelProduct.LabelPrice,
                         Store_Id = section.StoreId ?? 0,
                         Price = channelProduct.CurrentPrice,
                         Description = string.Empty,
-                        SkuCode = string.Empty, //TODO:确认SKU
+                        SkuCode = channelProduct.ProductCode,
                         Is4Sale = false, //商品属性同步完成了，设置为true
                         RecommendedReason = string.Empty,
                         RecommendUser = 0,
@@ -176,7 +178,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     _channelMapper.CreateMap(new ChannelMap()
                     {
                         LocalId = newProduct.Id,
-                        ChannnelValue = channelProduct.ProductCode,
+                        ChannnelValue = mapKey,
                         MapType = ChannelMapType.ProductCode
                     });
 
@@ -207,8 +209,8 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 proudctExt.Store_Id = section.StoreId ?? 0;
                 proudctExt.Brand_Id = brand == null ? 0 : brand.Id;
                 proudctExt.Tag_Id = tagId;
-                proudctExt.SkuCode = string.Empty;
-                proudctExt.Name = channelProduct.ProductName ?? string.Empty;
+                proudctExt.SkuCode = channelProduct.ProductCode;
+                proudctExt.Name = string.IsNullOrEmpty(channelProduct.ProductName) ? string.Format("{0}-{1}", brand.Name, channelProduct.ProductCode) : channelProduct.ProductName;
                 proudctExt.UnitPrice = channelProduct.LabelPrice;
                 proudctExt.Price = channelProduct.CurrentPrice;
                 proudctExt.Description = string.Empty;

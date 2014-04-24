@@ -23,7 +23,7 @@ namespace Intime.OPC.WebApi.Controllers
             _shippingSaleService = shippingSaleService;
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetOrder([FromUri] ReturnGoodsRequest request)
         {
             return DoFunction(() =>
@@ -77,7 +77,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaPackVerifyByPack([FromUri] PackageReceiveRequest request)
         {
             return DoFunction(() =>
@@ -109,7 +109,7 @@ namespace Intime.OPC.WebApi.Controllers
 
         #region 包裹退回-打印快递单
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaByPackPrintPress(string rmaNo)
         {
             return DoFunction(() =>
@@ -160,7 +160,7 @@ namespace Intime.OPC.WebApi.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaShippingByPackPrintPress([FromUri] RmaExpressRequest request)
         {
             return DoFunction(() =>
@@ -177,7 +177,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
-         [HttpGet]
+         [HttpPost]
         public IHttpActionResult GetRmaShippingPrintedByPack([FromUri] RmaExpressRequest request)
         {
             return DoFunction(() =>
@@ -210,7 +210,7 @@ namespace Intime.OPC.WebApi.Controllers
          /// </summary>
          /// <param name="request">The request.</param>
          /// <returns>IHttpActionResult.</returns>
-          [HttpGet]
+          [HttpPost]
         public IHttpActionResult GetRmaByShoppingGuide([FromUri] ShoppingGuideRequest request)
         {
             return DoFunction(() =>
@@ -231,7 +231,7 @@ namespace Intime.OPC.WebApi.Controllers
           /// </summary>
           /// <param name="request">The request.</param>
           /// <returns>IHttpActionResult.</returns>
-          [HttpGet]
+          [HttpPost]
           public IHttpActionResult GetRmaByAllOver([FromUri] ShoppingGuideRequest request)
           {
               return DoFunction(() =>
@@ -244,7 +244,7 @@ namespace Intime.OPC.WebApi.Controllers
           #endregion
 
           #region  网络自助退货
-          [HttpGet]
+          [HttpPost]
           public IHttpActionResult GetOrderAutoBack([FromUri] ReturnGoodsRequest request)
           {
               return DoFunction(() =>
@@ -254,7 +254,7 @@ namespace Intime.OPC.WebApi.Controllers
                   return _saleRmaService.GetOrderAutoBack(request);
               }, "查询订单失败");
           }
-          [HttpGet]
+          [HttpPost]
           public IHttpActionResult GetOrderItemsByOrderNoAutoBack(string orderNo, int pageIndex, int pageSize)
           {
               //todo 查询订单明细 未实现

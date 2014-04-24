@@ -19,7 +19,7 @@ namespace Intime.OPC.Service
 
         public virtual bool Add(T t)
         {
-            return _repository.Update(t);
+            return _repository.Create(t);
         }
 
         public virtual bool DeleteById(int id)

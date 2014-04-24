@@ -27,24 +27,17 @@ namespace Intime.OPC.WebApi.Controllers
 
         [HttpPost]
         public IHttpActionResult AddUser([FromBody] OPC_AuthUser user)
-            //public IHttpActionResult AddUser()
         {
-            
-            //TODO:check params
-            if (_accountService.Add(user))
+           if (_accountService.Add(user))
             {
                 return Ok();
             }
-
             return InternalServerError();
         }
 
         [HttpPut]
         public IHttpActionResult ResetPassword([FromBody] int userId)
-        //public IHttpActionResult AddUser()
         {
-
-
             return DoFunction(() =>
             {
                 _accountService.ResetPassword(userId);
@@ -72,7 +65,7 @@ namespace Intime.OPC.WebApi.Controllers
             return InternalServerError();
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetUsersByRoleID(int roleId)
         {
 
@@ -96,7 +89,7 @@ namespace Intime.OPC.WebApi.Controllers
             return InternalServerError();
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult SelectUser([FromUri] string orgID,  [FromUri] string SearchField, [FromUri] string SearchValue, [FromUri] int pageIndex, [FromUri] int pageSize = 20)
         {
             return DoFunction(() =>
@@ -105,14 +98,11 @@ namespace Intime.OPC.WebApi.Controllers
                 {
                     return _accountService.SelectByLogName(orgID, SearchValue, pageIndex, pageSize);
                 }
-                else if (SearchField == "1")
+                if (SearchField == "1")
                 {
                     return _accountService.Select(orgID, SearchValue, pageIndex, pageSize);
                 }
-                else
-                {
-                    return BadRequest("查询条件错误");
-                }
+                return BadRequest("查询条件错误");
             }, "查询用户信息失败");
         }
 

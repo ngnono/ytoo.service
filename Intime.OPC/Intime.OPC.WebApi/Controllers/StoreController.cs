@@ -20,7 +20,7 @@ namespace Intime.OPC.WebApi.Controllers
             _Service = service;
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetAll([UserId] int? userId)
         {
 
