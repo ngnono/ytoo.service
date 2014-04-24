@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service;
@@ -235,20 +236,28 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetShippingTypeEnums()
         {
+           
             return DoFunction(() => { return _enumService.All("ShippingType"); }, "读取发货方式失败！");
         }
 
         [HttpGet]
         public IHttpActionResult GetFinancialEnums()
         {
-            return DoFunction(() => { return _enumService.All("Financial"); }, "读取类型失败！");
+            return DoFunction(() =>
+            {
+                return _enumService.All("Financial");
+            }, "读取类型失败！");
         }
 
 
         [HttpGet]
         public IHttpActionResult GetOrderStatusEnums()
         {
-            return DoFunction(() => { return _enumService.All("OrderStatus"); });
+            return DoFunction(() =>
+            {
+                return _enumService.All(typeof (EnumOderStatus));
+               // return _enumService.All("OrderStatus");
+            });
         }
         /// <summary>
         /// 获得销售单类型
@@ -257,7 +266,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetSaleStatusEnums()
         {
-            return DoFunction(() => { return _enumService.All("SaleStatus"); }, "读取销售单类型失败！");
+            return DoFunction(() =>
+            {
+                return _enumService.All(typeof (EnumSaleStatus));
+               // return _enumService.All("SaleStatus");
+            }, "读取销售单类型失败！");
         }
 
         /// <summary>
@@ -267,7 +280,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetRmaStatusEnums()
         {
-            return DoFunction(() => { return _enumService.All("RmaStatus"); }, "读取退货单类型失败！");
+            return DoFunction(() =>
+            {
+                return _enumService.All(typeof(EnumRMAStatus));
+                return _enumService.All("RmaStatus");
+            }, "读取退货单类型失败！");
         }
 
         #region 退货入收银
