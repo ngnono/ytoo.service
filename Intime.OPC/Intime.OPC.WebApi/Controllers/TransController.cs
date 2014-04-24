@@ -57,7 +57,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="saleNo">销售单编号</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet] //ddd
+        [HttpPost] //ddd
         public IHttpActionResult GetShippingSaleBySaleOrderNo(string saleOrderNo)
         {
             return DoFunction(() => { return _transService.GetShippingSaleBySaleNo(saleOrderNo); }, "查询快递单信息失败");
@@ -68,7 +68,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="shippingSaleNo">快递单编号</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSaleByShippingSaleNo(string shippingSaleNo)
         {
             return DoFunction(() => { return _transService.GetSaleByShippingSaleNo(shippingSaleNo); }, "查询销售单信息失败");
@@ -84,7 +84,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="pageIndex">Index of the page.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetShippingSale(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize = 20)
         {
             
@@ -107,7 +107,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="pageIndex">Index of the page.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetShipping(string orderNo,
             string expressNo,
             DateTime startGoodsOutDate,
@@ -160,7 +160,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="dto">The dto.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSaleRmaByPack([FromUri]PackageReceiveRequest dto)
         {
             return DoFunction(() => { return _saleRmaService.GetByPack(dto); }, "查询退货收货单信息失败！");
@@ -171,7 +171,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="dto">The dto.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaByPack([FromUri]PackageReceiveRequest dto)
         {
             return DoFunction(() => { return _rmaService.GetAll(dto); }, "查询退货单失败！");
@@ -205,7 +205,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetShippingSaleCommentByShippingSaleNo(string shippingSaleNo)
         {
             return DoFunction(() => { return _transService.GetByShippingCommentCode(shippingSaleNo); }, "读取快递单备注失败！");
@@ -213,7 +213,7 @@ namespace Intime.OPC.WebApi.Controllers
 
         #endregion
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetPayTypeEnums()
         {
            // return DoFunction(() => { return _enumService.All("PayType"); }, "读取付款方式失败！");
@@ -233,14 +233,14 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetShippingTypeEnums()
         {
            
             return DoFunction(() => { return _enumService.All("ShippingType"); }, "读取发货方式失败！");
         }
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetFinancialEnums()
         {
             return DoFunction(() =>
@@ -250,7 +250,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetOrderStatusEnums()
         {
             return DoFunction(() =>
@@ -263,7 +263,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// 获得销售单类型
         /// </summary>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetSaleStatusEnums()
         {
             return DoFunction(() =>
@@ -277,7 +277,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// 获得退货单类型
         /// </summary>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaStatusEnums()
         {
             return DoFunction(() =>
@@ -294,7 +294,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaCashByExpress([FromUri] RmaExpressRequest request)
         {
             return DoFunction(() =>
@@ -353,7 +353,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaReturnByExpress([FromUri] RmaExpressRequest request)
         {
             return DoFunction(() =>
@@ -392,7 +392,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetRmaPrintByExpress([FromUri] RmaExpressRequest request)
         {
             return DoFunction(() =>
