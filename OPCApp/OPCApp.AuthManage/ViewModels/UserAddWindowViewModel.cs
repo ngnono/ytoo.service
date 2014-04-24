@@ -1,40 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.Practices.Prism.Mvvm;
-using Microsoft.Practices.Prism.Commands;
-using OPCAPP.Domain;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using OPCApp.DataService.Interface;
+using OPCApp.Domain.Models;
+using OPCApp.Infrastructure;
+using OPCApp.Infrastructure.DataService;
+using OPCApp.Infrastructure.Mvvm;
+
 namespace OPCApp.AuthManage.ViewModels
 {
-    public class UserAddWindowViewModel : BindableBase
+    [Export("UserViewModel", typeof (IViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class UserAddWindowViewModel : BaseViewModel<OPC_AuthUser>
     {
-        private User cUser;
-        public DelegateCommand SubmitCommand { get; set; }
-        public DelegateCommand ResetCommand { get; set; }
-        public UserAddWindowViewModel() 
+        private IList<OPC_OrgInfo> _orgList;
+        private OPC_OrgInfo orgInfo;
+
+        public UserAddWindowViewModel()
+            : base("UserView")
         {
-            this.cUser = new User();
-            //this.SubmitCommand = new DelegateCommand(this.OnSubmit);
-            //this.ResetCommand = new DelegateCommand(this.OnReset);
+            Model = new OPC_AuthUser();
+            OrgList = AppEx.Container.GetInstance<IOrgService>().Search();
+            OrgInfo = new OPC_OrgInfo();
         }
-       
-        //public void OnSubmit() 
-        //{
-            
-        //}
-        //public void OnReset() 
-        //{
-        //}
-        public User User
+
+        public OPC_OrgInfo OrgInfo
         {
-            get { return this.cUser; }
-            set { SetProperty(ref this.cUser, value); }
+            get { return orgInfo; }
+            set { SetProperty(ref orgInfo, value); }
+        }
+
+        public IList<OPC_OrgInfo> OrgList
+        {
+            get { return _orgList; }
+            set { SetProperty(ref _orgList, value); }
+        }
+
+        public override bool BeforeDoOKAction(OPC_AuthUser t)
+        {
+            if (OrgInfo == null)
+            {
+                return true;
+            }
+            t.DataAuthId = OrgInfo.OrgID;
+            t.DataAuthName = OrgInfo.OrgName;
+            return true;
+        }
+
+        protected override IBaseDataService<OPC_AuthUser> GetDataService()
+        {
+            return AppEx.Container.GetInstance<IAuthenticateService>();
         }
     }
-   
 }
-

@@ -1,81 +1,71 @@
 //===================================================================================
-// Microsoft patterns & practices
-// Composite Application Guidance for Windows Presentation Foundation
 //===================================================================================
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY
-// OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT
-// LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-// FITNESS FOR A PARTICULAR PURPOSE.
 //===================================================================================
-// The example companies, organizations, products, domain names,
-// e-mail addresses, logos, people, places, and events depicted
-// herein are fictitious.  No association with any real company,
-// organization, product, domain name, email address, logo, person,
-// places, or events is intended or should be inferred.
-//===================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using OPCApp.Main.Infrastructure.Properties;
+using OPCApp.Infrastructure.Properties;
 
-namespace OPCApp.Main.Infrastructure
+namespace OPCApp.Infrastructure
 {
     [SuppressMessage("Microsoft.Design", "CA1001",
-        Justification = "Calling the End method, which is part of the contract of using an IAsyncResult, releases the IDisposable.")]
+        Justification =
+            "Calling the End method, which is part of the contract of using an IAsyncResult, releases the IDisposable.")
+    ]
     public class AsyncResult<T> : IAsyncResult
     {
-        private readonly object lockObject;
         private readonly AsyncCallback asyncCallback;
         private readonly object asyncState;
-        private ManualResetEvent waitHandle;
-        private T result;
-        private Exception exception;
-        private bool isCompleted;
+        private readonly object lockObject;
         private bool completedSynchronously;
         private bool endCalled;
+        private Exception exception;
+        private bool isCompleted;
+        private T result;
+        private ManualResetEvent waitHandle;
 
         public AsyncResult(AsyncCallback asyncCallback, object asyncState)
         {
-            this.lockObject = new object();
+            lockObject = new object();
             this.asyncCallback = asyncCallback;
             this.asyncState = asyncState;
         }
 
+        public T Result
+        {
+            get { return result; }
+        }
+
         public object AsyncState
         {
-            get { return this.asyncState; }
+            get { return asyncState; }
         }
 
         public WaitHandle AsyncWaitHandle
         {
             get
             {
-                lock (this.lockObject)
+                lock (lockObject)
                 {
-                    if (this.waitHandle == null)
+                    if (waitHandle == null)
                     {
-                        this.waitHandle = new ManualResetEvent(this.IsCompleted);
+                        waitHandle = new ManualResetEvent(IsCompleted);
                     }
                 }
 
-                return this.waitHandle;
+                return waitHandle;
             }
         }
 
         public bool CompletedSynchronously
         {
-            get { return this.completedSynchronously; }
+            get { return completedSynchronously; }
         }
 
         public bool IsCompleted
         {
-            get { return this.isCompleted; }
-        }
-
-        public T Result
-        {
-            get { return this.result; }
+            get { return isCompleted; }
         }
 
         [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes",
@@ -120,14 +110,14 @@ namespace OPCApp.Main.Infrastructure
         {
             this.result = result;
 
-            this.DoSetComplete(completedSynchronously);
+            DoSetComplete(completedSynchronously);
         }
 
         public void SetComplete(Exception e, bool completedSynchronously)
         {
-            this.exception = e;
+            exception = e;
 
-            this.DoSetComplete(completedSynchronously);
+            DoSetComplete(completedSynchronously);
         }
 
         private void DoSetComplete(bool completedSynchronously)
@@ -135,23 +125,23 @@ namespace OPCApp.Main.Infrastructure
             if (completedSynchronously)
             {
                 this.completedSynchronously = true;
-                this.isCompleted = true;
+                isCompleted = true;
             }
             else
             {
-                lock (this.lockObject)
+                lock (lockObject)
                 {
-                    this.isCompleted = true;
-                    if (this.waitHandle != null)
+                    isCompleted = true;
+                    if (waitHandle != null)
                     {
-                        this.waitHandle.Set();
+                        waitHandle.Set();
                     }
                 }
             }
 
-            if (this.asyncCallback != null)
+            if (asyncCallback != null)
             {
-                this.asyncCallback(this);
+                asyncCallback(this);
             }
         }
     }

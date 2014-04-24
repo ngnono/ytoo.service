@@ -5,11 +5,14 @@
 // 
 // 
 //===================================================================================
+
 using System;
 using System.ComponentModel.Composition.Hosting;
 using System.Windows;
+using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.MefExtensions;
 using Microsoft.Practices.Prism.Modularity;
+using OPCApp.Infrastructure;
 
 namespace OPCApp.Main
 {
@@ -20,10 +23,10 @@ namespace OPCApp.Main
         protected override void ConfigureAggregateCatalog()
         {
             base.ConfigureAggregateCatalog();
-           
-            this.AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(QuickStartBootstrapper).Assembly));
 
-            this.AggregateCatalog.Catalogs.Add(new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory));
+            AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof (QuickStartBootstrapper).Assembly));
+
+            AggregateCatalog.Catalogs.Add(new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory));
         }
 
         protected override IModuleCatalog CreateModuleCatalog()
@@ -33,15 +36,21 @@ namespace OPCApp.Main
 
         protected override DependencyObject CreateShell()
         {
-            return this.Container.GetExportedValue<Shell>();
+            return Container.GetExportedValue<MetroWindow>();
         }
 
         protected override void InitializeShell()
         {
             base.InitializeShell();
-            Application.Current.MainWindow = (Window)this.Shell;
-            Application.Current.MainWindow.WindowState = WindowState.Maximized;
-            Application.Current.MainWindow.Show();
+            AppEx.Init(Container);
+            var logon = AppEx.Container.GetInstance<Login>();
+            //Application.Current.MainWindow.WindowState = WindowState.Maximized;
+            if (logon.ShowDialog() == true)
+            {
+                Application.Current.MainWindow = (Window) Shell;
+                Application.Current.MainWindow.ShowDialog();
+            }
+            Application.Current.Shutdown();
         }
     }
 }

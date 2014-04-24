@@ -1,40 +1,31 @@
-//===================================================================================
-//
-//===================================================================================
-//
-//===================================================================================
-//
-//===================================================================================
-using System;
 using System.ComponentModel.Composition;
-using System.Windows.Controls;
+using System.Reflection;
+using System.Windows;
+using MahApps.Metro.Controls;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
-using OPCApp.Main.Infrastructure;
-using System.Windows;
-using MahApps.Metro;
-using MahApps.Metro.Controls;
+
 namespace OPCApp.Main
 {
-    [Export]
-    public partial class Shell : MahApps.Metro.Controls.MetroWindow, IPartImportsSatisfiedNotification
+    [Export(typeof (MetroWindow))]
+    public partial class Shell : MetroWindow, IPartImportsSatisfiedNotification
     {
-        private const string EmailModuleName = "EmailModule";
-        private static Uri InboxViewUri = new Uri("/InboxView", UriKind.Relative);
+        [Import(AllowRecomposition = false)] public IModuleManager ModuleManager;
+
+        [Import(AllowRecomposition = false)] public IRegionManager RegionManager;
+
         public Shell()
         {
             InitializeComponent();
+            Title = "ÒøÌ©°Ù»õOPC v" + Assembly.GetExecutingAssembly().GetName().Version;
         }
-
-        [Import(AllowRecomposition = false)]
-        public IModuleManager ModuleManager;
-
-        [Import(AllowRecomposition = false)]
-        public IRegionManager RegionManager;
 
         public void OnImportsSatisfied()
         {
-          
+        }
+
+        private void NavigationItemsControl_OnLoaded(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

@@ -1,10 +1,6 @@
-﻿using OPCApp.Order.Model;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OPCApp.Order.Model;
 
 namespace OPCApp.Order.ViewModels
 {
@@ -12,9 +8,11 @@ namespace OPCApp.Order.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class OrderInfoSearchViewModel : ViewModelBase
     {
-        public OrderInfoSearchViewModel() {
-            this.ReturnOrders = new List<OrderInfo>();
+        public OrderInfoSearchViewModel()
+        {
+            ReturnOrders = new List<OrderInfo>();
         }
+
         public IList<OrderInfo> ReturnOrders { get; set; }
     }
 }

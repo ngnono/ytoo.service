@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.ComponentModel.Composition;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using MahApps.Metro;
-using MahApps.Metro.Controls;
+using OPCApp.AuthManage.ViewModels;
 
 namespace OPCApp.AuthManage.Views
 {
     /// <summary>
-    /// Role2UserListWindow.xaml 的交互逻辑
+    ///     Role2UserListWindow.xaml 的交互逻辑
     /// </summary>
+    [Export("Role2UserWindow", typeof (UserControl))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class Role2UserListWindow : UserControl
     {
         public Role2UserListWindow()
@@ -26,9 +16,11 @@ namespace OPCApp.AuthManage.Views
             InitializeComponent();
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        [Import("Role2UserViewModel")]
+        public Role2UserWindowViewModel ViewModel
         {
-            //是估覅一
+            get { return DataContext as Role2UserWindowViewModel; }
+            set { DataContext = value; }
         }
     }
 }
