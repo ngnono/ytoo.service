@@ -49,7 +49,10 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.3.0.20105.1\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -74,6 +77,9 @@
     <Compile Include="DTO\DateTimeExtension.cs" />
     <Compile Include="DTO\Request\Card\BindingRequest.cs" />
     <Compile Include="DTO\Request\ComputeAmountRequest.cs" />
+    <Compile Include="DTO\Request\IMSIncomeReqRequest.cs" />
+    <Compile Include="DTO\Request\IMSComboStatusUpdateRequest.cs" />
+    <Compile Include="DTO\Request\IMSComboUpdateRequest.cs" />
     <Compile Include="DTO\Request\Coupon\CouponRequest.cs" />
     <Compile Include="DTO\Request\Coupon\CouponRequestType.cs" />
     <Compile Include="DTO\Request\CreateAddressRequest.cs" />
@@ -85,6 +91,16 @@
     <Compile Include="DTO\Request\GetConversationRequest.cs" />
     <Compile Include="DTO\Request\GetFavorListRequest.cs" />
     <Compile Include="DTO\Request\GetProductInfo4PRequest.cs" />
+    <Compile Include="DTO\Request\IMSComboCreateRequest.cs" />
+    <Compile Include="DTO\Request\IMSGiftcardChangePwdRequest.cs" />
+    <Compile Include="DTO\Request\IMSGiftcardListRequest.cs" />
+    <Compile Include="DTO\Request\IMSGiftcardResetPwdRequest.cs" />
+    <Compile Include="DTO\Request\IMSGiftcardSendRequest.cs" />
+    <Compile Include="DTO\Request\IMSProductBrandsRequest.cs" />
+    <Compile Include="DTO\Request\IMSProductCreateRequest.cs" />
+    <Compile Include="DTO\Request\IMSProductSearchRequest.cs" />
+    <Compile Include="DTO\Request\IMSStoreDetailUpdateRequest.cs" />
+    <Compile Include="DTO\Request\IMSUserFavorRequest.cs" />
     <Compile Include="DTO\Request\MyCommentListRequest.cs" />
     <Compile Include="DTO\Request\MyOrderDetailRequest.cs" />
     <Compile Include="DTO\Request\MyOrderPayRequest.cs" />
@@ -122,6 +138,8 @@
     <Compile Include="DTO\Request\WxPackageGetRequest.cs" />
     <Compile Include="DTO\Response\Card\CardInfoResponse.cs" />
     <Compile Include="DTO\Response\Comment\CommentCollectionResponse.cs" />
+    <Compile Include="DTO\Response\IMSIncomeDetailResponse.cs" />
+    <Compile Include="DTO\Response\IMSIncomeReqDetailResponse.cs" />
     <Compile Include="DTO\Response\Device\DeviceInfoResponse.cs" />
     <Compile Include="DTO\Response\BaseResponse.cs" />
     <Compile Include="DTO\Response\Brand\BrandResponse.cs" />
@@ -134,6 +152,9 @@
     <Compile Include="DTO\Response\GetProductInfo4PResponse.cs" />
     <Compile Include="DTO\Response\GetShipCityDetailResponse.cs" />
     <Compile Include="DTO\Response\HotKey\HotWordResponse.cs" />
+    <Compile Include="DTO\Response\IMSComboDetailResponse.cs" />
+    <Compile Include="DTO\Response\IMSProductDetailResponse.cs" />
+    <Compile Include="DTO\Response\IMSStoreDetailResponse.cs" />
     <Compile Include="DTO\Response\ItemsInfoResponse.cs" />
     <Compile Include="DTO\Response\ItemsCollectionResponse.cs" />
     <Compile Include="DTO\Response\MyCommentInfoResponse.cs" />

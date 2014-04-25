@@ -1,3 +1,4 @@
+using com.intime.o2o.data.exchange.IT;
 using Yintai.Hangzhou.Contract.Apns;
 using Yintai.Hangzhou.Contract.Brand;
 using Yintai.Hangzhou.Contract.Card;
@@ -62,6 +63,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IUserService, UserService>();
             Current.Register<IUserRightService, UserRightService>();
             Current.Register<MappingManagerV2, MappingManagerV2>();
+            Current.Register<IApiClient, DefaultApiClient>();
 
             Current.Register<ICardDataService, CardDataService>();
             Current.RegisterSingleton<IGroupCardService, GroupCardService>();

@@ -93,6 +93,26 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IEFRepository<OrderTransactionEntity>, EFRepository<OrderTransactionEntity>>();
             Current.Register<IEFRepository<PaymentNotifyLogEntity>, EFRepository<PaymentNotifyLogEntity>>();
             Current.Register<IEFRepository<ExOrderEntity>, EFRepository<ExOrderEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateEntity>, EFRepository<IMS_AssociateEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateBrandEntity>, EFRepository<IMS_AssociateBrandEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateSaleCodeEntity>, EFRepository<IMS_AssociateSaleCodeEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateItemsEntity>, EFRepository<IMS_AssociateItemsEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateIncomeEntity>, EFRepository<IMS_AssociateIncomeEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateIncomeRequestEntity>, EFRepository<IMS_AssociateIncomeRequestEntity>>();
+            Current.Register<IEFRepository<IMS_AssociateIncomeHistoryEntity>, EFRepository<IMS_AssociateIncomeHistoryEntity>>();
+            Current.Register<IEFRepository<ProductCode2StoreCodeEntity>, EFRepository<ProductCode2StoreCodeEntity>>();
+            Current.Register<IEFRepository<IMS_ComboEntity>, EFRepository<IMS_ComboEntity>>();
+            Current.Register<IEFRepository<IMS_Combo2ProductEntity>, EFRepository<IMS_Combo2ProductEntity>>();
+
+            Current.Register<IEFRepository<IMS_GiftCardEntity>, EFRepository<IMS_GiftCardEntity>>();
+            Current.Register<IEFRepository<IMS_GiftCardItemEntity>, EFRepository<IMS_GiftCardItemEntity>>();
+            Current.Register<IEFRepository<IMS_GiftCardOrderEntity>, EFRepository<IMS_GiftCardOrderEntity>>();
+            Current.Register<IEFRepository<IMS_GiftCardRechargeEntity>, EFRepository<IMS_GiftCardRechargeEntity>>();
+            Current.Register<IEFRepository<IMS_GiftCardTransfersEntity>, EFRepository<IMS_GiftCardTransfersEntity>>();
+            Current.Register<IEFRepository<IMS_GiftCardUserEntity>, EFRepository<IMS_GiftCardUserEntity>>();
+            Current.Register<IEFRepository<IMS_InviteCodeEntity>, EFRepository<IMS_InviteCodeEntity>>();
+
+            Current.Register<IEFRepository<WX_MenuEntity>, EFRepository<WX_MenuEntity>>();
         }
 
         #endregion

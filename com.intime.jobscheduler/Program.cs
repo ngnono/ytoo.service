@@ -27,34 +27,9 @@ namespace com.intime.jobscheduler
             };
             ServiceBase.Run(ServicesToRun);
 #else
-            //var querydata = new OrderQuery()
-            //{
-            //    AppId = WxPayConfig.APP_ID,
-            //    SignMethod = "sha1",
-            //    TimeStamp = 1383696365,
-            //    Package = new OrderQueryPackage() {
-            //        TradeNo = "1217446001201311058031690715"
-            //    }
-            //};
             
-            //WxServiceHelper.Query(querydata,r=>{
-            //    var ret = r;
-            //},r=>{
-            //    var ret = r;
-            //});
             new MainJobService().ConsoleDebug();
-            IJob job = null;
-            //job = new Job.Wgw.ProductSyncJob();
 
-            //job = new Job.Wgw.BrandSyncJob();
-            //job = new Job.Wgw.OrderSyncJob();
-            //job.Execute(null);
-            //job = new Job.Wgw.InventorySyncJob();
-            //job = new Job.Wgw.ProductStatusSyncJob();
-            //job = new GetItemMultiStockJob();
-            job = new Job.Erp.OrderSyncJob();
-            job.Execute(null);
-            Console.WriteLine("Job执行完成！");
             Console.ReadLine();
 #endif
         }
