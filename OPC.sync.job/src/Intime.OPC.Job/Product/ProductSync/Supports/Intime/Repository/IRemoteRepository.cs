@@ -73,6 +73,15 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
         SectionDto GetSectionById(string counterId, string storeNo);
 
         /// <summary>
+        /// 根据更新时间获取专柜列表
+        /// </summary>
+        /// <param name="pageIndex">当前的页码</param>
+        /// <param name="pageSize">每页大小</param>
+        /// <param name="lastUpdateDateTime">最后更新时间</param>
+        /// <returns>商品列表</returns>
+        IEnumerable<SectionDto> GetSectionList(int pageIndex, int pageSize, DateTime lastUpdateDateTime);
+
+        /// <summary>
         /// 根据更新时间获取商品图片列表
         /// </summary>
         /// <param name="pageIndex">当前的页码</param>

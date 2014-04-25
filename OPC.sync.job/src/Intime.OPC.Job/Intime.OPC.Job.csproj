@@ -133,6 +133,7 @@
     <Compile Include="Product\ProductSync\Models\ChannelMapType.cs" />
     <Compile Include="Product\ProductSync\Models\ProductPropertyType.cs" />
     <Compile Include="Product\ProductSync\Supports\Intime\Jobs\ProductPicSyncJob.cs" />
+    <Compile Include="Product\ProductSync\Supports\Intime\Jobs\SectionSyncJob.cs" />
     <Compile Include="Product\ProductSync\Supports\Intime\Mapper\ChannelMapper.cs" />
     <Compile Include="Product\ProductSync\Supports\Intime\Jobs\AllSyncJob.cs" />
     <Compile Include="Product\ProductSync\Supports\Intime\Processors\CategorySyncProcessor.cs" />
