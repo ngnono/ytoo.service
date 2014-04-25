@@ -131,23 +131,32 @@ namespace Intime.OPC.WebApi.Controllers
                 return BadRequest("请求参数不正确");
             }
 
-            var user = _accountService.Get(loginModel.UserName, loginModel.Password);
-
-            if (user == null)
+            try
             {
-                return BadRequest("用户名或密码错误");
+                var user = _accountService.Get(loginModel.UserName, loginModel.Password);
+
+                if (user == null)
+                {
+                    return BadRequest("用户名或密码错误");
+                }
+
+                DateTime expiresDate = DateTime.Now.AddSeconds(60*60*24);
+
+                HttpContext.Current.User = new ClaimsPrincipal();
+                return Ok(new TokenModel
+                {
+                    AccessToken = SecurityUtils.CreateAccessToken(user.Id, expiresDate),
+                    UserId = user.Id,
+                    UserName = loginModel.UserName,
+                    Expires = expiresDate
+                });
             }
-
-            DateTime expiresDate = DateTime.Now.AddSeconds(60*60*24);
-
-           HttpContext.Current.User=new ClaimsPrincipal();
-            return Ok(new TokenModel
+            catch (Exception ex)
             {
-                AccessToken = SecurityUtils.CreateAccessToken(user.Id, expiresDate),
-                UserId = user.Id,
-                UserName = loginModel.UserName,
-                Expires = expiresDate
-            });
+                GetLog().Error(ex);
+                return this.InternalServerError(ex);
+            }
+            
         }
     }
 }

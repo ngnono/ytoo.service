@@ -64,6 +64,18 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string Brand2Name { get; set; }
         [DataMember(Name="skucode")]
         public string SkuCode { get; set; }
+        [DataMember(Name = "product_type")]
+        public int ProductType_I { get {
+            return ProductType ?? (int)Yintai.Hangzhou.Model.Enums.ProductType.FromSystem;
+        } }
+        [DataMember(Name="is_online")]
+        public bool IsOnline { get {
+            return SaleColors != null &&
+                SaleColors.Count() > 0 &&
+                SaleColors.Any(s => s.Sizes != null && s.Sizes.Count() > 0);
+        } }
+        [IgnoreDataMember]
+        public Nullable<int> ProductType { get; set; }
        
     }
     [DataContract]

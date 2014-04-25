@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.intime.fashion.common;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -203,8 +204,6 @@ namespace Yintai.Hangzhou.Service
 
                 var customerEntity = _customerRepository.Find(userId);
                 customerEntity.LastLoginDate = DateTime.Now;
-                customerEntity.Nickname = request.OutsiteNickname;
-
                 _customerRepository.Update(customerEntity);
             }
 
@@ -308,6 +307,19 @@ namespace Yintai.Hangzhou.Service
 
             var result = new ExecuteResult<CustomerInfoResponse>();
             var response = MappingManager.CustomerInfoResponseMappingForReadCount(userModel);
+
+            //modify: plug in template if user is the daogou
+            if (response.UserLevel == (int)UserLevel.DaoGou)
+            {
+                var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == response.Id).FirstOrDefault();
+                if (associateEntity != null)
+                {
+                    response.TemplateId = associateEntity.TemplateId;
+                    response.OperateRight = associateEntity.OperateRight;
+                    response.AssociateId = associateEntity.Id;
+                    response.MaxComboItems = ConfigManager.MAX_COMBO_ONLINE;
+                }
+            }
             result.Data = response;
 
             return result;

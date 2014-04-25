@@ -1,0 +1,89 @@
+﻿@model GiftCardEntityModel
+@{
+    ViewBag.Title = "新增礼品卡";
+}
+@section PageBread
+{
+    <ul class="breadcrumb">
+        <li>@Html.ActionLink2("首页", "index", "Home")<span class="divider">/</span></li>
+        <li>@Html.ActionLink2("礼品卡列表", "List")<span class="divider">/</span></li>
+        <li class="active">@ViewBag.Title</li>
+    </ul>
+}
+
+@section PageJsSection {
+    <script>
+        $(document).ready(function() {
+            $("#btn_add").click(function () {
+                var row = '<tr class="rowItem"><td><input name="amount" type="text" /></td><td><input name="price" type="text"/></td><td><input name="quota" type="text"/></td><td><input name="status" type="checkbox"/> </td><td><a href="javascript:void(0)" onclick="removetr(this)">删除</a></td></tr>';
+                $("tr:last").before(row);
+            });
+            $('#createBtn').click(function() {
+                var data = [];
+                $('.rowItem').each(function() {
+                    var o = {};
+                    $(this).find('input').each(function() {
+                        var val = $(this).val();
+                        var key = $(this).attr("name");
+                        if ($(this).attr("type") == "text") {
+                            if (!parseInt(val)) {
+                                alert("必须是数字");
+                                $(this).val("");
+                                $(this).focus();
+                                return false;
+                            }
+                            o[key] = val;
+                        } else if ($(this).attr("type") == "checkbox") {
+                            o[key] = $(this).prop("checked");
+                        }
+                    });
+                    data.push(o);
+                });
+                var jsonStr = JSON.stringify(data);
+
+                if ($("#items") != undefined) {
+                    $("#items").remove();
+                }
+                alert(jsonStr);
+                var input = "<input type='hidden' id='items' value='" + jsonStr + "' name='items'/>";
+                $("form:first").append(input);
+                $("form:first").submit();
+            });
+            $("#btn_add").trigger("click");
+        });
+
+        $('#btn_add').click();
+
+        function removetr(e) {
+            $(e).parent().parent().remove();
+        }
+    </script>
+}
+
+<h2>@ViewBag.Title</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <div class="label">@Html.Label("描述")</div>
+        <div class="text-box">
+            @Html.TextBox("Name")
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+    </fieldset>
+    <fieldset>
+        <div class="label">@Html.Label("增加子卡")</div>
+        <table>
+            <tr class="rowlink"><th>面额</th><th>销售价</th><th>销售配额</th><th>是否上线</th><th>删除</th></tr>
+            <tr id="tr_add" class="rowlink"><td colspan="5"><input id="btn_add" type="button" value="增加子卡" /></td></tr>
+        </table>
+    </fieldset>
+    <p>
+        <input id="createBtn" type="button" value="创建" class="btn btn-primary" />
+        @Html.ActionLink2("返回列表", "List", null, new { @class = "btn" })
+    </p>
+}

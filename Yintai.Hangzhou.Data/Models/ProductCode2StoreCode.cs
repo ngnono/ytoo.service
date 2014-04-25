@@ -7,7 +7,7 @@ namespace Yintai.Hangzhou.Data.Models
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public int ExPId { get; set; }
+        public string StoreProductCode { get; set; }
         public int StoreId { get; set; }
         public int Status { get; set; }
         public System.DateTime UpdateDate { get; set; }

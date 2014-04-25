@@ -32,6 +32,9 @@ namespace Yintai.Hangzhou.Data.Models
         public string ColorValueName { get; set; }
         public string SizeValueName { get; set; }
 
+        public Nullable<int> ProductType { get; set; }
+        public string StoreSalesCode { get; set; }
+
         #region Overrides of BaseEntity
 
         /// <summary>
@@ -40,7 +43,6 @@ namespace Yintai.Hangzhou.Data.Models
         public override object EntityId
         {       
                 get { return Id; }
- 
         }
 
         #endregion

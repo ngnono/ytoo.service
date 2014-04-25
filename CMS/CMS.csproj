@@ -131,10 +131,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Yintai.Architecture.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_dll\Yintai.Architecture.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="zxing">
       <HintPath>..\packages\ZXing.Net.0.12.0.0\lib\net40\zxing.dll</HintPath>
     </Reference>
@@ -200,6 +196,7 @@
     <Compile Include="Controllers\CouponCodeReportController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
+    <Compile Include="Controllers\GiftCardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HotwordController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -224,6 +221,7 @@
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\UserAuthController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\WxmenuController.cs" />
     <Compile Include="Controllers\WXReplyController.cs" />
     <Compile Include="Dto\Product\ListDto.cs" />
     <Compile Include="Dto\Resource\ListDto.cs" />
@@ -240,8 +238,10 @@
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\FilesStatus.cs" />
+    <Compile Include="Models\GiftCardViewModel.cs" />
     <Compile Include="Models\HotwordViewModel.cs" />
     <Compile Include="Models\IPagerInfo.cs" />
+    <Compile Include="Models\JsonNetResult.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\Order2SaleReportViewModel.cs" />
     <Compile Include="Models\OrderConfirmReportViewModel.cs" />
@@ -268,6 +268,7 @@
     <Compile Include="Models\TagPropertyViewModel.cs" />
     <Compile Include="Models\TagViewModel.cs" />
     <Compile Include="Models\UserAuthViewModel.cs" />
+    <Compile Include="Models\WxMenuViewModel.cs" />
     <Compile Include="Models\WXReplyViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\AdminAuthorizeAttribute.cs" />
@@ -1028,6 +1029,11 @@
     <Content Include="Views\Category\EditorTemplates\CategoryViewModel.cshtml" />
     <Content Include="Views\Category\EditorTemplates\ShowCategoryViewModel.cshtml" />
     <Content Include="Views\BarCode\Create.cshtml" />
+    <Content Include="Views\Wxmenu\Index.cshtml" />
+    <Content Include="Views\GiftCard\Create.cshtml" />
+    <Content Include="Views\GiftCard\Details.cshtml" />
+    <Content Include="Views\GiftCard\List.cshtml" />
+    <Content Include="Views\GiftCard\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\themes\webget\easyui\NewFolder1\" />
@@ -1040,6 +1046,10 @@
     <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Architecture.Framework\Yintai.Architecture.Framework\Yintai.Architecture.Framework.csproj">
+      <Project>{11d4830c-fd83-48b8-96de-6f51c9c2576c}</Project>
+      <Name>Yintai.Architecture.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>

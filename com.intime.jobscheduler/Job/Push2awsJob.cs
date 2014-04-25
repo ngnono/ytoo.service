@@ -32,25 +32,25 @@ namespace com.intime.jobscheduler.Job
             var client = new ElasticClient(new ConnectionSettings(new Uri(esUrl))
                                     .SetDefaultIndex(esIndex)
                                     .SetMaximumAsyncConnections(10));
-            ConnectionStatus connectionStatus;
-            if (!client.TryConnect(out connectionStatus))
+            if (client == null)
             {
-                log.Fatal(string.Format("Could not connect to {0}:\r\n{1}",
-                    esUrl, connectionStatus.Error.OriginalException.Message));
+                log.Info("client create faile");
                 return;
             }
+           
             if (needRebuild)
             {
                 var response = client.DeleteIndex(esIndex);
                 if (response.OK)
                 {
                     log.Info(string.Format("index:{0} is deleted!", esIndex));
-                    _isActiveOnly = true;
+                    
                 }
                 else
                 {
                     log.Info("remove index failed");
                 }
+                _isActiveOnly = true;
             }
             IndexBrand(client, benchDate);
             IndexHotwork(client, benchDate);
@@ -152,7 +152,7 @@ namespace com.intime.jobscheduler.Job
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (!result.IsValid)
+                    if (result != null && !result.IsValid)
                     {
                         foreach (var item in result.Items)
                         {
@@ -473,17 +473,26 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = from p in db.Tags
-                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
-                            select new ESTag()
+                var linq = db.Tags.AsQueryable();
+                if (_isActiveOnly)
+                    linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
+                var propertyLinq = db.Set<CategoryPropertyEntity>().Where(cp=>cp.IsSize == true)
+                                   .Join(db.Set<CategoryPropertyValueEntity>(),o=>o.Id,i=>i.PropertyId,(o,i)=>new {CP=o,CPV=i});
+                var prods = linq.Where(p=>p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                            .GroupJoin(propertyLinq,o=>o.Id,i=>i.CP.CategoryId,(o,i)=>new {C=o,CP=i})
+                            .Select(l=>new ESTag()
                             {
-                                Id = p.Id,
-                                Name = p.Name,
-                                Description = p.Description,
-                                Status = p.Status,
-                                SortOrder = p.SortOrder
-
-                            };
+                                Id = l.C.Id,
+                                Name =l.C.Name,
+                                Description = l.C.Description,
+                                Status = l.C.Status,
+                                SortOrder = l.C.SortOrder,
+                                SizeType = l.C.SizeType??(int)CategorySizeType.FreeInput,
+                                Sizes = l.CP.Select(lcp=>new ESSize(){
+                                         Id = lcp.CPV.Id,
+                                         Name = lcp.CPV.ValueDesc
+                                })
+                            });
 
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESTag>();
@@ -522,7 +531,10 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = from s in db.Stores
+                var linq = db.Stores.AsQueryable();
+                if (_isActiveOnly)
+                    linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
+                var prods = from s in linq
                             let resource = (from r in db.Resources
                                             where r.SourceId == s.Id
                                             && r.SourceType == (int)SourceType.StoreLogo
@@ -562,7 +574,7 @@ namespace com.intime.jobscheduler.Job
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (!result.IsValid)
+                    if (result!=null && !result.IsValid)
                     {
                         foreach (var item in result.Items)
                         {
@@ -594,16 +606,17 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = from p in db.Brands
-                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
-                            select new ESBrand()
+                var linq = db.Brands.Where(p=>p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate);
+                if (_isActiveOnly)
+                    linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
+                var prods = linq.Select(p=> new ESBrand()
                             {
                                 Id = p.Id,
                                 Name = p.Name,
                                 Description = p.Description,
                                 Status = p.Status,
                                 Group = p.Group
-                            };
+                            });
 
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESBrand>();
@@ -989,7 +1002,9 @@ namespace com.intime.jobscheduler.Job
                                 ShareCount = p.ShareCount,
                                 RecommendUserId = p.RecommendUser,
                                 Section=section.FirstOrDefault(),
-                                UpcCode = p.SkuCode
+                                UpcCode = p.SkuCode,
+                                IsSystem = (!p.ProductType.HasValue)||p.ProductType==(int)ProductType.FromSystem
+
                             };
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESProduct>();

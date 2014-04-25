@@ -33,6 +33,8 @@ namespace com.intime.fashion.common
         private static readonly string _grouphttphost = ConfigurationManager.AppSettings["grouphttphost"];
         private static readonly string _grouphttpaction_exchange = ConfigurationManager.AppSettings["grouphttpaction_exchange"];
         private static string _appStoreNoInGroup = ConfigurationManager.AppSettings["appstorenoingroup"];
+        public static readonly int COMBO_EXPIRED_DAYS = int.Parse(ConfigurationManager.AppSettings["COMBO_EXPIRED_DAYS"]);
+        public static readonly int MAX_COMBO_ONLINE = int.Parse(ConfigurationManager.AppSettings["MAX_COMBO_ONLINE"]);
         public static int GetCacheSeed()
         {
             var t = GetAppConfigParamsValueOrDefault("cacheseedfactory", "1");
@@ -224,8 +226,39 @@ namespace com.intime.fashion.common
             {
                 return int.Parse(ConfigurationManager.AppSettings["VoidOrderRMAReasonId"]);
             }
-        } 
-
+        }
        
+        public static int IMS_DEFAULT_TEMPLATE
+        {
+            get { 
+                return int.Parse(ConfigurationManager.AppSettings["IMS_Default_Template"]);
+            }
+        }
+
+        public static bool IS_PRODUCT_ENV
+        {
+            get
+            {
+                return bool.Parse(ConfigurationManager.AppSettings["IS_PRODUCT_ENV"]);
+            }
+        }
+
+        public static string IMS_DEFAULT_LOGO { get{
+            return ConfigurationManager.AppSettings["IMS_Default_LOGO"];
+        } }
+        public static int IMS_MAX_REQUEST_AMOUNT_MON
+        {
+            get
+            {
+                return int.Parse(ConfigurationManager.AppSettings["IMS_MAX_REQUEST_AMOUNT_MON"]);
+            }
+        }
+        public static int IMS_GIFTCARD_CAT_ID
+        {
+            get
+            {
+                return int.Parse(ConfigurationManager.AppSettings["IMS_GIFTCARD_CAT_ID"]);
+            }
+        }
     }
 }

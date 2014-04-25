@@ -110,15 +110,26 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         public ActionResult Detail(MyOrderDetailRequest request, UserModel authUser)
         {
             var dbContext = Context;
-            var linq = dbContext.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo && o.CustomerId == authUser.Id)
+            var linq = dbContext.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo)
                         .GroupJoin(dbContext.Set<OrderItemEntity>(),
                             o => o.OrderNo,
                             i => i.OrderNo,
                             (o, i) => new { O = o, OI = i })
                         .FirstOrDefault();
+           
             if (linq == null)
             {
                 return this.RenderError(m => m.Message = "订单号不存在");
+            }
+            var isDaogou = false;
+            if (linq.O.CustomerId != authUser.Id) 
+            {
+                var associateEntity = dbContext.Set<IMS_AssociateIncomeHistoryEntity>().Where(im => im.SourceType == (int)AssociateOrderType.Product &&
+                                    im.SourceNo == request.OrderNo &&
+                                    im.AssociateUserId == authUser.Id).FirstOrDefault();
+                if (associateEntity==null)
+                    return this.RenderError(m => m.Message = "订单号不存在");
+                isDaogou = true;
             }
             var result = new MyOrderDetailResponse().FromEntity<MyOrderDetailResponse>(linq.O, o =>
             {
@@ -139,7 +150,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 
                 o.RMAs = dbContext.Set<RMAEntity>().Where(r => r.OrderNo == o.OrderNo).OrderByDescending(r => r.CreateDate)
                         .ToList()
-                        .Select(r => new MyRMAResponse().FromEntity<MyRMAResponse>(r));
+                        .Select(r => new MyRMAResponse().FromEntity<MyRMAResponse>(r, ro => {
+                            ro.CanVoid = RMARule.CanVoid(ro.Status);
+                        }));
 
                 o.Outbounds = dbContext.Set<OutboundEntity>().Where(ob => ob.SourceType == (int)OutboundType.Order && ob.SourceNo == o.OrderNo)
                               .Join(dbContext.Set<ShipViaEntity>(),ob=>ob.ShippingVia,i=>i.Id,(ob,i)=>new {OB=ob,OS=i})
@@ -147,7 +160,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                  ShipViaName = ob.OS.Name,
                                   ShipNo = ob.OB.ShippingNo
                              });
-
+                o.IsDaoGou = isDaogou;
+                o.IsOwner = linq.O.CustomerId == authUser.Id;
             });
             return this.RenderSuccess<MyOrderDetailResponse>(r => r.Data=result);
         }
@@ -219,7 +233,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                    }
                }
                else {
-                   isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "CancelOrders", dealCode = linq.OrderNo}, null
+                   isSuccess = true;
+                   if (ConfigManager.IS_PRODUCT_ENV && (!linq.OrderProductType.HasValue || linq.OrderProductType.Value==(int)OrderProductType.SystemProduct))
+                        isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "CancelOrders", dealCode = linq.OrderNo }, null
                   , null);
                    
                }
@@ -243,6 +259,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         {
 
             return DoRMA(request, authUser, true);
+        }
+        [RestfulAuthorize]
+        public ActionResult RMA_All(RMARequest request, UserModel authUser)
+        {
+
+            return DoRMA(request, authUser, false);
         }
         [RestfulAuthorize]
         public ActionResult WxAppPay(WxGetPay4AppTokenRequest request, UserModel authUser) 
@@ -315,17 +337,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 }
             }
             request.Reason = string.Format("{0}-{1}", dbContext.Set<RMAReasonEntity>().Find(request.RMAReason).Reason, request.Reason ?? string.Empty);
-            var erpRma = new
-            {
-                dealCode = orderEntity.OrderNo,
-                CUSTOMER_FRT = "0",
-                COMPANY_FRT = "0",
-                REAL_NAME = orderEntity.ShippingContactPerson,
-                USER_SID = "0",
-
-                Detail = new List<dynamic>()
-            };
-            
+          
             using (var ts = new TransactionScope())
             {
                 decimal rmaAmount = 0;
@@ -344,25 +356,37 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     UpdateUser = authUser.Id,
                     ContactPhone = request.ContactPhone,
                     UserId = orderEntity.CustomerId
-                });
-                foreach (var rma in request.Products2)
+                }); 
+                var rmaItems = new List<OrderItemEntity>();
+                if (request.Products2 != null && request.Products2.Count()>0)
                 {
-                    var orderItemEntity = dbContext.Set<OrderItemEntity>().Where(o => o.OrderNo == request.OrderNo && o.ProductId == rma.ProductId && o.ColorValueId == rma.Properties.ColorValueId && o.SizeValueId == rma.Properties.SizeValueId).FirstOrDefault();
-                    if (orderItemEntity == null)
-                        return this.RenderError(r => r.Message = string.Format("{0} not in order", rma.ProductId));
-                    if (orderItemEntity.Quantity < rma.Quantity)
-                        return this.RenderError(r => r.Message = string.Format("{0} 超出购买数量", rma.ProductId));
-                    rmaAmount += orderItemEntity.ItemPrice * rma.Quantity;
+                    foreach (var rma in request.Products2)
+                    {
+                        var orderItemEntity = dbContext.Set<OrderItemEntity>().Where(o => o.OrderNo == request.OrderNo && o.ProductId == rma.ProductId && o.ColorValueId == rma.Properties.ColorValueId && o.SizeValueId == rma.Properties.SizeValueId).FirstOrDefault();
+                        if (orderItemEntity == null)
+                            return this.RenderError(r => r.Message = string.Format("{0} not in order", rma.ProductId));
+                        if (orderItemEntity.Quantity < rma.Quantity)
+                            return this.RenderError(r => r.Message = string.Format("{0} 超出购买数量", rma.ProductId));
+                        orderItemEntity.Quantity = rma.Quantity;
+                        rmaItems.Add(orderItemEntity);
+                    }
+                } else 
+                {
+                    rmaItems.AddRange(dbContext.Set<OrderItemEntity>().Where(o=>o.OrderNo == request.OrderNo));
+                }
+                foreach (var orderItemEntity in rmaItems)
+                {
+                    rmaAmount += orderItemEntity.ItemPrice * orderItemEntity.Quantity;
                     _rmaitemRepo.Insert(new RMAItemEntity()
                     {
                         CreateDate = DateTime.Now,
                         ItemPrice = orderItemEntity.ItemPrice,
-                        ExtendPrice = orderItemEntity.ItemPrice * rma.Quantity,
+                        ExtendPrice = orderItemEntity.ItemPrice * orderItemEntity.Quantity,
                         ProductDesc = orderItemEntity.ProductDesc,
                         ProductId = orderItemEntity.ProductId,
                         ColorValueId = orderItemEntity.ColorValueId,
                         SizeValueId = orderItemEntity.SizeValueId,
-                        Quantity = rma.Quantity,
+                        Quantity = orderItemEntity.Quantity,
                         RMANo = newRma.RMANo,
                         Status = (int)DataStatus.Normal,
                         UnitPrice = orderItemEntity.UnitPrice,
@@ -375,15 +399,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                         
 
                     });
-                    var exInventory = Context.Set<InventoryEntity>().Where(i => i.ProductId == rma.ProductId && i.PColorId == rma.Properties.ColorValueId && i.PSizeId == rma.Properties.SizeValueId).FirstOrDefault();
-                    if (exInventory == null)
-                        return this.RenderError(r => r.Message = string.Format("{0} no channel product", rma.ProductId));
-                    erpRma.Detail.Add(new
-                    {
-                        SelectPro_detail_sid = exInventory.ChannelInventoryId,
-                        RefundNum = rma.Quantity,
-                        REFUND_REASON = request.Reason
-                    });
+                    
                 }
                 newRma.RMAAmount = rmaAmount;
                 _rmaRepo.Update(newRma);
@@ -396,16 +412,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                     Operation = "申请线上退货"
                 });
                 string exRMANo = string.Empty;
-                bool isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "Agree_Refund", jsonSales = new { Data = new List<dynamic>() { erpRma } } }, r => exRMANo = r.orders_refund_frt_sid
-                  , null);
+                bool isSuccess = true;
+
                 if (isSuccess)
                 {
-                    _rmaexRepo.Insert(new RMA2ExEntity()
-                    {
-                        ExRMA = exRMANo??string.Empty,
-                        RMANo = newRma.RMANo,
-                        UpdateDate = DateTime.Now
-                    });
+                    
                     ts.Complete();
                     return this.RenderSuccess<MyRMAResponse>(r => r.Data = new MyRMAResponse().FromEntity<MyRMAResponse>(newRma));
                 }
