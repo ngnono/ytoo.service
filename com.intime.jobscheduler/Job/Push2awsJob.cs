@@ -44,12 +44,13 @@ namespace com.intime.jobscheduler.Job
                 if (response.OK)
                 {
                     log.Info(string.Format("index:{0} is deleted!", esIndex));
-                    _isActiveOnly = true;
+                    
                 }
                 else
                 {
                     log.Info("remove index failed");
                 }
+                _isActiveOnly = true;
             }
             IndexBrand(client, benchDate);
             IndexHotwork(client, benchDate);
