@@ -26,6 +26,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
         private readonly ISectionSyncProcessor _sectionSyncProcessor;
         private readonly IChannelMapper _channelMapper;
         private readonly int DefaultTagId = int.Parse(ConfigurationManager.AppSettings["ERPSYN_DEFAULT_TAG"]);
+        private static int DEFAULT_OWNER_ID = int.Parse(ConfigurationManager.AppSettings["ERPSYN_DEFAULT_USER"]);
 
         public ProductSyncProcessor(IRemoteRepository remoteRepository, IChannelMapper channelMapper)
         {
@@ -159,16 +160,16 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         SkuCode = channelProduct.ProductCode,
                         Is4Sale = false, //商品属性同步完成了，设置为true
                         RecommendedReason = string.Empty,
-                        RecommendUser = 0,
+                        RecommendUser = DEFAULT_OWNER_ID,
                         SortOrder = 0,
                         Status = 1,
                         Tag_Id = tagId,
                         BarCode = string.Empty,
                         Favorable = "1",
                         UpdatedDate = DateTime.Now,
-                        UpdatedUser = SystemDefine.SystemUser,
+                        UpdatedUser = DEFAULT_OWNER_ID,
                         CreatedDate = DateTime.Now,
-                        CreatedUser = SystemDefine.SystemUser,
+                        CreatedUser = DEFAULT_OWNER_ID,
                     };
 
                     db.Products.Add(newProduct);
@@ -205,7 +206,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     return null;
                 }
 
-                proudctExt.BarCode = string.Empty;                 
+                //proudctExt.BarCode = string.Empty;                 
                 proudctExt.Store_Id = section.StoreId ?? 0;
                 proudctExt.Brand_Id = brand == null ? 0 : brand.Id;
                 proudctExt.Tag_Id = tagId;
@@ -213,10 +214,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 proudctExt.Name = string.IsNullOrEmpty(channelProduct.ProductName) ? string.Format("{0}-{1}", brand.Name, channelProduct.ProductCode) : channelProduct.ProductName;
                 proudctExt.UnitPrice = channelProduct.LabelPrice;
                 proudctExt.Price = channelProduct.CurrentPrice;
-                proudctExt.Description = string.Empty;
-                proudctExt.RecommendedReason = string.Empty;
+                //proudctExt.Description = string.Empty;
+                //proudctExt.RecommendedReason = string.Empty;
                 proudctExt.UpdatedDate = DateTime.Now;
-                proudctExt.UpdatedUser = SystemDefine.SystemUser;
+                //proudctExt.UpdatedUser = SystemDefine.SystemUser;
 
                 //if (category == null)
                 //{
