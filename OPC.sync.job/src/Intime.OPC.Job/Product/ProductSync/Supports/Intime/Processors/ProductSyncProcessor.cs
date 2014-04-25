@@ -217,7 +217,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 //proudctExt.Description = string.Empty;
                 //proudctExt.RecommendedReason = string.Empty;
                 proudctExt.UpdatedDate = DateTime.Now;
-                //proudctExt.UpdatedUser = SystemDefine.SystemUser;
+                proudctExt.UpdatedUser = DEFAULT_OWNER_ID;
 
                 //if (category == null)
                 //{
