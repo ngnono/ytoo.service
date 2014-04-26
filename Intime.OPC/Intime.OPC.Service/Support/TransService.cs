@@ -174,8 +174,8 @@ namespace Intime.OPC.Service.Support
             //    throw new UnauthorizedAccessException();
             //}
 
-            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate,endDate,pageIndex,pageSize,null);
-            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            return _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate,endDate,pageIndex,pageSize,null);
+           // return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public PageResult<ShippingSaleDto> GetShippingSale(string saleOrderNo, string expressNo, DateTime startGoodsOutDate, DateTime endGoodsOutDate,
