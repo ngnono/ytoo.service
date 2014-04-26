@@ -83,5 +83,9 @@ namespace OPCApp.Domain.Models
         public string Remark { get; set; }
 
         public string SectionCode { get; set; }
+        /// <summary>
+        /// ×Ü¼Û
+        /// </summary>
+        public double SumPrice { get; set; }
     }
 }
