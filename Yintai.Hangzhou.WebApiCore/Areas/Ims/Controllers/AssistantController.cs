@@ -349,7 +349,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                         });
 
             var linq2 = Context.Set<IMS_AssociateIncomeHistoryEntity>().
-                        Where(iair => iair.AssociateUserId == authuid && iair.Status == (int)AssociateIncomeStatus.Frozen && iair.SourceType == (int)AssociateOrderType.GiftCard)
+                        Where(iair => iair.AssociateUserId == authuid && iair.Status == (int)AssociateIncomeStatus.Frozen && iair.SourceType == (int)AssociateOrderType.Product)
                         .Join(Context.Set<OrderEntity>(), o => o.SourceNo, i => i.OrderNo, (o, i) => new IMSIncomeDetailResponse
                         {
                             CreateDate = o.CreateDate,

@@ -52,19 +52,12 @@ namespace com.intime.o2o.data.exchange.IT
 
                 //计算签名
                 request.Sign = Sign(request);
-                try
-                {
-                    var result = client.PostAsync(resourceUri, request, _mediaTypeFormatter).Result;
+                var result = client.PostAsync(resourceUri, request, _mediaTypeFormatter).Result;
 
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var rst = result.Content.ReadAsStringAsync().Result;
-                        return result.Content.ReadAsAsync<TResponse>().Result;
-                    }
-                }
-                catch (Exception ex)
+                if (result.IsSuccessStatusCode)
                 {
-                    var str = ex.Message;
+                    var rst = result.Content.ReadAsStringAsync().Result;
+                    return result.Content.ReadAsAsync<TResponse>().Result;
                 }
             }
 
