@@ -81,5 +81,7 @@ namespace OPCApp.Domain.Models
         /// </summary>
         /// <value>The remark.</value>
         public string Remark { get; set; }
+
+        public string SectionCode { get; set; }
     }
 }

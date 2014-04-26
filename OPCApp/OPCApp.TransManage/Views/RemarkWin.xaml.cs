@@ -26,7 +26,6 @@ namespace OPCApp.TransManage.Views
             ViewModel = viewModel;
             ViewModel.CommandSave = new DelegateCommand(CommandSaveExecute);
             ViewModel.CommandBack = new DelegateCommand(CommandBackExecute);
-            ViewModel.Remark.Content = "";
         }
 
         public RemarkViewModel ViewModel
@@ -41,7 +40,7 @@ namespace OPCApp.TransManage.Views
             ViewModel.OpenWinSearch(id, type);
             if (ShowDialog() == true)
             {
-                ViewModel.SaveRemark(id, type);
+                //ViewModel.SaveRemark(id, type);
             }
         }
 
@@ -54,18 +53,20 @@ namespace OPCApp.TransManage.Views
 
         private void CommandSaveExecute()
         {
-            if (String.IsNullOrEmpty(ViewModel.Remark.Content))
+            if (String.IsNullOrEmpty(ViewModel.RemarkContent))
             {
                 MessageBox.Show("请填写备注信息", "提示");
                 isCancel = true;
             }
             else
             {
-                DialogResult = true;
-                isCancel = false;
+                ViewModel.SaveRemark();
+                //DialogResult = true;
+                //ViewModel.Remark.Content = "";
+                isCancel = true;
             }
 
-            Close();
+          //  Close();
         }
 
         protected override void OnClosing(CancelEventArgs e)
