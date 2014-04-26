@@ -90,14 +90,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Remark.cs" />
-    <Compile Include="Print\InvoiceDataSet.cs">
-      <DependentUpon>InvoiceDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Print\InvoiceDataSet1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InvoiceDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Print\IPrint.cs" />
     <Compile Include="Print\PrintExpressModel.cs" />
     <Compile Include="Print\PrintModel.cs" />
@@ -196,17 +188,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Print\InvoiceDataSet.xsc">
-      <DependentUpon>InvoiceDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="Print\InvoiceDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>InvoiceDataSet1.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Print\InvoiceDataSet.xss">
-      <DependentUpon>InvoiceDataSet.xsd</DependentUpon>
-    </None>
     <None Include="Properties\DataSources\OPCApp.Domain.Models.OPC_Sale.datasource" />
     <None Include="Properties\DataSources\OPCApp.Domain.Models.OPC_SaleDetail.datasource" />
     <None Include="Properties\DataSources\OPCApp.Domain.Models.OPC_ShippingSale.datasource" />
