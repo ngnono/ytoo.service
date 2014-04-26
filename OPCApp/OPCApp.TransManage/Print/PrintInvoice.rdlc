@@ -1303,7 +1303,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>发票台头：</Value>
+                <Value>发票抬头：</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -1416,66 +1416,6 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Textbox Name="ReceiptContent">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=First(Fields!ReceiptContent.Value, "OrderDT")</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>ReceiptContent</rd:DefaultName>
-        <Top>2.11406cm</Top>
-        <Left>10.07812cm</Left>
-        <Height>0.6cm</Height>
-        <Width>4.41855cm</Width>
-        <ZIndex>19</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="ReceiptHead">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=First(Fields!ReceiptHead.Value, "OrderDT")</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>ReceiptHead</rd:DefaultName>
-        <Top>2.11406cm</Top>
-        <Left>17.43354cm</Left>
-        <Height>0.6cm</Height>
-        <Width>3.21375cm</Width>
-        <ZIndex>20</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Textbox Name="Textbox26">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -1495,37 +1435,7 @@
         <Left>20.82368cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>21</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox29">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>发票台头：</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>2.18462cm</Top>
-        <Left>20.82368cm</Left>
-        <Height>0.6cm</Height>
-        <Width>2.09021cm</Width>
-        <ZIndex>22</ZIndex>
+        <ZIndex>19</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1555,7 +1465,7 @@
         <Left>20.82368cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>23</ZIndex>
+        <ZIndex>20</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1585,7 +1495,7 @@
         <Left>0.40569cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>24</ZIndex>
+        <ZIndex>21</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1615,7 +1525,7 @@
         <Left>2.63701cm</Left>
         <Height>0.6cm</Height>
         <Width>2.5cm</Width>
-        <ZIndex>25</ZIndex>
+        <ZIndex>22</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1645,7 +1555,7 @@
         <Left>5.30609cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>26</ZIndex>
+        <ZIndex>23</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1675,7 +1585,7 @@
         <Left>7.57269cm</Left>
         <Height>0.6cm</Height>
         <Width>6.80198cm</Width>
-        <ZIndex>27</ZIndex>
+        <ZIndex>24</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1705,7 +1615,7 @@
         <Left>15.32907cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>28</ZIndex>
+        <ZIndex>25</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1735,7 +1645,7 @@
         <Left>19.47965cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>29</ZIndex>
+        <ZIndex>26</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1765,7 +1675,7 @@
         <Left>21.67569cm</Left>
         <Height>0.6cm</Height>
         <Width>3.0455cm</Width>
-        <ZIndex>30</ZIndex>
+        <ZIndex>27</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1795,37 +1705,7 @@
         <Left>0.40569cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>31</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="CustomerName">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=First(Fields!CustomerName.Value, "OrderDT")</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>CustomerName</rd:DefaultName>
-        <Top>5.64321cm</Top>
-        <Left>2.63701cm</Left>
-        <Height>0.6cm</Height>
-        <Width>2.5cm</Width>
-        <ZIndex>32</ZIndex>
+        <ZIndex>28</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1855,7 +1735,7 @@
         <Left>5.30609cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>33</ZIndex>
+        <ZIndex>29</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1885,37 +1765,7 @@
         <Left>19.47965cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>34</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="CustomerPhone">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=First(Fields!CustomerPhone.Value, "OrderDT")</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>CustomerPhone</rd:DefaultName>
-        <Top>5.60794cm</Top>
-        <Left>21.67569cm</Left>
-        <Height>0.6cm</Height>
-        <Width>3.0455cm</Width>
-        <ZIndex>35</ZIndex>
+        <ZIndex>30</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1945,7 +1795,7 @@
         <Left>0.37042cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>36</ZIndex>
+        <ZIndex>31</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1975,7 +1825,7 @@
         <Left>0.40569cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>37</ZIndex>
+        <ZIndex>32</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2005,7 +1855,7 @@
         <Left>5.30609cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>38</ZIndex>
+        <ZIndex>33</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2035,7 +1885,7 @@
         <Left>15.45152cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
-        <ZIndex>39</ZIndex>
+        <ZIndex>34</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2065,7 +1915,7 @@
         <Left>17.68284cm</Left>
         <Height>0.6cm</Height>
         <Width>7.03836cm</Width>
-        <ZIndex>40</ZIndex>
+        <ZIndex>35</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2095,7 +1945,7 @@
         <Left>23.17866cm</Left>
         <Height>0.6cm</Height>
         <Width>2.5cm</Width>
-        <ZIndex>41</ZIndex>
+        <ZIndex>36</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2125,7 +1975,7 @@
         <Left>16.9037cm</Left>
         <Height>0.6cm</Height>
         <Width>2.5cm</Width>
-        <ZIndex>42</ZIndex>
+        <ZIndex>37</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2155,7 +2005,7 @@
         <Left>9.86578cm</Left>
         <Height>0.6cm</Height>
         <Width>4.63089cm</Width>
-        <ZIndex>43</ZIndex>
+        <ZIndex>38</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2185,7 +2035,7 @@
         <Left>10.09166cm</Left>
         <Height>0.6cm</Height>
         <Width>4.40501cm</Width>
-        <ZIndex>44</ZIndex>
+        <ZIndex>39</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2215,7 +2065,97 @@
         <Left>2.67229cm</Left>
         <Height>0.6cm</Height>
         <Width>4.36091cm</Width>
-        <ZIndex>45</ZIndex>
+        <ZIndex>40</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="InvoiceSubject">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=First(Fields!InvoiceSubject.Value, "SaleDT")</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>InvoiceSubject</rd:DefaultName>
+        <Top>2.14932cm</Top>
+        <Left>17.46882cm</Left>
+        <Height>0.6cm</Height>
+        <Width>8.20984cm</Width>
+        <ZIndex>41</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Invoice">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=First(Fields!Invoice.Value, "SaleDT")</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Invoice</rd:DefaultName>
+        <Top>2.18461cm</Top>
+        <Left>10.09166cm</Left>
+        <Height>0.6cm</Height>
+        <Width>4.40501cm</Width>
+        <ZIndex>42</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="PayType">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=First(Fields!PayType.Value, "SaleDT")</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>PayType</rd:DefaultName>
+        <Top>1.43467cm</Top>
+        <Left>9.47431cm</Left>
+        <Height>0.6cm</Height>
+        <Width>1.64042cm</Width>
+        <ZIndex>43</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2241,11 +2181,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>SectionCode</rd:DefaultName>
-        <Top>2.85433cm</Top>
-        <Left>17.40641cm</Left>
+        <Top>2.89043cm</Top>
+        <Left>17.46882cm</Left>
         <Height>0.6cm</Height>
-        <Width>3.24088cm</Width>
-        <ZIndex>46</ZIndex>
+        <Width>3.17847cm</Width>
+        <ZIndex>44</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2400,12 +2340,24 @@
           <DataField>IfTrans</DataField>
           <rd:TypeName>System.Nullable`1[[System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
+        <Field Name="Invoice">
+          <DataField>Invoice</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="InvoiceSubject">
+          <DataField>InvoiceSubject</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="IsSelected">
           <DataField>IsSelected</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
         <Field Name="OrderNo">
           <DataField>OrderNo</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PayType">
+          <DataField>PayType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="PrintTimes">
@@ -2497,115 +2449,6 @@
         <rd:DataSetName>OPCApp.Domain.Models</rd:DataSetName>
         <rd:TableName>OPC_Sale</rd:TableName>
         <rd:ObjectDataSourceType>OPCApp.Domain.Models.OPC_Sale, OPCAPP.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-    <DataSet Name="OrderDT">
-      <Query>
-        <DataSourceName>OPCAppDomainModels1</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="BuyDate">
-          <DataField>BuyDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="CustomerAddress">
-          <DataField>CustomerAddress</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CustomerFreight">
-          <DataField>CustomerFreight</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="CustomerName">
-          <DataField>CustomerName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CustomerPhone">
-          <DataField>CustomerPhone</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CustomerRemark">
-          <DataField>CustomerRemark</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ExpressCompany">
-          <DataField>ExpressCompany</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ExpressNo">
-          <DataField>ExpressNo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Id">
-          <DataField>Id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="IfReceipt">
-          <DataField>IfReceipt</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="MustPayTotal">
-          <DataField>MustPayTotal</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="OrderChannelNo">
-          <DataField>OrderChannelNo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OrderNo">
-          <DataField>OrderNo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OrderSouce">
-          <DataField>OrderSouce</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="OutGoodsDate">
-          <DataField>OutGoodsDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="OutGoodsType">
-          <DataField>OutGoodsType</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="PaymentMethodName">
-          <DataField>PaymentMethodName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="PostCode">
-          <DataField>PostCode</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Quantity">
-          <DataField>Quantity</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="ReceiptContent">
-          <DataField>ReceiptContent</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ReceiptHead">
-          <DataField>ReceiptHead</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ShippingNo">
-          <DataField>ShippingNo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Status">
-          <DataField>Status</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TotalAmount">
-          <DataField>TotalAmount</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>OPCApp.Domain.Models</rd:DataSetName>
-        <rd:TableName>Order</rd:TableName>
-        <rd:ObjectDataSourceType>OPCApp.Domain.Models.Order, OPCAPP.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
