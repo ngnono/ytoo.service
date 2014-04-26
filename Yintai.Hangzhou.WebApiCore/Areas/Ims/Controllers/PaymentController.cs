@@ -91,7 +91,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             {
                                 CreateDate = DateTime.Now,
                                 OrderNo = orderEntity.OrderNo,
-                                PaymentCode = WxPayConfig.PaymentCode,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4IMS,
                                 PaymentContent = JsonConvert.SerializeObject(sPara)
                             });
 
@@ -101,7 +101,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 OrderNo = orderEntity.OrderNo,
                                 CreateDate = DateTime.Now,
                                 IsSynced = false,
-                                PaymentCode = WxPayConfig.PaymentCode,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4IMS,
                                 TransNo = trade_no,
                                 OutsiteType = (int)OutsiteType.WX,
                                 OutsiteUId = request.OpenId,
@@ -242,7 +242,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             {
                                 CreateDate = DateTime.Now,
                                 OrderNo = giftcardOrder.No,
-                                PaymentCode = WxPayConfig.PaymentCode,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4IMS,
                                 PaymentContent = JsonConvert.SerializeObject(sPara)
                             });
 
@@ -252,7 +252,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 OrderNo = giftcardOrder.No,
                                 CreateDate = DateTime.Now,
                                 IsSynced = false,
-                                PaymentCode = WxPayConfig.PaymentCode,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4IMS,
                                 TransNo = trade_no,
                                 OutsiteType = (int)OutsiteType.WX,
                                 OutsiteUId = request.OpenId,
