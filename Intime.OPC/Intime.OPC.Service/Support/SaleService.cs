@@ -117,8 +117,8 @@ namespace Intime.OPC.Service.Support
             //    throw new UnauthorizedAccessException();
             //}
 
-            var lst = _saleRepository.GetPickUped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize,null);
-            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            return _saleRepository.GetPickUped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize,null);
+            //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
 
@@ -131,8 +131,8 @@ namespace Intime.OPC.Service.Support
             //{
             //    throw new UnauthorizedAccessException();
             //}
-            var lst = _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize,null);
-            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            return _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize,null);
+           // return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public PageResult<SaleDto> GetShipped(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize)
@@ -140,8 +140,8 @@ namespace Intime.OPC.Service.Support
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
             
-            var lst = _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
-            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            return  _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
+            //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public PageResult<SaleDto> GetPrintExpress(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
@@ -150,8 +150,8 @@ namespace Intime.OPC.Service.Support
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
             
-            var lst = _saleRepository.GetPrintExpress(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
-            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            return _saleRepository.GetPrintExpress(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
+            //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public PageResult<SaleDto> GetPrintInvoice(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
@@ -160,8 +160,8 @@ namespace Intime.OPC.Service.Support
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
             
-            var lst = _saleRepository.GetPrintInvoice(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
-            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            return _saleRepository.GetPrintInvoice(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
+           // return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public PageResult<SaleDto> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
@@ -170,8 +170,8 @@ namespace Intime.OPC.Service.Support
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
             
-            var lst = _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
-            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            return  _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
+            //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public bool WriteSaleRemark(OPC_SaleComment comment)
@@ -218,8 +218,8 @@ namespace Intime.OPC.Service.Support
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
            
-            var lst = _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize,null);
-            return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            return _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize,null);
+            //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         #endregion

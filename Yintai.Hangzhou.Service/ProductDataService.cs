@@ -271,19 +271,7 @@ namespace Yintai.Hangzhou.Service
             using (var ts = new TransactionScope())
             {
                 entity = _productRepository.Insert(inEntity);
-                //insert product code map
-                if (!string.IsNullOrEmpty(request.UPCCode))
-                {
-                    _productcodemapRepo.Insert(new ProductCode2StoreCodeEntity()
-                    {
-                        ProductId = entity.Id,
-                        Status = (int)DataStatus.Normal,
-                        StoreId = entity.Store_Id,
-                        ExPId = int.Parse(request.UPCCode),
-                        UpdateDate = DateTime.Now,
-                        UpdateUser = request.AuthUser.Id
-                    });
-                }
+               
                 //insert properties if any
                 if (request.PropertyModel != null)
                 {

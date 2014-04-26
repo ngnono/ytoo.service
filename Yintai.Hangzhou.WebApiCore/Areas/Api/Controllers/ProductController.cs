@@ -319,7 +319,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     ColorName = color.C.ValueDesc,
                                     Resource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(color.CR),
                                     Sizes = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id && pi.PColorId == color.C.Id)
-                                            .Join(Context.Set<ProductPropertyValueEntity>(),o=>o.PSizeId,i=>i.Id,(o,i)=>new {PI=o,PPV=i}).ToList()
+                                            .Join(Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Status == (int)DataStatus.Normal), o => o.PSizeId, i => i.Id, (o, i) => new { PI = o, PPV = i }).ToList()
+                                            .Where(pi=>pi.PI.Amount>0)
                                             .Select(pi => new SaleSizePropertyResponse() { 
                                                  Is4Sale = pi.PI.Amount>0,
                                                   SizeId=pi.PI.PSizeId,
@@ -409,10 +410,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 }
                
            });
+           var productEntity = dbContext.Set<ProductEntity>().Where(p =>p.Id == request.ProductId &&
+                                                p.Status == (int)DataStatus.Normal && (p.Is4Sale??false) == true)
+                                   .Join(dbContext.Set<InventoryEntity>().Where(inv => inv.Amount > 0),
+                                       o => o.Id,
+                                       i => i.ProductId,
+                                       (o, i) => o).FirstOrDefault();
            return this.RenderSuccess<GetAvailOperationsResponse>(m=>m.Data=new GetAvailOperationsResponse() { 
                  IsFavored = isFavored,
                   IfCanCoupon = ifCanCoupon,
-                  IfCanTalk = false
+                  IfCanTalk = false,
+                  Is4Sale = productEntity!=null
                });
            
         }

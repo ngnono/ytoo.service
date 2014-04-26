@@ -8,6 +8,29 @@
         <overwrite-existing-data>true</overwrite-existing-data>
     </processing-directives>
 
+  <!--专柜列表同步任务-->
+  <schedule>
+    <trigger>
+      <cron>
+        <name>SetionListSyncJobTigger</name>
+        <group>OrderStatusTiggerGroup</group>
+        <description>专柜列表同步</description>
+        <job-name>SectionListSyncJob</job-name>
+        <job-group>SectionListSyncJobGroup</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <job>
+      <name>SectionListSyncJob</name>
+      <group>SectionListSyncJobGroup</group>
+      <description>专柜列表同步job</description>
+      <job-type>Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs, Intime.OPC.Job</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+  </schedule>
+
     <!--订单状态同步任务-->
     <schedule>
         <trigger>

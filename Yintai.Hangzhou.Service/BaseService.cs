@@ -1,3 +1,4 @@
+using System.Data.Entity;
 using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Service.Manager;
@@ -16,9 +17,18 @@ namespace Yintai.Hangzhou.Service
             MappingManager = ServiceLocator.Current.Resolve<MappingManagerV2>();
         }
 
+        protected DbContext Context
+        {
+            get
+            {
+                return ServiceLocator.Current.Resolve<DbContext>();
+            }
+        }
         static BaseService()
         {
             Logger = LoggerManager.Current();
         }
+
+        
     }
 }

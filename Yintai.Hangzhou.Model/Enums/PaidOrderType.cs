@@ -10,6 +10,8 @@ namespace Yintai.Hangzhou.Model.Enums
     {
         Self = 0,
         Erp = 1,
-        Erp2 = 2
+        Erp2 = 2,
+        Self_ProductOfSelf = 3,
+        GiftCard = 4
     }
 }

@@ -97,6 +97,7 @@ namespace com.intime.fashion.common
 
         public static void Transfer2S3(string localPath,string remotePath)
         {
+            /*
             EnsureS3();
             var transferClient = new TransferUtility(s3);
             transferClient.Upload(new TransferUtilityUploadRequest() { 
@@ -105,6 +106,8 @@ namespace com.intime.fashion.common
                  BucketName = AwsConfig.S3_BUCKET_NAME,
                  Key = remotePath
             });
+             */
+            Aliyun.AliyunUtil.Transfer2AliyunAsync(localPath, remotePath,(object o)=>Logger.Error(o));
         }
         private static void EnsureQueue()
         {

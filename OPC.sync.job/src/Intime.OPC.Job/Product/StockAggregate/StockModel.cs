@@ -112,7 +112,7 @@ namespace Intime.OPC.Job.Product.StockAggregate
                         product.Is4Sale = true;
                         product.Price = stock.Price;
                         product.UpdatedDate = DateTime.Now;
-                        product.UpdatedUser = SystemDefine.SystemUser;
+                        //product.UpdatedUser = SystemDefine.SystemUser;
                         db.SaveChanges();
                     }
                 }

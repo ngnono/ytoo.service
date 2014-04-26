@@ -108,7 +108,7 @@ namespace com.intime.fashion.common
             }
             else
             {
-                WgServiceHelper.RenewToken();
+                token.Renew();
                 Logger.Debug(notifyResponse);
 
                 if (failCallback != null)
@@ -117,6 +117,54 @@ namespace com.intime.fashion.common
             }
 
 
+        }
+
+        public static bool RefreshMenu(WxMenu requestData, Action<dynamic> successCallback, Action<dynamic> failCallback)
+        {
+            var client = new RestClient(WxPayConfig.WEB_SERVICE_BASE);
+            var token = new AccessToken(AccessTokenType.MiniYin);
+            if (token == null)
+            {
+                CommonUtil.Log.Info("token is empty");
+                return false;
+            }
+            //delete menu first
+            var request = new RestRequest("cgi-bin/menu/delete?access_token={access_token}", Method.GET);
+            request.RequestFormat = DataFormat.Json;
+            request.AddUrlSegment("access_token", token.access_token);
+            var notifyResponse = JsonConvert.DeserializeObject<dynamic>(client.Execute(request).Content);
+
+            if (notifyResponse.errcode == 0)
+            {
+                request = new RestRequest("cgi-bin/menu/create?access_token={access_token}", Method.POST);
+                request.RequestFormat = DataFormat.Json;
+                request.AddUrlSegment("access_token", token.access_token);
+                request.AddBody(requestData);
+                var response = JsonConvert.DeserializeObject<dynamic>(client.Execute(request).Content);
+                if (response.errcode == 0)
+                {
+                    if (successCallback != null)
+                        successCallback(response);
+                    return true; 
+                }
+                else
+                {
+                    Logger.Debug(response);
+                    if (failCallback != null)
+                        failCallback(response);
+                    return false;
+                }
+                
+            }
+            else
+            {
+                Logger.Debug(notifyResponse);
+
+                if (failCallback != null)
+                    failCallback(notifyResponse);
+                return false;
+            }
+           
         }
 
         public static WxAppPayTokenResponse GetAppPayToken(string orderNo, decimal totalAmount, string clientIp)

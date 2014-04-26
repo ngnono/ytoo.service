@@ -15,7 +15,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.ToTable("ProductCode2StoreCode");
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.ProductId).HasColumnName("ProductId");
-            this.Property(t => t.ExPId).HasColumnName("ExPId");
+            this.Property(t => t.StoreProductCode).HasColumnName("StoreProductCode");
             this.Property(t => t.StoreId).HasColumnName("StoreId");
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");

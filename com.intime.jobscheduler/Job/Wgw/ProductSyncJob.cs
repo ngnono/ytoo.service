@@ -21,7 +21,7 @@ namespace com.intime.jobscheduler.Job.Wgw
             }
             else
             {
-                data["benchtime"] = data.GetDateTimeValue("benchtime").AddMinutes(interval);
+                data["benchtime"] = data.GetDateTimeValue("benchtime").AddMinutes(-interval);
             }
             var benchTime = data.GetDateTime("benchtime");
 #endif

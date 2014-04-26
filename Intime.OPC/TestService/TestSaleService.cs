@@ -10,7 +10,7 @@ namespace TestService
         [TestMethod]
         public void TestGetSaleDetail()
         {
-            var lst = Service.GetSaleOrderDetails("1142014041920-001", 1, 1, 1000);
+            var lst = Service.GetSaleOrderDetails("114042167140-001", 1, 1, 1000);
            Debug(lst);
             Assert.IsNotNull(lst);
             
@@ -20,7 +20,7 @@ namespace TestService
         [TestMethod]
         public void TestGetSaleByOrderNo()
         {
-            var lst = Service.GetByOrderNo("1142014041920", 1, 1, 1000);
+            var lst = Service.GetByOrderNo("114042236511", 1, 1, 1000);
             Debug(lst);
             Assert.IsNotNull(lst);
 
@@ -30,6 +30,15 @@ namespace TestService
         public void TestGetNoPickUp()
         {
             var lst = Service.GetNoPickUp("", 1, "", new DateTime(2000, 1, 1), DateTime.Now.Date, 1, 50);
+            Debug(lst);
+            Assert.IsNotNull(lst);
+
+        }
+
+        [TestMethod]
+        public void TestGetPrintSale()
+        {
+            var lst = Service.GetPrintSale("", 1, "", new DateTime(2000, 1, 1), DateTime.Now.Date, 1, 50);
             Debug(lst);
             Assert.IsNotNull(lst);
 

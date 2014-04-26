@@ -18,7 +18,7 @@ namespace TestService
         public void TestGetByReturnGoods()
         {
             ReturnGoodsRequest request=new ReturnGoodsRequest();
-
+            
             request.StartDate = new DateTime(2010, 1, 1);
             request.EndDate = DateTime.Now.Date.AddDays(1);
 

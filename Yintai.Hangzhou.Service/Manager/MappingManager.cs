@@ -232,86 +232,7 @@ namespace Yintai.Hangzhou.Service.Manager
 
         #region customer
 
-        //[System.Obsolete("建议使用usermodel")]
-        //public ShowCustomerInfoResponse ShowCustomerInfoResponseMapping(UserEntity source,
-        //                                                               List<ResourceEntity> resourceEntities)
-        //{
-        //    if (source == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    var target = Mapper.Map<UserEntity, ShowCustomerInfoResponse>(source);
-
-        //    //if (resourceEntities != null && resourceEntities.Count > 0)
-        //    //{
-        //    //    var resource = resourceEntities.FirstOrDefault();
-        //    //    if (resource != null)
-        //    //    {
-        //    //        target.Logo = Path.Combine(resource.Domain, resource.Name);
-        //    //    }
-        //    //}
-
-        //    return target;
-        //}
-
-        ////[System.Obsolete("建议使用usermodel")]
-        ////public ShowCustomerInfoResponse ShowCustomerInfoResponseMapping(UserEntity source)
-        ////{
-        ////    if (source == null)
-        ////    {
-        ////        return null;
-        ////    }
-        ////    //var resources = _resourceRepository.GetList((int)SourceType.CustomerPortrait, source.Id);
-
-        ////    //return UserShowResponseMapping(source, resources);
-        ////    return ShowCustomerInfoResponseMapping(source, null);
-        ////}
-
-        //[System.Obsolete("建议使用usermodel")]
-        //public IEnumerable<ShowCustomerInfoResponse> ShowCustomerInfoResponseMapping(List<UserEntity> source)
-        //{
-        //    if (source == null || source.Count == 0)
-        //    {
-        //        return new List<ShowCustomerInfoResponse>(0);
-        //    }
-
-        //    var result = new List<ShowCustomerInfoResponse>(source.Count);
-
-        //    foreach (var item in source)
-        //    {
-        //        var target = ShowCustomerInfoResponseMapping(item, null);
-
-        //        if (target != null)
-        //        {
-        //            result.Add(target);
-        //        }
-        //    }
-
-        //    return result;
-        //}
-
-        //[System.Obsolete("建议使用usermodel")]
-        //public CustomerInfoResponse CustomerInfoResponseMapping(UserEntity source)
-        //{
-        //    if (source == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    var target = Mapper.Map<UserEntity, CustomerInfoResponse>(source);
-
-        //    return target;
-        //}
-
-        //[System.Obsolete("建议使用usermodel")]
-        //public IEnumerable<CustomerInfoResponse> CustomerInfoResponseMapping(List<UserEntity> source)
-        //{
-        //    foreach (var entity in source)
-        //    {
-        //        yield return CustomerInfoResponseMapping(entity);
-        //    }
-        //}
+    
 
         public UserEntity UserEntityMapping(UserEntity source, UserEntity target)
         {
@@ -455,7 +376,7 @@ namespace Yintai.Hangzhou.Service.Manager
 
             target.Token = GetToken(source);
             target.AppId = ConfigManager.GetAppleAppId();
-
+              
             return target;
         }
 
@@ -561,7 +482,7 @@ namespace Yintai.Hangzhou.Service.Manager
             //ilikecount
             //likemecount
 
-            //LOGO
+            /*
             if (!String.IsNullOrWhiteSpace(target.Logo))
             {
                 if (!target.Logo.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
@@ -569,7 +490,7 @@ namespace Yintai.Hangzhou.Service.Manager
                     target.Logo = ConfigManager.GetHttpApiImagePath() + target.Logo;
                 }
             }
-
+            */
             if (target.Accounts == null || target.Accounts.Count == 0)
             {
                 return target;

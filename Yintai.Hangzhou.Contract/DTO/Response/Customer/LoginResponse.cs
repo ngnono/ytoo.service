@@ -93,7 +93,21 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
             set { }
         }
 
+        [DataMember(Name = "logo_full")]
+        public string Logo_Full
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Logo))
+                    return string.Empty;
+                if (Logo.StartsWith("http://"))
+                    return Logo;
+                return string.Concat(ConfigManager.GetHttpApiImagePath(),
+                    Logo,"_100x100.jpg");
 
+            }
+            set { }
+        }
         [IgnoreDataMember]
         public string BackgroundLogo { get; set; }
 
@@ -226,5 +240,15 @@ namespace Yintai.Hangzhou.Contract.DTO.Response.Customer
         [DataMember(Name = "isbindcard")]
         public bool? IsCardBinded { get; set; }
 
+        [DataMember(Name="operate_right")]
+        public int? OperateRight { get; set; }
+
+        [DataMember(Name="template_id")]
+        public int? TemplateId { get; set; }
+
+         [DataMember(Name = "associate_id")]
+        public int? AssociateId { get; set; }
+        [DataMember(Name="max_comboitems")]
+         public int? MaxComboItems { get; set; }
     }
 }

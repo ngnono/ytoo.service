@@ -39,7 +39,7 @@ namespace com.intime.fashion.common.Wxpay
 
         public static string MD5_Encode(string value)
         {
-           // CommonUtil.Log.Debug(string.Format("md5:{0}", value));
+
             byte[] hashData = MD5.Create().ComputeHash((Encoding.UTF8.GetBytes(value)));
             var hashText = new StringBuilder();
             foreach (byte b in hashData)
@@ -71,6 +71,13 @@ namespace com.intime.fashion.common.Wxpay
         {
             var signingStr = sPara.OrderBy(s => s.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}&", b.Key, b.Value), s => s.ToString().TrimEnd('&'));
             signingStr = string.Format("{0}&key={1}", signingStr, WxPayConfig.HTML_PARTER_KEY);
+            return MD5_Encode(signingStr).ToUpper();
+        }
+
+        public static string NotifySignIMS(Dictionary<string, string> sPara)
+        {
+            var signingStr = sPara.OrderBy(s => s.Key).Aggregate(new StringBuilder(), (s, b) => s.AppendFormat("{0}={1}&", b.Key, b.Value), s => s.ToString().TrimEnd('&'));
+            signingStr = string.Format("{0}&key={1}", signingStr, WxPayConfig.IMS_PARTER_KEY);
             return MD5_Encode(signingStr).ToUpper();
         }
 

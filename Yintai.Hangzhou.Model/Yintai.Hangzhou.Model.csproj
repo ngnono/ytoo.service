@@ -69,10 +69,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\AccountType.cs" />
+    <Compile Include="Enums\AssociateFavorType.cs" />
+    <Compile Include="Enums\AssociateIncomeRequestStatus.cs" />
+    <Compile Include="Enums\AssociateIncomeStatus.cs" />
+    <Compile Include="Enums\AssociateIncomeTransferStatus.cs" />
     <Compile Include="Enums\AuthDataType.cs" />
     <Compile Include="Enums\BrandSortOrder.cs" />
     <Compile Include="Enums\BusinessStatus.cs" />
     <Compile Include="Enums\CardType.cs" />
+    <Compile Include="Enums\CategorySizeType.cs" />
+    <Compile Include="Enums\ComboType.cs" />
+    <Compile Include="Enums\IncomeRuleType.cs" />
+    <Compile Include="Enums\OrderProductType.cs" />
     <Compile Include="Enums\CouponActionType.cs" />
     <Compile Include="Enums\CouponStatus.cs" />
     <Compile Include="Enums\HotWordType.cs" />
@@ -86,10 +94,12 @@
     <Compile Include="Enums\NotificationStatus.cs" />
     <Compile Include="Enums\OrderOpera.cs" />
     <Compile Include="Enums\OrderStatus.cs" />
+    <Compile Include="Enums\AsssociateOrderType.cs" />
     <Compile Include="Enums\OutboundStatus.cs" />
     <Compile Include="Enums\OutboundType.cs" />
     <Compile Include="Enums\PaidOrderType.cs" />
     <Compile Include="Enums\PreConfiguration.cs" />
+    <Compile Include="Enums\ProductType.cs" />
     <Compile Include="Enums\PromotionCountType.cs" />
     <Compile Include="Enums\PushSourceType.cs" />
     <Compile Include="Enums\ResourceSortOrder.cs" />
@@ -101,6 +111,7 @@
     <Compile Include="Enums\StorePromotionType.cs" />
     <Compile Include="Enums\StoreSortOrder.cs" />
     <Compile Include="Enums\TagSortOrder.cs" />
+    <Compile Include="Enums\UserOperatorRight.cs" />
     <Compile Include="Enums\UserRole.cs" />
     <Compile Include="ESModel\ESBanner.cs" />
     <Compile Include="ESModel\ESBrand.cs" />
@@ -110,6 +121,7 @@
     <Compile Include="ESModel\ESPromotion.cs" />
     <Compile Include="ESModel\ESResource.cs" />
     <Compile Include="ESModel\ESSection.cs" />
+    <Compile Include="ESModel\ESSize.cs" />
     <Compile Include="ESModel\ESSpecialTopic.cs" />
     <Compile Include="ESModel\ESStore.cs" />
     <Compile Include="ESModel\ESStorePromotion.cs" />

@@ -12,5 +12,7 @@ namespace Yintai.Hangzhou.Model.ES
         public string Description { get; set; }
         public int Status { get; set; }
         public int SortOrder { get; set; }
+        public int SizeType { get; set; }
+        public IEnumerable<ESSize> Sizes { get; set; }
     }
 }
