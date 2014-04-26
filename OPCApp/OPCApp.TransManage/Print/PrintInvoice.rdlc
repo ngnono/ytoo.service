@@ -805,21 +805,21 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SellPrice1">
+                    <Textbox Name="SalePrice">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SellPrice.Value</Value>
+                              <Value>=Fields!SalePrice.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SellPrice1</rd:DefaultName>
+                      <rd:DefaultName>SalePrice</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -865,21 +865,21 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SalePrice">
+                    <Textbox Name="SellPrice">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SalePrice.Value</Value>
+                              <Value>=Fields!SellPrice.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SalePrice</rd:DefaultName>
+                      <rd:DefaultName>SellPrice</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -992,7 +992,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Fields!SellPrice.Value*Fields!SellCount.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1022,7 +1022,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Fields!SellPrice.Value*Fields!SellCount.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
