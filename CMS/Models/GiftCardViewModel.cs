@@ -23,7 +23,7 @@ namespace Yintai.Hangzhou.Cms.WebSiteV1.Models
     public class GiftCardEntityModel
     {
         [Required]
-        [StringLength(30, MinimumLength = 4)]
+        [StringLength(500, MinimumLength = 3)]
         [Display(Name = "名称")]
         public string Name { get; set; }
 

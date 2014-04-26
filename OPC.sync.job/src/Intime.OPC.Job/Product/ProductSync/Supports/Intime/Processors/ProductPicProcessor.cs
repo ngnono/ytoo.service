@@ -121,7 +121,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 {
                     product.IsHasImage = true;
                     product.UpdatedDate = DateTime.Now;
-                    product.UpdatedUser = SystemDefine.SystemUser;
+                    //product.UpdatedUser = SystemDefine.SystemUser;
                 }
                 db.SaveChanges();
                 return resource;

@@ -179,5 +179,25 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
             return AutoMapper.Mapper.Map<IEnumerable<ProductImage>, IEnumerable<ProductImageDto>>(result.Data).GroupBy(x => x.GroupByKey, x => x).Select(x => x.ToList().OrderByDescending(y => y.WriteTime).FirstOrDefault());
 
         }
+
+
+        public IEnumerable<SectionDto> GetSectionList(int pageIndex, int pageSize, DateTime lastUpdateDateTime)
+        {
+            var result = _apiClient.Post(new GetSectionsRequest()
+            {
+                Data = new GetSectionsRequestData()
+                {
+                    PageIndex = pageIndex,
+                    PageSize = pageSize
+                }
+            });
+
+            if (!result.Status)
+            {
+                Log.ErrorFormat("获取商品图片列表信息出错,message:{0}", result.Message);
+                return null;
+            }
+            return AutoMapper.Mapper.Map<IEnumerable<Section>, IEnumerable<SectionDto>>(result.Data);
+        }
     }
 }
