@@ -67,10 +67,10 @@
                       SelectedIndex="0" />
             <Label Content=" 查找内容:" Margin="0,14,0,0" />
             <TextBox Height="20" Width="130" Text="{Binding SelectedFiledValue}" />
-            <Button Background="LightGray" Width="50" Command="{Binding SearchCommand}">
-                <StackPanel>
+            <Button Background="LightGray" Width="Auto" Command="{Binding SearchCommand}">
+                <StackPanel Orientation="Horizontal">
                     <Image Source="/image/查询.png" Stretch="None" />
-                    <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                    <TextBlock HorizontalAlignment="Center"  FontFamily="宋体" FontSize="18">查询</TextBlock>
                 </StackPanel>
             </Button>
 
