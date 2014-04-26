@@ -13,17 +13,17 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
-                <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
-                    <StackPanel>
+                <Button Background="LightGray" Width="Auto" Command="{Binding CommandSearch}">
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/查询.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                        <TextBlock HorizontalAlignment="Center"  FontFamily="宋体" FontSize="18">查询</TextBlock>
                     </StackPanel>
                 </Button>
 
-                <Button Background="LightGray" Width="50" Command="{Binding }">
-                    <StackPanel>
+                <Button Background="LightGray" Width="Auto" Command="{Binding }">
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/导出.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">导出</TextBlock>
+                        <TextBlock HorizontalAlignment="Center"  FontFamily="宋体" FontSize="18">导出</TextBlock>
                     </StackPanel>
                 </Button>
             </StackPanel>
