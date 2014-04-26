@@ -42,8 +42,8 @@ namespace Yintai.Hangzhou.Model.ES
         public bool IsSystem { get; set; }
         public decimal DiscountRate { get{
             if (!UnitPrice.HasValue || UnitPrice.Value <= 0m)
-                return 100;
-            return (int)(Price / UnitPrice * 100);
+                return 0;
+            return (int)((UnitPrice-Price) / UnitPrice * 100);
         } }
     }
 }
