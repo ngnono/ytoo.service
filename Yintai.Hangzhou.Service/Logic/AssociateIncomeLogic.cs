@@ -54,7 +54,7 @@ namespace Yintai.Hangzhou.Service.Logic
                 CreateDate = DateTime.Now,
                 SourceNo = giftOrder.No,
                 SourceType = (int)AssociateOrderType.GiftCard,
-                Status = (int)AssociateIncomeStatus.Frozen,
+                Status = (int)AssociateIncomeStatus.Avail,
                 UpdateDate = DateTime.Now,
                 AssociateIncome = thisIncome,
                 AssociateUserId = associateUserId

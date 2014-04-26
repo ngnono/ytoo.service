@@ -215,29 +215,28 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                      .Select(oi => new RMAProductDetailRequest()
                      {
                          ProductId = oi.ProductId,
-                         Properties = new ProductPropertyValueRequest() { 
+                         Properties = new ProductPropertyValueRequest()
+                         {
                              ColorValueId = oi.ColorValueId,
-                              SizeValueId = oi.SizeValueId
+                             SizeValueId = oi.SizeValueId
                          },
-                          Quantity = oi.Quantity
+                         Quantity = oi.Quantity
                      });
-                   var result = DoRMA(new RMARequest() {
-                     OrderNo = linq.OrderNo,
-                     RMAReason = ConfigManager.VoidOrderRMAReason,
-                      Reason = "取消订单",
-                     Products = JsonConvert.SerializeObject(products)
-                   }, authUser,false) as RestfulResult;
+                   var result = DoRMA(new RMARequest()
+                   {
+                       OrderNo = linq.OrderNo,
+                       RMAReason = ConfigManager.VoidOrderRMAReason,
+                       Reason = "取消订单",
+                       Products = JsonConvert.SerializeObject(products)
+                   }, authUser, false) as RestfulResult;
                    if (result.Data is ExecuteResult<MyRMAResponse>)
                    {
                        isSuccess = true;
                    }
                }
-               else {
+               else
+               {
                    isSuccess = true;
-                   if (ConfigManager.IS_PRODUCT_ENV && (!linq.OrderProductType.HasValue || linq.OrderProductType.Value==(int)OrderProductType.SystemProduct))
-                        isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = "CancelOrders", dealCode = linq.OrderNo }, null
-                  , null);
-                   
                }
                if (isSuccess)
                {
