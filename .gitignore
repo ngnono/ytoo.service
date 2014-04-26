@@ -170,3 +170,5 @@ pip-log.txt
 /com.intime.fashion.data.sync.runner/job_scheduling_data_2_0.xsd
 /Intime.OPC/packages
 /OPCApp/packages
+/Intime.OPC/Intime.OPC.WebHost/Log
+/Intime.OPC/Intime.OPC.WebHost/Update
