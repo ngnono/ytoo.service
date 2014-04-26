@@ -19,22 +19,22 @@
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                <Button Margin="5" Background="LightGray" Width="50" Command="{Binding CommandSearch}">
+                <Button Margin="5" Background="LightGray" Width="Auto" Command="{Binding CommandSearch}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/查询.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">查询</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Margin="5" Background="LightGray" Command="{Binding CommandReturnAcceptCashierConfirm}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/放款复核.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">退货入收银</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">退货入收银</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Margin="5" Background="LightGray" Command="{Binding CommandReturnAcceptCashier}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/收款确认.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">完成退货入收银</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">完成退货入收银</TextBlock>
                     </StackPanel>
                 </Button>
 

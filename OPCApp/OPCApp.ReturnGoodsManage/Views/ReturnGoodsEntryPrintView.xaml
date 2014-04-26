@@ -17,28 +17,28 @@
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                <Button Margin="5" Background="LightGray" Width="50" Command="{Binding CommandSearch}">
+                <Button Margin="5" Background="LightGray" Width="Auto" Command="{Binding CommandSearch}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/查询.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">查询</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Margin="5" Background="LightGray" Command="{Binding CommandPrintPreview}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/打印.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">打印预览</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Margin="5" Background="LightGray" Command="{Binding CommandPrintReturnGoods}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/打印.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">打印退货单</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">打印退货单</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Margin="5" Background="LightGray" Command="{Binding CommandPrintReturnGoodsConfirm}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/打印.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">完成打印退货单</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">完成打印退货单</TextBlock>
                     </StackPanel>
                 </Button>
 
