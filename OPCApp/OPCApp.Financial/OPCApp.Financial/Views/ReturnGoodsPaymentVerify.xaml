@@ -25,9 +25,9 @@
 
 
                 <Button Background="LightGray" Width="50" Command="{Binding CommandSearch}">
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/查询.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                        <TextBlock HorizontalAlignment="Center"  FontFamily="宋体" FontSize="18">查询</TextBlock>
                     </StackPanel>
                 </Button>
 

@@ -19,10 +19,10 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0">
                 <StackPanel Orientation="Horizontal" Background="LightGray">
-                    <Button Background="LightGray" Width="50" Command="{Binding CommandGetOrder}">
+                    <Button Background="LightGray" Width="Auto" Command="{Binding CommandGetOrder}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/image/查询.png" Stretch="None" />
-                            <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                            <TextBlock HorizontalAlignment="Center"  FontFamily="宋体" FontSize="18">查询</TextBlock>
                         </StackPanel>
                     </Button>
                  
