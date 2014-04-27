@@ -372,8 +372,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             {
                                 sender = transfer != null ? transfer.Phone : null,
                                 trans_id = transfer != null ? transfer.Id : 0,
-                                from = transfer!= null?transfer.FromNickName:null,
-                                phone = user == null?string.Empty: user.GiftCardAccount,
+                                from = transfer != null ? transfer.FromNickName : null,
+                                phone = user == null ? string.Empty : user.GiftCardAccount,
                                 amount = order.Amount
                             });
         }
@@ -399,7 +399,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             return
                 this.RenderSuccess<dynamic>(
                     c =>
-                        c.Data = TransDetail(order,trans, _rechargeRepo.Find(x => x.OrderNo == order.No)));
+                        c.Data = TransDetail(order, trans, _rechargeRepo.Find(x => x.OrderNo == order.No)));
         }
 
         [RestfulAuthorize]
@@ -449,7 +449,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "无效的礼品卡!");
             }
 
-            if (_transRepo.Get(x => x.FromUserId == authuid && x.IsActive != 1 && x.IsDecline != 1 && x.OrderNo == charge_no ).Any())
+            if (_transRepo.Get(x => x.FromUserId == authuid && x.IsActive != 1 && x.IsDecline != 1 && x.OrderNo == charge_no).Any())
             {
                 return this.RenderError(r => r.Message = "礼品卡已经赠送，不能重复赠送");
             }
@@ -490,7 +490,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 ts.Complete();
             }
 
-            return this.RenderSuccess<dynamic>(r => r.Data = new {trans_id = newTrans.Id});
+            return this.RenderSuccess<dynamic>(r => r.Data = new { trans_id = newTrans.Id });
         }
 
         [RestfulAuthorize]
@@ -524,10 +524,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var resetPwdRequest = new ResetPasswordRequest()
             {
                 Data = new
-                    {
-                        phone = cardAccount.GiftCardAccount,
-                        newpassword = pwd_new
-                    }
+                {
+                    phone = cardAccount.GiftCardAccount,
+                    newpassword = pwd_new
+                }
             };
 
             var rsp = _apiClient.Post(resetPwdRequest);
@@ -551,7 +551,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var order = _orderRepo.Find(x => x.No == trans.OrderNo);
             var recharge = _rechargeRepo.Find(x => x.OrderNo == trans.OrderNo);
 
-            return this.RenderSuccess<dynamic>(r => r.Data = this.TransDetail(order,trans,recharge));
+            return this.RenderSuccess<dynamic>(r => r.Data = this.TransDetail(order, trans, recharge));
         }
 
         [RestfulAuthorize]
@@ -768,7 +768,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         /// <param name="trans"></param>
         /// <param name="recharge"></param>
         /// <returns></returns>
-        private dynamic TransDetail(IMS_GiftCardOrderEntity order, IMS_GiftCardTransfersEntity trans,IMS_GiftCardRechargeEntity recharge)
+        private dynamic TransDetail(IMS_GiftCardOrderEntity order, IMS_GiftCardTransfersEntity trans, IMS_GiftCardRechargeEntity recharge)
         {
             return new
             {
@@ -852,3 +852,4 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         Recharge = 10,
     }
 }
+
