@@ -252,14 +252,15 @@ namespace Intime.OPC.Repository.Support
 
         public PageResult<RMADto> GetRmaReturnByExpress(string orderNo, DateTime startTime, DateTime endTime, int pageIndex, int pageSize)
         {
+            /*改为包裹审核通过的*/
             int stat = EnumRMAStatus.ShipVerifyPass.AsID();
-            var rmaCashStatus = EnumCashStatus.CashOver.GetDescription();
+            //var rmaCashStatus = EnumCashStatus.CashOver.GetDescription();
             using (var db = new YintaiHZhouContext())
             {
                 var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
                 var saleQuery =
                     db.OPC_SaleRMA.Where(
-                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMACashStatus == rmaCashStatus && t.Status==stat);
+                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime  && t.Status==stat);
                 
                 if (orderNo.IsNotNull())
                 {

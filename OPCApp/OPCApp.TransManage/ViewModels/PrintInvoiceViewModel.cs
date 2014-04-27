@@ -143,7 +143,7 @@ namespace OPCApp.TransManage.ViewModels
             RefreshOther(SaleSelected);
         }
         #region 打印销售单
-            private bool PrintCommon()
+            private bool PrintCommon(bool falg=false)
             {
                 if (SaleList == null || SaleSelected == null)
                 {
@@ -159,7 +159,7 @@ namespace OPCApp.TransManage.ViewModels
                 salelist.Add(SaleSelected);
                 invoiceModel.SaleDT = salelist;
                 invoiceModel.SaleDetailDT = InvoiceDetail4List;
-                pr.Print(xsdName, rdlcName, invoiceModel);
+                pr.Print(xsdName, rdlcName, invoiceModel,falg);
                 return true;
 
             }
@@ -173,7 +173,7 @@ namespace OPCApp.TransManage.ViewModels
 
             public void CommandOnlyPrintExecute()
             {
-               if(!PrintCommon())return;
+               if(!PrintCommon(true))return;
                 //打印完 发请求设置数据库 
                 List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
                 var iTransService = AppEx.Container.GetInstance<ITransService>();
