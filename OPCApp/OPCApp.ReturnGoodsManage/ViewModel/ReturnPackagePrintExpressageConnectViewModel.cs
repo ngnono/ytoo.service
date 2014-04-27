@@ -153,9 +153,13 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
 
         private void SearchShip()
         {
-            ClearData();
-            ShipSaleList =
-                AppEx.Container.GetInstance<IPackageService>().GetShipListWithReturnGoodsConnect(RmaExpressDto).ToList();
+            try
+            {
+                ClearData();
+                ShipSaleList =
+                    AppEx.Container.GetInstance<IPackageService>().GetShipListWithReturnGoodsConnect(RmaExpressDto).ToList();
+            }
+            catch { };
         }
 
         private void SetShippingRemark()
