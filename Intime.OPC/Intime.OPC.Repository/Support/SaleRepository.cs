@@ -155,8 +155,67 @@ namespace Intime.OPC.Repository.Support
         public PageResult<SaleDto> GetPrintSale(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
             int pageIndex, int pageSize, params int[] sectionIds)
         {
-            return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintSale, pageIndex, pageSize,
-                sectionIds);
+            //return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintSale, pageIndex, pageSize,
+            //    sectionIds);
+            var saleOrderStatus = EnumSaleOrderStatus.PrintSale.AsID();
+            using (var db = new YintaiHZhouContext())
+            {
+                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => t.Status == saleOrderStatus
+                                                                    && t.SellDate >= dtStart
+                                                                    && t.SellDate < dtEnd);
+
+                if (sectionIds != null)
+                {
+                    query = query.Where(t => sectionIds.Contains(t.SectionId.Value));
+                }
+
+                if (!string.IsNullOrWhiteSpace(orderNo))
+                {
+                    query = query.Where(t => t.OrderNo.Contains(orderNo));
+                }
+
+                if (!string.IsNullOrWhiteSpace(saleId))
+                {
+                    query = query.Where(t => t.SaleOrderNo.Contains(saleId));
+                }
+
+
+                var ll = from s in db.Sections
+                         join store in db.Stores on s.StoreId equals store.Id into ss
+                         select new { SectionID = s.Id, Section = s, Store = ss.FirstOrDefault() };
+
+                var ll2 = from s in query
+                          join l in ll on s.SectionId equals l.SectionID into ss
+                          join o in db.Orders on s.OrderNo equals o.OrderNo into oo
+                          select new { Sale = s, Order = oo.FirstOrDefault(), Store = ss.FirstOrDefault() };
+
+
+
+                ll2 = ll2.OrderByDescending(t => t.Sale.CreatedDate);
+                var lst = ll2.ToPageResult(pageIndex, pageSize);
+                var lstDto = new List<SaleDto>();
+                foreach (var t in lst.Result)
+                {
+                    var o = AutoMapper.Mapper.Map<OPC_Sale, SaleDto>(t.Sale);
+                    if (t.Store != null && t.Store.Store != null)
+                    {
+                        o.StoreName = t.Store.Store.Name;
+                        o.StoreTelephone = t.Store.Store.Tel;
+                        o.StoreAddress = t.Store.Store.Location;
+                    }
+
+
+                    if (t.Store != null && t.Store.Section != null)
+                    {
+                        o.SectionName = t.Store.Section.Name;
+                    }
+                    o.InvoiceSubject = t.Order.InvoiceSubject;
+                    o.PayType = t.Order.PaymentMethodName;
+                    o.Invoice = t.Order.InvoiceDetail;
+                    lstDto.Add(o);
+                }
+                return new PageResult<SaleDto>(lstDto, lst.TotalCount);
+            }
         }
 
         /// <summary>
@@ -211,6 +270,8 @@ namespace Intime.OPC.Repository.Support
                     if (s.Store!=null)
                     {
                         o.StoreName = s.Store.Name;
+                        o.StoreTelephone = s.Store.Tel;
+                        o.StoreAddress = s.Store.Location;
                     }
                     if (s.Section != null)
                     {
@@ -411,6 +472,8 @@ namespace Intime.OPC.Repository.Support
                     if (t.Store!=null && t.Store.Store!=null)
                     {
                         o.StoreName = t.Store.Store.Name;
+                        o.StoreTelephone = t.Store.Store.Tel;
+                        o.StoreAddress = t.Store.Store.Location;
 
                     }
 

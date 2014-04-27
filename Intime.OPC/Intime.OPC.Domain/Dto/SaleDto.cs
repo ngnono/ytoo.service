@@ -43,5 +43,9 @@ namespace Intime.OPC.Domain.Dto
 
         public string Invoice { get; set; }
 
+
+        public string StoreTelephone { get; set; }
+
+        public string StoreAddress { get; set; }
     }
 }
