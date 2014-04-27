@@ -43,10 +43,14 @@ namespace OPCApp.TransManage.ViewModels
             ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
             ShippingSaleCreateDto = new ShippingSaleCreateDto();
             CommandFHDPrintView = new DelegateCommand(FHDPrintView);
-            CommandFHDPrint = new DelegateCommand(FHDPrintView);
+            CommandFHDPrint = new DelegateCommand(FHDPrint);
         }
 
         public DelegateCommand CommandFHDPrint { get; set; }
+
+        private void FHDPrint()
+        {
+        }
 
         private void FHDPrintView()
         {
@@ -58,8 +62,23 @@ namespace OPCApp.TransManage.ViewModels
             IPrint pr = new PrintWin();
             var rdlcName = "Print//ReportFHD.rdlc";
 
-          
-            pr.PrintFHD(rdlcName, SaleList.Where(e=>e.IsSelected).ToList());
+            var saleSelecteds = SaleList.Where(e => e.IsSelected).ToList();
+             if (saleSelecteds.Count!=1)
+            {
+                MessageBox.Show("请选择一张单据进行打印", "提示");
+                return;
+            }
+            var listOpcSaleDetails=new List<OPC_SaleDetail>();
+            if (SaleSelected != null)
+            {
+                listOpcSaleDetails =
+                    AppEx.Container.GetInstance<ITransService>()
+                        .SelectSaleDetail(SaleSelected.SaleOrderNo)
+                        .Result.ToList();
+                PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(SaleSelected.OrderNo);
+                pr.PrintFHD(rdlcName, re.Result.FirstOrDefault(), saleSelecteds[0], listOpcSaleDetails);
+            }
+         
         }
 
         public DelegateCommand CommandFHDPrintView { get; set; }
