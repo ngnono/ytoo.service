@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\OPCApp_Main\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -29,7 +29,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\OPCApp\OPCApp_Main\bin\Debug\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -87,20 +87,16 @@
   <ItemGroup>
     <Compile Include="BaseInfoModule.cs" />
     <Compile Include="Common\JsonExtension.cs" />
-    <Compile Include="IService\IStore.cs" />
-    <Compile Include="IService\ResultMsg.cs" />
     <Compile Include="Models\StoreInfo.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
+    <Compile Include="ViewModels\StoreAddWindowViewModel.cs" />
     <Compile Include="ViewModels\StoreManageViewModel.cs" />
     <Compile Include="ViewModels\OrgManageViewModel.cs" />
-    <Compile Include="Views\NavigationItemView.xaml.cs">
-      <DependentUpon>NavigationItemView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\OrgManage.xaml.cs">
       <DependentUpon>OrgManage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StoreManage4Modify.xaml.cs">
-      <DependentUpon>StoreManage4Modify.xaml</DependentUpon>
+    <Compile Include="Views\StoreAddWindow.xaml.cs">
+      <DependentUpon>StoreAddWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StoreManage.xaml.cs">
       <DependentUpon>StoreManage.xaml</DependentUpon>
@@ -180,15 +176,11 @@
     <Resource Include="image\验证.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\NavigationItemView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\OrgManage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\StoreManage4Modify.xaml">
+    <Page Include="Views\StoreAddWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -198,9 +190,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OPCAPP.Domain\OPCAPP.Domain.csproj">
+    <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
+      <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
+      <Name>OPCApp.DataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
       <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
-      <Name>OPCAPP.Domain</Name>
+      <Name>OPCApp.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\OPCApp.Main.Controls\OPCApp.Main.Controls.csproj">
       <Project>{c8950baf-06a5-4af3-964a-55b18b0e0b9f}</Project>

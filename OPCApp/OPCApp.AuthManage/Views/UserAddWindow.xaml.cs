@@ -1,45 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using MahApps.Metro;
+﻿using System.ComponentModel.Composition;
 using MahApps.Metro.Controls;
-using OPCApp.AuthManage.ViewModels;
+using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.AuthManage.Views
 {
-    /// <summary>
-    /// UserAddWindow.xaml 的交互逻辑
-    /// </summary>
-    public partial class UserAddWindow : MetroWindow
+    [Export("UserView", typeof (IBaseView))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public partial class UserAddWindow : MetroWindow, IBaseView
     {
-        public UserAddWindowViewModel userAddWin = new UserAddWindowViewModel();
         public UserAddWindow()
         {
             InitializeComponent();
-            userAddWin.SubmitCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(Submit));
-            userAddWin.ResetCommand = new Microsoft.Practices.Prism.Commands.DelegateCommand(new Action(Cancel));
-            this.DataContext = userAddWin;
+        }
 
-        }
-        public void Submit() 
+        public void Cancel()
         {
-            this.DialogResult = true;
-            this.Close();
+            DialogResult = false;
+            Close();
         }
-        public void Cancel() 
+
+        public void CloseView()
         {
-            this.DialogResult = false;
-            this.Close();
+            DialogResult = true;
+            Close();
         }
     }
 }

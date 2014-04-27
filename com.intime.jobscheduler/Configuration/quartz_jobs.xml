@@ -338,7 +338,7 @@
         <cron-expression>0/30 * * * * ?</cron-expression>
       </cron>
     </trigger>
-    -->
+  
 
     <job>
       <name>ERP-GroupSync</name>
@@ -398,7 +398,7 @@
         <cron-expression>0 1 1 * * ?</cron-expression>
       </cron>
     </trigger>
- 
+   -->
     <!--
     <job>
       <name>ERP-OrderSync</name>
@@ -461,6 +461,7 @@
       </cron>
     </trigger>
     -->
+    <!--
     <job>
       <name>FreeMemory</name>
       <group>Fashion</group>
@@ -536,7 +537,39 @@
         <cron-expression>0 */5 * * * ?</cron-expression>
       </cron>
     </trigger>
+-->
+    <job>
+      <name>Transfer2Aliyun</name>
+      <group>Item</group>
+      <description>Sync order</description>
+      <job-type>com.intime.jobscheduler.Job.Aliyun.TransferRSS2AliyunJob, com.intime.jobscheduler</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>path</key>
+          <value>D:\project\fileupload</value>
+        </entry>
+        <entry>
+          <key>keyunprefix</key>
+          <value>D:\project\</value>
+        </entry>
+        <entry>
+          <key>pattern</key>
+          <value>2013092?/*.jpg</value>
+        </entry>
+      </job-data-map>
+    </job>
 
+    <trigger>
+      <cron>
+        <name>SyncOrder-1w</name>
+        <group>Item</group>
+        <description>every 5 MINS</description>
+        <job-name>Transfer2Aliyun</job-name>
+        <job-group>Item</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0/5 * * * * ?</cron-expression>
     <job>
       <name>IMS_AutoOffline</name>
       <group>Item</group>

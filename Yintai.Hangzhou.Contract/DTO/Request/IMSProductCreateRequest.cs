@@ -26,5 +26,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public int[] Size_Ids { get; set; }
 
         public string Size_Str { get; set; }
+        public int Image_Id { get; set; }
     }
 }

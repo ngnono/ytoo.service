@@ -1,38 +1,61 @@
 ﻿<UserControl x:Class="OPCApp.AuthManage.Views.AuthNavigationItemView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="clr-namespace:OPCApp.Main.Controls;assembly=OPCApp.Main.Controls"
-    mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="250">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:controls="clr-namespace:OPCApp.Main.Controls;assembly=OPCApp.Main.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="250" Loaded="AuthNavigationItemView_OnLoaded">
 
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Expander VerticalAlignment="Stretch" ExpandDirection="Down" HorizontalContentAlignment="Left" SnapsToDevicePixels="True">
-            <Expander.Header>
-                <TextBlock Text="权限管理" FontSize="14" FontWeight="Bold" />
-            </Expander.Header>
-            <Expander.Content>
-                <Grid Width="250">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <!--<RadioButton x:Name="NavigateToCalendarRadioButton" Grid.Row="0"  GroupName="MainNavigation" Click="Button_Click" Style="{StaticResource MainViewRadioButtonStyle}" AutomationProperties.AutomationId="CalendarRadioButton">权限管理</RadioButton>-->
-                    <RadioButton Grid.Row="0"  Margin="0, 5, 0, 5" Width="250" Command="{Binding UserListCommand }" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Style="{StaticResource MainViewRadioButtonStyle}">用户管理</RadioButton>
-                    <!--<RadioButton Grid.Row="0" Width="Auto" Style="{StaticResource MainViewRadioButtonStyle}">用户管理</RadioButton>-->
-                    <RadioButton Grid.Row="1"  Margin="0, 5, 0, 5" Width="250" Command="{Binding RoleListCommand }" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" Style="{StaticResource MainViewRadioButtonStyle}">角色管理</RadioButton>
-                </Grid>
-            </Expander.Content>
-        </Expander>
-        <!--<Expander >
-           
+        <ItemsControl x:Name="TopLevelListBox" ItemsSource="{Binding GroupItems}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Expander ExpandDirection="Down" Width="Auto" Expanded="Expander_OnExpanded">
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal" Width="200">
 
-        </Expander>-->
-       
+                                <TextBlock Text="{Binding Path=MenuName}" Margin="0,0,5,0" Width="200" FontSize="14"
+                                           FontWeight="Bold" MouseDown="TextBlock_MouseDown">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDown">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.ClickCommand}" />
+                                        </i:EventTrigger>
+
+                                    </i:Interaction.Triggers>
+                                </TextBlock>
+                            </StackPanel>
+                        </Expander.Header>
+                        <ListBox x:Name="SubListBox" Background="#D3D3D3" ItemsSource="{Binding Path=Items}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <RadioButton GroupName="Calendar" Margin="0, 5, 0, 5" Width="200"
+                                                     Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=ClickCommand}"
+                                                     CommandParameter="{Binding Url}" Height="30"
+                                                     HorizontalContentAlignment="Center"
+                                                     VerticalContentAlignment="Center" FontSize="14"
+                                                     Style="{StaticResource MainViewRadioButtonStyle}"
+                                                     Content="{Binding Path=MenuName}" Click="RadioButton_Click" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Expander>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
     </Grid>
 </UserControl>

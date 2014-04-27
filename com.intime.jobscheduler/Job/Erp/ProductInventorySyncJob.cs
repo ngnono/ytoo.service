@@ -116,9 +116,7 @@ namespace com.intime.jobscheduler.Job.Erp
                                 .Join(db.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == existProduct.Id), o => o.PropertyId, i => i.Id, (o, i) => o).FirstOrDefault();
                     var inventory = db.Set<InventoryEntity>().Where(i => i.ChannelInventoryId == product.PRO_DETAIL_SID).FirstOrDefault();
                     int amount = (int)product.PRO_STOCK_SUM;
-                    bool no4sale = product.PRO_ACTIVE_BIT.GetValueOrDefault()==0;
-                    if (no4sale)
-                        amount = 0;
+                    bool no4sale = false;
                     if (inventory == null)
                     {
                         db.Inventories.Add(new InventoryEntity()

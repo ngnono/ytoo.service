@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using MahApps.Metro;
+﻿using System.ComponentModel.Composition;
 using MahApps.Metro.Controls;
+using OPCApp.Infrastructure.Mvvm.View;
 
 namespace OPCApp.AuthManage.Views
 {
     /// <summary>
-    /// UserAddWindow.xaml 的交互逻辑
+    ///     UserAddWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class RoleAddWindow : MetroWindow
+    [Export("RoleAddView", typeof (IBaseView))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public partial class RoleAddWindow : MetroWindow, IBaseView
     {
         public RoleAddWindow()
         {
             InitializeComponent();
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        public void Cancel()
         {
-            //是估覅一
+            DialogResult = false;
+            Close();
+        }
+
+        public void CloseView()
+        {
+            DialogResult = true;
+            Close();
         }
     }
 }

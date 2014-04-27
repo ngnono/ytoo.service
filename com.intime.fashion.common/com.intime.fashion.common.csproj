@@ -33,6 +33,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aliyun.OpenServices">
+      <HintPath>..\_dll\Aliyun.OpenServices.dll</HintPath>
+    </Reference>
     <Reference Include="AWSSDK, Version=1.5.19.0, Culture=neutral, PublicKeyToken=9f476d3089b52be3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AWSSDK.1.5.19.0\lib\AWSSDK.dll</HintPath>
@@ -75,6 +78,8 @@
     <Compile Include="Alipay\AlipayNotify.cs" />
     <Compile Include="Alipay\MD5.cs" />
     <Compile Include="Alipay\RSA.cs" />
+    <Compile Include="Aliyun\AliyunUtil.cs" />
+    <Compile Include="Aliyun\Config.cs" />
     <Compile Include="AwsHelper.cs" />
     <Compile Include="Aws\AwsConfig.cs" />
     <Compile Include="CommonUtil.cs" />

@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{58CBE625-8DF4-4487-B984-F64D1349C169}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OPCApp.TransManage</RootNamespace>
+    <AssemblyName>OPCApp.TransManage</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\OPCApp_Main\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\OPCApp\OPCApp_Main\bin\Debug\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MahApps.Metro">
+      <HintPath>..\..\OPCApp\DllFile\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro.Resources">
+      <HintPath>..\DllFile\MahApps.Metro.Resources.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.MefExtensions">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.MefExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Mvvm">
+      <HintPath>..\..\OPCApp\DllFile\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Prism.Interfaces">
+      <HintPath>..\..\OPCApp\DllFile\Prism.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Remark.cs" />
+    <Compile Include="Print\IPrint.cs" />
+    <Compile Include="Print\PrintExpressModel.cs" />
+    <Compile Include="Print\PrintModel.cs" />
+    <Compile Include="Print\PrintWin.xaml.cs">
+      <DependentUpon>PrintWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TransManageModule.cs" />
+    <Compile Include="IService\IInvoice.cs" />
+    <Compile Include="IService\ResultMsg.cs" />
+    <Compile Include="IService\IPrint.cs" />
+    <Compile Include="ViewModels\NavigationItemViewModel.cs" />
+    <Compile Include="ViewModels\RemarkViewModel.cs" />
+    <Compile Include="ViewModels\SaleOrderPickupViewModel.cs" />
+    <Compile Include="ViewModels\StoreOutViewModel.cs" />
+    <Compile Include="ViewModels\StoreInViewModel.cs" />
+    <Compile Include="ViewModels\PrintInvoiceViewModel.cs" />
+    <Compile Include="Views\NavigationItemView.xaml.cs">
+      <DependentUpon>NavigationItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RMACashIn.xaml.cs">
+      <DependentUpon>RMACashIn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RemarkWin.xaml.cs">
+      <DependentUpon>RemarkWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SaleOrderPickupView.xaml.cs">
+      <DependentUpon>SaleOrderPickupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StoreOut.xaml.cs">
+      <DependentUpon>StoreOut.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StoreIn.xaml.cs">
+      <DependentUpon>StoreIn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PrintInvoice.xaml.cs">
+      <DependentUpon>PrintInvoice.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Print\PrintWin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NavigationItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RMACashIn.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RemarkWin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SaleOrderPickupView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StoreOut.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StoreIn.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PrintInvoice.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Print\PrintInvoice.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\ReportFHD.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\ReportForSF.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\DataSources\OPCApp.Domain.Models.OPC_Sale.datasource" />
+    <None Include="Properties\DataSources\OPCApp.Domain.Models.OPC_SaleDetail.datasource" />
+    <None Include="Properties\DataSources\OPCApp.Domain.Models.OPC_ShippingSale.datasource" />
+    <None Include="Properties\DataSources\OPCApp.TransManage.Print.PrintExpressModel.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\上传.png" />
+    <Resource Include="image\保存.png" />
+    <Resource Include="image\修改.png" />
+    <Resource Include="image\删除.png" />
+    <Resource Include="image\到达指派.png" />
+    <Resource Include="image\到达确认.png" />
+    <Resource Include="image\发布.png" />
+    <Resource Include="image\取消.png" />
+    <Resource Include="image\受理.png" />
+    <Resource Include="image\变更单位.png" />
+    <Resource Include="image\回单存档.png" />
+    <Resource Include="image\回单派发.png" />
+    <Resource Include="image\回单确认.png" />
+    <Resource Include="image\回单返回.png" />
+    <Resource Include="image\处理.png" />
+    <Resource Include="image\审批.png" />
+    <Resource Include="image\导出.png" />
+    <Resource Include="image\帮助.png" />
+    <Resource Include="image\打印.png" />
+    <Resource Include="image\拒签.png" />
+    <Resource Include="image\挂失.png" />
+    <Resource Include="image\指派.png" />
+    <Resource Include="image\指派送货.png" />
+    <Resource Include="image\收款确认.png" />
+    <Resource Include="image\放款.png" />
+    <Resource Include="image\放款复核.png" />
+    <Resource Include="image\新增.png" />
+    <Resource Include="image\明细.png" />
+    <Resource Include="image\查看.png" />
+    <Resource Include="image\查看回单标准.png" />
+    <Resource Include="image\查询.png" />
+    <Resource Include="image\申请审批.png" />
+    <Resource Include="image\移动.png" />
+    <Resource Include="image\立案.png" />
+    <Resource Include="image\签单上传.png" />
+    <Resource Include="image\签收.png" />
+    <Resource Include="image\结案.png" />
+    <Resource Include="image\统计.png" />
+    <Resource Include="image\解挂.png" />
+    <Resource Include="image\认领.png" />
+    <Resource Include="image\退回.png" />
+    <Resource Include="image\销款.png" />
+    <Resource Include="image\验证.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
+      <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
+      <Name>OPCApp.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
+      <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
+      <Name>OPCApp.DataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
+      <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
+      <Name>OPCApp.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.Main.Controls\OPCApp.Main.Controls.csproj">
+      <Project>{c8950baf-06a5-4af3-964a-55b18b0e0b9f}</Project>
+      <Name>OPCApp.Main.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OPCApp.Main.Infrastructure\OPCApp.Main.Infrastructure.csproj">
+      <Project>{55aa526e-1a89-4a8e-b648-8de5de2fd1e5}</Project>
+      <Name>OPCApp.Main.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

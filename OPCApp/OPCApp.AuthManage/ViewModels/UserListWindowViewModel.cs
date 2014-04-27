@@ -1,118 +1,293 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Practices.Prism.Mvvm;
+using System.Collections.ObjectModel;
+using System.ComponentModel.Composition;
+using System.Linq;
+using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.AuthManage.Views;
-using OPCAPP.Domain;
-using OPCAPP.DataService.Interface;
-using OPCAPP.DataService.Impl;
+using OPCApp.DataService.Interface;
+using OPCApp.Domain.Models;
+using OPCApp.Infrastructure;
+using OPCApp.Infrastructure.DataService;
+using OPCApp.Infrastructure.Mvvm;
+using OPCApp.Infrastructure.Mvvm.Model;
+
 namespace OPCApp.AuthManage.ViewModels
 {
-   public class UserListWindowViewModel : BindableBase
+    [Export("UserListViewModel", typeof (IViewModel))]
+    // [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class UserListWindowViewModel : BaseListViewModel<OPC_AuthUser>
     {
-       /*选择字段*/
-       public string selectedFiled { get; set; }
-       /*选择字段的值*/
-       public string selectedFiledValue { get; set; }
-       public IAuthenticateService userService { get; set; }
-       /*查询字段列表*/
-       public List<string> FieldList { get; set; }
-       private User user;
-       /*列表选择用户 并且 也用于新增修改时接受的用户*/
-      
-       public User User
+        private OPC_AuthUser _curUser;
+        public PageDataResult<OPC_AuthUser> _prResult;
+
+        public UserListWindowViewModel()
+            : base("UserListWindow")
         {
-            get { return this.user; }
-            set { SetProperty(ref this.user, value); }
+            EditViewModeKey = "UserViewModel";
+            AddViewModeKey = "UserViewModel";
+            InitOrg();
+            InitUser();
         }
-       private List<User> userList;
-       /*用户列表*/
-       public List<User> UserList
-       {
-           get { return this.userList; }
-           set { SetProperty(ref this.userList, value); }
-       }
-       /*查询用户命令*/
-        public DelegateCommand SearchCommand { get; set; }
-        /*增加用户命令*/
-        public DelegateCommand AddCommand { get; set; }
-        /*修改用户命令*/
-        public DelegateCommand UpdateCommand { get; set; }
-        /*删除用户命令*/
-        public DelegateCommand DelCommand { get; set; }
-        /*是否启用用户*/
+
+        public DelegateCommand UpdatePwdCommand { get; set; }
+        public DelegateCommand AddOrgCommand { get; set; }
+        public DelegateCommand EditOrgCommand { get; set; }
+        public DelegateCommand DeleteOrgCommand { get; set; }
+        public NodeViewModel Nodes { get; private set; }
+        public NodeInfo NodeInfo { get; private set; }
+        public ReadOnlyCollection<DelegateCommand> Commands { get; private set; }
+
+        public PageDataResult<OPC_AuthUser> PrResult
+        {
+            get { return _prResult; }
+            set { SetProperty(ref _prResult, value); }
+        }
+
+        public OPC_AuthUser CurModel
+        {
+            get { return _curUser; }
+            set { SetProperty(ref _curUser, value); }
+        }
+
+        /*选择字段*/
+
+        public string SelectedFiled { get; set; }
+        /*选择字段的值*/
+        public string SelectedFiledValue { get; set; }
+        /*查询字段列表*/
+        public List<string> FieldList { get; set; }
+        /*是否停用*/
         public DelegateCommand SetStopUserCommand { get; set; }
         /*导出用户*/
         public DelegateCommand ExportUserCommand { get; set; }
-       /*是否停用*/
-        /*构造*/
-        public UserListWindowViewModel() 
+        /*双击用户列表*/
+        public DelegateCommand DelUserCommand { get; set; }
+        public DelegateCommand RePasswordCommand { get; set; }
+
+        public int PageSize { get; set; }
+        public int PageIndex { get; set; }
+
+        public void AddOrg()
         {
-            this.SearchCommand = new DelegateCommand(this.searchCommand);
-            this.AddCommand = new DelegateCommand(this.addCommand);
-            this.UpdateCommand = new DelegateCommand(this.updateCommand);
-            this.DelCommand = new DelegateCommand(this.delCommand);
-            this.SetStopUserCommand = new DelegateCommand(this.setStopUserCommand);
-            this.Init();
+            if (CheckSelection())
+            {
+                GetOperationNode().AddOrg();
+            }
         }
+
+        public void EditOrg()
+        {
+            if (CheckSelection())
+            {
+                GetOperationNode().UpdateOrg();
+            }
+        }
+
+        public void DeleteOrg()
+        {
+            if (CheckSelection())
+            {
+                if (NodeInfo.SelectedNode.OrgId == "100")
+                {
+                    MessageBox.Show("父级组织机构节点不能删除", "提示");
+                    return;
+                }
+                GetOperationNode().DeleteOrg();
+            }
+        }
+
+        private void InitOrg()
+        {
+            AddOrgCommand = new DelegateCommand(AddOrg);
+            EditOrgCommand = new DelegateCommand(EditOrg);
+            DeleteOrgCommand = new DelegateCommand(DeleteOrg);
+         
+            List<OPC_OrgInfo> orgList = AppEx.Container.GetInstance<IOrgService>().Search().ToList();
+            Commands = new ReadOnlyCollection<DelegateCommand>(new[]
+            {
+                new DelegateCommand(SearchAction)
+            });
+
+            NodeInfo = new NodeInfo();
+            NodeInfo.SelectedNodeChanged += (s, e) => RefreshCommands();
+            Nodes = new NodeViewModel(NodeInfo);
+            GetNodesTree(Nodes, orgList);
+        }
+
+        private void GetNodesTree(NodeViewModel node, List<OPC_OrgInfo> listOrg)
+        {
+            List<OPC_OrgInfo> orgParent = listOrg.Where(e => e.OrgID == e.ParentID).ToList();
+            foreach (OPC_OrgInfo opcOrgInfo in orgParent)
+            {
+                NodeViewModel nv = node.AddSubNode(opcOrgInfo);
+                GetNodesTreeChild(nv, listOrg);
+            }
+        }
+
+        private void GetNodesTreeChild(NodeViewModel node, List<OPC_OrgInfo> listOrg)
+        {
+            List<OPC_OrgInfo> orgParent = listOrg.Where(e => e.OrgID != e.ParentID && e.ParentID == node.OrgId).ToList();
+            foreach (OPC_OrgInfo opcOrgInfo in orgParent)
+            {
+                NodeViewModel nv = node.AddSubNode(opcOrgInfo);
+                GetNodesTreeChild(nv, listOrg);
+            }
+        }
+
+        private bool CheckSelection()
+        {
+            if (NodeInfo.SelectedNode == null) //建议改后台
+            {
+                MessageBox.Show("请选择组织机构节点", "提示");
+                return false;
+                ;
+            }
+            return true;
+        }
+
+        private void RefreshCommands()
+        {
+            foreach (DelegateCommand cmd in Commands)
+            {
+                cmd.Execute();
+            }
+        }
+
+        private NodeViewModel GetOperationNode()
+        {
+            if (NodeInfo.SelectedNode == null)
+                return Nodes;
+            return NodeInfo.SelectedNode;
+        }
+
+        protected override IDictionary<string, object> GetFilter()
+        {
+            NodeViewModel node = GetOperationNode();
+            int indexFiled = FieldList.IndexOf(SelectedFiled);
+            var dicFilter = new Dictionary<string, object>
+            {
+                {"SearchField", indexFiled == -1 ? 1 : indexFiled},
+                {"SearchValue", SelectedFiledValue},
+                {"pageIndex", PageIndex},
+                {"pageSize", PageSize},
+                {"orgid", node.OrgId}
+            };
+            return dicFilter;
+        }
+
+        public override void SearchAction()
+        {
+            PageResult<OPC_AuthUser> PrResultTemp =
+                AppEx.Container.GetInstance<IAuthenticateService>().Search(GetFilter());
+            if (PrResultTemp == null || PrResultTemp.Result == null)
+            {
+                return;
+            }
+            PrResult = new PageDataResult<OPC_AuthUser>();
+            PrResult.Models = PrResultTemp.Result.ToList();
+            PrResult.Total = PrResultTemp.TotalCount;
+        }
+
+        /*重写 在选择组织结构 才能进行用户增加操作*/
+
+        public override bool BeforeAdd(OPC_AuthUser t)
+        {
+            NodeViewModel curNode = GetOperationNode();
+            if (curNode == null || curNode.OrgId == null)
+            {
+                MessageBox.Show("请选择部门", "提示");
+                return false;
+            }
+            if (t == null) t = new OPC_AuthUser();
+            t.OrgId = curNode.OrgId;
+            t.DataAuthId = curNode.OrgId;
+            t.DataAuthName = curNode.Name;
+            return true;
+        }
+
+        public override bool BeforeEdit(IViewModel viewModel, OPC_AuthUser model)
+        {
+            var vm = viewModel as UserAddWindowViewModel;
+            vm.OrgInfo = new OPC_OrgInfo {OrgID = model.DataAuthId, OrgName = model.DataAuthName};
+            return true;
+        }
+
         /*初始化页面固有的数据值*/
-        private void Init() 
+
+        private void InitUser()
         {
-            this.FieldList = new List<string>();
-            this.FieldList.Add("登陆名");
-            this.FieldList.Add("专柜码");
-            this.FieldList.Add("姓名");
-            this.FieldList.Add("门店");
-            this.FieldList.Add("机构");
-           
+            FieldList = new List<string> {"登陆名", "姓名"};
             /*查询初始化*/
-            this.selectedFiledValue = "";
-            this.selectedFiled = "";
-            /*初始化结构 IOC*/
-            this.userService = new AuthenticateService();
-        }
-        /**/
-        private void searchCommand() 
-        {
-            this.refreshList();
-        }
-        private void addCommand()
-        {
-            this.User = new User();
-            UserAddWindow userWin = new UserAddWindow();
-            userWin.userAddWin.User =this.User;
-            if (userWin.ShowDialog() == true)
-            {
-                this.userService.AddUser(User);
-                this.refreshList();
-            }
-        }
-        private void updateCommand()
-        {
-            UserAddWindow userWin = new UserAddWindow();
-            userWin.userAddWin.User = this.User;
-            if (userWin.ShowDialog() == true)
-            {
-                this.userService.UpdateUser(User);
-                this.refreshList();
-            }
-        }
-        private void delCommand()
-        {
-             this.userService.DelUser(User);
-            this.refreshList();
-        }
-        private void refreshList() 
-        {
-            this.UserList = this.userService.GetUserList(this.selectedFiled,this.selectedFiledValue);
+            SelectedFiledValue = "";
+            SelectedFiled = "";
+            SetStopUserCommand = new DelegateCommand(SetStopUser);
+            DelUserCommand = new DelegateCommand(DelUser);
+            PageIndex = 1;
+            PageSize = 10;
+            PrResult = new PageDataResult<OPC_AuthUser>();
+            CurModel = new OPC_AuthUser();
+            RePasswordCommand = new DelegateCommand(RePassword);
+            UpdatePwdCommand = new DelegateCommand(UpdatePassWord);
         }
 
-        private void setStopUserCommand() 
+        private void RePassword()
         {
-            bool isValid = user.IsValid ? true : false;
-            this.userService.SetIsStop(isValid);
+            OPC_AuthUser user = CurModel;
+            if (user == null)
+            {
+                MessageBox.Show("请选择要操作的用户", "提示");
+                return;
+            }
+            ResultMsg resultMsg = AppEx.Container.GetInstance<IAuthenticateService>().ResetPassword(user);
+            MessageBox.Show(resultMsg.IsSuccess ? "重置密码成功" : "操作失败", "提示");
         }
-       
-      
+
+        public void DelUser()
+        {
+            OPC_AuthUser user = CurModel;
+            if (user == null)
+            {
+                MessageBox.Show("请选择要操作的用户", "提示");
+                return;
+            }
+            DeleteAction(user);
+            SearchAction();
+        }
+
+        private void SetStopUser()
+        {
+            OPC_AuthUser user = CurModel;
+            if (user == null)
+            {
+                MessageBox.Show("请选择要操作的用户", "提示");
+                return;
+            }
+            var iauth = GetDataService() as IAuthenticateService;
+            iauth.SetIsStop(user);
+            SearchAction();
+        }
+
+        protected override IBaseDataService<OPC_AuthUser> GetDataService()
+        {
+            return AppEx.Container.GetInstance<IAuthenticateService>();
+        }
+
+        private void UpdatePassWord()
+        {
+            OPC_AuthUser user = CurModel;
+            if (user == null)
+            {
+                MessageBox.Show("请选择要操作的用户", "提示");
+                return;
+            }
+            var userPadWin = AppEx.Container.GetInstance<UserUpdatePwd>();
+            userPadWin.ViewModel.Model.LogonName = user.LogonName;
+            if (userPadWin.ShowDialog() == true)
+            {
+                ResultMsg resultMsg = AppEx.Container.GetInstance<IAuthenticateService>().UpdatePassword(user,userPadWin.ViewModel.Model.NewPassword);
+                MessageBox.Show(resultMsg.IsSuccess ? "重置密码成功" : "操作失败", "提示");
+            }
+        }
     }
-
 }

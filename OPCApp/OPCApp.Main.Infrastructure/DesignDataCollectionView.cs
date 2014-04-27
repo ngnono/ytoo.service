@@ -1,28 +1,27 @@
 //===================================================================================
-// Microsoft patterns & practices
-// Composite Application Guidance for Windows Presentation Foundation
+//OPCApp_Main
+// 
 //===================================================================================
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY
-// OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT
-// LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-// FITNESS FOR A PARTICULAR PURPOSE.
+// OPC项目主程序
+// 作者：赵晓玉
+// 创建日期：2014-2-5
 //===================================================================================
-// The example companies, organizations, products, domain names,
-// e-mail addresses, logos, people, places, and events depicted
-// herein are fictitious.  No association with any real company,
-// organization, product, domain name, email address, logo, person,
-// places, or events is intended or should be inferred.
+// 修改记录
+//
 //===================================================================================
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 
-namespace OPCApp.Main.Infrastructure
+using System;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Globalization;
+
+namespace OPCApp.Infrastructure
 {
     /// <summary>
-    /// This class is used to specify design data for view models that expose an ICollectionView. It is not intended
-    /// to be used by production code.
+    ///     This class is used to specify design data for view models that expose an ICollectionView. It is not intended
+    ///     to be used by production code.
     /// </summary>
     public class DesignDataCollectionView : Collection<object>, ICollectionView
     {
@@ -41,16 +40,10 @@ namespace OPCApp.Main.Infrastructure
             get { throw new NotImplementedException(); }
         }
 
-        public System.Globalization.CultureInfo Culture
+        public CultureInfo Culture
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
 #pragma warning disable 67    
@@ -78,14 +71,8 @@ namespace OPCApp.Main.Infrastructure
 
         public Predicate<object> Filter
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public ObservableCollection<GroupDescription> GroupDescriptions
@@ -153,7 +140,7 @@ namespace OPCApp.Main.Infrastructure
             get { throw new NotImplementedException(); }
         }
 
-        public System.Collections.IEnumerable SourceCollection
+        public IEnumerable SourceCollection
         {
             get { throw new NotImplementedException(); }
         }
@@ -161,7 +148,7 @@ namespace OPCApp.Main.Infrastructure
 #pragma warning disable 67
         // Implements ICollectionView and is here only to support design-time data only.
         // It's no surprise no one actually uses this event.
-        public event System.Collections.Specialized.NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
 #pragma warning restore 67
     }
 }

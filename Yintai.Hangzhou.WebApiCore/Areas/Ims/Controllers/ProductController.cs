@@ -50,9 +50,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
-            var files = Request.Files;
-            if (files.Count != 1)
-                return this.RenderError(r => r.Message = "商品没有图片！");
+            if (request.Image_Id <= 0)
+                return this.RenderError(r => r.Message = "必须传入一个图片");
+            var resourceEntity = Context.Set<ResourceEntity>().Find(request.Image_Id);
+            if (resourceEntity == null)
+                return this.RenderError(r=>r.Message="图片不正确");
             var categoryEntity = Context.Set<TagEntity>()
                                 .Where(t => t.Id == request.Category_Id)
                                 .GroupJoin(Context.Set<CategoryPropertyEntity>().Join(Context.Set<CategoryPropertyValueEntity>(), o => o.Id, i => i.PropertyId, (o, i) => new { CP = o, CPV = i })
@@ -203,30 +205,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 }
                 //step4: create image
 
-                var resourceEntity = _resourceService.Save(files
-                                        , authuid
-                                        , propertyvalueEntity.Id
-                                        , productEntity.Id
-                                        , SourceType.Product);
-                if (resourceEntity.Count > 0)
+                resourceEntity.SourceType = (int)SourceType.Product;
+                resourceEntity.SourceId = productEntity.Id;
+                resourceEntity.ColorId = propertyvalueEntity.Id;
+                _resourceRepo.Update(resourceEntity);
+                
+                ts.Complete();
+                return this.RenderSuccess<dynamic>(c => c.Data = new
                 {
-                    ts.Complete();
-                    return this.RenderSuccess<dynamic>(c => c.Data = new
-                    {
-                        id = productEntity.Id,
-                        image = resourceEntity.First().Name.Image320Url(),
-                        price = productEntity.Price,
-                        brand_name = brandEntity.Name,
-                        category_name = categoryEntity.C.Name
+                    id = productEntity.Id,
+                    image = resourceEntity.Name.Image320Url(),
+                    price = productEntity.Price,
+                    brand_name = brandEntity.Name,
+                    category_name = categoryEntity.C.Name
 
-                    });
-                }
-                else
-                {
-                    return this.RenderError(r => r.Message = "图片上传出错");
-                }
-
-
+                });
+               
             }
 
         }
@@ -246,7 +240,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "无权操作该商品");
             var files = Request.Files;
             bool needUpdateImage = false;
-            if (files.Count == 1)
+            if (request.Image_Id >0 )
                 needUpdateImage = true;
             var categoryEntity = Context.Set<TagEntity>()
                                 .Where(t => t.Id == request.Category_Id)
@@ -328,22 +322,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 //step4: create image
                 if (needUpdateImage)
                 {
-
                     currentResourceEntity.Status = (int)DataStatus.Deleted;
                     currentResourceEntity.UpdatedDate = DateTime.Now;
                     _resourceRepo.Update(currentResourceEntity);
 
-                    var resourceEntity = _resourceService.Save(files
-                                       , authuid
-                                       , -1
-                                       , productEntity.Id
-                                       , SourceType.Product);
-                    if (resourceEntity.Count <= 0)
-                        canCommit = false;
-                    else
-                    {
-                        currentResourceEntity = resourceEntity.First();
-                    }
+                    var colorPropertyId = currentResourceEntity.ColorId;
+                    currentResourceEntity = Context.Set<ResourceEntity>().Find(request.Image_Id);
+                    currentResourceEntity.SourceType = (int)SourceType.Product;
+                    currentResourceEntity.SourceId = productEntity.Id;
+                    currentResourceEntity.ColorId = colorPropertyId;
+                    _resourceRepo.Update(currentResourceEntity);
+                    
                 }
 
                 if (canCommit)
@@ -458,7 +447,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     }
                                 }
                                 if (productEntity.PR != null)
+                                {
                                     p.ImageUrl = productEntity.PR.Name;
+                                    p.Image_Id = productEntity.PR.Id;
+                                }
                             }));
         }
 
