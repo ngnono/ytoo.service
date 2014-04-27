@@ -178,7 +178,7 @@ namespace Intime.OPC.Repository.Support
             int cashStatus = EnumSaleOrderCashStatus.CashOver.AsID();
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => t.Status == saleOrderStatus
+                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => (t.Status == saleOrderStatus || t.Status == (int)EnumSaleOrderStatus.NoPickUp || t.Status == (int)EnumSaleOrderStatus.Fetched)
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
 
