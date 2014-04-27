@@ -94,6 +94,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
+                            <DataGridTextColumn Header="渠道订单号" Width="120" Binding="{Binding TransNo}" />
                             <DataGridTextColumn Header="销售类别" Binding="{Binding SalesType}" />
                             <DataGridTextColumn Header="销售状态" Binding="{Binding Status}"
                                                 ElementStyle="{StaticResource CellCenter}" />

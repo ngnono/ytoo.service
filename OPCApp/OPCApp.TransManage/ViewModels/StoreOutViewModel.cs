@@ -157,6 +157,7 @@ namespace OPCApp.TransManage.ViewModels
             ;
         }
 
+        #region 打印快递单
         /*打印*/
 
         public void OnlyPrint()
@@ -198,8 +199,9 @@ namespace OPCApp.TransManage.ViewModels
                 CustomerPhone = OrderList[0].CustomerPhone,
                 ExpressFee = ShipSaleSelected.ExpressFee.ToString("f2")
             };
-            pr.PrintExpress(rdlcName, printModel);
+            pr.PrintExpress(rdlcName, printModel,true);
         }
+        #endregion
 
         //发货单备注
         private void SetShippingRemark()
