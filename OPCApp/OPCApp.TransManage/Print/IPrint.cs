@@ -7,6 +7,6 @@ namespace OPCApp.TransManage.Print
     {
         void Print(string xsdName, string rdlcName, PrintModel dtList, bool isFast);
         void PrintExpress(string rdlcName, PrintExpressModel dtList);
-        void PrintFHD(string rdlcName, List<OPC_Sale> printExpressModel);
+        void PrintFHD(string rdlcName,Order order, OPC_Sale opcSale,List<OPC_SaleDetail> listOpcSaleDetails );
     }
 }
