@@ -63,6 +63,8 @@ namespace Intime.OPC.Repository
 
          public DbSet<OrderTransaction> OrderTransactions { get; set; }
 
+         public DbSet<User> Users { get; set; }
+
          protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
           
@@ -106,6 +108,7 @@ namespace Intime.OPC.Repository
             modelBuilder.Configurations.Add(new OPC_SaleRMACommentMap());
             modelBuilder.Configurations.Add(new PaymentMethodMap());
             modelBuilder.Configurations.Add(new OrderTransactionMap());
+            modelBuilder.Configurations.Add(new UserMap());
         }
     }
 }

@@ -16,10 +16,14 @@ namespace OPCApp.Customer.ViewModels
  
         public override void SearchGoodsInfo()
         {
-            OrderDtoList =
-                AppEx.Container.GetInstance<ICustomerReturnSearch>()
-                    .ReturnGoodsFinancialSearch(ReturnGoodsInfoGet)
-                    .ToList();
+            try
+            {
+                OrderDtoList =
+                    AppEx.Container.GetInstance<ICustomerReturnSearch>()
+                        .ReturnGoodsFinancialSearch(ReturnGoodsInfoGet)
+                        .ToList();
+            }
+            catch { };
         }
 
         public override void SearchRmaDtoListInfo()
@@ -29,9 +33,13 @@ namespace OPCApp.Customer.ViewModels
                 if (RmaDetailList != null) RmaDetailList.Clear();
                 return;
             }
-            List<RMADto> rmaList =
-                AppEx.Container.GetInstance<ICustomerReturnSearch>().GetRmaFinancialByOrderNo(OrderDto.OrderNo).ToList();
-            RMADtoList = rmaList;
+            try
+            { 
+                List<RMADto> rmaList =
+                    AppEx.Container.GetInstance<ICustomerReturnSearch>().GetRmaFinancialByOrderNo(OrderDto.OrderNo).ToList();
+                RMADtoList = rmaList;
+            }
+            catch { };
         }
       
     }
