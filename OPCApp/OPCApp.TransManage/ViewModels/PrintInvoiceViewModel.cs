@@ -145,6 +145,11 @@ namespace OPCApp.TransManage.ViewModels
 
         public void CommandViewAndPrintExecute()
         {
+            if (SaleList == null || SaleSelected==null)
+            {
+                MessageBox.Show("请勾选要打印预览的销售单", "提示");
+                return;
+            }
             IPrint pr = new PrintWin();
             string xsdName = "InvoiceDataSet";
             string rdlcName = "Print//PrintInvoice.rdlc";
@@ -153,12 +158,8 @@ namespace OPCApp.TransManage.ViewModels
             var salelist = new List<OPC_Sale>();
             salelist.Add(SaleSelected);
             invoiceModel.SaleDT = salelist;
-            var orderlist = new List<Order>();
-            var Order = new Order();
-            orderlist.Add(Order);
-            invoiceModel.OrderDT = orderlist;
             invoiceModel.SaleDetailDT = InvoiceDetail4List;
-            pr.Print(xsdName, rdlcName, invoiceModel, true);
+            pr.Print(xsdName, rdlcName, invoiceModel);
         }
 
         /*打印销售单*/
@@ -170,6 +171,18 @@ namespace OPCApp.TransManage.ViewModels
                 MessageBox.Show("请勾选要打印的销售单", "提示");
                 return;
             }
+            IPrint pr = new PrintWin();
+            string xsdName = "InvoiceDataSet";
+            string rdlcName = "Print//PrintInvoice.rdlc";
+
+            var invoiceModel = new PrintModel();
+            var salelist = new List<OPC_Sale>();
+            salelist.Add(SaleSelected);
+            invoiceModel.SaleDT = salelist;
+            invoiceModel.SaleDetailDT = InvoiceDetail4List;
+            pr.Print(xsdName, rdlcName, invoiceModel, true);
+
+            //打印完 发请求设置数据库 
             List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
             var iTransService = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = iTransService.ExecutePrintSale(selectSaleIds);

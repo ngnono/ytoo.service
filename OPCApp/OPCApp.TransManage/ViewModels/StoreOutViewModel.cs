@@ -47,12 +47,12 @@ namespace OPCApp.TransManage.ViewModels
         }
 
         public DelegateCommand CommandFHDPrint { get; set; }
-
+        #region 打印发货单
         private void FHDPrint()
         {
+            FHDPrintViewCommon(true);
         }
-
-        private void FHDPrintView()
+        private void FHDPrintViewCommon(bool bPrint)
         {
             if (SaleList == null)
             {
@@ -63,12 +63,12 @@ namespace OPCApp.TransManage.ViewModels
             var rdlcName = "Print//ReportFHD.rdlc";
 
             var saleSelecteds = SaleList.Where(e => e.IsSelected).ToList();
-             if (saleSelecteds.Count!=1)
+            if (saleSelecteds.Count != 1)
             {
                 MessageBox.Show("请选择一张单据进行打印", "提示");
                 return;
             }
-            var listOpcSaleDetails=new List<OPC_SaleDetail>();
+            var listOpcSaleDetails = new List<OPC_SaleDetail>();
             if (SaleSelected != null)
             {
                 listOpcSaleDetails =
@@ -76,11 +76,15 @@ namespace OPCApp.TransManage.ViewModels
                         .SelectSaleDetail(SaleSelected.SaleOrderNo)
                         .Result.ToList();
                 PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(SaleSelected.OrderNo);
-                pr.PrintFHD(rdlcName, re.Result.FirstOrDefault(), saleSelecteds[0], listOpcSaleDetails);
+                pr.PrintFHD(rdlcName, re.Result.FirstOrDefault(), saleSelecteds[0], listOpcSaleDetails,bPrint);
             }
-         
-        }
 
+        }
+        private void FHDPrintView()
+        {
+            FHDPrintViewCommon(false);
+        }
+        #endregion
         public DelegateCommand CommandFHDPrintView { get; set; }
 
         public OPC_ShippingSale ShipSaleSelected
@@ -314,7 +318,7 @@ namespace OPCApp.TransManage.ViewModels
             }
         }
 
-        //打印发货单
+        //打印发货单完成
         public void PrintInvoice()
         {
             if (SaleList == null || !SaleList.Any())
