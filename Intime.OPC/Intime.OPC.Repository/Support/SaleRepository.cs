@@ -103,7 +103,7 @@ namespace Intime.OPC.Repository.Support
                 var filter = from q in query
                     join o in qq on q.OrderItemId equals o.OrderItems.Id into oo
                     join p in db.OPC_Stock on q.StockId equals p.Id into pp
-
+                    
                     select new {OrderItem=oo.FirstOrDefault(),Sale=q,Stock=pp.FirstOrDefault()};
 
 
@@ -158,9 +158,10 @@ namespace Intime.OPC.Repository.Support
             //return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintSale, pageIndex, pageSize,
             //    sectionIds);
             var saleOrderStatus = EnumSaleOrderStatus.PrintSale.AsID();
+            var saleOrderStatus1 = EnumSaleOrderStatus.ShoppingGuidePickUp.AsID();
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => t.Status == saleOrderStatus
+                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => (t.Status == saleOrderStatus || t.Status == saleOrderStatus1)
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
 
@@ -187,7 +188,10 @@ namespace Intime.OPC.Repository.Support
                 var ll2 = from s in query
                           join l in ll on s.SectionId equals l.SectionID into ss
                           join o in db.Orders on s.OrderNo equals o.OrderNo into oo
-                          select new { Sale = s, Order = oo.FirstOrDefault(), Store = ss.FirstOrDefault() };
+                    join r in db.OrderTransactions on s.OrderNo equals r.OrderNo into rr
+                
+                
+                          select new { Sale = s, Order = oo.FirstOrDefault(), Store = ss.FirstOrDefault(),OrderTrans=rr.FirstOrDefault() };
 
 
 
@@ -208,6 +212,10 @@ namespace Intime.OPC.Repository.Support
                     if (t.Store != null && t.Store.Section != null)
                     {
                         o.SectionName = t.Store.Section.Name;
+                    }
+                    if (t.OrderTrans!=null)
+                    {
+                        o.TransNo = t.OrderTrans.TransNo;
                     }
                     o.InvoiceSubject = t.Order.InvoiceSubject;
                     o.PayType = t.Order.PaymentMethodName;
@@ -253,12 +261,14 @@ namespace Intime.OPC.Repository.Support
 
                 var qq = from sale in query
                          join s in db.Sections on sale.SectionId equals s.Id into cs
-                         select new { Sale = sale, Section = cs.FirstOrDefault() };
+                         join r in db.OrderTransactions on sale.OrderNo equals r.OrderNo into rr
+                         select new { Sale = sale, Section = cs.FirstOrDefault(),OrderTrans=rr.FirstOrDefault() };
 
                 var filter = from q in qq
                              join s in db.Stores on q.Section.StoreId equals s.Id into mm
                     join o in db.Orders on q.Sale.OrderNo equals o.OrderNo into oo
-                             select new { Sale = q.Sale,Section=q.Section, Order=oo.FirstOrDefault(), Store = mm.FirstOrDefault() };
+                             
+                             select new { Sale = q.Sale,Section=q.Section, OrderTrans=q.OrderTrans, Order=oo.FirstOrDefault(), Store = mm.FirstOrDefault() };
 
 
                 filter = filter.OrderByDescending(t => t.Sale.CreatedDate);
@@ -276,6 +286,10 @@ namespace Intime.OPC.Repository.Support
                     if (s.Section != null)
                     {
                         o.SectionName = s.Section.Name;
+                    }
+                    if (s.OrderTrans!=null)
+                    {
+                        o.TransNo = s.OrderTrans.TransNo;
                     }
                     o.InvoiceSubject = s.Order.InvoiceSubject;
                     o.PayType = s.Order.PaymentMethodName;
@@ -459,7 +473,8 @@ namespace Intime.OPC.Repository.Support
                 var ll2 = from s in query
                     join l in ll on s.SectionId equals l.SectionID into ss
                     join o in db.Orders on s.OrderNo equals o.OrderNo into oo
-                    select new {Sale = s, Order = oo.FirstOrDefault(), Store = ss.FirstOrDefault()};
+                          join r in db.OrderTransactions on s.OrderNo equals r.OrderNo into rr
+                    select new {Sale = s, Order = oo.FirstOrDefault(), Store = ss.FirstOrDefault(),OrderTrans=rr.FirstOrDefault()};
 
 
 
@@ -477,11 +492,17 @@ namespace Intime.OPC.Repository.Support
 
                     }
 
-                   
+                    if (t.OrderTrans != null)
+                    {
+                        o.TransNo = t.OrderTrans.TransNo;
+                    }
+
                     if (t.Store != null && t.Store.Section!=null)
                     {
                         o.SectionName = t.Store.Section.Name;
                     }
+
+
                     o.InvoiceSubject = t.Order.InvoiceSubject;
                     o.PayType = t.Order.PaymentMethodName;
                     o.Invoice = t.Order.InvoiceDetail;

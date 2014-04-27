@@ -100,8 +100,15 @@ namespace OPCApp.Financial.ViewModels
             {
                 RmaList.Clear();
             }
-            SaleRmaList =
-                AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByReturnGoodPay(ReturnGoodsPayDto).ToList();
+            try
+            {
+                SaleRmaList =
+                    AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByReturnGoodPay(ReturnGoodsPayDto).ToList();
+            }
+            catch
+            {
+
+            }
         }
 
         public void GetRmaDetailByRma()
