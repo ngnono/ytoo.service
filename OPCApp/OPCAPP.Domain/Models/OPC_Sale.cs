@@ -8,6 +8,8 @@ namespace OPCApp.Domain.Models
         {
             SaleStatus = "已销售";
         }
+        //订货人
+        public string ReceivePerson { get; set; }
 
         public string OrderSource { get; set; }
         public string SaleStatus { get; set; }
