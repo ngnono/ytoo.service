@@ -992,7 +992,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SellPrice.Value*Fields!SellCount.Value</Value>
+                              <Value>=Fields!Price.Value*Fields!SellCount.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1022,7 +1022,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SellCount.Value*Fields!SellPrice.Value</Value>
+                              <Value>=Fields!SellCount.Value*Fields!Price.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
