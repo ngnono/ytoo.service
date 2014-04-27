@@ -1041,7 +1041,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -1077,7 +1076,7 @@
         </TablixRowHierarchy>
         <DataSetName>SaleDetailDT</DataSetName>
         <Top>3.63155cm</Top>
-        <Left>0.36632cm</Left>
+        <Left>0.3175cm</Left>
         <Height>1.2cm</Height>
         <Width>24.38264cm</Width>
         <ZIndex>7</ZIndex>
@@ -1103,7 +1102,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>0.63182cm</Top>
-        <Left>7.78979cm</Left>
+        <Left>7.15479cm</Left>
         <Height>0.6cm</Height>
         <Width>2.05493cm</Width>
         <ZIndex>8</ZIndex>
@@ -1133,7 +1132,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>1.40821cm</Top>
-        <Left>7.78979cm</Left>
+        <Left>7.15479cm</Left>
         <Height>0.6cm</Height>
         <Width>1.61396cm</Width>
         <ZIndex>9</ZIndex>
@@ -1163,7 +1162,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>2.18461cm</Top>
-        <Left>7.78979cm</Left>
+        <Left>7.15479cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
         <ZIndex>10</ZIndex>
@@ -1193,7 +1192,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>2.89044cm</Top>
-        <Left>7.82506cm</Left>
+        <Left>7.19006cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
         <ZIndex>11</ZIndex>
@@ -1223,7 +1222,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>0.63182cm</Top>
-        <Left>15.27278cm</Left>
+        <Left>14.00278cm</Left>
         <Height>0.6cm</Height>
         <Width>1.21708cm</Width>
         <ZIndex>12</ZIndex>
@@ -1253,7 +1252,7 @@
         </Paragraphs>
         <rd:DefaultName>CreatedDate</rd:DefaultName>
         <Top>1.40822cm</Top>
-        <Left>13.02854cm</Left>
+        <Left>12.39354cm</Left>
         <Height>0.6cm</Height>
         <Width>1.46813cm</Width>
         <ZIndex>13</ZIndex>
@@ -1283,7 +1282,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>1.40822cm</Top>
-        <Left>11.22056cm</Left>
+        <Left>10.58556cm</Left>
         <Height>0.6cm</Height>
         <Width>1.75097cm</Width>
         <ZIndex>14</ZIndex>
@@ -1313,7 +1312,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>2.18461cm</Top>
-        <Left>15.27278cm</Left>
+        <Left>14.00278cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
         <ZIndex>15</ZIndex>
@@ -1343,9 +1342,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>2.89044cm</Top>
-        <Left>15.28632cm</Left>
+        <Left>14.01632cm</Left>
         <Height>0.6cm</Height>
-        <Width>2.09021cm</Width>
+        <Width>1.98566cm</Width>
         <ZIndex>16</ZIndex>
         <Style>
           <Border>
@@ -1373,7 +1372,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>0.66711cm</Top>
-        <Left>20.82368cm</Left>
+        <Left>19.23618cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
         <ZIndex>17</ZIndex>
@@ -1403,7 +1402,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>1.40822cm</Top>
-        <Left>15.27278cm</Left>
+        <Left>14.00278cm</Left>
         <Height>0.6cm</Height>
         <Width>1.70625cm</Width>
         <ZIndex>18</ZIndex>
@@ -1433,7 +1432,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>1.44351cm</Top>
-        <Left>20.82368cm</Left>
+        <Left>19.23618cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
         <ZIndex>19</ZIndex>
@@ -1462,8 +1461,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>2.89045cm</Top>
-        <Left>20.82368cm</Left>
+        <Top>2.2237cm</Top>
+        <Left>19.23618cm</Left>
         <Height>0.6cm</Height>
         <Width>2.09021cm</Width>
         <ZIndex>20</ZIndex>
@@ -1943,7 +1942,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>0.63182cm</Top>
-        <Left>23.17866cm</Left>
+        <Left>21.59116cm</Left>
         <Height>0.6cm</Height>
         <Width>2.5cm</Width>
         <ZIndex>36</ZIndex>
@@ -1972,10 +1971,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>IfTrans</rd:DefaultName>
-        <Top>0.52599cm</Top>
-        <Left>16.9037cm</Left>
+        <Top>0.62124cm</Top>
+        <Left>15.6337cm</Left>
         <Height>0.6cm</Height>
-        <Width>2.5cm</Width>
+        <Width>3.34672cm</Width>
         <ZIndex>37</ZIndex>
         <Style>
           <Border>
@@ -2003,7 +2002,7 @@
         </Paragraphs>
         <rd:DefaultName>StoreName</rd:DefaultName>
         <Top>0.65828cm</Top>
-        <Left>9.86578cm</Left>
+        <Left>9.23078cm</Left>
         <Height>0.6cm</Height>
         <Width>4.63089cm</Width>
         <ZIndex>38</ZIndex>
@@ -2033,7 +2032,7 @@
         </Paragraphs>
         <rd:DefaultName>SectionName1</rd:DefaultName>
         <Top>2.89044cm</Top>
-        <Left>10.09166cm</Left>
+        <Left>9.45666cm</Left>
         <Height>0.6cm</Height>
         <Width>4.40501cm</Width>
         <ZIndex>39</ZIndex>
@@ -2093,9 +2092,9 @@
         </Paragraphs>
         <rd:DefaultName>InvoiceSubject</rd:DefaultName>
         <Top>2.14932cm</Top>
-        <Left>17.46882cm</Left>
+        <Left>16.09299cm</Left>
         <Height>0.6cm</Height>
-        <Width>8.20984cm</Width>
+        <Width>2.88743cm</Width>
         <ZIndex>41</ZIndex>
         <Style>
           <Border>
@@ -2123,7 +2122,7 @@
         </Paragraphs>
         <rd:DefaultName>Invoice</rd:DefaultName>
         <Top>2.18461cm</Top>
-        <Left>10.09166cm</Left>
+        <Left>9.45666cm</Left>
         <Height>0.6cm</Height>
         <Width>4.40501cm</Width>
         <ZIndex>42</ZIndex>
@@ -2153,7 +2152,7 @@
         </Paragraphs>
         <rd:DefaultName>PayType</rd:DefaultName>
         <Top>1.43467cm</Top>
-        <Left>9.47431cm</Left>
+        <Left>8.83931cm</Left>
         <Height>0.6cm</Height>
         <Width>1.64042cm</Width>
         <ZIndex>43</ZIndex>
@@ -2183,10 +2182,70 @@
         </Paragraphs>
         <rd:DefaultName>SectionCode</rd:DefaultName>
         <Top>2.89043cm</Top>
-        <Left>17.46882cm</Left>
+        <Left>16.19882cm</Left>
         <Height>0.6cm</Height>
-        <Width>3.17847cm</Width>
+        <Width>2.7816cm</Width>
         <ZIndex>44</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox52">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>纳税人识别码</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox6</rd:DefaultName>
+        <Top>2.90484cm</Top>
+        <Left>19.23618cm</Left>
+        <Height>0.6cm</Height>
+        <Width>2.33368cm</Width>
+        <ZIndex>45</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="SectionCode2">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value />
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>SectionCode</rd:DefaultName>
+        <Top>2.2237cm</Top>
+        <Left>21.67569cm</Left>
+        <Height>0.6cm</Height>
+        <Width>2.7816cm</Width>
+        <ZIndex>46</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
