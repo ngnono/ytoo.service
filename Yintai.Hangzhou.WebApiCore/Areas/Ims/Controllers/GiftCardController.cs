@@ -566,7 +566,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 trans.IsDecline = 1;
                 trans.ToUserId = authuid;
-                trans.OperateDate = DateTime.Now;
+                trans.OperateDate = DateTime.Now.AddMilliseconds(-10);
                 //trans.OperateUser = authuid;
                 _transRepo.Update(trans);
 
@@ -626,7 +626,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             var orders =
                 _transRepo.Get(x => x.ToUserId == authuid)
-                    .OrderByDescending(t => t.CreateDate)
+                    .OrderByDescending(t => t.OperateDate)
                     .Skip((request.Page - 1) * request.Pagesize)
                     .Take(request.Pagesize)
                     .Join(_orderRepo.Get(o => o.Status != (int)GiftCardOrderStatus.Void), x => x.OrderNo, o => o.No,
