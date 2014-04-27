@@ -178,7 +178,7 @@ namespace OPCApp.TransManage.ViewModels
                 List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
                 var iTransService = AppEx.Container.GetInstance<ITransService>();
                 bool bFalg = iTransService.ExecutePrintSale(selectSaleIds);
-                MessageBox.Show(bFalg ? "打印成功" : "打印失败", "提示");
+               // MessageBox.Show(bFalg ? "打印成功" : "打印失败", "提示");
             }
         #endregion
         /*完成销售单打印*/
