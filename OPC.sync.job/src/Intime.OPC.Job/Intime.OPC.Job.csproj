@@ -111,6 +111,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Order\OrderStatusSync\PaidOrderNotificationEntity.cs" />
+    <Compile Include="Order\OrderStatusSync\RMAStatusSyncJob.cs" />
     <Compile Include="Order\OrderStatusSync\SaleOrderStatusProcessorFactory.cs" />
     <Compile Include="Order\OrderStatusSync\ShoppingGuidePickUpSaleOrderStatusProcessor.cs" />
     <Compile Include="Order\StockNotExistsException.cs" />
