@@ -49,5 +49,8 @@ namespace Intime.OPC.Domain.Dto
         public string StoreAddress { get; set; }
         public string TransNo { get; set; }
         public string OrderSource { get; set; }
+
+        public string ReceivePerson { get; set; }
+        
     }
 }
