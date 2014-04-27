@@ -23,8 +23,12 @@ namespace OPCApp.Main
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            UploadManager.Copy();
+            UploadManager.UpLoad();
+
             bootstrapper = new QuickStartBootstrapper();
             bootstrapper.Run();
+           
         }
     }
 }

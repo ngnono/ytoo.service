@@ -89,5 +89,7 @@ namespace Intime.OPC.Domain.Dto
         /// </summary>
         /// <value>The remark.</value>
         public string Remark { get; set; }
+
+        public string SectionCode { get; set; }
     }
 }

@@ -37,13 +37,13 @@
                                 </StackPanel>
                             </Button>
 
-                            <Button Background="LightGray" Width="Auto" Command="">
+                            <Button Background="LightGray" Width="Auto" Command="{Binding CommandFHDPrintView}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">打印预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Background="LightGray" Command="{Binding CommandPrintInvoice}">
+                            <Button Background="LightGray"  Command="{Binding CommandFHDPrint}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">打印发货单</TextBlock>
@@ -90,7 +90,7 @@
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Header="销售类别" Binding="{Binding SalesType}" />
-                            <DataGridTextColumn Header="销售状态" Binding="{Binding ShipViaId}"
+                            <DataGridTextColumn Header="销售状态" Binding="{Binding Status}"
                                                 ElementStyle="{StaticResource CellCenter}" />
                             <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}"
                                                 ElementStyle="{StaticResource CellCenter}" />
@@ -104,7 +104,7 @@
                                                 ElementStyle="{StaticResource CellRight}" />
                             <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}"
                                                 ElementStyle="{StaticResource CellRight}" />
-                            <DataGridTextColumn Header="门店" Width="200" Binding="{Binding SectionName}" />
+                            <DataGridTextColumn Header="门店" Width="200" Binding="{Binding StoreName}" />
                             <DataGridTextColumn Header="收银流水号" Width="120" Binding="{Binding CashNum}" />
                             <DataGridTextColumn Header="收银时间" Width="150"
                                                 Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
@@ -385,13 +385,13 @@
                                 </StackPanel>
                             </Button>
 
-                            <Button Background="LightGray" Width="Auto">
+                            <Button Background="LightGray" Width="Auto"  Command="{Binding CommandPrintView}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/查询.png" Stretch="None" />
                                     <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">补打快递预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Background="LightGray" Width="Auto">
+                            <Button Background="LightGray" Width="Auto"  Command="{Binding CommandOnlyPrint}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/image/打印.png" Stretch="None" />
                                     <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">补打快递单</TextBlock>

@@ -103,11 +103,11 @@
                                     ElementStyle="{StaticResource CellRight}" />
                 <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}"
                                     ElementStyle="{StaticResource CellRight}" />
-                <DataGridTextColumn Header="门店" Width="200" Binding="{Binding SectionName}" />
+                <DataGridTextColumn Header="门店" Width="200" Binding="{Binding StoreName}" />
                 <DataGridTextColumn Header="收银流水号" Width="120" Binding="{Binding CashNum}" />
                 <DataGridTextColumn Header="收银时间" Width="150"
                                     Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                <DataGridTextColumn Header="专柜码" Binding="{Binding ShippingCode}" />
+                <!--<DataGridTextColumn Header="专柜码" Binding="{Binding ShippingCode}" />-->
                 <DataGridTemplateColumn Header="备注录入">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -131,6 +131,7 @@
 
                 <DataGridTextColumn Header="款号" Width="150" Binding="{Binding StyleNo}"
                                     ElementStyle="{StaticResource CellRight}" />
+                <DataGridTextColumn Header="专柜码" Binding="{Binding SectionCode}" />
                 <DataGridTextColumn Header="规格" Binding="{Binding Size}" ElementStyle="{StaticResource CellRight}" />
                 <DataGridTextColumn Header="色码" Binding="{Binding Color}" />
                 <DataGridTextColumn Header="销售价" Binding="{Binding SellPrice}"

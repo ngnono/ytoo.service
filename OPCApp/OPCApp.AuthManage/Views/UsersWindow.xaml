@@ -8,21 +8,21 @@
                       ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="36" />
-            <RowDefinition Height="64" />
-            <RowDefinition />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <Button Background="LightGray" Width="Auto" Command="{Binding OkCommand}">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel>
                         <Image Source="/Image/保存.png" Stretch="None" />
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">确定</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="Auto" Command="{Binding CancelCommand}">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel>
                         <Image Source="/Image/删除.png" Stretch="None" />
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">取消</TextBlock>
                     </StackPanel>
@@ -32,16 +32,16 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Margin="0,35,0,10" Grid.RowSpan="2">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="0,1">
             <Label Content=" 查找字段:" Margin="0,14,0,10" />
             <ComboBox Width="100" ItemsSource="{Binding FieldList}" Height="20" SelectedItem="{Binding SelectedFiled}"
                       SelectedIndex="0" />
             <Label Content=" 查找内容:" Margin="0,14,0,0" />
             <TextBox Height="20" Width="130" Text="{Binding SelectedFiledValue}" />
-            <Button Background="LightGray" Width="Auto" Command="{Binding SearchCommand}">
-                <StackPanel Orientation="Horizontal">
+            <Button Background="LightGray" Width="50" Command="{Binding SearchCommand}">
+                <StackPanel>
                     <Image Source="/image/查询.png" Stretch="None" />
-                    <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">查询</TextBlock>
+                    <TextBlock HorizontalAlignment="Center">查询</TextBlock>
                 </StackPanel>
             </Button>
 
@@ -72,7 +72,7 @@
                 <DataGridTextColumn Header="authid" Visibility="Hidden" Width="150" Binding="{Binding DataAuthId}" />
                 <DataGridTextColumn Header="Id" Width="50" Binding="{Binding Id}" Visibility="Hidden" />
                 <DataGridTextColumn Width="100" Header="登录名" Binding="{Binding LogonName}" />
-                <DataGridTextColumn Header="密码" Width="80" Binding="{Binding Password}" />
+                <DataGridTextColumn Header="密码" Visibility="Hidden" Width="80" Binding="{Binding Password}" />
                 <DataGridTextColumn Header="姓名" Width="150" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="所属机构" Width="150" Binding="{Binding DataAuthName}" />
                 <DataGridCheckBoxColumn Header="是否有效" Width="100" Binding="{Binding IsValid}" />
