@@ -65,6 +65,18 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult IsBind(string phone, int authuid)
         {
             var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone);
+            if (cardAccount == null)
+            {
+                var user = _customerRepo.Find(x => x.Id == authuid);
+
+                cardAccount = _userRepo.Insert(new IMS_GiftCardUserEntity()
+                {
+                    UserId = authuid,
+                    CreateDate = DateTime.Now,
+                    GiftCardAccount = phone,
+                    Name = user.Nickname
+                });
+            }
             return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = cardAccount != null });
         }
 
@@ -566,7 +578,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 trans.IsDecline = 1;
                 trans.ToUserId = authuid;
-                trans.OperateDate = DateTime.Now;
+                trans.OperateDate = DateTime.Now.AddMilliseconds(-10);
                 //trans.OperateUser = authuid;
                 _transRepo.Update(trans);
 
@@ -626,7 +638,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             var orders =
                 _transRepo.Get(x => x.ToUserId == authuid)
-                    .OrderByDescending(t => t.CreateDate)
+                    .OrderByDescending(t => t.OperateDate)
                     .Skip((request.Page - 1) * request.Pagesize)
                     .Take(request.Pagesize)
                     .Join(_orderRepo.Get(o => o.Status != (int)GiftCardOrderStatus.Void), x => x.OrderNo, o => o.No,
@@ -639,7 +651,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 items.Add(new
                 {
                     recharged = o.order.Status == (int)GiftCardOrderStatus.Recharge,
-                    trans_id = o.transfer == null ? o.transfer.Id : 0,
+                    trans_id = o.transfer != null ? o.transfer.Id : 0,
                     from = o.transfer.FromNickName,
                     from_phone = o.transfer.FromPhone,
                     verify_phone = o.transfer != null ? o.transfer.Phone : "null",
@@ -711,7 +723,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 items.Add(new
                 {
                     recharged = o.order.Status == (int)GiftCardOrderStatus.Recharge,
-                    trans_id = o.transfer != null ? o.transfer.Id : 0,
+                    trans_id = 0,// o.transfer != null ? o.transfer.Id : 0,
                     card_no = o.order.No,
                     amount = o.order.Amount,
                     purchase_date = o.order.CreateDate.ToString(_dateFormmat),
