@@ -9,6 +9,7 @@ namespace OPCApp.Domain.Models
             SaleStatus = "ÒÑÏúÊÛ";
         }
 
+        public string OrderSource { get; set; }
         public string SaleStatus { get; set; }
         public bool IsSelected { get; set; }
        /// <summary>

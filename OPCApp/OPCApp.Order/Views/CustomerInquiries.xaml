@@ -166,7 +166,7 @@
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Header="渠道订单号" Width="120" Binding="{Binding TransNo}" />
-                            <DataGridTextColumn Header="销售类别" Binding="{Binding SalesType}" />
+                            <DataGridTextColumn Header="销售类别" Binding="{Binding OrderSource}" />
                            <DataGridTextColumn Header="销售状态" Binding="{Binding SaleStatus}"
                                                 ElementStyle="{StaticResource CellCenter}" />
                             <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}"
@@ -383,12 +383,12 @@
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Header="渠道订单号" Width="120" Binding="{Binding TransNo}" />
-                            <DataGridTextColumn Header="销售类别" Binding="{Binding SalesType}" />
+                            <DataGridTextColumn Header="销售类别" Binding="{Binding OrderSource}" />
                            <DataGridTextColumn Header="销售状态" Binding="{Binding SaleStatus}"
                                                 ElementStyle="{StaticResource CellCenter}" />
                             <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}"
                                                 ElementStyle="{StaticResource CellCenter}" />
-                            <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatus}"
+                            <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatusName}"
                                                 ElementStyle="{StaticResource CellCenter}" />
                             <DataGridTextColumn Header="销售时间" Width="150"
                                                 Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
