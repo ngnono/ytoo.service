@@ -23,9 +23,10 @@ namespace Intime.OPC.Domain.Enums
         [Description("通知单品")] NotifyProduct = 1,
 
         /// <summary>
-        ///     打印销售单
+        ///     完成销售单打印
         /// </summary>
-        [Description("打印销售单")] PrintSale = 2,
+        [Description("完成销售单打印")]
+        PrintSale = 2,
 
         /// <summary>
         ///     商品已被专柜导购的单品系统获取到
@@ -48,9 +49,10 @@ namespace Intime.OPC.Domain.Enums
         [Description("已提货")] PickUp = 15,
 
         /// <summary>
-        ///     导购提货
+        ///     导购提货确认
         /// </summary>
-        [Description("导购提货")] ShoppingGuidePickUp = 20,
+        [Description("导购提货确认")]
+        ShoppingGuidePickUp = 20,
 
         /// <summary>
         ///     物流入库

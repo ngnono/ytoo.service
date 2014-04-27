@@ -158,9 +158,10 @@ namespace Intime.OPC.Repository.Support
             //return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintSale, pageIndex, pageSize,
             //    sectionIds);
             var saleOrderStatus = EnumSaleOrderStatus.PrintSale.AsID();
+            var saleOrderStatus1 = EnumSaleOrderStatus.ShoppingGuidePickUp.AsID();
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => t.Status == saleOrderStatus
+                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => (t.Status == saleOrderStatus || t.Status == saleOrderStatus1)
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
 
