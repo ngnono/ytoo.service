@@ -124,7 +124,11 @@ namespace OPCApp.Financial.ViewModels
                 MessageBox.Show("请选择退货单", "提示");
                 return;
             }
-            RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(RmaDto.RMANo).ToList();
+            try
+            {
+                RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(RmaDto.RMANo).ToList();
+            }
+            catch { };
         }
 
         public void SearchRma()
@@ -133,7 +137,11 @@ namespace OPCApp.Financial.ViewModels
             {
                 RmaDetailList.Clear();
             }
-            RmaList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByFilter(PackageReceiveDto).ToList();
+            try
+            {
+                RmaList = AppEx.Container.GetInstance<IFinancialPayVerify>().GetRmaByFilter(PackageReceiveDto).ToList();
+            }
+            catch { };
         }
     }
 }
