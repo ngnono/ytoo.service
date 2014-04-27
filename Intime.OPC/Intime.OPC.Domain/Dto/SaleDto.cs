@@ -47,5 +47,7 @@ namespace Intime.OPC.Domain.Dto
         public string StoreTelephone { get; set; }
 
         public string StoreAddress { get; set; }
+        public string TransNo { get; set; }
+        
     }
 }
