@@ -217,6 +217,7 @@ namespace Intime.OPC.Repository.Support
                     {
                         o.TransNo = t.OrderTrans.TransNo;
                     }
+                    o.OrderSource = t.Order.OrderSource;
                     o.InvoiceSubject = t.Order.InvoiceSubject;
                     o.PayType = t.Order.PaymentMethodName;
                     o.Invoice = t.Order.InvoiceDetail;
@@ -291,6 +292,7 @@ namespace Intime.OPC.Repository.Support
                     {
                         o.TransNo = s.OrderTrans.TransNo;
                     }
+                    o.OrderSource = s.Order.OrderSource;
                     o.InvoiceSubject = s.Order.InvoiceSubject;
                     o.PayType = s.Order.PaymentMethodName;
                     o.Invoice = s.Order.InvoiceDetail;
@@ -403,11 +405,15 @@ namespace Intime.OPC.Repository.Support
                     if (s.Store != null)
                     {
                         o.StoreName = s.Store.Name;
+                        o.StoreName = s.Store.Name;
+                        o.StoreTelephone = s.Store.Tel;
+                        o.StoreAddress = s.Store.Location;
                     }
                     if (s.Section != null)
                     {
                         o.SectionName = s.Section.Name;
                     }
+                    o.OrderSource = s.Order.OrderSource;
                     o.InvoiceSubject = s.Order.InvoiceSubject;
                     o.PayType = s.Order.PaymentMethodName;
                     o.Invoice = s.Order.InvoiceDetail;
@@ -502,7 +508,7 @@ namespace Intime.OPC.Repository.Support
                         o.SectionName = t.Store.Section.Name;
                     }
 
-
+                    o.OrderSource = t.Order.OrderSource;
                     o.InvoiceSubject = t.Order.InvoiceSubject;
                     o.PayType = t.Order.PaymentMethodName;
                     o.Invoice = t.Order.InvoiceDetail;
