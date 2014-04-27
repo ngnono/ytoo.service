@@ -745,7 +745,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SellCount.Value*Fields!SellPrice.Value</Value>
+                              <Value>=Fields!Price.Value*Fields!SellCount.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -822,7 +822,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!SellCount.Value*Fields!SellPrice.Value)</Value>
+                              <Value>=Sum(Fields!Price.Value*Fields!SellCount.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1126,7 +1126,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!SellCount.Value*Fields!SellPrice.Value)</Value>
+                              <Value>=Sum(Fields!SellCount.Value*Fields!Price.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
