@@ -45,7 +45,7 @@ namespace OPCApp.TransManage.ViewModels
                 MessageBox.Show("请勾选要设置入库的销售单", "提示");
                 return;
             }
-            List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
+            List<string> selectSaleIds = SaleList.Where(n => n.IsSelected && n.StatusName == "完成销售单打印").Select(e => e.SaleOrderNo).ToList();
             var ts = AppEx.Container.GetInstance<ITransService>();
             bool bFalg = ts.SetStatusStoreInSure(selectSaleIds);
             MessageBox.Show(bFalg ? "销售单入库成功" : "销售单入库失败", "提示");
