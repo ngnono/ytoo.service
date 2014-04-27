@@ -1318,7 +1318,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>«Expr»</Value>
+                              <Value EvaluationMode="Constant">«Expr»</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
