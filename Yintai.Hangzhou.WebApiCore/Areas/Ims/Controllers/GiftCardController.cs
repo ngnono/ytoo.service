@@ -348,10 +348,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult Detail(string charge_no, int authuid)
         {
             var user = _userRepo.Find(x => x.UserId == authuid);
-            if (user == null)
-            {
-                return this.RenderError(r => r.Message = "未绑定账号！请先绑定！");
-            }
+            //if (user == null)
+            //{
+            //    return this.RenderError(r => r.Message = "未绑定账号！请先绑定！");
+            //}
             var order = _orderRepo.Find(x => x.No == charge_no);
             if (order == null)
             {
@@ -373,7 +373,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 sender = transfer != null ? transfer.Phone : null,
                                 trans_id = transfer != null ? transfer.Id : 0,
                                 from = transfer!= null?transfer.FromNickName:null,
-                                phone = user.GiftCardAccount,
+                                phone = user == null?string.Empty: user.GiftCardAccount,
                                 amount = order.Amount
                             });
         }
@@ -418,7 +418,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 data.Add(new { id = item.Id, unit_price = item.UnitPrice, price = item.Price });
             }
 
-            var resource = _resourceRepo.Find(x => x.Type == (int)SourceType.GiftCard && x.SourceId == card.Id);
+            var resource = _resourceRepo.Find(x => x.SourceType == (int)SourceType.GiftCard && x.SourceId == card.Id);
 
             return
                 this.RenderSuccess<dynamic>(

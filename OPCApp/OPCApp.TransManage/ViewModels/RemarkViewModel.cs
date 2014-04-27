@@ -14,11 +14,17 @@ namespace OPCApp.TransManage.ViewModels
     [Export(typeof (RemarkViewModel))]
     public class RemarkViewModel : BindableBase
     {
-        public string id;
-        private OPC_SaleComment remark = new OPC_SaleComment();
+        private string id;
+        private EnumSetRemarkType enumSetRemarkType;
+        private string remark;
         private IEnumerable<OPC_Comment> remark4list;
         public DelegateCommand CommandSave { get; set; } //保存
         public DelegateCommand CommandBack { get; set; } //返回
+
+        public RemarkViewModel()
+        {
+            RemarkContent = "";
+        }
 
         //Grid数据集
 
@@ -30,22 +36,22 @@ namespace OPCApp.TransManage.ViewModels
 
         //保存数据库传递的值
 
-        public OPC_SaleComment Remark
+        public string RemarkContent
         {
             get { return remark; }
             set { SetProperty(ref remark, value); }
         }
 
-        public void SaveRemark(string id, EnumSetRemarkType type)
+        public void SaveRemark()
         {
             var comment = new OPC_Comment();
             comment.RelationId = id;
-            comment.Content = Remark.Content;
+            comment.Content =RemarkContent;
             comment.CreateUser = 1;
             comment.CreateDate = DateTime.Now;
 
             bool isSuccess = false;
-            switch (type)
+            switch (enumSetRemarkType)
             {
                 case EnumSetRemarkType.SetSaleRemark:
                     OPC_SaleComment salecomment = Mapper.Map<OPC_Comment, OPC_SaleComment>(comment);
@@ -82,10 +88,17 @@ namespace OPCApp.TransManage.ViewModels
             {
                 MessageBox.Show("保存备注失败", "提示");
             }
+            else
+            {
+                RemarkContent = "";
+                OpenWinSearch(id,enumSetRemarkType);
+            }
         }
 
         public void OpenWinSearch(string id, EnumSetRemarkType type)
         {
+            this.id = id;
+            this.enumSetRemarkType = type;
             switch (type)
             {
                 case EnumSetRemarkType.SetSaleRemark:

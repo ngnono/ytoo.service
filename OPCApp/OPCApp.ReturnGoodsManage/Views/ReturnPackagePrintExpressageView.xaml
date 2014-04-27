@@ -26,28 +26,28 @@
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                <Button Background="LightGray" Command="{Binding CommandSearch}" Width="50">
+                <Button Background="LightGray" Command="{Binding CommandSearch}" Width="Auto">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/查询.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">查询</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="100" Command="{Binding CommandPrintView}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">打印预览</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">打印预览</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="100" Command="{Binding CommandOnlyPrint}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">打印快递单</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">打印快递单</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Command="{Binding CommandPrintExpress}" Width="150">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">完成快递单打印</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">完成快递单打印</TextBlock>
                     </StackPanel>
                 </Button>
 

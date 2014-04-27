@@ -46,16 +46,22 @@ namespace OPCApp.Main
 
         private static void DownloadFiles()
         {
-            string url = ConfigurationManager.AppSettings["updateAddress"];
-            var myWebClient = new WebClient();
-            if (!Directory.Exists(tempPath))
+            try
             {
-                Directory.CreateDirectory(tempPath);
+                string url = ConfigurationManager.AppSettings["updateAddress"];
+                var myWebClient = new WebClient();
+                if (!Directory.Exists(tempPath))
+                {
+                    Directory.CreateDirectory(tempPath);
+                }
+                string tempFile = tempPath + "//bin.zip";
+                myWebClient.DownloadFile(url + "//bin.zip", tempFile);
+                UnZip(tempFile, tempPath);
+                File.Delete(tempFile);
             }
-            string tempFile = tempPath + "//bin.zip";
-            myWebClient.DownloadFile(url + "//bin.zip", tempFile);
-            UnZip(tempFile, tempPath);
-            File.Delete(tempFile);
+            catch (Exception ex)
+            {
+            }
         }
 
         private static Version getServerVersion()

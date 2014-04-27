@@ -70,7 +70,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
-                <TreeView ItemsSource="{Binding FirstGeneration}">
+                <TreeView ItemsSource="{Binding FirstGeneration}" Background="White">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                             <TextBlock Text="{Binding Name}" />

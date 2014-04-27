@@ -63,11 +63,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 var requestSign = sPara["sign"];
                 sPara.Remove("sign");
                 var notifySigned = Util.NotifySignIMS(sPara);
-                if (ConfigManager.IS_PRODUCT_ENV)
-                {
-                    if (string.Compare(requestSign, notifySigned, true) != 0)
-                        return Content("fail");
-                }
+                if (string.Compare(requestSign, notifySigned, true) != 0)
+                    return Content("fail");
                 //external order no
                 string out_trade_no = sPara["out_trade_no"];
                 string trade_no = sPara["transaction_id"];
@@ -94,7 +91,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             {
                                 CreateDate = DateTime.Now,
                                 OrderNo = orderEntity.OrderNo,
-                                PaymentCode = WxPayConfig.PaymentCode,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4IMS,
                                 PaymentContent = JsonConvert.SerializeObject(sPara)
                             });
 
@@ -104,7 +101,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 OrderNo = orderEntity.OrderNo,
                                 CreateDate = DateTime.Now,
                                 IsSynced = false,
-                                PaymentCode = WxPayConfig.PaymentCode,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4IMS,
                                 TransNo = trade_no,
                                 OutsiteType = (int)OutsiteType.WX,
                                 OutsiteUId = request.OpenId,
@@ -245,7 +242,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             {
                                 CreateDate = DateTime.Now,
                                 OrderNo = giftcardOrder.No,
-                                PaymentCode = WxPayConfig.PaymentCode,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4IMS,
                                 PaymentContent = JsonConvert.SerializeObject(sPara)
                             });
 
@@ -255,7 +252,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 OrderNo = giftcardOrder.No,
                                 CreateDate = DateTime.Now,
                                 IsSynced = false,
-                                PaymentCode = WxPayConfig.PaymentCode,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4IMS,
                                 TransNo = trade_no,
                                 OutsiteType = (int)OutsiteType.WX,
                                 OutsiteUId = request.OpenId,

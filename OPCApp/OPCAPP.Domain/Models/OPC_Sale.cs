@@ -40,5 +40,19 @@ namespace OPCApp.Domain.Models
         /// 门店
         /// </summary>
         public string StoreName { get; set; }
+        /// <summary>
+        /// 发票抬头
+        /// </summary>
+
+        public string InvoiceSubject { get; set; }
+        /// <summary>
+        /// 支付方式
+        /// </summary>
+        public string PayType { get; set; }
+        /// <summary>
+        /// 发票内容
+        /// </summary>
+        public string Invoice { get; set; } 
+
     }
 }

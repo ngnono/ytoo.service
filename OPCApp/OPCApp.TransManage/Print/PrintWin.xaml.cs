@@ -1,7 +1,10 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Data;
 using System.Windows;
+using System.Windows.Documents;
 using Microsoft.Reporting.WinForms;
+using OPCApp.Domain.Models;
 
 namespace OPCApp.TransManage.Print
 {
@@ -42,6 +45,23 @@ namespace OPCApp.TransManage.Print
 
             _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
 
+            _reportViewer.RefreshReport();
+            ShowDialog();
+        }
+
+        public void PrintExpress(string rdlcName, PrintExpressModel printExpressModel)
+        {
+            var myRptDs = new ReportDataSource("PrintExpressModel",new List<PrintExpressModel>{ printExpressModel});
+            _reportViewer.LocalReport.DataSources.Add(myRptDs);
+            _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
+            _reportViewer.RefreshReport();
+            ShowDialog();
+        }
+        public void PrintFHD(string rdlcName, List<OPC_Sale> opcSales)
+        {
+            var myRptDs = new ReportDataSource("FHD", opcSales);
+            _reportViewer.LocalReport.DataSources.Add(myRptDs);
+            _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
             _reportViewer.RefreshReport();
             ShowDialog();
         }

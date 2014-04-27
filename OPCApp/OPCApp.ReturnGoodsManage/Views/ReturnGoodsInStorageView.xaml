@@ -16,16 +16,16 @@
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
 
-                <Button Margin="5" Background="LightGray" Width="50" Command="{Binding CommandSearch}">
+                <Button Margin="5" Background="LightGray" Width="Auto" Command="{Binding CommandSearch}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/查询.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">查询</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">查询</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Margin="5" Command="{Binding CommandReturnGoodsConfirm}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/回单确认.png" Stretch="None" />
-                        <TextBlock HorizontalAlignment="Center">退货入库</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">退货入库</TextBlock>
                     </StackPanel>
                 </Button>
 

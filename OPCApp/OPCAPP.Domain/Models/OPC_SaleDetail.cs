@@ -39,19 +39,16 @@ namespace OPCApp.Domain.Models
         /// </summary>
         /// <value>The Brand.</value>
         public string Brand { get; set; }
-
         /// <summary>
         ///     销售价格
         /// </summary>
         /// <value>The price.</value>
         public double SellPrice { get; set; }
-
         /// <summary>
         ///     原价
         /// </summary>
         /// <value>The price.</value>
         public double Price { get; set; }
-
         /// <summary>
         ///     促销价格
         /// </summary>
@@ -63,7 +60,6 @@ namespace OPCApp.Domain.Models
         /// </summary>
         /// <value>The sale count.</value>
         public int SellCount { get; set; }
-
         /// <summary>
         ///     退货数量
         /// </summary>
@@ -81,5 +77,11 @@ namespace OPCApp.Domain.Models
         /// </summary>
         /// <value>The remark.</value>
         public string Remark { get; set; }
+
+        public string SectionCode { get; set; }
+        /// <summary>
+        /// 总价
+        /// </summary>
+        public double SumPrice { get; set; }
     }
 }
