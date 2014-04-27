@@ -65,17 +65,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ActionResult IsBind(string phone, int authuid)
         {
             var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone);
-            if (IsPhoneBinded(phone))
-            {
-                var user = _customerRepo.Find(x => x.Id == authuid);
-                cardAccount = _userRepo.Insert(new IMS_GiftCardUserEntity()
-                {
-                    UserId = authuid,
-                    CreateDate = DateTime.Now,
-                    GiftCardAccount = phone,
-                    Name = user.Nickname
-                });
-            }
             return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = cardAccount != null });
         }
 
@@ -578,7 +567,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 trans.IsDecline = 1;
                 trans.ToUserId = authuid;
                 trans.OperateDate = DateTime.Now;
-                trans.OperateUser = authuid;
+                //trans.OperateUser = authuid;
                 _transRepo.Update(trans);
 
                 var preTrans = _transRepo.Find(x => x.Id == trans.PreTransferId);
