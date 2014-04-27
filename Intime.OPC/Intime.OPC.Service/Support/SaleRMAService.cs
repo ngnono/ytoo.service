@@ -324,11 +324,15 @@ namespace Intime.OPC.Service.Support
         {
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
+            /*
+             
+             财务退款确认的查询状态条件，就要改为退货状态为已生效，且退货单状态为物流入库的
 
+             */
             ISaleRMARepository rep = _repository as ISaleRMARepository;
             rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = rep.GetAll(dto.OrderNo,"", dto.PayType, "", dto.StartDate, dto.EndDate,
-                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.ServiceApprove.GetDescription(),dto.pageIndex,dto.pageSize);
+                EnumRMAStatus.ShipInStorage.AsID(), null, EnumReturnGoodsStatus.Valid.GetDescription(),dto.pageIndex,dto.pageSize);
 
             return lst;
         }

@@ -4,6 +4,15 @@ namespace OPCApp.Domain.Models
 {
     public class OPC_Sale
     {
+        public OPC_Sale()
+        {
+            SaleStatus = "已销售";
+        }
+        //订货人
+        public string ReceivePerson { get; set; }
+
+        public string OrderSource { get; set; }
+        public string SaleStatus { get; set; }
         public bool IsSelected { get; set; }
        /// <summary>
        /// 渠道号
@@ -14,7 +23,7 @@ namespace OPCApp.Domain.Models
         public string OrderNo { get; set; }
         public string SaleOrderNo { get; set; }
         public string SalesType { get; set; }
-        public int? ShipViaId { get; set; }
+        public string ShipViaId { get; set; }
         public int Status { get; set; }
         public string ShippingCode { get; set; }
         public decimal ShippingFee { get; set; }

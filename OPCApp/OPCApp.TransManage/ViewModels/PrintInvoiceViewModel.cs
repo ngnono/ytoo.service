@@ -142,40 +142,45 @@ namespace OPCApp.TransManage.ViewModels
                 AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(SaleSelected.SaleOrderNo).Result.ToList();
             RefreshOther(SaleSelected);
         }
-
-        public void CommandViewAndPrintExecute()
-        {
-            IPrint pr = new PrintWin();
-            string xsdName = "InvoiceDataSet";
-            string rdlcName = "Print//PrintInvoice.rdlc";
-
-            var invoiceModel = new PrintModel();
-            var salelist = new List<OPC_Sale>();
-            salelist.Add(SaleSelected);
-            invoiceModel.SaleDT = salelist;
-            var orderlist = new List<Order>();
-            var Order = new Order();
-            orderlist.Add(Order);
-            invoiceModel.OrderDT = orderlist;
-            invoiceModel.SaleDetailDT = InvoiceDetail4List;
-            pr.Print(xsdName, rdlcName, invoiceModel, true);
-        }
-
-        /*打印销售单*/
-
-        public void CommandOnlyPrintExecute()
-        {
-            if (SaleList == null || !SaleList.Any())
+        #region 打印销售单
+            private bool PrintCommon(bool falg=false)
             {
-                MessageBox.Show("请勾选要打印的销售单", "提示");
-                return;
-            }
-            List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
-            var iTransService = AppEx.Container.GetInstance<ITransService>();
-            bool bFalg = iTransService.ExecutePrintSale(selectSaleIds);
-            MessageBox.Show(bFalg ? "打印成功" : "打印失败", "提示");
-        }
+                if (SaleList == null || SaleSelected == null)
+                {
+                    MessageBox.Show("请勾选要打印预览的销售单", "提示");
+                    return false;
+                }
+                IPrint pr = new PrintWin();
+                string xsdName = "InvoiceDataSet";
+                string rdlcName = "Print//PrintInvoice.rdlc";
 
+                var invoiceModel = new PrintModel();
+                var salelist = new List<OPC_Sale>();
+                salelist.Add(SaleSelected);
+                invoiceModel.SaleDT = salelist;
+                invoiceModel.SaleDetailDT = InvoiceDetail4List;
+                pr.Print(xsdName, rdlcName, invoiceModel,falg);
+                return true;
+
+            }
+
+            public void CommandViewAndPrintExecute()
+            {
+              PrintCommon();
+            }
+
+            /*打印销售单*/
+
+            public void CommandOnlyPrintExecute()
+            {
+               if(!PrintCommon(true))return;
+                //打印完 发请求设置数据库 
+                List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
+                var iTransService = AppEx.Container.GetInstance<ITransService>();
+                bool bFalg = iTransService.ExecutePrintSale(selectSaleIds);
+               // MessageBox.Show(bFalg ? "打印成功" : "打印失败", "提示");
+            }
+        #endregion
         /*完成销售单打印*/
 
         public void CommandFinishExecute()

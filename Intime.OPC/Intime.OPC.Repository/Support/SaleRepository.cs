@@ -185,9 +185,14 @@ namespace Intime.OPC.Repository.Support
                          join store in db.Stores on s.StoreId equals store.Id into ss
                          select new { SectionID = s.Id, Section = s, Store = ss.FirstOrDefault() };
 
+                var uu = from o in db.Orders
+                         join u in db.Users on o.CustomerId equals u.Id into ss
+                         select new { OrderNo = o.OrderNo, Order = o, User = ss.FirstOrDefault() };
+                
+
                 var ll2 = from s in query
                           join l in ll on s.SectionId equals l.SectionID into ss
-                          join o in db.Orders on s.OrderNo equals o.OrderNo into oo
+                          join o in uu on s.OrderNo equals o.OrderNo into oo
                     join r in db.OrderTransactions on s.OrderNo equals r.OrderNo into rr
                 
                 
@@ -217,9 +222,11 @@ namespace Intime.OPC.Repository.Support
                     {
                         o.TransNo = t.OrderTrans.TransNo;
                     }
-                    o.InvoiceSubject = t.Order.InvoiceSubject;
-                    o.PayType = t.Order.PaymentMethodName;
-                    o.Invoice = t.Order.InvoiceDetail;
+                    o.ReceivePerson = t.Order.User.Nickname;
+                    o.OrderSource = t.Order.Order.OrderSource;
+                    o.InvoiceSubject = t.Order.Order.InvoiceSubject;
+                    o.PayType = t.Order.Order.PaymentMethodName;
+                    o.Invoice = t.Order.Order.InvoiceDetail;
                     lstDto.Add(o);
                 }
                 return new PageResult<SaleDto>(lstDto, lst.TotalCount);
@@ -264,9 +271,14 @@ namespace Intime.OPC.Repository.Support
                          join r in db.OrderTransactions on sale.OrderNo equals r.OrderNo into rr
                          select new { Sale = sale, Section = cs.FirstOrDefault(),OrderTrans=rr.FirstOrDefault() };
 
+                var uu = from o in db.Orders
+                         join u in db.Users on o.CustomerId equals u.Id into ss
+                         select new { OrderNo = o.OrderNo, Order = o, User = ss.FirstOrDefault() };
+                
+
                 var filter = from q in qq
                              join s in db.Stores on q.Section.StoreId equals s.Id into mm
-                    join o in db.Orders on q.Sale.OrderNo equals o.OrderNo into oo
+                    join o in uu on q.Sale.OrderNo equals o.OrderNo into oo
                              
                              select new { Sale = q.Sale,Section=q.Section, OrderTrans=q.OrderTrans, Order=oo.FirstOrDefault(), Store = mm.FirstOrDefault() };
 
@@ -291,9 +303,11 @@ namespace Intime.OPC.Repository.Support
                     {
                         o.TransNo = s.OrderTrans.TransNo;
                     }
-                    o.InvoiceSubject = s.Order.InvoiceSubject;
-                    o.PayType = s.Order.PaymentMethodName;
-                    o.Invoice = s.Order.InvoiceDetail;
+                    o.ReceivePerson = s.Order.User.Nickname;
+                    o.OrderSource = s.Order.Order.OrderSource;
+                    o.InvoiceSubject = s.Order.Order.InvoiceSubject;
+                    o.PayType = s.Order.Order.PaymentMethodName;
+                    o.Invoice = s.Order.Order.InvoiceDetail;
                     lstDto.Add(o);
                 }
                 return new PageResult<SaleDto>(lstDto,lst.TotalCount);
@@ -388,10 +402,15 @@ namespace Intime.OPC.Repository.Support
                     join s in db.Sections on sale.SectionId equals s.Id into cs
                     select new {Sale = sale, Section = cs.FirstOrDefault()};
 
+                var uu = from o in db.Orders
+                         join u in db.Users on o.CustomerId equals u.Id into ss
+                         select new { OrderNo = o.OrderNo, Order = o, User = ss.FirstOrDefault() };
+                
+
                 var filter = from q in qq
                     join s in db.Stores on q.Section.StoreId equals s.Id into mm
-                      join o in db.Orders on q.Sale.OrderNo equals o.OrderNo into oo
-                             select new { Sale = q.Sale,Section=q.Section, Order=oo.FirstOrDefault(), Store = mm.FirstOrDefault() };
+                      join o in uu on q.Sale.OrderNo equals o.OrderNo into oo
+                             select new { Sale = q.Sale,Section=q.Section, Order=oo.FirstOrDefault().Order, User=oo.FirstOrDefault().User, Store = mm.FirstOrDefault() };
 
                    
 
@@ -403,11 +422,16 @@ namespace Intime.OPC.Repository.Support
                     if (s.Store != null)
                     {
                         o.StoreName = s.Store.Name;
+                        o.StoreName = s.Store.Name;
+                        o.StoreTelephone = s.Store.Tel;
+                        o.StoreAddress = s.Store.Location;
                     }
                     if (s.Section != null)
                     {
                         o.SectionName = s.Section.Name;
                     }
+                    o.ReceivePerson = s.User.Nickname;
+                    o.OrderSource = s.Order.OrderSource;
                     o.InvoiceSubject = s.Order.InvoiceSubject;
                     o.PayType = s.Order.PaymentMethodName;
                     o.Invoice = s.Order.InvoiceDetail;
@@ -470,11 +494,18 @@ namespace Intime.OPC.Repository.Support
                     join store in db.Stores on s.StoreId equals store.Id into ss
                     select new {SectionID=s.Id, Section = s, Store = ss.FirstOrDefault()};
 
+                var uu = from o in db.Orders
+                    join u in db.Users on o.CustomerId equals u.Id into ss
+                    select new { OrderNo=o.OrderNo, Order=o,User=ss.FirstOrDefault()};
+                
+                
+
                 var ll2 = from s in query
                     join l in ll on s.SectionId equals l.SectionID into ss
-                    join o in db.Orders on s.OrderNo equals o.OrderNo into oo
-                          join r in db.OrderTransactions on s.OrderNo equals r.OrderNo into rr
-                    select new {Sale = s, Order = oo.FirstOrDefault(), Store = ss.FirstOrDefault(),OrderTrans=rr.FirstOrDefault()};
+                    join o in uu on s.OrderNo equals o.OrderNo into oo
+                    join r in db.OrderTransactions on s.OrderNo equals r.OrderNo into rr
+
+                    select new {Sale = s, Order = oo.FirstOrDefault().Order, User=oo.FirstOrDefault().User, Store = ss.FirstOrDefault(),OrderTrans=rr.FirstOrDefault()};
 
 
 
@@ -501,8 +532,8 @@ namespace Intime.OPC.Repository.Support
                     {
                         o.SectionName = t.Store.Section.Name;
                     }
-
-
+                    o.ReceivePerson = t.User.Nickname;
+                    o.OrderSource = t.Order.OrderSource;
                     o.InvoiceSubject = t.Order.InvoiceSubject;
                     o.PayType = t.Order.PaymentMethodName;
                     o.Invoice = t.Order.InvoiceDetail;
