@@ -36,5 +36,18 @@ namespace Intime.OPC.Domain.Dto
         public string CashStatusName { get; set; }
 
         public string StoreName { get; set; }
+
+        public string InvoiceSubject { get; set; }
+        public string PayType { get; set; }
+        public string SectionName { get; set; }
+
+        public string Invoice { get; set; }
+
+
+        public string StoreTelephone { get; set; }
+
+        public string StoreAddress { get; set; }
+        public string TransNo { get; set; }
+        
     }
 }
