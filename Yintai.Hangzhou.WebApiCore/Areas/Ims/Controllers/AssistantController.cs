@@ -212,12 +212,12 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
         public ActionResult Brands(int authuid)
         {
             var linq = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
-                            .GroupJoin(Context.Set<IMS_AssociateBrandEntity>().Join(Context.Set<BrandEntity>().Where(b => b.Status == (int)DataStatus.Normal),
+                            .GroupJoin(Context.Set<IMS_SectionBrandEntity>().Join(Context.Set<BrandEntity>().Where(b => b.Status == (int)DataStatus.Normal),
                                                                     o => o.BrandId,
                                                                     i => i.Id,
                                                                     (o, i) => new { AB = o, B = i }),
-                                        o => o.Id,
-                                        i => i.AB.AssociateId,
+                                        o => o.StoreId,
+                                        i => i.AB.SectionId,
                                         (o, i) => i).FirstOrDefault();
             List<dynamic> brands = null;
             if (linq != null)
