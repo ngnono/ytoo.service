@@ -162,6 +162,7 @@
     <Compile Include="Product\ProductSync\SystemDefine.cs" />
     <Compile Include="Product\StockAggregate\StockAttregateJob.cs" />
     <Compile Include="Product\StockAggregate\StockModel.cs" />
+    <Compile Include="Trade\SelfProductOrder\OrderSplitJob.cs" />
     <Compile Include="Trade\SplitOrder\IOrderStockStore.cs" />
     <Compile Include="Trade\SplitOrder\IOrderStore.cs" />
     <Compile Include="Trade\SplitOrder\ISaleOrderStore.cs" />
