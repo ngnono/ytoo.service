@@ -404,9 +404,15 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var query = db.OPC_Sale.Where(t => t.OrderNo == orderID);
+
                 var qq = from sale in query
-                    join s in db.Sections on sale.SectionId equals s.Id into cs
-                    select new {Sale = sale, Section = cs.FirstOrDefault()};
+                         join s in db.Sections on sale.SectionId equals s.Id into cs
+                         join r in db.OrderTransactions on sale.OrderNo equals r.OrderNo into rr
+                         select new { Sale = sale, Section = cs.FirstOrDefault(), OrderTrans = rr.FirstOrDefault() };
+
+                //var qq = from sale in query
+                //    join s in db.Sections on sale.SectionId equals s.Id into cs
+                //    select new {Sale = sale, Section = cs.FirstOrDefault()};
 
                 var uu = from o in db.Orders
                          join u in db.Users on o.CustomerId equals u.Id into ss
@@ -416,9 +422,10 @@ namespace Intime.OPC.Repository.Support
                 var filter = from q in qq
                     join s in db.Stores on q.Section.StoreId equals s.Id into mm
                       join o in uu on q.Sale.OrderNo equals o.OrderNo into oo
-                             select new { Sale = q.Sale,Section=q.Section, Order=oo.FirstOrDefault().Order, User=oo.FirstOrDefault().User, Store = mm.FirstOrDefault() };
+                             select new { Sale = q.Sale, Section = q.Section, OrderTrans = q.OrderTrans, User = oo.FirstOrDefault().User, Order = oo.FirstOrDefault().Order, Store = mm.FirstOrDefault() };
+                             //select new { Sale = q.Sale,Section=q.Section, Order=oo.FirstOrDefault().Order, User=oo.FirstOrDefault().User, Store = mm.FirstOrDefault() };
 
-                   
+     
 
                 var lst = filter.ToList();
                 var lstDto = new List<SaleDto>();
@@ -436,6 +443,12 @@ namespace Intime.OPC.Repository.Support
                     {
                         o.SectionName = s.Section.Name;
                     }
+
+                    if (s.OrderTrans != null)
+                    {
+                        o.TransNo = s.OrderTrans.TransNo;
+                    }
+
                     o.ReceivePerson = s.User.Nickname;
                     o.OrderSource = s.Order.OrderSource;
                     o.InvoiceSubject = s.Order.InvoiceSubject;
