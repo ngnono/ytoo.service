@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Documents;
 using Microsoft.Reporting.WinForms;
 using OPCApp.Domain.Models;
+using System;
 
 namespace OPCApp.TransManage.Print
 {
@@ -33,88 +34,116 @@ namespace OPCApp.TransManage.Print
         /// <param name="dt">数据集dt</param>
         public void Print(string xsdName, string rdlcName, PrintModel dtList, bool isPrint=false)
         {
-            var myRptDS = new ReportDataSource();
-            myRptDS = new ReportDataSource(xsdName, dtList.SaleDetailDT); //创建的数据源名称(xsd文件的名称),数据集
-            myRptDS.Name = "SaleDetailDT";
-            _reportViewer.LocalReport.DataSources.Add(myRptDS);
-
-
-            myRptDS = new ReportDataSource(xsdName, dtList.SaleDT); //创建的数据源名称(xsd文件的名称),数据集
-            myRptDS.Name = "SaleDT";
-            _reportViewer.LocalReport.DataSources.Add(myRptDS);
-
-            myRptDS = new ReportDataSource(xsdName, dtList.OrderDT); //创建的数据源名称(xsd文件的名称),数据集
-            myRptDS.Name = "OrderDT";
-            _reportViewer.LocalReport.DataSources.Add(myRptDS);
-
-            _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
-            if (isPrint)
+            try
             {
-                PrintOnly(_reportViewer.LocalReport);
+                var myRptDS = new ReportDataSource();
+                myRptDS = new ReportDataSource(xsdName, dtList.SaleDetailDT); //创建的数据源名称(xsd文件的名称),数据集
+                myRptDS.Name = "SaleDetailDT";
+                _reportViewer.LocalReport.DataSources.Add(myRptDS);
+
+
+                myRptDS = new ReportDataSource(xsdName, dtList.SaleDT); //创建的数据源名称(xsd文件的名称),数据集
+                myRptDS.Name = "SaleDT";
+                _reportViewer.LocalReport.DataSources.Add(myRptDS);
+
+                myRptDS = new ReportDataSource(xsdName, dtList.OrderDT); //创建的数据源名称(xsd文件的名称),数据集
+                myRptDS.Name = "OrderDT";
+                _reportViewer.LocalReport.DataSources.Add(myRptDS);
+
+                _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
+                if (isPrint)
+                {
+                    PrintOnly(_reportViewer.LocalReport);
+                }
+                else
+                {
+                    _reportViewer.RefreshReport();
+                    ShowDialog();
+                }
             }
-            else
+            catch (Exception Ex)
             {
-                _reportViewer.RefreshReport();
-                ShowDialog();
+                MessageBox.Show(Ex.Message);
             }
         }
 
         public void PrintExpress(string rdlcName, PrintExpressModel printExpressModel, bool isPrint = false)
         {
-            var myRptDs = new ReportDataSource("PrintExpressModel",new List<PrintExpressModel>{ printExpressModel});
-            _reportViewer.LocalReport.DataSources.Add(myRptDs);
-            _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
-            if (isPrint)
-            {
-                PrintOnly(_reportViewer.LocalReport);
+            try
+            { 
+                var myRptDs = new ReportDataSource("PrintExpressModel",new List<PrintExpressModel>{ printExpressModel});
+                _reportViewer.LocalReport.DataSources.Add(myRptDs);
+                _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
+                if (isPrint)
+                {
+                    PrintOnly(_reportViewer.LocalReport);
+                }
+                else
+                {
+                    _reportViewer.RefreshReport();
+                    ShowDialog();
+                }
             }
-            else
+            catch (Exception Ex)
             {
-                _reportViewer.RefreshReport();
-                ShowDialog();
+                MessageBox.Show(Ex.Message);
             }
         }
         public void PrintFHD(string rdlcName,Order order, OPC_Sale opcSale,List<OPC_SaleDetail> listOpcSaleDetails, bool isPrint=false)
         {
-            var myRptDs = new ReportDataSource("FHD",new List<OPC_Sale>(){opcSale});
-            _reportViewer.LocalReport.DataSources.Add(myRptDs);
-
-            myRptDs = new ReportDataSource("OrderDT",new List<Order>(){ order});
-            _reportViewer.LocalReport.DataSources.Add(myRptDs);
-
-            myRptDs = new ReportDataSource("SaleDetailDT", listOpcSaleDetails);
-            _reportViewer.LocalReport.DataSources.Add(myRptDs);
-
-            _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
-            if (isPrint)
+            try
             {
-                PrintOnly(_reportViewer.LocalReport);
+                var myRptDs = new ReportDataSource("FHD", new List<OPC_Sale>() { opcSale });
+                _reportViewer.LocalReport.DataSources.Add(myRptDs);
+
+                myRptDs = new ReportDataSource("OrderDT", new List<Order>() { order });
+                _reportViewer.LocalReport.DataSources.Add(myRptDs);
+
+                myRptDs = new ReportDataSource("SaleDetailDT", listOpcSaleDetails);
+                _reportViewer.LocalReport.DataSources.Add(myRptDs);
+
+                _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
+                if (isPrint)
+                {
+                    PrintOnly(_reportViewer.LocalReport);
+                }
+                else
+                {
+                    _reportViewer.RefreshReport();
+                    ShowDialog();
+                }
             }
-            else
+            catch (Exception Ex)
             {
-                _reportViewer.RefreshReport();
-                ShowDialog();
+                MessageBox.Show(Ex.Message);
             }
         }
 
 
         private void PrintOnly(LocalReport report)
         {
-            report.Refresh();
-            string deviceInfo =
-              "<DeviceInfo>" +
-              "  <OutputFormat>EMF</OutputFormat>" +
-              "  <PageWidth>8.5in</PageWidth>" +
-              "  <PageHeight>11in</PageHeight>" +
-              "  <MarginTop>0.25in</MarginTop>" +
-              "  <MarginLeft>0.25in</MarginLeft>" +
-              "  <MarginRight>0.25in</MarginRight>" +
-              "  <MarginBottom>0.25in</MarginBottom>" +
-              "</DeviceInfo>";
-            Warning[] warnings;
-            //将报表的内容按照deviceInfo指定的格式输出到CreateStream函数提供的Stream中。
-            report.Render("Image", deviceInfo, CreateStream, out warnings);
-            Print();
+            try
+            { 
+                report.Refresh();
+                string deviceInfo =
+                  "<DeviceInfo>" +
+                  "  <OutputFormat>EMF</OutputFormat>" +
+                  "  <PageWidth>8.5in</PageWidth>" +
+                  "  <PageHeight>11in</PageHeight>" +
+                  "  <MarginTop>0.25in</MarginTop>" +
+                  "  <MarginLeft>0.25in</MarginLeft>" +
+                  "  <MarginRight>0.25in</MarginRight>" +
+                  "  <MarginBottom>0.25in</MarginBottom>" +
+                  "</DeviceInfo>";
+                Warning[] warnings;
+                //将报表的内容按照deviceInfo指定的格式输出到CreateStream函数提供的Stream中。
+                report.Render("Image", deviceInfo, CreateStream, out warnings);
+                Print();
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.Message);
+            }
         }
         //声明一个Stream对象的列表用来保存报表的输出数据
         //LocalReport对象的Render方法会将报表按页输出为多个Stream对象。
