@@ -119,6 +119,7 @@ namespace Intime.OPC.Repository.Support
                         o.Color = t.OrderItem.OrderItems.ColorValueName;
                         o.Size = t.OrderItem.OrderItems.SizeValueName;
                         o.ProductNo = t.OrderItem.OrderItems.StoreSalesCode;
+                        o.ProductName = t.OrderItem.OrderItems.ProductName;
                         if (t.OrderItem.Brand!=null)
                         {
                             o.Brand = t.OrderItem.Brand.Name;
