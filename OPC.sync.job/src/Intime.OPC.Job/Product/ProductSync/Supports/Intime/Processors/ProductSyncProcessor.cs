@@ -123,6 +123,20 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 Log.WarnFormat("同步商品对应品牌失败:ProductId:[{0}],brandId:[{1}],brandName:[{2}]", channelProduct.ProductId, channelProduct.BrandId, channelProduct.BrandName);
             }
 
+            using (var db = new YintaiHZhouContext())
+            {
+                if (!db.IMS_SectionBrand.Any(x => x.BrandId == brand.Id && x.SectionId == section.Id))
+                {
+                    var sb = new IMS_SectionBrand()
+                    {
+                        BrandId = brand.Id,
+                        SectionId = section.Id
+                    };
+                    db.IMS_SectionBrand.Add(sb);
+                    db.SaveChanges();
+                }
+            }
+
             /**
              * 检查并同步分类,目前集团分类信息为空，所以同步商品不成功，只是提供警告 
              */

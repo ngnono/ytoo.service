@@ -5,7 +5,10 @@ namespace OPCApp.Domain.Models
     public class OPC_Sale
     {
         public bool IsSelected { get; set; }
-
+       /// <summary>
+       /// 渠道号
+       /// </summary>
+        public string TransNo { get; set; }
 
         public int Id { get; set; }
         public string OrderNo { get; set; }
@@ -52,7 +55,14 @@ namespace OPCApp.Domain.Models
         /// <summary>
         /// 发票内容
         /// </summary>
-        public string Invoice { get; set; } 
-
+        public string Invoice { get; set; }
+        /// <summary>
+        /// 门店电话
+        /// </summary>
+        public string StoreTelephone { get; set; }
+        /// <summary>
+        /// 门店地址
+        /// </summary>
+        public string StoreAddress { get; set; }
     }
 }

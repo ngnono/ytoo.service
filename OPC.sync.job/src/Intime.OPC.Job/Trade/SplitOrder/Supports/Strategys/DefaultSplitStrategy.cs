@@ -62,7 +62,8 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports.Strategys
                         Price = stock.Price,
                         OrderItemID= orderItem.Id,
                         CreatedDate = DateTime.Now,
-                        CreatedUser = SystemDefine.SysUserId
+                        CreatedUser = SystemDefine.SysUserId,
+                        SectionCode = stock.SectionCode
                     });
 
                 result.Add(detail);

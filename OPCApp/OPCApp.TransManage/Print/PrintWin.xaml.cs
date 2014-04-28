@@ -57,13 +57,22 @@ namespace OPCApp.TransManage.Print
             _reportViewer.RefreshReport();
             ShowDialog();
         }
-        public void PrintFHD(string rdlcName, List<OPC_Sale> opcSales)
+
+        public void PrintFHD(string rdlcName,Order order, OPC_Sale opcSale,List<OPC_SaleDetail> listOpcSaleDetails )
         {
-            var myRptDs = new ReportDataSource("FHD", opcSales);
+            var myRptDs = new ReportDataSource("FHD",new List<OPC_Sale>(){opcSale});
             _reportViewer.LocalReport.DataSources.Add(myRptDs);
+
+            myRptDs = new ReportDataSource("OrderDT",new List<Order>(){ order});
+            _reportViewer.LocalReport.DataSources.Add(myRptDs);
+
+            myRptDs = new ReportDataSource("SaleDetailDT", listOpcSaleDetails);
+            _reportViewer.LocalReport.DataSources.Add(myRptDs);
+
             _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
             _reportViewer.RefreshReport();
             ShowDialog();
         }
+
     }
 }
