@@ -9,7 +9,7 @@ namespace OPCApp.Domain.Models
         /// </summary>
         /// <value>The product no.</value>
         public string ProductNo { get; set; }
-
+        public string ProductName { get; set; }
         /// <summary>
         ///     œ˙ €µ•∫≈
         /// </summary>
