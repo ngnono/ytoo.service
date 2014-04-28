@@ -91,5 +91,7 @@ namespace Intime.OPC.Domain.Dto
         public string Remark { get; set; }
 
         public string SectionCode { get; set; }
+
+        public string ProductName { get; set; }
     }
 }
