@@ -16,8 +16,8 @@ namespace Intime.OPC.Domain.Dto
         public string ShippingStatusName { get; set; }
         public string ShippingRemark { get; set; }
         public DateTime SellDate { get; set; }
-        public bool? IfTrans { get; set; }
-        public int? TransStatus { get; set; }
+        public string IfTrans { get; set; }
+        public string TransStatus { get; set; }
         public decimal SalesAmount { get; set; }
         public int? SalesCount { get; set; }
         public int? CashStatus { get; set; }

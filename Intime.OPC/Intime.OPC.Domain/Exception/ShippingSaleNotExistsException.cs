@@ -21,7 +21,7 @@ namespace Intime.OPC.Domain.Exception
    public class ShippingSaleExistsException : System.Exception
    {
        public ShippingSaleExistsException(string saleOrderNo)
-           : base(saleOrderNo)
+           : base(string.Format("快递单已经存在,销售单号：{0}", saleOrderNo))
        {
            this.SaleOrderNo = saleOrderNo;
        }

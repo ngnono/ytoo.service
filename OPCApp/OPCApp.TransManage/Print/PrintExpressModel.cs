@@ -21,5 +21,10 @@ namespace OPCApp.TransManage.Print
         public string CustomerPhone { get; set; }
 
         public string ExpressFee { get; set; }
+
+        public string StoreName { get; set; }
+        public string StoreAddress { get; set; }
+        public string StorePerson { get; set; }
+        public string StoreTel { get; set; }
     }
 }

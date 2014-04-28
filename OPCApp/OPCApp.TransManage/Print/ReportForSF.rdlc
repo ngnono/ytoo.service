@@ -98,7 +98,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value />
+                <Value>=Fields!StoreName.Value</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -218,7 +218,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value />
+                <Value>=Fields!StoreAddress.Value</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -338,7 +338,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value />
+                <Value>=Fields!StoreTel.Value</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -527,7 +527,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox4</rd:DefaultName>
         <Top>2.33917in</Top>
-        <Left>3.66194in</Left>
+        <Left>3.53694in</Left>
         <Height>0.25in</Height>
         <Width>1.07292in</Width>
         <ZIndex>17</ZIndex>
@@ -826,6 +826,18 @@
         </Field>
         <Field Name="ExpressFee">
           <DataField>ExpressFee</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="StoreAddress">
+          <DataField>StoreAddress</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="StoreName">
+          <DataField>StoreName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="StoreTel">
+          <DataField>StoreTel</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
