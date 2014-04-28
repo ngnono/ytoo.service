@@ -8,6 +8,29 @@
         <overwrite-existing-data>true</overwrite-existing-data>
     </processing-directives>
 
+  <!--自拍商品拆单任务-->
+  <schedule>
+    <trigger>
+      <cron>
+        <name>SelfProductOrderSplitJobTigger</name>
+        <group>SelfProductOrderSplitJobGroup</group>
+        <description>自拍商品拆单</description>
+        <job-name>SelfProductOrderSplitJob</job-name>
+        <job-group>SelfProductOrderSplitJobGroup</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 0/10 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <job>
+      <name>SelfProductOrderSplitJob</name>
+      <group>SelfProductOrderSplitJobGroup</group>
+      <description>自拍商品拆单job</description>
+      <job-type>Intime.OPC.Job.Trade.SelfProductOrder.OrderSplitJob, Intime.OPC.Job</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+  </schedule>
+  
   <!--专柜列表同步任务-->
   <schedule>
     <trigger>

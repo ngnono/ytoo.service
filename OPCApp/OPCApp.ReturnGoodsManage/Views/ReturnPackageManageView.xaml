@@ -29,7 +29,7 @@
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">查询</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="80" Command="{Binding CommandReceivingGoodsSubmit}">
+                <Button Background="LightGray" Width="Auto" Command="{Binding CommandReceivingGoodsSubmit}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/回单确认.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">物流收货确认</TextBlock>

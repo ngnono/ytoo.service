@@ -678,21 +678,21 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="SellPrice">
+                    <Textbox Name="Price">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SellPrice.Value</Value>
+                              <Value>=Fields!Price.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>SellPrice</rd:DefaultName>
+                      <rd:DefaultName>Price</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -745,7 +745,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!SellCount.Value*Fields!SellPrice.Value</Value>
+                              <Value>=Fields!Price.Value*Fields!SellCount.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -802,6 +802,7 @@
                       </Style>
                     </Textbox>
                     <ColSpan>9</ColSpan>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell />
@@ -821,7 +822,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!SellCount.Value*Fields!SellPrice.Value)</Value>
+                              <Value>=Sum(Fields!Price.Value*Fields!SellCount.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1125,7 +1126,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!SellCount.Value*Fields!SellPrice.Value)</Value>
+                              <Value>=Sum(Fields!SellCount.Value*Fields!Price.Value)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1317,7 +1318,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=First(Fields!StoreTelephone.Value, "FHD")</Value>
+                              <Value EvaluationMode="Constant">«Expr»</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -2137,6 +2138,36 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Textbox Name="ReceivePerson">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=First(Fields!ReceivePerson.Value, "FHD")</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>ReceivePerson</rd:DefaultName>
+        <Top>1.61991in</Top>
+        <Left>1.23833in</Left>
+        <Height>0.25in</Height>
+        <Width>2.29167in</Width>
+        <ZIndex>26</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>7.41542in</Height>
     <Style>
@@ -2230,6 +2261,10 @@
           <DataField>OrderNo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="OrderSource">
+          <DataField>OrderSource</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="PayType">
           <DataField>PayType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -2237,6 +2272,10 @@
         <Field Name="PrintTimes">
           <DataField>PrintTimes</DataField>
           <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="ReceivePerson">
+          <DataField>ReceivePerson</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Remark">
           <DataField>Remark</DataField>
@@ -2257,6 +2296,10 @@
         <Field Name="SalesCount">
           <DataField>SalesCount</DataField>
           <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="SaleStatus">
+          <DataField>SaleStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SalesType">
           <DataField>SalesType</DataField>
@@ -2292,7 +2335,7 @@
         </Field>
         <Field Name="ShipViaId">
           <DataField>ShipViaId</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Status">
           <DataField>Status</DataField>
@@ -2312,6 +2355,10 @@
         </Field>
         <Field Name="StoreTelephone">
           <DataField>StoreTelephone</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TransNo">
+          <DataField>TransNo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="TransStatus">
