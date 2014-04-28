@@ -94,9 +94,9 @@ namespace Intime.OPC.Repository.Support
                         //    (t, o) => new {t.Sale, t.OrderItem, BrandName = o.Name});
                 var qq = from q in db.OrderItems
                     join b in db.Brands on q.BrandId equals b.Id into bb
-                    
-                
-                    select new {OrderItems=q,Brand=bb.FirstOrDefault()};
+                    join o in db.Orders on q.OrderNo equals o.OrderNo into oo
+
+                    select new {OrderItems=q,Brand=bb.FirstOrDefault(),Order=oo.FirstOrDefault()};
 
 
 
@@ -119,6 +119,7 @@ namespace Intime.OPC.Repository.Support
                         o.Color = t.OrderItem.OrderItems.ColorValueName;
                         o.Size = t.OrderItem.OrderItems.SizeValueName;
                         o.ProductNo = t.OrderItem.OrderItems.StoreSalesCode;
+                        o.ProductName = t.OrderItem.OrderItems.ProductName;
                         if (t.OrderItem.Brand!=null)
                         {
                             o.Brand = t.OrderItem.Brand.Name;
@@ -126,11 +127,11 @@ namespace Intime.OPC.Repository.Support
                     }
                     
                     //o.StyleNo=t.Stock.ProductCode
-                    //o.StyleNo = t.OrderItem.StoreItemNo;
-                    if (t.Stock!=null)
-                    {
-                        o.StyleNo = t.Stock.ProductCode;
-                    }
+                    o.StyleNo = t.OrderItem.OrderItems.StoreItemNo;
+                    //if (t.Stock!=null)
+                    //{
+                    //    o.StyleNo = t.Stock.ProductCode;
+                    //}
                     lstDto.Add(o);
                 }
                 return new PageResult<SaleDetailDto>(lstDto, lst.TotalCount);

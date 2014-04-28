@@ -18,5 +18,7 @@ namespace Intime.OPC.Job.Order.Repository
         /// <returns>信息</returns>
         OrderStatusResultDto GetOrderStatusById(OPC_Sale saleOrder);
 
+        OrderStatusResultDto GetRMAStatusById(OPC_SaleRMA saleRMA);
+
     }
 }

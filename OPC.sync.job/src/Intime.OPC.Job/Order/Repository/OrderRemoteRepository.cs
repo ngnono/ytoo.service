@@ -58,5 +58,37 @@ namespace Intime.OPC.Job.Order.Repository
             }
             return AutoMapper.Mapper.Map<OrderStatusResult, OrderStatusResultDto>(result.Data);
         }
+
+        public OrderStatusResultDto GetRMAStatusById(OPC_SaleRMA saleRMA)
+        {
+            OPC_Stock opcStock; ;
+
+            using (var db = new YintaiHZhouContext())
+            {
+                opcStock = db.OPC_Stock.FirstOrDefault(a => a.SectionId == saleRMA.SectionId);
+            }
+
+            if (opcStock == null)
+            {
+                throw new StockNotExistsException(string.Format(""));
+            }
+
+            var result = _apiClient.Post(new GetOrderStatusByIdRequest()
+            {
+                Data = new
+                {
+                    id = saleRMA.RMANo,
+                    storeno = opcStock.StoreCode
+                }
+            });
+
+            if (!result.Status)
+            {
+                Log.ErrorFormat("查询订单信息失败,message:{0}", result.Message);
+                return null;
+            }
+            return AutoMapper.Mapper.Map<OrderStatusResult, OrderStatusResultDto>(result.Data);
+
+        }
     }
 }
