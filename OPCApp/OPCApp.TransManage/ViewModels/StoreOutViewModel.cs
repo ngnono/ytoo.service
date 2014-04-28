@@ -76,6 +76,7 @@ namespace OPCApp.TransManage.ViewModels
                         .SelectSaleDetail(SaleSelected.SaleOrderNo)
                         .Result.ToList();
                 PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(SaleSelected.OrderNo);
+               
                 pr.PrintFHD(rdlcName, re.Result.FirstOrDefault(), saleSelecteds[0], listOpcSaleDetails,bPrint);
             }
 
@@ -177,7 +178,7 @@ namespace OPCApp.TransManage.ViewModels
                 CustomerPhone = OrderList[0].CustomerPhone,
                 ExpressFee = ShipSaleSelected.ExpressFee.ToString("f2")
             };
-            pr.PrintExpress(rdlcName, printModel);
+            pr.PrintExpress(rdlcName, printModel,true);
         }
 
         /*打印预览*/
@@ -199,7 +200,7 @@ namespace OPCApp.TransManage.ViewModels
                 CustomerPhone = OrderList[0].CustomerPhone,
                 ExpressFee = ShipSaleSelected.ExpressFee.ToString("f2")
             };
-            pr.PrintExpress(rdlcName, printModel,true);
+            pr.PrintExpress(rdlcName, printModel);
         }
         #endregion
 

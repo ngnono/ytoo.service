@@ -498,21 +498,21 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox13">
+                    <Textbox Name="ProductName">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Fields!ProductName.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox13</rd:DefaultName>
+                      <rd:DefaultName>ProductName</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -524,6 +524,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2139,22 +2140,22 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Textbox Name="ReceivePerson">
+      <Textbox Name="CustomerName2">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
         <Paragraphs>
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=First(Fields!ReceivePerson.Value, "FHD")</Value>
+                <Value>=First(Fields!CustomerName.Value, "OrderDT")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
             <Style />
           </Paragraph>
         </Paragraphs>
-        <rd:DefaultName>ReceivePerson</rd:DefaultName>
-        <Top>1.48241in</Top>
+        <rd:DefaultName>CustomerName1</rd:DefaultName>
+        <Top>1.48277in</Top>
         <Left>1.23833in</Left>
         <Height>0.25in</Height>
         <Width>2.29167in</Width>
@@ -2406,6 +2407,10 @@
         <Field Name="Price">
           <DataField>Price</DataField>
           <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="ProductName">
+          <DataField>ProductName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ProductNo">
           <DataField>ProductNo</DataField>
