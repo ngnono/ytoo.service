@@ -28,6 +28,8 @@ namespace Intime.OPC.Service
             map.ForMember(d => d.StatusName, opt => opt.MapFrom(t => GetSaleOrderStatusName(t.Status)));
             map.ForMember(d => d.CashStatusName, opt => opt.MapFrom(t => GetCashStatusName(t.CashStatus)));
             map.ForMember(d => d.ShippingStatusName, opt => opt.MapFrom(t => GetSaleOrderStatusName(t.ShippingStatus)));
+            map.ForMember(d => d.IfTrans, opt => opt.MapFrom(t => GetBoolValue(t.IfTrans)));
+            map.ForMember(d => d.TransStatus, opt => opt.MapFrom(t => GetTransStatus(t.TransStatus)));
 
             IMappingExpression<OPC_SaleDetail, SaleDetailDto> map2 = Mapper.CreateMap<OPC_SaleDetail, SaleDetailDto>();
             map2.ForMember(d => d.SellCount, opt => opt.MapFrom(t =>t.SaleCount));
@@ -42,6 +44,32 @@ namespace Intime.OPC.Service
 
             Mapper.CreateMap<OrderItem, RMAItem>();
             //todo 销售单明细 匹配
+        }
+
+        private static String GetBoolValue(bool? bl)
+        {
+            if (!bl.HasValue)
+            {
+                return "";
+            }
+            return bl.Value ? "是" : "否";
+        }
+
+        private static String GetTransStatus(int? bl)
+        {
+            if (!bl.HasValue)
+            {
+                return "";
+            }
+            switch (bl.Value)
+            {
+                case 0:
+                    return "未调拨";
+                case 1:
+                    return "调拨";
+                default:
+                    return bl.Value.ToString();
+            }
         }
 
         private static string GetSaleOrderStatusName(int status)
