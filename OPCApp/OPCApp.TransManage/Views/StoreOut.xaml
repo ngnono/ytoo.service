@@ -104,7 +104,7 @@
                                                 ElementStyle="{StaticResource CellCenter}" />
                             <DataGridTextColumn Header="销售时间" Width="150"
                                                 Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                            <DataGridTextColumn Header="是否调拨" Binding="{Binding IfTrans}" />
+                            <DataGridCheckBoxColumn Header="是否调拨" Binding="{Binding IfTrans}" />
                             <DataGridTextColumn Header="调拨状态" Binding="{Binding TransStatus}" />
                             <DataGridTextColumn Header="销售单金额" Binding="{Binding SalesAmount}"
                                                 ElementStyle="{StaticResource CellRight}" />

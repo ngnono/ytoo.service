@@ -2027,7 +2027,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=First(Fields!IfTrans.Value, "SaleDT")</Value>
+                <Value>=First(Fields!TransName.Value, "SaleDT")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -2642,6 +2642,10 @@
         </Field>
         <Field Name="StoreTelephone">
           <DataField>StoreTelephone</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TransName">
+          <DataField>TransName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="TransNo">

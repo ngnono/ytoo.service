@@ -76,6 +76,7 @@ namespace OPCApp.TransManage.ViewModels
                         .SelectSaleDetail(SaleSelected.SaleOrderNo)
                         .Result.ToList();
                 PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(SaleSelected.OrderNo);
+               
                 pr.PrintFHD(rdlcName, re.Result.FirstOrDefault(), saleSelecteds[0], listOpcSaleDetails,bPrint);
             }
 

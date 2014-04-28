@@ -156,6 +156,7 @@ namespace OPCApp.TransManage.ViewModels
 
                 var invoiceModel = new PrintModel();
                 var salelist = new List<OPC_Sale>();
+                SaleSelected.TransName = SaleSelected.IfTrans == true ? "是" : "否";
                 salelist.Add(SaleSelected);
                 invoiceModel.SaleDT = salelist;
                 invoiceModel.SaleDetailDT = InvoiceDetail4List;
