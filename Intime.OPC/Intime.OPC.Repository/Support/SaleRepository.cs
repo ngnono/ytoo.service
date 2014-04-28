@@ -125,7 +125,12 @@ namespace Intime.OPC.Repository.Support
                             o.Brand = t.OrderItem.Brand.Name;
                         }
                     }
-                    
+
+                    o.LabelPrice = (double)t.OrderItem.OrderItems.UnitPrice;
+                    o.Price = (double)t.OrderItem.OrderItems.ItemPrice;
+                    o.SalePrice = (double)t.OrderItem.OrderItems.ItemPrice;
+                    o.SellPrice = (double)t.OrderItem.OrderItems.ItemPrice;
+                    o.SectionCode = t.Sale.SectionCode;
                     //o.StyleNo=t.Stock.ProductCode
                     o.StyleNo = t.OrderItem.OrderItems.StoreItemNo;
                     //if (t.Stock!=null)
@@ -538,6 +543,7 @@ namespace Intime.OPC.Repository.Support
                     o.InvoiceSubject = t.Order.InvoiceSubject;
                     o.PayType = t.Order.PaymentMethodName;
                     o.Invoice = t.Order.InvoiceDetail;
+                    
                     lstDto.Add(o);
                 }
                 return new PageResult<SaleDto>(lstDto,lst.TotalCount);
