@@ -217,7 +217,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         return Content("success");
                     }
                     var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.TransNo == trade_no
-                                                && p.PaymentCode == WxPayConfig.PAYMENT_CODE4IMS
+                                                && p.PaymentCode == WxPayConfig.PAYMENT_CODE4GIFTCARD
                                                 && (!p.OrderType.HasValue || p.OrderType.Value == (int)PaidOrderType.GiftCard)).FirstOrDefault();
 
                     if (paymentEntity == null)
@@ -242,7 +242,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             {
                                 CreateDate = DateTime.Now,
                                 OrderNo = giftcardOrder.No,
-                                PaymentCode = WxPayConfig.PAYMENT_CODE4IMS,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4GIFTCARD,
                                 PaymentContent = JsonConvert.SerializeObject(sPara)
                             });
 
@@ -252,7 +252,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 OrderNo = giftcardOrder.No,
                                 CreateDate = DateTime.Now,
                                 IsSynced = false,
-                                PaymentCode = WxPayConfig.PAYMENT_CODE4IMS,
+                                PaymentCode = WxPayConfig.PAYMENT_CODE4GIFTCARD,
                                 TransNo = trade_no,
                                 OutsiteType = (int)OutsiteType.WX,
                                 OutsiteUId = request.OpenId,
