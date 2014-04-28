@@ -218,6 +218,9 @@
               <Width>2.89322cm</Width>
             </TablixColumn>
             <TablixColumn>
+              <Width>2.5cm</Width>
+            </TablixColumn>
+            <TablixColumn>
               <Width>2.04655cm</Width>
             </TablixColumn>
             <TablixColumn>
@@ -275,6 +278,36 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox15</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox2">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>商品名称</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox2</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -685,6 +718,36 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="ProductName">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!ProductName.Value</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>ProductName</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="StyleNo">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1062,6 +1125,7 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -1078,7 +1142,7 @@
         <Top>4.33005cm</Top>
         <Left>0.3175cm</Left>
         <Height>1.2cm</Height>
-        <Width>24.38264cm</Width>
+        <Width>26.88264cm</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -1213,7 +1277,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>调拨:</Value>
+                <Value>调拨：</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -1363,7 +1427,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>是否有赠品:</Value>
+                <Value>是否有赠品：</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -1372,9 +1436,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>1.31799cm</Top>
-        <Left>20.1975cm</Left>
+        <Left>19.96024cm</Left>
         <Height>0.6cm</Height>
-        <Width>2.09021cm</Width>
+        <Width>2.32747cm</Width>
         <ZIndex>17</ZIndex>
         <Style>
           <Border>
@@ -2324,7 +2388,7 @@
       </Border>
     </Style>
   </Body>
-  <Width>10.51425in</Width>
+  <Width>10.70872in</Width>
   <Page>
     <PageHeight>21cm</PageHeight>
     <PageWidth>29.7cm</PageWidth>
@@ -2379,6 +2443,10 @@
           <DataField>Price</DataField>
           <rd:TypeName>System.Double</rd:TypeName>
         </Field>
+        <Field Name="ProductName">
+          <DataField>ProductName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="ProductNo">
           <DataField>ProductNo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -2418,6 +2486,10 @@
         <Field Name="StyleNo">
           <DataField>StyleNo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SumPrice">
+          <DataField>SumPrice</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
