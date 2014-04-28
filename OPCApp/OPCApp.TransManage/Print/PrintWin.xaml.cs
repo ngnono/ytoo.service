@@ -162,24 +162,31 @@ namespace OPCApp.TransManage.Print
           
          private void Print()
          {
-             m_currentPageIndex = 0;
+             try
+             { 
+                 m_currentPageIndex = 0;
           
-             if (m_streams == null || m_streams.Count == 0)
-                 return;
-             //声明PrintDocument对象用于数据的打印
-             PrintDocument printDoc = new PrintDocument();
-             //指定需要使用的打印机的名称，使用空字符串""来指定默认打印机
-             printDoc.PrinterSettings.PrinterName = "";
-             //判断指定的打印机是否可用
-             if (!printDoc.PrinterSettings.IsValid)
-             {
-                 MessageBox.Show("没有发现打印机");
-                 return;
+                 if (m_streams == null || m_streams.Count == 0)
+                     return;
+                 //声明PrintDocument对象用于数据的打印
+                 PrintDocument printDoc = new PrintDocument();
+                 //指定需要使用的打印机的名称，使用空字符串""来指定默认打印机
+                 printDoc.PrinterSettings.PrinterName = "";
+                 //判断指定的打印机是否可用
+                 if (!printDoc.PrinterSettings.IsValid)
+                 {
+                     MessageBox.Show("没有发现打印机");
+                     return;
+                 }
+                 //声明PrintDocument对象的PrintPage事件，具体的打印操作需要在这个事件中处理。
+                 printDoc.PrintPage += new PrintPageEventHandler(PrintPage);
+                 //执行打印操作，Print方法将触发PrintPage事件。
+                 printDoc.Print();
              }
-             //声明PrintDocument对象的PrintPage事件，具体的打印操作需要在这个事件中处理。
-             printDoc.PrintPage += new PrintPageEventHandler(PrintPage);
-             //执行打印操作，Print方法将触发PrintPage事件。
-             printDoc.Print();
+             catch (Exception Ex)
+             {
+                 MessageBox.Show(Ex.Message);
+             }
          }
          private void PrintPage(object sender, PrintPageEventArgs ev)
         {
