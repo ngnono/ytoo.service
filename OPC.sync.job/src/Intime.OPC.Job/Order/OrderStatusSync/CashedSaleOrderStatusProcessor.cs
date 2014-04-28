@@ -34,18 +34,29 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                 saleOrder.UpdatedUser = -100;
                 db.SaveChanges();
 
-                //var slices = ParseProductIdAndPosCode(statusResult.PosSeqNo)
+                var slices = ParseProductIdAndPosCode(statusResult.PosSeqNo);
 
-                //foreach (var VARIABLE in saleOrderNo)
-                //{
-                    
-                //}
+                foreach (var slice in slices)
+                {
+                    var productId = slice.Key;
+                    var detail =
+                        db.OPC_SaleDetail.Where(x => x.SaleOrderNo == saleOrderNo)
+                            .Join(db.OPC_Stock.Where(s => s.SourceStockId == productId), d => d.StockId, s => s.Id,
+                                (o, s) => o)
+                            .FirstOrDefault();
+                    if (detail != null)
+                    {
+                        detail.SectionCode = slice.Value;
+                        db.SaveChanges();
+                    }
+                }
             }
         }
 
-        //private IList<KeyValuePair<string, string>> ParseProductIdAndPosCode(string strPosSeq)
-        //{
-        //    var splices = strPosSeq.Split()
-        //}
+        private IEnumerable<KeyValuePair<string, string>> ParseProductIdAndPosCode(string strPosSeq)
+        {
+            var slices = strPosSeq.Split(',');
+            return from slice in slices select slice.Split('|') into kv where kv.Length == 2 select new KeyValuePair<string, string>(kv[0],kv[1]);
+        }
     }
 }
