@@ -131,7 +131,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
             var favorEntity = Context.Set<FavoriteEntity>().Where(f => f.FavoriteSourceType == sourceType &&
                         f.FavoriteSourceId == request.Id &&
-                        f.Store_Id == request.StoreId).FirstOrDefault();
+                        f.Store_Id == request.StoreId &&
+                        f.User_Id == authuid).FirstOrDefault();
             if (favorEntity == null)
             {
                 _favorRepo.Insert(new FavoriteEntity()
