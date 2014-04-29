@@ -31,12 +31,11 @@ namespace Intime.OPC.ApiClient.MessageHandler
            ========================================================================--*/
 
             var buffer = new StringBuilder();
+            // 添加Method
+            buffer.Append(request.Method);
 
             // 添加请求地址
             buffer.Append(request.RequestUri.PathAndQuery);
-
-            // 添加Method
-            buffer.Append(request.Method);
 
             // 添加PostData
             if (request.Content != null && !request.Content.IsMimeMultipartContent())
