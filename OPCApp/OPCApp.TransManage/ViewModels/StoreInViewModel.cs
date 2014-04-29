@@ -45,7 +45,7 @@ namespace OPCApp.TransManage.ViewModels
                 MessageBox.Show("请勾选要设置入库的销售单", "提示");
                 return;
             }
-            List<string> selectSaleIds = SaleList.Where(n => n.IsSelected && (n.StatusName == "导购提货确认"|| n.SaleOrderNo.Substring(4,1)=="-")).Select(e => e.SaleOrderNo).ToList();
+            List<string> selectSaleIds = SaleList.Where(n => n.IsSelected && (n.StatusName == "导购提货确认"|| n.SaleOrderNo.IndexOf('-') == 3)).Select(e => e.SaleOrderNo).ToList();
             if (selectSaleIds.Count == 0)
             {
                 MessageBox.Show("没有找到可办理入库的销售单", "提示");
