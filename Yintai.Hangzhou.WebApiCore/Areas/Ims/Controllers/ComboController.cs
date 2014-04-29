@@ -227,10 +227,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                             o => o.Id,
                                             i => i.ItemId,
                                             (o, i) => new { C=o,A=i})
+                               .Join(Context.Set<IMS_AssociateEntity>(),o=>o.A.AssociateId,i=>i.Id,(o,i)=>new {C=o.C,A=o.A,AA=i})
                               .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.Status == (int)DataStatus.Normal && r.SourceType == (int)SourceType.Combo),
                                     o => o.C.Id,
                                     i => i.SourceId,
-                                    (o, i) => new { C = o.C,A=o.A, CR = i.OrderByDescending(ir => ir.SortOrder) }).FirstOrDefault();
+                                    (o, i) => new { C = o.C,A=o.A,AA=o.AA, CR = i.OrderByDescending(ir => ir.SortOrder) }).FirstOrDefault();
             if (comboEntity == null)
                 return this.RenderError(r => r.Message = "搭配不存在");
             return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, oc =>
@@ -259,6 +260,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     f.FavoriteSourceType == (int)SourceType.Combo &&
                                     f.FavoriteSourceId == comboEntity.C.Id &&
                                     f.Status == (int)DataStatus.Normal);
+                oc.TemplateId = comboEntity.AA.TemplateId ?? 1;
 
             }));
 

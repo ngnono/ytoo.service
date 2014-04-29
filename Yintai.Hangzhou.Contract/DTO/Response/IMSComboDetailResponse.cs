@@ -60,6 +60,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
          } }
         [DataMember(Name="store_id")]
         public int StoreId { get; set; }
+        [DataMember(Name="template_id")]
+        public int TemplateId { get; set; }
+
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
         [IgnoreDataMember]

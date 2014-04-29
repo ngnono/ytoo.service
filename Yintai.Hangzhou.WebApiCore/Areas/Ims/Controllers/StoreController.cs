@@ -222,7 +222,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&
                                     f.FavoriteSourceType == (int)SourceType.Store &&
                                     f.FavoriteSourceId == storeId &&
-                                    f.Status == (int)DataStatus.Normal)
+                                    f.Status == (int)DataStatus.Normal),
+                Template_Id = linq.Store.TemplateId??1
             };
         }
     }
