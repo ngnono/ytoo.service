@@ -189,7 +189,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var combos = Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.AssociateId == linq.Store.Id
                                              && iai.ItemType == (int)ComboType.Product
                                              && iai.Status == (int)DataStatus.Normal)
-                                 .Join(Context.Set<IMS_ComboEntity>(), o => o.ItemId, i => i.Id, (o, i) => i)
+                                 .Join(Context.Set<IMS_ComboEntity>().Where(c=>!c.ExpireDate.HasValue || c.ExpireDate>DateTime.Now), o => o.ItemId, i => i.Id, (o, i) => i)
                                  .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Combo && r.Status == (int)DataStatus.Normal),
                                                  o => o.Id, i => i.SourceId, (o, i) => new { C = o, R = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() })
                                  .GroupJoin(Context.Set<IMS_Combo2ProductEntity>()
