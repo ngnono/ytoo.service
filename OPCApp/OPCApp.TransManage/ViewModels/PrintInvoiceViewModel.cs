@@ -155,13 +155,10 @@ namespace OPCApp.TransManage.ViewModels
                 string rdlcName = "Print//PrintInvoice.rdlc";
 
                 var invoiceModel = new PrintModel();
-<<<<<<< HEAD
-                var salelist = new List<OPC_Sale>();
-                //SaleSelected.TransName = SaleSelected.IfTrans == true ? "是" : "否";
-=======
+
                 var salelist = new List<OPC_Sale>();
                 SaleSelected.TransName = SaleSelected.IfTrans;
->>>>>>> ca793d9913428378f3fd958c548bb1928bf2cd6a
+
                 salelist.Add(SaleSelected);
                 invoiceModel.SaleDT = salelist;
                 invoiceModel.SaleDetailDT = InvoiceDetail4List;
