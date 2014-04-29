@@ -18,13 +18,15 @@ namespace Intime.OPC.Service.Support
         private readonly IOrgInfoRepository _orgInfoRepository;
         private IRoleUserRepository _roleUserRepository;
         private ISectionRepository _sectionRepository;
+        private IStoreRepository _storeRepository;
 
-        public AccountService(IAccountRepository accountRepository,IOrgInfoRepository orgInfoRepository, IRoleUserRepository roleUserRepository, ISectionRepository sectionRepository):base(accountRepository)
+        public AccountService(IAccountRepository accountRepository,IOrgInfoRepository orgInfoRepository, IRoleUserRepository roleUserRepository, ISectionRepository sectionRepository, IStoreRepository storeRepository):base(accountRepository)
         {
             _accountRepository = accountRepository;
             _orgInfoRepository = orgInfoRepository;
             _roleUserRepository = roleUserRepository;
             _sectionRepository = sectionRepository;
+            _storeRepository = storeRepository;
         }
 
         public override bool DeleteById(int id)
@@ -118,11 +120,26 @@ namespace Intime.OPC.Service.Support
             }
             UserDto dto=new UserDto();
             dto.UserID = userID;
+            if (user.IsSystem)
+            {
+                dto.StoreIDs =
+                    _storeRepository.GetAll(1, 20000).Result.Select<Store, int>(t => t.Id).Distinct().ToList();
 
-            dto.StoreIDs = _orgInfoRepository.GetByOrgType(user.DataAuthId, EnumOrgType.Store.AsID()).Select(t=>t.StoreOrSectionID.Value).Distinct().ToList();
+                dto.SectionID = _sectionRepository.GetAll(1, 2000000).Result.Select<Section, int>(t => t.Id).ToList();
 
-            dto.SectionID= _sectionRepository.GetByStoreIDs(dto.StoreIDs).Select<Section,int>(t=>t.Id).Distinct().ToList();
-        
+            }
+            else
+            {
+
+                dto.StoreIDs =
+                    _orgInfoRepository.GetByOrgType(user.DataAuthId, EnumOrgType.Store.AsID())
+                        .Select(t => t.StoreOrSectionID.Value)
+                        .Distinct()
+                        .ToList();
+
+                dto.SectionID =
+                    _sectionRepository.GetByStoreIDs(dto.StoreIDs).Select<Section, int>(t => t.Id).Distinct().ToList();
+            }
             //dto.SectionIDs = _orgInfoRepository.GetByOrgType(user.DataAuthId, EnumOrgType.Section.AsID()).Select(t => t.StoreOrSectionID.Value).Distinct().ToList();
 
             return dto;

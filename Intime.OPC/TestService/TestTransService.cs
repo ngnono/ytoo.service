@@ -22,6 +22,7 @@ namespace TestService
         [TestMethod]
         public void TestGetShippingSale()
         {
+            Service.UserId = 1;
             var lst = Service.GetShippingSale("", "", DateTime.Now, DateTime.Now, "", -1, -1,
                 "", -1, 1, 1000);
             Assert.IsNotNull(lst);
@@ -40,7 +41,7 @@ namespace TestService
             }
         }
 
-        [TestMethod]
+        
         public void TestCreate()
         {
             ShippingSaleCreateDto dto=new ShippingSaleCreateDto();

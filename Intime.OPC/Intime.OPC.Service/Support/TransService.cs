@@ -94,8 +94,11 @@ namespace Intime.OPC.Service.Support
         {
             
             var dt = DateTime.Now;
+            var user = _accountService.GetByUserID(UserId);
+            _orderRepository.SetCurrentUser(user);
+           
+            _shippingSaleRepository.SetCurrentUser(user);
 
-            _orderRepository.SetCurrentUser(_accountService.GetByUserID(userId));
             var order = _orderRepository.GetOrderByOrderNo(shippingSaleDto.OrderNo);
             foreach (var saleID in shippingSaleDto.SaleOrderIDs)
             {
@@ -156,6 +159,9 @@ namespace Intime.OPC.Service.Support
 
         public PageResult<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo, int pageIndex, int pageSize = 20)
         {
+
+            var user = _accountService.GetByUserID(UserId);
+            _shippingSaleRepository.SetCurrentUser(user);
             var lst = _shippingSaleRepository.GetByShippingCode(shippingSaleNo,1,1);
             if (lst.TotalCount>0)
             {
@@ -186,7 +192,7 @@ namespace Intime.OPC.Service.Support
             startGoodsOutDate = startGoodsOutDate.Date;
             endGoodsOutDate = endGoodsOutDate.Date.AddDays(1);
             var user = _accountService.GetByUserID(UserId);
-            _saleRepository.SetCurrentUser(user);
+            _shippingSaleRepository.SetCurrentUser(user);
 
             var lst=  _shippingSaleRepository.GetShippingSale(saleOrderNo, expressNo, startGoodsOutDate, endGoodsOutDate,
                 outGoodsCode, sectionId, shippingStatus, customerPhone, brandId, pageIndex, pageSize);
@@ -202,6 +208,8 @@ namespace Intime.OPC.Service.Support
 
         public IList<SaleDto> GetSaleByShippingSaleNo(string shippingSaleNo)
         {
+            var user = _accountService.GetByUserID(UserId);
+            _shippingSaleRepository.SetCurrentUser(user);
             var lst = _shippingSaleRepository.GetByShippingCode(shippingSaleNo, 1, 1);
             if (lst.TotalCount == 0)
             {

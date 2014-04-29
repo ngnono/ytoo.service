@@ -18,10 +18,10 @@ namespace TestService
         [TestMethod]
         public void TestGet()
         {
-            var dd = Service.Get("wxh", "123456");
-            Assert.AreEqual(dd.Name,"wxh");
+            var dd = Service.Get("admin", "admin");
+            Assert.AreEqual(dd.Name,"admin");
         }
-        [TestMethod]
+        
         public void TestDelete()
         {
             var dd = Service.DeleteById(20);
@@ -35,7 +35,7 @@ namespace TestService
             Assert.AreEqual(dd, "wxh");
         }
 
-        [TestMethod]
+        
         public void TestAddUser()
         {
             OPC_AuthUser u=new OPC_AuthUser();

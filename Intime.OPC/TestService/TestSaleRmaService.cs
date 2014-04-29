@@ -21,12 +21,12 @@ namespace TestService
             
             request.StartDate = new DateTime(2010, 1, 1);
             request.EndDate = DateTime.Now.Date.AddDays(1);
-
+            Service.UserId = 1;
             var lst=  Service.GetByReturnGoods(request,1);
             AssertList<SaleRmaDto>(lst);
         }
 
-        [TestMethod]
+       
         public void TestCreateSaleRma()
         {
             RMAPost post=new RMAPost();

@@ -80,6 +80,7 @@ namespace Intime.OPC.Service.Support
 
         public PageResult<OrderItemDto> GetOrderItems(string orderNo,int pageIndex,int pageSize)
         {
+            _orderItemRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lstOrderItems= _orderItemRepository.GetByOrderNo(orderNo,pageIndex,pageSize);
 
             return lstOrderItems;
@@ -146,6 +147,7 @@ namespace Intime.OPC.Service.Support
         public SaleDetailStatListDto WebSiteStatSaleDetail(SearchStatRequest request)
         {
             request.FormatDate();
+            _orderItemRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = _orderItemRepository.WebSiteStatSaleDetail(request);
             lst.Stat();
             return lst;
@@ -155,6 +157,7 @@ namespace Intime.OPC.Service.Support
         public ReturnGoodsStatListDto WebSiteStatReturnDetail(SearchStatRequest request)
         {
             request.FormatDate();
+            _orderItemRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = _orderItemRepository.WebSiteStatReturnGoods(request);
             lst.Stat();
             return lst;
@@ -163,6 +166,7 @@ namespace Intime.OPC.Service.Support
         public CashierList WebSiteCashier(SearchCashierRequest request)
         {
             request.FormatDate();
+            _orderItemRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = _orderItemRepository.WebSiteCashier(request);
             lst.Stat();
             return lst;
@@ -170,6 +174,7 @@ namespace Intime.OPC.Service.Support
 
         public PageResult<OrderItemDto> GetOrderItemsAutoBack(string orderNo, int pageIndex, int pageSize)
         {
+            _orderItemRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lstOrderItems = _orderItemRepository.GetOrderItemsAutoBack(orderNo, pageIndex, pageSize);
 
             return lstOrderItems;
