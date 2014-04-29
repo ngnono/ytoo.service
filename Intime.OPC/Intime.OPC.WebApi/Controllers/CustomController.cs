@@ -13,14 +13,15 @@ namespace Intime.OPC.WebApi.Controllers
         private readonly ISaleRMAService _saleRmaService;
         private readonly IShippingSaleService _shippingSaleService;
         private IOrderService _orderService;
-
+        private IAccountService _accountService;
         public CustomController(IOrderService orderService, ISaleRMAService saleRmaService, IRmaService rmaService,
-            IShippingSaleService shippingSaleService)
+            IShippingSaleService shippingSaleService, IAccountService accountService)
         {
             _orderService = orderService;
             _saleRmaService = saleRmaService;
             _rmaService = rmaService;
             _shippingSaleService = shippingSaleService;
+            _accountService = accountService;
         }
 
         [HttpPost]
@@ -29,7 +30,7 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() =>
             {
                 int brandid = request.BandId.HasValue ? request.BandId.Value : -1;
-
+               
                 return _saleRmaService.GetByReturnGoods(request, UserID);
             }, "查询订单失败");
         }
@@ -45,6 +46,7 @@ namespace Intime.OPC.WebApi.Controllers
             return DoAction(() =>
             {
                 int userId = GetCurrentUserID();
+             
                 foreach (string rmaNo in rmaNos)
                 {
                     _saleRmaService.AgreeReturnGoods(rmaNo);

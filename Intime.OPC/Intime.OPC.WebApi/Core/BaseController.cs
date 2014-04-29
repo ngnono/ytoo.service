@@ -10,26 +10,29 @@ using System.Web.Http.Results;
 using Intime.OPC.Common.Logger;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
+using System.Web;
 
 namespace Intime.OPC.WebApi.Core
 {
     public class BaseController : ApiController
     {
-        public override Task<HttpResponseMessage> ExecuteAsync(HttpControllerContext controllerContext, CancellationToken cancellationToken)
+        public int UserID
         {
-            if (controllerContext.Request.RequestUri.LocalPath.ToLower() != "/api/account/token")
+            get
             {
-                this.UserID = GetUserID(controllerContext);
-            }
-            else
-            {
-                this.UserID = -1;
-            }
+                // 修改串用户的BUG,临时解决方案
+                if (!HttpContext.Current.Items.Contains("__ACCESS_TOKEN__USERID__"))
+                {
+                    return -1;
+                }
 
-            return base.ExecuteAsync(controllerContext, cancellationToken);
+                int tmp = -1;
+
+                int.TryParse(HttpContext.Current.Items["__ACCESS_TOKEN__USERID__"].ToString(),out tmp);
+
+                return tmp;
+            }
         }
-
-        public int UserID { get; private set; }
 
         /// <summary>
         ///     Gets the log.
@@ -65,7 +68,7 @@ namespace Intime.OPC.WebApi.Core
             }
             throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
-        protected IHttpActionResult DoFunction(Func<dynamic> action, string falseMeg="")
+        protected IHttpActionResult DoFunction(Func<dynamic> action, string falseMeg = "")
         {
             try
             {
@@ -83,7 +86,7 @@ namespace Intime.OPC.WebApi.Core
             }
         }
 
-        protected IHttpActionResult DoAction(Action action, string falseMeg="")
+        protected IHttpActionResult DoAction(Action action, string falseMeg = "")
         {
             try
             {

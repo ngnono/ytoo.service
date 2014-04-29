@@ -46,16 +46,10 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult CreateSaleRmaAuto([FromBody] RMAPost request)
         {
             int user = GetCurrentUserID();
-            //todo 客服退货 生成销售退货单
+
             return DoAction(() => { _saleRmaService.CreateSaleRmaAuto(user, request); }, "生成销售退货单失败");
         }
 
-
-        //[HttpPost]
-        //public IHttpActionResult UnAgreeReturnGoodsAuto()
-        //{
-
-        //}
 
         #endregion
         /// <summary>
@@ -67,7 +61,11 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
         {
             int userId = GetCurrentUserID();
-            return DoFunction(() => { return _saleRmaService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");
+            return DoFunction(() =>
+            {
+                _saleRmaService.UserId = userId;
+                return _saleRmaService.GetByReturnGoodsInfo(request);
+            }, "查询订单信息失败");
         }
 
         /// <summary>
@@ -83,6 +81,7 @@ namespace Intime.OPC.WebApi.Controllers
                 DoFunction(
                     () =>
                     {
+                        _rmaService.UserId = userId;
                         return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.NoDelivery.AsID(),
                             EnumReturnGoodsStatus.NoProcess.GetDescription(), pageIndex, pageSize);
                     }, "查询订单信息失败");
@@ -101,6 +100,7 @@ namespace Intime.OPC.WebApi.Controllers
                 DoFunction(
                     () =>
                     {
+                        _rmaService.UserId = userId;
                         return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.ShipNoReceive.AsID(),
                             EnumReturnGoodsStatus.NoProcess.GetDescription(), pageIndex, pageSize);
                     }, "查询订单信息失败");
@@ -115,7 +115,10 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetRmaDetailByRmaNo(string rmaNo, int pageIndex, int pageSize)
         {
             int userId = GetCurrentUserID();
-            return DoFunction(() => _rmaService.GetDetails(rmaNo, pageIndex, pageSize));
+            return DoFunction(() =>
+            {_rmaService.UserId = userId;
+                return _rmaService.GetDetails(rmaNo, pageIndex, pageSize);
+            });
         }
 
         #region 客服退货查询-物流退回
@@ -126,7 +129,11 @@ namespace Intime.OPC.WebApi.Controllers
             int userId = GetCurrentUserID();
             string returnGoodsStatus = "";
             int status = EnumRMAStatus.ShipVerifyNotPass.AsID();
-            return DoFunction(() => _rmaService.GetByOrderNo(orderNo, status, returnGoodsStatus, pageIndex, pageSize));
+            return DoFunction(() =>
+            {
+                _rmaService.UserId = userId;
+               return  _rmaService.GetByOrderNo(orderNo, status, returnGoodsStatus, pageIndex, pageSize);
+            });
         }
 
         #endregion
@@ -140,7 +147,11 @@ namespace Intime.OPC.WebApi.Controllers
             string returnGoodsStatus = EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
             return
                 DoFunction(
-                    () => { return _rmaService.GetByOrderNo(orderNo, null, returnGoodsStatus, pageIndex, pageSize); },
+                    () =>
+                    {
+                        _rmaService.UserId = userId; 
+                        return _rmaService.GetByOrderNo(orderNo, null, returnGoodsStatus, pageIndex, pageSize);
+                    },
                     "查询订单信息失败");
         }
 
@@ -192,6 +203,7 @@ namespace Intime.OPC.WebApi.Controllers
             int userId = GetCurrentUserID();
             return DoAction(() =>
             {
+                _saleRmaService.UserId = userId;
                 foreach (string rmaNo in request.RmaNos)
                 {
                     _saleRmaService.FinaceVerify(rmaNo, request.Pass);

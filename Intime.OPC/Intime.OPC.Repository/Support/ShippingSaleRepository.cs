@@ -64,7 +64,7 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 IQueryable<OPC_ShippingSale> query =
-                    db.ShippingSales.Where(t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate);
+                    db.ShippingSales.Where(t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate && t.StoreId.HasValue && CurrentUser.StoreIDs.Contains(t.StoreId.Value));
                 if (shippingStatus > -1)
                 {
                     query = query.Where(t => t.ShippingStatus == shippingStatus);
@@ -94,7 +94,7 @@ namespace Intime.OPC.Repository.Support
             {
                 var lst =
                     db.ShippingSales.Where(
-                        t => t.CreateDate >= startDate && t.CreateDate < endDate && t.ShippingStatus==shippingStatus );
+                        t => t.CreateDate >= startDate && t.CreateDate < endDate && t.ShippingStatus == shippingStatus && t.StoreId.HasValue && CurrentUser.StoreIDs.Contains(t.StoreId.Value));
                 if (orderNo.IsNotNull())
                 {
                     lst = lst.Where(t=>t.OrderNo.Contains(orderNo));
@@ -126,6 +126,12 @@ namespace Intime.OPC.Repository.Support
             if (sectionId > 0)
             {
                 //filterExpression = filterExpression.And(t => t(expressNo));
+            }
+            if (CurrentUser!=null)
+            {
+                var ll=CurrentUser.StoreIDs;
+                filterExpression = filterExpression.And(t =>t.StoreId.HasValue &&  ll.Contains(t.StoreId.Value));
+               // && CurrentUser.StoreIDs.Contains(t.StoreId)
             }
             return Select(filterExpression, t => t.CreateDate, false, pageIndex, pageSize);
         }

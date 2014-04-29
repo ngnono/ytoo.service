@@ -91,8 +91,14 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     storeExt.UpdatedDate = DateTime.Now;
                     storeExt.UpdatedUser = SystemDefine.SystemUser;
                     storeExt.Name = storeSource.Name;
-                    storeExt.RMAAddress = storeSource.Address ?? string.Empty;
-                    storeExt.Tel = storeSource.Tel ?? string.Empty;
+                    if (!string.IsNullOrEmpty(storeSource.Address))
+                    {
+                        storeExt.RMAAddress = storeSource.Address;
+                    }
+                    if (!string.IsNullOrEmpty(storeSource.Tel))
+                    {
+                        storeExt.Tel = storeSource.Tel;
+                    }
 
                     db.SaveChanges();
                 }

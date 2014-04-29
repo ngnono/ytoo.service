@@ -41,6 +41,7 @@ namespace TestService
              SearchStatRequest dto=new SearchStatRequest();
              dto.StartTime = new DateTime(2000, 1, 1);
              dto.EndTime = DateTime.Now;
+             Service.UserId = 1;
              var o = Service.WebSiteStatSaleDetail(dto);
              Assert.IsNotNull(o);
              Assert.AreNotEqual(o.Count,0);

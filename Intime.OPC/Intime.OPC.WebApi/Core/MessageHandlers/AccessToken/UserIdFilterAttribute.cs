@@ -1,10 +1,11 @@
-﻿using System.Web.Http.Controllers;
+﻿using System.Web;
+using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
 namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
 {
     /// <summary>
-    ///     绑定用户接口中的UserId
+    /// 绑定用户接口中的UserId
     /// </summary>
     public class UserIdFilterAttribute : ActionFilterAttribute
     {
@@ -14,13 +15,23 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
             {
                 if (actionContext.ActionArguments.ContainsKey("userId"))
                 {
-                    actionContext.ActionArguments["userId"] =
-                        actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName];
+                    actionContext.ActionArguments["userId"] = actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName];
                 }
                 else
                 {
-                    actionContext.ActionArguments.Add("userId",
-                        actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName]);
+                    actionContext.ActionArguments.Add("userId", actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName]);
+                }
+
+
+                // 修改串用户的BUG,临时解决方案
+                var userId_key = "__ACCESS_TOKEN__USERID__";
+                if (HttpContext.Current.Items.Contains("__ACCESS_TOKEN__USERID__"))
+                {
+                    HttpContext.Current.Items["__ACCESS_TOKEN__USERID__"] = actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName];
+                }
+                else
+                {
+                    HttpContext.Current.Items.Add("__ACCESS_TOKEN__USERID__", actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName]);
                 }
             }
         }

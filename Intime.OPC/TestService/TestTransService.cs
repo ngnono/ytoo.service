@@ -1,4 +1,5 @@
 ﻿using System;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,6 +22,7 @@ namespace TestService
         [TestMethod]
         public void TestGetShippingSale()
         {
+            Service.UserId = 1;
             var lst = Service.GetShippingSale("", "", DateTime.Now, DateTime.Now, "", -1, -1,
                 "", -1, 1, 1000);
             Assert.IsNotNull(lst);
@@ -37,6 +39,19 @@ namespace TestService
             {
                 Console.WriteLine(v);
             }
+        }
+
+        
+        public void TestCreate()
+        {
+            ShippingSaleCreateDto dto=new ShippingSaleCreateDto();
+            dto.OrderNo = "114042236511";
+            dto.SaleOrderIDs.Add("114042236511-001");
+            dto.ShipViaID = 38;
+            dto.ShipViaName = "中通";
+            dto.ShippingFee = 123123;
+            dto.ShippingCode = "werdf";
+          var bl=  Service.CreateShippingSale(1, dto);
         }
     }
 }

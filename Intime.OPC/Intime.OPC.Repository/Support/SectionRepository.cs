@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 
+using System.Collections.Generic;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
@@ -22,5 +23,9 @@ namespace Intime.OPC.Repository.Support
     /// </summary>
     public class SectionRepository : BaseRepository<Section>, ISectionRepository
     {
+        public IList<Section> GetByStoreIDs(IList<int> storeIDs)
+        {
+            return Select(t => t.StoreId.HasValue && storeIDs.Contains(t.StoreId.Value));
+        }
     }
 }

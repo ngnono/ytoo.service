@@ -115,11 +115,12 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
+               _orderService.UserId= GetCurrentUserID();
                 return _orderService.GetOrderByShippingNo(shippingNo,pageIndex,pageSize);
 
             }, "通过快递单查询订单失败");
         }
-        
+
 
 
         /// <summary>
@@ -130,7 +131,12 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetOrderByOderNo(string orderNo)
         {
-          return  Ok(  _orderService.GetOrderByOrderNo(orderNo));
+            return DoFunction(() =>
+            {
+                _orderService.UserId = GetCurrentUserID();
+               return   _orderService.GetOrderByOrderNo(orderNo);
+            });
+
         }
 
         /// <summary>
@@ -143,7 +149,13 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime, int pageIndex, int pageSize)
         {
-            return Ok(_orderService.GetOrderByOderNoTime(orderNo,starTime,endTime,pageIndex,pageSize));
+            return DoFunction(() =>
+            {
+                _orderService.UserId = GetCurrentUserID();
+               return  _orderService.GetOrderByOderNoTime(orderNo, starTime, endTime, pageIndex, pageSize);
+
+            }
+                );
             
         }
 
@@ -155,7 +167,11 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
         {
             var userId = GetCurrentUserID();
-            return DoFunction(() => { return _orderService.GetByReturnGoodsInfo(request); }, "查询订单信息失败");
+            return DoFunction(() =>
+            {
+                _orderService.UserId = userId;
+                return _orderService.GetByReturnGoodsInfo(request);
+            }, "查询订单信息失败");
         }
 
         #endregion
@@ -167,8 +183,12 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetShippingBackByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
         {
-            var userId = GetCurrentUserID();
-            return DoFunction(() => { return _orderService.GetShippingBackByReturnGoodsInfo(request); }, "查询订单信息失败");
+            
+            return DoFunction(() =>
+            {
+                _orderService.UserId = GetCurrentUserID();
+                return _orderService.GetShippingBackByReturnGoodsInfo(request);
+            }, "查询订单信息失败");
         }
 
         #endregion
@@ -177,8 +197,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetByReturnGoodsCompensate([FromUri] ReturnGoodsInfoRequest request)
         {
-            var userId = GetCurrentUserID();
-            return DoFunction(() => _orderService.GetSaleRmaByReturnGoodsCompensate(request));
+            return DoFunction(() =>
+            {
+                _orderService.UserId = GetCurrentUserID();
+                return _orderService.GetSaleRmaByReturnGoodsCompensate(request);
+            });
             //return DoFunction(() => _saleRmaService.GetByReturnGoodsCompensate(request));
             //return _orderService.GetShippingBackByReturnGoodsInfo(request);
         }
@@ -196,7 +219,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetOrderByOutOfStockNotify([FromUri] OutOfStockNotifyRequest request)
         {
-            return DoFunction(() => _orderService.GetOrderByOutOfStockNotify(request));
+            return DoFunction(() =>
+            {
+                _orderService.UserId = GetCurrentUserID();
+                return _orderService.GetOrderByOutOfStockNotify(request);
+            });
         }
 
         [HttpPost]
@@ -205,6 +232,7 @@ namespace Intime.OPC.WebApi.Controllers
             //todo 缺货提醒-缺货订单 取消销售单
             return DoAction(() =>
             {
+                _orderService.UserId = GetCurrentUserID();
                 foreach (var saleOrderNo in saleOrderNos)
                 {
                     _orderService.SetSaleOrderVoid(saleOrderNo);
@@ -225,7 +253,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetOrderOfVoid([FromUri] OutOfStockNotifyRequest request)
         {
-            return DoFunction(() => _orderService.GetOrderOfVoid(request));
+            return DoFunction(() =>
+            {
+                _orderService.UserId = GetCurrentUserID();
+                return _orderService.GetOrderOfVoid(request);
+            });
         }
 
         #endregion
@@ -237,7 +269,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult WebSiteStatSaleDetail([FromUri] SearchStatRequest request)
         {
-            return DoFunction(() => _orderService.WebSiteStatSaleDetail(request));
+            return DoFunction(() =>
+            {
+                _orderService.UserId = GetCurrentUserID();
+                return _orderService.WebSiteStatSaleDetail(request);
+            });
         }
 
         #endregion
@@ -248,7 +284,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult WebSiteStatReturnDetail([FromUri] SearchStatRequest request)
         {
-            return DoFunction(() => _orderService.WebSiteStatReturnDetail(request));
+            return DoFunction(() =>
+            {
+                _orderService.UserId = GetCurrentUserID(); 
+                return _orderService.WebSiteStatReturnDetail(request);
+            });
         }
 
         #endregion
@@ -259,7 +299,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult WebSiteCashier([FromUri] SearchCashierRequest request)
         {
-            return DoFunction(() => _orderService.WebSiteCashier(request));
+            return DoFunction(() =>
+            {
+                _orderService.UserId = GetCurrentUserID();
+                return _orderService.WebSiteCashier(request);
+            });
         }
 
         #endregion

@@ -28,7 +28,7 @@ namespace Intime.OPC.Repository.Support
             CheckUser();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
                 var query2 = db.Orders.Where(t => CurrentUser.StoreIDs.Contains(t.StoreId));
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -98,7 +98,7 @@ namespace Intime.OPC.Repository.Support
             CheckUser();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var query = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
                 if (returnGoodsStatus.IsNotNull())
                 {
                     query = query.Where(t => t.RMAStatus == returnGoodsStatus);
@@ -195,7 +195,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMA.Where(t => true);
+                var query = db.OPC_SaleRMA.Where(t => true && CurrentUser.StoreIDs.Contains(t.StoreId));
                 var query2 = db.Orders.Where(t => CurrentUser.StoreIDs.Contains(t.StoreId) && t.CreateDate>=request.StartDate && t.CreateDate<request.EndDate);
                 var queryRMA = db.RMAs.Where(t => true);
                 if (request.OrderNo.IsNotNull())

@@ -155,6 +155,7 @@ namespace OPCApp.TransManage.ViewModels
                 string rdlcName = "Print//PrintInvoice.rdlc";
 
                 var invoiceModel = new PrintModel();
+
                 var salelist = new List<OPC_Sale>();
                 SaleSelected.TransName = SaleSelected.IfTrans;
                 salelist.Add(SaleSelected);
