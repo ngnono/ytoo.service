@@ -158,7 +158,6 @@ namespace OPCApp.TransManage.ViewModels
 
                 var salelist = new List<OPC_Sale>();
                 SaleSelected.TransName = SaleSelected.IfTrans;
-
                 salelist.Add(SaleSelected);
                 invoiceModel.SaleDT = salelist;
                 invoiceModel.SaleDetailDT = InvoiceDetail4List;

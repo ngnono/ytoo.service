@@ -25,6 +25,8 @@ namespace Intime.OPC.Job.Order.DTO
         [DataMember(Name = "status")]
         public string Status { get; set; }
 
+        [DataMember(Name = "product_salecode")]
+        public string Products_SaleCodes { get; set; }
         //
         [DataMember(Name = "postime")]
         public DateTime PosTime { get; set; }

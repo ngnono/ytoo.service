@@ -76,6 +76,11 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
 
         private void ProcessSaleOrderStatus(OPC_Sale saleOrder, OrderStatusResultDto saleStatus)
         {
+            if (saleStatus == null)
+            {
+                Log.Error("Sale Order has no return info!");
+                return;
+            }
             var processor = SaleOrderStatusProcessorFactory.Create(int.Parse(saleStatus.Status));
             processor.Process(saleOrder.SaleOrderNo, saleStatus);
         }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Logging;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Job.Order.DTO;
@@ -11,6 +12,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
 {
     public class CashedSaleOrderStatusProcessor : AbstractSaleOrderStatusProcessor
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         public CashedSaleOrderStatusProcessor(EnumSaleOrderStatus status) : base(status) { }
 
         /// <summary>
@@ -34,7 +36,17 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                 saleOrder.UpdatedUser = -100;
                 db.SaveChanges();
 
-                var slices = ParseProductIdAndPosCode(statusResult.PosSeqNo);
+                if (string.IsNullOrEmpty(statusResult.Products_SaleCodes))
+                {
+                    Log.Error("没有销售码信息");
+                    return;
+                }
+
+                Log.Error("**************************************");
+                Log.ErrorFormat(statusResult.Products_SaleCodes);
+                Log.Error("**************************************");
+
+                var slices = ParseProductIdAndPosCode(statusResult.Products_SaleCodes);
 
                 foreach (var slice in slices)
                 {
