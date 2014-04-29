@@ -41,7 +41,7 @@ namespace TestService
             }
         }
 
-        
+        [TestMethod]
         public void TestCreate()
         {
             ShippingSaleCreateDto dto=new ShippingSaleCreateDto();

@@ -186,7 +186,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetByFinaceDto(FinaceRequest request)
+        public IHttpActionResult GetByFinaceDto([FromUri] FinaceRequest request)
         {
             int userId = GetCurrentUserID();
             return DoFunction(() =>
@@ -221,7 +221,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetRmaByReturnGoodPay(ReturnGoodsPayRequest request)
+        public IHttpActionResult GetRmaByReturnGoodPay([FromUri]ReturnGoodsPayRequest request)
         {
             int userId = GetCurrentUserID();
             return DoFunction(() =>
