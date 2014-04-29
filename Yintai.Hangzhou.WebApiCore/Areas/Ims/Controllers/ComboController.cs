@@ -55,8 +55,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             (!p.ProductType.HasValue && request.Product_Type == (int)ProductType.FromSystem)));
             if (products.Count() < 1)
                 return this.RenderError(r => r.Message = "商品类型不正确");
+             var resources = Context.Set<ResourceEntity>().Where(r => request.Image_Ids.Any(image => image == r.Id));
+             if (!resources.Any())
+                 return this.RenderError(r => r.Message = "搭配必须图片");
             var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
             var canOnline = ComboLogic.IfCanOnline(authuid);
+
             using (var ts = new TransactionScope())
             {
                 //step1: create combo
@@ -100,7 +104,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 });
 
                 //step3: bind images
-                var resources = Context.Set<ResourceEntity>().Where(r => request.Image_Ids.Any(image => image == r.Id));
+               
                 foreach (var resource in resources)
                 {
                     resource.SourceType = (int)SourceType.Combo;
