@@ -21,6 +21,8 @@ namespace Intime.OPC.Service.Support
         private readonly IShippingSaleRepository _shippingSaleRepository;
         private readonly IAccountService  _accountService;
         private readonly IOrderRepository _orderRepository;
+        private readonly ISectionRepository _sectionRepository;
+
 
         public TransService(ITransRepository transRepository, 
             IOrderRemarkRepository orderRemarkRepository,
@@ -28,7 +30,8 @@ namespace Intime.OPC.Service.Support
             IShippingSaleRepository shippingSaleRepository,
             IAccountService accountService,
             IOrderRepository  orderRepository,
-            IShippingSaleCommentRepository shippingSaleCommentRepository)
+            IShippingSaleCommentRepository shippingSaleCommentRepository,
+            ISectionRepository sectionRepository)
         {
             _transRepository = transRepository;
             _orderRemarkRepository = orderRemarkRepository;
@@ -37,6 +40,7 @@ namespace Intime.OPC.Service.Support
             _shippingSaleCommentRepository = shippingSaleCommentRepository;
             _accountService = accountService;
             _orderRepository = orderRepository;
+            _sectionRepository = sectionRepository;
         }
 
         #region ITransService Members
@@ -98,10 +102,17 @@ namespace Intime.OPC.Service.Support
             _orderRepository.SetCurrentUser(user);
            
             _shippingSaleRepository.SetCurrentUser(user);
+            _sectionRepository.SetCurrentUser(user);
+            _saleRepository.SetCurrentUser(user);
 
             var order = _orderRepository.GetOrderByOrderNo(shippingSaleDto.OrderNo);
-            foreach (var saleID in shippingSaleDto.SaleOrderIDs)
+           foreach (var saleID in shippingSaleDto.SaleOrderIDs)
             {
+                var saleOrder = _saleRepository.GetBySaleNo(saleID);
+                Section section = null;;
+               if (saleOrder!=null)
+                section = _sectionRepository.GetByID((int)saleOrder.SectionId);
+ 
                 var sale = new OPC_ShippingSale();
                 sale.CreateDate = dt;
                 sale.CreateUser = userId;
@@ -114,12 +125,14 @@ namespace Intime.OPC.Service.Support
                 sale.ShippingFee = (decimal) (shippingSaleDto.ShippingFee);
                 sale.ShippingStatus = EnumSaleOrderStatus.PrintInvoice.AsID();
                 sale.ShipViaName = shippingSaleDto.ShipViaName;
-                sale.BrandId = order.BrandId;
                 sale.ShippingAddress = order.ShippingAddress;
                 sale.ShippingContactPerson = order.ShippingContactPerson;
                 sale.ShippingContactPhone = order.ShippingContactPhone;
-                sale.StoreId = order.StoreId;
-                
+                if (section!=null)
+                    sale.StoreId = section.StoreId;
+
+                //sale.BrandId = order.BrandId;
+               
 
                 //验证是否已经生成过发货单
                 var lst = _shippingSaleRepository.GetBySaleOrderNo(saleID);
