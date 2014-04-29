@@ -4,35 +4,33 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using Intime.OPC.Common.Logger;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
-using System.Web;
 
 namespace Intime.OPC.WebApi.Core
 {
     public class BaseController : ApiController
     {
-        public int UserID
+        public override Task<HttpResponseMessage> ExecuteAsync(HttpControllerContext controllerContext, CancellationToken cancellationToken)
         {
-            get
+            if (controllerContext.Request.RequestUri.LocalPath.ToLower() != "/api/account/token")
             {
-                // 修改串用户的BUG,临时解决方案
-                if (!HttpContext.Current.Items.Contains("__ACCESS_TOKEN__USERID__"))
-                {
-                    return -1;
-                }
-
-                int tmp = -1;
-
-                int.TryParse(HttpContext.Current.Items["__ACCESS_TOKEN__USERID__"].ToString(),out tmp);
-
-                return tmp;
+                this.UserID = GetUserID(controllerContext);
             }
+            else
+            {
+                this.UserID = -1;
+            }
+
+            return base.ExecuteAsync(controllerContext, cancellationToken);
         }
+
+        public int UserID { get; private set; }
 
         /// <summary>
         ///     Gets the log.
@@ -57,7 +55,9 @@ namespace Intime.OPC.WebApi.Core
         {
             if (controllerContext.Request.Properties.ContainsKey(AccessTokenConst.UseridPropertiesName))
             {
+
                 string userid = controllerContext.Request.Properties[AccessTokenConst.UseridPropertiesName].ToString();
+
                 int id = -1;
                 bool bl = int.TryParse(userid, out id);
                 if (bl)
@@ -66,6 +66,8 @@ namespace Intime.OPC.WebApi.Core
                 }
                 throw new UserIdConverException(userid);
             }
+
+           
             throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
         protected IHttpActionResult DoFunction(Func<dynamic> action, string falseMeg = "")
