@@ -37,6 +37,7 @@ namespace Intime.OPC.Service.Support
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipNoReceive.AsID(),"",dto.pageIndex,dto.pageSize);
             return lst;
         }
@@ -50,6 +51,7 @@ namespace Intime.OPC.Service.Support
         public PageResult<RMADto> GetByOrderNo(string orderNo, int? rmaStatus, string returnGoodsStatus, int pageIndex, int pageSize)
         {
             var rep = (IRMARepository)_repository;
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = rep.GetAll(orderNo, "", new DateTime(2000, 1, 1), DateTime.Now.Date.AddDays(1), rmaStatus, returnGoodsStatus, pageIndex, pageSize);
             return lst;
         }
@@ -85,6 +87,7 @@ namespace Intime.OPC.Service.Support
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipReceive.AsID(), "",dto.pageIndex,dto.pageSize);
             return lst;
         }
@@ -94,6 +97,7 @@ namespace Intime.OPC.Service.Support
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.NoDelivery.AsID(), EnumReturnGoodsStatus.CompensateVerify.GetDescription(), dto.pageIndex, dto.pageSize);
             return lst;
         }
@@ -103,6 +107,7 @@ namespace Intime.OPC.Service.Support
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             PageResult<RMADto> lst = rep.GetByPackPrintPress(dto.OrderNo, "", dto.StartDate, dto.EndDate,EnumRMAStatus.ShipReceive.AsID(), dto.pageIndex, dto.pageSize);
             return lst;
         }
@@ -112,6 +117,7 @@ namespace Intime.OPC.Service.Support
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             PageResult<RMADto> lst = rep.GetByPackPrintPress(dto.OrderNo, "", dto.StartDate, dto.EndDate, EnumRMAStatus.ShipVerifyPass.AsID(), dto.pageIndex, dto.pageSize);
             return lst;
         }
@@ -119,7 +125,7 @@ namespace Intime.OPC.Service.Support
         public void SetRmaCash(string rmaNo)
         {
             var rep = (IRMARepository)_repository;
-
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var rma = rep.GetByRmaNo2(rmaNo);
             var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
 
@@ -157,6 +163,7 @@ namespace Intime.OPC.Service.Support
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             PageResult<RMADto> lst = rep.GetRmaReturnByExpress(dto.OrderNo, dto.StartDate, dto.EndDate, dto.pageIndex, dto.pageSize);
             return lst;
         }
@@ -175,6 +182,7 @@ namespace Intime.OPC.Service.Support
             dto.StartDate = dto.StartDate.Date;
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
           // PageResult<RMADto> lst = rep.GetByPackPrintPress(dto.OrderNo, "", dto.StartDate, dto.EndDate, EnumRMAStatus.ShipInStorage.AsID(), dto.pageIndex, dto.pageSize);
             var lst = rep.GetRmaPrintByExpress(dto.OrderNo, dto.StartDate, dto.EndDate, dto.pageIndex, dto.pageSize);
             return lst;

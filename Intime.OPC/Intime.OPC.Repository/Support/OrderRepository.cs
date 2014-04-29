@@ -185,6 +185,11 @@ namespace Intime.OPC.Repository.Support
 
                 var filter = db.Orders.Where(t => true);
 
+                if (CurrentUser!=null)
+                {
+                    filter = filter.Where(t => CurrentUser.StoreIDs.Contains(t.StoreId));
+                }
+
                 if (request.OrderNo.IsNotNull())
                 {
                     filter = filter.Where(t => t.OrderNo.Contains(request.OrderNo));

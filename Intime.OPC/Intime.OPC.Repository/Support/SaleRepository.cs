@@ -40,6 +40,11 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
+                if (CurrentUser != null)
+                {
+                  //query = query.Where(t => t.SectionId.HasValue && sectionIds.Contains(t.SectionId.Value));
+                  return   db.OPC_Sale.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value)).ToList();
+                }
                 List<OPC_Sale> saleList = db.OPC_Sale.ToList();
                 return saleList;
             }
@@ -262,6 +267,11 @@ namespace Intime.OPC.Repository.Support
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
 
+                if (sectionIds != null)
+                {
+                    query = query.Where(t => t.SectionId.HasValue && sectionIds.Contains(t.SectionId.Value));
+                }
+
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     query = query.Where(t => t.OrderNo.Contains(orderNo));
@@ -404,6 +414,10 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var query = db.OPC_Sale.Where(t => t.OrderNo == orderID);
+                if (CurrentUser!=null)
+                {
+                    query = query.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value));
+                }
 
                 var qq = from sale in query
                          join s in db.Sections on sale.SectionId equals s.Id into cs
@@ -492,6 +506,10 @@ namespace Intime.OPC.Repository.Support
                 IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => t.Status == (int) saleOrderStatus
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
+                //if (CurrentUser!=null)
+                //{
+                //    query = query.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value));
+                //}
 
                 if (sectionIds != null)
                 {

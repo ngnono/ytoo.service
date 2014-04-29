@@ -453,7 +453,7 @@ namespace Intime.OPC.Service.Support
             ISaleRMARepository rep = _repository as ISaleRMARepository;
 
             string status = EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
-
+            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             return rep.GetAll(request.OrderNo, request.SaleOrderNo, request.PayType, request.RmaNo,
                  request.StartDate, request.EndDate, request.RmaStatus, request.StoreID, status, request.pageIndex, request.pageSize);
         }

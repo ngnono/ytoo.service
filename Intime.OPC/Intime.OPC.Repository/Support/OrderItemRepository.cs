@@ -55,8 +55,12 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
+                var lstSections = CurrentUser.SectionID;
+                var saleNos = db.OPC_Sale.Where(t => t.SectionId.HasValue && lstSections.Contains(t.SectionId.Value)).Select<OPC_Sale, string>(t => t.SaleOrderNo).Distinct().ToList();
+
+
                 IQueryable<OPC_SaleDetail> query =
-                    db.OPC_SaleDetail.Where(t => t.CreatedDate >= request.StartTime && t.CreatedDate < request.EndTime);
+                    db.OPC_SaleDetail.Where(t => t.CreatedDate >= request.StartTime && t.CreatedDate < request.EndTime && saleNos.Contains(t.SaleOrderNo));
                 IQueryable<OrderItem> queryOrder =
                     db.OrderItems.Where(t => t.CreateDate >= request.StartTime && t.CreateDate < request.EndTime);
 
@@ -110,8 +114,13 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
+                var lstSections = CurrentUser.SectionID;
+                var saleNos=   db.OPC_Sale.Where(t => t.SectionId.HasValue && lstSections.Contains(t.SectionId.Value)).Select<OPC_Sale,string>(t=>t.SaleOrderNo).Distinct().ToList();
+
                 IQueryable<OPC_SaleDetail> query =
-                    db.OPC_SaleDetail.Where(t => t.CreatedDate >= request.StartTime && t.CreatedDate < request.EndTime);
+                    db.OPC_SaleDetail.Where(t => t.CreatedDate >= request.StartTime && t.CreatedDate < request.EndTime && saleNos.Contains(t.SaleOrderNo));
+
+               
                 var queryOrder =
                     db.OrderItems.Where(t => t.CreateDate >= request.StartTime && t.CreateDate < request.EndTime)
                         .Join(db.OPC_RMADetail, t => t.Id, o => o.OrderItemId,
@@ -175,11 +184,14 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 int cahStatus = EnumCashStatus.CashOver.AsID();
+
+                var lstSections = CurrentUser.SectionID;
+ 
                 var querySale =
                     db.OPC_Sale.Where(
                         t =>
                             t.CreatedDate >= request.StartTime && t.CreatedDate < request.EndTime &&
-                            t.CashStatus == cahStatus)
+                            t.CashStatus == cahStatus && t.SectionId.HasValue && lstSections.Contains(t.SectionId.Value))
                         .Join(db.OPC_SaleDetail, t => t.SaleOrderNo, o => o.SaleOrderNo,
                             (t, o) => new {Sale = t, SaleDetail = o});
 

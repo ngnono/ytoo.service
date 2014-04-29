@@ -7,6 +7,14 @@ using Intime.OPC.Domain;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
+using System.Linq;
+using System.Linq.Expressions;
+
+using Intime.OPC.Domain.Exception;
+
+
+
+
 namespace Intime.OPC.Repository.Support
 {
     public class TransRepository : BaseRepository<OPC_Sale>, ITransRepository
@@ -29,6 +37,14 @@ namespace Intime.OPC.Repository.Support
                     {
                         filterExpression = filterExpression.Where(p => p.SaleOrderNo.Contains(saleOrderNo));
                     }
+
+                    if (CurrentUser !=null)
+                    {
+                        var ll = CurrentUser.SectionID;
+                        filterExpression = filterExpression.Where(t => t.SectionId.HasValue && ll.Contains(t.SectionId.Value));
+                    }
+                    
+
                     filterExpression = filterExpression.OrderByDescending(t => t.CreatedDate);
                     return filterExpression.ToPageResult(pageIndex, pageSize);
                 }

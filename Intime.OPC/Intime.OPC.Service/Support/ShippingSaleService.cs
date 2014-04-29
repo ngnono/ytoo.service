@@ -18,11 +18,13 @@ namespace Intime.OPC.Service.Support
         private readonly IShippingSaleRepository _shippingSaleRepository;
         private readonly IOrderRepository _orderRepository;
         private ISaleRMARepository _saleRmaRepository;
-        public ShippingSaleService(IShippingSaleRepository repository, IOrderRepository orderRepository, ISaleRMARepository saleRmaRepository):base(repository)
+        private IAccountService _accountService;
+        public ShippingSaleService(IShippingSaleRepository repository, IOrderRepository orderRepository, ISaleRMARepository saleRmaRepository, IAccountService accountService):base(repository)
         {
             _shippingSaleRepository = repository;
             _orderRepository = orderRepository;
             _saleRmaRepository = saleRmaRepository;
+            _accountService = accountService;
         }
 
         public PageResult<OPC_ShippingSale> GetByShippingCode(string shippingCode,int pageIndex,int pageSize=20)
@@ -148,6 +150,7 @@ namespace Intime.OPC.Service.Support
         public PageResult<ShippingSaleDto> GetRmaByPackPrintPress(RmaExpressRequest request)
         {
             request.FormateDate();
+            _shippingSaleRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
           var lst=   _shippingSaleRepository.GetByOrderNo(request.OrderNo, request.StartDate, request.EndDate, request.pageIndex,
                 request.pageSize,EnumRmaShippingStatus.NoPrint.AsID());
 
@@ -167,6 +170,7 @@ namespace Intime.OPC.Service.Support
         public PageResult<ShippingSaleDto> GetRmaShippingPrintedByPack(RmaExpressRequest request)
         {
             request.FormateDate();
+            _shippingSaleRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = _shippingSaleRepository.GetByOrderNo(request.OrderNo, request.StartDate, request.EndDate, request.pageIndex,
                  request.pageSize, EnumRmaShippingStatus.Printed.AsID());
 

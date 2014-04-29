@@ -41,6 +41,7 @@ namespace Intime.OPC.Service.Support
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
+            _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var pg=_orderRepository.GetOrder(orderNo, orderSource, dtStart, dtEnd, storeId, brandId,
                 status, paymentType,
                 outGoodsType, shippingContactPhone, expressDeliveryCode, expressDeliveryCompany,pageIndex,pageSize);
@@ -72,6 +73,7 @@ namespace Intime.OPC.Service.Support
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
+            _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lstOrder = _orderRepository.GetOrderByOderNoTime(orderNo, dtStart, dtEnd,pageIndex,pageSize);
             return Mapper.Map<Order, OrderDto>(lstOrder);
         }
@@ -85,6 +87,7 @@ namespace Intime.OPC.Service.Support
 
         public PageResult<OrderDto> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize)
         {
+            _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst= _orderRepository.GetOrderByShippingNo(shippingNo,pageIndex,pageSize);
             return Mapper.Map<Order, OrderDto>(lst);
         }
@@ -92,6 +95,7 @@ namespace Intime.OPC.Service.Support
         public PageResult<OrderDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
             request.FormatDate();
+            _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = _orderRepository.GetByReturnGoodsInfo(request);
                return Mapper.Map<Order, OrderDto>(lst);
 
@@ -107,6 +111,7 @@ namespace Intime.OPC.Service.Support
 
             string returnGoodsStatus = "";
             int status = EnumRMAStatus.ShipVerifyNotPass.AsID();
+            _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = _orderRepository.GetBySaleRma(request, status, returnGoodsStatus);
             return Mapper.Map<Order, OrderDto>(lst);
         }
@@ -114,7 +119,7 @@ namespace Intime.OPC.Service.Support
         public PageResult<OrderDto> GetSaleRmaByReturnGoodsCompensate(ReturnGoodsInfoRequest request)
         {
             request.FormatDate();
-
+            _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             string returnGoodsStatus = EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
             var lst = _orderRepository.GetBySaleRma(request, null, returnGoodsStatus);
             return Mapper.Map<Order, OrderDto>(lst);
@@ -123,7 +128,7 @@ namespace Intime.OPC.Service.Support
         public PageResult<OrderDto> GetOrderByOutOfStockNotify(OutOfStockNotifyRequest request)
         {
             request.FormatDate();
-
+            _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             int orderstatus =EnumOderStatus.StockOut.AsID();
             var lst = _orderRepository.GetByOutOfStockNotify(request,orderstatus);
             return Mapper.Map<Order, OrderDto>(lst);
@@ -132,7 +137,7 @@ namespace Intime.OPC.Service.Support
         public PageResult<OrderDto> GetOrderOfVoid(OutOfStockNotifyRequest request)
         {
             request.FormatDate();
-
+            _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             int orderstatus = EnumOderStatus.Void.AsID();
             var lst = _orderRepository.GetByOutOfStockNotify(request, orderstatus);
             return Mapper.Map<Order, OrderDto>(lst);

@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 
+using System.Collections.Generic;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -21,5 +22,6 @@ namespace Intime.OPC.Repository
     /// </summary>
     public interface ISectionRepository : IRepository<Section>
     {
+        IList<Section> GetByStoreIDs(IList<int> storeIDs);
     }
 }

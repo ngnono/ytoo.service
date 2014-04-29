@@ -122,8 +122,8 @@ namespace Intime.OPC.WebApi.Controllers
         {
             try
             {
-                int userId = GetCurrentUserID();
-
+               
+                _transService.UserId= GetCurrentUserID();
                 var lst = _transService.GetShippingSale(orderNo, expressNo, startGoodsOutDate, endGoodsOutDate,
                     outGoodsCode, storeId, shippingStatus, customerPhone, brandId, pageIndex, pageSize);
 

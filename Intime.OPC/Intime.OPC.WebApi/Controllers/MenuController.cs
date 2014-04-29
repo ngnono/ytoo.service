@@ -60,14 +60,7 @@ namespace Intime.OPC.WebApi.Controllers
             
         }
 
-        private int? GetUserID()
-        {
-            if (this.ActionContext.Request.Properties.ContainsKey(AccessTokenConst.UseridPropertiesName))
-            {
-                return int.Parse( this.ActionContext.Request.Properties[AccessTokenConst.UseridPropertiesName].ToString());
-            }
-            return null;
-        }
+      
 
         [System.Web.Http.HttpPost]
         public IHttpActionResult LoadMenuByRoleID(int roleId, [UserId] int? userId)

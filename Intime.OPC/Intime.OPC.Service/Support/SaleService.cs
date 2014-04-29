@@ -111,13 +111,11 @@ namespace Intime.OPC.Service.Support
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
-           // var user = _accountService.GetByUserID(userID);
-            //if (user.SectionIDs.Count == 0)
-            //{
-            //    throw new UnauthorizedAccessException();
-            //}
 
-            return _saleRepository.GetPickUped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize,null);
+            var user = _accountService.GetByUserID(userID);
+            _saleRepository.SetCurrentUser(user);
+
+            return _saleRepository.GetPickUped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize,user.SectionID.ToArray());
             //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
@@ -126,12 +124,9 @@ namespace Intime.OPC.Service.Support
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
-            //var user = _accountService.GetByUserID(userId);
-            //if (user.SectionIDs.Count == 0)
-            //{
-            //    throw new UnauthorizedAccessException();
-            //}
-            return _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize,null);
+            var user = _accountService.GetByUserID(userId);
+            _saleRepository.SetCurrentUser(user);
+            return _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize,user.SectionID.ToArray());
            // return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
@@ -139,8 +134,10 @@ namespace Intime.OPC.Service.Support
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
-            
-            return  _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
+
+            var user = _accountService.GetByUserID(userId);
+            _saleRepository.SetCurrentUser(user);
+            return  _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionID.ToArray());
             //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
@@ -149,8 +146,9 @@ namespace Intime.OPC.Service.Support
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
-            
-            return _saleRepository.GetPrintExpress(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
+            var user = _accountService.GetByUserID(userId);
+            _saleRepository.SetCurrentUser(user);
+            return _saleRepository.GetPrintExpress(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionID.ToArray());
             //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
@@ -159,8 +157,11 @@ namespace Intime.OPC.Service.Support
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
-            
-            return _saleRepository.GetPrintInvoice(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
+
+            var user = _accountService.GetByUserID(userId);
+            _saleRepository.SetCurrentUser(user);
+
+            return _saleRepository.GetPrintInvoice(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionID.ToArray());
            // return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
@@ -169,8 +170,11 @@ namespace Intime.OPC.Service.Support
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
-            
-            return  _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, null);
+
+            var user = _accountService.GetByUserID(userId);
+            _saleRepository.SetCurrentUser(user);
+
+            return  _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionID.ToArray());
             //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
@@ -185,6 +189,9 @@ namespace Intime.OPC.Service.Support
             {
                 throw new OrderNoIsNullException(orderID);
             }
+            var user = _accountService.GetByUserID(userid);
+            _saleRepository.SetCurrentUser(user);
+            _saleRepository.SetCurrentUser(user);
             var lst = _saleRepository.GetByOrderNo2(orderID);
             return new PageResult<SaleDto>(lst, lst.Count);
            
@@ -217,8 +224,9 @@ namespace Intime.OPC.Service.Support
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
-           
-            return _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize,null);
+            var userDto = _accountService.GetByUserID(userId);
+
+            return _saleRepository.GetNoPickUp(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize, userDto.SectionID.ToArray());
             //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 

@@ -17,13 +17,14 @@ namespace Intime.OPC.Service.Support
         private readonly IAccountRepository _accountRepository;
         private readonly IOrgInfoRepository _orgInfoRepository;
         private IRoleUserRepository _roleUserRepository;
+        private ISectionRepository _sectionRepository;
 
-
-        public AccountService(IAccountRepository accountRepository,IOrgInfoRepository orgInfoRepository, IRoleUserRepository roleUserRepository):base(accountRepository)
+        public AccountService(IAccountRepository accountRepository,IOrgInfoRepository orgInfoRepository, IRoleUserRepository roleUserRepository, ISectionRepository sectionRepository):base(accountRepository)
         {
             _accountRepository = accountRepository;
             _orgInfoRepository = orgInfoRepository;
             _roleUserRepository = roleUserRepository;
+            _sectionRepository = sectionRepository;
         }
 
         public override bool DeleteById(int id)
@@ -119,6 +120,9 @@ namespace Intime.OPC.Service.Support
             dto.UserID = userID;
 
             dto.StoreIDs = _orgInfoRepository.GetByOrgType(user.DataAuthId, EnumOrgType.Store.AsID()).Select(t=>t.StoreOrSectionID.Value).Distinct().ToList();
+
+            dto.SectionID= _sectionRepository.GetByStoreIDs(dto.StoreIDs).Select<Section,int>(t=>t.Id).Distinct().ToList();
+        
             //dto.SectionIDs = _orgInfoRepository.GetByOrgType(user.DataAuthId, EnumOrgType.Section.AsID()).Select(t => t.StoreOrSectionID.Value).Distinct().ToList();
 
             return dto;
