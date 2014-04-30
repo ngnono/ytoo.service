@@ -338,6 +338,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     currentResourceEntity.SourceType = (int)SourceType.Product;
                     currentResourceEntity.SourceId = productEntity.Id;
                     currentResourceEntity.ColorId = colorPropertyId;
+                    currentResourceEntity.Status = (int)DataStatus.Normal;
                     _resourceRepo.Update(currentResourceEntity);
                     
                 }
