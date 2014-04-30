@@ -55,6 +55,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var resourceEntity = Context.Set<ResourceEntity>().Find(request.Image_Id);
             if (resourceEntity == null)
                 return this.RenderError(r=>r.Message="图片不正确");
+            
             var categoryEntity = Context.Set<TagEntity>()
                                 .Where(t => t.Id == request.Category_Id)
                                 .GroupJoin(Context.Set<CategoryPropertyEntity>().Join(Context.Set<CategoryPropertyValueEntity>(), o => o.Id, i => i.PropertyId, (o, i) => new { CP = o, CPV = i })
@@ -73,7 +74,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var brandEntity = Context.Set<BrandEntity>().Find(request.Brand_Id);
             if (brandEntity == null)
                 return this.RenderError(r => r.Message = "品牌不存在");
-
+            
+            request.UnitPrice = (!request.UnitPrice.HasValue || request.UnitPrice <= 0) ? request.Price : request.UnitPrice;
+            if (request.UnitPrice < request.Price)
+                return this.RenderError(r => r.Message = "商品原价必须大于等于销售价！");
             var assocateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
             using (var ts = new TransactionScope())
             {
@@ -99,7 +103,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     SortOrder = 1,
                     Status = (int)DataStatus.Normal,
                     Tag_Id = request.Category_Id,
-                    UnitPrice = 999999,
+                    UnitPrice = request.UnitPrice,
                     UpdatedDate = DateTime.Now,
                     UpdatedUser = authuid,
                     Store_Id = assocateEntity.StoreId,
@@ -260,7 +264,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var brandEntity = Context.Set<BrandEntity>().Find(request.Brand_Id);
             if (brandEntity == null)
                 return this.RenderError(r => r.Message = "品牌不存在");
-
+            request.UnitPrice = (!request.UnitPrice.HasValue || request.UnitPrice <= 0) ? request.Price : request.UnitPrice;
+            if (request.UnitPrice < request.Price)
+                return this.RenderError(r => r.Message = "商品原价必须大于等于销售价！");
             using (var ts = new TransactionScope())
             {
                 //step1: update product 
@@ -272,6 +278,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 productEntity.Name = productName;
                 productEntity.Description = productName;
                 productEntity.Price = request.Price;
+                productEntity.UnitPrice = request.UnitPrice;
                 productEntity.Tag_Id = request.Category_Id;
                 _productRepo.Update(productEntity);
 

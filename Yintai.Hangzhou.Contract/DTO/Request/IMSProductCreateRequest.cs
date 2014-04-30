@@ -24,6 +24,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         [Required(ErrorMessage = "分类必填")]
         public int Category_Id { get; set; }
         public int[] Size_Ids { get; set; }
+        public decimal? UnitPrice { get; set; }
 
         public string Size_Str { get; set; }
         public int Image_Id { get; set; }

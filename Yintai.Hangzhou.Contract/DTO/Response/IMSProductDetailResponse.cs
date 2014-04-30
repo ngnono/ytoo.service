@@ -45,6 +45,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public bool IsOnline { get; set; }
         [DataMember(Name="image_id")]
         public int Image_Id { get; set; }
+        [DataMember(Name = "unitprice")]
+        public decimal UnitPrice { get; set; }
 
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
