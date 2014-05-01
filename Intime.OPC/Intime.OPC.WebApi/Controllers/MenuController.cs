@@ -53,7 +53,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                var userId = GetCurrentUserID();
+                var userId = GetCurrentUserId();
                return   _menuService.SelectByUserID(userId);
             }, "加载菜单失败");
 

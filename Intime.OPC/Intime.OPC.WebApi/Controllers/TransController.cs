@@ -123,7 +123,7 @@ namespace Intime.OPC.WebApi.Controllers
             try
             {
                
-                _transService.UserId= GetCurrentUserID();
+                _transService.UserId= GetCurrentUserId();
                 var lst = _transService.GetShippingSale(orderNo, expressNo, startGoodsOutDate, endGoodsOutDate,
                     outGoodsCode, storeId, shippingStatus, customerPhone, brandId, pageIndex, pageSize);
 
@@ -145,7 +145,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return base.DoFunction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
 
                 return _transService.CreateShippingSale(userId, shippingSaleDto);
             }, "读取快递单备注失败！");
@@ -192,7 +192,7 @@ namespace Intime.OPC.WebApi.Controllers
             return base.DoFunction(() =>
             {
                 comment.CreateDate = DateTime.Now;
-                comment.CreateUser = GetCurrentUserID();
+                comment.CreateUser = GetCurrentUserId();
                 comment.UpdateDate = comment.CreateDate;
                 comment.UpdateUser = comment.CreateUser;
 
@@ -299,7 +299,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = UserId;
                 return _rmaService.GetRmaCashByExpress(request);
             }, "查询退货单信息失败");
         }
@@ -315,7 +315,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoAction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = UserId;
                 foreach (var rmaNo in rmaNos)
                 {
                     _rmaService.SetRmaCash(rmaNo);
@@ -334,7 +334,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoAction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = UserId;
                 foreach (var rmaNo in rmaNos)
                 {
                     _rmaService.SetRmaCashOver(rmaNo);
@@ -358,7 +358,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = UserId;
                 return _rmaService.GetRmaReturnByExpress(request);
             }, "查询退货单信息失败");
         }
@@ -374,7 +374,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoAction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = UserId;
                 foreach (var rmaNo in rmaNos)
                 {
                     _rmaService.SetRmaShipInStorage(rmaNo);
@@ -397,7 +397,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = UserId;
                 return _rmaService.GetRmaPrintByExpress(request);
             }, "查询退货单信息失败");
         }
@@ -407,7 +407,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoAction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = UserId;
                 foreach (var rmaNo in rmaNos)
                 {
                     _rmaService.SetRmaPint(rmaNo);

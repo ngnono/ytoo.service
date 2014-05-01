@@ -30,7 +30,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult CreateSaleRMA([FromBody] RMAPost request)
         {
-            int user = GetCurrentUserID();
+            int user = GetCurrentUserId();
             //todo 客服退货 生成销售退货单
             return DoAction(() => { _saleRmaService.CreateSaleRMA(user, request); }, "生成销售退货单失败");
         }
@@ -45,7 +45,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult CreateSaleRmaAuto([FromBody] RMAPost request)
         {
-            int user = GetCurrentUserID();
+            int user = GetCurrentUserId();
 
             return DoAction(() => { _saleRmaService.CreateSaleRmaAuto(user, request); }, "生成销售退货单失败");
         }
@@ -60,7 +60,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             return DoFunction(() =>
             {
                 _saleRmaService.UserId = userId;
@@ -76,7 +76,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetByOrderNo(string orderNo, int pageIndex, int pageSize)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             return
                 DoFunction(
                     () =>
@@ -95,7 +95,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetRmaByOrderNo(string orderNo, int pageIndex, int pageSize)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             return
                 DoFunction(
                     () =>
@@ -114,7 +114,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetRmaDetailByRmaNo(string rmaNo, int pageIndex, int pageSize)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             return DoFunction(() =>
             {_rmaService.UserId = userId;
                 return _rmaService.GetDetails(rmaNo, pageIndex, pageSize);
@@ -126,7 +126,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetByOrderNoShippingBack(string orderNo, int pageIndex, int pageSize)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             string returnGoodsStatus = "";
             int status = EnumRMAStatus.ShipVerifyNotPass.AsID();
             return DoFunction(() =>
@@ -143,7 +143,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetByOrderNoReturnGoodsCompensation(string orderNo, int pageIndex, int pageSize)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             string returnGoodsStatus = EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
             return
                 DoFunction(
@@ -168,7 +168,7 @@ namespace Intime.OPC.WebApi.Controllers
                 foreach (var rmaNo in rmaNos)
                 {
                     _saleRmaService.SetSaleRmaServiceAgreeGoodsBack(rmaNo);
-                    _shippingSaleService.CreateRmaShipping(rmaNo, UserID);
+                    _shippingSaleService.CreateRmaShipping(rmaNo, UserId);
                 }
             });
         }
@@ -188,7 +188,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetByFinaceDto([FromUri] FinaceRequest request)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             return DoFunction(() =>
             {
                 _rmaService.UserId = userId;
@@ -200,7 +200,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult FinaceVerify([FromBody] PackageVerifyRequest request)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             return DoAction(() =>
             {
                 _saleRmaService.UserId = userId;
@@ -223,7 +223,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetRmaByReturnGoodPay([FromUri]ReturnGoodsPayRequest request)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             return DoFunction(() =>
             {
                 _saleRmaService.UserId = userId;
@@ -239,7 +239,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetByRmaNo(string rmaNo, int pageIndex, int pageSize)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             return DoFunction(() =>
             {
                 _rmaService.UserId = userId;
@@ -255,7 +255,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult CompensateVerify([FromBody] CompensateVerifyRequest request)
         {
-            int userId = GetCurrentUserID();
+            int userId = GetCurrentUserId();
             return DoAction(() => { _saleRmaService.CompensateVerify(request.RmaNo, request.Money); }, "查询退货单信息失败");
         }
 
@@ -274,7 +274,7 @@ namespace Intime.OPC.WebApi.Controllers
             return DoAction(() =>
             {
                 comment.CreateDate = DateTime.Now;
-                comment.CreateUser = GetCurrentUserID();
+                comment.CreateUser = GetCurrentUserId();
                 comment.UpdateDate = comment.CreateDate;
                 comment.UpdateUser = comment.CreateUser;
                 _saleRmaService.AddComment(comment);
@@ -307,7 +307,7 @@ namespace Intime.OPC.WebApi.Controllers
             return DoAction(() =>
             {
                 comment.CreateDate = DateTime.Now;
-                comment.CreateUser = GetCurrentUserID();
+                comment.CreateUser = GetCurrentUserId();
                 comment.UpdateDate = comment.CreateDate;
                 comment.UpdateUser = comment.CreateUser;
                 _rmaService.AddComment(comment);

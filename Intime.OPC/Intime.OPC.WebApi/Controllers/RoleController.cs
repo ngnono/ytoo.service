@@ -30,7 +30,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             try
             {
-                var userID = GetCurrentUserID();
+                var userID = GetCurrentUserId();
                 _roleService.SetUsers(roleUserDto, userID);
                 return Ok();
             }

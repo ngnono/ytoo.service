@@ -31,7 +31,7 @@ namespace Intime.OPC.WebApi.Controllers
             {
                 int brandid = request.BandId.HasValue ? request.BandId.Value : -1;
                
-                return _saleRmaService.GetByReturnGoods(request, UserID);
+                return _saleRmaService.GetByReturnGoods(request, UserId);
             }, "查询订单失败");
         }
 
@@ -45,7 +45,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoAction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
              
                 foreach (string rmaNo in rmaNos)
                 {
@@ -64,7 +64,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoAction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
                 foreach (string rmaNo in rmaNos)
                 {
                     _saleRmaService.ShippingReceiveGoods(rmaNo);
@@ -84,7 +84,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = UserId;
                 return _rmaService.GetAllPackVerify(request);
             }, "查询退货单信息失败");
         }
@@ -116,7 +116,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = UserId;
                 return _rmaService.GetByRmaNo(rmaNo);
             }, "查询退货单信息失败");
         }
@@ -167,7 +167,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                _shippingSaleService.UserId = UserID;
+                _shippingSaleService.UserId = UserId;
                 return _shippingSaleService.GetRmaByPackPrintPress(request);
             }, "查询退货单信息失败");
         }
@@ -184,7 +184,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                _shippingSaleService.UserId = UserID;
+                _shippingSaleService.UserId = UserId;
                 return _shippingSaleService.GetRmaShippingPrintedByPack(request);
             }, "查询退货单信息失败");
         }
@@ -217,7 +217,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = UserId;
                 return _rmaService.GetRmaByShoppingGuide(request);
             }, "查询退货单信息失败");
         }
@@ -238,7 +238,7 @@ namespace Intime.OPC.WebApi.Controllers
           {
               return DoFunction(() =>
               {
-                  _rmaService.UserId = UserID;
+                  _rmaService.UserId = UserId;
                   return _rmaService.GetRmaByAllOver(request);
               }, "查询退货单信息失败");
           }

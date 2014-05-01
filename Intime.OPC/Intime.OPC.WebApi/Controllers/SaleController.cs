@@ -39,7 +39,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
                 return _saleService.GetSaleOrderDetails(saleOrderNo, userId,1,1000).Result;
             }, "读取销售单详情失败");
         }
@@ -49,7 +49,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
                 comment.CreateDate = DateTime.Now;
                 comment.CreateUser = userId;
                 comment.UpdateDate = DateTime.Now;
@@ -106,7 +106,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return base.DoFunction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
                 foreach (string saleOrderNo in saleOrderNos)
                 {
                     _saleService.PrintSale(saleOrderNo, userId);
@@ -229,7 +229,7 @@ namespace Intime.OPC.WebApi.Controllers
             var sd = lst.FirstOrDefault();
             var lstSale = _saleService.GetByShippingCode(shippingCode);
             
-            int userId = base.GetCurrentUserID();
+            int userId = base.GetCurrentUserId();
             foreach (var sale in lstSale)
             {
                 try
@@ -260,7 +260,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return base.DoAction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
                 foreach (var shippingCode in shippingCodes)
                 {
                     var lstSales = _saleService.GetByShippingCode(shippingCode);
@@ -323,7 +323,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return base.DoFunction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
                 return _saleService.GetNoPickUp(saleOrderNo, userId, orderNo, startDate, endDate, pageIndex, pageSize);
             }, "读取未提货数据失败");
         }
@@ -334,7 +334,7 @@ namespace Intime.OPC.WebApi.Controllers
 
             return DoFunction(() =>
             {
-                var userId = GetCurrentUserID();
+                var userId = GetCurrentUserId();
                 return _saleService.GetPickUp(saleOrderNo, orderCode, startDate, endDate,userId, pageIndex, pageSize);
             },
                 "查询快递单信息失败");
@@ -346,7 +346,7 @@ namespace Intime.OPC.WebApi.Controllers
 
             return DoFunction(() =>
             {
-                var userId = GetCurrentUserID();
+                var userId = GetCurrentUserId();
                 return _saleService.GetShipped(orderNo, userId, saleOrderNo, startDate, endDate, pageIndex, pageSize);
             },
                 "查询快递单信息失败");
@@ -364,7 +364,7 @@ namespace Intime.OPC.WebApi.Controllers
 
             return DoFunction(() =>
             {
-                var userId = GetCurrentUserID();
+                var userId = GetCurrentUserId();
                 return _saleService.GetPrintSale(saleOrderNo, userId, orderNo, startDate, endDate, pageIndex, pageSize);
             }, "读取已完成打印销售单的销售单数据失败");
         }
@@ -381,7 +381,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return base.DoFunction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
                 return _saleService.GetPrintInvoice(saleOrderNo, userId, orderNo, startDate, endDate, pageIndex, pageSize);
             }, "读取已完成打印发货单的销售单数据失败");
         }
@@ -398,7 +398,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return base.DoFunction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
                 return _saleService.GetPrintExpress(null, userId, orderNo, startDate, endDate, pageIndex, pageSize);
             }, "读取已完成打印快递单的销售单数据失败");
         }
@@ -415,7 +415,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return base.DoFunction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
                 return _saleService.GetShipInStorage(saleOrderNo, userId, orderNo, startDate, endDate, pageIndex, pageSize);
             }, "读取物流入库数据失败");
         }
@@ -425,7 +425,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                int userId = GetCurrentUserID();
+                int userId = GetCurrentUserId();
                 return  _saleService.GetByOrderNo(orderID,userId,pageIndex,pageSize);
                 
             }, "读取销售单数据失败");
