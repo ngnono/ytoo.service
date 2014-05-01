@@ -93,6 +93,7 @@ namespace Intime.OPC.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                GetLog().Error(ex);
                 return InternalServerError();
             }
         }
