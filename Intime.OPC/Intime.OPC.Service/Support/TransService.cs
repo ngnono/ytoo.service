@@ -9,6 +9,8 @@ using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service.Map;
+using YintaiHZhouContext = Intime.OPC.Domain.Models.YintaiHZhouContext;
+using System.Transactions;
 
 namespace Intime.OPC.Service.Support
 {
@@ -96,65 +98,64 @@ namespace Intime.OPC.Service.Support
 
         public bool CreateShippingSale(int userId, ShippingSaleCreateDto shippingSaleDto)
         {
-            
             var dt = DateTime.Now;
-            var user = _accountService.GetByUserID(UserId);
+            var user = _accountService.GetByUserID(userId);
             _orderRepository.SetCurrentUser(user);
-           
+
             _shippingSaleRepository.SetCurrentUser(user);
             _sectionRepository.SetCurrentUser(user);
             _saleRepository.SetCurrentUser(user);
 
             var order = _orderRepository.GetOrderByOrderNo(shippingSaleDto.OrderNo);
-           foreach (var saleID in shippingSaleDto.SaleOrderIDs)
+            foreach (var saleID in shippingSaleDto.SaleOrderIDs)
             {
                 var saleOrder = _saleRepository.GetBySaleNo(saleID);
-                Section section = null;;
-               if (saleOrder!=null)
-                section = _sectionRepository.GetByID((int)saleOrder.SectionId);
- 
+                Section section = null; ;
+                if (saleOrder != null)
+                    section = _sectionRepository.GetByID((int)saleOrder.SectionId);
+
                 var sale = new OPC_ShippingSale();
                 sale.CreateDate = dt;
                 sale.CreateUser = userId;
                 sale.UpdateDate = dt;
                 sale.UpdateUser = userId;
                 sale.OrderNo = shippingSaleDto.OrderNo;
-                
+
                 sale.ShipViaId = shippingSaleDto.ShipViaID;
                 sale.ShippingCode = shippingSaleDto.ShippingCode;
-                sale.ShippingFee = (decimal) (shippingSaleDto.ShippingFee);
+                sale.ShippingFee = (decimal)(shippingSaleDto.ShippingFee);
                 sale.ShippingStatus = EnumSaleOrderStatus.PrintInvoice.AsID();
                 sale.ShipViaName = shippingSaleDto.ShipViaName;
                 sale.ShippingAddress = order.ShippingAddress;
                 sale.ShippingContactPerson = order.ShippingContactPerson;
                 sale.ShippingContactPhone = order.ShippingContactPhone;
-                if (section!=null)
+                if (section != null)
                     sale.StoreId = section.StoreId;
 
                 //sale.BrandId = order.BrandId;
-               
+
 
                 //验证是否已经生成过发货单
                 var lst = _shippingSaleRepository.GetBySaleOrderNo(saleID);
 
-                if (lst!=null)
+                if (lst != null)
                 {
                     throw new ShippingSaleExistsException(shippingSaleDto.ShippingCode);
                 }
                 //验证发货单号 是否重复
-                var e=  _shippingSaleRepository.GetByShippingCode(shippingSaleDto.ShippingCode,1,1);
-                if (e.TotalCount>0)
+                var e = _shippingSaleRepository.GetByShippingCode(shippingSaleDto.ShippingCode, 1, 1);
+                if (e.TotalCount > 0)
                 {
                     throw new ShippingSaleExistsException(shippingSaleDto.ShippingCode);
                 }
 
-               var pSale=  _saleRepository.GetBySaleNo(saleID);
+                var pSale = _saleRepository.GetBySaleNo(saleID);
                 pSale.ShippingCode = sale.ShippingCode;
                 pSale.ShippingStatus = sale.ShippingStatus;
                 _saleRepository.Update(pSale);
 
                 var bl = _shippingSaleRepository.Create(sale);
-               // _saleRepository.UpdateSatus(saleID, EnumSaleOrderStatus.PrintExpress, userId);
+                _saleRepository.UpdateSatus(saleID, EnumSaleOrderStatus.PrintExpress, userId);
             }
 
             return true;

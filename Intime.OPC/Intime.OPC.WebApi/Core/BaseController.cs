@@ -18,6 +18,28 @@ namespace Intime.OPC.WebApi.Core
             return LoggerManager.Current();
         }
 
+        public TextResult Error(string message)
+        {
+            return new TextResult(message,this.Request);
+        }
+
+        public int UserId
+        {
+            get
+            {
+                int uid;
+                if (int.TryParse(this.Request.Properties[AccessTokenConst.UseridPropertiesName].ToString(), out uid))
+                {
+                    return uid;
+                }
+                throw new UnauthorizedAccessException();
+            }
+            set
+            {
+                throw new InvalidOperationException("不允许的操作");
+            }
+        }
+
         protected IHttpActionResult DoFunction(Func<dynamic> action, string errorMessage = "")
         {
             try

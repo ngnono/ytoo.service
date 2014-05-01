@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.UI.WebControls;
@@ -26,6 +27,7 @@ using Intime.OPC.Repository;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Bindings;
 using Intime.OPC.WebApi.Core;
+using YintaiHZhouContext = Intime.OPC.Domain.Models.YintaiHZhouContext;
 
 namespace Intime.OPC.WebApi.Controllers
 {
@@ -38,7 +40,7 @@ namespace Intime.OPC.WebApi.Controllers
         ///     The _order service
         /// </summary>
         private readonly IOrderService _orderService;
-        
+
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="OrderController" /> class.
@@ -47,7 +49,7 @@ namespace Intime.OPC.WebApi.Controllers
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
-            
+
         }
 
         /// <summary>
@@ -88,10 +90,12 @@ namespace Intime.OPC.WebApi.Controllers
                     pageSize = 20;
                 }
 
+                _orderService.UserId = uid;
+
                 var lst = _orderService.GetOrder(orderNo, orderSource, startCreateDate, endCreateDate, storeId, brandId,
                     status, paymentType, outGoodsType, shippingContactPhone, expressDeliveryCode, expressDeliveryCompany,
-                    uid,pageIndex,pageSize);
-                
+                    uid, pageIndex, pageSize);
+
                 return Ok(lst);
             }
             catch (Exception ex)
@@ -103,13 +107,13 @@ namespace Intime.OPC.WebApi.Controllers
 
 
         [HttpPost]
-        public IHttpActionResult GetOrderItemsByOrderNo(string orderNo, int pageIndex, int pageSize)
+        public IHttpActionResult GetOrderItemsByOrderNo(string orderNo, int pageIndex, int pageSize, [UserId] int uid)
         {
             //todo 查询订单明细 未实现
             return DoFunction(() =>
             {
-                return _orderService.GetOrderItems(orderNo,pageIndex,pageSize);
-                return null;
+                _orderService.UserId = uid;
+                return _orderService.GetOrderItems(orderNo, pageIndex, pageSize);
             }, "读取订单明细失败");
 
         }
@@ -118,10 +122,8 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetOrderByShippingSaleNo(string shippingNo, int pageIndex, int pageSize, [UserId] int uid)
         {
             _orderService.UserId = uid;
-            return DoFunction(() => _orderService.GetOrderByShippingNo(shippingNo,pageIndex,pageSize), "通过快递单查询订单失败");
+            return DoFunction(() => _orderService.GetOrderByShippingNo(shippingNo, pageIndex, pageSize), "通过快递单查询订单失败");
         }
-
-
 
         /// <summary>
         /// Gets the order by oder no.
@@ -134,9 +136,40 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() =>
             {
                 _orderService.UserId = uid;
-               return   _orderService.GetOrderByOrderNo(orderNo);
+                return _orderService.GetOrderByOrderNo(orderNo);
             });
+            //using (var db = new Repository.YintaiHZhouContext())
+            //{
+            //    var order = db.Orders.Where(x => x.OrderNo == orderNo)
+            //        .Join(db.OrderTransactions, o => o.OrderNo, x => x.OrderNo, (o, t)=>new
+            //        {
+            //            Id=o.Id,
+            //            OrderNo = o.OrderNo,
+            //            OrderChannelNo = t.TransNo,
+            //            PaymentMethodName = o.PaymentMethodName,
+            //            OrderSouce = o.OrderSource,
+            //            Status = o.Status,
+            //            Quantity = 0,
+            //            TotalAmount = o.TotalAmount,
+            //            CustomerFreight  = o.ShippingFee,
+            //            MustPayTotal = t.Amount,
+            //            BuyDate  = o.CreateDate,
+            //            CustomerName  = o.ShippingContactPerson,
+            //            CustomerAddress = o.ShippingAddress,
+            //            CustomerPhone = o.ShippingContactPhone,
+            //            CustomerRemark = o.Memo,
+            //            IfReceipt = o.NeedInvoice,
+            //            ReceiptHead = o.InvoiceSubject,
+            //            ReceiptContent = o.InvoiceDetail,
+            //            OutGoodsType = 1,
+            //            PostCode = o.ShippingZipCode,
+            //            ShippingNo = o.ShippingNo,
+            //            ExpressNo  = string.Empty,
+            //            ExpressCompany = o.ShippingVia,
 
+            //        });
+            //    return Ok(order);
+            //}
         }
 
         /// <summary>
@@ -152,17 +185,11 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() =>
             {
                 _orderService.UserId = uid;
-               return  _orderService.GetOrderByOderNoTime(orderNo, starTime, endTime, pageIndex, pageSize);
-
-            }
-                );
-            
+                return _orderService.GetOrderByOderNoTime(orderNo, starTime, endTime, pageIndex, pageSize);
+            });
         }
 
         #region 客服退货查询-退货信息
-
-
-
         [HttpPost]
         public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request, [UserId] int uid)
         {
@@ -182,7 +209,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetShippingBackByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request, [UserId] int uid)
         {
-            
+
             return DoFunction(() =>
             {
                 _orderService.UserId = uid;
@@ -201,8 +228,6 @@ namespace Intime.OPC.WebApi.Controllers
                 _orderService.UserId = uid;
                 return _orderService.GetSaleRmaByReturnGoodsCompensate(request);
             });
-            //return DoFunction(() => _saleRmaService.GetByReturnGoodsCompensate(request));
-            //return _orderService.GetShippingBackByReturnGoodsInfo(request);
         }
 
         //ReturnGoodsInfoRequest
@@ -228,7 +253,6 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult SetSaleOrderVoid([FromBody] IEnumerable<string> saleOrderNos, [UserId] int uid)
         {
-            //todo 缺货提醒-缺货订单 取消销售单
             return DoAction(() =>
             {
                 _orderService.UserId = uid;
@@ -236,7 +260,6 @@ namespace Intime.OPC.WebApi.Controllers
                 {
                     _orderService.SetSaleOrderVoid(saleOrderNo);
                 }
-
             });
         }
 
@@ -285,7 +308,7 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                _orderService.UserId = uid; 
+                _orderService.UserId = uid;
                 return _orderService.WebSiteStatReturnDetail(request);
             });
         }
@@ -318,8 +341,8 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult AddOrderComment([FromBody] OPC_OrderComment comment, [UserId] int uid)
         {
             return DoFunction(() =>
-             {
-
+            {
+                _orderService.UserId = uid;
                  comment.CreateDate = DateTime.Now;
                  comment.CreateUser = uid;
                  comment.UpdateDate = comment.CreateDate;
@@ -334,10 +357,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetCommentByOderNo(string orderNo)
+        public IHttpActionResult GetCommentByOderNo(string orderNo, [UserId] int uid)
         {
             return base.DoFunction(() =>
             {
+                _orderService.UserId = uid;
                 return _orderService.GetCommentByOderNo(orderNo);
 
             }, "读取订单备注失败！");

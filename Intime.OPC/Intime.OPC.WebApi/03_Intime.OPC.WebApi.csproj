@@ -83,6 +83,7 @@
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Reflection.Context" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -135,6 +136,7 @@
     <Compile Include="Core\MessageHandlers\Signature\AppSecurityManager.cs" />
     <Compile Include="Core\Security\Cryptography\CryptoHelper.cs" />
     <Compile Include="Core\Security\SecurityUtils.cs" />
+    <Compile Include="Core\TextResult.cs" />
     <Compile Include="Extentison\ControllerExtension.cs" />
     <Compile Include="Models\AccessTokenModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
