@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
+using Intime.OPC.Service.Map;
 using Intime.OPC.WebApi.Bindings;
 using Intime.OPC.WebApi.Core;
+using YintaiHZhouContext = Intime.OPC.Repository.YintaiHZhouContext;
 
 namespace Intime.OPC.WebApi.Controllers
 {
@@ -40,8 +44,35 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() =>
             {
                 _saleService.UserId = uid;
-                return _saleService.GetSaleOrderDetails(saleOrderNo, uid,1,1000).Result;
+                return _saleService.GetSaleOrderDetails(saleOrderNo, uid, 1, 1000).Result;
             }, "读取销售单详情失败");
+
+            using (var db = new YintaiHZhouContext())
+            {
+                var linq =
+                    db.OPC_SaleDetail.Where(o => o.SaleOrderNo == saleOrderNo)
+                        .Join(db.OrderItems, d => d.OrderItemId, i => i.Id, (o, i) => new{o,i}).Join(db.Brands.Where(b=>b.Status == 1),o=>o.i.BrandId,b=>b.Id,(o,b)=>new{o=o.o,i=o.i,b}).Join(db.OPC_Stock,o=>o.o.StockId,s=>s.Id,(o,x)=>new
+                        {
+                            Id = o.o.Id,
+                            ProductNo = x.ProductCode,
+                            SaleOrderNo = o.o.SaleOrderNo,
+                            StyleNo = x.ProductCode,
+                            Size = o.i.SizeValueName,
+                            Color = o.i.ColorValueName,
+                            Brand = o.b.Name,
+                            SellPrice = o.i.ItemPrice,
+                            Price = o.i.UnitPrice,
+                            SalePrice  = o.i.ItemPrice,
+                            SellCount = o.o.SaleCount,
+                            ReturnCount  = 0,
+                            LabelPrice  = o.i.UnitPrice,
+                            Remark  = o.o.Remark,
+                            SectionCode = o.o.SectionCode,
+                            ProductName = o.i.ProductDesc
+                        }).ToList<dynamic>();
+                var dtos = linq.Select(o => Mapper.Map<dynamic, SaleDetailDto>(o)).Cast<SaleDetailDto>().ToList();
+                return Ok(new PageResult<SaleDetailDto>(dtos, dtos.Count));
+            }
         }
 
         [HttpPost]

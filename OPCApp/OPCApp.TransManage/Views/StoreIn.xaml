@@ -124,20 +124,20 @@
         </StackPanel>
         <DataGrid Grid.Row="5" IsReadOnly="True" ItemsSource="{Binding InvoiceDetail4List}" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="款号" Width="150" Binding="{Binding SectionNumber}"
+                <DataGridTextColumn Header="款号" Width="150" Binding="{Binding StyleNo}"
                                     ElementStyle="{StaticResource CellRight}" />
-                <DataGridTextColumn Header="规格" Binding="{Binding Standard}" ElementStyle="{StaticResource CellRight}" />
-                <DataGridTextColumn Header="色码" Binding="{Binding ColorCode}" />
-                <DataGridTextColumn Header="销售价" Binding="{Binding SalePrice}"
+                <DataGridTextColumn Header="规格" Binding="{Binding Size}" ElementStyle="{StaticResource CellRight}" />
+                <DataGridTextColumn Header="色码" Binding="{Binding Color}" />
+                <DataGridTextColumn Header="销售价" Binding="{Binding SellPrice}"
                                     ElementStyle="{StaticResource CellRight}" />
-                <DataGridTextColumn Header="销售数量" Binding="{Binding SaleCount}"
+                <DataGridTextColumn Header="销售数量" Binding="{Binding SellCount}"
                                     ElementStyle="{StaticResource CellRight}" />
-                <DataGridTextColumn Header="已退货数量" Binding="{Binding RMACount}"
+                <DataGridTextColumn Header="已退货数量" Binding="{Binding ReturnCount}"
                                     ElementStyle="{StaticResource CellRight}" />
                 <DataGridTextColumn Width="150" Header="品牌" Binding="{Binding Brand}" />
-                <DataGridTextColumn Header="吊牌价" Binding="{Binding OriginalPrice}"
+                <DataGridTextColumn Header="吊牌价" Binding="{Binding LablePrice}"
                                     ElementStyle="{StaticResource CellRight}" />
-                <DataGridTextColumn Header="现价" Binding="{Binding PresentPrice}"
+                <DataGridTextColumn Header="现价" Binding="{Binding SellPrice}"
                                     ElementStyle="{StaticResource CellRight}" />
                 <DataGridTextColumn Width="150" Header="备注" Visibility="Hidden" Binding="{Binding SalesAmount}" />
                 <DataGridTextColumn Header="促销价格" Binding="{Binding SalesPrice}"
