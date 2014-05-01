@@ -79,15 +79,18 @@ namespace Intime.OPC.WebApi.Controllers
             string outGoodsType,
             string shippingContactPhone,
             string expressDeliveryCode,
-            int expressDeliveryCompany, int pageIndex, int pageSize = 20
-            )
+            int expressDeliveryCompany, int pageIndex, int pageSize, [UserId] int uid)
         {
             try
             {
-                int userId = GetCurrentUserId();
+                if (pageSize <= 0)
+                {
+                    pageSize = 20;
+                }
+
                 var lst = _orderService.GetOrder(orderNo, orderSource, startCreateDate, endCreateDate, storeId, brandId,
                     status, paymentType, outGoodsType, shippingContactPhone, expressDeliveryCode, expressDeliveryCompany,
-                    userId,pageIndex,pageSize);
+                    uid,pageIndex,pageSize);
                 
                 return Ok(lst);
             }
@@ -112,14 +115,10 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult GetOrderByShippingSaleNo(string shippingNo, int pageIndex, int pageSize)
+        public IHttpActionResult GetOrderByShippingSaleNo(string shippingNo, int pageIndex, int pageSize, [UserId] int uid)
         {
-            return DoFunction(() =>
-            {
-               _orderService.UserId= GetCurrentUserId();
-                return _orderService.GetOrderByShippingNo(shippingNo,pageIndex,pageSize);
-
-            }, "通过快递单查询订单失败");
+            _orderService.UserId = uid;
+            return DoFunction(() => _orderService.GetOrderByShippingNo(shippingNo,pageIndex,pageSize), "通过快递单查询订单失败");
         }
 
 
@@ -130,11 +129,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetOrderByOderNo(string orderNo)
+        public IHttpActionResult GetOrderByOderNo(string orderNo, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _orderService.UserId = GetCurrentUserId();
+                _orderService.UserId = uid;
                return   _orderService.GetOrderByOrderNo(orderNo);
             });
 
@@ -148,11 +147,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="endTime">The end time.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime, int pageIndex, int pageSize)
+        public IHttpActionResult GetOrderByOderNoTime(string orderNo, DateTime starTime, DateTime endTime, int pageIndex, int pageSize, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _orderService.UserId = GetCurrentUserId();
+                _orderService.UserId = uid;
                return  _orderService.GetOrderByOderNoTime(orderNo, starTime, endTime, pageIndex, pageSize);
 
             }
@@ -165,12 +164,11 @@ namespace Intime.OPC.WebApi.Controllers
 
 
         [HttpPost]
-        public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
+        public IHttpActionResult GetByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request, [UserId] int uid)
         {
-            var userId = GetCurrentUserId();
             return DoFunction(() =>
             {
-                _orderService.UserId = userId;
+                _orderService.UserId = uid;
                 return _orderService.GetByReturnGoodsInfo(request);
             }, "查询订单信息失败");
         }
@@ -182,12 +180,12 @@ namespace Intime.OPC.WebApi.Controllers
 
 
         [HttpPost]
-        public IHttpActionResult GetShippingBackByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request)
+        public IHttpActionResult GetShippingBackByReturnGoodsInfo([FromUri] ReturnGoodsInfoRequest request, [UserId] int uid)
         {
             
             return DoFunction(() =>
             {
-                _orderService.UserId = GetCurrentUserId();
+                _orderService.UserId = uid;
                 return _orderService.GetShippingBackByReturnGoodsInfo(request);
             }, "查询订单信息失败");
         }
@@ -196,11 +194,11 @@ namespace Intime.OPC.WebApi.Controllers
 
         #region 客服退货查询-退货赔偿退回
         [HttpPost]
-        public IHttpActionResult GetByReturnGoodsCompensate([FromUri] ReturnGoodsInfoRequest request)
+        public IHttpActionResult GetByReturnGoodsCompensate([FromUri] ReturnGoodsInfoRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _orderService.UserId = GetCurrentUserId();
+                _orderService.UserId = uid;
                 return _orderService.GetSaleRmaByReturnGoodsCompensate(request);
             });
             //return DoFunction(() => _saleRmaService.GetByReturnGoodsCompensate(request));
@@ -218,22 +216,22 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetOrderByOutOfStockNotify([FromUri] OutOfStockNotifyRequest request)
+        public IHttpActionResult GetOrderByOutOfStockNotify([FromUri] OutOfStockNotifyRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _orderService.UserId = GetCurrentUserId();
+                _orderService.UserId = uid;
                 return _orderService.GetOrderByOutOfStockNotify(request);
             });
         }
 
         [HttpPost]
-        public IHttpActionResult SetSaleOrderVoid([FromBody] IEnumerable<string> saleOrderNos)
+        public IHttpActionResult SetSaleOrderVoid([FromBody] IEnumerable<string> saleOrderNos, [UserId] int uid)
         {
             //todo 缺货提醒-缺货订单 取消销售单
             return DoAction(() =>
             {
-                _orderService.UserId = GetCurrentUserId();
+                _orderService.UserId = uid;
                 foreach (var saleOrderNo in saleOrderNos)
                 {
                     _orderService.SetSaleOrderVoid(saleOrderNo);
@@ -252,11 +250,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetOrderOfVoid([FromUri] OutOfStockNotifyRequest request)
+        public IHttpActionResult GetOrderOfVoid([FromUri] OutOfStockNotifyRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _orderService.UserId = GetCurrentUserId();
+                _orderService.UserId = uid;
                 return _orderService.GetOrderOfVoid(request);
             });
         }
@@ -268,11 +266,11 @@ namespace Intime.OPC.WebApi.Controllers
         //SearchStatRequest
 
         [HttpPost]
-        public IHttpActionResult WebSiteStatSaleDetail([FromUri] SearchStatRequest request)
+        public IHttpActionResult WebSiteStatSaleDetail([FromUri] SearchStatRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _orderService.UserId = GetCurrentUserId();
+                _orderService.UserId = uid;
                 return _orderService.WebSiteStatSaleDetail(request);
             });
         }
@@ -283,11 +281,11 @@ namespace Intime.OPC.WebApi.Controllers
         //SearchStatRequest
 
         [HttpPost]
-        public IHttpActionResult WebSiteStatReturnDetail([FromUri] SearchStatRequest request)
+        public IHttpActionResult WebSiteStatReturnDetail([FromUri] SearchStatRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _orderService.UserId = GetCurrentUserId(); 
+                _orderService.UserId = uid; 
                 return _orderService.WebSiteStatReturnDetail(request);
             });
         }
@@ -298,11 +296,11 @@ namespace Intime.OPC.WebApi.Controllers
         //SearchStatRequest
 
         [HttpPost]
-        public IHttpActionResult WebSiteCashier([FromUri] SearchCashierRequest request)
+        public IHttpActionResult WebSiteCashier([FromUri] SearchCashierRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _orderService.UserId = GetCurrentUserId();
+                _orderService.UserId = uid;
                 return _orderService.WebSiteCashier(request);
             });
         }
@@ -317,13 +315,13 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="sale">The sale.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult AddOrderComment([FromBody] OPC_OrderComment comment)
+        public IHttpActionResult AddOrderComment([FromBody] OPC_OrderComment comment, [UserId] int uid)
         {
             return DoFunction(() =>
              {
 
                  comment.CreateDate = DateTime.Now;
-                 comment.CreateUser = this.GetCurrentUserId();
+                 comment.CreateUser = uid;
                  comment.UpdateDate = comment.CreateDate;
                  comment.UpdateUser = comment.CreateUser;
                  return _orderService.AddOrderComment(comment);

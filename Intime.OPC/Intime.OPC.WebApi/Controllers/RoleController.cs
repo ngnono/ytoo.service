@@ -26,12 +26,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="roleUserDto">The role user dto.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult SetUsers([FromBody] RoleUserDto roleUserDto)
+        public IHttpActionResult SetUsers([FromBody] RoleUserDto roleUserDto, [UserId] int uid)
         {
             try
             {
-                var userID = GetCurrentUserId();
-                _roleService.SetUsers(roleUserDto, userID);
+                _roleService.SetUsers(roleUserDto, uid);
                 return Ok();
             }
             catch (Exception ex)

@@ -9,21 +9,7 @@ namespace Intime.OPC.WebApi.Core
 {
     public class BaseController : ApiController
     {
-        public int UserId
-        {
-            get
-            {
-                int uid;
-                var userId = this.Request.Properties[AccessTokenConst.UseridPropertiesName].ToString();
-                if (int.TryParse(userId, out uid))
-                {
-                    return uid;
-                }
-                return -1;
-            }
-        }
-
-        /// <summary>
+       /// <summary>
         ///     Gets the log.
         /// </summary>
         /// <returns>ILog.</returns>
@@ -32,22 +18,11 @@ namespace Intime.OPC.WebApi.Core
             return LoggerManager.Current();
         }
 
-        /// <summary>
-        ///     获得当前用户
-        /// </summary>
-        /// <returns>System.Nullable{System.Int32}.</returns>
-        /// <exception cref="Intime.OPC.Domain.Exception.UserIdConverException"></exception>
-        protected int GetCurrentUserId()
-        {
-            return UserId;
-        }
-
-        protected IHttpActionResult DoFunction(Func<dynamic> action, string falseMeg = "")
+        protected IHttpActionResult DoFunction(Func<dynamic> action, string errorMessage = "")
         {
             try
             {
-                var o = action();
-                return Ok(o);
+                return Ok(action());
             }
             catch (HttpResponseException ex)
             {
