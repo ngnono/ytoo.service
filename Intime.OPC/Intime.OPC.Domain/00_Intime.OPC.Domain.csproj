@@ -78,6 +78,7 @@
     <Compile Include="Dto\Financial\ReturnGoodsStatDto.cs" />
     <Compile Include="Dto\Financial\SaleDetailStatDto.cs" />
     <Compile Include="Dto\OrderItemDto.cs" />
+    <Compile Include="Dto\Request\SaleOrderDetailRequestDto.cs" />
     <Compile Include="Dto\RmaDetail.cs" />
     <Compile Include="Dto\RMADto.cs" />
     <Compile Include="Dto\RmaExpressDto.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Enums\EnumSaleStatus.cs" />
     <Compile Include="Exception\OrderNoIsNullException.cs" />
     <Compile Include="Exception\OrderNotExistsException.cs" />
+    <Compile Include="Exception\PackageException.cs" />
     <Compile Include="Exception\RoleNotExistsExcepion.cs" />
     <Compile Include="Exception\SaleOrderNotExistsException.cs" />
     <Compile Include="Exception\ShippingSaleNotExistsException.cs" />
@@ -195,9 +197,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dto\Request\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

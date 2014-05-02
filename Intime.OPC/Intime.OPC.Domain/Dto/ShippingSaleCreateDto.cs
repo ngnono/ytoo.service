@@ -13,7 +13,7 @@ namespace Intime.OPC.Domain.Dto
             SaleOrderIDs=new List<string>();
         }
 
-        public double ShippingFee { get; set; }
+        public decimal ShippingFee { get; set; }
 
         public string ShippingCode { get; set; }
 
@@ -23,6 +23,5 @@ namespace Intime.OPC.Domain.Dto
         public string OrderNo { get; set; }
 
         public IList<string> SaleOrderIDs { get; set; }
-
     }
 }

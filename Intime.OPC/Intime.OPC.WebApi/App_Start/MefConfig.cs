@@ -31,7 +31,7 @@ namespace Intime.OPC.WebApi
 
             // Export namespace {*.Support.*}
             conventions.ForTypesMatching(t => t.Namespace != null &&
-                                              (t.Namespace.EndsWith(".Support") || t.Namespace.Contains(".Support.")))
+                                              (t.Namespace.EndsWith(".Support") || t.Namespace.Contains(".Support.") || t.Namespace.EndsWith("Impl") || t.Namespace.Contains(".Impl.")))
                 .Export()
                 .ExportInterfaces();
 

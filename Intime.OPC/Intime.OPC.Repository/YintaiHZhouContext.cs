@@ -65,9 +65,11 @@ namespace Intime.OPC.Repository
 
          public DbSet<User> Users { get; set; }
 
+         public DbSet<OPC_ShippingSale> OPC_ShippingSales { get; set; }
+
          protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-          
+            modelBuilder.Configurations.Add(new OPC_ShippingSaleMap());
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMenuMap());

@@ -130,10 +130,10 @@ namespace Intime.OPC.Repository.Support
                             o.Brand = t.OrderItem.Brand.Name;
                         }
                     }
-                    o.LabelPrice = (double)t.OrderItem.OrderItems.UnitPrice;
-                    o.Price = (double)t.OrderItem.OrderItems.ItemPrice;
-                    o.SalePrice = (double)t.OrderItem.OrderItems.ItemPrice;
-                    o.SellPrice = (double)t.OrderItem.OrderItems.ItemPrice;
+                    //o.LabelPrice = (double)t.OrderItem.OrderItems.UnitPrice;
+                    //o.Price = (double)t.OrderItem.OrderItems.ItemPrice;
+                    //o.SalePrice = (double)t.OrderItem.OrderItems.ItemPrice;
+                    //o.SellPrice = (double)t.OrderItem.OrderItems.ItemPrice;
                     o.SectionCode = t.Sale.SectionCode;
                     //o.StyleNo=t.Stock.ProductCode
                     o.StyleNo = t.OrderItem.OrderItems.StoreItemNo;

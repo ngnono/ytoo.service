@@ -59,8 +59,14 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BaseService.cs" />
+    <Compile Include="Contract\IExpressService.cs" />
+    <Compile Include="Contract\IOrderService.cs" />
+    <Compile Include="Contract\ISaleOrderService.cs" />
     <Compile Include="IConnectProduct.cs" />
     <Compile Include="IEnumService.cs" />
+    <Compile Include="Impl\ExpressService.cs" />
+    <Compile Include="Impl\OrderService.cs" />
+    <Compile Include="Impl\SaleOrderService.cs" />
     <Compile Include="IOrgService.cs" />
     <Compile Include="IBrandService.cs" />
     <Compile Include="IMenuService.cs" />

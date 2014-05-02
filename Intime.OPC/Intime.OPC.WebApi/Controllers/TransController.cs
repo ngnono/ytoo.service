@@ -18,6 +18,7 @@ using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service;
+using Intime.OPC.Service.Contract;
 using Intime.OPC.Service.Map;
 using Intime.OPC.WebApi.Bindings;
 using Intime.OPC.WebApi.Core;
@@ -44,17 +45,28 @@ namespace Intime.OPC.WebApi.Controllers
         private IRmaService _rmaService;
         IEnumService _enumService;
         private IPaymentMethodRepository _paymentMethodRepository;
+        private ISaleOrderService _saleOrderService;
+        private IExpressService _expressService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="TransController" /> class.
         /// </summary>
         /// <param name="transService">The trans service.</param>
-        public TransController(ITransService transService, IEnumService enumService, ISaleRMAService saleRmaService, IRmaService rmaService, IPaymentMethodRepository paymentMethodRepository)
+        public TransController(ITransService transService, 
+            IEnumService enumService, 
+            ISaleRMAService saleRmaService, 
+            IRmaService rmaService, 
+            IPaymentMethodRepository paymentMethodRepository,
+            ISaleOrderService saleOrderService,
+            IExpressService expressService
+            )
         {
             _transService = transService;
             _enumService = enumService;
             _saleRmaService = saleRmaService;
             _rmaService = rmaService;
             _paymentMethodRepository = paymentMethodRepository;
+            _saleOrderService = saleOrderService;
+            _expressService = expressService;
         }
 
         /// <summary>
@@ -92,6 +104,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="shippingSaleNo">快递单编号</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
+        [Obsolete("废弃此方法 Wallace 2014-05-02")]
         public IHttpActionResult GetSaleByShippingSaleNo(string shippingSaleNo, [UserId] int uid)
         {
             return DoFunction(() =>
@@ -99,6 +112,17 @@ namespace Intime.OPC.WebApi.Controllers
                 _transService.UserId = uid;
                 return _transService.GetSaleByShippingSaleNo(shippingSaleNo);
             }, "查询销售单信息失败");
+        }
+
+        /// <summary>
+        /// 根据发货单Id查找所有打包在一起的销售单
+        /// </summary>
+        /// <param name="packageId">包裹Id</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult QueryRelatedSaleOrders(int packageId)
+        {
+            return DoFunction(() => Mapper.Map<OPC_Sale,SaleDto>(_saleOrderService.GetSaleOrdersByPachageId(packageId)));
         }
 
         //ddd
@@ -114,7 +138,6 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetShippingSale(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize = 20, [UserId] int uid = 0)
         {
-
             return DoFunction(() =>
             {
                 _transService.UserId = uid;
@@ -176,81 +199,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult CreateShippingSale([FromBody]ShippingSaleCreateDto shippingSaleDto, [UserId] int uid)
         {
-            try
-            {
-                //未做用户权限校验 需要判断订单所属门店是否是当前用户所在门店
-                using (var db = new YintaiHZhouContext())
-                {
-                    using (var ts = new TransactionScope())
-                    {
-                        var order = db.Orders.FirstOrDefault(x => x.OrderNo == shippingSaleDto.OrderNo);
-                        foreach (var saleOrderNo in shippingSaleDto.SaleOrderIDs)
-                        {
-                            if (order == null)
-                            {
-                                return Error("无效的订单号");
-                            }
-                            var saleOrder = db.OPC_Sale.FirstOrDefault(x => x.SaleOrderNo == saleOrderNo);
-                            if (saleOrder == null)
-                            {
-                                continue;
-                            }
-                            var section = db.Sections.FirstOrDefault(x => x.Id == saleOrder.SectionId);
-                            if (section == null)
-                            {
-                                return Error("订单所属门店错误");
-                            }
-
-                            var shippingSale =
-                                db.OPC_ShippingSale.FirstOrDefault(
-                                    x => x.OrderNo == saleOrder.OrderNo && x.SaleOrderNo == saleOrder.SaleOrderNo);
-                            if (shippingSale != null)
-                            {
-                                shippingSale.ShippingCode = shippingSaleDto.ShippingCode;
-                                shippingSale.ShipViaName = shippingSaleDto.ShipViaName;
-                                shippingSale.ShipViaId = shippingSaleDto.ShipViaID;
-                            }
-                            else
-                            {
-                                shippingSale = db.OPC_ShippingSale.Add(new OPC_ShippingSale()
-                                {
-                                    CreateDate = DateTime.Now,
-                                    CreateUser = uid,
-                                    UpdateDate = DateTime.Now,
-                                    UpdateUser = uid,
-                                    OrderNo = saleOrder.OrderNo,
-                                    SaleOrderNo = saleOrder.SaleOrderNo,
-                                    ShipViaId = shippingSaleDto.ShipViaID,
-                                    ShippingCode = shippingSaleDto.ShippingCode,
-                                    ShippingFee = (decimal) (shippingSaleDto.ShippingFee),
-                                    ShippingStatus = EnumSaleOrderStatus.PrintInvoice.AsID(),
-                                    ShipViaName = shippingSaleDto.ShipViaName,
-                                    ShippingAddress = order.ShippingAddress,
-                                    ShippingContactPerson = order.ShippingContactPerson,
-                                    ShippingContactPhone = order.ShippingContactPhone,
-                                    StoreId = section.StoreId,
-                                });
-                            }
-
-                            saleOrder.ShipViaId = shippingSaleDto.ShipViaID;
-                            saleOrder.ShippingCode = shippingSaleDto.ShippingCode;
-                            saleOrder.ShippingStatus = shippingSale.ShippingStatus;
-                            saleOrder.UpdatedDate = DateTime.Now;
-                            saleOrder.UpdatedUser = uid;
-                            saleOrder.Status = (int) EnumSaleOrderStatus.PrintExpress;
-                        }
-                        db.SaveChanges();
-                        ts.Complete();
-                    }
-                }
-                return this.Ok();
-            }
-            catch (Exception ex)
-            {
-                GetLog().Error(ex);
-                return Error(ex.Message);
-            }
-
+            return DoAction(() => _expressService.CreatePackage(shippingSaleDto,uid));
         }
 
         #region 包裹签收

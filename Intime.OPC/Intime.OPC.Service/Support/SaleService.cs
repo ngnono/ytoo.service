@@ -56,6 +56,7 @@ namespace Intime.OPC.Service.Support
             return true;
         }
 
+        [Obsolete("废弃此方法 Wallace 2014-05-02")]
         public PageResult<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int userId,int pageIndex,int pageSize)
         {
             if (string.IsNullOrEmpty(saleOrderNo))
