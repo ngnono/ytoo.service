@@ -13,7 +13,7 @@ namespace Intime.OPC.Domain.Models
         public Nullable<int> ShipViaId { get; set; }
         public int Status { get; set; }
         public string ShippingCode { get; set; }
-        public int ShippingSaleId { get; set; }
+        public Nullable<int> ShippingSaleId { get; set; }
         public Nullable<decimal> ShippingFee { get; set; }
         public Nullable<int> ShippingStatus { get; set; }
         public string ShippingRemark { get; set; }

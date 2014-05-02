@@ -140,6 +140,8 @@
     <Compile Include="Models\Mapping\OrderMap.cs" />
     <Compile Include="Models\Mapping\OrderTransactionMap.cs" />
     <Compile Include="Models\Mapping\PaymentMethodMap.cs" />
+    <Compile Include="Models\Mapping\ProductMap.cs" />
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Mapping\RMAItemMap.cs" />
     <Compile Include="Models\Mapping\RMAMap.cs" />
     <Compile Include="Models\Mapping\RMAReasonMap.cs" />

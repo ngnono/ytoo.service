@@ -46,11 +46,6 @@ namespace Intime.OPC.WebApi.Core
             {
                 return Ok(action());
             }
-            catch (HttpResponseException ex)
-            {
-                GetLog().Error(ex);
-                return new StatusCodeResult(HttpStatusCode.Unauthorized, this);
-            }
             catch (Exception ex)
             {
                 GetLog().Error(ex);

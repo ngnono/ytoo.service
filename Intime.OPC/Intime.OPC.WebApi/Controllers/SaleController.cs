@@ -42,7 +42,7 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() =>
             {
                 var saleDetails = _saleOrderService.GetSaleDetails(saleOrderNo);
-                return Ok(new PageResult<SaleDetailDto>(saleDetails, saleDetails.Count));
+                return new PageResult<SaleDetailDto>(saleDetails, saleDetails.Count).Result;
             });
         }
 
