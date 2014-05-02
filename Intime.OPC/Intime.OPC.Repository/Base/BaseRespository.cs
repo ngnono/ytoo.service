@@ -23,6 +23,7 @@ using Intime.OPC.Domain;
 using Intime.OPC.Domain.Base;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Exception;
+using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository.Base
 {
