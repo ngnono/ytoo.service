@@ -41,7 +41,7 @@ namespace Intime.OPC.Service.Impl
                             LabelPrice = o.item.UnitPrice.HasValue ? o.item.UnitPrice.Value : (decimal)0.0,
                             Remark = o.detail.Remark,
                             SectionCode = o.detail.SectionCode,
-                            ProductName = o.item.ProductDesc
+                            ProductName = o.item.ProductName
                         }).ToList();
             }
         }
