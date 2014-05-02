@@ -14,9 +14,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Intime.OPC.Domain
 {
+    [DataContract]
     /// <summary>
     ///     Class PageResult
     /// </summary>
@@ -40,12 +42,14 @@ namespace Intime.OPC.Domain
 
         #region Properties
 
+        [DataMember]
         /// <summary>
         ///     分页数据
         /// </summary>
         /// <value>The result.</value>
         public IList<TEntity> Result { get; private set; }
 
+        [DataMember]
         /// <summary>
         ///     结果总数
         /// </summary>

@@ -29,7 +29,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Synchronizers
         private readonly IUpdateDateStore _updateDateStore;
         private readonly string _lastUpdateDateTimeKey = string.Empty;
 
-        private const int PageSize = 2000;
+        private const int PageSize = 50;
 
         public AllSynchronizer(IRemoteRepository remoteRepository, IUpdateDateStore updateDateStore)
         {

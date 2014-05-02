@@ -380,7 +380,8 @@ namespace OPCApp.TransManage.ViewModels
         public void SearchRaDoc(OPC_ShippingSale opcShippingSale)
         {
             if (opcShippingSale == null) return;
-            SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(opcShippingSale.GoodsOutCode);
+            //SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(opcShippingSale.GoodsOutCode);
+            SaleList = AppEx.Container.GetInstance<ITransService>().QuerySaleOrderByShippingId(opcShippingSale.Id);
             if (SaleList != null && SaleList.Any())
             {
                 OPC_Sale sale = SaleList.FirstOrDefault();

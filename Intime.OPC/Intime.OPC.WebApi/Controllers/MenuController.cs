@@ -46,20 +46,13 @@ namespace Intime.OPC.WebApi.Controllers
         /// <summary>
         ///     Loads the menu.
         /// </summary>
-        /// <param name="userId">The user identifier.</param>
+        /// <param name="uid">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
         [System.Web.Http.HttpPost]
-        public IHttpActionResult LoadMenu()
+        public IHttpActionResult LoadMenu([UserId] int uid)
         {
-            return DoFunction(() =>
-            {
-                var userId = GetCurrentUserID();
-               return   _menuService.SelectByUserID(userId);
-            }, "加载菜单失败");
-
-            
+            return DoFunction(() => _menuService.SelectByUserID(uid), "加载菜单失败");
         }
-
       
 
         [System.Web.Http.HttpPost]

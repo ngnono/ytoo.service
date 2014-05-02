@@ -3,6 +3,7 @@ using System.Web.Http;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Service;
+using Intime.OPC.WebApi.Bindings;
 using Intime.OPC.WebApi.Core;
 
 namespace Intime.OPC.WebApi.Controllers
@@ -25,13 +26,13 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult GetOrder([FromUri] ReturnGoodsRequest request)
+        public IHttpActionResult GetOrder([FromUri] ReturnGoodsRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
                 int brandid = request.BandId.HasValue ? request.BandId.Value : -1;
                
-                return _saleRmaService.GetByReturnGoods(request, UserID);
+                return _saleRmaService.GetByReturnGoods(request, uid);
             }, "查询订单失败");
         }
 
@@ -44,9 +45,7 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult AgreeReturnGoods([FromBody] IEnumerable<string> rmaNos)
         {
             return DoAction(() =>
-            {
-                int userId = GetCurrentUserID();
-             
+            {           
                 foreach (string rmaNo in rmaNos)
                 {
                     _saleRmaService.AgreeReturnGoods(rmaNo);
@@ -64,7 +63,6 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoAction(() =>
             {
-                int userId = GetCurrentUserID();
                 foreach (string rmaNo in rmaNos)
                 {
                     _saleRmaService.ShippingReceiveGoods(rmaNo);
@@ -80,11 +78,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetRmaPackVerifyByPack([FromUri] PackageReceiveRequest request)
+        public IHttpActionResult GetRmaPackVerifyByPack([FromUri] PackageReceiveRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = uid;
                 return _rmaService.GetAllPackVerify(request);
             }, "查询退货单信息失败");
         }
@@ -112,11 +110,11 @@ namespace Intime.OPC.WebApi.Controllers
         #region 包裹退回-打印快递单
 
         [HttpPost]
-        public IHttpActionResult GetRmaByPackPrintPress(string rmaNo)
+        public IHttpActionResult GetRmaByPackPrintPress(string rmaNo, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = uid;
                 return _rmaService.GetByRmaNo(rmaNo);
             }, "查询退货单信息失败");
         }
@@ -163,11 +161,11 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult GetRmaShippingByPackPrintPress([FromUri] RmaExpressRequest request)
+        public IHttpActionResult GetRmaShippingByPackPrintPress([FromUri] RmaExpressRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _shippingSaleService.UserId = UserID;
+                _shippingSaleService.UserId = uid;
                 return _shippingSaleService.GetRmaByPackPrintPress(request);
             }, "查询退货单信息失败");
         }
@@ -180,11 +178,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
          [HttpPost]
-        public IHttpActionResult GetRmaShippingPrintedByPack([FromUri] RmaExpressRequest request)
+        public IHttpActionResult GetRmaShippingPrintedByPack([FromUri] RmaExpressRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _shippingSaleService.UserId = UserID;
+                _shippingSaleService.UserId = uid;
                 return _shippingSaleService.GetRmaShippingPrintedByPack(request);
             }, "查询退货单信息失败");
         }
@@ -213,11 +211,11 @@ namespace Intime.OPC.WebApi.Controllers
          /// <param name="request">The request.</param>
          /// <returns>IHttpActionResult.</returns>
           [HttpPost]
-        public IHttpActionResult GetRmaByShoppingGuide([FromUri] ShoppingGuideRequest request)
+         public IHttpActionResult GetRmaByShoppingGuide([FromUri] ShoppingGuideRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = uid;
                 return _rmaService.GetRmaByShoppingGuide(request);
             }, "查询退货单信息失败");
         }
@@ -234,11 +232,11 @@ namespace Intime.OPC.WebApi.Controllers
           /// <param name="request">The request.</param>
           /// <returns>IHttpActionResult.</returns>
           [HttpPost]
-          public IHttpActionResult GetRmaByAllOver([FromUri] ShoppingGuideRequest request)
+          public IHttpActionResult GetRmaByAllOver([FromUri] ShoppingGuideRequest request, [UserId] int uid)
           {
               return DoFunction(() =>
               {
-                  _rmaService.UserId = UserID;
+                  _rmaService.UserId = uid;
                   return _rmaService.GetRmaByAllOver(request);
               }, "查询退货单信息失败");
           }

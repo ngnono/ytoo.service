@@ -53,19 +53,19 @@ namespace Intime.OPC.Domain.Dto
         ///  销售价格
         /// </summary>
         /// <value>The price.</value>
-        public double SellPrice { get; set; }
+        public decimal SellPrice { get; set; }
 
         /// <summary>
         /// 原价
         /// </summary>
         /// <value>The price.</value>
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         /// <summary>
         /// 促销价格
         /// </summary>
         /// <value>The sale price.</value>
-        public double SalePrice { get; set; }
+        public decimal SalePrice { get; set; }
         /// <summary>
         /// 销售数量
         /// </summary>
@@ -82,7 +82,7 @@ namespace Intime.OPC.Domain.Dto
         /// 吊牌价格
         /// </summary>
         /// <value>The label price.</value>
-        public double LabelPrice { get; set; }
+        public decimal LabelPrice { get; set; }
 
         /// <summary>
         /// 备注

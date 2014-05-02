@@ -35,7 +35,9 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                  */
                 var mapKey = Utils.GetProductProprtyMapKey(productId, channelPropertyValueId);
                 var propertyValueMap = _channelMapper.GetMapByChannelValue(mapKey, mapType);
-
+                var valueDesc = string.IsNullOrWhiteSpace(channelPropertyValueName)
+                    ? channelPropertyValueId
+                    : channelPropertyValueName;
                 if (propertyValueMap == null)
                 {
                     // 检查当前商品是否存在颜色或尺寸的属性
@@ -64,31 +66,37 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         db.SaveChanges();
                     }
 
-                    var newProductPropertyValue = new ProductPropertyValue()
+                    var ppv =
+                        db.ProductPropertyValues.FirstOrDefault(
+                            p => p.PropertyId == propertyExt.Id && p.ValueDesc == valueDesc);
+
+                    if (ppv == null)
                     {
-                        PropertyId = propertyExt.Id,
-                        CreateDate = DateTime.Now,
-                        Status = 1,
-                        UpdateDate = DateTime.Now,
-                        ValueDesc = string.IsNullOrWhiteSpace(channelPropertyValueName) ? channelPropertyValueId : channelPropertyValueName
-                    };
+                        var newProductPropertyValue = new ProductPropertyValue()
+                        {
+                            PropertyId = propertyExt.Id,
+                            CreateDate = DateTime.Now,
+                            Status = 1,
+                            UpdateDate = DateTime.Now,
+                            ValueDesc = valueDesc
+                        };
 
-                    db.ProductPropertyValues.Add(newProductPropertyValue);
+                        db.ProductPropertyValues.Add(newProductPropertyValue);
+                        // 保存属性值
+                        db.SaveChanges();
+                        ppv = newProductPropertyValue;
+                        // 保存映射关系
+                        var newChannelMap = new ChannelMap()
+                        {
+                            LocalId = ppv.Id,
+                            ChannnelValue = Utils.GetProductProprtyMapKey(productId, channelPropertyValueId),
+                            MapType = mapType
+                        };
 
-                    // 保存属性值
-                    db.SaveChanges();
+                        _channelMapper.CreateMap(newChannelMap);
+                    }
 
-                    // 保存映射关系
-                    var newChannelMap = new ChannelMap()
-                    {
-                        LocalId = newProductPropertyValue.Id,
-                        ChannnelValue = Utils.GetProductProprtyMapKey(productId, channelPropertyValueId),
-                        MapType = mapType
-                    };
-
-                    _channelMapper.CreateMap(newChannelMap);
-
-                    return newProductPropertyValue;
+                    return ppv;
                 }
 
                 var propertyValueExt = GetProductPropertyValue(productId, propertyValueMap.LocalId, mapType);
@@ -99,7 +107,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     return null;
                 }
 
-                propertyValueExt.ValueDesc = string.IsNullOrWhiteSpace(channelPropertyValueName) ? channelPropertyValueId : channelPropertyValueName;
+                propertyValueExt.ValueDesc = valueDesc;
                 propertyValueExt.UpdateDate = DateTime.Now;
 
                 db.SaveChanges();

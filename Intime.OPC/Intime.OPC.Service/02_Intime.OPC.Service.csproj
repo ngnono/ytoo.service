@@ -36,8 +36,18 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,8 +59,14 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BaseService.cs" />
+    <Compile Include="Contract\IExpressService.cs" />
+    <Compile Include="Contract\IOrderService.cs" />
+    <Compile Include="Contract\ISaleOrderService.cs" />
     <Compile Include="IConnectProduct.cs" />
     <Compile Include="IEnumService.cs" />
+    <Compile Include="Impl\ExpressService.cs" />
+    <Compile Include="Impl\OrderService.cs" />
+    <Compile Include="Impl\SaleOrderService.cs" />
     <Compile Include="IOrgService.cs" />
     <Compile Include="IBrandService.cs" />
     <Compile Include="IMenuService.cs" />

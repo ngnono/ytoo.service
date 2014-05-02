@@ -34,5 +34,7 @@ namespace OPCApp.DataService.Interface.Trans
         PageResult<OPC_ShippingSale> GetListShip(string filter);
 
         List<OPC_Sale> SelectSaleByShip(string shipCode);
+
+        List<OPC_Sale> QuerySaleOrderByShippingId(int saleId);
     }
 }

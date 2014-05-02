@@ -16,6 +16,7 @@ namespace Intime.OPC.Repository
         {
         }
 
+        public DbSet<Product> Products { get; set; }
 
         public DbSet<Brand> Brands { get; set; }
       
@@ -67,7 +68,7 @@ namespace Intime.OPC.Repository
 
          protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-          
+            modelBuilder.Configurations.Add(new ProductMap());
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMenuMap());

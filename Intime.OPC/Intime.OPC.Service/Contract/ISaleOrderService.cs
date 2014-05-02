@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Models;
+
+namespace Intime.OPC.Service.Contract
+{
+    public interface ISaleOrderService
+    {
+        IList<SaleDetailDto> GetSaleDetails(string saleOrderNo);
+
+        IList<OPC_SaleComment> GetSaleComments(string saleOrderNo,int uid);
+
+        void CommentSaleOrder(string comment, string saleOrderNo, int uid);
+
+        IList<OPC_Sale> GetSaleOrdersByPachageId(int packageId);
+    }
+}

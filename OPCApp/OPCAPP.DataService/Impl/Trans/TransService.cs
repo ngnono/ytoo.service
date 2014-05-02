@@ -126,7 +126,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                var shipSale = RestClient.GetSingle<OPC_ShippingSale>("trans/GetShippingSaleBySaleOrderNo",
+                var shipSale = RestClient.GetSingle<OPC_ShippingSale>("trans/GetShippingSaleBySaleOrderNoGetSaleByShippingSaleNoGetSaleByShippingSaleNo",
                     string.Format("saleOrderNo={0}", saleOrderNo));
                 return shipSale == null ? new List<OPC_ShippingSale>() : new List<OPC_ShippingSale> {shipSale};
             }
@@ -216,7 +216,10 @@ namespace OPCApp.DataService.Impl.Trans
                 return new List<OPC_Sale>();
             }
         }
-
+        public List<OPC_Sale> QuerySaleOrderByShippingId(int packageId)
+        {
+            return RestClient.Get<OPC_Sale>("trans/QueryRelatedSaleOrders", string.Format("packageId={0}", packageId)).ToList();
+        }
 
         public bool SetSaleOrderShipped(IList<string> shipSalerNoList)
         {

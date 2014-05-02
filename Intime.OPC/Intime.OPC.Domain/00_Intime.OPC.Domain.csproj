@@ -78,6 +78,7 @@
     <Compile Include="Dto\Financial\ReturnGoodsStatDto.cs" />
     <Compile Include="Dto\Financial\SaleDetailStatDto.cs" />
     <Compile Include="Dto\OrderItemDto.cs" />
+    <Compile Include="Dto\Request\SaleOrderDetailRequestDto.cs" />
     <Compile Include="Dto\RmaDetail.cs" />
     <Compile Include="Dto\RMADto.cs" />
     <Compile Include="Dto\RmaExpressDto.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Enums\EnumSaleStatus.cs" />
     <Compile Include="Exception\OrderNoIsNullException.cs" />
     <Compile Include="Exception\OrderNotExistsException.cs" />
+    <Compile Include="Exception\PackageException.cs" />
     <Compile Include="Exception\RoleNotExistsExcepion.cs" />
     <Compile Include="Exception\SaleOrderNotExistsException.cs" />
     <Compile Include="Exception\ShippingSaleNotExistsException.cs" />
@@ -138,6 +140,8 @@
     <Compile Include="Models\Mapping\OrderMap.cs" />
     <Compile Include="Models\Mapping\OrderTransactionMap.cs" />
     <Compile Include="Models\Mapping\PaymentMethodMap.cs" />
+    <Compile Include="Models\Mapping\ProductMap.cs" />
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Mapping\RMAItemMap.cs" />
     <Compile Include="Models\Mapping\RMAMap.cs" />
     <Compile Include="Models\Mapping\RMAReasonMap.cs" />

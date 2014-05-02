@@ -12,16 +12,22 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Web.Http;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service;
+using Intime.OPC.Service.Contract;
+using Intime.OPC.Service.Map;
+using Intime.OPC.WebApi.Bindings;
 using Intime.OPC.WebApi.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Transactions;
+using System.Web.Http;
+using YintaiHZhouContext = Intime.OPC.Domain.Models.YintaiHZhouContext;
 
 namespace Intime.OPC.WebApi.Controllers
 {
@@ -37,19 +43,30 @@ namespace Intime.OPC.WebApi.Controllers
 
         private ISaleRMAService _saleRmaService;
         private IRmaService _rmaService;
-         IEnumService _enumService;
+        IEnumService _enumService;
         private IPaymentMethodRepository _paymentMethodRepository;
+        private ISaleOrderService _saleOrderService;
+        private IExpressService _expressService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="TransController" /> class.
         /// </summary>
         /// <param name="transService">The trans service.</param>
-        public TransController(ITransService transService, IEnumService enumService, ISaleRMAService saleRmaService, IRmaService rmaService, IPaymentMethodRepository paymentMethodRepository)
+        public TransController(ITransService transService, 
+            IEnumService enumService, 
+            ISaleRMAService saleRmaService, 
+            IRmaService rmaService, 
+            IPaymentMethodRepository paymentMethodRepository,
+            ISaleOrderService saleOrderService,
+            IExpressService expressService
+            )
         {
             _transService = transService;
             _enumService = enumService;
             _saleRmaService = saleRmaService;
             _rmaService = rmaService;
             _paymentMethodRepository = paymentMethodRepository;
+            _saleOrderService = saleOrderService;
+            _expressService = expressService;
         }
 
         /// <summary>
@@ -57,10 +74,28 @@ namespace Intime.OPC.WebApi.Controllers
         /// </summary>
         /// <param name="saleNo">销售单编号</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpPost] //ddd
-        public IHttpActionResult GetShippingSaleBySaleOrderNo(string saleOrderNo)
+        [HttpPost]
+        public IHttpActionResult GetShippingSaleBySaleOrderNo(string saleOrderNo, [UserId] int uid)
         {
-            return DoFunction(() => { return _transService.GetShippingSaleBySaleNo(saleOrderNo); }, "查询快递单信息失败");
+            using (var db = new YintaiHZhouContext())
+            {
+                var saleOrder = db.OPC_Sale.FirstOrDefault(x => x.SaleOrderNo == saleOrderNo);
+                if (saleOrder == null)
+                {
+                    return Error("不存在的销售单");
+                }
+
+                var shippingSale =
+                    db.OPC_ShippingSale.FirstOrDefault(
+                        x => x.OrderNo == saleOrder.OrderNo && x.ShippingCode == saleOrder.ShippingCode && x.SaleOrderNo == saleOrderNo);
+
+                if (shippingSale == null)
+                {
+                    return Error("未生成发货单");
+                }
+
+                return Ok(Mapper.Map<OPC_ShippingSale, ShippingSaleDto>(shippingSale));
+            }
         }
 
         /// <summary>
@@ -69,9 +104,25 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="shippingSaleNo">快递单编号</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetSaleByShippingSaleNo(string shippingSaleNo)
+        [Obsolete("废弃此方法 Wallace 2014-05-02")]
+        public IHttpActionResult GetSaleByShippingSaleNo(string shippingSaleNo, [UserId] int uid)
         {
-            return DoFunction(() => { return _transService.GetSaleByShippingSaleNo(shippingSaleNo); }, "查询销售单信息失败");
+            return DoFunction(() =>
+            {
+                _transService.UserId = uid;
+                return _transService.GetSaleByShippingSaleNo(shippingSaleNo);
+            }, "查询销售单信息失败");
+        }
+
+        /// <summary>
+        /// 根据发货单Id查找所有打包在一起的销售单
+        /// </summary>
+        /// <param name="packageId">包裹Id</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult QueryRelatedSaleOrders(int packageId)
+        {
+            return DoFunction(() => Mapper.Map<OPC_Sale,SaleDto>(_saleOrderService.GetSaleOrdersByPachageId(packageId)));
         }
 
         //ddd
@@ -85,10 +136,13 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="pageSize">Size of the page.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetShippingSale(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize = 20)
+        public IHttpActionResult GetShippingSale(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize = 20, [UserId] int uid = 0)
         {
-            
-            return DoFunction(() => { return _transService.GetShippingSale(orderNo, startDate, endDate, pageIndex, pageSize); },
+            return DoFunction(() =>
+            {
+                _transService.UserId = uid;
+                return _transService.GetShippingSale(orderNo, startDate, endDate, pageIndex, pageSize);
+            },
                 "查询快递单信息失败");
         }
 
@@ -117,13 +171,15 @@ namespace Intime.OPC.WebApi.Controllers
             int shippingStatus,
             string customerPhone,
             int brandId,
-            int pageIndex, int pageSize = 20
-            )
+            int pageIndex, int pageSize, [UserId] int uid)
         {
             try
             {
-               
-                _transService.UserId= GetCurrentUserID();
+                if (pageSize <= 0 || pageSize > 100)
+                {
+                    pageSize = 20;
+                }
+                _transService.UserId = uid;
                 var lst = _transService.GetShippingSale(orderNo, expressNo, startGoodsOutDate, endGoodsOutDate,
                     outGoodsCode, storeId, shippingStatus, customerPhone, brandId, pageIndex, pageSize);
 
@@ -131,6 +187,7 @@ namespace Intime.OPC.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                GetLog().Error(ex);
                 return InternalServerError();
             }
         }
@@ -138,17 +195,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <summary>
         ///     创建发货单
         /// </summary>
-        /// <param name="comment">The comment.</param>
         /// <returns>IHttpActionResult.</returns>
-        [HttpPost] //dddd
-        public IHttpActionResult CreateShippingSale([FromBody]ShippingSaleCreateDto shippingSaleDto)
+        [HttpPost]
+        public IHttpActionResult CreateShippingSale([FromBody]ShippingSaleCreateDto shippingSaleDto, [UserId] int uid)
         {
-            return base.DoFunction(() =>
-            {
-                int userId = GetCurrentUserID();
-
-                return _transService.CreateShippingSale(userId, shippingSaleDto);
-            }, "读取快递单备注失败！");
+            return DoAction(() => _expressService.CreatePackage(shippingSaleDto,uid));
         }
 
         #region 包裹签收
@@ -161,9 +212,13 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="dto">The dto.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetSaleRmaByPack([FromUri]PackageReceiveRequest dto)
+        public IHttpActionResult GetSaleRmaByPack([FromUri]PackageReceiveRequest dto, [UserId] int uid = 0)
         {
-            return DoFunction(() => { return _saleRmaService.GetByPack(dto); }, "查询退货收货单信息失败！");
+            return DoFunction(() =>
+            {
+                _saleRmaService.UserId = uid;
+                return _saleRmaService.GetByPack(dto);
+            }, "查询退货收货单信息失败！");
         }
 
         /// <summary>
@@ -172,8 +227,9 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="dto">The dto.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetRmaByPack([FromUri]PackageReceiveRequest dto)
+        public IHttpActionResult GetRmaByPack([FromUri]PackageReceiveRequest dto, [UserId] int uid)
         {
+            _rmaService.UserId = uid;
             return DoFunction(() => { return _rmaService.GetAll(dto); }, "查询退货单失败！");
         }
 
@@ -187,12 +243,13 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="comment">The comment.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult AddShippingSaleComment([FromBody]OPC_ShippingSaleComment comment)
+        public IHttpActionResult AddShippingSaleComment([FromBody]OPC_ShippingSaleComment comment, [UserId] int uid)
         {
             return base.DoFunction(() =>
             {
+                _transService.UserId = uid;
                 comment.CreateDate = DateTime.Now;
-                comment.CreateUser = GetCurrentUserID();
+                comment.CreateUser = uid;
                 comment.UpdateDate = comment.CreateDate;
                 comment.UpdateUser = comment.CreateUser;
 
@@ -206,9 +263,13 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="orderNo">The order no.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetShippingSaleCommentByShippingSaleNo(string shippingSaleNo)
+        public IHttpActionResult GetShippingSaleCommentByShippingSaleNo(string shippingSaleNo, [UserId] int uid)
         {
-            return DoFunction(() => { return _transService.GetByShippingCommentCode(shippingSaleNo); }, "读取快递单备注失败！");
+            return DoFunction(() =>
+            {
+                UserId = uid;
+                return _transService.GetByShippingCommentCode(shippingSaleNo);
+            }, "读取快递单备注失败！");
         }
 
         #endregion
@@ -216,10 +277,9 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetPayTypeEnums()
         {
-           // return DoFunction(() => { return _enumService.All("PayType"); }, "读取付款方式失败！");
             return DoFunction(() =>
             {
-               var lst=  _paymentMethodRepository.GetAll(1, 1000);
+                var lst = _paymentMethodRepository.GetAll(1, 1000);
                 var lstDto = new List<Item>();
                 foreach (var t in lst.Result)
                 {
@@ -236,7 +296,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetShippingTypeEnums()
         {
-           
+
             return DoFunction(() => { return _enumService.All("ShippingType"); }, "读取发货方式失败！");
         }
 
@@ -255,8 +315,8 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                return _enumService.All(typeof (EnumOderStatus));
-               // return _enumService.All("OrderStatus");
+                return _enumService.All(typeof(EnumOderStatus));
+                // return _enumService.All("OrderStatus");
             });
         }
         /// <summary>
@@ -268,8 +328,8 @@ namespace Intime.OPC.WebApi.Controllers
         {
             return DoFunction(() =>
             {
-                return _enumService.All(typeof (EnumSaleStatus));
-               // return _enumService.All("SaleStatus");
+                return _enumService.All(typeof(EnumSaleStatus));
+                // return _enumService.All("SaleStatus");
             }, "读取销售单类型失败！");
         }
 
@@ -283,7 +343,6 @@ namespace Intime.OPC.WebApi.Controllers
             return DoFunction(() =>
             {
                 return _enumService.All(typeof(EnumRMAStatus));
-                return _enumService.All("RmaStatus");
             }, "读取退货单类型失败！");
         }
 
@@ -295,11 +354,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetRmaCashByExpress([FromUri] RmaExpressRequest request)
+        public IHttpActionResult GetRmaCashByExpress([FromUri] RmaExpressRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = uid;
                 return _rmaService.GetRmaCashByExpress(request);
             }, "查询退货单信息失败");
         }
@@ -311,16 +370,16 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNos">The rma nos.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult SetRmaCash([FromBody]IEnumerable<string> rmaNos)
+        public IHttpActionResult SetRmaCash([FromBody]IEnumerable<string> rmaNos, [UserId] int uid)
         {
             return DoAction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = uid;
                 foreach (var rmaNo in rmaNos)
                 {
                     _rmaService.SetRmaCash(rmaNo);
                 }
-                 
+
             }, "查询退货单信息失败");
         }
 
@@ -330,11 +389,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNos">The rma nos.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult SetRmaCashOver([FromBody]IEnumerable<string> rmaNos)
+        public IHttpActionResult SetRmaCashOver([FromBody]IEnumerable<string> rmaNos, [UserId] int uid)
         {
             return DoAction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = uid;
                 foreach (var rmaNo in rmaNos)
                 {
                     _rmaService.SetRmaCashOver(rmaNo);
@@ -354,11 +413,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetRmaReturnByExpress([FromUri] RmaExpressRequest request)
+        public IHttpActionResult GetRmaReturnByExpress([FromUri] RmaExpressRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = uid;
                 return _rmaService.GetRmaReturnByExpress(request);
             }, "查询退货单信息失败");
         }
@@ -370,11 +429,11 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="rmaNos">The rma nos.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult SetRmaShipInStorage([FromBody]IEnumerable<string> rmaNos)
+        public IHttpActionResult SetRmaShipInStorage([FromBody]IEnumerable<string> rmaNos, [UserId] int uid)
         {
             return DoAction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = uid;
                 foreach (var rmaNo in rmaNos)
                 {
                     _rmaService.SetRmaShipInStorage(rmaNo);
@@ -387,27 +446,27 @@ namespace Intime.OPC.WebApi.Controllers
 
         #region  打印退货单
 
-         /// <summary>
+        /// <summary>
         /// 查询 退货单
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
-        public IHttpActionResult GetRmaPrintByExpress([FromUri] RmaExpressRequest request)
+        public IHttpActionResult GetRmaPrintByExpress([FromUri] RmaExpressRequest request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = uid;
                 return _rmaService.GetRmaPrintByExpress(request);
             }, "查询退货单信息失败");
         }
 
         [HttpPost]
-        public IHttpActionResult SetRmaPint([FromBody]IEnumerable<string> rmaNos)
+        public IHttpActionResult SetRmaPint([FromBody]IEnumerable<string> rmaNos, [UserId] int uid)
         {
             return DoAction(() =>
             {
-                _rmaService.UserId = UserID;
+                _rmaService.UserId = uid;
                 foreach (var rmaNo in rmaNos)
                 {
                     _rmaService.SetRmaPint(rmaNo);

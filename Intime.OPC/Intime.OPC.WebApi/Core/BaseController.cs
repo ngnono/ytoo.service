@@ -1,38 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Results;
-using Intime.OPC.Common.Logger;
-using Intime.OPC.Domain.Exception;
+﻿using Intime.OPC.Common.Logger;
 using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
+using System;
+using System.Net;
+using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace Intime.OPC.WebApi.Core
 {
     public class BaseController : ApiController
     {
-        public override Task<HttpResponseMessage> ExecuteAsync(HttpControllerContext controllerContext, CancellationToken cancellationToken)
-        {
-            if (controllerContext.Request.RequestUri.LocalPath.ToLower() != "/api/account/token")
-            {
-                this.UserID = GetUserID(controllerContext);
-            }
-            else
-            {
-                this.UserID = -1;
-            }
-
-            return base.ExecuteAsync(controllerContext, cancellationToken);
-        }
-
-        public int UserID { get; private set; }
-
-        /// <summary>
+       /// <summary>
         ///     Gets the log.
         /// </summary>
         /// <returns>ILog.</returns>
@@ -41,45 +18,33 @@ namespace Intime.OPC.WebApi.Core
             return LoggerManager.Current();
         }
 
-        /// <summary>
-        ///     获得当前用户
-        /// </summary>
-        /// <returns>System.Nullable{System.Int32}.</returns>
-        /// <exception cref="Intime.OPC.Domain.Exception.UserIdConverException"></exception>
-        protected int GetCurrentUserID()
+        public TextResult Error(string message)
         {
-            return UserID;
+            return new TextResult(message,this.Request);
         }
 
-        private int GetUserID(HttpControllerContext controllerContext)
+        public int UserId
         {
-            if (controllerContext.Request.Properties.ContainsKey(AccessTokenConst.UseridPropertiesName))
+            get
             {
-
-                string userid = controllerContext.Request.Properties[AccessTokenConst.UseridPropertiesName].ToString();
-
-                int id = -1;
-                bool bl = int.TryParse(userid, out id);
-                if (bl)
+                int uid;
+                if (int.TryParse(this.Request.Properties[AccessTokenConst.UseridPropertiesName].ToString(), out uid))
                 {
-                    return id;
+                    return uid;
                 }
-                throw new UserIdConverException(userid);
+                throw new UnauthorizedAccessException();
             }
-
-           
-            throw new HttpResponseException(HttpStatusCode.Unauthorized);
+            set
+            {
+                throw new InvalidOperationException("不允许的操作");
+            }
         }
-        protected IHttpActionResult DoFunction(Func<dynamic> action, string falseMeg = "")
+
+        protected IHttpActionResult DoFunction(Func<dynamic> action, string errorMessage = "")
         {
             try
             {
-                var o = action();
-                return Ok(o);
-            }
-            catch (HttpResponseException ex)
-            {
-                return new StatusCodeResult(HttpStatusCode.Unauthorized, this);
+                return Ok(action());
             }
             catch (Exception ex)
             {
@@ -97,6 +62,7 @@ namespace Intime.OPC.WebApi.Core
             }
             catch (HttpResponseException ex)
             {
+                GetLog().Error(ex);
                 return new StatusCodeResult(HttpStatusCode.Unauthorized, this);
             }
             catch (Exception ex)
