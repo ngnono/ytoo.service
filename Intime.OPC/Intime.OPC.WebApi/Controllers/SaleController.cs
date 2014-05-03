@@ -5,10 +5,12 @@ using System.Net;
 using System.Web.Http;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Request;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.Service.Contract;
+using Intime.OPC.Service.Map;
 using Intime.OPC.WebApi.Bindings;
 using Intime.OPC.WebApi.Core;
 
@@ -321,6 +323,16 @@ namespace Intime.OPC.WebApi.Controllers
                 _saleService.UserId = uid;
                 return _saleService.GetNoPickUp(saleOrderNo, uid, orderNo, startDate, endDate, pageIndex, pageSize);
             }, "读取未提货数据失败");
+        }
+
+        [HttpPost]
+        public IHttpActionResult GetNoPickupSaleOrders([FromUri]SaleOrderQueryRequest request, [UserId] int uid)
+        {
+            return DoFunction(() =>
+            {
+                var saleDtos = _saleOrderService.QuerySaleOrders(request, uid);
+                return new PageResult<SaleDto>(saleDtos, saleDtos.Count);
+            });
         }
 
         [HttpPost]

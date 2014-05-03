@@ -79,6 +79,7 @@
     <Compile Include="Dto\Financial\SaleDetailStatDto.cs" />
     <Compile Include="Dto\OrderItemDto.cs" />
     <Compile Include="Dto\Request\SaleOrderDetailRequestDto.cs" />
+    <Compile Include="Dto\Request\SaleOrderQueryRequest.cs" />
     <Compile Include="Dto\RmaDetail.cs" />
     <Compile Include="Dto\RMADto.cs" />
     <Compile Include="Dto\RmaExpressDto.cs" />

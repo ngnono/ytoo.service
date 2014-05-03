@@ -111,7 +111,6 @@
     <Compile Include="Support\StockRepository.cs" />
     <Compile Include="Support\StoreRepository.cs" />
     <Compile Include="Support\TransRepository.cs" />
-    <Compile Include="YintaiHZhouContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intime.OPC.Common\Intime.OPC.Common.csproj">

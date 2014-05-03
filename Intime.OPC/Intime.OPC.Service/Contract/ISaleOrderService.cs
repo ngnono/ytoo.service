@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Request;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Service.Contract
@@ -17,5 +18,7 @@ namespace Intime.OPC.Service.Contract
         void CommentSaleOrder(string comment, string saleOrderNo, int uid);
 
         IList<OPC_Sale> GetSaleOrdersByPachageId(int packageId);
+
+        IList<SaleDto> QuerySaleOrders(SaleOrderQueryRequest request, int uid);
     }
 }

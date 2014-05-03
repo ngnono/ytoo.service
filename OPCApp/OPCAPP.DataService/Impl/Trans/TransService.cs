@@ -203,6 +203,7 @@ namespace OPCApp.DataService.Impl.Trans
             }
         }
 
+        [Obsolete("废弃此方法，调用 QuerySaleOrderByShippingId Wallace 2014-05-02")]
         public List<OPC_Sale> SelectSaleByShip(string shipCode)
         {
             try

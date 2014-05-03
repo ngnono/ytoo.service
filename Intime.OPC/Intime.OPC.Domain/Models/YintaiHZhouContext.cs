@@ -43,31 +43,28 @@ namespace Intime.OPC.Domain.Models
         public DbSet<OPC_StorePriority> OPC_StorePriority { get; set; }
         public DbSet<OPC_SupplierInfo> OPC_SupplierInfo { get; set; }
         public DbSet<Order> Orders { get; set; }
-       
         public DbSet<OrderItem> OrderItems { get; set; }
-      
         public DbSet<RMA> RMAs { get; set; }
-      
         public DbSet<RMAItem> RMAItems { get; set; }
-      
         public DbSet<RMAReason> RMAReasons { get; set; }
-     
         public DbSet<Section> Sections { get; set; }
-
         public DbSet<ShipVia> ShipVias { get; set; }
-       
         public DbSet<Store> Stores { get; set; }
-     
- 
+        public DbSet<OPC_SaleRMAComment> OPC_SaleRMAComments { get; set; }
+        public DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public DbSet<OrderTransaction> OrderTransactions { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<OPC_OrgInfo> OrgInfos { get; set; }     
+        public DbSet<OPC_ShippingSale> ShippingSales { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-          
             modelBuilder.Configurations.Add(new OPC_AuthMenuMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleMenuMap());
             modelBuilder.Configurations.Add(new OPC_AuthRoleUserMap());
             modelBuilder.Configurations.Add(new OPC_AuthUserMap());
-
             modelBuilder.Configurations.Add(new OPC_ChannelProductMap());
             modelBuilder.Configurations.Add(new OPC_OrderCommentMap());
             modelBuilder.Configurations.Add(new OPC_OrgInfoMap());
@@ -87,18 +84,19 @@ namespace Intime.OPC.Domain.Models
             modelBuilder.Configurations.Add(new OPC_StorePriorityMap());
             modelBuilder.Configurations.Add(new OPC_SupplierInfoMap());
             modelBuilder.Configurations.Add(new OrderMap());
-            
             modelBuilder.Configurations.Add(new OrderItemMap());
-           
             modelBuilder.Configurations.Add(new RMAMap());
-
             modelBuilder.Configurations.Add(new RMAItemMap());
             modelBuilder.Configurations.Add(new RMAReasonMap());
             modelBuilder.Configurations.Add(new SectionMap());
             modelBuilder.Configurations.Add(new ShipViaMap());
-
             modelBuilder.Configurations.Add(new StoreMap());
             modelBuilder.Configurations.Add(new BrandMap());
+            modelBuilder.Configurations.Add(new OPC_SaleRMACommentMap());
+            modelBuilder.Configurations.Add(new PaymentMethodMap());
+            modelBuilder.Configurations.Add(new OrderTransactionMap());
+            modelBuilder.Configurations.Add(new UserMap());
+
         }
     }
 }
