@@ -231,7 +231,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                               .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.Status == (int)DataStatus.Normal && r.SourceType == (int)SourceType.Combo),
                                     o => o.C.Id,
                                     i => i.SourceId,
-                                    (o, i) => new { C = o.C,A=o.A,AA=o.AA, CR = i.OrderByDescending(ir => ir.SortOrder) }).FirstOrDefault();
+                                    (o, i) => new { C = o.C,A=o.A,AA=o.AA, CR = i.OrderByDescending(ir => ir.SortOrder).ThenByDescending(ir=>ir.Id) }).FirstOrDefault();
             if (comboEntity == null)
                 return this.RenderError(r => r.Message = "搭配不存在");
             return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, oc =>

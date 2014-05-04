@@ -179,7 +179,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                              && iai.Status == (int)DataStatus.Normal)
                                  .Join(Context.Set<IMS_GiftCardEntity>(), o => o.ItemId, i => i.Id, (o, i) => i)
                                  .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.GiftCard && r.Status == (int)DataStatus.Normal),
-                                                 o => o.Id, i => i.SourceId, (o, i) => new { G = o, R = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() })
+                                                 o => o.Id, i => i.SourceId, (o, i) => new { G = o, R = i.OrderByDescending(ir => ir.SortOrder).ThenByDescending(ir=>ir.Id).FirstOrDefault() })
                                  .Select(l => new IMSGiftCard()
                                  {
                                      Id = l.G.Id,
