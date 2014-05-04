@@ -106,6 +106,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 if (brandExt != null)
                 {
                     brandExt.Name = brandSource.Name;
+                    brandExt.Status = 1;
                     db.SaveChanges();
                 }
 
