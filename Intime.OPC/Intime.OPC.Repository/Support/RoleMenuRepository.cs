@@ -12,8 +12,8 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var lst = db.OPC_AuthRoleMenu.Where(t => t.OPC_AuthRoleId == roleID);
-                db.OPC_AuthRoleMenu.RemoveRange(lst);
+                var lst = db.OPC_AuthRoleMenus.Where(t => t.OPC_AuthRoleId == roleID);
+                db.OPC_AuthRoleMenus.RemoveRange(lst);
                 db.SaveChanges();
                 return true;
             }
@@ -25,14 +25,14 @@ namespace Intime.OPC.Repository.Support
             {
                 foreach (var menuId in menuIds)
                 {
-                    var t = db.OPC_AuthRoleMenu.Create();
+                    var t = db.OPC_AuthRoleMenus.Create();
                     t.CreateUserId = userId;
                     t.CreateDate = DateTime.Now;
                     t.UpdateDate = t.CreateDate;
                     t.UpdateUserId = t.CreateUserId;
                     t.OPC_AuthRoleId = role;
                     t.OPC_AuthMenuId = menuId;
-                    db.OPC_AuthRoleMenu.Add(t);
+                    db.OPC_AuthRoleMenus.Add(t);
                 }
 
                 db.SaveChanges();

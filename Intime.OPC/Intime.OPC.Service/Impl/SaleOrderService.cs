@@ -18,7 +18,7 @@ namespace Intime.OPC.Service.Impl
             using (var db = new YintaiHZhouContext())
             {
                 return
-                    db.OPC_SaleDetail.Where(o => o.SaleOrderNo == saleOrderNo)
+                    db.OPC_SaleDetails.Where(o => o.SaleOrderNo == saleOrderNo)
                         .Join(db.OrderItems, d => d.OrderItemId, i => i.Id, (o, i) => new { o, i })
                         .GroupJoin(db.Brands.Where(b => b.Status == 1), o => o.i.BrandId, b => b.Id, (o, b) => new
                         {
@@ -52,7 +52,7 @@ namespace Intime.OPC.Service.Impl
         {
             using (var db = new YintaiHZhouContext())
             {
-                return db.OPC_SaleComment.Where(x => x.SaleOrderNo == saleOrderNo).ToList();
+                return db.OPC_SaleComments.Where(x => x.SaleOrderNo == saleOrderNo).ToList();
             }
         }
 
@@ -60,7 +60,7 @@ namespace Intime.OPC.Service.Impl
         {
             using (var db = new YintaiHZhouContext())
             {
-                db.OPC_SaleComment.Add(new OPC_SaleComment
+                db.OPC_SaleComments.Add(new OPC_SaleComment
                 {
                     CreateUser = uid,
                     CreateDate = DateTime.Now,
@@ -76,7 +76,7 @@ namespace Intime.OPC.Service.Impl
         {
             using (var db = new YintaiHZhouContext())
             {
-                return db.OPC_Sale.Where(x => x.ShippingSaleId.HasValue && x.ShippingSaleId.Value == packageId).ToList();
+                return db.OPC_Sales.Where(x => x.ShippingSaleId.HasValue && x.ShippingSaleId.Value == packageId).ToList();
             }
         }
 
@@ -84,7 +84,7 @@ namespace Intime.OPC.Service.Impl
         {
             using (var db = new YintaiHZhouContext())
             {
-                return db.OPC_SaleComment.Where(x => x.SaleOrderNo == saleOrderNo).ToList();
+                return db.OPC_SaleComments.Where(x => x.SaleOrderNo == saleOrderNo).ToList();
             }
         }
 
@@ -93,8 +93,8 @@ namespace Intime.OPC.Service.Impl
             using (var db = new YintaiHZhouContext())
             {
                 var user =
-                    db.OPC_AuthUser.Where(x => x.Id == uid)
-                        .Join(db.OPC_OrgInfo, u => u.OrgId, o => o.OrgID, (u, o) => new { user = u, org = o })
+                    db.OPC_AuthUsers.Where(x => x.Id == uid)
+                        .Join(db.OPC_OrgInfos, u => u.OrgId, o => o.OrgID, (u, o) => new { user = u, org = o })
                         .FirstOrDefault();
                 if (user == null)
                 {
@@ -117,7 +117,7 @@ namespace Intime.OPC.Service.Impl
                 if (!user.user.IsSystem)
                 {
                     return
-                        db.OPC_Sale.Where(whereCondition)
+                        db.OPC_Sales.Where(whereCondition)
                             .Join(db.Sections.Where(s => s.StoreId == user.org.StoreOrSectionID)
                             .Join(db.Stores,s=>s.StoreId,x=>x.Id,(section,store)=>new{section,store}), o => o.SectionId, s => s.section.Id, (o, s) => new{o,store=s})
                             .Join(db.OrderTransactions, o => o.o.OrderNo, ot => ot.OrderNo, (o, ot) => new { o, ot })                       

@@ -43,9 +43,9 @@ namespace Intime.OPC.Repository.Support
                 if (CurrentUser != null)
                 {
                   //query = query.Where(t => t.SectionId.HasValue && sectionIds.Contains(t.SectionId.Value));
-                  return   db.OPC_Sale.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value)).ToList();
+                  return   db.OPC_Sales.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value)).ToList();
                 }
-                List<OPC_Sale> saleList = db.OPC_Sale.ToList();
+                List<OPC_Sale> saleList = db.OPC_Sales.ToList();
                 return saleList;
             }
         }
@@ -54,7 +54,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                OPC_Sale sale = db.OPC_Sale.FirstOrDefault(t => t.SaleOrderNo == saleNo);
+                OPC_Sale sale = db.OPC_Sales.FirstOrDefault(t => t.SaleOrderNo == saleNo);
                 if (sale != null)
                 {
                     sale.UpdatedDate = DateTime.Now;
@@ -76,7 +76,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                return db.OPC_Sale.FirstOrDefault(t => t.SaleOrderNo == saleNo);
+                return db.OPC_Sales.FirstOrDefault(t => t.SaleOrderNo == saleNo);
             }
         }
 
@@ -92,7 +92,7 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var query =
-                    db.OPC_SaleDetail.Where(t => t.SaleOrderNo == saleOrderNo);
+                    db.OPC_SaleDetails.Where(t => t.SaleOrderNo == saleOrderNo);
                   
                         //.Join(db.OrderItems, t => t.OrderItemId, o => o.Id, (t, o) => new {Sale = t, OrderItem = o})
                         //.Join(db.Brands, t => t.OrderItem.BrandId, o => o.Id,
@@ -107,7 +107,7 @@ namespace Intime.OPC.Repository.Support
 
                 var filter = from q in query
                     join o in qq on q.OrderItemId equals o.OrderItems.Id into oo
-                    join p in db.OPC_Stock on q.StockId equals p.Id into pp
+                    join p in db.OPC_Stocks on q.StockId equals p.Id into pp
                     
                     select new {OrderItem=oo.FirstOrDefault(),Sale=q,Stock=pp.FirstOrDefault()};
 
@@ -171,7 +171,7 @@ namespace Intime.OPC.Repository.Support
             var saleOrderStatus1 = EnumSaleOrderStatus.ShoppingGuidePickUp.AsID();
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => (t.Status == saleOrderStatus || t.Status == saleOrderStatus1)
+                IQueryable<OPC_Sale> query = db.OPC_Sales.Where(t => (t.Status == saleOrderStatus || t.Status == saleOrderStatus1)
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
 
@@ -262,7 +262,7 @@ namespace Intime.OPC.Repository.Support
             int cashStatus = EnumSaleOrderCashStatus.CashOver.AsID();
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => (t.Status == saleOrderStatus || t.Status == (int)EnumSaleOrderStatus.NoPickUp || t.Status == (int)EnumSaleOrderStatus.Fetched)
+                IQueryable<OPC_Sale> query = db.OPC_Sales.Where(t => (t.Status == saleOrderStatus || t.Status == (int)EnumSaleOrderStatus.NoPickUp || t.Status == (int)EnumSaleOrderStatus.Fetched)
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
 
@@ -345,7 +345,7 @@ namespace Intime.OPC.Repository.Support
             {
                 foreach (string saleNo in saleNos)
                 {
-                    OPC_Sale sale = db.OPC_Sale.FirstOrDefault(t => t.SaleOrderNo == saleNo);
+                    OPC_Sale sale = db.OPC_Sales.FirstOrDefault(t => t.SaleOrderNo == saleNo);
                     if (sale != null)
                     {
                         sale.UpdatedDate = DateTime.Now;
@@ -353,9 +353,9 @@ namespace Intime.OPC.Repository.Support
                         sale.Status = (int) saleOrderStatus;
                     }
                 }
-                IQueryable<OPC_Sale> lst = db.OPC_Sale.Where(t => saleNos.Contains(t.SaleOrderNo));
+                IQueryable<OPC_Sale> lst = db.OPC_Sales.Where(t => saleNos.Contains(t.SaleOrderNo));
 
-                IEnumerable<OPC_Sale> lst2 = saleNos.Join(db.OPC_Sale, t => t, o => o.SaleOrderNo, (t, o) => o);
+                IEnumerable<OPC_Sale> lst2 = saleNos.Join(db.OPC_Sales, t => t, o => o.SaleOrderNo, (t, o) => o);
 
                 db.SaveChanges();
                 return true;
@@ -412,7 +412,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_Sale.Where(t => t.OrderNo == orderID);
+                var query = db.OPC_Sales.Where(t => t.OrderNo == orderID);
                 if (CurrentUser!=null)
                 {
                     query = query.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value));
@@ -502,7 +502,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_Sale> query = db.OPC_Sale.Where(t => t.Status == (int) saleOrderStatus
+                IQueryable<OPC_Sale> query = db.OPC_Sales.Where(t => t.Status == (int) saleOrderStatus
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
                 //if (CurrentUser!=null)

@@ -17,7 +17,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var d= db.OPC_AuthUser.FirstOrDefault(t => t.Id==id);
+                var d= db.OPC_AuthUsers.FirstOrDefault(t => t.Id==id);
                 if (d!=null && d.IsSystem)
                 {
                     throw new Exception("系统管理员，不能删除");
@@ -31,7 +31,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                return db.OPC_AuthUser.FirstOrDefault(t => t.LogonName == userName && t.Password == password);
+                return db.OPC_AuthUsers.FirstOrDefault(t => t.LogonName == userName && t.Password == password);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                OPC_AuthUser user = db.OPC_AuthUser.FirstOrDefault(t => t.Id == userId);
+                OPC_AuthUser user = db.OPC_AuthUsers.FirstOrDefault(t => t.Id == userId);
                 if (user != null)
                 {
                     user.IsValid = enable;
@@ -54,8 +54,8 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_AuthUser> lst = db.OPC_AuthRoleUser.Where(t => t.OPC_AuthRoleId == roleId)
-                    .Join(db.OPC_AuthUser.Where(t => t.IsSystem == false), t => t.OPC_AuthUserId, o => o.Id, (t, o) => o);
+                IQueryable<OPC_AuthUser> lst = db.OPC_AuthRoleUsers.Where(t => t.OPC_AuthRoleId == roleId)
+                    .Join(db.OPC_AuthUsers.Where(t => t.IsSystem == false), t => t.OPC_AuthUserId, o => o.Id, (t, o) => o);
                     
               lst=  lst.OrderBy(t => t.Id);
                 return lst.ToPageResult(pageIndex, pageSize);
@@ -80,7 +80,7 @@ namespace Intime.OPC.Repository.Support
        {
            using (var db = new YintaiHZhouContext())
            {
-               var lst = db.OPC_AuthUser.Where(t => !t.IsSystem);
+               var lst = db.OPC_AuthUsers.Where(t => !t.IsSystem);
                if (!string.IsNullOrWhiteSpace(loginName))
                {
                    lst = lst.Where(t => t.LogonName.Contains(loginName));
@@ -99,7 +99,7 @@ namespace Intime.OPC.Repository.Support
 
             using (var db = new YintaiHZhouContext())
             {
-                var lst = db.OPC_AuthUser.Where(t=>t.IsSystem==false);
+                var lst = db.OPC_AuthUsers.Where(t=>t.IsSystem==false);
                 if (!string.IsNullOrWhiteSpace(name))
                 {
                     lst = lst.Where(t => t.Name.Contains(name));

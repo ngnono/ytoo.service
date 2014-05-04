@@ -23,7 +23,7 @@ namespace Intime.OPC.Repository.Support
                 IQueryable<OrderItem> query = db.OrderItems.Where(t => t.OrderNo == orderNo);
 
                 IQueryable<OPC_RMADetail> query2 = db.OrderItems.Where(t => t.OrderNo == orderNo)
-                    .Join(db.OPC_RMADetail, t => t.Id, o => o.OrderItemId, (t, o) => o);
+                    .Join(db.OPC_RMADetails, t => t.Id, o => o.OrderItemId, (t, o) => o);
                 var filter = from q in query
                     join b in db.Brands on q.BrandId equals b.Id into cs
                     join rmaDetail in query2 on q.Id equals rmaDetail.OrderItemId into rma
@@ -56,11 +56,11 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var lstSections = CurrentUser.SectionID;
-                var saleNos = db.OPC_Sale.Where(t => t.SectionId.HasValue && lstSections.Contains(t.SectionId.Value)).Select<OPC_Sale, string>(t => t.SaleOrderNo).Distinct().ToList();
+                var saleNos = db.OPC_Sales.Where(t => t.SectionId.HasValue && lstSections.Contains(t.SectionId.Value)).Select<OPC_Sale, string>(t => t.SaleOrderNo).Distinct().ToList();
 
 
                 IQueryable<OPC_SaleDetail> query =
-                    db.OPC_SaleDetail.Where(t => t.CreatedDate >= request.StartTime && t.CreatedDate < request.EndTime && saleNos.Contains(t.SaleOrderNo));
+                    db.OPC_SaleDetails.Where(t => t.CreatedDate >= request.StartTime && t.CreatedDate < request.EndTime && saleNos.Contains(t.SaleOrderNo));
                 IQueryable<OrderItem> queryOrder =
                     db.OrderItems.Where(t => t.CreateDate >= request.StartTime && t.CreateDate < request.EndTime);
 
@@ -115,15 +115,15 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var lstSections = CurrentUser.SectionID;
-                var saleNos=   db.OPC_Sale.Where(t => t.SectionId.HasValue && lstSections.Contains(t.SectionId.Value)).Select<OPC_Sale,string>(t=>t.SaleOrderNo).Distinct().ToList();
+                var saleNos=   db.OPC_Sales.Where(t => t.SectionId.HasValue && lstSections.Contains(t.SectionId.Value)).Select<OPC_Sale,string>(t=>t.SaleOrderNo).Distinct().ToList();
 
                 IQueryable<OPC_SaleDetail> query =
-                    db.OPC_SaleDetail.Where(t => t.CreatedDate >= request.StartTime && t.CreatedDate < request.EndTime && saleNos.Contains(t.SaleOrderNo));
+                    db.OPC_SaleDetails.Where(t => t.CreatedDate >= request.StartTime && t.CreatedDate < request.EndTime && saleNos.Contains(t.SaleOrderNo));
 
                
                 var queryOrder =
                     db.OrderItems.Where(t => t.CreateDate >= request.StartTime && t.CreateDate < request.EndTime)
-                        .Join(db.OPC_RMADetail, t => t.Id, o => o.OrderItemId,
+                        .Join(db.OPC_RMADetails, t => t.Id, o => o.OrderItemId,
                             (t, o) => new {OrderItem = t, RmaDetail = o});
 
                 var query2 = query.Join(queryOrder, t => t.OrderItemId, o => o.OrderItem.Id,
@@ -133,7 +133,7 @@ namespace Intime.OPC.Repository.Support
                     join o in db.Orders on q.OrderItem.OrderNo equals o.OrderNo into order
                     join b in db.Brands on q.OrderItem.BrandId equals b.Id into cs
                     join s in db.Stores on q.OrderItem.StoreId equals s.Id into store
-                    join r in db.OPC_SaleRMA on q.RmaDetail.RMANo equals r.RMANo into saleRma
+                    join r in db.OPC_SaleRMAs on q.RmaDetail.RMANo equals r.RMANo into saleRma
                     select
                         new
                         {
@@ -188,11 +188,11 @@ namespace Intime.OPC.Repository.Support
                 var lstSections = CurrentUser.SectionID;
  
                 var querySale =
-                    db.OPC_Sale.Where(
+                    db.OPC_Sales.Where(
                         t =>
                             t.CreatedDate >= request.StartTime && t.CreatedDate < request.EndTime &&
                             t.CashStatus == cahStatus && t.SectionId.HasValue && lstSections.Contains(t.SectionId.Value))
-                        .Join(db.OPC_SaleDetail, t => t.SaleOrderNo, o => o.SaleOrderNo,
+                        .Join(db.OPC_SaleDetails, t => t.SaleOrderNo, o => o.SaleOrderNo,
                             (t, o) => new {Sale = t, SaleDetail = o});
 
                 IQueryable<OrderItem> queryOrder =
@@ -205,7 +205,7 @@ namespace Intime.OPC.Repository.Support
                     join o in db.Orders on q.OrderItem.OrderNo equals o.OrderNo into order
                     join b in db.Brands on q.OrderItem.BrandId equals b.Id into cs
                     join s in db.Stores on q.OrderItem.StoreId equals s.Id into store
-                    join r in db.OPC_RMADetail on q.OrderItem.Id equals r.OrderItemId into rmaDetails
+                    join r in db.OPC_RMADetails on q.OrderItem.Id equals r.OrderItemId into rmaDetails
                     select
                         new
                         {
@@ -306,14 +306,14 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var sale = db.OPC_Sale.Where(t => t.SaleOrderNo == saleOrderNo).FirstOrDefault();
+                var sale = db.OPC_Sales.Where(t => t.SaleOrderNo == saleOrderNo).FirstOrDefault();
                 if (sale == null)
                 {
                     throw new Exception("销售单不存在，销售单号:"+saleOrderNo);
                 }
                 sale.Status = EnumSaleOrderStatus.Void.AsID();
                 
-                db.OPC_Sale.AddOrUpdate(sale);
+                db.OPC_Sales.AddOrUpdate(sale);
             
                 db.SaveChanges();
             }

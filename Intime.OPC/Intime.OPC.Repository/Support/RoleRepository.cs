@@ -38,7 +38,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                OPC_AuthRole ent = db.OPC_AuthRole.FirstOrDefault(t => t.Id == roleID);
+                OPC_AuthRole ent = db.OPC_AuthRoles.FirstOrDefault(t => t.Id == roleID);
                 if (ent != null)
                 {
                     if (ent.IsSystem)
@@ -82,7 +82,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                return db.OPC_AuthRoleUser.Where(t => t.OPC_AuthUserId == userID).Join(db.OPC_AuthRole,
+                return db.OPC_AuthRoleUsers.Where(t => t.OPC_AuthUserId == userID).Join(db.OPC_AuthRoles,
                     t => t.OPC_AuthUserId, o => o.Id, (t, o) => o).ToPageResult(pageIndex, pageSize);
             }
         }

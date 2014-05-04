@@ -41,11 +41,11 @@ namespace Intime.OPC.Repository.Support
                 //        arm => arm.OPC_AuthMenuId, (m, arm) => m).OrderBy(t=>t.Sort).ToList();
 
 
-                var lstRole = db.OPC_AuthRoleUser.Where(u => u.OPC_AuthUserId == userId).Select<OPC_AuthRoleUser,int>(t=>t.OPC_AuthRoleId).Distinct();
+                var lstRole = db.OPC_AuthRoleUsers.Where(u => u.OPC_AuthUserId == userId).Select<OPC_AuthRoleUser,int>(t=>t.OPC_AuthRoleId).Distinct();
                 var lstMenu =
-                    db.OPC_AuthRoleMenu.Where(t => lstRole.Contains(t.OPC_AuthRoleId))
+                    db.OPC_AuthRoleMenus.Where(t => lstRole.Contains(t.OPC_AuthRoleId))
                         .Select<OPC_AuthRoleMenu, int>(t => t.OPC_AuthMenuId).Distinct();
-               return  db.OPC_AuthMenu.Where(t => lstMenu.Contains(t.Id)).Distinct().ToList();
+               return  db.OPC_AuthMenus.Where(t => lstMenu.Contains(t.Id)).Distinct().ToList();
 
             }
         }
@@ -59,8 +59,8 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                return db.OPC_AuthRoleMenu.Where(t => t.OPC_AuthRoleId == roleID).Join(
-                    db.OPC_AuthMenu,
+                return db.OPC_AuthRoleMenus.Where(t => t.OPC_AuthRoleId == roleID).Join(
+                    db.OPC_AuthMenus,
                     t => t.OPC_AuthMenuId,
                     o => o.Id, (arm, aru) => aru).Distinct().OrderBy(t=>t.Sort).ToList();
             }

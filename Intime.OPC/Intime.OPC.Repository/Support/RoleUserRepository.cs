@@ -16,8 +16,8 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var lst = db.OPC_AuthRoleUser.Where(t => t.OPC_AuthUserId == id).ToList();
-                db.OPC_AuthRoleUser.RemoveRange(lst);
+                var lst = db.OPC_AuthRoleUsers.Where(t => t.OPC_AuthUserId == id).ToList();
+                db.OPC_AuthRoleUsers.RemoveRange(lst);
                 db.SaveChanges();
             }
         }

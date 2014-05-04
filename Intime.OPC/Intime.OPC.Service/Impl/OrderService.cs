@@ -15,7 +15,7 @@ namespace Intime.OPC.Service.Impl
                     db.Orders.Where(x => x.OrderNo == orderNo)
                         .Join(db.OrderTransactions, o => o.OrderNo, ot => ot.OrderNo,
                             (o, ot) => new {order = o, trans = ot}).Join(db.PaymentMethods,o=>o.trans.PaymentCode,s=>s.Code,(o,p)=>new{o=o,p})
-                        .GroupJoin(db.OPC_Sale.Where(x => x.OrderNo == orderNo), x => x.o.order.OrderNo, s => s.OrderNo,
+                        .GroupJoin(db.OPC_Sales.Where(x => x.OrderNo == orderNo), x => x.o.order.OrderNo, s => s.OrderNo,
                             (o, s) =>
                                 new
                                 {
