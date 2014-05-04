@@ -303,20 +303,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         TransCode = orderTran.TransNo
                     }
                 };
-                try
-                {
-                    var rsp = _apiClient.Post(rechargeRequest);
 
-                    if (!rsp.Status)
-                    {
-                        return this.RenderError(r => r.Message = rsp.ErrorMessage);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex);
-                    return this.RenderError(r => r.Message = ex.Message);
-                }
 
                 var transfer = _transRepo.Find(x => x.IsDecline == 0 && x.IsActive == 0 && x.OrderNo == charge_no);
 
@@ -342,8 +329,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         transfer.ToUserId = authuid;
                         _transRepo.Update(transfer);
                     }
+                    try
+                    {
+                        var rsp = _apiClient.Post(rechargeRequest);
 
-                    ts.Complete();
+                        if (!rsp.Status)
+                        {
+                            return this.RenderError(r => r.Message = rsp.ErrorMessage);
+                        }
+                        ts.Complete();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
+                        return this.RenderError(r => r.Message = ex.Message);
+                    }
+                    
                 }
 
                 return this.RenderSuccess<dynamic>(null);
