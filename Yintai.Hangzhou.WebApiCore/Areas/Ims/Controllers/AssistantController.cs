@@ -93,7 +93,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                        .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Combo && r.Status == (int)DataStatus.Normal)
                                 , o => o.Id
                                 , i => i.SourceId
-                                , (o, i) => new { A = o, R = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() });
+                                , (o, i) => new { A = o, R = i.OrderByDescending(ir => ir.SortOrder).ThenBy(ir=>ir.Id).FirstOrDefault() });
 
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
