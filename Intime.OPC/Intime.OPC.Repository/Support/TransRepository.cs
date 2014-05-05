@@ -27,7 +27,7 @@ namespace Intime.OPC.Repository.Support
                 DateTime dateNow = DateTime.Now;
                 using (var db = new YintaiHZhouContext())
                 {
-                    var filterExpression = db.OPC_Sale.Where(t => t.SellDate >= startDate && t.SellDate < endDate);
+                    var filterExpression = db.OPC_Sales.Where(t => t.SellDate >= startDate && t.SellDate < endDate);
                     
                     if (!string.IsNullOrEmpty(orderNo))
                     {
@@ -57,7 +57,7 @@ namespace Intime.OPC.Repository.Support
                 int intid = int.Parse(sale["id"]);
                 int intstatus = int.Parse(sale["status"]);
 
-                OPC_Sale user = db.OPC_Sale.Where(e => e.Id == intid).FirstOrDefault();
+                OPC_Sale user = db.OPC_Sales.Where(e => e.Id == intid).FirstOrDefault();
                 if (user != null)
                 {
                     user.Status = intstatus;
@@ -77,7 +77,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                return db.OPC_SaleDetail.Where(t => saleNos.Contains(t.SaleOrderNo)).ToList();
+                return db.OPC_SaleDetails.Where(t => saleNos.Contains(t.SaleOrderNo)).ToList();
             }
         }
 

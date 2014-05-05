@@ -110,7 +110,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var filter = db.ShippingSales.Where(t => t.ShippingCode == shippingNo).Join(db.Orders,t=>t.OrderNo,o=>o.OrderNo,(t,o)=>o);
+                var filter = db.OPC_ShippingSales.Where(t => t.ShippingCode == shippingNo).Join(db.Orders,t=>t.OrderNo,o=>o.OrderNo,(t,o)=>o);
                 filter = filter.OrderByDescending(t => t.CreateDate);
                 return filter.ToPageResult(pageIndex,pageSize);
             }
@@ -123,7 +123,7 @@ namespace Intime.OPC.Repository.Support
             {
                 var des = EnumReturnGoodsStatus.NoProcess.GetDescription();
                 
-                var filter2 = db.OPC_SaleRMA.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus==des); ;
+                var filter2 = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus==des); ;
 
                 var filter = db.Orders.Where(t => true);
 
@@ -137,7 +137,7 @@ namespace Intime.OPC.Repository.Support
                 }
                 if (request.SaleOrderNo.IsNotNull())
                 {
-                    filter = filter.Join(db.OPC_Sale.Where(t => t.SaleOrderNo.Contains(request.SaleOrderNo)),
+                    filter = filter.Join(db.OPC_Sales.Where(t => t.SaleOrderNo.Contains(request.SaleOrderNo)),
                         t => t.OrderNo, o => o.OrderNo, (t, o) => t);
                 }
 
@@ -172,7 +172,7 @@ namespace Intime.OPC.Repository.Support
             {
                 
 
-                var filter2 = db.OPC_SaleRMA.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate );
+                var filter2 = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate );
                 if (returnGoodsStatus.IsNotNull())
                 {
                     filter2 = filter2.Where(t => t.RMAStatus == returnGoodsStatus);
@@ -200,7 +200,7 @@ namespace Intime.OPC.Repository.Support
                 }
                 if (request.SaleOrderNo.IsNotNull())
                 {
-                    filter = filter.Join(db.OPC_Sale.Where(t => t.SaleOrderNo.Contains(request.SaleOrderNo)),
+                    filter = filter.Join(db.OPC_Sales.Where(t => t.SaleOrderNo.Contains(request.SaleOrderNo)),
                         t => t.OrderNo, o => o.OrderNo, (t, o) => t);
                 }
 
@@ -233,7 +233,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var filter2 = db.OPC_Sale.Where(t=>true);
+                var filter2 = db.OPC_Sales.Where(t=>true);
 
                 var filter = db.Orders.Where(t => t.CreateDate >= request.StartDate && t.CreateDate  < request.EndDate && t.Status==orderstatus);
                 if (request.OrderNo.IsNotNull())

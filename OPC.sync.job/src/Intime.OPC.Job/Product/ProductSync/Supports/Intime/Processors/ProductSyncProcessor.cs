@@ -71,12 +71,11 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             var brand = _brandSyncProcessor.SyncBrand(channelProduct.BrandId, channelProduct.BrandName);
             if (brand == null)
             {    
-                //zxy modi 2014-4-14
                 //品牌没有的，按所属专柜在查找，如果没有的，如果有则关联此品牌；如果没有，则依据专柜创建品牌并关联
                 using (var db = new YintaiHZhouContext())
                 {
                     brand = db.Brands.FirstOrDefault(b => b.Name == section.Name ||b.EnglishName==section.Name);
-                    if (brand==null)
+                    if (brand == null)
                     {
                         /**
                         * 品牌映射关系不存在，
@@ -117,6 +116,15 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
 
                         brand = newBrand;
 
+                    }
+                    else
+                    {
+                        if (brand.Status != 1)
+                        {
+                            brand.Status = 1;
+                            brand.UpdatedDate = DateTime.Now;
+                            db.SaveChanges();
+                        }
                     }
 
                 }

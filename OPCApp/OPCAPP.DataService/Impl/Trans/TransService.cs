@@ -126,7 +126,7 @@ namespace OPCApp.DataService.Impl.Trans
         {
             try
             {
-                var shipSale = RestClient.GetSingle<OPC_ShippingSale>("trans/GetShippingSaleBySaleOrderNoGetSaleByShippingSaleNoGetSaleByShippingSaleNo",
+                var shipSale = RestClient.GetSingle<OPC_ShippingSale>("trans/GetShippingSaleBySaleOrderNo",
                     string.Format("saleOrderNo={0}", saleOrderNo));
                 return shipSale == null ? new List<OPC_ShippingSale>() : new List<OPC_ShippingSale> {shipSale};
             }

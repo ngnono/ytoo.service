@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.Infrastructure;
@@ -54,11 +55,10 @@ namespace OPCApp.Main.ViewModels
                 AppEx.Config.UserKey = Model.UserKey;
                 AppEx.Config.Version = Model.Version;
             }
-            catch (Exception Ex)
+            catch (Exception)
             {
-                throw Ex;    
+                MessageBox.Show("配置错误，请联系管理员!", "配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
         }
 
     }

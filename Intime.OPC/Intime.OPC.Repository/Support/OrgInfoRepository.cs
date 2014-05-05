@@ -32,7 +32,7 @@ namespace Intime.OPC.Repository.Support
                 if (orgInfo != null)
                 {
 
-                    var lst=  db.OrgInfos.Where(t => t.ParentID == orgInfo.ParentID).OrderByDescending(t=>t.OrgID);
+                    var lst=  db.OPC_OrgInfos.Where(t => t.ParentID == orgInfo.ParentID).OrderByDescending(t=>t.OrgID);
                     var e = lst.FirstOrDefault();
                     if (e == null)
                     {
@@ -44,7 +44,7 @@ namespace Intime.OPC.Repository.Support
                         orgInfo.OrgID = (d + 1).ToString();
                     }
                     orgInfo.IsDel = false;
-                    var a=  db.OrgInfos.Add(orgInfo);
+                    var a = db.OPC_OrgInfos.Add(orgInfo);
                     db.SaveChanges();
                     return a;
                 }

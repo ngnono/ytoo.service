@@ -30,8 +30,8 @@ namespace Intime.OPC.Repository.Support
 
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
-                var saleQuery = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var saleQuery = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
                 if (rmaStatus.HasValue)
                 {
                     saleQuery = saleQuery.Where(t => t.Status == rmaStatus);
@@ -56,7 +56,7 @@ namespace Intime.OPC.Repository.Support
                     t => t.RMANo, (t, o) => new {Rma = t, SaleRma = o})
                     .Join(db.Stores, t => t.Rma.StoreId, o => o.Id,
                         (t, o) => new {Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma})
-                    .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
+                    .Join(db.OPC_Sales, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
                         (t, o) => new {Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = o})
                     .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo,
                         (t, o) =>
@@ -112,13 +112,13 @@ namespace Intime.OPC.Repository.Support
             
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMA.Where(t => t.RMANo == rmaNo);
+                var query = db.OPC_RMAs.Where(t => t.RMANo == rmaNo);
 
-                var lst2 = query.Join(db.OPC_SaleRMA.Where(e => e.RMANo == rmaNo), o => o.RMANo, t => t.RMANo,
+                var lst2 = query.Join(db.OPC_SaleRMAs.Where(e => e.RMANo == rmaNo), o => o.RMANo, t => t.RMANo,
                     (t, o) => new {Rma = t, SaleRma = o})
                     .Join(db.Stores, t => t.Rma.StoreId, o => o.Id,
                         (t, o) => new {Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma})
-                    .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
+                    .Join(db.OPC_Sales, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
                         (t, o) => new {Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = o})
                     .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo,
                         (t, o) =>
@@ -178,8 +178,8 @@ namespace Intime.OPC.Repository.Support
            ;
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
-                var saleQuery = db.OPC_SaleRMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && lstDes.Contains(t.RMAStatus));
+                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var saleQuery = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && lstDes.Contains(t.RMAStatus));
                 if (rmaStatus.HasValue)
                 {
                     saleQuery = saleQuery.Where(t => t.Status == rmaStatus);
@@ -198,7 +198,7 @@ namespace Intime.OPC.Repository.Support
                     t => t.RMANo, (t, o) => new { Rma = t, SaleRma = o })
                     .Join(db.Stores, t => t.Rma.StoreId, o => o.Id,
                         (t, o) => new { Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma })
-                    .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
+                    .Join(db.OPC_Sales, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
                         (t, o) => new { Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = o })
                     .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo,
                         (t, o) =>
@@ -257,9 +257,9 @@ namespace Intime.OPC.Repository.Support
             //var rmaCashStatus = EnumCashStatus.CashOver.GetDescription();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
                 var saleQuery =
-                    db.OPC_SaleRMA.Where(
+                    db.OPC_SaleRMAs.Where(
                         t => t.CreatedDate >= startTime && t.CreatedDate < endTime  && t.Status==stat);
                 
                 if (orderNo.IsNotNull())
@@ -273,7 +273,7 @@ namespace Intime.OPC.Repository.Support
                     t => t.RMANo, (t, o) => new {Rma = t, SaleRma = o})
                     .Join(db.Stores, t => t.Rma.StoreId, o => o.Id,
                         (t, o) => new {Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma})
-                    .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
+                    .Join(db.OPC_Sales, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
                         (t, o) => new {Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = o})
                     .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo,
                         (t, o) =>
@@ -332,9 +332,9 @@ namespace Intime.OPC.Repository.Support
             string rmaStatus = EnumReturnGoodsStatus.Valid.GetDescription();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
+                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
                 var saleQuery =
-                    db.OPC_SaleRMA.Where(
+                    db.OPC_SaleRMAs.Where(
                         t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMACashStatus == rmaCashStatus && t.Status == stat && t.RMAStatus == rmaStatus);
 
                 if (orderNo.IsNotNull())
@@ -346,7 +346,7 @@ namespace Intime.OPC.Repository.Support
                     t => t.RMANo, (t, o) => new { Rma = t, SaleRma = o })
                     .Join(db.Stores, t => t.Rma.StoreId, o => o.Id,
                         (t, o) => new { Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma })
-                    .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
+                    .Join(db.OPC_Sales, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
                         (t, o) => new { Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = o })
                     .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo,
                         (t, o) =>
@@ -405,9 +405,9 @@ namespace Intime.OPC.Repository.Support
             string rmaStatus = EnumReturnGoodsStatus.Valid.GetDescription();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
+                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
                 var saleQuery =
-                    db.OPC_SaleRMA.Where(
+                    db.OPC_SaleRMAs.Where(
                         t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus == rmaStatus && CurrentUser.StoreIDs.Contains(t.StoreId));
 
                 if (orderNo.IsNotNull())
@@ -419,7 +419,7 @@ namespace Intime.OPC.Repository.Support
                     t => t.RMANo, (t, o) => new { Rma = t, SaleRma = o })
                     .Join(db.Stores, t => t.Rma.StoreId, o => o.Id,
                         (t, o) => new { Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma })
-                    .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
+                    .Join(db.OPC_Sales, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
                         (t, o) => new { Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = o })
                     .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo,
                         (t, o) =>
@@ -479,9 +479,9 @@ namespace Intime.OPC.Repository.Support
             int rma = EnumRMAStatus.ShoppingGuideReceive.AsID();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMA.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
+                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
                 var saleQuery =
-                    db.OPC_SaleRMA.Where(
+                    db.OPC_SaleRMAs.Where(
                         t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.Status==rma && CurrentUser.StoreIDs.Contains(t.StoreId));
 
                 if (orderNo.IsNotNull())
@@ -493,7 +493,7 @@ namespace Intime.OPC.Repository.Support
                     t => t.RMANo, (t, o) => new { Rma = t, SaleRma = o })
                     .Join(db.Stores, t => t.Rma.StoreId, o => o.Id,
                         (t, o) => new { Rma = t.Rma, StoreName = o.Name, SaleRma = t.SaleRma })
-                    .Join(db.OPC_Sale, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
+                    .Join(db.OPC_Sales, t => t.Rma.SaleOrderNo, o => o.SaleOrderNo,
                         (t, o) => new { Rma = t.Rma, StoreName = t.StoreName, SaleRma = t.SaleRma, Sale = o })
                     .Join(db.Orders, t => t.Rma.OrderNo, o => o.OrderNo,
                         (t, o) =>

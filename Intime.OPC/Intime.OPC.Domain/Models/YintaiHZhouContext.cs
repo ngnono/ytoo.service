@@ -19,29 +19,28 @@ namespace Intime.OPC.Domain.Models
 
         public DbSet<Brand> Brands { get; set; }
       
-        public DbSet<OPC_AuthMenu> OPC_AuthMenu { get; set; }
-        public DbSet<OPC_AuthRole> OPC_AuthRole { get; set; }
-        public DbSet<OPC_AuthRoleMenu> OPC_AuthRoleMenu { get; set; }
-        public DbSet<OPC_AuthRoleUser> OPC_AuthRoleUser { get; set; }
-        public DbSet<OPC_AuthUser> OPC_AuthUser { get; set; }
-        public DbSet<OPC_ChannelProduct> OPC_ChannelProduct { get; set; }
-        public DbSet<OPC_OrderComment> OPC_OrderComment { get; set; }
-        public DbSet<OPC_OrgInfo> OPC_OrgInfo { get; set; }
-        public DbSet<OPC_RMA> OPC_RMA { get; set; }
-        public DbSet<OPC_RMAComment> OPC_RMAComment { get; set; }
-        public DbSet<OPC_RMADetail> OPC_RMADetail { get; set; }
-        public DbSet<OPC_RMALog> OPC_RMALog { get; set; }
-        public DbSet<OPC_Sale> OPC_Sale { get; set; }
-        public DbSet<OPC_SaleComment> OPC_SaleComment { get; set; }
-        public DbSet<OPC_SaleDetail> OPC_SaleDetail { get; set; }
-        public DbSet<OPC_SaleLog> OPC_SaleLog { get; set; }
-        public DbSet<OPC_SaleRMA> OPC_SaleRMA { get; set; }
-        public DbSet<OPC_ShippingSale> OPC_ShippingSale { get; set; }
-        public DbSet<OPC_ShippingSaleComment> OPC_ShippingSaleComment { get; set; }
-        public DbSet<OPC_SKU> OPC_SKU { get; set; }
-        public DbSet<OPC_Stock> OPC_Stock { get; set; }
-        public DbSet<OPC_StorePriority> OPC_StorePriority { get; set; }
-        public DbSet<OPC_SupplierInfo> OPC_SupplierInfo { get; set; }
+        public DbSet<OPC_AuthMenu> OPC_AuthMenus { get; set; }
+        public DbSet<OPC_AuthRole> OPC_AuthRoles { get; set; }
+        public DbSet<OPC_AuthRoleMenu> OPC_AuthRoleMenus { get; set; }
+        public DbSet<OPC_AuthRoleUser> OPC_AuthRoleUsers { get; set; }
+        public DbSet<OPC_AuthUser> OPC_AuthUsers { get; set; }
+        public DbSet<OPC_ChannelProduct> OPC_ChannelProducts { get; set; }
+        public DbSet<OPC_OrderComment> OPC_OrderComments { get; set; }
+        public DbSet<OPC_OrgInfo> OPC_OrgInfos { get; set; }
+        public DbSet<OPC_RMA> OPC_RMAs { get; set; }
+        public DbSet<OPC_RMAComment> OPC_RMAComments { get; set; }
+        public DbSet<OPC_RMADetail> OPC_RMADetails { get; set; }
+        public DbSet<OPC_RMALog> OPC_RMALogs { get; set; }
+        public DbSet<OPC_Sale> OPC_Sales { get; set; }
+        public DbSet<OPC_SaleComment> OPC_SaleComments { get; set; }
+        public DbSet<OPC_SaleDetail> OPC_SaleDetails { get; set; }
+        public DbSet<OPC_SaleLog> OPC_SaleLogs { get; set; }
+        public DbSet<OPC_SaleRMA> OPC_SaleRMAs { get; set; }
+        public DbSet<OPC_ShippingSaleComment> OPC_ShippingSaleComments { get; set; }
+        public DbSet<OPC_SKU> OPC_SKUs { get; set; }
+        public DbSet<OPC_Stock> OPC_Stocks { get; set; }
+        public DbSet<OPC_StorePriority> OPC_StorePriorities { get; set; }
+        public DbSet<OPC_SupplierInfo> OPC_SupplierInfos { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<RMA> RMAs { get; set; }
@@ -54,9 +53,8 @@ namespace Intime.OPC.Domain.Models
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
         public DbSet<OrderTransaction> OrderTransactions { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<OPC_OrgInfo> OrgInfos { get; set; }     
-        public DbSet<OPC_ShippingSale> ShippingSales { get; set; }
+        public DbSet<Product> Products { get; set; }  
+        public DbSet<OPC_ShippingSale> OPC_ShippingSales { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -96,6 +94,7 @@ namespace Intime.OPC.Domain.Models
             modelBuilder.Configurations.Add(new PaymentMethodMap());
             modelBuilder.Configurations.Add(new OrderTransactionMap());
             modelBuilder.Configurations.Add(new UserMap());
+            modelBuilder.Configurations.Add(new ProductMap());
 
         }
     }

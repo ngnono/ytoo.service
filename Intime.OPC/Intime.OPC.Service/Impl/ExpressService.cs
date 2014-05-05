@@ -22,7 +22,7 @@ namespace Intime.OPC.Service.Impl
                 }
 
                 var shippingSale =
-                    db.OPC_ShippingSale.FirstOrDefault(
+                    db.OPC_ShippingSales.FirstOrDefault(
                         x => x.OrderNo == package.OrderNo && x.ShippingCode == package.ShippingCode);
                 if (shippingSale != null)
                 {
@@ -53,7 +53,7 @@ namespace Intime.OPC.Service.Impl
                         ShippingContactPhone = order.ShippingContactPhone,
                         //StoreId = section.StoreId,
                     };
-                    shippingSale = db.OPC_ShippingSale.Add(shippingSale);
+                    shippingSale = db.OPC_ShippingSales.Add(shippingSale);
                     db.SaveChanges();
                 }
 
@@ -61,7 +61,7 @@ namespace Intime.OPC.Service.Impl
                 {
                     foreach (var saleOrderNo in package.SaleOrderIDs)
                     {
-                        var saleOrder = db.OPC_Sale.FirstOrDefault(x => x.SaleOrderNo == saleOrderNo);
+                        var saleOrder = db.OPC_Sales.FirstOrDefault(x => x.SaleOrderNo == saleOrderNo);
                         if (saleOrder == null)
                         {
                             continue;

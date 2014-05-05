@@ -16,12 +16,12 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                OPC_Sale sale = db.OPC_Sale.FirstOrDefault(t => t.SaleOrderNo == saleOrderNo);
+                OPC_Sale sale = db.OPC_Sales.FirstOrDefault(t => t.SaleOrderNo == saleOrderNo);
                 if (sale == null)
                 {
                     throw new SaleOrderNotExistsException(saleOrderNo);
                 }
-                return db.ShippingSales.FirstOrDefault(t => t.ShippingCode == sale.ShippingCode);
+                return db.OPC_ShippingSales.FirstOrDefault(t => t.ShippingCode == sale.ShippingCode);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 IQueryable<OPC_ShippingSale> query =
-                    db.ShippingSales.Where(t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate && t.StoreId.HasValue && CurrentUser.StoreIDs.Contains(t.StoreId.Value));
+                    db.OPC_ShippingSales.Where(t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate && t.StoreId.HasValue && CurrentUser.StoreIDs.Contains(t.StoreId.Value));
                 if (shippingStatus > -1)
                 {
                     query = query.Where(t => t.ShippingStatus == shippingStatus);
@@ -83,7 +83,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                return db.ShippingSales.FirstOrDefault(t => t.RmaNo == rmaNo);
+                return db.OPC_ShippingSales.FirstOrDefault(t => t.RmaNo == rmaNo);
             }
         }
 
@@ -93,7 +93,7 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var lst =
-                    db.ShippingSales.Where(
+                    db.OPC_ShippingSales.Where(
                         t => t.CreateDate >= startDate && t.CreateDate < endDate && t.ShippingStatus == shippingStatus && t.StoreId.HasValue && CurrentUser.StoreIDs.Contains(t.StoreId.Value));
                 if (orderNo.IsNotNull())
                 {

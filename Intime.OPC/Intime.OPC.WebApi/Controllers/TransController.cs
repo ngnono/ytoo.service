@@ -79,15 +79,15 @@ namespace Intime.OPC.WebApi.Controllers
         {
             using (var db = new YintaiHZhouContext())
             {
-                var saleOrder = db.OPC_Sale.FirstOrDefault(x => x.SaleOrderNo == saleOrderNo);
+                var saleOrder = db.OPC_Sales.FirstOrDefault(x => x.SaleOrderNo == saleOrderNo);
                 if (saleOrder == null)
                 {
                     return Error("不存在的销售单");
                 }
 
                 var shippingSale =
-                    db.OPC_ShippingSale.FirstOrDefault(
-                        x => x.OrderNo == saleOrder.OrderNo && x.ShippingCode == saleOrder.ShippingCode && x.SaleOrderNo == saleOrderNo);
+                    db.OPC_ShippingSales.FirstOrDefault(
+                        x => x.OrderNo == saleOrder.OrderNo && x.ShippingCode == saleOrder.ShippingCode);
 
                 if (shippingSale == null)
                 {

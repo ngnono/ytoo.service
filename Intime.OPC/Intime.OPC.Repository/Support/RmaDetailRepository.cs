@@ -18,7 +18,7 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var query =
-                    db.OPC_RMADetail.Where(t => t.RMANo == rmaNo)
+                    db.OPC_RMADetails.Where(t => t.RMANo == rmaNo)
                         .Join(db.OrderItems, t => t.OrderItemId, o => o.Id, (t, o) => new {RmaDetail = t, OrderItem = o})
                         .Join(db.Brands, t => t.OrderItem.BrandId, o => o.Id,
                             (t, o) => new {t.OrderItem, t.RmaDetail, BrandName = o.Name});

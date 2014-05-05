@@ -21,7 +21,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var pp= db.OPC_Sale.Where(t => t.OrderNo == orderNo).Join(db.OPC_SaleDetail, t => t.SaleOrderNo,
+                var pp= db.OPC_Sales.Where(t => t.OrderNo == orderNo).Join(db.OPC_SaleDetails, t => t.SaleOrderNo,
                     o => o.SaleOrderNo, (t, o) => o).OrderByDescending(t=>t.CreatedDate);
                 return pp.ToPageResult(pageIndex, pageSize);
             }
