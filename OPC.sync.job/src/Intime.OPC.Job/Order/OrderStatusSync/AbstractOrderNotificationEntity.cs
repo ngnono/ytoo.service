@@ -48,7 +48,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                         type = PaymentType,
                         typeid = trans.payment.Code,
                         typename = trans.payment.Name,
-                        no = string.Empty,
+                        no = trans.trans.TransNo,
                         amount = (de.detail.Price * de.detail.SaleCount).ToString(),
                         rowno = idx,
                         memo = string.Empty,
