@@ -312,7 +312,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                 .Join(Context.Set<ProductPropertyValueEntity>(), o => o, i => i.Id, (o, i) => i)
                                 .GroupJoin(Context.Set<ResourceEntity>().Where(pr => pr.SourceType == (int)SourceType.Product && pr.Type==(int)ResourceType.Image && pr.SourceId == linq.P.Id), o => o.Id, i => i.ColorId, (o, i) => new { C = o, CR = i.FirstOrDefault() })
                                 .ToList()
-                                .Where(l=>l.CR !=null )
                                 .Select(color => new SaleColorPropertyResponse()
                                 {
                                     ColorId = color.C.Id,
