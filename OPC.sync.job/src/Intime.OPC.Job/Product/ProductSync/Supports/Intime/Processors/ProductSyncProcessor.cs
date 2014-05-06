@@ -148,12 +148,12 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             /**
              * 检查并同步分类,目前集团分类信息为空，所以同步商品不成功，只是提供警告 
              */
-            //var category = _categorySyncProcessor.Sync(channelProduct.CategoryId4, channelProduct.Category4);
-            //if (category == null)
-            //{
-            //    //如果分类为空，设置一个默认值
-            //    Log.WarnFormat("同步商品对应分类失败:[{0}],categoryId:[{1}],category:[{2}]", channelProduct.ProductId, channelProduct.CategoryId4, channelProduct.Category4);
-            //}
+            var category = _categorySyncProcessor.Sync(channelProduct.CategoryId4, channelProduct.Category4);
+            if (category == null)
+            {
+                //如果分类为空，设置一个默认值
+                Log.WarnFormat("同步商品对应分类失败:[{0}],categoryId:[{1}],category:[{2}]", channelProduct.ProductId, channelProduct.CategoryId4, channelProduct.Category4);
+            }
 
             var tagId = FetchTagId(channelProduct);
 
