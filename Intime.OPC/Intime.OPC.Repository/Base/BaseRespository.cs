@@ -40,7 +40,7 @@ namespace Intime.OPC.Repository.Base
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public  bool Create(T entity)
+        public bool Create(T entity)
         {
             using (var db = new YintaiHZhouContext())
             {
@@ -48,10 +48,10 @@ namespace Intime.OPC.Repository.Base
                 {
                     IDbSet<T> set = db.Set<T>();
 
-                    var errors= db.Entry(entity).GetValidationResult();
+                    var errors = db.Entry(entity).GetValidationResult();
                     if (!errors.IsValid)
                     {
-                        StringBuilder strb=new StringBuilder();
+                        StringBuilder strb = new StringBuilder();
                         foreach (var err in errors.ValidationErrors)
                         {
                             strb.AppendLine(string.Format("property:{0} Error:{1}", err.PropertyName, err.ErrorMessage));
@@ -72,7 +72,7 @@ namespace Intime.OPC.Repository.Base
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public  bool Update(T entity)
+        public bool Update(T entity)
         {
             using (var db = new YintaiHZhouContext())
             {
@@ -92,7 +92,7 @@ namespace Intime.OPC.Repository.Base
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public  bool Delete(int id)
+        public bool Delete(int id)
         {
             using (var db = new YintaiHZhouContext())
             {
@@ -119,9 +119,10 @@ namespace Intime.OPC.Repository.Base
 
         #endregion
 
-
+        [Obsolete("已经过期，请不要使用")]
         protected UserDto CurrentUser { get; private set; }
 
+        [Obsolete("已经过期，请不要使用")]
         public void SetCurrentUser(UserDto dto)
         {
             CurrentUser = dto;
@@ -131,6 +132,7 @@ namespace Intime.OPC.Repository.Base
         /// 验证用户
         /// </summary>
         /// <exception cref="UserNotValidException">-1</exception>
+        [Obsolete("已经过期，请不要使用")]
         protected void CheckUser()
         {
             if (CurrentUser == null)
@@ -152,13 +154,13 @@ namespace Intime.OPC.Repository.Base
                 return set.Where(filter).ToList();
             }
         }
-        protected PageResult<T> Select<S>(Expression<Func<T, bool>> filter,Expression<Func<T, S>> orderByLambda, bool isAsc, int pageIndex, int pageSize = 20)
+        protected PageResult<T> Select<S>(Expression<Func<T, bool>> filter, Expression<Func<T, S>> orderByLambda, bool isAsc, int pageIndex, int pageSize = 20)
         {
             using (var db = new YintaiHZhouContext())
             {
                 DbSet<T> set = db.Set<T>();
                 int count = set.Count(filter);
-                
+
                 pageIndex = pageIndex - 1;
                 if (pageIndex < 0)
                 {
@@ -167,7 +169,7 @@ namespace Intime.OPC.Repository.Base
                 IList<T> lst;
                 if (isAsc)
                 {
-                    lst = set.Where(filter).OrderBy(orderByLambda).Skip(pageIndex*pageSize).Take(pageSize).ToList();
+                    lst = set.Where(filter).OrderBy(orderByLambda).Skip(pageIndex * pageSize).Take(pageSize).ToList();
                 }
                 else
                 {
@@ -180,7 +182,7 @@ namespace Intime.OPC.Repository.Base
             }
         }
 
-        protected PageResult<TEntity> Select2<TEntity, S>(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, S>> orderByLambda, bool isAsc, int pageIndex, int pageSize = 20) where TEntity : class 
+        protected PageResult<TEntity> Select2<TEntity, S>(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, S>> orderByLambda, bool isAsc, int pageIndex, int pageSize = 20) where TEntity : class
         {
             using (var db = new YintaiHZhouContext())
             {
