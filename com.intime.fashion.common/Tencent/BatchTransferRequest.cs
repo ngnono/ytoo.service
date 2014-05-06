@@ -12,9 +12,17 @@ namespace com.intime.fashion.common.Tencent
     public class BatchTransferRequest:BaseBatchRequest
     {
         [XmlElement("op_code", Order = 2)]
-        public string OperateCode { get; set; }
+        public string OperateCode { get {
+            return "1013";
+        }
+            set { }
+        }
         [XmlElement("op_name", Order = 3)]
-        public string OperateName { get; set; }
+        public string OperateName { get {
+            return "batch_draw";
+        }
+            set { }
+        }
         [XmlElement("op_user", Order = 6)]
         public string OperateUser { get; set; }
         [XmlElement("op_passwd", Order = 4)]
@@ -33,7 +41,7 @@ namespace com.intime.fashion.common.Tencent
         public string ClientIp { get; set; }
         [XmlArray("record_set", Order = 8)]
         [XmlArrayItem("record")]
-        public IEnumerable<BatchTransferItem> Records { get; set; }
+        public BatchTransferItem[] Records { get; set; }
 
        
     }

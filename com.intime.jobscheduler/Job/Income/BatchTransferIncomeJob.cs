@@ -70,19 +70,22 @@ namespace com.intime.jobscheduler.Job.Income
             {
                 var transferEntity = db.Set<IMS_AssociateIncomeTransferEntity>().Where(ia => ia.PackageId == packageId)
                                     .OrderByDescending(l => l.SerialNo).FirstOrDefault();
-                db.IMS_AssociateIncomeTransfer.Add(new IMS_AssociateIncomeTransferEntity()
+                if (transferEntity == null)
                 {
-                    CreateDate = DateTime.Now,
-                    IsSuccess = false,
-                    PackageId = packageId,
-                    SerialNo = transferEntity == null ? 1 : transferEntity.SerialNo + 1,
-                    Status = (int)AssociateIncomeTransferStatus.NotStart,
-                    TotalCount = 0,
-                    TotalFee = 0,
-                    TransferRetCode = "-1",
-                    TransferRetMsg = string.Empty
-                });
-                db.SaveChanges();
+                    transferEntity = db.IMS_AssociateIncomeTransfer.Add(new IMS_AssociateIncomeTransferEntity()
+                    {
+                        CreateDate = DateTime.Now,
+                        IsSuccess = false,
+                        PackageId = packageId,
+                        SerialNo = transferEntity == null ? 1 : transferEntity.SerialNo + 1,
+                        Status = (int)AssociateIncomeTransferStatus.NotStart,
+                        TotalCount = 0,
+                        TotalFee = 0,
+                        TransferRetCode = "-1",
+                        TransferRetMsg = string.Empty
+                    });
+                    db.SaveChanges();
+                }
                 return transferEntity;
             }
         }
@@ -152,12 +155,12 @@ namespace com.intime.jobscheduler.Job.Income
                         var totalNum = transferItems.Count;
                         var totalAmount = transferItems.Sum(l=>l.AmountOfFen);
                         var transferResponse = AutoBankTransfer.Instance.BatchTransfer(new BatchTransferRequest() { 
-                             Records = transferItems,
+                             Records = transferItems.ToArray(),
                               TotalNum = totalNum,
                                TotalAmountOfFen = totalAmount,
                                PackageId = string.Concat(transferJobEntity.PackageId,transferJobEntity.SerialNo)
                         });
-                        if (transferResponse != null && transferResponse.IsSuccess)
+                        if (transferResponse != null)
                         {
                             transferJobEntity.Status = (int)AssociateIncomeTransferStatus.RequestSent;
                             transferJobEntity.IsSuccess = true;

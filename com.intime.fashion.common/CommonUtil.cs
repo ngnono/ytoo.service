@@ -47,12 +47,9 @@ namespace com.intime.fashion.common
         {
 
             byte[] hashData = System.Security.Cryptography.MD5.Create().ComputeHash((encode.GetBytes(value)));
-            var hashText = new StringBuilder();
-            foreach (byte b in hashData)
-            {
-                hashText.Append(b.ToString("x2"));
-            }
-            return hashText.ToString();
+            var hashText = BitConverter.ToString(hashData).Replace("-", "").ToLower();
+            return hashText;
+
         }
 
         public static int Yuan2Fen(decimal input)

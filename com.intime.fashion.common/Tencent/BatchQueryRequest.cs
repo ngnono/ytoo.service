@@ -11,9 +11,17 @@ namespace com.intime.fashion.common.Tencent
     public class BatchQueryRequest:BaseBatchRequest
     {
         [XmlElement("op_code", Order = 2)]
-        public string OperateCode { get; set; }
+        public string OperateCode { get {
+            return "1014";
+        }
+            set { }
+        }
         [XmlElement("op_name", Order = 3)]
-        public string OperateName { get; set; }
+        public string OperateName { get {
+            return "batch_draw_query";
+        }
+            set { }
+        }
         [XmlElement("service_version", Order = 8)]
         public string ServiceVersion { get; set; }
         [XmlElement("op_user", Order = 6)]

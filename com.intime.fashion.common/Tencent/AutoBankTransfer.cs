@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -15,8 +16,6 @@ namespace com.intime.fashion.common.Tencent
     {
         private static object lockObject = new object();
         private static AutoBankTransfer transferObject = null;
-        private string operateCode = string.Empty;
-        private string operateName = string.Empty;
         private string operateUserId = string.Empty;
         private string operateUserPwd = string.Empty;
         private string parterId = string.Empty;
@@ -26,10 +25,8 @@ namespace com.intime.fashion.common.Tencent
         private StringBuilder debugInfo = new StringBuilder();
         private AutoBankTransfer()
         {
-            operateCode = Config.OP_CODE;
-            operateName = Config.OP_NAME;
             operateUserId = Config.OP_USERID;
-            operateUserPwd = Config.OP_USERPWD;
+            operateUserPwd = CommonUtil.MD5_Encode(Config.OP_USERPWD,Config.DEFAULT_ENCODE);
             parterId = Config.PARTER_ID;
             caFilePath = Config.CA_FILE_PATH;
             certFilePath = Config.CERT_FILE_PATH;
@@ -53,21 +50,23 @@ namespace com.intime.fashion.common.Tencent
         public BatchTransferResponse BatchTransfer(BatchTransferRequest request)
         {
             EnsureRequest(request);
-            return Send(request) as BatchTransferResponse;
+            return Send<BatchTransferResponse>(request);
         }
 
         public BatchQueryResponse Query(BatchQueryRequest request)
         {
             EnsureRequest(request);
-            return Send(request) as BatchQueryResponse;
+            return Send<BatchQueryResponse>(request);
         }
 
 
-        private BaseBatchResponse Send(BaseBatchRequest request)
+        private T Send<T>(BaseBatchRequest request) where T:class
         {
             var client = WebRequest.CreateHttp(Config.SERVICE_URI_BATCH_TRANSFER);
             client.ContentType = "application/x-www-form-urlencoded";
             client.Method = "Post";
+            var certPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Config.CERT_FILE_PATH);
+            client.ClientCertificates.Add(new X509Certificate2(certPath,Config.CERT_FILE_PWD));
             using (var webRequest = client.GetRequestStream())
             using (var streamWriter = new StreamWriter(webRequest, Config.DEFAULT_ENCODE))
             {
@@ -76,29 +75,36 @@ namespace com.intime.fashion.common.Tencent
                 streamWriter.Write(requestStr);
             }
             StringBuilder sb = new StringBuilder();
-            using (var response = client.GetResponse())
+            try
             {
-                using (var body = response.GetResponseStream())
+                using (var response = client.GetResponse())
                 {
-                    var serializer = new XmlSerializer(request.GetType());
-
-                    var transferResponse = serializer.Deserialize(body) as BatchQueryResponse;
-                    if (transferResponse == null)
+                    
+                    using (var body = response.GetResponseStream())
                     {
-                        debugInfo.AppendLine(string.Format("batch send response fail, raw response:{0}", body));
-                        return null;
-                    }
-                    return transferResponse;
-                }
+                        var serializer = new XmlSerializer(typeof(T));
 
+                        var transferResponse = serializer.Deserialize(body) as T;
+                        if (transferResponse == null)
+                        {
+                            debugInfo.AppendLine(string.Format("batch send response fail, raw response:{0}", body));
+                            return default(T);
+                        }
+                        return transferResponse;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
         private void EnsureRequest(BatchTransferRequest request)
         {
             if (request != null) {
-                request.OperateCode = operateCode;
-                request.OperateName = operateName;
+
                 request.OperatePwdMd5 = operateUserPwd;
                 request.OperateUser = operateUserId;
                 request.SPId = parterId;
@@ -111,8 +117,7 @@ namespace com.intime.fashion.common.Tencent
         {
             if (request != null)
             {
-                request.OperateCode = operateCode;
-                request.OperateName = operateName;
+
                 request.OperatePwdMd5 = operateUserPwd;
                 request.OperateUser = operateUserId;
                 request.SPId = parterId;

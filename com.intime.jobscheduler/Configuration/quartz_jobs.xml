@@ -538,7 +538,7 @@
       </cron>
     </trigger>
 -->
-
+<!--
     <job>
       <name>IMS_AutoOffline</name>
       <group>Item</group>
@@ -560,6 +560,81 @@
         <group>Item</group>
         <description>every day</description>
         <job-name>IMS_AutoOffline</job-name>
+        <job-group>Item</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 40 13 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    -->
+    <job>
+      <name>IMS_BatchTransfer</name>
+      <group>Item</group>
+      <description>auto tranfer daily at 1 am</description>
+      <job-type>com.intime.jobscheduler.Job.Income.BatchTransferIncomeJob, com.intime.jobscheduler</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>intervalOfDays</key>
+          <value>27</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>IMS_BatchTransfer-daily</name>
+        <group>Item</group>
+        <description>every day</description>
+        <job-name>IMS_BatchTransfer</job-name>
+        <job-group>Item</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0/10 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
+   <!--
+    <job>
+      <name>IMS_BatchTransferQuery</name>
+      <group>Item</group>
+      <description>auto tranfer query daily at 1 am</description>
+      <job-type>com.intime.jobscheduler.Job.Income.BatchQueryIncomeJob, com.intime.jobscheduler</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>IMS_BatchTransferQuery-daily</name>
+        <group>Item</group>
+        <description>every day</description>
+        <job-name>IMS_BatchTransferQuery</job-name>
+        <job-group>Item</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 40 13 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    -->
+    <job>
+      <name>IMS_AutoAvailIncome</name>
+      <group>Item</group>
+      <description>auto avail income daily at 1 am</description>
+      <job-type>com.intime.jobscheduler.Job.Income.AutoChangeIncomeStatusJob, com.intime.jobscheduler</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>intervalOfDays</key>
+          <value>1</value>
+        </entry>
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>IMS_AutoAvailIncome-daily</name>
+        <group>Item</group>
+        <description>every day</description>
+        <job-name>IMS_AutoAvailIncome</job-name>
         <job-group>Item</job-group>
         <misfire-instruction>SmartPolicy</misfire-instruction>
         <cron-expression>0 40 13 * * ?</cron-expression>

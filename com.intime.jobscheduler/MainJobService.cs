@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace com.intime.jobscheduler
         {
             InitializeComponent();
             ServiceLocator.Current.RegisterSingleton<Yintai.Architecture.Common.Logger.ILog, Yintai.Architecture.Common.Logger.Log4NetLog>();
+
+            ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };
         }
         internal void ConsoleDebug()
         {

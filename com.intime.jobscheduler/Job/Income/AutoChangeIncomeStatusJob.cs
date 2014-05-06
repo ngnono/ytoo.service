@@ -11,7 +11,7 @@ using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Service.Logic;
 
-namespace com.intime.jobscheduler.Job.Order
+namespace com.intime.jobscheduler.Job.Income
 {
     [DisallowConcurrentExecution]
     class AutoChangeIncomeStatusJob:IJob
