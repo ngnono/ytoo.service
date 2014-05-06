@@ -65,6 +65,11 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
             }
         }
 
+        /// <summary>
+        /// 解析信息部给的结构
+        /// </summary>
+        /// <param name="strPosSeq">信息部给的结构 : productid|comcode,productid|comcode</param>
+        /// <returns></returns>
         private IEnumerable<KeyValuePair<string, string>> ParseProductIdAndPosCode(string strPosSeq)
         {
             var slices = strPosSeq.Split(',');
