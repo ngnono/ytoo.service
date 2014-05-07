@@ -201,6 +201,7 @@
     <Compile Include="Models\Mapping\OPC_SaleLogMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleOrderNotificationLogMap.cs" />
+    <Compile Include="Models\Mapping\OPC_RMANotificationLogMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleRMACommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleRMAMap.cs" />
     <Compile Include="Models\Mapping\OPC_ShippingSaleCommentMap.cs" />
@@ -334,6 +335,7 @@
     <Compile Include="Models\RMA2Ex.cs" />
     <Compile Include="Models\RMAItem.cs" />
     <Compile Include="Models\RMALog.cs" />
+    <Compile Include="Models\OPC_RMANotificationLog.cs" />
     <Compile Include="Models\RMAReason.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\RoleAccessRight.cs" />
