@@ -12,6 +12,26 @@ namespace Intime.OPC.Modules.Dimension.Models
     public class Counter : Dimension
     {
         /// <summary>
+        /// Counter code
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// Area code
+        /// </summary>
+        public string AreaCode { get; set; }
+
+        /// <summary>
+        /// Contact phone number
+        /// </summary>
+        public string ContactPhoneNumber { get; set; }
+
+        /// <summary>
+        /// Repealed or not
+        /// </summary>
+        public bool Repealed { get; set; }
+
+        /// <summary>
         /// Brands
         /// </summary>
         public IList<Brand> Brands { get; set; }

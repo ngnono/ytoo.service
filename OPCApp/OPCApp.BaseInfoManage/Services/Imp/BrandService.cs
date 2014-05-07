@@ -11,12 +11,17 @@ namespace Intime.OPC.Modules.Dimension.Services.Imp
     [Export(typeof(IBrandService))]
     public class BrandService : IBrandService
     {
-        public IEnumerable<Brand> Query(string name)
+        public Brand Query(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Brand> QueryAll()
+        public IList<Brand> Query(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Brand> QueryAll()
         {
             throw new NotImplementedException();
         }

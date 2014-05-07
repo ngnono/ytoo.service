@@ -26,14 +26,20 @@ namespace Intime.OPC.Modules.Dimension.Services.Imp
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Counter> Query(string name)
+        public Counter Query(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Counter> QueryAll()
+        public IList<Counter> Query(string name)
         {
             throw new NotImplementedException();
         }
+
+        public IList<Counter> QueryAll()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
