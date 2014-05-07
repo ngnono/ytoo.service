@@ -30,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -183,9 +183,9 @@
       <Project>{ad060c8a-12af-4c1b-89cf-9b41a1edd31b}</Project>
       <Name>CustomControlLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Intime.OPC.ApiClient\05_Intime.OPC.ApiClient.csproj">
+    <ProjectReference Include="..\Intime.OPC.ApiClient\Intime.OPC.ApiClient.csproj">
       <Project>{d34916d5-ba8a-4a70-9a9c-2997289ef411}</Project>
-      <Name>05_Intime.OPC.ApiClient</Name>
+      <Name>Intime.OPC.ApiClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\OPCApp.AuthManage\OPCApp.AuthManage.csproj">
       <Project>{f354057b-1212-496c-9738-30590624a3ec}</Project>

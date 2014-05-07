@@ -8,7 +8,8 @@ namespace OPCApp.BaseInfoManage
     [ModuleExport(typeof (BaseInfoModule))]
     public class BaseInfoModule : IModule
     {
-        [Import] public IRegionManager RegionManager;
+        [Import] 
+        public IRegionManager RegionManager { get; set; }
 
         public void Initialize()
         {
