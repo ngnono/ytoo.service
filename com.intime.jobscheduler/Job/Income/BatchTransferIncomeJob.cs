@@ -167,7 +167,9 @@ namespace com.intime.jobscheduler.Job.Income
                             transferJobEntity.TotalCount = totalNum;
                             transferJobEntity.TotalFee = totalAmount;
                             transferJobEntity.TransferRetCode = transferResponse.RetCode;
-                            transferResponse.RetMsg = transferResponse.RetMsg;
+                            transferJobEntity.TransferRetMsg = transferResponse.RetMsg;
+                            db.Entry(transferJobEntity).State = System.Data.EntityState.Modified;
+                            db.SaveChanges();
                             ts.Complete();
                             successCount++;
                         }

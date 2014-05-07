@@ -59,9 +59,17 @@ namespace com.intime.fashion.common.Tencent
             return Send<BatchQueryResponse>(request);
         }
 
-
-        private T Send<T>(BaseBatchRequest request) where T:class
+        public string GetDebugLine()
         {
+            return debugInfo.ToString();
+        }
+        private void resetDebug()
+        {
+            debugInfo.Clear();
+        }
+        private T Send<T>(BaseBatchRequest request) where T:BaseBatchResponse
+        {
+            resetDebug();
             var client = WebRequest.CreateHttp(Config.SERVICE_URI_BATCH_TRANSFER);
             client.ContentType = "application/x-www-form-urlencoded";
             client.Method = "Post";
@@ -74,7 +82,6 @@ namespace com.intime.fashion.common.Tencent
 
                 streamWriter.Write(requestStr);
             }
-            StringBuilder sb = new StringBuilder();
             try
             {
                 using (var response = client.GetResponse())
@@ -87,9 +94,10 @@ namespace com.intime.fashion.common.Tencent
                         var transferResponse = serializer.Deserialize(body) as T;
                         if (transferResponse == null)
                         {
-                            debugInfo.AppendLine(string.Format("batch send response fail, raw response:{0}", body));
                             return default(T);
                         }
+                        if (!transferResponse.IsSuccess)
+                            debugInfo.AppendLine(string.Format("batch send response fail, raw response:{0}_{1}",transferResponse.RetCode,transferResponse.RetMsg));
                         return transferResponse;
                     }
 

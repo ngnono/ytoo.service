@@ -91,14 +91,16 @@ namespace com.intime.jobscheduler.Job.Income
                 {
                     using (var ts = new TransactionScope())
                     {
-
+                        bool canComplete = true;
                         using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
                         {
+                            var fullPackageId = string.Concat(order.PackageId, order.SerialNo);
                             BatchQueryResponse response = AutoBankTransfer.Instance.Query(new BatchQueryRequest()
                             {
-                                PackageId = string.Concat(order.PackageId, order.SerialNo),
+                                PackageId = fullPackageId,
                                 ServiceVersion = "1.2",
                             });
+                       
                             if (response != null && response.IsSuccess)
                             {
                                 switch (response.Result.TradeState)
@@ -106,22 +108,29 @@ namespace com.intime.jobscheduler.Job.Income
 
                                     case 4://all failed
                                     case 7:
-                                        doFailAll(db,order, response);
+                                        doFailAll(db, order, response,int.Parse(response.PackageId));
                                         break;
                                     case 6:
-                                        doPartialSuccess(db,order, response);
+                                        doPartialSuccess(db, order, response);
                                         successCount++;
                                         break;
                                     default:
-                                        continue;
+                                        canComplete = false;
+                                        break;
                                 }
                             }
                             else
-                                continue;
+                            {
+                                if (response != null)
+                                    doFailAll(db, order, response, int.Parse(fullPackageId));
+                                else
+                                    canComplete = false;
+                                Log.Info(AutoBankTransfer.Instance.GetDebugLine());
+                            }
 
                         }
-
-                      ts.Complete();
+                      if (canComplete)
+                         ts.Complete();
 
                     }
                 }
@@ -184,14 +193,14 @@ namespace com.intime.jobscheduler.Job.Income
 
         private void doFailAll(YintaiHangzhouContext db,
             IMS_AssociateIncomeTransferEntity order,
-            BatchQueryResponse response)
+            BatchQueryResponse response,
+            int fullPackageId)
         {
             order.Status = (int)AssociateIncomeTransferStatus.Fail;
             order.QueryRetCode = response.Result.TradeState.ToString();
             order.QueryRetMsg = response.RetMsg;
             db.Entry(order).State = System.Data.EntityState.Modified;
-
-            int fullPackageId = int.Parse(response.PackageId);
+            db.SaveChanges();
             //modify all transfer requesting
             foreach (var request in db.Set<IMS_AssociateIncomeRequestEntity>().Where(iar=>iar.Status==(int)AssociateIncomeRequestStatus.Transferring)
                                     .Join(db.Set<IMS_AssociateIncomeTran2ReqEntity>().Where(iait => iait.FullPackageId == fullPackageId),

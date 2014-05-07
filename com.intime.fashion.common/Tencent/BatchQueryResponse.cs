@@ -42,14 +42,14 @@ namespace com.intime.fashion.common.Tencent
         [XmlElement("suc_total")]
         public int SuccessTotal { get; set; }
         [XmlElement("suc_rec")]
-        public IEnumerable<BatchTransferSuccessItem> Records { get; set; }
+        public BatchTransferSuccessItem[] Records { get; set; }
     }
     public class TransferFailResult
     {
         [XmlAttribute("fail_total")]
         public int FailTotal { get; set; }
         [XmlElement("fail_rec")]
-        public IEnumerable<BatchTansferFailItem> Records { get; set; }
+        public BatchTansferFailItem[] Records { get; set; }
     }
 
     public class BatchTransferSuccessItem : BatchTransferItem
