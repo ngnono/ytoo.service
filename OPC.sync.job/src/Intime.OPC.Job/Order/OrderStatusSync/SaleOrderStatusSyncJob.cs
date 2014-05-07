@@ -24,7 +24,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
         {
             using (var context = new YintaiHZhouContext())
             {
-                var linq = context.OPC_Sale.Where(t => t.UpdatedDate > _benchTime && t.Status > 0 && t.Status < (int)EnumSaleOrderStatus.ShipInStorage);
+                var linq = context.OPC_Sale.Where(t => t.UpdatedDate > _benchTime && t.Status > 0 && t.Status < (int)EnumSaleOrderStatus.ShipInStorage && !context.Orders.Any(x=>x.OrderNo == t.OrderNo && x.OrderProductType == 2));
                 if (callback != null)
                     callback(linq);
             }

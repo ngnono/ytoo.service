@@ -69,7 +69,8 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         CreatedDate = DateTime.Now,
                         CreatedUser = SystemDefine.SystemUser,
                         UpdatedUser = SystemDefine.SystemUser,
-                        UpdatedDate = DateTime.Now
+                        UpdatedDate = DateTime.Now,
+                        LabelPrice = product.LabelPrice
                     };
 
                     db.OPC_Stock.Add(newStock);
@@ -81,6 +82,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 }
 
                 stockExt.Price = product.CurrentPrice;
+                stockExt.LabelPrice = product.LabelPrice;
                 stockExt.Count = Convert.ToInt32(decimal.Floor(product.Stock ?? 0));
                 stockExt.SourceStockId = product.ProductId;
                 stockExt.ProdSaleCode = product.PosCode;

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Configuration;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-
-using Common.Logging;
+﻿using Common.Logging;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Job.Product.ProductSync.Models;
 using Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository;
 using Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository.DTO;
+using System;
+using System.Configuration;
+using System.Linq;
 
 namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
 {
@@ -70,11 +68,11 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
              */
             var brand = _brandSyncProcessor.SyncBrand(channelProduct.BrandId, channelProduct.BrandName);
             if (brand == null)
-            {    
+            {
                 //品牌没有的，按所属专柜在查找，如果没有的，如果有则关联此品牌；如果没有，则依据专柜创建品牌并关联
                 using (var db = new YintaiHZhouContext())
                 {
-                    brand = db.Brands.FirstOrDefault(b => b.Name == section.Name ||b.EnglishName==section.Name);
+                    brand = db.Brands.FirstOrDefault(b => b.Name == section.Name || b.EnglishName == section.Name);
                     if (brand == null)
                     {
                         /**
@@ -131,6 +129,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 Log.WarnFormat("同步商品对应品牌失败:ProductId:[{0}],brandId:[{1}],brandName:[{2}]", channelProduct.ProductId, channelProduct.BrandId, channelProduct.BrandName);
             }
 
+
             using (var db = new YintaiHZhouContext())
             {
                 if (!db.IMS_SectionBrand.Any(x => x.BrandId == brand.Id && x.SectionId == section.Id))
@@ -148,14 +147,24 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             /**
              * 检查并同步分类,目前集团分类信息为空，所以同步商品不成功，只是提供警告 
              */
-            //var category = _categorySyncProcessor.Sync(channelProduct.CategoryId4, channelProduct.Category4);
-            //if (category == null)
-            //{
-            //    //如果分类为空，设置一个默认值
-            //    Log.WarnFormat("同步商品对应分类失败:[{0}],categoryId:[{1}],category:[{2}]", channelProduct.ProductId, channelProduct.CategoryId4, channelProduct.Category4);
-            //}
+            var category = _categorySyncProcessor.Sync(channelProduct.CategoryId4, channelProduct.Category4);
+            if (category == null)
+            {
+                //如果分类为空，设置一个默认值
+                Log.WarnFormat("同步商品对应分类失败:[{0}],categoryId:[{1}],category:[{2}]", channelProduct.ProductId, channelProduct.CategoryId4, channelProduct.Category4);
+            }
 
             var tagId = FetchTagId(channelProduct);
+            int catid;
+
+            if (!string.IsNullOrEmpty(channelProduct.CategoryId4))
+            {
+                int.TryParse(channelProduct.CategoryId4, out catid);
+            }
+            else
+            {
+                catid = 0;
+            }
 
             using (var db = new YintaiHZhouContext())
             {
@@ -174,7 +183,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     {
                         ProductType = 1,
                         Brand_Id = brand.Id,
-                        Name = string.IsNullOrEmpty(channelProduct.ProductName)?string.Format("{0}-{1}",brand.Name,channelProduct.ProductCode):channelProduct.ProductName,
+                        Name = string.IsNullOrEmpty(channelProduct.ProductName) ? string.Format("{0}-{1}", brand.Name, channelProduct.ProductCode) : channelProduct.ProductName,
                         UnitPrice = channelProduct.LabelPrice,
                         Store_Id = section.StoreId ?? 0,
                         Price = channelProduct.CurrentPrice,
@@ -194,7 +203,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         CreatedUser = DEFAULT_OWNER_ID,
                     };
 
-                    db.Products.Add(newProduct);
+                    newProduct = db.Products.Add(newProduct);
                     db.SaveChanges();
 
                     // 保存映射关系
@@ -213,10 +222,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         MapType = ChannelMapType.ProductId
                     });
 
-                    //if (category == null)
-                    //{
-                    //    CategoriesMap(newProduct.Id);
-                    //}
+                    if (catid > 0)
+                    {
+                        CreateProductMap(channelProduct, newProduct.Id, catid);
+                    }
                     return newProduct;
                 }
 
@@ -241,15 +250,16 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 proudctExt.UpdatedDate = DateTime.Now;
                 proudctExt.UpdatedUser = DEFAULT_OWNER_ID;
 
-                //if (category == null)
-                //{
-                //    CategoriesMap(proudctExt.Id);
-                //}
+                if (catid > 0 && !db.ProductMaps.Any(x=>x.Channel == SystemDefine.IntimeChannel && x.ProductId == proudctExt.Id))
+                {
+                    CreateProductMap(channelProduct, proudctExt.Id, catid);
+                }
+                
 
                 db.SaveChanges();
                 return proudctExt;
             }
-            
+
         }
 
         private int FetchTagId(ProductDto channelProduct)
@@ -268,23 +278,24 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
             }
         }
 
-        //private void CategoriesMap(int productId)
-        //{
-        //    using (var db = new YintaiHZhouContext())
-        //    {
-        //        var category = db.Categories.FirstOrDefault();
-        //        var productMap = new ProductMap()
-        //        {
-        //            ProductId = productId,
-        //            ChannelPId=productId,
-        //            Channel="ERP",
-        //            UpdateDate=DateTime.Now
-
-        //        };
-        //        db.ProductMaps.Add(productMap);
-
-        //        db.SaveChanges();
-        //    }
-        //}
+        private void CreateProductMap(ProductDto product,int productId, int catId)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                if (!db.ProductMaps.Any(x => x.ProductId == productId && x.Channel == SystemDefine.IntimeChannel && x.ChannelCatId == catId))
+                {
+                    db.ProductMaps.Add(new ProductMap()
+                    {
+                        Channel = SystemDefine.IntimeChannel,
+                        ChannelBrandId = 0,//product.BrandId,
+                        ChannelCatId = catId,
+                        ChannelPId = 0,//product.ProductId,
+                        ProductId = productId,
+                        UpdateDate = DateTime.Now,
+                    });
+                    db.SaveChanges();
+                }
+            }
+        }
     }
 }
