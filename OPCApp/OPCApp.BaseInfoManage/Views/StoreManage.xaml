@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="OPCApp.BaseInfoManage.Views.StoreManage"
+﻿<UserControl x:Class="Intime.OPC.Modules.Dimension.Views.StoreManage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"

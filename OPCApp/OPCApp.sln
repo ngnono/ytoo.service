@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPCApp.Common", "OPCAPP.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPCApp.AuthManage", "OPCApp.AuthManage\OPCApp.AuthManage.csproj", "{F354057B-1212-496C-9738-30590624A3EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPCApp.BaseInfoManage", "OPCApp.BaseInfoManage\OPCApp.BaseInfoManage.csproj", "{23D22B9E-465D-415C-92EA-52B93465A55E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intime.OPC.Modules.Dimension", "OPCApp.BaseInfoManage\Intime.OPC.Modules.Dimension.csproj", "{23D22B9E-465D-415C-92EA-52B93465A55E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Module", "Module", "{592715FF-B145-440C-A670-F150465433CD}"
 EndProject

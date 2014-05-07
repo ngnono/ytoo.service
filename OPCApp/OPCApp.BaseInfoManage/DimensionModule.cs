@@ -3,17 +3,17 @@ using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
 
-namespace OPCApp.BaseInfoManage
+namespace Intime.OPC.Modules.Dimension
 {
-    [ModuleExport(typeof (BaseInfoModule))]
-    public class BaseInfoModule : IModule
+    [ModuleExport(typeof (DimensionModule))]
+    public class DimensionModule : IModule
     {
         [Import] 
         public IRegionManager RegionManager { get; set; }
 
         public void Initialize()
         {
-            //this.RegionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, typeof(NavigationItemView));
+            
         }
     }
 }

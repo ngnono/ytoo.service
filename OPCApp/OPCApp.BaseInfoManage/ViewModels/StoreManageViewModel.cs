@@ -1,6 +1,6 @@
 ﻿using Microsoft.Practices.Prism.Mvvm;
 
-namespace OPCApp.BaseInfoManage.ViewModels
+namespace Intime.OPC.Modules.Dimension.ViewModels
 {
     public class StoreManageViewModel : BindableBase
     {
