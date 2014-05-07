@@ -19,40 +19,40 @@
 
                 <Button Background="LightGray" Width="50">
                     <StackPanel>
-                        <Image Source="/image/变更单位.png" Stretch="None" />
+                        <Image Source="/Resource/Image/变更单位.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">返回</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="50">
                     <StackPanel>
-                        <Image Source="/image/导出.png" Stretch="None" />
+                        <Image Source="/Resource/Image/导出.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">导出</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding SetStopUserCommand}">
                     <StackPanel>
-                        <Image Source="/image/解挂.png" Stretch="None" />
+                        <Image Source="/Resource/Image/解挂.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">是否启用</TextBlock>
                     </StackPanel>
                 </Button>
 
                 <Button Background="LightGray" Width="50" Command="{Binding AddCommand}">
                     <StackPanel>
-                        <Image Source="/image/新增.png" Stretch="None" />
+                        <Image Source="/Resource/Image/新增.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">增加</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding EditCommand}"
                         CommandParameter="{Binding Models.CurrentItem}">
                     <StackPanel>
-                        <Image Source="/image/修改.png" Stretch="None" />
+                        <Image Source="/Resource/Image/修改.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">编辑</TextBlock>
                     </StackPanel>
                 </Button>
                 <Button Background="LightGray" Width="50" Command="{Binding DeleteCommand}"
                         CommandParameter="{Binding Models.CurrentItem}">
                     <StackPanel>
-                        <Image Source="/image/删除.png" Stretch="None" />
+                        <Image Source="/Resource/Image/删除.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center">删除</TextBlock>
                     </StackPanel>
                 </Button>
@@ -69,7 +69,7 @@
             <TextBox Height="20" Width="130" Text="{Binding SelectedFiledValue}" />
             <Button Background="LightGray" Width="Auto" Command="{Binding SearchCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/image/查询.png" Stretch="None" />
+                    <Image Source="/Resource/Image/查询.png" Stretch="None" />
                     <TextBlock HorizontalAlignment="Center"  FontFamily="宋体" FontSize="18">查询</TextBlock>
                 </StackPanel>
             </Button>

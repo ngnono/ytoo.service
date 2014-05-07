@@ -91,6 +91,11 @@
     <Compile Include="Models\Dimension.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\Supplier.cs" />
+    <Compile Include="Services\IBrandService.cs" />
+    <Compile Include="Services\ICounterService.cs" />
+    <Compile Include="Services\Imp\BrandService.cs" />
+    <Compile Include="Services\Imp\CounterService.cs" />
+    <Compile Include="Services\IService.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
     <Compile Include="ViewModels\StoreAddWindowViewModel.cs" />
     <Compile Include="ViewModels\StoreManageViewModel.cs" />
@@ -124,6 +129,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Models\Model.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -210,9 +216,7 @@
       <Name>OPCApp.Main.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
