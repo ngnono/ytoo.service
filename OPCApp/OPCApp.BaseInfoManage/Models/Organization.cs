@@ -2,15 +2,11 @@
 
 namespace Intime.OPC.Modules.Dimension.Models
 {
-    internal class Organization
+    /// <summary>
+    /// Organization
+    /// </summary>
+    public class Organization : Dimension
     {
-        private readonly List<Organization> _childOrg = new List<Organization>();
 
-        public IList<Organization> ChildOrg
-        {
-            get { return _childOrg; }
-        }
-
-        public string OrgName { get; set; }
     }
 }

@@ -86,7 +86,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DimensionModule.cs" />
+    <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\Counter.cs" />
+    <Compile Include="Models\Dimension.cs" />
     <Compile Include="Models\Store.cs" />
+    <Compile Include="Models\Supplier.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
     <Compile Include="ViewModels\StoreAddWindowViewModel.cs" />
     <Compile Include="ViewModels\StoreManageViewModel.cs" />
