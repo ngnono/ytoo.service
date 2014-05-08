@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -94,10 +95,13 @@ namespace com.intime.fashion.common.Tencent
                         var transferResponse = serializer.Deserialize(body) as T;
                         if (transferResponse == null)
                         {
+                            debugInfo.AppendLine("batch send response deserialize fail");
                             return default(T);
                         }
                         if (!transferResponse.IsSuccess)
-                            debugInfo.AppendLine(string.Format("batch send response fail, raw response:{0}_{1}",transferResponse.RetCode,transferResponse.RetMsg));
+                            debugInfo.AppendLine(string.Format("batch send response fail, raw response:{0}_{1}", transferResponse.RetCode, transferResponse.RetMsg));
+                        else
+                            debugInfo.AppendLine(string.Format("batch send sucess:{0}",JsonConvert.SerializeObject(transferResponse)));
                         return transferResponse;
                     }
 

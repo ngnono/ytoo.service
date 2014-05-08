@@ -3,6 +3,7 @@ using Common.Logging;
 using Quartz;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -100,7 +101,7 @@ namespace com.intime.jobscheduler.Job.Income
                                 PackageId = fullPackageId,
                                 ServiceVersion = "1.2",
                             });
-                       
+                            
                             if (response != null && response.IsSuccess)
                             {
                                 switch (response.Result.TradeState)
@@ -115,7 +116,8 @@ namespace com.intime.jobscheduler.Job.Income
                                         successCount++;
                                         break;
                                     default:
-                                        canComplete = false;
+
+                                        canComplete = false; 
                                         break;
                                 }
                             }
@@ -125,12 +127,14 @@ namespace com.intime.jobscheduler.Job.Income
                                     doFailAll(db, order, response, int.Parse(fullPackageId));
                                 else
                                     canComplete = false;
-                                Log.Info(AutoBankTransfer.Instance.GetDebugLine());
+                                
                             }
 
                         }
                       if (canComplete)
                          ts.Complete();
+                      else
+                          Log.Info(AutoBankTransfer.Instance.GetDebugLine());
 
                     }
                 }
@@ -187,8 +191,23 @@ namespace com.intime.jobscheduler.Job.Income
                 db.Entry(incomeAccount).State = System.Data.EntityState.Modified;
                 
             }
-           
-            db.SaveChanges();        
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var error in ex.EntityValidationErrors)
+                {
+                    if (!error.IsValid)
+                    {
+                        foreach (var internalError in error.ValidationErrors)
+                        {
+                            Log.Info(string.Format("{0}_{1}", internalError.PropertyName, internalError.ErrorMessage));
+                        }
+                    }
+                }
+            }
         }
 
         private void doFailAll(YintaiHangzhouContext db,
