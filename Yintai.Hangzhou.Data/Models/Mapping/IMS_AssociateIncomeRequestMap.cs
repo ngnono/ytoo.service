@@ -47,6 +47,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.BankAccountName).HasColumnName("BankAccountName");
             this.Property(t => t.TransferErrorCode).HasColumnName("TransferErrorCode");
             this.Property(t => t.TransferErrorMsg).HasColumnName("TransferErrorMsg");
+            this.Property(t => t.TransferFee).HasColumnName("TransferFee");
 		Init();
         }
 
