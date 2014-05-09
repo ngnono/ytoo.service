@@ -1,6 +1,7 @@
 ﻿using Common.Logging;
 using Intime.O2O.ApiClient;
 using Intime.O2O.ApiClient.Request;
+using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Quartz;
 using System;
@@ -47,7 +48,7 @@ namespace Intime.OPC.Job.RMASync
             DoQuery(skus =>
             {
                 totalCount = skus.Count();
-            },0,NotificationStatus.Create);
+            }, (int)EnumRMAStatus.ShipInStorage, NotificationStatus.Create);
 
             int cursor = 0;
             int size = 20;
@@ -68,7 +69,7 @@ namespace Intime.OPC.Job.RMASync
             DoQuery(orders =>
             {
                 totalCount = orders.Count();
-            },1, NotificationStatus.Paid);
+            }, (int)EnumRMAStatus.PayVerify, NotificationStatus.Paid);
 
             while (cursor < totalCount)
             {
@@ -141,7 +142,7 @@ namespace Intime.OPC.Job.RMASync
                     return;
                 }
 
-                order.Status = 1;
+                order.Status = 1;    //xiugai 状态值
                 order.UpdatedDate = DateTime.Now;
                 order.UpdatedUser = -10000;
                 db.SaveChanges();

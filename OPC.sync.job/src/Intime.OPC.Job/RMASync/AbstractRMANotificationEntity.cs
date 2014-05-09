@@ -20,7 +20,7 @@ namespace Intime.OPC.Job.RMASync
                 var status = (int)Status;
 
                 var trans =
-                    db.OrderTransactions.Where(t => t.OrderNo == _saleRMA.RMANo)
+                    db.OrderTransactions.Where(t => t.OrderNo == _saleRMA.OrderNo)
                         .Join(db.PaymentMethods, t => t.PaymentCode, p => p.Code, (t, p) => new { trans = t, payment = p })
                         .FirstOrDefault();
                 var order = db.Orders.FirstOrDefault(o => o.OrderNo == _saleRMA.RMANo);
