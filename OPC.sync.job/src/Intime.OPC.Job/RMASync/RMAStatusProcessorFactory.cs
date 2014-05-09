@@ -14,7 +14,7 @@ namespace Intime.OPC.Job.RMASync
             switch (status)
             {
                 case 31:
-                    return new CashedRNASaleStatusProcessor(EnumRMAStatus.None);
+                    return new CashedRMASaleStatusProcessor(EnumRMAStatus.None);
                 case 32:
                     return new ShoppingGuidePickUpRMASaleStatusProcessor(EnumRMAStatus.ShoppingGuideReceive);
                 default: return new NoneOperationRMAStatusProcessor(EnumRMAStatus.None);

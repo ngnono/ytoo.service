@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Domain.Dto.Request
 {
-    public class ShippingSaleRequestDto : DateRangeRequest
+    public class ExpressRequestDto : DateRangeRequest
     {
         private int pageSize = 0;
         private int pageIndex = 0;

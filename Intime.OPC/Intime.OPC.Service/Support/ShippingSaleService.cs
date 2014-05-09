@@ -97,7 +97,7 @@ namespace Intime.OPC.Service.Support
             var shipping =_shippingSaleRepository.GetByRmaNo(request.RmaNo);
             if (shipping==null)
             {
-                throw new Exception(string.Format("快递单不存在,快递单号:{0}",request.ShippingCode));
+                throw new OpcExceptioin(string.Format("快递单不存在,快递单号:{0}",request.ShippingCode));
             }
 
             shipping.ShipViaId = request.ShipViaID;
