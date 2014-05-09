@@ -3,9 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+             mc:Ignorable="d" d:DesignWidth="600" Width="400" Height="280">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resource/Theme/BureauBlue.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <Label Margin="0,5,0,5">品牌名称:</Label>
+            <TextBox Text="{Binding Path=Model.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <Label Margin="0,5,0,5">品牌英文名称:</Label>
+            <TextBox Text="{Binding Path=Model.EnglishName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <Label Margin="0,5,0,5">供应商名称:</Label>
+            <TextBox IsReadOnly="True" Text="{Binding Path=Model.Supplier.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Margin="0,5,0,5">
+            <CheckBox IsChecked="{Binding Path=Model.Enabled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">是否已启用</CheckBox>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Height="30" Width="60" Margin="5" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.OKCommand}">确定</Button>
+            <Button Height="30" Width="60" Margin="5"  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CancelCommand}">取消</Button>
+        </StackPanel>
     </Grid>
 </UserControl>

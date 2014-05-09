@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Dimension.Services.Imp
 {
-    [Export(typeof(ICounterService))]
     public class CounterService : ICounterService
     {
-        public void Create(Counter obj)
+        public Counter Create(Counter obj)
         {
             throw new NotImplementedException();
         }

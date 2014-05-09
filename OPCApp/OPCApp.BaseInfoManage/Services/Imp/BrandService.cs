@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Dimension.Services.Imp
 {
-    [Export(typeof(IBrandService))]
     public class BrandService : IBrandService
     {
         public Brand Query(int id)
@@ -26,7 +25,7 @@ namespace Intime.OPC.Modules.Dimension.Services.Imp
             throw new NotImplementedException();
         }
 
-        public void Create(Brand obj)
+        public Brand Create(Brand obj)
         {
             throw new NotImplementedException();
         }

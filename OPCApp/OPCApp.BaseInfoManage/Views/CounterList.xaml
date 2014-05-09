@@ -3,9 +3,97 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:prism="http://www.codeplex.com/prism"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:cvt="clr-namespace:Intime.OPC.Modules.Dimension.Converters"
+             xmlns:local="clr-namespace:Intime.OPC.Modules.Dimension.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+             d:DesignHeight="415" d:DesignWidth="779" FontFamily="微软雅黑" BorderBrush="Gray" BorderThickness="1">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resource/Theme/BureauBlue.xaml"/>
+                <ResourceDictionary Source="../Resource/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <cvt:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <cvt:BooleanToStringConverter x:Key="BoolToStringConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Raised" SourceObject="{Binding EditRequest, Mode=OneWay}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
+                <prism:PopupWindowAction.WindowContent>
+                    <local:CounterView />
+                </prism:PopupWindowAction.WindowContent>
+            </prism:PopupWindowAction>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Raised" SourceObject="{Binding CreateRequest, Mode=OneWay}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
+                <prism:PopupWindowAction.WindowContent>
+                    <local:CounterView />
+                </prism:PopupWindowAction.WindowContent>
+            </prism:PopupWindowAction>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="45"></RowDefinition>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <Button DockPanel.Dock="Right" Command="{Binding CreateCommand}" Margin="5,5,5,10" Width="65" Height="30">新增专柜</Button>
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                <Label Height="30" Margin="0,0,5,0" VerticalContentAlignment="Center">专柜名称:</Label>
+                <TextBox x:Name="brandName" VerticalContentAlignment="Center" Height="30" Width="300"></TextBox>
+                <Button Command="{Binding QueryCommand}" CommandParameter="{Binding ElementName=brandName, Path=Text}" Width="65" Height="30"  Margin="5,5,5,10">查询</Button>
+            </StackPanel>
+        </DockPanel>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Style="{StaticResource HeadLabel}">专柜列表</Label>
+            <DataGrid Grid.Row="1" x:Name="brandList" ItemsSource="{Binding Models}" IsReadOnly="True" AutoGenerateColumns="False"  
+                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <CheckBox x:Name="selectAll" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SelectAllCommand}" CommandParameter="{Binding ElementName=selectAll, Path=IsChecked}"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Margin="8,0,0,0" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="专柜名称" Binding="{Binding Name}" Width="200"></DataGridTextColumn>
+                    <DataGridTextColumn Header="专柜码" Binding="{Binding Code}" Width="100"></DataGridTextColumn>
+                    <DataGridTextColumn Header="销售区域" Binding="{Binding AreaCode}" Width="80"></DataGridTextColumn>
+                    <DataGridTextColumn Header="联系电话" Binding="{Binding ContactPhoneNumber}" Width="100"></DataGridTextColumn>
+                    <DataGridTextColumn Header="管理部门" Binding="{Binding Organization.Name}" Width="200"></DataGridTextColumn>
+                    <DataGridTextColumn Header="状态" Binding="{Binding Path= Repealed, Converter={StaticResource  BoolToStringConverter}, ConverterParameter=已撤柜^未撤柜}"></DataGridTextColumn>
+                    <DataGridTemplateColumn Header="操作">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="编辑" Width="30" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EditCommand}" CommandParameter="{Binding ID}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Content="恢复" Margin="5" Width="65" Height="30" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EnableCommand}" />
+            <Button Content="撤销" Margin="5" Width="65" Height="30"  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DisableCommand}" />
+            <Button Content="删除" Margin="5" Width="65" Height="30"  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.DeleteCommand}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

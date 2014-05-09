@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Intime.OPC.Modules.Dimension.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -25,6 +26,12 @@ namespace Intime.OPC.Modules.Dimension.Views
         public BrandList()
         {
             InitializeComponent();
+        }
+
+        [Import]
+        public BrandListViewModel ViewModel
+        {
+            set { DataContext = value; }
         }
     }
 }

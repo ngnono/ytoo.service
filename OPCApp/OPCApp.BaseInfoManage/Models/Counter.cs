@@ -11,6 +11,8 @@ namespace Intime.OPC.Modules.Dimension.Models
     /// </summary>
     public class Counter : Dimension
     {
+        private bool repealed;
+
         /// <summary>
         /// Counter code
         /// </summary>
@@ -29,7 +31,11 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// <summary>
         /// Repealed or not
         /// </summary>
-        public bool Repealed { get; set; }
+        public bool Repealed
+        {
+            get { return repealed; }
+            set { SetProperty(ref repealed, value); }
+        }
 
         /// <summary>
         /// Brands

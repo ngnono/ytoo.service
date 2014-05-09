@@ -16,7 +16,7 @@ namespace Intime.OPC.Modules.Dimension.Services
         /// Create
         /// </summary>
         /// <param name="obj">object to create</param>
-        void Create(T obj);
+        T Create(T obj);
 
         /// <summary>
         /// Update

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Intime.OPC.Modules.Dimension.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -19,7 +20,6 @@ namespace Intime.OPC.Modules.Dimension.Views
     /// <summary>
     /// Interaction logic for BrandView.xaml
     /// </summary>
-    [Export("BrandView", typeof(UserControl))]
     public partial class BrandView : UserControl
     {
         public BrandView()

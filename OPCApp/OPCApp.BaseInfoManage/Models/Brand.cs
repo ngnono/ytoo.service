@@ -11,6 +11,8 @@ namespace Intime.OPC.Modules.Dimension.Models
     /// </summary>
     public class Brand : Dimension
     {
+        private bool enabled;
+
         /// <summary>
         /// English name
         /// </summary>
@@ -24,7 +26,11 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// <summary>
         /// Enabled or disabled
         /// </summary>
-        public bool Enabled { get; set; }
+        public bool Enabled 
+        {
+            get { return enabled; }
+            set { SetProperty(ref enabled, value); }
+        }
 
         /// <summary>
         /// Supplier

@@ -44,6 +44,10 @@
     <Reference Include="MahApps.Metro.Resources">
       <HintPath>..\..\OPCApp\DllFile\MahApps.Metro.Resources.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\DllFile\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
@@ -74,6 +78,10 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -87,6 +95,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DimensionListViewModel.cs" />
+    <Compile Include="Common\ModalDialogViewModel.cs" />
+    <Compile Include="Converters\BooleanToStringConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="DimensionModule.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\Counter.cs" />
@@ -97,6 +109,8 @@
     <Compile Include="Services\ICounterService.cs" />
     <Compile Include="Services\Imp\BrandService.cs" />
     <Compile Include="Services\Imp\CounterService.cs" />
+    <Compile Include="Services\Imp\MockBrandService.cs" />
+    <Compile Include="Services\Imp\MockCounterService.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="ViewModels\BrandListViewModel.cs" />
     <Compile Include="ViewModels\BrandViewModel.cs" />
@@ -203,6 +217,38 @@
     <Resource Include="Resource\Image\验证.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resource\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resource\Theme\BureauBlack.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resource\Theme\BureauBlue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resource\Theme\ExpressionDark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resource\Theme\ExpressionLight.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resource\Theme\ShinyBlue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resource\Theme\ShinyRed.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resource\Theme\WhistlerBlue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\BrandList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -233,6 +279,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
+      <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
+      <Name>OPCApp.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OPCAPP.DataService\OPCApp.DataService.csproj">
       <Project>{6938948d-192f-473d-92bb-4ae97b115536}</Project>
       <Name>OPCApp.DataService</Name>
