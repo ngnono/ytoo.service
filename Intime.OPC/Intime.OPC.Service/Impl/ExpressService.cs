@@ -1,4 +1,9 @@
-﻿using Intime.OPC.Domain.Dto;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
+using Intime.OPC.Domain;
+using Intime.OPC.Domain.Auth;
+using Intime.OPC.Domain.Dto;
+using Intime.OPC.Domain.Dto.Request;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
@@ -79,6 +84,42 @@ namespace Intime.OPC.Service.Impl
                     }
                     ts.Complete();
                 }
+            }
+        }
+
+        public PageResult<OPC_ShippingSale> QueryShippingSales(ExpressRequestDto request, int shippingStatus, int uid)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                
+
+                Expression<Func<OPC_ShippingSale, bool>> filterExpression =
+                    t =>
+                        t.CreateDate >= request.StartDate && t.CreateDate < request.EndDate &&
+                        t.ShippingStatus == shippingStatus;
+
+                if (!string.IsNullOrEmpty(request.OrderNo))
+                {
+                    filterExpression = filterExpression.And(x => x.OrderNo == request.OrderNo);
+                }
+
+                IAuthUser user = new AuthUser(uid);
+                if (!user.IsAdmin)
+                {
+                    filterExpression =
+                        filterExpression.And(x => user.AuthenticatedStores().ToArray().Contains(x.StoreId.Value));
+                }
+
+                int cnt = db.OPC_ShippingSales.Count(filterExpression);
+              
+                var list =
+                    db.OPC_ShippingSales.Where(filterExpression)
+                        .OrderBy(o => o.CreateDate)
+                        .Skip((request.PageSize - 1)*request.PageIndex)
+                        .Take(request.PageSize)
+                        .ToList();
+                return new PageResult<OPC_ShippingSale>(list,cnt);
+                 
             }
         }
     }
