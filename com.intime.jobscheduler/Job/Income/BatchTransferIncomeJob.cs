@@ -130,7 +130,7 @@ namespace com.intime.jobscheduler.Job.Income
                                 {
                                     AccountName = order.BankAccountName,
                                     AccountType = 1,
-                                    AmountOfFen = CommonUtil.Yuan2Fen(order.Amount-order.TransferFee??0m),
+                                    AmountOfFen = CommonUtil.Yuan2Fen(order.Amount-(order.TransferFee??0m)),
                                     BankCode = order.BankCode,
                                     BankNo = order.BankNo,
                                     Desc = "银泰分成",
