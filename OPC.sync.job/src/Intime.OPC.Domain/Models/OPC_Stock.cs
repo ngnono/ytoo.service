@@ -15,7 +15,7 @@ namespace Intime.OPC.Domain.Models
         public int SectionId { get; set; }
         public Nullable<int> Count { get; set; }
         public decimal Price { get; set; }
-        public decimal LabelPrice { get; set; }
+        public Nullable<decimal> LabelPrice { get; set; }
         public int Status { get; set; }
         public Nullable<bool> IsDel { get; set; }
         public System.DateTime CreatedDate { get; set; }
