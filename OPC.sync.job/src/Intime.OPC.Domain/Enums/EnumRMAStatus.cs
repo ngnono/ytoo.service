@@ -8,7 +8,12 @@ namespace Intime.OPC.Domain.Enums
     /// </summary>
     public enum EnumRMAStatus
     {
-        
+
+        /// <summary>
+        ///     无
+        /// </summary>
+        [Description("无")]
+        None = 0,
         /// <summary>
         ///     未收货
         /// </summary>

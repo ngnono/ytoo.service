@@ -14,6 +14,7 @@
 
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
+using Intime.OPC.Domain.Dto.Request;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
@@ -135,15 +136,24 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="pageIndex">Index of the page.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <returns>IHttpActionResult.</returns>
+        //[HttpPost]
+        //public IHttpActionResult GetShippingSale(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize = 20, [UserId] int uid = 0)
+        //{
+        //    return DoFunction(() =>
+        //    {
+        //        _transService.UserId = uid;
+        //        return _transService.GetShippingSale(orderNo, startDate, endDate, pageIndex, pageSize);
+        //    },
+        //        "查询快递单信息失败");
+        //}
         [HttpPost]
-        public IHttpActionResult GetShippingSale(string orderNo, DateTime startDate, DateTime endDate, int pageIndex, int pageSize = 20, [UserId] int uid = 0)
+        public IHttpActionResult GetShippingSale([FromUri]ExpressRequestDto request, [UserId] int uid)
         {
             return DoFunction(() =>
             {
-                _transService.UserId = uid;
-                return _transService.GetShippingSale(orderNo, startDate, endDate, pageIndex, pageSize);
-            },
-                "查询快递单信息失败");
+                var result = _expressService.QueryShippingSales(request, (int) EnumSaleOrderStatus.PrintExpress, uid);
+                return Mapper.Map<OPC_ShippingSale, ShippingSaleDto>(result);
+            });
         }
 
         /// <summary>

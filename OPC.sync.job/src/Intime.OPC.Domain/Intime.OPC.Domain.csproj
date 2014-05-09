@@ -196,12 +196,12 @@
     <Compile Include="Models\Mapping\OPC_RMADetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMALogMap.cs" />
     <Compile Include="Models\Mapping\OPC_RMAMap.cs" />
+    <Compile Include="Models\Mapping\OPC_RMANotificationLogMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleCommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleDetailMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleLogMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleOrderNotificationLogMap.cs" />
-    <Compile Include="Models\Mapping\OPC_RMANotificationLogMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleRMACommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_SaleRMAMap.cs" />
     <Compile Include="Models\Mapping\OPC_ShippingSaleCommentMap.cs" />
