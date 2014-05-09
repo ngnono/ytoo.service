@@ -1,4 +1,4 @@
-﻿<controls:MetroWindow x:Class="OPCApp.BaseInfoManage.Views.StoreAddWindow"
+﻿<controls:MetroWindow x:Class="Intime.OPC.Modules.Dimension.Views.StoreAddWindow"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"

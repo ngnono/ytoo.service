@@ -29,7 +29,7 @@
                         <GradientStop Color="#CC7D83B8" />
                     </LinearGradientBrush>
                 </StackPanel.Background>
-                <TextBlock HorizontalAlignment="Center" Margin="10,0,0,0" Width="Auto" Text="银泰百货  OPC系统"
+                <TextBlock HorizontalAlignment="Center" Margin="10,0,0,0" Width="Auto" Text="Intime OPC"
                            FontWeight="Normal" Foreground="White" FontSize="35" VerticalAlignment="Center" />
             </StackPanel>
 

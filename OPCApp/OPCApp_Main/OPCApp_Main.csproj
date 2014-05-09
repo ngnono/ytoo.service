@@ -30,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -183,17 +183,17 @@
       <Project>{ad060c8a-12af-4c1b-89cf-9b41a1edd31b}</Project>
       <Name>CustomControlLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Intime.OPC.ApiClient\05_Intime.OPC.ApiClient.csproj">
+    <ProjectReference Include="..\Intime.OPC.ApiClient\Intime.OPC.ApiClient.csproj">
       <Project>{d34916d5-ba8a-4a70-9a9c-2997289ef411}</Project>
-      <Name>05_Intime.OPC.ApiClient</Name>
+      <Name>Intime.OPC.ApiClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\OPCApp.AuthManage\OPCApp.AuthManage.csproj">
       <Project>{f354057b-1212-496c-9738-30590624a3ec}</Project>
       <Name>OPCApp.AuthManage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OPCApp.BaseInfoManage\OPCApp.BaseInfoManage.csproj">
+    <ProjectReference Include="..\OPCApp.BaseInfoManage\Intime.OPC.Modules.Dimension.csproj">
       <Project>{23d22b9e-465d-415c-92ea-52b93465a55e}</Project>
-      <Name>OPCApp.BaseInfoManage</Name>
+      <Name>Intime.OPC.Modules.Dimension</Name>
     </ProjectReference>
     <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
       <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
