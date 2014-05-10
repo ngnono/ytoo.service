@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using OPCApp.Infrastructure.Mvvm.View;
 
-namespace OPCApp.BaseInfoManage.Views
+namespace Intime.OPC.Modules.Dimension.Views
 {
     /// <summary>
     ///     StoreManage.xaml 的交互逻辑

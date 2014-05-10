@@ -18,8 +18,6 @@ namespace OPCApp.Main
 {
     public class QuickStartBootstrapper : MefBootstrapper
     {
-        private const string ModuleCatalogUri = "/OPCApp.Main;component/ModulesCatalog.xaml";
-
         protected override void ConfigureAggregateCatalog()
         {
             base.ConfigureAggregateCatalog();

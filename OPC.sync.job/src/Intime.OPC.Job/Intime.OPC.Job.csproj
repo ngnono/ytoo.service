@@ -104,15 +104,24 @@
   <ItemGroup>
     <Compile Include="Order\DTO\OrderStatusResultDto.cs" />
     <Compile Include="Order\OrderStatusSync\AbstractOrderNotificationEntity.cs" />
+    <Compile Include="RMASync\AbstractRMANotificationEntity.cs" />
+    <Compile Include="RMASync\AbstractRMASaleStatusProcessor.cs" />
     <Compile Include="Order\OrderStatusSync\AbstractSaleOrderStatusProcessor.cs" />
+    <Compile Include="RMASync\CashedRMASaleStatusProcessor.cs" />
     <Compile Include="Order\OrderStatusSync\CashedSaleOrderStatusProcessor.cs" />
     <Compile Include="Order\OrderStatusSync\CreateOrderNotificationEntity.cs" />
+    <Compile Include="RMASync\CreateRMANotificationEntity.cs" />
+    <Compile Include="RMASync\NoneOperationRMAStatusProcessor.cs" />
     <Compile Include="Order\OrderStatusSync\NoneOperationStatusProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Order\OrderStatusSync\PaidOrderNotificationEntity.cs" />
-    <Compile Include="Order\OrderStatusSync\RMAStatusSyncJob.cs" />
+    <Compile Include="RMASync\PaidRMANotificationEntity.cs" />
+    <Compile Include="RMASync\RMANotifyJob.cs" />
+    <Compile Include="RMASync\RMAStatusProcessorFactory.cs" />
+    <Compile Include="RMASync\RMAStatusSyncJob.cs" />
     <Compile Include="Order\OrderStatusSync\SaleOrderStatusProcessorFactory.cs" />
+    <Compile Include="RMASync\ShoppingGuidePickUpRMASaleStatusProcessor.cs" />
     <Compile Include="Order\OrderStatusSync\ShoppingGuidePickUpSaleOrderStatusProcessor.cs" />
     <Compile Include="Order\StockNotExistsException.cs" />
     <Compile Include="Order\OrderStatusSync\OrderNotifyJob.cs" />
@@ -209,9 +218,7 @@
       <Name>Intime.OPC.Domain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RMASplit\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

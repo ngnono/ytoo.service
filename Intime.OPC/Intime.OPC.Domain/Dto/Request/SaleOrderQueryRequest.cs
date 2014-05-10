@@ -27,7 +27,7 @@ namespace Intime.OPC.Domain.Dto.Request
         }
 
            [DataMember(Name = "enddate")]
-        public DateTime EndDate { get { return _endDate.Date; } set { _endDate = value; } }
+        public DateTime EndDate { get { return _endDate.Date.AddDays(1); } set { _endDate = value; } }
     }
 
     public interface PagerRequest

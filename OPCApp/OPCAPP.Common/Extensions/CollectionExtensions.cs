@@ -12,12 +12,13 @@
 // <summary></summary>
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace System.Collections
+namespace OPCApp.Common.Extensions
 {
     /// <summary>
     ///     Collection的扩展类

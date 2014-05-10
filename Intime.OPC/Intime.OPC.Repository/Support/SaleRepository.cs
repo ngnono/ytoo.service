@@ -388,7 +388,7 @@ namespace Intime.OPC.Repository.Support
         public PageResult<SaleDto> GetPrintInvoice(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd,
             int pageIndex, int pageSize, params int[] sectionIds)
         {
-            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintInvoice, pageIndex,
+            return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintExpress, pageIndex,
                 pageSize, sectionIds);
         }
 

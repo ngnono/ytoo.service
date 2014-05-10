@@ -18,6 +18,7 @@ namespace Intime.OPC.Domain.Models
 
         public DbSet<OPC_CategoryMap> OPC_CategoryMaps { get; set; }
         public DbSet<OPC_SaleOrderNotificationLog> OPC_SaleOrderNotificationLogs { get; set; }
+        public DbSet<OPC_RMANotificationLog> OPC_RMANotificationLogs { get; set; }
         public DbSet<AdminAccessRight> AdminAccessRights { get; set; }
         public DbSet<Banner> Banners { get; set; }
         public DbSet<Brand> Brands { get; set; }
@@ -170,6 +171,7 @@ namespace Intime.OPC.Domain.Models
             modelBuilder.Configurations.Add(new OPC_CategoryMapMapper());
             modelBuilder.Configurations.Add(new OPC_OrderSplitLogMapper());
             modelBuilder.Configurations.Add(new OPC_SaleOrderNotificationLogMapper());
+            modelBuilder.Configurations.Add(new OPC_RMANotificationLogMapper());
             modelBuilder.Configurations.Add(new AdminAccessRightMapper());
             modelBuilder.Configurations.Add(new BannerMapper());
             modelBuilder.Configurations.Add(new BrandMapper());

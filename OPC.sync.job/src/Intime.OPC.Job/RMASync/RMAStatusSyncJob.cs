@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Intime.OPC.Job.Order.OrderStatusSync
+namespace Intime.OPC.Job.RMASync
 {
        [DisallowConcurrentExecution]
     public class RMAStatusSyncJob : IJob
@@ -23,7 +23,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
         {
             using (var context = new YintaiHZhouContext())
             {
-                var linq = context.OPC_SaleRMA.Where(t => t.UpdatedDate > _benchTime && t.Status > 0 && t.Status == (int)EnumRMAStatus.ShipInStorage);
+                var linq = context.OPC_SaleRMA.Where(t => t.UpdatedDate > _benchTime && t.Status > 0 && t.Status == (int)EnumRMAStatus.PrintRMA);
                 if (callback != null)
                     callback(linq);
             }
@@ -65,7 +65,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
             try
             {
                 saleStatus = _remoteRepository.GetRMAStatusById(opc_SaleRMA);
-                ProcessSaleOrderStatus(opc_SaleRMA, saleStatus);
+                ProcessSaleRMAStatus(opc_SaleRMA, saleStatus);
             }
             catch (Exception e)
             {
@@ -73,9 +73,9 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
             }
         }
 
-        private void ProcessSaleOrderStatus(OPC_SaleRMA saleRMA, OrderStatusResultDto saleStatus)
+        private void ProcessSaleRMAStatus(OPC_SaleRMA saleRMA, OrderStatusResultDto saleStatus)
         {
-            var processor = SaleOrderStatusProcessorFactory.Create(int.Parse(saleStatus.Status));
+            var processor = RMAStatusProcessorFactory.Create(int.Parse(saleStatus.Status));
             processor.Process(saleRMA.RMANo, saleStatus);
         }
 

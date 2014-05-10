@@ -1,4 +1,4 @@
-﻿namespace OPCApp.BaseInfoManage.Views
+﻿namespace Intime.OPC.Modules.Dimension.Views
 {
     /// <summary>
     ///     OrgManage.xaml 的交互逻辑

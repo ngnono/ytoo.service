@@ -1,6 +1,6 @@
-﻿namespace OPCApp.BaseInfoManage.Models
+﻿namespace Intime.OPC.Modules.Dimension.Models
 {
-    public class StoreInfo
+    public class Store
     {
         public string Id { get; set; }
 

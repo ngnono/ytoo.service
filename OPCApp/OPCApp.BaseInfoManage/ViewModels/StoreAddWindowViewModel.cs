@@ -5,7 +5,7 @@ using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.DataService;
 using OPCApp.Infrastructure.Mvvm;
 
-namespace OPCApp.BaseInfoManage.ViewModels
+namespace Intime.OPC.Modules.Dimension.ViewModels
 {
     [Export("StoreViewModel", typeof (IViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]

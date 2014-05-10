@@ -8,7 +8,12 @@ namespace Intime.OPC.Domain.Enums
     /// </summary>
     public enum EnumRMAStatus
     {
-        
+
+        /// <summary>
+        ///     无
+        /// </summary>
+        [Description("无")]
+        None = 0,
         /// <summary>
         ///     未收货
         /// </summary>
@@ -43,6 +48,10 @@ namespace Intime.OPC.Domain.Enums
         ///     物流入库
         /// </summary>
         [Description("物流入库")] ShipInStorage = 25,
+
+        [Description("通知单品")] NotifyProduct = 26,
+
+        [Description("付款确认")]  PayVerify = 28,
 
         /// <summary>
         ///     打印退货单

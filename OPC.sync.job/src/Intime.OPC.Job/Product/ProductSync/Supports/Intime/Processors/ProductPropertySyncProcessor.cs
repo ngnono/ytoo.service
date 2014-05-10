@@ -103,8 +103,10 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
 
                 if (propertyValueExt == null)
                 {
-                    Log.ErrorFormat("属性数据错误，映射关系存在，数据不存在");
+                    Log.ErrorFormat("属性数据错误，映射关系存在，数据不存在, property value id {0}", propertyValueMap.LocalId);
                     return null;
+                    //DeleteNotExistsMapper(propertyValueMap.LocalId, (int)propertyValueMap.MapType);
+                    //return this.Sync(productId, channelPropertyValueName, channelPropertyValueId, productPropertyType);
                 }
 
                 propertyValueExt.ValueDesc = valueDesc;
@@ -143,6 +145,19 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
 
                 return db.ProductProperties.Where(p => p.IsSize.HasValue && p.IsSize.Value && p.ProductId == productId)
                 .Join(db.ProductPropertyValues, p => p.Id, p => p.PropertyId, (o, p) => p).FirstOrDefault(p => p.Id == propertyValueId);
+            }
+        }
+
+        private void DeleteNotExistsMapper(int localId, int mapType)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var map = db.OPC_ChannelMap.FirstOrDefault(x => x.Id == localId && x.MapType == mapType && x.Channel == SystemDefine.IntimeChannel);
+                if (map != null)
+                {
+                    db.OPC_ChannelMap.Remove(map);
+                    db.SaveChanges();
+                }
             }
         }
     }
