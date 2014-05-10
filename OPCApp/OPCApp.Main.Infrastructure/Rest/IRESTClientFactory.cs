@@ -8,6 +8,6 @@ namespace OPCApp.Infrastructure.REST
 {
     public interface IRestClientFactory
     {
-        IRestClient CreateRESTClient(string baseAddress, string privateKey, string from);
+        IRestClient Create(string baseAddress, string privateKey, string from);
     }
 }

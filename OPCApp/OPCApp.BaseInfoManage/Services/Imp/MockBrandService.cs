@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Dimension.Services.Imp
 {
-    [Export(typeof(IBrandService))]
     public class MockBrandService : IBrandService
     {
         private IList<Brand> brands = new List<Brand>();
@@ -47,7 +46,8 @@ namespace Intime.OPC.Modules.Dimension.Services.Imp
 
         public void Delete(int id)
         {
-            brands.Remove(brand => brand.ID == id);
+            var brandToRemove = brands.Where(brand => brand.ID == id).FirstOrDefault();
+            brands.Remove(brandToRemove);
         }
 
         public Models.Brand Query(int id)

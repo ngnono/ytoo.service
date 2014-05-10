@@ -9,6 +9,7 @@ namespace Intime.OPC.Modules.Dimension.Models
     /// <summary>
     /// 品牌
     /// </summary>
+    [Uri(Name="brands")]
     public class Brand : Dimension
     {
         private bool enabled;

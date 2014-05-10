@@ -1,4 +1,5 @@
-﻿using Intime.OPC.Modules.Dimension.Models;
+﻿using Intime.OPC.Modules.Dimension.Common;
+using Intime.OPC.Modules.Dimension.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

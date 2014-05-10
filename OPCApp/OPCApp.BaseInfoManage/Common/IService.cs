@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Intime.OPC.Modules.Dimension.Services
+namespace Intime.OPC.Modules.Dimension.Common
 {
     /// <summary>
     /// Service interface for CRUD

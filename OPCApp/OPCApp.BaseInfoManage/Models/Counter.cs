@@ -9,6 +9,7 @@ namespace Intime.OPC.Modules.Dimension.Models
     /// <summary>
     /// 专柜
     /// </summary>
+    [Uri(Name = "counters")]
     public class Counter : Dimension
     {
         private bool repealed;

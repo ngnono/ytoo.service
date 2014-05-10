@@ -11,23 +11,29 @@ namespace OPCApp.Infrastructure.REST
 {
     public class RestClient : IRestClient
     {
+        private const string Signature = "X-Sign";
+        private const string Consumerkey = "X-ConsumerKey";
+        private const string Token = "X-Token";
+
         private readonly Uri _baseAddress;
-        private readonly string _privateKey;
-        private readonly string _from;
+        private readonly string _consumerKey;
+        private readonly string _consumerSecret;
         private readonly Random _random = new Random();
         private readonly MediaTypeFormatter _mediaTypeFormatter = new JsonMediaTypeFormatter();
 
-        public RestClient(string baseAddress, string privateKey, string from)
+        public RestClient(string baseAddress, string consumerKey, string consumerSecret)
         {
-            _privateKey = privateKey;
+            _consumerKey = consumerKey;
             _baseAddress = new Uri(baseAddress);
-            _from = from;
+            _consumerSecret = consumerSecret;
         }
 
         public TResponse Get<TResponse>(string uri)
         {
             using (var client = CreateHttpClient())
             {
+                SetHeaderValue(client, Consumerkey, _consumerKey);
+
                 return Request<TResponse>(uri, client.GetAsync);
             }
         }
@@ -36,6 +42,9 @@ namespace OPCApp.Infrastructure.REST
         {
             using (var client = CreateHttpClient())
             {
+                SetHeaderValue(client, Consumerkey, _consumerKey);
+                SetHeaderValue(client, Signature, Sign(request));
+
                 return Send<TData, TResponse>(request, client.PostAsJsonAsync);
             }
         }
@@ -44,6 +53,9 @@ namespace OPCApp.Infrastructure.REST
         {
             using (var client = CreateHttpClient())
             {
+                SetHeaderValue(client, Consumerkey, _consumerKey);
+                SetHeaderValue(client, Signature, Sign(request));
+
                 return Send<TData, TResponse>(request, client.PutAsJsonAsync);
             }
         }
@@ -52,6 +64,8 @@ namespace OPCApp.Infrastructure.REST
         {
             using (var client = CreateHttpClient())
             {
+                SetHeaderValue(client, Consumerkey, _consumerKey);
+
                 return Request<TResponse>(uri, client.DeleteAsync);
             }
         }
@@ -69,11 +83,6 @@ namespace OPCApp.Infrastructure.REST
 
         private TResponse Send<TData, TResponse>(Request<TData> request, Func<string, Request<TData>, Task<HttpResponseMessage>> verb)
         {
-            request.From = _from;
-            request.Nonce = _random.Next(0, 99);
-            request.Timestamp = DateTime.Now.ToString("s");
-            request.Signature = Sign(request);
-
             var response = verb(string.Format("{0}{1}", _baseAddress, request.URI), request).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -88,6 +97,15 @@ namespace OPCApp.Infrastructure.REST
             return new HttpClient { BaseAddress = _baseAddress };
         }
 
+        private void SetHeaderValue(HttpClient client, string name, string value)
+        {
+            lock (client.DefaultRequestHeaders)
+            {
+                client.DefaultRequestHeaders.Remove(name);
+                client.DefaultRequestHeaders.Add(name, value);
+            }
+        }
+
         /// <summary>
         /// 计算签名
         /// </summary>
@@ -97,28 +115,17 @@ namespace OPCApp.Infrastructure.REST
         /// <returns>具体的签名</returns>
         private string Sign<TRequest>(Request<TRequest> request)
         {
-            // 参数列表
-            var list = new List<string>(3)
-            {
-                request.From,
-                request.Nonce.ToString(CultureInfo.InvariantCulture),
-                request.Timestamp
-            };
-
-            // 参数排序
-            list.Sort();
-
             var builder = new StringBuilder();
-            builder.Append(string.Join("", list));
-
             // 进行数据的串行化
             if (request.Data != null)
             {
                 var data = GetDataString(request.Data);
                 builder.Append(data);
             }
+            builder.Append(_consumerKey);
+            builder.Append(_consumerSecret);
 
-            return ComputeHash(_privateKey, builder.ToString());
+            return ComputeHash(builder.ToString());
         }
 
         private string GetDataString<T>(T data)
@@ -129,16 +136,18 @@ namespace OPCApp.Infrastructure.REST
             }
         }
 
-        private string ComputeHash(string privateKey, string message)
+        private string ComputeHash(string input)
         {
-            var key = Encoding.UTF8.GetBytes(privateKey);
+            MD5 md5Hasher = MD5.Create();
+            byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(input));
 
-            using (var hmac = new HMACSHA1(key))
+            var sBuilder = new StringBuilder();
+            foreach (byte t in data)
             {
-                hmac.Initialize();
-                var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(message));
-                return Convert.ToBase64String(hash);
+                sBuilder.Append(t.ToString("x2"));
             }
+
+            return sBuilder.ToString();
         }
     }
 }
