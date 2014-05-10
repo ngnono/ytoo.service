@@ -57,10 +57,16 @@ namespace Intime.OPC.Domain.Enums
         /// </summary>
         [Description("物流入库")] ShipInStorage = 25,
 
+        [Description("通知单品")]
+        NotifyProduct = 26,
+
+        [Description("付款确认")]
+        PayVerify = 28,
+
         /// <summary>
         ///     打印退货单
         /// </summary>
-        [Description("打印退货单")] PrintRMA = 30,
+        [Description("完成打印退货单")] PrintRMA = 30,
 
         /// <summary>
         ///     导购确认收货
