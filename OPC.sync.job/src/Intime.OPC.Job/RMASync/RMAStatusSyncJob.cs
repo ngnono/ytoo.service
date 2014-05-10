@@ -23,7 +23,7 @@ namespace Intime.OPC.Job.RMASync
         {
             using (var context = new YintaiHZhouContext())
             {
-                var linq = context.OPC_SaleRMA.Where(t => t.UpdatedDate > _benchTime && t.Status > 0 && t.Status == (int)EnumRMAStatus.PrintRMA);
+                var linq = context.OPC_SaleRMA.Where(t => t.UpdatedDate > _benchTime && t.Status >= (int)EnumRMAStatus.NotifyProduct && t.Status < (int)EnumRMAStatus.ShoppingGuideReceive);
                 if (callback != null)
                     callback(linq);
             }
