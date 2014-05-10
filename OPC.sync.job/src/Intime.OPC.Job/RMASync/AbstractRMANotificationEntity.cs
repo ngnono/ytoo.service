@@ -23,9 +23,9 @@ namespace Intime.OPC.Job.RMASync
                     db.OrderTransactions.Where(t => t.OrderNo == _saleRMA.OrderNo)
                         .Join(db.PaymentMethods, t => t.PaymentCode, p => p.Code, (t, p) => new { trans = t, payment = p })
                         .FirstOrDefault();
-                var order = db.Orders.FirstOrDefault(o => o.OrderNo == _saleRMA.RMANo);
+                var saleRMA = db.OPC_SaleRMA.FirstOrDefault(o => o.RMANo == _saleRMA.RMANo);
                 var storeno = string.Empty;
-                if (order == null)
+                if (saleRMA == null)
                 {
                     throw new OrderNotificationException(string.Format("Not exists RMA! RMANo ({0})", _saleRMA.RMANo));
                 }
@@ -44,12 +44,12 @@ namespace Intime.OPC.Job.RMASync
                     storeno = de.stock.StoreCode;
                     payment.Add(new
                     {
-                        id = _saleRMA.SaleOrderNo,
+                        id = _saleRMA.RMANo,
                         type = PaymentType,
-                        typeid = trans.payment.Code,
+                        typeid = trans.payment.Code,    //
                         typename = trans.payment.Name,
                         no = trans.trans.TransNo,
-                        amount = de.detail.Amount.ToString(),//(de.detail.Price * de.detail.SaleCount).ToString(),
+                        amount = de.detail.Amount.ToString(),
                         rowno = idx,
                         memo = string.Empty,
                         storeno,
@@ -76,7 +76,7 @@ namespace Intime.OPC.Job.RMASync
                     id,
                     mainid = _saleRMA.RMANo,
                     flag = 0,
-                    createtime = order.CreateDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                    createtime = saleRMA.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss"),//order.CreateDate.ToString("yyyy-MM-dd HH:mm:ss"),
                     paytime = trans.trans.CreateDate.ToString("yyyy-MM-dd HH:mm:ss"),
                     type = Type,
                     status = Status,

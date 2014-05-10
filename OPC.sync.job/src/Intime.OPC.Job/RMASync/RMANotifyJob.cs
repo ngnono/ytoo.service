@@ -16,14 +16,14 @@ namespace Intime.OPC.Job.RMASync
         private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
         private DateTime _benchTime = DateTime.Now.AddMinutes(-20);
 
-        private void DoQuery(Action<IQueryable<OPC_SaleRMA>> callback, int RMAStatus, NotificationStatus status)
+        private void DoQuery(Action<IQueryable<OPC_SaleRMA>> callback,  NotificationStatus status)
         {
             using (var context = new YintaiHZhouContext())
             {
                 var minx =
                     context.OPC_SaleRMA.Where(
                         t =>
-                            t.UpdatedDate > _benchTime && t.Status == RMAStatus &&
+                            t.UpdatedDate > _benchTime && (t.Status == (int)EnumRMAStatus.ShipInStorage || t.Status == (int)EnumRMAStatus.PayVerify) &&
                             !context.OPC_RMANotificationLogs.Any(
                                 x => x.RMANo == t.RMANo && x.Status == (int) status));
 
@@ -48,33 +48,37 @@ namespace Intime.OPC.Job.RMASync
             DoQuery(skus =>
             {
                 totalCount = skus.Count();
-            }, (int)EnumRMAStatus.ShipInStorage, NotificationStatus.Create);
+            }, NotificationStatus.Create);
 
             int cursor = 0;
             int size = 20;
             while (cursor < totalCount)
             {
                 List<OPC_SaleRMA> oneTimeList = null;
-                DoQuery(r => oneTimeList = r.OrderBy(t => t.RMANo).Skip(cursor).Take(size).ToList(),0, NotificationStatus.Create);
-                foreach (var saleOrder in oneTimeList)
+                DoQuery(r => oneTimeList = r.OrderBy(t => t.RMANo).Skip(cursor).Take(size).ToList(), NotificationStatus.Create);
+                foreach (var saleRMA in oneTimeList)
                 {
-                    NotifyCreate(saleOrder);
+                    if (saleRMA.Status == (int)EnumRMAStatus.ShipInStorage)
+                        NotifyCreate(saleRMA);
+                    else
+                        NotifyPaid(saleRMA);
                 }
                 cursor += size;
             }
 
+            /*
             totalCount = 0;
             cursor = 0;
 
             DoQuery(orders =>
             {
                 totalCount = orders.Count();
-            }, (int)EnumRMAStatus.PayVerify, NotificationStatus.Paid);
+            },  NotificationStatus.Paid);
 
             while (cursor < totalCount)
             {
                 List<OPC_SaleRMA> oneTimeList = null;
-                DoQuery(r => oneTimeList = r.OrderBy(t => t.RMANo).Skip(cursor).Take(size).ToList(),1, NotificationStatus.Paid);
+                DoQuery(r => oneTimeList = r.OrderBy(t => t.RMANo).Skip(cursor).Take(size).ToList(), NotificationStatus.Paid);
                 foreach (var saleOrder in oneTimeList)
                 {
                     try
@@ -88,6 +92,8 @@ namespace Intime.OPC.Job.RMASync
                 }
                 cursor += size;
             }
+             */
+
         }
 
 
@@ -109,12 +115,12 @@ namespace Intime.OPC.Job.RMASync
             SaleRMANotified(saleRMA, NotificationStatus.Create);
         }
 
-        public void NotifyPaid(OPC_SaleRMA saleOrder)
+        public void NotifyPaid(OPC_SaleRMA saleRMA)
         {
             var apiClient = new DefaultApiClient();
             var rsp = apiClient.Post(new OrderNotifyRequest()
             {
-                Data = new PaidRMANotificationEntity(saleOrder).CreateNotifiedEntity()
+                Data = new PaidRMANotificationEntity(saleRMA).CreateNotifiedEntity()
             });
             if (!rsp.Status)
             {
@@ -122,29 +128,36 @@ namespace Intime.OPC.Job.RMASync
                 Logger.Error(rsp.Message);
                 return;
             }
-            SaleRMANotified(saleOrder,NotificationStatus.Paid);
+            SaleRMANotified(saleRMA,NotificationStatus.Paid);
+
         }
 
         private void SaleRMANotified(OPC_SaleRMA saleRMA, NotificationStatus status)
         {
             using (var db = new YintaiHZhouContext())
             {
-                var order = db.OPC_SaleRMA.FirstOrDefault(x => x.Id == saleRMA.Id);
-                if (order == null)
+                var saleRma = db.OPC_SaleRMA.FirstOrDefault(x => x.Id == saleRMA.Id);
+                if (saleRma == null)
                 {
                     Logger.Error(string.Format("Invalid RMA ({0})",saleRMA.RMANo));
                     return;
                 }
 
-                if (order.Status != 1 && order.Status != 0)
+                if (saleRma.Status != 1 && saleRma.Status != 0)
                 {
                     Logger.Error(string.Format("Invalid RMA status ({0})", saleRMA.RMANo));
                     return;
                 }
 
-                order.Status = 1;    //xiugai 状态值
-                order.UpdatedDate = DateTime.Now;
-                order.UpdatedUser = -10000;
+                saleRma.Status = (int)EnumRMAStatus.NotifyProduct;    //xiugai 状态值
+                saleRma.UpdatedDate = DateTime.Now;
+                saleRma.UpdatedUser = -10000;
+                db.SaveChanges();
+
+                var opc_RMA = db.OPC_RMA.FirstOrDefault(x => x.RMANo == saleRMA.RMANo);
+                opc_RMA.Status = (int)EnumRMAStatus.NotifyProduct;
+                opc_RMA.UpdatedDate = DateTime.Now;
+                opc_RMA.UpdatedUser = -10000;
                 db.SaveChanges();
 
                 db.OPC_RMANotificationLogs.Add(new OPC_RMANotificationLog
