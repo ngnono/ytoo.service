@@ -3,7 +3,7 @@
 namespace Intime.OPC.Modules.Dimension.Models
 {
     /// <summary>
-    /// Organization
+    /// 组织
     /// </summary>
     public class Organization : Dimension
     {
