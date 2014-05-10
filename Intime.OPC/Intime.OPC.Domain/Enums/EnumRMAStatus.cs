@@ -66,7 +66,7 @@ namespace Intime.OPC.Domain.Enums
         /// <summary>
         ///     打印退货单
         /// </summary>
-        [Description("打印退货单")] PrintRMA = 30,
+        [Description("完成打印退货单")] PrintRMA = 30,
 
         /// <summary>
         ///     导购确认收货
