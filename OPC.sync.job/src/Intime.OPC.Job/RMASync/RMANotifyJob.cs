@@ -58,11 +58,11 @@ namespace Intime.OPC.Job.RMASync
                 DoQuery(r => oneTimeList = r.OrderBy(t => t.RMANo).Skip(cursor).Take(size).ToList(), NotificationStatus.Create);
                 foreach (var saleRMA in oneTimeList)
                 {
-                    if (saleRMA.Status == (int)EnumRMAStatus.ShipInStorage)
-                        NotifyCreate(saleRMA);
-                    else
+                    if (saleRMA.Status == (int)EnumRMAStatus.PayVerify)
                         NotifyPaid(saleRMA);
-                }
+                    else
+                        NotifyCreate(saleRMA);
+                }       
                 cursor += size;
             }
 
