@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 namespace Intime.OPC.Modules.Dimension.Models
 {
     /// <summary>
-    /// Brand
+    /// 品牌
     /// </summary>
     public class Brand : Dimension
     {
         private bool enabled;
 
         /// <summary>
-        /// English name
+        /// 英文名称
         /// </summary>
         public string EnglishName { get; set; }
 
         /// <summary>
-        /// Description
+        /// 描述
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Enabled or disabled
+        /// 是否已启用
         /// </summary>
         public bool Enabled 
         {
@@ -33,12 +33,12 @@ namespace Intime.OPC.Modules.Dimension.Models
         }
 
         /// <summary>
-        /// Supplier
+        /// 供应商
         /// </summary>
         public Supplier Supplier { get; set; }
 
         /// <summary>
-        /// Counters on sale
+        /// 销售这个品牌的专柜
         /// </summary>
         public IList<Counter> Counters { get; set; }
     }

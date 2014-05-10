@@ -77,6 +77,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -134,6 +135,13 @@
     </Compile>
     <Compile Include="RegionNames.cs" />
     <Compile Include="Request.cs" />
+    <Compile Include="Rest\IRestClientFactory.cs" />
+    <Compile Include="Rest\RestClient.cs" />
+    <Compile Include="Rest\IRestClient.cs" />
+    <Compile Include="Rest\Request.cs" />
+    <Compile Include="Rest\Response.cs" />
+    <Compile Include="Rest\RestClientFactory.cs" />
+    <Compile Include="Rest\RestException.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -146,7 +154,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="REST\" />
+    <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
+      <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
+      <Name>OPCApp.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

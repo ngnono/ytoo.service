@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace Intime.OPC.Modules.Dimension.Models
 {
     /// <summary>
-    /// Supplier
+    /// 供应商
     /// </summary>
     public class Supplier : Dimension
     {
         /// <summary>
-        /// Code
+        /// 供应商代码
         /// </summary>
         public string Code { get; set; }
     }

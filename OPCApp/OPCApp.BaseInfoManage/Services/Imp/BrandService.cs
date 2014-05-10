@@ -39,6 +39,5 @@ namespace Intime.OPC.Modules.Dimension.Services.Imp
         {
             throw new NotImplementedException();
         }
-
     }
 }

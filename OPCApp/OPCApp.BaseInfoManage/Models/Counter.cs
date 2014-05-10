@@ -7,29 +7,29 @@ using System.Threading.Tasks;
 namespace Intime.OPC.Modules.Dimension.Models
 {
     /// <summary>
-    /// Counter
+    /// 专柜
     /// </summary>
     public class Counter : Dimension
     {
         private bool repealed;
 
         /// <summary>
-        /// Counter code
+        /// 专柜码
         /// </summary>
         public string Code { get; set; }
 
         /// <summary>
-        /// Area code
+        /// 销售区域
         /// </summary>
         public string AreaCode { get; set; }
 
         /// <summary>
-        /// Contact phone number
+        /// 联系电话
         /// </summary>
         public string ContactPhoneNumber { get; set; }
 
         /// <summary>
-        /// Repealed or not
+        /// 是否已撤柜
         /// </summary>
         public bool Repealed
         {
@@ -38,12 +38,12 @@ namespace Intime.OPC.Modules.Dimension.Models
         }
 
         /// <summary>
-        /// Brands
+        /// 销售的品牌
         /// </summary>
         public IList<Brand> Brands { get; set; }
 
         /// <summary>
-        /// Organization
+        /// 管理部门
         /// </summary>
         public Organization Organization { get; set; }
     }
