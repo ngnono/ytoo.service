@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OPCApp.TransManage.Models
+namespace Intime.OPC.Modules.Logistics.Models
 {
     public class Invoice
     {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using System.Windows.Controls;
 
-namespace OPCApp.TransManage.Views
+namespace Intime.OPC.Modules.Logistics.Views
 {
     /// <summary>
     ///     PrintInvoiceViewModel.xaml 的交互逻辑

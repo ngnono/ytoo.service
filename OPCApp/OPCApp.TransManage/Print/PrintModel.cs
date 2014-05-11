@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using OPCApp.Domain.Models;
 
-namespace OPCApp.TransManage.Print
+namespace Intime.OPC.Modules.Logistics.Print
 {
     public class PrintModel
     {
