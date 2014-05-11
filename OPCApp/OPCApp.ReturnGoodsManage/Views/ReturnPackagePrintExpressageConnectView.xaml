@@ -32,19 +32,19 @@
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">查询</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="100" Command="{Binding CommandPrintView}">
+                <Button Background="LightGray" Width="Auto" Command="{Binding CommandPrintView}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">打印预览</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="100" Command="{Binding CommandOnlyPrint}">
+                <Button Background="LightGray" Width="Auto" Command="{Binding CommandOnlyPrint}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">打印快递单</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Command="{Binding CommandPrintExpress}" Width="150">
+                <Button Background="LightGray" Command="{Binding CommandPrintExpress}" Width="Auto">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/image/打印.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">完成快递单交接</TextBlock>

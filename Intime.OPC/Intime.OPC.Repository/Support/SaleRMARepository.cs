@@ -147,7 +147,7 @@ namespace Intime.OPC.Repository.Support
                 foreach (var t in lst.Result)
                 {
                     var o = new SaleRmaDto();
-                    o.Id = t.Orders.Id;
+                    o.Id = t.Orders.Id; 
                     
                     o.CustomerAddress = t.Orders.ShippingAddress;
                     o.CustomerName = t.Orders.ShippingContactPerson;
@@ -185,7 +185,105 @@ namespace Intime.OPC.Repository.Support
                 return new PageResult<SaleRmaDto>(lstSaleRma,lst.TotalCount);
             }
         }
+        /// <summary>
+        /// 付款确认
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <param name="saleOrderNo"></param>
+        /// <param name="payType"></param>
+        /// <param name="rmaNo"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="storeId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public PageResult<SaleRmaDto> GetByReturnGoodPay(string orderNo, string saleOrderNo, string payType, string rmaNo, DateTime startTime, DateTime endTime,
+             int? storeId,int pageIndex, int pageSize)
+        {
+            CheckUser();
+            using (var db = new YintaiHZhouContext())
+            {
+                var query = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
+                //退货状态 已生效的退货单
+                //query = query.Where(t => t.RMAStatus == EnumReturnGoodsStatus.Valid.GetDescription());
+                
+                //收银状态 未送收银
+                query = query.Where(t => t.RMACashStatus == EnumRMACashStatus.NoCash.GetDescription());
 
+                var query2 = db.Orders.Where(t => true);
+                if (!string.IsNullOrWhiteSpace(orderNo))
+                {
+                    query = query.Where(t => t.OrderNo.Contains(orderNo));
+                    query2 = query2.Where(t => t.OrderNo.Contains(orderNo));
+                }
+
+                if (!string.IsNullOrWhiteSpace(saleOrderNo))
+                {
+                    query = query.Where(t => t.SaleOrderNo.Contains(saleOrderNo));
+                }
+
+                if (!string.IsNullOrWhiteSpace(rmaNo))
+                {
+                    query = query.Where(t => t.RMANo.Contains(rmaNo));
+                }
+                //退货单状态 物流入库+通知单品    zxy 2014-5-10
+                query = query.Where(t => (t.Status == (int)EnumRMAStatus.ShipInStorage || t.Status == (int)EnumRMAStatus.NotifyProduct));
+
+                if (!string.IsNullOrWhiteSpace(payType))
+                {
+                    query2 = query2.Where(t => t.PaymentMethodCode == payType);
+                }
+
+                if (storeId.HasValue)
+                {
+                    query2 = query2.Where(t => t.StoreId == storeId.Value);
+                }
+
+                var lst = query.Join(query2, t => t.OrderNo, o => o.OrderNo, (t, o) => new { SaleRMA = t, Orders = o }).OrderByDescending(t => t.Orders.CreateDate).ToPageResult(pageIndex, pageSize);
+
+                var lstSaleRma = new List<SaleRmaDto>();
+                foreach (var t in lst.Result)
+                {
+                    var o = new SaleRmaDto();
+                    o.Id = t.Orders.Id;
+
+                    o.CustomerAddress = t.Orders.ShippingAddress;
+                    o.CustomerName = t.Orders.ShippingContactPerson;
+                    o.CustomerPhone = t.Orders.ShippingContactPhone;
+
+                    o.IfReceipt = t.Orders.NeedInvoice.HasValue ? t.Orders.NeedInvoice.Value : false;
+                    o.MustPayTotal = (double)(t.Orders.TotalAmount);
+                    o.OrderNo = t.Orders.OrderNo;
+                    o.PaymentMethodName = t.Orders.PaymentMethodName;
+
+                    o.ReceiptContent = t.Orders.InvoiceDetail;
+                    o.ReceiptHead = t.Orders.InvoiceSubject;
+
+                    o.OrderSource = t.Orders.OrderSource;
+                    o.OrderTransFee = t.Orders.ShippingFee;
+
+                    if (t.SaleRMA != null)
+                    {
+                        o.BuyDate = t.SaleRMA.CreatedDate;
+                        o.CustomFee = t.SaleRMA.CustomFee;
+                        o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
+                        o.RecoverableSumMoney = t.SaleRMA.RecoverableSumMoney;
+                        o.CreateDate = t.SaleRMA.CreatedDate;
+                        o.SaleOrderNo = t.SaleRMA.SaleOrderNo;
+                        o.StoreFee = t.SaleRMA.StoreFee;
+                        o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
+                        o.CustomerRemark = t.SaleRMA.Reason;
+                        o.RmaNo = t.SaleRMA.RMANo;
+                        o.RMACount = t.SaleRMA.RMACount.HasValue ? 0 : t.SaleRMA.RMACount.Value;
+                        o.CompensationFee = t.SaleRMA.CompensationFee;
+                    }
+
+                    lstSaleRma.Add(o);
+                }
+                return new PageResult<SaleRmaDto>(lstSaleRma, lst.TotalCount);
+            }
+        }
         public OPC_SaleRMA GetByRmaNo(string rmaNo)
         {
             return  Select(t => t.RMANo == rmaNo).FirstOrDefault();

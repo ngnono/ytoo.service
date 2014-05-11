@@ -31,6 +31,7 @@ namespace Intime.OPC.Job.RMASync
             {
                 var saleRMA = db.OPC_SaleRMA.FirstOrDefault(t => t.RMANo == rmaNo);
                 saleRMA.RMACashStatus = GetEnumDescription<EnumCashStatus>(EnumCashStatus.Cashed);
+                saleRMA.RMAStatus = GetEnumDescription<EnumReturnGoodsStatus>(EnumReturnGoodsStatus.Valid);
                 saleRMA.UpdatedDate = DateTime.Now;
                 saleRMA.Status = (int)_status;
                 saleRMA.UpdatedUser = -100;

@@ -327,6 +327,7 @@ namespace Intime.OPC.Repository.Support
 
         public PageResult<RMADto> GetRmaPrintByExpress(string orderNo, DateTime startTime, DateTime endTime, int pageIndex, int pageSize)
         {
+            //（物流入库+通知单品+付款确认）
             int stat = EnumRMAStatus.ShipInStorage.AsID();
             var rmaCashStatus = EnumCashStatus.CashOver.GetDescription();
             string rmaStatus = EnumReturnGoodsStatus.Valid.GetDescription();
@@ -335,7 +336,7 @@ namespace Intime.OPC.Repository.Support
                 var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
                 var saleQuery =
                     db.OPC_SaleRMAs.Where(
-                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMACashStatus == rmaCashStatus && t.Status == stat && t.RMAStatus == rmaStatus);
+                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && (t.Status == stat || t.Status == EnumRMAStatus.NotifyProduct.AsID() || t.Status == EnumRMAStatus.PayVerify.AsID()));
 
                 if (orderNo.IsNotNull())
                 {
@@ -388,7 +389,7 @@ namespace Intime.OPC.Repository.Support
                     o.SourceDesc = t.Rma.SourceDesc;
                     o.RmaStatusName = t.SaleRma.RMAStatus;
                     o.StoreName = t.StoreName;
-                    o.专柜码 = "";
+                    o.专柜码 = "";  //退货明细上去
 
 
                     lstSaleRma.Add(o);
