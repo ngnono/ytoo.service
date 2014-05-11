@@ -7,7 +7,7 @@ using System.ComponentModel.Composition;
 
 namespace Intime.OPC.Modules.Dimension.Services.Imp
 {
-    [Export(typeof(ICounterService))]
+    //[Export(typeof(ICounterService))]
     public class CounterService : DimensionService<Counter>
     {
 

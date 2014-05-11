@@ -13,21 +13,36 @@ namespace Intime.OPC.Modules.Dimension.Models
     public class Counter : Dimension
     {
         private bool repealed;
+        private string code;
+        private string areaCode;
+        private string contactPhoneNumber;
 
         /// <summary>
         /// 专柜码
         /// </summary>
-        public string Code { get; set; }
+        public string Code
+        {
+            get { return code; }
+            set { SetProperty(ref code, value); }
+        }
 
         /// <summary>
         /// 销售区域
         /// </summary>
-        public string AreaCode { get; set; }
+        public string AreaCode
+        {
+            get { return areaCode; }
+            set { SetProperty(ref areaCode, value); }
+        }
 
         /// <summary>
         /// 联系电话
         /// </summary>
-        public string ContactPhoneNumber { get; set; }
+        public string ContactPhoneNumber
+        {
+            get { return contactPhoneNumber; }
+            set { SetProperty(ref contactPhoneNumber, value); }
+        }
 
         /// <summary>
         /// 是否已撤柜

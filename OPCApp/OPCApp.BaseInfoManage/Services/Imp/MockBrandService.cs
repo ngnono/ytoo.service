@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Dimension.Services.Imp
 {
+    [Export(typeof(IBrandService))]
     public class MockBrandService : IBrandService
     {
         private IList<Brand> brands = new List<Brand>();
