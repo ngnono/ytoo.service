@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
 using Yintai.Architecture.Common.Logger;
@@ -113,7 +114,7 @@ namespace com.intime.fashion.common
             CommonUtil.Log.Info(string.Format("data:{0}", requestData));
             var notifyRequest = new RestRequest("cgi-bin/message/template/send?access_token={access_token}", Method.POST);
             notifyRequest.RequestFormat = DataFormat.Json;
-            notifyRequest.AddUrlSegment("access_token", token.access_token);
+            notifyRequest.AddUrlSegment("access_token", HttpUtility.UrlEncode(token.access_token));
             notifyRequest.AddBody(requestData);
             var content = client.Execute(notifyRequest).Content;
             CommonUtil.Log.Info(string.Format("response:{0}",content));
