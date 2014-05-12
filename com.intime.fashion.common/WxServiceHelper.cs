@@ -87,8 +87,23 @@ namespace com.intime.fashion.common
 
         public static bool SendMessage(dynamic requestData, Action<dynamic> successCallback, Action<dynamic> failCallback)
         {
+            return SendMessage(requestData, AccessTokenType.XihuanYintai, successCallback, failCallback);
+        }
+        public static bool SendMessage(dynamic requestData,AccessTokenType tokenType, Action<dynamic> successCallback, Action<dynamic> failCallback)
+        {
             var client = new RestClient(WxPayConfig.WEB_SERVICE_BASE);
-            var token = WgServiceHelper.Token;
+            AccessToken token = null;
+            switch(tokenType)
+            {
+                case AccessTokenType.MiniYin:
+                        token = WgServiceHelper.TokenMini;
+                    break;
+                case AccessTokenType.XihuanYintai:
+                    token = WgServiceHelper.Token;
+                    break;
+                default:
+                    throw new ArgumentException("tokenType mismatch");
+            }
             if (token == null)
             {
                 CommonUtil.Log.Info("token is empty");

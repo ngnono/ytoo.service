@@ -130,34 +130,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             }
 
                             bool isSuccess = true;
-                            /*
-                            var orderItemEntity = Context.Set<OrderItemEntity>().Where(o => o.OrderNo == orderEntity.OrderNo).FirstOrDefault();
-                            var expDate = string.Format("{0}之前", DateTime.Today.AddDays(1).ToShortDateString());
-                            var detailRemark = string.Format("提货码:{0} 专柜:{1}", out_trade_no, orderEntity.ShippingAddress);
-                           var targetUrl = new Dictionary<string, string>() {
-                                            {"productname",orderItemEntity.ProductName}
-                                            , {"quantity",orderItemEntity.Quantity.ToString()}
-                                            ,{"expdate",expDate}
-                                            ,{"remark",detailRemark}
-                                        }.Aggregate(new StringBuilder(), (s, e) => s.AppendFormat("{0}={1}&", e.Key, HttpUtility.UrlEncode(e.Value))
-                                                                        , s => s.ToString().TrimEnd('&'));
-                            isSuccess = WxServiceHelper.SendMessage(new
-                            {
-                                touser = request.OpenId,
-                                template_id = WxPayConfig.MESSAGE_TEMPLATE_ID,
-                                url = string.Format("{0}?{1}",WeigouConfig.MESSAGE_TARGET_URL,targetUrl),
-                                data = new
-                                {
-                                    productType = new { value = "商品名",  color = "#000000" },
-                                    name = new { value = orderItemEntity.ProductName, color = "#173177" },
-                                    number = new { value = orderItemEntity.Quantity.ToString(), color = "#173177" },
-                                    expDate =new { value =  expDate, color = "#173177" },
-                                    remark = new { value = detailRemark, color = "#173177" } 
-                                }
-                            }, null, null);
-                             * */
+
                             if (isSuccess)
+                            {
                                 ts.Complete();
+                                //notify wx async
+                                NotifyWxAsync(AssociateOrderType.Product, orderEntity.OrderNo, request.OpenId);
+                            }
                             else
                                 return Content("fail");
                         }
@@ -269,6 +248,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 }
                             }
                             ts.Complete();
+                            //notify wx async
+                            NotifyWxAsync(AssociateOrderType.GiftCard, giftcardOrder.No, request.OpenId);
                         }
                     }
 
@@ -307,6 +288,67 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return ServiceLocator.Current.Resolve<ILog>();
             }
+        }
+
+        private void NotifyWxAsync(AssociateOrderType type, string orderNo,string openId)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                //step1: send paid message to user
+                var order_type = string.Empty;
+                var url_path = string.Empty;
+                var daogou_url_path = "ims/store/stores/records";
+                switch (type)
+                { 
+                    case AssociateOrderType.Product:
+                        order_type="商品";
+                        url_path = string.Format("ims/orders/{1}",orderNo);
+                        break;
+                    case AssociateOrderType.GiftCard:
+                        order_type = "礼品卡";
+                        url_path = "ims/card_orders/list";
+                        break;
+                    default:
+                        return;
+                }
+                WxServiceHelper.SendMessage(new
+                {
+                    touser = openId,
+                    template_id = WxPayConfig.MESSAGE_TEMPLATE_ID_MINI,
+                    url = string.Format("{0}{1}", ConfigManager.AwsHost, url_path),
+                    topcolor = "#FF0000",
+                    data = new
+                    {
+                        title = new { value = "您的订单已支付", color = "#000000" },
+                        storeName = new { value = "银泰商业", color = "#173177" },
+                        orderId = new { value = orderNo, color = "#173177" },
+                        orderType = new { value = order_type, color = "#173177" },
+                        remark = new { value = "感谢支持，点击进入查看订单详情", color = "#173177" }
+                    }
+                }, null, null);
+                //step2: send income message to dagou
+                var associateOrder = Context.Set<IMS_AssociateIncomeHistoryEntity>().Where(iai => iai.SourceNo == orderNo && iai.SourceType == (int)type).FirstOrDefault();
+                if (associateOrder != null)
+                {
+                    var userEntity = Context.Set<OutsiteUserEntity>().Where(o => o.AssociateUserId == associateOrder.AssociateUserId).First();
+                    WxServiceHelper.SendMessage(new
+                    {
+                        touser = userEntity.OutsiteUserId,
+                        template_id = WxPayConfig.MESSAGE_TEMPLATE_ID_MINI,
+                        url = string.Format("{0}{1}", ConfigManager.AwsHost, daogou_url_path),
+                        topcolor = "#FF0000",
+                        data = new
+                        {
+                            title = new { value = "您的店铺有订单已支付", color = "#000000" },
+                            storeName = new { value = "银泰商业", color = "#173177" },
+                            orderId = new { value = orderNo, color = "#173177" },
+                            orderType = new { value = order_type, color = "#173177" },
+                            remark = new { value = "点击进入查看交易记录", color = "#173177" }
+                        }
+                    }, null, null);
+                }
+            });
+      
         }
     }
 }

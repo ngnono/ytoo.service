@@ -13,6 +13,7 @@ namespace com.intime.fashion.common
     public static class WgServiceHelper
     {
         private static AccessToken WxToken;
+        private static AccessToken WxToken_Mini;
 
         public static AccessToken Token
         {
@@ -26,6 +27,18 @@ namespace com.intime.fashion.common
             }
         }
 
+        public static AccessToken TokenMini
+        {
+            get
+            {
+                if (WxToken_Mini == null ||
+                    WxToken_Mini.IsExpired)
+                {
+                    WxToken_Mini = new AccessToken(AccessTokenType.MiniYin).Renew();
+                };
+                return WxToken_Mini;
+            }
+        }
        
     }
 }
