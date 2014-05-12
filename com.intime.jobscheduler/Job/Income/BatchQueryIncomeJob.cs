@@ -101,7 +101,6 @@ namespace com.intime.jobscheduler.Job.Income
                                 PackageId = fullPackageId,
                                 ServiceVersion = "1.2",
                             });
-                            
                             if (response != null && response.IsSuccess)
                             {
                                 switch (response.Result.TradeState)
@@ -158,38 +157,47 @@ namespace com.intime.jobscheduler.Job.Income
 
             int fullPackageId = int.Parse(response.PackageId);
             //modify all transfer requesting
-            foreach (var succRequest in response.Result.SuccessResult.Records)
-            { 
-                int requestId = int.Parse(succRequest.Serial);
-                var request = db.Set<IMS_AssociateIncomeRequestEntity>().Find(requestId);
-                request.Status = (int)AssociateIncomeRequestStatus.Transferred;
-                request.UpdateDate = DateTime.Now;
-                request.TransferErrorCode = order.QueryRetCode;
-                request.TransferErrorMsg = order.QueryRetMsg;
-                db.Entry(request).State = System.Data.EntityState.Modified;
-
-                var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId).First();
-                incomeAccount.RequestAmount -= request.Amount;
-                incomeAccount.ReceivedAmount += request.Amount;
-                incomeAccount.UpdateDate = DateTime.Now;
-                db.Entry(incomeAccount).State = System.Data.EntityState.Modified;
-            }
-            foreach (var failRequest in response.Result.FailResult.Records)
+            if (response.Result.SuccessResult.Records != null)
             {
-                int requestId = int.Parse(failRequest.Serial);
-                var request = db.Set<IMS_AssociateIncomeRequestEntity>().Find(requestId);
-                request.Status = (int)AssociateIncomeRequestStatus.Failed;
-                request.UpdateDate = DateTime.Now;
-                request.TransferErrorCode = failRequest.ErrorCode;
-                request.TransferErrorMsg = failRequest.ErrorMsg;
-                db.Entry(request).State = System.Data.EntityState.Modified;
+                foreach (var succRequest in response.Result.SuccessResult.Records)
+                {
+                    int requestId = int.Parse(succRequest.Serial);
+                    var request = db.Set<IMS_AssociateIncomeRequestEntity>().Find(requestId);
+                    request.Status = (int)AssociateIncomeRequestStatus.Transferred;
+                    request.UpdateDate = DateTime.Now;
+                    request.TransferErrorCode = order.QueryRetCode;
+                    request.TransferErrorMsg = order.QueryRetMsg;
+                    db.Entry(request).State = System.Data.EntityState.Modified;
 
-                var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId).First();
-                incomeAccount.RequestAmount -= request.Amount;
-                incomeAccount.AvailableAmount += request.Amount;
-                incomeAccount.UpdateDate = DateTime.Now;
-                db.Entry(incomeAccount).State = System.Data.EntityState.Modified;
-                
+                    var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId).First();
+                    incomeAccount.RequestAmount -= request.Amount;
+                    incomeAccount.ReceivedAmount += request.Amount;
+                    incomeAccount.UpdateDate = DateTime.Now;
+                    db.Entry(incomeAccount).State = System.Data.EntityState.Modified;
+                }
+            }
+            if (response.Result.FailResult.Records != null)
+            {
+                foreach (var failRequest in response.Result.FailResult.Records)
+                {
+                    if (failRequest != null)
+                    {
+                        int requestId = int.Parse(failRequest.Serial);
+                        var request = db.Set<IMS_AssociateIncomeRequestEntity>().Find(requestId);
+                        request.Status = (int)AssociateIncomeRequestStatus.Failed;
+                        request.UpdateDate = DateTime.Now;
+                        request.TransferErrorCode = failRequest.ErrorCode;
+                        request.TransferErrorMsg = failRequest.ErrorMsg;
+                        db.Entry(request).State = System.Data.EntityState.Modified;
+
+                        var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId).First();
+                        incomeAccount.RequestAmount -= request.Amount;
+                        incomeAccount.AvailableAmount += request.Amount;
+                        incomeAccount.UpdateDate = DateTime.Now;
+                        db.Entry(incomeAccount).State = System.Data.EntityState.Modified;
+                    }
+
+                }
             }
             try
             {
