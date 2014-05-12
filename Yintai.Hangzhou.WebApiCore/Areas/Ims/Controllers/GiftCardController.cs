@@ -337,14 +337,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         {
                             return this.RenderError(r => r.Message = rsp.ErrorMessage);
                         }
+                        Logger.Error(string.Format("充值成功，充值卡余额:{0}", rsp.Balance));
                         ts.Complete();
                     }
                     catch (Exception ex)
                     {
+                        Logger.Error(string.Format("调用信息部接口充值时抛出异常: 卡号:({0})",order.No));
                         Logger.Error(ex);
                         return this.RenderError(r => r.Message = ex.Message);
                     }
-                    
+
                 }
 
                 return this.RenderSuccess<dynamic>(null);
