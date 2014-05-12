@@ -5,18 +5,16 @@ using Microsoft.Practices.Prism.Regions;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
-namespace OPCApp.TransManage
+namespace Intime.OPC.Modules.Logistics
 {
-    //test
-    //liuyh 2014-1-1
-    [ModuleExport(typeof (TransManageModule))]
-    public class TransManageModule : IModule
+    [ModuleExport(typeof (LogisticsModule))]
+    public class LogisticsModule : IModule
     {
-        [Import] public IRegionManager RegionManager;
+        [Import]
+        public IRegionManager RegionManager { get; set; }
 
         public void Initialize()
         {
-            // this.RegionManager.RegisterViewWithRegion(RegionNames.MainNavigationRegion, typeof(NavigationItemView));
             Mapper.CreateMap<OPC_Comment, OPC_SaleComment>(e =>
                 new OPC_SaleComment
                 {

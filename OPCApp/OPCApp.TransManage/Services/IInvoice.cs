@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using OPCApp.TransManage.Models;
+using Intime.OPC.Modules.Logistics.Models;
 
-namespace OPCApp.TransManage.IService
+namespace Intime.OPC.Modules.Logistics.IService
 {
     //门店接口定义
     public interface IInvoice

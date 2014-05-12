@@ -1,14 +1,12 @@
-﻿using Intime.OPC.Modules.Dimension.Models;
-using Intime.OPC.Modules.Dimension.Services;
-using Microsoft.Practices.Prism.Interactivity;
-using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
-using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Mvvm;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using OPCApp.Common.Extensions;
+using System.Windows.Forms;
 using System.Windows.Input;
+using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
+using Microsoft.Practices.Prism.Mvvm;
+using OPCApp.Common.Extensions;
 
 namespace Intime.OPC.Modules.Dimension.Common
 {
@@ -83,6 +81,8 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         private void OnDelete()
         {
+            if (MessageBox.Show("确定要删除吗？", "删除", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+
             Models.ForEach(model =>
             {
                 if (model.IsSelected) Service.Delete(model.ID);

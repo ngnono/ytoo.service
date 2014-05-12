@@ -1,4 +1,4 @@
-﻿namespace OPCApp.TransManage.IService
+﻿namespace Intime.OPC.Modules.Logistics.IService
 {
     //封装的打印接口,从界面上取得数值，打印时不与后台交互
     public interface IPrintService

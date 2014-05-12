@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataService", "DataService"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{1D6F97CE-3597-4164-9DED-D0A938835AD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPCApp.TransManage", "OPCApp.TransManage\OPCApp.TransManage.csproj", "{58CBE625-8DF4-4487-B984-F64D1349C169}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intime.OPC.Modules.Logistics", "OPCApp.TransManage\Intime.OPC.Modules.Logistics.csproj", "{58CBE625-8DF4-4487-B984-F64D1349C169}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intime.OPC.ApiClient", "Intime.OPC.ApiClient\Intime.OPC.ApiClient.csproj", "{D34916D5-BA8A-4A70-9A9C-2997289EF411}"
 EndProject

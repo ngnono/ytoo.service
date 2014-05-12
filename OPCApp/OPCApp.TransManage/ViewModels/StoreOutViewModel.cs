@@ -10,9 +10,9 @@ using OPCApp.Domain.Dto;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
-using OPCApp.TransManage.Print;
+using Intime.OPC.Modules.Logistics.Print;
 
-namespace OPCApp.TransManage.ViewModels
+namespace Intime.OPC.Modules.Logistics.ViewModels
 {
     [Export("StoreOutViewModel", typeof (StoreOutViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]

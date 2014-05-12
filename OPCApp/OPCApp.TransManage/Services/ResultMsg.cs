@@ -1,4 +1,4 @@
-﻿namespace OPCApp.TransManage.IService
+﻿namespace Intime.OPC.Modules.Logistics.IService
 {
     public class ResultMsg
     {

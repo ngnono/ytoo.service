@@ -8,7 +8,7 @@ namespace OPCApp.Infrastructure.REST
     /// </summary>
     /// <typeparam name="TData">请求数据类型</typeparam>
     [DataContract]
-    public abstract class Request<TData>
+    public class Request<TData>
     {
         public string URI { get; set; }
 

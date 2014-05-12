@@ -7,7 +7,7 @@ using OPCApp.DataService.Interface.Trans;
 using OPCApp.Domain.Enums;
 using OPCApp.Infrastructure;
 
-namespace OPCApp.TransManage.ViewModels
+namespace Intime.OPC.Modules.Logistics.ViewModels
 {
     [Export("StoreInViewModel", typeof (StoreInViewModel))]
     public class StoreInViewModel : PrintInvoiceViewModel

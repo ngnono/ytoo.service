@@ -11,7 +11,7 @@ using Microsoft.Reporting.WinForms;
 using OPCApp.Domain.Models;
 using System;
 
-namespace OPCApp.TransManage.Print
+namespace Intime.OPC.Modules.Logistics.Print
 {
     /// <summary>
     ///     MainWindow.xaml 的交互逻辑

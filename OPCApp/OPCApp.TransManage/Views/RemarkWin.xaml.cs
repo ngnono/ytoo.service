@@ -5,9 +5,9 @@ using System.Windows;
 using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.IService;
 using OPCApp.Domain.Enums;
-using OPCApp.TransManage.ViewModels;
+using Intime.OPC.Modules.Logistics.ViewModels;
 
-namespace OPCApp.TransManage.Views
+namespace Intime.OPC.Modules.Logistics.Views
 {
     /// <summary>
     ///     RemarkWin.xaml 的交互逻辑
