@@ -335,6 +335,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
                         if (!rsp.Status)
                         {
+                            Logger.Error("充值失败：信息部返回错误：");
+                            Logger.Error(rsp.ErrorMessage);
                             return this.RenderError(r => r.Message = rsp.ErrorMessage);
                         }
                         Logger.Error(string.Format("充值成功，充值卡余额:{0}", rsp.Balance));
