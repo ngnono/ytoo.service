@@ -290,6 +290,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
         }
 
+       
         private void NotifyWxAsync(AssociateOrderType type, string orderNo,string openId)
         {
             Task.Factory.StartNew(() =>

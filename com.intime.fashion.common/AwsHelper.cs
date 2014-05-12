@@ -76,10 +76,10 @@ namespace com.intime.fashion.common
                  
                 }
             }
-            var jsonResponse = JsonConvert.DeserializeObject<dynamic>(sb.ToString());
+            dynamic jsonResponse = JsonConvert.DeserializeObject(sb.ToString());
 
             if (jsonResponse != null &&
-                jsonResponse.isSuccessful == true)
+                (jsonResponse.isSuccessful == null || jsonResponse.isSuccessful == true))
             {
                 if (successCallback != null) 
                 successCallback(jsonResponse);
