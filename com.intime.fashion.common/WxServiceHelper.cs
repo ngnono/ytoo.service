@@ -109,11 +109,15 @@ namespace com.intime.fashion.common
                 CommonUtil.Log.Info("token is empty");
                 return false;
             }
+            CommonUtil.Log.Info(string.Format("token:{0}", token.access_token));
+            CommonUtil.Log.Info(string.Format("data:{0}", requestData));
             var notifyRequest = new RestRequest("cgi-bin/message/template/send?access_token={access_token}", Method.POST);
             notifyRequest.RequestFormat = DataFormat.Json;
             notifyRequest.AddUrlSegment("access_token", token.access_token);
             notifyRequest.AddBody(requestData);
-            var notifyResponse = JsonConvert.DeserializeObject<dynamic>(client.Execute(notifyRequest).Content);
+            var content = client.Execute(notifyRequest).Content;
+            CommonUtil.Log.Info(string.Format("response:{0}",content));
+            var notifyResponse = JsonConvert.DeserializeObject<dynamic>(content);
 
             if (notifyResponse.errcode == 0)
             {

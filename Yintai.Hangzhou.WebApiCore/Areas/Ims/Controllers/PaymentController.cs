@@ -294,58 +294,65 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         {
             Task.Factory.StartNew(() =>
             {
-                //step1: send paid message to user
-                var order_type = string.Empty;
-                var url_path = string.Empty;
-                var daogou_url_path = "ims/store/stores/records";
-                switch (type)
-                { 
-                    case AssociateOrderType.Product:
-                        order_type="商品";
-                        url_path = string.Format("ims/orders/{1}",orderNo);
-                        break;
-                    case AssociateOrderType.GiftCard:
-                        order_type = "礼品卡";
-                        url_path = "ims/card_orders/list";
-                        break;
-                    default:
-                        return;
-                }
-                WxServiceHelper.SendMessage(new
+                try
                 {
-                    touser = openId,
-                    template_id = WxPayConfig.MESSAGE_TEMPLATE_ID_MINI,
-                    url = string.Format("{0}{1}", ConfigManager.AwsHost, url_path),
-                    topcolor = "#FF0000",
-                    data = new
+                    //step1: send paid message to user
+                    var order_type = string.Empty;
+                    var url_path = string.Empty;
+                    var daogou_url_path = "ims/store/stores/records";
+                    switch (type)
                     {
-                        title = new { value = "您的订单已支付", color = "#000000" },
-                        storeName = new { value = "银泰商业", color = "#173177" },
-                        orderId = new { value = orderNo, color = "#173177" },
-                        orderType = new { value = order_type, color = "#173177" },
-                        remark = new { value = "感谢支持，点击进入查看订单详情", color = "#173177" }
+                        case AssociateOrderType.Product:
+                            order_type = "商品";
+                            url_path = string.Format("ims/orders/{0}", orderNo);
+                            break;
+                        case AssociateOrderType.GiftCard:
+                            order_type = "礼品卡";
+                            url_path = "ims/card_orders/list";
+                            break;
+                        default:
+                            return;
                     }
-                }, null, null);
-                //step2: send income message to dagou
-                var associateOrder = Context.Set<IMS_AssociateIncomeHistoryEntity>().Where(iai => iai.SourceNo == orderNo && iai.SourceType == (int)type).FirstOrDefault();
-                if (associateOrder != null)
-                {
-                    var userEntity = Context.Set<OutsiteUserEntity>().Where(o => o.AssociateUserId == associateOrder.AssociateUserId).First();
                     WxServiceHelper.SendMessage(new
                     {
-                        touser = userEntity.OutsiteUserId,
+                        touser = openId,
                         template_id = WxPayConfig.MESSAGE_TEMPLATE_ID_MINI,
-                        url = string.Format("{0}{1}", ConfigManager.AwsHost, daogou_url_path),
+                        url = string.Format("{0}{1}", ConfigManager.AwsHost, url_path),
                         topcolor = "#FF0000",
                         data = new
                         {
-                            title = new { value = "您的店铺有订单已支付", color = "#000000" },
+                            title = new { value = "您的订单已支付", color = "#000000" },
                             storeName = new { value = "银泰商业", color = "#173177" },
                             orderId = new { value = orderNo, color = "#173177" },
                             orderType = new { value = order_type, color = "#173177" },
-                            remark = new { value = "点击进入查看交易记录", color = "#173177" }
+                            remark = new { value = "感谢支持，点击进入查看订单详情", color = "#173177" }
                         }
-                    }, null, null);
+                    }, AccessTokenType.MiniYin, null, null);
+                    //step2: send income message to dagou
+                    var associateOrder = Context.Set<IMS_AssociateIncomeHistoryEntity>().Where(iai => iai.SourceNo == orderNo && iai.SourceType == (int)type).FirstOrDefault();
+                    if (associateOrder != null)
+                    {
+                        var userEntity = Context.Set<OutsiteUserEntity>().Where(o => o.AssociateUserId == associateOrder.AssociateUserId).First();
+                        WxServiceHelper.SendMessage(new
+                        {
+                            touser = userEntity.OutsiteUserId,
+                            template_id = WxPayConfig.MESSAGE_TEMPLATE_ID_MINI,
+                            url = string.Format("{0}{1}", ConfigManager.AwsHost, daogou_url_path),
+                            topcolor = "#FF0000",
+                            data = new
+                            {
+                                title = new { value = "您的店铺有订单已支付", color = "#000000" },
+                                storeName = new { value = "银泰商业", color = "#173177" },
+                                orderId = new { value = orderNo, color = "#173177" },
+                                orderType = new { value = order_type, color = "#173177" },
+                                remark = new { value = "点击进入查看交易记录", color = "#173177" }
+                            }
+                        }, AccessTokenType.MiniYin, null, null);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Info(ex);
                 }
             });
       
