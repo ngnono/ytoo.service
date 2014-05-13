@@ -67,15 +67,27 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone);
             if (cardAccount == null)
             {
-                var user = _customerRepo.Find(x => x.Id == authuid);
-
-                cardAccount = _userRepo.Insert(new IMS_GiftCardUserEntity()
+                if (IsPhoneBinded(phone))
                 {
-                    UserId = authuid,
-                    CreateDate = DateTime.Now,
-                    GiftCardAccount = phone,
-                    Name = user.Nickname
-                });
+                    cardAccount = _userRepo.Find(x => x.UserId == authuid);
+
+                    if (cardAccount == null)
+                    {
+                        var user = _customerRepo.Find(x => x.Id == authuid);
+
+                        cardAccount = _userRepo.Insert(new IMS_GiftCardUserEntity()
+                        {
+                            UserId = authuid,
+                            CreateDate = DateTime.Now,
+                            GiftCardAccount = phone,
+                            Name = user.Nickname
+                        });
+                    }
+                }
+                else
+                {
+                    return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = false });
+                }
             }
             return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = cardAccount != null });
         }
