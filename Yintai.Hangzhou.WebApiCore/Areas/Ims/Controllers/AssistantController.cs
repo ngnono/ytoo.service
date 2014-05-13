@@ -272,7 +272,10 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                                              o => o.Id,
                                              i => i.ProductId,
                                              (o, i) => o)
-                                         .Join(Context.Set<InventoryEntity>(),
+                                         .Join(Context.Set<InventoryEntity>().Join(Context.Set<ProductPropertyValueEntity>().Where(ppv=>ppv.Status==(int)DataStatus.Normal),
+                                                                                    o=>o.PSizeId,
+                                                                                    i=>i.Id,
+                                                                                    (o,i)=>o),
                                                     o => o.Id,
                                                     i => i.ProductId,
                                                     (o, i) => i);
