@@ -110,6 +110,9 @@
     <Compile Include="Areas\Api\Controllers\ShareController.cs" />
     <Compile Include="Areas\Api\Controllers\StoreController.cs" />
     <Compile Include="Areas\Api\Controllers\TagController.cs" />
+    <Compile Include="Areas\Gg\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Gg\Controllers\OrderController.cs" />
+    <Compile Include="Areas\Gg\Controllers\ProductController.cs" />
     <Compile Include="Areas\Ims\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Ims\Controllers\AssistantController.cs" />
     <Compile Include="Areas\Ims\Controllers\ComboController.cs" />
@@ -123,6 +126,7 @@
     <Compile Include="Areas\Ims\Controllers\StoreController.cs" />
     <Compile Include="Areas\Ims\Controllers\UserController.cs" />
     <Compile Include="Authorize2FilterAttribute.cs" />
+    <Compile Include="ValidateParametersAttribute.cs" />
     <Compile Include="ControllerExtension.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DataServiceAttribute.cs" />
@@ -167,6 +171,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Binder\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

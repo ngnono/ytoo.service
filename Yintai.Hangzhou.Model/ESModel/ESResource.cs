@@ -18,5 +18,6 @@ namespace Yintai.Hangzhou.Model.ES
         public int Status { get; set; }
         public int SourceId { get; set; }
         public int SourceType { get; set; }
+        public Nullable<int> ColorId { get; set; }
     }
 }

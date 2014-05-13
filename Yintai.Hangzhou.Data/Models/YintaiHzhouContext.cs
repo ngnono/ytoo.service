@@ -247,6 +247,36 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<IMS_SectionOperatorEntity> IMS_SectionOperator { get; set; }
         public DbSet<ProductCode2StoreCodeEntity> ProductCode2StoreCode { get; set; }
 
+        public DbSet<OPC_AuthMenuEntity> OPC_AuthMenu { get; set; }
+        public DbSet<OPC_AuthRoleEntity> OPC_AuthRole { get; set; }
+        public DbSet<OPC_AuthRoleMenuEntity> OPC_AuthRoleMenu { get; set; }
+        public DbSet<OPC_AuthRoleUserEntity> OPC_AuthRoleUser { get; set; }
+        public DbSet<OPC_AuthUserEntity> OPC_AuthUser { get; set; }
+        public DbSet<OPC_CategoryMapEntity> OPC_CategoryMap { get; set; }
+        public DbSet<OPC_ChannelMapEntity> OPC_ChannelMap { get; set; }
+        public DbSet<OPC_ChannelProductEntity> OPC_ChannelProduct { get; set; }
+        public DbSet<OPC_OrderCommentEntity> OPC_OrderComment { get; set; }
+        public DbSet<OPC_OrderSplitLogEntity> OPC_OrderSplitLog { get; set; }
+        public DbSet<OPC_OrgInfoEntity> OPC_OrgInfo { get; set; }
+        public DbSet<OPC_RMAEntity> OPC_RMA { get; set; }
+        public DbSet<OPC_RMACommentEntity> OPC_RMAComment { get; set; }
+        public DbSet<OPC_RMADetailEntity> OPC_RMADetail { get; set; }
+        public DbSet<OPC_RMALogEntity> OPC_RMALog { get; set; }
+        public DbSet<OPC_RMANotificationLogEntity> OPC_RMANotificationLog { get; set; }
+        public DbSet<OPC_SaleEntity> OPC_Sale { get; set; }
+        public DbSet<OPC_SaleCommentEntity> OPC_SaleComment { get; set; }
+        public DbSet<OPC_SaleDetailEntity> OPC_SaleDetail { get; set; }
+        public DbSet<OPC_SaleLogEntity> OPC_SaleLog { get; set; }
+        public DbSet<OPC_SaleOrderNotificationLogEntity> OPC_SaleOrderNotificationLog { get; set; }
+        public DbSet<OPC_SaleRMAEntity> OPC_SaleRMA { get; set; }
+        public DbSet<OPC_SaleRMACommentEntity> OPC_SaleRMAComment { get; set; }
+        public DbSet<OPC_ShippingSaleEntity> OPC_ShippingSale { get; set; }
+        public DbSet<OPC_ShippingSaleCommentEntity> OPC_ShippingSaleComment { get; set; }
+        public DbSet<OPC_SKUEntity> OPC_SKU { get; set; }
+        public DbSet<OPC_StockEntity> OPC_Stock { get; set; }
+        public DbSet<OPC_StorePriorityEntity> OPC_StorePriority { get; set; }
+        public DbSet<OPC_SupplierInfoEntity> OPC_SupplierInfo { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 			Configuration.AutoDetectChangesEnabled = false;

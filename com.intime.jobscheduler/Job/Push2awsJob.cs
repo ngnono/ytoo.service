@@ -1,25 +1,23 @@
 ﻿using Common.Logging;
 using Nest;
+using Newtonsoft.Json;
 using Quartz;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using Yintai.Hangzhou.Data.Models;
-
-using Newtonsoft.Json;
-using Yintai.Hangzhou.Model.ES;
 using Yintai.Architecture.Common.Models;
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
-using com.intime.fashion.common;
+using Yintai.Hangzhou.Model.ES;
+using Yintai.Hangzhou.Model.ESModel;
 
 namespace com.intime.jobscheduler.Job
 {
     [DisallowConcurrentExecution]
-    public class Push2awsJob:IJob
+    public class Push2awsJob : IJob
     {
         private bool _isActiveOnly = false;
+
         public void Execute(IJobExecutionContext context)
         {
             ILog log = LogManager.GetLogger(this.GetType());
@@ -27,24 +25,23 @@ namespace com.intime.jobscheduler.Job
             var esUrl = data.GetString("eshost");
             var esIndex = data.GetString("defaultindex");
             var needRebuild = data.ContainsKey("needrebuild") ? data.GetBooleanValue("needrebuild") : false;
-            var benchDate = BenchDate(context) ;
-            
+            var benchDate = BenchDate(context);
+
             var client = new ElasticClient(new ConnectionSettings(new Uri(esUrl))
-                                    .SetDefaultIndex(esIndex)
-                                    .SetMaximumAsyncConnections(10));
+                .SetDefaultIndex(esIndex)
+                .SetMaximumAsyncConnections(10));
             if (client == null)
             {
                 log.Info("client create faile");
                 return;
             }
-           
+
             if (needRebuild)
             {
                 var response = client.DeleteIndex(esIndex);
                 if (response.OK)
                 {
                     log.Info(string.Format("index:{0} is deleted!", esIndex));
-                    
                 }
                 else
                 {
@@ -58,40 +55,96 @@ namespace com.intime.jobscheduler.Job
             IndexTag(client, benchDate);
             IndexUser(client, benchDate);
             IndexResource(client, benchDate);
-            IndexProds(client, benchDate,null);
-            IndexPros(client,benchDate,null);
+            IndexProds(client, benchDate, null);
+            IndexPros(client, benchDate, null);
             IndexBanner(client, benchDate);
-            IndexSpecialTopic(client, benchDate,null);
+            IndexSpecialTopic(client, benchDate, null);
             IndexStorePromotion(client, benchDate);
+            IndexInventory(client, benchDate);
         }
 
-   
-
-        private void IndexStorePromotion(ElasticClient client, DateTime benchDate)
+        private void IndexInventory(ElasticClient client, DateTime benchDate)
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var prods = db.StorePromotions.Where(r=> r.CreateDate >= benchDate || r.UpdateDate >= benchDate)
-                            .GroupJoin(db.PointOrderRules.Where(r=>r.Status!=(int)DataStatus.Deleted),o=>o.Id,i=>i.StorePromotionId,
-                                    (o,i)=>new {S=o,R = i});
+                var inventories =
+                    db.Inventories.Where(x => x.UpdateDate >= benchDate)
+                        .GroupBy(x => x.ProductId)
+                        .Join(db.Inventories, p => p.Key, i => i.ProductId, (k, i) => i)
+                        .Join(db.Products, i => i.ProductId, p => p.Id,
+                            (i, p) => new { stock = i, price = p.Price, labelprice = p.UnitPrice });
+                int totalCount = inventories.Count();
+                client.MapFromAttributes<ESStock>();
+                while (cursor < totalCount)
+                {
+                    var linq = from l in inventories.OrderByDescending(p => p.stock.Id).Skip(cursor).Take(size).ToList()
+                               select new ESStock()
+                               {
+                                   ProductId = l.stock.ProductId,
+                                   Amount = l.stock.Amount,
+                                   ColorValueId = l.stock.PColorId,
+                                   SizeValueId = l.stock.PSizeId,
+                                   Id = l.stock.Id,
+                                   LabelPrice = l.labelprice.HasValue ? l.labelprice.Value : 999999,
+                                   Price = l.price,
+                                   UpdateDate = DateTime.Now,
+                               };
+                    var result = client.IndexMany(linq);
+                    if (!result.IsValid)
+                    {
+                        foreach (var item in result.Items)
+                        {
+                            if (item.OK)
+                                successCount++;
+                            else
+                                log.Info(string.Format("id index failed:{0}", item.Id));
+                        }
+                    }
+                    else
+                        successCount += result.Items.Count();
+
+                    cursor += size;
+                }
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} inventory in {1} => {2} docs/s", successCount, sw.Elapsed,
+                successCount / sw.Elapsed.TotalSeconds));
+        }
+
+        private void IndexStorePromotion(ElasticClient client, DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var prods = db.StorePromotions.Where(r => r.CreateDate >= benchDate || r.UpdateDate >= benchDate)
+                            .GroupJoin(db.PointOrderRules.Where(r => r.Status != (int)DataStatus.Deleted), o => o.Id, i => i.StorePromotionId,
+                                    (o, i) => new { S = o, R = i });
 
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESStorePromotion>();
                 while (cursor < totalCount)
                 {
                     var linq = from l in prods.OrderByDescending(p => p.S.Id).Skip(cursor).Take(size).ToList()
-                               select new ESStorePromotion().FromEntity<ESStorePromotion>(l.S, s => { 
-                                    s.ExchangeRule = JsonConvert.SerializeObject(l.R.Select(r=>new {
-                                        rangefrom=r.RangeFrom,
-                                        rangeto = r.RangeTo,
-                                        ratio = r.Ratio
-                                    }));
+                               select new ESStorePromotion().FromEntity<ESStorePromotion>(l.S, s =>
+                               {
+                                   s.ExchangeRule = JsonConvert.SerializeObject(l.R.Select(r => new
+                                   {
+                                       rangefrom = r.RangeFrom,
+                                       rangeto = r.RangeTo,
+                                       ratio = r.Ratio
+                                   }));
                                });
                     var result = client.IndexMany(linq);
                     if (!result.IsValid)
@@ -113,7 +166,7 @@ namespace com.intime.jobscheduler.Job
             }
             sw.Stop();
             log.Info(string.Format("{0} store promotions in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
-            
+
         }
 
         private void IndexResource(ElasticClient client, DateTime benchDate)
@@ -134,7 +187,7 @@ namespace com.intime.jobscheduler.Job
                             select new ESResource()
                             {
                                 Id = r.Id,
-                                Status= r.Status,
+                                Status = r.Status,
                                 Domain = r.Domain,
                                 Name = r.Name,
                                 SortOrder = r.SortOrder,
@@ -143,8 +196,8 @@ namespace com.intime.jobscheduler.Job
                                 Width = r.Width,
                                 Height = r.Height,
                                 SourceId = r.SourceId,
-                                SourceType = r.SourceType
-
+                                SourceType = r.SourceType,
+                                ColorId = r.ColorId
                             };
 
                 int totalCount = prods.Count();
@@ -214,7 +267,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -275,7 +328,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -340,7 +393,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -359,8 +412,8 @@ namespace com.intime.jobscheduler.Job
                                 SortOrder = p.SortOrder,
                                 Status = p.Status,
                                 Type = p.Type,
-                                Word = p.Type==1?p.Word:JsonConvert.DeserializeObject<dynamic>(p.Word).name,
-                                BrandId = p.Type==1?0:JsonConvert.DeserializeObject<dynamic>(p.Word).id
+                                Word = p.Type == 1 ? p.Word : JsonConvert.DeserializeObject<dynamic>(p.Word).name,
+                                BrandId = p.Type == 1 ? 0 : JsonConvert.DeserializeObject<dynamic>(p.Word).id
                             };
 
                 int totalCount = prods.Count();
@@ -394,7 +447,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -420,7 +473,7 @@ namespace com.intime.jobscheduler.Job
                                                 Width = r.Width,
                                                 Height = r.Height
                                             })
-                            
+
                             select new ESBanner()
                             {
                                 Id = p.Id,
@@ -431,7 +484,7 @@ namespace com.intime.jobscheduler.Job
                                 Promotion = new ESPromotion()
                                 {
                                     Id = pro.Id
-                                  
+
                                 },
                                 Resource = resource
                             };
@@ -467,7 +520,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -476,21 +529,22 @@ namespace com.intime.jobscheduler.Job
                 var linq = db.Tags.AsQueryable();
                 if (_isActiveOnly)
                     linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
-                var propertyLinq = db.Set<CategoryPropertyEntity>().Where(cp=>cp.IsSize == true)
-                                   .Join(db.Set<CategoryPropertyValueEntity>(),o=>o.Id,i=>i.PropertyId,(o,i)=>new {CP=o,CPV=i});
-                var prods = linq.Where(p=>p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
-                            .GroupJoin(propertyLinq,o=>o.Id,i=>i.CP.CategoryId,(o,i)=>new {C=o,CP=i})
-                            .Select(l=>new ESTag()
+                var propertyLinq = db.Set<CategoryPropertyEntity>().Where(cp => cp.IsSize == true)
+                                   .Join(db.Set<CategoryPropertyValueEntity>(), o => o.Id, i => i.PropertyId, (o, i) => new { CP = o, CPV = i });
+                var prods = linq.Where(p => p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                            .GroupJoin(propertyLinq, o => o.Id, i => i.CP.CategoryId, (o, i) => new { C = o, CP = i })
+                            .Select(l => new ESTag()
                             {
                                 Id = l.C.Id,
-                                Name =l.C.Name,
+                                Name = l.C.Name,
                                 Description = l.C.Description,
                                 Status = l.C.Status,
                                 SortOrder = l.C.SortOrder,
-                                SizeType = l.C.SizeType??(int)CategorySizeType.FreeInput,
-                                Sizes = l.CP.Select(lcp=>new ESSize(){
-                                         Id = lcp.CPV.Id,
-                                         Name = lcp.CPV.ValueDesc
+                                SizeType = l.C.SizeType ?? (int)CategorySizeType.FreeInput,
+                                Sizes = l.CP.Select(lcp => new ESSize()
+                                {
+                                    Id = lcp.CPV.Id,
+                                    Name = lcp.CPV.ValueDesc
                                 })
                             });
 
@@ -525,7 +579,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -574,7 +628,7 @@ namespace com.intime.jobscheduler.Job
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (result!=null && !result.IsValid)
+                    if (result != null && !result.IsValid)
                     {
                         foreach (var item in result.Items)
                         {
@@ -600,16 +654,16 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var linq = db.Brands.Where(p=>p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate);
+                var linq = db.Brands.Where(p => p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate);
                 if (_isActiveOnly)
                     linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
-                var prods = linq.Select(p=> new ESBrand()
+                var prods = linq.Select(p => new ESBrand()
                             {
                                 Id = p.Id,
                                 Name = p.Name,
@@ -642,7 +696,7 @@ namespace com.intime.jobscheduler.Job
             }
             sw.Stop();
             log.Info(string.Format("{0} brands in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
-             //update related source if any affected
+            //update related source if any affected
             if (successCount > 0 && CascadPush)
             {
                 //index related products
@@ -663,7 +717,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -703,7 +757,7 @@ namespace com.intime.jobscheduler.Job
                                 CreateUser = p.CreatedUser,
                                 Resource = resource,
                                 Type = p.Type,
-                                TargetValue =  p.TargetValue
+                                TargetValue = p.TargetValue
                             };
 
                 int totalCount = prods.Count();
@@ -749,11 +803,12 @@ namespace com.intime.jobscheduler.Job
         protected virtual DateTime BenchDate(IJobExecutionContext context)
         {
             var data = context.JobDetail.JobDataMap;
-             return data.ContainsKey("benchdate") ? data.GetDateTimeValue("benchdate") : DateTime.Today.AddDays(-1);
+            return data.ContainsKey("benchdate") ? data.GetDateTimeValue("benchdate") : DateTime.Today.AddDays(-1);
         }
         protected virtual bool CascadPush
         {
-            get {
+            get
+            {
                 return false;
             }
         }
@@ -761,7 +816,7 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             int successCount = 0;
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -780,17 +835,18 @@ namespace com.intime.jobscheduler.Job
                 var prods = from p in linq
                             join s in db.Stores on p.Store_Id equals s.Id
                             let resource = (from r in db.Resources
-                                           where r.SourceId == p.Id
-                                           && r.SourceType == 2
-                                           select new ESResource() { 
-                                             Domain = r.Domain,
-                                             Name = r.Name,
-                                             SortOrder = r.SortOrder,
-                                             IsDefault = r.IsDefault,
-                                             Type = r.Type,
-                                             Width = r.Width,
-                                             Height = r.Height
-                                           })
+                                            where r.SourceId == p.Id
+                                            && r.SourceType == 2
+                                            select new ESResource()
+                                            {
+                                                Domain = r.Domain,
+                                                Name = r.Name,
+                                                SortOrder = r.SortOrder,
+                                                IsDefault = r.IsDefault,
+                                                Type = r.Type,
+                                                Width = r.Width,
+                                                Height = r.Height
+                                            })
                             select new ESPromotion()
                             {
                                 Id = p.Id,
@@ -831,21 +887,22 @@ namespace com.intime.jobscheduler.Job
 
                 int totalCount = prods.Count();
                 client.MapFromAttributes<ESPromotion>();
-            
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
                     if (!result.IsValid)
                     {
-                        foreach(var item in result.Items)
+                        foreach (var item in result.Items)
                         {
                             if (item.OK)
                                 successCount++;
                             else
-                                log.Info(string.Format("id index failed:{0}",item.Id));
+                                log.Info(string.Format("id index failed:{0}", item.Id));
                         }
-                    } else
-                        successCount+=result.Items.Count();
+                    }
+                    else
+                        successCount += result.Items.Count();
 
                     cursor += size;
                 }
@@ -854,27 +911,28 @@ namespace com.intime.jobscheduler.Job
             sw.Stop();
             log.Info(string.Format("{0} promotions in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
             if (successCount > 0 && CascadPush)
-            { 
+            {
                 //index related products
                 log.Info("index products affected by related promotions ");
                 IndexProds(client, null,
-                    (p,db) => {
+                    (p, db) =>
+                    {
                         return p.Where(prod => (from pro in db.Promotions
-                                             from ppr in db.Promotion2Product
-                                             where ppr.ProId == pro.Id
-                                             && (pro.CreatedDate >= benchDate || pro.UpdatedDate >= benchDate)
-                                             && ppr.ProdId == prod.Id
-                                             select ppr.ProdId).Any());
+                                                from ppr in db.Promotion2Product
+                                                where ppr.ProId == pro.Id
+                                                && (pro.CreatedDate >= benchDate || pro.UpdatedDate >= benchDate)
+                                                && ppr.ProdId == prod.Id
+                                                select ppr.ProdId).Any());
                     });
             }
         }
 
-        private void IndexProds(ElasticClient client,DateTime? benchDate,Func<IQueryable<ProductEntity>,YintaiHangzhouContext,IQueryable<ProductEntity>> whereCondition)
+        private void IndexProds(ElasticClient client, DateTime? benchDate, Func<IQueryable<ProductEntity>, YintaiHangzhouContext, IQueryable<ProductEntity>> whereCondition)
         {
             ILog log = LogManager.GetLogger(this.GetType());
             int cursor = 0;
             int successCount = 0;
-           int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
             Stopwatch sw = new Stopwatch();
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
@@ -884,10 +942,10 @@ namespace com.intime.jobscheduler.Job
                     linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
                 if (benchDate.HasValue)
                     linq = linq.Where(p => p.CreatedDate >= benchDate.Value || p.UpdatedDate >= benchDate.Value);
-                else if (whereCondition!=null)
+                else if (whereCondition != null)
                 {
                     linq = whereCondition(linq, db);
-                   
+
                 }
 
                 var prods = from p in linq
@@ -908,50 +966,65 @@ namespace com.intime.jobscheduler.Job
                                                 Height = r.Height
                                             })
                             let specials = from psp in db.SpecialTopicProductRelations
-                                            where psp.Product_Id == p.Id 
-                                            join sp in db.SpecialTopics on psp.SpecialTopic_Id equals sp.Id
-                                            select new ESSpecialTopic
-                                            {
-                                                Id = sp.Id,
-                                                Name = sp.Name,
-                                                Description = sp.Description
-                                            }
-                            let promotions = db.Promotion2Product.Where(pp=>pp.ProdId == p.Id)
-                                             .Join(db.Promotions,o=>o.ProId,i=>i.Id,(o,i)=>i)
-                                             .GroupJoin(db.Resources.Where(pr=>pr.SourceType==(int)SourceType.Promotion && pr.Type==(int)ResourceType.Image)
-                                                        ,o=>o.Id
-                                                        ,i=>i.SourceId
-                                                        ,(o,i)=>new {Pro=o,R=i.OrderByDescending(r=>r.SortOrder)})
-                                             .Select(ppr=> new ESPromotion { 
-                                                Id = ppr.Pro.Id,
-                                                Name = ppr.Pro.Name,
-                                                Description = ppr.Pro.Description,
-                                                CreatedDate = ppr.Pro.CreatedDate,
-                                                StartDate = ppr.Pro.StartDate,
-                                                EndDate = ppr.Pro.EndDate,
-                                                Status = ppr.Pro.Status,
-                                                Resource = ppr.R.Select(r=> new ESResource()
-                                                {
-                                                    Domain = r.Domain,
-                                                    Name = r.Name,
-                                                    SortOrder = r.SortOrder,
-                                                    IsDefault = r.IsDefault,
-                                                    Type = r.Type,
-                                                    Width = r.Width,
-                                                    Height = r.Height
-                                                })
+                                           where psp.Product_Id == p.Id
+                                           join sp in db.SpecialTopics on psp.SpecialTopic_Id equals sp.Id
+                                           select new ESSpecialTopic
+                                           {
+                                               Id = sp.Id,
+                                               Name = sp.Name,
+                                               Description = sp.Description
+                                           }
+                            let promotions = db.Promotion2Product.Where(pp => pp.ProdId == p.Id)
+                                             .Join(db.Promotions, o => o.ProId, i => i.Id, (o, i) => i)
+                                             .GroupJoin(db.Resources.Where(pr => pr.SourceType == (int)SourceType.Promotion && pr.Type == (int)ResourceType.Image)
+                                                        , o => o.Id
+                                                        , i => i.SourceId
+                                                        , (o, i) => new { Pro = o, R = i.OrderByDescending(r => r.SortOrder) })
+                                             .Select(ppr => new ESPromotion
+                                             {
+                                                 Id = ppr.Pro.Id,
+                                                 Name = ppr.Pro.Name,
+                                                 Description = ppr.Pro.Description,
+                                                 CreatedDate = ppr.Pro.CreatedDate,
+                                                 StartDate = ppr.Pro.StartDate,
+                                                 EndDate = ppr.Pro.EndDate,
+                                                 Status = ppr.Pro.Status,
+                                                 Resource = ppr.R.Select(r => new ESResource()
+                                                 {
+                                                     Domain = r.Domain,
+                                                     Name = r.Name,
+                                                     SortOrder = r.SortOrder,
+                                                     IsDefault = r.IsDefault,
+                                                     Type = r.Type,
+                                                     Width = r.Width,
+                                                     Height = r.Height
+                                                 })
                                              })
                             let section = (from section in db.Sections
                                            where section.BrandId == p.Brand_Id && section.StoreId == p.Store_Id
-                                          select new ESSection(){
-                                              ContactPerson = section.ContactPerson,
+                                           select new ESSection()
+                                           {
+                                               ContactPerson = section.ContactPerson,
                                                ContactPhone = section.ContactPhone,
-                                                Id = section.Id,
-                                                 Location = section.Location,
-                                                  Name = section.Name,
-                                                   Status = section.Status
-                                          })
-
+                                               Id = section.Id,
+                                               Location = section.Location,
+                                               Name = section.Name,
+                                               Status = section.Status
+                                           })
+                            let propertyValues = (from property in db.ProductProperties
+                                                  where property.ProductId == p.Id
+                                                  join v in db.ProductPropertyValues on property.Id equals v.PropertyId
+                                                  select new ESProductPropertyValue
+                                                  {
+                                                      ProductId = p.Id,
+                                                      Id = v.Id,
+                                                      IsColor = property.IsColor.HasValue && property.IsColor.Value,
+                                                      IsSize = property.IsSize.HasValue && property.IsSize.Value,
+                                                      PropertyDesc = property.PropertyDesc,
+                                                      PropertyId = property.Id,
+                                                      ValueDesc = v.ValueDesc
+                                                  })
+                            
                             select new ESProduct()
                             {
                                 Id = p.Id,
@@ -992,6 +1065,7 @@ namespace com.intime.jobscheduler.Job
                                     Description = b.Description,
                                     EngName = b.EnglishName
                                 },
+                                PropertyValues = propertyValues,
                                 Resource = resource,
                                 SpecialTopic = specials,
                                 Promotion = promotions,
@@ -1001,9 +1075,10 @@ namespace com.intime.jobscheduler.Job
                                 InvolvedCount = p.InvolvedCount,
                                 ShareCount = p.ShareCount,
                                 RecommendUserId = p.RecommendUser,
-                                Section=section.FirstOrDefault(),
+                                Section = section.FirstOrDefault(),
                                 UpcCode = p.SkuCode,
-                                IsSystem = (!p.ProductType.HasValue)||p.ProductType==(int)ProductType.FromSystem
+                                UpdatedDate = p.UpdatedDate,
+                                IsSystem = (!p.ProductType.HasValue) || p.ProductType == (int)ProductType.FromSystem
 
                             };
                 int totalCount = prods.Count();
@@ -1031,6 +1106,6 @@ namespace com.intime.jobscheduler.Job
             log.Info(string.Format("{0} products in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
 
         }
-    
+
     }
 }
