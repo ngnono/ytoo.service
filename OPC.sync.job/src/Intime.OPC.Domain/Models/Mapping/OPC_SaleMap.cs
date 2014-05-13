@@ -34,6 +34,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             // Table & Column Mappings
             this.ToTable("OPC_Sale");
             this.Property(t => t.Id).HasColumnName("Id");
+            this.Property(t => t.ShippingSaleId).HasColumnName("ShippingSaleId");
             this.Property(t => t.OrderNo).HasColumnName("OrderNo");
             this.Property(t => t.SaleOrderNo).HasColumnName("SaleOrderNo");
             this.Property(t => t.SalesType).HasColumnName("SalesType");

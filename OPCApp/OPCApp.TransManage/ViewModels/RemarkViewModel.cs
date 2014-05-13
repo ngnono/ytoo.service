@@ -9,7 +9,7 @@ using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 
-namespace OPCApp.TransManage.ViewModels
+namespace Intime.OPC.Modules.Logistics.ViewModels
 {
     [Export(typeof (RemarkViewModel))]
     public class RemarkViewModel : BindableBase

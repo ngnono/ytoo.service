@@ -7,29 +7,45 @@ using System.Threading.Tasks;
 namespace Intime.OPC.Modules.Dimension.Models
 {
     /// <summary>
-    /// Counter
+    /// 专柜
     /// </summary>
+    [Uri(Name = "counters")]
     public class Counter : Dimension
     {
         private bool repealed;
+        private string code;
+        private string areaCode;
+        private string contactPhoneNumber;
 
         /// <summary>
-        /// Counter code
+        /// 专柜码
         /// </summary>
-        public string Code { get; set; }
+        public string Code
+        {
+            get { return code; }
+            set { SetProperty(ref code, value); }
+        }
 
         /// <summary>
-        /// Area code
+        /// 销售区域
         /// </summary>
-        public string AreaCode { get; set; }
+        public string AreaCode
+        {
+            get { return areaCode; }
+            set { SetProperty(ref areaCode, value); }
+        }
 
         /// <summary>
-        /// Contact phone number
+        /// 联系电话
         /// </summary>
-        public string ContactPhoneNumber { get; set; }
+        public string ContactPhoneNumber
+        {
+            get { return contactPhoneNumber; }
+            set { SetProperty(ref contactPhoneNumber, value); }
+        }
 
         /// <summary>
-        /// Repealed or not
+        /// 是否已撤柜
         /// </summary>
         public bool Repealed
         {
@@ -38,12 +54,12 @@ namespace Intime.OPC.Modules.Dimension.Models
         }
 
         /// <summary>
-        /// Brands
+        /// 销售的品牌
         /// </summary>
         public IList<Brand> Brands { get; set; }
 
         /// <summary>
-        /// Organization
+        /// 管理部门
         /// </summary>
         public Organization Organization { get; set; }
     }

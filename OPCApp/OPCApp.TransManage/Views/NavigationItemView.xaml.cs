@@ -23,11 +23,11 @@ using System.Windows.Controls;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Regions;
 using OPCApp.Infrastructure;
-using OPCApp.TransManage.ViewModels;
+using Intime.OPC.Modules.Logistics.ViewModels;
 
 //.Infrastructure;
 
-namespace OPCApp.TransManage.Views
+namespace Intime.OPC.Modules.Logistics.Views
 {
     [Export]
     public partial class NavigationItemView : UserControl, IPartImportsSatisfiedNotification

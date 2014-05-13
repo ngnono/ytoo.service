@@ -5,6 +5,7 @@ using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
+using System;
 
 namespace Intime.OPC.Repository
 {
@@ -34,6 +35,20 @@ namespace Intime.OPC.Repository
         /// <param name="returnGoodsStatus">The return goods status.</param>
         /// <returns>IList{SaleRmaDto}.</returns>
         PageResult<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, System.DateTime startTime, System.DateTime endTime, int? rmaStatus, int? storeId, string returnGoodsStatus, int pageIndex, int pageSize);
+        /// <summary>
+        /// 付款确认
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <param name="saleOrderNo"></param>
+        /// <param name="payType"></param>
+        /// <param name="rmaNo"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="storeId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        PageResult<SaleRmaDto> GetByReturnGoodPay(string orderNo, string saleOrderNo, string payType, string rmaNo, DateTime startTime, DateTime endTime, int? storeId, int pageIndex, int pageSize);
 
         OPC_SaleRMA GetByRmaNo(string rmaNo);
         PageResult<SaleRmaDto> GetOrderAutoBack(ReturnGoodsRequest request);

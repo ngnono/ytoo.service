@@ -327,23 +327,23 @@ namespace Intime.OPC.Service.Support
             /*
              
              财务退款确认的查询状态条件，就要改为退货状态为已生效，且退货单状态为物流入库的
-
+             zxy 物流入库+通知单品 2014-5-10
              */
-//            ISaleRMARepository rep = _repository as ISaleRMARepository;
-//            rep.SetCurrentUser(_accountService.GetByUserID(UserId));
-//            var lst = rep.GetAll(dto.OrderNo,"", dto.PayType, "", dto.StartDate, dto.EndDate,
-//                EnumRMAStatus.ShipInStorage.AsID(), null, EnumReturnGoodsStatus.Valid.GetDescription(),dto.pageIndex,dto.pageSize);
-//=======
 
             ISaleRMARepository rep = _repository as ISaleRMARepository;
             rep.SetCurrentUser(_accountService.GetByUserID(UserId));
-            var lst = rep.GetAll(dto.OrderNo,"", dto.PayType, "", dto.StartDate, dto.EndDate,
-                EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.ServiceApprove.GetDescription(),dto.pageIndex,dto.pageSize);
-//>>>>>>> master
+            var lst = rep.GetByReturnGoodPay(dto.OrderNo, "", dto.PayType, "", dto.StartDate, dto.EndDate,
+                 null, dto.pageIndex, dto.pageSize);
+
 
             return lst;
         }
 
+        /// <summary>
+        /// 财务确认
+        /// </summary>
+        /// <param name="rmaNo"></param>
+        /// <param name="money"></param>
         public void CompensateVerify(string rmaNo, decimal money)
         {
             var rep = (ISaleRMARepository)_repository;
@@ -357,7 +357,7 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("客服未确认,退货单号:" + rmaNo);
             }
-            if (saleRma.Status > EnumReturnGoodsStatus.PayVerify.AsID())
+            if (saleRma.Status > EnumRMAStatus.PayVerify.AsID())
             {
                 throw new Exception("该退货单已经确认,退货单号:" + rmaNo);
             }
@@ -365,15 +365,15 @@ namespace Intime.OPC.Service.Support
             
             saleRma.RealRMASumMoney = money;
             saleRma.RecoverableSumMoney = saleRma.RealRMASumMoney - saleRma.CompensationFee;
-            if (saleRma.RecoverableSumMoney > 0)
-            {
-                saleRma.RMAStatus = EnumReturnGoodsStatus.CompensateVerify.GetDescription();
-            }
-            else
-            {
-                saleRma.RMAStatus = EnumReturnGoodsStatus.PayVerify.GetDescription();
-                saleRma.Status = EnumRMAStatus.ShipNoReceive.AsID();
-            }
+            //if (saleRma.RecoverableSumMoney > 0)
+            //{
+            //    saleRma.RMAStatus = EnumReturnGoodsStatus.CompensateVerify.GetDescription();
+            //}
+            //else
+            //{
+                //saleRma.RMAStatus = EnumReturnGoodsStatus.PayVerify.GetDescription();
+                saleRma.Status = EnumRMAStatus.PayVerify.AsID();
+            //}
 
             rep.Update(saleRma);
         }
@@ -386,6 +386,11 @@ namespace Intime.OPC.Service.Support
                 EnumRMAStatus.NoDelivery.AsID(), null, EnumReturnGoodsStatus.ServiceApprove.GetDescription(),pageIndex,pageSize);
         }
 
+        /// <summary>
+        /// 包裹审核
+        /// </summary>
+        /// <param name="rmaNo"></param>
+        /// <param name="passed"></param>
         public void PackageVerify(string rmaNo,bool passed)
         {
             var rep = (ISaleRMARepository)_repository;
@@ -504,7 +509,7 @@ namespace Intime.OPC.Service.Support
 
         private string CreateRmaNo(string orderNo, int count)
         {
-            return orderNo + count.ToString().PadLeft(3, '0');
+            return orderNo + count.ToString().PadLeft(4, '0');
         }
 
 

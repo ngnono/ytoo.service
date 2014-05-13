@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using OPCApp.Domain.Enums;
 
-namespace OPCApp.TransManage.ViewModels
+namespace Intime.OPC.Modules.Logistics.ViewModels
 {
     [Export("SaleOrderPickupViewModel")]
     public class SaleOrderPickupViewModel : StoreInViewModel

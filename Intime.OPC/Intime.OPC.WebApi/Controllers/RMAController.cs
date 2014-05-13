@@ -232,7 +232,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
-        ///     查询退货单 退货付款确认
+        ///     查询退货单 根据退货单号
         /// </summary>
         /// <param name="rmaNo">The rma no.</param>
         /// <returns>IHttpActionResult.</returns>

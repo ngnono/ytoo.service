@@ -6,6 +6,7 @@ namespace Intime.OPC.Domain.Models
     public partial class OPC_Sale
     {
         public int Id { get; set; }
+        public Nullable<int> ShippingSaleId { get; set; }
         public string OrderNo { get; set; }
         public string SaleOrderNo { get; set; }
         public int SalesType { get; set; }

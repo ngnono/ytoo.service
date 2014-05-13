@@ -1,44 +1,15 @@
-﻿using Intime.OPC.Modules.Dimension.Models;
-using System;
+﻿using Intime.OPC.Modules.Dimension.Common;
+using Intime.OPC.Modules.Dimension.Models;
+using OPCApp.Infrastructure;
+using OPCApp.Infrastructure.REST;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Dimension.Services.Imp
 {
-    public class CounterService : ICounterService
+    //[Export(typeof(ICounterService))]
+    public class CounterService : DimensionService<Counter>
     {
-        public Counter Create(Counter obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Counter obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Counter Query(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Counter> Query(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Counter> QueryAll()
-        {
-            throw new NotImplementedException();
-        }
 
     }
 }

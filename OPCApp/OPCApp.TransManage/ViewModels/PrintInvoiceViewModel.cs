@@ -9,10 +9,10 @@ using OPCApp.DataService.IService;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
-using OPCApp.TransManage.Models;
-using OPCApp.TransManage.Print;
+using Intime.OPC.Modules.Logistics.Models;
+using Intime.OPC.Modules.Logistics.Print;
 
-namespace OPCApp.TransManage.ViewModels
+namespace Intime.OPC.Modules.Logistics.ViewModels
 {
     [Export("PrintInvoiceViewModel", typeof (PrintInvoiceViewModel))]
     public class PrintInvoiceViewModel : BindableBase

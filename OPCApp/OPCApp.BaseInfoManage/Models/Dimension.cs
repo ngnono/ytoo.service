@@ -13,6 +13,7 @@ namespace Intime.OPC.Modules.Dimension.Models
     public abstract class Dimension : BindableBase
     {
         private bool isSelected;
+        private string name;
 
         /// <summary>
         /// ID
@@ -20,12 +21,16 @@ namespace Intime.OPC.Modules.Dimension.Models
         public int ID { get; set; }
 
         /// <summary>
-        /// Name
+        /// 名字
         /// </summary>
-        public string Name { get; set; }
+        public string Name 
+        {
+            get { return name; }
+            set { SetProperty(ref name, value); }
+        }
 
         /// <summary>
-        /// Is selected
+        /// 是否已选择
         /// </summary>
         public bool IsSelected 
         {

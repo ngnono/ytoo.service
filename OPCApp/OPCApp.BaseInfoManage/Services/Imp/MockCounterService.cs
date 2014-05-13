@@ -65,7 +65,8 @@ namespace Intime.OPC.Modules.Dimension.Services.Imp
 
         public void Delete(int id)
         {
-            counters.Remove(counter => counter.ID == id);
+            var counterToRemove = counters.Where(counter => counter.ID == id).FirstOrDefault();
+            counters.Remove(counterToRemove);
         }
 
         public Models.Counter Query(int id)

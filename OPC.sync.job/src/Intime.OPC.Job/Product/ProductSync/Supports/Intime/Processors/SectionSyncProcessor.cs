@@ -4,7 +4,13 @@ using Common.Logging;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Job.Product.ProductSync.Models;
 using Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository;
-
+/*
+ 
+ *修改历史： 修改不同门店专柜码相同的问题，做映射关系时以 专柜码 - 门店.id作为映射key，
+ *如果不存在则创建新的专柜。
+ *上线前需注意：之前映射好的专柜需要把门店.id加在映射关系之后
+ * Wallace 2014-05-12 
+ * */
 namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
 {
     /// <summary>
@@ -37,8 +43,9 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     return null;
                 }
 
+                var mapKey = string.Format("{0}-{1}", channelSectionId, storeExt.Id);
                 // 检查专柜映射关系是否存在
-                var sectionMap = _channelMapper.GetMapByChannelValue(channelSectionId, ChannelMapType.SectionId);
+                var sectionMap = _channelMapper.GetMapByChannelValue(mapKey, ChannelMapType.SectionId);
 
                 // 获取渠道门店信息
                 var channelSection = _remoteRepository.GetSectionById(channelSectionId, channelStoreNo);
@@ -71,7 +78,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                     var channelMap = new ChannelMap()
                     {
                         LocalId = newSection.Id,
-                        ChannnelValue = channelSectionId,
+                        ChannnelValue = mapKey,
                         MapType = ChannelMapType.SectionId
                     };
 

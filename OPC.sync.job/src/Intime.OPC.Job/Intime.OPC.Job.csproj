@@ -95,7 +95,7 @@
       <HintPath>..\..\libs\Yintai.Hangzhou.Contract.dll</HintPath>
     </Reference>
     <Reference Include="Yintai.Hangzhou.Model">
-      <HintPath>..\..\libs\Yintai.Hangzhou.Model.dll</HintPath>
+      <HintPath>..\..\..\Yintai.Hangzhou.Model\obj\Release\Yintai.Hangzhou.Model.dll</HintPath>
     </Reference>
     <Reference Include="Yintai.Hangzhou.Service">
       <HintPath>..\..\libs\Yintai.Hangzhou.Service.dll</HintPath>

@@ -227,9 +227,9 @@
       <Project>{3f264666-c1dc-4fc3-b2ac-d99b68b250a4}</Project>
       <Name>OPCApp.ReturnGoodsManage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OPCApp.TransManage\OPCApp.TransManage.csproj">
+    <ProjectReference Include="..\OPCApp.TransManage\Intime.OPC.Modules.Logistics.csproj">
       <Project>{58cbe625-8df4-4487-b984-f64d1349c169}</Project>
-      <Name>OPCApp.TransManage</Name>
+      <Name>Intime.OPC.Modules.Logistics</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

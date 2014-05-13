@@ -56,7 +56,11 @@ namespace Intime.OPC.Domain.Enums
         /// <summary>
         ///     打印退货单
         /// </summary>
+<<<<<<< HEAD
         [Description("打印退货单")] PrintRMA = 30,
+=======
+        [Description("完成打印退货单")] PrintRMA = 30,
+>>>>>>> 29208a9abca641693c00465c96112a7abdc73d95
 
         /// <summary>
         ///     导购确认收货
