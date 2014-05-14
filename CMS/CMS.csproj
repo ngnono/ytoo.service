@@ -1129,7 +1129,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>37299</DevelopmentServerPort>
+          <DevelopmentServerPort>65329</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://cmsitoo.yintai.com/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
