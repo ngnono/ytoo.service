@@ -26,6 +26,7 @@ using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Enums.SortOrder;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
+using LinqKit;
 using PredicateBuilder = LinqKit.PredicateBuilder;
 
 namespace Intime.OPC.Repository.Support
@@ -308,8 +309,8 @@ namespace Intime.OPC.Repository.Support
             {
                 int t;
                 //var r = EFHelper.GetPaged(DbQuery(v), query, out t, pagerRequest.PageIndex, pagerRequest.PageSize, orderBy);
-                var q = from s in c.Set<Brand>().Where(Filler(filter))
-                        join section_brand in c.Set<IMS_SectionBrand>().Where(Filler4Section(filter)) on s.Id equals
+                var q = from s in c.Set<Brand>().AsExpandable().Where(Filler(filter))
+                        join section_brand in c.Set<IMS_SectionBrand>().AsExpandable().Where(Filler4Section(filter)) on s.Id equals
                             section_brand.BrandId into tmp1
                         from sb in tmp1.DefaultIfEmpty()
                         select new

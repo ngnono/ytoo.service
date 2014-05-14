@@ -12,6 +12,11 @@ namespace Intime.OPC.Repository.Base
     {
         public DbContext DbContext()
         {
+            return GetYintaiHZhouContext();
+        }
+
+        public YintaiHZhouContext GetYintaiHZhouContext()
+        {
             return new YintaiHZhouContext();
         }
 
