@@ -5,9 +5,8 @@
 
                       Title="ProgressBarWindow" Height="100" Width="100" WindowStartupLocation="CenterScreen"
                       WindowStyle="None" ShowMinButton="False" ShowMaxRestoreButton="False" ShowCloseButton="False"
-                      ShowTitleBar="False">
+                      ShowTitleBar="False" BorderBrush="Black" Cursor="Wait" BorderThickness="1" >
     <Grid Margin="0">
-        <controls:ProgressRing Grid.Column="0" IsActive="True" />
-
+        <controls:ProgressRing Grid.Column="0" IsActive="True"/>
     </Grid>
 </controls:MetroWindow>

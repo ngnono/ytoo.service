@@ -11,6 +11,9 @@
     <AssemblyName>Intime.OPC.Domain</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,7 +66,16 @@
     <Compile Include="Auth\IAuthUser.cs" />
     <Compile Include="Base\BaseRequest.cs" />
     <Compile Include="Base\IEntity.cs" />
+    <Compile Include="BusinessModel\BrandFilter.cs" />
+    <Compile Include="BusinessModel\SupplierFilter.cs" />
+    <Compile Include="BusinessModel\PageFilter.cs" />
+    <Compile Include="BusinessModel\SectionFilter.cs" />
+    <Compile Include="Models\Mapping\Supplier_BrandMap.cs" />
+    <Compile Include="Models\Supplier_Brand.cs" />
+    <Compile Include="PagerRequest.cs" />
     <Compile Include="Dto\AuthUserDto.cs" />
+    <Compile Include="Dto\BrandDto.cs" />
+    <Compile Include="Dto\SupplierDto.cs" />
     <Compile Include="Dto\Custom\FinaceDto.cs" />
     <Compile Include="Dto\Custom\OutOfStockNotifyRequest.cs" />
     <Compile Include="Dto\Custom\PackageReceiveDto.cs" />
@@ -88,6 +100,7 @@
     <Compile Include="Dto\RMADto.cs" />
     <Compile Include="Dto\RmaExpressDto.cs" />
     <Compile Include="Dto\SaleRmaDto.cs" />
+    <Compile Include="Dto\SectionDto.cs" />
     <Compile Include="Dto\ShippingSaleCreateDto.cs" />
     <Compile Include="Dto\ShippingSaleDto.cs" />
     <Compile Include="Dto\OrderDto.cs" />
@@ -106,6 +119,9 @@
     <Compile Include="Enums\EnumSaleOrderCashStatus.cs" />
     <Compile Include="Enums\EnumSaleOrderStatus.cs" />
     <Compile Include="Enums\EnumSaleStatus.cs" />
+    <Compile Include="Enums\SortOrder\BrandSortOrder.cs" />
+    <Compile Include="Enums\SortOrder\SupplierSortOrder.cs" />
+    <Compile Include="Enums\SortOrder\SectionSortOrder.cs" />
     <Compile Include="Exception\OrderNoIsNullException.cs" />
     <Compile Include="Exception\OrderNotExistsException.cs" />
     <Compile Include="Exception\PackageException.cs" />
@@ -115,6 +131,8 @@
     <Compile Include="Exception\UserIdConverException.cs" />
     <Compile Include="Exception\UserNotExistException.cs" />
     <Compile Include="Exception\UserNotValidException.cs" />
+    <Compile Include="IPagedable.cs" />
+    <Compile Include="IPagedEnumerable.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\Mapping\BrandMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthMenuMap.cs" />
@@ -193,6 +211,15 @@
     <Compile Include="Models\YintaiHZhouContext.cs" />
     <Compile Include="MyPrincipal .cs" />
     <Compile Include="PageResult.cs" />
+    <Compile Include="PagerInfo.cs" />
+    <Compile Include="Partials\Models\Brand.cs" />
+    <Compile Include="Partials\Models\BrandClone.cs" />
+    <Compile Include="Partials\Models\IMS_SectionBrand.cs" />
+    <Compile Include="Partials\Models\Mapping\IMS_SectionBrandMap.cs" />
+    <Compile Include="Partials\Models\OpcSupplierInfo.cs" />
+    <Compile Include="Partials\Models\OpcSupplierInfoClone.cs" />
+    <Compile Include="Partials\Models\Section.cs" />
+    <Compile Include="Partials\Models\SectionClone.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -206,6 +233,13 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。启用“NuGet 程序包还原”可下载这些程序包。有关详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

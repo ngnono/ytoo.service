@@ -13,6 +13,9 @@ namespace Intime.OPC.WebApi
     {
         public static void Register(HttpConfiguration config)
         {
+            // WebApi2.1支持的RouteAttribute进行Map
+            config.MapHttpAttributeRoutes();
+
             // 注册Api默认的路由
             config.Routes.MapHttpRoute("DefaultApi",
                 "api/{controller}/{action}/{id}",
@@ -23,10 +26,6 @@ namespace Intime.OPC.WebApi
                 "api/{controller}",
                 new { id = System.Web.Http.RouteParameter.Optional }
                 );
-
-
-            // WebApi2.1支持的RouteAttribute进行Map
-            config.MapHttpAttributeRoutes();
 
             // 添加签名验证
             config.MessageHandlers.Add(new SignatureMessageHandler());

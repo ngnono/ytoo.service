@@ -14,6 +14,8 @@
 
 using System.Collections.Generic;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.BusinessModel;
+using Intime.OPC.Domain.Enums.SortOrder;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -21,7 +23,7 @@ namespace Intime.OPC.Repository
     /// <summary>
     /// Interface IBrandRepository
     /// </summary>
-    public interface IBrandRepository : IRepository<Brand>
+    public interface IBrandRepository : IOPCRepository<int, Brand>, IRepository<Brand>
     {
         IList<Brand> GetAll();
 
@@ -31,5 +33,16 @@ namespace Intime.OPC.Repository
         /// <param name="brandIds">The brand ids.</param>
         /// <returns>IList{Brand}.</returns>
         IList<Brand> GetByIds(int[] brandIds);
+
+        /// <summary>
+        /// 分页
+        /// </summary>
+        /// <param name="pagerRequest">分页请求参数</param>
+        /// <param name="totalCount">记录总数</param>
+        /// <param name="filter">筛选项</param>
+        /// <param name="sortOrder">排序项</param>
+        /// <returns></returns>
+        List<Brand> GetPagedList(PagerRequest pagerRequest, out int totalCount, BrandFilter filter,
+                                   BrandSortOrder sortOrder);
     }
 }

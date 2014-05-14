@@ -3,6 +3,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Intime.OPC.Service;
+using Intime.OPC.WebApi.App_Start;
 
 namespace Intime.OPC.WebApi
 {
@@ -24,8 +25,13 @@ namespace Intime.OPC.WebApi
             // 路由注册
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
+
             //初始化映射
             MapConfig.Config();
+
+            AutoMapperConfig.Config();
+
+            FormattersConfig.Config();
         }
     }
 }

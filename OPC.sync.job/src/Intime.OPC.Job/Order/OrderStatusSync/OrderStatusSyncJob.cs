@@ -1,4 +1,7 @@
-﻿using Common.Logging;
+﻿using System.Text;
+using System.Transactions;
+using Common.Logging;
+using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Job.Product.ProductSync;
 using Quartz;
@@ -70,26 +73,93 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
         /// <param name="opcSale"></param>
         private void SetOrderStatus(Domain.Models.Order order)
         {
+            const int PrepareShip = 7;
+            const int Shipping = 8;
             using (var db = new YintaiHZhouContext())
             {
-                var p = db.Orders.FirstOrDefault(t => t.OrderNo == order.OrderNo);
-                var saleOrders = db.OPC_Sale.Where(sa => sa.OrderNo == p.OrderNo).ToList();
-                var status = CheckStatus(saleOrders);
-                if (status == order.Status || status == NoStatus)
-                    return;
-                p.UpdateDate = DateTime.Now;
-                p.Status = status;
-                p.UpdateUser = SystemDefine.SystemUser;
-                db.SaveChanges();
-                Log.InfoFormat("完成订单状态更新,orderNo:{0},status:{1}", p.OrderNo, SystemDefine.OrderFinishSplitStatusCode);
+                using (var ts = new TransactionScope())
+                {
+                    var p = db.Orders.FirstOrDefault(t => t.OrderNo == order.OrderNo);
+                    var saleOrders = db.OPC_Sale.Where(sa => sa.OrderNo == p.OrderNo).ToList();
+                    var status = CheckStatus(saleOrders);
+                    if (status == order.Status || status == NoStatus)
+                        return;
+                    p.UpdateDate = DateTime.Now;
+                    p.Status = status;
+                    p.UpdateUser = SystemDefine.SystemUser;
+                    if (status == (int) EnumOrderStatus.PreparePack)
+                    {
+                        db.OrderLogs.Add(new OrderLog()
+                        {
+                            CreateDate = DateTime.Now,
+                            CreateUser = 0,
+                            CustomerId = order.CustomerId,
+                            Operation = order.Memo ?? "准备发货",
+                            OrderNo = order.OrderNo,
+                            Type = PrepareShip,
+                        });
+                    }
+                    if (status == (int) EnumOrderStatus.Shipped)
+                    {
+                        db.OrderLogs.Add(new OrderLog()
+                        {
+                            CreateDate = DateTime.Now,
+                            CreateUser = 0,
+                            CustomerId = order.CustomerId,
+                            Operation = "已发货",
+                            OrderNo = order.OrderNo,
+                            Type = Shipping,
+                        });
+
+                        foreach (int shippingId in saleOrders.Select(x=>x.ShippingSaleId).Distinct().Where(x=>x.HasValue))
+                        {
+                            var shipping = db.OPC_ShippingSale.FirstOrDefault(x => x.Id == shippingId);
+                            var shippingItems =
+                                db.OPC_Sale.Where(
+                                    x => x.ShippingSaleId.HasValue && x.ShippingSaleId.Value == shipping.Id)
+                                    .Join(db.OPC_SaleDetail, s => s.SaleOrderNo, d => d.SaleOrderNo, (s, d) => d)
+                                    .Join(db.OrderItems, d => d.OrderItemID, x => x.Id,
+                                        (detail, item) => new {detail, item});
+                            if(shipping == null) continue;
+
+                            var outboundNo = CreateOutBoundNo(shipping.StoreId.HasValue ? shipping.StoreId.Value : 0);
+                            db.Outbounds.Add(new Outbound()
+                            {
+                                SourceNo = shipping.OrderNo,
+                                SourceType = 1,
+                                CreateDate = DateTime.Now,
+                                CreateUser = 0,
+                                Status = 1,
+                                ShippingVia = shipping.ShipViaId,
+                                ShippingNo = shipping.ShippingCode,
+                                ShippingAddress = shipping.ShippingAddress,
+                                UpdateDate = DateTime.Now,
+                                UpdateUser = 0
+                            });
+
+                            foreach (var di in shippingItems)
+                            {
+                                db.OutboundItems.Add(new OutboundItem()
+                                {
+                                    CreateDate = DateTime.Now,
+                                    ColorId = di.item.ColorValueId,
+                                    OutboundNo = outboundNo,
+                                    ProductId = di.item.ProductId,
+                                    Quantity = di.detail.SaleCount,
+                                    SizeId = di.item.SizeValueId,
+                                    UpdateDate = DateTime.Now
+                                });
+                            }
+                        } 
+                    }
+                    db.SaveChanges();
+                    ts.Complete();
+                    Log.InfoFormat("完成订单状态更新,orderNo:{0},status:{1}", p.OrderNo, status);
+                }
             }
         }
 
         private const int NoStatus = -10000;
-        private const int Shipped = 15;
-        private const int PreparePack = 14;
-        private const int OrderPrinted = 13;
-        private const int AgentConfirmed = 11;
 
         private int CheckStatus(IEnumerable<OPC_Sale> saleOrders)
         {
@@ -98,29 +168,41 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                 return NoStatus;
             }
             //已发货
-            if (saleOrders.Any(x => x.Status == 40))
+            if (saleOrders.All(x => x.Status >= (int)EnumSaleOrderStatus.Shipped))
             {
-                return Shipped;
+                return (int)EnumOrderStatus.Shipped;
             }
             if (saleOrders.Any(x => x.Status == 35))
             {
-                return PreparePack;
+                return (int)EnumOrderStatus.PreparePack;
             }
 
-            if (saleOrders.Any(x => x.Status == 30))
+            if (saleOrders.Any(x => x.Status == 30 || x.Status == 25 || x.Status == 20 || x.Status == 15))
             {
-                return OrderPrinted;
-            }
-            if (saleOrders.Any(x => x.Status == 25 || x.Status == 20 || x.Status == 15))
-            {
-                return OrderPrinted;
+                return (int)EnumOrderStatus.OrderPrinted;
             }
 
             if (saleOrders.Any(x => x.Status == 2 || x.Status == 21))
             {
-                return AgentConfirmed;
+                return (int)EnumOrderStatus.AgentConfirmed;
             }
-            return NoStatus;
+            return (int)EnumOrderStatus.PassConfirmed;
+        }
+
+        private string CreateOutBoundNo(int storeId)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var code = string.Concat(string.Format("O{0}{1}", storeId.ToString().PadLeft(3, '0'), DateTime.Now.ToString("yyMMdd"))
+                   , DateTime.UtcNow.Ticks.ToString().Reverse().Take(5)
+                       .Aggregate(new StringBuilder(), (s, e) => s.Append(e), s => s.ToString())
+                       .PadRight(5, '0'));
+                var existingCodes =
+                    db.Outbounds.Count(c => c.OutboundNo == code && c.CreateDate >= DateTime.Today);
+                if (existingCodes > 0)
+                    code = string.Concat(code, (existingCodes + 1).ToString());
+                return code;
+            }
         }
 
         #endregion

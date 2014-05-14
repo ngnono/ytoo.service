@@ -66,5 +66,16 @@ namespace Intime.OPC.WebApi.Core
                 return InternalServerError();
             }
         }
+
+
+        protected IHttpActionResult RetrunHttpActionResult<T>(T dto)
+        {
+            if (dto != null)
+            {
+                return Ok(dto);
+            }
+
+            return NotFound();
+        }
     }
 }

@@ -40,7 +40,7 @@ namespace Intime.OPC.Domain.Models
         public DbSet<OPC_SKU> OPC_SKUs { get; set; }
         public DbSet<OPC_Stock> OPC_Stocks { get; set; }
         public DbSet<OPC_StorePriority> OPC_StorePriorities { get; set; }
-        public DbSet<OPC_SupplierInfo> OPC_SupplierInfos { get; set; }
+        public DbSet<OpcSupplierInfo> OPC_SupplierInfos { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<RMA> RMAs { get; set; }
@@ -55,6 +55,8 @@ namespace Intime.OPC.Domain.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }  
         public DbSet<OPC_ShippingSale> OPC_ShippingSales { get; set; }
+        public DbSet<Supplier_Brand> Supplier_Brand { get; set; }
+        public DbSet<IMS_SectionBrand> SectionBrands { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -95,7 +97,8 @@ namespace Intime.OPC.Domain.Models
             modelBuilder.Configurations.Add(new OrderTransactionMap());
             modelBuilder.Configurations.Add(new UserMap());
             modelBuilder.Configurations.Add(new ProductMap());
-
+            modelBuilder.Configurations.Add(new Supplier_BrandMap());
+            modelBuilder.Configurations.Add(new IMS_SectionBrandMap());
         }
     }
 }

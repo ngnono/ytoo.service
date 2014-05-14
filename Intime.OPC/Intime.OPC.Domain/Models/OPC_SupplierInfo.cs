@@ -4,7 +4,7 @@ using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Domain.Models
 {
-    public partial class OPC_SupplierInfo:IEntity
+    public partial class OpcSupplierInfo:IEntity
     {
         public int Id { get; set; }
         public string SupplierNo { get; set; }
