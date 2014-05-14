@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Newtonsoft.Json;
@@ -14,6 +15,7 @@ namespace Intime.OPC.Domain.Dto
         [Required]
         public string Name { get; set; }
         public string EnglishName { get; set; }
+     
         public string Description { get; set; }
 
         [JsonIgnore]

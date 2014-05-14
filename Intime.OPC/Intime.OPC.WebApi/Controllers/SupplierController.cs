@@ -27,6 +27,27 @@ namespace Intime.OPC.WebApi.Controllers
             _supplierRepository = supplierRepository;
             _brandRepository = brandRepository;
         }
+
+        private static OpcSupplierInfo CheckModel(OpcSupplierInfo model)
+        {
+            if (model == null)
+            {
+                return null;
+            }
+            model.Address = model.Address ?? String.Empty;
+            model.Contact = model.Contact ?? String.Empty;
+            model.Contract = model.Contract ?? String.Empty;
+            model.Corporate = model.Corporate ?? String.Empty;
+            model.FaxNo = model.FaxNo ?? String.Empty;
+            model.Memo = model.Memo ?? String.Empty;
+            model.SupplierName = model.SupplierName ?? String.Empty;
+            model.SupplierNo = model.SupplierNo ?? String.Empty;
+            model.TaxNo = model.TaxNo ?? String.Empty;
+            model.Telephone = model.Telephone ?? String.Empty;
+
+            return model;
+        }
+
         //[HttpGet]
         [Route("{id:int}")]
 
@@ -92,6 +113,8 @@ namespace Intime.OPC.WebApi.Controllers
 
             item.Brands = _brandRepository.GetByIds(dto.Brands.Select(v => v.Id).ToArray()).ToList();
 
+            item = CheckModel(item);
+
             ((IOPCRepository<int, OpcSupplierInfo>)_supplierRepository).Update(item);
 
             return Get(id);
@@ -140,12 +163,12 @@ namespace Intime.OPC.WebApi.Controllers
             model.UpdatedUser = userId;
 
             model.Brands = _brandRepository.GetByIds(dto.Brands.Select(v => v.Id).ToArray()).ToList();
-
+            model = CheckModel(model);
             var item = _supplierRepository.Insert(model);
 
             //item.Brands = _brandRepository.GetByIds(dto.Brands.Select(v => v.Id).ToArray()).ToList();
             //_supplierRepository.Update(item);
-
+            
 
             var resultdto = Mapper.Map<OpcSupplierInfo, SupplierDto>(item);
 

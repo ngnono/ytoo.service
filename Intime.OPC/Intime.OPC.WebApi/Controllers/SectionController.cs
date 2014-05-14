@@ -26,6 +26,20 @@ namespace Intime.OPC.WebApi.Controllers
             _sectionRepository = sectionRepository;
         }
 
+        private static Section CheckModel(Section model)
+        {
+            if (model == null)
+            {
+                return null;
+            }
+
+            model.Location = model.Location ?? String.Empty;
+            model.Name = model.Name ?? String.Empty;
+            model.StoreCode = model.StoreCode ?? String.Empty;
+
+            return model;
+        }
+
         [Route("all")]
         //[ActionName("all")]
         public IHttpActionResult GetAll()
@@ -119,6 +133,7 @@ namespace Intime.OPC.WebApi.Controllers
             item.CreateDate = createDate;
             item.CreateUser = createUser;
 
+            item = CheckModel(item);
             ((IOPCRepository<int, Section>)_sectionRepository).Update(item);
 
             return GetSection(id);
@@ -163,6 +178,7 @@ namespace Intime.OPC.WebApi.Controllers
             model.ContactPerson = String.Empty;
             model.StoreCode = String.Empty;
 
+            model = CheckModel(model);
             var item = _sectionRepository.Insert(model);
 
             return GetSection(item.Id);

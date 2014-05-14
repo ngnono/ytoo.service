@@ -29,6 +29,22 @@ namespace Intime.OPC.WebApi.Controllers
             _brandRepository = brandRepository;
         }
 
+        private static Brand CheckModel(Brand item)
+        {
+            if (item == null)
+            {
+                return null;
+            }
+
+            //AUTOMAPPER bug for null
+            item.Description = item.Description ?? String.Empty;
+            item.EnglishName = item.EnglishName ?? String.Empty;
+            item.WebSite = item.WebSite ?? String.Empty;
+
+            return item;
+        }
+
+
         [HttpPost]
         public IHttpActionResult GetAll([UserId] int? userId)
         {
@@ -100,6 +116,8 @@ namespace Intime.OPC.WebApi.Controllers
             item.CreatedDate = createDate;
             item.CreatedUser = createUser;
 
+            item = CheckModel(item);
+
 
             ((IOPCRepository<int, Brand>)_brandRepository).Update(item);
 
@@ -135,20 +153,16 @@ namespace Intime.OPC.WebApi.Controllers
             }
 
             Brand model = null;
-            try
-            {
-                model = Mapper.Map<BrandDto, Brand>(dto);
-            }
-            catch (Exception ex)
-            {
 
-                throw;
-            }
+            model = Mapper.Map<BrandDto, Brand>(dto);
+
 
             model.UpdatedDate = DateTime.Now;
             model.UpdatedUser = userId;
             model.CreatedDate = DateTime.Now;
             model.CreatedUser = userId;
+
+            model = CheckModel(model);
 
             var item = _brandRepository.Insert(model);
 
