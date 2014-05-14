@@ -31,6 +31,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         ///     last_update:yyyy-MM-dd'T'HH:mm:ss
         /// }
         /// </example>
+            [ValidateParameters]
         public ActionResult Search(dynamic request, string channel)
         {
             int pageIndex = string.IsNullOrEmpty(request.page_index) ? request.page_index : 1;
