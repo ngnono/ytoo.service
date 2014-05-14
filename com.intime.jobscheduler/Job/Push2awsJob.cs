@@ -1024,7 +1024,8 @@ namespace com.intime.jobscheduler.Job
                                                       PropertyId = property.Id,
                                                       ValueDesc = v.ValueDesc
                                                   })
-                            
+                            let category = (from map in db.ProductMaps where map.ProductId == p.Id && map.Channel == "intime" select map.ChannelCatId)
+
                             select new ESProduct()
                             {
                                 Id = p.Id,
@@ -1078,6 +1079,7 @@ namespace com.intime.jobscheduler.Job
                                 Section = section.FirstOrDefault(),
                                 UpcCode = p.SkuCode,
                                 UpdatedDate = p.UpdatedDate,
+                                CategoryId = category.FirstOrDefault() == null ? 0 : (category.FirstOrDefault().HasValue ? category.FirstOrDefault().Value : 0),
                                 IsSystem = (!p.ProductType.HasValue) || p.ProductType == (int)ProductType.FromSystem
 
                             };

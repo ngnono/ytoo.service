@@ -90,11 +90,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                                     r => r.Message = string.Format("订单包含无效的商品！商品Id = ({0})", productId));
                         }
 
-                        var colorValueId = (int)item.colorValueId;
-                        var sizeValueId = (int)item.sizeValueId;
+                        //var colorValueId = (int)item.colorValueId;
+                        //var sizeValueId = (int)item.sizeValueId;
+                        var stockId = (int) item.stockId;
                         var inventory =
                             db.Set<InventoryEntity>().FirstOrDefault(
-                                x => x.ProductId == product.Id && x.PColorId == colorValueId && x.PSizeId == sizeValueId);
+                                x => x.Id == stockId);
 
                         int itemQuantity = item.quantity;
 
@@ -173,9 +174,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         [ValidateParameters]
         public ActionResult Void(dynamic request, string channel)
         {
+            string orderNo = request.orderno;
             using (var db = Context)
             {
-                string orderNo = request.orderno;
+                
                 var order =
                     db.Set<OrderEntity>()
                         .FirstOrDefault(

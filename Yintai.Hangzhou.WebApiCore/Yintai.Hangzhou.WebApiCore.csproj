@@ -118,6 +118,7 @@
     <Compile Include="Areas\Gg\ViewModels\ESProducts.cs" />
     <Compile Include="Areas\Gg\ViewModels\ESStocks.cs" />
     <Compile Include="Areas\Gg\ViewModels\PagedListViewModel.cs" />
+    <Compile Include="Areas\Gg\Controllers\RMAController.cs" />
     <Compile Include="Areas\Ims\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Ims\Controllers\AssistantController.cs" />
     <Compile Include="Areas\Ims\Controllers\ComboController.cs" />
