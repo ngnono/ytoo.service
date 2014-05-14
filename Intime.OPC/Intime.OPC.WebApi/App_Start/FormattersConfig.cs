@@ -7,7 +7,7 @@ namespace Intime.OPC.WebApi.App_Start
         public static void Config()
         {
             var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
-            json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.All;
+            json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;
 
             GlobalConfiguration.Configuration.Formatters.Remove(
                 GlobalConfiguration.Configuration.Formatters.XmlFormatter);

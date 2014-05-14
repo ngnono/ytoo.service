@@ -31,7 +31,7 @@ namespace Intime.OPC.Domain
         /// The page size.
         /// </param>
         public PagerRequest(int pageNumber, int pageSize)
-            : this(pageNumber, pageSize, 40)
+            : this(pageNumber, pageSize, 200)
         {
         }
 

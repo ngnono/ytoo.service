@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 
 namespace Intime.OPC.Domain.Dto
@@ -17,6 +18,7 @@ namespace Intime.OPC.Domain.Dto
         [Required]
         public string Name { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<BrandDto> Brands { get; set; }
     }
 }

@@ -40,7 +40,7 @@ namespace Intime.OPC.Domain.Models
         public DbSet<OPC_SKU> OPC_SKUs { get; set; }
         public DbSet<OPC_Stock> OPC_Stocks { get; set; }
         public DbSet<OPC_StorePriority> OPC_StorePriorities { get; set; }
-        public DbSet<OPC_SupplierInfo> OPC_SupplierInfos { get; set; }
+        public DbSet<OpcSupplierInfo> OPC_SupplierInfos { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<RMA> RMAs { get; set; }

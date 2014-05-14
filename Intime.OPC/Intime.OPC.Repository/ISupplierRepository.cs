@@ -8,7 +8,7 @@ using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
 {
-    public interface ISupplierRepository : IOPCRepository<int, OPC_SupplierInfo>
+    public interface ISupplierRepository : IOPCRepository<int, OpcSupplierInfo>
     {
         /// <summary>
         /// 分页
@@ -18,7 +18,7 @@ namespace Intime.OPC.Repository
         /// <param name="filter">筛选项</param>
         /// <param name="sortOrder">排序项</param>
         /// <returns></returns>
-        List<OPC_SupplierInfo> GetPagedList(PagerRequest pagerRequest, out int totalCount, SupplierFilter filter,
+        List<OpcSupplierInfo> GetPagedList(PagerRequest pagerRequest, out int totalCount, SupplierFilter filter,
                                    SupplierSortOrder sortOrder);
     }
 }

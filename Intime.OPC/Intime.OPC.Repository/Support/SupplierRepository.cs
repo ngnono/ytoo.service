@@ -12,13 +12,13 @@ using Intime.OPC.Repository.Base;
 
 namespace Intime.OPC.Repository.Support
 {
-    public class SupplierRepository : OPCBaseRepository<int, OPC_SupplierInfo>, ISupplierRepository
+    public class SupplierRepository : OPCBaseRepository<int, OpcSupplierInfo>, ISupplierRepository
     {
         #region methods
 
-        private static Expression<Func<OPC_SupplierInfo, bool>> Filler(SupplierFilter filter)
+        private static Expression<Func<OpcSupplierInfo, bool>> Filler(SupplierFilter filter)
         {
-            var query = PredicateBuilder.True<OPC_SupplierInfo>();
+            var query = PredicateBuilder.True<OpcSupplierInfo>();
 
             if (filter != null)
             {
@@ -34,9 +34,9 @@ namespace Intime.OPC.Repository.Support
             return query;
         }
 
-        private static Func<IQueryable<OPC_SupplierInfo>, IOrderedQueryable<OPC_SupplierInfo>> OrderBy(SupplierSortOrder sortOrder)
+        private static Func<IQueryable<OpcSupplierInfo>, IOrderedQueryable<OpcSupplierInfo>> OrderBy(SupplierSortOrder sortOrder)
         {
-            Func<IQueryable<OPC_SupplierInfo>, IOrderedQueryable<OPC_SupplierInfo>> orderBy = null;
+            Func<IQueryable<OpcSupplierInfo>, IOrderedQueryable<OpcSupplierInfo>> orderBy = null;
 
             switch (sortOrder)
             {
@@ -50,13 +50,13 @@ namespace Intime.OPC.Repository.Support
 
         #endregion
 
-        protected override DbQuery<OPC_SupplierInfo> DbQuery(DbContext context)
+        protected override DbQuery<OpcSupplierInfo> DbQuery(DbContext context)
         {
-            return context.Set<OPC_SupplierInfo>(); ;
+            return context.Set<OpcSupplierInfo>(); ;
 
         }
 
-        public override IEnumerable<OPC_SupplierInfo> AutoComplete(string query)
+        public override IEnumerable<OpcSupplierInfo> AutoComplete(string query)
         {
             var filter = Filler(new SupplierFilter
             {
@@ -74,7 +74,7 @@ namespace Intime.OPC.Repository.Support
         /// <param name="filter"></param>
         /// <param name="sortOrder"></param>
         /// <returns></returns>
-        public List<OPC_SupplierInfo> GetPagedList(PagerRequest pagerRequest, out int totalCount, SupplierFilter filter, SupplierSortOrder sortOrder)
+        public List<OpcSupplierInfo> GetPagedList(PagerRequest pagerRequest, out int totalCount, SupplierFilter filter, SupplierSortOrder sortOrder)
         {
             var query = Filler(filter);
             var orderBy = OrderBy(sortOrder);
@@ -101,7 +101,7 @@ namespace Intime.OPC.Repository.Support
 
                     };
 
-                var list = new Dictionary<int, OPC_SupplierInfo>();
+                var list = new Dictionary<int, OpcSupplierInfo>();
 
                 var rst = q.ToList();
 
@@ -113,9 +113,9 @@ namespace Intime.OPC.Repository.Support
                         b = Brand.Convert2Brand(v.Brand);
                     }
 
-                    var item = OPC_SupplierInfo.Convert2Supplier(v.Et);
+                    var item = OpcSupplierInfo.Convert2Supplier(v.Et);
 
-                    OPC_SupplierInfo s;
+                    OpcSupplierInfo s;
                     if (list.TryGetValue(item.Id, out s))
                     {
                         if (b != null)
@@ -153,7 +153,7 @@ namespace Intime.OPC.Repository.Support
             return result.Data;
         }
 
-        public override void Update(OPC_SupplierInfo entity)
+        public override void Update(OpcSupplierInfo entity)
         {
             Action(c =>
             {
@@ -217,10 +217,10 @@ namespace Intime.OPC.Repository.Support
             });
         }
 
-        public override OPC_SupplierInfo Insert(OPC_SupplierInfo entity)
+        public override OpcSupplierInfo Insert(OpcSupplierInfo entity)
         {
             //insert ¹ØÏµ
-            return Func<OPC_SupplierInfo>(c =>
+            return Func<OpcSupplierInfo>(c =>
             {
                 Supplier_Brand[] supplier_brands = null;
                 if (entity != null && entity.Brands.Count() != 0)
@@ -246,7 +246,7 @@ namespace Intime.OPC.Repository.Support
             });
         }
 
-        public override OPC_SupplierInfo GetItem(int key)
+        public override OpcSupplierInfo GetItem(int key)
         {
             return Func(c =>
             {
@@ -256,7 +256,7 @@ namespace Intime.OPC.Repository.Support
                 //        .Where(v => v.Supplier_Id == key);
 
 
-                var q1 = EFHelper.Get<OPC_SupplierInfo>(c, v => v.Id == key);
+                var q1 = EFHelper.Get<OpcSupplierInfo>(c, v => v.Id == key);
 
                 var q2 = from b in c.Set<Brand>()
                     join sb in c.Set<Supplier_Brand>() on b.Id equals sb.Brand_Id into temp1
@@ -277,7 +277,7 @@ namespace Intime.OPC.Repository.Support
 
                 var rst = q.ToList();
 
-                var list = new Dictionary<int, OPC_SupplierInfo>();
+                var list = new Dictionary<int, OpcSupplierInfo>();
 
                 rst.ForEach(v =>
                 {
@@ -288,9 +288,9 @@ namespace Intime.OPC.Repository.Support
 
                     }
 
-                    var item = OPC_SupplierInfo.Convert2Supplier(v.Et);
+                    var item = OpcSupplierInfo.Convert2Supplier(v.Et);
 
-                    OPC_SupplierInfo s;
+                    OpcSupplierInfo s;
                     if (list.TryGetValue(item.Id, out s))
                     {
                         if (b != null)

@@ -23,6 +23,6 @@ namespace Intime.OPC.Domain.Models
 
         public IEnumerable<SectionClone> Sections { get; set; }
 
-        public IEnumerable<OPC_SupplierInfoClone> Suppliers { get; set; }
+        public IEnumerable<OpcSupplierInfoClone> Suppliers { get; set; }
     }
 }

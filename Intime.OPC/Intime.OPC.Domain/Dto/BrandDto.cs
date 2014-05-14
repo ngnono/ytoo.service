@@ -36,9 +36,11 @@ namespace Intime.OPC.Domain.Dto
             }
         }
 
-        [JsonProperty(PropertyName = "Counters")]
+
+        [JsonProperty(PropertyName = "Counters", NullValueHandling = NullValueHandling.Ignore)]
         public List<SectionDto> Sections { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public SupplierDto Supplier
         {
             get

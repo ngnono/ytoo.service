@@ -1,10 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Intime.OPC.Domain.Base;
 
 namespace Intime.OPC.Domain.Models
 {
-    public partial class OpcSupplierInfo:IEntity
+    public class OpcSupplierInfoClone
     {
         public int Id { get; set; }
         public string SupplierNo { get; set; }
@@ -23,5 +22,6 @@ namespace Intime.OPC.Domain.Models
         public int CreatedUser { get; set; }
         public System.DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
+        public IEnumerable<BrandClone> Brands { get; set; }
     }
 }

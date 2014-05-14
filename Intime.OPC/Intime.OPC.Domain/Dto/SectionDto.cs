@@ -68,6 +68,7 @@ namespace Intime.OPC.Domain.Dto
             }
         }
 
+                [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<BrandDto> Brands { get; set; }
     }
 }

@@ -24,18 +24,18 @@ namespace Intime.OPC.WebApi.App_Start
                 Id = v.Id
             });
 
-            var supplierModelMapper = Mapper.CreateMap<SupplierDto, OPC_SupplierInfo>();
+            var supplierModelMapper = Mapper.CreateMap<SupplierDto, OpcSupplierInfo>();
             supplierModelMapper.ForMember(d => d.SupplierName, opt => opt.MapFrom(s => s.Name));
             supplierModelMapper.ForMember(d => d.SupplierNo, opt => opt.MapFrom(s => s.Code));
 
 
-            var supplierDtoMapper = Mapper.CreateMap<OPC_SupplierInfo, SupplierDto>();
+            var supplierDtoMapper = Mapper.CreateMap<OpcSupplierInfo, SupplierDto>();
             supplierDtoMapper.ForMember(d => d.Name, opt => opt.MapFrom(s => s.SupplierName));
             supplierDtoMapper.ForMember(d => d.Code, opt => opt.MapFrom(s => s.SupplierNo));
 
 
 
-            Mapper.CreateMap<OPC_SupplierInfoClone, OPC_SupplierInfo>();
+            Mapper.CreateMap<OpcSupplierInfoClone, OpcSupplierInfo>();
             Mapper.CreateMap<BrandClone, Brand>();
             Mapper.CreateMap<SectionClone, Section>();
         }

@@ -36,7 +36,7 @@ namespace Intime.OPC.WebApi.Controllers
             var model = _supplierRepository.GetItem(id);
 
 
-            var dto = Mapper.Map<OPC_SupplierInfo, SupplierDto>(model);
+            var dto = Mapper.Map<OpcSupplierInfo, SupplierDto>(model);
 
             return RetrunHttpActionResult(dto);
         }
@@ -56,7 +56,7 @@ namespace Intime.OPC.WebApi.Controllers
 
             var model = _supplierRepository.GetPagedList(pagerRequest, out total, filter, filter.SortOrder ?? SupplierSortOrder.Default);
 
-            var dto = Mapper.Map<List<OPC_SupplierInfo>, List<SupplierDto>>(model);
+            var dto = Mapper.Map<List<OpcSupplierInfo>, List<SupplierDto>>(model);
 
             var pagerdto = new PagerInfo<SupplierDto>(pagerRequest, total);
             pagerdto.Datas = dto;
@@ -84,7 +84,7 @@ namespace Intime.OPC.WebApi.Controllers
             var createUser = item.CreatedUser;
 
             dto.Id = id;
-            Mapper.Map<SupplierDto, OPC_SupplierInfo>(dto, item);
+            Mapper.Map<SupplierDto, OpcSupplierInfo>(dto, item);
             item.UpdatedUser = userId;
             item.UpdatedDate = DateTime.Now;
             item.CreatedDate = createDate;
@@ -92,7 +92,7 @@ namespace Intime.OPC.WebApi.Controllers
 
             item.Brands = _brandRepository.GetByIds(dto.Brands.Select(v => v.Id).ToArray()).ToList();
 
-            ((IOPCRepository<int, OPC_SupplierInfo>)_supplierRepository).Update(item);
+            ((IOPCRepository<int, OpcSupplierInfo>)_supplierRepository).Update(item);
 
             return Get(id);
         }
@@ -133,7 +133,7 @@ namespace Intime.OPC.WebApi.Controllers
             }
 
 
-            var model = Mapper.Map<SupplierDto, OPC_SupplierInfo>(dto);
+            var model = Mapper.Map<SupplierDto, OpcSupplierInfo>(dto);
             model.CreatedDate = DateTime.Now;
             model.UpdatedDate = DateTime.Now;
             model.CreatedUser = userId;
@@ -147,7 +147,7 @@ namespace Intime.OPC.WebApi.Controllers
             //_supplierRepository.Update(item);
 
 
-            var resultdto = Mapper.Map<OPC_SupplierInfo, SupplierDto>(item);
+            var resultdto = Mapper.Map<OpcSupplierInfo, SupplierDto>(item);
 
             return RetrunHttpActionResult(resultdto);
         }

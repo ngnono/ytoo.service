@@ -3,7 +3,7 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace Intime.OPC.Domain.Models.Mapping
 {
-    public class OPC_SupplierInfoMap : EntityTypeConfiguration<OPC_SupplierInfo>
+    public class OPC_SupplierInfoMap : EntityTypeConfiguration<OpcSupplierInfo>
     {
         public OPC_SupplierInfoMap()
         {

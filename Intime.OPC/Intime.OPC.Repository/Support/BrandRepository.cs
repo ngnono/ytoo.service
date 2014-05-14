@@ -20,6 +20,7 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization.Formatters;
+using System.Transactions;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Enums.SortOrder;
@@ -165,10 +166,10 @@ namespace Intime.OPC.Repository.Support
                             sb.SectionId
                         };
                 var q1 = from b in q
-                         let sup = (from s in c.Set<OPC_SupplierInfo>()
+                         let sup = (from s in c.Set<OpcSupplierInfo>()
                                     join sb in c.Set<Supplier_Brand>() on s.Id equals sb.Supplier_Id
                                     where sb.Brand_Id == b.s.Id
-                                    select new OPC_SupplierInfoClone
+                                    select new OpcSupplierInfoClone
                                     {
                                         Address = s.Address,
                                         Contact = s.Contact,
@@ -236,26 +237,31 @@ namespace Intime.OPC.Repository.Support
 
         public override void Update(Brand entity)
         {
-            Action(c =>
+            using (var trans = new TransactionScope())
             {
-                List<int> supplier_ids = null;
-                List<int> section_ids = null;
-                if (entity.Suppliers != null)
+                Action(c =>
                 {
-                    supplier_ids = entity.Suppliers.Where(v=>v!=null).Select(v => v.Id).ToList();
-                    entity.Suppliers = null;
-                }
+                    List<int> supplier_ids = null;
+                    List<int> section_ids = null;
+                    if (entity.Suppliers != null)
+                    {
+                        supplier_ids = entity.Suppliers.Where(v => v != null).Select(v => v.Id).ToList();
+                        entity.Suppliers = null;
+                    }
 
-                if (entity.Sections != null)
-                {
-                    section_ids = entity.Sections.Select(v => v.Id).ToList();
-                    entity.Sections = null;
-                }
+                    if (entity.Sections != null)
+                    {
+                        section_ids = entity.Sections.Select(v => v.Id).ToList();
+                        entity.Sections = null;
+                    }
 
-                EFHelper.Update(c, entity);
+                    EFHelper.Update(c, entity);
 
-                Relationship(c, entity, supplier_ids, section_ids);
-            });
+                    Relationship(c, entity, supplier_ids, section_ids);
+                });
+
+                trans.Complete();
+            }
         }
 
         public override Brand Insert(Brand entity)
@@ -315,10 +321,10 @@ namespace Intime.OPC.Repository.Support
                 t = q.Count();
 
                 var q1 = from b in q.OrderBy(v => v.s.Id).Skip(pagerRequest.SkipCount).Take(pagerRequest.PageSize)
-                         let sup = (from s in c.Set<OPC_SupplierInfo>()
+                         let sup = (from s in c.Set<OpcSupplierInfo>()
                                     join sb in c.Set<Supplier_Brand>() on s.Id equals sb.Supplier_Id
                                     where sb.Brand_Id == b.s.Id
-                                    select new OPC_SupplierInfoClone
+                                    select new OpcSupplierInfoClone
                                     {
                                         Address = s.Address,
                                         Contact = s.Contact,
