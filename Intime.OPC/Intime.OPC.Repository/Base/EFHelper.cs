@@ -366,20 +366,10 @@ namespace Intime.OPC.Repository.Base
         /// <returns>T</returns>
         public static TEntity Insert<TEntity>(DbContext context, TEntity entity) where TEntity : class
         {
-            try
-            {
-                var newentity = GetDbSet<TEntity>(context).Add(entity);
-                context.SaveChanges();
-                //_unitOfWork.Commit();
+            var newentity = GetDbSet<TEntity>(context).Add(entity);
+            context.SaveChanges();
 
-                return newentity;
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-
+            return newentity;
         }
 
         public static IEnumerable<TEntity> Inserts<TEntity>(DbContext context, params TEntity[] entitys) where TEntity : class
@@ -393,11 +383,7 @@ namespace Intime.OPC.Repository.Base
                 list.Add(result);
             }
 
-
             context.SaveChanges();
-
-
-
 
             return list;
         }
