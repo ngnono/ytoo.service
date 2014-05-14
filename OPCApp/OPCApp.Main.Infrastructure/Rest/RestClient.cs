@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using Microsoft.Practices.Prism.PubSubEvents;
+using System;
+using System.ComponentModel.Composition;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Security.Cryptography;
@@ -13,13 +13,16 @@ namespace OPCApp.Infrastructure.REST
     {
         private const string Signature = "X-Sign";
         private const string Consumerkey = "X-ConsumerKey";
-        private const string Token = "X-Token";
+        private const string TokenKey = "X-Token";
 
         private readonly Uri _baseAddress;
         private readonly string _consumerKey;
         private readonly string _consumerSecret;
         private readonly Random _random = new Random();
         private readonly MediaTypeFormatter _mediaTypeFormatter = new JsonMediaTypeFormatter();
+
+        [Import]
+        public IEventAggregator EventAggregator { get; set;}
 
         public RestClient(string baseAddress, string consumerKey, string consumerSecret)
         {
@@ -28,68 +31,82 @@ namespace OPCApp.Infrastructure.REST
             _consumerSecret = consumerSecret;
         }
 
-        public TResponse Get<TResponse>(string uri)
+        public string Token { get; set; }
+
+        public TData Get<TData>(string uri)
         {
             using (var client = CreateHttpClient())
             {
-                SetHeaderValue(client, Consumerkey, _consumerKey);
+                SetHttpHeader(client);
 
-                return Request<TResponse>(uri, client.GetAsync);
+                return Request<TData>(uri, client.GetAsync);
             }
         }
 
-        public TResponse Post<TData, TResponse>(Request<TData> request)
+        public TEntity Post<TEntity>(string uri, TEntity entity)
         {
             using (var client = CreateHttpClient())
             {
-                SetHeaderValue(client, Consumerkey, _consumerKey);
-                SetHeaderValue(client, Signature, Sign(request));
+                SetHttpHeader(client, entity);
 
-                return Send<TData, TResponse>(request, client.PostAsJsonAsync);
+                return Send<TEntity>(uri, entity, client.PostAsJsonAsync);
             }
         }
 
-        public TResponse Put<TData, TResponse>(Request<TData> request)
+        public TEntity Put<TEntity>(string uri, TEntity entity)
         {
             using (var client = CreateHttpClient())
             {
-                SetHeaderValue(client, Consumerkey, _consumerKey);
-                SetHeaderValue(client, Signature, Sign(request));
+                SetHttpHeader(client, entity);
 
-                return Send<TData, TResponse>(request, client.PutAsJsonAsync);
+                return Send<TEntity>(uri, entity, client.PutAsJsonAsync);
             }
         }
 
-        public TResponse Delete<TResponse>(string uri)
+        public void Delete(string uri)
         {
             using (var client = CreateHttpClient())
             {
-                SetHeaderValue(client, Consumerkey, _consumerKey);
+                SetHttpHeader(client);
 
-                return Request<TResponse>(uri, client.DeleteAsync);
+                Request<string>(uri, client.DeleteAsync);
             }
         }
 
-        private TResponse Request<TResponse>(string uri, Func<string, Task<HttpResponseMessage>> verb)
+        private TData Request<TData>(string uri, Func<string, Task<HttpResponseMessage>> verb)
         {
-            var response = verb(string.Format("{0}{1}&ram={2}", _baseAddress, uri, _random.Next(0, 99))).Result;
+            var randomString = BuildRandomString<TData>();
+            var url = string.Format("{0}{1}{2}", _baseAddress, uri, randomString);
+            var response = verb(url).Result;
             if (response.IsSuccessStatusCode)
             {
-                return response.Content.ReadAsAsync<TResponse>().Result;
+                return response.Content.ReadAsAsync<TData>().Result;
             }
 
-            return default(TResponse);
+            var errorMessage = response.Content.ReadAsStringAsync().Result;
+            throw new RestException(response.StatusCode, errorMessage);
         }
 
-        private TResponse Send<TData, TResponse>(Request<TData> request, Func<string, Request<TData>, Task<HttpResponseMessage>> verb)
+        private TEntity Send<TEntity>(string uri, TEntity entity, Func<string, TEntity, Task<HttpResponseMessage>> verb)
         {
-            var response = verb(string.Format("{0}{1}", _baseAddress, request.URI), request).Result;
+            var response = verb(string.Format("{0}{1}", _baseAddress, uri), entity).Result;
             if (response.IsSuccessStatusCode)
             {
-                return response.Content.ReadAsAsync<TResponse>().Result;
+                return response.Content.ReadAsAsync<TEntity>().Result;
             }
 
-            return default(TResponse);
+            var errorMessage = response.Content.ReadAsStringAsync().Result;
+            throw new RestException(response.StatusCode, errorMessage);
+        }
+
+        private void SetHttpHeader(HttpClient client, object entity = null)
+        {
+            SetHeaderValue(client, Consumerkey, _consumerKey);
+            SetHeaderValue(client, TokenKey, Token);
+            if (entity != null)
+            { 
+                SetHeaderValue(client, Signature, Sign(entity)); 
+            }
         }
 
         private HttpClient CreateHttpClient()
@@ -106,20 +123,27 @@ namespace OPCApp.Infrastructure.REST
             }
         }
 
-        /// <summary>
-        /// 计算签名
-        /// </summary>
-        /// <typeparam name="TRequest">请求对象</typeparam>
-        /// <typeparam name="TResponse">响应对象</typeparam>
-        /// <param name="request">请求实体</param>
-        /// <returns>具体的签名</returns>
-        private string Sign<TRequest>(Request<TRequest> request)
+        private static string BuildRandomString<TData>()
+        {
+            var randomString = string.Empty;
+            var dataType = typeof(TData);
+            if (dataType.IsGenericType && dataType.GetGenericTypeDefinition() == typeof(PagedResult<>))
+            {
+                randomString = string.Format("&timestamp={0}", DateTime.Now.ToString("MMddyyyyHHmmssfff"));
+            }
+            else
+            {
+                randomString = string.Format("/?timestamp={0}", DateTime.Now.ToString("MMddyyyyHHmmssfff"));
+            }
+            return randomString;
+        }
+
+        private string Sign<TEntity>(TEntity entity)
         {
             var builder = new StringBuilder();
-            // 进行数据的串行化
-            if (request.Data != null)
+            if (entity != null)
             {
-                var data = GetDataString(request.Data);
+                var data = GetDataString(entity);
                 builder.Append(data);
             }
             builder.Append(_consumerKey);

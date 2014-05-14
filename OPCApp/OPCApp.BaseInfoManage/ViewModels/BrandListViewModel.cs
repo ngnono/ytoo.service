@@ -7,20 +7,21 @@ using Microsoft.Practices.Prism.Mvvm;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using OPCApp.Common.Extensions;
 using System.Windows.Input;
 using Intime.OPC.Modules.Dimension.Common;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Intime.OPC.Modules.Dimension.ViewModels
 {
     [Export(typeof(BrandListViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class BrandListViewModel : DimensionListViewModel<Brand,BrandViewModel,IBrandService>
+    public class BrandListViewModel : DimensionListViewModel<Brand,BrandViewModel,IService<Brand>>
     {
         public BrandListViewModel()
         {
-            EnableCommand = new DelegateCommand(() => OnEnable(true));
-            DisableCommand = new DelegateCommand(() => OnEnable(false));
+            EnableCommand = new AsyncDelegateCommand(() => OnEnable(true), CanExecute);
+            DisableCommand = new AsyncDelegateCommand(() => OnEnable(false), CanExecute);
         }
 
         #region Commands

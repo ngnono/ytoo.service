@@ -95,24 +95,26 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\AsyncDelegateCommand.cs" />
     <Compile Include="Common\DimensionListViewModel.cs" />
+    <Compile Include="QueryCriteria\IQueryCriteria.cs" />
     <Compile Include="Common\ModalDialogViewModel.cs" />
+    <Compile Include="QueryCriteria\QueryAll.cs" />
+    <Compile Include="QueryCriteria\QueryByName.cs" />
+    <Compile Include="QueryCriteria\QueryCriteria.cs" />
     <Compile Include="Converters\BooleanToStringConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="DimensionModule.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\Counter.cs" />
     <Compile Include="Models\Dimension.cs" />
-    <Compile Include="Models\UriAttribute.cs" />
+    <Compile Include="Common\UriAttribute.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Common\DimensionService.cs" />
-    <Compile Include="Services\IBrandService.cs" />
-    <Compile Include="Services\ICounterService.cs" />
-    <Compile Include="Services\Imp\BrandService.cs" />
-    <Compile Include="Services\Imp\CounterService.cs" />
-    <Compile Include="Services\Imp\MockBrandService.cs" />
-    <Compile Include="Services\Imp\MockCounterService.cs" />
+    <Compile Include="Common\UriParameterAttribute.cs" />
+    <Compile Include="Services\BrandService.cs" />
+    <Compile Include="Services\CounterService.cs" />
     <Compile Include="Common\IService.cs" />
     <Compile Include="ViewModels\BrandListViewModel.cs" />
     <Compile Include="ViewModels\BrandViewModel.cs" />
@@ -281,6 +283,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomControlLibrary\CustomControlLibrary.csproj">
+      <Project>{ad060c8a-12af-4c1b-89cf-9b41a1edd31b}</Project>
+      <Name>CustomControlLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
       <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
       <Name>OPCApp.Common</Name>

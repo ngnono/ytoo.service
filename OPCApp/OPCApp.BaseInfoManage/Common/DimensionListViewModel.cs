@@ -1,19 +1,21 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Windows.Forms;
+using System.Windows;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
 using Microsoft.Practices.Prism.Mvvm;
-using OPCApp.Common.Extensions;
+using System.Windows.Threading;
+using System.Collections.Generic;
+using System.Windows;
 
 namespace Intime.OPC.Modules.Dimension.Common
 {
-    public class DimensionListViewModel<TDimension, TDetailViewModel, IDimensionService> : BindableBase
+    public class DimensionListViewModel<TDimension, TDetailViewModel, TDimensionService> : BindableBase
         where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension, new()
         where TDetailViewModel: ModalDialogViewModel<TDimension>, new()
-        where IDimensionService : IService<TDimension>
+        where TDimensionService : IService<TDimension>
     {
         private ObservableCollection<TDimension> models;
 
@@ -22,8 +24,8 @@ namespace Intime.OPC.Modules.Dimension.Common
             SelectAllCommand = new DelegateCommand<bool?>(OnSelectAll);
             EditCommand = new DelegateCommand<int?>(OnEdit);
             CreateCommand = new DelegateCommand(OnCreate);
-            DeleteCommand = new DelegateCommand(OnDelete);
-            QueryCommand = new DelegateCommand<string>(OnQuery);
+            DeleteCommand = new AsyncDelegateCommand(OnDelete, CanDelete);
+            QueryCommand = new AsyncDelegateCommand<string>(OnQuery);
 
             EditRequest = new InteractionRequest<TDetailViewModel>();
             CreateRequest = new InteractionRequest<TDetailViewModel>();
@@ -32,7 +34,7 @@ namespace Intime.OPC.Modules.Dimension.Common
         #region Properties
 
         [Import]
-        public IDimensionService Service { get; set; }
+        public TDimensionService Service { get; set; }
 
         public ObservableCollection<TDimension> Models 
         { 
@@ -62,6 +64,21 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         #region Command handler
 
+        protected bool CanExecute()
+        {
+            var selected = Models != null && Models.Any(model => model.IsSelected);
+            if (!selected) MessageBox.Show("请选择至少一个对象", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+            return selected;
+        }
+
+        private bool CanDelete()
+        {
+            if (!CanExecute()) return false;
+
+            return (MessageBox.Show("确定要删除吗？", "删除", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes);
+        }
+
         private void OnSelectAll(bool? selected)
         {
             Models.ForEach(model => model.IsSelected = selected.Value);
@@ -81,8 +98,6 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         private void OnDelete()
         {
-            if (MessageBox.Show("确定要删除吗？", "删除", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
-
             Models.ForEach(model =>
             {
                 if (model.IsSelected) Service.Delete(model.ID);
@@ -91,7 +106,7 @@ namespace Intime.OPC.Modules.Dimension.Common
             while (Models.Any(brand => brand.IsSelected))
             {
                 var selectedModel = Models.Where(model => model.IsSelected).FirstOrDefault();
-                Models.Remove(selectedModel);
+                Application.Current.Dispatcher.Invoke(() => { Models.Remove(selectedModel); });
             }
         }
 
@@ -103,9 +118,9 @@ namespace Intime.OPC.Modules.Dimension.Common
                {
                    if (viewModel.Accepted)
                    {
-                       var brand = Service.Create(viewModel.Model);
+                       var model = Service.Create(viewModel.Model);
 
-                       models.Insert(0, brand);
+                       models.Insert(0, model);
                    }
                });
         }
@@ -116,7 +131,15 @@ namespace Intime.OPC.Modules.Dimension.Common
                 new TDetailViewModel { Title = "编辑", Model = Service.Query(id.Value) },
                 (viewModel) => 
                 {
-                    if (viewModel.Accepted) Service.Update(viewModel.Model);
+                    if (viewModel.Accepted)
+                    {
+                        var updatedModel = Service.Update(viewModel.Model);
+                        var modelToUpdate = models.Where(model => model.ID == viewModel.Model.ID).FirstOrDefault();
+                        int index = Models.IndexOf(modelToUpdate);
+
+                        models.Remove(modelToUpdate);
+                        models.Insert(index, updatedModel);
+                    }
                 });
         }
         #endregion

@@ -37,10 +37,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DllFile\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper.Net4, Version=3.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DllFile\AutoMapper.Net4.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\DllFile\log4net.dll</HintPath>
     </Reference>
@@ -59,6 +55,10 @@
     <Reference Include="Microsoft.Practices.Prism.Mvvm, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DllFile\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.PubSubEvents, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.PubSubEvents.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -136,12 +136,13 @@
     <Compile Include="RegionNames.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Rest\IRestClientFactory.cs" />
+    <Compile Include="Auth\AuthenticationSucceededEvent.cs" />
     <Compile Include="Rest\RestClient.cs" />
     <Compile Include="Rest\IRestClient.cs" />
-    <Compile Include="Rest\Request.cs" />
-    <Compile Include="Rest\Response.cs" />
+    <Compile Include="Rest\PagedResult.cs" />
     <Compile Include="Rest\RestClientFactory.cs" />
     <Compile Include="Rest\RestException.cs" />
+    <Compile Include="Rest\TokenManager.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

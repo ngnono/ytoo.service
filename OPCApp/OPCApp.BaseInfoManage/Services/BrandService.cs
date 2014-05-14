@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Dimension.Services.Imp
 {
-    //[Export(typeof(IBrandService))]
+    [Export(typeof(IService<Brand>))]
     public class BrandService : DimensionService<Brand>
     {
         

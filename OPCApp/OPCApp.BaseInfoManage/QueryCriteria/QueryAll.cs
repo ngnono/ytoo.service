@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Intime.OPC.Modules.Dimension.Models
+namespace Intime.OPC.Modules.Dimension
 {
-    public class UriAttribute : Attribute
+    public class QueryAll : QueryCriteria
     {
-        public string Name { get; set; }
     }
 }

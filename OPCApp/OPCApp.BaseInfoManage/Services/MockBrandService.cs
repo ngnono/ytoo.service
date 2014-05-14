@@ -1,4 +1,5 @@
-﻿using Intime.OPC.Modules.Dimension.Models;
+﻿using Intime.OPC.Modules.Dimension.Common;
+using Intime.OPC.Modules.Dimension.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -8,8 +9,7 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Dimension.Services.Imp
 {
-    [Export(typeof(IBrandService))]
-    public class MockBrandService : IBrandService
+    public class MockBrandService : IService<Brand>
     {
         private IList<Brand> brands = new List<Brand>();
 
@@ -40,9 +40,9 @@ namespace Intime.OPC.Modules.Dimension.Services.Imp
             return obj;
         }
 
-        public void Update(Models.Brand obj)
+        public Models.Brand Update(Models.Brand obj)
         {
-
+            return obj;
         }
 
         public void Delete(int id)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace OPCApp.Infrastructure.REST
 {
@@ -7,12 +8,14 @@ namespace OPCApp.Infrastructure.REST
     /// </summary>
     public interface IRestClient
     {
-        TResponse Get<TResponse>(string uri);
+        string Token { get; set; }
 
-        TResponse Post<TData, TResponse>(Request<TData> request);
+        TData Get<TData>(string uri);
 
-        TResponse Put<TData, TResponse>(Request<TData> request);
+        TEntity Post<TEntity>(string uri, TEntity entity);
 
-        TResponse Delete<TResponse>(string uri);
+        TEntity Put<TEntity>(string uri, TEntity entity);
+
+        void Delete(string uri);
     }
 }

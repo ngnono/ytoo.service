@@ -1,4 +1,5 @@
-﻿using Intime.OPC.Modules.Dimension.Models;
+﻿using Intime.OPC.Modules.Dimension.Common;
+using Intime.OPC.Modules.Dimension.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -8,8 +9,7 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Dimension.Services.Imp
 {
-    [Export(typeof(ICounterService))]
-    public class MockCounterService : ICounterService
+    public class MockCounterService : IService<Counter>
     {
         private IList<Counter> counters = new List<Counter>();
 
@@ -58,9 +58,9 @@ namespace Intime.OPC.Modules.Dimension.Services.Imp
             return obj;
         }
 
-        public void Update(Models.Counter obj)
+        public Models.Counter Update(Models.Counter obj)
         {
-            
+            return obj;
         }
 
         public void Delete(int id)

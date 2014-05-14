@@ -17,6 +17,7 @@ using System.ComponentModel.Composition;
 using OPCApp.DataService.Common;
 using OPCApp.Domain;
 using OPCApp.Infrastructure.Interfaces;
+using OPCApp.Infrastructure.Rest;
 
 namespace OPCApp.DataService.Impl
 {
@@ -58,8 +59,12 @@ namespace OPCApp.DataService.Impl
             }
             IsLogin = true;
             RestClient.SetToken(tk.AccessToken);
+            TokenManager.Token = tk.AccessToken;
             return new LoginModel(tk.UserId, tk.UserName, tk.AccessToken, "", tk.Expires);
         }
+
+        [Import]
+        public TokenManager TokenManager { get; set; }
 
         /// <summary>
         ///     Res the login.

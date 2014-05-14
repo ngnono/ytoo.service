@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Intime.OPC.Modules.Dimension.Common;
 
 namespace Intime.OPC.Modules.Dimension.Models
 {
@@ -15,6 +13,11 @@ namespace Intime.OPC.Modules.Dimension.Models
         private bool enabled;
         private string englishName;
         private string description;
+
+        public Brand()
+        {
+            Supplier = new Supplier { ID = 4, Name = "SupplierName" };
+        }
 
         /// <summary>
         /// 英文名称

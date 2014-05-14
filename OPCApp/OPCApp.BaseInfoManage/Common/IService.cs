@@ -22,7 +22,7 @@ namespace Intime.OPC.Modules.Dimension.Common
         /// Update
         /// </summary>
         /// <param name="obj">object to update</param>
-        void Update(T obj);
+        T Update(T obj);
 
         /// <summary>
         /// Delete

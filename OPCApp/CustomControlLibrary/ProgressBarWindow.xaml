@@ -2,11 +2,13 @@
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-
                       Title="ProgressBarWindow" Height="100" Width="100" WindowStartupLocation="CenterScreen"
                       WindowStyle="None" ShowMinButton="False" ShowMaxRestoreButton="False" ShowCloseButton="False"
-                      ShowTitleBar="False" BorderBrush="Black" Cursor="Wait" BorderThickness="1" >
-    <Grid Margin="0">
+                      ShowTitleBar="False" Cursor="Wait" Padding="2">
+    <Border BorderBrush="Gray"
+             BorderThickness="1"
+             CornerRadius="10"
+             Background="White">
         <controls:ProgressRing Grid.Column="0" IsActive="True"/>
-    </Grid>
+    </Border>
 </controls:MetroWindow>
