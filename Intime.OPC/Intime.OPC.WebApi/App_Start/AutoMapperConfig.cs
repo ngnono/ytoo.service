@@ -14,7 +14,7 @@ namespace Intime.OPC.WebApi.App_Start
 
 
 
-            Mapper.CreateMap<Brand, BrandDto>();
+            Mapper.CreateMap<Brand, BrandDto>().ForMember(s => s.Description, d => d.NullSubstitute(String.Empty));
             var brandModel = Mapper.CreateMap<BrandDto, Brand>();
             brandModel.ConstructUsing(v => new Brand()
             {
@@ -23,6 +23,8 @@ namespace Intime.OPC.WebApi.App_Start
                 WebSite = String.Empty,
                 Id = v.Id
             });
+
+            brandModel.ForMember(s => s.Description, d => d.NullSubstitute(String.Empty));
 
             var supplierModelMapper = Mapper.CreateMap<SupplierDto, OpcSupplierInfo>();
             supplierModelMapper.ForMember(d => d.SupplierName, opt => opt.MapFrom(s => s.Name));

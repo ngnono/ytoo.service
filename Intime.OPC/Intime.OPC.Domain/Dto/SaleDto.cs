@@ -8,120 +8,120 @@ namespace Intime.OPC.Domain.Dto
     {
         [DataMember]
         public int Id { get; set; }
-         
+
         [DataMember]
         public string OrderNo { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string SaleOrderNo { get; set; }
 
-         [DataMember]
+        [DataMember]
         public int SalesType { get; set; }
 
-         [DataMember]
+        [DataMember]
         public int? ShipViaId { get; set; }
 
-         [DataMember]
+        [DataMember]
         public int Status { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string ShippingCode { get; set; }
 
-         [DataMember]
+        [DataMember]
         public decimal ShippingFee { get; set; }
 
-         [DataMember]
+        [DataMember]
         public int? ShippingStatus { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string ShippingStatusName { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string ShippingRemark { get; set; }
 
-         [DataMember]
+        [DataMember]
         public DateTime SellDate { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string IfTrans { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string TransStatus { get; set; }
 
-         [DataMember]
+        [DataMember]
         public decimal SalesAmount { get; set; }
 
-         [DataMember]
+        [DataMember]
         public int? SalesCount { get; set; }
 
-         [DataMember]
+        [DataMember]
         public int? CashStatus { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string CashNum { get; set; }
 
-         [DataMember]
+        [DataMember]
         public DateTime? CashDate { get; set; }
 
-         [DataMember]
+        [DataMember]
         public int? SectionId { get; set; }
 
-         [DataMember]
+        [DataMember]
         public int? PrintTimes { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string Remark { get; set; }
 
-         [DataMember]
+        [DataMember]
         public DateTime? RemarkDate { get; set; }
 
-         [DataMember]
+        [DataMember]
         public DateTime CreatedDate { get; set; }
 
-         [DataMember]
+        [DataMember]
         public int CreatedUser { get; set; }
 
-         [DataMember]
+        [DataMember]
         public DateTime UpdatedDate { get; set; }
 
-         [DataMember]
+        [DataMember]
         public int UpdatedUser { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string StatusName { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string CashStatusName { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string StoreName { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string InvoiceSubject { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string PayType { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string SectionName { get; set; }
-         
+
         [DataMember]
         public string Invoice { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string StoreTelephone { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string StoreAddress { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string TransNo { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string OrderSource { get; set; }
 
-         [DataMember]
+        [DataMember]
         public string ReceivePerson { get; set; }
-        
+
     }
 }
