@@ -448,7 +448,6 @@ namespace Intime.OPC.Repository.Support
                     if (s.Store != null)
                     {
                         o.StoreName = s.Store.Name;
-                        o.StoreName = s.Store.Name;
                         o.StoreTelephone = s.Store.Tel;
                         o.StoreAddress = s.Store.Location;
                     }
