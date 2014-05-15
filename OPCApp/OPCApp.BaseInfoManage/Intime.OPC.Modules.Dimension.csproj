@@ -95,8 +95,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\AsyncDelegateCommand.cs" />
+    <Compile Include="Common\ViewModelBase.cs" />
+    <Compile Include="Interaction\AsyncDelegateCommand.cs" />
     <Compile Include="Common\DimensionListViewModel.cs" />
+    <Compile Include="Interaction\CommandAction.cs" />
+    <Compile Include="Interaction\RoutedEventTrigger.cs" />
     <Compile Include="QueryCriteria\IQueryCriteria.cs" />
     <Compile Include="Common\ModalDialogViewModel.cs" />
     <Compile Include="QueryCriteria\QueryAll.cs" />
@@ -113,6 +116,7 @@
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Common\DimensionService.cs" />
     <Compile Include="Common\UriParameterAttribute.cs" />
+    <Compile Include="QueryCriteria\SortOrder.cs" />
     <Compile Include="Services\BrandService.cs" />
     <Compile Include="Services\CounterService.cs" />
     <Compile Include="Common\IService.cs" />

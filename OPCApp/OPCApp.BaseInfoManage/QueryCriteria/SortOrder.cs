@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Dimension
 {
-    public interface IQueryCriteria
+    public enum SortOrder
     {
-        int PageIndex { get; set; }
-
-        int PageSize { get; set; }
-
-        string BuildQueryString();
+        SortByIDAsc =0,
+        SortByNameAsc = 1,
+        SortByNameDesc = 2,
     }
 }

@@ -16,15 +16,17 @@ namespace Intime.OPC.Modules.Dimension.Common
     {
         private Action<T> executeMethod;
         private Func<T, bool> canExecuteMethod;
+        private Action<Exception> errorHandler;
 
-        public AsyncDelegateCommand(Action<T> executeMethod)
-            : this(executeMethod, null)
+        public AsyncDelegateCommand(Action<T> executeMethod, Action<Exception> errorHandler)
+            : this(executeMethod,errorHandler, null)
         {
         }
 
-        public AsyncDelegateCommand(Action<T> executeMethod, Func<T, bool> canExecuteMethod)
+        public AsyncDelegateCommand(Action<T> executeMethod, Action<Exception> errorHandler, Func<T, bool> canExecuteMethod)
         {
             this.executeMethod = executeMethod;
+            this.errorHandler = errorHandler;
             this.canExecuteMethod = canExecuteMethod;
         }
 
@@ -41,16 +43,33 @@ namespace Intime.OPC.Modules.Dimension.Common
 
             ProgressBarWindow progressDialog = new ProgressBarWindow();
             Task task = new Task(() => 
-            { 
-                executeMethod((T)parameter);
-                progressDialog.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate 
-                    {
-                        progressDialog.Hide(); 
-                    }));
+            {
+                try
+                {
+                    executeMethod((T)parameter);
+                }
+                catch (Exception exception)
+                {
+                    if (errorHandler != null) errorHandler(exception);
+                }
+                finally
+                {
+                    CloseDialog(progressDialog);
+                }
+                
             });
 
             task.Start();
             progressDialog.ShowDialog();
+        }
+
+        private void CloseDialog(Window dialog)
+        {
+            dialog.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+            {
+                dialog.Hide();
+                dialog.Close();
+            }));
         }
     }
 
@@ -58,16 +77,17 @@ namespace Intime.OPC.Modules.Dimension.Common
     {
         private Action executeMethod;
         private Func<bool> canExecuteMethod;
+        private Action<Exception> errorHandler;
 
-        public AsyncDelegateCommand(Action executeMethod)
-            :this(executeMethod, null)
+        public AsyncDelegateCommand(Action executeMethod, Action<Exception> errorHandler)
+            :this(executeMethod,errorHandler, null)
         {
         }
 
-
-        public AsyncDelegateCommand(Action executeMethod, Func<bool> canExecuteMethod)
+        public AsyncDelegateCommand(Action executeMethod, Action<Exception> errorHandler, Func<bool> canExecuteMethod)
         {
             this.executeMethod = executeMethod;
+            this.errorHandler = errorHandler;
             this.canExecuteMethod = canExecuteMethod;
         }
 
@@ -85,15 +105,31 @@ namespace Intime.OPC.Modules.Dimension.Common
             ProgressBarWindow progressDialog = new ProgressBarWindow();
             Task task = new Task(() =>
             {
-                executeMethod();
-                progressDialog.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                try
                 {
-                    progressDialog.Hide();
-                }));
+                    executeMethod();
+                }
+                catch (Exception exception)
+                {
+                    if (errorHandler != null) errorHandler(exception);
+                }
+                finally
+                {
+                    CloseDialog(progressDialog);
+                }
             });
 
             task.Start();
             progressDialog.ShowDialog();
+        }
+
+        private void CloseDialog(Window dialog)
+        {
+            dialog.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+            {
+                dialog.Hide();
+                dialog.Close();
+            }));
         }
     }
 }

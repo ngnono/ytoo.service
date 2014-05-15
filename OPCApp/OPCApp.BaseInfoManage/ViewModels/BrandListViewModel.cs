@@ -20,8 +20,8 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
     {
         public BrandListViewModel()
         {
-            EnableCommand = new AsyncDelegateCommand(() => OnEnable(true), CanExecute);
-            DisableCommand = new AsyncDelegateCommand(() => OnEnable(false), CanExecute);
+            EnableCommand = new AsyncDelegateCommand(() => OnEnable(true), OnException, CanExecute);
+            DisableCommand = new AsyncDelegateCommand(() => OnEnable(false), OnException, CanExecute);
         }
 
         #region Commands

@@ -17,6 +17,7 @@ namespace Intime.OPC.Modules.Dimension.Models
         public Brand()
         {
             Supplier = new Supplier { ID = 4, Name = "SupplierName" };
+            enabled = true;
         }
 
         /// <summary>

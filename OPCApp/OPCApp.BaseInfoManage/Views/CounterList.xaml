@@ -58,7 +58,7 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Style="{StaticResource HeadLabel}">专柜列表</Label>
             <DataGrid Grid.Row="1" x:Name="brandList" ItemsSource="{Binding Models}" IsReadOnly="True" AutoGenerateColumns="False"  
-                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.ScrollChanged ="OnGridScrollChanged">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.HeaderTemplate>

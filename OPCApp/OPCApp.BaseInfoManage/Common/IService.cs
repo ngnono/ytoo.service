@@ -38,16 +38,9 @@ namespace Intime.OPC.Modules.Dimension.Common
         T Query(int id);
 
         /// <summary>
-        /// Query by name
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <returns>Object collection</returns>
-        IList<T> Query(string name);
-
-        /// <summary>
-        /// Query all
+        /// Query
         /// </summary>
         /// <returns>Object collection</returns>
-        IList<T> QueryAll();
+        IList<T> Query(IQueryCriteria queryCriteria);
     }
 }

@@ -20,8 +20,8 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
     {
         public CounterListViewModel()
         {
-            EnableCommand = new AsyncDelegateCommand(() => OnEnable(true), CanExecute);
-            DisableCommand = new AsyncDelegateCommand(() => OnEnable(false), CanExecute);
+            EnableCommand = new AsyncDelegateCommand(() => OnEnable(false), OnException, CanExecute);
+            DisableCommand = new AsyncDelegateCommand(() => OnEnable(true), OnException, CanExecute);
         }
 
         #region Commands

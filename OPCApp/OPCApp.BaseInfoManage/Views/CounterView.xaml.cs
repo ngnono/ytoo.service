@@ -26,5 +26,18 @@ namespace Intime.OPC.Modules.Dimension.Views
         {
             InitializeComponent();
         }
+
+        private void OnListBoxScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            var scrollViewer = (ScrollViewer)(((RoutedEventArgs)(e)).OriginalSource);
+            if (scrollViewer.VerticalOffset != 0 && scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+            {
+                var viewModel = (CounterViewModel)DataContext;
+                viewModel.LoadMoreBrandsCommand.Execute(null);
+
+                scrollViewer.InvalidateVisual();
+                scrollViewer.UpdateLayout();
+            }
+        }
     }
 }

@@ -1,12 +1,13 @@
-﻿using Microsoft.Practices.Prism.Commands;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Windows.Input;
+using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
 using Microsoft.Practices.Prism.Mvvm;
-using System;
-using System.Windows.Input;
 
 namespace Intime.OPC.Modules.Dimension.Common
 {
-    public abstract class ModalDialogViewModel<TDimension> : BindableBase, INotification, IInteractionRequestAware
+    public abstract class ModalDialogViewModel<TDimension> : ViewModelBase, INotification, IInteractionRequestAware
         where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension, new()
     {
         private TDimension model;

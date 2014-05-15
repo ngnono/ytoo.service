@@ -59,19 +59,7 @@ namespace Intime.OPC.Modules.Dimension.Common
             return restClient.Get<TDimension>(string.Format("{0}/{1}", uriName, id));
         }
 
-        public IList<TDimension> Query(string name)
-        {
-            var queryCriteria = new QueryByName { Name = name, PageIndex = 1, PageSize = 200 };
-            return Query(queryCriteria);
-        }
-
-        public IList<TDimension> QueryAll()
-        {
-            var queryCriteria = new QueryAll { PageIndex = 1, PageSize = 200 };
-            return Query(queryCriteria);
-        }
-
-        private IList<TDimension> Query(IQueryCriteria queryCriteria)
+        public  IList<TDimension> Query(IQueryCriteria queryCriteria)
         {
             var reponse = restClient.Get<PagedResult<TDimension>>(string.Format("{0}?{1}", uriName, queryCriteria.BuildQueryString()));
             return reponse.Data;
