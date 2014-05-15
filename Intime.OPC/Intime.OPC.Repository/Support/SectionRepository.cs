@@ -25,6 +25,7 @@ using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Enums.SortOrder;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
+using LinqKit;
 using PredicateBuilder = LinqKit.PredicateBuilder;
 
 namespace Intime.OPC.Repository.Support
@@ -133,10 +134,10 @@ namespace Intime.OPC.Repository.Support
             {
                 int t;
 
-                var q1 = from section in c.Set<Section>().Where(Filler(filter))
+                var q1 = from section in c.Set<Section>().AsExpandable().Where(Filler(filter))
                          select new { section };
 
-                var qq = from sec_brand in c.Set<IMS_SectionBrand>().Where(brandFilter)
+                var qq = from sec_brand in c.Set<IMS_SectionBrand>().AsExpandable().Where(brandFilter)
                          select new { sec_brand };
 
                 if (filter.BrandId == null)
