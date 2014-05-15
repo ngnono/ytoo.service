@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using Intime.OPC.Modules.Dimension.Common;
+using Intime.OPC.Modules.Dimension.Framework;
 
 namespace Intime.OPC.Modules.Dimension
 {

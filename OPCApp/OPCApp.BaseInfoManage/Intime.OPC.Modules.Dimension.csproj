@@ -95,13 +95,17 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\ViewModelBase.cs" />
+    <Compile Include="Framework\ErrorsContainer.cs" />
+    <Compile Include="Framework\ValidatableBindableBase.cs" />
+    <Compile Include="Framework\Validation\LocalizedMaxLengthAttribute.cs" />
+    <Compile Include="Framework\Validation\LocalizedRequiredAttribute.cs" />
+    <Compile Include="Framework\ViewModelBase.cs" />
     <Compile Include="Interaction\AsyncDelegateCommand.cs" />
-    <Compile Include="Common\DimensionListViewModel.cs" />
+    <Compile Include="Framework\DimensionListViewModel.cs" />
     <Compile Include="Interaction\CommandAction.cs" />
     <Compile Include="Interaction\RoutedEventTrigger.cs" />
     <Compile Include="QueryCriteria\IQueryCriteria.cs" />
-    <Compile Include="Common\ModalDialogViewModel.cs" />
+    <Compile Include="Framework\ModalDialogViewModel.cs" />
     <Compile Include="QueryCriteria\QueryAll.cs" />
     <Compile Include="QueryCriteria\QueryByName.cs" />
     <Compile Include="QueryCriteria\QueryCriteria.cs" />
@@ -111,15 +115,15 @@
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\Counter.cs" />
     <Compile Include="Models\Dimension.cs" />
-    <Compile Include="Common\UriAttribute.cs" />
+    <Compile Include="Framework\UriAttribute.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\Supplier.cs" />
-    <Compile Include="Common\DimensionService.cs" />
-    <Compile Include="Common\UriParameterAttribute.cs" />
+    <Compile Include="Framework\DimensionService.cs" />
+    <Compile Include="Framework\UriParameterAttribute.cs" />
     <Compile Include="QueryCriteria\SortOrder.cs" />
     <Compile Include="Services\BrandService.cs" />
     <Compile Include="Services\CounterService.cs" />
-    <Compile Include="Common\IService.cs" />
+    <Compile Include="Framework\IService.cs" />
     <Compile Include="ViewModels\BrandListViewModel.cs" />
     <Compile Include="ViewModels\BrandViewModel.cs" />
     <Compile Include="ViewModels\CounterListViewModel.cs" />
@@ -225,6 +229,10 @@
     <Resource Include="Resource\Image\验证.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resource\Validation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resource\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

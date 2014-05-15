@@ -8,7 +8,7 @@ using OPCAPP.Common.Extensions;
 using OPCApp.Infrastructure.Rest;
 using System.Threading.Tasks;
 
-namespace Intime.OPC.Modules.Dimension.Common
+namespace Intime.OPC.Modules.Dimension.Framework
 {
     public abstract class DimensionService<TDimension> : IService<TDimension>, IPartImportsSatisfiedNotification
         where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension

@@ -59,5 +59,23 @@ namespace Intime.OPC.Modules.Dimension.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}长度不能超过{1}.
+        /// </summary>
+        internal static string LocalizedMaxLength {
+            get {
+                return ResourceManager.GetString("LocalizedMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}不能为空.
+        /// </summary>
+        internal static string LocalizedRequired {
+            get {
+                return ResourceManager.GetString("LocalizedRequired", resourceCulture);
+            }
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Intime.OPC.Modules.Dimension.Common;
+using Intime.OPC.Modules.Dimension.Framework;
+using System.ComponentModel.DataAnnotations;
+using Intime.OPC.Modules.Dimension.Framework.Validation;
 
 namespace Intime.OPC.Modules.Dimension.Models
 {
@@ -18,6 +20,9 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// <summary>
         /// 专柜码
         /// </summary>
+        [Display(Name = "专柜码")]
+        [LocalizedRequired()]
+        [LocalizedMaxLength(200)]
         public string Code
         {
             get { return code; }
@@ -27,6 +32,8 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// <summary>
         /// 销售区域
         /// </summary>
+        [Display(Name = "销售区域")]
+        [LocalizedMaxLength(200)]
         public string AreaCode
         {
             get { return areaCode; }
@@ -36,6 +43,9 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// <summary>
         /// 联系电话
         /// </summary>
+        [Display(Name = "联系电话")]
+        [LocalizedRequired()]
+        [LocalizedMaxLength(50)]
         public string ContactPhoneNumber
         {
             get { return contactPhoneNumber; }

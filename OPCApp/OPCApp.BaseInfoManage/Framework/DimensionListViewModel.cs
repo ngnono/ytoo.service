@@ -10,7 +10,7 @@ using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
 using Microsoft.Practices.Prism.Mvvm;
 using OPCApp.Infrastructure;
 
-namespace Intime.OPC.Modules.Dimension.Common
+namespace Intime.OPC.Modules.Dimension.Framework
 {
     public class DimensionListViewModel<TDimension, TDetailViewModel, TDimensionService> : ViewModelBase
         where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension, new()

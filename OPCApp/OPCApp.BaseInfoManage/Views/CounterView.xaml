@@ -14,6 +14,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Resource/Theme/BureauBlue.xaml"/>
+                <ResourceDictionary Source="../Resource/Validation.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -34,13 +35,13 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Margin="0,5,0,5">专柜名称:</Label>
-        <TextBox Height="25" Grid.Row="0" Grid.Column="1" Text="{Binding Path=Model.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <TextBox Height="25" Grid.Row="0" Grid.Column="1" Text="{Binding Path=Model.Name,Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}"></TextBox>
         <Label Grid.Row="1" Grid.Column="0" Margin="0,5,0,5">专柜码:</Label>
-        <TextBox Height="25"  Grid.Row="1" Grid.Column="1" Text="{Binding Path=Model.Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Height="25"  Grid.Row="1" Grid.Column="1" Text="{Binding Path=Model.Code, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Grid.Row="2" Grid.Column="0" Margin="0,5,0,5">销售区域:</Label>
-        <TextBox Height="25"  Grid.Row="2" Grid.Column="1" Text="{Binding Path=Model.AreaCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Height="25"  Grid.Row="2" Grid.Column="1" Text="{Binding Path=Model.AreaCode, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Grid.Row="3" Grid.Column="0" Margin="0,5,0,5">联系电话:</Label>
-        <TextBox Height="25"  Grid.Row="3" Grid.Column="1" Text="{Binding Path=Model.ContactPhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Height="25"  Grid.Row="3" Grid.Column="1" Text="{Binding Path=Model.ContactPhoneNumber, ValidatesOnExceptions=true, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Grid.Row="4" Grid.Column="0" Margin="0,5,0,5">管理部门:</Label>
         <TextBox Height="25"  Grid.Row="4" Grid.Column="1" Text="{Binding Path=Model.Organization.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Grid.Row="5" Grid.Column="0"  Margin="0,5,0,5">销售品牌:</Label>

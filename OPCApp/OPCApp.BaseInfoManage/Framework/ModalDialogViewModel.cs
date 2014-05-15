@@ -4,8 +4,9 @@ using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
 using Microsoft.Practices.Prism.Mvvm;
+using System.Collections.Generic;
 
-namespace Intime.OPC.Modules.Dimension.Common
+namespace Intime.OPC.Modules.Dimension.Framework
 {
     public abstract class ModalDialogViewModel<TDimension> : ViewModelBase, INotification, IInteractionRequestAware
         where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension, new()
@@ -16,8 +17,13 @@ namespace Intime.OPC.Modules.Dimension.Common
         {
             OKCommand = new DelegateCommand(() =>
             {
-                Accepted = true;
-                FinishInteraction();
+                model.ValidateProperties();
+                FlattenErrors();
+                if (!model.HasErrors)
+                {
+                    Accepted = true;
+                    FinishInteraction();
+                }
             });
             CancelCommand = new DelegateCommand(() =>
             {
@@ -45,5 +51,19 @@ namespace Intime.OPC.Modules.Dimension.Common
         public object Content { get; set; }
 
         public string Title { get; set; }
+
+        private List<string> FlattenErrors()
+        {
+            List<string> errors = new List<string>();
+            Dictionary<string, List<string>> allErrors = model.GetAllErrors();
+            foreach (string propertyName in allErrors.Keys)
+            {
+                foreach (var errorString in allErrors[propertyName])
+                {
+                    errors.Add(propertyName + ": " + errorString);
+                }
+            }
+            return errors;
+        }
     }
 }

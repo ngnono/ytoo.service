@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Input;
-using Intime.OPC.Modules.Dimension.Common;
+using Intime.OPC.Modules.Dimension.Framework;
 using System.Collections.Generic;
 using System.Windows.Forms;
 

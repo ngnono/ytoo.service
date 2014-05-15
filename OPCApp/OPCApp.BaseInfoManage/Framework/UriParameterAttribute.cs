@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Intime.OPC.Modules.Dimension.Common
+namespace Intime.OPC.Modules.Dimension.Framework
 {
     public class UriParameterAttribute : Attribute
     {

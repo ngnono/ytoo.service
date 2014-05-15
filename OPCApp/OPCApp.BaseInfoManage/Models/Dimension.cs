@@ -1,16 +1,20 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Intime.OPC.Modules.Dimension.Framework;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Intime.OPC.Modules.Dimension.Properties;
+using Intime.OPC.Modules.Dimension.Framework.Validation;
 
 namespace Intime.OPC.Modules.Dimension.Models
 {
     /// <summary>
     /// Dimension such as brand, counter, organization etc.
     /// </summary>
-    public abstract class Dimension : BindableBase
+    public abstract class Dimension : ValidatableBindableBase
     {
         private bool isSelected;
         private string name;
@@ -23,6 +27,9 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// <summary>
         /// 名字
         /// </summary>
+        [Display(Name = "名字")]
+        [LocalizedRequired]
+        [LocalizedMaxLength(64)]
         public string Name 
         {
             get { return name; }

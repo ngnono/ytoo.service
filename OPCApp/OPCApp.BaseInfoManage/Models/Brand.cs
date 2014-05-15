@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Intime.OPC.Modules.Dimension.Common;
+using Intime.OPC.Modules.Dimension.Framework;
+using System.ComponentModel.DataAnnotations;
+using Intime.OPC.Modules.Dimension.Properties;
+using Intime.OPC.Modules.Dimension.Framework.Validation;
 
 namespace Intime.OPC.Modules.Dimension.Models
 {
@@ -23,6 +26,9 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// <summary>
         /// 英文名称
         /// </summary>
+        [Display(Name = "英文名称")]
+        [LocalizedRequired]
+        [LocalizedMaxLength(512)]
         public string EnglishName
         {
             get { return englishName; }
@@ -32,6 +38,8 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// <summary>
         /// 描述
         /// </summary>
+        [Display(Name = "描述")]
+        [LocalizedRequired]
         public string Description
         {
             get { return description; }

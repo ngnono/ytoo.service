@@ -1,4 +1,4 @@
-﻿using Intime.OPC.Modules.Dimension.Common;
+﻿using Intime.OPC.Modules.Dimension.Framework;
 using Intime.OPC.Modules.Dimension.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
