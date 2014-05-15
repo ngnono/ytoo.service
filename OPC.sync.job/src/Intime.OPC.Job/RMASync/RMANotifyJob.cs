@@ -194,7 +194,10 @@ namespace Intime.OPC.Job.RMASync
         /// </summary>
         Paid = 3,
 
-
+        ///<summary>
+        /// Sync2Yintai
+        /// </summary>
+        Sync2Yintai = 7,
     }
 
     public enum NotificationType

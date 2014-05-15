@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="Order\OrderStatusSync\PaidOrderNotificationEntity.cs" />
     <Compile Include="RMASync\PaidRMANotificationEntity.cs" />
+    <Compile Include="RMASync\RMA2YintaiJob.cs" />
     <Compile Include="RMASync\RMANotifyJob.cs" />
     <Compile Include="RMASync\RMAStatusProcessorFactory.cs" />
     <Compile Include="RMASync\RMAStatusSyncJob.cs" />

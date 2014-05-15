@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -89,6 +90,8 @@
     <Compile Include="Domain\Section.cs" />
     <Compile Include="Domain\Store.cs" />
     <Compile Include="Domain\Supplier.cs" />
+    <Compile Include="Yintai\YintaiApiClient.cs" />
+    <Compile Include="Yintai\YintaiResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
