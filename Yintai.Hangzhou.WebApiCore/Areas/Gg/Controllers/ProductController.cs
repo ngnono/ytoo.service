@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+
 using Nest;
 using Yintai.Hangzhou.WebApiCore.Areas.Gg.ViewModels;
 
@@ -31,7 +32,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         ///     last_update:yyyy-MM-dd'T'HH:mm:ss
         /// }
         /// </example>
-            [ValidateParameters]
+        [ValidateParameters]
         public ActionResult Search(dynamic request, string channel)
         {
             int pageIndex = string.IsNullOrEmpty(request.page_index) ? request.page_index : 1;
@@ -55,7 +56,18 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             //  获取商品总数
             // ===========================================================================
 
-            var total = result.Hits.Total;
+            var total = result.Hits == null ? 0 : result.Hits.Total;
+
+            if (total == 0)
+            {
+                return this.RenderSuccess<dynamic>(r => r.Data = new PagedListViewModel<ESProducts>()
+                {
+                    PageIndex = pageIndex,
+                    PageSize = pageSize,
+                    Total = total,
+                    Data = new List<ESProducts>()
+                });
+            }
 
             // ===========================================================================
             // 获取商品id列表
@@ -119,6 +131,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         private IDictionary<int, IList<ESStocks>> Map2ProductId(IEnumerable<ESStocks> docs)
         {
             var result = new Dictionary<int, IList<ESStocks>>();
+
+            if (docs == null)
+            {
+                return result;
+            }
 
             foreach (var doc in docs)
             {
