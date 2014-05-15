@@ -113,6 +113,7 @@
     <Compile Include="Areas\Api\Controllers\StoreController.cs" />
     <Compile Include="Areas\Api\Controllers\TagController.cs" />
     <Compile Include="Areas\Gg\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Gg\Controllers\GgController.cs" />
     <Compile Include="Areas\Gg\Controllers\OrderController.cs" />
     <Compile Include="Areas\Gg\Controllers\ProductController.cs" />
     <Compile Include="Areas\Gg\ViewModels\ESProducts.cs" />

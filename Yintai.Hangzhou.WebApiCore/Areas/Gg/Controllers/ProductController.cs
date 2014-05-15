@@ -10,7 +10,7 @@ using Yintai.Hangzhou.WebApiCore.Areas.Gg.ViewModels;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
 {
-    public class ProductController : RestfulController
+    public class ProductController : GgController
     {
         private readonly IElasticClient _elasticClient;
 
@@ -35,8 +35,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         [ValidateParameters]
         public ActionResult Search(dynamic request, string channel)
         {
-            int pageIndex = string.IsNullOrEmpty(request.page_index) ? request.page_index : 1;
-            int pageSize = string.IsNullOrEmpty(request.page_size) ? request.page_index : 10;
+            int pageIndex = request.page_index;
+            int pageSize = request.page_size;
 
             string lastUpdate = request.last_update;
 
@@ -47,9 +47,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             var result = _elasticClient.Search<ESProducts>(body =>
                 body.From(pageIndex * pageSize)
                     .Size(pageSize)
-                    .SortAscending(p => p.CreatedDate)
+                    .SortAscending(p => p.UpdatedDate)
                     .Query(q => q.Range(p => p.GreaterOrEquals(lastUpdate)
-                    .OnField(f => f.CreatedDate))
+                    .OnField(f => f.UpdatedDate))
                 ));
 
             // ===========================================================================

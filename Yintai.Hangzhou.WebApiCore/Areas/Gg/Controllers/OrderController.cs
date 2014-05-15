@@ -9,7 +9,7 @@ using Yintai.Hangzhou.Service.Logic;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
 {
-    public class OrderController : RestfulController
+    public class OrderController : GgController
     {
         private const int GG_CREATE_USERID = -1;
         [ValidateParameters]

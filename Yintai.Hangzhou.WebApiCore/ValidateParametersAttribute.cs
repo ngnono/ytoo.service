@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using Yintai.Architecture.Common;
@@ -53,8 +54,8 @@ namespace Yintai.Hangzhou.WebApiCore
             if (validDate > DateTime.Now.AddMinutes(5) || validDate < DateTime.Now.AddMinutes(-5))
                 throw new ArgumentException("ts expired");
 #endif
-            var rawSignings = new List<string> { nonce, channel, timestamp,data };
-            rawSignings.Sort();
+            var rawSignings = new List<string> { nonce, channel, timestamp, data };
+            rawSignings.Sort(StringComparer.Ordinal);
             var rawSigning = rawSignings.Aggregate(new StringBuilder(), (s, e) => s.Append(e), s => s.ToString());
             string signedValue;
             using (var hmac = new HMACSHA1(Encoding.UTF8.GetBytes(privateKey)))
@@ -68,7 +69,7 @@ namespace Yintai.Hangzhou.WebApiCore
                 throw new ArgumentException("sign not match");
             }
             filterContext.ActionParameters["request"] = JsonConvert.DeserializeObject<dynamic>(data);
-            filterContext.ActionParameters[Define.Channel] = channel;            
+            filterContext.ActionParameters[Define.Channel] = channel;
         }
     }
 }
