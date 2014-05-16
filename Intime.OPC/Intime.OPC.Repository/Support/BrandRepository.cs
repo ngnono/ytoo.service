@@ -38,7 +38,7 @@ namespace Intime.OPC.Repository.Support
     {
         #region methods
 
-        private static Expression<Func<Brand, bool>> Filler(BrandFilter filter)
+        private static Expression<Func<Brand, bool>> Filter(BrandFilter filter)
         {
             var query = PredicateBuilder.True<Brand>();
 
@@ -57,13 +57,16 @@ namespace Intime.OPC.Repository.Support
                 {
                     query = PredicateBuilder.And(query, v => v.Status == filter.Status.Value);
                 }
+                else
+                {
+                    query = PredicateBuilder.And(query, v => v.Status > 0);
+                }
             }
 
             return query;
         }
 
-
-        private static Expression<Func<IMS_SectionBrand, bool>> Filler4Section(BrandFilter filter)
+        private static Expression<Func<IMS_SectionBrand, bool>> Filter4SectionBrand(BrandFilter filter)
         {
             var query = PredicateBuilder.True<IMS_SectionBrand>();
 
@@ -72,6 +75,8 @@ namespace Intime.OPC.Repository.Support
 
                 if (filter.CounterId != null)
                 {
+
+                    //return v => v.SectionId == filter.CounterId;
                     query = PredicateBuilder.And(query, v => v.SectionId == filter.CounterId);
                 }
 
@@ -79,6 +84,35 @@ namespace Intime.OPC.Repository.Support
             }
 
             return query;
+            //return v => true;
+        }
+
+        private static Expression<Func<Section, bool>> Filter4Section(BrandFilter filter)
+        {
+            var query = PredicateBuilder.True<Section>();
+
+            if (filter != null)
+            {
+
+                if (filter.CounterId != null)
+                {
+
+                    //return v => v.SectionId == filter.CounterId;
+                    query = PredicateBuilder.And(query, v => v.Id == filter.CounterId);
+                }
+
+                if (filter.Status != null)
+                {
+                    query = PredicateBuilder.And(query, v => v.Status == filter.Status.Value);
+                }
+                else
+                {
+                    query = PredicateBuilder.And(query, v => v.Status > 0);
+                }
+            }
+
+            return query;
+            //return v => true;
         }
 
         private static Func<IQueryable<Brand>, IOrderedQueryable<Brand>> OrderBy(BrandSortOrder sortOrder)
@@ -158,14 +192,19 @@ namespace Intime.OPC.Repository.Support
             return Func(c =>
             {
                 var q = from s in c.Set<Brand>().Where(v => v.Id == key)
-                        join section_brand in c.Set<IMS_SectionBrand>() on s.Id equals
-                            section_brand.BrandId into tmp1
-                        from sb in tmp1.DefaultIfEmpty()
+                        let sb_let = (from sb in c.Set<IMS_SectionBrand>()
+                                      //join s in c.Set<Sse>()
+                                      where s.Id == sb.BrandId
+                                      select new
+                                      {
+                                          sb.SectionId
+                                      })
                         select new
                         {
                             s,
-                            sb.SectionId
+                            Sectons = sb_let
                         };
+
                 var q1 = from b in q
                          let sup = (from s in c.Set<OpcSupplierInfo>()
                                     join sb in c.Set<Supplier_Brand>() on s.Id equals sb.Supplier_Id
@@ -192,8 +231,9 @@ namespace Intime.OPC.Repository.Support
 
                                     })
 
-                         let se = (from s in c.Set<Section>().AsEnumerable()
-                                   where (b.SectionId == s.Id)
+                         let se = (from s in c.Set<Section>()
+                                   join s_b in c.Set<IMS_SectionBrand>() on s.Id equals s_b.SectionId
+                                   where (s_b.BrandId == b.s.Id)
                                    select new SectionClone
                                    {
                                        BrandId = s.BrandId,
@@ -238,10 +278,12 @@ namespace Intime.OPC.Repository.Support
 
         public override void Update(Brand entity)
         {
-            using (var trans = new TransactionScope())
+
+            Action(c =>
             {
-                Action(c =>
+                using (var trans = new TransactionScope())
                 {
+
                     List<int> supplier_ids = null;
                     List<int> section_ids = null;
                     if (entity.Suppliers != null)
@@ -259,10 +301,12 @@ namespace Intime.OPC.Repository.Support
                     EFHelper.Update(c, entity);
 
                     Relationship(c, entity, supplier_ids, section_ids);
-                });
 
-                trans.Complete();
-            }
+                    trans.Complete();
+                }
+            });
+
+
         }
 
         public override Brand Insert(Brand entity)
@@ -271,28 +315,37 @@ namespace Intime.OPC.Repository.Support
 
             return Func(c =>
             {
-                List<int> supplier_ids = null;
-                List<int> section_ids = null;
-                if (entity.Suppliers != null)
+
+                using (var trans = new TransactionScope())
                 {
-                    supplier_ids = entity.Suppliers.Where(v=>v!=null).Select(v => v.Id).ToList();
-                    entity.Suppliers = null;
+                    List<int> supplier_ids = null;
+                    List<int> section_ids = null;
+                    if (entity.Suppliers != null)
+                    {
+                        supplier_ids = entity.Suppliers.Where(v => v != null).Select(v => v.Id).ToList();
+                        entity.Suppliers = null;
+                    }
+
+                    if (entity.Sections != null)
+                    {
+                        section_ids = entity.Sections.Select(v => v.Id).ToList();
+                        entity.Sections = null;
+                    }
+
+                    var item = EFHelper.Insert(c, entity);
+                    entity.Id = item.Id;
+
+
+                    Relationship(c, entity, supplier_ids, section_ids);
+
+                    trans.Complete();
+
+                    return item;
                 }
-
-                if (entity.Sections != null)
-                {
-                    section_ids = entity.Sections.Select(v => v.Id).ToList();
-                    entity.Sections = null;
-                }
-
-                var item = EFHelper.Insert(c, entity);
-                entity.Id = item.Id;
-
-
-                Relationship(c, entity, supplier_ids, section_ids);
-
-                return item;
             });
+
+
+
         }
 
         /// <summary>
@@ -305,18 +358,26 @@ namespace Intime.OPC.Repository.Support
         /// <returns></returns>
         public List<Brand> GetPagedList(PagerRequest pagerRequest, out int totalCount, BrandFilter filter, BrandSortOrder sortOrder)
         {
+            var brandFilter = Filter(filter);
+            var fi = Filter4SectionBrand(filter);
+            var sectionFilter = Filter4Section(filter);
+
             var result = Func(c =>
             {
                 int t;
-                //var r = EFHelper.GetPaged(DbQuery(v), query, out t, pagerRequest.PageIndex, pagerRequest.PageSize, orderBy);
-                var q = from s in c.Set<Brand>().AsExpandable().Where(Filler(filter))
-                        join section_brand in c.Set<IMS_SectionBrand>().AsExpandable().Where(Filler4Section(filter)) on s.Id equals
-                            section_brand.BrandId into tmp1
-                        from sb in tmp1.DefaultIfEmpty()
+
+                var q = from s in c.Set<Brand>().AsExpandable().Where(brandFilter)
+                        let sb_let = (from sb in c.Set<IMS_SectionBrand>().AsExpandable().Where(fi)
+                                      //join s in c.Set<Sse>()
+                                      where s.Id == sb.BrandId
+                                      select new
+                                      {
+                                          sb.SectionId
+                                      })
                         select new
                         {
                             s,
-                            sb.SectionId
+                            Sectons = sb_let
                         };
 
                 t = q.Count();
@@ -347,8 +408,9 @@ namespace Intime.OPC.Repository.Support
 
                                     })
 
-                         let se = (from s in c.Set<Section>().AsEnumerable()
-                                   where (b.SectionId == s.Id)
+                         let se = (from s in c.Set<Section>().AsExpandable().Where(sectionFilter)
+                                   join s_b in c.Set<IMS_SectionBrand>().AsExpandable() on s.Id equals s_b.SectionId
+                                   where (s_b.BrandId == b.s.Id)
                                    select new SectionClone
                                    {
                                        BrandId = s.BrandId,
@@ -401,7 +463,7 @@ namespace Intime.OPC.Repository.Support
 
         public override IEnumerable<Brand> AutoComplete(string query)
         {
-            var filter = Filler(new BrandFilter
+            var filter = Filter(new BrandFilter
             {
                 NamePrefix = query
             });

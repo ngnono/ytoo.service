@@ -36,6 +36,8 @@ namespace Intime.OPC.WebApi.Controllers
             model.Location = model.Location ?? String.Empty;
             model.Name = model.Name ?? String.Empty;
             model.StoreCode = model.StoreCode ?? String.Empty;
+            model.ContactPhone = model.ContactPhone ?? String.Empty;
+
 
             return model;
         }
@@ -152,6 +154,9 @@ namespace Intime.OPC.WebApi.Controllers
             item.UpdateDate = DateTime.Now;
             item.UpdateUser = userId;
 
+            //关系
+            item.Brands = null;
+
             ((IOPCRepository<int, Section>)_sectionRepository).Update(item);
 
             return RetrunHttpActionResult("ok");
@@ -177,6 +182,8 @@ namespace Intime.OPC.WebApi.Controllers
             model.Location = String.Empty;
             model.ContactPerson = String.Empty;
             model.StoreCode = String.Empty;
+
+            //model.Status = dto.Status ?? 1;
 
             model = CheckModel(model);
             var item = _sectionRepository.Insert(model);

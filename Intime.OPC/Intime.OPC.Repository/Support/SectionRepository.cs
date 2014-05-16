@@ -20,6 +20,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Transactions;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Enums.SortOrder;
@@ -37,7 +38,12 @@ namespace Intime.OPC.Repository.Support
     {
         #region methods
 
-        private static Expression<Func<Section, bool>> Filler(SectionFilter filter)
+        /// <summary>
+        /// section filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        private static Expression<Func<Section, bool>> Filter(SectionFilter filter)
         {
             var query = PredicateBuilder.True<Section>();
 
@@ -50,6 +56,10 @@ namespace Intime.OPC.Repository.Support
                 {
                     query = PredicateBuilder.And(query, v => v.Status == filter.Status);
                 }
+                else
+                {
+                    query = PredicateBuilder.And(query, v => v.Status > 0);
+                }
 
                 if (!String.IsNullOrWhiteSpace(filter.Name))
                 {
@@ -60,7 +70,12 @@ namespace Intime.OPC.Repository.Support
             return query;
         }
 
-        private static Expression<Func<IMS_SectionBrand, bool>> Filler4Brand(SectionFilter filter)
+        /// <summary>
+        /// section_brand filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        private static Expression<Func<IMS_SectionBrand, bool>> Filter4SectionBrand(SectionFilter filter)
         {
             var query = PredicateBuilder.True<IMS_SectionBrand>();
 
@@ -75,6 +90,36 @@ namespace Intime.OPC.Repository.Support
 
             return query;
 
+        }
+
+        /// <summary>
+        /// 品牌表 filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        private static Expression<Func<Brand, bool>> Filter4Brand(SectionFilter filter)
+        {
+            var query = PredicateBuilder.True<Brand>();
+
+            if (filter != null)
+            {
+                if (filter.Status != null)
+                {
+                    query = PredicateBuilder.And(query, v => v.Status == filter.Status.Value);
+                }
+                else
+                {
+                    query = PredicateBuilder.And(query, v => v.Status > 0);
+                }
+
+                if (filter.BrandId != null)
+                {
+                    query = PredicateBuilder.And(query, v => v.Id == filter.BrandId.Value);
+                }
+
+            }
+
+            return query;
         }
 
         private static Func<IQueryable<Section>, IOrderedQueryable<Section>> OrderBy(SectionSortOrder sortOrder)
@@ -123,175 +168,42 @@ namespace Intime.OPC.Repository.Support
 
         public override IEnumerable<Section> AutoComplete(string query)
         {
-            var filter = Filler(new SectionFilter { NamePrefix = query });
+            var filter = Filter(new SectionFilter { NamePrefix = query });
             return Func(v => EFHelper.Get(DbQuery(v), filter, null).ToList());
         }
 
         public List<Section> GetPagedList(PagerRequest pagerRequest, out int totalCount, SectionFilter filter, SectionSortOrder sortOrder)
         {
-            var brandFilter = Filler4Brand(filter);
+            var sectionbrandFilter = Filter4SectionBrand(filter);
+            var sectionFilter = Filter(filter);
+            var brandFilter = Filter4Brand(filter);
+
             var result = Func(c =>
             {
                 int t;
 
-                var q1 = from section in c.Set<Section>().AsExpandable().Where(Filler(filter))
-                         select new { section };
+                var qt = from s in c.Set<Section>().AsExpandable().Where(sectionFilter)
+                         let s_b_let = (from sb in c.Set<IMS_SectionBrand>().AsExpandable().Where(sectionbrandFilter)
+                                        where s.Id == sb.SectionId
+                                        select new
+                                        {
+                                            sb.SectionId
+                                        }
+                                       )
 
-                var qq = from sec_brand in c.Set<IMS_SectionBrand>().AsExpandable().Where(brandFilter)
-                         select new { sec_brand };
-
-                if (filter.BrandId == null)
-                {
-                    var qt = from s in q1
-                             join s_b in qq on s.section.Id equals
-                        s_b.sec_brand.SectionId into tmp1
-                             from s_b in tmp1.DefaultIfEmpty()
-                             select new
-                             {
-                                 s.section,
-                                 s_b.sec_brand.BrandId
-                             };
-
-                    t = qt.Count();
-
-                    var qr = from s in qt.OrderBy(v => v.section.Id).Skip(pagerRequest.SkipCount).Take(pagerRequest.PageSize)
-                             let brands = (
-                                 from b in c.Set<Brand>()
-                                 where s.BrandId == b.Id
-                                 select new BrandClone
-                                 {
-                                     ChannelBrandId = b.ChannelBrandId,
-                                     CreatedDate = b.CreatedDate,
-                                     CreatedUser = b.CreatedUser,
-                                     Description = b.Description,
-                                     EnglishName = b.EnglishName,
-                                     Group = b.Group,
-                                     Id = b.Id,
-                                     Logo = b.Logo,
-                                     Name = b.Name,
-                                     Status = b.Status,
-                                     UpdatedDate = b.UpdatedDate,
-                                     UpdatedUser = b.UpdatedUser,
-                                     WebSite = b.WebSite
-                                 }
-                                 )
-                             select new SectionClone()
-                             {
-                                 BrandId = s.section.BrandId,
-                                 ChannelSectionId = s.section.ChannelSectionId,
-                                 ContactPerson = s.section.ContactPerson,
-                                 ContactPhone = s.section.ContactPhone,
-                                 CreateDate = s.section.CreateDate,
-                                 CreateUser = s.section.CreateUser,
-                                 Id = s.section.Id,
-                                 Location = s.section.Location,
-                                 Name = s.section.Name,
-                                 Status = s.section.Status,
-                                 StoreCode = s.section.StoreCode,
-                                 StoreId = s.section.StoreId,
-                                 UpdateDate = s.section.UpdateDate,
-                                 UpdateUser = s.section.UpdateUser,
-                                 Brands = brands
-                             };
-
-
-                    return new
-                    {
-                        totalCount = t,
-                        Data = qr.ToList()
-                    };
-                }
-                else
-                {
-                    var qt = from s in q1
-                             join s_b in qq on s.section.Id equals
-                        s_b.sec_brand.SectionId
-                             select new
-                             {
-                                 s.section,
-                                 s_b.sec_brand.BrandId
-                             };
-                    t = qt.Count();
-
-                    var qr = from s in qt.OrderBy(v => v.section.Id).Skip(pagerRequest.SkipCount).Take(pagerRequest.PageSize)
-                             let brands = (
-                                 from b in c.Set<Brand>()
-                                 where s.BrandId == b.Id
-                                 select new BrandClone
-                                 {
-                                     ChannelBrandId = b.ChannelBrandId,
-                                     CreatedDate = b.CreatedDate,
-                                     CreatedUser = b.CreatedUser,
-                                     Description = b.Description,
-                                     EnglishName = b.EnglishName,
-                                     Group = b.Group,
-                                     Id = b.Id,
-                                     Logo = b.Logo,
-                                     Name = b.Name,
-                                     Status = b.Status,
-                                     UpdatedDate = b.UpdatedDate,
-                                     UpdatedUser = b.UpdatedUser,
-                                     WebSite = b.WebSite
-                                 }
-                                 )
-                             select new SectionClone()
-                             {
-                                 BrandId = s.section.BrandId,
-                                 ChannelSectionId = s.section.ChannelSectionId,
-                                 ContactPerson = s.section.ContactPerson,
-                                 ContactPhone = s.section.ContactPhone,
-                                 CreateDate = s.section.CreateDate,
-                                 CreateUser = s.section.CreateUser,
-                                 Id = s.section.Id,
-                                 Location = s.section.Location,
-                                 Name = s.section.Name,
-                                 Status = s.section.Status,
-                                 StoreCode = s.section.StoreCode,
-                                 StoreId = s.section.StoreId,
-                                 UpdateDate = s.section.UpdateDate,
-                                 UpdateUser = s.section.UpdateUser,
-                                 Brands = brands
-                             };
-
-                    return new
-                    {
-                        totalCount = t,
-                        Data = qr.ToList()
-                    };
-                }
-
-            });
-
-            totalCount = result.totalCount;
-
-            return AutoMapper.Mapper.Map<List<SectionClone>, List<Section>>(result.Data);
-        }
-
-
-        public override Section GetItem(int key)
-        {
-            return Func(c =>
-            {
-                var q1 = from section in c.Set<Section>().Where(v => v.Id == key)
-                         select new { section };
-
-                var qq = from sec_brand in c.Set<IMS_SectionBrand>()
-                         select new { sec_brand };
-
-
-                var qt = from s in q1
-                         join s_b in qq on s.section.Id equals
-                    s_b.sec_brand.SectionId into tmp1
-                         from s_b in tmp1.DefaultIfEmpty()
                          select new
                          {
-                             s.section,
-                             s_b.sec_brand.BrandId
+                             section = s,
+                             sbs = s_b_let
                          };
-                var qr = from s in qt
+
+                t = qt.Count();
+
+                var qr = from s in qt.OrderBy(v => v.section.Id).Skip(pagerRequest.SkipCount).Take(pagerRequest.PageSize)
                          let brands = (
-                             from b in c.Set<Brand>()
-                             where s.BrandId == b.Id
+                             from b in c.Set<Brand>().Where(brandFilter)
+                             join s_b in c.Set<IMS_SectionBrand>() on b.Id equals s_b.BrandId
+                             where s.section.Id == s_b.SectionId
                              select new BrandClone
                              {
                                  ChannelBrandId = b.ChannelBrandId,
@@ -329,11 +241,81 @@ namespace Intime.OPC.Repository.Support
                          };
 
 
+                return new
+                {
+                    totalCount = t,
+                    Data = qr.ToList()
+                };
+            });
 
+            totalCount = result.totalCount;
+
+            return AutoMapper.Mapper.Map<List<SectionClone>, List<Section>>(result.Data);
+        }
+
+
+        public override Section GetItem(int key)
+        {
+            return Func(c =>
+            {
+                var qt = from s in c.Set<Section>().AsExpandable().Where(v => v.Id == key)
+                         let s_b_let = (from sb in c.Set<IMS_SectionBrand>().AsExpandable()
+                                        where s.Id == sb.SectionId
+                                        select new
+                                        {
+                                            sb.SectionId
+                                        }
+                                       )
+
+                         select new
+                         {
+                             section = s,
+                             sbs = s_b_let
+                         };
+
+
+                var qr = from s in qt.OrderBy(v => v.section.Id)
+                         let brands = (
+                             from b in c.Set<Brand>()
+                             join s_b in c.Set<IMS_SectionBrand>() on b.Id equals s_b.BrandId
+                             where s.section.Id == s_b.SectionId
+                             select new BrandClone
+                             {
+                                 ChannelBrandId = b.ChannelBrandId,
+                                 CreatedDate = b.CreatedDate,
+                                 CreatedUser = b.CreatedUser,
+                                 Description = b.Description,
+                                 EnglishName = b.EnglishName,
+                                 Group = b.Group,
+                                 Id = b.Id,
+                                 Logo = b.Logo,
+                                 Name = b.Name,
+                                 Status = b.Status,
+                                 UpdatedDate = b.UpdatedDate,
+                                 UpdatedUser = b.UpdatedUser,
+                                 WebSite = b.WebSite
+                             }
+                             )
+                         select new SectionClone()
+                         {
+                             BrandId = s.section.BrandId,
+                             ChannelSectionId = s.section.ChannelSectionId,
+                             ContactPerson = s.section.ContactPerson,
+                             ContactPhone = s.section.ContactPhone,
+                             CreateDate = s.section.CreateDate,
+                             CreateUser = s.section.CreateUser,
+                             Id = s.section.Id,
+                             Location = s.section.Location,
+                             Name = s.section.Name,
+                             Status = s.section.Status,
+                             StoreCode = s.section.StoreCode,
+                             StoreId = s.section.StoreId,
+                             UpdateDate = s.section.UpdateDate,
+                             UpdateUser = s.section.UpdateUser,
+                             Brands = brands
+                         };
 
                 return AutoMapper.Mapper.Map<SectionClone, Section>(qr.FirstOrDefault());
-
-
             });
         }
 
@@ -346,20 +328,25 @@ namespace Intime.OPC.Repository.Support
         {
             return Func(c =>
             {
-                List<int> brandids = null;
-                if (entity.Brands != null)
+                using (var trans = new TransactionScope())
                 {
-                    brandids = entity.Brands.Select(v => v.Id).ToList();
-                    entity.Brands = null;
+
+                    List<int> brandids = null;
+                    if (entity.Brands != null)
+                    {
+                        brandids = entity.Brands.Select(v => v.Id).ToList();
+                        entity.Brands = null;
+                    }
+
+                    var item = EFHelper.Insert(c, entity);
+                    entity.Id = item.Id;
+
+
+                    Relationship(c, entity, brandids);
+
+                    trans.Complete();
+                    return item;
                 }
-
-                var item = EFHelper.Insert(c, entity);
-                entity.Id = item.Id;
-
-
-                Relationship(c, entity, brandids);
-
-                return item;
             });
         }
 
@@ -367,19 +354,22 @@ namespace Intime.OPC.Repository.Support
         {
             Action(c =>
             {
-
-                List<int> brandids = null;
-                if (entity.Brands != null)
+                using (var trans = new TransactionScope())
                 {
-                    brandids = entity.Brands.Select(v => v.Id).ToList();
-                    entity.Brands = null;
+                    List<int> brandids = null;
+                    if (entity.Brands != null)
+                    {
+                        brandids = entity.Brands.Select(v => v.Id).ToList();
+                        entity.Brands = null;
+                    }
+
+
+
+                    EFHelper.Update(c, entity);
+
+                    Relationship(c, entity, brandids);
+                    trans.Complete();
                 }
-
-
-
-                EFHelper.Update(c, entity);
-
-                Relationship(c, entity, brandids);
             });
         }
 

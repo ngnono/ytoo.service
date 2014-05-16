@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Transactions;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Enums.SortOrder;
@@ -84,22 +85,22 @@ namespace Intime.OPC.Repository.Support
                 var q1 = EFHelper.GetPaged(c, query, out t, pagerRequest.PageIndex, pagerRequest.PageSize, orderBy);
 
                 var q2 = from b in c.Set<Brand>()
-                    join sb in c.Set<Supplier_Brand>() on b.Id equals sb.Brand_Id into temp1
-                    from sb in temp1.DefaultIfEmpty()
-                    select new
-                    {
-                        b,
-                        sb.Supplier_Id
-                    };
+                         join sb in c.Set<Supplier_Brand>() on b.Id equals sb.Brand_Id into temp1
+                         from sb in temp1.DefaultIfEmpty()
+                         select new
+                         {
+                             b,
+                             sb.Supplier_Id
+                         };
                 var q = from s in q1
-                    join b in q2 on s.Id equals b.Supplier_Id into temp1
-                    from sb in temp1.DefaultIfEmpty()
-                    select new
-                    {
-                        Et = s,
-                        Brand = sb.b
+                        join b in q2 on s.Id equals b.Supplier_Id into temp1
+                        from sb in temp1.DefaultIfEmpty()
+                        select new
+                        {
+                            Et = s,
+                            Brand = sb.b
 
-                    };
+                        };
 
                 var list = new Dictionary<int, OpcSupplierInfo>();
 
@@ -157,62 +158,67 @@ namespace Intime.OPC.Repository.Support
         {
             Action(c =>
             {
-                Supplier_Brand[] supplier_brands = null;
-                if (entity.Brands != null && entity.Brands.Count() != 0)
+                using (var trans = new TransactionScope())
                 {
-                    supplier_brands = entity.Brands.Select(v => new Supplier_Brand()
+                    Supplier_Brand[] supplier_brands = null;
+                    if (entity.Brands != null && entity.Brands.Count() != 0)
                     {
-                        Brand_Id = v.Id,
-                        Supplier_Id = entity.Id
-                    }).ToArray();
+                        supplier_brands = entity.Brands.Select(v => new Supplier_Brand()
+                        {
+                            Brand_Id = v.Id,
+                            Supplier_Id = entity.Id
+                        }).ToArray();
 
-                    entity.Brands = null;
-                }
+                        entity.Brands = null;
+                    }
 
-                EFHelper.Update(c, entity);
+                    EFHelper.Update(c, entity);
 
-                if (supplier_brands == null)
-                {
-                    //del 
-                    EFHelper.Delete<Supplier_Brand>(c, v => v.Supplier_Id == entity.Id);
-                }
-                else
-                {
-                    var list = EFHelper.Get<Supplier_Brand>(c, v => v.Supplier_Id == entity.Id).ToList();
-                    if (list.Count == 0)
+                    if (supplier_brands == null)
                     {
-                        EFHelper.Inserts<Supplier_Brand>(c, supplier_brands);
+                        //del 
+                        EFHelper.Delete<Supplier_Brand>(c, v => v.Supplier_Id == entity.Id);
                     }
                     else
                     {
-                        //1 加的 2 删的
-                        var l_b = list.Select(v => v.Brand_Id);
-                        var s_b = supplier_brands.Select(v => v.Brand_Id);
-                        var b = s_b.Except(l_b).ToArray();//新增的，
-                        var a = l_b.Except(s_b).ToArray();//剔除的
-
-                        if (b.Length > 0)
+                        var list = EFHelper.Get<Supplier_Brand>(c, v => v.Supplier_Id == entity.Id).ToList();
+                        if (list.Count == 0)
                         {
-                            foreach (var i in b)
-                            {
-                                EFHelper.Insert<Supplier_Brand>(c, new Supplier_Brand
-                                {
-                                    Brand_Id = i,
-                                    Supplier_Id = entity.Id
-                                });
-                            }
+                            EFHelper.Inserts<Supplier_Brand>(c, supplier_brands);
                         }
-
-                        if (a.Length > 0)
+                        else
                         {
-                            foreach (var i in a)
+                            //1 加的 2 删的
+                            var l_b = list.Select(v => v.Brand_Id);
+                            var s_b = supplier_brands.Select(v => v.Brand_Id);
+                            var b = s_b.Except(l_b).ToArray();//新增的，
+                            var a = l_b.Except(s_b).ToArray();//剔除的
+
+                            if (b.Length > 0)
                             {
-                                EFHelper.Delete<Supplier_Brand>(c, v => v.Supplier_Id == entity.Id && v.Brand_Id == i);
+                                foreach (var i in b)
+                                {
+                                    EFHelper.Insert<Supplier_Brand>(c, new Supplier_Brand
+                                    {
+                                        Brand_Id = i,
+                                        Supplier_Id = entity.Id
+                                    });
+                                }
                             }
+
+                            if (a.Length > 0)
+                            {
+                                foreach (var i in a)
+                                {
+                                    EFHelper.Delete<Supplier_Brand>(c, v => v.Supplier_Id == entity.Id && v.Brand_Id == i);
+                                }
+                            }
+
                         }
 
                     }
 
+                    trans.Complete();
                 }
             });
         }
@@ -222,27 +228,33 @@ namespace Intime.OPC.Repository.Support
             //insert 关系
             return Func<OpcSupplierInfo>(c =>
             {
-                Supplier_Brand[] supplier_brands = null;
-                if (entity != null && entity.Brands.Count() != 0)
+                using (var trans = new TransactionScope())
                 {
-                    supplier_brands = entity.Brands.Select(v => new Supplier_Brand()
+
+                    Supplier_Brand[] supplier_brands = null;
+                    if (entity != null && entity.Brands.Count() != 0)
                     {
-                        Brand_Id = v.Id,
-                        Supplier_Id = 0
-                    }).ToArray();
+                        supplier_brands = entity.Brands.Select(v => new Supplier_Brand()
+                        {
+                            Brand_Id = v.Id,
+                            Supplier_Id = 0
+                        }).ToArray();
 
-                    entity.Brands = null;
+                        entity.Brands = null;
+                    }
+
+                    var item = EFHelper.Insert(c, entity);
+
+                    if (supplier_brands != null)
+                    {
+                        supplier_brands.ForEach(v => v.Supplier_Id = item.Id);
+
+                        EFHelper.InsertOrUpdate<Supplier_Brand>(c, supplier_brands.ToArray());
+                    }
+
+                    trans.Complete();
+                    return item;
                 }
-
-                var item = EFHelper.Insert(c, entity);
-
-                if (supplier_brands != null)
-                {
-                    supplier_brands.ForEach(v => v.Supplier_Id = item.Id);
-
-                    EFHelper.InsertOrUpdate<Supplier_Brand>(c, supplier_brands.ToArray());
-                }
-                return item;
             });
         }
 
@@ -259,21 +271,21 @@ namespace Intime.OPC.Repository.Support
                 var q1 = EFHelper.Get<OpcSupplierInfo>(c, v => v.Id == key);
 
                 var q2 = from b in c.Set<Brand>()
-                    join sb in c.Set<Supplier_Brand>() on b.Id equals sb.Brand_Id into temp1
-                    from sb in temp1.DefaultIfEmpty()
-                    select new
-                    {
-                        b,
-                        sb.Supplier_Id
-                    };
+                         join sb in c.Set<Supplier_Brand>() on b.Id equals sb.Brand_Id into temp1
+                         from sb in temp1.DefaultIfEmpty()
+                         select new
+                         {
+                             b,
+                             sb.Supplier_Id
+                         };
                 var q = from s in q1
-                    join b in q2 on s.Id equals b.Supplier_Id into temp1
-                    from sb in temp1.DefaultIfEmpty()
-                    select new
-                    {
-                        Et = s,
-                        B = sb.b
-                    };
+                        join b in q2 on s.Id equals b.Supplier_Id into temp1
+                        from sb in temp1.DefaultIfEmpty()
+                        select new
+                        {
+                            Et = s,
+                            B = sb.b
+                        };
 
                 var rst = q.ToList();
 

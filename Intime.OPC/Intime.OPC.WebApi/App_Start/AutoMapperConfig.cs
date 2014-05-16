@@ -10,7 +10,17 @@ namespace Intime.OPC.WebApi.App_Start
         public static void Config()
         {
             Mapper.CreateMap<Section, SectionDto>();
-            var sectionDto = Mapper.CreateMap<SectionDto, Section>();
+            var sectionModel = Mapper.CreateMap<SectionDto, Section>();
+            sectionModel.ConstructUsing(v => new Section
+            {
+                ContactPerson = String.Empty,
+                ContactPhone = String.Empty,
+                Location = String.Empty,
+                Status = 1,
+                StoreCode = String.Empty,
+                Name = String.Empty,
+                Id = v.Id
+            });
 
 
 
