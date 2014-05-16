@@ -98,6 +98,10 @@ namespace Intime.OPC.Service.Support
 
                     details.Remove(detail);
                     detail = details.FirstOrDefault();
+                    
+                    //更新退货数量
+                    UpdateSaleDetailOfBackNum(detail, detail.SaleCount);
+                    
                     returnCount = returnCount - detail.SaleCount;
                 }
 
@@ -129,6 +133,9 @@ namespace Intime.OPC.Service.Support
                     subConfig.OrderDetailID = kv.Key;
                     subConfig.ReturnCount = returnCount;
                     config.Details.Add(subConfig);
+                    //更新退货数量
+                    UpdateSaleDetailOfBackNum(detail, returnCount);
+
                     //lstRmaConfigs.Add(config);
                 }
             }
@@ -136,6 +143,15 @@ namespace Intime.OPC.Service.Support
             Save(lstRmaConfigs);
         }
 
+        private void UpdateSaleDetailOfBackNum(OPC_SaleDetail saleDetail,int backCount)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                OPC_SaleDetail sd = db.OPC_SaleDetails.FirstOrDefault(x => x.Id == saleDetail.Id);
+                sd.BackNumber = backCount;
+                db.SaveChanges();
+            }
+        }
         public PageResult<SaleRmaDto> GetByReturnGoodsInfo(ReturnGoodsInfoRequest request)
         {
             ISaleRMARepository rep = _repository as ISaleRMARepository;

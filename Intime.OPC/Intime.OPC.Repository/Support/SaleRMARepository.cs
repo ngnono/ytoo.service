@@ -31,7 +31,8 @@ namespace Intime.OPC.Repository.Support
             {
                 var query = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
 
-                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime);
+                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime );
+
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     query = query.Where(t => t.OrderNo.Contains(orderNo));
