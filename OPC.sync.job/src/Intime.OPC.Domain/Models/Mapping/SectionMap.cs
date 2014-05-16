@@ -43,6 +43,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.Name).HasColumnName("Name");
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.StoreCode).HasColumnName("StoreCode");
+            this.Property(t => t.SectionCode).HasColumnName("SectionCode");
             this.Property(t => t.ChannelSectionId).HasColumnName("ChannelSectionId");
         }
     }
