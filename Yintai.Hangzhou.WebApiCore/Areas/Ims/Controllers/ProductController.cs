@@ -406,7 +406,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Status == (int)DataStatus.Normal),
                                             o => o.P.Id,
                                             i => i.SourceId,
-                                            (o, i) => new { P = o.P, C = o.C, B = o.B, PC = o.PC, PR = i.FirstOrDefault() })
+                                            (o, i) => new { P = o.P, C = o.C, B = o.B, PC = o.PC, PR = i })
                                 .FirstOrDefault();
             if (productEntity == null)
                 return this.RenderError(r => r.Message = "商品不存在");
@@ -451,8 +451,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 }
                                 if (productEntity.PR != null)
                                 {
-                                    p.ImageUrl = productEntity.PR.Name;
-                                    p.Image_Id = productEntity.PR.Id;
+                                    p.Images = productEntity.PR.Select(pr => new IMSSelfImageResponse() { 
+                                         Id = pr.Id,
+                                         Name = pr.Name
+                                    }).ToArray();
                                 }
                             }));
         }

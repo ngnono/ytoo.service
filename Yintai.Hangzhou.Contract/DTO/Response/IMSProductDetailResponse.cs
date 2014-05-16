@@ -38,19 +38,24 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         {
             get
             {
-                return ImageUrl.Image320Url();
+                if (Images != null && Images.Count() > 0)
+                    return Images.First().Url;
+                return string.Empty;
             }
         }
         [DataMember(Name="is_online")]
         public bool IsOnline { get; set; }
         [DataMember(Name="image_id")]
-        public int Image_Id { get; set; }
+        public int Image_Id { get {
+            if (Images != null && Images.Count() > 0)
+                return Images.First().Id;
+            return 0;
+        } }
         [DataMember(Name = "unitprice")]
         public decimal UnitPrice { get; set; }
+        [DataMember(Name="images")]
+        public IEnumerable<IMSSelfImageResponse> Images { get; set; }
 
-
-        [IgnoreDataMember]
-        public string ImageUrl { get; set; }
     }
 
     [DataContract]
@@ -75,6 +80,19 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int SizeValueId { get; set; }
         [DataMember(Name = "size_name")]
         public string SizeName { get; set; }
+    }
+    [DataContract]
+    public class IMSSelfImageResponse
+    {
+        [DataMember(Name="id")]
+        public int Id { get; set; }
+        [DataMember(Name = "url")]
+        public string Url { get {
+            return Name.Image320Url();
+        } }
+
+        [IgnoreDataMember]
+        public string Name { get; set; }
     }
 }
 
