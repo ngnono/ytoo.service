@@ -1,11 +1,13 @@
-﻿using Intime.OPC.Modules.Dimension.Framework;
+﻿using Intime.OPC.Infrastructure.Mvvm;
+using Intime.OPC.Infrastructure.Service;
+using Intime.OPC.Modules.Dimension.Common;
 using Intime.OPC.Modules.Dimension.Models;
+using Microsoft.Practices.Prism.Commands;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
-using System.Windows.Input;
 using System.Linq;
-using System.Collections.Generic;
-using Microsoft.Practices.Prism.Commands;
+using System.Windows.Input;
 
 namespace Intime.OPC.Modules.Dimension.ViewModels
 {
@@ -66,7 +68,8 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
                 _queryCriteria = new QueryByName { PageIndex = 1, PageSize = 100, Name = brandName };
             }
 
-            var brands = new ObservableCollection<Brand>(BrandService.Query(_queryCriteria));
+            var result = BrandService.Query(_queryCriteria);
+            var brands = new ObservableCollection<Brand>(result.Data);
             FilterBrands(brands);
             Brands = new ObservableCollection<Brand>(brands);
 
@@ -85,7 +88,7 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
             if (_queryCriteria == null) return;
 
             _queryCriteria.PageIndex++;
-            var brands = BrandService.Query(_queryCriteria);
+            var brands = BrandService.Query(_queryCriteria).Data;
             FilterBrands(brands);
             AppendBrands(brands);
         }
@@ -110,13 +113,7 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
                 }
             });
 
-            while (true)
-            {
-                var brand = brands.Where(b => b.IsSelected).FirstOrDefault();
-                if (brand == null) break;
-
-                brands.Remove(brand);
-            }
+            brands.Remove(brand => brand.IsSelected);
         }
     }
 }

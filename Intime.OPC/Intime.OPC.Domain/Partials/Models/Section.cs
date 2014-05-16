@@ -29,6 +29,7 @@ namespace Intime.OPC.Domain.Models
                 StoreId = obj.StoreId,
                 UpdateDate = obj.UpdateDate,
                 UpdateUser = obj.CreateUser,
+                SectionCode = obj.SectionCode
 
             };
         }

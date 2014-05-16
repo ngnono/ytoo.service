@@ -101,9 +101,9 @@
     <Compile Include="ITransRepository.cs" />
     <Compile Include="IRoleUserRepository.cs" />
     <Compile Include="Base\OPCBaseRepository.cs" />
-    <Compile Include="Support\SupplierRepository.cs" />
+    <Compile Include="Impl\SupplierRepository.cs" />
     <Compile Include="Support\PaymentMethodRepository.cs" />
-    <Compile Include="Support\BrandRepository.cs" />
+    <Compile Include="Impl\BrandRepository.cs" />
     <Compile Include="Support\MenuRepository.cs" />
     <Compile Include="Support\AccountRepository.cs" />
     <Compile Include="Support\OrderItemRepository.cs" />
@@ -121,7 +121,7 @@
     <Compile Include="Support\SaleRepository.cs" />
     <Compile Include="Support\SaleRmaCommentRepository.cs" />
     <Compile Include="Support\SaleRMARepository.cs" />
-    <Compile Include="Support\SectionRepository.cs" />
+    <Compile Include="Impl\SectionRepository.cs" />
     <Compile Include="Support\ShippingSaleCommentRepository.cs" />
     <Compile Include="Support\ShippingSaleRepository.cs" />
     <Compile Include="Support\ShipViaRepository.cs" />

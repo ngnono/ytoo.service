@@ -105,9 +105,17 @@
       <Project>{03e03b5b-ead6-4e27-976d-82d15f7396d7}</Project>
       <Name>00_Intime.OPC.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Intime.OPC.Repository\01_Intime.OPC.Repository.csproj">
+      <Project>{6f89b48c-f608-4c24-968c-2646aca68d26}</Project>
+      <Name>01_Intime.OPC.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Intime.OPC.Service\02_Intime.OPC.Service.csproj">
       <Project>{b34f0a0c-cefc-4491-913c-c76ea6b05fbe}</Project>
       <Name>02_Intime.OPC.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Intime.OPC.WebApi\03_Intime.OPC.WebApi.csproj">
+      <Project>{f2bde9cd-d3ef-4896-8e4c-24b86595be78}</Project>
+      <Name>03_Intime.OPC.WebApi</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Intime.OPC.Modules.Dimension.Framework;
 using System.ComponentModel.DataAnnotations;
-using Intime.OPC.Modules.Dimension.Framework.Validation;
+using Intime.OPC.Infrastructure.Service;
+using Intime.OPC.Infrastructure.Validation;
 
 namespace Intime.OPC.Modules.Dimension.Models
 {

@@ -133,16 +133,19 @@ namespace Intime.OPC.WebApi.Controllers
             //var createUser = item.CreatedUser;
             //逻辑删除
             item.Status = -1;
-            //关系没有删除
+            //关系有删除
             item.Brands = null;
             item.UpdatedUser = userId;
             item.UpdatedDate = DateTime.Now;
+
+            item.Brands = null;
+
             //item.CreatedDate = createDate;
             //item.CreatedUser = createUser;
 
             _supplierRepository.Update(item);
 
-            return RetrunHttpActionResult(item);
+            return RetrunHttpActionResult("OK");
         }
 
         [ModelValidationFilter]
@@ -162,7 +165,11 @@ namespace Intime.OPC.WebApi.Controllers
             model.CreatedUser = userId;
             model.UpdatedUser = userId;
 
-            model.Brands = _brandRepository.GetByIds(dto.Brands.Select(v => v.Id).ToArray()).ToList();
+            if (dto.Brands != null && dto.Brands.Count > 0)
+            {
+                model.Brands = _brandRepository.GetByIds(dto.Brands.Select(v => v.Id).ToArray()).ToList();
+            }
+            
             model = CheckModel(model);
             var item = _supplierRepository.Insert(model);
 

@@ -2,6 +2,7 @@
 using AutoMapper;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Domain.Partials.Models;
 
 namespace Intime.OPC.WebApi.App_Start
 {
@@ -9,14 +10,25 @@ namespace Intime.OPC.WebApi.App_Start
     {
         public static void Config()
         {
-            Mapper.CreateMap<Section, SectionDto>();
-            var sectionDto = Mapper.CreateMap<SectionDto, Section>();
+            Mapper.CreateMap<Section, SectionDto>().ForMember(s => s.Code, opt => opt.MapFrom(d => d.SectionCode));
+            var sectionModel = Mapper.CreateMap<SectionDto, Section>();
+            sectionModel.ForMember(s => s.SectionCode, opt => opt.MapFrom(d => d.Code));
+            sectionModel.ConstructUsing(v => new Section
+            {
+                ContactPerson = String.Empty,
+                ContactPhone = String.Empty,
+                Location = String.Empty,
+                Status = 1,
+                StoreCode = String.Empty,
+                Id = v.Id,
+                SectionCode = String.Empty
+            });
 
 
 
             Mapper.CreateMap<Brand, BrandDto>().ForMember(s => s.Description, d => d.NullSubstitute(String.Empty));
             var brandModel = Mapper.CreateMap<BrandDto, Brand>();
-            brandModel.ConstructUsing(v => new Brand()
+            brandModel.ConstructUsing(v => new Brand
             {
                 Logo = String.Empty,
                 Group = String.Empty,
@@ -40,6 +52,12 @@ namespace Intime.OPC.WebApi.App_Start
             Mapper.CreateMap<OpcSupplierInfoClone, OpcSupplierInfo>();
             Mapper.CreateMap<BrandClone, Brand>();
             Mapper.CreateMap<SectionClone, Section>();
+            Mapper.CreateMap<Store, StoreClone>();
+            Mapper.CreateMap<StoreClone, Store>();
+            Mapper.CreateMap<OPC_Sale, OPC_SaleClone>();
+            Mapper.CreateMap<OPC_SaleClone, OPC_Sale>();
+            Mapper.CreateMap<OrderTransactionClone, OrderTransaction>();
+            Mapper.CreateMap<OrderTransaction, OrderTransactionClone>();
         }
     }
 }

@@ -137,6 +137,10 @@ namespace Intime.OPC.WebApi.Controllers
             item.UpdatedDate = DateTime.Now;
             item.UpdatedUser = userId;
 
+            //关系删除 其余软删除
+            item.Sections = null;
+            item.Suppliers = null;
+
             ((IOPCRepository<int, Brand>)_brandRepository).Update(item);
 
             return RetrunHttpActionResult("OK");
