@@ -28,7 +28,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             //初始化命令属性
             CommandSearch = new DelegateCommand(CommandSearchExecute);
             CommandViewAndPrint = new DelegateCommand(CommandViewAndPrintExecute);
-            CommandOnlyPrint = new DelegateCommand(CommandOnlyPrintExecute);
+            OnlyPrintCommand = new DelegateCommand(CommandOnlyPrintExecute);
             CommandFinish = new DelegateCommand(CommandFinishExecute);
             CommandSetRemark = new DelegateCommand(CommandRemarkExecute);
             CommandGetDown = new DelegateCommand(CommandGetDownExecute);
@@ -72,7 +72,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         public DelegateCommand CommandSearch { get; set; }
         public DelegateCommand CommandViewAndPrint { get; set; }
-        public DelegateCommand CommandOnlyPrint { get; set; }
+        public DelegateCommand OnlyPrintCommand { get; set; }
         public DelegateCommand CommandFinish { get; set; }
         public DelegateCommand CommandSetRemark { get; set; }
         public DelegateCommand CommandGetDown { get; set; }

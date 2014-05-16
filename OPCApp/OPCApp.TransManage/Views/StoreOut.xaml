@@ -76,7 +76,7 @@
                             </Button>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right">
-                            <Button Margin="5"  Command="{Binding CommandPrintInvoice}">
+                            <Button Margin="5"  Command="{Binding PrintInvoiceCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="90">
                                     <Image Source="../Resource/Image/变更单位.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center">生成发货单</TextBlock>
@@ -99,7 +99,7 @@
                                         <DataTemplate>
                                             <CheckBox
                                         IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                        Command="{Binding Path=DataContext.CommandSearchOrderBySale,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                        Command="{Binding Path=DataContext.SearchOrderBySaleCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
                                         VerticalAlignment="Center" HorizontalAlignment="Center" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -154,13 +154,13 @@
                             <TextBlock Text="发货单" />
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Orientation="Horizontal" >
-                            <Button Margin="5"  Width="Auto" Command="{Binding CommandFHDPrintView}">
+                            <Button Margin="5"  Width="Auto" Command="{Binding PreviewDeliveryOrderCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="70">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">打印预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="5"  Width="Auto" Command="{Binding CommandFHDPrintView}">
+                            <Button Margin="5"  Width="Auto" Command="{Binding PreviewDeliveryOrderCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="70">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">打印</TextBlock>
@@ -191,7 +191,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                                Command="{Binding Path=DataContext.CommandSetShippingRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.RemarkShippingCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -232,25 +232,25 @@
                             </Button>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Orientation="Horizontal">
-                            <Button Margin="5" Command="{Binding CommandOnlyPrint}">
+                            <Button Margin="5" Command="{Binding OnlyPrintCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">补打发货单预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="5" Command="{Binding CommandOnlyPrint}">
+                            <Button Margin="5" Command="{Binding OnlyPrintCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">补打发货单</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="5" Command="{Binding CommandOnlyPrint}">
+                            <Button Margin="5" Command="{Binding OnlyPrintCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">打印快递单预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="5" Command="{Binding CommandOnlyPrint}">
+                            <Button Margin="5" Command="{Binding OnlyPrintCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">打印快递单</TextBlock>
@@ -286,7 +286,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                                Command="{Binding Path=DataContext.CommandSetShippingRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.RemarkShippingCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -304,7 +304,7 @@
                             <TextBlock Text="快递单号" Margin="10 5" />
                             <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingSaleCreateDto.ShippingCode}" />
-                            <Button Height="30" Margin="10 5"  Command="{Binding CommandSaveShip}">
+                            <Button Height="30" Margin="10 5"  Command="{Binding SaveShipCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="90">
                                     <Image Source="../Resource/Image/指派送货.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center">生成快递单</TextBlock>
@@ -396,7 +396,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                                Command="{Binding Path=DataContext.CommandSetOrderRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.RemarkOrderCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -427,7 +427,7 @@
                             <DatePicker Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}" />
                             <TextBlock Text="订单号" Margin="10 5" />
                             <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}" />
-                            <Button Margin="5" Command="{Binding CommandSearchExpress}" Width="Auto">
+                            <Button Margin="5" Command="{Binding SearchExpressCommand}" Width="Auto">
                                 <StackPanel Orientation="Horizontal" MinWidth="70">
                                     <Image Source="../Resource/Image/查询.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">查询</TextBlock>
@@ -435,19 +435,19 @@
                             </Button>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                            <Button Width="Auto" Margin="5"  Command="{Binding CommandPrintView}">
+                            <Button Width="Auto" Margin="5"  Command="{Binding PreviewCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="../Resource/Image/查询.png" Stretch="None" />
                                     <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">补打快递单预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Width="Auto" Margin="5"  Command="{Binding CommandOnlyPrint}">
+                            <Button Width="Auto" Margin="5"  Command="{Binding OnlyPrintCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">补打快递单</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Width="Auto" Margin="5" Command="{Binding CommandShippSaleHandOver}">
+                            <Button Width="Auto" Margin="5" Command="{Binding ShipSaleHandOverCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="../Resource/Image/变更单位.png" Stretch="None" />
                                     <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">完成快递发货交接</TextBlock>
@@ -469,7 +469,7 @@
                                     <DataTemplate>
                                         <CheckBox
                                             IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
-                                            Command="{Binding Path=DataContext.CommandGetDownShip,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                            Command="{Binding Path=DataContext.GetDownShipCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
                                             VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -496,7 +496,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                                Command="{Binding Path=DataContext.CommandSetShippingRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.RemarkShippingCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -530,7 +530,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="录入"
-                                                Command="{Binding Path=DataContext.CommandSetOrderRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                                                Command="{Binding Path=DataContext.RemarkOrderCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
