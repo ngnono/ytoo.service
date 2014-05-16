@@ -38,6 +38,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             int pageIndex = request.page_index;
             int pageSize = request.page_size;
 
+            pageSize = Math.Min(pageSize, 100);
+
             string lastUpdate = request.last_update;
 
             // ===========================================================================
@@ -103,6 +105,49 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                 Total = total,
                 Data = result.Documents
             });
+        }
+
+        /// <summary>
+        /// 根据最后更新时间获取库存价格信息
+        /// </summary>
+        /// <param name="request">请求对象</param>
+        /// <param name="channel">渠道名称</param>
+        /// <returns>库存列表</returns>
+        /// <example>
+        /// {
+        ///     page_index:1,
+        ///     page_size:10,
+        ///     last_update:yyyy-MM-dd'T'HH:mm:ss
+        /// }
+        /// </example>
+        [ValidateParameters]
+        public ActionResult Stock(dynamic request, string channel)
+        {
+            int pageIndex = request.page_index;
+            int pageSize = request.page_size;
+
+            pageSize = Math.Min(pageSize, 100);
+
+            string lastUpdate = request.last_update;
+
+            var stocks = _elasticClient.Search<ESStocks>(body =>
+                 body.From(pageIndex * pageSize)
+                    .Size(pageSize)
+                    .SortAscending(p => p.UpdateDate)
+                    .Query(q => q.Range(p => p.GreaterOrEquals(lastUpdate)
+                    .OnField(f => f.UpdateDate))
+                ));
+
+            var total = stocks.Hits == null ? 0 : stocks.Hits.Total;
+
+            return this.RenderSuccess<dynamic>(r => r.Data = new PagedListViewModel<ESStocks>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Total = total,
+                Data = stocks.Documents
+            });
+
         }
 
         /// <summary>
