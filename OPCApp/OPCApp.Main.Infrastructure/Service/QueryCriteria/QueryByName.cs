@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Intime.OPC.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using Intime.OPC.Modules.Dimension.Framework;
 
-namespace Intime.OPC.Modules.Dimension
+namespace Intime.OPC.Infrastructure.Service
 {
     public class QueryByName : QueryCriteria
     {

@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Linq.Expressions;
 
-namespace Intime.OPC.Modules.Dimension.Framework
+namespace Intime.OPC.Infrastructure.Validation
 {
     public class ValidatableBindableBase : BindableBase, INotifyDataErrorInfo
     {

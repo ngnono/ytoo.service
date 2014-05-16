@@ -1,34 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Intime.OPC.Modules.Dimension.Models.Brand">
+  <Class Name="Intime.OPC.ObjectModel.Dimension.Brand">
     <Position X="0.5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAgAIAAAAAAAAAAAAAAAEAAAAAAACAAAAA=</HashCode>
       <FileName>Models\Brand.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Intime.OPC.Modules.Dimension.Models.Counter">
+  <Class Name="Intime.OPC.ObjectModel.Dimension.Counter">
     <Position X="4.75" Y="2.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAgAAAEAAAAAAEAAAAAAAABIEA=</HashCode>
       <FileName>Models\Counter.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Intime.OPC.Modules.Dimension.Models.Dimension">
+  <Class Name="Intime.OPC.ObjectModel.Dimension.Dimension">
     <Position X="4" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Dimension.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Intime.OPC.Modules.Dimension.Models.Organization">
+  <Class Name="Intime.OPC.ObjectModel.Dimension.Organization">
     <Position X="2.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Organization.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Intime.OPC.Modules.Dimension.Models.Supplier">
+  <Class Name="Intime.OPC.ObjectModel.Dimension.Supplier">
     <Position X="7.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>

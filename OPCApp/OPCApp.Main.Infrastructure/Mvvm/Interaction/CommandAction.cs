@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interactivity;
 
-namespace Intime.OPC.Modules.Dimension.Interaction
+namespace Intime.OPC.Infrastructure.Mvvm
 {
     public class CommandAction : TargetedTriggerAction<FrameworkElement>, ICommandSource
     {

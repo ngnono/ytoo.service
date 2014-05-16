@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
-             mc:Ignorable="d"  Width="506.97" Height="414.532">
+             xmlns:mvvm="clr-namespace:Intime.OPC.Infrastructure.Mvvm;assembly=OPCApp.Infrastructure"
+             mc:Ignorable="d"  Width="506.97" Height="430">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadBrandsCommand}" />
@@ -18,7 +19,6 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -35,24 +35,34 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Margin="0,5,0,5">专柜名称:</Label>
-        <TextBox Height="25" Grid.Row="0" Grid.Column="1" Text="{Binding Path=Model.Name,Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <TextBox Height="25" Grid.Row="0" Grid.Column="1" 
+                 Text="{Binding Path=Model.Name,Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource ErrorStyle}"/>
         <Label Grid.Row="1" Grid.Column="0" Margin="0,5,0,5">专柜码:</Label>
-        <TextBox Height="25"  Grid.Row="1" Grid.Column="1" Text="{Binding Path=Model.Code, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Height="25"  Grid.Row="1" Grid.Column="1" 
+                 Text="{Binding Path=Model.Code, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource ErrorStyle}"/>
         <Label Grid.Row="2" Grid.Column="0" Margin="0,5,0,5">销售区域:</Label>
-        <TextBox Height="25"  Grid.Row="2" Grid.Column="1" Text="{Binding Path=Model.AreaCode, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Height="25"  Grid.Row="2" Grid.Column="1" 
+                 Text="{Binding Path=Model.AreaCode, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource ErrorStyle}"/>
         <Label Grid.Row="3" Grid.Column="0" Margin="0,5,0,5">联系电话:</Label>
-        <TextBox Height="25"  Grid.Row="3" Grid.Column="1" Text="{Binding Path=Model.ContactPhoneNumber, ValidatesOnExceptions=true, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Height="25"  Grid.Row="3" Grid.Column="1" 
+                 Text="{Binding Path=Model.ContactPhoneNumber, ValidatesOnExceptions=true, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource ErrorStyle}"/>
         <Label Grid.Row="4" Grid.Column="0" Margin="0,5,0,5">管理部门:</Label>
-        <TextBox Height="25"  Grid.Row="4" Grid.Column="1" Text="{Binding Path=Model.Organization.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Height="25"  Grid.Row="4" IsReadOnly="True" IsEnabled="False" Grid.Column="1" 
+                 Text="{Binding Path=Model.Organization.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Grid.Row="5" Grid.Column="0"  Margin="0,5,0,5">销售品牌:</Label>
         <StackPanel Grid.Row="5" Grid.Column="1">
             <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="brandName" Width="100" Margin="0,0,5,0"/>
+                <TextBox x:Name="brandName" Width="150" Margin="0,0,5,0"/>
                 <Button Command="{Binding LoadBrandsCommand}" CommandParameter="{Binding ElementName=brandName, Path=Text}">查询</Button>
             </StackPanel>
             <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0,5,0,0" Height="150" 
-                 ItemsSource="{Binding Path=Brands,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                  ScrollViewer.ScrollChanged ="OnListBoxScrollChanged">
+                ItemsSource="{Binding Path=Brands,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                mvvm:ScrollingBehavior.IsEnabled="True"
+                mvvm:ScrollingBehavior.ScrollToBottomCommand="{Binding LoadMoreBrandsCommand}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <CheckBox Content="{Binding Path=Name}" Command="{Binding DataContext.SelectBrandCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Path=ID}"  IsChecked="{Binding Path=IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></CheckBox>
@@ -60,7 +70,6 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </StackPanel>
-
         <CheckBox Margin="0,5,0,5" Grid.Row="6" Grid.Column="1"  IsChecked="{Binding Path=Model.Repealed,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">是否已撤柜</CheckBox>
         <StackPanel Grid.Row="7" Grid.ColumnSpan="2"  Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Height="30" Width="60" Margin="5" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.OKCommand}">确定</Button>

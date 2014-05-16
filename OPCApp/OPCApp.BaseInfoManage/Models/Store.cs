@@ -4,14 +4,22 @@
     {
         public string Id { get; set; }
 
-        public string Name { get; set; } //门店名称
+        /// <summary>
+        /// 门店名称
+        /// </summary>
+        public string Name { get; set; }
 
-        public string Location { get; set; } //地址
+        /// <summary>
+        /// 地址
+        /// </summary>
+        public string Location { get; set; }
 
-        public string Tel { get; set; } //电话
+        /// <summary>
+        /// 电话
+        /// </summary>
+        public string Tel { get; set; }
 
         public string CreatedUser { get; set; }
-
 
         public string CreatedDate { get; set; }
 
@@ -21,15 +29,30 @@
 
         public string Status { get; set; }
 
-        public string ExStoreId { get; set; } //排序号
+        /// <summary>
+        /// 排序号
+        /// </summary>
+        public string ExStoreId { get; set; }
 
-        public string RMAAddress { get; set; } //退货地址
+        /// <summary>
+        /// 退货地址
+        /// </summary>
+        public string RMAAddress { get; set; }
 
-        public string RMAZipCode { get; set; } //邮编
+        /// <summary>
+        /// //邮编
+        /// </summary>
+        public string RMAZipCode { get; set; }
 
-        public string RMAPerson { get; set; } //退货联系人
+        /// <summary>
+        /// 退货联系人
+        /// </summary>
+        public string RMAPerson { get; set; }
 
-        public string RMAPhone { get; set; } //退货电话
+        /// <summary>
+        /// 退货电话
+        /// </summary>
+        public string RMAPhone { get; set; }
     }
 
     public class Store4Get

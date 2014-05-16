@@ -1,4 +1,5 @@
-﻿using Intime.OPC.Modules.Dimension.Properties;
+﻿using Intime.OPC.Infrastructure.Validation;
+using Intime.OPC.Modules.Dimension.Properties;
 using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Intime.OPC.Modules.Dimension.Framework
+namespace Intime.OPC.Modules.Dimension.Common
 {
     public class ViewModelBase : ValidatableBindableBase
     {

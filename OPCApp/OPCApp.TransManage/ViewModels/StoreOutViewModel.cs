@@ -21,72 +21,50 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         private List<Order> _orderList;
         private List<OPC_ShippingSale> _shipList;
         private OPC_ShippingSale _shipSale;
-        private ShippingSaleCreateDto shippingSaleCreateDto;
+        private ShippingSaleCreateDto _shippingSaleCreateDto;
 
         public StoreOutViewModel()
         {
             //初始化命令属性
             SearchSaleStatus = EnumSearchSaleStatus.StoreOutDataBaseSearchStatus;
             //初始化命令属性
-            //tab1 打印发货单
-            CommandPrintInvoice = new DelegateCommand(PrintInvoice);
-            CommandOnlyPrint = new DelegateCommand(OnlyPrint);
-            CommandPrintExpress = new DelegateCommand(PrintExpress);
-            CommandSetOrderRemark = new DelegateCommand(SetOrderRemark);
-            CommandSearchOrderBySale = new DelegateCommand(SearchOrderBySale);
-            CommandSetShippingRemark = new DelegateCommand(SetShippingRemark);
-            CommandSaveShip = new DelegateCommand(SaveShipSale);
-            CommandPrintView = new DelegateCommand(PrintView);
-            CommandSearchExpress = new DelegateCommand(GetShipSaleList);
-            CommandGetDownShip = new DelegateCommand(GetDownShip);
-            CommandShippSaleHandOver = new DelegateCommand(ShippSaleHandOver);
+            PrintInvoiceCommand = new DelegateCommand(PrintInvoice);
+            OnlyPrintCommand = new DelegateCommand(OnlyPrint);
+            PrintExpressCommand = new DelegateCommand(PrintExpress);
+            RemarkOrderCommand = new DelegateCommand(SetOrderRemark);
+            SearchOrderBySaleCommand = new DelegateCommand(SearchOrderBySale);
+            RemarkShippingCommand = new DelegateCommand(SetShippingRemark);
+            SaveShipCommand = new DelegateCommand(SaveShipSale);
+            PreviewCommand = new DelegateCommand(PrintView);
+            SearchExpressCommand = new DelegateCommand(GetShipSaleList);
+            GetDownShipCommand = new DelegateCommand(GetDownShip);
+            ShipSaleHandOverCommand = new DelegateCommand(ShippSaleHandOver);
             ShipViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
             ShippingSaleCreateDto = new ShippingSaleCreateDto();
-            CommandFHDPrintView = new DelegateCommand(FHDPrintView);
-            CommandFHDPrint = new DelegateCommand(FHDPrint);
+            PreviewDeliveryOrderCommand = new DelegateCommand(OnDeliveryOrderPreview);
+            PrintDeliveryOrderCommand = new DelegateCommand(OnDeliveryOrderPrint);
         }
 
-        public DelegateCommand CommandFHDPrint { get; set; }
-        #region 打印发货单
-        private void FHDPrint()
-        {
-            FHDPrintViewCommon(true);
-        }
-        private void FHDPrintViewCommon(bool bPrint)
-        {
-            if (SaleList == null)
-            {
-                MessageBox.Show("请选择销售单", "提示");
-                return;
-            }
-            IPrint pr = new PrintWin();
-            var rdlcName = "Print//ReportFHD.rdlc";
+        #region Commands
 
-            var saleSelecteds = SaleList.Where(e => e.IsSelected).ToList();
-            if (saleSelecteds.Count != 1)
-            {
-                MessageBox.Show("请选择一张单据进行打印", "提示");
-                return;
-            }
-            var listOpcSaleDetails = new List<OPC_SaleDetail>();
-            if (SaleSelected != null)
-            {
-                listOpcSaleDetails =
-                    AppEx.Container.GetInstance<ITransService>()
-                        .SelectSaleDetail(SaleSelected.SaleOrderNo)
-                        .Result.ToList();
-                PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(SaleSelected.OrderNo);
-               
-                pr.PrintFHD(rdlcName, re.Result.FirstOrDefault(), saleSelecteds[0], listOpcSaleDetails,bPrint);
-            }
-
-        }
-        private void FHDPrintView()
-        {
-            FHDPrintViewCommon(false);
-        }
+        public DelegateCommand PrintDeliveryOrderCommand { get; set; }
+        public DelegateCommand PreviewDeliveryOrderCommand { get; set; }
+        public DelegateCommand ShipSaleHandOverCommand { get; set; }
+        public DelegateCommand SaveShipCommand { get; set; }
+        public DelegateCommand PrintInvoiceCommand { get; set; }
+        public DelegateCommand PrintExpressCommand { get; set; }
+        public DelegateCommand SearchExpressCommand { get; set; }
+        public DelegateCommand RemarkOrderCommand { get; set; }
+        public DelegateCommand<int?> SelectionChangedCommand { get; set; }
+        public DelegateCommand SearchOrderBySaleCommand { get; set; }
+        public DelegateCommand RemarkShippingCommand { get; set; }
+        public DelegateCommand GetListShipSaleCommand { get; set; }
+        public DelegateCommand OnlyPrintCommand { get; set; }
+        public DelegateCommand PreviewCommand { get; set; }
+        public DelegateCommand GetDownShipCommand { get; set; }
         #endregion
-        public DelegateCommand CommandFHDPrintView { get; set; }
+
+        #region Properties
 
         public OPC_ShippingSale ShipSaleSelected
         {
@@ -107,29 +85,20 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         }
 
         public ShipVia ShipVia { get; set; }
-        public List<ShipVia> ShipViaList { get; set; }
-        public DelegateCommand CommandShippSaleHandOver { get; set; }
-        public DelegateCommand CommandSaveShip { get; set; }
-        public DelegateCommand CommandPrintInvoice { get; set; }
-        public DelegateCommand CommandPrintExpress { get; set; }
-        public DelegateCommand CommandSearchExpress { get; set; }
-        public DelegateCommand CommandSetOrderRemark { get; set; }
-        public DelegateCommand<int?> CommandSelectionChanged { get; set; }
-        public DelegateCommand CommandSearchOrderBySale { get; set; }
-        public DelegateCommand CommandSetShippingRemark { get; set; }
-        public DelegateCommand CommandGetListShipSale { get; set; }
-        public DelegateCommand CommandOnlyPrint { get; set; } /*打印待加的命令*/
-        public DelegateCommand CommandPrintView { get; set; }
-        public DelegateCommand CommandGetDownShip { get; set; }
 
+        public List<ShipVia> ShipViaList { get; set; }
 
         public ShippingSaleCreateDto ShippingSaleCreateDto
         {
-            get { return shippingSaleCreateDto; }
-            set { SetProperty(ref shippingSaleCreateDto, value); }
+            get { return _shippingSaleCreateDto; }
+            set { SetProperty(ref _shippingSaleCreateDto, value); }
         }
 
         public int IsTabIndex { get; set; }
+
+        #endregion
+
+        #region Command Handlers
 
         private void ShippSaleHandOver()
         {
@@ -152,16 +121,18 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             ClearList();
         }
 
-        public void GetListShipSaleBySale(string saleOrderNo)
+        private void GetListShipSaleBySale(string saleOrderNo)
         {
             ShipSaleList = AppEx.Container.GetInstance<ITransService>().GetListShipSaleBySale(saleOrderNo);
             ;
         }
 
         #region 打印快递单
-        /*打印*/
 
-        public void OnlyPrint()
+        /// <summary>
+        /// 打印
+        /// </summary>
+        private void OnlyPrint()
         {
             if (ShipSaleSelected == null)
             {
@@ -181,8 +152,9 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             pr.PrintExpress(rdlcName, printModel,true);
         }
 
-        /*打印预览*/
-
+        /// <summary>
+        /// 打印预览
+        /// </summary>
         private void PrintView()
         {
             if (ShipSaleSelected == null)
@@ -202,9 +174,12 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             };
             pr.PrintExpress(rdlcName, printModel);
         }
+
         #endregion
 
-        //发货单备注
+        /// <summary>
+        /// 发货单备注
+        /// </summary>
         private void SetShippingRemark()
         {
             //被选择的对象
@@ -218,9 +193,10 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetShipSaleRemark); //填写的是快递单
         }
 
-        /*生成*/
-        //发货单
-        public void SaveShipSale()
+        /// <summary>
+        /// 生成发货单
+        /// </summary>
+        private void SaveShipSale()
         {
             if (SaleList == null) return;
             List<OPC_Sale> sale = SaleList.Where(e => e.IsSelected).ToList();
@@ -229,10 +205,10 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
                 MessageBox.Show("请勾选销售单", "提示");
                 return;
             }
-            shippingSaleCreateDto.SaleOrderIDs = sale.Select(e => e.SaleOrderNo).ToList();
-            shippingSaleCreateDto.OrderNo = sale[0].OrderNo;
-            shippingSaleCreateDto.ShipViaID = ShipVia.Id;
-            shippingSaleCreateDto.ShipViaName = ShipVia.Name;
+            _shippingSaleCreateDto.SaleOrderIDs = sale.Select(e => e.SaleOrderNo).ToList();
+            _shippingSaleCreateDto.OrderNo = sale[0].OrderNo;
+            _shippingSaleCreateDto.ShipViaID = ShipVia.Id;
+            _shippingSaleCreateDto.ShipViaName = ShipVia.Name;
             bool isSuccess = AppEx.Container.GetInstance<ITransService>().SaveShip(ShippingSaleCreateDto);
             MessageBox.Show(isSuccess ? "生成发货单成功" : "生成发货单失败", "提示");
             if (isSuccess)
@@ -247,9 +223,9 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         }
 
         /// <summary>
-        ///     查询
+        /// 查询
         /// </summary>
-        public void SearchOrderBySale()
+        private void SearchOrderBySale()
         {
             //OPC_Sale sale = SaleList.FirstOrDefault(e => e.IsSelected);
             if (SaleSelected == null)
@@ -261,7 +237,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             OrderList = re == null ? new List<Order>() : re.Result.ToList();
         }
 
-        public void SetOrderRemark()
+        private void SetOrderRemark()
         {
             //被选择的对象
             string id = SaleSelected.SaleOrderNo;
@@ -283,8 +259,10 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             ClearList();
         }
 
-        //清空所有默认列表值
-        public void ClearList()
+        /// <summary>
+        /// 清空所有默认列表值
+        /// </summary>
+        private void ClearList()
         {
             ShipSaleList = new List<OPC_ShippingSale>();
             SaleList = new List<OPC_Sale>();
@@ -292,7 +270,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
            // InvoiceDetail4List = new List<OPC_SaleDetail>();
         }
 
-        public void SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
             {
@@ -321,8 +299,10 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             }
         }
 
-        //打印发货单完成
-        public void PrintInvoice()
+        /// <summary>
+        /// 打印发货单完成
+        /// </summary>
+        private void PrintInvoice()
         {
             if (SaleList == null || !SaleList.Any())
             {
@@ -337,9 +317,10 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             Refresh();
         }
 
-        /*查询快递单*/
-
-        public void PrintExpress()
+        /// <summary>
+        /// 查询快递单
+        /// </summary>
+        private void PrintExpress()
         {
             if (ShipSaleSelected == null)
             {
@@ -357,10 +338,10 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             }
         }
 
-
-        /*查询快递单*/
-
-        public void GetShipSaleList()
+        /// <summary>
+        /// 查询快递单
+        /// </summary>
+        private void GetShipSaleList()
         {
             string filter = string.Format("startdate={0}&enddate={1}&orderno={2}",
                 Invoice4Get.StartSellDate.ToShortDateString(),
@@ -375,9 +356,11 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             }
         }
 
-        /*查询快递单关联单据*/
-
-        public void SearchRaDoc(OPC_ShippingSale opcShippingSale)
+        /// <summary>
+        /// 查询快递单关联单据
+        /// </summary>
+        /// <param name="opcShippingSale"></param>
+        private void SearchRaDoc(OPC_ShippingSale opcShippingSale)
         {
             if (opcShippingSale == null) return;
             //SaleList = AppEx.Container.GetInstance<ITransService>().SelectSaleByShip(opcShippingSale.GoodsOutCode);
@@ -392,7 +375,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             }
         }
 
-        public void GetDownShip()
+        private void GetDownShip()
         {
             if (ShipSaleList == null) return;
             OPC_ShippingSale saleCur = ShipSaleList.FirstOrDefault(n => n.IsSelected);
@@ -405,5 +388,51 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             }
             SearchRaDoc(saleCur);
         }
+
+        #region 打印发货单
+
+        private void OnDeliveryOrderPrint()
+        {
+            FHDPrintViewCommon(true);
+        }
+
+        private void FHDPrintViewCommon(bool bPrint)
+        {
+            if (SaleList == null)
+            {
+                MessageBox.Show("请选择销售单", "提示");
+                return;
+            }
+            IPrint pr = new PrintWin();
+            var rdlcName = "Print//ReportFHD.rdlc";
+
+            var saleSelecteds = SaleList.Where(e => e.IsSelected).ToList();
+            if (saleSelecteds.Count != 1)
+            {
+                MessageBox.Show("请选择一张单据进行打印", "提示");
+                return;
+            }
+            var listOpcSaleDetails = new List<OPC_SaleDetail>();
+            if (SaleSelected != null)
+            {
+                listOpcSaleDetails =
+                    AppEx.Container.GetInstance<ITransService>()
+                        .SelectSaleDetail(SaleSelected.SaleOrderNo)
+                        .Result.ToList();
+                PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(SaleSelected.OrderNo);
+
+                pr.PrintFHD(rdlcName, re.Result.FirstOrDefault(), saleSelecteds[0], listOpcSaleDetails, bPrint);
+            }
+
+        }
+
+        private void OnDeliveryOrderPreview()
+        {
+            FHDPrintViewCommon(false);
+        }
+
+        #endregion
+
+        #endregion
     }
 }

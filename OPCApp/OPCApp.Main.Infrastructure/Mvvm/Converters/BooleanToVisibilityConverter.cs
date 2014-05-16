@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Intime.OPC.Modules.Dimension.Converters
+namespace Intime.OPC.Infrastructure.Mvvm
 {
     public class BooleanToVisibilityConverter : IValueConverter
     {

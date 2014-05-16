@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace Intime.OPC.Modules.Dimension.Converters
+namespace Intime.OPC.Infrastructure.Mvvm
 {
     public class BooleanToStringConverter : IValueConverter
     {

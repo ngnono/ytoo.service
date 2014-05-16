@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common.Logging;
+﻿using Common.Logging;
+using Intime.O2O.ApiClient.Yintai;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
+using Newtonsoft.Json;
 using Quartz;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Intime.OPC.Job.RMASync
 {
@@ -35,40 +35,84 @@ namespace Intime.OPC.Job.RMASync
             int size = 20;
             while (cursor < totalCount)
             {
-                List<OPC_SaleRMA> oneTimeList = null;
+                List<OPC_RMA> oneTimeList = null;
                 DoQuery(r => oneTimeList = r.OrderBy(t => t.RMANo).Skip(cursor).Take(size).ToList(),
                     NotificationStatus.Create);
                 foreach (var saleRMA in oneTimeList)
                 {
-                    Notify2Yintai(saleRMA);
+                    try
+                    {
+                        Notify2Yintai(saleRMA);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error("推送退货信息失败,异常： {0}", ex);
+                    }
                 }
                 cursor += size;
             }
         }
 
-        private void Notify2Yintai(OPC_SaleRMA rma)
+        private void Notify2Yintai(OPC_RMA rma)
         {
             using (var context = new YintaiHZhouContext())
             {
-                //rma.OrderNo
+                var linq =
+                    context.OPC_RMADetail.Where(r => r.RMANo == rma.RMANo).Select(r => new
+                    {
+                        ItemCode = r.StockId,
+                        RMAQuantity = r.BackCount,
+                        Reason = rma.RMAReason
+                    });
+
+                dynamic data = new
+                {
+                    OPCSONumber = rma.OrderNo,
+                    Status = rma.Status == (int)EnumRMAStatus.PayVerify ? 700 : 300,
+                    RMAType = 1,
+                    OperaterFrom = 1,
+                    OPCRMATrancaction = linq
+                };
+                var rmaInfos = new Dictionary<string, string>
+                {
+                    {"Data", JsonConvert.SerializeObject(data)},
+                };
+                Logger.ErrorFormat("推送退货订单 {0} 商品明细 {1}");
+                var client = new YintaiApiClient();
+                var rsp = client.Post(rmaInfos, "Yintai.OpenApi.RMA. AddRMA");
+                if (rsp.IsSuccessful)
+                {
+                    context.OPC_RMANotificationLogs.Add(new OPC_RMANotificationLog
+                    {
+                        CreateDate = DateTime.Now,
+                        CreateUser = -10000,
+                        RMANo = rma.SaleOrderNo,
+                        Status = (int)NotificationStatus.Sync2Yintai,
+                        Message = string.Empty
+                    });
+                    Logger.ErrorFormat("通知银泰网RMA订单成功,RMANO {0}", rma.RMANo);
+                }
+                else
+                {
+                    Logger.ErrorFormat("推送退货单至RMA失败：RMANO:{0},银泰网返回错误:{1}", rma.RMAReason, rsp.Description);
+                }
             }
-            throw new NotImplementedException();
         }
 
-        private void DoQuery(Action<IQueryable<OPC_SaleRMA>> callback, NotificationStatus status)
+        private void DoQuery(Action<IQueryable<OPC_RMA>> callback, NotificationStatus status)
         {
             using (var context = new YintaiHZhouContext())
             {
-                var minx =
-                    context.OPC_SaleRMA.Where(
+                var rmas =
+                    context.OPC_RMA.Where(
                         t => context.Map4Order.Any(m => m.OrderNo == t.OrderNo && m.Channel == "yintai") &&
                             t.UpdatedDate > _benchTime &&
-                            (t.Status == (int)EnumRMAStatus.ShipInStorage || t.Status == (int)EnumRMAStatus.PayVerify || t.Status == (int)EnumRMAStatus.ShipVerifyNotPass) &&
+                            (t.Status == (int)EnumRMAStatus.PayVerify || t.Status == (int)EnumRMAStatus.ShipVerifyNotPass) &&
                             !context.OPC_RMANotificationLogs.Any(
                                 x => x.RMANo == t.RMANo && x.Status == (int)status));
 
                 if (callback != null)
-                    callback(minx);
+                    callback(rmas);
             }
         }
     }

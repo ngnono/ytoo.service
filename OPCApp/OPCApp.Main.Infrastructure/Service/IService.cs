@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OPCApp.Infrastructure.REST;
+using Intime.OPC.Infrastructure.Service;
 
-namespace Intime.OPC.Modules.Dimension.Framework
+namespace Intime.OPC.Infrastructure.Service
 {
     /// <summary>
     /// Service interface for CRUD
@@ -41,6 +43,6 @@ namespace Intime.OPC.Modules.Dimension.Framework
         /// Query
         /// </summary>
         /// <returns>Object collection</returns>
-        IList<T> Query(IQueryCriteria queryCriteria);
+        PagedResult<T> Query(IQueryCriteria queryCriteria);
     }
 }

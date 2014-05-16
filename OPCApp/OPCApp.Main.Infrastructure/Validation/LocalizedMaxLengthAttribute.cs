@@ -1,12 +1,12 @@
-﻿using Intime.OPC.Modules.Dimension.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Intime.OPC.Infrastructure.Properties;
 
-namespace Intime.OPC.Modules.Dimension.Framework.Validation
+namespace Intime.OPC.Infrastructure.Validation
 {
     public class LocalizedMaxLengthAttribute : MaxLengthAttribute
     {

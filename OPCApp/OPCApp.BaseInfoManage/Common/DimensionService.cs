@@ -7,8 +7,9 @@ using OPCApp.Infrastructure.REST;
 using OPCAPP.Common.Extensions;
 using OPCApp.Infrastructure.Rest;
 using System.Threading.Tasks;
+using Intime.OPC.Infrastructure.Service;
 
-namespace Intime.OPC.Modules.Dimension.Framework
+namespace Intime.OPC.Modules.Dimension.Common
 {
     public abstract class DimensionService<TDimension> : IService<TDimension>, IPartImportsSatisfiedNotification
         where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension
@@ -59,10 +60,9 @@ namespace Intime.OPC.Modules.Dimension.Framework
             return restClient.Get<TDimension>(string.Format("{0}/{1}", uriName, id));
         }
 
-        public  IList<TDimension> Query(IQueryCriteria queryCriteria)
+        public PagedResult<TDimension> Query(IQueryCriteria queryCriteria)
         {
-            var reponse = restClient.Get<PagedResult<TDimension>>(string.Format("{0}?{1}", uriName, queryCriteria.BuildQueryString()));
-            return reponse.Data;
+            return restClient.Get<PagedResult<TDimension>>(string.Format("{0}?{1}", uriName, queryCriteria.BuildQueryString()));
         }
     }
 }

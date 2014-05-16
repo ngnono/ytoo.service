@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Intime.OPC.Modules.Dimension
+namespace Intime.OPC.Infrastructure.Service
 {
     public class QueryAll : QueryCriteria
     {

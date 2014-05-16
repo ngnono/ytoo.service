@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
-namespace Intime.OPC.Modules.Dimension.Framework
+namespace Intime.OPC.Infrastructure.Mvvm
 {
     //ToDo: Refactoring is required to remove the duplicated codes between the two classes
     public class AsyncDelegateCommand<T> : ICommand

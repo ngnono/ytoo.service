@@ -6,7 +6,7 @@ using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
 using Microsoft.Practices.Prism.Mvvm;
 using System.Collections.Generic;
 
-namespace Intime.OPC.Modules.Dimension.Framework
+namespace Intime.OPC.Modules.Dimension.Common
 {
     public abstract class ModalDialogViewModel<TDimension> : ViewModelBase, INotification, IInteractionRequestAware
         where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension, new()

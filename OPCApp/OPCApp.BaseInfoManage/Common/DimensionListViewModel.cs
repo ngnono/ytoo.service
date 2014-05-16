@@ -1,22 +1,25 @@
-﻿using System;
+﻿using Intime.OPC.Infrastructure.Mvvm;
+using Intime.OPC.Infrastructure.Service;
+using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
+using OPCApp.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
-using Microsoft.Practices.Prism.Mvvm;
-using OPCApp.Infrastructure;
 
-namespace Intime.OPC.Modules.Dimension.Framework
+namespace Intime.OPC.Modules.Dimension.Common
 {
     public class DimensionListViewModel<TDimension, TDetailViewModel, TDimensionService> : ViewModelBase
         where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension, new()
         where TDetailViewModel : ModalDialogViewModel<TDimension>, new()
         where TDimensionService : IService<TDimension>
     {
+        private const int MaxRecord = 10000;
+
         private ObservableCollection<TDimension> models;
         private IQueryCriteria queryCriteria;
 
@@ -46,6 +49,14 @@ namespace Intime.OPC.Modules.Dimension.Framework
             private set { SetProperty(ref models, value); }
         }
 
+        public int TotalCount { get; set; }
+
+        public int LoadedCount { get; set; }
+
+        public int MinLoadedPageIndex { get; set; }
+
+        public int MaxLoadedPageIndex { get; set; }
+
         #endregion
 
         public InteractionRequest<TDetailViewModel> EditRequest { get; set; }
@@ -65,6 +76,8 @@ namespace Intime.OPC.Modules.Dimension.Framework
         public ICommand QueryCommand { get; private set; }
 
         public ICommand LoadNextPageCommand { get; private set; }
+
+        public ICommand LoadPreviousPageCommand { get; private set; }
 
         #endregion
 
@@ -103,7 +116,13 @@ namespace Intime.OPC.Modules.Dimension.Framework
                 queryCriteria = new QueryAll { PageIndex = 1, PageSize = 100 };
             }
 
-            Models = new ObservableCollection<TDimension>(Service.Query(queryCriteria));
+            var result = Service.Query(queryCriteria);
+            
+            Models = new ObservableCollection<TDimension>(result.Data);
+
+            LoadedCount = result.Data.Count;
+            TotalCount = result.TotalCount;
+            MinLoadedPageIndex = MaxLoadedPageIndex = 1;
         }
 
         private void OnDelete()
@@ -168,15 +187,57 @@ namespace Intime.OPC.Modules.Dimension.Framework
 
         private void OnNextPageLoad()
         {
-            if (queryCriteria == null) return;
+            if (queryCriteria == null || MaxLoadedPageIndex * queryCriteria.PageSize >= TotalCount) return;
 
-            queryCriteria.PageIndex++;
+            MaxLoadedPageIndex++;
 
-            var moreModels = Service.Query(queryCriteria);
-            foreach (var model in moreModels)
+            if (LoadedCount >= MaxRecord)
+            {
+                PerformActionOnUIThread(() => 
+                {
+                    Models.Clear();
+                });
+                LoadedCount = 0;
+                MinLoadedPageIndex = MaxLoadedPageIndex;
+            }
+
+            queryCriteria.PageIndex = MaxLoadedPageIndex;
+
+            var result = Service.Query(queryCriteria);
+            foreach (var model in result.Data)
             {
                 PerformActionOnUIThread(() => { Models.Add(model); });
             }
+
+            LoadedCount += result.Data.Count;
+        }
+
+        private void OnPrevioustPageLoad()
+        {
+            if (queryCriteria == null || MinLoadedPageIndex <= 1) return;
+
+            MinLoadedPageIndex--;
+
+            if (LoadedCount >= MaxRecord)
+            {
+                PerformActionOnUIThread(() =>
+                {
+                    Models.Clear();
+                });
+                LoadedCount = 0;
+                MaxLoadedPageIndex = MinLoadedPageIndex;
+            }
+
+            queryCriteria.PageIndex = MinLoadedPageIndex;
+
+            var result = Service.Query(queryCriteria);
+            int position = 0;
+            foreach (var model in result.Data)
+            {
+                PerformActionOnUIThread(() => { Models.Insert(position++, model); });
+            }
+
+            LoadedCount += result.Data.Count;
         }
 
         #endregion

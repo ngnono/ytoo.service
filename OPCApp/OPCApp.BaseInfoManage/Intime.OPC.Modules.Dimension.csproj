@@ -95,35 +95,19 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Framework\ErrorsContainer.cs" />
-    <Compile Include="Framework\ValidatableBindableBase.cs" />
-    <Compile Include="Framework\Validation\LocalizedMaxLengthAttribute.cs" />
-    <Compile Include="Framework\Validation\LocalizedRequiredAttribute.cs" />
-    <Compile Include="Framework\ViewModelBase.cs" />
-    <Compile Include="Interaction\AsyncDelegateCommand.cs" />
-    <Compile Include="Framework\DimensionListViewModel.cs" />
-    <Compile Include="Interaction\CommandAction.cs" />
-    <Compile Include="Interaction\RoutedEventTrigger.cs" />
-    <Compile Include="QueryCriteria\IQueryCriteria.cs" />
-    <Compile Include="Framework\ModalDialogViewModel.cs" />
-    <Compile Include="QueryCriteria\QueryAll.cs" />
-    <Compile Include="QueryCriteria\QueryByName.cs" />
-    <Compile Include="QueryCriteria\QueryCriteria.cs" />
-    <Compile Include="Converters\BooleanToStringConverter.cs" />
-    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Common\ViewModelBase.cs" />
+    <Compile Include="Common\DimensionListViewModel.cs" />
+    <Compile Include="Common\ModalDialogViewModel.cs" />
     <Compile Include="DimensionModule.cs" />
+    <Compile Include="Common\DimensionService.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\Counter.cs" />
     <Compile Include="Models\Dimension.cs" />
-    <Compile Include="Framework\UriAttribute.cs" />
+    <Compile Include="Models\Organization.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\Supplier.cs" />
-    <Compile Include="Framework\DimensionService.cs" />
-    <Compile Include="Framework\UriParameterAttribute.cs" />
-    <Compile Include="QueryCriteria\SortOrder.cs" />
     <Compile Include="Services\BrandService.cs" />
     <Compile Include="Services\CounterService.cs" />
-    <Compile Include="Framework\IService.cs" />
     <Compile Include="ViewModels\BrandListViewModel.cs" />
     <Compile Include="ViewModels\BrandViewModel.cs" />
     <Compile Include="ViewModels\CounterListViewModel.cs" />
@@ -155,7 +139,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Organization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

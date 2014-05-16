@@ -74,6 +74,7 @@
             <DataGrid.Columns>
 
                 <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
+                <DataGridTextColumn Header="渠道订单号" Width="100" Binding="{Binding OrderChannelNo}" />
                 <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}"
                                         Binding="{Binding PaymentMethodName}" />
                 <DataGridTextColumn Header="应付款总计" Binding="{Binding MustPayTotal}" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interactivity;
 
-namespace Intime.OPC.Modules.Dimension.Interaction
+namespace Intime.OPC.Infrastructure.Mvvm
 {
     public class RoutedEventTrigger : EventTriggerBase<DependencyObject>
     {

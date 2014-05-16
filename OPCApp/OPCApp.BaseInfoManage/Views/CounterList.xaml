@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:prism="http://www.codeplex.com/prism"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:cvt="clr-namespace:Intime.OPC.Modules.Dimension.Converters"
+             xmlns:mvvm="clr-namespace:Intime.OPC.Infrastructure.Mvvm;assembly=OPCApp.Infrastructure"
              xmlns:local="clr-namespace:Intime.OPC.Modules.Dimension.Views"
              mc:Ignorable="d" 
              d:DesignHeight="415" d:DesignWidth="779" FontFamily="微软雅黑" BorderBrush="Gray" BorderThickness="1">
@@ -15,8 +15,8 @@
                 <ResourceDictionary Source="../Resource/Theme/BureauBlue.xaml"/>
                 <ResourceDictionary Source="../Resource/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <cvt:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-            <cvt:BooleanToStringConverter x:Key="BoolToStringConverter" />
+            <mvvm:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <mvvm:BooleanToStringConverter x:Key="BoolToStringConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -58,7 +58,10 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Style="{StaticResource HeadLabel}">专柜列表</Label>
             <DataGrid Grid.Row="1" x:Name="brandList" ItemsSource="{Binding Models}" IsReadOnly="True" AutoGenerateColumns="False"  
-                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.ScrollChanged ="OnGridScrollChanged">
+                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
+                      mvvm:ScrollingBehavior.IsEnabled="True"
+                      mvvm:ScrollingBehavior.ScrollToBottomCommand="{Binding LoadNextPageCommand}"
+                      mvvm:ScrollingBehavior.ScrollToTopCommand="{Binding LoadPreviousPageCommand}">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.HeaderTemplate>

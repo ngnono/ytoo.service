@@ -1,4 +1,4 @@
-﻿using Intime.OPC.Modules.Dimension.Framework;
+﻿using Intime.OPC.Infrastructure.Validation;
 using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -6,8 +6,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Intime.OPC.Modules.Dimension.Properties;
-using Intime.OPC.Modules.Dimension.Framework.Validation;
 
 namespace Intime.OPC.Modules.Dimension.Models
 {
