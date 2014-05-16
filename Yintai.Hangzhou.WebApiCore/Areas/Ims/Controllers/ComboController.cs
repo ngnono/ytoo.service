@@ -72,7 +72,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     OnlineDate = DateTime.Now,
                     Price = products.Sum(p => p.Price),
                     Private2Name = request.Private_To ?? string.Empty,
-                    Status = canOnline?(int)DataStatus.Normal:(int)DataStatus.Default,
+                    Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
                     UpdateUser = authuid,
                     UserId = authuid,
@@ -98,7 +98,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     CreateUser = authuid,
                     ItemId = comboEntity.Id,
                     ItemType = (int)ComboType.Product,
-                    Status = canOnline ? (int)DataStatus.Normal : (int)DataStatus.Default,
+                    Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
                     UpdateUser = authuid
                 });
@@ -112,6 +112,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     _resourceRepo.Update(resource);
                 }
 
+                //step4: offline one other combo
+                if (!canOnline)
+                {
+                    ComboLogic.OfflineComboOne(authuid);
+                }
                 ts.Complete();
                 return this.RenderSuccess<dynamic>(c => c.Data = new
                 {

@@ -106,7 +106,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     Status = (int)DataStatus.Normal,
                     TemplateId = ConfigManager.IMS_DEFAULT_TEMPLATE,
                     UserId = authuid.Value,
-                    StoreId = sectionEntity.Id
+                    StoreId = sectionEntity.StoreId??0,
+                    SectionId = sectionEntity.Id,
+                    OperatorCode = inviteEntity.Sec.OperatorCode
                 });
                 //2.3 create daogou's brands
                 foreach (var brand in initialBrands)

@@ -13,6 +13,8 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<int> TemplateId { get; set; }
         public Nullable<int> OperateRight { get; set; }
         public int StoreId { get; set; }
+        public int? SectionId { get; set; }
+        public string OperatorCode { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -14,6 +14,7 @@ using Yintai.Hangzhou.WebSupport.Mvc;
 using com.intime.fashion.common.Extension;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Hangzhou.WebSupport.Binder;
+using Yintai.Hangzhou.Service.Logic;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -43,33 +44,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _productCodeRepo = productCodeRepo;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Create([InternalJsonArrayAttribute("size_ids")]Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
+        public ActionResult Create(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
         {
             if (!ModelState.IsValid)
             {
                 var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
-            if (request.Image_Id <= 0)
+            if (request.Image_Ids==null || request.Image_Ids.Length <= 0)
                 return this.RenderError(r => r.Message = "必须传入一个图片");
-            var resourceEntity = Context.Set<ResourceEntity>().Find(request.Image_Id);
-            if (resourceEntity == null)
-                return this.RenderError(r=>r.Message="图片不正确");
             
-            var categoryEntity = Context.Set<TagEntity>()
-                                .Where(t => t.Id == request.Category_Id)
-                                .GroupJoin(Context.Set<CategoryPropertyEntity>().Join(Context.Set<CategoryPropertyValueEntity>(), o => o.Id, i => i.PropertyId, (o, i) => new { CP = o, CPV = i })
-                                    , o => o.Id, i => i.CP.CategoryId, (o, i) => new { C = o, CP = i }).FirstOrDefault()
-                                    ;
+            var categoryEntity = Context.Set<TagEntity>().Find(request.Category_Id);
             if (categoryEntity == null)
                 return this.RenderError(r => r.Message = "分类不存在");
-            var catSizeType = categoryEntity.C.SizeType ?? (int)CategorySizeType.FreeInput;
-            if (categoryEntity.C.SizeType == (int)CategorySizeType.LimitSize
-                && (request.Size_Ids == null || request.Size_Ids.Length < 1))
-                return this.RenderError(r => r.Message = "分类尺码必选");
-            if (categoryEntity.C.SizeType == (int)CategorySizeType.FreeInput
-                && string.IsNullOrEmpty(request.Size_Str))
-                return this.RenderError(r => r.Message = "分类尺码必选");
+
+            if (request.Sizes == null || request.Sizes.Length < 1)
+                return this.RenderError(r => r.Message = "必须传入一个尺码");
 
             var brandEntity = Context.Set<BrandEntity>().Find(request.Brand_Id);
             if (brandEntity == null)
@@ -78,17 +68,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             request.UnitPrice = (!request.UnitPrice.HasValue || request.UnitPrice <= 0) ? request.Price : request.UnitPrice;
             if (request.UnitPrice < request.Price)
                 return this.RenderError(r => r.Message = "商品原价必须大于等于销售价！");
+            if (string.IsNullOrEmpty(request.Color_Str))
+                request.Color_Str = "均色";
+            var productName = string.Format("{0}-{1}-{2}", brandEntity.Name, categoryEntity.Name, request.Sku_Code);
+            if (string.IsNullOrEmpty(request.Desc))
+                request.Desc = productName;
             var assocateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
             using (var ts = new TransactionScope())
             {
                 //step1: create product 
-                var productName = string.Format("{0}-{1}-{2}", brandEntity.Name, categoryEntity.C.Name, request.Sku_Code);
+               
                 var productEntity = _productRepo.Insert(new ProductEntity()
                 {
                     Brand_Id = request.Brand_Id,
                     CreatedDate = DateTime.Now,
                     CreatedUser = authuid,
-                    Description = productName,
+                    Description = request.Desc,
                     FavoriteCount = 0,
                     InvolvedCount = 0,
                     Is4Sale = true,
@@ -137,7 +132,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     PropertyId = propertyEntity.Id,
                     Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
-                    ValueDesc = "均色"
+                    ValueDesc = request.Color_Str
                 });
                 //step3: create product size property
                 var sizePropertyEntity = _productPropertyRepo.Insert(new ProductPropertyEntity()
@@ -152,53 +147,19 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     UpdateUser = authuid
                 });
 
-                if (categoryEntity.C.SizeType == (int)CategorySizeType.LimitSize)
-                {
-                    var hasValidSize = false;
-                    foreach (var size in request.Size_Ids)
-                    {
-                        var categoryPropertyValueEntity = categoryEntity.CP.Where(cp => cp.CPV.Id == size).FirstOrDefault();
-                        if (categoryPropertyValueEntity != null)
-                        {
-                            hasValidSize = true;
-                            var sizevalueEntity = _productPropertyValueRepo.Insert(new ProductPropertyValueEntity()
-                            {
-                                CreateDate = DateTime.Now,
-                                PropertyId = sizePropertyEntity.Id,
-                                UpdateDate = DateTime.Now,
-                                ValueDesc = categoryPropertyValueEntity.CPV.ValueDesc,
-                                Status = (int)DataStatus.Normal
-                            });
-                            _inventoryRepo.Insert(new InventoryEntity()
-                            {
-                                Amount = 1,
-                                ProductId = productEntity.Id,
-                                PColorId = propertyvalueEntity.Id,
-                                PSizeId = sizevalueEntity.Id,
-                                UpdateDate = DateTime.Now,
-                                UpdateUser = authuid
-
-                            });
-                        }
-
-                    }
-                    if (!hasValidSize)
-                        return this.RenderError(r => r.Message = "尺码传入不正确");
-                }
-                else
-                {
-                    var valueDesc = string.IsNullOrEmpty(request.Size_Str) ? "均码" : request.Size_Str;
+                foreach (var size in request.Sizes)
+                {   
                     var sizevalueEntity = _productPropertyValueRepo.Insert(new ProductPropertyValueEntity()
                     {
                         CreateDate = DateTime.Now,
                         PropertyId = sizePropertyEntity.Id,
                         UpdateDate = DateTime.Now,
-                        ValueDesc = valueDesc,
+                        ValueDesc = size.Name,
                         Status = (int)DataStatus.Normal
                     });
                     _inventoryRepo.Insert(new InventoryEntity()
                     {
-                        Amount = 1,
+                        Amount = size.Inventory,
                         ProductId = productEntity.Id,
                         PColorId = propertyvalueEntity.Id,
                         PSizeId = sizevalueEntity.Id,
@@ -206,31 +167,56 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         UpdateUser = authuid
 
                     });
+
                 }
+             
                 //step4: create image
-
-                resourceEntity.SourceType = (int)SourceType.Product;
-                resourceEntity.SourceId = productEntity.Id;
-                resourceEntity.ColorId = propertyvalueEntity.Id;
-                _resourceRepo.Update(resourceEntity);
-                
-                ts.Complete();
-                return this.RenderSuccess<dynamic>(c => c.Data = new
+                bool haveValidImage = false;
+                ResourceEntity resourceEntity = null;
+                int sortOrder = 1;
+                foreach (var image in request.Image_Ids.Reverse())
                 {
-                    id = productEntity.Id,
-                    image = resourceEntity.Name.Image320Url(),
-                    price = productEntity.Price,
-                    brand_name = brandEntity.Name,
-                    category_name = categoryEntity.C.Name
+                    resourceEntity = Context.Set<ResourceEntity>().Find(image);
+                    if (resourceEntity == null)
+                        continue;
+                    haveValidImage = true;
+                    resourceEntity.SourceType = (int)SourceType.Product;
+                    resourceEntity.SourceId = productEntity.Id;
+                    resourceEntity.ColorId = propertyvalueEntity.Id;
+                    resourceEntity.SortOrder = sortOrder++;
+                    _resourceRepo.Update(resourceEntity);
+                }
+                //step5: if create combo auto
+                int? comboId = null;
+                if (request.CreateCombo)
+                {
+                   IMS_ComboEntity comboEntity =  ComboLogic.CreateComboFromProduct(productEntity,assocateEntity);
+                   comboId = comboEntity.Id;
+                }
+                if (haveValidImage)
+                {
+                    ts.Complete();
+                    return this.RenderSuccess<dynamic>(c => c.Data = new
+                    {
+                        id = productEntity.Id,
+                        image = resourceEntity.Name.Image320Url(),
+                        price = productEntity.Price,
+                        brand_name = brandEntity.Name,
+                        category_name = categoryEntity.Name,
+                        combo_id = comboId
 
-                });
+                    });
+                }
+                else
+                    return this.RenderError(r=>r.Message="没有传入正确的图片");
                
             }
 
         }
 
+    
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Update([InternalJsonArrayAttribute("size_ids")]Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
+        public ActionResult Update(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
         {
             if (!ModelState.IsValid)
             {
@@ -244,39 +230,33 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "无权操作该商品");
             var files = Request.Files;
             bool needUpdateImage = false;
-            if (request.Image_Id >0 )
+            if (request.Image_Ids.Length >0 )
                 needUpdateImage = true;
-            var categoryEntity = Context.Set<TagEntity>()
-                                .Where(t => t.Id == request.Category_Id)
-                                .GroupJoin(Context.Set<CategoryPropertyEntity>().Join(Context.Set<CategoryPropertyValueEntity>(), o => o.Id, i => i.PropertyId, (o, i) => new { CP = o, CPV = i })
-                                    , o => o.Id, i => i.CP.CategoryId, (o, i) => new { C = o, CP = i }).FirstOrDefault()
-                                    ;
+            var categoryEntity = Context.Set<TagEntity>().Find(request.Category_Id);
             if (categoryEntity == null)
                 return this.RenderError(r => r.Message = "分类不存在");
-            if (categoryEntity.C.SizeType == (int)CategorySizeType.LimitSize
-                && request.Size_Ids.Length < 1)
-                return this.RenderError(r => r.Message = "分类尺码必选");
-            if (categoryEntity.C.SizeType == (int)CategorySizeType.FreeInput
-                && string.IsNullOrEmpty(request.Size_Str))
-                return this.RenderError(r => r.Message = "分类尺码必选");
-
-            bool isLimitSize = categoryEntity.C.SizeType == (int)CategorySizeType.LimitSize;
+            if (request.Sizes == null || request.Sizes.Length < 1)
+                return this.RenderError(r => r.Message = "必须传入一个尺码");
+    
             var brandEntity = Context.Set<BrandEntity>().Find(request.Brand_Id);
             if (brandEntity == null)
                 return this.RenderError(r => r.Message = "品牌不存在");
             request.UnitPrice = (!request.UnitPrice.HasValue || request.UnitPrice <= 0) ? request.Price : request.UnitPrice;
             if (request.UnitPrice < request.Price)
                 return this.RenderError(r => r.Message = "商品原价必须大于等于销售价！");
+            var productName = string.Format("{0}-{1}-{2}", brandEntity.Name, categoryEntity.Name, request.Sku_Code);
+            if (string.IsNullOrEmpty(request.Desc))
+                request.Desc = productName;
             using (var ts = new TransactionScope())
             {
                 //step1: update product 
-                var productName = string.Format("{0}-{1}-{2}", brandEntity.Name, categoryEntity.C.Name, request.Sku_Code);
+
                 productEntity.Brand_Id = request.Brand_Id;
                 productEntity.UpdatedDate = DateTime.Now;
                 productEntity.UpdatedUser = authuid;
                 productEntity.SkuCode = request.Sku_Code;
                 productEntity.Name = productName;
-                productEntity.Description = productName;
+                productEntity.Description = request.Desc;
                 productEntity.Price = request.Price;
                 productEntity.UnitPrice = request.UnitPrice;
                 productEntity.Tag_Id = request.Category_Id;
@@ -287,7 +267,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 productcodeEntity.UpdateDate = DateTime.Now;
                 _productCodeRepo.Update(productcodeEntity);
 
-                //step2: update product size property
+                //step2: update product color property
+                if (!string.IsNullOrEmpty(request.Color_Str))
+                {
+                    var colorPropertyEntity = Context.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == productEntity.Id && pp.IsColor == true).First();
+                    var colorValue = Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.PropertyId == colorPropertyEntity.Id && ppv.Status == (int)DataStatus.Normal).First();
+                    colorValue.ValueDesc = request.Color_Str;
+                    colorValue.UpdateDate = DateTime.Now;
+                    _productPropertyValueRepo.Update(colorValue);
+                }
+                //2.0 update size property
                 var sizePropertyEntity = Context.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == productEntity.Id && pp.IsSize == true).First();
 
                 //2.1 soft delete all propertyvalues
@@ -306,42 +295,87 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 //2.2 update property thereus
                 var colorProperty = Context.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == productEntity.Id && pp.IsColor == true)
                                       .Join(Context.Set<ProductPropertyValueEntity>(), o => o.Id, i => i.PropertyId, (o, i) => i).First();
-                if (isLimitSize)
+
+                foreach (var size in request.Sizes)
                 {
-                    foreach (var size in request.Size_Ids)
+                    var propertyValue = propertValues.Where(ppv => ppv.ValueDesc == size.Name).FirstOrDefault();
+                    if (propertyValue == null)
                     {
-                        var categoryPropertyValueEntity = categoryEntity.CP.Where(cp => cp.CPV.Id == size).FirstOrDefault();
-                        if (categoryPropertyValueEntity != null)
+                        var sizevalueEntity = _productPropertyValueRepo.Insert(new ProductPropertyValueEntity()
                         {
-                            var propertyValue = propertValues.Where(ppv => ppv.ValueDesc == categoryPropertyValueEntity.CPV.ValueDesc).FirstOrDefault();
-                            UpdateSingleProperty(productEntity.Id, colorProperty.Id, request.Size_Str, sizePropertyEntity.Id, propertyValue);
-                        }
+                            CreateDate = DateTime.Now,
+                            PropertyId = sizePropertyEntity.Id,
+                            UpdateDate = DateTime.Now,
+                            ValueDesc = size.Name,
+                            Status = (int)DataStatus.Normal
+                        });
+                        _inventoryRepo.Insert(new InventoryEntity()
+                        {
+                            Amount = size.Inventory,
+                            ProductId = productEntity.Id,
+                            PColorId = colorProperty.Id,
+                            PSizeId = sizevalueEntity.Id,
+                            UpdateDate = DateTime.Now,
+                            UpdateUser = 0
+
+                        });
                     }
-                }
-                else
-                {
-                    var propertyValue = propertValues.Where(ppv => ppv.ValueDesc == request.Size_Str).FirstOrDefault();
-                    UpdateSingleProperty(productEntity.Id, colorProperty.Id, request.Size_Str, sizePropertyEntity.Id, propertyValue);
+                    else
+                    {
+                        var inventory = Context.Set<InventoryEntity>().Where(i => i.ProductId == productEntity.Id &&
+                                                            i.PColorId == colorProperty.Id &&
+                                                            i.PSizeId == sizePropertyEntity.Id).FirstOrDefault();
+                        if (inventory != null)
+                        {
+                            inventory.Amount = size.Inventory;
+                            inventory.UpdateDate = DateTime.Now;
+                            _inventoryRepo.Update(inventory);
+                        }
+                        propertyValue.Status = (int)DataStatus.Normal;
+                        _productPropertyValueRepo.Update(propertyValue);
+                    }
+
 
                 }
+               
                 bool canCommit = true;
-                var currentResourceEntity = Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.SourceId == (int)productEntity.Id && r.Status == (int)DataStatus.Normal).First();
+                
                 //step4: create image
+               
+                ResourceEntity resourceEntity = null;
                 if (needUpdateImage)
                 {
-                    currentResourceEntity.Status = (int)DataStatus.Deleted;
-                    currentResourceEntity.UpdatedDate = DateTime.Now;
-                    _resourceRepo.Update(currentResourceEntity);
+                    var currentResources = Context.Set<ResourceEntity>().
+                                       Where(r => r.SourceType == (int)SourceType.Product &&
+                                                   r.SourceId == (int)productEntity.Id &&
+                                                   r.Status == (int)DataStatus.Normal);
+                    int colorPropertyId =0;
+                    foreach (var oldResource in currentResources)
+                    {
+                        if (colorPropertyId == 0)
+                            colorPropertyId = oldResource.ColorId??0;
+                        oldResource.Status = (int)DataStatus.Deleted;
+                        oldResource.UpdatedDate = DateTime.Now;
+                        _resourceRepo.Update(oldResource);
+                    }
 
-                    var colorPropertyId = currentResourceEntity.ColorId;
-                    currentResourceEntity = Context.Set<ResourceEntity>().Find(request.Image_Id);
-                    currentResourceEntity.SourceType = (int)SourceType.Product;
-                    currentResourceEntity.SourceId = productEntity.Id;
-                    currentResourceEntity.ColorId = colorPropertyId;
-                    currentResourceEntity.Status = (int)DataStatus.Normal;
-                    _resourceRepo.Update(currentResourceEntity);
+                    foreach (var newResource in request.Image_Ids)
+                    {
+                      
+                        var newResourceEntity = Context.Set<ResourceEntity>().Find(newResource);
+
+                        newResourceEntity.SourceType = (int)SourceType.Product;
+                        newResourceEntity.SourceId = productEntity.Id;
+                        newResourceEntity.ColorId = colorPropertyId;
+                        newResourceEntity.Status = (int)DataStatus.Normal;
+                        _resourceRepo.Update(newResourceEntity);
+                        if (resourceEntity == null)
+                            resourceEntity = newResourceEntity;
+                    }
                     
                 }
+                if (resourceEntity == null)
+                    canCommit = false;
 
                 if (canCommit)
                 {
@@ -349,7 +383,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     return this.RenderSuccess<dynamic>(c => c.Data = new
                     {
                         id = productEntity.Id,
-                        image = currentResourceEntity.Name.Image320Url(),
+                        image = resourceEntity.Name.Image320Url(),
                         price = productEntity.Price
                     });
                 }
@@ -361,46 +395,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
         }
 
-        private void UpdateSingleProperty(int productId, int colorId, string size, int sizeId, ProductPropertyValueEntity propertyValue)
-        {
-            if (propertyValue == null)
-            {
-                var sizevalueEntity = _productPropertyValueRepo.Insert(new ProductPropertyValueEntity()
-                {
-                    CreateDate = DateTime.Now,
-                    PropertyId = sizeId,
-                    UpdateDate = DateTime.Now,
-                    ValueDesc = size,
-                    Status = (int)DataStatus.Normal
-                });
-                _inventoryRepo.Insert(new InventoryEntity()
-                {
-                    Amount = 1,
-                    ProductId = productId,
-                    PColorId = colorId,
-                    PSizeId = sizevalueEntity.Id,
-                    UpdateDate = DateTime.Now,
-                    UpdateUser = 0
-
-                });
-            }
-            else
-            {
-                var inventory = Context.Set<InventoryEntity>().Where(i => i.ProductId == productId && i.PColorId == colorId && i.PSizeId == sizeId).FirstOrDefault();
-                if (inventory != null)
-                {
-                    inventory.Amount = 1;
-                    _inventoryRepo.Update(inventory);
-                }
-                propertyValue.Status = (int)DataStatus.Normal;
-                _productPropertyValueRepo.Update(propertyValue);
-            }
-
-
-
-        }
-
-
+      
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Detail(int id, int authuid)
         {

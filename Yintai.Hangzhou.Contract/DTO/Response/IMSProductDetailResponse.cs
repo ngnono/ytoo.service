@@ -48,6 +48,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name = "unitprice")]
         public decimal UnitPrice { get; set; }
 
+
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
     }
