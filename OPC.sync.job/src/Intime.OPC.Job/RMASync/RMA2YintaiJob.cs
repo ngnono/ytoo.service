@@ -68,7 +68,7 @@ namespace Intime.OPC.Job.RMASync
                 dynamic data = new
                 {
                     OPCSONumber = rma.OrderNo,
-                    Status = rma.Status == (int)EnumRMAStatus.PayVerify ? 700 : 300,
+                    Status = rma.Status == (int)EnumRMAStatus.ShipVerifyNotPass ? 300 : 700,
                     RMAType = 1,
                     OperaterFrom = 1,
                     OPCRMATrancaction = linq
@@ -107,7 +107,7 @@ namespace Intime.OPC.Job.RMASync
                     context.OPC_RMA.Where(
                         t => context.Map4Order.Any(m => m.OrderNo == t.OrderNo && m.Channel == "yintai") &&
                             t.UpdatedDate > _benchTime &&
-                            (t.Status == (int)EnumRMAStatus.PayVerify || t.Status == (int)EnumRMAStatus.ShipVerifyNotPass) &&
+                            (!string.IsNullOrEmpty(t.RMACashNum) || t.Status == (int)EnumRMAStatus.ShipVerifyNotPass) &&
                             !context.OPC_RMANotificationLogs.Any(
                                 x => x.RMANo == t.RMANo && x.Status == (int)status));
 

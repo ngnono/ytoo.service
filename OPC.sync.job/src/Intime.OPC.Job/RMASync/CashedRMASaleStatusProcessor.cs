@@ -25,13 +25,11 @@ namespace Intime.OPC.Job.RMASync
         /// <param name="statusResult"></param>
         public override void Process(string rmaNo, OrderStatusResultDto statusResult)
         {
-
-
             using (var db = new YintaiHZhouContext())
             {
                 var saleRMA = db.OPC_SaleRMA.FirstOrDefault(t => t.RMANo == rmaNo);
-                saleRMA.RMACashStatus = GetEnumDescription<EnumCashStatus>(EnumCashStatus.Cashed);
-                saleRMA.RMAStatus = GetEnumDescription<EnumReturnGoodsStatus>(EnumReturnGoodsStatus.Valid);
+                saleRMA.RMACashStatus = (int)EnumCashStatus.Cashed;
+                saleRMA.RMAStatus = (int)EnumReturnGoodsStatus.Valid;
                 saleRMA.UpdatedDate = DateTime.Now;
                 saleRMA.Status = (int)_status;
                 saleRMA.UpdatedUser = -100;

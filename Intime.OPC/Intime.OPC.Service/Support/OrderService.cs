@@ -110,10 +110,9 @@ namespace Intime.OPC.Service.Support
         {
             request.FormatDate();
 
-            string returnGoodsStatus = "";
             int status = EnumRMAStatus.ShipVerifyNotPass.AsID();
             _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
-            var lst = _orderRepository.GetBySaleRma(request, status, returnGoodsStatus);
+            var lst = _orderRepository.GetBySaleRma(request, status, EnumReturnGoodsStatus.None);
             return Mapper.Map<Order, OrderDto>(lst);
         }
 
@@ -121,8 +120,7 @@ namespace Intime.OPC.Service.Support
         {
             request.FormatDate();
             _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
-            string returnGoodsStatus = EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
-            var lst = _orderRepository.GetBySaleRma(request, null, returnGoodsStatus);
+            var lst = _orderRepository.GetBySaleRma(request, null, EnumReturnGoodsStatus.CompensateVerifyFailed);
             return Mapper.Map<Order, OrderDto>(lst);
         }
 

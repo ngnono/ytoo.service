@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
@@ -29,7 +30,8 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var query = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
-                var query2 = db.Orders.Where(t => CurrentUser.StoreIDs.Contains(t.StoreId));
+
+                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     query = query.Where(t => t.OrderNo.Contains(orderNo));
@@ -39,17 +41,17 @@ namespace Intime.OPC.Repository.Support
 
                 if (!string.IsNullOrWhiteSpace(payType))
                 {
-                    query2 = query2.Where(t => t.PaymentMethodCode==payType);
+                    query2 = query2.Where(t => t.PaymentMethodCode == payType);
                 }
 
                 if (bandId.HasValue)
                 {
-                    query2 = query2.Where(t => t.BrandId==bandId.Value);
+                    query2 = query2.Where(t => t.BrandId == bandId.Value);
                 }
-               
+
                 var q = from t in query2
-                    join o in query on t.OrderNo equals o.OrderNo into cs
-                    select new {SaleRMA = cs.FirstOrDefault(), Orders = t};
+                        join o in query on t.OrderNo equals o.OrderNo into cs
+                        select new { SaleRMA = cs.FirstOrDefault(), Orders = t };
                 q = q.OrderByDescending(t => t.Orders.OrderNo);
                 var lst = q.ToPageResult(pageIndex, pageSize);
                 var lstSaleRma = new List<SaleRmaDto>();
@@ -57,23 +59,23 @@ namespace Intime.OPC.Repository.Support
                 {
                     var o = new SaleRmaDto();
                     o.Id = t.Orders.Id;
-                   
+
                     o.CustomerAddress = t.Orders.ShippingAddress;
                     o.CustomerName = t.Orders.ShippingContactPerson;
                     o.CustomerPhone = t.Orders.ShippingContactPhone;
-                    
-                    o.IfReceipt = t.Orders.NeedInvoice.HasValue?t.Orders.NeedInvoice.Value:false;
-                    o.MustPayTotal =(double)( t.Orders.TotalAmount);
+
+                    o.IfReceipt = t.Orders.NeedInvoice.HasValue ? t.Orders.NeedInvoice.Value : false;
+                    o.MustPayTotal = (double)(t.Orders.TotalAmount);
                     o.OrderNo = t.Orders.OrderNo;
                     o.PaymentMethodName = t.Orders.PaymentMethodName;
-                    
+
                     o.ReceiptContent = t.Orders.InvoiceDetail;
                     o.ReceiptHead = t.Orders.InvoiceSubject;
-                   
+
                     o.OrderSource = t.Orders.OrderSource;
                     o.OrderTransFee = t.Orders.ShippingFee;
-                   
-                    if (t.SaleRMA!=null)
+
+                    if (t.SaleRMA != null)
                     {
                         o.BuyDate = t.Orders.CreateDate;
                         o.CustomFee = t.SaleRMA.CustomFee;
@@ -88,22 +90,22 @@ namespace Intime.OPC.Repository.Support
                     }
                     lstSaleRma.Add(o);
                 }
-                return new PageResult<SaleRmaDto>(lstSaleRma,lst.TotalCount);
+                return new PageResult<SaleRmaDto>(lstSaleRma, lst.TotalCount);
             }
         }
 
         public PageResult<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, DateTime startTime, DateTime endTime,
-            int? rmaStatus, int? storeId, string returnGoodsStatus,int pageIndex,int pageSize)
+            int? rmaStatus, int? storeId, EnumReturnGoodsStatus returnGoodsStatus, int pageIndex, int pageSize)
         {
             CheckUser();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
-                if (returnGoodsStatus.IsNotNull())
-                {
-                    query = query.Where(t => t.RMAStatus == returnGoodsStatus);
-                }
-                var query2 = db.Orders.Where(t=>true);
+                var query =
+                    db.OPC_SaleRMAs.Where(
+                        t =>
+                            t.CreatedDate >= startTime && t.CreatedDate < endTime &&
+                            CurrentUser.StoreIDs.Contains(t.StoreId) && t.RMAStatus == (int)returnGoodsStatus);
+                var query2 = db.Orders.Where(t => true);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     query = query.Where(t => t.OrderNo.Contains(orderNo));
@@ -128,14 +130,14 @@ namespace Intime.OPC.Repository.Support
                 {
                     query2 = query2.Where(t => t.PaymentMethodCode == payType);
                 }
-               
+
 
                 if (storeId.HasValue)
                 {
                     query2 = query2.Where(t => t.StoreId == storeId.Value);
                 }
 
-                var lst = query.Join(query2, t => t.OrderNo, o => o.OrderNo, (t, o) => new { SaleRMA = t, Orders = o }).OrderByDescending(t=>t.Orders.CreateDate).ToPageResult(pageIndex,pageSize);
+                var lst = query.Join(query2, t => t.OrderNo, o => o.OrderNo, (t, o) => new { SaleRMA = t, Orders = o }).OrderByDescending(t => t.Orders.CreateDate).ToPageResult(pageIndex, pageSize);
                 //var q = from t in query2
                 //        join o in query on t.OrderNo equals o.OrderNo into cs
                 //        select new { SaleRMA = cs.FirstOrDefault(), Orders = t };
@@ -147,12 +149,12 @@ namespace Intime.OPC.Repository.Support
                 foreach (var t in lst.Result)
                 {
                     var o = new SaleRmaDto();
-                    o.Id = t.Orders.Id; 
-                    
+                    o.Id = t.Orders.Id;
+
                     o.CustomerAddress = t.Orders.ShippingAddress;
                     o.CustomerName = t.Orders.ShippingContactPerson;
                     o.CustomerPhone = t.Orders.ShippingContactPhone;
-                   
+
                     o.IfReceipt = t.Orders.NeedInvoice.HasValue ? t.Orders.NeedInvoice.Value : false;
                     o.MustPayTotal = (double)(t.Orders.TotalAmount);
                     o.OrderNo = t.Orders.OrderNo;
@@ -176,13 +178,13 @@ namespace Intime.OPC.Repository.Support
                         o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
                         o.CustomerRemark = t.SaleRMA.Reason;
                         o.RmaNo = t.SaleRMA.RMANo;
-                        o.RMACount =t.SaleRMA.RMACount.HasValue? 0: t.SaleRMA.RMACount.Value;
+                        o.RMACount = t.SaleRMA.RMACount.HasValue ? 0 : t.SaleRMA.RMACount.Value;
                         o.CompensationFee = t.SaleRMA.CompensationFee;
                     }
 
                     lstSaleRma.Add(o);
                 }
-                return new PageResult<SaleRmaDto>(lstSaleRma,lst.TotalCount);
+                return new PageResult<SaleRmaDto>(lstSaleRma, lst.TotalCount);
             }
         }
         /// <summary>
@@ -199,23 +201,18 @@ namespace Intime.OPC.Repository.Support
         /// <param name="pageSize"></param>
         /// <returns></returns>
         public PageResult<SaleRmaDto> GetByReturnGoodPay(string orderNo, string saleOrderNo, string payType, string rmaNo, DateTime startTime, DateTime endTime,
-             int? storeId,int pageIndex, int pageSize)
+             int? storeId, int pageIndex, int pageSize)
         {
             CheckUser();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
-                //退货状态 已生效的退货单
-                //query = query.Where(t => t.RMAStatus == EnumReturnGoodsStatus.Valid.GetDescription());
-                
                 //收银状态 未送收银
-                query = query.Where(t => t.RMACashStatus == EnumRMACashStatus.NoCash.GetDescription());
-
+                var query = db.OPC_SaleRMAs.Where(t => t.RMACashStatus == (int)EnumRMACashStatus.NoCash && t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
                 var query2 = db.Orders.Where(t => true);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
-                    query = query.Where(t => t.OrderNo.Contains(orderNo));
-                    query2 = query2.Where(t => t.OrderNo.Contains(orderNo));
+                    query = query.Where(t => t.OrderNo == orderNo);
+                    query2 = query2.Where(t => t.OrderNo == orderNo);
                 }
 
                 if (!string.IsNullOrWhiteSpace(saleOrderNo))
@@ -286,7 +283,7 @@ namespace Intime.OPC.Repository.Support
         }
         public OPC_SaleRMA GetByRmaNo(string rmaNo)
         {
-            return  Select(t => t.RMANo == rmaNo).FirstOrDefault();
+            return Select(t => t.RMANo == rmaNo).FirstOrDefault();
         }
 
         public PageResult<SaleRmaDto> GetOrderAutoBack(ReturnGoodsRequest request)
@@ -294,7 +291,7 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var query = db.OPC_SaleRMAs.Where(t => true && CurrentUser.StoreIDs.Contains(t.StoreId));
-                var query2 = db.Orders.Where(t => CurrentUser.StoreIDs.Contains(t.StoreId) && t.CreateDate>=request.StartDate && t.CreateDate<request.EndDate);
+                var query2 = db.Orders.Where(t => CurrentUser.StoreIDs.Contains(t.StoreId) && t.CreateDate >= request.StartDate && t.CreateDate < request.EndDate);
                 var queryRMA = db.RMAs.Where(t => true);
                 if (request.OrderNo.IsNotNull())
                 {
@@ -313,12 +310,12 @@ namespace Intime.OPC.Repository.Support
                 {
                     query2 = query2.Where(t => t.BrandId == request.BandId.Value);
                 }
-               var  query3 = Queryable.Join(query2, queryRMA, t => t.OrderNo, o => o.OrderNo,
-                    (t, o) => new {Order = t, RMA = o});
+                var query3 = Queryable.Join(query2, queryRMA, t => t.OrderNo, o => o.OrderNo,
+                     (t, o) => new { Order = t, RMA = o });
 
-               var q = from t in query3
+                var q = from t in query3
                         join o in query on t.Order.OrderNo equals o.OrderNo into cs
-                        select new { SaleRMA = cs.FirstOrDefault(), Orders = t.Order,RMA=t.RMA };
+                        select new { SaleRMA = cs.FirstOrDefault(), Orders = t.Order, RMA = t.RMA };
                 q = q.OrderByDescending(t => t.Orders.CreateDate);
                 var lst = q.ToPageResult(request.pageIndex, request.pageSize);
                 var lstSaleRma = new List<SaleRmaDto>();
@@ -365,12 +362,12 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var lst= db.OPC_SaleRMAs.Where(t => t.SaleOrderNo == saleOrderNo).ToList();
+                var lst = db.OPC_SaleRMAs.Where(t => t.SaleOrderNo == saleOrderNo).ToList();
                 foreach (var sale in lst)
                 {
                     sale.Status = EnumRMAStatus.OutofStack.AsID();
-                    sale.RMAStatus = EnumReturnGoodsStatus.Valid.GetDescription();
-                    sale.RMACashStatus = EnumCashStatus.CashOver.GetDescription();
+                    sale.RMAStatus = (int)EnumReturnGoodsStatus.Valid;
+                    sale.RMACashStatus = EnumCashStatus.CashOver.AsID();
                 }
                 db.SaveChanges();
             }

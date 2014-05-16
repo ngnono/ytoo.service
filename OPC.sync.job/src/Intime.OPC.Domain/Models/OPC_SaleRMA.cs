@@ -24,8 +24,8 @@ namespace Intime.OPC.Domain.Models
         public Nullable<int> SectionId { get; set; }
         public string OrderNo { get; set; }
         public string SaleRMASource { get; set; }
-        public string RMAStatus { get; set; }
-        public string RMACashStatus { get; set; }
+        public int RMAStatus { get; set; }
+        public int RMACashStatus { get; set; }
         public string RMANo { get; set; }
         public Nullable<decimal> RealRMASumMoney { get; set; }
         public Nullable<decimal> RecoverableSumMoney { get; set; }

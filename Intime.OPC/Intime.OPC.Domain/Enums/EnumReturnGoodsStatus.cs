@@ -21,6 +21,10 @@ namespace Intime.OPC.Domain.Enums
     /// </summary>
     public enum EnumReturnGoodsStatus
     {
+
+        [Description("未操作")]
+        None = -1,
+
         [Description("未处理")]
         NoProcess = 0,
         /// <summary>

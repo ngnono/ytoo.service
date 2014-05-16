@@ -30,12 +30,6 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.SaleRMASource)
                 .IsRequired()
                 .HasMaxLength(20);
-
-            this.Property(t => t.RMAStatus)
-                .HasMaxLength(50);
-
-            this.Property(t => t.RMACashStatus)
-                .HasMaxLength(50);
             
 
             this.Property(t => t.RMANo)

@@ -121,9 +121,7 @@ namespace Intime.OPC.Repository.Support
             //todo 查询所有有退货的订单
             using (var db = new YintaiHZhouContext())
             {
-                var des = EnumReturnGoodsStatus.NoProcess.GetDescription();
-                
-                var filter2 = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus==des); ;
+                var filter2 = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus==(int)EnumReturnGoodsStatus.NoProcess); ;
 
                 var filter = db.Orders.Where(t => true);
 
@@ -166,17 +164,13 @@ namespace Intime.OPC.Repository.Support
             }
         }
 
-        public PageResult<Order> GetBySaleRma(ReturnGoodsInfoRequest request,int? rmaStatus,string returnGoodsStatus)
+        public PageResult<Order> GetBySaleRma(ReturnGoodsInfoRequest request,int? rmaStatus,EnumReturnGoodsStatus returnGoodsStatus)
         {
             using (var db = new YintaiHZhouContext())
             {
                 
 
-                var filter2 = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate );
-                if (returnGoodsStatus.IsNotNull())
-                {
-                    filter2 = filter2.Where(t => t.RMAStatus == returnGoodsStatus);
-                }
+                var filter2 = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus == (int)returnGoodsStatus );
 
                 if (rmaStatus.HasValue)
                 {
