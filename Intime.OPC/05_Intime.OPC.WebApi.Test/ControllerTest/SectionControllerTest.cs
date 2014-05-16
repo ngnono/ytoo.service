@@ -9,6 +9,7 @@ using System.Web.Http.Results;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Dto;
+using Intime.OPC.Repository.Impl;
 using Intime.OPC.Repository.Support;
 using Intime.OPC.WebApi.Controllers;
 using NUnit.Framework;
@@ -125,6 +126,8 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
             var actual = _controller.Post(new SectionDto
             {
                 Name = "Test_001",
+                Code = "asdfq2@$a",
+                ContactPhone = "110",
                 Enabled = true,
 
             }, 0) as OkNegotiatedContentResult<SectionDto>;
@@ -135,7 +138,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
         }
 
         [Test()]
-        public void Put([Values(879)]int id)
+        public void Put([Values(883)]int id)
         {
             _controller.Request.Method = HttpMethod.Put;
 
@@ -144,6 +147,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
                 Name = "Test_002",
                 Enabled = true,
                 Id = id,
+                Code = "asdf9876",
                 Brands = new List<BrandDto>()
                 {
                     new BrandDto()

@@ -4,9 +4,9 @@ namespace Intime.OPC.Domain.Models
 {
     public partial class Brand
     {
-        public IEnumerable<Section> Sections { get; set; }
+        public virtual IEnumerable<Section> Sections { get; set; }
 
-        public IEnumerable<OpcSupplierInfo> Suppliers { get; set; }
+        public virtual IEnumerable<OpcSupplierInfo> Suppliers { get; set; }
 
         public static Brand Convert2Brand(dynamic obj)
         {

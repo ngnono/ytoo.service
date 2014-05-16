@@ -11,13 +11,13 @@ using Intime.OPC.Domain.Enums.SortOrder;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
 
-namespace Intime.OPC.Repository.Support
+namespace Intime.OPC.Repository.Impl
 {
     public class SupplierRepository : OPCBaseRepository<int, OpcSupplierInfo>, ISupplierRepository
     {
         #region methods
 
-        private static Expression<Func<OpcSupplierInfo, bool>> Filler(SupplierFilter filter)
+        private static Expression<Func<OpcSupplierInfo, bool>> Filter(SupplierFilter filter)
         {
             var query = PredicateBuilder.True<OpcSupplierInfo>();
 
@@ -29,6 +29,15 @@ namespace Intime.OPC.Repository.Support
                 if (filter.Status != null)
                 {
                     query = PredicateBuilder.And(query, v => v.Status == filter.Status.Value);
+                }
+                else
+                {
+                    query = PredicateBuilder.And(query, v => v.Status > 0);
+                }
+
+                if (!String.IsNullOrWhiteSpace(filter.Name))
+                {
+                    query = PredicateBuilder.And(query, v => v.SupplierName == filter.Name);
                 }
             }
 
@@ -59,7 +68,7 @@ namespace Intime.OPC.Repository.Support
 
         public override IEnumerable<OpcSupplierInfo> AutoComplete(string query)
         {
-            var filter = Filler(new SupplierFilter
+            var filter = Filter(new SupplierFilter
             {
                 NamePrefix = query
             });
@@ -77,7 +86,7 @@ namespace Intime.OPC.Repository.Support
         /// <returns></returns>
         public List<OpcSupplierInfo> GetPagedList(PagerRequest pagerRequest, out int totalCount, SupplierFilter filter, SupplierSortOrder sortOrder)
         {
-            var query = Filler(filter);
+            var query = Filter(filter);
             var orderBy = OrderBy(sortOrder);
             var result = Func(c =>
             {

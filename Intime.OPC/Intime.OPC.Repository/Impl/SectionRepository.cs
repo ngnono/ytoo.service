@@ -15,8 +15,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
@@ -29,7 +27,7 @@ using Intime.OPC.Repository.Base;
 using LinqKit;
 using PredicateBuilder = LinqKit.PredicateBuilder;
 
-namespace Intime.OPC.Repository.Support
+namespace Intime.OPC.Repository.Impl
 {
     /// <summary>
     ///  专柜
@@ -218,7 +216,8 @@ namespace Intime.OPC.Repository.Support
                                  Status = b.Status,
                                  UpdatedDate = b.UpdatedDate,
                                  UpdatedUser = b.UpdatedUser,
-                                 WebSite = b.WebSite
+                                 WebSite = b.WebSite,
+                                 
                              }
                              )
                          select new SectionClone()
@@ -237,7 +236,8 @@ namespace Intime.OPC.Repository.Support
                              StoreId = s.section.StoreId,
                              UpdateDate = s.section.UpdateDate,
                              UpdateUser = s.section.UpdateUser,
-                             Brands = brands
+                             Brands = brands,
+                             SectionCode = s.section.SectionCode
                          };
 
 
@@ -312,7 +312,8 @@ namespace Intime.OPC.Repository.Support
                              StoreId = s.section.StoreId,
                              UpdateDate = s.section.UpdateDate,
                              UpdateUser = s.section.UpdateUser,
-                             Brands = brands
+                             Brands = brands,
+                             SectionCode = s.section.SectionCode
                          };
 
                 return AutoMapper.Mapper.Map<SectionClone, Section>(qr.FirstOrDefault());

@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Dto;
-using Intime.OPC.Repository.Support;
+using Intime.OPC.Repository.Impl;
 using Intime.OPC.Service.Support;
 using Intime.OPC.WebApi.App_Start;
 using Intime.OPC.WebApi.Controllers;
 using NUnit.Framework;
 
-namespace Intime.OPC.WebApi.Test
+namespace Intime.OPC.WebApi.Test.ControllerTest
 {
     [TestFixture]
-    public class BrandControllerTest
+    public class BrandControllerTest : BaseControllerTest
     {
         private BrandController _controller;
 
@@ -29,18 +28,6 @@ namespace Intime.OPC.WebApi.Test
             _controller.Request.SetConfiguration(new HttpConfiguration());
 
             return _controller;
-        }
-
-        [TestFixtureSetUp]
-        public void ClassInit()
-        {
-            AutoMapperConfig.Config();
-        }
-
-        [TestFixtureTearDown]
-        public void ClassClear()
-        {
-
         }
 
         [SetUp]
@@ -124,7 +111,7 @@ namespace Intime.OPC.WebApi.Test
             }, 0) as OkNegotiatedContentResult<PagerInfo<BrandDto>>;
 
             Assert.IsNotNull(actual);
-            Assert.IsTrue(actual.Content.Datas.Count>0);
+            Assert.IsTrue(actual.Content.Datas.Count > 0);
         }
 
         [Test()]
@@ -183,7 +170,7 @@ namespace Intime.OPC.WebApi.Test
 
             Assert.IsNotNull(actual);
         }
-                [Test()]
+        [Test()]
         public void Delete([Values(1000961)]int id)
         {
             _controller.Request.Method = HttpMethod.Delete;

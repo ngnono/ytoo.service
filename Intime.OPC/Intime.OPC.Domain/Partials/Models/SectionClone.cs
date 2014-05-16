@@ -20,5 +20,7 @@ namespace Intime.OPC.Domain.Models
         public string StoreCode { get; set; }
         public Nullable<int> ChannelSectionId { get; set; }
         public IEnumerable<BrandClone> Brands { get; set; }
+
+        public string SectionCode { get; set; }
     }
 }

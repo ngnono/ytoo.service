@@ -19,7 +19,6 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.Serialization.Formatters;
 using System.Transactions;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.BusinessModel;
@@ -29,7 +28,7 @@ using Intime.OPC.Repository.Base;
 using LinqKit;
 using PredicateBuilder = LinqKit.PredicateBuilder;
 
-namespace Intime.OPC.Repository.Support
+namespace Intime.OPC.Repository.Impl
 {
     /// <summary>
     /// Class BrandRepository.
@@ -249,7 +248,8 @@ namespace Intime.OPC.Repository.Support
                                        StoreCode = s.StoreCode,
                                        StoreId = s.StoreId,
                                        UpdateDate = s.UpdateDate,
-                                       UpdateUser = s.UpdateUser
+                                       UpdateUser = s.UpdateUser,
+                                       SectionCode = s.SectionCode
                                    })
                          select new BrandClone()
                          {
@@ -426,7 +426,8 @@ namespace Intime.OPC.Repository.Support
                                        StoreCode = s.StoreCode,
                                        StoreId = s.StoreId,
                                        UpdateDate = s.UpdateDate,
-                                       UpdateUser = s.UpdateUser
+                                       UpdateUser = s.UpdateUser,
+                                       SectionCode = s.SectionCode
                                    })
                          select new BrandClone()
                          {
