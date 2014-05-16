@@ -34,21 +34,5 @@ namespace Yintai.Hangzhou.WebApiCore.Test
 
             }
         }
-
-        [TestMethod]
-        public void GetTest()
-        {
-            var controller = new ProductController(ElasticClient);
-
-            dynamic request = new
-            {
-                Page = 1,
-                page_index = 1,
-                page_size = 10,
-                last_update = "2013-03-05T12:59:59"
-            };
-
-            controller.Get(request, "test");
-        }
     }
 }

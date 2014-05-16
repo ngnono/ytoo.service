@@ -15,157 +15,164 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         [ValidateParameters]
         public ActionResult Create(dynamic request, string channel)
         {
-            int authuid = GG_CREATE_USERID;
-            using (var db = Context)
+            const int authuid = GG_CREATE_USERID;
+            //using (var db = Context)
+            //{
+            var db = Context;
+            string channelOrderNo = request.sonumber;
+            if (db.Set<Map4Order>().Any(x => x.Channel == channel && x.ChannelOrderCode == channelOrderNo))
             {
-                var orderNo = OrderRule.CreateCode(0);
-                using (var ts = new TransactionScope())
+                return this.RenderError(r => r.Message = string.Format("订单号({0})对应订单已存在！", channelOrderNo));
+            }
+
+            var orderNo = OrderRule.CreateCode(0);
+            using (var ts = new TransactionScope())
+            {
+                var order = new OrderEntity()
                 {
-                    var order = new OrderEntity()
-                    {
-                        CreateDate = DateTime.Now,
-                        CreateUser = authuid,
-                        BrandId = 0,
-                        CustomerId = authuid,
-                        InvoiceAmount = request.invoice != null ? request.invoice.amount : null,
-                        InvoiceDetail = request.invoice.detail,
-                        InvoiceSubject = request.invoice.subject,
-                        Memo = request.memo,
-                        ShippingAddress = request.contact.addr,
-                        ShippingContactPerson = request.contact.person,
-                        ShippingContactPhone = request.contact.phone,
-                        ShippingZipCode = request.contact.zip,
-                        TotalAmount = request.totalAmount,
-                        RecAmount = request.receivedAmount,
-                        ShippingFee = request.shippingFee,
-                        OrderSource = channel,
-                        OrderProductType = (int)OrderProductType.SystemProduct,
-                        OrderNo = orderNo,
-                        Status = request.paid ? (int)OrderStatus.Paid : (int)OrderStatus.Complete,
-                    };
+                    CreateDate = DateTime.Now,
+                    CreateUser = authuid,
+                    BrandId = 0,
+                    CustomerId = authuid,
+                    InvoiceAmount = request.invoice != null ? request.invoice.amount : null,
+                    InvoiceDetail = request.invoice.detail,
+                    InvoiceSubject = request.invoice.subject,
+                    Memo = request.memo,
+                    ShippingAddress = request.contact.addr,
+                    ShippingContactPerson = request.contact.person,
+                    ShippingContactPhone = request.contact.phone,
+                    ShippingZipCode = request.contact.zip,
+                    TotalAmount = request.totalAmount,
+                    RecAmount = request.receivedAmount,
+                    ShippingFee = request.shippingFee,
+                    OrderSource = channel,
+                    OrderProductType = (int)OrderProductType.SystemProduct,
+                    OrderNo = orderNo,
+                    Status = request.paid ? (int)OrderStatus.Paid : (int)OrderStatus.Complete,
+                };
 
-                    if (request.paid)
+                if (request.paid)
+                {
+                    if (request.payment == null || request.payment.Count == 0)
                     {
-                        if (request.payment == null || request.payment.Count == 0)
-                        {
-                            return this.RenderError(r => r.Message = "没有支付信息的订单");
-                        }
-
-                        foreach (var pay in request.payment)
-                        {
-                            string payCode = pay.code;
-                            var method = db.Set<PaymentMethodEntity>().FirstOrDefault(x => x.Code == payCode);
-                            if (method == null)
-                            {
-                                return this.RenderError(r => r.Message = "不支持的支付方式");
-                            }
-                            order.PaymentMethodCode = method.Code;
-                            order.PaymentMethodName = method.Name;
-                            var payment = new OrderTransactionEntity()
-                            {
-                                Amount = pay.amount,
-                                PaymentCode = method.Code,
-                                CreateDate = DateTime.Now,
-                                CanSync = -1,
-                                OrderNo = order.OrderNo,
-                                TransNo = request.transno, //淘宝订单号??
-                            };
-                            db.Set<OrderTransactionEntity>().Add(payment);
-                        }
+                        return this.RenderError(r => r.Message = "没有支付信息的订单");
                     }
 
-
-                    if (request.products == null || request.products.Count == 0)
+                    foreach (var pay in request.payment)
                     {
-                        return this.RenderError(r => r.Message = "订单没有商品信息");
-                    }
-                    foreach (var item in request.products)
-                    {
-                        int productId = item.productId;
-                        var product = db.Set<ProductEntity>().FirstOrDefault(x => x.Id == productId);
-                        if (product == null)
+                        string payCode = pay.code;
+                        var method = db.Set<PaymentMethodEntity>().FirstOrDefault(x => x.Code == payCode);
+                        if (method == null)
                         {
-                            return
-                                this.RenderError(
-                                    r => r.Message = string.Format("订单包含无效的商品！商品Id = ({0})", productId));
+                            return this.RenderError(r => r.Message = "不支持的支付方式");
                         }
-
-                        //var colorValueId = (int)item.colorValueId;
-                        //var sizeValueId = (int)item.sizeValueId;
-                        var stockId = (int) item.stockId;
-                        var inventory =
-                            db.Set<InventoryEntity>().FirstOrDefault(
-                                x => x.Id == stockId);
-
-                        int itemQuantity = item.quantity;
-
-                        if (inventory == null)
+                        order.PaymentMethodCode = method.Code;
+                        order.PaymentMethodName = method.Name;
+                        var payment = new OrderTransactionEntity()
                         {
-                            return this.RenderError(r => r.Message = "订单商品没有库存信息，请排查!");
-                        }
-
-                        if (inventory.Amount < itemQuantity)
-                        {
-                            return this.RenderError(r => r.Message = string.Format("商品({0})库存不足，无法创建订单", product.Id));
-                        }
-
-                        inventory.Amount -= itemQuantity; //扣减库存
-
-                        var colorEntity = db.Set<ProductPropertyValueEntity>().FirstOrDefault(ppv => ppv.Id == inventory.PColorId);
-                        var sizeEntity = db.Set<ProductPropertyValueEntity>().FirstOrDefault(ppv => ppv.Id == inventory.PSizeId);
-
-                        var colorValueName = colorEntity == null ? string.Empty : colorEntity.ValueDesc;
-                        var sizeValueName = sizeEntity == null ? string.Empty : sizeEntity.ValueDesc;
-                        db.Set<OrderItemEntity>().Add(new OrderItemEntity()
-                        {
-                            OrderNo = order.OrderNo,
-                            ProductId = product.Id,
-                            BrandId = product.Brand_Id,
-                            StoreId = product.Store_Id,
-                            CreateUser = authuid,
+                            Amount = pay.amount,
+                            PaymentCode = method.Code,
                             CreateDate = DateTime.Now,
-                            ItemPrice = item.itemPrice,
-                            Quantity = itemQuantity,
-                            ProductName = product.Name,
-                            Status = (int)DataStatus.Normal,
-                            UpdateDate = DateTime.Now,
-                            UpdateUser = authuid,
-                            ExtendPrice = item.extendPrice,
-                            ProductDesc = string.Format("{0}:{1},{2}:{3}", "颜色", colorValueName, "尺码", sizeValueName),
-                            ColorId = colorEntity == null ? 0 : colorEntity.PropertyId,
-                            ColorValueId = colorEntity == null ? 0 : colorEntity.Id,
-                            SizeId = sizeEntity == null ? 0 : sizeEntity.PropertyId,
-                            SizeValueId = sizeEntity == null ? 0 : sizeEntity.Id,
-                            ColorValueName = colorValueName,
-                            SizeValueName = sizeValueName,
-                            StoreItemNo = product.SkuCode,
-                            Points = 0,
-                            UnitPrice = product.UnitPrice
-                        });
+                            CanSync = -1,
+                            OrderNo = order.OrderNo,
+                            TransNo = request.transno, //淘宝订单号??
+                        };
+                        db.Set<OrderTransactionEntity>().Add(payment);
+                    }
+                }
+
+
+                if (request.products == null || request.products.Count == 0)
+                {
+                    return this.RenderError(r => r.Message = "订单没有商品信息");
+                }
+                foreach (var item in request.products)
+                {
+                    int productId = item.productId;
+                    var product = db.Set<ProductEntity>().FirstOrDefault(x => x.Id == productId);
+                    if (product == null)
+                    {
+                        return
+                            this.RenderError(
+                                r => r.Message = string.Format("订单包含无效的商品！商品Id = ({0})", productId));
                     }
 
-                    db.Set<Map4Order>().Add(new Map4Order
-                    {
-                        ChannelOrderCode = request.sonumber,
-                        OrderNo = order.OrderNo,
-                        Channel = channel,
-                        CreateDate = DateTime.Now,
-                        UpdateDate = DateTime.Now,
-                        SyncStatus = (int)OrderOpera.FromCustomer,
-                    });
-                    db.Set<OrderLogEntity>().Add(new OrderLogEntity()
-                    {
-                        CreateDate = DateTime.Now,
-                        CreateUser = authuid,
-                        CustomerId = authuid,
-                        Operation = request.paid ? "创建已支付订单" : "创建订单",
-                        OrderNo = order.OrderNo,
-                        Type = (int)OrderOpera.FromOperator
-                    });
+                    //var colorValueId = (int)item.colorValueId;
+                    //var sizeValueId = (int)item.sizeValueId;
+                    var stockId = (int)item.stockId;
+                    var inventory =
+                        db.Set<InventoryEntity>().FirstOrDefault(
+                            x => x.Id == stockId);
 
-                    db.SaveChanges();
-                    ts.Complete();
+                    int itemQuantity = item.quantity;
+
+                    if (inventory == null)
+                    {
+                        return this.RenderError(r => r.Message = "订单商品没有库存信息，请排查!");
+                    }
+
+                    if (inventory.Amount < itemQuantity)
+                    {
+                        return this.RenderError(r => r.Message = string.Format("商品({0})库存不足，无法创建订单", product.Id));
+                    }
+
+                    inventory.Amount -= itemQuantity; //扣减库存
+
+                    var colorEntity = db.Set<ProductPropertyValueEntity>().FirstOrDefault(ppv => ppv.Id == inventory.PColorId);
+                    var sizeEntity = db.Set<ProductPropertyValueEntity>().FirstOrDefault(ppv => ppv.Id == inventory.PSizeId);
+
+                    var colorValueName = colorEntity == null ? string.Empty : colorEntity.ValueDesc;
+                    var sizeValueName = sizeEntity == null ? string.Empty : sizeEntity.ValueDesc;
+                    db.Set<OrderItemEntity>().Add(new OrderItemEntity()
+                    {
+                        OrderNo = order.OrderNo,
+                        ProductId = product.Id,
+                        BrandId = product.Brand_Id,
+                        StoreId = product.Store_Id,
+                        CreateUser = authuid,
+                        CreateDate = DateTime.Now,
+                        ItemPrice = item.itemPrice,
+                        Quantity = itemQuantity,
+                        ProductName = product.Name,
+                        Status = (int)DataStatus.Normal,
+                        UpdateDate = DateTime.Now,
+                        UpdateUser = authuid,
+                        ExtendPrice = item.extendPrice,
+                        ProductDesc = string.Format("{0}:{1},{2}:{3}", "颜色", colorValueName, "尺码", sizeValueName),
+                        ColorId = colorEntity == null ? 0 : colorEntity.PropertyId,
+                        ColorValueId = colorEntity == null ? 0 : colorEntity.Id,
+                        SizeId = sizeEntity == null ? 0 : sizeEntity.PropertyId,
+                        SizeValueId = sizeEntity == null ? 0 : sizeEntity.Id,
+                        ColorValueName = colorValueName,
+                        SizeValueName = sizeValueName,
+                        StoreItemNo = product.SkuCode,
+                        Points = 0,
+                        UnitPrice = product.UnitPrice
+                    });
                 }
+
+                db.Set<Map4Order>().Add(new Map4Order
+                {
+                    ChannelOrderCode = request.sonumber,
+                    OrderNo = order.OrderNo,
+                    Channel = channel,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    SyncStatus = (int)OrderOpera.FromCustomer,
+                });
+                db.Set<OrderLogEntity>().Add(new OrderLogEntity()
+                {
+                    CreateDate = DateTime.Now,
+                    CreateUser = authuid,
+                    CustomerId = authuid,
+                    Operation = request.paid ? "创建已支付订单" : "创建订单",
+                    OrderNo = order.OrderNo,
+                    Type = (int)OrderOpera.FromOperator
+                });
+
+                db.SaveChanges();
+                ts.Complete();
+                //}
 
                 return this.RenderSuccess<dynamic>(r => r.Data = new { orderno = orderNo });
             }
@@ -175,50 +182,50 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         public ActionResult Void(dynamic request, string channel)
         {
             string orderNo = request.orderno;
-            using (var db = Context)
+            //using (var db = Context)
+            //{
+            var db = Context;
+            var order =
+                db.Set<OrderEntity>()
+                    .FirstOrDefault(
+                        x =>
+                            x.OrderNo == orderNo);
+            if (order == null)
             {
-                
-                var order =
-                    db.Set<OrderEntity>()
-                        .FirstOrDefault(
-                            x =>
-                                x.OrderNo == orderNo);
-                if (order == null)
-                {
-                    return this.RenderError(r => r.Message = string.Format("无效的订单号({0})", orderNo));
-                }
-                if (order.Status > (int)OrderStatus.OrderPrinted)
-                {
-                    return this.RenderError(r => r.Message = "订单已发货，不能取消");
-                }
-                var map4Order = db.Set<Map4Order>().FirstOrDefault(m => m.Channel == channel && m.OrderNo == orderNo);
-                if (map4Order == null)
-                {
-                    return this.RenderError(r => r.Message = string.Format("该渠道({0})不存在此订单号({1})对应的订单", channel, orderNo));
-                }
-                using (var ts = new TransactionScope())
-                {
-                    order.Status = (int)OrderStatus.Void;
-                    order.UpdateDate = DateTime.Now;
-                    order.UpdateUser = GG_CREATE_USERID;
-                    map4Order.SyncStatus = (int)OrderOpera.CustomerVoid;
-                    map4Order.UpdateDate = DateTime.Now;
-
-                    Context.Set<OrderLogEntity>().Add(
-                        new OrderLogEntity()
-                        {
-                            CreateDate = DateTime.Now,
-                            CreateUser = GG_CREATE_USERID,
-                            CustomerId = GG_CREATE_USERID,
-                            Operation = "取消订单",
-                            OrderNo = orderNo,
-                            Type = (int)OrderOpera.SystemVoid
-                        });
-
-                    db.SaveChanges();
-                    ts.Complete();
-                }
+                return this.RenderError(r => r.Message = string.Format("无效的订单号({0})", orderNo));
             }
+            if (order.Status > (int)OrderStatus.OrderPrinted)
+            {
+                return this.RenderError(r => r.Message = "订单已发货，不能取消");
+            }
+            var map4Order = db.Set<Map4Order>().FirstOrDefault(m => m.Channel == channel && m.OrderNo == orderNo);
+            if (map4Order == null)
+            {
+                return this.RenderError(r => r.Message = string.Format("该渠道({0})不存在此订单号({1})对应的订单", channel, orderNo));
+            }
+            using (var ts = new TransactionScope())
+            {
+                order.Status = (int)OrderStatus.Void;
+                order.UpdateDate = DateTime.Now;
+                order.UpdateUser = GG_CREATE_USERID;
+                map4Order.SyncStatus = (int)OrderOpera.CustomerVoid;
+                map4Order.UpdateDate = DateTime.Now;
+
+                Context.Set<OrderLogEntity>().Add(
+                    new OrderLogEntity()
+                    {
+                        CreateDate = DateTime.Now,
+                        CreateUser = GG_CREATE_USERID,
+                        CustomerId = GG_CREATE_USERID,
+                        Operation = "取消订单",
+                        OrderNo = orderNo,
+                        Type = (int)OrderOpera.SystemVoid
+                    });
+
+                db.SaveChanges();
+                ts.Complete();
+            }
+            //}
             return this.RenderSuccess<dynamic>(t => t.IsSuccess = true);
         }
 
@@ -336,21 +343,21 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
 
         private IEnumerable<dynamic> QueryStatus(OrderEntity order)
         {
-            if (order.Status != (int) OrderStatus.Shipped)
+            if (order.Status != (int)OrderStatus.Shipped)
             {
                 yield return new List<dynamic>();
             }
             var list = Context.Set<OPC_SaleEntity>()
                 .Where(sale => sale.OrderNo == order.OrderNo)
                 .Join(Context.Set<OPC_SaleDetailEntity>(), sale => sale.SaleOrderNo, detail => detail.SaleOrderNo,
-                    (sale, detail) => new {sale, detail})
+                    (sale, detail) => new { sale, detail })
                 .Join(Context.Set<OPC_ShippingSaleEntity>(), sale => sale.sale.ShippingSaleId, shipping => shipping.Id,
-                    (sale, shipping) => new {sale, shipping})
+                    (sale, shipping) => new { sale, shipping })
                 .Join(Context.Set<OrderItemEntity>().Where(i => i.OrderNo == order.OrderNo),
-                    x => x.sale.detail.OrderItemID, i => i.Id, (x, i) => new {x, i})
+                    x => x.sale.detail.OrderItemID, i => i.Id, (x, i) => new { x, i })
                 .Join(Context.Set<StoreEntity>(), x => x.x.shipping.StoreId, st => st.Id, (x, st) => new
                 {
-                    saleDetail = x.x.sale.detail, 
+                    saleDetail = x.x.sale.detail,
                     x.x.shipping,
                     item = x.i,
                     store = st
