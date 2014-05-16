@@ -166,7 +166,7 @@ namespace Intime.OPC.Repository.Support
 
                     if (t.SaleRMA != null)
                     {
-                        o.BuyDate = t.SaleRMA.CreatedDate;
+                        o.BuyDate = t.Orders.CreateDate;
                         o.CustomFee = t.SaleRMA.CustomFee;
                         o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
                         o.RecoverableSumMoney = t.SaleRMA.RecoverableSumMoney;
