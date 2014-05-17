@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using Intime.OPC.Modules.Dimension.Common;
-using Intime.OPC.Modules.Dimension.Models;
+using OPCApp.Domain.Models;
 
 namespace Intime.OPC.Modules.Dimension.ViewModels
 {

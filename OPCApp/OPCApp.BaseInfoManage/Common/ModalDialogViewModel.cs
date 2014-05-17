@@ -9,7 +9,7 @@ using Microsoft.Practices.Prism.Mvvm;
 namespace Intime.OPC.Modules.Dimension.Common
 {
     public abstract class ModalDialogViewModel<TDimension> : ViewModelBase, INotification, IInteractionRequestAware
-        where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension, new()
+        where TDimension : OPCApp.Domain.Models.Dimension, new()
     {
         private TDimension _model;
 

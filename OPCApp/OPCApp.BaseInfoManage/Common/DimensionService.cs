@@ -7,12 +7,11 @@ using OPCApp.Infrastructure.REST;
 using OPCAPP.Common.Extensions;
 using OPCApp.Infrastructure.Rest;
 using Intime.OPC.Infrastructure.Service;
-using Intime.OPC.Modules.Dimension.Models;
 
 namespace Intime.OPC.Modules.Dimension.Common
 {
     public abstract class DimensionService<TDimension> : IService<TDimension>, IPartImportsSatisfiedNotification
-        where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension
+        where TDimension : OPCApp.Domain.Models.Dimension
     {
         private IRestClient _restClient;
         private string _uriName;

@@ -13,6 +13,8 @@ using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using Intime.OPC.Modules.Logistics.Print;
 using Intime.OPC.Infrastructure.Mvvm;
+using Intime.OPC.Modules.Logistics.Criteria;
+using Intime.OPC.Infrastructure.Service;
 
 namespace Intime.OPC.Modules.Logistics.ViewModels
 {
@@ -20,8 +22,10 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class StoreOutViewModel : PrintInvoiceViewModel
     {
-        private List<Order> _orderList;
-        private List<OPC_ShippingSale> _shipList;
+        private QuerySalesOrder _queryCriteria;
+        private IList<Order> _orders;
+        private IList<OPC_Sale> _salesOrders;
+        private IList<OPC_ShippingSale> _shipList;
         private OPC_ShippingSale _shipSale;
         private ShippingSaleCreateDto _shippingSaleCreateDto;
 
@@ -29,7 +33,8 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         {
             //初始化命令属性
             SearchSaleStatus = EnumSearchSaleStatus.StoreOutDataBaseSearchStatus;
-            //初始化命令属性
+
+            QuerySalesOrderCommand = new AsyncDelegateCommand(OnSalesOrderQuery);
             PrintInvoiceCommand = new DelegateCommand(PrintInvoice);
             OnlyPrintCommand = new DelegateCommand(OnlyPrint);
             PrintExpressCommand = new DelegateCommand(PrintExpress);
@@ -49,6 +54,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         #region Commands
 
+        public ICommand QuerySalesOrderCommand { get; set; }
         public ICommand PrintDeliveryOrderCommand { get; set; }
         public ICommand PreviewDeliveryOrderCommand { get; set; }
         public ICommand ShipSaleHandOverCommand { get; set; }
@@ -69,22 +75,37 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         #region Properties
 
+        [Import]
+        public IService<OPC_Sale> SalesOrderService { get; set; }
+
+        public QuerySalesOrder QueryCriteria
+        {
+            get { return _queryCriteria; }
+            set { SetProperty(ref _queryCriteria, value); }
+        }
+
         public OPC_ShippingSale ShipSaleSelected
         {
             get { return _shipSale; }
             set { SetProperty(ref _shipSale, value); }
         }
 
-        public List<OPC_ShippingSale> ShipSaleList
+        public IList<OPC_ShippingSale> ShipSaleList
         {
             get { return _shipList; }
             set { SetProperty(ref _shipList, value); }
         }
 
-        public List<Order> OrderList
+        public IList<Order> Orders
         {
-            get { return _orderList; }
-            set { SetProperty(ref _orderList, value); }
+            get { return _orders; }
+            set { SetProperty(ref _orders, value); }
+        }
+
+        public IList<OPC_Sale> SalesOrders
+        {
+            get { return _salesOrders; }
+            set { SetProperty(ref _salesOrders, value); }
         }
 
         public ShipVia ShipVia { get; set; }
@@ -102,6 +123,16 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         #endregion
 
         #region Command Handlers
+
+        private void OnSalesOrderQuery()
+        {
+            var result = SalesOrderService.Query(_queryCriteria);
+            SalesOrders = result.Data;
+            if (result.TotalCount == 0)
+            {
+                MessageBox.Show("没有符合条件的销售单","提示", MessageBoxButton.OK,MessageBoxImage.Information);
+            }
+        }
 
         private void ShippSaleHandOver()
         {
@@ -147,9 +178,9 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
             var printModel = new PrintExpressModel()
             {
-                CustomerAddress = OrderList[0].CustomerAddress,
-                CustomerName = OrderList[0].CustomerName,
-                CustomerPhone = OrderList[0].CustomerPhone,
+                CustomerAddress = Orders[0].CustomerAddress,
+                CustomerName = Orders[0].CustomerName,
+                CustomerPhone = Orders[0].CustomerPhone,
                 ExpressFee = ShipSaleSelected.ExpressFee.ToString("f2")
             };
             pr.PrintExpress(rdlcName, printModel,true);
@@ -170,9 +201,9 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
             var printModel = new PrintExpressModel()
             {
-                CustomerAddress = OrderList[0].CustomerAddress,
-                CustomerName = OrderList[0].CustomerName,
-                CustomerPhone = OrderList[0].CustomerPhone,
+                CustomerAddress = Orders[0].CustomerAddress,
+                CustomerName = Orders[0].CustomerName,
+                CustomerPhone = Orders[0].CustomerPhone,
                 ExpressFee = ShipSaleSelected.ExpressFee.ToString("f2")
             };
             pr.PrintExpress(rdlcName, printModel);
@@ -233,11 +264,11 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             //OPC_Sale sale = SaleList.FirstOrDefault(e => e.IsSelected);
             if (SaleSelected == null)
             {
-                OrderList = new List<Order>();
+                Orders = new List<Order>();
                 return;
             }
             PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(SaleSelected.OrderNo);
-            OrderList = re == null ? new List<Order>() : re.Result.ToList();
+            Orders = re == null ? new List<Order>() : re.Result.ToList();
         }
 
         private void SetOrderRemark()
@@ -251,7 +282,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         public override void RefreshOther(OPC_Sale sale)
         {
             PageResult<Order> re = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
-            OrderList = re == null ? new List<Order>() : re.Result.ToList();
+            Orders = re == null ? new List<Order>() : re.Result.ToList();
             if (SearchSaleStatus == EnumSearchSaleStatus.PrintExpressSearchStatus) return;
             GetListShipSaleBySale(sale.SaleOrderNo);
             ;
@@ -269,7 +300,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         {
             ShipSaleList = new List<OPC_ShippingSale>();
             SaleList = new List<OPC_Sale>();
-            OrderList = new List<Order>();
+            Orders = new List<Order>();
            // InvoiceDetail4List = new List<OPC_SaleDetail>();
         }
 
@@ -372,7 +403,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             {
                 OPC_Sale sale = SaleList.FirstOrDefault();
                 PageResult<Order> re1 = AppEx.Container.GetInstance<ITransService>().SearchOrderBySale(sale.OrderNo);
-                OrderList = re1 == null ? new List<Order>() : re1.Result.ToList();
+                Orders = re1 == null ? new List<Order>() : re1.Result.ToList();
                 //InvoiceDetail4List =
                 //    AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(sale.SaleOrderNo).Result.ToList();
             }
@@ -385,7 +416,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             if (saleCur == null)
             {
                 SaleList = new List<OPC_Sale>();
-                OrderList = new List<Order>();
+                Orders = new List<Order>();
                 //InvoiceDetail4List = new List<OPC_SaleDetail>();
                 return;
             }

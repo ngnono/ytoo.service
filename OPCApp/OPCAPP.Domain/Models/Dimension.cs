@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Intime.OPC.Modules.Dimension.Models
+namespace OPCApp.Domain.Models
 {
     /// <summary>
     /// Dimension such as brand, counter, organization etc.

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Intime.OPC.Infrastructure.Service;
 using Intime.OPC.Infrastructure.Validation;
 
-namespace Intime.OPC.Modules.Dimension.Models
+namespace OPCApp.Domain.Models
 {
     /// <summary>
     /// 专柜

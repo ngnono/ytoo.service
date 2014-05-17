@@ -14,7 +14,7 @@ using Intime.OPC.Infrastructure.Service;
 namespace Intime.OPC.Modules.Dimension.Common
 {
     public class DimensionListViewModel<TDimension, TDetailViewModel, TDimensionService> : ViewModelBase
-        where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension, new()
+        where TDimension : OPCApp.Domain.Models.Dimension, new()
         where TDetailViewModel : ModalDialogViewModel<TDimension>, new()
         where TDimensionService : IService<TDimension>
     {
@@ -123,6 +123,11 @@ namespace Intime.OPC.Modules.Dimension.Common
             LoadedCount = result.Data.Count;
             TotalCount = result.TotalCount;
             MinLoadedPageIndex = MaxLoadedPageIndex = 1;
+
+            if (result.TotalCount == 0)
+            {
+                MessageBox.Show("没有符合条件的记录", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void OnDelete()

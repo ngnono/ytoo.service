@@ -101,6 +101,7 @@
       <DependentUpon>PrintWin.xaml</DependentUpon>
     </Compile>
     <Compile Include="LogisticsModule.cs" />
+    <Compile Include="Criteria\QuerySalesOrder.cs" />
     <Compile Include="Services\DeliveryOrderService.cs" />
     <Compile Include="Services\IInvoiceService.cs" />
     <Compile Include="Services\OrderService.cs" />
