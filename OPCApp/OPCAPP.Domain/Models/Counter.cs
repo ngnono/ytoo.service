@@ -9,7 +9,7 @@ namespace OPCApp.Domain.Models
     /// <summary>
     /// 专柜
     /// </summary>
-    [Uri(Name = "counters")]
+    [Uri("counters")]
     public class Counter : Dimension
     {
         private bool _repealed;

@@ -9,7 +9,7 @@ namespace OPCApp.Domain.Models
     /// <summary>
     /// 品牌
     /// </summary>
-    [Uri(Name="brands")]
+    [Uri("brands")]
     public class Brand : Dimension
     {
         private bool _enabled;
