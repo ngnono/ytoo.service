@@ -1,10 +1,10 @@
-﻿using Intime.OPC.Infrastructure.Mvvm;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Windows.Input;
+using Intime.OPC.Infrastructure.Mvvm;
 using Intime.OPC.Infrastructure.Service;
 using Intime.OPC.Modules.Dimension.Common;
 using Intime.OPC.Modules.Dimension.Models;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Windows.Input;
 
 namespace Intime.OPC.Modules.Dimension.ViewModels
 {

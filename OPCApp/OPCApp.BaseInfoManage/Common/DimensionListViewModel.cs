@@ -1,15 +1,15 @@
-﻿using Intime.OPC.Infrastructure.Mvvm;
-using Intime.OPC.Infrastructure.Service;
-using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
-using OPCApp.Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
+using OPCApp.Infrastructure;
+using Intime.OPC.Infrastructure.Mvvm;
+using Intime.OPC.Infrastructure.Service;
 
 namespace Intime.OPC.Modules.Dimension.Common
 {
@@ -20,8 +20,8 @@ namespace Intime.OPC.Modules.Dimension.Common
     {
         private const int MaxRecord = 10000;
 
-        private ObservableCollection<TDimension> models;
-        private IQueryCriteria queryCriteria;
+        private ObservableCollection<TDimension> _models;
+        private IQueryCriteria _queryCriteria;
 
         public DimensionListViewModel()
         {
@@ -45,8 +45,8 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         public ObservableCollection<TDimension> Models 
         { 
-            get {return models;}
-            private set { SetProperty(ref models, value); }
+            get {return _models;}
+            private set { SetProperty(ref _models, value); }
         }
 
         public int TotalCount { get; set; }
@@ -85,7 +85,7 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         protected bool CanExecute()
         {
-            var selected = models != null && models.Any(model => model.IsSelected);
+            var selected = _models != null && _models.Any(model => model.IsSelected);
             if (!selected) MessageBox.Show("请选择至少一个对象", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             return selected;
@@ -100,23 +100,23 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         private void OnSelectAll(bool? selected)
         {
-            if (models == null && !models.Any()) return;
+            if (_models == null && !_models.Any()) return;
 
-            models.ForEach(model => model.IsSelected = selected.Value);
+            _models.ForEach(model => model.IsSelected = selected.Value);
         }
 
         private void OnQuery(string name)
         {
             if (!string.IsNullOrEmpty(name))
             {
-                queryCriteria = new QueryByName { Name = name, PageIndex = 1, PageSize = 100 };
+                _queryCriteria = new QueryByName { Name = name, PageIndex = 1, PageSize = 100 };
             }
             else
             {
-                queryCriteria = new QueryAll { PageIndex = 1, PageSize = 100 };
+                _queryCriteria = new QueryAll { PageIndex = 1, PageSize = 100 };
             }
 
-            var result = Service.Query(queryCriteria);
+            var result = Service.Query(_queryCriteria);
             
             Models = new ObservableCollection<TDimension>(result.Data);
 
@@ -152,7 +152,7 @@ namespace Intime.OPC.Modules.Dimension.Common
                     Action create = () =>
                     {
                         var model = Service.Create(viewModel.Model);
-                        models.Insert(0, model);
+                        _models.Insert(0, model);
                     };
 
                     PerformAction(create);
@@ -173,11 +173,11 @@ namespace Intime.OPC.Modules.Dimension.Common
                     Action edit = () =>
                     {
                         var updatedModel = Service.Update(viewModel.Model);
-                        var modelToUpdate = models.Where(model => model.ID == viewModel.Model.ID).FirstOrDefault();
+                        var modelToUpdate = _models.Where(model => model.ID == viewModel.Model.ID).FirstOrDefault();
                         int index = Models.IndexOf(modelToUpdate);
 
-                        models.Remove(modelToUpdate);
-                        models.Insert(index, updatedModel);
+                        _models.Remove(modelToUpdate);
+                        _models.Insert(index, updatedModel);
                     };
 
                     PerformAction(edit);
@@ -187,7 +187,7 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         private void OnNextPageLoad()
         {
-            if (queryCriteria == null || MaxLoadedPageIndex * queryCriteria.PageSize >= TotalCount) return;
+            if (_queryCriteria == null || MaxLoadedPageIndex * _queryCriteria.PageSize >= TotalCount) return;
 
             MaxLoadedPageIndex++;
 
@@ -201,9 +201,9 @@ namespace Intime.OPC.Modules.Dimension.Common
                 MinLoadedPageIndex = MaxLoadedPageIndex;
             }
 
-            queryCriteria.PageIndex = MaxLoadedPageIndex;
+            _queryCriteria.PageIndex = MaxLoadedPageIndex;
 
-            var result = Service.Query(queryCriteria);
+            var result = Service.Query(_queryCriteria);
             foreach (var model in result.Data)
             {
                 PerformActionOnUIThread(() => { Models.Add(model); });
@@ -214,7 +214,7 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         private void OnPrevioustPageLoad()
         {
-            if (queryCriteria == null || MinLoadedPageIndex <= 1) return;
+            if (_queryCriteria == null || MinLoadedPageIndex <= 1) return;
 
             MinLoadedPageIndex--;
 
@@ -228,9 +228,9 @@ namespace Intime.OPC.Modules.Dimension.Common
                 MaxLoadedPageIndex = MinLoadedPageIndex;
             }
 
-            queryCriteria.PageIndex = MinLoadedPageIndex;
+            _queryCriteria.PageIndex = MinLoadedPageIndex;
 
-            var result = Service.Query(queryCriteria);
+            var result = Service.Query(_queryCriteria);
             int position = 0;
             foreach (var model in result.Data)
             {

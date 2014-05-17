@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Windows.Input;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Practices.Prism.Commands;
@@ -11,6 +12,7 @@ using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using Intime.OPC.Modules.Logistics.Print;
+using Intime.OPC.Infrastructure.Mvvm;
 
 namespace Intime.OPC.Modules.Logistics.ViewModels
 {
@@ -32,7 +34,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             OnlyPrintCommand = new DelegateCommand(OnlyPrint);
             PrintExpressCommand = new DelegateCommand(PrintExpress);
             RemarkOrderCommand = new DelegateCommand(SetOrderRemark);
-            SearchOrderBySaleCommand = new DelegateCommand(SearchOrderBySale);
+            SearchOrderBySaleCommand = new AsyncDelegateCommand(SearchOrderBySale);
             RemarkShippingCommand = new DelegateCommand(SetShippingRemark);
             SaveShipCommand = new DelegateCommand(SaveShipSale);
             PreviewCommand = new DelegateCommand(PrintView);
@@ -47,21 +49,22 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         #region Commands
 
-        public DelegateCommand PrintDeliveryOrderCommand { get; set; }
-        public DelegateCommand PreviewDeliveryOrderCommand { get; set; }
-        public DelegateCommand ShipSaleHandOverCommand { get; set; }
-        public DelegateCommand SaveShipCommand { get; set; }
-        public DelegateCommand PrintInvoiceCommand { get; set; }
-        public DelegateCommand PrintExpressCommand { get; set; }
-        public DelegateCommand SearchExpressCommand { get; set; }
-        public DelegateCommand RemarkOrderCommand { get; set; }
-        public DelegateCommand<int?> SelectionChangedCommand { get; set; }
-        public DelegateCommand SearchOrderBySaleCommand { get; set; }
-        public DelegateCommand RemarkShippingCommand { get; set; }
-        public DelegateCommand GetListShipSaleCommand { get; set; }
-        public DelegateCommand OnlyPrintCommand { get; set; }
-        public DelegateCommand PreviewCommand { get; set; }
-        public DelegateCommand GetDownShipCommand { get; set; }
+        public ICommand PrintDeliveryOrderCommand { get; set; }
+        public ICommand PreviewDeliveryOrderCommand { get; set; }
+        public ICommand ShipSaleHandOverCommand { get; set; }
+        public ICommand SaveShipCommand { get; set; }
+        public ICommand PrintInvoiceCommand { get; set; }
+        public ICommand PrintExpressCommand { get; set; }
+        public ICommand SearchExpressCommand { get; set; }
+        public ICommand RemarkOrderCommand { get; set; }
+        public ICommand SelectionChangedCommand { get; set; }
+        public ICommand SearchOrderBySaleCommand { get; set; }
+        public ICommand RemarkShippingCommand { get; set; }
+        public ICommand GetListShipSaleCommand { get; set; }
+        public ICommand OnlyPrintCommand { get; set; }
+        public ICommand PreviewCommand { get; set; }
+        public ICommand GetDownShipCommand { get; set; }
+
         #endregion
 
         #region Properties
@@ -270,7 +273,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
            // InvoiceDetail4List = new List<OPC_SaleDetail>();
         }
 
-        private void SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
             {

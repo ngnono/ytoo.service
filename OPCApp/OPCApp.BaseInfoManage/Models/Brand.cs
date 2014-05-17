@@ -12,14 +12,14 @@ namespace Intime.OPC.Modules.Dimension.Models
     [Uri(Name="brands")]
     public class Brand : Dimension
     {
-        private bool enabled;
-        private string englishName;
-        private string description;
+        private bool _enabled;
+        private string _englishName;
+        private string _description;
 
         public Brand()
         {
             Supplier = new Supplier { ID = 4, Name = "SupplierName" };
-            enabled = true;
+            _enabled = true;
         }
 
         /// <summary>
@@ -30,8 +30,8 @@ namespace Intime.OPC.Modules.Dimension.Models
         [LocalizedMaxLength(512)]
         public string EnglishName
         {
-            get { return englishName; }
-            set { SetProperty(ref englishName, value); }
+            get { return _englishName; }
+            set { SetProperty(ref _englishName, value); }
         }
 
         /// <summary>
@@ -41,8 +41,8 @@ namespace Intime.OPC.Modules.Dimension.Models
         [LocalizedRequired]
         public string Description
         {
-            get { return description; }
-            set { SetProperty(ref description, value); }
+            get { return _description; }
+            set { SetProperty(ref _description, value); }
         }
 
         /// <summary>
@@ -50,8 +50,8 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// </summary>
         public bool Enabled 
         {
-            get { return enabled; }
-            set { SetProperty(ref enabled, value); }
+            get { return _enabled; }
+            set { SetProperty(ref _enabled, value); }
         }
 
         /// <summary>

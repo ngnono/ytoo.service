@@ -14,8 +14,8 @@ namespace Intime.OPC.Modules.Dimension.Models
     /// </summary>
     public abstract class Dimension : ValidatableBindableBase
     {
-        private bool isSelected;
-        private string name;
+        private bool _isSelected;
+        private string _name;
 
         /// <summary>
         /// ID
@@ -30,8 +30,8 @@ namespace Intime.OPC.Modules.Dimension.Models
         [LocalizedMaxLength(64)]
         public string Name 
         {
-            get { return name; }
-            set { SetProperty(ref name, value); }
+            get { return _name; }
+            set { SetProperty(ref _name, value); }
         }
 
         /// <summary>
@@ -39,8 +39,8 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// </summary>
         public bool IsSelected 
         {
-            get { return isSelected; }
-            set { SetProperty(ref isSelected, value); }
+            get { return _isSelected; }
+            set { SetProperty(ref _isSelected, value); }
         }
     }
 }

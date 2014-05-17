@@ -1,4 +1,4 @@
-﻿namespace Intime.OPC.Modules.Logistics.IService
+﻿namespace Intime.OPC.Modules.Logistics.Services
 {
     public class ResultMsg
     {
