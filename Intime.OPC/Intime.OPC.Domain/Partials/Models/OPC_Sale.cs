@@ -1,6 +1,6 @@
 ﻿namespace Intime.OPC.Domain.Models
 {
-    public partial class OPC_Sale
+    public partial class OPC_Sale_Partial
     {
         public string ShippingStatusName { get; set; }
 

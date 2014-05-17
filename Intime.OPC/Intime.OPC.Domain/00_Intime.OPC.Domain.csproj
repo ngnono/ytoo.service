@@ -217,12 +217,12 @@
     <Compile Include="PagerInfo.cs" />
     <Compile Include="Partials\Models\Brand.cs" />
     <Compile Include="Partials\Models\BrandClone.cs" />
-    <Compile Include="Partials\Models\OPC_SaleClone.cs" />
     <Compile Include="Partials\Models\IMS_SectionBrand.cs" />
     <Compile Include="Partials\Models\Mapping\IMS_SectionBrandMap.cs" />
     <Compile Include="Partials\Models\OpcSupplierInfo.cs" />
     <Compile Include="Partials\Models\OpcSupplierInfoClone.cs" />
     <Compile Include="Partials\Models\OPC_Sale.cs" />
+    <Compile Include="Partials\Models\OPC_SaleClone.cs" />
     <Compile Include="Partials\Models\OrderTransactionClone.cs" />
     <Compile Include="Partials\Models\Section.cs" />
     <Compile Include="Partials\Models\SectionClone.cs" />

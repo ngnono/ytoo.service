@@ -75,10 +75,10 @@ namespace Intime.OPC.Repository.Support
 
                     o.OrderSource = t.Orders.OrderSource;
                     o.OrderTransFee = t.Orders.ShippingFee;
+                    o.BuyDate = t.Orders.CreateDate;
 
                     if (t.SaleRMA != null)
                     {
-                        o.BuyDate = t.Orders.CreateDate;
                         o.CustomFee = t.SaleRMA.CustomFee;
                         o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
                         o.RecoverableSumMoney = t.SaleRMA.RecoverableSumMoney;
@@ -105,7 +105,7 @@ namespace Intime.OPC.Repository.Support
                     db.OPC_SaleRMAs.Where(
                         t =>
                             t.CreatedDate >= startTime && t.CreatedDate < endTime &&
-                            CurrentUser.StoreIDs.Contains(t.StoreId) && t.RMAStatus == (int)returnGoodsStatus);
+                            CurrentUser.StoreIDs.Contains(t.StoreId) );
                 var query2 = db.Orders.Where(t => true);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -121,6 +121,11 @@ namespace Intime.OPC.Repository.Support
                 if (!string.IsNullOrWhiteSpace(rmaNo))
                 {
                     query = query.Where(t => t.RMANo.Contains(rmaNo));
+                }
+
+                if (returnGoodsStatus != EnumReturnGoodsStatus.None)
+                {
+                    query = query.Where(t => t.RMAStatus == (int)returnGoodsStatus);
                 }
                 if (rmaStatus.HasValue)
                 {
@@ -166,10 +171,10 @@ namespace Intime.OPC.Repository.Support
 
                     o.OrderSource = t.Orders.OrderSource;
                     o.OrderTransFee = t.Orders.ShippingFee;
+                    o.BuyDate = t.Orders.CreateDate;
 
                     if (t.SaleRMA != null)
                     {
-                        o.BuyDate = t.Orders.CreateDate;
                         o.CustomFee = t.SaleRMA.CustomFee;
                         o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
                         o.RecoverableSumMoney = t.SaleRMA.RecoverableSumMoney;
