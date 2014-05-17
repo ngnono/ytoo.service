@@ -7,9 +7,7 @@ using System.Windows.Input;
 namespace Intime.OPC.Infrastructure.Mvvm
 {
     public class ScrollingBehavior
-    {
-        private static FrameworkElement frameworkElement;
-        
+    {        
         #region Dependency Properties
 
         public static readonly DependencyProperty IsEnabledProperty;
@@ -70,7 +68,7 @@ namespace Intime.OPC.Infrastructure.Mvvm
 
         private static void IsFrontTurn(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            frameworkElement = sender as FrameworkElement;
+            var frameworkElement = sender as FrameworkElement;
             if (frameworkElement == null) return;
 
             if (e.NewValue is bool && ((bool)e.NewValue) == true)
@@ -85,10 +83,11 @@ namespace Intime.OPC.Infrastructure.Mvvm
 
         private static void OnElementLoaded(object sender, RoutedEventArgs e)
         {
-            var scrollViewer = GetFirstChildOfType<ScrollViewer>(frameworkElement);
+            var scrollViewer = GetFirstChildOfType<ScrollViewer>((FrameworkElement)sender);
 
             if (scrollViewer != null)
             {
+                scrollViewer.ScrollChanged -= OnScrollChanged;
                 scrollViewer.ScrollChanged += OnScrollChanged;
             }
         }
@@ -109,6 +108,21 @@ namespace Intime.OPC.Infrastructure.Mvvm
             return null;
         }
 
+        private static DependencyObject GetScrollViewOwner(DependencyObject dependencyObject)
+        {
+            while (true)
+            {
+                if (dependencyObject == null) break;
+
+                var command = dependencyObject.GetValue(ScrollToBottomCommandProperty);
+                if (command != null) return dependencyObject;
+
+                dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
+            }
+            
+            return null;
+        }
+
         #endregion
 
         private const int PreservedOffset = 10;
@@ -118,16 +132,19 @@ namespace Intime.OPC.Infrastructure.Mvvm
             var scrollViewer = sender as ScrollViewer;
             if (scrollViewer == null) return;
 
+            var target = GetScrollViewOwner(scrollViewer);
+            if (target == null) return;
+
             if (e.VerticalChange > 0 && scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
             {
-                ICommand command = GetScrollToBottomCommand(frameworkElement);
-                if (command != null) command.Execute(frameworkElement);
+                ICommand command = GetScrollToBottomCommand(target);
+                if (command != null) command.Execute(target);
             }
 
             if (scrollViewer.VerticalOffset == 0 && e.VerticalChange < 0)
             {
-                ICommand command = GetScrollToTopCommand(frameworkElement);
-                if (command != null) command.Execute(frameworkElement);
+                ICommand command = GetScrollToTopCommand(target);
+                if (command != null) command.Execute(target);
             }
         }
     }

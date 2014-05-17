@@ -1,25 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
 using Microsoft.Practices.Prism.Mvvm;
-using System.Collections.Generic;
 
 namespace Intime.OPC.Modules.Dimension.Common
 {
     public abstract class ModalDialogViewModel<TDimension> : ViewModelBase, INotification, IInteractionRequestAware
-        where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension, new()
+        where TDimension : OPCApp.Domain.Models.Dimension, new()
     {
-        private TDimension model;
+        private TDimension _model;
 
         public ModalDialogViewModel()
         {
             OKCommand = new DelegateCommand(() =>
             {
-                model.ValidateProperties();
+                _model.ValidateProperties();
                 FlattenErrors();
-                if (!model.HasErrors)
+                if (!_model.HasErrors)
                 {
                     Accepted = true;
                     FinishInteraction();
@@ -34,8 +34,8 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         public virtual TDimension Model 
         {
-            get { return model; }
-            set { SetProperty(ref model, value); } 
+            get { return _model; }
+            set { SetProperty(ref _model, value); } 
         }
 
         public ICommand OKCommand { get; set; }
@@ -55,7 +55,7 @@ namespace Intime.OPC.Modules.Dimension.Common
         private List<string> FlattenErrors()
         {
             List<string> errors = new List<string>();
-            Dictionary<string, List<string>> allErrors = model.GetAllErrors();
+            Dictionary<string, List<string>> allErrors = _model.GetAllErrors();
             foreach (string propertyName in allErrors.Keys)
             {
                 foreach (var errorString in allErrors[propertyName])

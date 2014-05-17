@@ -1,128 +1,136 @@
-using System;
+锘縰sing System;
+using System.Collections.Generic;
+using Intime.OPC.Infrastructure.Service;
 
 namespace OPCApp.Domain.Models
 {
+    [Uri("order")]
     public class Order
     {
         /// <summary>
-        ///     订单ID
+        ///     露漏碌楼ID
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        ///     订单号
+        ///     露漏碌楼潞脜
         /// </summary>
         public string OrderNo { get; set; }
 
         /// <summary>
-        ///     订单渠道号
+        ///     露漏碌楼脟镁碌脌潞脜
         /// </summary>
         public string OrderChannelNo { get; set; }
 
         /// <summary>
-        ///     支付方式
+        ///     脰搂赂露路陆脢陆
         /// </summary>
         public string PaymentMethodName { get; set; }
 
         /// <summary>
-        ///     订单来源
+        ///     露漏碌楼脌麓脭麓
         /// </summary>
         public string OrderSouce { get; set; }
 
         /// <summary>
-        ///     订单状态
+        ///     露漏碌楼脳麓脤卢
         /// </summary>
         public string Status { get; set; }
 
         /// <summary>
-        ///     商品数量
+        ///     脡脤脝路脢媒脕驴
         /// </summary>
         public int Quantity { get; set; }
 
         /// <summary>
-        ///     商品金额
+        ///     脡脤脝路陆冒露卯
         /// </summary>
         public decimal TotalAmount { get; set; }
 
         /// <summary>
-        ///     顾客运费
+        ///     鹿脣驴脥脭脣路脩
         /// </summary>
         public decimal CustomerFreight { get; set; }
 
         /// <summary>
-        ///     应付款合计
+        ///     脫娄赂露驴卯潞脧录脝
         /// </summary>
         public decimal MustPayTotal { get; set; }
 
 
         /// <summary>
-        ///     购买时间
+        ///     鹿潞脗貌脢卤录盲
         /// </summary>
         public DateTime BuyDate { get; set; }
 
         /// <summary>
-        ///     收货人姓名
+        ///     脢脮禄玫脠脣脨脮脙没
         /// </summary>
         public string CustomerName { get; set; }
 
         /// <summary>
-        ///     收货人地址
+        ///     脢脮禄玫脠脣碌脴脰路
         /// </summary>
         public string CustomerAddress { get; set; }
 
         /// <summary>
-        ///     收货人电话
+        ///     脢脮禄玫脠脣碌莽禄掳
         /// </summary>
         public string CustomerPhone { get; set; }
 
         /// <summary>
-        ///     顾客备注
+        ///     鹿脣驴脥卤赂脳垄
         /// </summary>
         public string CustomerRemark { get; set; }
 
         /// <summary>
-        ///     是否要发票
+        ///     脢脟路帽脪陋路垄脝卤
         /// </summary>
         public string IfReceipt { get; set; }
 
         /// <summary>
-        ///     发票台头
+        ///     路垄脝卤脤篓脥路
         /// </summary>
         public string ReceiptHead { get; set; }
 
         /// <summary>
-        ///     发票内容
+        ///     路垄脝卤脛脷脠脻
         /// </summary>
         public string ReceiptContent { get; set; }
 
         /// <summary>
-        ///     发货方式
+        ///     路垄禄玫路陆脢陆
         /// </summary>
         public string OutGoodsType { get; set; }
 
         /// <summary>
-        ///     邮编
+        ///     脫脢卤脿
         /// </summary>
         public string PostCode { get; set; }
 
         /// <summary>
-        ///     发货单号
+        ///     路垄禄玫碌楼潞脜
         /// </summary>
         public string ShippingNo { get; set; }
 
         /// <summary>
-        ///     快递单号
+        ///     驴矛碌脻碌楼潞脜
         /// </summary>
         public string ExpressNo { get; set; }
 
         /// <summary>
-        ///     快递公司
+        ///     驴矛碌脻鹿芦脣戮
         /// </summary>
         public string ExpressCompany { get; set; }
 
         /// <summary>
-        ///     发货时间
+        ///     路垄禄玫脢卤录盲
         /// </summary>
         public DateTime OutGoodsDate { get; set; }
+
+        /// <summary>
+        /// 閿�鍞崟
+        /// </summary>
+        public IList<OPC_Sale> SalesOrder { get; set; }
     }
 }

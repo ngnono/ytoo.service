@@ -1,12 +1,12 @@
-﻿using Intime.OPC.Infrastructure.Validation;
-using Intime.OPC.Modules.Dimension.Properties;
-using Microsoft.Practices.Prism.Mvvm;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Practices.Prism.Mvvm;
+using Intime.OPC.Infrastructure.Validation;
+using Intime.OPC.Modules.Dimension.Properties;
 
 namespace Intime.OPC.Modules.Dimension.Common
 {

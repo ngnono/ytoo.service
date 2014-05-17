@@ -100,12 +100,6 @@
     <Compile Include="Common\ModalDialogViewModel.cs" />
     <Compile Include="DimensionModule.cs" />
     <Compile Include="Common\DimensionService.cs" />
-    <Compile Include="Models\Brand.cs" />
-    <Compile Include="Models\Counter.cs" />
-    <Compile Include="Models\Dimension.cs" />
-    <Compile Include="Models\Organization.cs" />
-    <Compile Include="Models\Store.cs" />
-    <Compile Include="Models\Supplier.cs" />
     <Compile Include="Services\BrandService.cs" />
     <Compile Include="Services\CounterService.cs" />
     <Compile Include="ViewModels\BrandListViewModel.cs" />
@@ -156,7 +150,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Models\Model.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

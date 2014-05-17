@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Prism.PubSubEvents;
+﻿using Intime.OPC.Infrastructure.Rest;
+using Microsoft.Practices.Prism.PubSubEvents;
 using System;
 using System.ComponentModel.Composition;
 using System.Net.Http;
@@ -83,7 +84,7 @@ namespace OPCApp.Infrastructure.REST
                 return response.Content.ReadAsAsync<TData>().Result;
             }
 
-            var errorMessage = response.Content.ReadAsStringAsync().Result;
+            string errorMessage = ParseErrorMessage(response);
             throw new RestException(response.StatusCode, errorMessage);
         }
 
@@ -95,8 +96,23 @@ namespace OPCApp.Infrastructure.REST
                 return response.Content.ReadAsAsync<TEntity>().Result;
             }
 
-            var errorMessage = response.Content.ReadAsStringAsync().Result;
+            string errorMessage = ParseErrorMessage(response);
             throw new RestException(response.StatusCode, errorMessage);
+        }
+
+        private static string ParseErrorMessage(HttpResponseMessage response)
+        {
+            string errorMessage = string.Empty;
+            try
+            {
+                errorMessage = response.Content.ReadAsAsync<RestErrorMessage>().Result.Message;
+            }
+            catch
+            {
+                errorMessage = response.Content.ReadAsStringAsync().Result;
+            }
+
+            return errorMessage;
         }
 
         private void SetHttpHeader(HttpClient client, object entity = null)

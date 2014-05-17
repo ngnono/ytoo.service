@@ -114,6 +114,7 @@
     <Compile Include="Mvvm\Interaction\CommandAction.cs" />
     <Compile Include="Mvvm\Interaction\RoutedEventTrigger.cs" />
     <Compile Include="Mvvm\Interaction\ScrollingBehavior.cs" />
+    <Compile Include="Rest\RestErrorMessage.cs" />
     <Compile Include="Service\IService.cs" />
     <Compile Include="Log\ILogger.cs" />
     <Compile Include="Log\Log4NetLogger.cs" />

@@ -1,7 +1,9 @@
 using System;
+using Intime.OPC.Infrastructure.Service;
 
 namespace OPCApp.Domain.Models
 {
+    [Uri("deliveryorder")]
     public class OPC_ShippingSale
     {
         public bool IsSelected { get; set; }
@@ -97,5 +99,7 @@ namespace OPCApp.Domain.Models
         /// </summary>
         /// <value>The express fee.</value>
         public double ExpressFee { get; set; }
+
+        public OPC_Sale SalesOrder { get; set; }
     }
 }

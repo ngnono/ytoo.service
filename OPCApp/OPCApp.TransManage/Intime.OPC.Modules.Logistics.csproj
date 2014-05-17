@@ -90,6 +90,9 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Invoice4Get.cs" />
+    <Compile Include="Models\InvoiceDetail.cs" />
+    <Compile Include="Models\InvoiceDetail4Get.cs" />
     <Compile Include="Models\Remark.cs" />
     <Compile Include="Print\IPrint.cs" />
     <Compile Include="Print\PrintExpressModel.cs" />
@@ -98,9 +101,15 @@
       <DependentUpon>PrintWin.xaml</DependentUpon>
     </Compile>
     <Compile Include="LogisticsModule.cs" />
-    <Compile Include="Services\IInvoice.cs" />
+    <Compile Include="Criteria\QuerySalesOrder.cs" />
+    <Compile Include="Services\DeliveryOrderService.cs" />
+    <Compile Include="Services\IInvoiceService.cs" />
+    <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\PrintService.cs" />
     <Compile Include="Services\ResultMsg.cs" />
-    <Compile Include="Services\IPrint.cs" />
+    <Compile Include="Services\IPrintService.cs" />
+    <Compile Include="Services\SalesOrderService.cs" />
+    <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
     <Compile Include="ViewModels\RemarkViewModel.cs" />
     <Compile Include="ViewModels\SaleOrderPickupViewModel.cs" />

@@ -14,9 +14,9 @@ namespace Intime.OPC.Infrastructure.Mvvm
     //ToDo: Refactoring is required to remove the duplicated codes between the two classes
     public class AsyncDelegateCommand<T> : ICommand
     {
-        private Action<T> executeMethod;
-        private Func<T, bool> canExecuteMethod;
-        private Action<Exception> errorHandler;
+        private Action<T> _executeMethod;
+        private Func<T, bool> _canExecuteMethod;
+        private Action<Exception> _errorHandler;
 
         public AsyncDelegateCommand(Action<T> executeMethod, Action<Exception> errorHandler)
             : this(executeMethod,errorHandler, null)
@@ -25,9 +25,9 @@ namespace Intime.OPC.Infrastructure.Mvvm
 
         public AsyncDelegateCommand(Action<T> executeMethod, Action<Exception> errorHandler, Func<T, bool> canExecuteMethod)
         {
-            this.executeMethod = executeMethod;
-            this.errorHandler = errorHandler;
-            this.canExecuteMethod = canExecuteMethod;
+            this._executeMethod = executeMethod;
+            this._errorHandler = errorHandler;
+            this._canExecuteMethod = canExecuteMethod;
         }
 
         public bool CanExecute(object parameter)
@@ -39,18 +39,18 @@ namespace Intime.OPC.Infrastructure.Mvvm
 
         public void Execute(object parameter)
         {
-            if (canExecuteMethod != null && !canExecuteMethod((T)parameter)) return;
+            if (_canExecuteMethod != null && !_canExecuteMethod((T)parameter)) return;
 
             ProgressBarWindow progressDialog = new ProgressBarWindow();
             Task task = new Task(() => 
             {
                 try
                 {
-                    executeMethod((T)parameter);
+                    _executeMethod((T)parameter);
                 }
                 catch (Exception exception)
                 {
-                    if (errorHandler != null) errorHandler(exception);
+                    if (_errorHandler != null) _errorHandler(exception);
                 }
                 finally
                 {
@@ -75,9 +75,14 @@ namespace Intime.OPC.Infrastructure.Mvvm
 
     public class AsyncDelegateCommand : ICommand
     {
-        private Action executeMethod;
-        private Func<bool> canExecuteMethod;
-        private Action<Exception> errorHandler;
+        private Action _executeMethod;
+        private Func<bool> _canExecuteMethod;
+        private Action<Exception> _errorHandler;
+
+        public AsyncDelegateCommand(Action executeMethod)
+            : this(executeMethod, null, null)
+        {
+        }
 
         public AsyncDelegateCommand(Action executeMethod, Action<Exception> errorHandler)
             :this(executeMethod,errorHandler, null)
@@ -86,9 +91,9 @@ namespace Intime.OPC.Infrastructure.Mvvm
 
         public AsyncDelegateCommand(Action executeMethod, Action<Exception> errorHandler, Func<bool> canExecuteMethod)
         {
-            this.executeMethod = executeMethod;
-            this.errorHandler = errorHandler;
-            this.canExecuteMethod = canExecuteMethod;
+            this._executeMethod = executeMethod;
+            this._errorHandler = errorHandler;
+            this._canExecuteMethod = canExecuteMethod;
         }
 
         public bool CanExecute(object parameter)
@@ -100,25 +105,27 @@ namespace Intime.OPC.Infrastructure.Mvvm
 
         public void Execute(object parameter)
         {
-            if (canExecuteMethod != null && !canExecuteMethod()) return;
+            if (_canExecuteMethod != null && !_canExecuteMethod()) return;
 
             ProgressBarWindow progressDialog = new ProgressBarWindow();
             Task task = new Task(() =>
             {
                 try
                 {
-                    executeMethod();
+                    _executeMethod();
                 }
                 catch (Exception exception)
                 {
-                    if (errorHandler != null) errorHandler(exception);
+                    if (_errorHandler == null) throw;
+
+                    _errorHandler(exception);
                 }
                 finally
                 {
                     CloseDialog(progressDialog);
                 }
             });
-
+  
             task.Start();
             progressDialog.ShowDialog();
         }
