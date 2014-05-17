@@ -27,6 +27,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
         {
             CommandSearch = new DelegateCommand(SearchRmaAndSaleRma);
             CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaSaleDetailByRma);
+            //CommandGetRmaBySaleRma = new DelegateCommand(CommandGetRmaBySaleRma);
             PackageReceiveDto = new PackageReceiveDto();
             CommandSetSaleRmaRemark = new DelegateCommand(SetSaleRmaRemark);
             CommandSetRmaRemark = new DelegateCommand(SetRmaRemark);
@@ -75,6 +76,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
         public DelegateCommand CommandReceivingGoodsSubmit { get; set; }
         public DelegateCommand CommandSearch { get; set; }
         public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
+        public DelegateCommand CommandGetRmaBySaleRma { get; set; }
         public DelegateCommand CommandSetRmaRemark { get; set; }
 
         public void SetRmaRemark()
@@ -114,7 +116,8 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             MessageBox.Show(flag ? "确认收货成功" : "确认收货失败", "提示");
             if (flag)
             {
-                RmaDetailList.Clear();
+                if (RmaDetailList!=null)
+                    RmaDetailList.Clear();
                 SearchRmaAndSaleRma();
             }
         }

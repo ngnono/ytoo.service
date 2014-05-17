@@ -27,13 +27,13 @@
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">查询</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="80" Command="{Binding CommandTransVerifyPass}">
+                <Button Background="LightGray" Width="Auto" Command="{Binding CommandTransVerifyPass}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/收款确认.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">物流审核</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Background="LightGray" Width="120" Command="{Binding CommandTransVerifyNoPass}">
+                <Button Background="LightGray" Width="Auto" Command="{Binding CommandTransVerifyNoPass}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/退回.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">物流审核未通过</TextBlock>
@@ -71,8 +71,8 @@
                 </DataGrid.RenderTransform>
 
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding CommandGetRmaSaleDetailByRma}" />
+                    <i:EventTrigger EventName="SelectionChanged1">
+                        <i:InvokeCommandAction Command="{Binding CommandGetRmaSaleDetailByRma1}" />
                     </i:EventTrigger>
 
                 </i:Interaction.Triggers>
@@ -102,12 +102,12 @@
                     <DataGridTextColumn Header="退货收银流水号" Binding="{Binding RmaCashNum}" />
                     <DataGridTextColumn Header="退货收银时间"
                                         Binding="{Binding RmaCashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                    <DataGridTextColumn Header="要求退货时间" Binding="{Binding Address}" />
+                    <DataGridTextColumn Header="要求退货时间" Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     <DataGridTextColumn Header="退货类型" Binding="{Binding RMAType}" />
-                    <DataGridTextColumn Header="专柜码" Binding="{Binding ContractPhone}" />
+                    <DataGridTextColumn Header="专柜码" Binding="{Binding 专柜码}" />
                     <DataGridTextColumn Header="退货时间"
-                                        Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                    <DataGridTextColumn Header="支付方式" Binding="{Binding PaymentName}" />
+                                        Binding="{Binding BackDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                    <DataGridTextColumn Header="支付方式" Binding="{Binding PayType}" />
                     <DataGridTemplateColumn Header="备注录入">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
