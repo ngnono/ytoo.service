@@ -134,7 +134,7 @@ namespace Intime.OPC.Modules.Dimension.Common
         {
             Models.ForEach(model =>
             {
-                if (model.IsSelected) Service.Delete(model.ID);
+                if (model.IsSelected) Service.Delete(model.Id);
             });
 
             while (Models.Any(brand => brand.IsSelected))
@@ -178,7 +178,7 @@ namespace Intime.OPC.Modules.Dimension.Common
                     Action edit = () =>
                     {
                         var updatedModel = Service.Update(viewModel.Model);
-                        var modelToUpdate = _models.Where(model => model.ID == viewModel.Model.ID).FirstOrDefault();
+                        var modelToUpdate = _models.Where(model => model.Id == viewModel.Model.Id).FirstOrDefault();
                         int index = Models.IndexOf(modelToUpdate);
 
                         _models.Remove(modelToUpdate);

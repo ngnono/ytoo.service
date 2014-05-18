@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Intime.OPC.Infrastructure.Service;
+using OPCApp.Domain.Attributes;
 
 namespace OPCApp.Domain.Models
 {
     [Uri("order")]
-    public class Order
+    public class Order : Model
     {
-        /// <summary>
-        ///     ¶©µ¥ID
-        /// </summary>
-        public int Id { get; set; }
-
         /// <summary>
         ///     ¶©µ¥ºÅ
         /// </summary>
@@ -127,10 +122,5 @@ namespace OPCApp.Domain.Models
         ///     ·¢»õÊ±¼ä
         /// </summary>
         public DateTime OutGoodsDate { get; set; }
-
-        /// <summary>
-        /// 销售单
-        /// </summary>
-        public IList<OPC_Sale> SalesOrder { get; set; }
     }
 }

@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    [Export(typeof(IService<OPC_ShippingSale>))]
-    public class DeliveryOrderService : ServiceBase<OPC_ShippingSale>
+    [Export(typeof(IService<OPC_SaleDetail>))]
+    public class SalesOrderDetailService : ServiceBase<OPC_SaleDetail>
     {
+
     }
 }
