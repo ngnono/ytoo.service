@@ -6,11 +6,13 @@ using Intime.OPC.Domain.Dto.Request;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Domain.Partials.Models;
+using log4net.Util;
 
 namespace Intime.OPC.WebApi.App_Start
 {
     public static class AutoMapperConfig
     {
+        private static log4net.ILog log = log4net.LogManager.GetLogger(typeof(AutoMapperConfig));
         public static void Config()
         {
             Mapper.CreateMap<Section, SectionDto>().ForMember(s => s.Code, opt => opt.MapFrom(d => d.SectionCode));
