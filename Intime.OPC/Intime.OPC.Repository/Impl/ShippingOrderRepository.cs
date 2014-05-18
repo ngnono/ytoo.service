@@ -82,6 +82,7 @@ namespace Intime.OPC.Repository.Impl
         public List<OPC_ShippingSale> GetPagedList(PagerRequest pagerRequest, out int totalCount, ShippingOrderFilter filter,
             ShippingOrderSortOrder sortOrder)
         {
+
             throw new NotImplementedException();
             //var shippingOrderFilter = Filter(filter);
             //var saleorderFilter = SaleOrder4Filter(filter);
@@ -93,9 +94,13 @@ namespace Intime.OPC.Repository.Impl
             //            where ss.Id == sale.ShippingSaleId
             //            select sale
             //                     )
+            //        let items_let = (from sd in db.Set<OPC_SaleDetail>()
+            //                       join  s in db.Set<OPC_Sale>() on sd.SaleOrderNo equals s.SaleOrderNo
+                     
+                
+                
+            //        )
 
-
-            //    var q2 = from ss in q1
 
 
 

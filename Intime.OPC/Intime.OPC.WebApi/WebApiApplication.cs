@@ -11,6 +11,9 @@ namespace Intime.OPC.WebApi
     {
         protected void Application_Start()
         {
+
+            log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo(Server.MapPath("~/Config/log4net.config")));
+
             // MEF配置
             MefConfig.RegisterMefDependencyResolver();
 
