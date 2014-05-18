@@ -6,7 +6,7 @@ using OPCApp.Domain.Models;
 namespace Intime.OPC.Modules.Dimension.Services
 {
     [Export(typeof(IService<Counter>))]
-    public class CounterService : DimensionService<Counter>
+    public class CounterService : ServiceBase<Counter>
     {
 
     }

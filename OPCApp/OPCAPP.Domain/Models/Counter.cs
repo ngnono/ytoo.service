@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Intime.OPC.Infrastructure.Service;
-using Intime.OPC.Infrastructure.Validation;
+using OPCApp.Domain.Attributes;
+using OPCApp.Domain.Validation;
 
 namespace OPCApp.Domain.Models
 {

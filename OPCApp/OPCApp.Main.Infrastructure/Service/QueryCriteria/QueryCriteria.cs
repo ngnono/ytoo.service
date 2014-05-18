@@ -1,7 +1,9 @@
 ﻿using Intime.OPC.Infrastructure;
+using OPCApp.Domain.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,12 +27,36 @@ namespace Intime.OPC.Infrastructure.Service
                 if (attributes != null && attributes.Length > 0)
                 {
                     var uriParameter = (UriParameterAttribute)attributes[0];
-                    queryString.Append(string.Format("{0}={1}&",uriParameter.Name, propertyInfo.GetValue(this).ToString()));
+                    var parameterValue = GetParameterValue(propertyInfo);
+
+                    queryString.Append(string.Format("{0}={1}&", uriParameter.Name, parameterValue.ToString()));
                 }
             }
             if (queryString.Length > 0) queryString.Remove(queryString.Length - 1, 1);
 
             return queryString.ToString();
+        }
+
+        private string GetParameterValue(PropertyInfo propertyInfo)
+        {
+            var propertyValue = propertyInfo.GetValue(this);
+
+            if (propertyValue == null)
+            {
+                return string.Empty;
+            }
+
+            if (propertyValue.GetType().IsEnum)
+            {
+                propertyValue = (int)propertyValue;
+            }
+
+            if (propertyValue.GetType().Equals(typeof(DateTime)))
+            {
+                propertyValue = ((DateTime)propertyValue).ToShortDateString();
+            }
+
+            return propertyValue.ToString();
         }
     }
 }

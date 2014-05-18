@@ -4,22 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.Practices.Prism.Mvvm;
-using Intime.OPC.Modules.Dimension.Properties;
-using OPCApp.Domain;
 
-namespace Intime.OPC.Modules.Dimension.Common
+namespace Intime.OPC.Infrastructure.Mvvm.Utility
 {
-    public class ViewModelBase : ValidatableBindableBase
+    public class MvvmUtility
     {
-        protected void OnException(Exception exception)
+        public static void OnException(Exception exception)
         {
             Action action = () => { MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error); };
 
             PerformActionOnUIThread(action);
         }
 
-        protected void PerformAction(Action action)
+        public static void PerformAction(Action action)
         {
             try
             {
@@ -31,7 +28,7 @@ namespace Intime.OPC.Modules.Dimension.Common
             }
         }
 
-        protected void PerformActionOnUIThread(Action action)
+        public static void PerformActionOnUIThread(Action action)
         {
             Application.Current.Dispatcher.Invoke(action);
         }
