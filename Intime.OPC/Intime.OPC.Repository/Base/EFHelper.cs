@@ -470,7 +470,7 @@ namespace Intime.OPC.Repository.Base
         /// 更新数据
         /// </summary>
         /// <param name="context"></param>
-        /// <param name="entityToUpdate">要更新的实体</param>
+        /// <param anme="entityToUpdate">要更新的实体</param>
         public static void Update<TEntity>(DbContext context, TEntity entityToUpdate) where TEntity : class, IEntity
         {
 
@@ -535,6 +535,26 @@ namespace Intime.OPC.Repository.Base
             //        }
             //    }
             //}
+        }
+
+        /// <summary>
+        /// 更新指定字段
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="entity">实体</param>
+        /// <param name="fileds">更新字段数组</param>
+        public static void UpdateEntityFields<TEntity>(DbContext context, TEntity entity, List<string> fileds) where TEntity : class
+        {
+            if (entity != null && fileds != null)
+            {
+                context.Set<TEntity>().Attach(entity);
+                var setEntry = ((IObjectContextAdapter)context).ObjectContext.
+                    ObjectStateManager.GetObjectStateEntry(entity);
+                foreach (var t in fileds)
+                {
+                    setEntry.SetModifiedProperty(t);
+                }
+            }
         }
 
         /// <summary>

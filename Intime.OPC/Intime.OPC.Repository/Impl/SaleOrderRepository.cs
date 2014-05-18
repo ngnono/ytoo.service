@@ -19,21 +19,32 @@ namespace Intime.OPC.Repository.Impl
     {
         #region methods
 
+        /// <summary>
+        /// 销售单 筛选
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         private static Expression<Func<OPC_Sale, bool>> Filler(SaleOrderFilter filter)
         {
             var query = PredicateBuilder.True<OPC_Sale>();
 
             if (filter != null)
             {
+
+                if (filter.Status != null)
+                {
+                    query = query.And(v => v.Status == (int)filter.Status);
+                }
+
                 if (!String.IsNullOrWhiteSpace(filter.SaleOrderNo))
                     query = query.And(v => v.SaleOrderNo == filter.SaleOrderNo);
 
                 if (!String.IsNullOrWhiteSpace(filter.OrderNo))
                     query = query.And(v => v.OrderNo == filter.OrderNo);
 
-                if (filter.Status != null)
+                if (filter.ShippingOrderId != null)
                 {
-                    query = query.And(v => v.Status == filter.Status.Value);
+                    query = query.And(v => v.ShippingSaleId == filter.ShippingOrderId);
                 }
 
                 if (filter.DateRange != null)
@@ -48,11 +59,18 @@ namespace Intime.OPC.Repository.Impl
                         query = query.And(v => v.CreatedDate < filter.DateRange.EndDateTime.Value);
                     }
                 }
+
+
             }
 
             return query;
         }
 
+        /// <summary>
+        /// 专柜 筛选
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         private static Expression<Func<Section, bool>> Section4Filler(SaleOrderFilter filter)
         {
             var query = PredicateBuilder.True<Section>();
@@ -74,13 +92,12 @@ namespace Intime.OPC.Repository.Impl
             switch (sortOrder)
             {
                 default:
-                    //orderBy = v => v.OrderByDescending(s => s);
+                    orderBy = v => v.OrderByDescending(s => s.CreatedDate).ThenBy(s => s.OrderNo);
                     break;
             }
 
             return orderBy;
         }
-
         #endregion
 
         public override IEnumerable<OPC_Sale> AutoComplete(string query)
@@ -88,7 +105,7 @@ namespace Intime.OPC.Repository.Impl
             throw new NotImplementedException();
         }
 
-        public List<OPC_Sale> GetPagedList(PagerRequest pagerRequest, out int totalCount, SaleOrderFilter filter,
+        public List<SaleOrderModel> GetPagedList(PagerRequest pagerRequest, out int totalCount, SaleOrderFilter filter,
             SaleOrderSortOrder sortOrder)
         {
             var where = Filler(filter);
@@ -126,60 +143,24 @@ namespace Intime.OPC.Repository.Impl
                       PrintTimes = ot.o.o.PrintTimes,
                       Remark = ot.o.o.Remark,
                       RemarkDate = ot.o.o.RemarkDate,
-                      // Store =  ot.o.store.store,
+
                       CreatedDate = ot.o.o.CreatedDate,
                       CreatedUser = ot.o.o.CreatedUser,
                       UpdatedDate = ot.o.o.UpdatedDate,
                       UpdatedUser = ot.o.o.UpdatedUser,
 
-
-                      //Section = ot.o.store.section,
-                      //OrderTransaction =  ot.ot
+                      Store = StoreClone.Convert2Store(ot.o.store.store),
+                      Section = SectionClone.Convert2Section(ot.o.store.section),
+                      OrderTransaction = OrderTransactionClone.Convert2OorderTransaction(ot.ot)
                   });
-                //var q = q1.Join(db.OrderTransactions, o => o.o.OrderNo, ot => ot.OrderNo, (o, ot) => new { o, ot })
-                //     .Join(db.PaymentMethods, ot => ot.ot.PaymentCode, pm => pm.Code, (ot, pm) => new OPC_SaleClone()
-                //     {
-                //         Id = ot.o.o.Id,
-                //         OrderNo = ot.o.o.OrderNo,
-                //         SaleOrderNo = ot.o.o.SaleOrderNo,
-                //         SalesType = ot.o.o.SalesType,
-                //         ShipViaId = ot.o.o.ShipViaId,
-                //         Status = ot.o.o.Status,
-                //         ShippingCode = ot.o.o.ShippingCode,
-                //         ShippingFee = ot.o.o.ShippingFee.HasValue ? ot.o.o.ShippingFee.Value : 0m,
-                //         ShippingStatus = ot.o.o.ShippingStatus,
-                //         ShippingStatusName = ot.o.o.ShippingStatus.HasValue ? ((EnumSaleOrderStatus)ot.o.o.ShippingStatus.Value).GetDescription() : String.Empty,
-                //         ShippingRemark = ot.o.o.ShippingRemark,
-                //         SellDate = ot.ot.CreateDate,
-                //         IfTrans = ot.o.o.IfTrans.HasValue && ot.o.o.IfTrans.Value ? "是" : "否",
-                //         TransStatus = ot.o.o.TransStatus.HasValue && ot.o.o.TransStatus.Value == 1 ? "调拨" : String.Empty,
-                //         SalesAmount = ot.o.o.SalesAmount,
-                //         SalesCount = ot.o.o.SalesCount,
-                //         CashStatus = ot.o.o.CashStatus,
-                //         CashNum = ot.o.o.CashNum,
-                //         CashDate = ot.o.o.CashDate,
-                //         SectionId = ot.o.o.SectionId,
-                //         PrintTimes = ot.o.o.PrintTimes,
-                //         Remark = ot.o.o.Remark,
-                //         RemarkDate = ot.o.o.RemarkDate,
-                //         //CreatedDate = ot.o.CreatedDate,
-                //         //CreatedUser = ot.o.CreatedUser,
-                //         //UpdatedDate = ot.o.UpdatedDate.Value,
-                //         //UpdatedUser = ot.o.UpdatedUser.Value,
-                //         StatusName = ((EnumSaleOrderStatus)ot.o.o.Status).GetDescription(),
-                //         CashStatusName = ot.o.o.CashStatus.HasValue ? ((EnumCashStatus)ot.o.o.CashStatus).GetDescription() : string.Empty,
-                //         StoreName = ot.o.store.store.Name,
-                //         //InvoiceSubject = ot.o.o.
-                //         SectionName = ot.o.store.section.Name,
-                //         TransNo = ot.ot.TransNo,
-                //     });
+
 
                 totalCount = q.Count();
 
                 var rst = q.OrderBy(v => v.Id).Skip(pagerRequest.SkipCount).Take(pagerRequest.PageSize).ToList();
 
 
-                return AutoMapper.Mapper.Map<List<OPC_SaleClone>, List<OPC_Sale>>(rst);
+                return AutoMapper.Mapper.Map<List<OPC_SaleClone>, List<SaleOrderModel>>(rst);
             }
         }
     }

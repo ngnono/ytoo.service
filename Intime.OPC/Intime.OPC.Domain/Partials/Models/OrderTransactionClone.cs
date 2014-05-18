@@ -16,5 +16,29 @@ namespace Intime.OPC.Domain.Partials.Models
         public Nullable<int> OutsiteType { get; set; }
         public Nullable<int> OrderType { get; set; }
         public Nullable<int> CanSync { get; set; }
+
+        public static OrderTransactionClone Convert2OorderTransaction(dynamic obj)
+        {
+            if (obj == null)
+            {
+                return null;
+            }
+
+            return new OrderTransactionClone
+            {
+                Amount = obj.Amount,
+                CanSync = obj.CanSync,
+                CreateDate = obj.CreateDate,
+                Id = obj.Id,
+                IsSynced = obj.IsSynced,
+                OrderNo = obj.OrderNo,
+                OrderType = obj.OrderType,
+                OutsiteType = obj.OutsiteType,
+                OutsiteUId = obj.OutsiteUId,
+                PaymentCode = obj.PaymentCode,
+                SyncDate = obj.SyncDate,
+                TransNo = obj.TransNo
+            };
+        }
     }
 }

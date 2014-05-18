@@ -67,12 +67,15 @@ namespace Intime.OPC.Service.Support
                     saleDetails.Where(t => t.OrderItemId == kv.Key).OrderByDescending(t => t.SaleCount).ToList();
                 int returnCount = kv.Value;
                 OPC_SaleDetail detail = details.FirstOrDefault();
+<<<<<<< HEAD
+=======
                 if (detail==null)
                 {
                     //没有销售明细
                     throw new Exception(string.Format("没有销售明细不存在,订单明细号:{0}", kv.Key));
                    
                 }
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
                 while (returnCount > detail.SaleCount)
                 {
                     RmaConfig config = lstRmaConfigs.FirstOrDefault(t => t.SaleOrderNo == detail.SaleOrderNo);
@@ -198,7 +201,11 @@ namespace Intime.OPC.Service.Support
             ISaleRMARepository rep = _repository as ISaleRMARepository;
             rep.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = rep.GetAll(dto.OrderNo,dto.SaleOrderNo, "","", dto.StartDate, dto.EndDate,
+<<<<<<< HEAD
+                EnumRMAStatus.ShipNoReceive.AsID(),null,EnumReturnGoodsStatus.None,dto.pageIndex,dto.pageSize);
+=======
                 EnumRMAStatus.ShipNoReceive.AsID(), null, EnumReturnGoodsStatus.None, dto.pageIndex, dto.pageSize);
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
 
             return lst;
         }
@@ -234,26 +241,41 @@ namespace Intime.OPC.Service.Support
         public void ShippingReceiveGoods(string rmaNo)
         {
             var rep = (ISaleRMARepository)_repository;
+<<<<<<< HEAD
+=======
 
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
             var saleRma = rep.GetByRmaNo(rmaNo);
             if (saleRma == null)
             {
                 throw new Exception("快递单不存在,退货单号:" + rmaNo);
             }
+<<<<<<< HEAD
+            if (saleRma.RMAStatus <= (int)EnumReturnGoodsStatus.NoProcess)
+            {
+                throw new Exception("客服未确认,退货单号:" + rmaNo);
+            }
+            if (saleRma.Status!=EnumRMAStatus.ShipNoReceive.AsID())
+=======
             if (saleRma.RMAStatus < (int)EnumReturnGoodsStatus.NoProcess)
             {
                 throw new Exception("客服未确认,退货单号:" + rmaNo);
             }
             if (saleRma.Status>(int)EnumRMAStatus.ShipNoReceive)
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
             {
                 throw new Exception("该退货单已经确认或正在审核,退货单号:" + rmaNo);
             }
            
             saleRma.Status = EnumRMAStatus.ShipReceive.AsID();
+<<<<<<< HEAD
+            rep.Update(saleRma);
+=======
             UpdateRMAStatus(rmaNo, EnumRMAStatus.ShipReceive.AsID());
 
             rep.Update(saleRma);
 
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
         }
 
         public PageResult<SaleRmaDto> GetByReturnGoodPay(ReturnGoodsPayRequest dto)
@@ -289,7 +311,11 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("快递单不存在,退货单号:" + rmaNo);
             }
+<<<<<<< HEAD
+            if (saleRma.RMAStatus <= 0)
+=======
             if (saleRma.RMAStatus < 0)
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
             {
                 throw new Exception("客服未确认,退货单号:" + rmaNo);
             }
@@ -301,11 +327,25 @@ namespace Intime.OPC.Service.Support
             
             saleRma.RealRMASumMoney = money;
             saleRma.RecoverableSumMoney = saleRma.RealRMASumMoney - saleRma.CompensationFee;
+<<<<<<< HEAD
+            //if (saleRma.RecoverableSumMoney > 0)
+            //{
+            //    saleRma.RMAStatus = EnumReturnGoodsStatus.CompensateVerify.GetDescription();
+            //}
+            //else
+            //{
+                //saleRma.RMAStatus = EnumReturnGoodsStatus.PayVerify.GetDescription();
+                saleRma.Status = EnumRMAStatus.PayVerify.AsID();
+            //}
+
+            rep.Update(saleRma);
+=======
             saleRma.Status = EnumRMAStatus.PayVerify.AsID();
             
             rep.Update(saleRma);
             UpdateRMAStatus(rmaNo, EnumRMAStatus.PayVerify.AsID());
 
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
         }
 
         public PageResult<SaleRmaDto> GetByRmaNo(string rmaNo, int pageIndex, int pageSize)
@@ -329,7 +369,11 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("快递单不存在,退货单号:" + rmaNo);
             }
+<<<<<<< HEAD
+            if (saleRma.RMAStatus <= (int)EnumReturnGoodsStatus.NoProcess)
+=======
             if (saleRma.RMAStatus < (int)EnumReturnGoodsStatus.NoProcess)
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
             {
                 throw new Exception("客服未确认,退货单号:" + rmaNo);
             }
@@ -340,6 +384,10 @@ namespace Intime.OPC.Service.Support
             var  rmastaturs=passed?EnumRMAStatus.ShipVerifyPass.AsID():EnumRMAStatus.ShipVerifyNotPass.AsID();
 
             saleRma.Status = rmastaturs;
+<<<<<<< HEAD
+          
+            rep.Update(saleRma);
+=======
 
           
             rep.Update(saleRma);
@@ -348,6 +396,7 @@ namespace Intime.OPC.Service.Support
 
 
 
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
         }
 
         public PageResult<SaleRmaDto> GetByFinaceDto(FinaceRequest dto)
@@ -372,14 +421,21 @@ namespace Intime.OPC.Service.Support
             {
                 throw new Exception("快递单不存在,退货单号:" + rmaNo);
             }
+<<<<<<< HEAD
+ 
+=======
 
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
             if (saleRma.RMAStatus == EnumReturnGoodsStatus.CompensateVerify.AsID())
             {
                 saleRma.RMAStatus = (int)(pass?EnumReturnGoodsStatus.CompensateVerifyPass:EnumReturnGoodsStatus.CompensateVerifyFailed);
                 if (pass)
                 {
                     saleRma.Status = EnumRMAStatus.ShipNoReceive.AsID();
+<<<<<<< HEAD
+=======
                     UpdateRMAStatus(rmaNo, EnumRMAStatus.ShipNoReceive.AsID());
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
                 }
                 rep.Update(saleRma);
                 return;
@@ -388,6 +444,8 @@ namespace Intime.OPC.Service.Support
             
            
         }
+<<<<<<< HEAD
+=======
                                                                 
         private void UpdateRMAStatus(string rmaNo, int status)
         {
@@ -407,6 +465,7 @@ namespace Intime.OPC.Service.Support
 
 
         }
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
 
         public PageResult<SaleRmaDto> GetByReturnGoodsCompensate(ReturnGoodsInfoRequest request)
         {
@@ -563,11 +622,15 @@ namespace Intime.OPC.Service.Support
             rma.RMACashStatus = EnumRMACashStatus.NoCash.AsID();
             rma.SectionId = OpcSale.SectionId;
             rma.Status = EnumRMAStatus.NoDelivery.AsID();
+<<<<<<< HEAD
+            rma.RMAStatus = EnumReturnGoodsStatus.NoProcess.AsID();
+=======
             //如果有赔偿的，在走财务赔偿审批
             if(RefundAmount - ComputeAccount()>0)
                 rma.RMAStatus = EnumReturnGoodsStatus.CompensateVerify.AsID();
             else
                 rma.RMAStatus = EnumReturnGoodsStatus.ServiceApprove.AsID();
+>>>>>>> d5b656a06e4c5c27bdaf90677938daa89e5bb86b
             return rma;
         }
 

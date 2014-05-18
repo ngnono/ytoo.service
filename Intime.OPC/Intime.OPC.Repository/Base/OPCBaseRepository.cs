@@ -27,6 +27,13 @@ namespace Intime.OPC.Repository.Base
         }
 
         /// <summary>
+        /// 更新指定字段
+        /// </summary>
+        /// <param name="entity">实体</param>
+        /// <param name="fileds">更新字段数组</param>
+
+
+        /// <summary>
         /// 帮助方法
         /// </summary>
         /// <typeparam name="T"></typeparam>
