@@ -181,6 +181,9 @@ namespace Intime.OPC.Repository.Impl
                 int t;
 
                 var qt = from s in c.Set<Section>().AsExpandable().Where(sectionFilter)
+                         //join o in c.Set<OPC_OrgInfo>() on s.StoreId equals o.StoreOrSectionID
+                
+                
                          let s_b_let = (from sb in c.Set<IMS_SectionBrand>().AsExpandable().Where(sectionbrandFilter)
                                         where s.Id == sb.SectionId
                                         select new

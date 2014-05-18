@@ -70,8 +70,10 @@
     <Compile Include="Base\ExtensionEx.cs" />
     <Compile Include="Base\QueryTableEx.cs" />
     <Compile Include="Base\StringEx.cs" />
+    <Compile Include="Impl\ShippingOrderRepository.cs" />
     <Compile Include="Impl\SaleOrderRepository.cs" />
     <Compile Include="ISaleOrderRepository.cs" />
+    <Compile Include="IShippingOrderRepository.cs" />
     <Compile Include="ISupplierRepository.cs" />
     <Compile Include="IBrandRepository.cs" />
     <Compile Include="IOPCRepository.cs" />

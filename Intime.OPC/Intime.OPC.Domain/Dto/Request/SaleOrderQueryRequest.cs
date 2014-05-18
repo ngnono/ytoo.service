@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Intime.OPC.Domain.Enums;
 
 namespace Intime.OPC.Domain.Dto.Request
 {
@@ -12,11 +13,22 @@ namespace Intime.OPC.Domain.Dto.Request
         [DataMember(Name = "orderno")]
         public string OrderNo { get; set; }
 
+        /// <summary>
+        /// 发货单号
+        /// </summary>
+        public string ShippingOrderNo { get; set; }
+
         public int? Page { get; set; }
 
         public int? PageSize { get; set; }
 
         public int? SortOrder { get; set; }
+
+
+        /// <summary>
+        /// 销售单状态
+        /// </summary>
+        public EnumSaleOrderStatus? SaleOrderStatus { get; set; }
     }
 
     [DataContract]

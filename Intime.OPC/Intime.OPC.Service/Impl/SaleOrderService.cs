@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Linq.Expressions;
 using AutoMapper;
 using Intime.OPC.Domain;
@@ -178,6 +179,10 @@ namespace Intime.OPC.Service.Impl
 
         public PagerInfo<SaleDto> GetPagedList(SaleOrderQueryRequest request, int authId)
         {
+
+            var filter = Mapper.Map<SaleOrderQueryRequest, SaleOrderFilter>(request);
+            var pagerRequest = new Domain.PagerRequest(request.Page ?? 1, request.PageSize ?? 10);
+
             //用户身份验证
             using (var db = new YintaiHZhouContext())
             {
@@ -190,14 +195,14 @@ namespace Intime.OPC.Service.Impl
                     throw new OpcExceptioin("未授权的用户");
                 }
 
-                if (user.user.IsSystem)
+                if (!user.user.IsSystem)
                 {
                     throw new NotImplementedException();
                 }
-            }
 
-            var filter = Mapper.Map<SaleOrderQueryRequest, SaleOrderFilter>(request);
-            var pagerRequest = new Domain.PagerRequest(request.Page ?? 1, request.PageSize ?? 10);
+                //添加店铺ID
+                filter.StoreId = user.org.StoreOrSectionID;
+            }
 
             if (request.EndDate != null || request.StartDate != null)
             {
@@ -208,7 +213,7 @@ namespace Intime.OPC.Service.Impl
 
             int total;
             var datas = _saleOrderRepository.GetPagedList(pagerRequest, out total, filter, (SaleOrderSortOrder)(request.SortOrder ?? 0));
-            var dto = Mapper.Map<List<OPC_Sale>, List<SaleDto>>(datas);
+            var dto = Mapper.Map<List<SaleOrderModel>, List<SaleDto>>(datas);
 
             var pagerdto = new PagerInfo<SaleDto>(pagerRequest, total) { Datas = dto };
 
