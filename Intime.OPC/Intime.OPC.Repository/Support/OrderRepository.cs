@@ -121,7 +121,7 @@ namespace Intime.OPC.Repository.Support
             //todo 查询所有有退货的订单
             using (var db = new YintaiHZhouContext())
             {
-                var filter2 = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus==(int)EnumReturnGoodsStatus.NoProcess); ;
+                var filter2 = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate); //&& t.RMAStatus==(int)EnumReturnGoodsStatus.NoProcess;
 
                 var filter = db.Orders.Where(t => true);
 
@@ -145,10 +145,10 @@ namespace Intime.OPC.Repository.Support
                     filter2 = filter2.Where(t => t.RMANo == request.RmaNo);
                 }
 
-                if (request.RmaStatus.HasValue)
+                if (request.RmaStatus.HasValue && request.RmaStatus!=-1)
                 {
                     filter2 = filter2.Where(t => t.Status == request.RmaStatus.Value);
-                    
+
                 }
 
                 if (request.StoreID.HasValue)

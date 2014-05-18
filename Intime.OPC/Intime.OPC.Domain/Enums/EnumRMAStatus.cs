@@ -21,7 +21,11 @@ namespace Intime.OPC.Domain.Enums
     /// </summary>
     public enum EnumRMAStatus
     {
-        
+        /// <summary>
+        ///     未收货
+        /// </summary>
+        [Description("全部")]
+        None = -1,
         /// <summary>
         ///     未收货
         /// </summary>
@@ -75,6 +79,6 @@ namespace Intime.OPC.Domain.Enums
         /// <summary>
         ///     未收货
         /// </summary>
-        [Description("缺货")]OutofStack = -1
+        [Description("缺货")]OutofStack = 999
     }
 }
