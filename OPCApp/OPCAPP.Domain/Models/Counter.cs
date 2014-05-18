@@ -4,18 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using Intime.OPC.Infrastructure.Service;
 using Intime.OPC.Infrastructure.Validation;
 
-namespace Intime.OPC.Modules.Dimension.Models
+namespace OPCApp.Domain.Models
 {
     /// <summary>
     /// 专柜
     /// </summary>
-    [Uri(Name = "counters")]
+    [Uri("counters")]
     public class Counter : Dimension
     {
-        private bool repealed;
-        private string code;
-        private string areaCode;
-        private string contactPhoneNumber;
+        private bool _repealed;
+        private string _code;
+        private string _areaCode;
+        private string _contactPhoneNumber;
 
         /// <summary>
         /// 专柜码
@@ -25,8 +25,8 @@ namespace Intime.OPC.Modules.Dimension.Models
         [LocalizedMaxLength(200)]
         public string Code
         {
-            get { return code; }
-            set { SetProperty(ref code, value); }
+            get { return _code; }
+            set { SetProperty(ref _code, value); }
         }
 
         /// <summary>
@@ -36,20 +36,19 @@ namespace Intime.OPC.Modules.Dimension.Models
         [LocalizedMaxLength(200)]
         public string AreaCode
         {
-            get { return areaCode; }
-            set { SetProperty(ref areaCode, value); }
+            get { return _areaCode; }
+            set { SetProperty(ref _areaCode, value); }
         }
 
         /// <summary>
         /// 联系电话
         /// </summary>
         [Display(Name = "联系电话")]
-        [LocalizedRequired()]
         [LocalizedMaxLength(50)]
         public string ContactPhoneNumber
         {
-            get { return contactPhoneNumber; }
-            set { SetProperty(ref contactPhoneNumber, value); }
+            get { return _contactPhoneNumber; }
+            set { SetProperty(ref _contactPhoneNumber, value); }
         }
 
         /// <summary>
@@ -57,8 +56,8 @@ namespace Intime.OPC.Modules.Dimension.Models
         /// </summary>
         public bool Repealed
         {
-            get { return repealed; }
-            set { SetProperty(ref repealed, value); }
+            get { return _repealed; }
+            set { SetProperty(ref _repealed, value); }
         }
 
         /// <summary>

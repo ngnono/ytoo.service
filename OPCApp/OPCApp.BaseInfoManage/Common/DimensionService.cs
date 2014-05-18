@@ -1,21 +1,20 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Intime.OPC.Modules.Dimension.Models;
 using OPCApp.Infrastructure;
 using OPCApp.Infrastructure.REST;
 using OPCAPP.Common.Extensions;
 using OPCApp.Infrastructure.Rest;
-using System.Threading.Tasks;
 using Intime.OPC.Infrastructure.Service;
 
 namespace Intime.OPC.Modules.Dimension.Common
 {
     public abstract class DimensionService<TDimension> : IService<TDimension>, IPartImportsSatisfiedNotification
-        where TDimension : Intime.OPC.Modules.Dimension.Models.Dimension
+        where TDimension : OPCApp.Domain.Models.Dimension
     {
-        private IRestClient restClient;
-        private string uriName;
+        private IRestClient _restClient;
+        private string _uriName;
 
         [Import]
         public TokenManager TokenManager { get; set; }
@@ -26,13 +25,13 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         public virtual void Initialize()
         {
-            restClient = RestClientFactory.Create(AppEx.Config.ServiceUrl, AppEx.Config.UserKey, AppEx.Config.Password);
-            restClient.Token = TokenManager.Token;
+            _restClient = RestClientFactory.Create(AppEx.Config.ServiceUrl, AppEx.Config.UserKey, AppEx.Config.Password);
+            _restClient.Token = TokenManager.Token;
 
             var attribute = typeof(TDimension).GetCustomAttribute<UriAttribute>();
             if (attribute == null) throw new InvalidOperationException("Uriattribute not found on the given dimension.");
 
-            uriName = attribute.Name;
+            _uriName = attribute.Name;
         }
 
         public void OnImportsSatisfied()
@@ -42,27 +41,27 @@ namespace Intime.OPC.Modules.Dimension.Common
 
         public TDimension Create(TDimension obj)
         {
-            return restClient.Post<TDimension>(uriName, obj);
+            return _restClient.Post<TDimension>(_uriName, obj);
         }
 
         public TDimension Update(TDimension obj)
         {
-            return restClient.Put<TDimension>(string.Format("{0}/{1}", uriName, obj.ID), obj);
+            return _restClient.Put<TDimension>(string.Format("{0}/{1}", _uriName, obj.ID), obj);
         }
 
         public void Delete(int id)
         {
-            restClient.Delete(string.Format("{0}/{1}", uriName, id));
+            _restClient.Delete(string.Format("{0}/{1}", _uriName, id));
         }
 
         public TDimension Query(int id)
         {
-            return restClient.Get<TDimension>(string.Format("{0}/{1}", uriName, id));
+            return _restClient.Get<TDimension>(string.Format("{0}/{1}", _uriName, id));
         }
 
         public PagedResult<TDimension> Query(IQueryCriteria queryCriteria)
         {
-            return restClient.Get<PagedResult<TDimension>>(string.Format("{0}?{1}", uriName, queryCriteria.BuildQueryString()));
+            return _restClient.Get<PagedResult<TDimension>>(string.Format("{0}?{1}", _uriName, queryCriteria.BuildQueryString()));
         }
     }
 }

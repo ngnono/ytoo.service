@@ -35,6 +35,7 @@ namespace Intime.OPC.Repository.Support
                 if (rmaStatus.HasValue)
                 {
                     saleQuery = saleQuery.Where(t => t.Status == rmaStatus);
+                    query = query.Where(t => t.Status == rmaStatus);
                 }
 
                 if (returnGoodsStatus != EnumReturnGoodsStatus.None)

@@ -33,6 +33,21 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.MefExtensions">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.MefExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Mvvm">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.PubSubEvents">
+      <HintPath>..\DllFile\Microsoft.Practices.Prism.PubSubEvents.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -83,6 +98,8 @@
     <Compile Include="Enums\EnumSearchSaleStatus.cs" />
     <Compile Include="LoginModel.cs" />
     <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\Counter.cs" />
+    <Compile Include="Models\Dimension.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />
     <Compile Include="Models\OPC_AuthRoleMenu.cs" />
@@ -106,12 +123,14 @@
     <Compile Include="Models\OPC_SaleDetailsComment.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
+    <Compile Include="Models\Organization.cs" />
     <Compile Include="Models\RMA.cs" />
     <Compile Include="Models\ShippingGet.cs" />
     <Compile Include="Models\OrderGet.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\ShipVia.cs" />
     <Compile Include="Models\Store.cs" />
+    <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\UpdatePwdModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />
@@ -125,7 +144,9 @@
       <Name>OPCApp.Main.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Models\Model.cd" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

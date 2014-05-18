@@ -1,23 +1,17 @@
 using System;
+using Intime.OPC.Infrastructure.Service;
 
 namespace OPCApp.Domain.Models
 {
+    [Uri("salesorder")]
     public class OPC_Sale
     {
         public OPC_Sale()
         {
             SaleStatus = "已销售";
         }
-        //订货人
-        public string ReceivePerson { get; set; }
 
-        public string OrderSource { get; set; }
-        public string SaleStatus { get; set; }
-        public bool IsSelected { get; set; }
-       /// <summary>
-       /// 渠道号
-       /// </summary>
-        public string TransNo { get; set; }
+        #region Properties generated from DB
 
         public int Id { get; set; }
         public string OrderNo { get; set; }
@@ -31,10 +25,6 @@ namespace OPCApp.Domain.Models
         public string ShippingRemark { get; set; }
         public DateTime SellDate { get; set; }
         public string IfTrans { get; set; }
-        /// <summary>
-        /// 调拨
-        /// </summary>
-        public string TransName { get; set; }
         public string TransStatus { get; set; }
         public decimal SalesAmount { get; set; }
         public int? SalesCount { get; set; }
@@ -42,7 +32,6 @@ namespace OPCApp.Domain.Models
         public string CashNum { get; set; }
         public DateTime? CashDate { get; set; }
         public int? SectionId { get; set; }
-        public string SectionName { get; set; }
         public int? PrintTimes { get; set; }
         public string Remark { get; set; }
         public DateTime? RemarkDate { get; set; }
@@ -50,32 +39,70 @@ namespace OPCApp.Domain.Models
         public int CreatedUser { get; set; }
         public DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
+
+        #endregion
+
+        public Order Order { get; set; }
+
+        public Counter Counter { get; set; }
+
+        public OPC_ShippingSale DeliveryOrder { get; set; }
+
+        #region Properties to delete
+
+        public string SectionName { get; set; }
+
+        //订货人
+        public string ReceivePerson { get; set; }
+
+        public string OrderSource { get; set; }
+
+        public string SaleStatus { get; set; }
+
+        public bool IsSelected { get; set; }
+
+        /// <summary>
+        /// 渠道号
+        /// </summary>
+        public string TransNo { get; set; }
+
+        /// <summary>
+        /// 调拨
+        /// </summary>
+        public string TransName { get; set; }
+
         public string StatusName { get; set; }
 
         /// <summary>
         /// 门店
         /// </summary>
         public string StoreName { get; set; }
+
         /// <summary>
         /// 发票抬头
         /// </summary>
-
         public string InvoiceSubject { get; set; }
+
         /// <summary>
         /// 支付方式
         /// </summary>
         public string PayType { get; set; }
+
         /// <summary>
         /// 发票内容
         /// </summary>
         public string Invoice { get; set; }
+
         /// <summary>
         /// 门店电话
         /// </summary>
         public string StoreTelephone { get; set; }
+
         /// <summary>
         /// 门店地址
         /// </summary>
         public string StoreAddress { get; set; }
+
+        #endregion
     }
 }

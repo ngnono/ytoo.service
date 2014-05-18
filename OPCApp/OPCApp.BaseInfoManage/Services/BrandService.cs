@@ -1,7 +1,7 @@
-﻿using Intime.OPC.Infrastructure.Service;
+﻿using System.ComponentModel.Composition;
+using Intime.OPC.Infrastructure.Service;
 using Intime.OPC.Modules.Dimension.Common;
-using Intime.OPC.Modules.Dimension.Models;
-using System.ComponentModel.Composition;
+using OPCApp.Domain.Models;
 
 namespace Intime.OPC.Modules.Dimension.Services
 {

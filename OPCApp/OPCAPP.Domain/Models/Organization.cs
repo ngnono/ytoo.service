@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Intime.OPC.Modules.Dimension.Models
+namespace OPCApp.Domain.Models
 {
     /// <summary>
     /// 组织
