@@ -36,6 +36,17 @@ namespace Intime.OPC.Repository.Impl
                     query = query.And(v => v.Status == (int)filter.Status);
                 }
 
+                if (filter.HasDeliveryOrderGenerated)
+                {
+                    //已经生成发货单的
+                    query = query.And(v => v.ShippingSaleId > 0);
+                }
+                else
+                {
+                    //未生成发货单的
+                    query = query.And(v => v.ShippingSaleId == 0);
+                }
+
                 if (!String.IsNullOrWhiteSpace(filter.SaleOrderNo))
                     query = query.And(v => v.SaleOrderNo == filter.SaleOrderNo);
 
@@ -59,8 +70,6 @@ namespace Intime.OPC.Repository.Impl
                         query = query.And(v => v.CreatedDate < filter.DateRange.EndDateTime.Value);
                     }
                 }
-
-
             }
 
             return query;
@@ -116,9 +125,17 @@ namespace Intime.OPC.Repository.Impl
                 var q1 = db.OPC_Sales.Where(where)
                     .Join(db.Sections.Where(sectionFilter)
                         .Join(db.Stores, s => s.StoreId, x => x.Id, (section, store) => new { section, store }),
-                        o => o.SectionId, s => s.section.Id, (o, s) => new { o, store = s });
-                var q = q1.Join(db.OrderTransactions, o => o.o.OrderNo, ot => ot.OrderNo, (o, ot) => new { o, ot })
-                  .Join(db.PaymentMethods, ot => ot.ot.PaymentCode, pm => pm.Code, (ot, pm) => new OPC_SaleClone()
+                        o => o.SectionId, s => s.section.Id, (o, s) => new { o, store = s })
+                    .Join(db.OrderTransactions, o => o.o.OrderNo, ot => ot.OrderNo, (o, ot) => new { o, ot });
+                var q = from ot in q1
+                        let shipp_let = (from s in db.OPC_ShippingSales
+                                         where ot.o.o.ShippingSaleId == s.Id
+                                         select new
+                                         {
+                                             s
+                                         })
+                        join p in db.PaymentMethods on ot.ot.PaymentCode equals p.Code
+                        select new OPC_SaleClone()
                   {
                       Id = ot.o.o.Id,
                       OrderNo = ot.o.o.OrderNo,
@@ -151,14 +168,13 @@ namespace Intime.OPC.Repository.Impl
 
                       Store = StoreClone.Convert2Store(ot.o.store.store),
                       Section = SectionClone.Convert2Section(ot.o.store.section),
-                      OrderTransaction = OrderTransactionClone.Convert2OorderTransaction(ot.ot)
-                  });
-
+                      OrderTransaction = OrderTransactionClone.Convert2OorderTransaction(ot.ot),
+                      ShippingSale = OPC_ShippingSaleClone.Convert2ShippingSale(shipp_let.FirstOrDefault())
+                  };
 
                 totalCount = q.Count();
 
-                var rst = q.OrderBy(v => v.Id).Skip(pagerRequest.SkipCount).Take(pagerRequest.PageSize).ToList();
-
+                var rst = q.OrderByDescending(v => v.CreatedDate).ThenBy(v => v.OrderNo).Skip(pagerRequest.SkipCount).Take(pagerRequest.PageSize).ToList();
 
                 return AutoMapper.Mapper.Map<List<OPC_SaleClone>, List<SaleOrderModel>>(rst);
             }

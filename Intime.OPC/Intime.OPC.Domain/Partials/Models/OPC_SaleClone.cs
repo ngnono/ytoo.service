@@ -43,5 +43,7 @@ namespace Intime.OPC.Domain.Partials.Models
         public SectionClone Section { get; set; }
 
         public OrderTransactionClone OrderTransaction { get; set; }
+
+        public OPC_ShippingSaleClone ShippingSale { get; set; }
     }
 }

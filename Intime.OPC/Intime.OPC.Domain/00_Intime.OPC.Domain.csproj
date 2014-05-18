@@ -228,6 +228,7 @@
     <Compile Include="Partials\Models\OpcSupplierInfoClone.cs" />
     <Compile Include="Partials\Models\OPC_Sale.cs" />
     <Compile Include="Partials\Models\OPC_SaleClone.cs" />
+    <Compile Include="Partials\Models\OPC_ShippingSaleClone.cs" />
     <Compile Include="Partials\Models\OrderTransactionClone.cs" />
     <Compile Include="Partials\Models\Section.cs" />
     <Compile Include="Partials\Models\SectionClone.cs" />

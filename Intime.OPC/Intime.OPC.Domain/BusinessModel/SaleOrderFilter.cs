@@ -34,5 +34,10 @@ namespace Intime.OPC.Domain.BusinessModel
         /// 销售单状态
         /// </summary>
         public EnumSaleOrderStatus? Status { get; set; }
+
+        /// <summary>
+        /// 是否生成发货单
+        /// </summary>
+        public bool HasDeliveryOrderGenerated { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Security;
 
 namespace Intime.OPC.Domain.Dto
 {
@@ -123,5 +125,14 @@ namespace Intime.OPC.Domain.Dto
         [DataMember]
         public string ReceivePerson { get; set; }
 
+        /// <summary>
+        /// 订单
+        /// </summary>
+        public OrderDto Order { get; set; }
+
+        /// <summary>
+        /// 出库单
+        /// </summary>
+        public ShippingSaleDto ShippingOrder { get; set; }
     }
 }

@@ -28,7 +28,12 @@ namespace Intime.OPC.Domain.Dto.Request
         /// <summary>
         /// 销售单状态
         /// </summary>
-        public EnumSaleOrderStatus? SaleOrderStatus { get; set; }
+        public EnumSaleOrderStatus? Status { get; set; }
+
+        /// <summary>
+        /// 是否生成发货单
+        /// </summary>
+        public bool HasDeliveryOrderGenerated { get; set; }
     }
 
     [DataContract]

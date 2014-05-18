@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Intime.OPC.Domain.Dto
 {
@@ -101,5 +102,10 @@ namespace Intime.OPC.Domain.Dto
         public string RmaNo { get; set; }
 
         public string OrderNo { get; set; }
+
+        /// <summary>
+        /// 销售单
+        /// </summary>
+        public List<SaleDto> SaleOrders { get; set; }
     }
 }
