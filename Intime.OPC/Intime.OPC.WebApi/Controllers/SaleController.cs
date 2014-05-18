@@ -436,7 +436,7 @@ namespace Intime.OPC.WebApi.Controllers
 
         }
 
-        [Route("api/saleorders")]
+        [Route("api/salesorder")]
         [HttpGet]
         public IHttpActionResult GetList([FromUri]SaleOrderQueryRequest request, [UserId] int uid)
         {

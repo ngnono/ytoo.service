@@ -12,6 +12,8 @@ using Intime.OPC.Domain.Enums.SortOrder;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Domain.Partials.Models;
 using Intime.OPC.Repository.Base;
+using LinqKit;
+using PredicateBuilder = LinqKit.PredicateBuilder;
 
 namespace Intime.OPC.Repository.Impl
 {
@@ -33,41 +35,41 @@ namespace Intime.OPC.Repository.Impl
 
                 if (filter.Status != null)
                 {
-                    query = query.And(v => v.Status == (int)filter.Status);
+                    query = PredicateBuilder.And(query, v => v.Status == (int)filter.Status);
                 }
 
                 if (filter.HasDeliveryOrderGenerated)
                 {
                     //已经生成发货单的
-                    query = query.And(v => v.ShippingSaleId > 0);
+                    query = PredicateBuilder.And(query, v => v.ShippingSaleId > 0);
                 }
                 else
                 {
                     //未生成发货单的
-                    query = query.And(v => v.ShippingSaleId == 0);
+                    query = PredicateBuilder.And(query, v => !v.ShippingSaleId.HasValue);
                 }
 
                 if (!String.IsNullOrWhiteSpace(filter.SaleOrderNo))
-                    query = query.And(v => v.SaleOrderNo == filter.SaleOrderNo);
+                    query = PredicateBuilder.And(query, v => v.SaleOrderNo == filter.SaleOrderNo);
 
                 if (!String.IsNullOrWhiteSpace(filter.OrderNo))
-                    query = query.And(v => v.OrderNo == filter.OrderNo);
+                    query = PredicateBuilder.And(query, v => v.OrderNo == filter.OrderNo);
 
                 if (filter.ShippingOrderId != null)
                 {
-                    query = query.And(v => v.ShippingSaleId == filter.ShippingOrderId);
+                    query = PredicateBuilder.And(query, v => v.ShippingSaleId == filter.ShippingOrderId);
                 }
 
                 if (filter.DateRange != null)
                 {
                     if (filter.DateRange.StartDateTime != null)
                     {
-                        query = query.And(v => v.CreatedDate >= filter.DateRange.StartDateTime.Value);
+                        query = PredicateBuilder.And(query, v => v.CreatedDate >= filter.DateRange.StartDateTime.Value);
                     }
 
                     if (filter.DateRange.EndDateTime != null)
                     {
-                        query = query.And(v => v.CreatedDate < filter.DateRange.EndDateTime.Value);
+                        query = PredicateBuilder.And(query, v => v.CreatedDate < filter.DateRange.EndDateTime.Value);
                     }
                 }
             }
@@ -87,7 +89,7 @@ namespace Intime.OPC.Repository.Impl
             if (filter != null)
             {
                 if (filter.StoreId != null)
-                    query = query.And(v => v.StoreId == filter.StoreId.Value);
+                    query = PredicateBuilder.And(query, v => v.StoreId == filter.StoreId.Value);
             }
 
             return query;
@@ -114,7 +116,7 @@ namespace Intime.OPC.Repository.Impl
             throw new NotImplementedException();
         }
 
-        public List<SaleOrderModel> GetPagedList(PagerRequest pagerRequest, out int totalCount, SaleOrderFilter filter,
+        public List<OPC_Sale> GetPagedList(PagerRequest pagerRequest, out int totalCount, SaleOrderFilter filter,
             SaleOrderSortOrder sortOrder)
         {
             var where = Filler(filter);
@@ -122,19 +124,39 @@ namespace Intime.OPC.Repository.Impl
 
             using (var db = GetYintaiHZhouContext())
             {
-                var q1 = db.OPC_Sales.Where(where)
-                    .Join(db.Sections.Where(sectionFilter)
+                var q1 = db.OPC_Sales.AsExpandable().Where(where)
+                    .Join(db.Sections.AsExpandable().Where(sectionFilter)
                         .Join(db.Stores, s => s.StoreId, x => x.Id, (section, store) => new { section, store }),
                         o => o.SectionId, s => s.section.Id, (o, s) => new { o, store = s })
                     .Join(db.OrderTransactions, o => o.o.OrderNo, ot => ot.OrderNo, (o, ot) => new { o, ot });
                 var q = from ot in q1
                         let shipp_let = (from s in db.OPC_ShippingSales
                                          where ot.o.o.ShippingSaleId == s.Id
-                                         select new
+                                         select new OPC_ShippingSaleClone
                                          {
-                                             s
+                                             Id = s.Id,
+                                             BrandId = s.BrandId,
+                                             CreateDate = s.CreateDate,
+                                             CreateUser = s.CreateUser,
+                                             OrderNo = s.OrderNo,
+                                             PrintTimes = s.PrintTimes,
+                                             RmaNo = s.RmaNo,
+                                             ShippingAddress = s.ShippingAddress,
+                                             ShippingCode = s.ShippingCode,
+                                             ShippingStatus = s.ShippingStatus,
+                                             ShippingContactPerson = s.ShippingContactPerson,
+                                             ShippingContactPhone = s.ShippingContactPhone,
+                                             ShipViaId = s.ShipViaId,
+                                             ShipViaName = s.ShipViaName,
+                                             ShippingFee = s.ShippingFee,
+                                             ShippingRemark = s.ShippingRemark,
+                                             ShippingZipCode = s.ShippingZipCode,
+                                             StoreId = s.StoreId,
+                                             UpdateDate = s.UpdateDate,
+                                             UpdateUser = s.UpdateUser
                                          })
                         join p in db.PaymentMethods on ot.ot.PaymentCode equals p.Code
+                        join oo in db.Orders on ot.o.o.OrderNo equals oo.OrderNo 
                         select new OPC_SaleClone()
                   {
                       Id = ot.o.o.Id,
@@ -166,17 +188,84 @@ namespace Intime.OPC.Repository.Impl
                       UpdatedDate = ot.o.o.UpdatedDate,
                       UpdatedUser = ot.o.o.UpdatedUser,
 
-                      Store = StoreClone.Convert2Store(ot.o.store.store),
-                      Section = SectionClone.Convert2Section(ot.o.store.section),
-                      OrderTransaction = OrderTransactionClone.Convert2OorderTransaction(ot.ot),
-                      ShippingSale = OPC_ShippingSaleClone.Convert2ShippingSale(shipp_let.FirstOrDefault())
+                      Store = new StoreClone
+            {
+                Id = ot.o.store.store.Id,
+                Name = ot.o.store.store.Name,
+                ExStoreId = ot.o.store.store.ExStoreId,
+                GpsAlt = ot.o.store.store.GpsAlt,
+                GpsLng = ot.o.store.store.GpsLng,
+                GpsLat = ot.o.store.store.GpsLat,
+                Group_Id = ot.o.store.store.Group_Id,
+                Latitude = ot.o.store.store.Latitude,
+                Location = ot.o.store.store.Location,
+                Longitude = ot.o.store.store.Longitude,
+                Region_Id = ot.o.store.store.Region_Id,
+                RMAAddress = ot.o.store.store.RMAAddress,
+                RMAZipCode = ot.o.store.store.RMAZipCode,
+                RMAPerson = ot.o.store.store.RMAPerson,
+                RMAPhone = ot.o.store.store.RMAPhone,
+                Tel = ot.o.store.store.Tel,
+                StoreLevel = ot.o.store.store.StoreLevel,
+
+                CreatedDate = ot.o.store.store.CreatedDate,
+                CreatedUser = ot.o.store.store.CreatedUser,
+                Description = ot.o.store.store.Description,
+                Status = ot.o.store.store.Status,
+                UpdatedDate = ot.o.store.store.UpdatedDate,
+                UpdatedUser = ot.o.store.store.CreatedUser
+            },
+
+
+                      Section = new SectionClone
+                      {
+                          BrandId = ot.o.store.section.BrandId,
+                          ChannelSectionId = ot.o.store.section.ChannelSectionId,
+                          ContactPerson = ot.o.store.section.ContactPerson,
+                          ContactPhone = ot.o.store.section.ContactPhone,
+                          CreateDate = ot.o.store.section.CreateDate,
+                          CreateUser = ot.o.store.section.CreateUser,
+                          Location = ot.o.store.section.Location,
+                          Name = ot.o.store.section.Name,
+                          Id = ot.o.store.section.Id,
+                          Status = ot.o.store.section.Status,
+                          StoreCode = ot.o.store.section.StoreCode,
+                          StoreId = ot.o.store.section.StoreId,
+                          UpdateDate = ot.o.store.section.UpdateDate,
+                          UpdateUser = ot.o.store.section.CreateUser,
+                          SectionCode = ot.o.store.section.SectionCode
+                      },
+                      //SectionClone.Convert2Section(ot.o.store.section),
+
+                      OrderTransaction = new OrderTransactionClone
+                      {
+                          Amount = ot.ot.Amount,
+                          CanSync = ot.ot.CanSync,
+                          CreateDate = ot.ot.CreateDate,
+                          Id = ot.ot.Id,
+                          IsSynced = ot.ot.IsSynced,
+                          OrderNo = ot.ot.OrderNo,
+                          OrderType = ot.ot.OrderType,
+                          OutsiteType = ot.ot.OutsiteType,
+                          OutsiteUId = ot.ot.OutsiteUId,
+                          PaymentCode = ot.ot.PaymentCode,
+                          SyncDate = ot.ot.SyncDate,
+                          TransNo = ot.ot.TransNo
+                      }, //OrderTransactionClone.Convert2OorderTransaction(ot.ot),
+
+                      ShippingSale = shipp_let.FirstOrDefault(),
+                      Order = new OrderClone
+                      {
+                          
+                      }
+                      //OPC_ShippingSaleClone.Convert2ShippingSale(shipp_let.FirstOrDefault())
                   };
 
                 totalCount = q.Count();
 
                 var rst = q.OrderByDescending(v => v.CreatedDate).ThenBy(v => v.OrderNo).Skip(pagerRequest.SkipCount).Take(pagerRequest.PageSize).ToList();
 
-                return AutoMapper.Mapper.Map<List<OPC_SaleClone>, List<SaleOrderModel>>(rst);
+                return AutoMapper.Mapper.Map<List<OPC_SaleClone>, List<OPC_Sale>>(rst);
             }
         }
     }

@@ -60,10 +60,10 @@ namespace Intime.OPC.WebApi.App_Start
             Mapper.CreateMap<Store, StoreClone>();
             Mapper.CreateMap<StoreClone, Store>();
 
-            Mapper.CreateMap<OPC_Sale, SaleOrderModel>();
-            Mapper.CreateMap<SaleOrderModel, OPC_Sale>();
+            Mapper.CreateMap<OPC_SaleClone, OPC_Sale>();
+            Mapper.CreateMap<OPC_Sale, OPC_SaleClone>();
 
-            var saleordermodel = Mapper.CreateMap<SaleOrderModel, SaleDto>();
+            var saleordermodel = Mapper.CreateMap<OPC_Sale, SaleDto>();
             saleordermodel.ForMember(d => d.ShippingStatusName, opt => opt.MapFrom(s => s.ShippingStatus.HasValue ? ((EnumSaleOrderStatus)s.ShippingStatus.Value).GetDescription() : String.Empty));
             saleordermodel.ForMember(d => d.ShippingFee,
                 opt => opt.MapFrom(s => s.ShippingFee.HasValue ? s.ShippingFee : 0m));
@@ -77,6 +77,7 @@ namespace Intime.OPC.WebApi.App_Start
             saleordermodel.ForMember(d => d.StoreName, opt => opt.MapFrom(s => s.Store.Name));
             saleordermodel.ForMember(d => d.SectionName, opt => opt.MapFrom(s => s.Section.Name));
             saleordermodel.ForMember(d => d.TransNo, opt => opt.MapFrom(s => s.OrderTransaction.TransNo));
+            saleordermodel.ForMember(d => d.ShippingOrder, opt => opt.MapFrom(s => s.ShippingSale));
 
 
             Mapper.CreateMap<OrderTransactionClone, OrderTransaction>();
@@ -85,6 +86,12 @@ namespace Intime.OPC.WebApi.App_Start
             Mapper.CreateMap<OPC_ShippingSale, OPC_ShippingSaleClone>();
 
             Mapper.CreateMap<SaleOrderQueryRequest, SaleOrderFilter>();
+
+            Mapper.CreateMap<OrderClone, Order>();
+            Mapper.CreateMap<OrderClone, OrderClone>();
+
+            Mapper.CreateMap<OrderDto, Order>();
+            Mapper.CreateMap<Order, OrderDto>();
         }
     }
 }
