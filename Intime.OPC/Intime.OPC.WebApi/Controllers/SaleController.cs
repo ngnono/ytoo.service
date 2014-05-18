@@ -444,10 +444,10 @@ namespace Intime.OPC.WebApi.Controllers
             {
                 request = new SaleOrderQueryRequest();
             }
-#if DEBUG
-            //TODO: 测试数据
-             uid = 1;
-#endif
+//#if DEBUG
+//            //TODO: 测试数据
+//             uid = 1;
+//#endif
             var dto = _saleOrderService.GetPagedList(request, uid);
 
             return RetrunHttpActionResult(dto);

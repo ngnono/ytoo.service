@@ -20,7 +20,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// 生成出库单
         /// </summary>
         /// <returns></returns>
-        [Route("/shippingsaleorders")]
+        [Route("shippingsaleorders")]
         [HttpPost]
         public IHttpActionResult PostOrder([FromBody]CreateShippingSaleOrderRequest request, [UserId]int userId)
         {
@@ -34,7 +34,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// 获取出库单
         /// </summary>
         /// <returns></returns>
-        [Route("/shippingsaleorders/{id:int}")]
+        [Route("shippingsaleorders/{id:int}")]
         [HttpGet]
         public IHttpActionResult Get(int id, [UserId] int userId)
         {
@@ -45,7 +45,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// 获取出库单
         /// </summary>
         /// <returns></returns>
-        [Route("/shippingsaleorders")]
+        [Route("shippingsaleorders")]
         [HttpGet]
         public IHttpActionResult GetList([FromUri]GetShippingSaleOrderRequest request, [UserId]int userId)
         {
@@ -60,7 +60,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="request"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [Route("/shippingsaleorders/{id:int}")]
+        [Route("shippingsaleorders/{id:int}")]
         [HttpPut]
         public IHttpActionResult Put(int id, [FromBody] PutShippingSaleOrderRequest request, [UserId] int userId)
         {
