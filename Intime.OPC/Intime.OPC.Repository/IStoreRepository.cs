@@ -28,5 +28,7 @@ namespace Intime.OPC.Repository
         PageResult<Store> GetAll(int pageIndex, int pageSize = 20);
 
         List<Store> GetPagedList(PagerRequest request, out int totalCount, StoreFilter filter);
+
+        Store GetItem(int Id);
     }
 }

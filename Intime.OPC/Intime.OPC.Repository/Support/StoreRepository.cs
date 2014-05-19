@@ -91,5 +91,13 @@ namespace Intime.OPC.Repository.Support
                 return rst;
             }
         }
+
+        public Store GetItem(int Id)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                return EFHelper.FindOne<Store>(db, v => v.Id == Id);
+            }
+        }
     }
 }

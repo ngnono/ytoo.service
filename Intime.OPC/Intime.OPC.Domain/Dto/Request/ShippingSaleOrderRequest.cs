@@ -11,7 +11,7 @@ namespace Intime.OPC.Domain.Dto.Request
     public class CreateShippingSaleOrderRequest
     {
         [Required]
-        public List<int> SaleOrderIds { get; set; }
+        public List<int> SaleOrderNos { get; set; }
     }
 
     public class GetShippingSaleOrderRequest : DateRangeRequest
@@ -32,12 +32,17 @@ namespace Intime.OPC.Domain.Dto.Request
         /// <summary>
         /// 发货单号
         /// </summary>
-        public int ShippingSaleOrderNo { get; set; }
+        public int ShippingSaleOrderId { get; set; }
 
         /// <summary>
         /// 快递公司
         /// </summary>
-        public ShipViaDto ShipVia { get; set; }
+        public int  ShipViaId { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public int ShippingRemark { get; set; }
 
         /// <summary>
         /// 快递单号

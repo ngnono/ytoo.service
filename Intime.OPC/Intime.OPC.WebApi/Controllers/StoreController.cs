@@ -32,7 +32,7 @@ namespace Intime.OPC.WebApi.Controllers
 
         [Route("api/stores")]
         [HttpGet]
-        public IHttpActionResult GetList(StoreRequest request,[UserId] int? userId)
+        public IHttpActionResult GetList([FromUri]StoreRequest request,[UserId] int? userId)
         {
             if (request == null)
             {
