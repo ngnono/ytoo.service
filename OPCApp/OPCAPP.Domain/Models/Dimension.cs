@@ -15,7 +15,6 @@ namespace OPCApp.Domain.Models
     /// </summary>
     public abstract class Dimension : Model
     {
-        private bool _isSelected;
         private string _name;
 
         /// <summary>
@@ -28,15 +27,6 @@ namespace OPCApp.Domain.Models
         {
             get { return _name; }
             set { SetProperty(ref _name, value); }
-        }
-
-        /// <summary>
-        /// 是否已选择
-        /// </summary>
-        public bool IsSelected 
-        {
-            get { return _isSelected; }
-            set { SetProperty(ref _isSelected, value); }
         }
     }
 }
