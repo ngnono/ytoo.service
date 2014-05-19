@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Intime.OPC.WebApi</RootNamespace>
     <AssemblyName>Intime.OPC.WebApi</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -120,6 +120,8 @@
     <Compile Include="App_Start\MefConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Bindings\UserProfileAttribute.cs" />
+    <Compile Include="Bindings\UserProfileHttpParameterBinding.cs" />
     <Compile Include="Bindings\UserIdHttpParameterBinding.cs" />
     <Compile Include="Bindings\UserIdAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -151,6 +153,7 @@
     <Compile Include="Core\MessageHandlers\Signature\SignatureMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\Signature\AppSecurityManager.cs" />
     <Compile Include="Core\Security\Cryptography\CryptoHelper.cs" />
+    <Compile Include="Core\MessageHandlers\AccessToken\UserProfile.cs" />
     <Compile Include="Core\Security\SecurityUtils.cs" />
     <Compile Include="Core\TextResult.cs" />
     <Compile Include="Extentison\ControllerExtension.cs" />

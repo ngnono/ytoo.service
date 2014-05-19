@@ -23,7 +23,7 @@ namespace Intime.OPC.Repository
     /// <summary>
     ///     Interface IRoleService
     /// </summary>
-    public interface IRoleService : IService,ICanAdd<OPC_AuthRole>, ICanDelete, ICanUpdate<OPC_AuthRole>
+    public interface IRoleService : IService, ICanAdd<OPC_AuthRole>, ICanDelete, ICanUpdate<OPC_AuthRole>
     {
         PageResult<OPC_AuthRole> Select(int pageIndex, int pageSize);
         /// <summary>
@@ -39,7 +39,7 @@ namespace Intime.OPC.Repository
         /// </summary>
         /// <param name="roleMenuDto">The role menu dto.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool SetMenus(int roleId,int userID,IEnumerable<int> menuids );
+        bool SetMenus(int roleId, int userID, IEnumerable<int> menuids);
 
         /// <summary>
         ///     获取用户的所有角色
@@ -49,5 +49,7 @@ namespace Intime.OPC.Repository
         PageResult<OPC_AuthRole> GetByUserID(int userID, int pageIndex, int pageSize = 20);
 
         bool SetUsers(Domain.Dto.RoleUserDto roleUserDto, int userId);
+
+        IEnumerable<OPC_AuthRole> GetRolesByUserId(int userId);
     }
 }

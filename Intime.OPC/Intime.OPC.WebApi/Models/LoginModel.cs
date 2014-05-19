@@ -5,10 +5,10 @@ namespace Intime.OPC.WebApi.Models
 {
     public class LoginModel
     {
-        [Required]
+        [Required(ErrorMessage = "用户名不能为空")]
         public String UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "密码不能为空")]
         public String Password { get; set; }
     }
 }

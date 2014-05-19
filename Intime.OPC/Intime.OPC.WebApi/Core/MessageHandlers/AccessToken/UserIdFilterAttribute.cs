@@ -24,7 +24,7 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
 
 
                 // 修改串用户的BUG,临时解决方案
-                var userId_key = "__ACCESS_TOKEN__USERID__";
+                var userIdKey = "__ACCESS_TOKEN__USERID__";
                 if (HttpContext.Current.Items.Contains("__ACCESS_TOKEN__USERID__"))
                 {
                     HttpContext.Current.Items["__ACCESS_TOKEN__USERID__"] = actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName];

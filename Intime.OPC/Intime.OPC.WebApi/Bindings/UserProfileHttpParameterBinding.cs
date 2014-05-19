@@ -2,13 +2,14 @@
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using System.Web.Http.Metadata;
+
 using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 
 namespace Intime.OPC.WebApi.Bindings
 {
-    public class UserIdHttpParameterBinding : HttpParameterBinding
+    public class UserProfileHttpParameterBinding : HttpParameterBinding
     {
-        public UserIdHttpParameterBinding(HttpParameterDescriptor descriptor)
+        public UserProfileHttpParameterBinding(HttpParameterDescriptor descriptor)
             : base(descriptor)
         {
         }
@@ -17,17 +18,11 @@ namespace Intime.OPC.WebApi.Bindings
             CancellationToken cancellationToken)
         {
             if (actionContext != null &&
-                actionContext.Request.Properties.ContainsKey(AccessTokenConst.UseridPropertiesName))
+                actionContext.Request.Properties.ContainsKey(AccessTokenConst.UserProfilePropertiesName))
             {
                 if (actionContext.ActionArguments != null)
                     actionContext.ActionArguments[Descriptor.ParameterName] =
-                        actionContext.Request.Properties[AccessTokenConst.UseridPropertiesName];
-            }
-            else
-            {
-                if (actionContext != null)
-                    if (actionContext.ActionArguments != null)
-                        actionContext.ActionArguments[Descriptor.ParameterName] = 0;
+                        actionContext.Request.Properties[AccessTokenConst.UserProfilePropertiesName];
             }
 
             return Task.FromResult<object>(null);

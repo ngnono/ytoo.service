@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Intime.OPC.MessageHandlers.AccessToken;
+using System.Web;
+
 using Intime.OPC.WebApi.Core.Security;
 
 namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
@@ -57,30 +60,35 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
              AccessToken处理
             ========================================================================*/
 
-            if (!request.Headers.Contains(HeadConfig.Toekn))
+            if (!request.Headers.Contains(HeadConfig.Token))
             {
-                return CreateErrorResponse(request, "用户没有授权");
+                return CreateErrorResponse(request, string.Format("HttpHeader {0}不存在", HeadConfig.Token));
             }
 
-            string accessToken = request.Headers.GetValues(HeadConfig.Toekn).FirstOrDefault();
+            string accessToken = request.Headers.GetValues(HeadConfig.Token).FirstOrDefault();
             if (string.IsNullOrWhiteSpace(accessToken))
             {
-                return CreateErrorResponse(request, "用户没有授权");
+                return CreateErrorResponse(request, string.Format("HttpHeader {0} 的值为空", HeadConfig.Token));
             }
 
-            AccessTokenIdentity obj = SecurityUtils.GetAccessToken(accessToken);
-            if (obj == null)
+            AccessTokenIdentity<UserProfile> token = SecurityUtils.GetAccessToken<UserProfile>(accessToken);
+            if (token == null)
             {
-                return CreateErrorResponse(request, "用户授权失败");
+                return CreateErrorResponse(request, "Token验证失败");
             }
 
-            if (obj.Expires.CompareTo(DateTime.Now) < 0)
+            if (token.Expires.CompareTo(DateTime.Now) < 0)
             {
-                return CreateErrorResponse(request, "AccessToken已经过期");
+                return CreateErrorResponse(request, "Token已经过期");
             }
 
-            // 设置当前用户
-            request.Properties.Add(AccessTokenConst.UseridPropertiesName, obj.UserId);
+            // 兼容老的用户系统设置用户Id
+            request.Properties.Add(AccessTokenConst.UseridPropertiesName, token.Profile.Id);
+
+            //保存UserProfile
+            request.Properties.Add(AccessTokenConst.UserProfilePropertiesName, token.Profile);
+
+            SetUserPrincipal(token.Profile, token.Expires);
 
             return base.SendAsync(request, cancellationToken);
         }
@@ -94,6 +102,30 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
         {
             HttpResponseMessage errorResponse = request.CreateErrorResponse(HttpStatusCode.Forbidden, message);
             return Task.FromResult(errorResponse);
+        }
+
+        private void SetUserPrincipal(UserProfile userProfile, DateTime expires)
+        {
+            var principal = CreateClaimsPrincipal(userProfile, expires);
+
+            Thread.CurrentPrincipal = principal;
+            HttpContext.Current.User = Thread.CurrentPrincipal;
+        }
+
+        private ClaimsPrincipal CreateClaimsPrincipal(UserProfile userProfile, DateTime expires)
+        {
+            // 初始化默认
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name,userProfile.Name),
+                new Claim(ClaimTypes.NameIdentifier,userProfile.Id.ToString(CultureInfo.InvariantCulture)),
+                new Claim(ClaimTypes.Expired,expires.ToUniversalTime().ToString(CultureInfo.InvariantCulture))
+            };
+
+            // 添加角色
+            claims.AddRange(userProfile.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            return new ClaimsPrincipal(new ClaimsIdentity[] { new ClaimsIdentity(claims, "Auth0") });
         }
     }
 }

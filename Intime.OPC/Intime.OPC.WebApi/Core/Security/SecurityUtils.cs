@@ -2,7 +2,8 @@
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using Intime.OPC.MessageHandlers.AccessToken;
+using Intime.OPC.Domain.Models;
+using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 using Intime.OPC.WebApi.Core.Security.Cryptography;
 
 namespace Intime.OPC.WebApi.Core.Security
@@ -18,11 +19,11 @@ namespace Intime.OPC.WebApi.Core.Security
 
         #endregion
 
-        public static string CreateAccessToken(int userId, DateTime expires)
+        public static string CreateToken(UserProfile userProfile, DateTime expires)
         {
-            var token = new AccessTokenIdentity
+            var token = new AccessTokenIdentity<UserProfile>
             {
-                UserId = userId,
+                Profile = userProfile,
                 Expires = expires
             };
 
@@ -31,7 +32,7 @@ namespace Intime.OPC.WebApi.Core.Security
             return AesEncrypt(input);
         }
 
-        public static AccessTokenIdentity GetAccessToken(string input)
+        public static AccessTokenIdentity<T> GetAccessToken<T>(string input)
         {
             string temp = AesDecrypt(input);
 
@@ -39,7 +40,16 @@ namespace Intime.OPC.WebApi.Core.Security
             {
                 return null;
             }
-            var token = Deserialize<AccessTokenIdentity>(temp);
+
+            AccessTokenIdentity<T> token = null;
+
+            try
+            {
+                token = Deserialize<AccessTokenIdentity<T>>(temp);
+            }
+            catch (Exception)
+            {
+            }
 
             return token;
         }
@@ -86,13 +96,13 @@ namespace Intime.OPC.WebApi.Core.Security
 
         private static T Deserialize<T>(string json) where T : class
         {
-            var ds = new DataContractJsonSerializer(typeof (T));
+            var ds = new DataContractJsonSerializer(typeof(T));
 
             T obj;
 
             using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(json)))
             {
-                obj = (T) ds.ReadObject(ms);
+                obj = (T)ds.ReadObject(ms);
                 ms.Close();
             }
 
