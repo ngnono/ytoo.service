@@ -65,6 +65,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public IEnumerable<IMSProductSizeResponse> Sizes { get; set; }
         [DataMember(Name="sales_code")]
         public string SalesCode { get; set; }
+        [DataMember(Name="color_str")]
+        public string ColorStr { get; set; }
       
     }
     [DataContract]
@@ -75,6 +77,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int SizeValueId { get; set; }
         [DataMember(Name = "name")]
         public string SizeName { get; set; }
+        [DataMember(Name="inventory")]
+        public int Inventory { get; set; }
     }
     [DataContract]
     public class IMSSelfImageResponse

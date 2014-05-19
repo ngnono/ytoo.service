@@ -412,25 +412,33 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "商品不存在");
             if (productEntity.P.CreatedUser != authuid)
                 return this.RenderError(r => r.Message = "无权操作该商品");
-            var sizeValues = Context.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == id && pp.IsSize == true && pp.Status == (int)DataStatus.Normal)
-                             .GroupJoin(Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Status == (int)DataStatus.Normal)
+            var colorValue = Context.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == id && pp.IsColor == true && pp.Status == (int)DataStatus.Normal)
+                             .Join(Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Status == (int)DataStatus.Normal)
                                         , o => o.Id
                                         , i => i.PropertyId
                                         , (o, i) => i)
+                             .First();
+            var sizeValues = Context.Set<ProductPropertyEntity>().Where(pp => pp.ProductId == id && pp.IsSize == true && pp.Status == (int)DataStatus.Normal)
+                             .GroupJoin(Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Status == (int)DataStatus.Normal)
+                                            .Join(Context.Set<InventoryEntity>().Where(ie => ie.PColorId == colorValue.Id), o => o.Id, i => i.PSizeId, (o, i) => new { PPV=o,I=i})
+                                        , o => o.Id
+                                        , i => i.PPV.PropertyId
+                                        , (o, i) => i)
                              .FirstOrDefault().ToList();
 
-
+            
             return this.RenderSuccess<Yintai.Hangzhou.Contract.DTO.Response.IMSProductSelfDetailResponse>(r =>
                             r.Data = new IMSProductSelfDetailResponse().FromEntity<IMSProductSelfDetailResponse>(productEntity.P, p =>
                             {
                                 p.Brand_Name = productEntity.B.Name;
                                 p.Category_Name = productEntity.C.Name;
                                 p.SalesCode = productEntity.PC.StoreProductCode;
-                      
+                                p.ColorStr = colorValue.ValueDesc;
                                 p.Sizes = sizeValues.Select(csv => new IMSProductSizeResponse()
                                 {
-                                    SizeName = csv.ValueDesc,
-                                    SizeValueId = csv.Id
+                                    SizeName = csv.PPV.ValueDesc,
+                                    SizeValueId = csv.PPV.Id,
+                                    Inventory = csv.I.Amount
                                 });
                                    
                                 if (productEntity.PR != null)
