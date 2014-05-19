@@ -13,6 +13,7 @@ namespace Intime.OPC.Domain.Dto
         public int Id { get; set; }
 
         [Required]
+        [StringLength(200, ErrorMessage = "名称请不要超过200个字符", MinimumLength = 1)]
         public string Name { get; set; }
 
         //读
@@ -25,6 +26,7 @@ namespace Intime.OPC.Domain.Dto
         /// <summary>
         /// 只能新增，不能修改
         /// </summary>
+        [StringLength(20, ErrorMessage = "专柜码请不要超过20个字符")]
         public string Code { get; set; }
 
         [JsonProperty(PropertyName = "ContactPhoneNumber")]

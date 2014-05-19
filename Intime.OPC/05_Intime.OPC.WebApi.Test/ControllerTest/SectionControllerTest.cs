@@ -121,8 +121,8 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
 
             var actual = _controller.Post(new SectionDto
             {
-                Name = "Test_001",
-                Code = "asdfq2@$a",
+                Name = "",
+                Code = "",
                 ContactPhone = "110",
                 Status  = 1,
                 StoreId = 3,
