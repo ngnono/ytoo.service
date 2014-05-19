@@ -39,7 +39,7 @@ namespace Intime.OPC.Service.Support
             var list = _storeRepository.GetPagedList(pagerequest, out totalCount, storeFilter);
 
             var dto = AutoMapper.Mapper.Map<List<Store>, List<StoreDto>>(list);
-            var page = new PagerInfo<StoreDto>(pagerequest) { Datas = dto };
+            var page = new PagerInfo<StoreDto>(pagerequest,totalCount) { Datas = dto };
 
             return page;
         }
