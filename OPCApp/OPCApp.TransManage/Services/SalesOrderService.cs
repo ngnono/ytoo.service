@@ -1,5 +1,6 @@
 ﻿using Intime.OPC.Infrastructure.Service;
 using OPCApp.Domain.Models;
+using OPCApp.Infrastructure.REST;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -11,30 +12,26 @@ using OPCApp.Domain.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    [Export(typeof(IService<OPC_ShippingSale>))]
-    public class DeliveryOrderService : ServiceBase<OPC_ShippingSale>
+    [Export(typeof(IService<OPC_Sale>))]
+    public class SalesOrderService : ServiceBase<OPC_Sale>
     {
         private Fixture fixture = new Fixture();
 
-        public override OPC_ShippingSale Create(OPC_ShippingSale obj)
+        public override PagedResult<OPC_Sale> Query(IQueryCriteria queryCriteria)
         {
             var salesOrders = fixture.Build<OPC_Sale>()
                 .Without(so => so.DeliveryOrder)
                 .Without(so => so.Counter)
                 .Do(so => so.IsSelected = false)
-                .Do(so => so.Status = EnumSaleOrderStatus.PrintInvoice)
-                .CreateMany(3);
+                .Do(so => so.Status = EnumSaleOrderStatus.ShipInStorage)
+                .CreateMany(200);
 
-            var deliveryOrder = fixture.Build<OPC_ShippingSale>()
-                .Without(delivery => delivery.SalesOrders)
-                .Create();
+            var result = new PagedResult<OPC_Sale>() { PageIndex = queryCriteria.PageIndex, PageSize = queryCriteria.PageSize, TotalCount = 200, Data = salesOrders.ToList() };
 
-            deliveryOrder.SalesOrders = salesOrders.ToList();
-
-            return deliveryOrder;
+            return result;
         }
 
-        public override OPC_ShippingSale Update(OPC_ShippingSale obj)
+        public override OPC_Sale Update(OPC_Sale obj)
         {
             return obj;
         }

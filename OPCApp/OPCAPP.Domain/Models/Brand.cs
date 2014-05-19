@@ -1,8 +1,8 @@
-﻿using System;
+﻿using OPCApp.Domain.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Intime.OPC.Infrastructure.Service;
-using Intime.OPC.Infrastructure.Validation;
+using OPCApp.Domain.Attributes;
 
 namespace OPCApp.Domain.Models
 {
@@ -18,7 +18,7 @@ namespace OPCApp.Domain.Models
 
         public Brand()
         {
-            Supplier = new Supplier { ID = 4, Name = "SupplierName" };
+            Supplier = new Supplier { Id = 4, Name = "SupplierName" };
             _enabled = true;
         }
 

@@ -65,6 +65,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\ReportViewer\Microsoft.ReportViewer.WinForms.dll</HintPath>
     </Reference>
+    <Reference Include="Ploeh.AutoFixture">
+      <HintPath>..\packages\AutoFixture.3.18.7\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+    </Reference>
     <Reference Include="Prism.Interfaces">
       <HintPath>..\..\OPCApp\DllFile\Prism.Interfaces.dll</HintPath>
     </Reference>
@@ -90,6 +93,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Criteria\QuerySalesOrderDetailBySalesOrderNo.cs" />
     <Compile Include="Models\Invoice4Get.cs" />
     <Compile Include="Models\InvoiceDetail.cs" />
     <Compile Include="Models\InvoiceDetail4Get.cs" />
@@ -101,13 +105,14 @@
       <DependentUpon>PrintWin.xaml</DependentUpon>
     </Compile>
     <Compile Include="LogisticsModule.cs" />
-    <Compile Include="Criteria\QuerySalesOrder.cs" />
+    <Compile Include="Criteria\QuerySalesOrderByComposition.cs" />
     <Compile Include="Services\DeliveryOrderService.cs" />
     <Compile Include="Services\IInvoiceService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PrintService.cs" />
     <Compile Include="Services\ResultMsg.cs" />
     <Compile Include="Services\IPrintService.cs" />
+    <Compile Include="Services\SalesOrderDetailService.cs" />
     <Compile Include="Services\SalesOrderService.cs" />
     <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="ViewModels\NavigationItemViewModel.cs" />
@@ -226,6 +231,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\DataSources\OPCApp.Domain.Models.OPC_Sale.datasource" />
     <None Include="Properties\DataSources\OPCApp.Domain.Models.OPC_SaleDetail.datasource" />
     <None Include="Properties\DataSources\OPCApp.Domain.Models.OPC_ShippingSale.datasource" />

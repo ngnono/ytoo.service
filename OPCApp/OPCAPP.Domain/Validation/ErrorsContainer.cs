@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using Microsoft.Practices.Prism.Mvvm;
 
-namespace Intime.OPC.Infrastructure.Validation
+namespace OPCApp.Domain.Validation
 {
     /// <summary>
     /// Manages validation errors for an object, notifying when the error state changes.
