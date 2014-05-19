@@ -200,7 +200,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
             return AutoMapper.Mapper.Map<IEnumerable<Section>, IEnumerable<SectionDto>>(result.Data);
         }
 
-        public IEnumerable<dynamic> GetProductProperties(int pageIndex, int pageSize, DateTime lastUpdateDateTime)
+        public IEnumerable<PropertyValue> GetProductProperties(int pageIndex, int pageSize, DateTime lastUpdateDateTime)
         {
             var result = _apiClient.Post(new GetProductPropertiesRequest()
             {

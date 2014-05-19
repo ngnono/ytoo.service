@@ -72,7 +72,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                 //品牌没有的，按所属专柜在查找，如果没有的，如果有则关联此品牌；如果没有，则依据专柜创建品牌并关联
                 using (var db = new YintaiHZhouContext())
                 {
-                    brand = db.Brands.FirstOrDefault(b => b.Name == section.Name || b.EnglishName == section.Name);
+                    brand = db.Brands.FirstOrDefault(b => b.Name.Trim().ToUpper() == section.Name.Trim().ToUpper() || b.EnglishName.Trim().ToUpper() == section.Name.Trim().ToUpper());
                     if (brand == null)
                     {
                         /**
@@ -99,21 +99,8 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                         };
 
                         // 添加品牌并保持
-                        db.Brands.Add(newBrand);
+                        brand = db.Brands.Add(newBrand);
                         db.SaveChanges();
-
-                        // 添加映射关系
-                        var newChannelMap = new ChannelMap()
-                        {
-                            LocalId = newBrand.Id,
-                            ChannnelValue = section.Name,
-                            MapType = ChannelMapType.Brand
-                        };
-
-                        _channelMapper.CreateMap(newChannelMap);
-
-                        brand = newBrand;
-
                     }
                     else
                     {
@@ -124,7 +111,15 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors
                             db.SaveChanges();
                         }
                     }
+                    // 添加映射关系
+                    var newChannelMap = new ChannelMap()
+                    {
+                        LocalId = brand.Id,
+                        ChannnelValue = section.Name,
+                        MapType = ChannelMapType.Brand
+                    };
 
+                    _channelMapper.CreateMap(newChannelMap);
                 }
                 Log.WarnFormat("同步商品对应品牌失败:ProductId:[{0}],brandId:[{1}],brandName:[{2}]", channelProduct.ProductId, channelProduct.BrandId, channelProduct.BrandName);
             }
