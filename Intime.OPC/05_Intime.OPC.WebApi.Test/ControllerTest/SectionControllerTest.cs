@@ -130,7 +130,8 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
                 Code = "asdfq2@$a",
                 ContactPhone = "110",
                 Status  = 1,
-                StoreId = 3
+                StoreId = 3,
+                Repealed = true
 
             }, 0) as OkNegotiatedContentResult<SectionDto>;
             var sectionDto = actual.Content;
@@ -151,6 +152,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
                 Id = id,
                 Code = "asdf9876",
                 StoreId = 4,
+                Repealed = false,
                 Brands = new List<BrandDto>()
                 {
                     new BrandDto()

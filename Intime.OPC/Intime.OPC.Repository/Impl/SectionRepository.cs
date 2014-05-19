@@ -57,7 +57,7 @@ namespace Intime.OPC.Repository.Impl
                 }
                 else
                 {
-                    query = PredicateBuilder.And(query, v => v.Status > 0);
+                    query = PredicateBuilder.And(query, v => v.Status >= 0);
                 }
 
                 if (!String.IsNullOrWhiteSpace(filter.Name))

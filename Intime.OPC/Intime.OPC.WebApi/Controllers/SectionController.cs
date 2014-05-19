@@ -136,6 +136,8 @@ namespace Intime.OPC.WebApi.Controllers
             item.CreateDate = createDate;
             item.CreateUser = createUser;
 
+            item.Status = dto.Repealed ? 1 : 0;
+
             item = CheckModel(item);
             ((IOPCRepository<int, Section>)_sectionRepository).Update(item);
 
@@ -179,7 +181,9 @@ namespace Intime.OPC.WebApi.Controllers
             model.UpdateDate = DateTime.Now;
             model.UpdateUser = userId;
 
-            model.Status = dto.Status ?? 1;
+            //model.Status = dto.Status ?? 1;
+            model.Status = dto.Repealed ? 1 : 0;
+
 
             model = CheckModel(model);
             var item = _sectionRepository.Insert(model);

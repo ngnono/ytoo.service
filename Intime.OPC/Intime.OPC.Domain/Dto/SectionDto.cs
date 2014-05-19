@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Management.Instrumentation;
 using Newtonsoft.Json;
 
 namespace Intime.OPC.Domain.Dto
@@ -30,6 +31,27 @@ namespace Intime.OPC.Domain.Dto
         public string ContactPhone { get; set; }
 
         public int? Status { get; set; }
+
+        /// <summary>
+        /// Repealed or not
+        /// </summary>
+        [Required(ErrorMessage = "是否撤柜必须填写")]
+        public bool Repealed
+        {
+            get
+            {
+                if (Status == null || Status.Value != 1)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            set
+            {
+                Status = value ? 1 : 0;
+            }
+        }
 
         //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         //public bool? Enabled
@@ -70,6 +92,7 @@ namespace Intime.OPC.Domain.Dto
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<BrandDto> Brands { get; set; }
 
+        [Required(ErrorMessage = "必须提供门店Id")]
         public int StoreId { get; set; }
 
         /// <summary>
