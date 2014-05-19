@@ -36,6 +36,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
        public int? Id { get; set; }
        [Required(ErrorMessage = "尺码为空")]
        public string Name { get; set; }
+       
        public int Inventory { get; set; }
    }
 }

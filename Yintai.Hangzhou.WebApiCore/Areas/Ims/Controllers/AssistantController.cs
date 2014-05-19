@@ -219,7 +219,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                                                                     o => o.BrandId,
                                                                     i => i.Id,
                                                                     (o, i) => new { AB = o, B = i }),
-                                        o => o.StoreId,
+                                        o => o.SectionId,
                                         i => i.AB.SectionId,
                                         (o, i) => i).FirstOrDefault();
             List<dynamic> brands = null;

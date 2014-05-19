@@ -324,13 +324,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     {
                         var inventory = Context.Set<InventoryEntity>().Where(i => i.ProductId == productEntity.Id &&
                                                             i.PColorId == colorProperty.Id &&
-                                                            i.PSizeId == sizePropertyEntity.Id).FirstOrDefault();
+                                                            i.PSizeId == propertyValue.Id).FirstOrDefault();
                         if (inventory != null)
                         {
                             inventory.Amount = size.Inventory;
                             inventory.UpdateDate = DateTime.Now;
                             _inventoryRepo.Update(inventory);
                         }
+                       
                         propertyValue.Status = (int)DataStatus.Normal;
                         _productPropertyValueRepo.Update(propertyValue);
                     }
