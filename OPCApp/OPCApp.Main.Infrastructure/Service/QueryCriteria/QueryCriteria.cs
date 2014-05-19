@@ -11,6 +11,15 @@ namespace Intime.OPC.Infrastructure.Service
 {
     public class QueryCriteria : IQueryCriteria
     {
+        private const int DefaultPageIndex = 1;
+        private const int DefaultPageSize = 100;
+
+        public QueryCriteria()
+        {
+            PageIndex = DefaultPageIndex;
+            PageSize = DefaultPageSize;
+        }
+
         [UriParameter("page")]
         public int PageIndex { get; set; }
 

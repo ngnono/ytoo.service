@@ -61,6 +61,18 @@ namespace OPCApp.Domain.Models
         }
 
         /// <summary>
+        /// 门店ID
+        /// </summary>
+        public int StoreId { get; set; }
+
+        /// <summary>
+        /// 门店
+        /// </summary>
+        [Display(Name = "所属门店")]
+        [Required(ErrorMessage="必须选择一家门店")]
+        public Store Store { get; set; }
+
+        /// <summary>
         /// 销售的品牌
         /// </summary>
         public IList<Brand> Brands { get; set; }

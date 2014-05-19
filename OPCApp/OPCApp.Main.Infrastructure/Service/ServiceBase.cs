@@ -64,5 +64,23 @@ namespace Intime.OPC.Infrastructure.Service
         {
             return _restClient.Get<PagedResult<TModel>>(string.Format("{0}?{1}", _uriName, queryCriteria.BuildQueryString()));
         }
+
+        public IList<TModel> QueryAll(IQueryCriteria queryCriteria)
+        {
+            var pagedResult = _restClient.Get<PagedResult<TModel>>(string.Format("{0}?{1}", _uriName, queryCriteria.BuildQueryString()));
+            if (pagedResult.TotalCount == pagedResult.Data.Count) return pagedResult.Data;
+
+            var result = new List<TModel>(pagedResult.Data);
+            var pages = pagedResult.TotalCount / pagedResult.PageSize + (pagedResult.TotalCount % pagedResult.PageSize == 0 ? 0: 1);
+
+            for (int i = pagedResult.PageIndex; i < pages; i++)
+            {
+                queryCriteria.PageIndex++;
+                pagedResult = _restClient.Get<PagedResult<TModel>>(string.Format("{0}?{1}", _uriName, queryCriteria.BuildQueryString()));
+                result.AddRange(pagedResult.Data);
+            }
+
+            return result;
+        }
     }
 }

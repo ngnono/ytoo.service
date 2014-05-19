@@ -8,6 +8,10 @@ namespace Intime.OPC.Modules.Dimension.Services
     [Export(typeof(IService<Counter>))]
     public class CounterService : ServiceBase<Counter>
     {
-
+        public override Counter Create(Counter obj)
+        {
+            if (obj.Store != null) obj.StoreId = obj.Store.Id;
+            return base.Create(obj);
+        }
     }
 }
