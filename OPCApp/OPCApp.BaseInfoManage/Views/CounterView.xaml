@@ -65,7 +65,7 @@
                 mvvm:ScrollingBehavior.ScrollToBottomCommand="{Binding LoadMoreBrandsCommand}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox Content="{Binding Path=Name}" Command="{Binding DataContext.SelectBrandCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Path=ID}"  IsChecked="{Binding Path=IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></CheckBox>
+                        <CheckBox Content="{Binding Path=Name}" Command="{Binding DataContext.SelectBrandCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Path=Id}"  IsChecked="{Binding Path=IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></CheckBox>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
