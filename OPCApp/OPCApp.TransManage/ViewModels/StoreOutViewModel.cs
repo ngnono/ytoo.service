@@ -28,7 +28,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         private QuerySalesOrderByComposition _queryCriteriaForExpressReceipt;
         private QuerySalesOrderByComposition _queryCriteriaForHandOver;
         private IList<Order> _orders;
-        private IList<OPC_Sale> _salesOrdersForDelivery;
+        private ObservableCollection<OPC_Sale> _salesOrdersForDelivery;
         private IList<OPC_Sale> _salesOrdersForExpress;
         private ObservableCollection<OPC_ShippingSale> _deliveryOrders;
         private OPC_ShippingSale _selectedDeliveryOrder;
@@ -36,6 +36,8 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         public StoreOutViewModel()
         {
+            DeliveryOrders = new ObservableCollection<OPC_ShippingSale>();
+
             QueryCriteriaForDeliveryOrder = new QuerySalesOrderByComposition { Status = EnumSaleOrderStatus.ShipInStorage };
             QueryCriteriaForExpressReceipt = new QuerySalesOrderByComposition { Status = EnumSaleOrderStatus.PrintInvoice };
             QueryCriteriaForHandOver = new QuerySalesOrderByComposition();
@@ -60,7 +62,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             ShippingSaleCreateDto = new ShippingSaleCreateDto();
             PreviewDeliveryOrderCommand = new DelegateCommand(OnDeliveryOrderPreview);
             PrintDeliveryOrderCommand = new DelegateCommand(OnDeliveryOrderPrint);
-            SelectAllSalesOrderForDeliveryCommand = new DelegateCommand(OnAllSalesOrderForDeliverySelect);
+            SelectAllSalesOrderForDeliveryCommand = new DelegateCommand<bool?>(OnAllSalesOrderForDeliverySelect);
             LoadMoreSalesOrdersForDeliveryCommand = new AsyncDelegateCommand(OnMoreSalesOrderForDeliveryLoad, MvvmUtility.OnException);
         }
 
@@ -138,7 +140,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             set { SetProperty(ref _orders, value); }
         }
 
-        public IList<OPC_Sale> SalesOrdersForDelivery
+        public ObservableCollection<OPC_Sale> SalesOrdersForDelivery
         {
             get { return _salesOrdersForDelivery; }
             set { SetProperty(ref _salesOrdersForDelivery, value); }
@@ -168,11 +170,15 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         #region Command Handlers
 
-        private void OnAllSalesOrderForDeliverySelect()
+        /// <summary>
+        /// 全选所有销售单
+        /// </summary>
+        /// <param name="isSelected"></param>
+        private void OnAllSalesOrderForDeliverySelect(bool? isSelected)
         {
             if (SalesOrdersForDelivery == null || !SalesOrdersForDelivery.Any()) return;
 
-            SalesOrdersForDelivery.ForEach(salesOrder => salesOrder.IsSelected = true);
+            SalesOrdersForDelivery.ForEach(salesOrder => salesOrder.IsSelected = isSelected.Value);
         }
 
         private void OnSalesOrderForDeliveryQuery()
@@ -181,19 +187,19 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             _queryCriteriaForDeliveryOrder.PageSize = 100;
 
             var result = SalesOrderService.Query(_queryCriteriaForDeliveryOrder);
-            SalesOrdersForDelivery = result.Data;
+            SalesOrdersForDelivery = result.Data.ToObservableCollection();
             if (result.TotalCount == 0)
             {
-                MessageBox.Show("没有符合条件的销售单","提示", MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("没有符合条件的销售单", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
         private void OnMoreSalesOrderForDeliveryLoad()
         {
-            _queryCriteriaForDeliveryOrder.PageIndex ++;
+            _queryCriteriaForDeliveryOrder.PageIndex++;
 
             var result = SalesOrderService.Query(_queryCriteriaForDeliveryOrder);
-            SalesOrdersForDelivery = result.Data;
+            SalesOrdersForDelivery = result.Data.ToObservableCollection();
         }
 
         private void OnSalesOrderForExpressQuery()
@@ -218,13 +224,17 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             }
 
             var selectedSalesOrdersForDelivery = SalesOrdersForDelivery.Where(salesOrder => salesOrder.IsSelected);
-
+            if (!selectedSalesOrdersForDelivery.Any())
+            {
+                MessageBox.Show("请选择至少一个销售单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             if (selectedSalesOrdersForDelivery.Distinct(salesOrder => salesOrder.Order.OrderNo).Count() > 1)
             {
                 MessageBox.Show("所选择的销售单必须来自同一订单，否则无法生成发货单", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if (selectedSalesOrdersForDelivery.Distinct(salesOrder => string.Format("{0} {1} {2}", salesOrder.Order.CustomerName, 
+            if (selectedSalesOrdersForDelivery.Distinct(salesOrder => string.Format("{0} {1} {2}", salesOrder.Order.CustomerName,
                 salesOrder.Order.CustomerAddress, salesOrder.Order.CustomerPhone)).Count() > 1)
             {
                 MessageBox.Show("所选择的销售单收货信息不一致，无法生成发货单", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -243,15 +253,15 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             };
 
             deliveryOrder = DeliveryOrderService.Create(deliveryOrder);
-            selectedSalesOrdersForDelivery.ForEach(salesOrder => 
+            selectedSalesOrdersForDelivery.ForEach(salesOrder =>
             {
                 salesOrder.DeliveryOrder = deliveryOrder;
                 SalesOrderService.Update(salesOrder);
-
-                SalesOrdersForDelivery.Remove(so => so.Id == salesOrder.Id);
             });
 
-            DeliveryOrders.Insert(0, deliveryOrder);
+            SalesOrdersForDelivery.SafelyRemove(salesOrder => salesOrder.IsSelected);
+
+            DeliveryOrders.SafelyInsert(0, deliveryOrder);
         }
 
         private void ShippSaleHandOver()
