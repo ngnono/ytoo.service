@@ -13,7 +13,6 @@
 // ***********************************************************************
 
 using System;
-using OPCApp.Infrastructure.Interfaces;
 
 namespace OPCApp.Domain
 {
