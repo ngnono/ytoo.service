@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Intime.O2O.ApiClient.Domain;
 using Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository.DTO;
 
 namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
@@ -97,6 +98,6 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
         /// <param name="pageSize"></param>
         /// <param name="lastUpdateDateTime"></param>
         /// <returns></returns>
-        IEnumerable<dynamic> GetProductProperties(int pageIndex, int pageSize, DateTime lastUpdateDateTime);
+        IEnumerable<PropertyValue> GetProductProperties(int pageIndex, int pageSize, DateTime lastUpdateDateTime);
     }
 }

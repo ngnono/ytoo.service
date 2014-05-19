@@ -10,7 +10,7 @@ namespace Intime.O2O.ApiClient.Response
     {
     }
 
-    public class GetProductPropertiesResponse : Response<IEnumerable<dynamic>>
+    public class GetProductPropertiesResponse : Response<IEnumerable<PropertyValue>>
     {
     }
 }
