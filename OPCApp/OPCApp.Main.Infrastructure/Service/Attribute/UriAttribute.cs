@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OPCApp.Domain.Attributes
+namespace Intime.OPC.Infrastructure.Service
 {
     public class UriAttribute : Attribute
     {

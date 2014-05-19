@@ -107,14 +107,13 @@
     <Compile Include="DataService\ResultMsg.cs" />
     <Compile Include="DesignDataCollectionView.cs" />
     <Compile Include="Interfaces\ILoginManager.cs" />
+    <Compile Include="Interfaces\ILoginModel.cs" />
     <Compile Include="IOC\IContainer.cs" />
     <Compile Include="IOC\MefContainer.cs" />
-    <Compile Include="Mvvm\Converters\EnumerationToStringConverter.cs" />
     <Compile Include="Mvvm\Interaction\AsyncDelegateCommand.cs" />
     <Compile Include="Mvvm\Interaction\CommandAction.cs" />
     <Compile Include="Mvvm\Interaction\RoutedEventTrigger.cs" />
     <Compile Include="Mvvm\Interaction\ScrollingBehavior.cs" />
-    <Compile Include="Mvvm\Utility\MvvmUtility.cs" />
     <Compile Include="Rest\RestErrorMessage.cs" />
     <Compile Include="Service\IService.cs" />
     <Compile Include="Log\ILogger.cs" />
@@ -161,7 +160,12 @@
     <Compile Include="Rest\RestClientFactory.cs" />
     <Compile Include="Rest\RestException.cs" />
     <Compile Include="Rest\TokenManager.cs" />
-    <Compile Include="Service\ServiceBase.cs" />
+    <Compile Include="Service\Attribute\UriAttribute.cs" />
+    <Compile Include="Service\Attribute\UriParameterAttribute.cs" />
+    <Compile Include="Validation\ErrorsContainer.cs" />
+    <Compile Include="Validation\LocalizedMaxLengthAttribute.cs" />
+    <Compile Include="Validation\LocalizedRequiredAttribute.cs" />
+    <Compile Include="Validation\ValidatableBindableBase.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -181,10 +185,6 @@
     <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
       <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
       <Name>OPCApp.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OPCAPP.Domain\OPCApp.Domain.csproj">
-      <Project>{153825c7-d458-4478-992f-3f1b1904f3a9}</Project>
-      <Name>OPCApp.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -14,7 +14,7 @@
 
 using System;
 
-namespace OPCApp.Domain
+namespace OPCApp.Infrastructure.Interfaces
 {
     /// <summary>
     ///     Interface ILoginModel

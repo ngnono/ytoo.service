@@ -12,7 +12,6 @@
 // <summary></summary>
 // ***********************************************************************
 
-using OPCApp.Domain;
 namespace OPCApp.Infrastructure.Interfaces
 {
     /// <summary>

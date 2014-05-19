@@ -3,16 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:si="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
-             xmlns:mvvm="clr-namespace:Intime.OPC.Infrastructure.Mvvm;assembly=OPCApp.Infrastructure"
              FontFamily="微软雅黑" >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Resource/Theme/BureauBlue.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <mvvm:EnumerationToStringConverter x:Key="EnumToStringConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid>
         <Grid.Resources>
             <Style TargetType="{x:Type TextBox}">
@@ -61,14 +60,14 @@
                     <DockPanel Grid.Row="0" Grid.ColumnSpan="2">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
                             <TextBlock Text="购买时间"/>
-                            <DatePicker Foreground="Blue" SelectedDate="{Binding QueryCriteriaForDeliveryOrder.StartDate}" />
+                            <DatePicker Foreground="Blue" SelectedDate="{Binding QueryCriteria.StartSellDate}" />
                             <TextBlock Text="至" />
-                            <DatePicker Foreground="Blue" SelectedDate="{Binding QueryCriteriaForDeliveryOrder.EndDate}" />
+                            <DatePicker Foreground="Blue" SelectedDate="{Binding QueryCriteria.EndSellDate}" />
                             <TextBlock Text="订单号" />
-                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding QueryCriteriaForDeliveryOrder.OrderNo}" />
+                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding QueryCriteria.OrderNo}" />
                             <TextBlock Text="销售单号"/>
-                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding QueryCriteriaForDeliveryOrder.SalesOrderNo}" />
-                            <Button Margin="5" Command="{Binding QuerySalesOrderForDeliveryCommand}">
+                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding QueryCriteria.SaleOrderNo}" />
+                            <Button Margin="5" Command="{Binding QuerySalesOrderCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="70">
                                     <Image Source="../Resource/Image/查询.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">查询</TextBlock>
@@ -76,7 +75,7 @@
                             </Button>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right">
-                            <Button Margin="5"  Command="{Binding CreateDeliveryOrderCommand}">
+                            <Button Margin="5"  Command="{Binding PrintInvoiceCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="90">
                                     <Image Source="../Resource/Image/变更单位.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center">生成发货单</TextBlock>
@@ -90,48 +89,54 @@
                         </StackPanel>
                     </StackPanel>
                     <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
-                        <DataGrid ScrollViewer.CanContentScroll="True" ItemsSource="{Binding SalesOrdersForDelivery}" IsReadOnly="True"
+                        <DataGrid ScrollViewer.CanContentScroll="True" ItemsSource="{Binding SalesOrders}" IsReadOnly="True"
                             AutoGenerateColumns="False" SelectionMode="Single"
-                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedSalesOrder}"
-                            mvvm:ScrollingBehavior.IsEnabled="True"
-                            mvvm:ScrollingBehavior.ScrollToBottomCommand="{Binding LoadMoreSalesOrdersForDeliveryCommand}">
+                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn SortMemberPath="IsSelected" Width="60">
-                                    <DataGridTemplateColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <CheckBox x:Name="selectAll" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SelectAllSalesOrderForDeliveryCommand}" CommandParameter="{Binding ElementName=selectAll, Path=IsChecked}"></CheckBox>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.HeaderTemplate>
+                                <DataGridTemplateColumn Header="选择" SortMemberPath="IsSelected" Width="60">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox Margin="8,0,0,0" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                                            <CheckBox
+                                        IsChecked="{Binding Path=IsSelected,UpdateSourceTrigger=PropertyChanged}"
+                                        Command="{Binding Path=DataContext.SearchOrderBySaleCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                        VerticalAlignment="Center" HorizontalAlignment="Center" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                                 <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
-                                <DataGridTextColumn Header="收货人姓名" Width="150" Binding="{Binding Order.CustomerName}" />
-                                <DataGridTextColumn Header="收货人地址" Width="150" Binding="{Binding Order.CustomerAddress}" />
-                                <DataGridTextColumn Header="收货人电话" Width="150" Binding="{Binding Order.CustomerPhone}" />
-                                <DataGridTextColumn Header="是否要发票" Width="150" Binding="{Binding Order.IfReceipt}" />
-                                <DataGridTextColumn Header="发票抬头" Width="150" Binding="{Binding Order.ReceiptHead}" />
-                                <DataGridTextColumn Header="发票内容" Width="150" Binding="{Binding Order.ReceiptContent}" />
-                                <DataGridTextColumn Header="发货方式" Width="150" Binding="{Binding Order.OutGoodsType}" />
-                                <DataGridTextColumn Header="邮编" Width="150" Binding="{Binding Order.PostCode}" />
-                                <DataGridTextColumn Header="订单备注" Width="150" Binding="{Binding Order.CustomerRemark}" />
-                                <DataGridTextColumn Header="物流备注" Width="150" Binding="{Binding OrderSource}" />
+                                <DataGridTextColumn Header="收货人姓名" Width="150" Binding="{Binding SellDate}" />
+                                <DataGridTextColumn Header="收货人地址" Width="150" Binding="{Binding SellDate}" />
+                                <DataGridTextColumn Header="收货人电话" Width="150" Binding="{Binding SellDate}" />
+                                <DataGridTextColumn Header="是否要发票" Width="150" Binding="{Binding SellDate}" />
+                                <DataGridTextColumn Header="发票抬头" Width="150" Binding="{Binding SellDate}" />
+                                <DataGridTextColumn Header="发票内容" Width="150" Binding="{Binding SellDate}" />
+                                <DataGridTextColumn Header="发货方式" Width="150" Binding="{Binding SellDate}" />
+                                <DataGridTextColumn Header="邮编" Width="150" Binding="{Binding SellDate}" />
+                                <DataGridTextColumn Header="订单备注" Width="150" Binding="{Binding SellDate}" />
+                                <DataGridTextColumn Header="物流备注" Width="150" Binding="{Binding SellDate}" />
                                 <DataGridTextColumn Header="销售类别" Binding="{Binding OrderSource}" />
-                                <DataGridTextColumn Header="销售状态" Binding="{Binding Path=SaleStatus}" ElementStyle="{StaticResource CellCenter}" />
-                                <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding Path=Status, Converter={StaticResource EnumToStringConverter}}" ElementStyle="{StaticResource CellCenter}" />
-                                <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatusName}" ElementStyle="{StaticResource CellCenter}" />
-                                <DataGridTextColumn Header="销售时间" Width="150" Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                                <DataGridTextColumn Header="购买时间" Width="150" Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                                <DataGridTextColumn Header="销售单金额" Binding="{Binding SalesAmount}" ElementStyle="{StaticResource CellRight}" />
-                                <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}" ElementStyle="{StaticResource CellRight}" />
-                                <DataGridTextColumn Header="门店" Width="200" Binding="{Binding Counter.Name}" />
+                                <DataGridTextColumn Header="销售状态" Binding="{Binding SaleStatus}"
+                                            ElementStyle="{StaticResource CellCenter}" />
+                                <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}"
+                                            ElementStyle="{StaticResource CellCenter}" />
+                                <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatusName}"
+                                            ElementStyle="{StaticResource CellCenter}" />
+                                <DataGridTextColumn Header="销售时间" Width="150"
+                                            Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                <DataGridTextColumn Header="购买时间" Width="150"
+                                            Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                <DataGridTextColumn Header="是否调拨" Binding="{Binding IfTrans}" />
+                                <DataGridTextColumn Header="调拨状态" Binding="{Binding TransStatus}" />
+                                <DataGridTextColumn Header="销售单金额" Binding="{Binding SalesAmount}"
+                                            ElementStyle="{StaticResource CellRight}" />
+                                <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}"
+                                            ElementStyle="{StaticResource CellRight}" />
+                                <DataGridTextColumn Header="门店" Width="200" Binding="{Binding StoreName}" />
                                 <DataGridTextColumn Header="收银流水号" Width="120" Binding="{Binding CashNum}" />
-                                <DataGridTextColumn Header="收银时间" Width="150" Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                                <DataGridTextColumn Header="专柜码" Binding="{Binding Counter.Code}" />
+                                <DataGridTextColumn Header="收银时间" Width="150"
+                                            Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                <DataGridTextColumn Header="专柜码" Binding="{Binding ShippingCode}" />
                                 <DataGridTemplateColumn Header="备注录入">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -154,7 +159,7 @@
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">打印预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="5"  Width="Auto" Command="{Binding PrintDeliveryOrderCommand}">
+                            <Button Margin="5"  Width="Auto" Command="{Binding PreviewDeliveryOrderCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="70">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">打印</TextBlock>
@@ -162,19 +167,20 @@
                             </Button>
                         </StackPanel>
                     </DockPanel>
-                    <DataGrid Grid.Row="4" ItemsSource="{Binding DeliveryOrders}" IsReadOnly="True"
-                              SelectedItem="{Binding SelectedDeliveryOrder}"
+                    <DataGrid Grid.Row="4" ItemsSource="{Binding ShipSaleList}" IsReadOnly="True"
+                              SelectedItem="{Binding ShipSaleSelected}"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="130" Header="发货单号" Binding="{Binding GoodsOutCode}" />
                             <DataGridTextColumn Width="200" Header="快递公司名称" Binding="{Binding ShipCompanyName}" />
                             <DataGridTextColumn Header="发货状态" Binding="{Binding ShippingStatus}" />
-                            <DataGridTextColumn Header="发货时间" Binding="{Binding GoodsOutDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="发货时间"
+                                                Binding="{Binding GoodsOutDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="快递公司取件人" Binding="{Binding ShipManName}" />
                             <DataGridTextColumn Header="打印状态" Binding="{Binding PrintStatus}" />
                             <DataGridTextColumn Header="快递单号" Binding="{Binding ExpressCode}" />
                             <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
-                            <DataGridTextColumn Header="收货人地址" Width="200" Binding="{Binding CustomerAddress}" />
+                            <DataGridTextColumn Width="200" Header="收货人地址" Binding="{Binding CustomerAddress}" />
                             <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
                             <DataGridTextColumn Header="邮编" Binding="{Binding ShippingZipCode}" />
                             <DataGridTextColumn Header="配送方式" Binding="{Binding ShippingMethod}" />
@@ -189,7 +195,9 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
+
                     </DataGrid>
+                    
                 </Grid>
             </TabItem>
             <TabItem Header="打印快递单">
@@ -210,12 +218,12 @@
                     <DockPanel Grid.Row="0">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
                             <TextBlock Text="购买时间" Margin="10 5" />
-                            <DatePicker Foreground="Blue" SelectedDate="{Binding QueryCriteriaForExpressReceipt.StartDate}" />
+                            <DatePicker Foreground="Blue" SelectedDate="{Binding Invoice4Get.StartSellDate}" />
                             <TextBlock Text="至" Margin="10 5" />
-                            <DatePicker Foreground="Blue" SelectedDate="{Binding QueryCriteriaForExpressReceipt.EndDate}" />
+                            <DatePicker Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}" />
                             <TextBlock Text="订单号" Margin="10 5" />
-                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding QueryCriteriaForExpressReceipt.OrderNo}" />
-                            <Button Margin="5" Width="Auto" Command="{Binding QuerySalesOrderForExpressCommand}">
+                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}" />
+                            <Button Margin="5" Width="Auto" Command="{Binding CommandSearch}">
                                 <StackPanel Orientation="Horizontal" MinWidth="70">
                                         <Image Source="../Resource/Image/查询.png" Stretch="None" />
                                         <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">查询</TextBlock>
@@ -223,13 +231,13 @@
                             </Button>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Orientation="Horizontal">
-                            <Button Margin="5" Command="{Binding PreviewDeliveryOrderCommand}">
+                            <Button Margin="5" Command="{Binding OnlyPrintCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">补打发货单预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="5" Command="{Binding PrintDeliveryOrderCommand}">
+                            <Button Margin="5" Command="{Binding OnlyPrintCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">补打发货单</TextBlock>
@@ -241,7 +249,7 @@
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">打印快递单预览</TextBlock>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="5" Command="{Binding PrintExpressReceiptCommand}">
+                            <Button Margin="5" Command="{Binding OnlyPrintCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="../Resource/Image/打印.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">打印快递单</TextBlock>
@@ -254,7 +262,7 @@
                             <TextBlock Text="发货单" />
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid Grid.Row="2" ItemsSource="{Binding SalesOrdersForExpress}" IsReadOnly="True"
+                    <DataGrid Grid.Row="2" ItemsSource="{Binding ShipSaleList}" IsReadOnly="True"
                               SelectedItem="{Binding ShipSaleSelected}"
                               AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
@@ -262,7 +270,8 @@
                             <DataGridTextColumn Header="快递单号" Binding="{Binding ExpressCode}" />
                             <DataGridTextColumn Width="200" Header="快递公司名称" Binding="{Binding ShipCompanyName}" />
                             <DataGridTextColumn Header="发货状态" Binding="{Binding ShippingStatus}" />
-                            <DataGridTextColumn Header="发货时间" Binding="{Binding GoodsOutDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="发货时间"
+                                                Binding="{Binding GoodsOutDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="快递公司取件人" Binding="{Binding ShipManName}" />
                             <DataGridTextColumn Header="打印状态" Binding="{Binding PrintStatus}" />
                             <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
@@ -294,7 +303,7 @@
                             <TextBlock Text="快递单号" Margin="10 5" />
                             <TextBox Height="25" Width="150" Foreground="Blue" Background="White"
                                      Text="{Binding ShippingSaleCreateDto.ShippingCode}" />
-                            <Button Height="30" Margin="10 5"  Command="{Binding CreateExpressReceiptCommand}">
+                            <Button Height="30" Margin="10 5"  Command="{Binding SaveShipCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="90">
                                     <Image Source="../Resource/Image/指派送货.png" Stretch="None" />
                                     <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center">生成快递单</TextBlock>
@@ -310,6 +319,7 @@
                     <DataGrid Grid.Row="7" ItemsSource="{Binding SaleList}" IsReadOnly="True"
                               AutoGenerateColumns="False"
                               HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SaleSelected}">
+
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="选中" SortMemberPath="IsSelected" Width="60">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -325,17 +335,24 @@
                             <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
                             <DataGridTextColumn Header="渠道订单号" Width="120" Binding="{Binding TransNo}" />
                             <DataGridTextColumn Header="销售类别" Binding="{Binding OrderSource}" />
-                            <DataGridTextColumn Header="销售状态" Binding="{Binding SaleStatus}" ElementStyle="{StaticResource CellCenter}" />
-                            <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}" ElementStyle="{StaticResource CellCenter}" />
-                            <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatusName}" ElementStyle="{StaticResource CellCenter}" />
-                            <DataGridTextColumn Header="销售时间" Width="150" Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="销售状态" Binding="{Binding SaleStatus}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="收银状态" Binding="{Binding CashStatusName}"
+                                                ElementStyle="{StaticResource CellCenter}" />
+                            <DataGridTextColumn Header="销售时间" Width="150"
+                                                Binding="{Binding SellDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="是否调拨" Binding="{Binding IfTrans}" />
                             <DataGridTextColumn Header="调拨状态" Binding="{Binding TransStatus}" />
-                            <DataGridTextColumn Header="销售单金额" Binding="{Binding SalesAmount}" ElementStyle="{StaticResource CellRight}" />
-                            <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}" ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="销售单金额" Binding="{Binding SalesAmount}"
+                                                ElementStyle="{StaticResource CellRight}" />
+                            <DataGridTextColumn Header="销售单数量" Binding="{Binding SalesCount}"
+                                                ElementStyle="{StaticResource CellRight}" />
                             <DataGridTextColumn Header="门店" Width="200" Binding="{Binding SectionName}" />
                             <DataGridTextColumn Header="收银流水号" Width="120" Binding="{Binding CashNum}" />
-                            <DataGridTextColumn Header="收银时间" Width="150" Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="收银时间" Width="150"
+                                                Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="专柜码" Binding="{Binding ShippingCode}" />
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -359,10 +376,12 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Width="200" Header="渠道订单号" Binding="{Binding OrderChannelNo}" />
-                            <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}" Binding="{Binding PaymentMethodName}" />
+                            <DataGridTextColumn Header="支付方式" ElementStyle="{StaticResource CellCenter}"
+                                                Binding="{Binding PaymentMethodName}" />
                             <DataGridTextColumn Header="应付款总计" Binding="{Binding MustPayTotal}" />
                             <DataGridTextColumn Header="门店应付款" />
-                            <DataGridTextColumn Header="购买时间" Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                            <DataGridTextColumn Header="购买时间"
+                                                Binding="{Binding BuyDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                             <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
                             <DataGridTextColumn Header="收货人地址" Binding="{Binding CustomerAddress}" />
                             <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
@@ -402,11 +421,11 @@
                     <DockPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
                             <TextBlock Text="购买时间" Margin="10 5" />
-                            <DatePicker Foreground="Blue" SelectedDate="{Binding QueryCriteriaForHandOver.StartSellDate}" />
+                            <DatePicker Foreground="Blue" SelectedDate="{Binding Invoice4Get.StartSellDate}" />
                             <TextBlock Text="至" Margin="10 5" />
-                            <DatePicker Foreground="Blue" SelectedDate="{Binding QueryCriteriaForHandOver.EndSellDate}" />
+                            <DatePicker Foreground="Blue" SelectedDate="{Binding Invoice4Get.EndSellDate}" />
                             <TextBlock Text="订单号" Margin="10 5" />
-                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding QueryCriteriaForHandOver.OrderNo}" />
+                            <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding Invoice4Get.OrderNo}" />
                             <Button Margin="5" Command="{Binding SearchExpressCommand}" Width="Auto">
                                 <StackPanel Orientation="Horizontal" MinWidth="70">
                                     <Image Source="../Resource/Image/查询.png" Stretch="None" />

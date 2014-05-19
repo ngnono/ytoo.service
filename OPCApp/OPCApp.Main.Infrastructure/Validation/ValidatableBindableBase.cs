@@ -10,9 +10,8 @@ using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Linq.Expressions;
-using OPCApp.Domain.Validation;
 
-namespace OPCApp.Domain
+namespace Intime.OPC.Infrastructure.Validation
 {
     public class ValidatableBindableBase : BindableBase, INotifyDataErrorInfo
     {

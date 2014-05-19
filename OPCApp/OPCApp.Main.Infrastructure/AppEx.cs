@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.Composition.Hosting;
 using OPCApp.Infrastructure.Config;
 using OPCApp.Infrastructure.Interfaces;
-using OPCApp.Domain;
 
 namespace OPCApp.Infrastructure
 {

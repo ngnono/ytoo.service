@@ -37,7 +37,7 @@ namespace Intime.OPC.Repository.Support
                     o.BrandName = t.Brand == null ? "" : t.Brand.Name;
                     if (t.Rma != null)
                     {
-                        o.NeedReturnCount = t.Rma.BackCount;
+                        o.NeedReturnCount = t.Order.Quantity-t.Rma.BackCount;
                         o.ReturnCount = t.Rma.BackCount;
                     }
                     lstDtos.Add(o);

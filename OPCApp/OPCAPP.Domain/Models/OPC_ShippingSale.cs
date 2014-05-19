@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
-using OPCApp.Domain.Attributes;
+using Intime.OPC.Infrastructure.Service;
 
 namespace OPCApp.Domain.Models
 {
     [Uri("deliveryorder")]
-    public class OPC_ShippingSale : Model
+    public class OPC_ShippingSale
     {
         public bool IsSelected { get; set; }
 
@@ -16,6 +15,11 @@ namespace OPCApp.Domain.Models
 
         /// 订单
         public string OrderNo { get; set; }
+
+        /// <summary>
+        ///     发货单ID
+        /// </summary>
+        public int Id { get; set; }
 
         public string SaleOrderNo { get; set; }
 
@@ -96,6 +100,6 @@ namespace OPCApp.Domain.Models
         /// <value>The express fee.</value>
         public double ExpressFee { get; set; }
 
-        public IList<OPC_Sale> SalesOrders { get; set; }
+        public OPC_Sale SalesOrder { get; set; }
     }
 }

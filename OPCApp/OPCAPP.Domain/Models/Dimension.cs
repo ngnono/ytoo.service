@@ -1,22 +1,26 @@
-﻿using Microsoft.Practices.Prism.Mvvm;
+﻿using Intime.OPC.Infrastructure.Validation;
+using Microsoft.Practices.Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OPCApp.Domain.Attributes;
-using OPCApp.Domain.Validation;
 
 namespace OPCApp.Domain.Models
 {
     /// <summary>
     /// Dimension such as brand, counter, organization etc.
     /// </summary>
-    public abstract class Dimension : Model
+    public abstract class Dimension : ValidatableBindableBase
     {
         private bool _isSelected;
         private string _name;
+
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
 
         /// <summary>
         /// 名字

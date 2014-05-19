@@ -46,14 +46,14 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
             if (brandID == null) return;
 
             if (Model.Brands == null) Model.Brands = new List<Brand>();
-            var brand = Brands.Where(b => b.Id == brandID.Value).FirstOrDefault();
+            var brand = Brands.Where(b => b.ID == brandID.Value).FirstOrDefault();
             if (brand.IsSelected)
             {
                 Model.Brands.Add(brand);
             }
             else
             {
-                Model.Brands.Remove(b => b.Id == brand.Id);
+                Model.Brands.Remove(b => b.ID == brand.ID);
             }
         }
 
@@ -107,7 +107,7 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
 
             brands.ForEach(brand =>
             {
-                if (Model.Brands.Contains(b => b.Id == brand.Id))
+                if (Model.Brands.Contains(b => b.ID == brand.ID))
                 {
                     brand.IsSelected = true;
                 }

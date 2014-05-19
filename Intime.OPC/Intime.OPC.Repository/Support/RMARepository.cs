@@ -32,7 +32,7 @@ namespace Intime.OPC.Repository.Support
             {
                 var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
                 var saleQuery = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime );
-                if (rmaStatus.HasValue)
+                if (rmaStatus.HasValue && rmaStatus!=-1)
                 {
                     saleQuery = saleQuery.Where(t => t.Status == rmaStatus);
                     query = query.Where(t => t.Status == rmaStatus);

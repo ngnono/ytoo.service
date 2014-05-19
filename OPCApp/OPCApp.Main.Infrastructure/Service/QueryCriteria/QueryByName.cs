@@ -1,5 +1,4 @@
 ﻿using Intime.OPC.Infrastructure;
-using OPCApp.Domain.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

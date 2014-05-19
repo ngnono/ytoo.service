@@ -1,11 +1,10 @@
 using System;
-using OPCApp.Domain.Attributes;
-using OPCApp.Domain.Enums;
+using Intime.OPC.Infrastructure.Service;
 
 namespace OPCApp.Domain.Models
 {
     [Uri("salesorder")]
-    public class OPC_Sale : Model
+    public class OPC_Sale
     {
         public OPC_Sale()
         {
@@ -14,11 +13,12 @@ namespace OPCApp.Domain.Models
 
         #region Properties generated from DB
 
+        public int Id { get; set; }
         public string OrderNo { get; set; }
         public string SaleOrderNo { get; set; }
         public string SalesType { get; set; }
         public string ShipViaId { get; set; }
-        public EnumSaleStatus Status { get; set; }
+        public int Status { get; set; }
         public string ShippingCode { get; set; }
         public decimal ShippingFee { get; set; }
         public int? ShippingStatus { get; set; }

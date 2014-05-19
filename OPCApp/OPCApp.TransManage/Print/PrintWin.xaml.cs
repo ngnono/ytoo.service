@@ -73,7 +73,7 @@ namespace Intime.OPC.Modules.Logistics.Print
             { 
                 var myRptDs = new ReportDataSource("PrintExpressModel",new List<PrintExpressModel>{ printExpressModel});
                 _reportViewer.LocalReport.DataSources.Add(myRptDs);
-                _reportViewer.LocalReport.ReportPath = rdlcName;
+                _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
                 if (isPrint)
                 {
                     PrintOnly(_reportViewer.LocalReport);
@@ -89,7 +89,7 @@ namespace Intime.OPC.Modules.Logistics.Print
                 MessageBox.Show(Ex.Message);
             }
         }
-        public void PrintDeliveryOrder(string rdlcName,Order order, OPC_Sale opcSale,IList<OPC_SaleDetail> listOpcSaleDetails, bool isPrint=false)
+        public void PrintFHD(string rdlcName,Order order, OPC_Sale opcSale,List<OPC_SaleDetail> listOpcSaleDetails, bool isPrint=false)
         {
             try
             {
@@ -101,8 +101,8 @@ namespace Intime.OPC.Modules.Logistics.Print
 
                 myRptDs = new ReportDataSource("SaleDetailDT", listOpcSaleDetails);
                 _reportViewer.LocalReport.DataSources.Add(myRptDs);
-                _reportViewer.LocalReport.ReportPath = rdlcName;
 
+                _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
                 if (isPrint)
                 {
                     PrintOnly(_reportViewer.LocalReport);
@@ -115,7 +115,7 @@ namespace Intime.OPC.Modules.Logistics.Print
             }
             catch (Exception Ex)
             {
-                MessageBox.Show(Ex.Message,"错误",MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Ex.Message);
             }
         }
 
