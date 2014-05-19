@@ -1,15 +1,18 @@
+using OPCApp.Domain.Attributes;
+using System.Collections.Generic;
 namespace OPCApp.Domain.Models
 {
-    public class OPC_SaleDetail
+    [Uri("salesorderdetail")]
+    public class OPC_SaleDetail : Model
     {
-        public int Id { get; set; }
-
         /// <summary>
         ///     商品编码
         /// </summary>
         /// <value>The product no.</value>
         public string ProductNo { get; set; }
+
         public string ProductName { get; set; }
+
         /// <summary>
         ///     销售单号
         /// </summary>
@@ -79,9 +82,12 @@ namespace OPCApp.Domain.Models
         public string Remark { get; set; }
 
         public string SectionCode { get; set; }
+
         /// <summary>
         /// 总价
         /// </summary>
         public double SumPrice { get; set; }
+
+        public IList<OrderItem> OrderItems { get; set; }
     }
 }

@@ -85,7 +85,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="编辑" Width="30" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EditCommand}" CommandParameter="{Binding ID}"/>
+                                    <Button Content="编辑" Width="30" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EditCommand}" CommandParameter="{Binding Id}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

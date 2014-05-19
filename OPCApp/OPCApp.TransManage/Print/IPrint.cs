@@ -7,6 +7,6 @@ namespace Intime.OPC.Modules.Logistics.Print
     {
         void Print(string xsdName, string rdlcName, PrintModel dtList, bool isPrint = false);
         void PrintExpress(string rdlcName, PrintExpressModel dtList, bool isPrint = false);
-        void PrintFHD(string rdlcName, Order order, OPC_Sale opcSale, List<OPC_SaleDetail> listOpcSaleDetails, bool isPrint = false);
+        void PrintDeliveryOrder(string rdlcName, Order order, OPC_Sale opcSale, IList<OPC_SaleDetail> listOpcSaleDetails, bool isPrint = false);
     }
 }

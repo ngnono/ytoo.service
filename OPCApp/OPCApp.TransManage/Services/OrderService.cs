@@ -11,31 +11,8 @@ using System.Threading.Tasks;
 namespace Intime.OPC.Modules.Logistics.Services
 {
     [Export(typeof(IService<Order>))]
-    public class OrderService : IService<Order>
+    public class OrderService : ServiceBase<Order>
     {
-        public Order Create(Order obj)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Order Update(Order obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Order Query(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public PagedResult<Order> Query(IQueryCriteria queryCriteria)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
