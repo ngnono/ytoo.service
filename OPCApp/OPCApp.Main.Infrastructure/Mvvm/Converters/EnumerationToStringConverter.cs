@@ -12,7 +12,10 @@ namespace Intime.OPC.Infrastructure.Mvvm
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var attributes = value.GetType().GetCustomAttributes(typeof(DescriptionAttribute),false);
+            var fieldInfo = value.GetType().GetField(value.ToString());
+            if (fieldInfo == null) return string.Empty;
+
+            var attributes = fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
             if (attributes != null && attributes.Any()) return ((DescriptionAttribute)attributes[0]).Description;
 
             throw new InvalidOperationException();

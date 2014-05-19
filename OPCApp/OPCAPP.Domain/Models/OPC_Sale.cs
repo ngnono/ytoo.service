@@ -18,7 +18,7 @@ namespace OPCApp.Domain.Models
         public string SaleOrderNo { get; set; }
         public string SalesType { get; set; }
         public string ShipViaId { get; set; }
-        public EnumSaleStatus Status { get; set; }
+        public EnumSaleOrderStatus Status { get; set; }
         public string ShippingCode { get; set; }
         public decimal ShippingFee { get; set; }
         public int? ShippingStatus { get; set; }
@@ -58,8 +58,6 @@ namespace OPCApp.Domain.Models
         public string OrderSource { get; set; }
 
         public string SaleStatus { get; set; }
-
-        public bool IsSelected { get; set; }
 
         /// <summary>
         /// ÇþµÀºÅ
