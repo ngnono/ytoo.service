@@ -61,24 +61,19 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
     [DataContract]
     public class IMSProductSelfDetailResponse : IMSProductDetailResponse
     {
-        [DataMember(Name = "size")]
+        [DataMember(Name = "sizes")]
         public IEnumerable<IMSProductSizeResponse> Sizes { get; set; }
         [DataMember(Name="sales_code")]
         public string SalesCode { get; set; }
-        [DataMember(Name = "size_type")]
-        public int SizeType { get; set; }
-       
-        [DataMember(Name="size_str")]
-        public string Size_Str { get; set; }
-
+      
     }
     [DataContract]
     public class IMSProductSizeResponse
     {
 
-        [DataMember(Name = "size_id")]
+        [DataMember(Name = "id")]
         public int SizeValueId { get; set; }
-        [DataMember(Name = "size_name")]
+        [DataMember(Name = "name")]
         public string SizeName { get; set; }
     }
     [DataContract]

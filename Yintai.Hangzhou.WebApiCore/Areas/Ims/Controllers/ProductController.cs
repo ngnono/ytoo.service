@@ -426,29 +426,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 p.Brand_Name = productEntity.B.Name;
                                 p.Category_Name = productEntity.C.Name;
                                 p.SalesCode = productEntity.PC.StoreProductCode;
-                                p.SizeType = productEntity.C.SizeType.Value;
-                                if (sizeValues != null)
+                      
+                                p.Sizes = sizeValues.Select(csv => new IMSProductSizeResponse()
                                 {
-                                    if (productEntity.C.SizeType == (int)CategorySizeType.LimitSize)
-                                    {
-                                        var catSizeValues = Context.Set<CategoryPropertyEntity>().Where(cp => cp.CategoryId == productEntity.P.Tag_Id && cp.Status == (int)DataStatus.Normal && cp.IsSize == true)
-                                                             .Join(Context.Set<CategoryPropertyValueEntity>().Where(cpv => cpv.Status == (int)DataStatus.Normal),
-                                                                o => o.Id,
-                                                                i => i.PropertyId,
-                                                                (o, i) => i);
-                                        p.Sizes = catSizeValues.ToList().Where(csv => sizeValues.Any(sv => sv.ValueDesc == csv.ValueDesc)).Select(csv => new IMSProductSizeResponse()
-                                        {
-                                            SizeName = csv.ValueDesc,
-                                            SizeValueId = csv.Id
-                                        });
-                                    }
-                                    else
-                                    {
-                                        var firstSize = sizeValues.FirstOrDefault();
-                                        if (firstSize != null)
-                                            p.Size_Str = firstSize.ValueDesc;
-                                    }
-                                }
+                                    SizeName = csv.ValueDesc,
+                                    SizeValueId = csv.Id
+                                });
+                                   
                                 if (productEntity.PR != null)
                                 {
                                     p.Images = productEntity.PR.Select(pr => new IMSSelfImageResponse() { 
