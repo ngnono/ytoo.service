@@ -96,7 +96,7 @@ namespace Intime.OPC.Service
             return orderStatus.GetDescription();
         }
 
-        private static OrderDto converDto(Order o)
+        public static OrderDto converDto(Order o)
         {
             var t = new OrderDto();
             t.Id = o.Id;

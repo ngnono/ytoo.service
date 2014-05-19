@@ -39,6 +39,49 @@ namespace Intime.OPC.Domain.Partials.Models
         public Nullable<int> TotalPoints { get; set; }
         public string OrderSource { get; set; }
         public Nullable<int> OrderProductType { get; set; }
+
+
+        public OrderClone Convert2Order(OrderClone obj)
+        {
+            if (obj == null)
+            {
+                return obj;
+            }
+
+            return new OrderClone
+            {
+                BrandId = obj.BrandId,
+                CreateDate = obj.CreateDate,
+                CreateUser = obj.CreateUser,
+                CustomerId = obj.CustomerId,
+                Id = obj.Id,
+                InvoiceAmount = obj.InvoiceAmount,
+                InvoiceDetail = obj.InvoiceDetail,
+                InvoiceSubject = obj.InvoiceSubject,
+                Memo = obj.Memo,
+                NeedInvoice = obj.NeedInvoice,
+                OrderNo = obj.OrderNo,
+                OrderProductType = obj.OrderProductType,
+                OrderSource = obj.OrderSource,
+                PaymentMethodCode = obj.PaymentMethodCode,
+                PaymentMethodName = obj.PaymentMethodName,
+                RecAmount = obj.RecAmount,
+                ShippingAddress = obj.ShippingAddress,
+                ShippingContactPerson = obj.ShippingContactPerson,
+                ShippingContactPhone = obj.ShippingContactPhone,
+                ShippingFee = obj.ShippingFee,
+                ShippingNo = obj.ShippingNo,
+                ShippingVia = obj.ShippingVia,
+                ShippingZipCode = obj.ShippingZipCode,
+                Status = obj.Status,
+                StoreId = obj.StoreId,
+                TotalAmount = obj.TotalAmount,
+                TotalPoints = obj.TotalPoints,
+                UpdateDate = obj.UpdateDate,
+                UpdateUser = obj.UpdateUser
+
+            };
+        }
     }
 
 
