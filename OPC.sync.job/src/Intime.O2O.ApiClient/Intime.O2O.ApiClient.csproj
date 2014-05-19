@@ -61,6 +61,7 @@
     <Compile Include="Request\GetOrderStatusByIdRequest.cs" />
     <Compile Include="Request\GetProductImagesRequest.cs" />
     <Compile Include="Request\GetProductImagesRequestData.cs" />
+    <Compile Include="Request\GetProductPropertiesRequest.cs" />
     <Compile Include="Request\GetSectionByIdRequestData.cs" />
     <Compile Include="Request\GetSectionByIdRequest.cs" />
     <Compile Include="Request\GetSectionsRequestData.cs" />
