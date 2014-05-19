@@ -90,6 +90,7 @@
     <Compile Include="ControllerTest\BaseControllerTest.cs" />
     <Compile Include="ControllerTest\BrandControllerTest.cs" />
     <Compile Include="ControllerTest\SaleControllerTest.cs" />
+    <Compile Include="ControllerTest\StoreControllerTest.cs" />
     <Compile Include="ControllerTest\SupplierControllerTest.cs" />
     <Compile Include="ControllerTest\SectionControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

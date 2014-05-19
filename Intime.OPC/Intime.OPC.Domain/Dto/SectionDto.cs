@@ -29,46 +29,53 @@ namespace Intime.OPC.Domain.Dto
         [JsonProperty(PropertyName = "ContactPhoneNumber")]
         public string ContactPhone { get; set; }
 
-        [JsonIgnore]
         public int? Status { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public bool? Enabled
-        {
-            get
-            {
-                if (Status == null)
-                {
-                    return null;
-                }
+        //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        //public bool? Enabled
+        //{
+        //    get
+        //    {
+        //        if (Status == null)
+        //        {
+        //            return null;
+        //        }
 
-                return Status == 1;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    Status = null;
+        //        return Status == 1;
+        //    }
+        //    set
+        //    {
+        //        if (value == null)
+        //        {
+        //            Status = null;
 
-                }
-                else
-                {
-                    if (value == true)
-                    {
-                        Status = 1;
-                    }
-                    else
-                    {
-                        Status = -1;
-                    }
-                }
+        //        }
+        //        else
+        //        {
+        //            if (value == true)
+        //            {
+        //                Status = 1;
+        //            }
+        //            else
+        //            {
+        //                Status = -1;
+        //            }
+        //        }
 
 
 
-            }
-        }
+        //    }
+        //}
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<BrandDto> Brands { get; set; }
+
+        public int StoreId { get; set; }
+
+        /// <summary>
+        /// 门店
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public StoreDto Store { get; set; }
     }
 }

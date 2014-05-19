@@ -23,6 +23,7 @@ using Intime.OPC.Domain;
 using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Enums.SortOrder;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Domain.Partials.Models;
 using Intime.OPC.Repository.Base;
 using LinqKit;
 using PredicateBuilder = LinqKit.PredicateBuilder;
@@ -181,9 +182,9 @@ namespace Intime.OPC.Repository.Impl
                 int t;
 
                 var qt = from s in c.Set<Section>().AsExpandable().Where(sectionFilter)
-                         //join o in c.Set<OPC_OrgInfo>() on s.StoreId equals o.StoreOrSectionID
-                
-                
+                         join store in c.Set<Store>() on s.StoreId equals store.Id into tmp1
+                         from store in tmp1.DefaultIfEmpty()
+
                          let s_b_let = (from sb in c.Set<IMS_SectionBrand>().AsExpandable().Where(sectionbrandFilter)
                                         where s.Id == sb.SectionId
                                         select new
@@ -195,12 +196,42 @@ namespace Intime.OPC.Repository.Impl
                          select new
                          {
                              section = s,
-                             sbs = s_b_let
+                             sbs = s_b_let,
+                             Store = store == null ? null : new StoreClone()
+                         {
+                             Id = store.Id,
+                             Name = store.Name,
+                             ExStoreId = store.ExStoreId,
+                             GpsAlt = store.GpsAlt,
+                             GpsLng = store.GpsLng,
+                             GpsLat = store.GpsLat,
+                             Group_Id = store.Group_Id,
+                             Latitude = store.Latitude,
+                             Location = store.Location,
+                             Longitude = store.Longitude,
+                             Region_Id = store.Region_Id,
+                             RMAAddress = store.RMAAddress,
+                             RMAZipCode = store.RMAZipCode,
+                             RMAPerson = store.RMAPerson,
+                             RMAPhone = store.RMAPhone,
+                             Tel = store.Tel,
+                             StoreLevel = store.StoreLevel,
+
+                             CreatedDate = store.CreatedDate,
+                             CreatedUser = store.CreatedUser,
+                             Description = store.Description,
+                             Status = store.Status,
+                             UpdatedDate = store.UpdatedDate,
+                             UpdatedUser = store.CreatedUser
+
+                         }
+
                          };
 
                 t = qt.Count();
 
                 var qr = from s in qt.OrderBy(v => v.section.Id).Skip(pagerRequest.SkipCount).Take(pagerRequest.PageSize)
+
                          let brands = (
                              from b in c.Set<Brand>().Where(brandFilter)
                              join s_b in c.Set<IMS_SectionBrand>() on b.Id equals s_b.BrandId
@@ -220,7 +251,7 @@ namespace Intime.OPC.Repository.Impl
                                  UpdatedDate = b.UpdatedDate,
                                  UpdatedUser = b.UpdatedUser,
                                  WebSite = b.WebSite,
-                                 
+
                              }
                              )
                          select new SectionClone()
@@ -240,7 +271,8 @@ namespace Intime.OPC.Repository.Impl
                              UpdateDate = s.section.UpdateDate,
                              UpdateUser = s.section.UpdateUser,
                              Brands = brands,
-                             SectionCode = s.section.SectionCode
+                             SectionCode = s.section.SectionCode,
+                             Store = s.Store
                          };
 
 
@@ -256,12 +288,13 @@ namespace Intime.OPC.Repository.Impl
             return AutoMapper.Mapper.Map<List<SectionClone>, List<Section>>(result.Data);
         }
 
-
         public override Section GetItem(int key)
         {
             return Func(c =>
             {
                 var qt = from s in c.Set<Section>().AsExpandable().Where(v => v.Id == key)
+                         join store in c.Set<Store>() on s.StoreId equals store.Id into tmp1
+                         from store in tmp1.DefaultIfEmpty()
                          let s_b_let = (from sb in c.Set<IMS_SectionBrand>().AsExpandable()
                                         where s.Id == sb.SectionId
                                         select new
@@ -273,7 +306,35 @@ namespace Intime.OPC.Repository.Impl
                          select new
                          {
                              section = s,
-                             sbs = s_b_let
+                             sbs = s_b_let,
+                             Store = store == null ? null : new StoreClone()
+                         {
+                             Id = store.Id,
+                             Name = store.Name,
+                             ExStoreId = store.ExStoreId,
+                             GpsAlt = store.GpsAlt,
+                             GpsLng = store.GpsLng,
+                             GpsLat = store.GpsLat,
+                             Group_Id = store.Group_Id,
+                             Latitude = store.Latitude,
+                             Location = store.Location,
+                             Longitude = store.Longitude,
+                             Region_Id = store.Region_Id,
+                             RMAAddress = store.RMAAddress,
+                             RMAZipCode = store.RMAZipCode,
+                             RMAPerson = store.RMAPerson,
+                             RMAPhone = store.RMAPhone,
+                             Tel = store.Tel,
+                             StoreLevel = store.StoreLevel,
+
+                             CreatedDate = store.CreatedDate,
+                             CreatedUser = store.CreatedUser,
+                             Description = store.Description,
+                             Status = store.Status,
+                             UpdatedDate = store.UpdatedDate,
+                             UpdatedUser = store.CreatedUser
+
+                         }
                          };
 
 
@@ -316,7 +377,8 @@ namespace Intime.OPC.Repository.Impl
                              UpdateDate = s.section.UpdateDate,
                              UpdateUser = s.section.UpdateUser,
                              Brands = brands,
-                             SectionCode = s.section.SectionCode
+                             SectionCode = s.section.SectionCode,
+                             Store = s.Store
                          };
 
                 return AutoMapper.Mapper.Map<SectionClone, Section>(qr.FirstOrDefault());
@@ -375,11 +437,6 @@ namespace Intime.OPC.Repository.Impl
                     trans.Complete();
                 }
             });
-        }
-
-        public override void Delete(int id)
-        {
-            base.Delete(id);
         }
     }
 }

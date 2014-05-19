@@ -47,7 +47,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
         }
 
         [Test()]
-        public void GetTest([Values(877)]int id)
+        public void GetTest([Values(883)]int id)
         {
             _controller.Request.Method = HttpMethod.Get;
             var actual = _controller.GetSection(id) as OkNegotiatedContentResult<SectionDto>;
@@ -55,6 +55,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
 
             Assert.IsNotNull(actual);
             Assert.IsTrue(sectionDto != null);
+            Assert.IsNotNull(actual.Content.Store);
         }
 
 
@@ -128,7 +129,8 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
                 Name = "Test_001",
                 Code = "asdfq2@$a",
                 ContactPhone = "110",
-                Enabled = true,
+                Status  = 1,
+                StoreId = 3
 
             }, 0) as OkNegotiatedContentResult<SectionDto>;
             var sectionDto = actual.Content;
@@ -145,9 +147,10 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
             var actual = _controller.Put(id, new SectionDto
             {
                 Name = "Test_002",
-                Enabled = true,
+                Status = 1,
                 Id = id,
                 Code = "asdf9876",
+                StoreId = 4,
                 Brands = new List<BrandDto>()
                 {
                     new BrandDto()

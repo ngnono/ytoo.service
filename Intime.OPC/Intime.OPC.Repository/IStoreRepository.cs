@@ -15,6 +15,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Models;
 
 namespace Intime.OPC.Repository
@@ -25,5 +26,7 @@ namespace Intime.OPC.Repository
     public interface IStoreRepository : IRepository<Store>
     {
         PageResult<Store> GetAll(int pageIndex, int pageSize = 20);
+
+        List<Store> GetPagedList(PagerRequest request, out int totalCount, StoreFilter filter);
     }
 }

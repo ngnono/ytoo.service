@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Intime.OPC.Domain.Partials.Models;
 
 namespace Intime.OPC.Domain.Models
 {
@@ -23,13 +24,15 @@ namespace Intime.OPC.Domain.Models
 
         public string SectionCode { get; set; }
 
+        public StoreClone Store { get; set; }
+
         public static SectionClone Convert2Section(dynamic obj)
         {
             if (obj == null)
             {
                 return null;
             }
-
+          
             return new SectionClone()
             {
                 BrandId = obj.BrandId,
