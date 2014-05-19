@@ -86,8 +86,8 @@ namespace Intime.OPC.WebApi.Controllers
                     () =>
                     {
                         _rmaService.UserId = uid;
-                        return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.NoDelivery.AsID(),
-                            EnumReturnGoodsStatus.NoProcess, pageIndex, pageSize);
+                        return _rmaService.GetByOrderNo(orderNo, -1,
+                            EnumReturnGoodsStatus.None, pageIndex, pageSize);
                     }, "查询订单信息失败");
         }
 

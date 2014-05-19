@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Intime.OPC.Infrastructure.Service;
+using OPCApp.Domain.Attributes;
+using OPCApp.Domain.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Criteria
 {
@@ -13,6 +15,7 @@ namespace Intime.OPC.Modules.Logistics.Criteria
         {
             StartDate = DateTime.Now;
             EndDate = DateTime.Now;
+            Status = EnumSaleOrderStatus.ShipInStorage;
         }
 
         [UriParameter("startdate")]
@@ -26,5 +29,8 @@ namespace Intime.OPC.Modules.Logistics.Criteria
 
         [UriParameter("saleorderno")]
         public string SalesOrderNo { get; set; }
+
+        [UriParameter("status")]
+        public EnumSaleOrderStatus Status { get; set; }
     }
 }

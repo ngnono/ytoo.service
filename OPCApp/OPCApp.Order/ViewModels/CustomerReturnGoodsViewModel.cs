@@ -155,9 +155,23 @@ namespace OPCApp.Customer.ViewModels
                 MessageBox.Show("请选择销售单明细", "提示");
                 return;
             }
+            //原因必填
+            if (string.Empty==RmaPost.Remark)
+            {
+                MessageBox.Show("退货备注不能为空", "提示");
+                return;
+            }
+
             List<KeyValuePair<int, int>> list =
                 selectOrder.Select(
                     e => new KeyValuePair<int, int>(e.Id, e.NeedReturnCount)).ToList<KeyValuePair<int, int>>();
+            //退货数量大于0，且已退数量+退货数量<=销售数量
+            List<OrderItem> q= selectOrder.Where(t => (t.ReturnCount + t.NeedReturnCount > t.Quantity) || t.NeedReturnCount < 1).ToList();
+            if (q.Count>0)
+            {
+                MessageBox.Show("选择的订单明细的退货数量必须大于零，且已退货数量加上退货数量要小于等于销售数量","提示");
+                return ;
+            }
             RmaPost.OrderNo = SaleRma.OrderNo;
             RmaPost.ReturnProducts = list;
             bool bFlag = AppEx.Container.GetInstance<ICustomerReturnGoods>().CustomerReturnGoodsSave(RmaPost);

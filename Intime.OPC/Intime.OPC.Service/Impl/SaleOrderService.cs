@@ -179,7 +179,6 @@ namespace Intime.OPC.Service.Impl
 
         public PagerInfo<SaleDto> GetPagedList(SaleOrderQueryRequest request, int authId)
         {
-
             var filter = Mapper.Map<SaleOrderQueryRequest, SaleOrderFilter>(request);
             var pagerRequest = new Domain.PagerRequest(request.Page ?? 1, request.PageSize ?? 10);
 
@@ -195,13 +194,13 @@ namespace Intime.OPC.Service.Impl
                     throw new OpcExceptioin("未授权的用户");
                 }
 
+                //如果是管理员可以管理任意门店 
+                //否则拿当前用户可以管理的门店
                 if (!user.user.IsSystem)
                 {
-                    throw new NotImplementedException();
+                    //添加店铺ID
+                    filter.StoreId = user.org.StoreOrSectionID;
                 }
-
-                //添加店铺ID
-                filter.StoreId = user.org.StoreOrSectionID;
             }
 
             if (request.EndDate != null || request.StartDate != null)
@@ -213,7 +212,7 @@ namespace Intime.OPC.Service.Impl
 
             int total;
             var datas = _saleOrderRepository.GetPagedList(pagerRequest, out total, filter, (SaleOrderSortOrder)(request.SortOrder ?? 0));
-            var dto = Mapper.Map<List<SaleOrderModel>, List<SaleDto>>(datas);
+            var dto = Mapper.Map<List<OPC_Sale>, List<SaleDto>>(datas);
 
             var pagerdto = new PagerInfo<SaleDto>(pagerRequest, total) { Datas = dto };
 

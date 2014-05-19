@@ -45,7 +45,7 @@ namespace Intime.OPC.Repository.Support
                     query2 = query2.Where(t => t.PaymentMethodCode == payType);
                 }
 
-                if (bandId.HasValue)
+                if (bandId.HasValue && bandId!=-1)
                 {
                     query2 = query2.Where(t => t.BrandId == bandId.Value);
                 }

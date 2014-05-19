@@ -31,6 +31,10 @@ namespace Intime.OPC.Repository.Impl
 
             if (filter != null)
             {
+                if (filter.Status != null)
+                {
+                    query = PredicateBuilder.And(query, v => v.ShippingStatus == (int)filter.Status);
+                }
             }
 
             return query;
@@ -42,6 +46,10 @@ namespace Intime.OPC.Repository.Impl
 
             if (filter != null)
             {
+                //if (filter.Status != null)
+                //{
+                //    query = PredicateBuilder.And(query, v => v.stat == (int)filter.Status);
+                //}
             }
 
             return query;
@@ -79,33 +87,77 @@ namespace Intime.OPC.Repository.Impl
             throw new NotImplementedException();
         }
 
-        public List<OPC_ShippingSale> GetPagedList(PagerRequest pagerRequest, out int totalCount, ShippingOrderFilter filter,
+        public List<OPC_ShippingSale> GetPagedList(PagerRequest pagerRequest, out int totalCount,
+            ShippingOrderFilter filter,
             ShippingOrderSortOrder sortOrder)
         {
 
-            throw new NotImplementedException();
-            //var shippingOrderFilter = Filter(filter);
-            //var saleorderFilter = SaleOrder4Filter(filter);
-            //var orderItemFilter = OrderItem4Filter(filter);
-            //return Func(db =>
-            //{
-            //    var q1 = from ss in db.Set<OPC_ShippingSale>().AsExpandable().Where(shippingOrderFilter)
-            //        let sale_let = (from sale in db.Set<OPC_Sale>().AsExpandable().Where(saleorderFilter)
-            //            where ss.Id == sale.ShippingSaleId
-            //            select sale
-            //                     )
-            //        let items_let = (from sd in db.Set<OPC_SaleDetail>()
-            //                       join  s in db.Set<OPC_Sale>() on sd.SaleOrderNo equals s.SaleOrderNo
-                     
-                
-                
-            //        )
+
+            var shippingOrderFilter = Filter(filter);
+            var saleorderFilter = SaleOrder4Filter(filter);
+
+            var rst = Func(db =>
+            {
+
+                var q1 = from ss in db.Set<OPC_ShippingSale>().AsExpandable().Where(shippingOrderFilter)
+                    let sale_let = (from sale in db.Set<OPC_Sale>().AsExpandable().Where(saleorderFilter)
+                        where ss.Id == sale.ShippingSaleId
+                        select sale
+                        )
+                    let items_let = (
+                        from sale in sale_let
+                        join sd in db.Set<OPC_SaleDetail>() on sale.SaleOrderNo equals sd.SaleOrderNo
+                        join s in db.Set<OPC_Sale>() on sd.SaleOrderNo equals s.SaleOrderNo
+                        join si in db.Set<OrderItem>() on sd.OrderItemId equals si.Id
+
+                        select si
+                        )
+                    select new
+                    {
+
+                        ShippingSale = ss,
+                        OrderItems = items_let,
+                        SaleOrders = sale_let
+                    };
+
+                var t = q1.Count();
+
+                var q =
+                    q1.OrderByDescending(v => v.ShippingSale.CreateDate)
+                        .Skip(pagerRequest.SkipCount)
+                        .Take(pagerRequest.PageSize).ToList();
+
+                var list = new List<OPC_ShippingSale>(q.Count);
+                foreach (var item in q)
+                {
+                    if (item.ShippingSale != null)
+                    {
+                        var model = OPC_ShippingSale.Convert2ShippingOrderModel(item.ShippingSale);
+
+                        if (item.OrderItems != null)
+                        {
+                            model.OrderItems = item.OrderItems.ToList();
+                        }
+
+                        if (item.SaleOrders != null)
+                        {
+                            model.SaleOrders = item.SaleOrders.ToList();
+                        }
+
+                        list.Add(model);
+                    }
+                }
 
 
+                return new
+                {
+                    total = t,
+                    data = list
+                };
+            });
 
-
-
-            //});
+            totalCount = rst.total;
+            return rst.data;
         }
 
         public OPC_ShippingSale Update4ShippingCode(OPC_ShippingSale entity, int userId)
@@ -125,7 +177,7 @@ namespace Intime.OPC.Repository.Impl
         /// <param name="saleOrderModels">销售单</param>
         /// <param name="userId">操作人</param>
         /// <returns></returns>
-        public OPC_ShippingSale CreateBySaleOrder(OPC_ShippingSale entity, List<SaleOrderModel> saleOrderModels, int userId)
+        public OPC_ShippingSale CreateBySaleOrder(OPC_ShippingSale entity, List<OPC_Sale> saleOrderModels, int userId)
         {
             return Func(db =>
             {

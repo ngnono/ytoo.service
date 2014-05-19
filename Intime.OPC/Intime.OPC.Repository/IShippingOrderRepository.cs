@@ -34,6 +34,6 @@ namespace Intime.OPC.Repository
         /// <param name="saleOrderModels">销售单</param>
         /// <param name="userId">操作人</param>
         /// <returns></returns>
-        OPC_ShippingSale CreateBySaleOrder(OPC_ShippingSale entity,List<SaleOrderModel> saleOrderModels, int userId);
+        OPC_ShippingSale CreateBySaleOrder(OPC_ShippingSale entity, List<OPC_Sale> saleOrderModels, int userId);
     }
 }
