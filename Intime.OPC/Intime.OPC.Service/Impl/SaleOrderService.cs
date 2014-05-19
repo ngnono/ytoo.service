@@ -214,6 +214,14 @@ namespace Intime.OPC.Service.Impl
             var datas = _saleOrderRepository.GetPagedList(pagerRequest, out total, filter, (SaleOrderSortOrder)(request.SortOrder ?? 0));
             var dto = Mapper.Map<List<OPC_Sale>, List<SaleDto>>(datas);
 
+            //默认的MAPPING 有问题
+            //foreach (var d in dto)
+            //{
+            //    MapConfig
+            //} 
+            
+
+
             var pagerdto = new PagerInfo<SaleDto>(pagerRequest, total) { Datas = dto };
 
             return pagerdto;
