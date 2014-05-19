@@ -7,7 +7,7 @@
     <ProjectGuid>{55AA526E-1A89-4A8E-B648-8DE5DE2FD1E5}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OPCApp.Infrastructure</RootNamespace>
+    <RootNamespace>Intime.OPC.Infrastructure</RootNamespace>
     <AssemblyName>OPCApp.Infrastructure</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -78,6 +78,10 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DllFile\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -106,10 +110,18 @@
     <Compile Include="Interfaces\ILoginModel.cs" />
     <Compile Include="IOC\IContainer.cs" />
     <Compile Include="IOC\MefContainer.cs" />
+    <Compile Include="Mvvm\Interaction\AsyncDelegateCommand.cs" />
+    <Compile Include="Mvvm\Interaction\CommandAction.cs" />
+    <Compile Include="Mvvm\Interaction\RoutedEventTrigger.cs" />
+    <Compile Include="Mvvm\Interaction\ScrollingBehavior.cs" />
+    <Compile Include="Rest\RestErrorMessage.cs" />
+    <Compile Include="Service\IService.cs" />
     <Compile Include="Log\ILogger.cs" />
     <Compile Include="Log\Log4NetLogger.cs" />
     <Compile Include="MAP\Mapper.cs" />
     <Compile Include="Mvvm\Conts.cs" />
+    <Compile Include="Mvvm\Converters\BooleanToStringConverter.cs" />
+    <Compile Include="Mvvm\Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Mvvm\Model\PageResult.cs" />
     <Compile Include="Mvvm\ViewModel\BaseListViewModel.cs" />
     <Compile Include="Mvvm\ViewModel\BaseViewModel.cs" />
@@ -133,6 +145,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Service\QueryCriteria\IQueryCriteria.cs" />
+    <Compile Include="Service\QueryCriteria\QueryAll.cs" />
+    <Compile Include="Service\QueryCriteria\QueryByName.cs" />
+    <Compile Include="Service\QueryCriteria\QueryCriteria.cs" />
+    <Compile Include="Service\QueryCriteria\SortOrder.cs" />
     <Compile Include="RegionNames.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="Rest\IRestClientFactory.cs" />
@@ -143,6 +160,12 @@
     <Compile Include="Rest\RestClientFactory.cs" />
     <Compile Include="Rest\RestException.cs" />
     <Compile Include="Rest\TokenManager.cs" />
+    <Compile Include="Service\Attribute\UriAttribute.cs" />
+    <Compile Include="Service\Attribute\UriParameterAttribute.cs" />
+    <Compile Include="Validation\ErrorsContainer.cs" />
+    <Compile Include="Validation\LocalizedMaxLengthAttribute.cs" />
+    <Compile Include="Validation\LocalizedRequiredAttribute.cs" />
+    <Compile Include="Validation\ValidatableBindableBase.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -155,6 +178,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomControlLibrary\CustomControlLibrary.csproj">
+      <Project>{ad060c8a-12af-4c1b-89cf-9b41a1edd31b}</Project>
+      <Name>CustomControlLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OPCAPP.Common\OPCApp.Common.csproj">
       <Project>{9d9e5d0e-3e34-4c75-84e7-db07f0c74ef8}</Project>
       <Name>OPCApp.Common</Name>

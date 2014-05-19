@@ -27,7 +27,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
         {
             CommandSearch = new DelegateCommand(SearchRma);
             PackageReceiveDto = new PackageReceiveDto();
-            CommandGetRmaSaleDetailByRma = new DelegateCommand(GetRmaDetailByRma);
+            CommandGetRmaSaleDetailByRma1 = new DelegateCommand(GetRmaDetailByRma);
             CommandTransVerifyPass = new DelegateCommand(TransVerifyPass);
             CommandTransVerifyNoPass = new DelegateCommand(TransVerifyNoPass);
             CommandSetRmaRemark = new DelegateCommand(SetRmaRemark);
@@ -58,7 +58,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
         }
 
         public DelegateCommand CommandSearch { get; set; }
-        public DelegateCommand CommandGetRmaSaleDetailByRma { get; set; }
+        public DelegateCommand CommandGetRmaSaleDetailByRma1 { get; set; }
         public DelegateCommand CommandTransVerifyPass { get; set; }
         public DelegateCommand CommandTransVerifyNoPass { get; set; }
         public DelegateCommand CommandSetRmaRemark { get; set; }
@@ -86,7 +86,15 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
             bool falg =
                 AppEx.Container.GetInstance<IPackageService>()
                     .TransVerifyNoPass(rmaSelectedList.Select(e => e.RMANo).ToList());
-            MessageBox.Show(falg ? "物流审核成功" : "物流审核失败", "提示");
+            MessageBox.Show(falg ? "设置审核不通过成功" : "设置审核不通过失败", "提示");
+            if (falg)
+            {
+                if (RmaList != null)
+                    RmaList.Clear();
+                if (RmaDetailList != null)
+                    RmaDetailList.Clear();
+                SearchRma();
+            }
         }
 
         public void TransVerifyPass()
@@ -105,17 +113,31 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
             bool falg =
                 AppEx.Container.GetInstance<IPackageService>()
                     .TransVerifyPass(rmaSelectedList.Select(e => e.RMANo).ToList());
-            MessageBox.Show(falg ? "设置审核不通过成功" : "设置审核不通过失败", "提示");
+            MessageBox.Show(falg ? "物流审核成功" : "物流审核失败", "提示");
+            if (falg)
+            {
+                if (RmaList != null)
+                    RmaList.Clear();
+                if (RmaDetailList != null)
+                    RmaDetailList.Clear();
+                SearchRma();
+            }
+
         }
 
         public void GetRmaDetailByRma()
         {
-            if (RmaDto == null)
+            if (rmaDto != null)
             {
-                MessageBox.Show("请选择退货单", "提示");
-                return;
+                RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(rmaDto.RMANo).ToList();
             }
-            RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(RmaDto.RMANo).ToList();
+
+            //if (RmaDto == null)
+            //{
+            //    MessageBox.Show("请选择退货单", "提示");
+            //    return;
+            //}
+            //RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(RmaDto.RMANo).ToList();
         }
 
         public void SearchRma()

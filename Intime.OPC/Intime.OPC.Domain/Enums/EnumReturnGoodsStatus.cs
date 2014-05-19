@@ -21,6 +21,10 @@ namespace Intime.OPC.Domain.Enums
     /// </summary>
     public enum EnumReturnGoodsStatus
     {
+
+        [Description("未操作")]
+        None = -1,
+
         [Description("未处理")]
         NoProcess = 0,
         /// <summary>
@@ -29,8 +33,6 @@ namespace Intime.OPC.Domain.Enums
         [Description("客服批准")] ServiceApprove = 5,
 
 
-        [Description("付款确认")]
-        PayVerify = 7,
 
         /// <summary>
         ///     The compensate verify
@@ -46,6 +48,9 @@ namespace Intime.OPC.Domain.Enums
         ///     The compensate verify failed
         /// </summary>
         [Description("赔偿审核未通过")] CompensateVerifyFailed =20,
+
+        [Description("付款确认")]
+        PayVerify = 21,
 
 
         [Description("客服同意商品退回")]

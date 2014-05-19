@@ -35,8 +35,8 @@ namespace Intime.OPC.Domain.Models
         /// ÍË»õ×´Ì¬
         /// </summary>
         /// <value>The rma status.</value>
-        public string RMAStatus { get; set; }
-        public string RMACashStatus { get; set; }
+        public int RMAStatus { get; set; }
+        public int RMACashStatus { get; set; }
         public string RMANo { get; set; }
 
         public int StoreId { get; set; }

@@ -67,11 +67,16 @@
     <Compile Include="Base\BaseRequest.cs" />
     <Compile Include="Base\IEntity.cs" />
     <Compile Include="BusinessModel\BrandFilter.cs" />
+    <Compile Include="BusinessModel\ShippingOrderFilter.cs" />
     <Compile Include="BusinessModel\DateRangeFilter.cs" />
     <Compile Include="BusinessModel\SaleOrderFilter.cs" />
     <Compile Include="BusinessModel\SupplierFilter.cs" />
     <Compile Include="BusinessModel\PageFilter.cs" />
     <Compile Include="BusinessModel\SectionFilter.cs" />
+    <Compile Include="Dto\Request\ShippingSaleOrderRequest.cs" />
+    <Compile Include="Dto\ShipViaDto.cs" />
+    <Compile Include="Enums\ShippingOrderStatus.cs" />
+    <Compile Include="Enums\SortOrder\ShippingOrderSortOrder.cs" />
     <Compile Include="Enums\SortOrder\SaleOrderSortOrder.cs" />
     <Compile Include="Models\Mapping\Supplier_BrandMap.cs" />
     <Compile Include="Models\Supplier_Brand.cs" />
@@ -221,8 +226,13 @@
     <Compile Include="Partials\Models\Mapping\IMS_SectionBrandMap.cs" />
     <Compile Include="Partials\Models\OpcSupplierInfo.cs" />
     <Compile Include="Partials\Models\OpcSupplierInfoClone.cs" />
+    <Compile Include="Partials\Models\OPC_Sale.cs" />
+    <Compile Include="Partials\Models\OPC_SaleClone.cs" />
+    <Compile Include="Partials\Models\OPC_ShippingSaleClone.cs" />
+    <Compile Include="Partials\Models\OrderTransactionClone.cs" />
     <Compile Include="Partials\Models\Section.cs" />
     <Compile Include="Partials\Models\SectionClone.cs" />
+    <Compile Include="Partials\Models\StoreClone.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

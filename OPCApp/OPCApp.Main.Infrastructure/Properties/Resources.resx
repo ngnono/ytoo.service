@@ -120,4 +120,10 @@
   <data name="EndMethodAlreadyCalled" xml:space="preserve">
     <value>End method already called.</value>
   </data>
+  <data name="LocalizedMaxLength" xml:space="preserve">
+    <value>{0}长度不能超过{1}</value>
+  </data>
+  <data name="LocalizedRequired" xml:space="preserve">
+    <value>{0}不能为空</value>
+  </data>
 </root>

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Security;
+using Newtonsoft.Json;
 
 namespace Intime.OPC.Domain.Dto
 {
@@ -123,5 +126,22 @@ namespace Intime.OPC.Domain.Dto
         [DataMember]
         public string ReceivePerson { get; set; }
 
+        /// <summary>
+        /// 订单
+        /// </summary>
+        public OrderDto Order { get; set; }
+
+        /// <summary>
+        /// 出库单
+        /// </summary>
+        /// 
+        [JsonProperty(PropertyName = "DeliveryOrder", NullValueHandling = NullValueHandling.Ignore)]
+        public ShippingSaleDto ShippingOrder { get; set; }
+
+        /// <summary>
+        /// 专柜
+        /// </summary>
+        [JsonProperty(PropertyName = "Counter", NullValueHandling = NullValueHandling.Ignore)]
+        public SectionDto Section { get; set; }
     }
 }

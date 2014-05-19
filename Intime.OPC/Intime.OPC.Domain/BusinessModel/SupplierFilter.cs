@@ -15,5 +15,7 @@ namespace Intime.OPC.Domain.BusinessModel
         public int? Status { get; set; }
 
         public SupplierSortOrder? SortOrder { get; set; }
+
+        public string Name { get; set; }
     }
 }

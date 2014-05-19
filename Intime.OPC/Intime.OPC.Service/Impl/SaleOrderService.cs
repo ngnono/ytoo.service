@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Linq.Expressions;
 using AutoMapper;
 using Intime.OPC.Domain;
@@ -178,6 +179,9 @@ namespace Intime.OPC.Service.Impl
 
         public PagerInfo<SaleDto> GetPagedList(SaleOrderQueryRequest request, int authId)
         {
+            var filter = Mapper.Map<SaleOrderQueryRequest, SaleOrderFilter>(request);
+            var pagerRequest = new Domain.PagerRequest(request.Page ?? 1, request.PageSize ?? 10);
+
             //用户身份验证
             using (var db = new YintaiHZhouContext())
             {
@@ -190,14 +194,14 @@ namespace Intime.OPC.Service.Impl
                     throw new OpcExceptioin("未授权的用户");
                 }
 
-                if (user.user.IsSystem)
+                //如果是管理员可以管理任意门店 
+                //否则拿当前用户可以管理的门店
+                if (!user.user.IsSystem)
                 {
-                    throw new NotImplementedException();
+                    //添加店铺ID
+                    filter.StoreId = user.org.StoreOrSectionID;
                 }
             }
-
-            var filter = Mapper.Map<SaleOrderQueryRequest, SaleOrderFilter>(request);
-            var pagerRequest = new Domain.PagerRequest(request.Page ?? 1, request.PageSize ?? 10);
 
             if (request.EndDate != null || request.StartDate != null)
             {

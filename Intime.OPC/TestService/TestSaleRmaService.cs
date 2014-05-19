@@ -36,7 +36,7 @@ namespace TestService
             post.ReturnProducts.Add(new KeyValuePair<int, int>(6, 13));
             post.RealRMASumMoney = 123123;
 
-            post.OrderNo = "114201404118";
+            post.OrderNo = "11420140507925";  //OrderNo=
             post.Remark = "unitTest";
 
             Service.CreateSaleRMA(1,post);

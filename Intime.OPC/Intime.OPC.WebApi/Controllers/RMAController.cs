@@ -86,8 +86,8 @@ namespace Intime.OPC.WebApi.Controllers
                     () =>
                     {
                         _rmaService.UserId = uid;
-                        return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.NoDelivery.AsID(),
-                            EnumReturnGoodsStatus.NoProcess.GetDescription(), pageIndex, pageSize);
+                        return _rmaService.GetByOrderNo(orderNo, -1,
+                            EnumReturnGoodsStatus.None, pageIndex, pageSize);
                     }, "查询订单信息失败");
         }
 
@@ -105,7 +105,7 @@ namespace Intime.OPC.WebApi.Controllers
                     {
                         _rmaService.UserId = uid;
                         return _rmaService.GetByOrderNo(orderNo, EnumRMAStatus.ShipNoReceive.AsID(),
-                            EnumReturnGoodsStatus.NoProcess.GetDescription(), pageIndex, pageSize);
+                            EnumReturnGoodsStatus.NoProcess, pageIndex, pageSize);
                     }, "查询订单信息失败");
         }
 
@@ -129,12 +129,11 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetByOrderNoShippingBack(string orderNo, int pageIndex, int pageSize, [UserId] int uid)
         {
-            string returnGoodsStatus = "";
             int status = EnumRMAStatus.ShipVerifyNotPass.AsID();
             return DoFunction(() =>
             {
                 _rmaService.UserId = uid;
-               return  _rmaService.GetByOrderNo(orderNo, status, returnGoodsStatus, pageIndex, pageSize);
+               return  _rmaService.GetByOrderNo(orderNo, status, EnumReturnGoodsStatus.None, pageIndex, pageSize);
             });
         }
 
@@ -145,13 +144,12 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetByOrderNoReturnGoodsCompensation(string orderNo, int pageIndex, int pageSize, [UserId] int uid)
         {
-            string returnGoodsStatus = EnumReturnGoodsStatus.CompensateVerifyFailed.GetDescription();
             return
                 DoFunction(
                     () =>
                     {
                         _rmaService.UserId = uid; 
-                        return _rmaService.GetByOrderNo(orderNo, null, returnGoodsStatus, pageIndex, pageSize);
+                        return _rmaService.GetByOrderNo(orderNo, null, EnumReturnGoodsStatus.CompensateVerifyFailed, pageIndex, pageSize);
                     },
                     "查询订单信息失败");
         }

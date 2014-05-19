@@ -39,7 +39,7 @@ namespace OPCApp.DataService.Impl
         {
             try
             {
-                string paras = string.Format("UserId={0}", AppEx.LoginModel.UserID);
+                string paras = "";// string.Format("UserId={0}", AppEx.LoginModel.UserID);
                     //AppEx.LoginModel.UserID); //1 update curUserId 
                 IList<OPC_AuthMenu> listMenu = RestClient.Get<OPC_AuthMenu>("menu/loadmenu", paras);
                 if (listMenu!=null)

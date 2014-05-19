@@ -11,10 +11,12 @@ using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
 using Intime.OPC.Modules.Logistics.Models;
 using Intime.OPC.Modules.Logistics.Print;
+using Intime.OPC.Infrastructure.Mvvm;
+using System.Windows.Input;
 
 namespace Intime.OPC.Modules.Logistics.ViewModels
 {
-    [Export("PrintInvoiceViewModel", typeof (PrintInvoiceViewModel))]
+    [Export("PrintInvoiceViewModel", typeof(PrintInvoiceViewModel))]
     public class PrintInvoiceViewModel : BindableBase
     {
         private OPC_Sale _opcSale;
@@ -26,10 +28,10 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         {
             EnumSetRemarkType = EnumSetRemarkType.SetSaleRemark;
             //初始化命令属性
-            CommandSearch = new DelegateCommand(CommandSearchExecute);
+            CommandSearch = new AsyncDelegateCommand(CommandSearchExecute);
             CommandViewAndPrint = new DelegateCommand(CommandViewAndPrintExecute);
-            CommandOnlyPrint = new DelegateCommand(CommandOnlyPrintExecute);
-            CommandFinish = new DelegateCommand(CommandFinishExecute);
+            OnlyPrintCommand = new DelegateCommand(CommandOnlyPrintExecute);
+            CommandFinish = new AsyncDelegateCommand(CommandFinishExecute);
             CommandSetRemark = new DelegateCommand(CommandRemarkExecute);
             CommandGetDown = new DelegateCommand(CommandGetDownExecute);
             CommandDbClick = new DelegateCommand(CommandDbClickExecute);
@@ -47,7 +49,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         }
 
         //界面查询条件
-
         public Invoice4Get Invoice4Get
         {
             get { return invoice4Get; }
@@ -70,14 +71,19 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             set { SetProperty(ref invoiceDetail4List, value); }
         }
 
-        public DelegateCommand CommandSearch { get; set; }
-        public DelegateCommand CommandViewAndPrint { get; set; }
-        public DelegateCommand CommandOnlyPrint { get; set; }
-        public DelegateCommand CommandFinish { get; set; }
-        public DelegateCommand CommandSetRemark { get; set; }
-        public DelegateCommand CommandGetDown { get; set; }
-        public DelegateCommand CommandDbClick { get; set; }
         public EnumSetRemarkType EnumSetRemarkType { get; set; }
+
+        #region Commands
+
+        public ICommand CommandSearch { get; set; }
+        public ICommand CommandViewAndPrint { get; set; }
+        public ICommand OnlyPrintCommand { get; set; }
+        public ICommand CommandFinish { get; set; }
+        public ICommand CommandSetRemark { get; set; }
+        public ICommand CommandGetDown { get; set; }
+        public ICommand CommandDbClick { get; set; }
+
+        #endregion
 
         private void CommandDbClickExecute()
         {
@@ -129,8 +135,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         public void CommandGetDownExecute()
         {
-            //if (SaleList == null)return;
-            // OPC_Sale saleCur = //SaleList.Where(n => n.IsSelected).FirstOrDefault();
             if (SaleSelected == null)
             {
                 if (invoiceDetail4List == null) return;
@@ -142,49 +146,54 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
                 AppEx.Container.GetInstance<ITransService>().SelectSaleDetail(SaleSelected.SaleOrderNo).Result.ToList();
             RefreshOther(SaleSelected);
         }
+
         #region 打印销售单
-            private bool PrintCommon(bool falg=false)
+
+        private bool PrintCommon(bool falg = false)
+        {
+            if (SaleList == null || SaleSelected == null)
             {
-                if (SaleList == null || SaleSelected == null)
-                {
-                    MessageBox.Show("请勾选要打印预览的销售单", "提示");
-                    return false;
-                }
-                IPrint pr = new PrintWin();
-                string xsdName = "InvoiceDataSet";
-                string rdlcName = "Print//PrintInvoice.rdlc";
-
-                var invoiceModel = new PrintModel();
-
-                var salelist = new List<OPC_Sale>();
-                SaleSelected.TransName = SaleSelected.IfTrans;
-                salelist.Add(SaleSelected);
-                invoiceModel.SaleDT = salelist;
-                invoiceModel.SaleDetailDT = InvoiceDetail4List;
-                pr.Print(xsdName, rdlcName, invoiceModel,falg);
-                return true;
-
+                MessageBox.Show("请勾选要打印预览的销售单", "提示");
+                return false;
             }
+            IPrint pr = new PrintWin();
+            string xsdName = "InvoiceDataSet";
+            string rdlcName = "Print//PrintInvoice.rdlc";
 
-            public void CommandViewAndPrintExecute()
-            {
-              PrintCommon();
-            }
+            var invoiceModel = new PrintModel();
 
-            /*打印销售单*/
+            var salelist = new List<OPC_Sale>();
+            SaleSelected.TransName = SaleSelected.IfTrans;
+            salelist.Add(SaleSelected);
+            invoiceModel.SaleDT = salelist;
+            invoiceModel.SaleDetailDT = InvoiceDetail4List;
+            pr.Print(xsdName, rdlcName, invoiceModel, falg);
+            return true;
 
-            public void CommandOnlyPrintExecute()
-            {
-               if(!PrintCommon(true))return;
-                //打印完 发请求设置数据库 
-                List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
-                var iTransService = AppEx.Container.GetInstance<ITransService>();
-                bool bFalg = iTransService.ExecutePrintSale(selectSaleIds);
-               // MessageBox.Show(bFalg ? "打印成功" : "打印失败", "提示");
-            }
+        }
+
+        public void CommandViewAndPrintExecute()
+        {
+            PrintCommon();
+        }
+
+        /// <summary>
+        /// 打印销售单
+        /// </summary>
+        public void CommandOnlyPrintExecute()
+        {
+            if (!PrintCommon(true)) return;
+            //打印完 发请求设置数据库 
+            List<string> selectSaleIds = SaleList.Where(n => n.IsSelected).Select(e => e.SaleOrderNo).ToList();
+            var iTransService = AppEx.Container.GetInstance<ITransService>();
+            bool bFalg = iTransService.ExecutePrintSale(selectSaleIds);
+            // MessageBox.Show(bFalg ? "打印成功" : "打印失败", "提示");
+        }
         #endregion
-        /*完成销售单打印*/
 
+        /// <summary>
+        /// 完成销售单打印
+        /// </summary>
         public void CommandFinishExecute()
         {
             if (SaleList == null || !SaleList.Any())

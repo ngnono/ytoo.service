@@ -1,16 +1,10 @@
-﻿using Intime.OPC.Modules.Dimension.Models;
-using Intime.OPC.Modules.Dimension.Services;
-using Microsoft.Practices.Prism.Interactivity;
-using Microsoft.Practices.Prism.Interactivity.InteractionRequest;
-using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Mvvm;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Windows.Input;
-using Intime.OPC.Modules.Dimension.Framework;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using Intime.OPC.Infrastructure.Mvvm;
+using Intime.OPC.Infrastructure.Service;
+using Intime.OPC.Modules.Dimension.Common;
+using OPCApp.Domain.Models;
 
 namespace Intime.OPC.Modules.Dimension.ViewModels
 {

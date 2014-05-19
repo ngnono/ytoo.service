@@ -25,21 +25,22 @@ namespace Intime.OPC.Repository.Support
         }
 
         public PageResult<RMADto> GetAll(string orderNo, string saleOrderNo, DateTime startTime, DateTime endTime,
-            int? rmaStatus, string returnGoodsStatus, int pageIdex, int pageSize)
+            int? rmaStatus, EnumReturnGoodsStatus returnGoodsStatus, int pageIdex, int pageSize)
         {
 
             using (var db = new YintaiHZhouContext())
             {
                 var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
-                var saleQuery = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
-                if (rmaStatus.HasValue)
+                var saleQuery = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime );
+                if (rmaStatus.HasValue && rmaStatus!=-1)
                 {
                     saleQuery = saleQuery.Where(t => t.Status == rmaStatus);
+                    query = query.Where(t => t.Status == rmaStatus);
                 }
 
-                if (returnGoodsStatus.IsNotNull())
+                if (returnGoodsStatus != EnumReturnGoodsStatus.None)
                 {
-                    saleQuery = saleQuery.Where(t => t.RMAStatus == returnGoodsStatus);
+                    saleQuery = db.OPC_SaleRMAs.Where(t => t.RMAStatus == (int) returnGoodsStatus);
                 }
 
                 if (orderNo.IsNotNull())
@@ -91,11 +92,11 @@ namespace Intime.OPC.Repository.Support
                     o.RefundAmount = t.Rma.RefundAmount;
                     o.RmaCashDate = t.Rma.RmaCashDate;
                     o.PayType = t.payTyp;
-                    o.RmaCashStatusName = t.SaleRma.RMACashStatus;
+                    o.RmaCashStatusName = ((EnumRMACashStatus)t.SaleRma.RMACashStatus).GetDescription();
                     EnumRMAStatus status2 = (EnumRMAStatus) (t.SaleRma.Status);
                     o.StatusName = status2.GetDescription();
                     o.SourceDesc = t.Rma.SourceDesc;
-                    o.RmaStatusName = t.SaleRma.RMAStatus;
+                    o.RmaStatusName = ((EnumRMAStatus)t.SaleRma.RMAStatus).GetDescription();
                     o.StoreName = t.StoreName;
                     o.专柜码 = "";
                     
@@ -153,11 +154,11 @@ namespace Intime.OPC.Repository.Support
                     o.RefundAmount = t.Rma.RefundAmount;
                     o.RmaCashDate = t.Rma.RmaCashDate;
                     o.PayType = t.payTyp;
-                    o.RmaCashStatusName = t.SaleRma.RMACashStatus;
+                    o.RmaCashStatusName = ((EnumRMACashStatus)t.SaleRma.RMACashStatus).GetDescription();
                     EnumRMAStatus status2 = (EnumRMAStatus) (t.Rma.Status);
                     o.StatusName = status2.GetDescription();
                     o.SourceDesc = t.Rma.SourceDesc;
-                    o.RmaStatusName = t.SaleRma.RMAStatus;
+                    o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
                     o.StoreName = t.StoreName;
                     o.专柜码 = "";
                    
@@ -174,12 +175,15 @@ namespace Intime.OPC.Repository.Support
             int? rmaStatus,  int pageIdex, int pageSize)
         {
        
-            string[] lstDes = { EnumReturnGoodsStatus.PayVerify.GetDescription(), EnumReturnGoodsStatus.CompensateVerifyPass.GetDescription() };
-           ;
             using (var db = new YintaiHZhouContext())
             {
                 var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime);
-                var saleQuery = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && lstDes.Contains(t.RMAStatus));
+                var saleQuery =
+                    db.OPC_SaleRMAs.Where(
+                        t =>
+                            t.CreatedDate >= startTime && t.CreatedDate < endTime &&
+                            (t.RMAStatus == (int) EnumReturnGoodsStatus.PayVerify ||
+                             t.RMAStatus == (int) EnumReturnGoodsStatus.CompensateVerifyPass));
                 if (rmaStatus.HasValue)
                 {
                     saleQuery = saleQuery.Where(t => t.Status == rmaStatus);
@@ -234,11 +238,11 @@ namespace Intime.OPC.Repository.Support
                     o.RmaCashDate = t.Rma.RmaCashDate;
                     o.RmaCashNum = t.Rma.RmaCashNum;
                     o.PayType = t.payTyp;
-                    o.RmaCashStatusName = t.SaleRma.RMACashStatus;
+                    o.RmaCashStatusName = ((EnumRMACashStatus)t.SaleRma.RMACashStatus).GetDescription();
                     EnumRMAStatus status2 = (EnumRMAStatus)(t.Rma.Status);
                     o.StatusName = status2.GetDescription();
                     o.SourceDesc = t.Rma.SourceDesc;
-                    o.RmaStatusName = t.SaleRma.RMAStatus;
+                    o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
                     o.StoreName = t.StoreName;
                     o.专柜码 = "";
 
@@ -309,11 +313,11 @@ namespace Intime.OPC.Repository.Support
                     o.RmaCashDate = t.Rma.RmaCashDate;
                     o.RmaCashNum = t.Rma.RmaCashNum;
                     o.PayType = t.payTyp;
-                    o.RmaCashStatusName = t.SaleRma.RMACashStatus;
+                    o.RmaCashStatusName = ((EnumRMACashStatus)t.SaleRma.RMACashStatus).GetDescription();
                     EnumRMAStatus status2 = (EnumRMAStatus) (t.Rma.Status);
                     o.StatusName = status2.GetDescription();
                     o.SourceDesc = t.Rma.SourceDesc;
-                    o.RmaStatusName = t.SaleRma.RMAStatus;
+                    o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
                     o.StoreName = t.StoreName;
                     o.专柜码 = "";
 
@@ -383,11 +387,11 @@ namespace Intime.OPC.Repository.Support
                     o.RmaCashDate = t.Rma.RmaCashDate;
                     o.RmaCashNum = t.Rma.RmaCashNum;
                     o.PayType = t.payTyp;
-                    o.RmaCashStatusName = t.SaleRma.RMACashStatus;
+                    o.RmaCashStatusName = ((EnumRMACashStatus)t.SaleRma.RMACashStatus).GetDescription();
                     EnumRMAStatus status2 = (EnumRMAStatus)(t.Rma.Status);
                     o.StatusName = status2.GetDescription();
                     o.SourceDesc = t.Rma.SourceDesc;
-                    o.RmaStatusName = t.SaleRma.RMAStatus;
+                    o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
                     o.StoreName = t.StoreName;
                     o.专柜码 = "";  //退货明细上去
 
@@ -402,14 +406,12 @@ namespace Intime.OPC.Repository.Support
         public PageResult<RMADto> GetRmaByShoppingGuide(string orderNo, DateTime startTime, DateTime endTime, int pageIndex, int pageSize)
         {
             CheckUser();
-            var lstSection = CurrentUser.SectionID;
-            string rmaStatus = EnumReturnGoodsStatus.Valid.GetDescription();
             using (var db = new YintaiHZhouContext())
             {
                 var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
                 var saleQuery =
                     db.OPC_SaleRMAs.Where(
-                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus == rmaStatus && CurrentUser.StoreIDs.Contains(t.StoreId));
+                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus == (int)EnumReturnGoodsStatus.Valid && CurrentUser.StoreIDs.Contains(t.StoreId));
 
                 if (orderNo.IsNotNull())
                 {
@@ -456,11 +458,12 @@ namespace Intime.OPC.Repository.Support
                     o.RmaCashDate = t.Rma.RmaCashDate;
                     o.RmaCashNum = t.Rma.RmaCashNum;
                     o.PayType = t.payTyp;
-                    o.RmaCashStatusName = t.SaleRma.RMACashStatus;
+                    o.RmaCashStatusName = ((EnumRMACashStatus)t.SaleRma.RMACashStatus).GetDescription();
                     EnumRMAStatus status2 = (EnumRMAStatus)(t.Rma.Status);
                     o.StatusName = status2.GetDescription();
                     o.SourceDesc = t.Rma.SourceDesc;
-                    o.RmaStatusName = t.SaleRma.RMAStatus;
+                    o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
+
                     o.StoreName = t.StoreName;
                     o.专柜码 = "";
 
@@ -530,11 +533,12 @@ namespace Intime.OPC.Repository.Support
                     o.RmaCashDate = t.Rma.RmaCashDate;
                     o.RmaCashNum = t.Rma.RmaCashNum;
                     o.PayType = t.payTyp;
-                    o.RmaCashStatusName = t.SaleRma.RMACashStatus;
+                    o.RmaCashStatusName = ((EnumRMACashStatus)t.SaleRma.RMACashStatus).GetDescription();
                     EnumRMAStatus status2 = (EnumRMAStatus)(t.Rma.Status);
                     o.StatusName = status2.GetDescription();
                     o.SourceDesc = t.Rma.SourceDesc;
-                    o.RmaStatusName = t.SaleRma.RMAStatus;
+                    o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
+
                     o.StoreName = t.StoreName;
                     o.专柜码 = "";
 

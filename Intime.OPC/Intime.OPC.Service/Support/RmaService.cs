@@ -38,7 +38,7 @@ namespace Intime.OPC.Service.Support
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
             rep.SetCurrentUser(_accountService.GetByUserID(UserId));
-            var lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipNoReceive.AsID(),"",dto.pageIndex,dto.pageSize);
+            var lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipNoReceive.AsID(), EnumReturnGoodsStatus.None, dto.pageIndex, dto.pageSize);
             return lst;
         }
 
@@ -47,8 +47,7 @@ namespace Intime.OPC.Service.Support
             var lst = _rmaDetailRepository.GetByRmaNo(rmaNo,pageIndex,pageSize);
             return lst;
         }
-
-        public PageResult<RMADto> GetByOrderNo(string orderNo, int? rmaStatus, string returnGoodsStatus, int pageIndex, int pageSize)
+        public PageResult<RMADto> GetByOrderNo(string orderNo, int? rmaStatus, EnumReturnGoodsStatus returnGoodsStatus, int pageIndex, int pageSize)
         {
             var rep = (IRMARepository)_repository;
             rep.SetCurrentUser(_accountService.GetByUserID(UserId));
@@ -88,7 +87,7 @@ namespace Intime.OPC.Service.Support
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
             rep.SetCurrentUser(_accountService.GetByUserID(UserId));
-            PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipReceive.AsID(), "",dto.pageIndex,dto.pageSize);
+            PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.ShipReceive.AsID(), EnumReturnGoodsStatus.None,dto.pageIndex,dto.pageSize);
             return lst;
         }
 
@@ -98,7 +97,7 @@ namespace Intime.OPC.Service.Support
             dto.EndDate = dto.EndDate.Date.AddDays(1);
             var rep = (IRMARepository)_repository;
             rep.SetCurrentUser(_accountService.GetByUserID(UserId));
-            PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.NoDelivery.AsID(), EnumReturnGoodsStatus.CompensateVerify.GetDescription(), dto.pageIndex, dto.pageSize);
+            PageResult<RMADto> lst = rep.GetAll(dto.OrderNo, dto.SaleOrderNo, dto.StartDate, dto.EndDate, EnumRMAStatus.NoDelivery.AsID(), EnumReturnGoodsStatus.CompensateVerify, dto.pageIndex, dto.pageSize);
             return lst;
         }
 
@@ -142,8 +141,8 @@ namespace Intime.OPC.Service.Support
         {
             var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
 
-            saleRma.RMACashStatus = EnumRMACashStatus.CashOver.GetDescription();
-            saleRma.RMAStatus = EnumReturnGoodsStatus.Valid.GetDescription();
+            saleRma.RMACashStatus = EnumRMACashStatus.CashOver.AsID();
+            saleRma.RMAStatus = EnumReturnGoodsStatus.Valid.AsID();
             _saleRmaRepository.Update(saleRma);
 
 
@@ -168,13 +167,18 @@ namespace Intime.OPC.Service.Support
             return lst;
         }
 
+        /// <summary>
+        /// 物流入库
+        /// </summary>
+        /// <param name="rmaNo"></param>
         public void SetRmaShipInStorage(string rmaNo)
         {
             var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
 
             saleRma.Status = EnumRMAStatus.ShipInStorage.AsID();
             _saleRmaRepository.Update(saleRma);
-
+            //
+            UpdateRMAStatus(rmaNo, EnumRMAStatus.ShipInStorage.AsID());
         }
 
         public PageResult<RMADto> GetRmaPrintByExpress(RmaExpressRequest dto)
@@ -195,8 +199,18 @@ namespace Intime.OPC.Service.Support
             saleRma.Status = EnumRMAStatus.PrintRMA.AsID();
             _saleRmaRepository.Update(saleRma);
 
+            UpdateRMAStatus(rmaNo, EnumRMAStatus.PrintRMA.AsID());
+
         }
 
+        private void UpdateRMAStatus(string rmaNo,int status)
+        {
+            var rep = (IRMARepository)_repository;
+            var rma = rep.GetByRmaNo2(rmaNo);
+            rma.Status = status;
+            rep.Update(rma);
+
+        }
         public PageResult<RMADto> GetRmaByShoppingGuide(ShoppingGuideRequest dto)
         {
             dto.StartDate = dto.StartDate.Date;

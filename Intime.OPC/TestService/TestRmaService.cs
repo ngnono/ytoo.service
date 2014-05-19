@@ -34,7 +34,7 @@ namespace TestService
         [TestMethod]
         public void TestGetByOrderNo()
         {
-            var lst = Service.GetByOrderNo("1142014041211", 0, "", 1, 1000);
+            var lst = Service.GetByOrderNo("1142014041211", 0, EnumReturnGoodsStatus.None, 1, 1000);
             AssertList<RMADto>(lst);
         }
         [TestMethod]

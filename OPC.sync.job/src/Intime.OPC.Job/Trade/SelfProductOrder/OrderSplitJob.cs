@@ -70,10 +70,11 @@ namespace Intime.OPC.Job.Trade.SelfProductOrder
                     {
                         int idx = 1;
                         var saleOrderNo = string.Format("{0}-{1}", idx++.ToString("D").PadLeft(3, '0'), order.OrderNo);
-                        var sectionId = item.Key.ToString();
-                        var sectionCode =
-                            db.OPC_ChannelMap.FirstOrDefault(
-                                x => x.MapType == (int)ChannelMapType.SectionId && x.InnerValue == sectionId);
+                        var sectionId = item.Key;
+                        var section = db.Sections.FirstOrDefault(s=>s.Id==sectionId);
+                        //var sectionCode =
+                        //    db.OPC_ChannelMap.FirstOrDefault(
+                        //        x => x.MapType == (int)ChannelMapType.SectionId && x.InnerValue == sectionId);
                         decimal saleAmount = 0;
                         int salesCount = 0;
                         foreach (var p in item)
@@ -91,7 +92,7 @@ namespace Intime.OPC.Job.Trade.SelfProductOrder
                                 Remark = "自拍商品订单",
                                 SaleCount = p.item.Quantity,
                                 RemarkDate = DateTime.Now,
-                                SectionCode = sectionCode == null ? string.Empty : sectionCode.ChannelValue,
+                                SectionCode = section == null ? string.Empty : section.SectionCode,
                                 Status = 0,
                                 StockId = -1,
                                 UpdatedDate = DateTime.Now,

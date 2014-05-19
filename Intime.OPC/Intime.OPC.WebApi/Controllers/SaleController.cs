@@ -25,7 +25,7 @@ namespace Intime.OPC.WebApi.Controllers
         private readonly IShippingSaleService _shippingSaleService;
         private readonly ISaleOrderService _saleOrderService;
 
-        public SaleController(ISaleService saleService, IShippingSaleService shippingSaleService,ISaleOrderService saleOrderService)
+        public SaleController(ISaleService saleService, IShippingSaleService shippingSaleService, ISaleOrderService saleOrderService)
         {
             _saleService = saleService;
             _shippingSaleService = shippingSaleService;
@@ -35,7 +35,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetSaleRemarks(string saleId, [UserId] int userId)
         {
-            return DoFunction(() => _saleOrderService.GetSaleComments(saleId,userId));
+            return DoFunction(() => _saleOrderService.GetSaleComments(saleId, userId));
         }
 
         [HttpPost]
@@ -434,6 +434,23 @@ namespace Intime.OPC.WebApi.Controllers
 
             }, "读取销售单数据失败");
 
+        }
+
+        [Route("api/salesorder")]
+        [HttpGet]
+        public IHttpActionResult GetList([FromUri]SaleOrderQueryRequest request, [UserId] int uid)
+        {
+            if (request == null)
+            {
+                request = new SaleOrderQueryRequest();
+            }
+//#if DEBUG
+//            //TODO: 测试数据
+//             uid = 1;
+//#endif
+            var dto = _saleOrderService.GetPagedList(request, uid);
+
+            return RetrunHttpActionResult(dto);
         }
 
         #endregion

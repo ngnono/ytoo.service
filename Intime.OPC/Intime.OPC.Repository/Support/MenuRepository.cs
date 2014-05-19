@@ -41,6 +41,7 @@ namespace Intime.OPC.Repository.Support
                 //        arm => arm.OPC_AuthMenuId, (m, arm) => m).OrderBy(t=>t.Sort).ToList();
 
 
+
                 var lstRole = db.OPC_AuthRoleUsers.Where(u => u.OPC_AuthUserId == userId).Select<OPC_AuthRoleUser,int>(t=>t.OPC_AuthRoleId).Distinct();
                 var lstMenu =
                     db.OPC_AuthRoleMenus.Where(t => lstRole.Contains(t.OPC_AuthRoleId))

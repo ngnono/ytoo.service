@@ -34,7 +34,7 @@ namespace Intime.OPC.Repository
         /// <param name="rmaStatus">The rma status.</param>
         /// <param name="returnGoodsStatus">The return goods status.</param>
         /// <returns>IList{SaleRmaDto}.</returns>
-        PageResult<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, System.DateTime startTime, System.DateTime endTime, int? rmaStatus, int? storeId, string returnGoodsStatus, int pageIndex, int pageSize);
+        PageResult<SaleRmaDto> GetAll(string orderNo, string saleOrderNo, string payType, string rmaNo, System.DateTime startTime, System.DateTime endTime, int? rmaStatus, int? storeId, EnumReturnGoodsStatus returnGoodsStatus, int pageIndex, int pageSize);
         /// <summary>
         /// 付款确认
         /// </summary>
