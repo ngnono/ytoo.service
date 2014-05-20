@@ -20,7 +20,7 @@ namespace com.intime.fashion.common
                 if (WxToken == null ||
                     WxToken.IsExpired)
                 {
-                    WxToken = new AccessToken(AccessTokenType.XihuanYintai).Renew();
+                    WxToken = new AccessToken(AccessTokenType.XihuanYintai).Token();
                 };
                 return WxToken;
             }
@@ -31,7 +31,7 @@ namespace com.intime.fashion.common
             get
             {
 
-               return new AccessToken(AccessTokenType.MiniYin).Renew();
+               return new AccessToken(AccessTokenType.MiniYin).Token();
             }
         }
        
