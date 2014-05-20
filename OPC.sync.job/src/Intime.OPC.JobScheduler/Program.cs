@@ -13,8 +13,6 @@ namespace Intime.OPC.JobScheduler
         /// </summary>
         static void Main(String[] args)
         {
-            new PropuctPropertySyncJob().Execute(null);
-            return;
             if (args.Length > 0)
             {
                 var job = new OrderNotifyJob();

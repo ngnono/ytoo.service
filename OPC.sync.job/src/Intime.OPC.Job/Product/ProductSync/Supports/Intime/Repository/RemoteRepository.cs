@@ -212,9 +212,9 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository
                 }
             });
 
-            if (!result.Status)
+            if (result == null || !result.Status)
             {
-                Log.ErrorFormat("获取商品图片列表信息出错,message:{0}", result.Message);
+                Log.ErrorFormat("获取商品属性列表信息出错,message:{0}", result.Message);
                 return null;
             }
             return result.Data;

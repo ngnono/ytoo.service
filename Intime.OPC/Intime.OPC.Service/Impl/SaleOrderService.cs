@@ -41,7 +41,7 @@ namespace Intime.OPC.Service.Impl
                         .Join(db.Products, o => o.item.ProductId, p => p.Id, (o, p) => new SaleDetailDto
                         {
                             Id = o.detail.Id,
-                            ProductNo = p.SkuCode,
+                            ProductNo = o.detail.ProdSaleCode,
                             SaleOrderNo = o.detail.SaleOrderNo,
                             StyleNo = p.SkuCode,
                             Size = o.item.SizeValueName,

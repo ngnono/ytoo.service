@@ -18,7 +18,7 @@ namespace Intime.OPC.Job.Trade.SelfProductOrder
         {
             using (var db = new YintaiHZhouContext())
             {
-                return db.Orders.Where(o => o.CreateDate > new DateTime(2014, 4, 25) && o.Status == 1 && o.OrderProductType.HasValue && o.OrderProductType == 2 &&
+                return db.Orders.Where(o => o.CreateDate > new DateTime(2014, 4, 25) && o.Status == 1 && o.OrderProductType.HasValue && o.OrderProductType.Value == 2 &&
                                             !db.OPC_OrderSplitLog.Any(
                                                 log => log.OrderNo == o.OrderNo && log.Status == -1) &&
                                             (!db.OPC_OrderSplitLog.Any(l => o.OrderNo == l.OrderNo) ||
