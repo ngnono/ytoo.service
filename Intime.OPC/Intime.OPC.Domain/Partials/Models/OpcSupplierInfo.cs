@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Intime.OPC.Domain.Models
 {
     public partial class OpcSupplierInfo
     {
+        [NotMapped]
         public IEnumerable<Brand> Brands { get; set; }
 
         public static OpcSupplierInfo Convert2Supplier(dynamic obj)

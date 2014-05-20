@@ -64,6 +64,11 @@ namespace Intime.OPC.Repository.Impl
                 {
                     query = PredicateBuilder.And(query, v => v.Name == filter.Name);
                 }
+
+                if (filter.StoreId != null)
+                {
+                    query = PredicateBuilder.And(query, v => v.StoreId == filter.StoreId);
+                }
             }
 
             return query;

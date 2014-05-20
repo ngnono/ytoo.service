@@ -16,7 +16,15 @@ namespace Intime.OPC.Repository
         /// <param name="filter">筛选项</param>
         /// <param name="sortOrder">排序项</param>
         /// <returns></returns>
-        List<OPC_Sale> GetPagedList(PagerRequest pagerRequest, out int totalCount, SaleOrderFilter filter,
+        List<SalesOrderModel> GetPagedList(PagerRequest pagerRequest, out int totalCount, SaleOrderFilter filter,
                                    SaleOrderSortOrder sortOrder);
+
+        /// <summary>
+        /// 获取指定条件的 opcsale
+        /// </summary>
+        /// <param name="salesOrderNos"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        List<OPC_Sale> GetListByNos(List<string> salesOrderNos, SaleOrderFilter filter);
     }
 }

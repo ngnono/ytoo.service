@@ -18,5 +18,7 @@ namespace Intime.OPC.Domain.BusinessModel
         /// 
         /// </summary>
         public int? AuthUserId { get; set; }
+
+        public int? StoreId { get; set; }
     }
 }

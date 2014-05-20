@@ -75,5 +75,10 @@ namespace Intime.OPC.WebApi.Core
 
             return NotFound();
         }
+
+        public IHttpActionResult ResultNotFound()
+        {
+            return NotFound();
+        }
     }
 }
