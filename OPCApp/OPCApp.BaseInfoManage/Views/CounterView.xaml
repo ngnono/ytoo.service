@@ -64,13 +64,8 @@
             </i:Interaction.Triggers>
         </TextBox>-->
         <ComboBox Grid.Row="5" Grid.Column="1" x:Name="stores" ItemsSource="{Binding Stores}"
-                  Height="25" IsDropDownOpen="{Binding IsFilteringStore}"
+                  Height="25" IsDropDownOpen="{Binding IsFilteringStore}" DisplayMemberPath="Name"
                   SelectedItem="{Binding Model.Store, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"></TextBlock>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
         </ComboBox>
         <Label Grid.Row="6" Grid.Column="0"  Margin="0,5,0,5">销售品牌:</Label>
         <StackPanel Grid.Row="6" Grid.Column="1" Margin="0,3,0,0">

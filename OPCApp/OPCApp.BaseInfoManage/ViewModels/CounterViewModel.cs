@@ -156,6 +156,10 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
             Stores = StoreService.QueryAll(new QueryAll());
             _storeArray = new Store[Stores.Count];
             Stores.CopyTo(_storeArray, 0);
+
+            if (Model.Store == null) return;
+
+            Model.Store = Stores.Where(store => store.Id == Model.StoreId).FirstOrDefault();
         }
 
         public void AppendBrands(IEnumerable<Brand> brands)

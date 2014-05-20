@@ -16,6 +16,7 @@ namespace OPCApp.Domain.Models
         private string _code;
         private string _areaCode;
         private string _contactPhoneNumber;
+        private Store _store;
 
         /// <summary>
         /// 专柜码
@@ -69,8 +70,12 @@ namespace OPCApp.Domain.Models
         /// 门店
         /// </summary>
         [Display(Name = "所属门店")]
-        [Required(ErrorMessage="必须选择一家门店")]
-        public Store Store { get; set; }
+        [Required(ErrorMessage = "必须选择一家门店")]
+        public Store Store
+        {
+            get { return _store; }
+            set { SetProperty(ref _store, value); }
+        }
 
         /// <summary>
         /// 销售的品牌

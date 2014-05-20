@@ -13,5 +13,11 @@ namespace Intime.OPC.Modules.Dimension.Services
             if (obj.Store != null) obj.StoreId = obj.Store.Id;
             return base.Create(obj);
         }
+
+        public override Counter Update(Counter obj)
+        {
+            if (obj.Store != null) obj.StoreId = obj.Store.Id;
+            return base.Update(obj);
+        }
     }
 }
