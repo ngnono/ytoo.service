@@ -404,7 +404,9 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new IMS_SectionBrandEntityMap());
             modelBuilder.Configurations.Add(new IMS_SectionOperatorEntityMap());
             modelBuilder.Configurations.Add(new ProductCode2StoreCodeEntityMap());
-
+            modelBuilder.Configurations.Add(new OPC_SaleDetailEntityMap());
+            modelBuilder.Configurations.Add(new OPC_SaleEntityMap());
+            modelBuilder.Configurations.Add(new OPC_ShippingSaleEntityMap());
         }
 
 

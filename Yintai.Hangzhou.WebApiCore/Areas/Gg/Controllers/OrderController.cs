@@ -315,10 +315,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         [ValidateParameters]
         public ActionResult QueryOrderStatus(dynamic request, string channel)
         {
-            IList<string> orderNoList = new List<string>();
+            var orderNoList = new List<string>();
             foreach (var orderNo in request)
             {
-                orderNoList.Add(orderNo.orderno);
+                orderNoList.Add(orderNo.orderno.ToString());
             }
 
             if (orderNoList.Count > 40)
@@ -344,7 +344,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                 });
             }
 
-            return this.RenderSuccess<dynamic>(r => r.Data = null);
+            return this.RenderSuccess<dynamic>(r => r.Data = result);
 
         }
 
