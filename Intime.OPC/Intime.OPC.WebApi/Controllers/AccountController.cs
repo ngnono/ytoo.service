@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Repository;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Core;
+using Intime.OPC.WebApi.Core.MessageHandlers;
+using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 using Intime.OPC.WebApi.Core.Security;
 using Intime.OPC.WebApi.Models;
 
@@ -19,16 +23,18 @@ namespace Intime.OPC.WebApi.Controllers
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
+        private readonly IUserProfileProvider _userProfileProvider;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, IUserProfileProvider userProfileProvider)
         {
             _accountService = accountService;
+            _userProfileProvider = userProfileProvider;
         }
 
         [HttpPost]
         public IHttpActionResult AddUser([FromBody] OPC_AuthUser user)
         {
-           if (_accountService.Add(user))
+            if (_accountService.Add(user))
             {
                 return Ok();
             }
@@ -43,12 +49,12 @@ namespace Intime.OPC.WebApi.Controllers
                 _accountService.ResetPassword(userId);
                 return true;
 
-            },"");
+            }, "");
         }
 
 
         [HttpPost]
-        public IHttpActionResult ChangePassword( [FromBody]ChangePasswordDto dto)
+        public IHttpActionResult ChangePassword([FromBody]ChangePasswordDto dto)
         {
             return DoAction(() => _accountService.ChangePassword(dto.UserID, dto.OldPassword, dto.NewPassword));
         }
@@ -69,7 +75,7 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult GetUsersByRoleID(int roleId)
         {
 
-            var lst = _accountService.GetUsersByRoleID(roleId,1,1000).Result;
+            var lst = _accountService.GetUsersByRoleID(roleId, 1, 1000).Result;
 
             return Ok(lst);
         }
@@ -90,11 +96,11 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult SelectUser([FromUri] string orgID,  [FromUri] string SearchField, [FromUri] string SearchValue, [FromUri] int pageIndex, [FromUri] int pageSize = 20)
+        public IHttpActionResult SelectUser([FromUri] string orgID, [FromUri] string SearchField, [FromUri] string SearchValue, [FromUri] int pageIndex, [FromUri] int pageSize = 20)
         {
             return DoFunction(() =>
             {
-                if (SearchField=="0")
+                if (SearchField == "0")
                 {
                     return _accountService.SelectByLogName(orgID, SearchValue, pageIndex, pageSize);
                 }
@@ -110,7 +116,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPut]
         public IHttpActionResult Enable([FromBody] OPC_AuthUser user)
         {
-            if (null==user)
+            if (null == user)
             {
                 return BadRequest("用户对象为空");
             }
@@ -128,35 +134,35 @@ namespace Intime.OPC.WebApi.Controllers
         {
             if (!ModelState.IsValid || loginModel == null)
             {
-                return BadRequest("请求参数不正确");
+                return BadRequest(ModelState);
             }
 
-            try
+            // ===========================================================
+            // 验证用户登录信息
+            // ===========================================================
+
+            var currentUser = _accountService.Get(loginModel.UserName, loginModel.Password);
+
+            if (currentUser == null)
             {
-                var user = _accountService.Get(loginModel.UserName, loginModel.Password);
-
-                if (user == null)
-                {
-                    return BadRequest("用户名或密码错误");
-                }
-
-                DateTime expiresDate = DateTime.Now.AddSeconds(60*60*24);
-
-                HttpContext.Current.User = new ClaimsPrincipal();
-                return Ok(new TokenModel
-                {
-                    AccessToken = SecurityUtils.CreateAccessToken(user.Id, expiresDate),
-                    UserId = user.Id,
-                    UserName = loginModel.UserName,
-                    Expires = expiresDate
-                });
+                return BadRequest("用户验证失败，请检查您的密码是否正确");
             }
-            catch (Exception ex)
+
+            // ===========================================================
+            // 验证通过
+            // ===========================================================
+
+            var expires = DateTime.Now.AddSeconds(60 * 60 * 24);
+
+            var profile = _userProfileProvider.Get(currentUser.Id);
+
+            return Ok(new TokenModel
             {
-                GetLog().Error(ex);
-                return this.InternalServerError(ex);
-            }
-            
+                AccessToken = SecurityUtils.CreateToken(profile, expires),
+                UserId = currentUser.Id,
+                UserName = loginModel.UserName,
+                Expires = expires
+            });
         }
     }
 }

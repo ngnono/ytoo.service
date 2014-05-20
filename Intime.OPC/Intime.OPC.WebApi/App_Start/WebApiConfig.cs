@@ -29,10 +29,18 @@ namespace Intime.OPC.WebApi
 
             // 添加签名验证
             config.MessageHandlers.Add(new SignatureMessageHandler());
-            config.MessageHandlers.Add(new AccessTokenMessageHandler(new List<string>
+
+            var handler = new AccessTokenMessageHandler(new List<string>
             {
                 "/api/account/token"
-            }));
+            });
+
+            var userProfileProvider =
+                GlobalConfiguration.Configuration.DependencyResolver.GetService(typeof(IUserProfileProvider)) as
+                    IUserProfileProvider;
+
+            handler.SetUserProfileProvider(userProfileProvider);
+            config.MessageHandlers.Add(handler);
 
             config.EnsureInitialized();
         }

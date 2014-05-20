@@ -29,7 +29,7 @@ namespace Intime.OPC.Repository.Support
             CheckUser();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
+                var query = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIds.Contains(t.StoreId));
 
                 var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime );
 
@@ -105,7 +105,7 @@ namespace Intime.OPC.Repository.Support
                     db.OPC_SaleRMAs.Where(
                         t =>
                             t.CreatedDate >= startTime && t.CreatedDate < endTime &&
-                            CurrentUser.StoreIDs.Contains(t.StoreId) );
+                            CurrentUser.StoreIds.Contains(t.StoreId) );
                 var query2 = db.Orders.Where(t => true);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -213,7 +213,7 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 //收银状态 未送收银
-                var query = db.OPC_SaleRMAs.Where(t => t.RMACashStatus == (int)EnumRMACashStatus.NoCash && t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
+                var query = db.OPC_SaleRMAs.Where(t => t.RMACashStatus == (int)EnumRMACashStatus.NoCash && t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIds.Contains(t.StoreId));
                 var query2 = db.Orders.Where(t => true);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -296,8 +296,8 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMAs.Where(t => true && CurrentUser.StoreIDs.Contains(t.StoreId));
-                var query2 = db.Orders.Where(t => CurrentUser.StoreIDs.Contains(t.StoreId) && t.CreateDate >= request.StartDate && t.CreateDate < request.EndDate);
+                var query = db.OPC_SaleRMAs.Where(t => true && CurrentUser.StoreIds.Contains(t.StoreId));
+                var query2 = db.Orders.Where(t => CurrentUser.StoreIds.Contains(t.StoreId) && t.CreateDate >= request.StartDate && t.CreateDate < request.EndDate);
                 var queryRMA = db.RMAs.Where(t => true);
                 if (request.OrderNo.IsNotNull())
                 {

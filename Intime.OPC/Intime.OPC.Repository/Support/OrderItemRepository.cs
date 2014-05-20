@@ -55,7 +55,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var lstSections = CurrentUser.SectionID;
+                var lstSections = CurrentUser.SectionIds;
                 var saleNos = db.OPC_Sales.Where(t => t.SectionId.HasValue && lstSections.Contains(t.SectionId.Value)).Select<OPC_Sale, string>(t => t.SaleOrderNo).Distinct().ToList();
 
 
@@ -114,7 +114,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var lstSections = CurrentUser.SectionID;
+                var lstSections = CurrentUser.SectionIds;
                 var saleNos=   db.OPC_Sales.Where(t => t.SectionId.HasValue && lstSections.Contains(t.SectionId.Value)).Select<OPC_Sale,string>(t=>t.SaleOrderNo).Distinct().ToList();
 
                 IQueryable<OPC_SaleDetail> query =
@@ -185,7 +185,7 @@ namespace Intime.OPC.Repository.Support
             {
                 int cahStatus = EnumCashStatus.CashOver.AsID();
 
-                var lstSections = CurrentUser.SectionID;
+                var lstSections = CurrentUser.SectionIds;
  
                 var querySale =
                     db.OPC_Sales.Where(

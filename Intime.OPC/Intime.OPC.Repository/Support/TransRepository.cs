@@ -40,7 +40,7 @@ namespace Intime.OPC.Repository.Support
 
                     if (CurrentUser !=null)
                     {
-                        var ll = CurrentUser.SectionID;
+                        var ll = CurrentUser.SectionIds;
                         filterExpression = filterExpression.Where(t => t.SectionId.HasValue && ll.Contains(t.SectionId.Value));
                     }
                     

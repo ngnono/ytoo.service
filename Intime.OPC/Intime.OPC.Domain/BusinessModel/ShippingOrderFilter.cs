@@ -10,5 +10,12 @@ namespace Intime.OPC.Domain.BusinessModel
     public class ShippingOrderFilter
     {
         public EnumSaleOrderStatus? Status { get; set; }
+
+        /// <summary>
+        /// 日期范围
+        /// </summary>
+        public DateRangeFilter DateRange { get; set; }
+
+        public int? OrderNo { get; set; }
     }
 }

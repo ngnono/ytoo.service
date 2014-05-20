@@ -43,7 +43,7 @@ namespace Intime.OPC.Repository.Support
                 if (CurrentUser != null)
                 {
                   //query = query.Where(t => t.SectionId.HasValue && sectionIds.Contains(t.SectionId.Value));
-                  return   db.OPC_Sales.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value)).ToList();
+                  return   db.OPC_Sales.Where(t => t.SectionId.HasValue && CurrentUser.SectionIds.Contains(t.SectionId.Value)).ToList();
                 }
                 List<OPC_Sale> saleList = db.OPC_Sales.ToList();
                 return saleList;
@@ -415,7 +415,7 @@ namespace Intime.OPC.Repository.Support
                 var query = db.OPC_Sales.Where(t => t.OrderNo == orderID);
                 if (CurrentUser!=null)
                 {
-                    query = query.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value));
+                    query = query.Where(t => t.SectionId.HasValue && CurrentUser.SectionIds.Contains(t.SectionId.Value));
                 }
 
                 var qq = from sale in query
