@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Intime.OPC.Infrastructure.Service;
-using Intime.OPC.Infrastructure.Validation;
+using OPCApp.Domain.Attributes;
+using OPCApp.Domain.Validation;
 
 namespace OPCApp.Domain.Models
 {
@@ -16,6 +16,7 @@ namespace OPCApp.Domain.Models
         private string _code;
         private string _areaCode;
         private string _contactPhoneNumber;
+        private Store _store;
 
         /// <summary>
         /// 专柜码
@@ -58,6 +59,22 @@ namespace OPCApp.Domain.Models
         {
             get { return _repealed; }
             set { SetProperty(ref _repealed, value); }
+        }
+
+        /// <summary>
+        /// 门店ID
+        /// </summary>
+        public int StoreId { get; set; }
+
+        /// <summary>
+        /// 门店
+        /// </summary>
+        [Display(Name = "所属门店")]
+        [Required(ErrorMessage = "必须选择一家门店")]
+        public Store Store
+        {
+            get { return _store; }
+            set { SetProperty(ref _store, value); }
         }
 
         /// <summary>

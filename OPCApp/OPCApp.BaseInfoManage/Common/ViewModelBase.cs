@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Practices.Prism.Mvvm;
-using Intime.OPC.Infrastructure.Validation;
 using Intime.OPC.Modules.Dimension.Properties;
+using OPCApp.Domain;
 
 namespace Intime.OPC.Modules.Dimension.Common
 {

@@ -9,13 +9,14 @@ using OPCApp.Domain.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Criteria
 {
-    public class QuerySalesOrder : QueryCriteria
+    public class QuerySalesOrderByComposition : QueryCriteria
     {
-        public QuerySalesOrder()
+        public QuerySalesOrderByComposition()
         {
             StartDate = DateTime.Now;
             EndDate = DateTime.Now;
             Status = EnumSaleOrderStatus.ShipInStorage;
+            HasDeliveryOrderGenerated = false;
         }
 
         [UriParameter("startdate")]
@@ -32,5 +33,8 @@ namespace Intime.OPC.Modules.Logistics.Criteria
 
         [UriParameter("status")]
         public EnumSaleOrderStatus Status { get; set; }
+
+        [UriParameter("hasdeliveryordergenerated")]
+        public bool HasDeliveryOrderGenerated { get; set; }
     }
 }

@@ -37,7 +37,12 @@
                 <Button Width="Auto" Background="LightGray"
                         Visibility="{Binding IsShowCustomerAgreeBtn, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource  BoolToVisibilityConverter}}"
                         Command="{Binding CommandSetCustomerMoneyReviewGoods}">
-                    <StackPanel Orientation="Horizontal"/>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/image/到达确认.png" Stretch="None" />
+                            <TextBlock HorizontalAlignment="Center"  FontFamily="雅黑" FontSize="18">客服同意商品退货</TextBlock>
+                        </StackPanel>
+                    </StackPanel>
                 </Button>
                 <Button Width="Auto" Background="LightGray"
                         Visibility="{Binding IsShowCustomerReViewBtn, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource  BoolToVisibilityConverter}}"

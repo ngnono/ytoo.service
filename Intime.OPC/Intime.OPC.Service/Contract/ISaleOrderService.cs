@@ -30,6 +30,6 @@ namespace Intime.OPC.Service.Contract
         /// <param name="request"></param>
         /// <param name="uid"></param>
         /// <returns></returns>
-        PagerInfo<SaleDto> GetPagedList(SaleOrderQueryRequest request, int uid);
+        PagerInfo<SalesOrderDto> GetPagedList(SaleOrderQueryRequest request, int uid);
     }
 }

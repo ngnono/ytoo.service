@@ -53,17 +53,23 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs
                     }
                     using (var db = new YintaiHZhouContext())
                     {
-                        var sectionMap = _channelMapper.GetMapByChannelValue(channelSectionId, ChannelMapType.SectionId);
-                        if (sectionMap == null)
+                        var section =
+                            db.Sections.FirstOrDefault(
+                                x => x.SectionCode == channelSectionId && x.StoreId == storeExt.Id);
+                        if (section != null)
                         {
-                            var newSection = new Section()
-                            {
+                            continue;
+                        }
+
+                        var newSection = new Section
+                        {
                                 CreateDate = DateTime.Now,
                                 CreateUser = SystemDefine.SystemUser,
                                 Location = string.Empty,
                                 Name = channelSection.Name,
                                 ContactPhone = string.Empty,
                                 StoreId = storeExt.Id,
+                                SectionCode = channelSectionId,
                                 Status = 1,
                                 UpdateDate = DateTime.Now,
                                 UpdateUser = SystemDefine.SystemUser,
@@ -71,17 +77,6 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs
 
                             db.Sections.Add(newSection);
                             db.SaveChanges();
-
-                            // 保存映射关系
-                            var channelMap = new ChannelMap()
-                            {
-                                LocalId = newSection.Id,
-                                ChannnelValue = channelSectionId,
-                                MapType = ChannelMapType.SectionId
-                            };
-
-                            _channelMapper.CreateMap(channelMap);
-                        }
                     }
                 }
                 Thread.Sleep(500);

@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mvvm="clr-namespace:Intime.OPC.Infrastructure.Mvvm;assembly=OPCApp.Infrastructure"
-             mc:Ignorable="d"  Width="506.97" Height="430">
+             mc:Ignorable="d"  Width="506.97" Height="480">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadBrandsCommand}" />
+            <i:InvokeCommandAction Command="{Binding LoadDimesionsCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.Resources>
@@ -21,6 +21,7 @@
     </UserControl.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -53,8 +54,21 @@
         <Label Grid.Row="4" Grid.Column="0" Margin="0,5,0,5">管理部门:</Label>
         <TextBox Height="25"  Grid.Row="4" IsReadOnly="True" IsEnabled="False" Grid.Column="1" 
                  Text="{Binding Path=Model.Organization.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Grid.Row="5" Grid.Column="0"  Margin="0,5,0,5">销售品牌:</Label>
-        <StackPanel Grid.Row="5" Grid.Column="1">
+        <Label Grid.Row="5" Grid.Column="0" Margin="0,5,0,5">所属门店:</Label>
+        <!--<TextBox Grid.Row="5" Grid.Column="1" x:Name="storeName" Panel.ZIndex="9" 
+                 Height="25" Width="410" HorizontalAlignment="Left">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="TextChanged">
+                    <i:InvokeCommandAction Command="{Binding FilterStoreCommand}" CommandParameter="{Binding ElementName=storeName, Path=Text}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>-->
+        <ComboBox Grid.Row="5" Grid.Column="1" x:Name="stores" ItemsSource="{Binding Stores}"
+                  Height="25" IsDropDownOpen="{Binding IsFilteringStore}" DisplayMemberPath="Name"
+                  SelectedItem="{Binding Model.Store, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}">
+        </ComboBox>
+        <Label Grid.Row="6" Grid.Column="0"  Margin="0,5,0,5">销售品牌:</Label>
+        <StackPanel Grid.Row="6" Grid.Column="1" Margin="0,3,0,0">
             <StackPanel Orientation="Horizontal">
                 <TextBox x:Name="brandName" Width="150" Margin="0,0,5,0"/>
                 <Button Command="{Binding LoadBrandsCommand}" CommandParameter="{Binding ElementName=brandName, Path=Text}">查询</Button>
@@ -65,13 +79,13 @@
                 mvvm:ScrollingBehavior.ScrollToBottomCommand="{Binding LoadMoreBrandsCommand}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox Content="{Binding Path=Name}" Command="{Binding DataContext.SelectBrandCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Path=ID}"  IsChecked="{Binding Path=IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></CheckBox>
+                        <CheckBox Content="{Binding Path=Name}" Command="{Binding DataContext.SelectBrandCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Path=Id}"  IsChecked="{Binding Path=IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ></CheckBox>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </StackPanel>
-        <CheckBox Margin="0,5,0,5" Grid.Row="6" Grid.Column="1"  IsChecked="{Binding Path=Model.Repealed,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">是否已撤柜</CheckBox>
-        <StackPanel Grid.Row="7" Grid.ColumnSpan="2"  Orientation="Horizontal" HorizontalAlignment="Right">
+        <CheckBox Grid.Row="7" Grid.Column="1"  Margin="0,5,0,5" IsChecked="{Binding Path=Model.Repealed,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">是否已撤柜</CheckBox>
+        <StackPanel Grid.Row="8" Grid.ColumnSpan="2"  Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Height="30" Width="60" Margin="5" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.OKCommand}">确定</Button>
             <Button Height="30" Width="60" Margin="5"  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.CancelCommand}">取消</Button>
         </StackPanel>

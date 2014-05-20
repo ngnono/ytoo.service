@@ -2,37 +2,41 @@
 using OPCApp.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ploeh.AutoFixture;
+using OPCApp.Domain.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    public class DeliveryOrderService : IService<OPC_ShippingSale>
+    [Export(typeof(IService<OPC_ShippingSale>))]
+    public class DeliveryOrderService : ServiceBase<OPC_ShippingSale>
     {
-        public OPC_ShippingSale Create(OPC_ShippingSale obj)
+        private Fixture fixture = new Fixture();
+
+        public override OPC_ShippingSale Create(OPC_ShippingSale obj)
         {
-            throw new NotImplementedException();
+            var salesOrders = fixture.Build<OPC_Sale>()
+                .Without(so => so.DeliveryOrder)
+                .Without(so => so.Counter)
+                .Do(so => so.IsSelected = false)
+                .Do(so => so.Status = EnumSaleOrderStatus.PrintInvoice)
+                .CreateMany(3);
+
+            var deliveryOrder = fixture.Build<OPC_ShippingSale>()
+                .Without(delivery => delivery.SalesOrders)
+                .Create();
+
+            deliveryOrder.SalesOrders = salesOrders.ToList();
+
+            return deliveryOrder;
         }
 
-        public OPC_ShippingSale Update(OPC_ShippingSale obj)
+        public override OPC_ShippingSale Update(OPC_ShippingSale obj)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public OPC_ShippingSale Query(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public OPCApp.Infrastructure.REST.PagedResult<OPC_ShippingSale> Query(IQueryCriteria queryCriteria)
-        {
-            throw new NotImplementedException();
+            return obj;
         }
     }
 }

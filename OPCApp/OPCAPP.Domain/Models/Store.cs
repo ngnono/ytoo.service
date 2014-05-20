@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OPCApp.Domain.Attributes;
 
 namespace OPCApp.Domain.Models
 {
-    public class Store
+    [Uri("stores")]
+    public class Store : Dimension
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
         public string Tel { get; set; }
@@ -31,5 +31,10 @@ namespace OPCApp.Domain.Models
         public string RMAZipCode { get; set; }
         public string RMAPerson { get; set; }
         public string RMAPhone { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

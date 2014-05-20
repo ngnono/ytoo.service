@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Results;
-using Intime.OPC.Domain;
+﻿using Intime.OPC.Domain;
 using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Repository.Impl;
-using Intime.OPC.Repository.Support;
 using Intime.OPC.WebApi.Controllers;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace Intime.OPC.WebApi.Test.ControllerTest
 {
@@ -47,7 +42,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
         }
 
         [Test()]
-        public void GetTest([Values(877)]int id)
+        public void GetTest([Values(883)]int id)
         {
             _controller.Request.Method = HttpMethod.Get;
             var actual = _controller.GetSection(id) as OkNegotiatedContentResult<SectionDto>;
@@ -55,6 +50,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
 
             Assert.IsNotNull(actual);
             Assert.IsTrue(sectionDto != null);
+            Assert.IsNotNull(actual.Content.Store);
         }
 
 
@@ -125,10 +121,12 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
 
             var actual = _controller.Post(new SectionDto
             {
-                Name = "Test_001",
-                Code = "asdfq2@$a",
+                Name = "",
+                Code = "",
                 ContactPhone = "110",
-                Enabled = true,
+                Status  = 1,
+                StoreId = 3,
+                Repealed = true
 
             }, 0) as OkNegotiatedContentResult<SectionDto>;
             var sectionDto = actual.Content;
@@ -145,9 +143,11 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
             var actual = _controller.Put(id, new SectionDto
             {
                 Name = "Test_002",
-                Enabled = true,
+                Status = 1,
                 Id = id,
                 Code = "asdf9876",
+                StoreId = 4,
+                Repealed = false,
                 Brands = new List<BrandDto>()
                 {
                     new BrandDto()

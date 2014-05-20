@@ -31,5 +31,11 @@ namespace Intime.OPC.Job.Product.ProductSync
         bool CreateMap(ChannelMap channelMap);
 
         bool UpdateMapByLocal(string localValue, ChannelMapType mapType, string channelValue);
+
+        /// <summary>
+        /// 删除映射关系
+        /// </summary>
+        /// <param name="channelMap"></param>
+        void RemoveMap(ChannelMap channelMap);
     }
 }

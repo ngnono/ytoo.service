@@ -6,8 +6,18 @@ using OPCApp.Domain.Models;
 namespace Intime.OPC.Modules.Dimension.Services
 {
     [Export(typeof(IService<Counter>))]
-    public class CounterService : DimensionService<Counter>
+    public class CounterService : ServiceBase<Counter>
     {
+        public override Counter Create(Counter obj)
+        {
+            if (obj.Store != null) obj.StoreId = obj.Store.Id;
+            return base.Create(obj);
+        }
 
+        public override Counter Update(Counter obj)
+        {
+            if (obj.Store != null) obj.StoreId = obj.Store.Id;
+            return base.Update(obj);
+        }
     }
 }

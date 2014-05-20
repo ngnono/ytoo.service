@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -143,6 +144,17 @@ namespace System.Collections.Generic
 
                 source.Remove(item);
             }
+        }
+
+        /// <summary>
+        /// List to observable collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static ObservableCollection<T> ToObservableCollection<T>(this IList<T> source)
+        {
+            return new ObservableCollection<T>(source);
         }
 
         /// <summary>

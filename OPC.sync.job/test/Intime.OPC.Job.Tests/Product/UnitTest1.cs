@@ -19,9 +19,16 @@ namespace Intime.OPC.Job.Tests.Product
             job.Execute(null);
             //var picJob = new ProductPicSyncJob();
             //picJob.Execute(null);
-            var stockJob = new StockAttregateJob();
-            stockJob.Execute(null);
+            //var stockJob = new StockAttregateJob();
+            //stockJob.Execute(null);
 
+        }
+
+        [TestMethod]
+        public void PropertyTest()
+        {
+            var job = new PropuctPropertySyncJob();
+            job.Execute(null);
         }
     }
 }

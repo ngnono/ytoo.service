@@ -53,7 +53,7 @@ namespace OPCApp.DataService.Impl.Info
                 List<KeyValue> lst = RestClient.Get<Brand>("brand/getall").Select<Brand, KeyValue>(t =>
                 {
                     var kv = new KeyValue();
-                    kv.Key = t.ID;
+                    kv.Key = t.Id;
                     kv.Value = t.Name;
                     return kv;
                 }).Distinct().ToList();

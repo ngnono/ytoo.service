@@ -79,13 +79,14 @@
                     <DataGridTextColumn Header="专柜码" Binding="{Binding Code}" Width="100"></DataGridTextColumn>
                     <DataGridTextColumn Header="销售区域" Binding="{Binding AreaCode}" Width="80"></DataGridTextColumn>
                     <DataGridTextColumn Header="联系电话" Binding="{Binding ContactPhoneNumber}" Width="100"></DataGridTextColumn>
-                    <DataGridTextColumn Header="管理部门" Binding="{Binding Organization.Name}" Width="200"></DataGridTextColumn>
+                    <DataGridTextColumn Header="所属门店" Binding="{Binding Store.Name}" Width="200"></DataGridTextColumn>
+                    <DataGridTextColumn Header="管理部门" Binding="{Binding Organization.Name}" Width="100"></DataGridTextColumn>
                     <DataGridTextColumn Header="状态" Binding="{Binding Path= Repealed, Converter={StaticResource  BoolToStringConverter}, ConverterParameter=已撤柜^未撤柜}"></DataGridTextColumn>
                     <DataGridTemplateColumn Header="操作">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="编辑" Width="30" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EditCommand}" CommandParameter="{Binding ID}"/>
+                                    <Button Content="编辑" Width="30" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.EditCommand}" CommandParameter="{Binding Id}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

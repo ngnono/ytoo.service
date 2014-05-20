@@ -74,7 +74,10 @@
     <Compile Include="BusinessModel\PageFilter.cs" />
     <Compile Include="BusinessModel\SectionFilter.cs" />
     <Compile Include="Dto\Request\ShippingSaleOrderRequest.cs" />
+    <Compile Include="Dto\SalesOrderDto.cs" />
+    <Compile Include="Dto\ShippingOrderDto.cs" />
     <Compile Include="Dto\ShipViaDto.cs" />
+    <Compile Include="Dto\StoreDto.cs" />
     <Compile Include="Enums\ShippingOrderStatus.cs" />
     <Compile Include="Enums\SortOrder\ShippingOrderSortOrder.cs" />
     <Compile Include="Enums\SortOrder\SaleOrderSortOrder.cs" />

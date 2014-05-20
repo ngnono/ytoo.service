@@ -18,4 +18,16 @@ namespace Intime.OPC.Domain.BusinessModel
 
         public string Name { get; set; }
     }
+
+
+    public class StoreFilter : PageFilter
+    {
+        public string NamePrefix { get; set; }
+
+        public int? Status { get; set; }
+
+        public StoreSortOrder? SortOrder { get; set; }
+
+        public string Name { get; set; }
+    }
 }

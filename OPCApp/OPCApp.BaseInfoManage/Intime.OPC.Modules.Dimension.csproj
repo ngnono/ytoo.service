@@ -99,9 +99,9 @@
     <Compile Include="Common\DimensionListViewModel.cs" />
     <Compile Include="Common\ModalDialogViewModel.cs" />
     <Compile Include="DimensionModule.cs" />
-    <Compile Include="Common\DimensionService.cs" />
     <Compile Include="Services\BrandService.cs" />
     <Compile Include="Services\CounterService.cs" />
+    <Compile Include="Services\StoreService.cs" />
     <Compile Include="ViewModels\BrandListViewModel.cs" />
     <Compile Include="ViewModels\BrandViewModel.cs" />
     <Compile Include="ViewModels\CounterListViewModel.cs" />
