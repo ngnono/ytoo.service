@@ -55,18 +55,21 @@
         <TextBox Height="25"  Grid.Row="4" IsReadOnly="True" IsEnabled="False" Grid.Column="1" 
                  Text="{Binding Path=Model.Organization.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Grid.Row="5" Grid.Column="0" Margin="0,5,0,5">所属门店:</Label>
-        <!--<TextBox Grid.Row="5" Grid.Column="1" x:Name="storeName" Panel.ZIndex="9" 
-                 Height="25" Width="410" HorizontalAlignment="Left">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="TextChanged">
-                    <i:InvokeCommandAction Command="{Binding FilterStoreCommand}" CommandParameter="{Binding ElementName=storeName, Path=Text}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </TextBox>-->
-        <ComboBox Grid.Row="5" Grid.Column="1" x:Name="stores" ItemsSource="{Binding Stores}"
-                  Height="25" IsDropDownOpen="{Binding IsFilteringStore}" DisplayMemberPath="Name"
+        <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
+            <TextBox x:Name="storeName" 
+                 Height="25" Width="185" HorizontalAlignment="Left">
+                在此输入进行过滤
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding FilterStoreCommand}" CommandParameter="{Binding ElementName=storeName, Path=Text}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+            <ComboBox Margin="10,0,0,0" x:Name="stores" ItemsSource="{Binding Stores}"
+                  Height="25" Width="230" IsDropDownOpen="{Binding IsFilteringStore}" DisplayMemberPath="Name"
                   SelectedItem="{Binding Model.Store, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}">
-        </ComboBox>
+            </ComboBox>
+        </StackPanel>
         <Label Grid.Row="6" Grid.Column="0"  Margin="0,5,0,5">销售品牌:</Label>
         <StackPanel Grid.Row="6" Grid.Column="1" Margin="0,3,0,0">
             <StackPanel Orientation="Horizontal">
