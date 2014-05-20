@@ -76,6 +76,19 @@ namespace com.intime.jobscheduler.Job.Order
                                      OrderNo = order.OrderNo,
                                       Type=(int)OrderOpera.SystemVoid
                             });
+                            foreach (var item in db.Set<OrderItemEntity>().Where(oi => oi.OrderNo == order.OrderNo &&
+                                       oi.Status != (int)DataStatus.Deleted))
+                            {
+                                var inventoryItem = db.Set<InventoryEntity>().Where(ie => ie.ProductId == item.ProductId
+                                                                                        && ie.PColorId == item.ColorValueId
+                                                                                        && ie.PSizeId == item.SizeValueId).FirstOrDefault();
+                                if (inventoryItem != null)
+                                {
+                                    inventoryItem.Amount += item.Quantity;
+                                    inventoryItem.UpdateDate = DateTime.Now;
+                                    db.Entry(inventoryItem).State = System.Data.EntityState.Modified;
+                                }
+                            }
                             db.SaveChanges();
                             successCount++;
                         }
