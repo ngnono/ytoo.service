@@ -8,11 +8,19 @@ namespace OPCApp.Domain.Attributes
 {
     public class UriParameterAttribute : Attribute
     {
-        public UriParameterAttribute(string name)
+        public UriParameterAttribute(string name, object defaultValue)
         {
             Name = name;
+            DefaultValue = defaultValue;
+        }
+
+        public UriParameterAttribute(string name)
+            :this(name, null)
+        {
         }
 
         public string Name { get; set; }
+
+        public object DefaultValue { get; set; }
     }
 }
