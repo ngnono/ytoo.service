@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ploeh.AutoFixture;
 using OPCApp.Domain.Enums;
+using OPCApp.Infrastructure.REST;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
@@ -37,6 +38,24 @@ namespace Intime.OPC.Modules.Logistics.Services
         public override OPC_ShippingSale Update(OPC_ShippingSale obj)
         {
             return obj;
+        }
+
+        public override PagedResult<OPC_ShippingSale> Query(IQueryCriteria queryCriteria)
+        {
+            var salesOrders = fixture.Build<OPC_Sale>()
+                .Without(so => so.DeliveryOrder)
+                .Without(so => so.Counter)
+                .Do(so => so.IsSelected = false)
+                .Do(so => so.Status = EnumSaleOrderStatus.PrintInvoice)
+                .CreateMany(3);
+
+            var deliveryOrders = fixture.Build<OPC_ShippingSale>()
+                .Without(delivery => delivery.SalesOrders)
+                .Do(deliveryOrder => deliveryOrder.SalesOrders = salesOrders.ToList())
+                .CreateMany(100);
+
+            var result = new PagedResult<OPC_ShippingSale>() { PageIndex = queryCriteria.PageIndex, PageSize = queryCriteria.PageSize, TotalCount = 200, Data = deliveryOrders.ToList() };
+            return result;
         }
     }
 }
