@@ -70,8 +70,9 @@ namespace Intime.OPC.Job.RMASync
                     OPCSONumber = rma.OrderNo,
                     Status = rma.Status == (int)EnumRMAStatus.ShipVerifyNotPass ? 300 : 700,
                     RMAType = 1,
-                    OperaterFrom = 1,
-                    OPCRMATrancaction = linq
+                    OperaterFrom = 5,
+                    OPCRMATrancaction = linq,
+                    CacelReason = string.Empty,
                 };
                 var rmaInfos = new Dictionary<string, string>
                 {
@@ -79,7 +80,7 @@ namespace Intime.OPC.Job.RMASync
                 };
                 Logger.ErrorFormat("推送退货订单 {0} 商品明细 {1}");
                 var client = new YintaiApiClient();
-                var rsp = client.Post(rmaInfos, "Yintai.OpenApi.RMA. AddRMA");
+                var rsp = client.Post(rmaInfos, "Yintai.OpenApi.Vendor.AddRMAByOPC");
                 if (rsp.IsSuccessful)
                 {
                     context.OPC_RMANotificationLogs.Add(new OPC_RMANotificationLog

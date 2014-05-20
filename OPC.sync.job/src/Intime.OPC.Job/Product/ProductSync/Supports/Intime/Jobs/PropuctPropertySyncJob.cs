@@ -2,8 +2,6 @@
 using Common.Logging;
 using Intime.O2O.ApiClient;
 using Intime.OPC.Domain.Models;
-using Intime.OPC.Job.Product.ProductSync.Supports.Intime.Mapper;
-using Intime.OPC.Job.Product.ProductSync.Supports.Intime.Processors;
 using Intime.OPC.Job.Product.ProductSync.Supports.Intime.Repository;
 using Quartz;
 using System;
@@ -11,43 +9,49 @@ using System.Threading;
 
 namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs
 {
-    public class PropuctPropertySyncJob:IJob
+    public class PropuctPropertySyncJob : IJob
     {
         private const int PageSize = 200;
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        RemoteRepository _remoteRepository = new RemoteRepository(new DefaultApiClient());
-        private StoreSyncProcessor _storeSyncProcessor;
-        private ChannelMapper _channelMapper;
-        private DateTime _jobPublishDateTime = new DateTime(2014,4,22);
+        readonly RemoteRepository _remoteRepository = new RemoteRepository(new DefaultApiClient());
+
         public void Execute(IJobExecutionContext context)
         {
-            this.Sync();
+#if !DEBUG
+            JobDataMap data = context.JobDetail.JobDataMap;
+            var interval = data.ContainsKey("intervalofhrs") ? data.GetInt("intervalofhrs") : 1;
+
+            var benchTime = data.GetDateTime("benchdate");
+            var lastUpdateDateTime = DateTime.Now.AddHours(-interval);
+            this.Sync(benchTime, lastUpdateDateTime);
+#else
+            this.Sync(new DateTime(2014, 4, 22), DateTime.Now.AddMonths(-1));
+#endif
         }
 
-        public void Sync()
+        public void Sync(DateTime benchDate, DateTime lastUpdateDateTime)
         {
             var pageIndex = 1;
-
 
             while (true)
             {
                 var properties =
-                    _remoteRepository.GetProductProperties(pageIndex++, PageSize, DateTime.Now.AddYears(-2)).ToList();
+                    _remoteRepository.GetProductProperties(pageIndex++, PageSize, lastUpdateDateTime).ToList();
 
                 if (properties.Count == 0)
                 {
-                    Log.ErrorFormat("没有可同步的信息,pageIndex:{0},pageSize:{1},lastUpdateDatetime:{2}", pageIndex, PageSize);
+                    Log.ErrorFormat("没有可同步的信息,pageIndex:{0},pageSize:{1},lastUpdateDatetime:{2}", pageIndex, PageSize, lastUpdateDateTime);
                     break;
                 }
                 foreach (var p in properties)
                 {
                     using (var db = new YintaiHZhouContext())
                     {
-                        var product = db.Products.FirstOrDefault(i => i.CreatedDate > _jobPublishDateTime &&
+                        var product = db.Products.FirstOrDefault(i => i.CreatedDate > benchDate &&
                                                                       i.SkuCode.ToUpper() == p.ProductCode.ToUpper());
                         if (product == null)
                         {
-                            Log.ErrorFormat("属性对应商品未同步，商品款号:({0})",p.ProductCode);
+                            Log.ErrorFormat("属性对应商品未同步，商品款号:({0})", p.ProductCode);
                             continue;
                         }
                         var property =

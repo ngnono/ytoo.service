@@ -7,7 +7,42 @@
     <processing-directives>
         <overwrite-existing-data>true</overwrite-existing-data>
     </processing-directives>
-
+  <!--商品属性同同步任务-->
+  <schedule>
+    <trigger>
+      <cron>
+        <name>ProductPropertySyncJobTigger</name>
+        <group>ProductPropertySyncJobTiggerGroup</group>
+        <description>商品属性同步job</description>
+        <job-name>ProductPropertySyncJob</job-name>
+        <job-group>ProductPropertySyncGroup</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 0 0/1 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <job>
+      <name>ProductPropertySyncJob</name>
+      <group>ProductPropertySyncGroup</group>
+      <description>商品属性同步任务</description>
+      <job-type>Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs.PropuctPropertySyncJob, Intime.OPC.Job</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>needrebuild</key>
+          <value>false</value>
+        </entry>
+        <entry>
+          <key>benchdate</key>
+          <value>2014/4/22</value>
+        </entry>
+        <entry>
+          <key>intervalofhrs</key>
+          <value>2</value>
+        </entry>
+      </job-data-map>
+    </job>
+  </schedule>
   <!--自拍商品拆单任务-->
   <schedule>
     <trigger>
