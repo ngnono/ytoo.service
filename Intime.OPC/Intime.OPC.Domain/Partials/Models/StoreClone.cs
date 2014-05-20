@@ -2,7 +2,7 @@
 
 namespace Intime.OPC.Domain.Partials.Models
 {
-    public partial class StoreClone
+    public class StoreClone
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -197,35 +197,7 @@ namespace Intime.OPC.Repository.Impl
                          {
                              section = s,
                              sbs = s_b_let,
-                             Store = store == null ? null : new StoreClone()
-                         {
-                             Id = store.Id,
-                             Name = store.Name,
-                             ExStoreId = store.ExStoreId,
-                             GpsAlt = store.GpsAlt,
-                             GpsLng = store.GpsLng,
-                             GpsLat = store.GpsLat,
-                             Group_Id = store.Group_Id,
-                             Latitude = store.Latitude,
-                             Location = store.Location,
-                             Longitude = store.Longitude,
-                             Region_Id = store.Region_Id,
-                             RMAAddress = store.RMAAddress,
-                             RMAZipCode = store.RMAZipCode,
-                             RMAPerson = store.RMAPerson,
-                             RMAPhone = store.RMAPhone,
-                             Tel = store.Tel,
-                             StoreLevel = store.StoreLevel,
-
-                             CreatedDate = store.CreatedDate,
-                             CreatedUser = store.CreatedUser,
-                             Description = store.Description,
-                             Status = store.Status,
-                             UpdatedDate = store.UpdatedDate,
-                             UpdatedUser = store.CreatedUser
-
-                         }
-
+                             Store = store == null ? null : store
                          };
 
                 t = qt.Count();
@@ -307,37 +279,11 @@ namespace Intime.OPC.Repository.Impl
                          {
                              section = s,
                              sbs = s_b_let,
-                             Store = store == null ? null : new StoreClone()
-                         {
-                             Id = store.Id,
-                             Name = store.Name,
-                             ExStoreId = store.ExStoreId,
-                             GpsAlt = store.GpsAlt,
-                             GpsLng = store.GpsLng,
-                             GpsLat = store.GpsLat,
-                             Group_Id = store.Group_Id,
-                             Latitude = store.Latitude,
-                             Location = store.Location,
-                             Longitude = store.Longitude,
-                             Region_Id = store.Region_Id,
-                             RMAAddress = store.RMAAddress,
-                             RMAZipCode = store.RMAZipCode,
-                             RMAPerson = store.RMAPerson,
-                             RMAPhone = store.RMAPhone,
-                             Tel = store.Tel,
-                             StoreLevel = store.StoreLevel,
-
-                             CreatedDate = store.CreatedDate,
-                             CreatedUser = store.CreatedUser,
-                             Description = store.Description,
-                             Status = store.Status,
-                             UpdatedDate = store.UpdatedDate,
-                             UpdatedUser = store.CreatedUser
-
-                         }
+                             Store = store == null ? null : store
                          };
+                //var ww = qt.FirstOrDefault();
 
-
+                //var qwww = ww;
                 var qr = from s in qt.OrderBy(v => v.section.Id)
                          let brands = (
                              from b in c.Set<Brand>()
@@ -378,10 +324,38 @@ namespace Intime.OPC.Repository.Impl
                              UpdateUser = s.section.UpdateUser,
                              Brands = brands,
                              SectionCode = s.section.SectionCode,
-                             Store = s.Store
+                             Store = s.Store// == null ? (StoreClone)null : new StoreClone()
+                         //{
+                         //    Id = s.Store.Id,
+                         //    Name = s.Store.Name,
+                         //    //ExStoreId = store.ExStoreId,
+                         //    //GpsAlt = store.GpsAlt,
+                         //    //GpsLng = store.GpsLng,
+                         //    //GpsLat = store.GpsLat,
+                         //    //Group_Id = store.Group_Id,
+                         //    //Latitude = store.Latitude,
+                         //    //Location = store.Location,
+                         //    //Longitude = store.Longitude,
+                         //    //Region_Id = store.Region_Id,
+                         //    //RMAAddress = store.RMAAddress,
+                         //    //RMAZipCode = store.RMAZipCode,
+                         //    //RMAPerson = store.RMAPerson,
+                         //    //RMAPhone = store.RMAPhone,
+                         //    //Tel = store.Tel,
+                         //    //StoreLevel = store.StoreLevel,
+
+                         //    //CreatedDate = store.CreatedDate,
+                         //    //CreatedUser = store.CreatedUser,
+                         //    //Description = store.Description,
+                         //    //Status = store.Status,
+                         //    //UpdatedDate = store.UpdatedDate,
+                         //    //UpdatedUser = store.CreatedUser
+
+                         //}
                          };
 
-                return AutoMapper.Mapper.Map<SectionClone, Section>(qr.FirstOrDefault());
+                var ss = qr.FirstOrDefault();
+                return AutoMapper.Mapper.Map<SectionClone, Section>(ss);
             });
         }
 

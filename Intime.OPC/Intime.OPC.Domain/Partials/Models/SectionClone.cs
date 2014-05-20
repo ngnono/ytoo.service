@@ -24,7 +24,7 @@ namespace Intime.OPC.Domain.Models
 
         public string SectionCode { get; set; }
 
-        public StoreClone Store { get; set; }
+        public Store Store { get; set; }
 
         public static SectionClone Convert2Section(dynamic obj)
         {
