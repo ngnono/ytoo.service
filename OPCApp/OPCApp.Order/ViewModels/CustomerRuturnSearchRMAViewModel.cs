@@ -9,6 +9,7 @@ namespace OPCApp.Customer.ViewModels
         public CustomerReturnSearchRmaViewModel()
         {
             IsShowCustomerReViewBtn = false;
+            IsShowCustomerAgreeBtn = false;
         }
     }
 }
