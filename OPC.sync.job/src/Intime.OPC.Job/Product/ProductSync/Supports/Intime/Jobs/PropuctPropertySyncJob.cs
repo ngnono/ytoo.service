@@ -9,6 +9,7 @@ using System.Threading;
 
 namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs
 {
+    [DisallowConcurrentExecution]
     public class PropuctPropertySyncJob : IJob
     {
         private const int PageSize = 200;

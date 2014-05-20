@@ -10,6 +10,7 @@ using System.Linq;
 
 namespace Intime.OPC.Job.RMASync
 {
+    [DisallowConcurrentExecution]
     public class RMA2YintaiJob : IJob
     {
         private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
