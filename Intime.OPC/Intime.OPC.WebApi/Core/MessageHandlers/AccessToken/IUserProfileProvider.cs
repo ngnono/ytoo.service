@@ -1,9 +1,7 @@
-﻿using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
-
-namespace Intime.OPC.WebApi.Core.MessageHandlers
+﻿namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
 {
     public interface IUserProfileProvider
     {
-        UserProfile GetByUserId(int userId);
+        UserProfile Get(int userId);
     }
 }

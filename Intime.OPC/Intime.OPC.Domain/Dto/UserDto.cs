@@ -40,6 +40,11 @@ namespace Intime.OPC.Domain.Dto
         public string Name { get; set; }
 
         /// <summary>
+        /// 是否为管理员
+        /// </summary>
+        public bool IsSystem { get; set; }
+
+        /// <summary>
         /// 专柜列表
         /// </summary>
         public IList<int> SectionIds { get; set; }

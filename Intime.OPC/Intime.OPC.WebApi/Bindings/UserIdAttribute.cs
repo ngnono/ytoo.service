@@ -7,7 +7,7 @@ namespace Intime.OPC.WebApi.Bindings
     {
         public override HttpParameterBinding GetBinding(HttpParameterDescriptor parameter)
         {
-            if (parameter.ParameterType == typeof (int) || parameter.ParameterType == typeof (int?))
+            if (parameter.ParameterType == typeof(int) || parameter.ParameterType == typeof(int?))
             {
                 return new UserIdHttpParameterBinding(parameter);
             }

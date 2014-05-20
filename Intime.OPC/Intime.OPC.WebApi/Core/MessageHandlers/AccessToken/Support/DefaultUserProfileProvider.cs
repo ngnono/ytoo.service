@@ -21,9 +21,9 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken.Support
 
         public UserProfile Get(int userId)
         {
-            var userInfo = _accountService.GetByUserID(userId);
+            var currentUser = _accountService.GetByUserID(userId);
 
-            if (userInfo == null)
+            if (currentUser == null)
             {
                 throw new NullReferenceException(string.Format("当前用户信息不存在,userId:{0}", userId));
             }
@@ -34,9 +34,10 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken.Support
             return new UserProfile()
              {
                  Id = userId,
-                 Name = userInfo.Name,
-                 SectionIds = userInfo.SectionIds ?? new List<int>(),
-                 StoreIds = userInfo.StoreIds ?? new List<int>(),
+                 Name = currentUser.Name,
+                 IsSystem = currentUser.IsSystem,
+                 SectionIds = currentUser.SectionIds ?? new List<int>(),
+                 StoreIds = currentUser.StoreIds ?? new List<int>(),
                  Roles = roles.ToList().ConvertAll(p => p.Name)
              };
         }

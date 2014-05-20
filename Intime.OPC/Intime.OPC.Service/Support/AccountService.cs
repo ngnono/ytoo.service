@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
+
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
@@ -16,9 +16,9 @@ namespace Intime.OPC.Service.Support
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IOrgInfoRepository _orgInfoRepository;
-        private IRoleUserRepository _roleUserRepository;
-        private ISectionRepository _sectionRepository;
-        private IStoreRepository _storeRepository;
+        private readonly IRoleUserRepository _roleUserRepository;
+        private readonly ISectionRepository _sectionRepository;
+        private readonly IStoreRepository _storeRepository;
 
         public AccountService(IAccountRepository accountRepository, IOrgInfoRepository orgInfoRepository, IRoleUserRepository roleUserRepository, ISectionRepository sectionRepository, IStoreRepository storeRepository)
             : base(accountRepository)
@@ -122,8 +122,11 @@ namespace Intime.OPC.Service.Support
             UserDto dto = new UserDto();
             dto.Id = userID;
             dto.Name = user.Name;
+            dto.IsSystem = user.IsSystem;
             if (user.IsSystem)
             {
+                // 目前现状专柜有40000多家，如果不控制管理员的权限，这里可以根据IsSystem进行判断，不需要进行获取数据
+                // @yali
                 dto.StoreIds =
                     _storeRepository.GetAll(1, 20000).Result.Select<Store, int>(t => t.Id).Distinct().ToList();
 

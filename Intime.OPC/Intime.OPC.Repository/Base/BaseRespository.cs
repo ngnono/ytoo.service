@@ -152,6 +152,7 @@ namespace Intime.OPC.Repository.Base
                     UserDto dto = new UserDto();
                     dto.Id = userId;
                     dto.Name = user.Name;
+                    dto.IsSystem = user.IsSystem;
                     if (user.IsSystem)
                     {
                         dto.StoreIds =

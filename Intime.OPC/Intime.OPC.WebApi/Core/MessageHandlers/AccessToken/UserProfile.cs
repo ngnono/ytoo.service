@@ -22,6 +22,12 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
         public string Name { get; set; }
 
         /// <summary>
+        /// 系统管理员,如果是系统管理员可以管理所有门店和专柜
+        /// </summary>
+        [DataMember]
+        public bool IsSystem { get; set; }
+
+        /// <summary>
         /// 专柜列表
         /// </summary>
         [DataMember]
