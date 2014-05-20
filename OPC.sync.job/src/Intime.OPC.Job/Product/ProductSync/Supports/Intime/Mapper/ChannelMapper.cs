@@ -64,6 +64,23 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Mapper
             }
         }
 
+        public void RemoveMap(ChannelMap channelMap)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var map =
+                    db.OPC_ChannelMap.FirstOrDefault(
+                        x =>
+                            x.Channel == SystemDefine.IntimeChannel && x.ChannelValue == channelMap.ChannnelValue &&
+                            x.MapType == (int)channelMap.MapType && x.InnerValue == channelMap.LocalId.ToString(CultureInfo.InvariantCulture));
+                if (map != null)
+                {
+                    db.OPC_ChannelMap.Remove(map);
+                    db.SaveChanges();
+                }
+            }
+        }
+
         public bool UpdateMapByLocal(string localValue, ChannelMapType mapType, string channelValue)
         {
             using (var db = new YintaiHZhouContext())

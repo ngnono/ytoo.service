@@ -9,12 +9,21 @@ namespace Intime.OPC.Domain.Dto
     [DataContract]
     public class SaleDto
     {
+        /// <summary>
+        /// Id 主键ID
+        /// </summary>
         [DataMember]
         public int Id { get; set; }
 
+        /// <summary>
+        /// 订单 NO
+        /// </summary>
         [DataMember]
         public string OrderNo { get; set; }
 
+        /// <summary>
+        /// 销售单 NO
+        /// </summary>
         [DataMember]
         public string SaleOrderNo { get; set; }
 
@@ -27,18 +36,33 @@ namespace Intime.OPC.Domain.Dto
         [DataMember]
         public int Status { get; set; }
 
+        /// <summary>
+        /// 物流单 code
+        /// </summary>
         [DataMember]
         public string ShippingCode { get; set; }
 
+        /// <summary>
+        /// 物流 费
+        /// </summary>
         [DataMember]
         public decimal ShippingFee { get; set; }
 
+        /// <summary>
+        /// 物流 状态
+        /// </summary>
         [DataMember]
         public int? ShippingStatus { get; set; }
 
+        /// <summary>
+        /// 物流状态 Name
+        /// </summary>
         [DataMember]
         public string ShippingStatusName { get; set; }
 
+        /// <summary>
+        /// 物流备注
+        /// </summary>
         [DataMember]
         public string ShippingRemark { get; set; }
 
@@ -126,22 +150,6 @@ namespace Intime.OPC.Domain.Dto
         [DataMember]
         public string ReceivePerson { get; set; }
 
-        /// <summary>
-        /// 订单
-        /// </summary>
-        public OrderDto Order { get; set; }
 
-        /// <summary>
-        /// 出库单
-        /// </summary>
-        /// 
-        [JsonProperty(PropertyName = "DeliveryOrder", NullValueHandling = NullValueHandling.Ignore)]
-        public ShippingSaleDto ShippingOrder { get; set; }
-
-        /// <summary>
-        /// 专柜
-        /// </summary>
-        [JsonProperty(PropertyName = "Counter", NullValueHandling = NullValueHandling.Ignore)]
-        public SectionDto Section { get; set; }
     }
 }

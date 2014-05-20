@@ -1,10 +1,15 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Intime.OPC.Domain.Models
 {
     public partial class Section
     {
+        [NotMapped]
         public IEnumerable<Brand> Brands { get; set; }
+
+        [NotMapped]
+        public Store Store { get; set; }
 
         public static Section Convert2Section(dynamic obj)
         {

@@ -44,5 +44,12 @@ namespace Intime.OPC.Infrastructure.Service
         /// </summary>
         /// <returns>Object collection</returns>
         PagedResult<T> Query(IQueryCriteria queryCriteria);
+
+        /// <summary>
+        /// Query all
+        /// </summary>
+        /// <param name="queryCriteria"></param>
+        /// <returns></returns>
+        IList<T> QueryAll(IQueryCriteria queryCriteria);
     }
 }

@@ -1,5 +1,7 @@
-﻿using Intime.OPC.Domain.Models;
+﻿using Intime.OPC.Domain.Dto.Request;
+using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
+using Intime.OPC.Repository.Support;
 using Intime.OPC.Service;
 using Intime.OPC.WebApi.Bindings;
 using System;
@@ -26,6 +28,20 @@ namespace Intime.OPC.WebApi.Controllers
 
             return DoFunction(() => _Service.GetAll(), "获得门店信息失败");
            
+        }
+
+        [Route("api/stores")]
+        [HttpGet]
+        public IHttpActionResult GetList([FromUri]StoreRequest request,[UserId] int? userId)
+        {
+            if (request == null)
+            {
+                request = new StoreRequest();
+            }
+
+            var dto = _Service.GetPagedList(request);
+
+            return RetrunHttpActionResult(dto);
         }
     }
 }

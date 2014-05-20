@@ -110,6 +110,7 @@
     <Compile Include="IOC\IContainer.cs" />
     <Compile Include="IOC\MefContainer.cs" />
     <Compile Include="Mvvm\Converters\EnumerationToStringConverter.cs" />
+    <Compile Include="Mvvm\Extensions\ObservableCollectionExtension.cs" />
     <Compile Include="Mvvm\Interaction\AsyncDelegateCommand.cs" />
     <Compile Include="Mvvm\Interaction\CommandAction.cs" />
     <Compile Include="Mvvm\Interaction\RoutedEventTrigger.cs" />

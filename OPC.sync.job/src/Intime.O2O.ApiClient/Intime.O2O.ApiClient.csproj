@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultApiClient.cs" />
+    <Compile Include="Domain\PropertyValue.cs" />
     <Compile Include="Request\GetBrandByIdRequest.cs" />
     <Compile Include="Domain\Detail.cs" />
     <Compile Include="Domain\Head.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Request\GetOrderStatusByIdRequest.cs" />
     <Compile Include="Request\GetProductImagesRequest.cs" />
     <Compile Include="Request\GetProductImagesRequestData.cs" />
+    <Compile Include="Request\GetProductPropertiesRequest.cs" />
     <Compile Include="Request\GetSectionByIdRequestData.cs" />
     <Compile Include="Request\GetSectionByIdRequest.cs" />
     <Compile Include="Request\GetSectionsRequestData.cs" />

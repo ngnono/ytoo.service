@@ -4,6 +4,7 @@ using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Request;
 using Intime.OPC.Domain.Enums;
+using Intime.OPC.Domain.Enums.SortOrder;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Domain.Partials.Models;
 using log4net.Util;
@@ -77,7 +78,33 @@ namespace Intime.OPC.WebApi.App_Start
             saleordermodel.ForMember(d => d.StoreName, opt => opt.MapFrom(s => s.Store.Name));
             saleordermodel.ForMember(d => d.SectionName, opt => opt.MapFrom(s => s.Section.Name));
             saleordermodel.ForMember(d => d.TransNo, opt => opt.MapFrom(s => s.OrderTransaction.TransNo));
-            saleordermodel.ForMember(d => d.ShippingOrder, opt => opt.MapFrom(s => s.ShippingSale));
+            // saleordermodel.ForMember(d => d.ShippingOrder, opt => opt.MapFrom(s => s.ShippingSale));
+
+
+            var salesordermodel = Mapper.CreateMap<OPC_Sale, SalesOrderDto>();
+            salesordermodel.ForMember(d => d.ShippingStatusName, opt => opt.MapFrom(s => s.ShippingStatus.HasValue ? ((EnumSaleOrderStatus)s.ShippingStatus.Value).GetDescription() : String.Empty));
+            salesordermodel.ForMember(d => d.ShippingFee,
+                opt => opt.MapFrom(s => s.ShippingFee.HasValue ? s.ShippingFee : 0m));
+            salesordermodel.ForMember(d => d.IfTrans,
+                opt => opt.MapFrom(s => s.IfTrans.HasValue && s.IfTrans.Value ? true : false));
+            salesordermodel.ForMember(d => d.TransStatus,
+                opt => opt.MapFrom(s => s.TransStatus.HasValue && s.TransStatus.Value == 1 ? "调拨" : String.Empty));
+            salesordermodel.ForMember(d => d.StatusName,
+                opt => opt.MapFrom(s => ((EnumSaleOrderStatus)s.Status).GetDescription()));
+
+            salesordermodel.ForMember(d => d.CustomerName,
+                opt => opt.MapFrom(s => s.Order == null ? String.Empty : s.Order.ShippingContactPerson));
+            salesordermodel.ForMember(d => d.CustomerPhone,
+    opt => opt.MapFrom(s => s.Order == null ? String.Empty : s.Order.ShippingContactPhone));
+            //            salesordermodel.ForMember(d => d.CustomerRemark,
+            //opt => opt.MapFrom(s => s.Order == null ? String.Empty : s.Order.sh));
+
+
+
+            //saleordermodel.ForMember(d => d.StoreName, opt => opt.MapFrom(s => s.Store.Name));
+            //saleordermodel.ForMember(d => d.SectionName, opt => opt.MapFrom(s => s.Section.Name));
+            //saleordermodel.ForMember(d => d.TransNo, opt => opt.MapFrom(s => s.OrderTransaction.TransNo));
+
 
 
             Mapper.CreateMap<OrderTransactionClone, OrderTransaction>();
@@ -92,6 +119,11 @@ namespace Intime.OPC.WebApi.App_Start
 
             Mapper.CreateMap<OrderDto, Order>();
             Mapper.CreateMap<Order, OrderDto>();
+
+
+            Mapper.CreateMap<Store, StoreDto>();
+            Mapper.CreateMap<StoreDto, Store>();
+            Mapper.CreateMap<StoreRequest, StoreFilter>().ForMember(d => d.SortOrder, opt => opt.MapFrom(s => s.SortOrder == null ? StoreSortOrder.Default : (StoreSortOrder)s.SortOrder));
         }
     }
 }

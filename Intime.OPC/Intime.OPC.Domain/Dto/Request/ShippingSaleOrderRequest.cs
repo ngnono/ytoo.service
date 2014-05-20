@@ -10,8 +10,50 @@ namespace Intime.OPC.Domain.Dto.Request
 {
     public class CreateShippingSaleOrderRequest
     {
-        [Required]
-        public List<int> SaleOrderIds { get; set; }
+        [Required(ErrorMessage = "必须提供销售单号")]
+        public List<int> SaleOrderNos { get; set; }
+    }
+
+    public class GetOrderItemsRequest
+    {
+        /// <summary>
+        /// 订单 no
+        /// </summary>
+        public string OrderNo { get; set; }
+
+        /// <summary>
+        /// 销售单 no
+        /// </summary>
+        public string SaleOrderNo { get; set; }
+
+        /// <summary>
+        /// 快递单OR出库单 ID
+        /// </summary>
+        public int ShippingOrderId { get; set; }
+
+        public int? Page { get; set; }
+
+        public int? PageSize { get; set; }
+
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int? SortOrder { get; set; }
+
+        /// <summary>
+        /// 商品名
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 商品名前缀
+        /// </summary>
+        public string NamePrefix { get; set; }
+
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string ContactPhone { get; set; }
     }
 
     public class GetShippingSaleOrderRequest : DateRangeRequest
@@ -32,21 +74,30 @@ namespace Intime.OPC.Domain.Dto.Request
         /// <summary>
         /// 发货单号
         /// </summary>
-        public int ShippingSaleOrderNo { get; set; }
+        public int? ShippingSaleOrderId { get; set; }
 
         /// <summary>
         /// 快递公司
         /// </summary>
-        public ShipViaDto ShipVia { get; set; }
+        public int? ShipViaId { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        [StringLength(200, ErrorMessage = "备注请不要超过200个字符", MinimumLength = 0)]
+        public string ShippingRemark { get; set; }
 
         /// <summary>
         /// 快递单号
         /// </summary>
+        [Required(ErrorMessage = "必须提供快递单号")]
         public string ShippingNo { get; set; }
 
         /// <summary>
         /// 快递费
         /// </summary>
+        [Required(ErrorMessage = "必须提供快递费")]
+        [RegularExpression(@"^[0-9]+(.[0-9]{1,2})?$", ErrorMessage = "请填写正确的快递费")]
         public decimal ShippingFee { get; set; }
     }
 }

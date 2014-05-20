@@ -14,20 +14,30 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
     [Export(typeof(CounterViewModel))]
     public class CounterViewModel : ModalDialogViewModel<Counter>
     {
-        private IQueryCriteria _queryCriteria;
+        private IQueryCriteria _brandQueryCriteria;
         private ObservableCollection<Brand> _brands;
+        private IList<Store> _stores;
+        private Store[] _storeArray;
+        private bool _isFiltingStore;
 
         public CounterViewModel()
         {
+            LoadDimesionsCommand = new AsyncDelegateCommand(OnDimesionsLoad, OnException);
             LoadBrandsCommand = new AsyncDelegateCommand<string>(OnBrandsLoad, OnException);
             LoadMoreBrandsCommand = new AsyncDelegateCommand(OnMoreBrandsLoad, OnException);
             SelectBrandCommand = new DelegateCommand<int?>(OnBrandSelect);
+            FilterStoreCommand = new DelegateCommand<string>(OnStoreFilter);
 
             Brands = new ObservableCollection<Brand>();
         }
 
+        #region Properties
+
         [Import]
         public IService<Brand> BrandService { get; set; }
+
+        [Import]
+        public IService<Store> StoreService { get; set; }
 
         public ObservableCollection<Brand> Brands
         {
@@ -35,11 +45,35 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
             set { SetProperty(ref _brands, value); }
         }
 
+        public IList<Store> Stores
+        {
+            get { return _stores; }
+            set { SetProperty(ref _stores, value); }
+        }
+
+        public bool IsFilteringStore
+        {
+            get { return _isFiltingStore; }
+            set { SetProperty(ref _isFiltingStore, value); }
+        }
+
+        #endregion
+
+        #region Commands
+
+        public ICommand FilterStoreCommand { get; set; }
+
+        public ICommand LoadDimesionsCommand { get; set; }
+
         public ICommand LoadBrandsCommand { get; set; }
 
         public ICommand SelectBrandCommand { get; set; }
 
         public ICommand LoadMoreBrandsCommand { get; set; }
+
+        #endregion
+
+        #region Command handlers
 
         private void OnBrandSelect(int? brandID)
         {
@@ -61,14 +95,14 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
         {
             if (string.IsNullOrEmpty(brandName))
             {
-                _queryCriteria = new QueryAll { PageIndex =1, PageSize=100};
+                _brandQueryCriteria = new QueryAll { PageIndex =1, PageSize = 100};
             }
             else
             {
-                _queryCriteria = new QueryByName { PageIndex = 1, PageSize = 100, Name = brandName };
+                _brandQueryCriteria = new QueryByName { PageIndex = 1, PageSize = 100, Name = brandName };
             }
 
-            var result = BrandService.Query(_queryCriteria);
+            var result = BrandService.Query(_brandQueryCriteria);
             var brands = new ObservableCollection<Brand>(result.Data);
             FilterBrands(brands);
             Brands = new ObservableCollection<Brand>(brands);
@@ -85,12 +119,43 @@ namespace Intime.OPC.Modules.Dimension.ViewModels
 
         private void OnMoreBrandsLoad()
         {
-            if (_queryCriteria == null) return;
+            if (_brandQueryCriteria == null) return;
 
-            _queryCriteria.PageIndex++;
-            var brands = BrandService.Query(_queryCriteria).Data;
+            _brandQueryCriteria.PageIndex++;
+            var brands = BrandService.Query(_brandQueryCriteria).Data;
             FilterBrands(brands);
             AppendBrands(brands);
+        }
+
+        private void OnStoreFilter(string storeName)
+        {
+            if (!string.IsNullOrEmpty(storeName))
+            {
+                var stores = _storeArray.Where(store => store.Name.Contains(storeName)).ToList();
+                Stores = stores;
+            }
+            else
+            {
+                Stores = new List<Store>(_storeArray);
+            }
+
+            IsFilteringStore = true;
+        }
+
+        private void OnDimesionsLoad()
+        {
+            OnBrandsLoad(null);
+
+            LoadStores();
+        }
+
+        #endregion
+
+        private void LoadStores()
+        {
+            Stores = StoreService.QueryAll(new QueryAll());
+            _storeArray = new Store[Stores.Count];
+            Stores.CopyTo(_storeArray, 0);
         }
 
         public void AppendBrands(IEnumerable<Brand> brands)

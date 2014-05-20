@@ -66,5 +66,20 @@ namespace Intime.OPC.WebApi.Controllers
         {
             throw new NotImplementedException();
         }
+
+
+        /// <summary>
+        /// 打印
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="type">1为 出货单  2为快递单</param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [Route("{id:int}/print")]
+        [HttpPut]
+        public IHttpActionResult Put(int id, [FromBody] int type, [UserId] int userId)
+        {
+            throw new NotImplementedException();
+        } 
     }
 }

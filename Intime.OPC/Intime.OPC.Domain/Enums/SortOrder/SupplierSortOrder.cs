@@ -10,4 +10,9 @@ namespace Intime.OPC.Domain.Enums.SortOrder
     {
         Default = 0
     }
+
+    public enum StoreSortOrder : int
+    {
+        Default = 0
+    }
 }

@@ -79,7 +79,8 @@
                     <DataGridTextColumn Header="专柜码" Binding="{Binding Code}" Width="100"></DataGridTextColumn>
                     <DataGridTextColumn Header="销售区域" Binding="{Binding AreaCode}" Width="80"></DataGridTextColumn>
                     <DataGridTextColumn Header="联系电话" Binding="{Binding ContactPhoneNumber}" Width="100"></DataGridTextColumn>
-                    <DataGridTextColumn Header="管理部门" Binding="{Binding Organization.Name}" Width="200"></DataGridTextColumn>
+                    <DataGridTextColumn Header="所属门店" Binding="{Binding Store.Name}" Width="200"></DataGridTextColumn>
+                    <DataGridTextColumn Header="管理部门" Binding="{Binding Organization.Name}" Width="100"></DataGridTextColumn>
                     <DataGridTextColumn Header="状态" Binding="{Binding Path= Repealed, Converter={StaticResource  BoolToStringConverter}, ConverterParameter=已撤柜^未撤柜}"></DataGridTextColumn>
                     <DataGridTemplateColumn Header="操作">
                         <DataGridTemplateColumn.CellTemplate>

@@ -9,4 +9,8 @@ namespace Intime.O2O.ApiClient.Response
     public class GetProductsResponse : Response<IEnumerable<Product>>
     {
     }
+
+    public class GetProductPropertiesResponse : Response<IEnumerable<PropertyValue>>
+    {
+    }
 }

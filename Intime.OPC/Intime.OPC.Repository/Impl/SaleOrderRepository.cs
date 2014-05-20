@@ -256,7 +256,35 @@ namespace Intime.OPC.Repository.Impl
                       ShippingSale = shipp_let.FirstOrDefault(),
                       Order = new OrderClone
                       {
-                          
+                          BrandId = oo.BrandId,
+                          CreateDate = oo.CreateDate,
+                          CreateUser = oo.CreateUser,
+                          CustomerId = oo.CustomerId,
+                          Id = oo.Id,
+                          InvoiceAmount = oo.InvoiceAmount,
+                          InvoiceDetail = oo.InvoiceDetail,
+                          InvoiceSubject = oo.InvoiceSubject,
+                          Memo = oo.Memo,
+                          NeedInvoice = oo.NeedInvoice,
+                          OrderNo = oo.OrderNo,
+                          OrderProductType = oo.OrderProductType,
+                          OrderSource = oo.OrderSource,
+                          PaymentMethodCode = oo.PaymentMethodCode,
+                          PaymentMethodName = oo.PaymentMethodName,
+                          RecAmount = oo.RecAmount,
+                          ShippingAddress = oo.ShippingAddress,
+                          ShippingContactPerson = oo.ShippingContactPerson,
+                          ShippingContactPhone = oo.ShippingContactPhone,
+                          ShippingFee = oo.ShippingFee,
+                          ShippingNo = oo.ShippingNo,
+                          ShippingVia = oo.ShippingVia,
+                          ShippingZipCode = oo.ShippingZipCode,
+                          Status = oo.Status,
+                          StoreId = oo.StoreId,
+                          TotalAmount = oo.TotalAmount,
+                          TotalPoints = oo.TotalPoints,
+                          UpdateDate = oo.UpdateDate,
+                          UpdateUser = oo.UpdateUser
                       }
                       //OPC_ShippingSaleClone.Convert2ShippingSale(shipp_let.FirstOrDefault())
                   };

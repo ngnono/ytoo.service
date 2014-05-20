@@ -177,7 +177,7 @@ namespace Intime.OPC.Service.Impl
             }
         }
 
-        public PagerInfo<SaleDto> GetPagedList(SaleOrderQueryRequest request, int authId)
+        public PagerInfo<SalesOrderDto> GetPagedList(SaleOrderQueryRequest request, int authId)
         {
             var filter = Mapper.Map<SaleOrderQueryRequest, SaleOrderFilter>(request);
             var pagerRequest = new Domain.PagerRequest(request.Page ?? 1, request.PageSize ?? 10);
@@ -212,9 +212,17 @@ namespace Intime.OPC.Service.Impl
 
             int total;
             var datas = _saleOrderRepository.GetPagedList(pagerRequest, out total, filter, (SaleOrderSortOrder)(request.SortOrder ?? 0));
-            var dto = Mapper.Map<List<OPC_Sale>, List<SaleDto>>(datas);
+            var dto = Mapper.Map<List<OPC_Sale>, List<SalesOrderDto>>(datas);
 
-            var pagerdto = new PagerInfo<SaleDto>(pagerRequest, total) { Datas = dto };
+            //默认的MAPPING 有问题
+            //foreach (var d in dto)
+            //{
+            //    MapConfig
+            //} 
+
+
+
+            var pagerdto = new PagerInfo<SalesOrderDto>(pagerRequest, total) { Datas = dto };
 
             return pagerdto;
         }

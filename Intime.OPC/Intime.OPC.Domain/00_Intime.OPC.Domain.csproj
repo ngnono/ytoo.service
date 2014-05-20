@@ -74,7 +74,10 @@
     <Compile Include="BusinessModel\PageFilter.cs" />
     <Compile Include="BusinessModel\SectionFilter.cs" />
     <Compile Include="Dto\Request\ShippingSaleOrderRequest.cs" />
+    <Compile Include="Dto\SalesOrderDto.cs" />
+    <Compile Include="Dto\ShippingOrderDto.cs" />
     <Compile Include="Dto\ShipViaDto.cs" />
+    <Compile Include="Dto\StoreDto.cs" />
     <Compile Include="Enums\ShippingOrderStatus.cs" />
     <Compile Include="Enums\SortOrder\ShippingOrderSortOrder.cs" />
     <Compile Include="Enums\SortOrder\SaleOrderSortOrder.cs" />
@@ -228,10 +231,12 @@
     <Compile Include="Partials\Models\OpcSupplierInfoClone.cs" />
     <Compile Include="Partials\Models\OPC_Sale.cs" />
     <Compile Include="Partials\Models\OPC_SaleClone.cs" />
+    <Compile Include="Partials\Models\OPC_ShippingSale.cs" />
     <Compile Include="Partials\Models\OPC_ShippingSaleClone.cs" />
     <Compile Include="Partials\Models\OrderTransactionClone.cs" />
     <Compile Include="Partials\Models\Section.cs" />
     <Compile Include="Partials\Models\SectionClone.cs" />
+    <Compile Include="Partials\Models\Store.cs" />
     <Compile Include="Partials\Models\StoreClone.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -26,6 +26,21 @@ namespace Intime.OPC.Domain.Dto.Request
         public int ExpressCompanyId { get; set; }
     }
 
+    public class StoreRequest 
+    {
+        public string NamePrefix { get; set; }
+
+        public int? Status { get; set; }
+
+        public int? SortOrder { get; set; }
+
+        public string Name { get; set; }
+
+        public int? Page { get; set; }
+
+        public int? PageSize { get; set; }
+    }
+
     public class PageRequest
     {
         private int pageIndex = 1;
