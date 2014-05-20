@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Transactions;
 using System.Web.Mvc;
@@ -24,7 +25,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             {
                 return this.RenderError(r => r.Message = string.Format("订单号({0})对应订单已存在！", channelOrderNo));
             }
-
+            bool isPaid = Convert.ToBoolean(request.paid);
             var orderNo = OrderRule.CreateCode(0);
             using (var ts = new TransactionScope())
             {
@@ -32,6 +33,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                 {
                     CreateDate = DateTime.Now,
                     CreateUser = authuid,
+                    UpdateDate = DateTime.Now,
+                    UpdateUser =  authuid,
                     BrandId = 0,
                     CustomerId = authuid,
                     InvoiceAmount = request.invoice != null ? request.invoice.amount : null,
@@ -48,10 +51,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                     OrderSource = channel,
                     OrderProductType = (int)OrderProductType.SystemProduct,
                     OrderNo = orderNo,
-                    Status = request.paid ? (int)OrderStatus.Paid : (int)OrderStatus.Complete,
+                    Status = isPaid ? (int)OrderStatus.Paid : (int)OrderStatus.Complete,
                 };
 
-                if (request.paid)
+                
+                if (isPaid)
                 {
                     if (request.payment == null || request.payment.Count == 0)
                     {
@@ -88,14 +92,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                 }
                 foreach (var item in request.products)
                 {
-                    int productId = item.productId;
-                    var product = db.Set<ProductEntity>().FirstOrDefault(x => x.Id == productId);
-                    if (product == null)
-                    {
-                        return
-                            this.RenderError(
-                                r => r.Message = string.Format("订单包含无效的商品！商品Id = ({0})", productId));
-                    }
+
 
                     //var colorValueId = (int)item.colorValueId;
                     //var sizeValueId = (int)item.sizeValueId;
@@ -113,10 +110,18 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
 
                     if (inventory.Amount < itemQuantity)
                     {
-                        return this.RenderError(r => r.Message = string.Format("商品({0})库存不足，无法创建订单", product.Id));
+                        return this.RenderError(r => r.Message = string.Format("商品({0})库存不足，无法创建订单", inventory.ProductId));
                     }
 
                     inventory.Amount -= itemQuantity; //扣减库存
+                    db.Entry(inventory).State = EntityState.Modified;
+                    var product = db.Set<ProductEntity>().FirstOrDefault(x => x.Id == inventory.ProductId);
+                    if (product == null)
+                    {
+                        return
+                            this.RenderError(
+                                r => r.Message = string.Format("订单包含无效的商品！商品Id = ({0})", inventory.ProductId));
+                    }
 
                     var colorEntity = db.Set<ProductPropertyValueEntity>().FirstOrDefault(ppv => ppv.Id == inventory.PColorId);
                     var sizeEntity = db.Set<ProductPropertyValueEntity>().FirstOrDefault(ppv => ppv.Id == inventory.PSizeId);
@@ -165,10 +170,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                     CreateDate = DateTime.Now,
                     CreateUser = authuid,
                     CustomerId = authuid,
-                    Operation = request.paid ? "创建已支付订单" : "创建订单",
+                    Operation = isPaid? "创建已支付订单" : "创建订单",
                     OrderNo = order.OrderNo,
                     Type = (int)OrderOpera.FromOperator
                 });
+
+                db.Set<OrderEntity>().Add(order);
 
                 db.SaveChanges();
                 ts.Complete();
@@ -291,7 +298,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                 return this.RenderError(r => r.Message = "订单未支付，无法确认发票金额!");
             }
 
-            if (order.RecAmount.Value <= request.amount)
+            if (order.RecAmount.Value < (decimal)request.amount)
             {
                 return this.RenderError(r => r.Message = "发票金额超过了订单金额，不能修改!");
             }
