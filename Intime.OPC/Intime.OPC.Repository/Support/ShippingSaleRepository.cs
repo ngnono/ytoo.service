@@ -64,7 +64,7 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 IQueryable<OPC_ShippingSale> query =
-                    db.OPC_ShippingSales.Where(t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate && t.StoreId.HasValue && CurrentUser.StoreIDs.Contains(t.StoreId.Value));
+                    db.OPC_ShippingSales.Where(t => t.CreateDate >= startGoodsOutDate && t.CreateDate < endGoodsOutDate && t.StoreId.HasValue && CurrentUser.StoreIds.Contains(t.StoreId.Value));
                 if (shippingStatus > -1)
                 {
                     query = query.Where(t => t.ShippingStatus == shippingStatus);
@@ -94,7 +94,7 @@ namespace Intime.OPC.Repository.Support
             {
                 var lst =
                     db.OPC_ShippingSales.Where(
-                        t => t.CreateDate >= startDate && t.CreateDate < endDate && t.ShippingStatus == shippingStatus && t.StoreId.HasValue && CurrentUser.StoreIDs.Contains(t.StoreId.Value));
+                        t => t.CreateDate >= startDate && t.CreateDate < endDate && t.ShippingStatus == shippingStatus && t.StoreId.HasValue && CurrentUser.StoreIds.Contains(t.StoreId.Value));
                 if (orderNo.IsNotNull())
                 {
                     lst = lst.Where(t=>t.OrderNo.Contains(orderNo));
@@ -129,7 +129,7 @@ namespace Intime.OPC.Repository.Support
             }
             if (CurrentUser!=null)
             {
-                var ll=CurrentUser.StoreIDs;
+                var ll=CurrentUser.StoreIds;
                 filterExpression = filterExpression.And(t =>t.StoreId.HasValue &&  ll.Contains(t.StoreId.Value));
                // && CurrentUser.StoreIDs.Contains(t.StoreId)
             }

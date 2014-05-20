@@ -12,7 +12,7 @@ using Intime.OPC.Service.Security;
 
 namespace Intime.OPC.Service.Support
 {
-    public class AccountService :BaseService<OPC_AuthUser>, IAccountService
+    public class AccountService : BaseService<OPC_AuthUser>, IAccountService
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IOrgInfoRepository _orgInfoRepository;
@@ -20,7 +20,8 @@ namespace Intime.OPC.Service.Support
         private ISectionRepository _sectionRepository;
         private IStoreRepository _storeRepository;
 
-        public AccountService(IAccountRepository accountRepository,IOrgInfoRepository orgInfoRepository, IRoleUserRepository roleUserRepository, ISectionRepository sectionRepository, IStoreRepository storeRepository):base(accountRepository)
+        public AccountService(IAccountRepository accountRepository, IOrgInfoRepository orgInfoRepository, IRoleUserRepository roleUserRepository, ISectionRepository sectionRepository, IStoreRepository storeRepository)
+            : base(accountRepository)
         {
             _accountRepository = accountRepository;
             _orgInfoRepository = orgInfoRepository;
@@ -40,18 +41,18 @@ namespace Intime.OPC.Service.Support
         public bool Add(OPC_AuthUser t)
         {
             t.Password = t.Password.MD5CSP();
-            return  base.Add(t);
+            return base.Add(t);
         }
 
         public bool Update(OPC_AuthUser t)
         {
             var u = _accountRepository.GetByID(t.Id);
-            if (u==null)
+            if (u == null)
             {
                 throw new UserNotExistException(t.Id);
             }
             t.Password = u.Password;
-           return   base.Update(t);
+            return base.Update(t);
         }
 
         public AuthUserDto Get(string userName, string password)
@@ -61,32 +62,32 @@ namespace Intime.OPC.Service.Support
                 throw new Exception("用户或密码为空");
             }
 
-            var pwd=  password.MD5CSP();
+            var pwd = password.MD5CSP();
             var user = _accountRepository.Get(userName, pwd);
-            if (user==null)
+            if (user == null)
             {
                 throw new Exception("用户名或密码不正确");
             }
-            var dto= AutoMapper.Mapper.Map<OPC_AuthUser,AuthUserDto>(user);
-           
+            var dto = AutoMapper.Mapper.Map<OPC_AuthUser, AuthUserDto>(user);
+
             var org = _orgInfoRepository.GetByOrgID(user.DataAuthId);
-            if (org!=null)
+            if (org != null)
             {
-                dto.DataAuthName =org.OrgName;
+                dto.DataAuthName = org.OrgName;
             }
-            
+
             return dto;
         }
 
         public PageResult<AuthUserDto> Select(string orgid, string name, int pageIndex, int pageSize = 20)
         {
-            var lst= _accountRepository.GetByOrgId(orgid, name, pageIndex, pageSize);
+            var lst = _accountRepository.GetByOrgId(orgid, name, pageIndex, pageSize);
             return OpcResult2Result(lst);
         }
 
         public PageResult<AuthUserDto> SelectByLogName(string orgid, string loginName, int pageIndex, int pageSize = 20)
         {
-            var lst= _accountRepository.GetByLoginName(orgid, loginName, pageIndex, pageSize);
+            var lst = _accountRepository.GetByLoginName(orgid, loginName, pageIndex, pageSize);
             return OpcResult2Result(lst);
         }
 
@@ -110,46 +111,47 @@ namespace Intime.OPC.Service.Support
         public UserDto GetByUserID(int userID)
         {
             var user = _accountRepository.GetByID(userID);
-            if (user==null)
+            if (user == null)
             {
                 throw new UserNotExistException(userID);
             }
-            if (!user.IsValid.HasValue ||!user.IsValid.Value)
+            if (!user.IsValid.HasValue || !user.IsValid.Value)
             {
-                throw new  UserNotValidException(userID);
+                throw new UserNotValidException(userID);
             }
-            UserDto dto=new UserDto();
-            dto.UserID = userID;
+            UserDto dto = new UserDto();
+            dto.Id = userID;
+            dto.Name = user.Name;
             if (user.IsSystem)
             {
-                dto.StoreIDs =
+                dto.StoreIds =
                     _storeRepository.GetAll(1, 20000).Result.Select<Store, int>(t => t.Id).Distinct().ToList();
 
-                dto.SectionID = _sectionRepository.GetAll(1, 2000000).Result.Select<Section, int>(t => t.Id).ToList();
+                dto.SectionIds = _sectionRepository.GetAll(1, 2000000).Result.Select<Section, int>(t => t.Id).ToList();
 
             }
             else
             {
 
-                dto.StoreIDs =
+                dto.StoreIds =
                     _orgInfoRepository.GetByOrgType(user.DataAuthId, EnumOrgType.Store.AsID())
                         .Select(t => t.StoreOrSectionID.Value)
                         .Distinct()
                         .ToList();
 
-                dto.SectionID =
-                    _sectionRepository.GetByStoreIDs(dto.StoreIDs).Select<Section, int>(t => t.Id).Distinct().ToList();
+                dto.SectionIds =
+                    _sectionRepository.GetByStoreIDs(dto.StoreIds).Select<Section, int>(t => t.Id).Distinct().ToList();
             }
             //dto.SectionIDs = _orgInfoRepository.GetByOrgType(user.DataAuthId, EnumOrgType.Section.AsID()).Select(t => t.StoreOrSectionID.Value).Distinct().ToList();
 
             return dto;
         }
 
-       
+
         public void ResetPassword(int userId)
         {
-             var u= _accountRepository.GetByID(userId);
-            if (u!=null && !u.IsSystem && u.IsValid==true)
+            var u = _accountRepository.GetByID(userId);
+            if (u != null && !u.IsSystem && u.IsValid == true)
             {
                 u.Password = "123456".MD5CSP();
                 _accountRepository.Update(u);
@@ -175,21 +177,21 @@ namespace Intime.OPC.Service.Support
 
         protected PageResult<AuthUserDto> OpcResult2Result(PageResult<OPC_AuthUser> result)
         {
-             var lstOrg = _orgInfoRepository.GetAll(1, 10000);
-            IList<AuthUserDto> lstUserDtos=new List<AuthUserDto>();
+            var lstOrg = _orgInfoRepository.GetAll(1, 10000);
+            IList<AuthUserDto> lstUserDtos = new List<AuthUserDto>();
 
             foreach (var user in result.Result)
             {
                 var u = AutoMapper.Mapper.Map<OPC_AuthUser, AuthUserDto>(user);
                 var org = lstOrg.Result.FirstOrDefault(t => t.OrgID == user.DataAuthId);
-                if (org!=null)
+                if (org != null)
                 {
                     u.DataAuthName = org.OrgName;
                 }
                 lstUserDtos.Add(u);
             }
 
-            return new PageResult<AuthUserDto>(lstUserDtos,result.TotalCount);
+            return new PageResult<AuthUserDto>(lstUserDtos, result.TotalCount);
         }
     }
 }

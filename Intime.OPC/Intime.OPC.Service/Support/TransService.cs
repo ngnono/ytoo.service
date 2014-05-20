@@ -195,7 +195,7 @@ namespace Intime.OPC.Service.Support
             endDate = endDate.Date.AddDays(1);
              var user = _accountService.GetByUserID(userid);
             _saleRepository.SetCurrentUser(user);
-             return _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate, endDate, pageIndex, pageSize, user.SectionID.ToArray());
+             return _saleRepository.GetPickUped(saleOrderNo, orderNo, startDate, endDate, pageIndex, pageSize, user.SectionIds.ToArray());
            // return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 

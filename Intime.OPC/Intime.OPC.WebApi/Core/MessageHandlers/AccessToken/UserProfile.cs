@@ -22,22 +22,16 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
         public string Name { get; set; }
 
         /// <summary>
-        /// 专柜Id
+        /// 专柜列表
         /// </summary>
         [DataMember]
-        public int? SectionId { get; set; }
+        public IEnumerable<int> SectionIds { get; set; }
 
         /// <summary>
-        /// 组织Id
+        /// 门店列表
         /// </summary>
         [DataMember]
-        public string OrganizationId { get; set; }
-
-        /// <summary>
-        /// 数据验证Id
-        /// </summary>
-        [DataMember]
-        public string DataAuthId { get; set; }
+        public IEnumerable<int> StoreIds { get; set; }
 
         /// <summary>
         /// 获取角色列表

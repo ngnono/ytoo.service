@@ -6,6 +6,7 @@ using System.Web.Compilation;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using Intime.OPC.WebApi.Core.DependencyResolver.MEF;
+using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 
 namespace Intime.OPC.WebApi
 {
@@ -38,6 +39,7 @@ namespace Intime.OPC.WebApi
             CompositionHost container = new ContainerConfiguration()
                 .WithAssemblies(BuildManager.GetReferencedAssemblies().Cast<Assembly>(), conventions)
                 .CreateContainer();
+
 
             // 设置WebApi的DependencyResolver
             GlobalConfiguration.Configuration.DependencyResolver = new MefDependencyResolver(container);

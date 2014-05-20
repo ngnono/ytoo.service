@@ -22,12 +22,12 @@ namespace Intime.OPC.WebApi.Controllers
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
-        private readonly IRoleRepository _roleRepository;
+        private readonly IUserProfileProvider _userProfileProvider;
 
-        public AccountController(IAccountService accountService, IRoleRepository roleRepository)
+        public AccountController(IAccountService accountService, IUserProfileProvider userProfileProvider)
         {
             _accountService = accountService;
-            _roleRepository = roleRepository;
+            _userProfileProvider = userProfileProvider;
         }
 
         [HttpPost]
@@ -153,17 +153,7 @@ namespace Intime.OPC.WebApi.Controllers
 
             var expires = DateTime.Now.AddSeconds(60 * 60 * 24);
 
-            var roles = _roleRepository.GetRolesByUserId(currentUser.Id);
-
-            var profile = new UserProfile()
-            {
-                Id = currentUser.Id,
-                Name = currentUser.Name,
-                OrganizationId = currentUser.OrgId,
-                SectionId = currentUser.SectionId,
-                DataAuthId = currentUser.DataAuthId,
-                Roles = roles.ToList().ConvertAll(p => p.Name)
-            };
+            var profile = _userProfileProvider.Get(currentUser.Id);
 
             return Ok(new TokenModel
             {

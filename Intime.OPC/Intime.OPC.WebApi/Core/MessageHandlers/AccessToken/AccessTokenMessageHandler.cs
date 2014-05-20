@@ -9,7 +9,6 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-
 using Intime.OPC.WebApi.Core.Security;
 
 namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
@@ -20,6 +19,7 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
     public class AccessTokenMessageHandler : DelegatingHandler
     {
         private readonly IList<string> _excludesUrls = new List<string>();
+        private IUserProfileProvider _userProfileProvider;
 
         public AccessTokenMessageHandler(IList<string> excludesUrls)
         {
@@ -43,6 +43,11 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
 
                 return result;
             }
+        }
+
+        public void SetUserProfileProvider(IUserProfileProvider userProfileProvider)
+        {
+            _userProfileProvider = userProfileProvider;
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
@@ -71,7 +76,7 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
                 return CreateErrorResponse(request, string.Format("HttpHeader {0} 的值为空", HeadConfig.Token));
             }
 
-            AccessTokenIdentity<UserProfile> token = SecurityUtils.GetAccessToken<UserProfile>(accessToken);
+            AccessTokenIdentity<int> token = SecurityUtils.GetAccessToken<int>(accessToken);
             if (token == null)
             {
                 return CreateErrorResponse(request, "Token验证失败");
@@ -83,12 +88,18 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
             }
 
             // 兼容老的用户系统设置用户Id
-            request.Properties.Add(AccessTokenConst.UseridPropertiesName, token.Profile.Id);
+            request.Properties.Add(AccessTokenConst.UseridPropertiesName, token.UserId);
+
+            // ToFix BaseRepostiory Bug
+            HttpContext.Current.Items[AccessTokenConst.UserProfilePropertiesName] = token.UserId;
+
+            // 获取用户信息
+            var userProfile = _userProfileProvider.Get(token.UserId);
 
             //保存UserProfile
-            request.Properties.Add(AccessTokenConst.UserProfilePropertiesName, token.Profile);
+            request.Properties.Add(AccessTokenConst.UserProfilePropertiesName, userProfile);
 
-            SetUserPrincipal(token.Profile, token.Expires);
+            SetUserPrincipal(userProfile, token.Expires);
 
             return base.SendAsync(request, cancellationToken);
         }
@@ -125,7 +136,7 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
             // 添加角色
             claims.AddRange(userProfile.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-            return new ClaimsPrincipal(new ClaimsIdentity[] { new ClaimsIdentity(claims, "Auth0") });
+            return new ClaimsPrincipal(new ClaimsIdentity[] { new ClaimsIdentity(claims, "OPC_Auth") });
         }
     }
 }

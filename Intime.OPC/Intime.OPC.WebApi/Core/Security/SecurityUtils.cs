@@ -21,9 +21,9 @@ namespace Intime.OPC.WebApi.Core.Security
 
         public static string CreateToken(UserProfile userProfile, DateTime expires)
         {
-            var token = new AccessTokenIdentity<UserProfile>
+            var token = new AccessTokenIdentity<int>
             {
-                Profile = userProfile,
+                UserId = userProfile.Id,
                 Expires = expires
             };
 

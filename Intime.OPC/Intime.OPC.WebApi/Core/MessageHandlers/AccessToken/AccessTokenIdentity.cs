@@ -19,6 +19,6 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
         /// 用户信息
         /// </summary>
         [DataMember]
-        public T Profile { get; set; }
+        public T UserId { get; set; }
     }
 }
