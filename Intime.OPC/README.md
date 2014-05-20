@@ -2,9 +2,9 @@
 ## 用户权限相关
 
 * 开关控制
-```
+    ```
   Web.config中的AppSettings中键AccessToken:Enabled 设置true开启，false关闭
-```
+    ```
 * 用户Id的获取
   ```
   Action([UserId] int userId)
