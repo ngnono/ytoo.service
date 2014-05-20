@@ -428,14 +428,13 @@ namespace Intime.OPC.Repository.Support
                 //    select new {Sale = sale, Section = cs.FirstOrDefault()};
 
                 var uu = from o in db.Orders
-                         join u in db.Users on o.CustomerId equals u.Id into ss
-                         select new { OrderNo = o.OrderNo, Order = o, User = ss.FirstOrDefault() };
+                         select new { OrderNo = o.OrderNo, Order = o };
                 
 
                 var filter = from q in qq
                     join s in db.Stores on q.Section.StoreId equals s.Id into mm
                       join o in uu on q.Sale.OrderNo equals o.OrderNo into oo
-                             select new { Sale = q.Sale, Section = q.Section, OrderTrans = q.OrderTrans, User = oo.FirstOrDefault().User, Order = oo.FirstOrDefault().Order, Store = mm.FirstOrDefault() };
+                             select new { Sale = q.Sale, Section = q.Section, OrderTrans = q.OrderTrans, Order = oo.FirstOrDefault().Order, Store = mm.FirstOrDefault() };
                              //select new { Sale = q.Sale,Section=q.Section, Order=oo.FirstOrDefault().Order, User=oo.FirstOrDefault().User, Store = mm.FirstOrDefault() };
 
      
@@ -461,7 +460,7 @@ namespace Intime.OPC.Repository.Support
                         o.TransNo = s.OrderTrans.TransNo;
                     }
 
-                    o.ReceivePerson = s.User.Nickname;
+                    o.ReceivePerson = s.Order.ShippingContactPerson;
                     o.OrderSource = s.Order.OrderSource;
                     o.InvoiceSubject = s.Order.InvoiceSubject;
                     o.PayType = s.Order.PaymentMethodName;
