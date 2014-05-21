@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Intime.OPC.Domain.Enums;
-using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 
 namespace Intime.OPC.Domain.Dto.Request
 {
