@@ -618,7 +618,7 @@ namespace Intime.OPC.Repository.Support
                     {
                         Id = saleDetail.Id,
                         ProductName = orderItem.ProductName,
-                        ProductNo = orderItem.StoreSalesCode,
+                        ProductNo = saleDetail.ProdSaleCode,
                         Color = orderItem.ColorValueName,
                         Size = orderItem.SizeValueName,
                         Brand = brand.Name,
