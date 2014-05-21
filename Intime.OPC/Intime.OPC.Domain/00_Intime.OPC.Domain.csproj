@@ -76,6 +76,7 @@
     <Compile Include="Dto\Request\DeliveryOrderPrintRequest.cs" />
     <Compile Include="Dto\Request\ShippingSaleOrderRequest.cs" />
     <Compile Include="Dto\SalesOrderDto.cs" />
+    <Compile Include="Dto\SalesProductDetailDto.cs" />
     <Compile Include="Dto\ShipViaDto.cs" />
     <Compile Include="Dto\StoreDto.cs" />
     <Compile Include="Enums\ShippingOrderStatus.cs" />

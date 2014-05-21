@@ -22,5 +22,6 @@ namespace OPCApp.ReturnGoodsManage.Views
             set { DataContext = value; }
             get { return DataContext as ShopperReturnGoodsSearchViewModel; }
         }
+
     }
 }

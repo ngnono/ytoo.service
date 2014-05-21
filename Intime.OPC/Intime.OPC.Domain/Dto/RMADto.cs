@@ -78,7 +78,7 @@ namespace Intime.OPC.Domain.Dto
         /// 专柜码
         /// </summary>
         /// <value>The name of the rma cash status.</value>
-        public string 专柜码 { get; set; }
+        public string SectionCode { get; set; }
 
         /// <summary>
         /// 收银流水号
@@ -115,5 +115,54 @@ namespace Intime.OPC.Domain.Dto
         /// </summary>
         /// <value>The cash number.</value>
         public string PayType { get; set; }
+
+        #region 原OPC_SaleRMA
+        public string PaymentMethodName { get; set; }
+        /// <summary>
+        /// 订单来源
+        /// </summary>
+        public string OrderSource { get; set; }
+        /// <summary>
+        /// 订单运费
+        /// </summary>
+        public decimal? OrderTransFee { get; set; }
+        public double MustPayTotal { get; set; }
+        public Nullable<decimal> RealRMASumMoney { get; set; }
+        public string TransMemo { get; set; }
+        public DateTime BuyDate { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerAddress { get; set; }
+        public string CustomerPhone { get; set; }
+        public string CustomerRemark { get; set; }
+        public bool IfReceipt { get; set; }
+        public string ReceiptHead { get; set; }
+        public string ReceiptContent { get; set; }
+        /// <summary>
+        /// 公司应付
+        /// </summary>
+        /// <value>The store fee.</value>
+        public decimal? StoreFee { get; set; }
+        /// <summary>
+        /// 客户应付
+        /// </summary>
+        /// <value>The custom fee.</value>
+        public decimal? CustomFee { get; set; }
+
+        /// <summary>
+        /// 客服同意时间
+        /// </summary>
+        /// <value>The service agree date.</value>
+        public DateTime? ServiceAgreeDate { get; set; }
+
+        /// <summary>
+        /// 应退总金额[待定]
+        /// </summary>
+        public decimal? RecoverableSumMoney { get; set; }
+        /// <summary>
+        /// 赔偿 暂定[应退总金额]
+        /// </summary>
+        public decimal? CompensationFee { get; set; }
+
+        #endregion
     }
 }

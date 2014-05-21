@@ -64,6 +64,36 @@ namespace OPCApp.Infrastructure.REST
             }
         }
 
+        public void PostWithoutReturnValue<TEntity>(string uri, TEntity entity)
+        {
+            using (var client = CreateHttpClient())
+            {
+                SetHttpHeader(client, entity);
+
+                Send<TEntity>(uri, entity, client.PostAsJsonAsync, false);
+            }
+        }
+
+        public void PutWithoutReturn(string uri)
+        {
+            using (var client = CreateHttpClient())
+            {
+                SetHttpHeader(client, string.Empty);
+
+                Send<string>(uri, string.Empty, client.PutAsJsonAsync, false);
+            }
+        }
+
+        public void PutWithoutReturn<TEntity>(string uri, TEntity entity)
+        {
+            using (var client = CreateHttpClient())
+            {
+                SetHttpHeader(client, entity);
+
+                Send<TEntity>(uri, entity, client.PutAsJsonAsync, false);
+            }
+        }
+
         public void Delete(string uri)
         {
             using (var client = CreateHttpClient())
@@ -88,12 +118,13 @@ namespace OPCApp.Infrastructure.REST
             throw new RestException(response.StatusCode, errorMessage);
         }
 
-        private TEntity Send<TEntity>(string uri, TEntity entity, Func<string, TEntity, Task<HttpResponseMessage>> verb)
+        private TEntity Send<TEntity>(string uri, TEntity entity, Func<string, TEntity, Task<HttpResponseMessage>> verb, bool withReturn = true)
         {
             var response = verb(string.Format("{0}{1}", _baseAddress, uri), entity).Result;
             if (response.IsSuccessStatusCode)
             {
-                return response.Content.ReadAsAsync<TEntity>().Result;
+
+                return withReturn ? response.Content.ReadAsAsync<TEntity>().Result : default(TEntity);
             }
 
             string errorMessage = ParseErrorMessage(response);
@@ -189,5 +220,6 @@ namespace OPCApp.Infrastructure.REST
 
             return sBuilder.ToString();
         }
+
     }
 }

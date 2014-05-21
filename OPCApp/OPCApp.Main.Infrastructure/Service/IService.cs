@@ -27,10 +27,22 @@ namespace Intime.OPC.Infrastructure.Service
         T Update(T obj);
 
         /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="data"></param>
+        void Update<TData>(T obj, TData data);
+
+        /// <summary>
         /// Delete
         /// </summary>
         /// <param name="id">object id</param>
         void Delete(int id);
+
+        /// <summary>
+        /// Delete by unique ID
+        /// </summary>
+        /// <param name="uniqueID">unique ID</param>
+        void Delete(string uniqueID);
 
         /// <summary>
         /// Query by ID
@@ -38,6 +50,13 @@ namespace Intime.OPC.Infrastructure.Service
         /// <param name="id">ID</param>
         /// <returns>Object with specifier type</returns>
         T Query(int id);
+
+        /// <summary>
+        /// Query by unique ID
+        /// </summary>
+        /// <param name="uniqueID">unique ID</param>
+        /// <returns>Object with specifier type</returns>
+        T Query(string uniqueID);
 
         /// <summary>
         /// Query

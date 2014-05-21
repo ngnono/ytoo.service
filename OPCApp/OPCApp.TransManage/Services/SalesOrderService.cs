@@ -12,28 +12,50 @@ using OPCApp.Domain.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    [Export(typeof(IService<OPC_Sale>))]
+    //[Export(typeof(IService<OPC_Sale>))]
     public class SalesOrderService : ServiceBase<OPC_Sale>
     {
-        private Fixture fixture = new Fixture();
+        private IService<Order> _orderService;
+        private IService<OPC_ShippingSale> _deliveryOrderService;
+        private IService<Counter> _counterService;
+
+        [ImportingConstructor]
+        public SalesOrderService(IService<Order> orderService, IService<OPC_ShippingSale> deliveryOrderService, IService<Counter> counterService)
+        {
+            _orderService = orderService;
+            _deliveryOrderService = deliveryOrderService;
+            _counterService = counterService;
+        }
 
         public override PagedResult<OPC_Sale> Query(IQueryCriteria queryCriteria)
         {
-            var salesOrders = fixture.Build<OPC_Sale>()
-                .Without(so => so.DeliveryOrder)
-                .Without(so => so.Counter)
-                .Do(so => so.IsSelected = false)
-                .Do(so => so.Status = EnumSaleOrderStatus.ShipInStorage)
-                .CreateMany(200);
-
-            var result = new PagedResult<OPC_Sale>() { PageIndex = queryCriteria.PageIndex, PageSize = queryCriteria.PageSize, TotalCount = 200, Data = salesOrders.ToList() };
+            var result = base.Query(queryCriteria);
+            if (result.TotalCount > 0)
+            {
+                result.Data.ForEach(salesOrder => BuildSalesOrder(salesOrder));
+            }
 
             return result;
         }
 
-        public override OPC_Sale Update(OPC_Sale obj)
+        public override OPC_Sale Query(int id)
         {
-            return obj;
+            return Query(id.ToString());
+        }
+
+        public override OPC_Sale Query(string uniqueID)
+        {
+            var salesOrder = base.Query(uniqueID);
+            BuildSalesOrder(salesOrder);
+
+            return salesOrder;
+        }
+
+        private void BuildSalesOrder(OPC_Sale salesOrder)
+        {
+            if (salesOrder.Order == null) salesOrder.Order = _orderService.Query(salesOrder.OrderNo);
+            if (salesOrder.Counter == null && salesOrder.SectionId.HasValue) salesOrder.Counter = _counterService.Query(salesOrder.SectionId.Value);
+            if (salesOrder.DeliveryOrder == null) salesOrder.DeliveryOrder = _deliveryOrderService.Query(salesOrder.SaleOrderNo);
         }
     }
 }

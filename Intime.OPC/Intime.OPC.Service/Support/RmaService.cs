@@ -8,6 +8,7 @@ using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service.Map;
+using System.Transactions;
 
 namespace Intime.OPC.Service.Support
 {
@@ -139,22 +140,35 @@ namespace Intime.OPC.Service.Support
 
         public void SetRmaCashOver(string rmaNo)
         {
-            var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
+            //var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
 
-            saleRma.RMACashStatus = EnumRMACashStatus.CashOver.AsID();
-            saleRma.RMAStatus = EnumReturnGoodsStatus.Valid.AsID();
-            _saleRmaRepository.Update(saleRma);
+            //saleRma.RMACashStatus = EnumRMACashStatus.CashOver.AsID();
+            //saleRma.RMAStatus = EnumReturnGoodsStatus.Valid.AsID();
+            //_saleRmaRepository.Update(saleRma);
 
-
-            var lstDetail = _rmaDetailRepository.GetByRmaNo(rmaNo, 1, 1000);
-
-            //更新库存
-            foreach (var detail in lstDetail.Result)
+            using (TransactionScope ts = new TransactionScope())
             {
-                var stock = _stockRepository.GetByID(detail.StockId.Value);
-                stock.Count += detail.BackCount;
-                _stockRepository.Update(stock);
+
+                var rep = (IRMARepository)_repository;
+                var rma = rep.GetByRmaNo2(rmaNo);
+                rma.RMACashStatus = EnumRMACashStatus.CashOver.AsID();
+                rma.RMAStatus = EnumReturnGoodsStatus.Valid.AsID();
+                rep.Update(rma);
+
+
+
+                var lstDetail = _rmaDetailRepository.GetByRmaNo(rmaNo, 1, 1000);
+
+                //更新库存
+                foreach (var detail in lstDetail.Result)
+                {
+                    var stock = _stockRepository.GetByID(detail.StockId.Value);
+                    stock.Count += detail.BackCount;
+                    _stockRepository.Update(stock);
+                }
+                ts.Complete();
             }
+
         }
 
         public PageResult<RMADto> GetRmaReturnByExpress(RmaExpressRequest dto)
@@ -173,11 +187,6 @@ namespace Intime.OPC.Service.Support
         /// <param name="rmaNo"></param>
         public void SetRmaShipInStorage(string rmaNo)
         {
-            var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
-
-            saleRma.Status = EnumRMAStatus.ShipInStorage.AsID();
-            _saleRmaRepository.Update(saleRma);
-            //
             UpdateRMAStatus(rmaNo, EnumRMAStatus.ShipInStorage.AsID());
         }
 
@@ -194,13 +203,7 @@ namespace Intime.OPC.Service.Support
 
         public void SetRmaPint(string rmaNo)
         {
-            var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
-
-            saleRma.Status = EnumRMAStatus.PrintRMA.AsID();
-            _saleRmaRepository.Update(saleRma);
-
             UpdateRMAStatus(rmaNo, EnumRMAStatus.PrintRMA.AsID());
-
         }
 
         private void UpdateRMAStatus(string rmaNo,int status)

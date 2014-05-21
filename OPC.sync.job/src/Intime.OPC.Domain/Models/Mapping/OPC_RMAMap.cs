@@ -19,9 +19,6 @@ namespace Intime.OPC.Domain.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(20);
 
-            this.Property(t => t.SourceDesc)
-                .HasMaxLength(50);
-
             this.Property(t => t.OrderNo)
                 .IsRequired()
                 .HasMaxLength(20);
@@ -56,10 +53,22 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.ShipNo)
                 .HasMaxLength(50);
 
+            this.Property(t => t.RmaCashNum)
+                .HasMaxLength(50);
+
             this.Property(t => t.MailAddress)
                 .HasMaxLength(1000);
 
             this.Property(t => t.ContactPerson)
+                .HasMaxLength(20);
+
+            //OPC_SalerRMA
+            this.Property(t => t.Reason)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            this.Property(t => t.SaleRMASource)
+                .IsRequired()
                 .HasMaxLength(20);
 
             this.Property(t => t.RMACashNum)
@@ -71,9 +80,6 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.SaleOrderNo).HasColumnName("SaleOrderNo");
             this.Property(t => t.RMANo).HasColumnName("RMANo");
             this.Property(t => t.IsInquirer).HasColumnName("IsInquirer");
-            this.Property(t => t.SourceDesc).HasColumnName("SourceDesc");
-            this.Property(t => t.SectionId).HasColumnName("SectionId");
-            this.Property(t => t.StoreId).HasColumnName("StoreId");
             this.Property(t => t.Count).HasColumnName("Count");
             this.Property(t => t.RefundAmount).HasColumnName("RefundAmount");
             this.Property(t => t.IsShipping).HasColumnName("IsShipping");
@@ -105,8 +111,22 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.CreatedUser).HasColumnName("CreatedUser");
             this.Property(t => t.UpdatedDate).HasColumnName("UpdatedDate");
             this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
-            this.Property(t => t.RMACashNum).HasColumnName("RMACashNum");
-            this.Property(t => t.RMACashDate).HasColumnName("RMACashDate");
+            this.Property(t => t.StoreId).HasColumnName("StoreId");
+
+            this.Property(t => t.RmaCashNum).HasColumnName("RmaCashNum");
+            this.Property(t => t.RmaCashDate).HasColumnName("RmaCashDate");
+            this.Property(t => t.SectionId).HasColumnName("SectionId");
+            this.Property(t => t.Reason).HasColumnName("Reason");
+            this.Property(t => t.BackDate).HasColumnName("BackDate");
+            this.Property(t => t.StoreFee).HasColumnName("StoreFee");
+            this.Property(t => t.CustomFee).HasColumnName("CustomFee");
+            this.Property(t => t.CompensationFee).HasColumnName("CompensationFee");
+            this.Property(t => t.SaleRMASource).HasColumnName("SaleRMASource");
+            this.Property(t => t.RMAStatus).HasColumnName("RMAStatus");
+            this.Property(t => t.RMACashStatus).HasColumnName("RMACashStatus");
+            this.Property(t => t.RealRMASumMoney).HasColumnName("RealRMASumMoney");
+            this.Property(t => t.ServiceAgreeTime).HasColumnName("CustomerAuthDate");
+            this.Property(t => t.RecoverableSumMoney).HasColumnName("RecoverableSumMoney");
         }
     }
 }

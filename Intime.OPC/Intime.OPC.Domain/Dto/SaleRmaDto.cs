@@ -63,5 +63,8 @@ namespace Intime.OPC.Domain.Dto
         public decimal? CompensationFee { get; set; }
 
         public string RmaNo { get; set; }
+
+
+
     }
 }

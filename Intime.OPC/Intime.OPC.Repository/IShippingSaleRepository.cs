@@ -1,6 +1,8 @@
 ﻿using System;
 using Intime.OPC.Domain;
+using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Domain.Partials.Models;
 
 namespace Intime.OPC.Repository
 {
@@ -10,7 +12,7 @@ namespace Intime.OPC.Repository
 
         PageResult<OPC_ShippingSale> GetByShippingCode(string shippingCode, int pageIndex, int pageSize = 20);
 
-       
+
         PageResult<OPC_ShippingSale> Get(string shippingCode, DateTime startTime, DateTime endTime, int shippingStatus,
             int pageIndex, int pageSize = 20);
 
@@ -37,6 +39,6 @@ namespace Intime.OPC.Repository
         OPC_ShippingSale GetByRmaNo(string rmaNo);
 
         PageResult<OPC_ShippingSale> GetByOrderNo(string orderNo, DateTime startDate, DateTime endDate, int pageIndex,
-            int pageSize,int shippingStatus);
+            int pageSize, int shippingStatus);
     }
 }
