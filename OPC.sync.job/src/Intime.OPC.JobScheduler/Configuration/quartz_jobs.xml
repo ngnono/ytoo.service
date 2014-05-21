@@ -30,10 +30,6 @@
       <recover>false</recover>
       <job-data-map>
         <entry>
-          <key>isRebuild</key>
-          <value>false</value>
-        </entry>
-        <entry>
           <key>benchdate</key>
           <value>2014/5/19</value>
         </entry>
@@ -63,12 +59,12 @@
       <name>ProductPropertySyncJob</name>
       <group>ProductPropertySyncGroup</group>
       <description>商品属性同步任务</description>
-      <job-type>Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs.PropuctPropertySyncJob, Intime.OPC.Job</job-type>
+      <job-type>Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs.ProductPropertySyncJob, Intime.OPC.Job</job-type>
       <durable>false</durable>
       <recover>false</recover>
       <job-data-map>
         <entry>
-          <key>needrebuild</key>
+          <key>isRebuild</key>
           <value>false</value>
         </entry>
         <entry>

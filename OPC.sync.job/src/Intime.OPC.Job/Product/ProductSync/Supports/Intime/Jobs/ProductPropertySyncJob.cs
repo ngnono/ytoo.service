@@ -10,7 +10,7 @@ using System.Threading;
 namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs
 {
     [DisallowConcurrentExecution]
-    public class PropuctPropertySyncJob : IJob
+    public class ProductPropertySyncJob : IJob
     {
         private const int PageSize = 200;
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -110,6 +110,5 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs
                 Thread.Sleep(500);
             }
         }
-
     }
 }
