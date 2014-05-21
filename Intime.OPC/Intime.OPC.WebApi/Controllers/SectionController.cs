@@ -39,6 +39,10 @@ namespace Intime.OPC.WebApi.Controllers
             model.ContactPhone = model.ContactPhone ?? String.Empty;
             model.SectionCode = model.SectionCode ?? String.Empty;
 
+            model.SectionCode = model.SectionCode.Trim();
+            model.Name = model.Name.Trim();
+
+
 
             return model;
         }
@@ -179,7 +183,7 @@ namespace Intime.OPC.WebApi.Controllers
             model.UpdateDate = DateTime.Now;
             model.UpdateUser = userId;
 
-
+            model.Status = 1;
             model = CheckModel(model);
             var item = _sectionRepository.Insert(model);
 

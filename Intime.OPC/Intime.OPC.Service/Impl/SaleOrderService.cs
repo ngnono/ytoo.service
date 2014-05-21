@@ -19,7 +19,7 @@ namespace Intime.OPC.Service.Impl
 {
     public class SaleOrderService : ISaleOrderService
     {
-        private ISaleOrderRepository _saleOrderRepository;
+        private readonly ISaleOrderRepository _saleOrderRepository;
         public SaleOrderService(ISaleOrderRepository saleOrderRepository)
         {
             _saleOrderRepository = saleOrderRepository;
@@ -41,7 +41,7 @@ namespace Intime.OPC.Service.Impl
                         .Join(db.Products, o => o.item.ProductId, p => p.Id, (o, p) => new SaleDetailDto
                         {
                             Id = o.detail.Id,
-                            ProductNo = p.SkuCode,
+                            ProductNo = o.detail.ProdSaleCode,
                             SaleOrderNo = o.detail.SaleOrderNo,
                             StyleNo = p.SkuCode,
                             Size = o.item.SizeValueName,
@@ -177,31 +177,10 @@ namespace Intime.OPC.Service.Impl
             }
         }
 
-        public PagerInfo<SalesOrderDto> GetPagedList(SaleOrderQueryRequest request, int authId)
+        public PagerInfo<SaleDto> GetPagedList(SaleOrderQueryRequest request, int uid)
         {
             var filter = Mapper.Map<SaleOrderQueryRequest, SaleOrderFilter>(request);
             var pagerRequest = new Domain.PagerRequest(request.Page ?? 1, request.PageSize ?? 10);
-
-            //用户身份验证
-            using (var db = new YintaiHZhouContext())
-            {
-                var user =
-                    db.OPC_AuthUsers.Where(x => x.Id == authId)
-                        .Join(db.OPC_OrgInfos, u => u.OrgId, o => o.OrgID, (u, o) => new { user = u, org = o })
-                        .FirstOrDefault();
-                if (user == null)
-                {
-                    throw new OpcExceptioin("未授权的用户");
-                }
-
-                //如果是管理员可以管理任意门店 
-                //否则拿当前用户可以管理的门店
-                if (!user.user.IsSystem)
-                {
-                    //添加店铺ID
-                    filter.StoreId = user.org.StoreOrSectionID;
-                }
-            }
 
             if (request.EndDate != null || request.StartDate != null)
             {
@@ -212,17 +191,9 @@ namespace Intime.OPC.Service.Impl
 
             int total;
             var datas = _saleOrderRepository.GetPagedList(pagerRequest, out total, filter, (SaleOrderSortOrder)(request.SortOrder ?? 0));
-            var dto = Mapper.Map<List<OPC_Sale>, List<SalesOrderDto>>(datas);
+            var dto = Mapper.Map<List<SalesOrderModel>, List<SaleDto>>(datas);
 
-            //默认的MAPPING 有问题
-            //foreach (var d in dto)
-            //{
-            //    MapConfig
-            //} 
-
-
-
-            var pagerdto = new PagerInfo<SalesOrderDto>(pagerRequest, total) { Datas = dto };
+            var pagerdto = new PagerInfo<SaleDto>(pagerRequest, total) { Datas = dto };
 
             return pagerdto;
         }

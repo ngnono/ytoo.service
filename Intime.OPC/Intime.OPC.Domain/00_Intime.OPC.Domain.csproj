@@ -82,6 +82,7 @@
     <Compile Include="Enums\SortOrder\ShippingOrderSortOrder.cs" />
     <Compile Include="Enums\SortOrder\SaleOrderSortOrder.cs" />
     <Compile Include="Models\Mapping\Supplier_BrandMap.cs" />
+    <Compile Include="Partials\Models\SalesOrderModel.cs" />
     <Compile Include="Models\Supplier_Brand.cs" />
     <Compile Include="PagerRequest.cs" />
     <Compile Include="Dto\AuthUserDto.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="Partials\Models\OrderTransactionClone.cs" />
     <Compile Include="Partials\Models\Section.cs" />
     <Compile Include="Partials\Models\SectionClone.cs" />
+    <Compile Include="Partials\Models\ShippingOrderModel.cs" />
     <Compile Include="Partials\Models\Store.cs" />
     <Compile Include="Partials\Models\StoreClone.cs" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Management.Instrumentation;
 using Newtonsoft.Json;
@@ -42,16 +42,16 @@ namespace Intime.OPC.Domain.Dto
         {
             get
             {
-                if (Status == null || Status.Value != 1)
+                if (Status != null && Status.Value == 0)
                 {
-                    return false;
+                    return true;
                 }
 
-                return true;
+                return false;
             }
             set
             {
-                Status = value ? 1 : 0;
+                Status = value ? 0 : 1;
             }
         }
 

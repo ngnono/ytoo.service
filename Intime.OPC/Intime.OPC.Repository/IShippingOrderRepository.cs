@@ -3,6 +3,7 @@ using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Enums.SortOrder;
 using Intime.OPC.Domain.Models;
 using System.Collections.Generic;
+using Intime.OPC.Domain.Partials.Models;
 
 namespace Intime.OPC.Repository
 {
@@ -16,16 +17,23 @@ namespace Intime.OPC.Repository
         /// <param name="filter">筛选项</param>
         /// <param name="sortOrder">排序项</param>
         /// <returns></returns>
-        List<OPC_ShippingSale> GetPagedList(PagerRequest pagerRequest, out int totalCount, ShippingOrderFilter filter,
+        List<ShippingOrderModel> GetPagedList(PagerRequest pagerRequest, out int totalCount, ShippingOrderFilter filter,
                                    ShippingOrderSortOrder sortOrder);
 
+        /// <summary>
+        /// 获取 MODEL
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        ShippingOrderModel GetItemModel(int id);
+        
         /// <summary>
         /// 更新
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="userId">操作人</param>
         /// <returns></returns>
-        OPC_ShippingSale Update4ShippingCode(OPC_ShippingSale entity, int userId);
+        void Update4ShippingCode(OPC_ShippingSale entity, int userId);
 
         /// <summary>
         /// 创建出库单，
@@ -33,7 +41,32 @@ namespace Intime.OPC.Repository
         /// <param name="entity">shipping</param>
         /// <param name="saleOrderModels">销售单</param>
         /// <param name="userId">操作人</param>
+        /// <param name="shippingRemark">物流备注</param>
         /// <returns></returns>
-        OPC_ShippingSale CreateBySaleOrder(OPC_ShippingSale entity, List<OPC_Sale> saleOrderModels, int userId);
+        ShippingOrderModel CreateBySaleOrder(OPC_ShippingSale entity, List<OPC_Sale> saleOrderModels, int userId, string shippingRemark);
+
+        /// <summary>
+        /// 创建备注
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        OPC_ShippingSaleComment CreateComment(OPC_ShippingSaleComment entity, int userId);
+
+        /// <summary>
+        /// 修改备注
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        void UpdateComment(OPC_ShippingSaleComment entity, int userId);
+
+        /// <summary>
+        /// 修改打印次数
+        /// </summary>
+        /// <param name="id">shipping</param>
+        /// <param name="times">增加的次数</param>
+        /// <param name="userId">用户ID</param>
+        void Update4Times(ShippingOrderModel model, int times, int userId );
     }
 }

@@ -14,7 +14,8 @@ namespace Intime.OPC.Service.Support
         private readonly IRoleMenuRepository _roleMenuRepository;
         private IRoleUserRepository _roleUserRepository;
 
-        public RoleService(IRoleRepository roleRepository,IRoleMenuRepository roleMenuRepository, IRoleUserRepository roleUserRepository):base(roleRepository)
+        public RoleService(IRoleRepository roleRepository, IRoleMenuRepository roleMenuRepository, IRoleUserRepository roleUserRepository)
+            : base(roleRepository)
         {
             _roleRepository = roleRepository;
             _roleMenuRepository = roleMenuRepository;
@@ -23,7 +24,7 @@ namespace Intime.OPC.Service.Support
 
         #region IRoleService Members
 
-       
+
         public PageResult<OPC_AuthRole> Select(int pageIndex, int pageSize)
         {
             return _repository.GetAll(pageIndex, pageSize);
@@ -44,12 +45,12 @@ namespace Intime.OPC.Service.Support
             return false;
         }
 
-        public PageResult<OPC_AuthRole> GetByUserID(int userID,int pageIndex, int pageSize = 20)
+        public PageResult<OPC_AuthRole> GetByUserID(int userID, int pageIndex, int pageSize = 20)
         {
-            return _roleRepository.GetByUserID(userID,pageIndex,pageSize);
+            return _roleRepository.GetByUserID(userID, pageIndex, pageSize);
         }
 
-        public bool SetUsers(RoleUserDto roleUserDto,int userId)
+        public bool SetUsers(RoleUserDto roleUserDto, int userId)
         {
             foreach (var uId in roleUserDto.UserIds)
             {
@@ -66,9 +67,14 @@ namespace Intime.OPC.Service.Support
 
                     _roleUserRepository.Create(userRole);
                 }
-                
+
             }
             return true;
+        }
+
+        public IEnumerable<OPC_AuthRole> GetRolesByUserId(int userId)
+        {
+            return _roleRepository.GetRolesByUserId(userId) ?? new List<OPC_AuthRole>();
         }
 
         #endregion

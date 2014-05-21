@@ -98,7 +98,7 @@ namespace Intime.OPC.Repository.Support
                     o.SourceDesc = t.Rma.SourceDesc;
                     o.RmaStatusName = ((EnumRMAStatus)t.SaleRma.RMAStatus).GetDescription();
                     o.StoreName = t.StoreName;
-                    o.专柜码 = "";
+                    o.SectionCode = "";
                     
 
                     lstSaleRma.Add(o);
@@ -160,7 +160,7 @@ namespace Intime.OPC.Repository.Support
                     o.SourceDesc = t.Rma.SourceDesc;
                     o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
                     o.StoreName = t.StoreName;
-                    o.专柜码 = "";
+                    o.SectionCode = "";
                    
                    
 
@@ -244,7 +244,7 @@ namespace Intime.OPC.Repository.Support
                     o.SourceDesc = t.Rma.SourceDesc;
                     o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
                     o.StoreName = t.StoreName;
-                    o.专柜码 = "";
+                    o.SectionCode = "";
 
 
                     lstSaleRma.Add(o);
@@ -319,7 +319,7 @@ namespace Intime.OPC.Repository.Support
                     o.SourceDesc = t.Rma.SourceDesc;
                     o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
                     o.StoreName = t.StoreName;
-                    o.专柜码 = "";
+                    o.SectionCode = "";
 
 
                     lstSaleRma.Add(o);
@@ -393,7 +393,7 @@ namespace Intime.OPC.Repository.Support
                     o.SourceDesc = t.Rma.SourceDesc;
                     o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
                     o.StoreName = t.StoreName;
-                    o.专柜码 = "";  //退货明细上去
+                    o.SectionCode = "";  //退货明细上去
 
 
                     lstSaleRma.Add(o);
@@ -408,10 +408,10 @@ namespace Intime.OPC.Repository.Support
             CheckUser();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
+                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIds.Contains(t.StoreId));
                 var saleQuery =
                     db.OPC_SaleRMAs.Where(
-                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus == (int)EnumReturnGoodsStatus.Valid && CurrentUser.StoreIDs.Contains(t.StoreId));
+                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.RMAStatus == (int)EnumReturnGoodsStatus.Valid && CurrentUser.StoreIds.Contains(t.StoreId));
 
                 if (orderNo.IsNotNull())
                 {
@@ -465,7 +465,7 @@ namespace Intime.OPC.Repository.Support
                     o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
 
                     o.StoreName = t.StoreName;
-                    o.专柜码 = "";
+                    o.SectionCode = "";
 
 
                     lstSaleRma.Add(o);
@@ -483,10 +483,10 @@ namespace Intime.OPC.Repository.Support
             int rma = EnumRMAStatus.ShoppingGuideReceive.AsID();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIDs.Contains(t.StoreId));
+                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIds.Contains(t.StoreId));
                 var saleQuery =
                     db.OPC_SaleRMAs.Where(
-                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.Status==rma && CurrentUser.StoreIDs.Contains(t.StoreId));
+                        t => t.CreatedDate >= startTime && t.CreatedDate < endTime && t.Status==rma && CurrentUser.StoreIds.Contains(t.StoreId));
 
                 if (orderNo.IsNotNull())
                 {
@@ -540,7 +540,7 @@ namespace Intime.OPC.Repository.Support
                     o.RmaStatusName = ((EnumReturnGoodsStatus)t.SaleRma.RMAStatus).GetDescription();
 
                     o.StoreName = t.StoreName;
-                    o.专柜码 = "";
+                    o.SectionCode = "";
 
 
                     lstSaleRma.Add(o);

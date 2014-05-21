@@ -6,18 +6,6 @@ namespace Intime.OPC.Domain.Models
     public partial class OPC_ShippingSale 
     {
         /// <summary>
-        /// 销售单
-        /// </summary>
-        [NotMapped]
-        public virtual List<OPC_Sale> SaleOrders { get; set; }
-
-        /// <summary>
-        /// 订单商品
-        /// </summary>
-        [NotMapped]
-        public virtual List<OrderItem> OrderItems { get; set; }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="obj"></param>

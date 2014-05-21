@@ -1,15 +1,11 @@
 ﻿
+using System.Collections.Generic;
 using Intime.OPC.Domain.Enums;
 
 namespace Intime.OPC.Domain.BusinessModel
 {
     public class SaleOrderFilter
     {
-        /// <summary>
-        /// 店铺ID
-        /// </summary>
-        public int? StoreId { get;set; }
-
         /// <summary>
         /// 销售单 NO
         /// </summary>
@@ -39,5 +35,15 @@ namespace Intime.OPC.Domain.BusinessModel
         /// 是否生成发货单
         /// </summary>
         public bool HasDeliveryOrderGenerated { get; set; }
+
+        /// <summary>
+        /// 查询指定门店
+        /// </summary>
+        public List<int> StoreIds { get; set; }
+
+        /// <summary>
+        /// 是否查询所有门店
+        /// </summary>
+        public bool IsAllStoreIds { get; set; }
     }
 }

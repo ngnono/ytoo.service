@@ -13,5 +13,7 @@ namespace Intime.OPC.Domain.Models
         public int CreateUser { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public int UpdateUser { get; set; }
+
+        public int ShippingSaleId { get; set; }
     }
 }

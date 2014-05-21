@@ -16,7 +16,7 @@ using System.Collections.Generic;
 namespace Intime.OPC.Domain.Dto
 {
     /// <summary>
-    /// Class UserDto.
+    /// 用户模型
     /// </summary>
     public class UserDto
     {
@@ -25,26 +25,35 @@ namespace Intime.OPC.Domain.Dto
         /// </summary>
         public UserDto()
         {
-            SectionID = new List<int>();
-            StoreIDs = new List<int>();
+            SectionIds = new List<int>();
+            StoreIds = new List<int>();
         }
 
         /// <summary>
-        /// Gets or sets the user identifier.
+        /// 用户Id
         /// </summary>
-        /// <value>The user identifier.</value>
-        public int UserID { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the section i ds.
+        /// 用户名称
         /// </summary>
-        /// <value>The section i ds.</value>
-        public IList<int> SectionID { get; set; }
+        public string Name { get; set; }
+
         /// <summary>
-        /// Gets or sets the store i ds.
+        /// 是否为管理员
+        /// </summary>
+        public bool IsSystem { get; set; }
+
+        /// <summary>
+        /// 专柜列表
+        /// </summary>
+        public IList<int> SectionIds { get; set; }
+
+        /// <summary>
+        /// 门店列表
         /// </summary>
         /// <value>The store i ds.</value>
-        public IList<int> StoreIDs { get; set; }
+        public IList<int> StoreIds { get; set; }
     }
 
     public class ChangePasswordDto

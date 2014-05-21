@@ -49,5 +49,40 @@ namespace Intime.OPC.Domain.Models
 
         public Nullable<int> SectionId { get; set; }
         public DateTime? RmaCashDate { get; set; }
+        /// <summary>
+        ///  原OPC_SaleRMA字段
+        /// </summary>
+        public string Reason { get; set; }
+        public System.DateTime BackDate { get; set; }
+
+        public Nullable<decimal> StoreFee { get; set; }
+        public Nullable<decimal> CustomFee { get; set; }
+        public string RMAMemo { get; set; }
+        /// <summary>
+        /// 退货总金额
+        /// </summary>
+        /// <value>The compensation fee.</value>
+        public Nullable<decimal> CompensationFee { get; set; }
+        public string SaleRMASource { get; set; }
+        /// <summary>
+        /// 退货状态
+        /// </summary>
+        /// <value>The rma status.</value>
+        public int RMAStatus { get; set; }
+        public int RMACashStatus { get; set; }
+        /// <summary>
+        /// 实退总金额
+        /// </summary>
+        /// <value>The real rma sum money.</value>
+        public Nullable<decimal> RealRMASumMoney { get; set; }
+
+        public DateTime? ServiceAgreeTime { get; set; }
+
+        /// <summary>
+        /// 赔偿
+        /// </summary>
+        /// <value>The recoverable sum money.</value>
+        public Decimal? RecoverableSumMoney { get; set; }
+
     }
 }

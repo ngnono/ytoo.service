@@ -43,7 +43,7 @@ namespace Intime.OPC.Repository.Support
                 if (CurrentUser != null)
                 {
                   //query = query.Where(t => t.SectionId.HasValue && sectionIds.Contains(t.SectionId.Value));
-                  return   db.OPC_Sales.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value)).ToList();
+                  return   db.OPC_Sales.Where(t => t.SectionId.HasValue && CurrentUser.SectionIds.Contains(t.SectionId.Value)).ToList();
                 }
                 List<OPC_Sale> saleList = db.OPC_Sales.ToList();
                 return saleList;
@@ -415,7 +415,7 @@ namespace Intime.OPC.Repository.Support
                 var query = db.OPC_Sales.Where(t => t.OrderNo == orderID);
                 if (CurrentUser!=null)
                 {
-                    query = query.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value));
+                    query = query.Where(t => t.SectionId.HasValue && CurrentUser.SectionIds.Contains(t.SectionId.Value));
                 }
 
                 var qq = from sale in query
@@ -428,14 +428,13 @@ namespace Intime.OPC.Repository.Support
                 //    select new {Sale = sale, Section = cs.FirstOrDefault()};
 
                 var uu = from o in db.Orders
-                         join u in db.Users on o.CustomerId equals u.Id into ss
-                         select new { OrderNo = o.OrderNo, Order = o, User = ss.FirstOrDefault() };
+                         select new { OrderNo = o.OrderNo, Order = o };
                 
 
                 var filter = from q in qq
                     join s in db.Stores on q.Section.StoreId equals s.Id into mm
                       join o in uu on q.Sale.OrderNo equals o.OrderNo into oo
-                             select new { Sale = q.Sale, Section = q.Section, OrderTrans = q.OrderTrans, User = oo.FirstOrDefault().User, Order = oo.FirstOrDefault().Order, Store = mm.FirstOrDefault() };
+                             select new { Sale = q.Sale, Section = q.Section, OrderTrans = q.OrderTrans, Order = oo.FirstOrDefault().Order, Store = mm.FirstOrDefault() };
                              //select new { Sale = q.Sale,Section=q.Section, Order=oo.FirstOrDefault().Order, User=oo.FirstOrDefault().User, Store = mm.FirstOrDefault() };
 
      
@@ -461,7 +460,7 @@ namespace Intime.OPC.Repository.Support
                         o.TransNo = s.OrderTrans.TransNo;
                     }
 
-                    o.ReceivePerson = s.User.Nickname;
+                    o.ReceivePerson = s.Order.ShippingContactPerson;
                     o.OrderSource = s.Order.OrderSource;
                     o.InvoiceSubject = s.Order.InvoiceSubject;
                     o.PayType = s.Order.PaymentMethodName;

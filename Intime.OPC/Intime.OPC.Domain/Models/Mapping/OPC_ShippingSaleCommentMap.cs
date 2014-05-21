@@ -28,6 +28,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.CreateUser).HasColumnName("CreateUser");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
+            this.Property(t => t.ShippingSaleId).HasColumnName("ShippingSaleId");
         }
     }
 }

@@ -13,7 +13,9 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
@@ -75,7 +77,7 @@ namespace Intime.OPC.Repository.Support
 
         public PageResult<OPC_AuthRole> GetAll(int pageIndex, int pageSize)
         {
-            return Select2<OPC_AuthRole, int>(t => t.IsSystem == false, t => t.Id,true, pageIndex, pageSize);
+            return Select2<OPC_AuthRole, int>(t => t.IsSystem == false, t => t.Id, true, pageIndex, pageSize);
         }
 
         public PageResult<OPC_AuthRole> GetByUserID(int userID, int pageIndex, int pageSize = 20)
@@ -84,6 +86,25 @@ namespace Intime.OPC.Repository.Support
             {
                 return db.OPC_AuthRoleUsers.Where(t => t.OPC_AuthUserId == userID).Join(db.OPC_AuthRoles,
                     t => t.OPC_AuthUserId, o => o.Id, (t, o) => o).ToPageResult(pageIndex, pageSize);
+            }
+        }
+
+
+        /// <summary>
+        /// 根据用户获取角色列表
+        /// </summary>
+        /// <param name="userId">用户id</param>
+        /// <returns>角色列表</returns>
+        public IEnumerable<OPC_AuthRole> GetRolesByUserId(int userId)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                return db.OPC_AuthRoleUsers
+                    .Where(a => a.OPC_AuthUserId == userId)
+                    .Join(db.OPC_AuthRoles,
+                    t => t.OPC_AuthRoleId,
+                    o => o.Id,
+                    (t, o) => o).ToList();
             }
         }
 

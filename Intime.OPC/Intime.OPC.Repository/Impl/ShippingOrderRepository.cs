@@ -10,6 +10,7 @@ using Intime.OPC.Domain;
 using Intime.OPC.Domain.BusinessModel;
 using Intime.OPC.Domain.Enums.SortOrder;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Domain.Partials.Models;
 using Intime.OPC.Repository.Base;
 using LinqKit;
 using log4net.Appender;
@@ -87,72 +88,59 @@ namespace Intime.OPC.Repository.Impl
             throw new NotImplementedException();
         }
 
-        public List<OPC_ShippingSale> GetPagedList(PagerRequest pagerRequest, out int totalCount,
+        public List<ShippingOrderModel> GetPagedList(PagerRequest pagerRequest, out int totalCount,
             ShippingOrderFilter filter,
             ShippingOrderSortOrder sortOrder)
         {
-
-
             var shippingOrderFilter = Filter(filter);
-            var saleorderFilter = SaleOrder4Filter(filter);
+            //var saleorderFilter = SaleOrder4Filter(filter);
 
             var rst = Func(db =>
             {
-
                 var q1 = from ss in db.Set<OPC_ShippingSale>().AsExpandable().Where(shippingOrderFilter)
-                    let sale_let = (from sale in db.Set<OPC_Sale>().AsExpandable().Where(saleorderFilter)
-                        where ss.Id == sale.ShippingSaleId
-                        select sale
-                        )
-                    let items_let = (
-                        from sale in sale_let
-                        join sd in db.Set<OPC_SaleDetail>() on sale.SaleOrderNo equals sd.SaleOrderNo
-                        join s in db.Set<OPC_Sale>() on sd.SaleOrderNo equals s.SaleOrderNo
-                        join si in db.Set<OrderItem>() on sd.OrderItemId equals si.Id
+                         //let sale_let = (from sale in db.Set<OPC_Sale>().AsExpandable().Where(saleorderFilter)
+                         //                where ss.Id == sale.ShippingSaleId
+                         //                select sale
+                         //    )
+                         select new
+                         {
 
-                        select si
-                        )
-                    select new
-                    {
-
-                        ShippingSale = ss,
-                        OrderItems = items_let,
-                        SaleOrders = sale_let
-                    };
+                             ShippingSale = ss,
+                             //SaleOrders = sale_let
+                         };
 
                 var t = q1.Count();
 
                 var q =
                     q1.OrderByDescending(v => v.ShippingSale.CreateDate)
                         .Skip(pagerRequest.SkipCount)
-                        .Take(pagerRequest.PageSize).ToList();
-
-                var list = new List<OPC_ShippingSale>(q.Count);
-                foreach (var item in q)
-                {
-                    if (item.ShippingSale != null)
-                    {
-                        var model = OPC_ShippingSale.Convert2ShippingOrderModel(item.ShippingSale);
-
-                        if (item.OrderItems != null)
+                        .Take(pagerRequest.PageSize).Select(v => new ShippingOrderModel
                         {
-                            model.OrderItems = item.OrderItems.ToList();
-                        }
-
-                        if (item.SaleOrders != null)
-                        {
-                            model.SaleOrders = item.SaleOrders.ToList();
-                        }
-
-                        list.Add(model);
-                    }
-                }
-
+                            Id = v.ShippingSale.Id,
+                            CustomerAddress = v.ShippingSale.ShippingAddress,
+                            CustomerName = v.ShippingSale.ShippingContactPerson,
+                            CustomerPhone = v.ShippingSale.ShippingContactPhone,
+                            ExpressCode = v.ShippingSale.ShippingCode,
+                            ExpressFee = v.ShippingSale.ShippingFee ?? 0,
+                            GoodsOutCode = v.ShippingSale.ShippingCode,
+                            GoodsOutDate = v.ShippingSale.CreateDate,
+                            GoodsOutType = String.Empty,//v.ShippingSale.
+                            OrderNo = v.ShippingSale.OrderNo,
+                            PrintTimes = v.ShippingSale.PrintTimes,
+                            RmaNo = v.ShippingSale.RmaNo,
+                            //SaleOrderNo
+                            ShipCompanyName = v.ShippingSale.ShipViaName,
+                            ShipManName = String.Empty,
+                            ShippingMethod = String.Empty,
+                            ShippingStatus = v.ShippingSale.ShippingStatus,
+                            ShippingZipCode = v.ShippingSale.ShippingZipCode,
+                            ShipViaExpressFee = v.ShippingSale.ShippingFee ?? 0
+                        }).ToList();
 
                 return new
                 {
                     total = t,
-                    data = list
+                    data = q
                 };
             });
 
@@ -160,14 +148,59 @@ namespace Intime.OPC.Repository.Impl
             return rst.data;
         }
 
-        public OPC_ShippingSale Update4ShippingCode(OPC_ShippingSale entity, int userId)
+        public ShippingOrderModel GetItemModel(int id)
         {
             return Func(db =>
             {
-                EFHelper.UpdateEntityFields(db, entity, new List<string> { "ShipViaId", "ShipViaName", "ShippingCode", "ShippingFee" });
+                var q1 = from ss in db.Set<OPC_ShippingSale>().Where(v => v.Id == id)
+                         //let sale_let = (from sale in db.Set<OPC_Sale>()
+                         //                where ss.Id == sale.ShippingSaleId
+                         //                select sale
+                         //    )
+                         select new
+                         {
 
-                return entity;
+                             ShippingSale = ss,
+                             //SaleOrders = sale_let
+                         };
+
+                var q =
+                    q1.Select(v => new ShippingOrderModel
+                    {
+                        Id = v.ShippingSale.Id,
+                        CustomerAddress = v.ShippingSale.ShippingAddress,
+                        CustomerName = v.ShippingSale.ShippingContactPerson,
+                        CustomerPhone = v.ShippingSale.ShippingContactPhone,
+                        ExpressCode = v.ShippingSale.ShippingCode,
+                        ExpressFee = v.ShippingSale.ShippingFee ?? 0,
+                        GoodsOutCode = v.ShippingSale.ShippingCode,
+                        GoodsOutDate = v.ShippingSale.CreateDate,
+                        GoodsOutType = String.Empty, //v.ShippingSale.
+                        OrderNo = v.ShippingSale.OrderNo,
+                        PrintTimes = v.ShippingSale.PrintTimes,
+                        RmaNo = v.ShippingSale.RmaNo,
+                        //SaleOrderNo
+                        ShipCompanyName = v.ShippingSale.ShipViaName,
+                        ShipManName = String.Empty,
+                        ShippingMethod = String.Empty,
+                        ShippingStatus = v.ShippingSale.ShippingStatus,
+                        ShippingZipCode = v.ShippingSale.ShippingZipCode,
+                        ShipViaExpressFee = v.ShippingSale.ShippingFee ?? 0,
+                        StoreId = v.ShippingSale.StoreId ?? 0
+                    }).FirstOrDefault();
+
+                return q;
             });
+        }
+
+        public void Update4ShippingCode(OPC_ShippingSale entity, int userId)
+        {
+            Action(db =>
+           {
+               EFHelper.UpdateEntityFields(db, entity, new List<string> { "ShipViaId", "ShipViaName", "ShippingCode", "ShippingFee" });
+
+               /// return entity;
+           });
         }
 
         /// <summary>
@@ -177,37 +210,63 @@ namespace Intime.OPC.Repository.Impl
         /// <param name="saleOrderModels">销售单</param>
         /// <param name="userId">操作人</param>
         /// <returns></returns>
-        public OPC_ShippingSale CreateBySaleOrder(OPC_ShippingSale entity, List<OPC_Sale> saleOrderModels, int userId)
+        public ShippingOrderModel CreateBySaleOrder(OPC_ShippingSale entity, List<OPC_Sale> saleOrderModels, int userId, string shippingRemark)
         {
             return Func(db =>
             {
                 using (var trans = new TransactionScope())
                 {
                     entity = EFHelper.Insert(db, entity);
-
-                    //update saleordermodel
-                    var ids = saleOrderModels.Select(v => v.Id);
-
-                    var sales = EFHelper.Get<OPC_Sale>(db, v => ids.Contains(v.Id)).ToList();
-                    if (sales.Count != ids.Count())
+                    if (!String.IsNullOrWhiteSpace(shippingRemark))
                     {
-                        throw new ArgumentException("销售单未能找到，且与提供的数量不一致。");
+                        var remark = new OPC_ShippingSaleComment()
+                        {
+                            Content = shippingRemark,
+                            CreateDate = DateTime.Now,
+                            CreateUser = userId,
+                            ShippingCode = String.Empty,
+                            ShippingSaleId = entity.Id,
+                            UpdateDate = DateTime.Now,
+                            UpdateUser = userId
+                        };
+                        EFHelper.Insert(db, remark);
                     }
 
-                    foreach (var sale in sales)
+                    foreach (var sale in saleOrderModels)
                     {
                         sale.ShippingSaleId = entity.Id;
                         sale.UpdatedUser = userId;
                         sale.UpdatedDate = DateTime.Now;
+                        sale.ShippingRemark = shippingRemark ?? String.Empty;
 
-                        EFHelper.UpdateEntityFields(db, sale, new List<string> { "ShippingSaleId", "UpdatedUser", "UpdatedDate" });
+                        EFHelper.UpdateEntityFields(db, sale, new List<string> { "ShippingSaleId", "UpdatedUser", "UpdatedDate", "ShippingRemark" });
                     }
 
                     trans.Complete();
 
-                    return entity;
+                    return GetItemModel(entity.Id);
                 }
             });
+        }
+
+        public OPC_ShippingSaleComment CreateComment(OPC_ShippingSaleComment entity, int userId)
+        {
+            return Func(db =>
+
+                EFHelper.Insert(db, entity)
+            );
+        }
+
+        public void UpdateComment(OPC_ShippingSaleComment entity, int userId)
+        {
+            Action(db =>
+   EFHelper.Update(db, entity)
+);
+        }
+
+        public void Update4Times(ShippingOrderModel model, int times, int userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

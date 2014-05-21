@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Intime.OPC.MessageHandlers.AccessToken
+namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
 {
     /// <summary>
     ///     用户访问令牌
     /// </summary>
     [DataContract]
-    public class AccessTokenIdentity
+    public class AccessTokenIdentity<T>
     {
         /// <summary>
         ///     过期时间
@@ -16,9 +16,9 @@ namespace Intime.OPC.MessageHandlers.AccessToken
         public DateTime Expires { get; set; }
 
         /// <summary>
-        ///     用户ID
+        /// 用户信息
         /// </summary>
         [DataMember]
-        public int UserId { get; set; }
+        public T UserId { get; set; }
     }
 }

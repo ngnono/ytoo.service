@@ -8,6 +8,76 @@
         <overwrite-existing-data>true</overwrite-existing-data>
     </processing-directives>
 
+  <!--退货单同步至银泰网任务-->
+  <schedule>
+    <trigger>
+      <cron>
+        <name>RMA2YintaiJobTigger</name>
+        <group>RMA2YintaiJobTiggerGroup</group>
+        <description>退货单同步至银泰网job</description>
+        <job-name>RMA2YintaiJob</job-name>
+        <job-group>RMA2YintaiJobGroup</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 1/45 * * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <job>
+      <name>RMA2YintaiJob</name>
+      <group>RMA2YintaiJobGroup</group>
+      <description>商品属性同步任务</description>
+      <job-type>Intime.OPC.Job.RMASync.RMA2YintaiJob, Intime.OPC.Job</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>benchdate</key>
+          <value>2014/5/19</value>
+        </entry>
+        <entry>
+          <key>intervalofmins</key>
+          <value>60</value>
+        </entry>
+      </job-data-map>
+    </job>
+  </schedule>
+  
+  
+  <!--商品属性同同步任务-->
+  <schedule>
+    <trigger>
+      <cron>
+        <name>ProductPropertySyncJobTigger</name>
+        <group>ProductPropertySyncJobTiggerGroup</group>
+        <description>商品属性同步job</description>
+        <job-name>ProductPropertySyncJob</job-name>
+        <job-group>ProductPropertySyncGroup</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 0 0/1 * * ?</cron-expression>
+      </cron>
+    </trigger>
+    <job>
+      <name>ProductPropertySyncJob</name>
+      <group>ProductPropertySyncGroup</group>
+      <description>商品属性同步任务</description>
+      <job-type>Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs.ProductPropertySyncJob, Intime.OPC.Job</job-type>
+      <durable>false</durable>
+      <recover>false</recover>
+      <job-data-map>
+        <entry>
+          <key>isRebuild</key>
+          <value>false</value>
+        </entry>
+        <entry>
+          <key>benchdate</key>
+          <value>2014/4/22</value>
+        </entry>
+        <entry>
+          <key>intervalofhrs</key>
+          <value>2</value>
+        </entry>
+      </job-data-map>
+    </job>
+  </schedule>
   <!--自拍商品拆单任务-->
   <schedule>
     <trigger>

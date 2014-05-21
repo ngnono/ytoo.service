@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Intime.OPC.Domain.Dto
+namespace Intime.OPC.Domain.Partials.Models
 {
-    /// <summary>
-    ///     发货单
-    /// </summary>
-    public class ShippingSaleDto
+    public class ShippingOrderModel
     {
         /// <summary>
         ///     销售单号
         /// </summary>
         public string SaleOrderNo { get; set; }
+
         /// <summary>
         ///     发货单ID
         /// </summary>
@@ -30,7 +27,7 @@ namespace Intime.OPC.Domain.Dto
         /// <summary>
         ///     发货状态
         /// </summary>
-        public string ShippingStatus { get; set; }
+        public int? ShippingStatus { get; set; }
 
         /// <summary>
         ///     收货人姓名
@@ -50,7 +47,7 @@ namespace Intime.OPC.Domain.Dto
         /// <summary>
         ///     发货时间
         /// </summary>
-        public DateTime GoodsOutDate { get; set; }
+        public DateTime? GoodsOutDate { get; set; }
 
         /// <summary>
         ///     发货方式
@@ -68,9 +65,9 @@ namespace Intime.OPC.Domain.Dto
         public string ShipManName { get; set; }
 
         /// <summary>
-        ///     打印状态
+        /// 打印次数
         /// </summary>
-        public string PrintStatus { get; set; }
+        public int PrintTimes { get; set; }
 
         /// <summary>
         ///     邮编
@@ -87,13 +84,13 @@ namespace Intime.OPC.Domain.Dto
         ///     支付快递公司快递费
         /// </summary>
         /// <value>The express fee.</value>
-        public double ShipViaExpressFee { get; set; }
+        public decimal ShipViaExpressFee { get; set; }
 
         /// <summary>
         ///     快递费
         /// </summary>
         /// <value>The express fee.</value>
-        public double ExpressFee { get; set; }
+        public decimal ExpressFee { get; set; }
 
         /// <summary>
         ///     退货单号
@@ -101,6 +98,14 @@ namespace Intime.OPC.Domain.Dto
         /// <value>The shipping method.</value>
         public string RmaNo { get; set; }
 
+        /// <summary>
+        ///  订单号
+        /// </summary>
         public string OrderNo { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int StoreId { get; set; }
     }
 }

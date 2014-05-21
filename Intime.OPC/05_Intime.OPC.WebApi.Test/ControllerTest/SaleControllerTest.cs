@@ -18,6 +18,7 @@ using Intime.OPC.Service.Impl;
 using Intime.OPC.Service.Support;
 using Intime.OPC.WebApi.App_Start;
 using Intime.OPC.WebApi.Controllers;
+using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 using NUnit.Framework;
 using IOrderService = Intime.OPC.Service.IOrderService;
 using OrderService = Intime.OPC.Service.Support.OrderService;
@@ -50,7 +51,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
             ISaleRMARepository saleRmaRepository = new SaleRMARepository();
             IOrderService orderService = new OrderService(orderRepository, orderRemarkRepository, orderItemRepository, brandRepository, accountService, saleDetailRepository, saleRmaRepository);
             IShippingSaleService shippingSaleService = new ShippingSaleService(shippingSaleRepository, orderRepository, saleRmaRepository, accountService);
-            ISaleOrderRepository saleOrderRepository = new SaleOrderRepository();
+            ISaleOrderRepository saleOrderRepository = new SalesOrderRepository();
             ISaleOrderService saleOrderService = new SaleOrderService(saleOrderRepository);
             _controller = new SaleController(saleService, shippingSaleService, saleOrderService);
 
@@ -84,10 +85,43 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
                 EndDate = DateTime.Now,
                 StartDate = DateTime.Now.AddYears(-1),
                 Status = EnumSaleOrderStatus.ShipInStorage
-            }, 28) as OkNegotiatedContentResult<PagerInfo<SaleDto>>;
+            }, 28, new UserProfile { IsSystem = true }) as OkNegotiatedContentResult<PagerInfo<SaleDto>>;
+
+            Assert.IsNotNull(actual);
+            Assert.IsTrue(actual.Content.TotalCount > 0);
+        }
+
+        [Test()]
+        public void GetListTest_2()
+        {
+            _controller.Request.Method = HttpMethod.Get;
+            var actual = _controller.GetList(new SaleOrderQueryRequest
+            {
+                Page = 1,
+                PageSize = 10,
+                EndDate = DateTime.Now,
+                StartDate = DateTime.Now.AddYears(-1),
+                Status = EnumSaleOrderStatus.ShipInStorage
+            }, 28, new UserProfile { IsSystem = false }) as NotFoundResult;
 
             Assert.IsNotNull(actual);
         }
 
+        [Test()]
+        public void GetListTest_3()
+        {
+            _controller.Request.Method = HttpMethod.Get;
+            var actual = _controller.GetList(new SaleOrderQueryRequest
+            {
+                Page = 1,
+                PageSize = 10,
+                EndDate = DateTime.Now,
+                StartDate = DateTime.Now.AddYears(-1),
+                Status = EnumSaleOrderStatus.ShipInStorage
+            }, 28, new UserProfile { IsSystem = false, StoreIds = new List<int> { 21,22 } }) as OkNegotiatedContentResult<PagerInfo<SaleDto>>;
+
+            Assert.IsNotNull(actual);
+            Assert.IsTrue(actual.Content.TotalCount > 0);
+        }
     }
 }

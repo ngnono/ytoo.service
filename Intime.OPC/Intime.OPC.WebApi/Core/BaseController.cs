@@ -1,9 +1,7 @@
 ﻿using Intime.OPC.Common.Logger;
 using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 using System;
-using System.Net;
 using System.Web.Http;
-using System.Web.Http.Results;
 
 namespace Intime.OPC.WebApi.Core
 {
@@ -75,6 +73,11 @@ namespace Intime.OPC.WebApi.Core
                 return Ok(dto);
             }
 
+            return NotFound();
+        }
+
+        public IHttpActionResult ResultNotFound()
+        {
             return NotFound();
         }
     }
