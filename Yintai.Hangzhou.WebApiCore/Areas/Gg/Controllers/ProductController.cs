@@ -47,7 +47,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             // ===========================================================================
 
             var result = _elasticClient.Search<ESProducts>(body =>
-                body.From(pageIndex * pageSize)
+                body.From(Skip(pageIndex, pageSize))
                     .Size(pageSize)
                     .SortAscending(p => p.UpdatedDate)
                     .Query(q => q.Range(p => p.GreaterOrEquals(lastUpdate)
@@ -131,7 +131,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             string lastUpdate = request.last_update;
 
             var stocks = _elasticClient.Search<ESStocks>(body =>
-                 body.From(pageIndex * pageSize)
+                 body.From(Skip(pageIndex, pageSize))
                     .Size(pageSize)
                     .SortAscending(p => p.UpdateDate)
                     .Query(q => q.Range(p => p.GreaterOrEquals(lastUpdate)
@@ -171,6 +171,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         private string GetAppSetting(string key, string defaultValue = "")
         {
             return ConfigurationManager.AppSettings[key] ?? defaultValue;
+        }
+
+        private int Skip(int pageIndex, int pageSize)
+        {
+            pageIndex = Math.Max(pageIndex - 1, 0);
+            return pageIndex * pageSize;
         }
 
         private IDictionary<int, IList<ESStocks>> Map2ProductId(IEnumerable<ESStocks> docs)

@@ -68,7 +68,14 @@ namespace Yintai.Hangzhou.WebApiCore
                 log.Debug(string.Format("input sign:{0} vs correct sign:{1}", sign, signedValue));
                 throw new ArgumentException("sign not match");
             }
-            filterContext.ActionParameters["request"] = JsonConvert.DeserializeObject<dynamic>(data);
+            try
+            {
+                filterContext.ActionParameters["request"] = JsonConvert.DeserializeObject<dynamic>(data);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("data format must be json,please check it ");
+            }
             filterContext.ActionParameters[Define.Channel] = channel;
         }
     }
