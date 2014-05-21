@@ -40,7 +40,7 @@ namespace Intime.OPC.Modules.Logistics.Services
         {
             if (deliveryOrder.SalesOrders == null && !string.IsNullOrEmpty(deliveryOrder.GoodsOutCode))
             {
-                IQueryCriteria queryCriteria = new QuerySalesOrderByDeliveryOrderNo() { DeliveryOrderNo = deliveryOrder.GoodsOutCode };
+                IQueryCriteria queryCriteria = new QuerySalesOrderByDeliveryOrderId() { DeliveryOrderId = deliveryOrder.Id };
                 deliveryOrder.SalesOrders = _salesOrderService.QueryAll(queryCriteria);
             }
         }

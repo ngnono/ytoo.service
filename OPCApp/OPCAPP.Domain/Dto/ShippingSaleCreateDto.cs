@@ -6,6 +6,8 @@ namespace OPCApp.Domain.Dto
 {
     public class ShippingSaleCreateDto : ValidatableBindableBase
     {
+        private string _shippingCode;
+
         public ShippingSaleCreateDto()
         {
             SaleOrderIDs = new List<string>();
@@ -21,7 +23,11 @@ namespace OPCApp.Domain.Dto
 
         [Display(Name = "快递单号")]
         [LocalizedRequired]
-        public string ShippingCode { get; set; }
+        public string ShippingCode
+        {
+            get { return _shippingCode; }
+            set { SetProperty(ref _shippingCode,value); }
+        }
 
         [Display(Name = "快递公司")]
         [LocalizedRequired]

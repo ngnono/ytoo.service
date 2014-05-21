@@ -85,9 +85,7 @@
                     </StackPanel>
                     <DataGrid Grid.Row="2" ScrollViewer.CanContentScroll="True" ItemsSource="{Binding SalesOrdersForDelivery}" SelectedItem="{Binding SelectedSalesOrder}"
                             IsReadOnly="True" AutoGenerateColumns="False"
-                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
-                            mvvm:ScrollingBehavior.IsEnabled="True"
-                            mvvm:ScrollingBehavior.ScrollToBottomCommand="{Binding LoadMoreSalesOrdersForDeliveryCommand}">
+                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn SortMemberPath="IsSelected" Width="60">
                                 <DataGridTemplateColumn.HeaderTemplate>

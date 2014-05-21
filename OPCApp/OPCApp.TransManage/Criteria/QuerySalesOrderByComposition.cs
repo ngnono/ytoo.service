@@ -27,7 +27,7 @@ namespace Intime.OPC.Modules.Logistics.Criteria
         [UriParameter("orderno")]
         public string OrderNo { get; set; }
 
-        [UriParameter("saleorderno")]
+        [UriParameter("salesorderno")]
         public string SalesOrderNo { get; set; }
 
         [UriParameter("status")]

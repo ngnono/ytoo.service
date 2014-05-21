@@ -31,6 +31,12 @@ namespace Intime.OPC.Modules.Logistics.Services
             return result;
         }
 
+        public override IList<OPC_Sale> QueryAll(IQueryCriteria queryCriteria)
+        {
+            var result = Query(queryCriteria);
+            return result.Data;
+        }
+
         public override OPC_Sale Update(OPC_Sale obj)
         {
             return obj;

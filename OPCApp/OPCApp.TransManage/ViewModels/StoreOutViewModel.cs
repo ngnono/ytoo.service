@@ -54,20 +54,19 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
             QuerySalesOrderForDeliveryCommand = new AsyncDelegateCommand(OnSalesOrderForDeliveryQuery, MvvmUtility.OnException);
             QueryDeliveryOrderForExpressCommand = new AsyncDelegateCommand(OnDeliveryOrderForExpressQuery, MvvmUtility.OnException);
-            QueryDeliveryOrderForHandOverCommand = new DelegateCommand(OnDeliveryOrderForHandOverQuery);
+            QueryDeliveryOrderForHandOverCommand = new AsyncDelegateCommand(OnDeliveryOrderForHandOverQuery, MvvmUtility.OnException);
 
             CreateDeliveryOrderCommand = new AsyncDelegateCommand(OnDeliveryOrderCreate, MvvmUtility.OnException);
-            CreateExpressReceiptCommand = new DelegateCommand(OnExpressReceiptCreate);
+            CreateExpressReceiptCommand = new AsyncDelegateCommand(OnExpressReceiptCreate, MvvmUtility.OnException);
 
             RemarkOrderCommand = new DelegateCommand(SetOrderRemark);
             RemarkShippingCommand = new DelegateCommand(SetShippingRemark);
             
-            CompleteHandOverCommand = new DelegateCommand(OnHandOverCompleteOver);
+            CompleteHandOverCommand = new DelegateCommand(OnHandOverComplete);
             ShippingViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
             ShippingSaleCreateDto = new ShippingSaleCreateDto();
 
             SelectAllSalesOrderForDeliveryCommand = new DelegateCommand<bool?>(OnAllSalesOrderForDeliverySelect);
-            LoadMoreSalesOrdersForDeliveryCommand = new AsyncDelegateCommand(OnMoreSalesOrderForDeliveryLoad, MvvmUtility.OnException);
             LoadOrderOfExpressReceiptCommand = new DelegateCommand<OPC_ShippingSale>(OnOrderOfExpressReceiptLoad);
             LoadOrderOfHandOverCommand = new DelegateCommand<OPC_ShippingSale>(OnOrderOfHandOverLoad);
 
@@ -96,7 +95,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         public ICommand RemarkOrderCommand { get; set; }
         public ICommand RemarkShippingCommand { get; set; }
         public ICommand GetListShipSaleCommand { get; set; }
-        public ICommand LoadMoreSalesOrdersForDeliveryCommand { get; set; }
         public ICommand LoadOrderOfExpressReceiptCommand { get; set; }
         public ICommand LoadOrderOfHandOverCommand { get; set; }
 
@@ -232,33 +230,22 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         /// </summary>
         private void OnSalesOrderForDeliveryQuery()
         {
-            _queryCriteriaForDeliveryOrder.PageIndex = 1;
-            _queryCriteriaForDeliveryOrder.PageSize = 100;
-
-            var result = SalesOrderService.Query(_queryCriteriaForDeliveryOrder);
-            SalesOrdersForDelivery = result.Data.ToObservableCollection();
-            if (result.TotalCount == 0)
+            var salesOrders = SalesOrderService.QueryAll(_queryCriteriaForDeliveryOrder);
+            SalesOrdersForDelivery = salesOrders.ToObservableCollection();
+            if (salesOrders.Count == 0)
             {
                 MessageBox.Show("没有符合条件的销售单", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private void OnMoreSalesOrderForDeliveryLoad()
-        {
-            _queryCriteriaForDeliveryOrder.PageIndex++;
-
-            var result = SalesOrderService.Query(_queryCriteriaForDeliveryOrder);
-            SalesOrdersForDelivery = result.Data.ToObservableCollection();
-        }
-
         private void OnOrderOfExpressReceiptLoad(OPC_ShippingSale deliveryOrder)
         {
-            OrderOfExpressReceipt = new List<Order> { deliveryOrder.SalesOrders.First().Order };
+            OrderOfExpressReceipt = deliveryOrder == null ? null : new List<Order> { deliveryOrder.SalesOrders.First().Order };
         }
 
         private void OnOrderOfHandOverLoad(OPC_ShippingSale deliveryOrder)
         {
-            OrderOfHandOver = new List<Order> { deliveryOrder.SalesOrders.First().Order };
+            OrderOfHandOver = deliveryOrder == null ? null : new List<Order> { deliveryOrder.SalesOrders.First().Order };
         }
 
         /// <summary>
@@ -266,11 +253,11 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         /// </summary>
         private void OnDeliveryOrderForExpressQuery()
         {
-            var result = DeliveryOrderService.Query(_queryCriteriaForExpressReceipt);
-            DeliveryOrdersForExpress = result.Data.ToObservableCollection();
-            if (result.TotalCount == 0)
+            var deliveryOrders = DeliveryOrderService.QueryAll(_queryCriteriaForExpressReceipt);
+            DeliveryOrdersForExpress = deliveryOrders.ToObservableCollection();
+            if (deliveryOrders.Count == 0)
             {
-                MessageBox.Show("没有符合条件的销售单","提示", MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("没有符合条件的发货单", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -342,13 +329,16 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
             DeliveryOrderService.Update<ShippingSaleCreateDto>(SelectedDeliveryOrderForExpress, ShippingSaleCreateDto);
 
-            DeliveryOrdersForExpress.SafelyRemove(deliveryOrder => deliveryOrder.Id == SelectedDeliveryOrderForExpress.Id);
+            var selectedDeliveryOrderID = SelectedDeliveryOrderForExpress.Id;
+            DeliveryOrdersForExpress.SafelyRemove(deliveryOrder => deliveryOrder.Id == selectedDeliveryOrderID);
+
+            ShippingSaleCreateDto.ShippingCode = null;
         }
 
         /// <summary>
         /// 完成发货交接
         /// </summary>
-        private void OnHandOverCompleteOver()
+        private void OnHandOverComplete()
         {
             if (SelectedDeliveryOrderForHandOver == null)
             {
@@ -357,7 +347,8 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             }
 
             DeliveryOrderService.CompleteHandOver(SelectedDeliveryOrderForHandOver);
-            DeliveryOrdersForHandOver.SafelyRemove(deliveryOrder => deliveryOrder.Id == SelectedDeliveryOrderForHandOver.Id);
+            var selectedDeliveryOrderID = SelectedDeliveryOrderForHandOver.Id;
+            DeliveryOrdersForHandOver.SafelyRemove(deliveryOrder => deliveryOrder.Id == selectedDeliveryOrderID);
         }
 
         private void GetListShipSaleBySale(string saleOrderNo)
@@ -396,11 +387,11 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         /// </summary>
         private void OnDeliveryOrderForHandOverQuery()
         {
-            var result = DeliveryOrderService.Query(_queryCriteriaForHandOver);
-            DeliveryOrdersForHandOver = result.Data.ToObservableCollection();
-            if (result.TotalCount == 0)
+            var deliveryOrders = DeliveryOrderService.QueryAll(_queryCriteriaForHandOver);
+            DeliveryOrdersForHandOver = deliveryOrders.ToObservableCollection();
+            if (deliveryOrders.Count == 0)
             {
-                MessageBox.Show("没有符合条件的销售单", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("没有符合条件的快递单", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

@@ -41,6 +41,11 @@ namespace Intime.OPC.Modules.Logistics.Services
             return obj;
         }
 
+        public override void Update<TData>(OPC_ShippingSale obj, TData data)
+        {
+            
+        }
+
         public override PagedResult<OPC_ShippingSale> Query(IQueryCriteria queryCriteria)
         {
             var salesOrders = fixture.Build<OPC_Sale>()
@@ -57,6 +62,12 @@ namespace Intime.OPC.Modules.Logistics.Services
 
             var result = new PagedResult<OPC_ShippingSale>() { PageIndex = queryCriteria.PageIndex, PageSize = queryCriteria.PageSize, TotalCount = 200, Data = deliveryOrders.ToList() };
             return result;
+        }
+
+        public override IList<OPC_ShippingSale> QueryAll(IQueryCriteria queryCriteria)
+        {
+            var result = Query(queryCriteria);
+            return result.Data;
         }
 
         public void Print(OPC_ShippingSale deliveryOrder, ReceiptType receiptType)
