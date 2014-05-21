@@ -10,7 +10,7 @@ namespace Intime.OPC.Modules.Logistics.Criteria
 {
     public class QuerySalesOrderDetailBySalesOrderNo : QueryCriteria
     {
-        [UriParameter("salesorderno")]
+        [UriParameter("saleorderno")]
         public string SalesOrderNo { get; set; }
     }
 }

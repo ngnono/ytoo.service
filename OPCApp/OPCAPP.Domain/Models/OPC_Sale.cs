@@ -42,11 +42,19 @@ namespace OPCApp.Domain.Models
 
         #endregion
 
+        #region Added by Frank
+
+        public int OrderId { get; set; }
+
+        public int? ShippingSaleId { get; set; }
+
         public Order Order { get; set; }
 
         public Counter Counter { get; set; }
 
         public OPC_ShippingSale DeliveryOrder { get; set; }
+
+        #endregion
 
         #region Properties to delete
 

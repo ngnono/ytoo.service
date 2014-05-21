@@ -26,8 +26,8 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
     public class StoreOutViewModel : ValidatableBindableBase
     {
         private QuerySalesOrderByComposition _queryCriteriaForDeliveryOrder;
-        private QuerySalesOrderByComposition _queryCriteriaForExpressReceipt;
-        private QuerySalesOrderByComposition _queryCriteriaForHandOver;
+        private QueryDeliveryOrderByComposition _queryCriteriaForExpressReceipt;
+        private QueryDeliveryOrderByComposition _queryCriteriaForHandOver;
         private IList<Order> _orders;
         private OPC_ShippingSale _selectedDeliveryOrder;
         private ObservableCollection<OPC_ShippingSale> _deliveryOrders;
@@ -47,8 +47,8 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             DeliveryOrders = new ObservableCollection<OPC_ShippingSale>();
 
             QueryCriteriaForDeliveryOrder = new QuerySalesOrderByComposition { Status = EnumSaleOrderStatus.ShipInStorage };
-            QueryCriteriaForExpressReceipt = new QuerySalesOrderByComposition { Status = EnumSaleOrderStatus.PrintInvoice };
-            QueryCriteriaForHandOver = new QuerySalesOrderByComposition();
+            QueryCriteriaForExpressReceipt = new QueryDeliveryOrderByComposition { Status = EnumSaleOrderStatus.PrintInvoice };
+            QueryCriteriaForHandOver = new QueryDeliveryOrderByComposition { Status = EnumSaleOrderStatus.PrintExpress };
 
             QuerySalesOrderForDeliveryCommand = new AsyncDelegateCommand(OnSalesOrderForDeliveryQuery, MvvmUtility.OnException);
             QueryDeliveryOrderForExpressCommand = new AsyncDelegateCommand(OnDeliveryOrderForExpressQuery, MvvmUtility.OnException);
@@ -120,13 +120,13 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             set { SetProperty(ref _queryCriteriaForDeliveryOrder, value); }
         }
 
-        public QuerySalesOrderByComposition QueryCriteriaForExpressReceipt
+        public QueryDeliveryOrderByComposition QueryCriteriaForExpressReceipt
         {
             get { return _queryCriteriaForExpressReceipt; }
             set { SetProperty(ref _queryCriteriaForExpressReceipt, value); }
         }
 
-        public QuerySalesOrderByComposition QueryCriteriaForHandOver
+        public QueryDeliveryOrderByComposition QueryCriteriaForHandOver
         {
             get { return _queryCriteriaForHandOver; }
             set { SetProperty(ref _queryCriteriaForHandOver, value); }
@@ -207,12 +207,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         }
 
         #endregion
-
-        public IList<Order> Orders
-        {
-            get { return _orders; }
-            set { SetProperty(ref _orders, value); }
-        }
 
         public int IsTabIndex { get; set; }
 
