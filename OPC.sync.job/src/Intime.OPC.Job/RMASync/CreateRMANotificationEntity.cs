@@ -4,7 +4,7 @@ namespace Intime.OPC.Job.RMASync
 {
     public class CreateRMANotificationEntity:AbstractRMANotificationEntity
     {
-        public CreateRMANotificationEntity(OPC_SaleRMA saleRMA) : base(saleRMA)
+        public CreateRMANotificationEntity(OPC_RMA saleRMA) : base(saleRMA)
         {
         }
 

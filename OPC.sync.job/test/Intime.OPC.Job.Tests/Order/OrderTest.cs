@@ -18,6 +18,9 @@ namespace Intime.OPC.Job.Tests.Order
           //var job = new OrderNotifyJob();
           //job.Execute(null);
 
+          var rmaJob = new Intime.OPC.Job.RMASync.RMANotifyJob();
+          rmaJob.Execute(null);
+
           var statusJob = new SaleOrderStatusSyncJob();
         statusJob.Execute(null);
       }

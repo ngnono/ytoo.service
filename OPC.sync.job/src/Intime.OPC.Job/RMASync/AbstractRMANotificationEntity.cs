@@ -6,8 +6,8 @@ namespace Intime.OPC.Job.RMASync
 {
     public abstract class AbstractRMANotificationEntity
     {
-        protected OPC_SaleRMA _saleRMA;
-        protected AbstractRMANotificationEntity(OPC_SaleRMA saleRMA)
+        protected OPC_RMA _saleRMA;
+        protected AbstractRMANotificationEntity(OPC_RMA saleRMA)
         {
             this._saleRMA = saleRMA;
         }
@@ -23,7 +23,7 @@ namespace Intime.OPC.Job.RMASync
                     db.OrderTransactions.Where(t => t.OrderNo == _saleRMA.OrderNo)
                         .Join(db.PaymentMethods, t => t.PaymentCode, p => p.Code, (t, p) => new { trans = t, payment = p })
                         .FirstOrDefault();
-                var saleRMA = db.OPC_SaleRMA.FirstOrDefault(o => o.RMANo == _saleRMA.RMANo);
+                var saleRMA = db.OPC_RMA.FirstOrDefault(o => o.RMANo == _saleRMA.RMANo);
                 var storeno = string.Empty;
                 if (saleRMA == null)
                 {
@@ -80,7 +80,7 @@ namespace Intime.OPC.Job.RMASync
                     paytime = trans.trans.CreateDate.ToString("yyyy-MM-dd HH:mm:ss"),
                     type = Type,
                     status = Status,
-                    quantity = _saleRMA.RMACount,
+                    quantity = _saleRMA.Count,
                     discount = "0.0",
                     total = _saleRMA.RealRMASumMoney.ToString(),
                     vipno = string.Empty,
