@@ -20,7 +20,6 @@ namespace Intime.OPC.Domain.Models
         [NotMapped]
         public virtual Order Order { get; set; }
 
-        [NotMapped]
-        public virtual OPC_ShippingSale ShippingSale { get; set; }
+
     }
 }

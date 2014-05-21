@@ -26,9 +26,9 @@ namespace Intime.OPC.Repository
         /// <param name="id"></param>
         /// <returns></returns>
         ShippingOrderModel GetItemModel(int id);
-        
+
         /// <summary>
-        /// 更新
+        /// 更新 物流信息
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="userId">操作人</param>
@@ -62,11 +62,18 @@ namespace Intime.OPC.Repository
         void UpdateComment(OPC_ShippingSaleComment entity, int userId);
 
         /// <summary>
-        /// 修改打印次数
+        /// 修改打印次数 及设置状态
         /// </summary>
         /// <param name="id">shipping</param>
         /// <param name="times">增加的次数</param>
         /// <param name="userId">用户ID</param>
-        void Update4Times(ShippingOrderModel model, int times, int userId );
+        void Update4Print(ShippingOrderModel model, Intime.OPC.Domain.Dto.Request.DeliveryOrderPrintRequest request, int userId);
+
+        /// <summary>
+        /// 同步状态
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="userId"></param>
+        void Sync4Status(ShippingOrderModel model, int userId);
     }
 }

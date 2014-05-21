@@ -10,4 +10,26 @@
 
         public string SaleOrderNo { get; private set; }
     }
+
+
+    public class SaleOrderNotFoundException : SaleOrderException
+    {
+        public SaleOrderNotFoundException(string msg)
+            : base(msg)
+        {
+        }
+
+        public string SaleOrderNo { get; private set; }
+    }
+
+
+    public class SaleOrderException : System.Exception
+    {
+        public SaleOrderException(string msg)
+            : base(msg)
+        {
+        }
+
+        public string SaleOrderNo { get; private set; }
+    }
 }

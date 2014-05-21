@@ -76,7 +76,7 @@ namespace Intime.OPC.Repository.Base
         /// <returns></returns>
         public static IQueryable<TEntity> Get<TEntity>(DbQuery<TEntity> dbset, Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, int? take = null) where TEntity : class
         {
-            var resetSet = filter != null ? dbset.AsExpandable().Where(filter).AsQueryable() : dbset.AsNoTracking().AsQueryable();
+            var resetSet = filter != null ? dbset.AsExpandable().Where(filter).AsQueryable() : dbset.AsQueryable();
 
             resetSet = orderBy != null ? orderBy(resetSet).AsQueryable() : resetSet.AsQueryable();
 
@@ -225,7 +225,7 @@ namespace Intime.OPC.Repository.Base
         {
             var dbset = GetDbSet<TEntity>(context);
             var skipCount = specialSkipCount;
-            var resetSet = filter != null ? dbset.AsNoTracking().AsExpandable().Where(filter).AsQueryable() : dbset.AsNoTracking().AsQueryable();
+            var resetSet = filter != null ? dbset.AsExpandable().Where(filter).AsQueryable() : dbset.AsQueryable();
 
             resetSet = orderBy != null ? orderBy(resetSet).AsQueryable() : resetSet.AsQueryable();
             total = resetSet.Count();

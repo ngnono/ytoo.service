@@ -159,7 +159,10 @@ namespace Intime.OPC.Domain.Dto
 
         [DataMember]
         public int StoreId { get; set; }
-         [DataMember]
+        [DataMember]
         public string SectionCode { get; set; }
+
+        [DataMember]
+        public int ShippingSaleId { get; set; }
     }
 }

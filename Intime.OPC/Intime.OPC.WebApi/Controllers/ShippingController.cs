@@ -26,11 +26,36 @@ namespace Intime.OPC.WebApi.Controllers
         private readonly IShippingOrderRepository _shippingOrderRepository;
         private readonly ISaleOrderRepository _saleOrderRepository;
         private readonly IOrderRepository _orderRepository;
-        public ShippingController(IShippingOrderRepository shippingOrderRepository, ISaleOrderRepository saleOrderRepository,IOrderRepository orderRepository)
+        private readonly IShipViaRepository _shipViaRepository;
+
+        public ShippingController(IShippingOrderRepository shippingOrderRepository, ISaleOrderRepository saleOrderRepository, IOrderRepository orderRepository, IShipViaRepository shipViaRepository)
         {
             _shippingOrderRepository = shippingOrderRepository;
             _saleOrderRepository = saleOrderRepository;
             _orderRepository = orderRepository;
+            _shipViaRepository = shipViaRepository;
+        }
+
+        private IHttpActionResult Check(int shippingId, UserProfile userProfile)
+        {
+            if (!userProfile.IsSystem && (userProfile.StoreIds == null || !userProfile.StoreIds.Any()))
+            {
+                return BadRequest("您请先维护门店信息后，再查询");
+            }
+
+            var model = _shippingOrderRepository.GetItem(shippingId);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            if (!userProfile.IsSystem && !userProfile.StoreIds.Contains(model.StoreId ?? 0))
+            {
+                return BadRequest("您请先维护门店信息后，再查询");
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -42,17 +67,17 @@ namespace Intime.OPC.WebApi.Controllers
         public IHttpActionResult PostOrder([FromBody]CreateShippingSaleOrderRequest request, [UserId] int userId, [UserProfile] UserProfile userProfile)
         {
             //不同的销售单可以生成同一个出库单
-            if (!ModelState.IsValid || request==null || request.SalesOrderNos==null||request.SalesOrderNos.Count==0)
+            if (!ModelState.IsValid || request == null || request.SalesOrderNos == null || request.SalesOrderNos.Count == 0)
             {
-                return BadRequest("您请先维护门店后，再次查询"); 
+                return BadRequest("您请先维护门店后，再次查询");
             }
 
             //验证用户合法性
-            if(!userProfile.IsSystem && (userProfile.StoreIds==null || !userProfile.SectionIds.Any()))
+            if (!userProfile.IsSystem && (userProfile.StoreIds == null || !userProfile.SectionIds.Any()))
             {
                 return BadRequest("您没有门店信息，请先维护门店信息");
             }
-        
+
             var stores = userProfile.StoreIds.ToList();
             var saleList = _saleOrderRepository.GetListByNos(request.SalesOrderNos, new SaleOrderFilter
             {
@@ -60,7 +85,7 @@ namespace Intime.OPC.WebApi.Controllers
                 StoreIds = stores,
                 HasDeliveryOrderGenerated = false,
                 Status = EnumSaleOrderStatus.ShipInStorage
-                
+
             });
             if (saleList.Count != request.SalesOrderNos.Count)
             {
@@ -74,7 +99,7 @@ namespace Intime.OPC.WebApi.Controllers
             {
                 if (s.OrderNo != item.OrderNo)
                 {
-                    return BadRequest(String.Format("订单ID的不一致，请确认。订单号：{0} vs {1}",s.OrderNo,item.OrderNo));
+                    return BadRequest(String.Format("订单ID的不一致，请确认。订单号：{0} vs {1}", s.OrderNo, item.OrderNo));
                 }
             }
 
@@ -97,7 +122,7 @@ namespace Intime.OPC.WebApi.Controllers
                 ShippingContactPhone = order.ShippingContactPhone,
                 ShippingFee = 0m,
                 ShippingRemark = String.Empty,
-                ShippingStatus = (int) EnumSaleOrderStatus.ShipInStorage,
+                ShippingStatus = (int)EnumSaleOrderStatus.ShipInStorage,
                 ShippingZipCode = order.ShippingZipCode,
                 StoreId = order.StoreId
             };
@@ -117,22 +142,14 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult Get(int id, [UserId] int userId, [UserProfile] UserProfile userProfile)
         {
-            if (!userProfile.IsSystem && (userProfile.StoreIds == null || !userProfile.StoreIds.Any()))
+            var checkRst = Check(id, userProfile);
+
+            if (checkRst != null)
             {
-                return BadRequest("您请先维护门店后，再查询"); 
+                return checkRst;
             }
 
             var model = _shippingOrderRepository.GetItemModel(id);
-
-            if (model == null)
-            {
-                return NotFound();
-            }
-
-            if (!userProfile.StoreIds.Contains(model.StoreId))
-            {
-            }
-
 
             var dto = Mapper.Map<ShippingOrderModel, ShippingSaleDto>(model);
 
@@ -145,7 +162,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <returns></returns>
         [Route("")]
         [HttpGet]
-        public IHttpActionResult GetList([FromUri]GetShippingSaleOrderRequest request, [UserId]int userId)
+        public IHttpActionResult GetList([FromUri]GetShippingSaleOrderRequest request, [UserId]int userId, [UserProfile] UserProfile userProfile)
         {
             var filter = Mapper.Map<GetShippingSaleOrderRequest, ShippingOrderFilter>(request);
             var pagerRequest = new Domain.PagerRequest(request.Page ?? 1, request.PageSize ?? 10);
@@ -158,6 +175,8 @@ namespace Intime.OPC.WebApi.Controllers
             }
 
             int total;
+
+            filter.StoreIds = userProfile.StoreIds.ToList();
 
             //按创建日期倒序
             var datas = _shippingOrderRepository.GetPagedList(pagerRequest, out total, filter,
@@ -179,9 +198,40 @@ namespace Intime.OPC.WebApi.Controllers
         /// <returns></returns>
         [Route("{id:int}")]
         [HttpPut]
-        public IHttpActionResult Put(int id, [FromBody] PutShippingSaleOrderRequest request, [UserId] int userId)
+        public IHttpActionResult Put(int id, [FromBody] PutShippingSaleOrderRequest request, [UserId] int userId, [UserProfile] UserProfile userProfile)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var checkRst = Check(id, userProfile);
+
+            if (checkRst != null)
+            {
+                return checkRst;
+            }
+
+            var item = _shippingOrderRepository.GetItem(id);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+
+            var shipVia = _shipViaRepository.GetByID(request.ShipViaId ?? 0);
+
+            item.ShipViaId = request.ShipViaId;
+            item.ShippingFee = request.ShippingFee;
+            item.ShippingCode = request.ShippingNo;
+            item.ShipViaName = shipVia == null ? String.Empty : shipVia.Name;
+
+            _shippingOrderRepository.Update4ShippingCode(item, userId);
+
+
+            return RetrunHttpActionResult("OK");
+
         }
 
 
@@ -189,14 +239,60 @@ namespace Intime.OPC.WebApi.Controllers
         /// 打印
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="type">1为 出货单  2为快递单</param>
+        /// <param name="type">1为 出库单  2为快递单</param>
         /// <param name="userId"></param>
         /// <returns></returns>
         [Route("{id:int}/print")]
         [HttpPut]
-        public IHttpActionResult Put(int id, [FromBody] int type, [UserId] int userId)
+        public IHttpActionResult PutPrint(int id, [FromBody] DeliveryOrderPrintRequest request, [UserId] int userId)
         {
-            throw new NotImplementedException();
+            if (request == null)
+            {
+                return BadRequest("参数请求出错");
+            }
+
+            var model = _shippingOrderRepository.GetItemModel(id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            _shippingOrderRepository.Update4Print(model, request, userId);
+
+            return RetrunHttpActionResult("OK");
+        }
+
+
+        /// <summary>
+        ///  完成物流交接
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <param name="userProfile"></param>
+        /// <returns></returns>
+        [Route("{id:int}/finish")]
+        [HttpPut]
+        public IHttpActionResult PutFinish(int id, [UserId] int userId, [UserProfile] UserProfile userProfile)
+        {
+            var model = _shippingOrderRepository.GetItemModel(id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            if (model.ShippingStatus < (int)EnumSaleOrderStatus.Shipped)
+            {
+                model.ShippingStatus = (int)EnumSaleOrderStatus.Shipped;
+                _shippingOrderRepository.Sync4Status(model, userId);
+            }
+            else
+            {
+                return BadRequest(String.Format("当前快递单状态{0}({1}),不能处理状态为{2}({3})", model.ShippingStatus, model.ShippingStatus == null ? String.Empty : ((EnumSaleOrderStatus)model.ShippingStatus).GetDescription(), (int)EnumSaleOrderStatus.Shipped, EnumSaleOrderStatus.Shipped.GetDescription()));
+            }
+
+            return RetrunHttpActionResult("OK");
         }
     }
 }

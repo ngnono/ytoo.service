@@ -26,5 +26,12 @@ namespace Intime.OPC.Repository
         /// <param name="filter"></param>
         /// <returns></returns>
         List<OPC_Sale> GetListByNos(List<string> salesOrderNos, SaleOrderFilter filter);
+
+        /// <summary>
+        /// 获取销售单
+        /// </summary>
+        /// <param name="salesorderno"></param>
+        /// <returns></returns>
+        SalesOrderModel GetItemModel(string salesorderno);
     }
 }

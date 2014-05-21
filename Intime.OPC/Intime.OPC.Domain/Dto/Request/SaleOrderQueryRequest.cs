@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Intime.OPC.Domain.Enums;
+using Newtonsoft.Json;
 
 namespace Intime.OPC.Domain.Dto.Request
 {
@@ -18,24 +19,31 @@ namespace Intime.OPC.Domain.Dto.Request
         /// <summary>
         /// 发货单号
         /// </summary>
-        public string ShippingOrderNo { get; set; }
+        [JsonProperty(PropertyName = "DeliveryOrderId")]
+        [DataMember(Name = "DeliveryOrderId")]
+        public int? ShippingOrderId { get; set; }
 
+        [DataMember]
         public int? Page { get; set; }
 
+        [DataMember]
         public int? PageSize { get; set; }
 
+        [DataMember]
         public int? SortOrder { get; set; }
 
 
         /// <summary>
         /// 销售单状态
         /// </summary>
+        [DataMember]
         public EnumSaleOrderStatus? Status { get; set; }
 
         /// <summary>
         /// 是否生成发货单
         /// </summary>
-        public bool HasDeliveryOrderGenerated { get; set; }
+        [DataMember]
+        public bool? HasDeliveryOrderGenerated { get; set; }
 
         /// <summary>
         /// 查询指定门店

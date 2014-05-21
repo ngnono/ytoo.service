@@ -39,6 +39,6 @@ namespace Intime.OPC.Domain.BusinessModel
         /// </summary>
         public DateRangeFilter DateRange { get; set; }
 
-        public int? OrderNo { get; set; }
+        public string OrderNo { get; set; }
     }
 }

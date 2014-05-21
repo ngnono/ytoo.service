@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,6 +16,8 @@ using Intime.OPC.Repository.Base;
 using LinqKit;
 using log4net.Appender;
 using PredicateBuilder = LinqKit.PredicateBuilder;
+using Intime.OPC.Domain.Exception;
+
 
 namespace Intime.OPC.Repository.Impl
 {
@@ -36,6 +39,21 @@ namespace Intime.OPC.Repository.Impl
                 {
                     query = PredicateBuilder.And(query, v => v.ShippingStatus == (int)filter.Status);
                 }
+
+                if (filter.StoreIds != null)
+                {
+                    query = PredicateBuilder.And(query, v => filter.StoreIds.Contains(v.StoreId ?? 0));
+                }
+
+                if (filter.DateRange != null)
+                {
+                    query = PredicateBuilder.And(query, v => filter.StoreIds.Contains(v.StoreId ?? 0));
+                }
+
+                if (filter.OrderNo != null)
+                {
+                    query = PredicateBuilder.And(query, v => v.OrderNo == filter.OrderNo);
+                }
             }
 
             return query;
@@ -56,12 +74,22 @@ namespace Intime.OPC.Repository.Impl
             return query;
         }
 
-        private static Expression<Func<OrderItem, bool>> OrderItem4Filter(ShippingOrderFilter filter)
+        private static Expression<Func<Order, bool>> Order4Filter(ShippingOrderFilter filter)
         {
-            var query = PredicateBuilder.True<OrderItem>();
+            var query = PredicateBuilder.True<Order>();
 
             if (filter != null)
             {
+                if (filter.DateRange != null)
+                {
+                    if (filter.DateRange.StartDateTime != null)
+                        query = PredicateBuilder.And(query, v => v.CreateDate >= (filter.DateRange.StartDateTime));
+
+                    if (filter.DateRange.EndDateTime != null)
+                    {
+                        query = PredicateBuilder.And(query, v => v.CreateDate < (filter.DateRange.EndDateTime));
+                    }
+                }
             }
 
             return query;
@@ -93,18 +121,15 @@ namespace Intime.OPC.Repository.Impl
             ShippingOrderSortOrder sortOrder)
         {
             var shippingOrderFilter = Filter(filter);
-            //var saleorderFilter = SaleOrder4Filter(filter);
+            var orderFilter = Order4Filter(filter);
 
             var rst = Func(db =>
             {
                 var q1 = from ss in db.Set<OPC_ShippingSale>().AsExpandable().Where(shippingOrderFilter)
-                         //let sale_let = (from sale in db.Set<OPC_Sale>().AsExpandable().Where(saleorderFilter)
-                         //                where ss.Id == sale.ShippingSaleId
-                         //                select sale
-                         //    )
+                         from o in db.Set<Order>().AsExpandable().Where(v => v.OrderNo == ss.OrderNo).Where(orderFilter)
                          select new
                          {
-
+                             Order = o,
                              ShippingSale = ss,
                              //SaleOrders = sale_let
                          };
@@ -234,6 +259,18 @@ namespace Intime.OPC.Repository.Impl
 
                     foreach (var sale in saleOrderModels)
                     {
+                        var saleEntity = EFHelper.Find<OPC_Sale>(db, sale.Id);
+
+                        if (saleEntity == null)
+                        {
+                            throw new Exception("没有找到 销售单，请重新选择或与管理员联系");
+                        }
+
+                        if (saleEntity.Status != (int)Intime.OPC.Domain.Enums.EnumSaleOrderStatus.ShipInStorage)
+                        {
+                            throw new Exception(String.Format("请检查销售单状态{0}，必须是{1}，才能生成出库单。", saleEntity.Status.ToString(), Intime.OPC.Domain.Enums.EnumSaleOrderStatus.ShipInStorage.GetDescription()));
+                        }
+
                         sale.ShippingSaleId = entity.Id;
                         sale.UpdatedUser = userId;
                         sale.UpdatedDate = DateTime.Now;
@@ -264,9 +301,123 @@ namespace Intime.OPC.Repository.Impl
 );
         }
 
-        public void Update4Times(ShippingOrderModel model, int times, int userId)
+        public void Update4Print(ShippingOrderModel model, Intime.OPC.Domain.Dto.Request.DeliveryOrderPrintRequest request, int userId)
         {
-            throw new NotImplementedException();
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
+            Action(db =>
+            {
+                var entity = EFHelper.Find<OPC_ShippingSale>(db, model.Id);
+                if (entity == null)
+                {
+                    throw new Exception("没有找到 销售单，请重新选择或与管理员联系");
+                }
+
+                entity.PrintTimes = entity.PrintTimes + request.Times ?? 1;
+                entity.UpdateUser = userId;
+                entity.UpdateDate = DateTime.Now;
+
+                var fieldUpdate = new List<string>();
+                fieldUpdate.Add("PrintTimes");
+                fieldUpdate.Add("UpdateUser");
+                fieldUpdate.Add("UpdateDate");
+
+                int? status = null;
+
+                //如果是物流入库状态，就要修改状态为 打印
+                if (entity.ShippingStatus == (int)Intime.OPC.Domain.Enums.EnumSaleOrderStatus.ShipInStorage)
+                {
+                    //打印出库单
+                    status = (int)Intime.OPC.Domain.Enums.EnumSaleOrderStatus.PrintInvoice;
+                }
+                else
+                    if (entity.ShippingStatus == (int)Intime.OPC.Domain.Enums.EnumSaleOrderStatus.PrintInvoice && request.ShippingOrderType == Intime.OPC.Domain.Enums.ShippingOrderType.ExpressOrder)
+                    {
+                        status = (int)Intime.OPC.Domain.Enums.EnumSaleOrderStatus.PrintExpress;
+                    }
+
+                //其余都是 +次数操作
+
+                using (var trans = new TransactionScope())
+                {
+                    if (status != null)
+                    {
+                        entity.ShippingStatus = status;
+                        //需要同时修改 销售单
+
+                        fieldUpdate.Add("ShippingStatus");
+
+                        _SyncStatus(db, entity.ShippingStatus, entity.Id, userId);
+                    }
+
+                    EFHelper.UpdateEntityFields(db, entity, fieldUpdate);
+
+                    trans.Complete();
+                }
+            });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="status"></param>
+        /// <param name="shippingId"></param>
+        /// <param name="userId"></param>
+        private void _SyncStatus(DbContext db, int? status, int shippingId, int userId)
+        {
+            if (status != null)
+            {
+                var sales = EFHelper.Get<OPC_Sale>(db, v => v.ShippingSaleId == shippingId).ToList();
+                if (sales.Count == 0)
+                {
+                    throw new SaleOrderNotFoundException(String.Format("没有找到出库单id:{0},对应的销售单", shippingId));
+                }
+
+                foreach (var s in sales)
+                {
+                    //重置状态的 不应大于 打印快递单
+                    //已经发货就不能重新至状态了
+                    if (s.ShippingStatus > (int)Intime.OPC.Domain.Enums.EnumSaleOrderStatus.PrintExpress)
+                    {
+                        throw new SaleOrderException(String.Format("销售单no:{0}，状态{1}、出库单状态是{2},不能再恢复出库单状态{3},或请与管理员联系", s.SaleOrderNo, s.Status, s.ShippingStatus, status));
+                    }
+                    s.ShippingStatus = status.Value;
+                    s.Status = status.Value;
+                    s.UpdatedDate = DateTime.Now;
+                    s.UpdatedUser = userId;
+                    EFHelper.UpdateEntityFields(db, s, new List<string> { "Status", "ShippingStatus", "UpdatedDate", "UpdatedUser" });
+                }
+            }
+        }
+
+        public void Sync4Status(ShippingOrderModel model, int userId)
+        {
+            var entity = GetItem(model.Id);
+            if (entity == null)
+            {
+                throw new Exception("不能获取 快递单数据");
+            }
+
+            entity.ShippingStatus = model.ShippingStatus;
+            entity.UpdateDate = DateTime.Now;
+            entity.UpdateUser = userId;
+
+            Action(db =>
+            {
+                EFHelper.UpdateEntityFields(db, entity, new List<string>
+                {
+                 "ShippingStatus",
+                 "UpdateDate",
+                 "UpdateUser"
+                });
+                _SyncStatus(db, entity.ShippingStatus, entity.Id, userId);
+            });
+
+
         }
     }
 }

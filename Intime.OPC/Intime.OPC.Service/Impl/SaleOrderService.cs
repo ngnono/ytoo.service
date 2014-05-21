@@ -197,5 +197,10 @@ namespace Intime.OPC.Service.Impl
 
             return pagerdto;
         }
+
+        public SaleDto GetItem(string salesorderno)
+        {
+            return AutoMapper.Mapper.Map<SalesOrderModel, SaleDto>(_saleOrderRepository.GetItemModel(salesorderno));
+        }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Web.Http;
-using System.Web.Http.Results;
+﻿using System.Web.Http.Results;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Request;
@@ -11,10 +6,14 @@ using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Service;
 using Intime.OPC.Service.Contract;
-using Intime.OPC.Service.Map;
 using Intime.OPC.WebApi.Bindings;
 using Intime.OPC.WebApi.Core;
 using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web.Http;
 
 namespace Intime.OPC.WebApi.Controllers
 {
@@ -468,6 +467,32 @@ namespace Intime.OPC.WebApi.Controllers
             //             uid = 1;
             //#endif
             var dto = _saleOrderService.GetPagedList(request, uid);
+
+            return RetrunHttpActionResult(dto);
+        }
+
+        [Route("api/salesorder/{orderno}")]
+        [HttpGet]
+        public IHttpActionResult GetItem(string orderno, [UserId] int uid, [UserProfile] UserProfile userProfile)
+        {
+            if (userProfile.IsSystem)
+            {
+            }
+            else
+            {
+                if (userProfile.StoreIds == null || !userProfile.StoreIds.Any())
+                {
+                    _log.Debug(String.Format("uid:{0}.stores is null", uid.ToString()));
+                    return ResultNotFound();
+                }
+            }
+
+            var dto = _saleOrderService.GetItem(orderno);
+
+            if (!userProfile.IsSystem && userProfile.StoreIds.Contains(dto.StoreId))
+            {
+                return BadRequest("请先维护您的门店信息后，再查询");
+            }
 
             return RetrunHttpActionResult(dto);
         }

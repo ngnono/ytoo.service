@@ -9,7 +9,7 @@ namespace Intime.OPC.Domain.BusinessModel
         /// <summary>
         /// 销售单 NO
         /// </summary>
-        public string SaleOrderNo { get; set; }
+        public string SalesOrderNo { get; set; }
 
         /// <summary>
         /// 订单NO
@@ -34,7 +34,7 @@ namespace Intime.OPC.Domain.BusinessModel
         /// <summary>
         /// 是否生成发货单
         /// </summary>
-        public bool HasDeliveryOrderGenerated { get; set; }
+        public bool? HasDeliveryOrderGenerated { get; set; }
 
         /// <summary>
         /// 查询指定门店

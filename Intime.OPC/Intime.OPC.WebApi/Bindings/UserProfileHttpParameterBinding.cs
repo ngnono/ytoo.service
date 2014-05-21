@@ -24,6 +24,11 @@ namespace Intime.OPC.WebApi.Bindings
                     actionContext.ActionArguments[Descriptor.ParameterName] =
                         actionContext.Request.Properties[AccessTokenConst.UserProfilePropertiesName];
             }
+            else
+            {
+                if (actionContext.ActionArguments != null)
+                    actionContext.ActionArguments[Descriptor.ParameterName] = null;
+            }
 
             return Task.FromResult<object>(null);
         }
