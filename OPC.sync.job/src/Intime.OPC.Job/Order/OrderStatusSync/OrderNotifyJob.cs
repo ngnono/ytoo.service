@@ -21,7 +21,7 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
             {
                 var minx =
                     context.OPC_Sale.Where(
-                        t =>
+                        t =>!context.Orders.Any(o=>o.OrderNo==t.OrderNo&&o.OrderProductType == 2) &&
                             t.UpdatedDate > _benchTime && t.Status == orderStatus &&
                             !context.OPC_SaleOrderNotificationLogs.Any(
                                 x => x.SaleOrderNo == t.SaleOrderNo && x.Status == (int) status));
