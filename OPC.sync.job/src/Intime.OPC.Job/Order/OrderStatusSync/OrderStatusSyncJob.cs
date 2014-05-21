@@ -125,8 +125,10 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                             var outboundNo = CreateOutBoundNo(shipping.StoreId.HasValue ? shipping.StoreId.Value : 0);
                             db.Outbounds.Add(new Outbound()
                             {
+                                OutboundNo = outboundNo,
                                 SourceNo = shipping.OrderNo,
                                 SourceType = 1,
+                                ShippingContactPerson = shipping.ShippingContactPerson,
                                 CreateDate = DateTime.Now,
                                 CreateUser = 0,
                                 Status = 1,
@@ -143,6 +145,9 @@ namespace Intime.OPC.Job.Order.OrderStatusSync
                                 {
                                     CreateDate = DateTime.Now,
                                     ColorId = di.item.ColorValueId,
+                                    ItemPrice = di.item.ItemPrice,
+                                    UnitPrice = di.item.UnitPrice.Value,
+                                    ExtendPrice = di.item.ExtendPrice,
                                     OutboundNo = outboundNo,
                                     ProductId = di.item.ProductId,
                                     Quantity = di.detail.SaleCount,
