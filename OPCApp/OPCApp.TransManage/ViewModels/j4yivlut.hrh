@@ -28,16 +28,11 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         private QuerySalesOrderByComposition _queryCriteriaForExpressReceipt;
         private QuerySalesOrderByComposition _queryCriteriaForHandOver;
         private IList<Order> _orders;
-        private OPC_ShippingSale _selectedDeliveryOrder;
-        private ObservableCollection<OPC_ShippingSale> _deliveryOrders;
-
         private ObservableCollection<OPC_Sale> _salesOrdersForDelivery;
         private IList<OPC_ShippingSale> _deliveryOrdersForExpress;
-        private Order _orderOfExpressReceipt;
-        private OPC_ShippingSale _selectedDeliveryOrderForExpress;
+        private ObservableCollection<OPC_ShippingSale> _deliveryOrders;
+        private OPC_ShippingSale _selectedDeliveryOrder;
         private ShippingSaleCreateDto _shippingSaleCreateDto;
-        
-        private Order _orderOfHandover;
 
         public StoreOutViewModel()
         {
@@ -52,14 +47,13 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
             QuerySalesOrderForDeliveryCommand = new AsyncDelegateCommand(OnSalesOrderForDeliveryQuery, MvvmUtility.OnException);
             QueryDeliveryOrderForExpressCommand = new AsyncDelegateCommand(OnDeliveryOrderForExpressQuery, MvvmUtility.OnException);
-
             CreateDeliveryOrderCommand = new AsyncDelegateCommand(OnDeliveryOrderCreate, MvvmUtility.OnException);
-            CreateExpressReceiptCommand = new DelegateCommand(OnExpressReceiptCreate);
 
             RemarkOrderCommand = new DelegateCommand(SetOrderRemark);
             SearchOrderBySaleCommand = new AsyncDelegateCommand(SearchOrderBySale, MvvmUtility.OnException);
             RemarkShippingCommand = new DelegateCommand(SetShippingRemark);
-            
+            CreateExpressReceiptCommand = new DelegateCommand(OnExpressReceiptCreate);
+            PreviewCommand = new DelegateCommand(PrintView);
             SearchExpressCommand = new DelegateCommand(GetShipSaleList);
             GetDownShipCommand = new DelegateCommand(GetDownShip);
             ShipSaleHandOverCommand = new DelegateCommand(ShippSaleHandOver);
@@ -68,11 +62,9 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
             SelectAllSalesOrderForDeliveryCommand = new DelegateCommand<bool?>(OnAllSalesOrderForDeliverySelect);
             LoadMoreSalesOrdersForDeliveryCommand = new AsyncDelegateCommand(OnMoreSalesOrderForDeliveryLoad, MvvmUtility.OnException);
-            LoadOrderOfExpressReceiptCommand = new DelegateCommand<OPC_ShippingSale>(OnOrderOfExpressReceiptLoad);
-            LoadOrderOfHandoverCommand = new DelegateCommand<OPC_ShippingSale>(OnOrderOfHandoverLoad);
 
-            PrintExpressReceiptCommand = new DelegateCommand<OPC_ShippingSale>(OnExpressReceiptPrint);
-            PreviewExpressReceiptCommand = new DelegateCommand<OPC_ShippingSale>(OnExpressReceiptPreview);
+            PrintExpressReceiptCommand = new DelegateCommand(OnExpressReceiptPrint);
+            PrintExpressCommand = new DelegateCommand(PrintExpress);
             PreviewDeliveryOrderCommand = new DelegateCommand<OPC_ShippingSale>(OnDeliveryOrderPreview);
             PrintDeliveryOrderCommand = new DelegateCommand<OPC_ShippingSale>(OnDeliveryOrderPrint);
         }
@@ -84,21 +76,20 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         public ICommand QuerySalesOrderForDeliveryCommand { get; set; }
         public ICommand PrintDeliveryOrderCommand { get; set; }
         public ICommand PreviewDeliveryOrderCommand { get; set; }
-        public ICommand PreviewExpressReceiptCommand { get; set; }
-        public ICommand PrintExpressReceiptCommand { get; set; }
         public ICommand ShipSaleHandOverCommand { get; set; }
         public ICommand CreateExpressReceiptCommand { get; set; }
         public ICommand CreateDeliveryOrderCommand { get; set; }
+        public ICommand PrintExpressCommand { get; set; }
         public ICommand SearchExpressCommand { get; set; }
         public ICommand RemarkOrderCommand { get; set; }
         public ICommand SelectionChangedCommand { get; set; }
         public ICommand SearchOrderBySaleCommand { get; set; }
         public ICommand RemarkShippingCommand { get; set; }
         public ICommand GetListShipSaleCommand { get; set; }
+        public ICommand PrintExpressReceiptCommand { get; set; }
+        public ICommand PreviewCommand { get; set; }
         public ICommand GetDownShipCommand { get; set; }
         public ICommand LoadMoreSalesOrdersForDeliveryCommand { get; set; }
-        public ICommand LoadOrderOfExpressReceiptCommand { get; set; }
-        public ICommand LoadOrderOfHandoverCommand { get; set; }
 
         #endregion
 
@@ -140,14 +131,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             set { SetProperty(ref _selectedDeliveryOrder, value); }
         }
 
-        public OPC_ShippingSale SelectedDeliveryOrderForExpress
-        {
-            get { return _selectedDeliveryOrderForExpress; }
-            set { SetProperty(ref _selectedDeliveryOrderForExpress, value); }
-        }
-
-        public OPC_Sale SelectedSalesOrder { get; set; }
-
         public ObservableCollection<OPC_ShippingSale> DeliveryOrders
         {
             get { return _deliveryOrders; }
@@ -182,18 +165,8 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             set { SetProperty(ref _shippingSaleCreateDto, value); }
         }
 
-        public Order OrderOfExpressReceipt
-        {
-            get { return _orderOfExpressReceipt; }
-            set { SetProperty(ref _orderOfExpressReceipt, value); }
-        }
+        public OPC_Sale SelectedSalesOrder { get; set; }
 
-        public Order OrderOfHandover
-        {
-            get { return _orderOfHandover; }
-            set { SetProperty(ref _orderOfHandover, value); }
-        }
- 
         public int IsTabIndex { get; set; }
 
         #endregion
@@ -211,9 +184,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             SalesOrdersForDelivery.ForEach(salesOrder => salesOrder.IsSelected = isSelected.Value);
         }
 
-        /// <summary>
-        /// 查询需要生成发货单的销售单
-        /// </summary>
         private void OnSalesOrderForDeliveryQuery()
         {
             _queryCriteriaForDeliveryOrder.PageIndex = 1;
@@ -235,19 +205,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             SalesOrdersForDelivery = result.Data.ToObservableCollection();
         }
 
-        private void OnOrderOfExpressReceiptLoad(OPC_ShippingSale deliveryOrder)
-        {
-            OrderOfExpressReceipt = deliveryOrder.SalesOrders.First().Order;
-        }
-
-        private void OnOrderOfHandoverLoad(OPC_ShippingSale deliveryOrder)
-        {
-            OrderOfHandover = deliveryOrder.SalesOrders.First().Order;
-        }
-
-        /// <summary>
-        /// 查询需要生成快递单的发货单
-        /// </summary>
         private void OnDeliveryOrderForExpressQuery()
         {
             var result = DeliveryOrderService.Query(_queryCriteriaForExpressReceipt);
@@ -310,41 +267,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             DeliveryOrders.SafelyInsert(0, deliveryOrder);
         }
 
-        /// <summary>
-        /// 生成快递单
-        /// </summary>
-        private void OnExpressReceiptCreate()
-        {
-            if (SelectedDeliveryOrderForExpress == null)
-            {
-                MessageBox.Show("请选择发货单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            //if (SaleList == null) return;
-            //List<OPC_Sale> sale = SaleList.Where(e => e.IsSelected).ToList();
-            //if (sale.Count == 0)
-            //{
-            //    MessageBox.Show("请勾选销售单", "提示");
-            //    return;
-            //}
-            //_shippingSaleCreateDto.SaleOrderIDs = sale.Select(e => e.SaleOrderNo).ToList();
-            //_shippingSaleCreateDto.OrderNo = sale[0].OrderNo;
-            //_shippingSaleCreateDto.ShipViaID = ShipVia.Id;
-            //_shippingSaleCreateDto.ShipViaName = ShipVia.Name;
-            //bool isSuccess = AppEx.Container.GetInstance<ITransService>().SaveShip(ShippingSaleCreateDto);
-            //MessageBox.Show(isSuccess ? "生成发货单成功" : "生成发货单失败", "提示");
-            //if (isSuccess)
-            //{
-            //    GetListShipSaleBySale(sale[0].SaleOrderNo);
-            //}
-            //else
-            //{
-            //    DeliveryOrders = new ObservableCollection<OPC_ShippingSale>();
-            //    GetShipSaleList();
-            //}
-        }
-
         private void ShippSaleHandOver()
         {
             if (DeliveryOrders == null || DeliveryOrders.Count == 0)
@@ -372,6 +294,56 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             DeliveryOrders = new ObservableCollection<OPC_ShippingSale>(deliveryOrder);
         }
 
+        #region 打印快递单
+
+        /// <summary>
+        /// 打印快递单
+        /// </summary>
+        private void OnExpressReceiptPrint()
+        {
+            if (SelectedDeliveryOrder == null)
+            {
+                MessageBox.Show("请选择快递单", "提示");
+                return;
+            }
+            IPrint pr = new PrintWin();
+            var rdlcName = "Print//ReportForSF.rdlc";
+
+            var printModel = new PrintExpressModel()
+            {
+                CustomerAddress = Orders[0].CustomerAddress,
+                CustomerName = Orders[0].CustomerName,
+                CustomerPhone = Orders[0].CustomerPhone,
+                ExpressFee = SelectedDeliveryOrder.ExpressFee.ToString("f2")
+            };
+            pr.PrintExpress(rdlcName, printModel,true);
+        }
+
+        /// <summary>
+        /// 打印快递单预览
+        /// </summary>
+        private void PrintView()
+        {
+            if (SelectedDeliveryOrder == null)
+            {
+                MessageBox.Show("请选择快递单", "提示");
+                return;
+            }
+            IPrint pr = new PrintWin();
+            var rdlcName = "Print//ReportForSF.rdlc";
+
+            var printModel = new PrintExpressModel()
+            {
+                CustomerAddress = Orders[0].CustomerAddress,
+                CustomerName = Orders[0].CustomerName,
+                CustomerPhone = Orders[0].CustomerPhone,
+                ExpressFee = SelectedDeliveryOrder.ExpressFee.ToString("f2")
+            };
+            pr.PrintExpress(rdlcName, printModel);
+        }
+
+        #endregion
+
         /// <summary>
         /// 发货单备注
         /// </summary>
@@ -387,6 +359,35 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             var remarkWin = AppEx.Container.GetInstance<IRemark>();
             //填写的是快递单
             remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetShipSaleRemark); 
+        }
+
+        /// <summary>
+        /// 生成快递单
+        /// </summary>
+        private void OnExpressReceiptCreate()
+        {
+            if (SaleList == null) return;
+            List<OPC_Sale> sale = SaleList.Where(e => e.IsSelected).ToList();
+            if (sale.Count == 0)
+            {
+                MessageBox.Show("请勾选销售单", "提示");
+                return;
+            }
+            _shippingSaleCreateDto.SaleOrderIDs = sale.Select(e => e.SaleOrderNo).ToList();
+            _shippingSaleCreateDto.OrderNo = sale[0].OrderNo;
+            _shippingSaleCreateDto.ShipViaID = ShipVia.Id;
+            _shippingSaleCreateDto.ShipViaName = ShipVia.Name;
+            bool isSuccess = AppEx.Container.GetInstance<ITransService>().SaveShip(ShippingSaleCreateDto);
+            MessageBox.Show(isSuccess ? "生成发货单成功" : "生成发货单失败", "提示");
+            if (isSuccess)
+            {
+                GetListShipSaleBySale(sale[0].SaleOrderNo);
+            }
+            else
+            {
+                DeliveryOrders = new ObservableCollection<OPC_ShippingSale>();
+                GetShipSaleList();
+            }
         }
 
         /// <summary>
@@ -436,31 +437,52 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         public void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (e.Source is TabControl)
-            //{
-            //    var tabControl = sender as TabControl;
-            //    int i = tabControl.SelectedIndex;
-            //    switch (i)
-            //    {
-            //        case 1:
-            //            SearchSaleStatus = EnumSearchSaleStatus.PrintInvoiceSearchStatus;
-            //            ClearList();
-            //            Refresh();
-            //            break;
-            //        case 2:
-            //            SearchSaleStatus = EnumSearchSaleStatus.PrintExpressSearchStatus;
+            if (e.Source is TabControl)
+            {
+                var tabControl = sender as TabControl;
+                int i = tabControl.SelectedIndex;
+                switch (i)
+                {
+                    case 1:
+                        SearchSaleStatus = EnumSearchSaleStatus.PrintInvoiceSearchStatus;
+                        ClearList();
+                        Refresh();
+                        break;
+                    case 2:
+                        SearchSaleStatus = EnumSearchSaleStatus.PrintExpressSearchStatus;
 
-            //            ClearList();
-            //            GetShipSaleList();
-            //            break;
-            //        default:
-            //            ClearList();
-            //            SearchSaleStatus = EnumSearchSaleStatus.StoreOutDataBaseSearchStatus;
-            //            Refresh();
-            //            break;
-            //            ;
-            //    }
-            //}
+                        ClearList();
+                        GetShipSaleList();
+                        break;
+                    default:
+                        ClearList();
+                        SearchSaleStatus = EnumSearchSaleStatus.StoreOutDataBaseSearchStatus;
+                        Refresh();
+                        break;
+                        ;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 查询快递单
+        /// </summary>
+        private void PrintExpress()
+        {
+            if (SelectedDeliveryOrder == null)
+            {
+                MessageBox.Show("请勾选要打印的发货单", "提示");
+                return;
+            }
+            var ts = AppEx.Container.GetInstance<ITransService>();
+            bool bFalg = ts.SetStatusPrintExpress(SelectedDeliveryOrder.GoodsOutCode);
+            MessageBox.Show(bFalg ? "打印快递单成功" : "打印快递单失败", "提示");
+
+            if (bFalg)
+            {
+                ClearList();
+                Refresh();
+            }
         }
 
         /// <summary>
@@ -528,68 +550,19 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         private void PrintDeliveryOrder(OPC_ShippingSale deliveryOrder, bool preview)
         {
-            const string ReportName = "Print//ReportFHD.rdlc";
-
             if (deliveryOrder == null)
             {
                 MessageBox.Show("请选择一张发货单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            const string ReportName = "Print//ReportFHD.rdlc";
             IPrint reporter = new PrintWin();
             var order = deliveryOrder.SalesOrders.First().Order;
             var salesOrders = deliveryOrder.SalesOrders;
             var salesOrderDetails = SalesOrderDetailService.Query(new QuerySalesOrderDetailBySalesOrderNo { SalesOrderNo = deliveryOrder.SaleOrderNo });
 
             reporter.PrintDeliveryOrder(ReportName, order, salesOrders, salesOrderDetails.Data, !preview);
-        }
-
-        #endregion
-
-        #region 打印快递单
-
-        /// <summary>
-        /// 打印预览快递单
-        /// </summary>
-        private void OnExpressReceiptPreview(OPC_ShippingSale deliveryOrder)
-        {
-            PrintExpressReceipt(deliveryOrder, true);
-        }
-
-        /// <summary>
-        /// 打印快递单
-        /// </summary>
-        private void OnExpressReceiptPrint(OPC_ShippingSale deliveryOrder)
-        {
-            PrintExpressReceipt(deliveryOrder, false);
-        }
-
-        /// <summary>
-        /// 打印快递单
-        /// </summary>
-        /// <param name="deliveryOrder"></param>
-        /// <param name="isPreview"></param>
-        private void PrintExpressReceipt(OPC_ShippingSale deliveryOrder, bool isPreview)
-        {
-            const string ReportName = "Print//ReportForSF.rdlc";
-
-            if (deliveryOrder == null)
-            {
-                MessageBox.Show("请选择快递单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            IPrint reporter = new PrintWin();
-            var order = deliveryOrder.SalesOrders.First().Order;
-            var expressReceiptPrintModel = new PrintExpressModel()
-            {
-                CustomerAddress = order.CustomerAddress,
-                CustomerName = order.CustomerName,
-                CustomerPhone = order.CustomerPhone,
-                ExpressFee = deliveryOrder.ExpressFee.ToString("f2")
-            };
-
-            reporter.PrintExpress(ReportName, expressReceiptPrintModel, !isPreview);
         }
 
         #endregion

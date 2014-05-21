@@ -88,6 +88,6 @@ namespace OPCApp.Domain.Models
         /// </summary>
         public double SumPrice { get; set; }
 
-        public IList<OrderItem> OrderItems { get; set; }
+        public OrderItem OrderItems { get; set; }
     }
 }
