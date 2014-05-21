@@ -112,8 +112,10 @@
                     <DataGridTextColumn Header="退货状态" Binding="{Binding RmaStatusName}" />
                     <DataGridTextColumn Header="退货单状态" Binding="{Binding StatusName}" />
                     <DataGridTextColumn Header="退货收银状态" Binding="{Binding RmaCashStatusName}" />
-                    <DataGridTextColumn Header="退货总金额" Binding="{Binding RMAAmount}" />
+                    <DataGridTextColumn Header="退货总金额" Binding="{Binding RefundAmount}" />
                     <DataGridTextColumn Header="退货总数" Binding="{Binding Count}" />
+                    <DataGridTextColumn Header="退货赔偿金额" Binding="{Binding RecoverableSumMoney}" />
+
                     <DataGridTextColumn Header="收银流水号" Binding="{Binding CashNum}" />
                     <DataGridTextColumn Header="收银时间"
                                         Binding="{Binding CashDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
@@ -123,7 +125,7 @@
                     <DataGridTextColumn Header="要求退货时间"
                                         Binding="{Binding BackDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     <DataGridTextColumn Header="退货类型" Binding="{Binding RMAType}" />
-                    <DataGridTextColumn Header="专柜码" Binding="{Binding ContractPhone}" />
+                    <DataGridTextColumn Header="专柜码" Binding="{Binding SectionCode}" />
                     <DataGridTextColumn Header="退货时间"
                                         Binding="{Binding CreatedDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     <DataGridTextColumn Header="支付方式" Binding="{Binding PayType}" />

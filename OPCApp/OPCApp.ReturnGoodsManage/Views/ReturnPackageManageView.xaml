@@ -76,7 +76,7 @@
                     <DataGridTextColumn Header="顾客应付运费" Binding="{Binding CustomFee}" />
                     <DataGridTextColumn Header="公司应付运费" Binding="{Binding StoreFee}" />
                     <DataGridTextColumn Header="退货总数量" Binding="{Binding RMACount}" />
-                    <DataGridTextColumn Header="退货总金额" Binding="{Binding RealRMASumMoney}" />
+                    <DataGridTextColumn Header="退货总金额" Binding="{Binding RefundAmount}" />
                     <DataGridTextColumn Header="客服同意退货时间" Binding="{Binding ServiceAgreeDate}" />
                     <DataGridTemplateColumn Header="备注录入">
                         <DataGridTemplateColumn.CellTemplate>
