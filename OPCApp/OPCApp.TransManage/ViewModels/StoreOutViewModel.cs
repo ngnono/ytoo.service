@@ -18,6 +18,8 @@ using Intime.OPC.Infrastructure.Service;
 using System.Collections.ObjectModel;
 using Intime.OPC.Infrastructure.Mvvm.Utility;
 using OPCApp.Domain;
+using Intime.OPC.Modules.Logistics.Services;
+using Intime.OPC.Modules.Logistics.Enums;
 
 namespace Intime.OPC.Modules.Logistics.ViewModels
 {
@@ -26,29 +28,29 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
     public class StoreOutViewModel : ValidatableBindableBase
     {
         private QuerySalesOrderByComposition _queryCriteriaForDeliveryOrder;
-        private QuerySalesOrderByComposition _queryCriteriaForExpressReceipt;
-        private QuerySalesOrderByComposition _queryCriteriaForHandOver;
-        private IList<Order> _orders;
+        private QueryDeliveryOrderByComposition _queryCriteriaForExpressReceipt;
+        private QueryDeliveryOrderByComposition _queryCriteriaForHandOver;
+
         private OPC_ShippingSale _selectedDeliveryOrder;
         private ObservableCollection<OPC_ShippingSale> _deliveryOrders;
 
         private ObservableCollection<OPC_Sale> _salesOrdersForDelivery;
-        private IList<OPC_ShippingSale> _deliveryOrdersForExpress;
+        private ObservableCollection<OPC_ShippingSale> _deliveryOrdersForExpress;
         private IList<Order> _orderOfExpressReceipt;
         private OPC_ShippingSale _selectedDeliveryOrderForExpress;
         private ShippingSaleCreateDto _shippingSaleCreateDto;
 
         private IList<Order> _orderOfHandOver;
         private OPC_ShippingSale _selectedDeliveryOrderForHandOver;
-        private IList<OPC_ShippingSale> _deliveryOrdersForHandOver;
+        private ObservableCollection<OPC_ShippingSale> _deliveryOrdersForHandOver;
 
         public StoreOutViewModel()
         {
             DeliveryOrders = new ObservableCollection<OPC_ShippingSale>();
 
             QueryCriteriaForDeliveryOrder = new QuerySalesOrderByComposition { Status = EnumSaleOrderStatus.ShipInStorage };
-            QueryCriteriaForExpressReceipt = new QuerySalesOrderByComposition { Status = EnumSaleOrderStatus.PrintInvoice };
-            QueryCriteriaForHandOver = new QuerySalesOrderByComposition();
+            QueryCriteriaForExpressReceipt = new QueryDeliveryOrderByComposition { Status = EnumSaleOrderStatus.PrintInvoice };
+            QueryCriteriaForHandOver = new QueryDeliveryOrderByComposition { Status = EnumSaleOrderStatus.PrintExpress };
 
             QuerySalesOrderForDeliveryCommand = new AsyncDelegateCommand(OnSalesOrderForDeliveryQuery, MvvmUtility.OnException);
             QueryDeliveryOrderForExpressCommand = new AsyncDelegateCommand(OnDeliveryOrderForExpressQuery, MvvmUtility.OnException);
@@ -106,7 +108,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         public IService<OPC_Sale> SalesOrderService { get; set; }
 
         [Import]
-        public IService<OPC_ShippingSale> DeliveryOrderService { get; set; }
+        public IDeliveryOrderService DeliveryOrderService { get; set; }
 
         [Import]
         public IService<Order> OrderService { get; set; }
@@ -120,13 +122,13 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             set { SetProperty(ref _queryCriteriaForDeliveryOrder, value); }
         }
 
-        public QuerySalesOrderByComposition QueryCriteriaForExpressReceipt
+        public QueryDeliveryOrderByComposition QueryCriteriaForExpressReceipt
         {
             get { return _queryCriteriaForExpressReceipt; }
             set { SetProperty(ref _queryCriteriaForExpressReceipt, value); }
         }
 
-        public QuerySalesOrderByComposition QueryCriteriaForHandOver
+        public QueryDeliveryOrderByComposition QueryCriteriaForHandOver
         {
             get { return _queryCriteriaForHandOver; }
             set { SetProperty(ref _queryCriteriaForHandOver, value); }
@@ -158,7 +160,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         #region Express properties
 
-        public IList<OPC_ShippingSale> DeliveryOrdersForExpress
+        public ObservableCollection<OPC_ShippingSale> DeliveryOrdersForExpress
         {
             get { return _deliveryOrdersForExpress; }
             set { SetProperty(ref _deliveryOrdersForExpress, value); }
@@ -194,7 +196,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             set { SetProperty(ref _selectedDeliveryOrderForHandOver, value); }
         }
 
-        public IList<OPC_ShippingSale> DeliveryOrdersForHandOver
+        public ObservableCollection<OPC_ShippingSale> DeliveryOrdersForHandOver
         {
             get { return _deliveryOrdersForHandOver; }
             set { SetProperty(ref _deliveryOrdersForHandOver, value); }
@@ -207,12 +209,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         }
 
         #endregion
-
-        public IList<Order> Orders
-        {
-            get { return _orders; }
-            set { SetProperty(ref _orders, value); }
-        }
 
         public int IsTabIndex { get; set; }
 
@@ -271,7 +267,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         private void OnDeliveryOrderForExpressQuery()
         {
             var result = DeliveryOrderService.Query(_queryCriteriaForExpressReceipt);
-            DeliveryOrdersForExpress = result.Data;
+            DeliveryOrdersForExpress = result.Data.ToObservableCollection();
             if (result.TotalCount == 0)
             {
                 MessageBox.Show("没有符合条件的销售单","提示", MessageBoxButton.OK,MessageBoxImage.Information);
@@ -337,35 +333,31 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         {
             if (SelectedDeliveryOrderForExpress == null)
             {
-                MessageBox.Show("请选择发货单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("请选择一张发货单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             ShippingSaleCreateDto.ValidateProperties();
             if (ShippingSaleCreateDto.HasErrors) return;
 
+            DeliveryOrderService.Update<ShippingSaleCreateDto>(SelectedDeliveryOrderForExpress, ShippingSaleCreateDto);
 
+            DeliveryOrdersForExpress.SafelyRemove(deliveryOrder => deliveryOrder.Id == SelectedDeliveryOrderForExpress.Id);
         }
 
+        /// <summary>
+        /// 完成发货交接
+        /// </summary>
         private void OnHandOverCompleteOver()
         {
-            if (DeliveryOrders == null || DeliveryOrders.Count == 0)
+            if (SelectedDeliveryOrderForHandOver == null)
             {
-                MessageBox.Show("请选择快递单", "提示");
+                MessageBox.Show("请选择一张快递单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
-            }
-            List<string> goodsOutCodes = DeliveryOrders.Where(e => e.IsSelected).Select(e => e.GoodsOutCode).ToList();
-            if (goodsOutCodes.Count == 0)
-            {
-                MessageBox.Show("请选择快递单", "提示");
-                return;
-            }
-            bool isSuccess = AppEx.Container.GetInstance<ITransService>().SetSaleOrderShipped(goodsOutCodes);
-            if (isSuccess)
-            {
-                MessageBox.Show("完成快递发货交接成功", "提示");
             }
 
+            DeliveryOrderService.CompleteHandOver(SelectedDeliveryOrderForHandOver);
+            DeliveryOrdersForHandOver.SafelyRemove(deliveryOrder => deliveryOrder.Id == SelectedDeliveryOrderForHandOver.Id);
         }
 
         private void GetListShipSaleBySale(string saleOrderNo)
@@ -399,42 +391,13 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             remarkWin.ShowRemarkWin(id, EnumSetRemarkType.SetOrderRemark); //3填写的是订单
         }
 
-        public void OnTabItemSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //if (e.Source is TabControl)
-            //{
-            //    var tabControl = sender as TabControl;
-            //    int i = tabControl.SelectedIndex;
-            //    switch (i)
-            //    {
-            //        case 1:
-            //            SearchSaleStatus = EnumSearchSaleStatus.PrintInvoiceSearchStatus;
-            //            ClearList();
-            //            Refresh();
-            //            break;
-            //        case 2:
-            //            SearchSaleStatus = EnumSearchSaleStatus.PrintExpressSearchStatus;
-
-            //            ClearList();
-            //            GetShipSaleList();
-            //            break;
-            //        default:
-            //            ClearList();
-            //            SearchSaleStatus = EnumSearchSaleStatus.StoreOutDataBaseSearchStatus;
-            //            Refresh();
-            //            break;
-            //            ;
-            //    }
-            //}
-        }
-
         /// <summary>
         /// 查询快递单
         /// </summary>
         private void OnDeliveryOrderForHandOverQuery()
         {
             var result = DeliveryOrderService.Query(_queryCriteriaForHandOver);
-            DeliveryOrdersForHandOver = result.Data;
+            DeliveryOrdersForHandOver = result.Data.ToObservableCollection();
             if (result.TotalCount == 0)
             {
                 MessageBox.Show("没有符合条件的销售单", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -469,6 +432,8 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             var salesOrderDetails = SalesOrderDetailService.Query(new QuerySalesOrderDetailBySalesOrderNo { SalesOrderNo = deliveryOrder.SaleOrderNo });
 
             reporter.PrintDeliveryOrder(ReportName, order, salesOrders, salesOrderDetails.Data, !preview);
+
+            if (!preview) DeliveryOrderService.Print(deliveryOrder, ReceiptType.DeliveryOrder);
         }
 
         #endregion
@@ -495,14 +460,14 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         /// 打印快递单
         /// </summary>
         /// <param name="deliveryOrder"></param>
-        /// <param name="isPreview"></param>
-        private void PrintExpressReceipt(OPC_ShippingSale deliveryOrder, bool isPreview)
+        /// <param name="preview"></param>
+        private void PrintExpressReceipt(OPC_ShippingSale deliveryOrder, bool preview)
         {
             const string ReportName = "Print//ReportForSF.rdlc";
 
             if (deliveryOrder == null)
             {
-                MessageBox.Show("请选择快递单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("请选择一张快递单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -516,7 +481,9 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
                 ExpressFee = deliveryOrder.ExpressFee.ToString("f2")
             };
 
-            reporter.PrintExpress(ReportName, expressReceiptPrintModel, !isPreview);
+            reporter.PrintExpress(ReportName, expressReceiptPrintModel, !preview);
+
+            if (!preview) DeliveryOrderService.Print(deliveryOrder, ReceiptType.ExpressReceipt);
         }
 
         #endregion

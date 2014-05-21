@@ -1,21 +1,20 @@
-﻿using System;
+﻿using Intime.OPC.Infrastructure.Service;
+using OPCApp.Domain.Attributes;
+using OPCApp.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Intime.OPC.Infrastructure.Service;
-using OPCApp.Domain.Attributes;
-using OPCApp.Domain.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Criteria
 {
-    public class QuerySalesOrderByComposition : QueryCriteria
+    public class QueryDeliveryOrderByComposition : QueryCriteria
     {
-        public QuerySalesOrderByComposition()
+        public QueryDeliveryOrderByComposition()
         {
             StartDate = DateTime.Now;
             EndDate = DateTime.Now;
-            Status = EnumSaleOrderStatus.ShipInStorage;
         }
 
         [UriParameter("startdate")]
@@ -26,9 +25,6 @@ namespace Intime.OPC.Modules.Logistics.Criteria
 
         [UriParameter("orderno")]
         public string OrderNo { get; set; }
-
-        [UriParameter("saleorderno")]
-        public string SalesOrderNo { get; set; }
 
         [UriParameter("status")]
         public EnumSaleOrderStatus Status { get; set; }

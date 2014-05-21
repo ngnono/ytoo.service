@@ -117,6 +117,7 @@
     <Compile Include="Mvvm\Interaction\ScrollingBehavior.cs" />
     <Compile Include="Mvvm\Utility\MvvmUtility.cs" />
     <Compile Include="Rest\RestErrorMessage.cs" />
+    <Compile Include="Service\IAddtionalService.cs" />
     <Compile Include="Service\IService.cs" />
     <Compile Include="Log\ILogger.cs" />
     <Compile Include="Log\Log4NetLogger.cs" />

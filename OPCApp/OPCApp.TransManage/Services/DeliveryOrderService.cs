@@ -9,53 +9,53 @@ using System.Threading.Tasks;
 using Ploeh.AutoFixture;
 using OPCApp.Domain.Enums;
 using OPCApp.Infrastructure.REST;
+using Intime.OPC.Modules.Logistics.Criteria;
+using Intime.OPC.Modules.Logistics.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    [Export(typeof(IService<OPC_ShippingSale>))]
-    public class DeliveryOrderService : ServiceBase<OPC_ShippingSale>
+    //[Export(typeof(IDeliveryOrderService))]
+    public class DeliveryOrderService : ServiceBase<OPC_ShippingSale>, IDeliveryOrderService
     {
-        private Fixture fixture = new Fixture();
+        private IService<OPC_Sale> _salesOrderService;
 
-        public override OPC_ShippingSale Create(OPC_ShippingSale obj)
+        [ImportingConstructor]
+        public DeliveryOrderService(IService<OPC_Sale> salesOrderService)
         {
-            var salesOrders = fixture.Build<OPC_Sale>()
-                .Without(so => so.DeliveryOrder)
-                .Without(so => so.Counter)
-                .Do(so => so.IsSelected = false)
-                .Do(so => so.Status = EnumSaleOrderStatus.PrintInvoice)
-                .CreateMany(3);
-
-            var deliveryOrder = fixture.Build<OPC_ShippingSale>()
-                .Without(delivery => delivery.SalesOrders)
-                .Create();
-
-            deliveryOrder.SalesOrders = salesOrders.ToList();
-
-            return deliveryOrder;
-        }
-
-        public override OPC_ShippingSale Update(OPC_ShippingSale obj)
-        {
-            return obj;
+            _salesOrderService = salesOrderService;
         }
 
         public override PagedResult<OPC_ShippingSale> Query(IQueryCriteria queryCriteria)
         {
-            var salesOrders = fixture.Build<OPC_Sale>()
-                .Without(so => so.DeliveryOrder)
-                .Without(so => so.Counter)
-                .Do(so => so.IsSelected = false)
-                .Do(so => so.Status = EnumSaleOrderStatus.PrintInvoice)
-                .CreateMany(3);
+            var result = base.Query(queryCriteria);
+            if (result.TotalCount > 0)
+            {
+                result.Data.ForEach(deliveryOrder => BuildDeliveryOrder(deliveryOrder));
+            }
 
-            var deliveryOrders = fixture.Build<OPC_ShippingSale>()
-                .Without(delivery => delivery.SalesOrders)
-                .Do(deliveryOrder => deliveryOrder.SalesOrders = salesOrders.ToList())
-                .CreateMany(100);
-
-            var result = new PagedResult<OPC_ShippingSale>() { PageIndex = queryCriteria.PageIndex, PageSize = queryCriteria.PageSize, TotalCount = 200, Data = deliveryOrders.ToList() };
             return result;
+        }
+
+        private void BuildDeliveryOrder(OPC_ShippingSale deliveryOrder)
+        {
+            if (deliveryOrder.SalesOrders == null && !string.IsNullOrEmpty(deliveryOrder.GoodsOutCode))
+            {
+                IQueryCriteria queryCriteria = new QuerySalesOrderByDeliveryOrderNo() { DeliveryOrderNo = deliveryOrder.GoodsOutCode };
+                deliveryOrder.SalesOrders = _salesOrderService.QueryAll(queryCriteria);
+            }
+        }
+
+        public void Print(OPC_ShippingSale deliveryOrder, ReceiptType receiptType)
+        {
+            string uri = string.Format("deliveryorder/{0}/print", deliveryOrder.Id);
+            var data = new { Type = (int)receiptType };
+            Update(uri, data);
+        }
+
+        public void CompleteHandOver(OPC_ShippingSale deliveryOrder)
+        {
+            string uri = string.Format("deliveryorder/{0}/finish", deliveryOrder.Id);
+            Update(uri);
         }
     }
 }

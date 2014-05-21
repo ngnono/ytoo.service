@@ -93,7 +93,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Criteria\QueryDeliveryOrderByComposition.cs" />
+    <Compile Include="Criteria\QuerySalesOrderByDeliveryOrderNo.cs" />
     <Compile Include="Criteria\QuerySalesOrderDetailBySalesOrderNo.cs" />
+    <Compile Include="Enums\ReceiptType.cs" />
     <Compile Include="Models\Invoice4Get.cs" />
     <Compile Include="Models\InvoiceDetail.cs" />
     <Compile Include="Models\InvoiceDetail4Get.cs" />
@@ -107,7 +110,12 @@
     <Compile Include="LogisticsModule.cs" />
     <Compile Include="Criteria\QuerySalesOrderByComposition.cs" />
     <Compile Include="Services\DeliveryOrderService.cs" />
+    <Compile Include="Services\IDeliveryOrderService.cs" />
     <Compile Include="Services\IInvoiceService.cs" />
+    <Compile Include="Services\Mockup\MockDeliveryOrderService.cs" />
+    <Compile Include="Services\Mockup\MockOrderService.cs" />
+    <Compile Include="Services\Mockup\MockSalesOrderDetailService.cs" />
+    <Compile Include="Services\Mockup\MockSalesOrderService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PrintService.cs" />
     <Compile Include="Services\ResultMsg.cs" />

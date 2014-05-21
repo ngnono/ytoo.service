@@ -12,7 +12,7 @@ using OPCApp.Domain.Attributes;
 
 namespace Intime.OPC.Infrastructure.Service
 {
-    public class ServiceBase<TModel> : IService<TModel>, IPartImportsSatisfiedNotification
+    public abstract class ServiceBase<TModel> : IService<TModel>, IAddtionalService, IPartImportsSatisfiedNotification
         where TModel : OPCApp.Domain.Models.Model
     {
         private IRestClient _restClient;
@@ -40,6 +40,8 @@ namespace Intime.OPC.Infrastructure.Service
             Initialize();
         }
 
+        #region Implementation of IService
+
         public virtual TModel Create(TModel obj)
         {
             return _restClient.Post<TModel>(_uriName, obj);
@@ -50,14 +52,29 @@ namespace Intime.OPC.Infrastructure.Service
             return _restClient.Put<TModel>(string.Format("{0}/{1}", _uriName, obj.Id), obj);
         }
 
+        public virtual void Update<TData>(TModel obj, TData data)
+        {
+            _restClient.PutWithoutReturn<TData>(string.Format("{0}/{1}", _uriName, obj.Id), data);
+        }
+
         public virtual void Delete(int id)
         {
-            _restClient.Delete(string.Format("{0}/{1}", _uriName, id));
+            Delete(id.ToString());
+        }
+
+        public virtual void Delete(string uniqueID)
+        {
+            _restClient.Delete(string.Format("{0}/{1}", _uriName, uniqueID));
         }
 
         public virtual TModel Query(int id)
         {
-            return _restClient.Get<TModel>(string.Format("{0}/{1}", _uriName, id));
+            return Query(id.ToString());
+        }
+
+        public virtual TModel Query(string uniqueID)
+        {
+            return _restClient.Get<TModel>(string.Format("{0}/{1}", _uriName, uniqueID));
         }
 
         public virtual PagedResult<TModel> Query(IQueryCriteria queryCriteria)
@@ -65,7 +82,7 @@ namespace Intime.OPC.Infrastructure.Service
             return _restClient.Get<PagedResult<TModel>>(string.Format("{0}?{1}", _uriName, queryCriteria.BuildQueryString()));
         }
 
-        public IList<TModel> QueryAll(IQueryCriteria queryCriteria)
+        public virtual IList<TModel> QueryAll(IQueryCriteria queryCriteria)
         {
             var pagedResult = _restClient.Get<PagedResult<TModel>>(string.Format("{0}?{1}", _uriName, queryCriteria.BuildQueryString()));
             if (pagedResult.TotalCount == pagedResult.Data.Count) return pagedResult.Data;
@@ -82,5 +99,26 @@ namespace Intime.OPC.Infrastructure.Service
 
             return result;
         }
+
+        #endregion
+
+        #region Implementation of IAddtionalService
+
+        public void Create<TData>(string uri, TData data)
+        {
+            _restClient.PostWithoutReturnValue<TData>(uri, data);
+        }
+
+        public void Update<TData>(string uri, TData data)
+        {
+            _restClient.PutWithoutReturn<TData>(uri, data);
+        }
+
+        public void Update(string uri)
+        {
+            _restClient.PutWithoutReturn(uri);
+        }
+
+        #endregion
     }
 }

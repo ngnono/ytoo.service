@@ -10,6 +10,8 @@ namespace OPCApp.Infrastructure.REST
     {
         string Token { get; set; }
 
+        #region CRUD
+
         TData Get<TData>(string uri);
 
         TEntity Post<TEntity>(string uri, TEntity entity);
@@ -17,5 +19,13 @@ namespace OPCApp.Infrastructure.REST
         TEntity Put<TEntity>(string uri, TEntity entity);
 
         void Delete(string uri);
+
+        #endregion
+
+        void PutWithoutReturn(string uri);
+
+        void PutWithoutReturn<TEntity>(string uri, TEntity entity);
+
+        void PostWithoutReturnValue<TEntity>(string uri, TEntity entity);
     }
 }
