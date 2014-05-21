@@ -13,6 +13,8 @@ using Yintai.Hangzhou.Model.ES;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Model.Enums;
 using com.intime.fashion.common;
+using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.common.Configuration;
 
 namespace com.intime.jobscheduler.Job
 {
@@ -24,14 +26,11 @@ namespace com.intime.jobscheduler.Job
         {
             ILog log = LogManager.GetLogger(this.GetType());
             JobDataMap data = context.JobDetail.JobDataMap;
-            var esUrl = data.GetString("eshost");
-            var esIndex = data.GetString("defaultindex");
+
             var needRebuild = data.ContainsKey("needrebuild") ? data.GetBooleanValue("needrebuild") : false;
             var benchDate = BenchDate(context) ;
-            
-            var client = new ElasticClient(new ConnectionSettings(new Uri(esUrl))
-                                    .SetDefaultIndex(esIndex)
-                                    .SetMaximumAsyncConnections(10));
+
+            var client = SearchLogic.GetClient();
             if (client == null)
             {
                 log.Info("client create faile");
@@ -40,10 +39,10 @@ namespace com.intime.jobscheduler.Job
            
             if (needRebuild)
             {
-                var response = client.DeleteIndex(esIndex);
+                var response = client.DeleteIndex(ElasticSearchConfigurationSetting.Current.Index);
                 if (response.OK)
                 {
-                    log.Info(string.Format("index:{0} is deleted!", esIndex));
+                    log.Info(string.Format("index:{0} is deleted!", ElasticSearchConfigurationSetting.Current.Index));
                     
                 }
                 else

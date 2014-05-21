@@ -196,6 +196,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 if (haveValidImage)
                 {
                     ts.Complete();
+                    SearchLogic.IndexSingleAsync(productEntity.Id, SourceType.Product);
                     return this.RenderSuccess<dynamic>(c => c.Data = new
                     {
                         id = productEntity.Id,
@@ -381,6 +382,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 if (canCommit)
                 {
                     ts.Complete();
+                    SearchLogic.IndexSingleAsync(productEntity.Id, SourceType.Product);
                     return this.RenderSuccess<dynamic>(c => c.Data = new
                     {
                         id = productEntity.Id,

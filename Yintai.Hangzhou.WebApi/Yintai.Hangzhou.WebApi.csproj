@@ -162,6 +162,9 @@
     <Content Include="Configurations\Log4Net.config" />
     <Content Include="Configurations\production\unity.config" />
     <Content Include="Configurations\production\Log4Net.config" />
+    <Content Include="Configurations\production\elasticSearch.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\HangzhouV45.pubxml" />
     <None Include="Properties\PublishProfiles\intimedemo - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\intimedemo - Web Deploy.pubxml" />
