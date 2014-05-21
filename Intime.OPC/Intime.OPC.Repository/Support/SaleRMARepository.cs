@@ -29,14 +29,14 @@ namespace Intime.OPC.Repository.Support
             CheckUser();
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIds.Contains(t.StoreId));
+                var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIds.Contains(t.StoreId));
 
-                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime );
+                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime);
 
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
-                    query = query.Where(t => t.OrderNo.Contains(orderNo));
-                    query2 = query2.Where(t => t.OrderNo.Contains(orderNo));
+                    query = query.Where(t => t.OrderNo == orderNo);
+                    query2 = query2.Where(t => t.OrderNo == orderNo);
                 }
 
 
@@ -45,7 +45,7 @@ namespace Intime.OPC.Repository.Support
                     query2 = query2.Where(t => t.PaymentMethodCode == payType);
                 }
 
-                if (bandId.HasValue && bandId!=-1)
+                if (bandId.HasValue && bandId != -1)
                 {
                     query2 = query2.Where(t => t.BrandId == bandId.Value);
                 }
@@ -58,24 +58,22 @@ namespace Intime.OPC.Repository.Support
                 var lstSaleRma = new List<SaleRmaDto>();
                 foreach (var t in lst.Result)
                 {
-                    var o = new SaleRmaDto();
-                    o.Id = t.Orders.Id;
-
-                    o.CustomerAddress = t.Orders.ShippingAddress;
-                    o.CustomerName = t.Orders.ShippingContactPerson;
-                    o.CustomerPhone = t.Orders.ShippingContactPhone;
-
-                    o.IfReceipt = t.Orders.NeedInvoice.HasValue ? t.Orders.NeedInvoice.Value : false;
-                    o.MustPayTotal = (double)(t.Orders.TotalAmount);
-                    o.OrderNo = t.Orders.OrderNo;
-                    o.PaymentMethodName = t.Orders.PaymentMethodName;
-
-                    o.ReceiptContent = t.Orders.InvoiceDetail;
-                    o.ReceiptHead = t.Orders.InvoiceSubject;
-
-                    o.OrderSource = t.Orders.OrderSource;
-                    o.OrderTransFee = t.Orders.ShippingFee;
-                    o.BuyDate = t.Orders.CreateDate;
+                    var o = new SaleRmaDto
+                    {
+                        Id = t.Orders.Id,
+                        CustomerAddress = t.Orders.ShippingAddress,
+                        CustomerName = t.Orders.ShippingContactPerson,
+                        CustomerPhone = t.Orders.ShippingContactPhone,
+                        IfReceipt = t.Orders.NeedInvoice.HasValue && t.Orders.NeedInvoice.Value,
+                        MustPayTotal = (double)(t.Orders.TotalAmount),
+                        OrderNo = t.Orders.OrderNo,
+                        PaymentMethodName = t.Orders.PaymentMethodName,
+                        ReceiptContent = t.Orders.InvoiceDetail,
+                        ReceiptHead = t.Orders.InvoiceSubject,
+                        OrderSource = t.Orders.OrderSource,
+                        OrderTransFee = t.Orders.ShippingFee,
+                        BuyDate = t.Orders.CreateDate
+                    };
 
                     if (t.SaleRMA != null)
                     {
@@ -102,32 +100,32 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 var query =
-                    db.OPC_SaleRMAs.Where(
+                    db.OPC_RMAs.Where(
                         t =>
                             t.CreatedDate >= startTime && t.CreatedDate < endTime &&
-                            CurrentUser.StoreIds.Contains(t.StoreId) );
+                            CurrentUser.StoreIds.Contains(t.StoreId));
                 var query2 = db.Orders.Where(t => true);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
-                    query = query.Where(t => t.OrderNo.Contains(orderNo));
-                    query2 = query2.Where(t => t.OrderNo.Contains(orderNo));
+                    query = query.Where(t => t.OrderNo == orderNo);
+                    query2 = query2.Where(t => t.OrderNo == orderNo);
                 }
 
                 if (!string.IsNullOrWhiteSpace(saleOrderNo))
                 {
-                    query = query.Where(t => t.SaleOrderNo.Contains(saleOrderNo));
+                    query = query.Where(t => t.SaleOrderNo == saleOrderNo);
                 }
 
                 if (!string.IsNullOrWhiteSpace(rmaNo))
                 {
-                    query = query.Where(t => t.RMANo.Contains(rmaNo));
+                    query = query.Where(t => t.RMANo == rmaNo);
                 }
 
                 if (returnGoodsStatus != EnumReturnGoodsStatus.None)
                 {
                     query = query.Where(t => t.RMAStatus == (int)returnGoodsStatus);
                 }
-                if (rmaStatus.HasValue)
+                if (rmaStatus.HasValue && rmaStatus.Value != -1)
                 {
                     query = query.Where(t => t.Status == rmaStatus.Value);
                 }
@@ -137,18 +135,13 @@ namespace Intime.OPC.Repository.Support
                     query2 = query2.Where(t => t.PaymentMethodCode == payType);
                 }
 
-
                 if (storeId.HasValue)
                 {
                     query2 = query2.Where(t => t.StoreId == storeId.Value);
                 }
 
                 var lst = query.Join(query2, t => t.OrderNo, o => o.OrderNo, (t, o) => new { SaleRMA = t, Orders = o }).OrderByDescending(t => t.Orders.CreateDate).ToPageResult(pageIndex, pageSize);
-                //var q = from t in query2
-                //        join o in query on t.OrderNo equals o.OrderNo into cs
-                //        select new { SaleRMA = cs.FirstOrDefault(), Orders = t };
-                //q = q.OrderBy(t=>t.Orders.OrderNo);
-                //var lst = q.ToPageResult(pageIndex,pageSize);
+
 
 
                 var lstSaleRma = new List<SaleRmaDto>();
@@ -184,7 +177,7 @@ namespace Intime.OPC.Repository.Support
                         o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
                         o.CustomerRemark = t.SaleRMA.Reason;
                         o.RmaNo = t.SaleRMA.RMANo;
-                        o.RMACount = t.SaleRMA.RMACount.HasValue ? 0 : t.SaleRMA.RMACount.Value;
+                        o.RMACount = t.SaleRMA.Count.HasValue ? t.SaleRMA.Count.Value : 0;
                         o.CompensationFee = t.SaleRMA.CompensationFee;
                     }
 
@@ -213,7 +206,7 @@ namespace Intime.OPC.Repository.Support
             using (var db = new YintaiHZhouContext())
             {
                 //收银状态 未送收银
-                var query = db.OPC_SaleRMAs.Where(t => t.RMACashStatus == (int)EnumRMACashStatus.NoCash && t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIds.Contains(t.StoreId));
+                var query = db.OPC_RMAs.Where(t => t.RMACashStatus == (int)EnumRMACashStatus.NoCash && t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIds.Contains(t.StoreId));
                 var query2 = db.Orders.Where(t => true);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -248,23 +241,21 @@ namespace Intime.OPC.Repository.Support
                 var lstSaleRma = new List<SaleRmaDto>();
                 foreach (var t in lst.Result)
                 {
-                    var o = new SaleRmaDto();
-                    o.Id = t.Orders.Id;
-
-                    o.CustomerAddress = t.Orders.ShippingAddress;
-                    o.CustomerName = t.Orders.ShippingContactPerson;
-                    o.CustomerPhone = t.Orders.ShippingContactPhone;
-
-                    o.IfReceipt = t.Orders.NeedInvoice.HasValue ? t.Orders.NeedInvoice.Value : false;
-                    o.MustPayTotal = (double)(t.Orders.TotalAmount);
-                    o.OrderNo = t.Orders.OrderNo;
-                    o.PaymentMethodName = t.Orders.PaymentMethodName;
-
-                    o.ReceiptContent = t.Orders.InvoiceDetail;
-                    o.ReceiptHead = t.Orders.InvoiceSubject;
-
-                    o.OrderSource = t.Orders.OrderSource;
-                    o.OrderTransFee = t.Orders.ShippingFee;
+                    var o = new SaleRmaDto
+                    {
+                        Id = t.Orders.Id,
+                        CustomerAddress = t.Orders.ShippingAddress,
+                        CustomerName = t.Orders.ShippingContactPerson,
+                        CustomerPhone = t.Orders.ShippingContactPhone,
+                        IfReceipt = t.Orders.NeedInvoice.HasValue && t.Orders.NeedInvoice.Value,
+                        MustPayTotal = (double)(t.Orders.TotalAmount),
+                        OrderNo = t.Orders.OrderNo,
+                        PaymentMethodName = t.Orders.PaymentMethodName,
+                        ReceiptContent = t.Orders.InvoiceDetail,
+                        ReceiptHead = t.Orders.InvoiceSubject,
+                        OrderSource = t.Orders.OrderSource,
+                        OrderTransFee = t.Orders.ShippingFee
+                    };
 
                     if (t.SaleRMA != null)
                     {
@@ -278,7 +269,7 @@ namespace Intime.OPC.Repository.Support
                         o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
                         o.CustomerRemark = t.SaleRMA.Reason;
                         o.RmaNo = t.SaleRMA.RMANo;
-                        o.RMACount = t.SaleRMA.RMACount.HasValue ? 0 : t.SaleRMA.RMACount.Value;
+                        o.RMACount = t.SaleRMA.Count.HasValue ? t.SaleRMA.Count.Value : 0;
                         o.CompensationFee = t.SaleRMA.CompensationFee;
                     }
 
@@ -296,14 +287,14 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var query = db.OPC_SaleRMAs.Where(t => true && CurrentUser.StoreIds.Contains(t.StoreId));
+                var query = db.OPC_RMAs.Where(t => true && CurrentUser.StoreIds.Contains(t.StoreId));
                 var query2 = db.Orders.Where(t => CurrentUser.StoreIds.Contains(t.StoreId) && t.CreateDate >= request.StartDate && t.CreateDate < request.EndDate);
                 var queryRMA = db.RMAs.Where(t => true);
                 if (request.OrderNo.IsNotNull())
                 {
-                    query = query.Where(t => t.OrderNo.Contains(request.OrderNo));
-                    query2 = query2.Where(t => t.OrderNo.Contains(request.OrderNo));
-                    queryRMA = queryRMA.Where(t => t.OrderNo.Contains(request.OrderNo));
+                    query = query.Where(t => t.OrderNo==request.OrderNo);
+                    query2 = query2.Where(t => t.OrderNo==request.OrderNo);
+                    queryRMA = queryRMA.Where(t => t.OrderNo==request.OrderNo);
                 }
 
 
@@ -327,23 +318,21 @@ namespace Intime.OPC.Repository.Support
                 var lstSaleRma = new List<SaleRmaDto>();
                 foreach (var t in lst.Result)
                 {
-                    var o = new SaleRmaDto();
-                    o.Id = t.Orders.Id;
-
-                    o.CustomerAddress = t.Orders.ShippingAddress;
-                    o.CustomerName = t.Orders.ShippingContactPerson;
-                    o.CustomerPhone = t.Orders.ShippingContactPhone;
-
-                    o.IfReceipt = t.Orders.NeedInvoice.HasValue ? t.Orders.NeedInvoice.Value : false;
-                    o.MustPayTotal = (double)(t.Orders.TotalAmount);
-                    o.OrderNo = t.Orders.OrderNo;
-                    o.PaymentMethodName = t.Orders.PaymentMethodName;
-
-                    o.ReceiptContent = t.Orders.InvoiceDetail;
-                    o.ReceiptHead = t.Orders.InvoiceSubject;
-
-                    o.OrderSource = t.Orders.OrderSource;
-                    o.OrderTransFee = t.Orders.ShippingFee;
+                    var o = new SaleRmaDto
+                    {
+                        Id = t.Orders.Id,
+                        CustomerAddress = t.Orders.ShippingAddress,
+                        CustomerName = t.Orders.ShippingContactPerson,
+                        CustomerPhone = t.Orders.ShippingContactPhone,
+                        IfReceipt = t.Orders.NeedInvoice.HasValue && t.Orders.NeedInvoice.Value,
+                        MustPayTotal = (double) (t.Orders.TotalAmount),
+                        OrderNo = t.Orders.OrderNo,
+                        PaymentMethodName = t.Orders.PaymentMethodName,
+                        ReceiptContent = t.Orders.InvoiceDetail,
+                        ReceiptHead = t.Orders.InvoiceSubject,
+                        OrderSource = t.Orders.OrderSource,
+                        OrderTransFee = t.Orders.ShippingFee
+                    };
 
                     if (t.SaleRMA != null)
                     {
@@ -368,7 +357,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var lst = db.OPC_SaleRMAs.Where(t => t.SaleOrderNo == saleOrderNo).ToList();
+                var lst = db.OPC_RMAs.Where(t => t.SaleOrderNo == saleOrderNo).ToList();
                 foreach (var sale in lst)
                 {
                     sale.Status = EnumRMAStatus.OutofStack.AsID();

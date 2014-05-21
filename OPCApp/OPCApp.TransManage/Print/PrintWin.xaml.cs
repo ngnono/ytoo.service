@@ -89,11 +89,12 @@ namespace Intime.OPC.Modules.Logistics.Print
                 MessageBox.Show(Ex.Message);
             }
         }
-        public void PrintDeliveryOrder(string rdlcName,Order order, OPC_Sale opcSale,IList<OPC_SaleDetail> listOpcSaleDetails, bool isPrint=false)
+
+        public void PrintDeliveryOrder(string rdlcName, Order order, IList<OPC_Sale> opcSales, IList<OPC_SaleDetail> listOpcSaleDetails, bool isPrint = false)
         {
             try
             {
-                var myRptDs = new ReportDataSource("FHD", new List<OPC_Sale>() { opcSale });
+                var myRptDs = new ReportDataSource("FHD", opcSales);
                 _reportViewer.LocalReport.DataSources.Add(myRptDs);
 
                 myRptDs = new ReportDataSource("OrderDT", new List<Order>() { order });
