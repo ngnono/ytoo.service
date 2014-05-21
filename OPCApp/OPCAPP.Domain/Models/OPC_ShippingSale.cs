@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using OPCApp.Domain.Attributes;
 
@@ -10,88 +10,88 @@ namespace OPCApp.Domain.Models
         public bool IsSelected { get; set; }
 
         /// <summary>
-        ///     ÍË»õµ¥ºÅ
+        ///     ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public string RmaNo { get; set; }
 
-        /// ¶©µ¥
+        /// ï¿½ï¿½ï¿½ï¿½
         public string OrderNo { get; set; }
 
         public string SaleOrderNo { get; set; }
 
-        /// ·¢»õµ¥ºÅ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public string GoodsOutCode { get; set; }
 
         /// <summary>
-        ///     ¿ìµÝµ¥ºÅ
+        ///     ï¿½ï¿½Ýµï¿½ï¿½ï¿½
         /// </summary>
         public string ExpressCode { get; set; }
 
         /// <summary>
-        ///     ·¢»õ×´Ì¬
+        ///     ï¿½ï¿½ï¿½ï¿½×´Ì¬
         /// </summary>
         public string ShippingStatus { get; set; }
 
         /// <summary>
-        ///     ÊÕ»õÈËÐÕÃû
+        ///     ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public string CustomerName { get; set; }
 
         /// <summary>
-        ///     ÊÕ»õÈËµØÖ·
+        ///     ï¿½Õ»ï¿½ï¿½Ëµï¿½Ö·
         /// </summary>
         public string CustomerAddress { get; set; }
 
         /// <summary>
-        ///     ÊÕ»õÈËµç»°
+        ///     ï¿½Õ»ï¿½ï¿½Ëµç»°
         /// </summary>
         public string CustomerPhone { get; set; }
 
         /// <summary>
-        ///     ·¢»õÊ±¼ä
+        ///     ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
         /// </summary>
         public DateTime GoodsOutDate { get; set; }
 
         /// <summary>
-        ///     ·¢»õ·½Ê½
+        ///     ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½
         /// </summary>
         public string GoodsOutType { get; set; }
 
         /// <summary>
-        ///     ¿ìµÝ¹«Ë¾
+        ///     ï¿½ï¿½Ý¹ï¿½Ë¾
         /// </summary>
         public string ShipCompanyName { get; set; }
 
         /// <summary>
-        ///     ¿ìµÝÔ±
+        ///     ï¿½ï¿½ï¿½Ô±
         /// </summary>
         public string ShipManName { get; set; }
 
         /// <summary>
-        ///     ´òÓ¡×´Ì¬
+        ///     ï¿½ï¿½Ó¡×´Ì¬
         /// </summary>
         public string PrintStatus { get; set; }
 
         /// <summary>
-        ///     ÓÊ±à
+        ///     ï¿½Ê±ï¿½
         /// </summary>
         public string ShippingZipCode { get; set; }
 
         /// <summary>
-        ///     ÅäËÍ·½Ê½
+        ///     ï¿½ï¿½ï¿½Í·ï¿½Ê½
         /// </summary>
         /// <value>The shipping method.</value>
         public string ShippingMethod { get; set; }
 
         /// <summary>
-        ///     Ö§¸¶¿ìµÝ¹«Ë¾¿ìµÝ·Ñ
+        ///     Ö§ï¿½ï¿½ï¿½ï¿½Ý¹ï¿½Ë¾ï¿½ï¿½Ý·ï¿½
         /// </summary>
         /// <value>The express fee.</value>
         public double ShipViaExpressFee { get; set; }
 
         /// <summary>
-        ///     ¿ìµÝ·Ñ
+        ///     ï¿½ï¿½Ý·ï¿½
         /// </summary>
         /// <value>The express fee.</value>
         public double ExpressFee { get; set; }
