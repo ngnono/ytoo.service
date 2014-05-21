@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 using Ploeh.AutoFixture;
 using OPCApp.Domain.Enums;
 using OPCApp.Infrastructure.REST;
+using Intime.OPC.Modules.Logistics.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    [Export(typeof(IService<OPC_ShippingSale>))]
-    public class MockDeliveryOrderService : ServiceBase<OPC_ShippingSale>
+    [Export(typeof(IDeliveryOrderService))]
+    public class MockDeliveryOrderService : ServiceBase<OPC_ShippingSale>, IDeliveryOrderService
     {
         private Fixture fixture = new Fixture();
 
@@ -56,6 +57,16 @@ namespace Intime.OPC.Modules.Logistics.Services
 
             var result = new PagedResult<OPC_ShippingSale>() { PageIndex = queryCriteria.PageIndex, PageSize = queryCriteria.PageSize, TotalCount = 200, Data = deliveryOrders.ToList() };
             return result;
+        }
+
+        public void Print(OPC_ShippingSale deliveryOrder, ReceiptType receiptType)
+        {
+
+        }
+
+        public void CompleteHandOver(OPC_ShippingSale deliveryOrder)
+        {
+
         }
     }
 }

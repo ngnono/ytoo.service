@@ -44,8 +44,6 @@ namespace OPCApp.Domain.Models
 
         #region Added by Frank
 
-        public int OrderId { get; set; }
-
         public int? ShippingSaleId { get; set; }
 
         public Order Order { get; set; }
