@@ -59,7 +59,7 @@ namespace Intime.OPC.WebApi.Controllers
         }
 
         /// <summary>
-        /// 生成出库单
+        /// 生成发货单
         /// </summary>
         /// <returns></returns>
         [Route("")]
@@ -122,9 +122,9 @@ namespace Intime.OPC.WebApi.Controllers
                 ShippingContactPhone = order.ShippingContactPhone,
                 ShippingFee = 0m,
                 ShippingRemark = String.Empty,
-                ShippingStatus = (int)EnumSaleOrderStatus.ShipInStorage,
+                ShippingStatus = (int)EnumSaleOrderStatus.PrintInvoice,
                 ShippingZipCode = order.ShippingZipCode,
-                StoreId = order.StoreId
+                StoreId = order.StoreId,
             };
 
             var model = _shippingOrderRepository.CreateBySaleOrder(entity, saleList, userId, String.Empty);
@@ -226,12 +226,14 @@ namespace Intime.OPC.WebApi.Controllers
             item.ShippingFee = request.ShippingFee;
             item.ShippingCode = request.ShippingNo;
             item.ShipViaName = shipVia == null ? String.Empty : shipVia.Name;
+            item.ShippingStatus = (int)Domain.Enums.EnumSaleOrderStatus.PrintExpress;
+            item.UpdateDate = DateTime.Now;
+            item.UpdateUser = userId;
 
             _shippingOrderRepository.Update4ShippingCode(item, userId);
 
 
             return RetrunHttpActionResult("OK");
-
         }
 
 
@@ -244,7 +246,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <returns></returns>
         [Route("{id:int}/print")]
         [HttpPut]
-        public IHttpActionResult PutPrint(int id, [FromBody] DeliveryOrderPrintRequest request, [UserId] int userId)
+        public IHttpActionResult PutPrint(int id, [FromBody] DeliveryOrderPrintRequest request, [UserId] int userId, [UserProfile] UserProfile userProfile)
         {
             if (request == null)
             {
@@ -285,6 +287,7 @@ namespace Intime.OPC.WebApi.Controllers
             if (model.ShippingStatus < (int)EnumSaleOrderStatus.Shipped)
             {
                 model.ShippingStatus = (int)EnumSaleOrderStatus.Shipped;
+                
                 _shippingOrderRepository.Sync4Status(model, userId);
             }
             else

@@ -554,6 +554,8 @@ namespace Intime.OPC.Repository.Base
                 {
                     setEntry.SetModifiedProperty(t);
                 }
+
+                context.SaveChanges();
             }
         }
 
