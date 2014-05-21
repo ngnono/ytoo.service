@@ -64,6 +64,19 @@ namespace Intime.OPC.Domain.Models.Mapping
 
             this.Property(t => t.ContactPerson)
                 .HasMaxLength(20);
+            
+            //OPC_SalerRMA
+            this.Property(t => t.Reason)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            this.Property(t => t.RMAMemo)
+                .HasMaxLength(150);
+
+            this.Property(t => t.SaleRMASource)
+                .IsRequired()
+                .HasMaxLength(20);
+            //OPC_SalerRMA
 
             // Table & Column Mappings
             this.ToTable("OPC_RMA");
@@ -108,6 +121,21 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.RmaCashNum).HasColumnName("RmaCashNum");
             this.Property(t => t.RmaCashDate).HasColumnName("RmaCashDate");
             this.Property(t => t.SectionId).HasColumnName("SectionId");
+            //OPC_SalerRMA
+            this.Property(t => t.Reason).HasColumnName("Reason");
+            this.Property(t => t.BackDate).HasColumnName("BackDate");
+            this.Property(t => t.StoreFee).HasColumnName("StoreFee");
+            this.Property(t => t.CustomFee).HasColumnName("CustomFee");
+            this.Property(t => t.RMAMemo).HasColumnName("RMAMemo");
+            this.Property(t => t.CompensationFee).HasColumnName("CompensationFee");
+            this.Property(t => t.SaleRMASource).HasColumnName("SaleRMASource");
+            this.Property(t => t.RMAStatus).HasColumnName("RMAStatus");
+            this.Property(t => t.RMACashStatus).HasColumnName("RMACashStatus");
+            this.Property(t => t.RealRMASumMoney).HasColumnName("RealRMASumMoney");
+            this.Property(t => t.ServiceAgreeTime).HasColumnName("CustomerAuthDate");
+            this.Property(t => t.RecoverableSumMoney).HasColumnName("RecoverableSumMoney");
+
+
         }
     }
 }
