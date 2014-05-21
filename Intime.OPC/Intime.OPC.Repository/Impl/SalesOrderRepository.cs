@@ -43,7 +43,7 @@ namespace Intime.OPC.Repository.Impl
                     else
                     {
                         //未生成发货单的
-                        query = PredicateBuilder.And(query, v => !v.ShippingSaleId.HasValue);
+                        query = PredicateBuilder.And(query, v => (!v.ShippingSaleId.HasValue) || v.ShippingSaleId < 1);
                     }
                 }
 

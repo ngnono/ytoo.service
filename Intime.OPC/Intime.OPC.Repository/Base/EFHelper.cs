@@ -547,7 +547,9 @@ namespace Intime.OPC.Repository.Base
         {
             if (entity != null && fileds != null)
             {
-                context.Set<TEntity>().Attach(entity);
+                var dbset = GetDbSet<TEntity>(context);
+
+                dbset.Attach(entity);
                 var setEntry = ((IObjectContextAdapter)context).ObjectContext.
                     ObjectStateManager.GetObjectStateEntry(entity);
                 foreach (var t in fileds)

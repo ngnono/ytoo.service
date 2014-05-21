@@ -27,13 +27,15 @@ namespace Intime.OPC.WebApi.Controllers
         private readonly ISaleOrderRepository _saleOrderRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IShipViaRepository _shipViaRepository;
+        private readonly ISectionRepository _sectionRepository;
 
-        public ShippingController(IShippingOrderRepository shippingOrderRepository, ISaleOrderRepository saleOrderRepository, IOrderRepository orderRepository, IShipViaRepository shipViaRepository)
+        public ShippingController(IShippingOrderRepository shippingOrderRepository, ISaleOrderRepository saleOrderRepository, IOrderRepository orderRepository, IShipViaRepository shipViaRepository, ISectionRepository sectionRepository)
         {
             _shippingOrderRepository = shippingOrderRepository;
             _saleOrderRepository = saleOrderRepository;
             _orderRepository = orderRepository;
             _shipViaRepository = shipViaRepository;
+            _sectionRepository = sectionRepository;
         }
 
         private IHttpActionResult Check(int shippingId, UserProfile userProfile)
@@ -69,7 +71,7 @@ namespace Intime.OPC.WebApi.Controllers
             //不同的销售单可以生成同一个出库单
             if (!ModelState.IsValid || request == null || request.SalesOrderNos == null || request.SalesOrderNos.Count == 0)
             {
-                return BadRequest("您请先维护门店后，再次查询");
+                return BadRequest("参数错误");
             }
 
             //验证用户合法性
@@ -104,6 +106,7 @@ namespace Intime.OPC.WebApi.Controllers
             }
 
             var order = _orderRepository.GetOrderByOrderNo(s.OrderNo);
+            var section = _sectionRepository.GetByID(s.SectionId ?? 0);
 
             var entity = new OPC_ShippingSale
             {
@@ -124,7 +127,7 @@ namespace Intime.OPC.WebApi.Controllers
                 ShippingRemark = String.Empty,
                 ShippingStatus = (int)EnumSaleOrderStatus.PrintInvoice,
                 ShippingZipCode = order.ShippingZipCode,
-                StoreId = order.StoreId,
+                StoreId = section == null ? order.StoreId : section.StoreId,//拿销售单storeid
             };
 
             var model = _shippingOrderRepository.CreateBySaleOrder(entity, saleList, userId, String.Empty);
@@ -287,7 +290,7 @@ namespace Intime.OPC.WebApi.Controllers
             if (model.ShippingStatus < (int)EnumSaleOrderStatus.Shipped)
             {
                 model.ShippingStatus = (int)EnumSaleOrderStatus.Shipped;
-                
+
                 _shippingOrderRepository.Sync4Status(model, userId);
             }
             else

@@ -34,7 +34,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
 
         public ShippingController GetController()
         {
-            _controller = new ShippingController( new ShippingOrderRepository(), new SalesOrderRepository(), new OrderRepository(),new ShipViaRepository());
+            _controller = new ShippingController( new ShippingOrderRepository(), new SalesOrderRepository(), new OrderRepository(),new ShipViaRepository(),new SectionRepository());
 
             _controller.Request = new HttpRequestMessage();
             _controller.Request.SetConfiguration(new HttpConfiguration());
@@ -137,6 +137,23 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
                 Times = 1
 
             }, 28, new UserProfile { IsSystem = false, StoreIds = storeIds }) as OkNegotiatedContentResult<string>;
+
+            Assert.IsNotNull(actual);
+        }
+
+        [Test()]
+        public void PostOrder()
+        {
+            _controller.Request.Method = HttpMethod.Post;
+
+            var storeIds = new List<int>()
+            {
+                21,23
+            };
+            var actual = _controller.PostOrder(new CreateShippingSaleOrderRequest()
+            {
+                SalesOrderNos = new List<string>() { "114042236511-001" }
+            }, 28, new UserProfile { IsSystem = true, StoreIds = storeIds }) as OkNegotiatedContentResult<ShippingSaleDto>;
 
             Assert.IsNotNull(actual);
         }
