@@ -91,7 +91,7 @@ namespace Intime.OPC.WebApi.Core.MessageHandlers.AccessToken
             request.Properties.Add(AccessTokenConst.UseridPropertiesName, token.UserId);
 
             // ToFix BaseRepostiory Bug
-            HttpContext.Current.Items[AccessTokenConst.UserProfilePropertiesName] = token.UserId;
+            HttpContext.Current.Items[AccessTokenConst.UseridPropertiesName] = token.UserId;
 
             // 获取用户信息
             var userProfile = _userProfileProvider.Get(token.UserId);

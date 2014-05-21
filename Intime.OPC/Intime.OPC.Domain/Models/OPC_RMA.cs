@@ -10,7 +10,6 @@ namespace Intime.OPC.Domain.Models
         public string SaleOrderNo { get; set; }
         public string RMANo { get; set; }
         public Nullable<bool> IsInquirer { get; set; }
-        public string SourceDesc { get; set; }
         public Nullable<int> Count { get; set; }
         public decimal RefundAmount { get; set; }
         public Nullable<bool> IsShipping { get; set; }
@@ -57,7 +56,7 @@ namespace Intime.OPC.Domain.Models
 
         public Nullable<decimal> StoreFee { get; set; }
         public Nullable<decimal> CustomFee { get; set; }
-        public string RMAMemo { get; set; }
+
         /// <summary>
         /// ÍË»õ×Ü½ð¶î
         /// </summary>

@@ -187,11 +187,6 @@ namespace Intime.OPC.Service.Support
         /// <param name="rmaNo"></param>
         public void SetRmaShipInStorage(string rmaNo)
         {
-            //var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
-
-            //saleRma.Status = EnumRMAStatus.ShipInStorage.AsID();
-            //_saleRmaRepository.Update(saleRma);
-            //
             UpdateRMAStatus(rmaNo, EnumRMAStatus.ShipInStorage.AsID());
         }
 
@@ -208,13 +203,7 @@ namespace Intime.OPC.Service.Support
 
         public void SetRmaPint(string rmaNo)
         {
-            //var saleRma = _saleRmaRepository.GetByRmaNo(rmaNo);
-
-            //saleRma.Status = EnumRMAStatus.PrintRMA.AsID();
-            //_saleRmaRepository.Update(saleRma);
-
             UpdateRMAStatus(rmaNo, EnumRMAStatus.PrintRMA.AsID());
-
         }
 
         private void UpdateRMAStatus(string rmaNo,int status)
