@@ -19,11 +19,8 @@ namespace Intime.OPC.Job.RMASync
         {
 #if !DEBUG
             JobDataMap data = context.JobDetail.JobDataMap;
-            var isRebuild = data.ContainsKey("isRebuild") && data.GetBoolean("isRebuild");
             var interval = data.ContainsKey("intervalofmins") ? data.GetInt("intervalofmins") : 60;
             _benchTime = DateTime.Now.AddMinutes(-interval);
-            if (isRebuild)
-                _benchTime = _benchTime.AddMonths(-2);
 #endif
 
             var totalCount = 0;

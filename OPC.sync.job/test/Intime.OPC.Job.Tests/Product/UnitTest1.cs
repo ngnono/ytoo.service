@@ -27,7 +27,7 @@ namespace Intime.OPC.Job.Tests.Product
         [TestMethod]
         public void PropertyTest()
         {
-            var job = new PropuctPropertySyncJob();
+            var job = new ProductPropertySyncJob();
             job.Execute(null);
         }
     }

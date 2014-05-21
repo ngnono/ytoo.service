@@ -104,7 +104,7 @@
   <ItemGroup>
     <Compile Include="Order\DTO\OrderStatusResultDto.cs" />
     <Compile Include="Order\OrderStatusSync\AbstractOrderNotificationEntity.cs" />
-    <Compile Include="Product\ProductSync\Supports\Intime\Jobs\PropuctPropertySyncJob.cs" />
+    <Compile Include="Product\ProductSync\Supports\Intime\Jobs\ProductPropertySyncJob.cs" />
     <Compile Include="RMASync\AbstractRMANotificationEntity.cs" />
     <Compile Include="RMASync\AbstractRMASaleStatusProcessor.cs" />
     <Compile Include="Order\OrderStatusSync\AbstractSaleOrderStatusProcessor.cs" />
