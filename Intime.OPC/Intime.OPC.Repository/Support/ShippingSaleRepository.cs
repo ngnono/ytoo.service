@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Domain.Partials.Models;
 using Intime.OPC.Repository.Base;
 
 namespace Intime.OPC.Repository.Support
@@ -97,14 +100,14 @@ namespace Intime.OPC.Repository.Support
                         t => t.CreateDate >= startDate && t.CreateDate < endDate && t.ShippingStatus == shippingStatus && t.StoreId.HasValue && CurrentUser.StoreIds.Contains(t.StoreId.Value));
                 if (orderNo.IsNotNull())
                 {
-                    lst = lst.Where(t=>t.OrderNo.Contains(orderNo));
+                    lst = lst.Where(t => t.OrderNo.Contains(orderNo));
                 }
-                 lst=lst.OrderByDescending(t => t.CreateDate);
+                lst = lst.OrderByDescending(t => t.CreateDate);
                 return lst.ToPageResult(pageIndex, pageSize);
             }
         }
 
-      
+
 
         #endregion
 
@@ -127,11 +130,11 @@ namespace Intime.OPC.Repository.Support
             {
                 //filterExpression = filterExpression.And(t => t(expressNo));
             }
-            if (CurrentUser!=null)
+            if (CurrentUser != null)
             {
-                var ll=CurrentUser.StoreIds;
-                filterExpression = filterExpression.And(t =>t.StoreId.HasValue &&  ll.Contains(t.StoreId.Value));
-               // && CurrentUser.StoreIDs.Contains(t.StoreId)
+                var ll = CurrentUser.StoreIds;
+                filterExpression = filterExpression.And(t => t.StoreId.HasValue && ll.Contains(t.StoreId.Value));
+                // && CurrentUser.StoreIDs.Contains(t.StoreId)
             }
             return Select(filterExpression, t => t.CreateDate, false, pageIndex, pageSize);
         }

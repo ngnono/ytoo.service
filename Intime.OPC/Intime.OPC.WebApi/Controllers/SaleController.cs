@@ -472,6 +472,18 @@ namespace Intime.OPC.WebApi.Controllers
             return RetrunHttpActionResult(dto);
         }
 
+        [Route("api/salesorderdetail")]
+        [HttpGet]
+        public IHttpActionResult GetSalesOrderDetailBySaleOrderNo([UserProfile] UserProfile userProfile, [FromUri]string saleOrderNo = "", [FromUri] int? pageIndex = 1, [FromUri]int? pagesize = 10)
+        {
+            if (string.IsNullOrWhiteSpace(saleOrderNo))
+            {
+                return BadRequest("saleOrderNo为空");
+            }
+
+            return Ok(_saleService.GetSalesDetailsBySaleOrderNo(saleOrderNo, userProfile.StoreIds, pageIndex ?? 1, pagesize ?? 10));
+        }
+
         #endregion
     }
 }

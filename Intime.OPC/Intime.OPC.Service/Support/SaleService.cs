@@ -17,7 +17,8 @@ namespace Intime.OPC.Service.Support
         private readonly ISaleRepository _saleRepository;
         private readonly IAccountService _accountService;
 
-        public SaleService(ISaleRepository saleRepository, ISaleRemarkRepository saleRemarkRepository,IAccountService accountService):base(saleRepository)
+        public SaleService(ISaleRepository saleRepository, ISaleRemarkRepository saleRemarkRepository, IAccountService accountService)
+            : base(saleRepository)
         {
             _saleRepository = saleRepository;
             _saleRemarkRepository = saleRemarkRepository;
@@ -44,7 +45,7 @@ namespace Intime.OPC.Service.Support
                 throw new SaleOrderNotExistsException(saleNo);
             }
 
-            if (saleOrder.Status > (int) EnumSaleOrderStatus.PrintSale)
+            if (saleOrder.Status > (int)EnumSaleOrderStatus.PrintSale)
             {
                 return true;
             }
@@ -57,7 +58,7 @@ namespace Intime.OPC.Service.Support
         }
 
         [Obsolete("废弃此方法 Wallace 2014-05-02")]
-        public PageResult<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int userId,int pageIndex,int pageSize)
+        public PageResult<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int userId, int pageIndex, int pageSize)
         {
             if (string.IsNullOrEmpty(saleOrderNo))
             {
@@ -69,8 +70,8 @@ namespace Intime.OPC.Service.Support
                 throw new SaleOrderNotExistsException(saleOrderNo);
             }
 
-            return _saleRepository.GetSaleOrderDetails(saleOrderNo,pageIndex,pageSize);
-            
+            return _saleRepository.GetSaleOrderDetails(saleOrderNo, pageIndex, pageSize);
+
         }
 
         public bool SetSaleOrderPickUp(string saleOrderNo, int userId)
@@ -108,7 +109,7 @@ namespace Intime.OPC.Service.Support
             return UpdateSatus(orderNo, userId, EnumSaleOrderStatus.StockOut);
         }
 
-        public PageResult<SaleDto> GetPickUp(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd,int userID, int pageIndex, int pageSize)
+        public PageResult<SaleDto> GetPickUp(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int userID, int pageIndex, int pageSize)
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
@@ -116,7 +117,7 @@ namespace Intime.OPC.Service.Support
             var user = _accountService.GetByUserID(userID);
             _saleRepository.SetCurrentUser(user);
 
-            return _saleRepository.GetPickUped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize,user.SectionIds.ToArray());
+            return _saleRepository.GetPickUped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIds.ToArray());
             //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
@@ -127,8 +128,8 @@ namespace Intime.OPC.Service.Support
             dtEnd = dtEnd.Date.AddDays(1);
             var user = _accountService.GetByUserID(userId);
             _saleRepository.SetCurrentUser(user);
-            return _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize,user.SectionIds.ToArray());
-           // return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            return _saleRepository.GetPrintSale(saleId, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIds.ToArray());
+            // return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public PageResult<SaleDto> GetShipped(string saleOrderNo, int userId, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize)
@@ -138,7 +139,7 @@ namespace Intime.OPC.Service.Support
 
             var user = _accountService.GetByUserID(userId);
             _saleRepository.SetCurrentUser(user);
-            return  _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIds.ToArray());
+            return _saleRepository.GetShipped(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIds.ToArray());
             //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
@@ -163,7 +164,7 @@ namespace Intime.OPC.Service.Support
             _saleRepository.SetCurrentUser(user);
 
             return _saleRepository.GetPrintInvoice(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIds.ToArray());
-           // return Mapper.Map<OPC_Sale, SaleDto>(lst);
+            // return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
         public PageResult<SaleDto> GetShipInStorage(string saleOrderNo, int userId, string orderNo, DateTime dtStart,
@@ -175,7 +176,7 @@ namespace Intime.OPC.Service.Support
             var user = _accountService.GetByUserID(userId);
             _saleRepository.SetCurrentUser(user);
 
-            return  _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIds.ToArray());
+            return _saleRepository.GetShipInStorage(saleOrderNo, orderNo, dtStart, dtEnd, pageIndex, pageSize, user.SectionIds.ToArray());
             //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
@@ -195,8 +196,8 @@ namespace Intime.OPC.Service.Support
             _saleRepository.SetCurrentUser(user);
             var lst = _saleRepository.GetByOrderNo2(orderID);
             return new PageResult<SaleDto>(lst, lst.Count);
-           
-           
+
+
             //IList<SaleDto> lstDtos=new List<SaleDto>();
             //foreach (var sectionID in user.SectionIDs)
             //{
@@ -209,15 +210,15 @@ namespace Intime.OPC.Service.Support
 
             //var lst = _saleRepository.GetByOrderNo(orderID, -1);
             //var lstDtos = Mapper.Map<OPC_Sale, SaleDto>(lst);
-           
+
             //var lst2= lstDtos.Page(pageIndex, pageSize);
 
-           // return new PageResult<SaleDto>(lst2.ToList(),lstDtos.Count);
+            // return new PageResult<SaleDto>(lst2.ToList(),lstDtos.Count);
         }
 
         public IList<SaleDto> GetByShippingCode(string shippingCode)
         {
-            var sale= _saleRepository.GetByShippingCode(shippingCode);
+            var sale = _saleRepository.GetByShippingCode(shippingCode);
             return Mapper.Map<OPC_Sale, SaleDto>(sale);
         }
 
@@ -231,6 +232,19 @@ namespace Intime.OPC.Service.Support
             //return Mapper.Map<OPC_Sale, SaleDto>(lst);
         }
 
+        /// <summary>
+        /// 根据销售单号获取
+        /// </summary>
+        /// <param name="saleOrderNo">销售单号</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页大小</param>
+        /// <param name="storeIds">门店列表</param>
+        /// <returns>销售单列表</returns>
+        public PagerInfo<SaleDetailDto> GetSalesDetailsBySaleOrderNo(string saleOrderNo, IEnumerable<int> storeIds, int pageIndex, int pageSize)
+        {
+            return _saleRepository.GetSalesDetailsBySaleOrderNo(saleOrderNo, storeIds, pageIndex, pageSize);
+        }
+
         #endregion
 
         private bool UpdateSatus(string saleNo, int userId, EnumSaleOrderStatus saleOrderStatus)
@@ -241,11 +255,11 @@ namespace Intime.OPC.Service.Support
                 throw new SaleOrderNotExistsException(saleNo);
             }
 
-            if (saleOrder.Status >= (int) saleOrderStatus)
+            if (saleOrder.Status >= (int)saleOrderStatus)
             {
                 return true;
             }
-            saleOrder.Status = (int) saleOrderStatus;
+            saleOrder.Status = (int)saleOrderStatus;
             saleOrder.ShippingStatus = saleOrder.Status;
             saleOrder.UpdatedDate = DateTime.Now;
             saleOrder.UpdatedUser = userId;

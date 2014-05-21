@@ -130,7 +130,7 @@ namespace Intime.OPC.Service.Support
                 dto.StoreIds =
                     _storeRepository.GetAll(1, 20000).Result.Select<Store, int>(t => t.Id).Distinct().ToList();
 
-                dto.SectionIds = _sectionRepository.GetAll(1, 2000000).Result.Select<Section, int>(t => t.Id).ToList();
+                //dto.SectionIds = _sectionRepository.GetAll(1, 2000000).Result.Select<Section, int>(t => t.Id).ToList();
 
             }
             else
@@ -142,8 +142,8 @@ namespace Intime.OPC.Service.Support
                         .Distinct()
                         .ToList();
 
-                dto.SectionIds =
-                    _sectionRepository.GetByStoreIDs(dto.StoreIds).Select<Section, int>(t => t.Id).Distinct().ToList();
+                //dto.SectionIds =
+                //  _sectionRepository.GetByStoreIDs(dto.StoreIds).Select<Section, int>(t => t.Id).Distinct().ToList();
             }
             //dto.SectionIDs = _orgInfoRepository.GetByOrgType(user.DataAuthId, EnumOrgType.Section.AsID()).Select(t => t.StoreOrSectionID.Value).Distinct().ToList();
 

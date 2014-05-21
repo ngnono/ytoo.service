@@ -138,5 +138,15 @@ namespace Intime.OPC.Repository
         PageResult<SaleDto> GetShipped(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize, params int[] sectionIds);
 
         IList<OPC_Sale> GetByShippingCode(string shippingCode);
+
+        /// <summary>
+        /// 根据销售单号获取
+        /// </summary>
+        /// <param name="saleOrderNo">销售单号</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页大小</param>
+        /// <param name="storeIds">门店列表</param>
+        /// <returns>销售单列表</returns>
+        PagerInfo<SaleDetailDto> GetSalesDetailsBySaleOrderNo(string saleOrderNo, IEnumerable<int> storeIds, int pageIndex, int pageSize);
     }
 }
