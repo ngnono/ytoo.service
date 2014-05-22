@@ -120,6 +120,11 @@ namespace Intime.OPC.WebApi.App_Start
             shippingSaleDto.ForMember(v => v.GoodsOutCode, opt => opt.MapFrom(s => s.Id.ToString()));
 
             Mapper.CreateMap<GetShippingSaleOrderRequest, ShippingOrderFilter>();
+
+            var orderdto = Mapper.CreateMap<OrderModel, OrderDto>();
+            orderdto.ForMember(d => d.Status, opt => opt.MapFrom(s => ((EnumOderStatus)s.Status).GetDescription()));
+            orderdto.ForMember(d => d.IfReceipt,
+                opt => opt.MapFrom(s => s.IfReceipt == null ? String.Empty : (s.IfReceipt.Value ? "是" : "否")));
         }
     }
 }

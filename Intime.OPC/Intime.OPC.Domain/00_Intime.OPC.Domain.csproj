@@ -84,6 +84,7 @@
     <Compile Include="Enums\SortOrder\ShippingOrderSortOrder.cs" />
     <Compile Include="Enums\SortOrder\SaleOrderSortOrder.cs" />
     <Compile Include="Models\Mapping\Supplier_BrandMap.cs" />
+    <Compile Include="Partials\Models\OrderModel.cs" />
     <Compile Include="Partials\Models\SalesOrderModel.cs" />
     <Compile Include="Models\Supplier_Brand.cs" />
     <Compile Include="PagerRequest.cs" />
