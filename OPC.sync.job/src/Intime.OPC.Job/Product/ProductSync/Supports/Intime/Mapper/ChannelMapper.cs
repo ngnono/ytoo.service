@@ -68,11 +68,12 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Mapper
         {
             using (var db = new YintaiHZhouContext())
             {
+                var innverValue = channelMap.LocalId.ToString();
                 var map =
                     db.OPC_ChannelMap.FirstOrDefault(
                         x =>
                             x.Channel == SystemDefine.IntimeChannel && x.ChannelValue == channelMap.ChannnelValue &&
-                            x.MapType == (int)channelMap.MapType && x.InnerValue == channelMap.LocalId.ToString(CultureInfo.InvariantCulture));
+                            x.MapType == (int)channelMap.MapType && x.InnerValue == innverValue);
                 if (map != null)
                 {
                     db.OPC_ChannelMap.Remove(map);
