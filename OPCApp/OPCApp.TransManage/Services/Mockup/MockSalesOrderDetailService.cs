@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    //[Export(typeof(IService<OPC_SaleDetail>))]
+    [Export(typeof(IService<OPC_SaleDetail>))]
     public class MockSalesOrderDetailService : ServiceBase<OPC_SaleDetail>
     {
         private Fixture fixture = new Fixture();

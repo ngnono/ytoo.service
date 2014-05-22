@@ -94,7 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Criteria\QueryDeliveryOrderByComposition.cs" />
-    <Compile Include="Criteria\QuerySalesOrderByDeliveryOrderId.cs" />
+    <Compile Include="Criteria\QuerySalesOrderByDeliveryOrderNo.cs" />
     <Compile Include="Criteria\QuerySalesOrderDetailBySalesOrderNo.cs" />
     <Compile Include="Enums\ReceiptType.cs" />
     <Compile Include="Models\ExpressReceiptCreationDTO.cs" />
