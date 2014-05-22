@@ -440,11 +440,11 @@ namespace Intime.OPC.WebApi.Controllers
 
         [Route("api/salesorder")]
         [HttpGet]
-        public IHttpActionResult GetList([FromUri]SaleOrderQueryRequest request, [UserId] int uid, [UserProfile] UserProfile userProfile)
+        public IHttpActionResult GetList([FromUri]GetSaleOrderQueryRequest request, [UserId] int uid, [UserProfile] UserProfile userProfile)
         {
             if (request == null)
             {
-                request = new SaleOrderQueryRequest();
+                request = new GetSaleOrderQueryRequest();
             }
 
             if (userProfile.IsSystem)
@@ -462,10 +462,6 @@ namespace Intime.OPC.WebApi.Controllers
                 request.StoreIds = userProfile.StoreIds.ToList();
             }
 
-            //#if DEBUG
-            //            //TODO: 测试数据
-            //             uid = 1;
-            //#endif
             var dto = _saleOrderService.GetPagedList(request, uid);
 
             return RetrunHttpActionResult(dto);

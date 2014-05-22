@@ -7,6 +7,54 @@ using Newtonsoft.Json;
 
 namespace Intime.OPC.Domain.Dto.Request
 {
+
+    public class GetSaleOrderQueryRequest : DateRangeRequest
+    {
+
+        public string SaleOrderNo { get; set; }
+
+
+        public string OrderNo { get; set; }
+
+        /// <summary>
+        /// 发货单号 deliveryorderid
+        /// </summary>
+        //[JsonProperty(PropertyName = "deliveryorderid")]
+
+        public int? DeliveryOrderId { get; set; }
+
+
+        public int? Page { get; set; }
+
+
+        public int? PageSize { get; set; }
+
+
+        public int? SortOrder { get; set; }
+
+
+        /// <summary>
+        /// 销售单状态
+        /// </summary>
+        public EnumSaleOrderStatus? Status { get; set; }
+
+        ///// <summary>
+        ///// 是否生成发货单
+        ///// </summary>
+        //[DataMember]
+        //public bool? HasDeliveryOrderGenerated { get; set; }
+
+        /// <summary>
+        /// 查询指定门店
+        /// </summary>
+        public List<int> StoreIds { get; set; }
+
+        /// <summary>
+        /// 是否查询所有门店
+        /// </summary>
+        public bool IsAllStoreIds { get; set; }
+    }
+
     [DataContract]
     public class SaleOrderQueryRequest : DateRangeRequest
     {
