@@ -64,6 +64,26 @@ namespace OPCApp.Infrastructure.REST
             }
         }
 
+        public TEntity Post<TEntity, TData>(string uri, TData data)
+        {
+            using (var client = CreateHttpClient())
+            {
+                SetHttpHeader(client, data);
+
+                return Send<TEntity, TData>(uri, data, client.PostAsJsonAsync);
+            }
+        }
+
+        public TEntity Put<TEntity, TData>(string uri, TData data)
+        {
+            using (var client = CreateHttpClient())
+            {
+                SetHttpHeader(client, data);
+
+                return Send<TEntity, TData>(uri, data, client.PutAsJsonAsync);
+            }
+        }
+
         public void PostWithoutReturnValue<TEntity>(string uri, TEntity entity)
         {
             using (var client = CreateHttpClient())
@@ -120,7 +140,12 @@ namespace OPCApp.Infrastructure.REST
 
         private TEntity Send<TEntity>(string uri, TEntity entity, Func<string, TEntity, Task<HttpResponseMessage>> verb, bool withReturn = true)
         {
-            var response = verb(string.Format("{0}{1}", _baseAddress, uri), entity).Result;
+            return Send<TEntity, TEntity>(uri, entity, verb, withReturn);
+        }
+
+        private TEntity Send<TEntity, TData>(string uri, TData data, Func<string, TData, Task<HttpResponseMessage>> verb, bool withReturn = true)
+        {
+            var response = verb(string.Format("{0}{1}", _baseAddress, uri), data).Result;
             if (response.IsSuccessStatusCode)
             {
 
@@ -143,7 +168,9 @@ namespace OPCApp.Infrastructure.REST
                 errorMessage = response.Content.ReadAsStringAsync().Result;
             }
 
-            return errorMessage;
+            string errorDetailMessage = string.IsNullOrEmpty(errorMessage) ? string.Empty: string.Format("\n\n错误信息:{0}。", errorMessage);
+
+            return string.Format("调用后台API时发生错误。{0}", errorDetailMessage);
         }
 
         private void SetHttpHeader(HttpClient client, object entity = null)
@@ -220,6 +247,5 @@ namespace OPCApp.Infrastructure.REST
 
             return sBuilder.ToString();
         }
-
     }
 }
