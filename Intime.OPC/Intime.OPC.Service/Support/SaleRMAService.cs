@@ -497,6 +497,7 @@ namespace Intime.OPC.Service.Support
         /// <returns>OPC_RMA.</returns>
         private OPC_RMA CreateOpcRma(int userId)
         {
+            var fee = ComputeAccount();
             var rma = new OPC_RMA
             {
                 UserId = userId,
@@ -509,16 +510,16 @@ namespace Intime.OPC.Service.Support
                 OrderNo = OpcSale.OrderNo,
                 RMAType = 1,
                 RefundAmount = RefundAmount,
-                RMAAmount = ComputeAccount(),
+                RMAAmount = fee,
                 UpdatedDate = DateTime.Now,
                 StoreFee = StoreFee,
                 CustomFee = CustomFee,
                 SaleRMASource = SaleRmaSource,
                 RealRMASumMoney = RefundAmount,
                 Reason = Reason,
-                CompensationFee = ComputeAccount(),
+                CompensationFee = fee,
                 BackDate = DateTime.Now,
-                RecoverableSumMoney = RefundAmount - ComputeAccount(),
+                RecoverableSumMoney = RefundAmount - fee,
                 RMACashStatus = EnumRMACashStatus.NoCash.AsID(),
                 SectionId = OpcSale.SectionId,
                 Count = this.Details.Sum(x => x.ReturnCount),
@@ -526,7 +527,7 @@ namespace Intime.OPC.Service.Support
                     ? EnumReturnGoodsStatus.CompensateVerify.AsID()
                     : EnumReturnGoodsStatus.ServiceApprove.AsID(),
 
-                Status = RefundAmount - ComputeAccount() > 0
+                Status = RefundAmount - fee > 0
                         ? EnumRMAStatus.NoDelivery.AsID()
                         : EnumRMAStatus.ShipNoReceive.AsID()
 
