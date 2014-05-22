@@ -1,27 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Windows.Input;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
+using Intime.OPC.Infrastructure.Mvvm;
+using Intime.OPC.Infrastructure.Mvvm.Utility;
+using Intime.OPC.Infrastructure.Service;
+using Intime.OPC.Modules.Logistics.Criteria;
+using Intime.OPC.Modules.Logistics.Enums;
+using Intime.OPC.Modules.Logistics.Models;
+using Intime.OPC.Modules.Logistics.Print;
+using Intime.OPC.Modules.Logistics.Services;
 using OPCApp.DataService.Interface.Trans;
 using OPCApp.DataService.IService;
+using OPCApp.Domain;
 using OPCApp.Domain.Dto;
 using OPCApp.Domain.Enums;
 using OPCApp.Domain.Models;
 using OPCApp.Infrastructure;
-using Intime.OPC.Modules.Logistics.Print;
-using Intime.OPC.Infrastructure.Mvvm;
-using Intime.OPC.Modules.Logistics.Criteria;
-using Intime.OPC.Infrastructure.Service;
-using System.Collections.ObjectModel;
-using Intime.OPC.Infrastructure.Mvvm.Utility;
-using OPCApp.Domain;
-using Intime.OPC.Modules.Logistics.Services;
-using Intime.OPC.Modules.Logistics.Enums;
-using Intime.OPC.Modules.Logistics.Models;
-using System;
 
 namespace Intime.OPC.Modules.Logistics.ViewModels
 {
@@ -295,8 +294,9 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
                 MessageBox.Show("所选择的销售单必须来自同一订单，否则无法生成发货单", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if (selectedSalesOrdersForDelivery.Distinct(salesOrder => string.Format("{0} {1} {2}", salesOrder.Order.CustomerName,
-                salesOrder.Order.CustomerAddress, salesOrder.Order.CustomerPhone)).Count() > 1)
+            if (selectedSalesOrdersForDelivery.Distinct(salesOrder => salesOrder.Order.CustomerName).Count() > 1 
+                ||selectedSalesOrdersForDelivery.Distinct(salesOrder => salesOrder.Order.CustomerAddress).Count() > 1
+                ||selectedSalesOrdersForDelivery.Distinct(salesOrder => salesOrder.Order.CustomerPhone).Count() > 1)
             {
                 MessageBox.Show("所选择的销售单收货信息不一致，无法生成发货单", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

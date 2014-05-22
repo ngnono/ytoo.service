@@ -167,10 +167,6 @@
                             <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
                             <DataGridTextColumn Header="邮编" Binding="{Binding ShippingZipCode}" />
                             <DataGridTextColumn Header="配送方式" Binding="{Binding ShippingMethod}" />
-                            <DataGridTextColumn Header="快递公司名称" Binding="{Binding ShipCompanyName}" Width="200" />
-                            <DataGridTextColumn Header="快递公司取件人" Binding="{Binding ShipManName}" />
-                            <DataGridTextColumn Header="快递单号" Binding="{Binding ExpressCode}" />
-                            <DataGridTextColumn Header="支付快递公司运费" Binding="{Binding ShipViaExpressFee}" />
                             <DataGridTextColumn Header="顾客支付运费" Binding="{Binding ExpressFee}" />
                             <DataGridTextColumn Header="打印状态" Binding="{Binding PrintStatus}" />
                             <DataGridTemplateColumn Header="备注录入">
