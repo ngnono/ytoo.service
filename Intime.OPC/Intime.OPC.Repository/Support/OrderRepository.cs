@@ -21,6 +21,7 @@ using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Domain.Partials.Models;
 using Intime.OPC.Repository.Base;
 
 namespace Intime.OPC.Repository.Support
@@ -38,7 +39,7 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                
+
                 var query = db.Orders.Where(t => t.CreateDate >= dtStart && t.CreateDate < dtEnd);
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -95,14 +96,14 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var filter = db.Orders.Where( t => t.CreateDate >= starTime && t.CreateDate < endTime);
-               
+                var filter = db.Orders.Where(t => t.CreateDate >= starTime && t.CreateDate < endTime);
+
                 if (string.IsNullOrWhiteSpace(orderNo))
                 {
-                   filter= filter.Where(t => t.OrderNo.Contains(orderNo));
+                    filter = filter.Where(t => t.OrderNo.Contains(orderNo));
                 }
                 filter = filter.OrderByDescending(t => t.CreateDate);
-                return filter.ToPageResult(pageIndex,pageSize);
+                return filter.ToPageResult(pageIndex, pageSize);
             }
         }
 
@@ -110,9 +111,9 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var filter = db.OPC_ShippingSales.Where(t => t.ShippingCode == shippingNo).Join(db.Orders,t=>t.OrderNo,o=>o.OrderNo,(t,o)=>o);
+                var filter = db.OPC_ShippingSales.Where(t => t.ShippingCode == shippingNo).Join(db.Orders, t => t.OrderNo, o => o.OrderNo, (t, o) => o);
                 filter = filter.OrderByDescending(t => t.CreateDate);
-                return filter.ToPageResult(pageIndex,pageSize);
+                return filter.ToPageResult(pageIndex, pageSize);
             }
         }
 
@@ -139,13 +140,13 @@ namespace Intime.OPC.Repository.Support
                         t => t.OrderNo, o => o.OrderNo, (t, o) => t);
                 }
 
-                
+
                 if (request.RmaNo.IsNotNull())
                 {
                     filter2 = filter2.Where(t => t.RMANo == request.RmaNo);
                 }
 
-                if (request.RmaStatus.HasValue && request.RmaStatus!=-1)
+                if (request.RmaStatus.HasValue && request.RmaStatus != -1)
                 {
                     filter2 = filter2.Where(t => t.Status == request.RmaStatus.Value);
 
@@ -158,19 +159,19 @@ namespace Intime.OPC.Repository.Support
 
                 var orderIds = filter2.ToList().Select(t => t.OrderNo).Distinct().ToList();
 
-                filter = filter.Where(t => orderIds.Contains(t.OrderNo)).OrderByDescending(t=>t.CreateDate);
+                filter = filter.Where(t => orderIds.Contains(t.OrderNo)).OrderByDescending(t => t.CreateDate);
 
-                return filter.ToPageResult(request.pageIndex,request.pageSize);
+                return filter.ToPageResult(request.pageIndex, request.pageSize);
             }
         }
 
-        public PageResult<Order> GetBySaleRma(ReturnGoodsInfoRequest request,int? rmaStatus,EnumReturnGoodsStatus returnGoodsStatus)
+        public PageResult<Order> GetBySaleRma(ReturnGoodsInfoRequest request, int? rmaStatus, EnumReturnGoodsStatus returnGoodsStatus)
         {
             using (var db = new YintaiHZhouContext())
             {
-                
 
-                var filter2 = db.OPC_RMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus == (int)returnGoodsStatus );
+
+                var filter2 = db.OPC_RMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus == (int)returnGoodsStatus);
 
                 if (rmaStatus.HasValue)
                 {
@@ -179,7 +180,7 @@ namespace Intime.OPC.Repository.Support
 
                 var filter = db.Orders.Where(t => true);
 
-                if (CurrentUser!=null)
+                if (CurrentUser != null)
                 {
                     filter = filter.Where(t => CurrentUser.StoreIds.Contains(t.StoreId));
                 }
@@ -227,12 +228,12 @@ namespace Intime.OPC.Repository.Support
         {
             using (var db = new YintaiHZhouContext())
             {
-                var filter2 = db.OPC_Sales.Where(t=>true);
+                var filter2 = db.OPC_Sales.Where(t => true);
 
-                var filter = db.Orders.Where(t => t.CreateDate >= request.StartDate && t.CreateDate  < request.EndDate && t.Status==orderstatus);
+                var filter = db.Orders.Where(t => t.CreateDate >= request.StartDate && t.CreateDate < request.EndDate && t.Status == orderstatus);
                 if (request.OrderNo.IsNotNull())
                 {
-                    filter2 = filter2.Where(t => t.OrderNo==request.OrderNo);
+                    filter2 = filter2.Where(t => t.OrderNo == request.OrderNo);
                     filter = filter.Where(t => t.OrderNo == request.OrderNo);
                 }
 
@@ -255,13 +256,59 @@ namespace Intime.OPC.Repository.Support
 
                 if (request.StoreId.HasValue)
                 {
-                    filter = filter.Where(t => t.StoreId==request.StoreId.Value);
+                    filter = filter.Where(t => t.StoreId == request.StoreId.Value);
                 }
-                filter=  Queryable.Join(filter, filter2, t => t.OrderNo, o => o.OrderNo, (t, o) => t);
+                filter = Queryable.Join(filter, filter2, t => t.OrderNo, o => o.OrderNo, (t, o) => t);
 
                 filter = filter.OrderByDescending(t => t.CreateDate);
-   
+
                 return filter.ToPageResult(request.pageIndex, request.pageSize);
+            }
+        }
+
+        public OrderModel GetItemByOrderNo(string orderno)
+        {
+            using (var db = new YintaiHZhouContext())
+            {
+                var order = db.Orders;
+                var orderTransactions = db.OrderTransactions;
+                var shipvia = db.ShipVias;
+
+                var q = from o in order.Where(v => v.OrderNo == orderno)
+                        join ot in orderTransactions on o.OrderNo equals ot.OrderNo into tmp1
+                        from ot in tmp1.DefaultIfEmpty()
+                        join via in shipvia on o.ShippingVia equals via.Id into tmp2
+                        from via in tmp2.DefaultIfEmpty()
+                        select new OrderModel
+                        {
+                            BuyDate = o.CreateDate,
+                            CustomerAddress = o.ShippingAddress,
+                            CustomerFreight = 0m,
+                            CustomerName = o.ShippingContactPerson,
+                            CustomerPhone = o.ShippingContactPhone,
+                            //CustomerRemark = o.Memo,
+                            ExpressCompany = via == null ? String.Empty : via.Name,
+                            ExpressNo = o.ShippingNo,
+                            Id = o.Id,
+                            IfReceipt = o.NeedInvoice,
+                            MustPayTotal= o.TotalAmount,
+                            OrderChannelNo = ot!=null? ot.TransNo:String.Empty,
+                            OrderNo = o.OrderNo,
+                            OrderSouce = o.OrderSource,
+                            //OutGoodsDate = 
+                            //OutGoodsType = 
+                            PaymentMethodName = o.PaymentMethodName,
+                            PostCode = o.ShippingZipCode,
+                            //Quantity = o.
+                            ReceiptContent = o.InvoiceDetail,
+                            ReceiptHead = o.InvoiceSubject,
+                            ShippingNo = o.ShippingNo,
+                            Status = o.Status,
+                            TotalAmount = o.TotalAmount
+
+                        };
+
+                return q.FirstOrDefault();
             }
         }
 
