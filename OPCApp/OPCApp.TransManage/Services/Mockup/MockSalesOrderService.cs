@@ -12,7 +12,7 @@ using OPCApp.Domain.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    [Export(typeof(IService<OPC_Sale>))]
+    //[Export(typeof(IService<OPC_Sale>))]
     public class MockSalesOrderService : ServiceBase<OPC_Sale>
     {
         private Fixture fixture = new Fixture();

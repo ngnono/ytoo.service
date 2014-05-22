@@ -7,6 +7,11 @@ namespace OPCApp.Domain.Models
     [Uri("deliveryorder")]
     public class OPC_ShippingSale : Model
     {
+        private string _expressCode;
+        private string _shipCompanyName;
+        private double _expressFee;
+        private double _shipViaExpressFee;
+
         /// <summary>
         /// 退货单号
         /// </summary>
@@ -30,7 +35,11 @@ namespace OPCApp.Domain.Models
         /// <summary>
         /// 快递单号
         /// </summary>
-        public string ExpressCode { get; set; }
+        public string ExpressCode
+        {
+            get { return _expressCode; }
+            set { SetProperty(ref _expressCode, value); }
+        }
 
         /// <summary>
         /// 发货状态
@@ -65,7 +74,11 @@ namespace OPCApp.Domain.Models
         /// <summary>
         /// 快递公司
         /// </summary>
-        public string ShipCompanyName { get; set; }
+        public string ShipCompanyName
+        {
+            get { return _shipCompanyName; }
+            set { SetProperty(ref _shipCompanyName, value); }
+        }
 
         /// <summary>
         /// 快递员
@@ -92,13 +105,22 @@ namespace OPCApp.Domain.Models
         /// 支付快递公司快递费
         /// </summary>
         /// <value>The express fee.</value>
-        public double ShipViaExpressFee { get; set; }
+        public double ShipViaExpressFee
+        {
+            get { return _shipViaExpressFee; }
+            set { SetProperty(ref _shipViaExpressFee, value); }
+        }
 
         /// <summary>
         /// 快递费
         /// </summary>
         /// <value>The express fee.</value>
-        public double ExpressFee { get; set; }
+        public double ExpressFee
+        {
+            get { return _expressFee; }
+            set { SetProperty(ref _expressFee, value); }
+        }
+
 
         #region Added by Frank Gao
 

@@ -97,6 +97,7 @@
     <Compile Include="Criteria\QuerySalesOrderByDeliveryOrderId.cs" />
     <Compile Include="Criteria\QuerySalesOrderDetailBySalesOrderNo.cs" />
     <Compile Include="Enums\ReceiptType.cs" />
+    <Compile Include="Models\ExpressReceiptCreationDTO.cs" />
     <Compile Include="Models\Invoice4Get.cs" />
     <Compile Include="Models\InvoiceDetail.cs" />
     <Compile Include="Models\InvoiceDetail4Get.cs" />
@@ -109,6 +110,7 @@
     </Compile>
     <Compile Include="LogisticsModule.cs" />
     <Compile Include="Criteria\QuerySalesOrderByComposition.cs" />
+    <Compile Include="Models\DeliveryOrderCreationDTO.cs" />
     <Compile Include="Services\DeliveryOrderService.cs" />
     <Compile Include="Services\IDeliveryOrderService.cs" />
     <Compile Include="Services\IInvoiceService.cs" />

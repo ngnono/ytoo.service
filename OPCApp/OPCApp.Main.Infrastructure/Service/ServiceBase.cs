@@ -47,6 +47,11 @@ namespace Intime.OPC.Infrastructure.Service
             return _restClient.Post<TModel>(_uriName, obj);
         }
 
+        public TModel Create<TData>(TData data)
+        {
+            return _restClient.Post<TModel,TData>(_uriName, data);
+        }
+
         public virtual TModel Update(TModel obj)
         {
             return _restClient.Put<TModel>(string.Format("{0}/{1}", _uriName, obj.Id), obj);
@@ -103,11 +108,6 @@ namespace Intime.OPC.Infrastructure.Service
         #endregion
 
         #region Implementation of IAddtionalService
-
-        public void Create<TData>(string uri, TData data)
-        {
-            _restClient.PostWithoutReturnValue<TData>(uri, data);
-        }
 
         public void Update<TData>(string uri, TData data)
         {

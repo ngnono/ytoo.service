@@ -4,7 +4,7 @@ using OPCApp.Domain.Attributes;
 
 namespace OPCApp.Domain.Models
 {
-    [Uri("order")]
+    [Uri("orders")]
     public class Order : Model
     {
         /// <summary>
