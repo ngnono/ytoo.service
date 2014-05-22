@@ -238,8 +238,10 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             MessageBox.Show(falg ? "操作成功" : "操作失败", "提示");
         }
 
+
         public void PrintView()
         {
+
         }
 
         public void InitCombo()

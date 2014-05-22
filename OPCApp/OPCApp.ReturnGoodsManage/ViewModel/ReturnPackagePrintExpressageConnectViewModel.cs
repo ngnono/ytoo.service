@@ -198,10 +198,37 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
 
         public void OnlyPrint()
         {
+
+        }
+
+        private bool PrintCommon(bool falg = false)
+        {
+            /*
+            if (SaleList == null || SaleSelected == null)
+            {
+                MessageBox.Show("请勾选要打印预览的销售单", "提示");
+                return false;
+            }
+            IPrint pr = new PrintWin();
+            string xsdName = "InvoiceDataSet";
+            string rdlcName = "Print//PrintInvoice.rdlc";
+
+            var invoiceModel = new PrintModel();
+
+            var salelist = new List<OPC_Sale>();
+            //SaleSelected.TransName = SaleSelected.IfTrans;
+            salelist.Add(SaleSelected);
+            invoiceModel.SaleDT = salelist;
+            invoiceModel.SaleDetailDT = InvoiceDetail4List;
+            pr.Print(xsdName, rdlcName, invoiceModel, falg);
+            */
+            return true;
+
         }
 
         public void PrintView()
         {
+
         }
 
         public void InitCombo()

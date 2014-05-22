@@ -71,10 +71,9 @@
                 </DataGrid.RenderTransform>
 
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged1">
-                        <i:InvokeCommandAction Command="{Binding CommandGetRmaSaleDetailByRma1}" />
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding CommandGetRmaDetailByRma}" />
                     </i:EventTrigger>
-
                 </i:Interaction.Triggers>
 
                 <DataGrid.Columns>
@@ -121,7 +120,7 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="0,1" Grid.Row="4">
             <Label Content="退货明细" />
-            <DataGrid ItemsSource="{Binding RmaDetailList, Mode=TwoWay}" AutoGenerateColumns="False" IsReadOnly="True"
+            <DataGrid ItemsSource="{Binding RmaDetailLs, Mode=TwoWay}" AutoGenerateColumns="False" IsReadOnly="True"
                       RenderTransformOrigin="0.5,0.5"
                       Margin="0,0,0,-78">
                 <DataGrid.RenderTransform>
