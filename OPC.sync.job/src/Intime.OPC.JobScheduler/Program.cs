@@ -15,8 +15,8 @@ namespace Intime.OPC.JobScheduler
         {
             if (args.Length > 0)
             {
-                var job = new OrderNotifyJob();
-                job.Execute(null);
+                var job = new MainJobService();
+                job.Start();
             }
             else
             {

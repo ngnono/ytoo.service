@@ -118,7 +118,7 @@
       <name>SectionListSyncJob</name>
       <group>SectionListSyncJobGroup</group>
       <description>专柜列表同步job</description>
-      <job-type>Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs, Intime.OPC.Job</job-type>
+      <job-type>Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs.SectionSyncJob, Intime.OPC.Job</job-type>
       <durable>true</durable>
       <recover>false</recover>
     </job>
@@ -203,7 +203,7 @@
                 <job-name>SpitOrderJob</job-name>
                 <job-group>SpitOrderJobGroup</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
-                <cron-expression>0 0/3 * * * ?</cron-expression>
+                <cron-expression>0/3 * * * * ?</cron-expression>
             </cron>
         </trigger>
         <job>
