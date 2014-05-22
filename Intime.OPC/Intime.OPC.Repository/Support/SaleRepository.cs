@@ -12,20 +12,15 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Core;
-using System.Data.Entity.SqlServer;
-using System.Globalization;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Web.UI;
 using AutoMapper;
 using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository.Base;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Intime.OPC.Repository.Support
 {
@@ -46,8 +41,10 @@ namespace Intime.OPC.Repository.Support
             {
                 if (CurrentUser != null)
                 {
-                    //query = query.Where(t => t.SectionId.HasValue && sectionIds.Contains(t.SectionId.Value));
-                    return db.OPC_Sales.Where(t => t.SectionId.HasValue && CurrentUser.SectionIds.Contains(t.SectionId.Value)).ToList();
+                    var sections = db.Stores.Where(s => CurrentUser.StoreIds.Contains(s.Id))
+                        .Join(db.Sections, st => st.Id, se => se.StoreId, (st, se) => se);
+
+                    return db.OPC_Sales.Join(sections, o => o.SectionId, s => s.Id, (o, s) => o).ToList();
                 }
                 List<OPC_Sale> saleList = db.OPC_Sales.ToList();
                 return saleList;
@@ -91,30 +88,22 @@ namespace Intime.OPC.Repository.Support
         /// <returns>IList{OPC_SaleDetail}.</returns>
         public PageResult<SaleDetailDto> GetSaleOrderDetails(string saleOrderNo, int pageIndex, int pageSize)
         {
-            //return Select2<OPC_SaleDetail, DateTime>(t => t.SaleOrderNo == saleOrderNo, t => t.CreatedDate, false,
-            //    pageIndex, pageSize);
             using (var db = new YintaiHZhouContext())
             {
                 var query =
                     db.OPC_SaleDetails.Where(t => t.SaleOrderNo == saleOrderNo);
 
-                //.Join(db.OrderItems, t => t.OrderItemId, o => o.Id, (t, o) => new {Sale = t, OrderItem = o})
-                //.Join(db.Brands, t => t.OrderItem.BrandId, o => o.Id,
-                //    (t, o) => new {t.Sale, t.OrderItem, BrandName = o.Name});
                 var qq = from q in db.OrderItems
                          join b in db.Brands on q.BrandId equals b.Id into bb
                          join o in db.Orders on q.OrderNo equals o.OrderNo into oo
 
                          select new { OrderItems = q, Brand = bb.FirstOrDefault(), Order = oo.FirstOrDefault() };
 
-
-
                 var filter = from q in query
                              join o in qq on q.OrderItemId equals o.OrderItems.Id into oo
                              join p in db.OPC_Stocks on q.StockId equals p.Id into pp
 
                              select new { OrderItem = oo.FirstOrDefault(), Sale = q, Stock = pp.FirstOrDefault() };
-
 
                 var lst3 = filter.OrderByDescending(t => t.Sale.CreatedDate);
                 var lst = lst3.ToPageResult(pageIndex, pageSize);
@@ -134,17 +123,8 @@ namespace Intime.OPC.Repository.Support
                             o.Brand = t.OrderItem.Brand.Name;
                         }
                     }
-                    //o.LabelPrice = (double)t.OrderItem.OrderItems.UnitPrice;
-                    //o.Price = (double)t.OrderItem.OrderItems.ItemPrice;
-                    //o.SalePrice = (double)t.OrderItem.OrderItems.ItemPrice;
-                    //o.SellPrice = (double)t.OrderItem.OrderItems.ItemPrice;
                     o.SectionCode = t.Sale.SectionCode;
-                    //o.StyleNo=t.Stock.ProductCode
                     o.StyleNo = t.OrderItem.OrderItems.StoreItemNo;
-                    //if (t.Stock!=null)
-                    //{
-                    //    o.StyleNo = t.Stock.ProductCode;
-                    //}
                     lstDto.Add(o);
                 }
                 return new PageResult<SaleDetailDto>(lstDto, lst.TotalCount);
@@ -152,10 +132,10 @@ namespace Intime.OPC.Repository.Support
         }
 
         public PageResult<SaleDto> GetPickUped(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
-            int pageIndex, int pageSize, params int[] sectionIds)
+            int pageIndex, int pageSize, params int[] storeIds)
         {
             return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PickUp, pageIndex, pageSize,
-                sectionIds);
+                storeIds);
         }
 
         /// <summary>
@@ -167,10 +147,8 @@ namespace Intime.OPC.Repository.Support
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
         public PageResult<SaleDto> GetPrintSale(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
-            int pageIndex, int pageSize, params int[] sectionIds)
+            int pageIndex, int pageSize, params int[] StoreIds)
         {
-            //return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintSale, pageIndex, pageSize,
-            //    sectionIds);
             var saleOrderStatus = EnumSaleOrderStatus.PrintSale.AsID();
             var saleOrderStatus1 = EnumSaleOrderStatus.ShoppingGuidePickUp.AsID();
             using (var db = new YintaiHZhouContext())
@@ -179,34 +157,25 @@ namespace Intime.OPC.Repository.Support
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
 
-                if (sectionIds != null)
-                {
-                    query = query.Where(t => sectionIds.Contains(t.SectionId.Value));
-                }
-
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
-                    query = query.Where(t => t.OrderNo.Contains(orderNo));
+                    query = query.Where(t => t.OrderNo == orderNo);
                 }
 
                 if (!string.IsNullOrWhiteSpace(saleId))
                 {
-                    query = query.Where(t => t.SaleOrderNo.Contains(saleId));
+                    query = query.Where(t => t.SaleOrderNo == saleId);
                 }
 
+                var stores = db.Stores.Where(x => StoreIds.Contains(x.Id));
 
                 var ll = from s in db.Sections
-                         join store in db.Stores on s.StoreId equals store.Id into ss
+                         join store in stores on s.StoreId equals store.Id into ss
                          select new { SectionID = s.Id, Section = s, Store = ss.FirstOrDefault() };
-
-                var uu = from o in db.Orders
-                         join u in db.Users on o.CustomerId equals u.Id into ss
-                         select new { OrderNo = o.OrderNo, Order = o, User = ss.FirstOrDefault() };
-
 
                 var ll2 = from s in query
                           join l in ll on s.SectionId equals l.SectionID into ss
-                          join o in uu on s.OrderNo equals o.OrderNo into oo
+                          join o in db.Orders on s.OrderNo equals o.OrderNo into oo
                           join r in db.OrderTransactions on s.OrderNo equals r.OrderNo into rr
 
 
@@ -219,7 +188,7 @@ namespace Intime.OPC.Repository.Support
                 var lstDto = new List<SaleDto>();
                 foreach (var t in lst.Result)
                 {
-                    var o = AutoMapper.Mapper.Map<OPC_Sale, SaleDto>(t.Sale);
+                    var o = Mapper.Map<OPC_Sale, SaleDto>(t.Sale);
                     if (t.Store != null && t.Store.Store != null)
                     {
                         o.StoreName = t.Store.Store.Name;
@@ -236,11 +205,11 @@ namespace Intime.OPC.Repository.Support
                     {
                         o.TransNo = t.OrderTrans.TransNo;
                     }
-                    o.ReceivePerson = t.Order.User.Nickname;
-                    o.OrderSource = t.Order.Order.OrderSource;
-                    o.InvoiceSubject = t.Order.Order.InvoiceSubject;
-                    o.PayType = t.Order.Order.PaymentMethodName;
-                    o.Invoice = t.Order.Order.InvoiceDetail;
+                    o.ReceivePerson = t.Order.ShippingContactPerson;
+                    o.OrderSource = t.Order.OrderSource;
+                    o.InvoiceSubject = t.Order.InvoiceSubject;
+                    o.PayType = t.Order.PaymentMethodName;
+                    o.Invoice = t.Order.InvoiceDetail;
                     lstDto.Add(o);
                 }
                 return new PageResult<SaleDto>(lstDto, lst.TotalCount);
@@ -250,39 +219,32 @@ namespace Intime.OPC.Repository.Support
         /// <summary>
         ///     获得 未提货 的数据
         /// </summary>
-        /// <param name="saleId">The sale identifier.</param>
+        /// <param name="saleOrderNo">The sale identifier.</param>
         /// <param name="orderNo">The order no.</param>
         /// <param name="dtStart">The dt start.</param>
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
-        public PageResult<SaleDto> GetNoPickUp(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
-            int pageIndex, int pageSize, params int[] sectionIds)
+        public PageResult<SaleDto> GetNoPickUp(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd,
+            int pageIndex, int pageSize, params int[] storeIds)
         {
-
-
-            //return getSalesData(saleId, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.NoPickUp, pageIndex, pageSize,
-            //    sectionIds);
             int saleOrderStatus = EnumSaleOrderStatus.NotifyProduct.AsID();
-            int cashStatus = EnumSaleOrderCashStatus.CashOver.AsID();
             using (var db = new YintaiHZhouContext())
             {
-                IQueryable<OPC_Sale> query = db.OPC_Sales.Where(t => (t.Status == saleOrderStatus || t.Status == (int)EnumSaleOrderStatus.NoPickUp || t.Status == (int)EnumSaleOrderStatus.Fetched)
-                                                                    && t.SellDate >= dtStart
-                                                                    && t.SellDate < dtEnd);
+                IQueryable<OPC_Sale> query =
+                    db.OPC_Sales.Where(
+                        t =>
+                            (t.Status == saleOrderStatus || t.Status == (int) EnumSaleOrderStatus.NoPickUp ||
+                             t.Status == (int) EnumSaleOrderStatus.Fetched)
+                            && t.SellDate >= dtStart
+                            && t.SellDate < dtEnd);
 
-                if (sectionIds != null)
+                if (!string.IsNullOrWhiteSpace(saleOrderNo))
                 {
-                    query = query.Where(t => t.SectionId.HasValue && sectionIds.Contains(t.SectionId.Value));
+                    query = query.Where(t => t.SaleOrderNo == saleOrderNo);
                 }
-
-                if (!string.IsNullOrWhiteSpace(orderNo))
+                else if (!string.IsNullOrWhiteSpace(orderNo))
                 {
-                    query = query.Where(t => t.OrderNo.Contains(orderNo));
-                }
-
-                if (!string.IsNullOrWhiteSpace(saleId))
-                {
-                    query = query.Where(t => t.SaleOrderNo.Contains(saleId));
+                    query = query.Where(t => t.OrderNo == orderNo);
                 }
 
                 var qq = from sale in query
@@ -290,16 +252,15 @@ namespace Intime.OPC.Repository.Support
                          join r in db.OrderTransactions on sale.OrderNo equals r.OrderNo into rr
                          select new { Sale = sale, Section = cs.FirstOrDefault(), OrderTrans = rr.FirstOrDefault() };
 
-                var uu = from o in db.Orders
-                         join u in db.Users on o.CustomerId equals u.Id into ss
-                         select new { OrderNo = o.OrderNo, Order = o, User = ss.FirstOrDefault() };
-
+                var stores = from s in db.Stores
+                             where storeIds.Contains(s.Id)
+                             select s;
 
                 var filter = from q in qq
-                             join s in db.Stores on q.Section.StoreId equals s.Id into mm
-                             join o in uu on q.Sale.OrderNo equals o.OrderNo into oo
+                             join s in stores on q.Section.StoreId equals s.Id into mm
+                             join o in db.Orders on q.Sale.OrderNo equals o.OrderNo into oo
 
-                             select new { Sale = q.Sale, Section = q.Section, OrderTrans = q.OrderTrans, Order = oo.FirstOrDefault(), Store = mm.FirstOrDefault() };
+                             select new {q.Sale, q.Section, q.OrderTrans, Order = oo.FirstOrDefault(), Store = mm.FirstOrDefault() };
 
 
                 filter = filter.OrderByDescending(t => t.Sale.CreatedDate);
@@ -322,11 +283,11 @@ namespace Intime.OPC.Repository.Support
                     {
                         o.TransNo = s.OrderTrans.TransNo;
                     }
-                    o.ReceivePerson = s.Order.User.Nickname;
-                    o.OrderSource = s.Order.Order.OrderSource;
-                    o.InvoiceSubject = s.Order.Order.InvoiceSubject;
-                    o.PayType = s.Order.Order.PaymentMethodName;
-                    o.Invoice = s.Order.Order.InvoiceDetail;
+                    o.ReceivePerson = s.Order.ShippingContactPerson;
+                    o.OrderSource = s.Order.OrderSource;
+                    o.InvoiceSubject = s.Order.InvoiceSubject;
+                    o.PayType = s.Order.PaymentMethodName;
+                    o.Invoice = s.Order.InvoiceDetail;
                     lstDto.Add(o);
                 }
                 return new PageResult<SaleDto>(lstDto, lst.TotalCount);
@@ -375,10 +336,10 @@ namespace Intime.OPC.Repository.Support
         /// <param name="dtEnd">The dt end.</param>
         /// <returns>IList{OPC_Sale}.</returns>
         public PageResult<SaleDto> GetPrintExpress(string saleOrderNo, string orderNo, DateTime dtStart, DateTime dtEnd,
-            int pageIndex, int pageSize, params int[] sectionIds)
+            int pageIndex, int pageSize, params int[] storeIds)
         {
             return getSalesData(saleOrderNo, orderNo, dtStart, dtEnd, EnumSaleOrderStatus.PrintExpress, pageIndex,
-                pageSize, sectionIds);
+                pageSize, storeIds);
         }
 
         /// <summary>
@@ -500,22 +461,13 @@ namespace Intime.OPC.Repository.Support
         /// <param name="saleOrderStatus">The sale order status.</param>
         /// <returns>IList{OPC_Sale}.</returns>
         private PageResult<SaleDto> getSalesData(string saleId, string orderNo, DateTime dtStart, DateTime dtEnd,
-            EnumSaleOrderStatus saleOrderStatus, int pageIndex, int pageSize, params int[] sectionIds)
+            EnumSaleOrderStatus saleOrderStatus, int pageIndex, int pageSize, params int[] storeIds)
         {
             using (var db = new YintaiHZhouContext())
             {
                 IQueryable<OPC_Sale> query = db.OPC_Sales.Where(t => t.Status == (int)saleOrderStatus
                                                                     && t.SellDate >= dtStart
                                                                     && t.SellDate < dtEnd);
-                //if (CurrentUser!=null)
-                //{
-                //    query = query.Where(t => t.SectionId.HasValue && CurrentUser.SectionID.Contains(t.SectionId.Value));
-                //}
-
-                if (sectionIds != null)
-                {
-                    query = query.Where(t => sectionIds.Contains(t.SectionId.Value));
-                }
 
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
@@ -528,23 +480,18 @@ namespace Intime.OPC.Repository.Support
                 }
 
 
+                var stores = db.Stores.Where(x => storeIds.Contains(x.Id));
+
                 var ll = from s in db.Sections
-                         join store in db.Stores on s.StoreId equals store.Id into ss
+                         join store in stores on s.StoreId equals store.Id into ss
                          select new { SectionID = s.Id, Section = s, Store = ss.FirstOrDefault() };
-
-                var uu = from o in db.Orders
-                         join u in db.Users on o.CustomerId equals u.Id into ss
-                         select new { OrderNo = o.OrderNo, Order = o, User = ss.FirstOrDefault() };
-
-
 
                 var ll2 = from s in query
                           join l in ll on s.SectionId equals l.SectionID into ss
-                          join o in uu on s.OrderNo equals o.OrderNo into oo
+                          join o in db.Orders on s.OrderNo equals o.OrderNo into oo
                           join r in db.OrderTransactions on s.OrderNo equals r.OrderNo into rr
 
-                          select new { Sale = s, Order = oo.FirstOrDefault().Order, User = oo.FirstOrDefault().User, Store = ss.FirstOrDefault(), OrderTrans = rr.FirstOrDefault() };
-
+                          select new { Sale = s, Order = oo.FirstOrDefault(), Store = ss.FirstOrDefault(), OrderTrans = rr.FirstOrDefault() };
 
 
                 ll2 = ll2.OrderByDescending(t => t.Sale.CreatedDate);
@@ -552,7 +499,7 @@ namespace Intime.OPC.Repository.Support
                 var lstDto = new List<SaleDto>();
                 foreach (var t in lst.Result)
                 {
-                    var o = AutoMapper.Mapper.Map<OPC_Sale, SaleDto>(t.Sale);
+                    var o = Mapper.Map<OPC_Sale, SaleDto>(t.Sale);
                     if (t.Store != null && t.Store.Store != null)
                     {
                         o.StoreName = t.Store.Store.Name;
@@ -570,7 +517,7 @@ namespace Intime.OPC.Repository.Support
                     {
                         o.SectionName = t.Store.Section.Name;
                     }
-                    o.ReceivePerson = t.User.Nickname;
+                    o.ReceivePerson = t.Order.ShippingContactPerson;
                     o.OrderSource = t.Order.OrderSource;
                     o.InvoiceSubject = t.Order.InvoiceSubject;
                     o.PayType = t.Order.PaymentMethodName;

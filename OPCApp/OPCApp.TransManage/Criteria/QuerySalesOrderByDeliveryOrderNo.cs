@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Logistics.Criteria
 {
-    public class QuerySalesOrderByDeliveryOrderId : QueryCriteria
+    public class QuerySalesOrderByDeliveryOrderNo : QueryCriteria
     {
-        [UriParameter("deliveryorderid")]
-        public int DeliveryOrderId { get; set; }
+        [UriParameter("deliveryorderno")]
+        public string DeliveryOrderNo { get; set; }
     }
 }

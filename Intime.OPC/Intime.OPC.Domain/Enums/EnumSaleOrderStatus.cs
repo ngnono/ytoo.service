@@ -60,14 +60,14 @@ namespace Intime.OPC.Domain.Enums
         [Description("物流入库")] ShipInStorage = 25,
 
         /// <summary>
-        ///     打印发货单
+        ///     已生成发货单
         /// </summary>
-        [Description("打印发货单")] PrintInvoice = 30,
+        [Description("已生成发货单")] PrintInvoice = 30,
 
         /// <summary>
-        ///     打印快递单
+        ///     已生成快递单
         /// </summary>
-        [Description("打印快递单")] PrintExpress = 35,
+        [Description("已生成快递单")] PrintExpress = 35,
 
         /// <summary>
         ///     已发货

@@ -64,20 +64,20 @@ namespace Intime.OPC.WebApi.App_Start
             Mapper.CreateMap<OPC_SaleClone, OPC_Sale>();
             Mapper.CreateMap<OPC_Sale, OPC_SaleClone>();
 
-            var saleordermodel = Mapper.CreateMap<OPC_Sale, SaleDto>();
-            saleordermodel.ForMember(d => d.ShippingStatusName, opt => opt.MapFrom(s => s.ShippingStatus.HasValue ? ((EnumSaleOrderStatus)s.ShippingStatus.Value).GetDescription() : String.Empty));
-            saleordermodel.ForMember(d => d.ShippingFee,
-                opt => opt.MapFrom(s => s.ShippingFee.HasValue ? s.ShippingFee : 0m));
-            saleordermodel.ForMember(d => d.IfTrans,
-                opt => opt.MapFrom(s => s.IfTrans.HasValue && s.IfTrans.Value ? "是" : "否"));
-            saleordermodel.ForMember(d => d.TransStatus,
-                opt => opt.MapFrom(s => s.TransStatus.HasValue && s.TransStatus.Value == 1 ? "调拨" : String.Empty));
-            saleordermodel.ForMember(d => d.StatusName,
-                opt => opt.MapFrom(s => ((EnumSaleOrderStatus)s.Status).GetDescription()));
+            //var saleordermodel = Mapper.CreateMap<OPC_Sale, SaleDto>();
+            //saleordermodel.ForMember(d => d.ShippingStatusName, opt => opt.MapFrom(s => s.ShippingStatus.HasValue ? ((EnumSaleOrderStatus)s.ShippingStatus.Value).GetDescription() : String.Empty));
+            //saleordermodel.ForMember(d => d.ShippingFee,
+            //    opt => opt.MapFrom(s => s.ShippingFee.HasValue ? s.ShippingFee : 0m));
+            //saleordermodel.ForMember(d => d.IfTrans,
+            //    opt => opt.MapFrom(s => s.IfTrans.HasValue && s.IfTrans.Value ? "是" : "否"));
+            //saleordermodel.ForMember(d => d.TransStatus,
+            //    opt => opt.MapFrom(s => s.TransStatus.HasValue && s.TransStatus.Value == 1 ? "调拨" : String.Empty));
+            //saleordermodel.ForMember(d => d.StatusName,
+            //    opt => opt.MapFrom(s => ((EnumSaleOrderStatus)s.Status).GetDescription()));
 
-            saleordermodel.ForMember(d => d.StoreName, opt => opt.MapFrom(s => s.Store.Name));
-            saleordermodel.ForMember(d => d.SectionName, opt => opt.MapFrom(s => s.Section.Name));
-            saleordermodel.ForMember(d => d.TransNo, opt => opt.MapFrom(s => s.OrderTransaction.TransNo));
+            //saleordermodel.ForMember(d => d.StoreName, opt => opt.MapFrom(s => s.Store.Name));
+            //saleordermodel.ForMember(d => d.SectionName, opt => opt.MapFrom(s => s.Section.Name));
+            //saleordermodel.ForMember(d => d.TransNo, opt => opt.MapFrom(s => s.OrderTransaction.TransNo));
 
             Mapper.CreateMap<OrderTransactionClone, OrderTransaction>();
             Mapper.CreateMap<OrderTransaction, OrderTransactionClone>();
@@ -117,7 +117,7 @@ namespace Intime.OPC.WebApi.App_Start
             shippingSaleDto.ForMember(v => v.PrintStatus,
                 opt => opt.MapFrom(s => s.PrintTimes > 0 ? String.Format("{0}次", s.PrintTimes) : "未打印"));
             shippingSaleDto.ForMember(v => v.ShippingStatus, opt => opt.MapFrom(s => s.ShippingStatus.HasValue ? ((EnumSaleOrderStatus)s.ShippingStatus).GetDescription() : String.Empty));
-
+            shippingSaleDto.ForMember(v => v.GoodsOutCode, opt => opt.MapFrom(s => s.Id.ToString()));
 
             Mapper.CreateMap<GetShippingSaleOrderRequest, ShippingOrderFilter>();
         }
