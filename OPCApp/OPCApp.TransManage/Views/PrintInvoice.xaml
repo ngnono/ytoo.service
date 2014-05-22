@@ -21,11 +21,9 @@
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <Button Background="LightGray" Width="Auto" Command="{Binding CommandSearch}">
                     <StackPanel Orientation="Horizontal">
-<<<<<<< HEAD
-                        <Image Source="/image/查询.png" Stretch="None" />
-=======
+
                         <Image Source="/Resource\Image/查询.png" Stretch="None" />
->>>>>>> 9e2edbc441bdb07534ffa90d10ef43edb967c62d
+
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
@@ -37,22 +35,16 @@
                 </Button>
                 <Button Background="LightGray" Command="{Binding CommandOnlyPrint}">
                     <StackPanel Orientation="Horizontal">
-<<<<<<< HEAD
-                        <Image Source="/image/打印.png" Stretch="None" />
-=======
                         <Image Source="/Resource\Image/打印.png" Stretch="None" />
->>>>>>> 9e2edbc441bdb07534ffa90d10ef43edb967c62d
+
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">打印销售单</TextBlock>
                     </StackPanel>
                 </Button>
 
                 <Button Background="LightGray" Command="{Binding CommandFinish}">
                     <StackPanel Orientation="Horizontal">
-<<<<<<< HEAD
-                        <Image Source="/image/打印.png" Stretch="None" />
-=======
+
                         <Image Source="/Resource\Image/打印.png" Stretch="None" />
->>>>>>> 9e2edbc441bdb07534ffa90d10ef43edb967c62d
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">完成打印销售单</TextBlock>
                     </StackPanel>
                 </Button>

@@ -20,7 +20,6 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
         private List<RmaDetail> rmaDetails;
         //与包裹审核公用传输类
 
-
         public RMADto rmaDto;
 
         public ReturnPackageVerifyViewViewModel()
