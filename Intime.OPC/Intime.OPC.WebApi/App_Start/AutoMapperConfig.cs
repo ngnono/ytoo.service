@@ -84,7 +84,7 @@ namespace Intime.OPC.WebApi.App_Start
             Mapper.CreateMap<OPC_ShippingSaleClone, OPC_ShippingSale>();
             Mapper.CreateMap<OPC_ShippingSale, OPC_ShippingSaleClone>();
 
-            Mapper.CreateMap<SaleOrderQueryRequest, SaleOrderFilter>();
+            Mapper.CreateMap<GetSaleOrderQueryRequest, SaleOrderFilter>().ForMember(d => d.ShippingOrderId, opt => opt.MapFrom(s => s.DeliveryOrderId));
 
             Mapper.CreateMap<OrderClone, Order>();
             Mapper.CreateMap<OrderClone, OrderClone>();

@@ -177,9 +177,9 @@ namespace Intime.OPC.Service.Impl
             }
         }
 
-        public PagerInfo<SaleDto> GetPagedList(SaleOrderQueryRequest request, int uid)
+        public PagerInfo<SaleDto> GetPagedList(GetSaleOrderQueryRequest request, int uid)
         {
-            var filter = Mapper.Map<SaleOrderQueryRequest, SaleOrderFilter>(request);
+            var filter = Mapper.Map<GetSaleOrderQueryRequest, SaleOrderFilter>(request);
             var pagerRequest = new Domain.PagerRequest(request.Page ?? 1, request.PageSize ?? 10);
 
             if (request.EndDate != null || request.StartDate != null)
