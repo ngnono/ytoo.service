@@ -198,7 +198,7 @@ namespace Intime.OPC.Repository.Impl
                         CustomerPhone = v.ShippingSale.ShippingContactPhone,
                         ExpressCode = v.ShippingSale.ShippingCode,
                         ExpressFee = v.ShippingSale.ShippingFee ?? 0,
-                        GoodsOutCode = v.ShippingSale.ShippingCode,
+                        GoodsOutCode = v.ShippingSale.Id.ToString(),
                         GoodsOutDate = v.ShippingSale.CreateDate,
                         GoodsOutType = String.Empty, //v.ShippingSale.
                         OrderNo = v.ShippingSale.OrderNo,
