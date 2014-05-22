@@ -82,9 +82,9 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
             {
                 Page = 1,
                 PageSize = 10,
-                EndDate = DateTime.Now,
-                StartDate = DateTime.Now.AddYears(-1),
-                ShippingOrderId = 28
+                //EndDate = DateTime.Now,
+                //StartDate = DateTime.Now.AddYears(-1),
+                ShippingOrderId = 29
                 //Status = EnumSaleOrderStatus.ShipInStorage
             }, 28, new UserProfile { IsSystem = true }) as OkNegotiatedContentResult<PagerInfo<SaleDto>>;
 
