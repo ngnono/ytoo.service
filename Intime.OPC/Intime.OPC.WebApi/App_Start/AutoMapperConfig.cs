@@ -117,7 +117,7 @@ namespace Intime.OPC.WebApi.App_Start
             shippingSaleDto.ForMember(v => v.PrintStatus,
                 opt => opt.MapFrom(s => s.PrintTimes > 0 ? String.Format("{0}次", s.PrintTimes) : "未打印"));
             shippingSaleDto.ForMember(v => v.ShippingStatus, opt => opt.MapFrom(s => s.ShippingStatus.HasValue ? ((EnumSaleOrderStatus)s.ShippingStatus).GetDescription() : String.Empty));
-
+            shippingSaleDto.ForMember(v => v.GoodsOutCode, opt => opt.MapFrom(s => s.Id.ToString()));
 
             Mapper.CreateMap<GetShippingSaleOrderRequest, ShippingOrderFilter>();
         }
