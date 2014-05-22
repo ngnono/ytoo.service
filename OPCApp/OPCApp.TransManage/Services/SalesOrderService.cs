@@ -33,7 +33,7 @@ namespace Intime.OPC.Modules.Logistics.Services
             var result = base.Query(queryCriteria);
             if (result.TotalCount > 0)
             {
-                result.Data.ForEach(salesOrder => BuildSalesOrder(salesOrder));
+                result.Data.ForEach(salesOrder => Compose(salesOrder));
             }
 
             return result;
@@ -42,7 +42,7 @@ namespace Intime.OPC.Modules.Logistics.Services
         public override IList<OPC_Sale> QueryAll(IQueryCriteria queryCriteria)
         {
             var salesOrders = base.QueryAll(queryCriteria);
-            salesOrders.ForEach(salesOrder => BuildSalesOrder(salesOrder));
+            salesOrders.ForEach(salesOrder => Compose(salesOrder));
 
             return salesOrders;
         }
@@ -55,12 +55,12 @@ namespace Intime.OPC.Modules.Logistics.Services
         public override OPC_Sale Query(string uniqueID)
         {
             var salesOrder = base.Query(uniqueID);
-            BuildSalesOrder(salesOrder);
+            Compose(salesOrder);
 
             return salesOrder;
         }
 
-        private void BuildSalesOrder(OPC_Sale salesOrder)
+        private void Compose(OPC_Sale salesOrder)
         {
             if (salesOrder.Order == null)
             { 

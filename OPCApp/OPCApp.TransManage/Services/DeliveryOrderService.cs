@@ -29,33 +29,33 @@ namespace Intime.OPC.Modules.Logistics.Services
         public override IList<OPC_ShippingSale> QueryAll(IQueryCriteria queryCriteria)
         {
             var deliveryOrders = base.QueryAll(queryCriteria);
-            deliveryOrders.ForEach(deliveryOrder => BuildDeliveryOrder(deliveryOrder));
+            deliveryOrders.ForEach(deliveryOrder => Compose(deliveryOrder));
 
             return deliveryOrders;
         }
 
         public void Print(OPC_ShippingSale deliveryOrder, ReceiptType receiptType)
         {
-            string uri = string.Format("deliveryorder/{0}/print", deliveryOrder.Id);
+            string uri = string.Format("{0}/{1}/print", UriName, deliveryOrder.Id);
             var data = new { Type = (int)receiptType };
             Update(uri, data);
         }
 
         public void CompleteHandOver(OPC_ShippingSale deliveryOrder)
         {
-            string uri = string.Format("deliveryorder/{0}/finish", deliveryOrder.Id);
+            string uri = string.Format("{0}/{1}/finish", UriName, deliveryOrder.Id);
             Update(uri);
         }
 
         public OPC_ShippingSale Create(DeliveryOrderCreationDTO deliveryOrderCreationDto)
         {
             var deliveryOrder = Create<DeliveryOrderCreationDTO>(deliveryOrderCreationDto);
-            BuildDeliveryOrder(deliveryOrder);
+            Compose(deliveryOrder);
 
             return deliveryOrder;
         }
 
-        private void BuildDeliveryOrder(OPC_ShippingSale deliveryOrder)
+        private void Compose(OPC_ShippingSale deliveryOrder)
         {
             if (deliveryOrder.SalesOrders == null)
             {

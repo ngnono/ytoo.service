@@ -309,10 +309,9 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
                 SalesOrderNos = selectedSalesOrdersForDelivery.Select(salesOrder => salesOrder.SaleOrderNo).ToArray() 
             };
 
-            var deliveryOrder = DeliveryOrderService.Create(deliveryOrderCreationDto);
-
             SalesOrdersForDelivery.SafelyRemove(salesOrder => salesOrder.IsSelected);
 
+            var deliveryOrder = DeliveryOrderService.Create(deliveryOrderCreationDto);
             DeliveryOrders.SafelyInsert(0, deliveryOrder);
         }
 
