@@ -96,7 +96,7 @@ namespace Intime.OPC.Domain.Dto.Request
         public bool IsAllStoreIds { get; set; }
     }
 
-    public class PutShippingSaleOrderRequest : DateRangeRequest
+    public class PutShippingSaleOrderRequest
     {
         /// <summary>
         /// 发货单号

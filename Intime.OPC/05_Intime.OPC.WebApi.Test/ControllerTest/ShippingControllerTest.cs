@@ -34,7 +34,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
 
         public ShippingController GetController()
         {
-            _controller = new ShippingController( new ShippingOrderRepository(), new SalesOrderRepository(), new OrderRepository(),new ShipViaRepository());
+            _controller = new ShippingController( new ShippingOrderRepository(), new SalesOrderRepository(), new OrderRepository(),new ShipViaRepository(),new SectionRepository());
 
             _controller.Request = new HttpRequestMessage();
             _controller.Request.SetConfiguration(new HttpConfiguration());
@@ -95,7 +95,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
                 EndDate = DateTime.Now,
                 StartDate = DateTime.Now.AddYears(-1),
                 Status = EnumSaleOrderStatus.ShipInStorage
-            }, 28, new UserProfile { IsSystem = false, StoreIds = storeIds }) as NotFoundResult;
+            }, 28, new UserProfile { IsSystem = false, StoreIds = storeIds }) as OkNegotiatedContentResult<PagerInfo<ShippingSaleDto>>;
 
             Assert.IsNotNull(actual);
         }
@@ -120,6 +120,75 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
 
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Content.TotalCount > 0);
+        }
+
+        [Test()]
+        public void PutPrintTest([Values(1,2)]int? type)
+        {
+            _controller.Request.Method = HttpMethod.Put;
+
+            var storeIds = new List<int>()
+            {
+                21,23
+            };
+            var actual = _controller.PutPrint(4,new DeliveryOrderPrintRequest
+            {
+                Type = type,
+                Times = 1
+
+            }, 28, new UserProfile { IsSystem = false, StoreIds = storeIds }) as OkNegotiatedContentResult<string>;
+
+            Assert.IsNotNull(actual);
+        }
+
+        [Test()]
+        public void PostOrderTest()
+        {
+            _controller.Request.Method = HttpMethod.Post;
+
+            var storeIds = new List<int>()
+            {
+                21,23
+            };
+            var actual = _controller.PostOrder(new CreateShippingSaleOrderRequest()
+            {
+                SalesOrderNos = new List<string>() { "114042236511-001" }
+            }, 28, new UserProfile { IsSystem = true, StoreIds = storeIds }) as OkNegotiatedContentResult<ShippingSaleDto>;
+
+            Assert.IsNotNull(actual);
+        }
+
+        [Test()]
+        public void PutTest()
+        {
+            _controller.Request.Method = HttpMethod.Put;
+
+            var storeIds = new List<int>()
+            {
+                21,23
+            };
+            var actual = _controller.Put( 26, new PutShippingSaleOrderRequest()
+            {
+                ShippingFee= 99999,
+                ShippingNo = "agcsss9999"
+                ,ShippingSaleOrderId=23,ShipViaId = 38
+            }, 1, new UserProfile { IsSystem = true, StoreIds = storeIds }) as OkNegotiatedContentResult<string>;
+
+            Assert.IsNotNull(actual);
+        }
+
+        [Test()]
+        public void PutFinishTest()
+        {
+            _controller.Request.Method = HttpMethod.Put;
+
+            var storeIds = new List<int>()
+            {
+                21,23
+            };
+            var actual = _controller.PutFinish(26, 28, new UserProfile { IsSystem = true, StoreIds = storeIds }) as OkNegotiatedContentResult<string>;
+
+            Assert.IsNotNull(actual);
         }
     }
 }

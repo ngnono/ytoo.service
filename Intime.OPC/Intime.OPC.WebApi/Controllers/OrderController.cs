@@ -70,6 +70,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>IHttpActionResult.</returns>
         [HttpPost]
+        //[Route("api/order/getorder")]
         public IHttpActionResult GetOrder(string orderNo,
             string orderSource,
             DateTime startCreateDate,
@@ -369,5 +370,24 @@ namespace Intime.OPC.WebApi.Controllers
 
 
         #endregion
+
+
+
+        /// <summary>
+        /// Gets the order by oder no.
+        /// </summary>
+        /// <param name="orderNo">The order no.</param>
+        /// <returns>IHttpActionResult.</returns>
+        [Route("api/orders/{orderno}")]
+        [HttpGet]
+        public IHttpActionResult GetOrderss(string orderNo, [UserId] int uid)
+        {
+            return DoFunction(() =>
+            {
+                _orderService.UserId = uid;
+                return _orderService.GetOrderByOrderNo(orderNo);
+            });
+
+        }
     }
 }
