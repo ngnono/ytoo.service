@@ -21,6 +21,14 @@ namespace Intime.OPC.Infrastructure.Service
         T Create(T obj);
 
         /// <summary>
+        /// Create model by passsing another type of data
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        T Create<TData>(TData data);
+
+        /// <summary>
         /// Update
         /// </summary>
         /// <param name="obj">object to update</param>

@@ -85,9 +85,7 @@
                     </StackPanel>
                     <DataGrid Grid.Row="2" ScrollViewer.CanContentScroll="True" ItemsSource="{Binding SalesOrdersForDelivery}" SelectedItem="{Binding SelectedSalesOrder}"
                             IsReadOnly="True" AutoGenerateColumns="False"
-                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
-                            mvvm:ScrollingBehavior.IsEnabled="True"
-                            mvvm:ScrollingBehavior.ScrollToBottomCommand="{Binding LoadMoreSalesOrdersForDeliveryCommand}">
+                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn SortMemberPath="IsSelected" Width="60">
                                 <DataGridTemplateColumn.HeaderTemplate>
@@ -128,7 +126,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                             Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -175,7 +173,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.RemarkShippingCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -272,7 +270,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.RemarkShippingCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -287,7 +285,7 @@
                             <TextBlock Text="实际运费" Margin="10 5" />
                             <TextBox Height="25" Width="150" Foreground="Blue" Background="White" Text="{Binding ShippingSaleCreateDto.ShippingFee}" />
                             <TextBlock Text="快递单号" Margin="10 5" />
-                            <TextBox Height="25" Width="150" Foreground="Blue" Background="White" Text="{Binding ShippingSaleCreateDto.ShippingCode}" />
+                            <TextBox Height="25" Width="150" Foreground="Blue" Background="White" Text="{Binding ShippingSaleCreateDto.ShippingNo}" />
                             <Button Height="30" Margin="10 5"  Command="{Binding CreateExpressReceiptCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="90">
                                     <Image Source="../Resource/Image/指派送货.png" Stretch="None" />
@@ -322,7 +320,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.RemarkOrderCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -356,7 +354,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -448,7 +446,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.RemarkShippingCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -481,7 +479,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.RemarkOrderCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -523,7 +521,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

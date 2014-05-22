@@ -20,6 +20,8 @@ using Intime.OPC.Infrastructure.Mvvm.Utility;
 using OPCApp.Domain;
 using Intime.OPC.Modules.Logistics.Services;
 using Intime.OPC.Modules.Logistics.Enums;
+using Intime.OPC.Modules.Logistics.Models;
+using System;
 
 namespace Intime.OPC.Modules.Logistics.ViewModels
 {
@@ -38,7 +40,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         private ObservableCollection<OPC_ShippingSale> _deliveryOrdersForExpress;
         private IList<Order> _orderOfExpressReceipt;
         private OPC_ShippingSale _selectedDeliveryOrderForExpress;
-        private ShippingSaleCreateDto _shippingSaleCreateDto;
+        private ExpressReceiptCreationDTO _shippingSaleCreateDto;
 
         private IList<Order> _orderOfHandOver;
         private OPC_ShippingSale _selectedDeliveryOrderForHandOver;
@@ -52,29 +54,28 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             QueryCriteriaForExpressReceipt = new QueryDeliveryOrderByComposition { Status = EnumSaleOrderStatus.PrintInvoice };
             QueryCriteriaForHandOver = new QueryDeliveryOrderByComposition { Status = EnumSaleOrderStatus.PrintExpress };
 
-            QuerySalesOrderForDeliveryCommand = new AsyncDelegateCommand(OnSalesOrderForDeliveryQuery, MvvmUtility.OnException);
-            QueryDeliveryOrderForExpressCommand = new AsyncDelegateCommand(OnDeliveryOrderForExpressQuery, MvvmUtility.OnException);
-            QueryDeliveryOrderForHandOverCommand = new DelegateCommand(OnDeliveryOrderForHandOverQuery);
+            QuerySalesOrderForDeliveryCommand = new AsyncDelegateCommand(OnSalesOrderForDeliveryQuery);
+            QueryDeliveryOrderForExpressCommand = new AsyncDelegateCommand(OnDeliveryOrderForExpressQuery);
+            QueryDeliveryOrderForHandOverCommand = new AsyncDelegateCommand(OnDeliveryOrderForHandOverQuery);
 
-            CreateDeliveryOrderCommand = new AsyncDelegateCommand(OnDeliveryOrderCreate, MvvmUtility.OnException);
-            CreateExpressReceiptCommand = new DelegateCommand(OnExpressReceiptCreate);
+            CreateDeliveryOrderCommand = new AsyncDelegateCommand(OnDeliveryOrderCreate);
+            CreateExpressReceiptCommand = new AsyncDelegateCommand(OnExpressReceiptCreate);
 
             RemarkOrderCommand = new DelegateCommand(SetOrderRemark);
             RemarkShippingCommand = new DelegateCommand(SetShippingRemark);
             
-            CompleteHandOverCommand = new DelegateCommand(OnHandOverCompleteOver);
+            CompleteHandOverCommand = new DelegateCommand(OnHandOverComplete);
             ShippingViaList = AppEx.Container.GetInstance<ICommonInfo>().GetShipViaList();
-            ShippingSaleCreateDto = new ShippingSaleCreateDto();
+            ShippingSaleCreateDto = new ExpressReceiptCreationDTO();
 
             SelectAllSalesOrderForDeliveryCommand = new DelegateCommand<bool?>(OnAllSalesOrderForDeliverySelect);
-            LoadMoreSalesOrdersForDeliveryCommand = new AsyncDelegateCommand(OnMoreSalesOrderForDeliveryLoad, MvvmUtility.OnException);
             LoadOrderOfExpressReceiptCommand = new DelegateCommand<OPC_ShippingSale>(OnOrderOfExpressReceiptLoad);
             LoadOrderOfHandOverCommand = new DelegateCommand<OPC_ShippingSale>(OnOrderOfHandOverLoad);
 
-            PrintExpressReceiptCommand = new DelegateCommand<OPC_ShippingSale>(OnExpressReceiptPrint);
-            PreviewExpressReceiptCommand = new DelegateCommand<OPC_ShippingSale>(OnExpressReceiptPreview);
-            PreviewDeliveryOrderCommand = new DelegateCommand<OPC_ShippingSale>(OnDeliveryOrderPreview);
-            PrintDeliveryOrderCommand = new DelegateCommand<OPC_ShippingSale>(OnDeliveryOrderPrint);
+            PrintExpressReceiptCommand = new AsyncDelegateCommand<OPC_ShippingSale>(OnExpressReceiptPrint);
+            PreviewExpressReceiptCommand = new AsyncDelegateCommand<OPC_ShippingSale>(OnExpressReceiptPreview);
+            PreviewDeliveryOrderCommand = new AsyncDelegateCommand<OPC_ShippingSale>(OnDeliveryOrderPreview);
+            PrintDeliveryOrderCommand = new AsyncDelegateCommand<OPC_ShippingSale>(OnDeliveryOrderPrint);
         }
 
         #region Commands
@@ -96,7 +97,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         public ICommand RemarkOrderCommand { get; set; }
         public ICommand RemarkShippingCommand { get; set; }
         public ICommand GetListShipSaleCommand { get; set; }
-        public ICommand LoadMoreSalesOrdersForDeliveryCommand { get; set; }
         public ICommand LoadOrderOfExpressReceiptCommand { get; set; }
         public ICommand LoadOrderOfHandOverCommand { get; set; }
 
@@ -178,9 +178,9 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             set { SetProperty(ref _orderOfExpressReceipt, value); }
         }
 
-        public List<ShipVia> ShippingViaList { get; set; }
+        public IList<ShipVia> ShippingViaList { get; set; }
 
-        public ShippingSaleCreateDto ShippingSaleCreateDto
+        public ExpressReceiptCreationDTO ShippingSaleCreateDto
         {
             get { return _shippingSaleCreateDto; }
             set { SetProperty(ref _shippingSaleCreateDto, value); }
@@ -210,8 +210,6 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
         #endregion
 
-        public int IsTabIndex { get; set; }
-
         #endregion
 
         #region Command Handlers
@@ -232,33 +230,34 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         /// </summary>
         private void OnSalesOrderForDeliveryQuery()
         {
-            _queryCriteriaForDeliveryOrder.PageIndex = 1;
-            _queryCriteriaForDeliveryOrder.PageSize = 100;
-
-            var result = SalesOrderService.Query(_queryCriteriaForDeliveryOrder);
-            SalesOrdersForDelivery = result.Data.ToObservableCollection();
-            if (result.TotalCount == 0)
+            var salesOrders = SalesOrderService.QueryAll(_queryCriteriaForDeliveryOrder);
+            SalesOrdersForDelivery = salesOrders.ToObservableCollection();
+            if (salesOrders.Count == 0)
             {
-                MessageBox.Show("没有符合条件的销售单", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("没有符合条件的销售单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-        }
-
-        private void OnMoreSalesOrderForDeliveryLoad()
-        {
-            _queryCriteriaForDeliveryOrder.PageIndex++;
-
-            var result = SalesOrderService.Query(_queryCriteriaForDeliveryOrder);
-            SalesOrdersForDelivery = result.Data.ToObservableCollection();
         }
 
         private void OnOrderOfExpressReceiptLoad(OPC_ShippingSale deliveryOrder)
         {
-            OrderOfExpressReceipt = new List<Order> { deliveryOrder.SalesOrders.First().Order };
+            if (deliveryOrder == null)
+            {
+                OrderOfExpressReceipt = null;
+                return;
+            }
+            var salesOrder = deliveryOrder.SalesOrders.FirstOrDefault();
+            OrderOfExpressReceipt = salesOrder == null ? null : new List<Order> { salesOrder.Order };
         }
 
         private void OnOrderOfHandOverLoad(OPC_ShippingSale deliveryOrder)
         {
-            OrderOfHandOver = new List<Order> { deliveryOrder.SalesOrders.First().Order };
+            if (deliveryOrder == null)
+            {
+                OrderOfHandOver = null;
+                return;
+            }
+            var salesOrder = deliveryOrder.SalesOrders.FirstOrDefault();
+            OrderOfHandOver = salesOrder == null ? null : new List<Order> { salesOrder.Order };
         }
 
         /// <summary>
@@ -266,11 +265,11 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         /// </summary>
         private void OnDeliveryOrderForExpressQuery()
         {
-            var result = DeliveryOrderService.Query(_queryCriteriaForExpressReceipt);
-            DeliveryOrdersForExpress = result.Data.ToObservableCollection();
-            if (result.TotalCount == 0)
+            var deliveryOrders = DeliveryOrderService.QueryAll(_queryCriteriaForExpressReceipt);
+            DeliveryOrdersForExpress = deliveryOrders.ToObservableCollection();
+            if (deliveryOrders.Count == 0)
             {
-                MessageBox.Show("没有符合条件的销售单","提示", MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("没有符合条件的发货单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -305,21 +304,12 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
 
             var firstSalesOrder = selectedSalesOrdersForDelivery.First();
 
-            var deliveryOrder = new OPC_ShippingSale
-            {
-                OrderNo = firstSalesOrder.Order.OrderNo,
-                CustomerName = firstSalesOrder.Order.CustomerName,
-                CustomerAddress = firstSalesOrder.Order.CustomerAddress,
-                CustomerPhone = firstSalesOrder.Order.CustomerPhone,
-                ShippingZipCode = firstSalesOrder.Order.PostCode
+            var deliveryOrderCreationDto = new DeliveryOrderCreationDTO() 
+            { 
+                SalesOrderNos = selectedSalesOrdersForDelivery.Select(salesOrder => salesOrder.SaleOrderNo).ToArray() 
             };
 
-            deliveryOrder = DeliveryOrderService.Create(deliveryOrder);
-            selectedSalesOrdersForDelivery.ForEach(salesOrder =>
-            {
-                salesOrder.DeliveryOrder = deliveryOrder;
-                SalesOrderService.Update(salesOrder);
-            });
+            var deliveryOrder = DeliveryOrderService.Create(deliveryOrderCreationDto);
 
             SalesOrdersForDelivery.SafelyRemove(salesOrder => salesOrder.IsSelected);
 
@@ -340,15 +330,20 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             ShippingSaleCreateDto.ValidateProperties();
             if (ShippingSaleCreateDto.HasErrors) return;
 
-            DeliveryOrderService.Update<ShippingSaleCreateDto>(SelectedDeliveryOrderForExpress, ShippingSaleCreateDto);
+            ShippingSaleCreateDto.DeliveryOrderId = SelectedDeliveryOrderForExpress.Id;
+            DeliveryOrderService.Update<ExpressReceiptCreationDTO>(SelectedDeliveryOrderForExpress, ShippingSaleCreateDto);
 
-            DeliveryOrdersForExpress.SafelyRemove(deliveryOrder => deliveryOrder.Id == SelectedDeliveryOrderForExpress.Id);
+            SelectedDeliveryOrderForExpress.ExpressCode = ShippingSaleCreateDto.ShippingNo;
+            SelectedDeliveryOrderForExpress.ShipViaExpressFee = ShippingSaleCreateDto.ShippingFee;
+            SelectedDeliveryOrderForExpress.ShipCompanyName = ShippingViaList.Where(shippingVia => shippingVia.Id == ShippingSaleCreateDto.ShipViaID).First().Name;
+            
+            ShippingSaleCreateDto.ShippingNo = null;
         }
 
         /// <summary>
         /// 完成发货交接
         /// </summary>
-        private void OnHandOverCompleteOver()
+        private void OnHandOverComplete()
         {
             if (SelectedDeliveryOrderForHandOver == null)
             {
@@ -357,13 +352,8 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
             }
 
             DeliveryOrderService.CompleteHandOver(SelectedDeliveryOrderForHandOver);
-            DeliveryOrdersForHandOver.SafelyRemove(deliveryOrder => deliveryOrder.Id == SelectedDeliveryOrderForHandOver.Id);
-        }
-
-        private void GetListShipSaleBySale(string saleOrderNo)
-        {
-            var deliveryOrder = AppEx.Container.GetInstance<ITransService>().GetListShipSaleBySale(saleOrderNo);
-            DeliveryOrders = new ObservableCollection<OPC_ShippingSale>(deliveryOrder);
+            var selectedDeliveryOrderID = SelectedDeliveryOrderForHandOver.Id;
+            DeliveryOrdersForHandOver.SafelyRemove(deliveryOrder => deliveryOrder.Id == selectedDeliveryOrderID);
         }
 
         /// <summary>
@@ -396,11 +386,11 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
         /// </summary>
         private void OnDeliveryOrderForHandOverQuery()
         {
-            var result = DeliveryOrderService.Query(_queryCriteriaForHandOver);
-            DeliveryOrdersForHandOver = result.Data.ToObservableCollection();
-            if (result.TotalCount == 0)
+            var deliveryOrders = DeliveryOrderService.QueryAll(_queryCriteriaForHandOver);
+            DeliveryOrdersForHandOver = deliveryOrders.ToObservableCollection();
+            if (deliveryOrders.Count == 0)
             {
-                MessageBox.Show("没有符合条件的销售单", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("没有符合条件的快递单", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -426,12 +416,22 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
                 return;
             }
 
-            IPrint reporter = new PrintWin();
             var order = deliveryOrder.SalesOrders.First().Order;
             var salesOrders = deliveryOrder.SalesOrders;
-            var salesOrderDetails = SalesOrderDetailService.Query(new QuerySalesOrderDetailBySalesOrderNo { SalesOrderNo = deliveryOrder.SaleOrderNo });
+            var salesOrderDetails = new List<OPC_SaleDetail>();
+            salesOrders.ForEach(salesOrder => 
+            {
+                var details = SalesOrderDetailService.QueryAll(new QuerySalesOrderDetailBySalesOrderNo { SalesOrderNo = salesOrder.SaleOrderNo });
+                salesOrderDetails.AddRange(details);
+            });
 
-            reporter.PrintDeliveryOrder(ReportName, order, salesOrders, salesOrderDetails.Data, !preview);
+            Action print = () =>
+            {
+                IPrint reporter = new PrintWin();
+                reporter.PrintDeliveryOrder(ReportName, order, salesOrders, salesOrderDetails, !preview);
+            };
+            
+            MvvmUtility.PerformActionOnUIThread(print);
 
             if (!preview) DeliveryOrderService.Print(deliveryOrder, ReceiptType.DeliveryOrder);
         }
@@ -471,7 +471,7 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
                 return;
             }
 
-            IPrint reporter = new PrintWin();
+            
             var order = deliveryOrder.SalesOrders.First().Order;
             var expressReceiptPrintModel = new PrintExpressModel()
             {
@@ -481,7 +481,13 @@ namespace Intime.OPC.Modules.Logistics.ViewModels
                 ExpressFee = deliveryOrder.ExpressFee.ToString("f2")
             };
 
-            reporter.PrintExpress(ReportName, expressReceiptPrintModel, !preview);
+            Action print = () => 
+            {
+                IPrint reporter = new PrintWin();
+                reporter.PrintExpress(ReportName, expressReceiptPrintModel, !preview);
+            };
+            
+            MvvmUtility.PerformActionOnUIThread(print);
 
             if (!preview) DeliveryOrderService.Print(deliveryOrder, ReceiptType.ExpressReceipt);
         }
