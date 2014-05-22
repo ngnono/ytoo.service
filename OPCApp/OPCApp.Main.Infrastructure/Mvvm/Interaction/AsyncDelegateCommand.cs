@@ -86,7 +86,7 @@ namespace Intime.OPC.Infrastructure.Mvvm
         private Action<Exception> _errorHandler;
 
         public AsyncDelegateCommand(Action executeMethod)
-            : this(executeMethod, null, null)
+            : this(executeMethod, MvvmUtility.OnException)
         {
         }
 
