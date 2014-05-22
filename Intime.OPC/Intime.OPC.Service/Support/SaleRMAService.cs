@@ -507,7 +507,6 @@ namespace Intime.OPC.Service.Support
                 StoreId = StoreID,
                 SaleOrderNo = SaleOrderNo,
                 OrderNo = OpcSale.OrderNo,
-                Status = EnumRMAStatus.NoDelivery.AsID(),
                 RMAType = 1,
                 RefundAmount = RefundAmount,
                 RMAAmount = ComputeAccount(),
@@ -525,7 +524,12 @@ namespace Intime.OPC.Service.Support
                 Count = this.Details.Sum(x => x.ReturnCount),
                 RMAStatus = RefundAmount - ComputeAccount() > 0
                     ? EnumReturnGoodsStatus.CompensateVerify.AsID()
-                    : EnumReturnGoodsStatus.ServiceApprove.AsID()
+                    : EnumReturnGoodsStatus.ServiceApprove.AsID(),
+
+                Status = RefundAmount - ComputeAccount() > 0
+                        ? EnumRMAStatus.NoDelivery.AsID()
+                        : EnumRMAStatus.ShipNoReceive.AsID()
+
             };
             return rma;
         }
