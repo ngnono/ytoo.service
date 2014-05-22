@@ -28,12 +28,7 @@ namespace Intime.OPC.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult GetOrder([FromUri] ReturnGoodsRequest request, [UserId] int uid)
         {
-            return DoFunction(() =>
-            {
-                int brandid = request.BandId.HasValue ? request.BandId.Value : -1;
-               
-                return _saleRmaService.GetByReturnGoods(request, uid);
-            }, "查询订单失败");
+            return DoFunction(() => _saleRmaService.GetByReturnGoods(request, uid), "查询订单失败");
         }
 
         /// <summary>
