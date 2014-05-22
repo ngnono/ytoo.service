@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -147,7 +148,7 @@ namespace Intime.OPC.Repository.Impl
                             CustomerPhone = v.ShippingSale.ShippingContactPhone,
                             ExpressCode = v.ShippingSale.ShippingCode,
                             ExpressFee = v.ShippingSale.ShippingFee ?? 0,
-                            GoodsOutCode = v.ShippingSale.ShippingCode,
+                            GoodsOutCode = String.Empty,
                             GoodsOutDate = v.ShippingSale.CreateDate,
                             GoodsOutType = String.Empty,//v.ShippingSale.
                             OrderNo = v.ShippingSale.OrderNo,
@@ -198,7 +199,7 @@ namespace Intime.OPC.Repository.Impl
                         CustomerPhone = v.ShippingSale.ShippingContactPhone,
                         ExpressCode = v.ShippingSale.ShippingCode,
                         ExpressFee = v.ShippingSale.ShippingFee ?? 0,
-                        GoodsOutCode = v.ShippingSale.ShippingCode,
+                        GoodsOutCode = String.Empty,
                         GoodsOutDate = v.ShippingSale.CreateDate,
                         GoodsOutType = String.Empty, //v.ShippingSale.
                         OrderNo = v.ShippingSale.OrderNo,

@@ -152,7 +152,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
             };
             var actual = _controller.PostOrder(new CreateShippingSaleOrderRequest()
             {
-                SalesOrderNos = new List<string>() { "114042236511-001" }
+                SalesOrderNos = new List<string>() { "113063033630" }
             }, 28, new UserProfile { IsSystem = true, StoreIds = storeIds }) as OkNegotiatedContentResult<ShippingSaleDto>;
 
             Assert.IsNotNull(actual);
@@ -186,7 +186,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
             {
                 21,23
             };
-            var actual = _controller.PutFinish(26, 28, new UserProfile { IsSystem = true, StoreIds = storeIds }) as OkNegotiatedContentResult<string>;
+            var actual = _controller.PutFinish(38, 28, new UserProfile { IsSystem = true, StoreIds = storeIds }) as OkNegotiatedContentResult<string>;
 
             Assert.IsNotNull(actual);
         }

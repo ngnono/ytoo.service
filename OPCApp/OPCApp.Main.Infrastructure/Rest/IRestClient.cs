@@ -22,6 +22,10 @@ namespace OPCApp.Infrastructure.REST
 
         #endregion
 
+        TEntity Post<TEntity, TData>(string uri, TData data);
+
+        TEntity Put<TEntity, TData>(string uri, TData data);
+
         void PutWithoutReturn(string uri);
 
         void PutWithoutReturn<TEntity>(string uri, TEntity entity);
