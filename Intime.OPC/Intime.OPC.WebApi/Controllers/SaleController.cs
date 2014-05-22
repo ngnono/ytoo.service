@@ -499,14 +499,14 @@ namespace Intime.OPC.WebApi.Controllers
 
         [Route("api/salesorderdetail")]
         [HttpGet]
-        public IHttpActionResult GetSalesOrderDetailBySaleOrderNo([UserProfile] UserProfile userProfile, [FromUri]string saleOrderNo = "", [FromUri] int? pageIndex = 1, [FromUri]int? pagesize = 10)
+        public IHttpActionResult GetSalesOrderDetailBySaleOrderNo([UserProfile] UserProfile userProfile, [FromUri]string salesOrderNo = "", [FromUri] int? pageIndex = 1, [FromUri]int? pagesize = 10)
         {
-            if (string.IsNullOrWhiteSpace(saleOrderNo))
+            if (string.IsNullOrWhiteSpace(salesOrderNo))
             {
-                return BadRequest("saleOrderNo为空");
+                return BadRequest("salesOrderNo为空");
             }
 
-            return Ok(_saleService.GetSalesDetailsBySaleOrderNo(saleOrderNo, userProfile.StoreIds, pageIndex ?? 1, pagesize ?? 10));
+            return Ok(_saleService.GetSalesDetailsBySaleOrderNo(salesOrderNo, userProfile.StoreIds, pageIndex ?? 1, pagesize ?? 10));
 
         }
 
