@@ -142,7 +142,7 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
         }
 
         [Test()]
-        public void PostOrder()
+        public void PostOrderTest()
         {
             _controller.Request.Method = HttpMethod.Post;
 
@@ -154,6 +154,39 @@ namespace Intime.OPC.WebApi.Test.ControllerTest
             {
                 SalesOrderNos = new List<string>() { "114042236511-001" }
             }, 28, new UserProfile { IsSystem = true, StoreIds = storeIds }) as OkNegotiatedContentResult<ShippingSaleDto>;
+
+            Assert.IsNotNull(actual);
+        }
+
+        [Test()]
+        public void PutTest()
+        {
+            _controller.Request.Method = HttpMethod.Put;
+
+            var storeIds = new List<int>()
+            {
+                21,23
+            };
+            var actual = _controller.Put( 26, new PutShippingSaleOrderRequest()
+            {
+                ShippingFee= 99999,
+                ShippingNo = "agcsss9999"
+                ,ShippingSaleOrderId=23,ShipViaId = 38
+            }, 1, new UserProfile { IsSystem = true, StoreIds = storeIds }) as OkNegotiatedContentResult<string>;
+
+            Assert.IsNotNull(actual);
+        }
+
+        [Test()]
+        public void PutFinishTest()
+        {
+            _controller.Request.Method = HttpMethod.Put;
+
+            var storeIds = new List<int>()
+            {
+                21,23
+            };
+            var actual = _controller.PutFinish(26, 28, new UserProfile { IsSystem = true, StoreIds = storeIds }) as OkNegotiatedContentResult<string>;
 
             Assert.IsNotNull(actual);
         }

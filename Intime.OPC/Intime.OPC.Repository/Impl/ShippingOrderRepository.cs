@@ -231,7 +231,9 @@ namespace Intime.OPC.Repository.Impl
                {
                    EFHelper.Update(db, entity);
                    //同步状态
-                   SyncStatus(db, entity.ShippingStatus, entity.Id, userId);
+                   SyncStatus(db, entity.ShippingStatus, entity.Id, userId, entity);
+
+
 
                    trans.Complete();
                }
@@ -352,7 +354,7 @@ namespace Intime.OPC.Repository.Impl
         /// <param name="status"></param>
         /// <param name="shippingId"></param>
         /// <param name="userId"></param>
-        private static void SyncStatus(DbContext db, int? status, int shippingId, int userId)
+        private static void SyncStatus(DbContext db, int? status, int shippingId, int userId, OPC_ShippingSale entity)
         {
             if (status != null)
             {
@@ -374,7 +376,28 @@ namespace Intime.OPC.Repository.Impl
                     s.Status = status.Value;
                     s.UpdatedDate = DateTime.Now;
                     s.UpdatedUser = userId;
-                    EFHelper.UpdateEntityFields(db, s, new List<string> { "Status", "ShippingStatus", "UpdatedDate", "UpdatedUser" });
+                    var fieldList =
+                   new List<string>
+                    {
+                        "Status",
+                        "ShippingStatus",
+                        "UpdatedDate",
+                        "UpdatedUser"
+                    };
+
+                    if (entity != null)
+                    {
+                        s.ShipViaId = entity.ShipViaId;
+                        s.ShippingFee = entity.ShippingFee;
+                        s.ShippingCode = entity.ShippingCode;
+
+                        fieldList.AddRange(new List<string>     {                   "ShipViaId",
+                        "ShippingFee",
+                        "ShippingCode"});
+                    }
+
+
+                    EFHelper.UpdateEntityFields(db, s, fieldList);
                 }
             }
         }
@@ -393,13 +416,18 @@ namespace Intime.OPC.Repository.Impl
 
             Action(db =>
             {
-                EFHelper.UpdateEntityFields(db, entity, new List<string>
+                using (var trans = new TransactionScope())
                 {
-                 "ShippingStatus",
-                 "UpdateDate",
-                 "UpdateUser",
-                });
-                SyncStatus(db, entity.ShippingStatus, entity.Id, userId);
+                    EFHelper.UpdateEntityFields(db, entity, new List<string>
+                    {
+                        "ShippingStatus",
+                        "UpdateDate",
+                        "UpdateUser",
+                    });
+                    SyncStatus(db, entity.ShippingStatus, entity.Id, userId, null);
+
+                    trans.Complete();
+                }
             });
 
 
