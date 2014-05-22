@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    [Export(typeof(IService<Order>))]
+    //[Export(typeof(IService<Order>))]
     public class MockOrderService : ServiceBase<Order>
     {
 

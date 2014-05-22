@@ -8,7 +8,6 @@ namespace Intime.OPC.Infrastructure.Service
 {
     public interface IAddtionalService
     {
-        void Create<TData>(string uri, TData data);
 
         void Update<TData>(string uri, TData data);
 

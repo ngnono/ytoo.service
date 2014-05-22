@@ -1,5 +1,6 @@
 ﻿using Intime.OPC.Infrastructure.Service;
 using Intime.OPC.Modules.Logistics.Enums;
+using Intime.OPC.Modules.Logistics.Models;
 using OPCApp.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -23,5 +24,12 @@ namespace Intime.OPC.Modules.Logistics.Services
         /// </summary>
         /// <param name="deliveryOrder"></param>
         void CompleteHandOver(OPC_ShippingSale deliveryOrder);
+
+        /// <summary>
+        /// Create delivery order
+        /// </summary>
+        /// <param name="deliveryOrderCreationDto"></param>
+        /// <returns></returns>
+        OPC_ShippingSale Create(DeliveryOrderCreationDTO deliveryOrderCreationDto);
     }
 }

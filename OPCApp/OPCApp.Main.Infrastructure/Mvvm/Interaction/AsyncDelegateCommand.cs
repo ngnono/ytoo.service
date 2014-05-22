@@ -1,4 +1,5 @@
 ﻿using CustomControlLibrary;
+using Intime.OPC.Infrastructure.Mvvm.Utility;
 using Microsoft.Practices.Prism.Commands;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,11 @@ namespace Intime.OPC.Infrastructure.Mvvm
         private Action<T> _executeMethod;
         private Func<T, bool> _canExecuteMethod;
         private Action<Exception> _errorHandler;
+
+        public AsyncDelegateCommand(Action<T> executeMethod)
+            :this(executeMethod, MvvmUtility.OnException)
+        {
+        }
 
         public AsyncDelegateCommand(Action<T> executeMethod, Action<Exception> errorHandler)
             : this(executeMethod,errorHandler, null)

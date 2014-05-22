@@ -13,7 +13,7 @@ using Intime.OPC.Modules.Logistics.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    [Export(typeof(IDeliveryOrderService))]
+    //[Export(typeof(IDeliveryOrderService))]
     public class MockDeliveryOrderService : ServiceBase<OPC_ShippingSale>, IDeliveryOrderService
     {
         private Fixture fixture = new Fixture();
@@ -78,6 +78,11 @@ namespace Intime.OPC.Modules.Logistics.Services
         public void CompleteHandOver(OPC_ShippingSale deliveryOrder)
         {
 
+        }
+
+        public OPC_ShippingSale Create(Models.DeliveryOrderCreationDTO deliveryOrderCreationDto)
+        {
+            return Create(new OPC_ShippingSale());
         }
     }
 }

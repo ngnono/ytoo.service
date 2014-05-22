@@ -63,12 +63,12 @@ namespace OPCApp.Domain.Enums
         /// <summary>
         ///     The print invoice
         /// </summary>
-        [Description("打印发货单")] PrintInvoice = 30,
+        [Description("已生成发货单")] PrintInvoice = 30,
 
         /// <summary>
         ///     The print express
         /// </summary>
-        [Description("打印快递单")] PrintExpress = 35,
+        [Description("已生成快递单")] PrintExpress = 35,
 
         /// <summary>
         ///     The shipped
