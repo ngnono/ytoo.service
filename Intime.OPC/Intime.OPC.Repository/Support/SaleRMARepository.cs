@@ -26,7 +26,7 @@ namespace Intime.OPC.Repository.Support
             {
                 var query = db.OPC_RMAs.Where(t => t.CreatedDate >= startTime && t.CreatedDate < endTime && CurrentUser.StoreIds.Contains(t.StoreId));
 
-                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime).Join(db.OrderTransactions,o=>o.OrderNo,t=>t.OrderNo,(o,t)=>new
+                var query2 = db.Orders.Where(t => t.CreateDate >= startTime && t.CreateDate < endTime).Join(db.OrderTransactions, o => o.OrderNo, t => t.OrderNo, (o, t) => new
                 {
                     Order = o,
                     Trans = t
@@ -48,40 +48,44 @@ namespace Intime.OPC.Repository.Support
                         select new { SaleRMA = cs.FirstOrDefault(), Orders = t };
                 q = q.OrderByDescending(t => t.Orders.Order.OrderNo);
                 var lst = q.ToPageResult(pageIndex, pageSize);
-                var lstSaleRma = lst.Result.Select(t => CreateSaleRmaDto(t)).ToList();
+                var lstSaleRma = lst.Result.Select(t => CreateSaleRmaDto(t.Orders.Order,t.Orders.Trans,t.SaleRMA)).ToList();
                 return new PageResult<SaleRmaDto>(lstSaleRma, lst.TotalCount);
             }
         }
 
-        private SaleRmaDto CreateSaleRmaDto(dynamic t)
+        private SaleRmaDto CreateSaleRmaDto(Order order, OrderTransaction trans, OPC_RMA rma)
         {
             var o = new SaleRmaDto
             {
-                Id = t.Orders.Order.Id,
-                CustomerAddress = t.Orders.Order.ShippingAddress,
-                CustomerName = t.Orders.Order.ShippingContactPerson,
-                CustomerPhone = t.Orders.Order.ShippingContactPhone,
-                IfReceipt = t.Orders.Order.NeedInvoice.HasValue && t.Orders.Order.NeedInvoice.Value,
-                MustPayTotal = (double)(t.Orders.Order.TotalAmount),
-                OrderNo = t.Orders.Order.OrderNo,
-                PaymentMethodName = t.Orders.Order.PaymentMethodName,
-                ReceiptContent = t.Orders.Order.InvoiceDetail,
-                ReceiptHead = t.Orders.Order.InvoiceSubject,
-                OrderSource = t.Orders.Order.OrderSource,
-                OrderTransFee = t.Orders.Order.ShippingFee,
-                BuyDate = t.Orders.Order.CreateDate
+                Id = order.Id,
+                OrderChannelNo = trans.TransNo,
+                CustomerAddress = order.ShippingAddress,
+                CustomerName = order.ShippingContactPerson,
+                CustomerPhone = order.ShippingContactPhone,
+                IfReceipt = order.NeedInvoice.HasValue && order.NeedInvoice.Value,
+                MustPayTotal = (double)order.TotalAmount,
+                OrderNo = order.OrderNo,
+                PaymentMethodName = order.PaymentMethodName,
+                ReceiptContent = order.InvoiceDetail,
+                ReceiptHead = order.InvoiceSubject,
+                OrderSource = order.OrderSource,
+                OrderTransFee = order.ShippingFee,
+                BuyDate = order.CreateDate
             };
 
-            if (t.SaleRMA == null) return o;
-            o.CustomFee = t.SaleRMA.CustomFee;
-            o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
-            o.RecoverableSumMoney = t.SaleRMA.RecoverableSumMoney;
-            o.RealRMASumMoney = t.SaleRMA.RealRMASumMoney;
-            o.SaleOrderNo = t.SaleRMA.SaleOrderNo;
-            o.StoreFee = t.SaleRMA.StoreFee;
-            o.ServiceAgreeDate = t.SaleRMA.ServiceAgreeTime;
-            o.CustomerRemark = t.SaleRMA.Reason;
-            o.RmaNo = t.SaleRMA.RMANo;
+            if (rma != null)
+            {
+                o.CustomFee = rma.CustomFee;
+                o.RealRMASumMoney = rma.RealRMASumMoney;
+                o.RecoverableSumMoney = rma.RecoverableSumMoney;
+                o.RealRMASumMoney = rma.RealRMASumMoney;
+                o.SaleOrderNo = rma.SaleOrderNo;
+                o.StoreFee = rma.StoreFee;
+                o.ServiceAgreeDate = rma.ServiceAgreeTime;
+                o.CustomerRemark = rma.Reason;
+                o.RmaNo = rma.RMANo;
+            }
+
             return o;
         }
 
@@ -98,7 +102,8 @@ namespace Intime.OPC.Repository.Support
                             CurrentUser.StoreIds.Contains(t.StoreId));
                 var query2 = db.Orders.Where(t => true).Join(db.OrderTransactions, o => o.OrderNo, t => t.OrderNo, (o, t) => new
                 {
-                    Order = o, o.OrderNo,
+                    Order = o,
+                    o.OrderNo,
                     Trans = t
                 }); ;
                 if (!string.IsNullOrWhiteSpace(orderNo))
@@ -138,7 +143,7 @@ namespace Intime.OPC.Repository.Support
 
                 var lst = query.Join(query2, t => t.OrderNo, o => o.OrderNo, (t, o) => new { SaleRMA = t, Orders = o }).OrderByDescending(t => t.Orders.Order.CreateDate).ToPageResult(pageIndex, pageSize);
 
-                var lstSaleRma = lst.Result.Select(t => CreateSaleRmaDto(t)).ToList();
+                var lstSaleRma = lst.Result.Select(t => CreateSaleRmaDto(t.Orders.Order, t.Orders.Trans, t.SaleRMA)).ToList();
                 return new PageResult<SaleRmaDto>(lstSaleRma, lst.TotalCount);
             }
         }
@@ -168,7 +173,7 @@ namespace Intime.OPC.Repository.Support
                     Order = o,
                     o.OrderNo,
                     Trans = t
-                }); 
+                });
                 if (!string.IsNullOrWhiteSpace(orderNo))
                 {
                     query = query.Where(t => t.OrderNo == orderNo);
@@ -199,7 +204,7 @@ namespace Intime.OPC.Repository.Support
 
                 var lst = query.Join(query2, t => t.OrderNo, o => o.OrderNo, (t, o) => new { SaleRMA = t, Orders = o }).OrderByDescending(t => t.Orders.Order.CreateDate).ToPageResult(pageIndex, pageSize);
 
-                var lstSaleRma = lst.Result.Select(t => CreateSaleRmaDto(t)).ToList();
+                var lstSaleRma = lst.Result.Select(t => CreateSaleRmaDto(t.Orders.Order, t.Orders.Trans, t.SaleRMA)).ToList();
                 return new PageResult<SaleRmaDto>(lstSaleRma, lst.TotalCount);
             }
         }
@@ -222,9 +227,9 @@ namespace Intime.OPC.Repository.Support
                 var queryRMA = db.RMAs.Where(t => true);
                 if (request.OrderNo.IsNotNull())
                 {
-                    query = query.Where(t => t.OrderNo==request.OrderNo);
-                    query2 = query2.Where(t => t.OrderNo==request.OrderNo);
-                    queryRMA = queryRMA.Where(t => t.OrderNo==request.OrderNo);
+                    query = query.Where(t => t.OrderNo == request.OrderNo);
+                    query2 = query2.Where(t => t.OrderNo == request.OrderNo);
+                    queryRMA = queryRMA.Where(t => t.OrderNo == request.OrderNo);
                 }
 
                 if (request.PayType.IsNotNull())
@@ -240,7 +245,7 @@ namespace Intime.OPC.Repository.Support
                         select new { SaleRMA = cs.FirstOrDefault(), Orders = t.Order, RMA = t.RMA };
                 q = q.OrderByDescending(t => t.Orders.Order.CreateDate);
                 var lst = q.ToPageResult(request.pageIndex, request.pageSize);
-                var lstSaleRma = lst.Result.Select(t => CreateSaleRmaDto(t)).ToList();
+                var lstSaleRma = lst.Result.Select(t => CreateSaleRmaDto(t.Orders.Order, t.Orders.Trans, t.SaleRMA)).ToList();
                 return new PageResult<SaleRmaDto>(lstSaleRma, lst.TotalCount);
             }
         }
