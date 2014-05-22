@@ -7,6 +7,8 @@ namespace Intime.OPC.Domain.Dto
         public int Id { get; set; }
         public string SaleOrderNo { get; set; }
         public string PaymentMethodName { get; set; }
+
+        public string OrderChannelNo { get; set; }
         /// <summary>
         /// 订单来源
         /// </summary>
