@@ -379,7 +379,7 @@ namespace Intime.OPC.WebApi.Controllers
         /// <returns>IHttpActionResult.</returns>
         [Route("api/order/{orderno}")]
         [HttpGet]
-        public IHttpActionResult GetOrder(string orderNo, [UserId] int uid)
+        public IHttpActionResult GetOrders(string orderNo, [UserId] int uid)
         {
             return DoFunction(() =>
             {
