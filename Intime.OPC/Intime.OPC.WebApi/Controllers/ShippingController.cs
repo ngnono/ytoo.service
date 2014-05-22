@@ -85,7 +85,7 @@ namespace Intime.OPC.WebApi.Controllers
             {
                 IsAllStoreIds = userProfile.IsSystem,
                 StoreIds = stores,
-                HasDeliveryOrderGenerated = false,
+               // HasDeliveryOrderGenerated = false,
                 Status = EnumSaleOrderStatus.ShipInStorage
 
             });

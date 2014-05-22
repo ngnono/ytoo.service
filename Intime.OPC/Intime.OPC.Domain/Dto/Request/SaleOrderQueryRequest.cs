@@ -39,11 +39,11 @@ namespace Intime.OPC.Domain.Dto.Request
         [DataMember]
         public EnumSaleOrderStatus? Status { get; set; }
 
-        /// <summary>
-        /// 是否生成发货单
-        /// </summary>
-        [DataMember]
-        public bool? HasDeliveryOrderGenerated { get; set; }
+        ///// <summary>
+        ///// 是否生成发货单
+        ///// </summary>
+        //[DataMember]
+        //public bool? HasDeliveryOrderGenerated { get; set; }
 
         /// <summary>
         /// 查询指定门店

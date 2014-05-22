@@ -33,19 +33,19 @@ namespace Intime.OPC.Repository.Impl
                     query = PredicateBuilder.And(query, v => v.Status == (int)filter.Status);
                 }
 
-                if (filter.HasDeliveryOrderGenerated != null)
-                {
-                    if (filter.HasDeliveryOrderGenerated.Value)
-                    {
-                        //已经生成发货单的
-                        query = PredicateBuilder.And(query, v => v.ShippingSaleId > 0);
-                    }
-                    else
-                    {
-                        //未生成发货单的
-                        query = PredicateBuilder.And(query, v => (!v.ShippingSaleId.HasValue) || v.ShippingSaleId < 1);
-                    }
-                }
+                //if (filter.if != null)
+                //{
+                //    if (filter.HasDeliveryOrderGenerated.Value)
+                //    {
+                //        //已经生成发货单的
+                //        query = PredicateBuilder.And(query, v => v.ShippingSaleId > 0);
+                //    }
+                //    else
+                //    {
+                //        //未生成发货单的
+                //        query = PredicateBuilder.And(query, v => (!v.ShippingSaleId.HasValue) || v.ShippingSaleId < 1);
+                //    }
+                //}
 
                 if (!String.IsNullOrWhiteSpace(filter.SalesOrderNo))
                     query = PredicateBuilder.And(query, v => v.SaleOrderNo == filter.SalesOrderNo);
