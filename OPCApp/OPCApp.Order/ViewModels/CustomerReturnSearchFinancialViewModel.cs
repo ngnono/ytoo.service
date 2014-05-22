@@ -13,7 +13,12 @@ namespace OPCApp.Customer.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CustomerReturnSearchFinancialViewModel : CustomerReturnSearchViewModel
     {
- 
+        public CustomerReturnSearchFinancialViewModel()
+        {
+            //IsShowCustomerReViewBtn = false;
+            IsShowCustomerAgreeBtn = false;
+        }
+
         public override void SearchGoodsInfo()
         {
             try

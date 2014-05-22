@@ -27,7 +27,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
         {
             CommandSearch = new DelegateCommand(SearchRma);
             PackageReceiveDto = new PackageReceiveDto();
-            CommandGetRmaSaleDetailByRma1 = new DelegateCommand(GetRmaDetailByRma);
+            CommandGetRmaDetailByRma = new DelegateCommand(GetRmaDetailByRma);
             CommandTransVerifyPass = new DelegateCommand(TransVerifyPass);
             CommandTransVerifyNoPass = new DelegateCommand(TransVerifyNoPass);
             CommandSetRmaRemark = new DelegateCommand(SetRmaRemark);
@@ -51,14 +51,14 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
             set { SetProperty(ref _rmaDtos, value); }
         }
 
-        public List<RmaDetail> RmaDetailList
+        public List<RmaDetail> RmaDetailLs
         {
             get { return rmaDetails; }
             set { SetProperty(ref rmaDetails, value); }
         }
 
         public DelegateCommand CommandSearch { get; set; }
-        public DelegateCommand CommandGetRmaSaleDetailByRma1 { get; set; }
+        public DelegateCommand CommandGetRmaDetailByRma { get; set; }
         public DelegateCommand CommandTransVerifyPass { get; set; }
         public DelegateCommand CommandTransVerifyNoPass { get; set; }
         public DelegateCommand CommandSetRmaRemark { get; set; }
@@ -91,8 +91,8 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
             {
                 if (RmaList != null)
                     RmaList.Clear();
-                if (RmaDetailList != null)
-                    RmaDetailList.Clear();
+                if (RmaDetailLs != null)
+                    RmaDetailLs.Clear();
                 SearchRma();
             }
         }
@@ -118,8 +118,8 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
             {
                 if (RmaList != null)
                     RmaList.Clear();
-                if (RmaDetailList != null)
-                    RmaDetailList.Clear();
+                if (RmaDetailLs != null)
+                    RmaDetailLs.Clear();
                 SearchRma();
             }
 
@@ -129,7 +129,7 @@ namespace OPCApp.ReturnGoodsManage.ViewModels
         {
             if (rmaDto != null)
             {
-                RmaDetailList = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(rmaDto.RMANo).ToList();
+                RmaDetailLs = AppEx.Container.GetInstance<IPackageService>().GetRmaDetailByRma(rmaDto.RMANo).ToList();
             }
 
             //if (RmaDto == null)

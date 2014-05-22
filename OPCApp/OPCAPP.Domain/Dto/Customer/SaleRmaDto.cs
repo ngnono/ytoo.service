@@ -10,7 +10,10 @@ namespace OPCApp.Domain.Customer
         public bool IsSelected { get; set; }
         public string SaleOrderNo { get; set; }
         public string PaymentMethodName { get; set; }
-
+        /// <summary>
+        ///     订单渠道号
+        /// </summary>
+        public string OrderChannelNo { get; set; }
         /// <summary>
         ///     订单来源
         /// </summary>
