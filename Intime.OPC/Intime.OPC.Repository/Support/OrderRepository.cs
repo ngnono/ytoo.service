@@ -121,13 +121,13 @@ namespace Intime.OPC.Repository.Support
             //todo 查询所有有退货的订单
             using (var db = new YintaiHZhouContext())
             {
-                var filter2 = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate); //&& t.RMAStatus==(int)EnumReturnGoodsStatus.NoProcess;
+                var filter2 = db.OPC_RMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate); //&& t.RMAStatus==(int)EnumReturnGoodsStatus.NoProcess;
 
                 var filter = db.Orders.Where(t => true);
 
                 if (request.OrderNo.IsNotNull())
                 {
-                    filter = filter.Where(t => t.OrderNo.Contains(request.OrderNo));
+                    filter = filter.Where(t => t.OrderNo == request.OrderNo);
                 }
                 if (request.PayType.IsNotNull())
                 {
@@ -135,7 +135,7 @@ namespace Intime.OPC.Repository.Support
                 }
                 if (request.SaleOrderNo.IsNotNull())
                 {
-                    filter = filter.Join(db.OPC_Sales.Where(t => t.SaleOrderNo.Contains(request.SaleOrderNo)),
+                    filter = filter.Join(db.OPC_Sales.Where(t => t.SaleOrderNo == request.SaleOrderNo),
                         t => t.OrderNo, o => o.OrderNo, (t, o) => t);
                 }
 
@@ -156,7 +156,7 @@ namespace Intime.OPC.Repository.Support
                     filter2 = filter2.Where(t => t.StoreId == request.StoreID.Value);
                 }
 
-                var orderIds = filter2.ToList().Select<OPC_SaleRMA, string>(t => t.OrderNo).Distinct().ToList();
+                var orderIds = filter2.ToList().Select(t => t.OrderNo).Distinct().ToList();
 
                 filter = filter.Where(t => orderIds.Contains(t.OrderNo)).OrderByDescending(t=>t.CreateDate);
 
@@ -170,7 +170,7 @@ namespace Intime.OPC.Repository.Support
             {
                 
 
-                var filter2 = db.OPC_SaleRMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus == (int)returnGoodsStatus );
+                var filter2 = db.OPC_RMAs.Where(t => t.CreatedDate >= request.StartDate && t.CreatedDate < request.EndDate && t.RMAStatus == (int)returnGoodsStatus );
 
                 if (rmaStatus.HasValue)
                 {
@@ -215,7 +215,7 @@ namespace Intime.OPC.Repository.Support
                     filter2 = filter2.Where(t => t.StoreId == request.StoreID.Value);
                 }
 
-                var orderIds = filter2.ToList().Select<OPC_SaleRMA, string>(t => t.OrderNo).Distinct().ToList();
+                var orderIds = filter2.ToList().Select(t => t.OrderNo).Distinct().ToList();
 
                 filter = filter.Where(t => orderIds.Contains(t.OrderNo)).OrderByDescending(t => t.CreateDate);
 

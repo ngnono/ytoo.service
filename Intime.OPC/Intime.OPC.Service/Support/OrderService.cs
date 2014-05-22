@@ -99,11 +99,6 @@ namespace Intime.OPC.Service.Support
             _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = _orderRepository.GetByReturnGoodsInfo(request);
                return Mapper.Map<Order, OrderDto>(lst);
-
-            //var lst = _orderRepository.GetOrder(request.OrderNo,"",request.StartDate,request.EndDate,request.StoreID.Value,
-            //    -1,-1,request.PayType,"","","",-1,1,1000);
-                   
-            //return Mapper.Map<Order, OrderDto>(lst.Result);
         }
 
         public PageResult<OrderDto> GetShippingBackByReturnGoodsInfo(ReturnGoodsInfoRequest request)
