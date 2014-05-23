@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Routing;
+using Intime.OPC.WebApi.Core.MessageHandlers;
 using Intime.OPC.WebApi.Core.MessageHandlers.AccessToken;
 using Intime.OPC.WebApi.Core.MessageHandlers.Signature;
 
@@ -41,6 +42,9 @@ namespace Intime.OPC.WebApi
 
             handler.SetUserProfileProvider(userProfileProvider);
             config.MessageHandlers.Add(handler);
+
+            //请求日志记录
+            config.MessageHandlers.Add(new RequestLoggingHandler());
 
             config.EnsureInitialized();
         }

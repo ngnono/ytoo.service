@@ -153,6 +153,7 @@
     <Compile Include="Core\MessageHandlers\AccessToken\IUserProfileProvider.cs" />
     <Compile Include="Core\MessageHandlers\AccessToken\Support\DefaultUserProfileProvider.cs" />
     <Compile Include="Core\MessageHandlers\AccessToken\UserIdFilterAttribute.cs" />
+    <Compile Include="Core\MessageHandlers\RequestLoggingHandler.cs" />
     <Compile Include="Core\MessageHandlers\Signature\IAppSecurityManager.cs" />
     <Compile Include="Core\MessageHandlers\Signature\SignatureMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\Signature\AppSecurityManager.cs" />
