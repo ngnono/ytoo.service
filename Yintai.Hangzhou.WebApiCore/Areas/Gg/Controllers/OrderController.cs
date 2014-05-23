@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using System.Security.Cryptography;
 using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Hangzhou.Data.Models;
@@ -34,7 +36,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                     CreateDate = DateTime.Now,
                     CreateUser = authuid,
                     UpdateDate = DateTime.Now,
-                    UpdateUser =  authuid,
+                    UpdateUser = authuid,
                     BrandId = 0,
                     CustomerId = authuid,
                     InvoiceAmount = request.invoice != null ? request.invoice.amount : null,
@@ -54,7 +56,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                     Status = isPaid ? (int)OrderStatus.Paid : (int)OrderStatus.Complete,
                 };
 
-                
+
                 if (isPaid)
                 {
                     if (request.payment == null || request.payment.Count == 0)
@@ -170,7 +172,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                     CreateDate = DateTime.Now,
                     CreateUser = authuid,
                     CustomerId = authuid,
-                    Operation = isPaid? "创建已支付订单" : "创建订单",
+                    Operation = isPaid ? "创建已支付订单" : "创建订单",
                     OrderNo = order.OrderNo,
                     Type = (int)OrderOpera.FromOperator
                 });
@@ -352,33 +354,28 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         {
             if (order.Status != (int)OrderStatus.Shipped)
             {
-                yield return new List<dynamic>();
+                return new List<dynamic>();
             }
-            var list = Context.Set<OPC_SaleEntity>()
-                .Where(sale => sale.OrderNo == order.OrderNo)
-                .Join(Context.Set<OPC_SaleDetailEntity>(), sale => sale.SaleOrderNo, detail => detail.SaleOrderNo,
-                    (sale, detail) => new { sale, detail })
-                .Join(Context.Set<OPC_ShippingSaleEntity>(), sale => sale.sale.ShippingSaleId, shipping => shipping.Id,
-                    (sale, shipping) => new { sale, shipping })
-                .Join(Context.Set<OrderItemEntity>().Where(i => i.OrderNo == order.OrderNo),
-                    x => x.sale.detail.OrderItemID, i => i.Id, (x, i) => new { x, i })
-                .Join(Context.Set<StoreEntity>(), x => x.x.shipping.StoreId, st => st.Id, (x, st) => new
-                {
-                    saleDetail = x.x.sale.detail,
-                    x.x.shipping,
-                    item = x.i,
-                    store = st
-                });
-            foreach (var d in list)
-            {
-                yield return new
-                {
-                    productId = d.item.ProductId,
-                    shippno = d.shipping.ShippingCode,
-                    express = d.shipping.ShipViaName,
-                    store = d.store.Name,
-                };
-            }
+
+            var items = from sale in Context.Set<OPC_SaleEntity>()
+                        from sd in Context.Set<OPC_SaleDetailEntity>()
+                        from sse in Context.Set<OPC_ShippingSaleEntity>()
+                        from oi in Context.Set<OrderItemEntity>()
+                        from store in Context.Set<StoreEntity>()
+                        from stock in Context.Set<InventoryEntity>()
+                        where
+                            sale.OrderNo == order.OrderNo && sd.SaleOrderNo == sale.SaleOrderNo && sale.ShippingSaleId == sse.Id &&
+                            oi.Id == sd.OrderItemID && store.Id == sse.StoreId && oi.ProductId == stock.ProductId &&
+                            oi.ColorValueId == stock.PColorId && oi.SizeValueId == stock.PSizeId
+                        select new
+                        {
+                            productId = oi.ProductId,
+                            stockId = stock.Id,
+                            express = sse.ShipViaName,
+                            shippno = sse.ShippingCode,
+                            store = store.Name
+                        };
+            return items;
         }
     }
 }
