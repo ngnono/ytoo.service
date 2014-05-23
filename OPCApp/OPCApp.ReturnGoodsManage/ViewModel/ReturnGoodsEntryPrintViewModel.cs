@@ -75,28 +75,23 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             string xsdName = "InvoiceDataSet";
             string rdlcName = "Print//PrintRMA.rdlc";
 
-            var invoiceModel = new PrintModel();
-
-            var salelist = new List<OPC_RMA>();
-            //SaleSelected.TransName = SaleSelected.IfTrans;
-            //salelist.Add(SaleSelected);
-            //invoiceModel.RmaDT = salelist;
-            //invoiceModel.RMADetailDT = InvoiceDetail4List;
-            pr.Print(xsdName, rdlcName, invoiceModel, falg);
+            var invoiceModel = new ReturnGoodsPrintModel();
+            invoiceModel.RmaDT = CustomReturnGoodsUserControlViewModel.RmaList.Where(e => e.IsSelected).ToList();
+            invoiceModel.RMADetailDT = CustomReturnGoodsUserControlViewModel.RmaDetailList;
+            pr.PrintReturnGoods(xsdName, rdlcName, invoiceModel, falg);
             return true;
 
         }
 
         private void PrintPreView()
         {
-            if (VerifyRmaSelected())
-            {
-                List<string> rmaNos = GetRmoNoList();
+            PrintCommon();
+            //if (VerifyRmaSelected())
+            //{
+            //    List<string> rmaNos = GetRmoNoList();
                 //bool falg = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().PrintReturnGoods(rmaNos);
                 //MessageBox.Show(falg ? "打印退货单成功" : "打印退货单失败", "提示");
-
-
-            }
+            //}
         }
 
         public override void SearchRma()

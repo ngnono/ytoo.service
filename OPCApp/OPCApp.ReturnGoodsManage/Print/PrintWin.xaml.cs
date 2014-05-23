@@ -120,6 +120,39 @@ namespace OPCApp.ReturnGoodsManage.Print
             }
         }
 
+        //zxy1
+        public void PrintReturnGoods(string xsdName, string rdlcName, ReturnGoodsPrintModel dtList, bool isPrint = false)
+        {
+            try
+            {
+                var myRptDS = new ReportDataSource();
+                myRptDS = new ReportDataSource(xsdName, dtList.RmaDT); //创建的数据源名称(xsd文件的名称),数据集
+                myRptDS.Name = "RmaDT";
+                _reportViewer.LocalReport.DataSources.Add(myRptDS);
+
+
+                myRptDS = new ReportDataSource(xsdName, dtList.RMADetailDT); //创建的数据源名称(xsd文件的名称),数据集
+                myRptDS.Name = "RmaDetailDT";
+                _reportViewer.LocalReport.DataSources.Add(myRptDS);
+
+
+                _reportViewer.LocalReport.ReportPath = rdlcName; //报表的地址
+                if (isPrint)
+                {
+                    PrintOnly(_reportViewer.LocalReport);
+                }
+                else
+                {
+                    _reportViewer.RefreshReport();
+                    ShowDialog();
+                }
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.Message);
+            }
+        }
+
 
         private void PrintOnly(LocalReport report)
         {

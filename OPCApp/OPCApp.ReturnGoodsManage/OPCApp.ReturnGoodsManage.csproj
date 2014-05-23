@@ -157,7 +157,7 @@
       <DependentUpon>ShopperReturnGoodsSearchView.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Print\PrintRMA.rdlc">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

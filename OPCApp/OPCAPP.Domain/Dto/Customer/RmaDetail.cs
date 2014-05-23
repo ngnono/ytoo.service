@@ -55,10 +55,6 @@ namespace OPCApp.Domain.Customer
         /// </summary>
         public string SectionCode { get; set; }
 
-        /// <summary>
-        ///     商品编码
-        /// </summary>
-        /// <value>The name of the color value.</value>
-        public string 商品编码 { get; set; }
+
     }
 }
