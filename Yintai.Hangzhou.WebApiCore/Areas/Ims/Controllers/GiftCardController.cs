@@ -114,6 +114,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 {
                     try
                     {
+                        var user = _customerRepo.Find(x => x.Id == authuid);
+                        
+                        _userRepo.Insert(new IMS_GiftCardUserEntity()
+                        {
+                            UserId = authuid,
+                            CreateDate = DateTime.Now,
+                            GiftCardAccount = phone,
+                            Name = user.Nickname
+                        });
                         var balance = GetUserAccountBalance(phone);
                         return this.RenderSuccess<dynamic>(c => c.Data = new
                         {
@@ -168,10 +177,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult Create(string phone, string pwd, string charge_no, string identity_no, int authuid)
         {
-            if (IsPhoneBinded(phone))
-            {
-                return this.RenderError(r => r.Message = "账号已创建，不能重复创建，您可以直接充值");
-            }
+            //if (IsPhoneBinded(phone))
+            //{
+            //    return this.RenderError(r => r.Message = "账号已创建，不能重复创建，您可以直接充值");
+            //}
 
             IMS_GiftCardOrderEntity giftCardOrder = _orderRepo.Find(t => t.No == charge_no);
             if (giftCardOrder == null)
