@@ -43,6 +43,7 @@ namespace com.intime.fashion.common
         public static ILog Log { get {
             return ServiceLocator.Current.Resolve<ILog>();
         } }
+       
         public static string MD5_Encode(string value,Encoding encode)
         {
 

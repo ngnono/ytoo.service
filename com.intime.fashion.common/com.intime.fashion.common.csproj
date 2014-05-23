@@ -40,9 +40,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AWSSDK.1.5.19.0\lib\AWSSDK.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.2.0\lib\net4\RestSharp.dll</HintPath>
@@ -86,6 +86,9 @@
     <Compile Include="ConfigManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\CommonConfigurationBase.cs" />
+    <Compile Include="Configuration\CommonConfigurationFactory.cs" />
+    <Compile Include="Configuration\ElasticSearchConfigurationSetting.cs" />
     <Compile Include="Extension\EnumExtension.cs" />
     <Compile Include="Erp2ServiceHelper.cs" />
     <Compile Include="Erp2\Erp2Config.cs" />
