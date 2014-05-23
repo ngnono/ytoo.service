@@ -12,7 +12,7 @@ using OPCApp.Domain.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    [Export(typeof(IService<OPC_Sale>))]
+    //[Export(typeof(IService<OPC_Sale>))]
     public class MockSalesOrderService : ServiceBase<OPC_Sale>
     {
         private Fixture fixture = new Fixture();
@@ -29,6 +29,12 @@ namespace Intime.OPC.Modules.Logistics.Services
             var result = new PagedResult<OPC_Sale>() { PageIndex = queryCriteria.PageIndex, PageSize = queryCriteria.PageSize, TotalCount = 200, Data = salesOrders.ToList() };
 
             return result;
+        }
+
+        public override IList<OPC_Sale> QueryAll(IQueryCriteria queryCriteria)
+        {
+            var result = Query(queryCriteria);
+            return result.Data;
         }
 
         public override OPC_Sale Update(OPC_Sale obj)

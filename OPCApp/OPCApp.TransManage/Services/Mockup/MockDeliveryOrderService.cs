@@ -13,7 +13,7 @@ using Intime.OPC.Modules.Logistics.Enums;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    [Export(typeof(IDeliveryOrderService))]
+    //[Export(typeof(IDeliveryOrderService))]
     public class MockDeliveryOrderService : ServiceBase<OPC_ShippingSale>, IDeliveryOrderService
     {
         private Fixture fixture = new Fixture();
@@ -41,6 +41,11 @@ namespace Intime.OPC.Modules.Logistics.Services
             return obj;
         }
 
+        public override void Update<TData>(OPC_ShippingSale obj, TData data)
+        {
+            
+        }
+
         public override PagedResult<OPC_ShippingSale> Query(IQueryCriteria queryCriteria)
         {
             var salesOrders = fixture.Build<OPC_Sale>()
@@ -59,6 +64,12 @@ namespace Intime.OPC.Modules.Logistics.Services
             return result;
         }
 
+        public override IList<OPC_ShippingSale> QueryAll(IQueryCriteria queryCriteria)
+        {
+            var result = Query(queryCriteria);
+            return result.Data;
+        }
+
         public void Print(OPC_ShippingSale deliveryOrder, ReceiptType receiptType)
         {
 
@@ -67,6 +78,11 @@ namespace Intime.OPC.Modules.Logistics.Services
         public void CompleteHandOver(OPC_ShippingSale deliveryOrder)
         {
 
+        }
+
+        public OPC_ShippingSale Create(Models.DeliveryOrderCreationDTO deliveryOrderCreationDto)
+        {
+            return Create(new OPC_ShippingSale());
         }
     }
 }

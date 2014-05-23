@@ -21,7 +21,9 @@
             <StackPanel Orientation="Horizontal" Background="LightGray">
                 <Button Background="LightGray" Width="Auto" Command="{Binding CommandSearch}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/image/查询.png" Stretch="None" />
+
+                        <Image Source="/Resource\Image/查询.png" Stretch="None" />
+
                         <TextBlock FontFamily="宋体" FontSize="18" HorizontalAlignment="Center">查询</TextBlock>
                     </StackPanel>
                 </Button>
@@ -33,14 +35,16 @@
                 </Button>
                 <Button Background="LightGray" Command="{Binding CommandOnlyPrint}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/image/打印.png" Stretch="None" />
+                        <Image Source="/Resource\Image/打印.png" Stretch="None" />
+
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">打印销售单</TextBlock>
                     </StackPanel>
                 </Button>
 
                 <Button Background="LightGray" Command="{Binding CommandFinish}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/image/打印.png" Stretch="None" />
+
+                        <Image Source="/Resource\Image/打印.png" Stretch="None" />
                         <TextBlock HorizontalAlignment="Center" FontFamily="宋体" FontSize="18">完成打印销售单</TextBlock>
                     </StackPanel>
                 </Button>
@@ -89,7 +93,7 @@
                 <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                 <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
                 <DataGridTextColumn Header="渠道订单号" Width="120" Binding="{Binding TransNo}" />
-                <DataGridTextColumn Header="销售类别" Binding="{Binding OrderSource}" />
+                <DataGridTextColumn Header="订单渠道" Binding="{Binding OrderSource}" />
                <DataGridTextColumn Header="销售状态" Binding="{Binding SaleStatus}"
                                     ElementStyle="{StaticResource CellCenter}" />
                 <DataGridTextColumn Header="销售单状态" Width="100" Binding="{Binding StatusName}"

@@ -5,6 +5,7 @@ using Microsoft.Practices.Prism.Commands;
 using OPCApp.DataService.Interface.RMA;
 using OPCApp.Infrastructure;
 using OPCApp.ReturnGoodsManage.Common;
+using System.Windows.Forms;
 
 namespace OPCApp.ReturnGoodsManage.ViewModel
 {
@@ -27,6 +28,13 @@ namespace OPCApp.ReturnGoodsManage.ViewModel
             {
                 List<string> rmaList = GetRmoNoList();
                 bool falg = AppEx.Container.GetInstance<IReturnGoodsSearchWithRma>().SetReturnGoodsInStorage(rmaList);
+                MessageBox.Show(falg ? "物流入库成功" : "物流入库失败", "提示");
+                if (falg)
+                {
+                    CustomReturnGoodsUserControlViewModel.RmaList.Clear();
+                    CustomReturnGoodsUserControlViewModel.RmaDetailList.Clear();
+                    SearchRma();
+                }
             }
         }
 

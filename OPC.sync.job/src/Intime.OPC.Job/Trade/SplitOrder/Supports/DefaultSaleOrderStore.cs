@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Intime.OPC.Domain.Models;
 using System.Transactions;
@@ -13,14 +14,13 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
     {
         public bool Save(IEnumerable<Models.SaleOrderModel> saleOrders)
         {
-            using (var db = new YintaiHZhouContext())
+            // 遍历保存销售单
+            foreach (var saleOrderModel in saleOrders)
             {
-                using (var ts = new TransactionScope())
+                using (var db = new YintaiHZhouContext())
                 {
-                    // 遍历保存销售单
-                    foreach (var saleOrderModel in saleOrders)
+                    using (var ts = new TransactionScope())
                     {
-                        // TODO：检查订单是否已经被拆分，防止两个程序启动写入双份
                         var saleOrder = new OPC_Sale()
                         {
                             OrderNo = saleOrderModel.OrderNo,
@@ -48,12 +48,23 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
                             saleDetail.UpdatedUser = SystemDefine.SysUserId;
                             db.OPC_SaleDetail.Add(saleDetail);
                         }
+
+                        // 检查销售是否已经存在，防止重复拆单,
+                        // 处理方式：发现销售单存继续其他销售单处理，放弃当前的修改，不进行保存
+                        if (db.OPC_Sale.Any(s => s.SaleOrderNo == saleOrderModel.SaleOrderNo))
+                        {
+                            SaveSplitOrderLog(saleOrderModel.OrderNo.ToString(CultureInfo.InvariantCulture),
+                                "已经拆单完成，重复拆单", -999);
+                            continue;
+                        }
+
+                        db.SaveChanges();
+                        ts.Complete();
                     }
-                    db.SaveChanges();
-                    ts.Complete();
                 }
-                return true;
             }
+            return true;
+
         }
 
         /// <summary>
@@ -62,21 +73,21 @@ namespace Intime.OPC.Job.Trade.SplitOrder.Supports
         /// <param name="orderNo"></param>
         /// <param name="ErrorReason"></param>
         /// <returns></returns>
-        public bool SaveSplitOrderLog(string orderNo, string reason,int status)
+        public bool SaveSplitOrderLog(string orderNo, string reason, int status)
         {
             using (var db = new YintaiHZhouContext())
-            { 
+            {
                 var opc_OrderSplitLog = new OPC_OrderSplitLog
                 {
-                    OrderNo=orderNo,
+                    OrderNo = orderNo,
                     Reason = reason,
                     Status = status,
-                    CreateDate=DateTime.Now
+                    CreateDate = DateTime.Now
                 };
                 db.OPC_OrderSplitLog.Add(opc_OrderSplitLog);
                 db.SaveChanges();
 
-            }            
+            }
             return true;
         }
     }

@@ -45,6 +45,9 @@
         <TabControl Grid.Row="0">
             <TabItem Header="打印发货单完成包装" VerticalContentAlignment="Top">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -85,11 +88,9 @@
                     </StackPanel>
                     <DataGrid Grid.Row="2" ScrollViewer.CanContentScroll="True" ItemsSource="{Binding SalesOrdersForDelivery}" SelectedItem="{Binding SelectedSalesOrder}"
                             IsReadOnly="True" AutoGenerateColumns="False"
-                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" 
-                            mvvm:ScrollingBehavior.IsEnabled="True"
-                            mvvm:ScrollingBehavior.ScrollToBottomCommand="{Binding LoadMoreSalesOrdersForDeliveryCommand}">
+                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn SortMemberPath="IsSelected" Width="60">
+                            <DataGridTemplateColumn SortMemberPath="IsSelected" Width="40">
                                 <DataGridTemplateColumn.HeaderTemplate>
                                     <DataTemplate>
                                         <CheckBox x:Name="selectAll" Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SelectAllSalesOrderForDeliveryCommand}" CommandParameter="{Binding ElementName=selectAll, Path=IsChecked}"></CheckBox>
@@ -128,7 +129,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                             Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -154,28 +155,24 @@
                             </Button>
                         </StackPanel>
                     </DockPanel>
-                    <DataGrid Grid.Row="4" ItemsSource="{Binding DeliveryOrders}" IsReadOnly="True"
-                              SelectedItem="{Binding SelectedDeliveryOrder}"
-                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+                    <DataGrid Grid.Row="4" ItemsSource="{Binding DeliveryOrders}" SelectedItem="{Binding SelectedDeliveryOrder}"
+                             IsReadOnly="True" AutoGenerateColumns="False"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="130" Header="发货单号" Binding="{Binding GoodsOutCode}" />
-                            <DataGridTextColumn Width="200" Header="快递公司名称" Binding="{Binding ShipCompanyName}" />
+                            <DataGridTextColumn Header="发货单号" Binding="{Binding GoodsOutCode}" Width="130" />
                             <DataGridTextColumn Header="发货状态" Binding="{Binding ShippingStatus}" />
                             <DataGridTextColumn Header="发货时间" Binding="{Binding GoodsOutDate,StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                            <DataGridTextColumn Header="快递公司取件人" Binding="{Binding ShipManName}" />
-                            <DataGridTextColumn Header="打印状态" Binding="{Binding PrintStatus}" />
-                            <DataGridTextColumn Header="快递单号" Binding="{Binding ExpressCode}" />
                             <DataGridTextColumn Header="收货人姓名" Binding="{Binding CustomerName}" />
                             <DataGridTextColumn Header="收货人地址" Width="200" Binding="{Binding CustomerAddress}" />
                             <DataGridTextColumn Header="收货人电话" Binding="{Binding CustomerPhone}" />
                             <DataGridTextColumn Header="邮编" Binding="{Binding ShippingZipCode}" />
                             <DataGridTextColumn Header="配送方式" Binding="{Binding ShippingMethod}" />
-                            <DataGridTextColumn Header="支付快递公司运费" Binding="{Binding ShipViaExpressFee}" />
                             <DataGridTextColumn Header="顾客支付运费" Binding="{Binding ExpressFee}" />
+                            <DataGridTextColumn Header="打印状态" Binding="{Binding PrintStatus}" />
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.RemarkShippingCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -192,12 +189,12 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="200"/>
+                        <RowDefinition Height="*" MinHeight="200"/>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="100" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
                     <DockPanel Grid.Row="0">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
@@ -209,9 +206,9 @@
                             <TextBox Width="150" Foreground="Blue" Background="White" Text="{Binding QueryCriteriaForExpressReceipt.OrderNo}" />
                             <Button Margin="5" Width="Auto" Command="{Binding QueryDeliveryOrderForExpressCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="70">
-                                        <Image Source="../Resource/Image/查询.png" Stretch="None" />
-                                        <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">查询</TextBlock>
-                                    </StackPanel>
+                                    <Image Source="../Resource/Image/查询.png" Stretch="None" />
+                                    <TextBlock  Margin="10,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center">查询</TextBlock>
+                                </StackPanel>
                             </Button>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Orientation="Horizontal">
@@ -248,7 +245,7 @@
                     </StackPanel>
                     <DataGrid x:Name="deliveryOrderList" Grid.Row="2" ItemsSource="{Binding DeliveryOrdersForExpress}" IsReadOnly="True"
                               SelectedItem="{Binding SelectedDeliveryOrderForExpress}"
-                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <i:InvokeCommandAction Command="{Binding LoadOrderOfExpressReceiptCommand}" CommandParameter="{Binding ElementName=deliveryOrderList, Path=SelectedItem}"/>
@@ -272,7 +269,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.RemarkShippingCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -287,7 +284,7 @@
                             <TextBlock Text="实际运费" Margin="10 5" />
                             <TextBox Height="25" Width="150" Foreground="Blue" Background="White" Text="{Binding ShippingSaleCreateDto.ShippingFee}" />
                             <TextBlock Text="快递单号" Margin="10 5" />
-                            <TextBox Height="25" Width="150" Foreground="Blue" Background="White" Text="{Binding ShippingSaleCreateDto.ShippingCode}" />
+                            <TextBox Height="25" Width="150" Foreground="Blue" Background="White" Text="{Binding ShippingSaleCreateDto.ShippingNo}" />
                             <Button Height="30" Margin="10 5"  Command="{Binding CreateExpressReceiptCommand}">
                                 <StackPanel Orientation="Horizontal" MinWidth="90">
                                     <Image Source="../Resource/Image/指派送货.png" Stretch="None" />
@@ -302,7 +299,7 @@
                         </StackPanel>
                     </StackPanel>
                     <DataGrid Grid.Row="5" ItemsSource="{Binding OrderOfExpressReceipt}" IsReadOnly="True"
-                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" Width="150" />
                             <DataGridTextColumn Header="渠道订单号" Binding="{Binding OrderChannelNo}" Width="200" />
@@ -322,7 +319,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.RemarkOrderCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -335,7 +332,7 @@
                         </StackPanel>
                     </StackPanel>
                     <DataGrid Grid.Row="7" ItemsSource="{Binding SelectedDeliveryOrderForExpress.SalesOrders}" IsReadOnly="True"
-                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
@@ -356,7 +353,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -374,11 +371,11 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="200" />
+                        <RowDefinition Height="*" MinHeight="240" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="100" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
                     <DockPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
@@ -423,7 +420,7 @@
                     </StackPanel>
                     <DataGrid x:Name="deliveryOrderListForHandOver" Grid.Row="2" ItemsSource="{Binding DeliveryOrdersForHandOver}" IsReadOnly="True"
                               SelectedItem="{Binding SelectedDeliveryOrderForHandOver}"
-                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <i:InvokeCommandAction Command="{Binding LoadOrderOfHandOverCommand}" CommandParameter="{Binding ElementName=deliveryOrderListForHandOver, Path=SelectedItem}"/>
@@ -448,7 +445,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.RemarkShippingCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -461,7 +458,7 @@
                         </StackPanel>
                     </StackPanel>
                     <DataGrid Grid.Row="4" ItemsSource="{Binding OrderOfHandOver}" IsReadOnly="True"
-                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto">
+                              AutoGenerateColumns="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="150" Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Width="200" Header="渠道订单号" Binding="{Binding OrderChannelNo}" />
@@ -481,7 +478,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.RemarkOrderCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -495,7 +492,7 @@
                     </StackPanel>
                     <DataGrid Grid.Row="6" ItemsSource="{Binding SelectedDeliveryOrderForHandOver.SalesOrders}" IsReadOnly="True"
                               AutoGenerateColumns="False"
-                              HorizontalScrollBarVisibility="Auto">
+                                HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="订单号" Binding="{Binding OrderNo}" />
                             <DataGridTextColumn Header="销售单号" Width="120" Binding="{Binding SaleOrderNo}" />
@@ -523,7 +520,7 @@
                             <DataGridTemplateColumn Header="备注录入">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="录入" Width="40"
+                                        <Button Content="录入" Width="40" IsEnabled="False"
                                                 Command="{Binding Path=DataContext.CommandSetRemark,RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

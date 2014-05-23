@@ -84,7 +84,7 @@ namespace Intime.OPC.WebApi.App_Start
             Mapper.CreateMap<OPC_ShippingSaleClone, OPC_ShippingSale>();
             Mapper.CreateMap<OPC_ShippingSale, OPC_ShippingSaleClone>();
 
-            Mapper.CreateMap<SaleOrderQueryRequest, SaleOrderFilter>();
+            Mapper.CreateMap<GetSaleOrderQueryRequest, SaleOrderFilter>().ForMember(d => d.ShippingOrderId, opt => opt.MapFrom(s => s.DeliveryOrderId));
 
             Mapper.CreateMap<OrderClone, Order>();
             Mapper.CreateMap<OrderClone, OrderClone>();
@@ -120,6 +120,11 @@ namespace Intime.OPC.WebApi.App_Start
             shippingSaleDto.ForMember(v => v.GoodsOutCode, opt => opt.MapFrom(s => s.Id.ToString()));
 
             Mapper.CreateMap<GetShippingSaleOrderRequest, ShippingOrderFilter>();
+
+            var orderdto = Mapper.CreateMap<OrderModel, OrderDto>();
+            orderdto.ForMember(d => d.Status, opt => opt.MapFrom(s => ((EnumOderStatus)s.Status).GetDescription()));
+            orderdto.ForMember(d => d.IfReceipt,
+                opt => opt.MapFrom(s => s.IfReceipt == null ? String.Empty : (s.IfReceipt.Value ? "是" : "否")));
         }
     }
 }

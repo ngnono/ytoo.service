@@ -8,6 +8,7 @@ using Intime.OPC.Domain.Dto.Financial;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
+using Intime.OPC.Domain.Partials.Models;
 using Intime.OPC.Repository;
 using Intime.OPC.Service.Map;
 
@@ -42,46 +43,53 @@ namespace Intime.OPC.Service.Support
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
             _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
-            var pg=_orderRepository.GetOrder(orderNo, orderSource, dtStart, dtEnd, storeId, brandId,
+            var pg = _orderRepository.GetOrder(orderNo, orderSource, dtStart, dtEnd, storeId, brandId,
                 status, paymentType,
-                outGoodsType, shippingContactPhone, expressDeliveryCode, expressDeliveryCompany,pageIndex,pageSize);
+                outGoodsType, shippingContactPhone, expressDeliveryCode, expressDeliveryCompany, pageIndex, pageSize);
 
-            var r= Mapper.Map<Order, OrderDto>(pg.Result);
+            var r = Mapper.Map<Order, OrderDto>(pg.Result);
             return new PageResult<OrderDto>(r, pg.TotalCount);
         }
 
         public OrderDto GetOrderByOrderNo(string orderNo)
         {
-            var e = _orderRepository.GetOrderByOrderNo(orderNo);
-            if (e==null)
+            //var e = _orderRepository.GetOrderByOrderNo(orderNo);
+            //if (e==null)
+            //{
+            //    throw new OrderNotExistsException(orderNo);
+            //}
+            //return  Mapper.Map<Order, OrderDto>(e);
+            var model = _orderRepository.GetItemByOrderNo(orderNo);
+            if (model == null)
             {
                 throw new OrderNotExistsException(orderNo);
             }
-            return  Mapper.Map<Order, OrderDto>(e);
+
+            return AutoMapper.Mapper.Map<OrderModel, OrderDto>(model);
         }
 
         #region 有关备注
-        
-       
+
+
         public bool AddOrderComment(OPC_OrderComment comment)
         {
 
             return _orderRemarkRepository.Create(comment);
         }
 
-        public PageResult<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime dtStart, DateTime dtEnd,int pageIndex,int pageSize)
+        public PageResult<OrderDto> GetOrderByOderNoTime(string orderNo, DateTime dtStart, DateTime dtEnd, int pageIndex, int pageSize)
         {
             dtStart = dtStart.Date;
             dtEnd = dtEnd.Date.AddDays(1);
             _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
-            var lstOrder = _orderRepository.GetOrderByOderNoTime(orderNo, dtStart, dtEnd,pageIndex,pageSize);
+            var lstOrder = _orderRepository.GetOrderByOderNoTime(orderNo, dtStart, dtEnd, pageIndex, pageSize);
             return Mapper.Map<Order, OrderDto>(lstOrder);
         }
 
-        public PageResult<OrderItemDto> GetOrderItems(string orderNo,int pageIndex,int pageSize)
+        public PageResult<OrderItemDto> GetOrderItems(string orderNo, int pageIndex, int pageSize)
         {
             _orderItemRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
-            var lstOrderItems= _orderItemRepository.GetByOrderNo(orderNo,pageIndex,pageSize);
+            var lstOrderItems = _orderItemRepository.GetByOrderNo(orderNo, pageIndex, pageSize);
 
             return lstOrderItems;
         }
@@ -89,7 +97,7 @@ namespace Intime.OPC.Service.Support
         public PageResult<OrderDto> GetOrderByShippingNo(string shippingNo, int pageIndex, int pageSize)
         {
             _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
-            var lst= _orderRepository.GetOrderByShippingNo(shippingNo,pageIndex,pageSize);
+            var lst = _orderRepository.GetOrderByShippingNo(shippingNo, pageIndex, pageSize);
             return Mapper.Map<Order, OrderDto>(lst);
         }
 
@@ -98,12 +106,7 @@ namespace Intime.OPC.Service.Support
             request.FormatDate();
             _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
             var lst = _orderRepository.GetByReturnGoodsInfo(request);
-               return Mapper.Map<Order, OrderDto>(lst);
-
-            //var lst = _orderRepository.GetOrder(request.OrderNo,"",request.StartDate,request.EndDate,request.StoreID.Value,
-            //    -1,-1,request.PayType,"","","",-1,1,1000);
-                   
-            //return Mapper.Map<Order, OrderDto>(lst.Result);
+            return Mapper.Map<Order, OrderDto>(lst);
         }
 
         public PageResult<OrderDto> GetShippingBackByReturnGoodsInfo(ReturnGoodsInfoRequest request)
@@ -128,8 +131,8 @@ namespace Intime.OPC.Service.Support
         {
             request.FormatDate();
             _orderRepository.SetCurrentUser(_accountService.GetByUserID(UserId));
-            int orderstatus =EnumOderStatus.StockOut.AsID();
-            var lst = _orderRepository.GetByOutOfStockNotify(request,orderstatus);
+            int orderstatus = EnumOderStatus.StockOut.AsID();
+            var lst = _orderRepository.GetByOutOfStockNotify(request, orderstatus);
             return Mapper.Map<Order, OrderDto>(lst);
         }
 
@@ -190,6 +193,6 @@ namespace Intime.OPC.Service.Support
             return _orderRemarkRepository.GetByOrderNo(orderNo);
         }
         #endregion
-    
+
     }
 }

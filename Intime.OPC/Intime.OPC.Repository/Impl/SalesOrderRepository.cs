@@ -213,7 +213,7 @@ namespace Intime.OPC.Repository.Impl
                       //ReceiptContent = v.oo.InvoiceDetail,
 
                       ////OT
-                      //OrderChannelNo = v.ot.ot.TransNo
+                      TransNo = v.ot.ot.TransNo,
 
                       ShippingSaleId = v.ot.o.o.ShippingSaleId
 
@@ -315,7 +315,7 @@ namespace Intime.OPC.Repository.Impl
                             //ReceiptContent = v.oo.InvoiceDetail,
 
                             ////OT
-                            //OrderChannelNo = v.ot.ot.TransNo
+                            TransNo = v.ot.ot.TransNo,
 
                             ShippingSaleId = v.ot.o.o.ShippingSaleId
                         }).FirstOrDefault();

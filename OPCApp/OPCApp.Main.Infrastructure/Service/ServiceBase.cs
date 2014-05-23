@@ -24,6 +24,11 @@ namespace Intime.OPC.Infrastructure.Service
         [Import]
         private IRestClientFactory RestClientFactory { get; set; }
 
+        public string UriName
+        {
+            get { return _uriName; }
+        }
+
         public virtual void Initialize()
         {
             _restClient = RestClientFactory.Create(AppEx.Config.ServiceUrl, AppEx.Config.UserKey, AppEx.Config.Password);

@@ -9,21 +9,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Ploeh.AutoFixture;
 using OPCApp.Domain.Enums;
+using OPCApp.Infrastructure;
 
 namespace Intime.OPC.Modules.Logistics.Services
 {
-    //[Export(typeof(IService<OPC_Sale>))]
+    [Export(typeof(IService<OPC_Sale>))]
     public class SalesOrderService : ServiceBase<OPC_Sale>
     {
+        private IDeliveryOrderService _deliveryOrderService;
         private IService<Order> _orderService;
-        private IService<OPC_ShippingSale> _deliveryOrderService;
         private IService<Counter> _counterService;
 
         [ImportingConstructor]
-        public SalesOrderService(IService<Order> orderService, IService<OPC_ShippingSale> deliveryOrderService, IService<Counter> counterService)
+        public SalesOrderService(IDeliveryOrderService deliveryOrderService, IService<Order> orderService, IService<Counter> counterService)
         {
-            _orderService = orderService;
             _deliveryOrderService = deliveryOrderService;
+            _orderService = orderService;
             _counterService = counterService;
         }
 
@@ -32,10 +33,18 @@ namespace Intime.OPC.Modules.Logistics.Services
             var result = base.Query(queryCriteria);
             if (result.TotalCount > 0)
             {
-                result.Data.ForEach(salesOrder => BuildSalesOrder(salesOrder));
+                result.Data.ForEach(salesOrder => Compose(salesOrder));
             }
 
             return result;
+        }
+
+        public override IList<OPC_Sale> QueryAll(IQueryCriteria queryCriteria)
+        {
+            var salesOrders = base.QueryAll(queryCriteria);
+            salesOrders.ForEach(salesOrder => Compose(salesOrder));
+
+            return salesOrders;
         }
 
         public override OPC_Sale Query(int id)
@@ -46,16 +55,27 @@ namespace Intime.OPC.Modules.Logistics.Services
         public override OPC_Sale Query(string uniqueID)
         {
             var salesOrder = base.Query(uniqueID);
-            BuildSalesOrder(salesOrder);
+            Compose(salesOrder);
 
             return salesOrder;
         }
 
-        private void BuildSalesOrder(OPC_Sale salesOrder)
+        private void Compose(OPC_Sale salesOrder)
         {
-            if (salesOrder.Order == null) salesOrder.Order = _orderService.Query(salesOrder.OrderNo);
-            if (salesOrder.Counter == null && salesOrder.SectionId.HasValue) salesOrder.Counter = _counterService.Query(salesOrder.SectionId.Value);
-            if (salesOrder.DeliveryOrder == null) salesOrder.DeliveryOrder = _deliveryOrderService.Query(salesOrder.SaleOrderNo);
+            if (salesOrder.Order == null)
+            { 
+                salesOrder.Order = _orderService.Query(salesOrder.OrderNo);
+            }
+            if (salesOrder.Counter == null && salesOrder.SectionId.HasValue)
+            { 
+                salesOrder.Counter = _counterService.Query(salesOrder.SectionId.Value);
+            }
+            if (salesOrder.DeliveryOrder == null 
+                && salesOrder.ShippingSaleId.HasValue 
+                && salesOrder.ShippingSaleId.Value >0)
+            { 
+                salesOrder.DeliveryOrder = _deliveryOrderService.Query(salesOrder.ShippingSaleId.Value);
+            }
         }
     }
 }
