@@ -1461,7 +1461,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>12.08216cm</Top>
+        <Top>13.03466cm</Top>
         <Left>0.08819cm</Left>
         <Height>0.6cm</Height>
         <Width>2.62864cm</Width>
@@ -1532,7 +1532,7 @@
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>9.92966cm</Top>
         <Left>0.05292cm</Left>
-        <Height>1.97611cm</Height>
+        <Height>2.53173cm</Height>
         <Width>2.62864cm</Width>
         <ZIndex>22</ZIndex>
         <Style>
@@ -2312,7 +2312,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>9.19913cm</Top>
+        <Top>9.16385cm</Top>
         <Left>2.89322cm</Left>
         <Height>0.6cm</Height>
         <Width>7.47702cm</Width>
@@ -2342,7 +2342,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>12.08216cm</Top>
+        <Top>13.03466cm</Top>
         <Left>2.89322cm</Left>
         <Height>0.6cm</Height>
         <Width>20.88044cm</Width>
@@ -2381,9 +2381,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>9.92966cm</Top>
-        <Left>2.89322cm</Left>
-        <Height>1.97611cm</Height>
+        <Top>9.75327cm</Top>
+        <Left>2.71684cm</Left>
+        <Height>2.53173cm</Height>
         <Width>20.88044cm</Width>
         <ZIndex>50</ZIndex>
         <Style>
@@ -2396,24 +2396,10 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Rectangle Name="Rectangle1">
-        <ReportItems>
-          <Rectangle Name="Rectangle2">
-            <KeepTogether>true</KeepTogether>
-            <Top>0cm</Top>
-            <Left>0cm</Left>
-            <Height>0.43625cm</Height>
-            <Width>0.50208cm</Width>
-            <Style>
-              <Border>
-                <Style>Solid</Style>
-              </Border>
-            </Style>
-          </Rectangle>
-        </ReportItems>
+      <Rectangle Name="Rectangle5">
         <KeepTogether>true</KeepTogether>
-        <Top>9.92966cm</Top>
-        <Left>3.24247cm</Left>
+        <Top>11.77198cm</Top>
+        <Left>3.25305cm</Left>
         <Height>0.43625cm</Height>
         <Width>0.50208cm</Width>
         <ZIndex>51</ZIndex>
@@ -2423,9 +2409,185 @@
           </Border>
         </Style>
       </Rectangle>
-      <Rectangle Name="Rectangle3">
+      <Textbox Name="Textbox3">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>是否收回商品　　收货人签字：</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox3</rd:DefaultName>
+        <Top>3.9675in</Top>
+        <Left>1.70708in</Left>
+        <Height>0.25in</Height>
+        <Width>2.70513in</Width>
+        <ZIndex>52</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox44">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>是否扣除赠品价值，扣除赠品金额</Value>
+                <Style />
+              </TextRun>
+              <TextRun>
+                <Value>              元</Value>
+                <Style>
+                  <TextDecoration>Underline</TextDecoration>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox3</rd:DefaultName>
+        <Top>4.28694in</Top>
+        <Left>1.70708in</Left>
+        <Height>0.25in</Height>
+        <Width>2.70513in</Width>
+        <ZIndex>53</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox47">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>是否收回赠品　导购员签字：　　　　　收银员签字：</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox3</rd:DefaultName>
+        <Top>3.93486in</Top>
+        <Left>4.9914in</Left>
+        <Height>0.25in</Height>
+        <Width>4.19792in</Width>
+        <ZIndex>54</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Rectangle Name="Rectangle4">
+        <KeepTogether>true</KeepTogether>
+        <Top>10.96059cm</Top>
+        <Left>3.25305cm</Left>
+        <Height>0.43625cm</Height>
+        <Width>0.50208cm</Width>
+        <ZIndex>55</ZIndex>
+        <Style>
+          <Border>
+            <Style>Solid</Style>
+          </Border>
+        </Style>
+      </Rectangle>
+      <Rectangle Name="Rectangle6">
+        <KeepTogether>true</KeepTogether>
+        <Top>10.1933cm</Top>
+        <Left>3.31655cm</Left>
+        <Height>0.43625cm</Height>
+        <Width>0.50208cm</Width>
+        <ZIndex>56</ZIndex>
+        <Style>
+          <Border>
+            <Style>Solid</Style>
+          </Border>
+        </Style>
+      </Rectangle>
+      <Textbox Name="Textbox57">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>是否扣除贴补邮费，扣除邮费金额</Value>
+                <Style />
+              </TextRun>
+              <TextRun>
+                <Value xml:space="preserve">              </Value>
+                <Style>
+                  <TextDecoration>Underline</TextDecoration>
+                </Style>
+              </TextRun>
+              <TextRun>
+                <Value>元，或者补贴邮费</Value>
+                <Style>
+                  <TextDecoration>None</TextDecoration>
+                </Style>
+              </TextRun>
+              <TextRun>
+                <Value xml:space="preserve">　　　</Value>
+                <Style>
+                  <TextDecoration>Underline</TextDecoration>
+                </Style>
+              </TextRun>
+              <TextRun>
+                <Value>元　　</Value>
+                <Style>
+                  <TextDecoration>None</TextDecoration>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox3</rd:DefaultName>
+        <Top>4.57861in</Top>
+        <Left>1.70708in</Left>
+        <Height>0.25in</Height>
+        <Width>4.50721in</Width>
+        <ZIndex>57</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Rectangle Name="Rectangle7">
         <ReportItems>
-          <Rectangle Name="Rectangle4">
+          <Rectangle Name="Rectangle8">
             <KeepTogether>true</KeepTogether>
             <Top>0cm</Top>
             <Left>0cm</Left>
@@ -2439,32 +2601,62 @@
           </Rectangle>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>10.6687cm</Top>
-        <Left>3.24247cm</Left>
+        <Top>10.11392cm</Top>
+        <Left>11.75676cm</Left>
         <Height>0.43625cm</Height>
         <Width>0.50208cm</Width>
-        <ZIndex>52</ZIndex>
+        <ZIndex>58</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
           </Border>
         </Style>
       </Rectangle>
-      <Rectangle Name="Rectangle5">
+      <Rectangle Name="Rectangle9">
         <KeepTogether>true</KeepTogether>
-        <Top>11.28134cm</Top>
-        <Left>3.24247cm</Left>
+        <Top>10.96059cm</Top>
+        <Left>11.75676cm</Left>
         <Height>0.43625cm</Height>
         <Width>0.50208cm</Width>
-        <ZIndex>53</ZIndex>
+        <ZIndex>59</ZIndex>
         <Style>
           <Border>
             <Style>Solid</Style>
           </Border>
         </Style>
       </Rectangle>
+      <Textbox Name="Textbox58">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>是否需要收银退款操作　　　　　营管签章：</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox3</rd:DefaultName>
+        <Top>4.28694in</Top>
+        <Left>4.9914in</Left>
+        <Height>0.25in</Height>
+        <Width>4.19792in</Width>
+        <ZIndex>60</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>4.99298in</Height>
+    <Height>5.48256in</Height>
     <Style />
   </Body>
   <Width>9.35971in</Width>
