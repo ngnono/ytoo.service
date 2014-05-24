@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using AutoMapper;
-using Intime.OPC.Domain;
+﻿using Intime.OPC.Domain;
 using Intime.OPC.Domain.Dto;
 using Intime.OPC.Domain.Dto.Custom;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Exception;
 using Intime.OPC.Domain.Models;
 using Intime.OPC.Repository;
-using Intime.OPC.Repository.Base;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Transactions;
 
 namespace Intime.OPC.Service.Support
@@ -241,15 +238,15 @@ namespace Intime.OPC.Service.Support
             var saleRma = rep.GetByRmaNo(rmaNo);
             if (saleRma == null)
             {
-                throw new Exception("快递单不存在,退货单号:" + rmaNo);
+                throw new OpcExceptioin("快递单不存在,退货单号:" + rmaNo);
             }
             if (saleRma.RMAStatus != EnumReturnGoodsStatus.NoProcess.AsID())
             {
-                throw new Exception("快递单已经确认过，退货单号:" + rmaNo);
+                throw new OpcExceptioin("快递单已经确认过，退货单号:" + rmaNo);
             }
             if (saleRma.Status > EnumRMAStatus.NoDelivery.AsID())
             {
-                throw new Exception("快递单已经确认过，退货单号:" + rmaNo);
+                throw new OpcExceptioin("快递单已经确认过，退货单号:" + rmaNo);
             }
             saleRma.RMAStatus = EnumReturnGoodsStatus.ServiceApprove.AsID();
             saleRma.ServiceAgreeTime = DateTime.Now;
@@ -258,20 +255,18 @@ namespace Intime.OPC.Service.Support
 
         public void ShippingReceiveGoods(string rmaNo)
         {
-            ;
-
             var saleRma = _rmaRepository.GetByRmaNo2(rmaNo);
             if (saleRma == null)
             {
-                throw new Exception("快递单不存在,退货单号:" + rmaNo);
+                throw new OpcExceptioin("快递单不存在,退货单号:" + rmaNo);
             }
             if (saleRma.RMAStatus < (int)EnumReturnGoodsStatus.NoProcess)
             {
-                throw new Exception("客服未确认,退货单号:" + rmaNo);
+                throw new OpcExceptioin("客服未确认,退货单号:" + rmaNo);
             }
             if (saleRma.Status > (int)EnumRMAStatus.ShipNoReceive)
             {
-                throw new Exception("该退货单已经确认或正在审核,退货单号:" + rmaNo);
+                throw new OpcExceptioin("该退货单已经确认或正在审核,退货单号:" + rmaNo);
             }
 
             saleRma.Status = EnumRMAStatus.ShipReceive.AsID();
@@ -523,7 +518,7 @@ namespace Intime.OPC.Service.Support
                 RMACashStatus = EnumRMACashStatus.NoCash.AsID(),
                 SectionId = OpcSale.SectionId,
                 Count = this.Details.Sum(x => x.ReturnCount),
-                RMAStatus = RefundAmount - ComputeAccount() > 0
+                RMAStatus = RefundAmount - fee > 0
                     ? EnumReturnGoodsStatus.CompensateVerify.AsID()
                     : EnumReturnGoodsStatus.ServiceApprove.AsID(),
 

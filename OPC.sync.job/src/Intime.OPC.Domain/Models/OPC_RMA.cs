@@ -41,7 +41,7 @@ namespace Intime.OPC.Domain.Models
         public System.DateTime UpdatedDate { get; set; }
         public int UpdatedUser { get; set; }
 
-        public int StoreId { get; set; }
+        public int? StoreId { get; set; }
 
         public string RmaCashNum { get; set; }
 
@@ -67,9 +67,9 @@ namespace Intime.OPC.Domain.Models
         /// </summary>
         /// <value>The rma status.</value>
         public int RMAStatus { get; set; }
-        public int RMACashStatus { get; set; }
+        public Nullable<int> RMACashStatus { get; set; }
         public string RMACashNum { get; set; }
-        public DateTime RMACashDate { get; set; }
+        public Nullable<DateTime> RMACashDate { get; set; }
         /// <summary>
         /// ÊµÍË×Ü½ð¶î
         /// </summary>

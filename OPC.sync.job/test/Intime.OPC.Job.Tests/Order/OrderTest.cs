@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Intime.O2O.ApiClient.Yintai;
 using Intime.OPC.Job.Order.OrderStatusSync;
 using Intime.OPC.Job.RMASync;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -32,6 +33,16 @@ namespace Intime.OPC.Job.Tests.Order
             var job = new RMA2YintaiJob();
             job.Execute(null);
 
+        }
+
+        [TestMethod]
+        public void TestYintaiApi()
+        {
+            var dict = new Dictionary<string, string> {};
+            //{"channelId", "1000000"}
+            var client = new YintaiApiClient();
+            var rsp = client.Post(dict, "Yintai.OpenApi.Item.GetVirtualCategoryByChannel");
+            Assert.IsNotNull(rsp);
         }
     }
 }
