@@ -44,12 +44,12 @@ namespace OPCApp.Customer.ViewModels
                 return;
             }
 
-            if (RmaPost.RealRMASumMoney<0)
-            {
-                MessageBox.Show("赔偿金额不能小于零", "提示");
-                return;
+            //if (RmaPost.RealRMASumMoney<0)
+            //{
+            //    MessageBox.Show("赔偿金额不能小于零", "提示");
+            //    return;
 
-            }
+            //}
 
             List<KeyValuePair<int, int>> list =
                 selectOrder.Select(
