@@ -108,6 +108,7 @@ namespace Intime.OPC.WebApi.Controllers
 
         // [ActionName("list")]/section?page=1,2&sortorder=0&prekeyname=11&storeid=1&status=2
         [Route("")]
+        [HttpGet]
         public IHttpActionResult GetList([FromUri]SectionFilter filter, [UserId] int userId)
         {
             return GetSectionList(filter, userId);

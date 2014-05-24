@@ -19,8 +19,6 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal" Background="LightGray">
-
-
                 <Button Background="LightGray" Width="Auto" Command="{Binding CommandSearch}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Image/查询.png" Stretch="None" />
@@ -122,7 +120,7 @@
             <Label Content="退货明细" />
             <DataGrid ItemsSource="{Binding RmaDetailLs, Mode=TwoWay}" AutoGenerateColumns="False" IsReadOnly="True"
                       RenderTransformOrigin="0.5,0.5"
-                      Margin="0,0,0,-78">
+                      Margin="0,0,0,-78" Height="70">
                 <DataGrid.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform />
