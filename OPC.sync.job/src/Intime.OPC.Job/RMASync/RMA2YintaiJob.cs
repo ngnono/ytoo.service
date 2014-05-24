@@ -1,4 +1,5 @@
-﻿using Common.Logging;
+﻿using System.Web;
+using Common.Logging;
 using Intime.O2O.ApiClient.Yintai;
 using Intime.OPC.Domain.Enums;
 using Intime.OPC.Domain.Models;
@@ -7,6 +8,7 @@ using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Quartz.Impl.Matchers;
 
 namespace Intime.OPC.Job.RMASync
 {
@@ -14,14 +16,14 @@ namespace Intime.OPC.Job.RMASync
     public class RMA2YintaiJob : IJob
     {
         private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
-        private DateTime _benchTime = DateTime.Now.AddMinutes(-20);
+        //private DateTime _benchTime = DateTime.Now.AddDays(-20);
         public void Execute(IJobExecutionContext context)
         {
-#if !DEBUG
-            JobDataMap data = context.JobDetail.JobDataMap;
-            var interval = data.ContainsKey("intervalofmins") ? data.GetInt("intervalofmins") : 60;
-            _benchTime = DateTime.Now.AddMinutes(-interval);
-#endif
+//#if !DEBUG
+//            JobDataMap data = context.JobDetail.JobDataMap;
+//            var interval = data.ContainsKey("intervalofmins") ? data.GetInt("intervalofmins") : 60;
+//            _benchTime = DateTime.Now.AddMinutes(-interval);
+//#endif
 
             var totalCount = 0;
             DoQuery(skus =>
@@ -35,7 +37,7 @@ namespace Intime.OPC.Job.RMASync
             {
                 List<OPC_RMA> oneTimeList = null;
                 DoQuery(r => oneTimeList = r.OrderBy(t => t.RMANo).Skip(cursor).Take(size).ToList(),
-                    NotificationStatus.Create);
+                    NotificationStatus.Sync2Yintai);
                 foreach (var saleRMA in oneTimeList)
                 {
                     try
@@ -55,30 +57,45 @@ namespace Intime.OPC.Job.RMASync
         {
             using (var context = new YintaiHZhouContext())
             {
-                var linq =
-                    context.OPC_RMADetail.Where(r => r.RMANo == rma.RMANo).Select(r => new
+                var linq = from detail in context.OPC_RMADetail
+                    from item in context.OrderItems
+                    from stock in context.Inventories
+                    where
+                        detail.OrderItemId == item.Id && item.ProductId == stock.ProductId &&
+                        item.ColorValueId == stock.PColorId && item.SizeValueId == stock.PSizeId && detail.RMANo == rma.RMANo
+                    select new
                     {
-                        ItemCode = r.StockId,
-                        RMAQuantity = r.BackCount,
-                        Reason = rma.RMAReason
-                    });
+                        ItemCode = stock.Id,
+                        RMAQuantity = detail.BackCount,
+                        rma.Reason
+                    };
+                    
 
                 dynamic data = new
                 {
                     OPCSONumber = rma.OrderNo,
-                    Status = rma.Status == (int)EnumRMAStatus.ShipVerifyNotPass ? 300 : 700,
+                    Status = rma.Status == (int)EnumRMAStatus.ShipVerifyNotPass ? 300 : 800,
                     RMAType = 1,
                     OperaterFrom = 5,
                     OPCRMATrancaction = linq,
                     CacelReason = string.Empty,
+                    rma.Reason, 
                 };
+
+                var parameter = JsonConvert.SerializeObject(data);
+
                 var rmaInfos = new Dictionary<string, string>
                 {
-                    {"Data", JsonConvert.SerializeObject(data)},
+                    {"Data", parameter},
                 };
-                Logger.ErrorFormat("推送退货订单 {0} 商品明细 {1}");
+                
                 var client = new YintaiApiClient();
                 var rsp = client.Post(rmaInfos, "Yintai.OpenApi.Vendor.AddRMAByOPC");
+                if (rsp == null)
+                {
+                    Logger.ErrorFormat("调用银泰网接口返回NULL 退货单号： {0} 参数明细 {1}", rma.RMANo, parameter);
+                    return;
+                }
                 if (rsp.IsSuccessful)
                 {
                     context.OPC_RMANotificationLogs.Add(new OPC_RMANotificationLog
@@ -105,7 +122,6 @@ namespace Intime.OPC.Job.RMASync
                 var rmas =
                     context.OPC_RMA.Where(
                         t => context.Map4Order.Any(m => m.OrderNo == t.OrderNo && m.Channel == "yintai") &&
-                            t.UpdatedDate > _benchTime &&
                             (!string.IsNullOrEmpty(t.RMACashNum) || t.Status == (int)EnumRMAStatus.ShipVerifyNotPass) &&
                             !context.OPC_RMANotificationLogs.Any(
                                 x => x.RMANo == t.RMANo && x.Status == (int)status));

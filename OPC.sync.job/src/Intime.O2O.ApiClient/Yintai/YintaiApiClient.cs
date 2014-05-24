@@ -33,7 +33,7 @@ namespace Intime.O2O.ApiClient.Yintai
         public YintaiApiClient(string baseUrl, string appKey, string appSecret, string clientName, string clientId)
         {
             _currentDateTime = DateTime.Now.ToString("yyyymmddHHmmss");
-            requestParamDictionary = new Dictionary<string, string>(StringComparer.Ordinal);
+            requestParamDictionary = new SortedDictionary<string, string>(StringComparer.Ordinal);
             _url = baseUrl;
             _clientId = clientId;
             _clientName = clientName;
@@ -101,7 +101,7 @@ namespace Intime.O2O.ApiClient.Yintai
                 {"secrectKey", _appSecret},
                 {"TimeReq", _currentDateTime}
             };
-            return sortedParams.Keys.Aggregate(sb, (s, e) => s.AppendFormat("{0}={1}&", e.ToUpper(), HttpUtility.UrlEncode(sortedParams[e])),
+            return sortedParams.Keys.Aggregate(sb, (s, e) => s.AppendFormat("{0}={1}&", e.ToUpper(), sortedParams[e]),
                 s => s.ToString().TrimEnd('&'));
         }
     }
