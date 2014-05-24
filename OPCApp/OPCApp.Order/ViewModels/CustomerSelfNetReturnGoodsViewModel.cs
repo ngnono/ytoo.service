@@ -37,6 +37,20 @@ namespace OPCApp.Customer.ViewModels
                 MessageBox.Show("请选择销售单明细", "提示");
                 return;
             }
+            //原因必填
+            if (string.Empty == RmaPost.Remark)
+            {
+                MessageBox.Show("退货备注不能为空", "提示");
+                return;
+            }
+
+            if (RmaPost.RealRMASumMoney<0)
+            {
+                MessageBox.Show("赔偿金额不能小于零", "提示");
+                return;
+
+            }
+
             List<KeyValuePair<int, int>> list =
                 selectOrder.Select(
                     e => new KeyValuePair<int, int>(e.Id, e.NeedReturnCount)).ToList<KeyValuePair<int, int>>();
