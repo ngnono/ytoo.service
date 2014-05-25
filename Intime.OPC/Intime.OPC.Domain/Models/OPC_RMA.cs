@@ -67,8 +67,8 @@ namespace Intime.OPC.Domain.Models
         /// 退货状态
         /// </summary>
         /// <value>The rma status.</value>
-        public int RMAStatus { get; set; }
-        public int RMACashStatus { get; set; }
+        public int? RMAStatus { get; set; }
+        public int? RMACashStatus { get; set; }
         /// <summary>
         /// 实退总金额
         /// </summary>

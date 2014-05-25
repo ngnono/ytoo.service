@@ -33,7 +33,7 @@ namespace Intime.OPC.Job.Product.ProductSync.Supports.Intime.Jobs
 
         public void Sync(DateTime benchDate, DateTime lastUpdateDateTime)
         {
-            var pageIndex = 13;
+            var pageIndex = 1;
 
             while (true)
             {
