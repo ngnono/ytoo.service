@@ -50,8 +50,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                 body.From(Skip(pageIndex, pageSize))
                     .Size(pageSize)
                     .SortAscending(p => p.UpdatedDate)
-                    .Query(q => q.Range(p => p.GreaterOrEquals(lastUpdate)
-                    .OnField(f => f.UpdatedDate))
+                    .Query(q =>
+                        q.Term(p => p.IsSystem, true) &
+                        q.Range(p => p.GreaterOrEquals(lastUpdate).OnField(f => f.UpdatedDate)
+                    )
                 ));
 
             // ===========================================================================
