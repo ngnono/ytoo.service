@@ -44,6 +44,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     name = p.OI.ProductName,
                     productdesc = p.OI.ProductDesc,
                     price = p.OI.ItemPrice,
+                    sku_code = p.OI.StoreItemNo,
                     image = p.R==null?string.Empty:p.R.Name.Image320Url()
                 })
             });

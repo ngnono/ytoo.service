@@ -45,7 +45,6 @@ namespace com.intime.fashion.common.Tencent
 
        
     }
-    [XmlRoot("record")]
     public class BatchTransferItem
     {
         [XmlElement("serial")]

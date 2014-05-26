@@ -133,7 +133,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                        .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Status == (int)DataStatus.Normal),
                                     o => o.Id,
                                     i => i.SourceId,
-                                    (o, i) => new { P = o, R = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() });
+                                    (o, i) => new { P = o, R = i.OrderByDescending(ir => ir.SortOrder) });
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
             linq = linq.OrderByDescending(l => l.P.CreatedDate).Skip(skipCount).Take(request.Pagesize);
@@ -142,7 +142,10 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
 
                 if (l.R == null)
                     return;
-                o.ImageUrl = l.R.Name;
+                o.Images = l.R.Select(pr => new IMSSelfImageResponse() { 
+                     Id = pr.Id,
+                     Name = pr.Name
+                });
             }));
             var response = new PagerInfoResponse<IMSProductSelfDetailResponse>(request.PagerRequest, totalCount)
             {
@@ -216,7 +219,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                                                                     o => o.BrandId,
                                                                     i => i.Id,
                                                                     (o, i) => new { AB = o, B = i }),
-                                        o => o.StoreId,
+                                        o => o.SectionId,
                                         i => i.AB.SectionId,
                                         (o, i) => i).FirstOrDefault();
             List<dynamic> brands = null;
@@ -272,7 +275,10 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                                              o => o.Id,
                                              i => i.ProductId,
                                              (o, i) => o)
-                                         .Join(Context.Set<InventoryEntity>(),
+                                         .Join(Context.Set<InventoryEntity>().Join(Context.Set<ProductPropertyValueEntity>().Where(ppv=>ppv.Status==(int)DataStatus.Normal),
+                                                                                    o=>o.PSizeId,
+                                                                                    i=>i.Id,
+                                                                                    (o,i)=>o),
                                                     o => o.Id,
                                                     i => i.ProductId,
                                                     (o, i) => i);
@@ -381,7 +387,8 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                 return this.RenderError(r => r.Message = "银行卡号不能为空");
             if (string.IsNullOrEmpty(request.User_Name))
                 return this.RenderError(r => r.Message = "银行帐户名不能为空");
-
+            if (request.Amount <= ConfigManager.BANK_TRANSFER_FEE)
+                return this.RenderError(r => r.Message = string.Format("提现最小金额须大于{0}",ConfigManager.BANK_TRANSFER_FEE));
             var incomeAccountEntity = Context.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == authuid).FirstOrDefault();
             if (incomeAccountEntity == null)
                 return this.RenderError(r => r.Message = "账户内可提现金额不足！");
@@ -414,9 +421,8 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                     Status = (int)AssociateIncomeRequestStatus.Requesting,
                     BankAccountName = request.User_Name,
                     UpdateDate = DateTime.Now,
-                    UserId = authuid
-
-
+                    UserId = authuid,
+                    TransferFee = ConfigManager.BANK_TRANSFER_FEE
                 });
 
                 incomeAccountEntity.AvailableAmount -= request.Amount;

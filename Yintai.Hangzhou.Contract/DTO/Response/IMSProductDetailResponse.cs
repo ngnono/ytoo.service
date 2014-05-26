@@ -38,42 +38,60 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         {
             get
             {
-                return ImageUrl.Image320Url();
+                if (Images != null && Images.Count() > 0)
+                    return Images.First().Url;
+                return string.Empty;
             }
         }
         [DataMember(Name="is_online")]
         public bool IsOnline { get; set; }
         [DataMember(Name="image_id")]
-        public int Image_Id { get; set; }
+        public int Image_Id { get {
+            if (Images != null && Images.Count() > 0)
+                return Images.First().Id;
+            return 0;
+        } }
         [DataMember(Name = "unitprice")]
         public decimal UnitPrice { get; set; }
+        [DataMember(Name="images")]
+        public IEnumerable<IMSSelfImageResponse> Images { get; set; }
 
-        [IgnoreDataMember]
-        public string ImageUrl { get; set; }
     }
 
     [DataContract]
     public class IMSProductSelfDetailResponse : IMSProductDetailResponse
     {
-        [DataMember(Name = "size")]
+        [DataMember(Name = "sizes")]
         public IEnumerable<IMSProductSizeResponse> Sizes { get; set; }
         [DataMember(Name="sales_code")]
         public string SalesCode { get; set; }
-        [DataMember(Name = "size_type")]
-        public int SizeType { get; set; }
-       
-        [DataMember(Name="size_str")]
-        public string Size_Str { get; set; }
-
+        [DataMember(Name="color_str")]
+        public string ColorStr { get; set; }
+      
     }
     [DataContract]
     public class IMSProductSizeResponse
     {
 
-        [DataMember(Name = "size_id")]
+        [DataMember(Name = "id")]
         public int SizeValueId { get; set; }
-        [DataMember(Name = "size_name")]
+        [DataMember(Name = "name")]
         public string SizeName { get; set; }
+        [DataMember(Name="inventory")]
+        public int Inventory { get; set; }
+    }
+    [DataContract]
+    public class IMSSelfImageResponse
+    {
+        [DataMember(Name="id")]
+        public int Id { get; set; }
+        [DataMember(Name = "url")]
+        public string Url { get {
+            return Name.Image320Url();
+        } }
+
+        [IgnoreDataMember]
+        public string Name { get; set; }
     }
 }
 

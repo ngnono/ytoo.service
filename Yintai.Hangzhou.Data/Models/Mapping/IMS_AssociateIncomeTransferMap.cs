@@ -19,7 +19,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(200);
 
             this.Property(t => t.QueryRetCode)
-                .HasMaxLength(10);
+                .HasMaxLength(50);
 
             this.Property(t => t.QueryRetMsg)
                 .HasMaxLength(200);

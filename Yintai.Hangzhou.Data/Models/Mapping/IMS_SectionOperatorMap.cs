@@ -20,6 +20,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.Name).HasColumnName("Name");
             this.Property(t => t.SectionId).HasColumnName("SectionId");
+            this.Property(t => t.OperatorCode).HasColumnName("OperatorCode");
 		Init();
         }
 

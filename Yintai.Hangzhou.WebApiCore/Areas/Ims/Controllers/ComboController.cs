@@ -72,7 +72,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     OnlineDate = DateTime.Now,
                     Price = products.Sum(p => p.Price),
                     Private2Name = request.Private_To ?? string.Empty,
-                    Status = canOnline?(int)DataStatus.Normal:(int)DataStatus.Default,
+                    Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
                     UpdateUser = authuid,
                     UserId = authuid,
@@ -98,7 +98,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     CreateUser = authuid,
                     ItemId = comboEntity.Id,
                     ItemType = (int)ComboType.Product,
-                    Status = canOnline ? (int)DataStatus.Normal : (int)DataStatus.Default,
+                    Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
                     UpdateUser = authuid
                 });
@@ -112,6 +112,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     _resourceRepo.Update(resource);
                 }
 
+                //step4: offline one other combo
+                if (!canOnline)
+                {
+                    ComboLogic.OfflineComboOne(authuid);
+                }
                 ts.Complete();
                 return this.RenderSuccess<dynamic>(c => c.Data = new
                 {
@@ -243,7 +248,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image && r.Status == (int)DataStatus.Normal),
                                         o => o.Id,
                                         i => i.SourceId,
-                                        (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() })
+                                        (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder)})
                             .GroupJoin(Context.Set<InventoryEntity>(), o => o.P.Id, i => i.ProductId, (o, i) => new
                             {
                                 P = o.P,
@@ -252,7 +257,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             })
                             .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po =>
                             {
-                                po.ImageUrl = p.PR == null ? string.Empty : p.PR.Name;
+                                po.Images = p.PR.Select(pr => new IMSSelfImageResponse() { 
+                                     Id = pr.Id,
+                                     Name = pr.Name
+                                }); ;
                                 po.IsOnline = p.P.Status==(int)DataStatus.Normal && (p.P.Is4Sale??false)==true && p.PI!=null && p.PI.Amount>0;
                             }));
                 oc.Is_Owner = authuid == comboEntity.C.UserId;

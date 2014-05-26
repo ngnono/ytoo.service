@@ -75,11 +75,11 @@ namespace com.intime.jobscheduler.Job.Income
                                 bool isSuccess = false;
                                 if (incomeIsAvail)
                                 {
-                                   isSuccess= AssociateIncomeLogic.Avail(order.SourceNo);
+                                   isSuccess= AssociateIncomeLogic.Avail(order);
                                 }
                                 else
                                 {
-                                    isSuccess =AssociateIncomeLogic.Void(order.SourceNo);
+                                    isSuccess =AssociateIncomeLogic.Void(order);
                                 }
 
                                 if (isSuccess)
