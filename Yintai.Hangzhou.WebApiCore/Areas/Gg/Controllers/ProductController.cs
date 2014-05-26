@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Nest;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-
-using Nest;
+using Yintai.Hangzhou.Service.Logic;
 using Yintai.Hangzhou.WebApiCore.Areas.Gg.ViewModels;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
@@ -156,21 +155,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         /// <returns>ES搜索客户端</returns>
         private IElasticClient GetDefaultElasticClient()
         {
-            var esUrl = GetAppSetting("es.connection.url");
-
-            if (string.IsNullOrWhiteSpace(esUrl))
-            {
-                throw new ConfigurationErrorsException("please check AppSetting config for:es.connection.url");
-            }
-
-            return new ElasticClient(new ConnectionSettings(new Uri(esUrl))
-                 .SetDefaultIndex("intime")
-                 .SetMaximumAsyncConnections(10));
-        }
-
-        private string GetAppSetting(string key, string defaultValue = "")
-        {
-            return ConfigurationManager.AppSettings[key] ?? defaultValue;
+            return SearchLogic.GetClient();
         }
 
         private int Skip(int pageIndex, int pageSize)
