@@ -28,7 +28,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(50);
 
             this.Property(t => t.TransferErrorCode)
-                .HasMaxLength(10);
+                .HasMaxLength(50);
 
             this.Property(t => t.TransferErrorMsg)
                 .HasMaxLength(200);
@@ -47,6 +47,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.BankAccountName).HasColumnName("BankAccountName");
             this.Property(t => t.TransferErrorCode).HasColumnName("TransferErrorCode");
             this.Property(t => t.TransferErrorMsg).HasColumnName("TransferErrorMsg");
+            this.Property(t => t.TransferFee).HasColumnName("TransferFee");
 		Init();
         }
 

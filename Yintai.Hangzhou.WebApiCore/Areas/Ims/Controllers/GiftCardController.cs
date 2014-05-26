@@ -67,15 +67,27 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone);
             if (cardAccount == null)
             {
-                var user = _customerRepo.Find(x => x.Id == authuid);
-
-                cardAccount = _userRepo.Insert(new IMS_GiftCardUserEntity()
+                if (IsPhoneBinded(phone))
                 {
-                    UserId = authuid,
-                    CreateDate = DateTime.Now,
-                    GiftCardAccount = phone,
-                    Name = user.Nickname
-                });
+                    cardAccount = _userRepo.Find(x => x.UserId == authuid);
+
+                    if (cardAccount == null)
+                    {
+                        var user = _customerRepo.Find(x => x.Id == authuid);
+
+                        cardAccount = _userRepo.Insert(new IMS_GiftCardUserEntity()
+                        {
+                            UserId = authuid,
+                            CreateDate = DateTime.Now,
+                            GiftCardAccount = phone,
+                            Name = user.Nickname
+                        });
+                    }
+                }
+                else
+                {
+                    return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = false });
+                }
             }
             return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = cardAccount != null });
         }
@@ -335,16 +347,20 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
                         if (!rsp.Status)
                         {
+                            Logger.Error("充值失败：信息部返回错误：");
+                            Logger.Error(rsp.ErrorMessage);
                             return this.RenderError(r => r.Message = rsp.ErrorMessage);
                         }
+                        Logger.Error(string.Format("充值成功，充值卡余额:{0}", rsp.Balance));
                         ts.Complete();
                     }
                     catch (Exception ex)
                     {
+                        Logger.Error(string.Format("调用信息部接口充值时抛出异常: 卡号:({0})",order.No));
                         Logger.Error(ex);
                         return this.RenderError(r => r.Message = ex.Message);
                     }
-                    
+
                 }
 
                 return this.RenderSuccess<dynamic>(null);

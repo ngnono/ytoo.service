@@ -272,7 +272,10 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                                              o => o.Id,
                                              i => i.ProductId,
                                              (o, i) => o)
-                                         .Join(Context.Set<InventoryEntity>(),
+                                         .Join(Context.Set<InventoryEntity>().Join(Context.Set<ProductPropertyValueEntity>().Where(ppv=>ppv.Status==(int)DataStatus.Normal),
+                                                                                    o=>o.PSizeId,
+                                                                                    i=>i.Id,
+                                                                                    (o,i)=>o),
                                                     o => o.Id,
                                                     i => i.ProductId,
                                                     (o, i) => i);
@@ -381,7 +384,8 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                 return this.RenderError(r => r.Message = "银行卡号不能为空");
             if (string.IsNullOrEmpty(request.User_Name))
                 return this.RenderError(r => r.Message = "银行帐户名不能为空");
-
+            if (request.Amount <= ConfigManager.BANK_TRANSFER_FEE)
+                return this.RenderError(r => r.Message = string.Format("提现最小金额须大于{0}",ConfigManager.BANK_TRANSFER_FEE));
             var incomeAccountEntity = Context.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == authuid).FirstOrDefault();
             if (incomeAccountEntity == null)
                 return this.RenderError(r => r.Message = "账户内可提现金额不足！");
@@ -414,9 +418,8 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                     Status = (int)AssociateIncomeRequestStatus.Requesting,
                     BankAccountName = request.User_Name,
                     UpdateDate = DateTime.Now,
-                    UserId = authuid
-
-
+                    UserId = authuid,
+                    TransferFee = ConfigManager.BANK_TRANSFER_FEE
                 });
 
                 incomeAccountEntity.AvailableAmount -= request.Amount;

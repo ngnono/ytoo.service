@@ -10,6 +10,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string BankName { get; set; }
         public string BankNo { get; set; }
         public decimal Amount { get; set; }
+        public decimal? TransferFee { get; set; }
         public int Status { get; set; }
         public System.DateTime CreateDate { get; set; }
         public System.DateTime UpdateDate { get; set; }

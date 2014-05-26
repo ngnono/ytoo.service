@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using com.intime.jobscheduler.Job.Erp;
 using com.intime.jobscheduler.Job.Wgw;
 using Quartz;
+using System.Xml.Serialization;
 
 namespace com.intime.jobscheduler
 {
@@ -27,7 +28,7 @@ namespace com.intime.jobscheduler
             };
             ServiceBase.Run(ServicesToRun);
 #else
-            
+
             new MainJobService().ConsoleDebug();
 
             Console.ReadLine();

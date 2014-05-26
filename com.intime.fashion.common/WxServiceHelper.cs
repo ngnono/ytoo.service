@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml;
 using System.Xml.Serialization;
 using Yintai.Architecture.Common.Logger;
@@ -87,20 +88,38 @@ namespace com.intime.fashion.common
 
         public static bool SendMessage(dynamic requestData, Action<dynamic> successCallback, Action<dynamic> failCallback)
         {
+            return SendMessage(requestData, AccessTokenType.XihuanYintai, successCallback, failCallback);
+        }
+        public static bool SendMessage(dynamic requestData,AccessTokenType tokenType, Action<dynamic> successCallback, Action<dynamic> failCallback)
+        {
             var client = new RestClient(WxPayConfig.WEB_SERVICE_BASE);
-            var token = WgServiceHelper.Token;
+            AccessToken token = null;
+            switch(tokenType)
+            {
+                case AccessTokenType.MiniYin:
+                        token = WgServiceHelper.TokenMini;
+                    break;
+                case AccessTokenType.XihuanYintai:
+                    token = WgServiceHelper.Token;
+                    break;
+                default:
+                    throw new ArgumentException("tokenType mismatch");
+            }
             if (token == null)
             {
                 CommonUtil.Log.Info("token is empty");
                 return false;
             }
+
             var notifyRequest = new RestRequest("cgi-bin/message/template/send?access_token={access_token}", Method.POST);
             notifyRequest.RequestFormat = DataFormat.Json;
-            notifyRequest.AddUrlSegment("access_token", token.access_token);
+            notifyRequest.AddUrlSegment("access_token", HttpUtility.UrlEncode(token.access_token));
             notifyRequest.AddBody(requestData);
-            var notifyResponse = JsonConvert.DeserializeObject<dynamic>(client.Execute(notifyRequest).Content);
+            var content = client.Execute(notifyRequest).Content;
 
-            if (notifyResponse.errcode == 0)
+            var notifyResponse = JsonConvert.DeserializeObject<dynamic>(content);
+
+            if (notifyResponse!=null && notifyResponse.errcode == 0)
             {
                 if (successCallback != null)
                     successCallback(notifyResponse);
@@ -109,7 +128,7 @@ namespace com.intime.fashion.common
             else
             {
                 token.Renew();
-                Logger.Debug(notifyResponse);
+                Logger.Debug(notifyResponse.ToString());
 
                 if (failCallback != null)
                     failCallback(notifyResponse);

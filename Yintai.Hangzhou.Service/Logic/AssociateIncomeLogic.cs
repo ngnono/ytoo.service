@@ -64,24 +64,19 @@ namespace Yintai.Hangzhou.Service.Logic
            
             return true;
         }
-        public static bool Avail(string orderNo)
+        public static bool Avail(IMS_AssociateIncomeHistoryEntity incomeHistory)
         {
             var incomeRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateIncomeHistoryEntity>>();
-            var incomeHistory = Context.Set<IMS_AssociateIncomeHistoryEntity>().Where(ia => ia.SourceType == (int)AssociateIncomeStatus.Frozen && ia.SourceNo == orderNo).FirstOrDefault();
-            if (incomeHistory == null)
-                return true;
             incomeHistory.Status = (int)AssociateIncomeStatus.Avail;
             incomeHistory.UpdateDate = DateTime.Now;
             incomeRepo.Update(incomeHistory);
             AssociateIncomeAccount.Avail(incomeHistory.AssociateUserId, incomeHistory.AssociateIncome);
             return true;
         }
-        public static bool Void(string orderNo)
+        public static bool Void(IMS_AssociateIncomeHistoryEntity incomeHistory)
         {
             var incomeRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateIncomeHistoryEntity>>();
-            var incomeHistory = Context.Set<IMS_AssociateIncomeHistoryEntity>().Where(ia => ia.SourceType == (int)AssociateIncomeStatus.Frozen && ia.SourceNo == orderNo).FirstOrDefault();
-            if (incomeHistory == null)
-                return true;
+          
             incomeHistory.Status = (int)AssociateIncomeStatus.Void;
             incomeHistory.UpdateDate = DateTime.Now;
             incomeRepo.Update(incomeHistory);

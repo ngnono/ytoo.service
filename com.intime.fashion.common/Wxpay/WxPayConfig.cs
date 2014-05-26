@@ -51,6 +51,7 @@ namespace com.intime.fashion.common.Wxpay
         public static readonly string ORDER_SOURCE = "BarSale";
         public static string WEB_SERVICE_BASE = ConfigurationManager.AppSettings["wx_WEBSERVICE_BASE"];
         public static readonly string MESSAGE_TEMPLATE_ID = ConfigurationManager.AppSettings["WX_MESSAGE_TEMPLATE_ID"];
+        public static readonly string MESSAGE_TEMPLATE_ID_MINI = ConfigurationManager.AppSettings["WX_MESSAGE_TEMPLATE_ID_MINI"];
 
     }
 
