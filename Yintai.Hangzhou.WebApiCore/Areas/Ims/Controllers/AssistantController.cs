@@ -133,7 +133,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                        .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Status == (int)DataStatus.Normal),
                                     o => o.Id,
                                     i => i.SourceId,
-                                    (o, i) => new { P = o, R = i.OrderByDescending(ir => ir.SortOrder).FirstOrDefault() });
+                                    (o, i) => new { P = o, R = i.OrderByDescending(ir => ir.SortOrder) });
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
             linq = linq.OrderByDescending(l => l.P.CreatedDate).Skip(skipCount).Take(request.Pagesize);
@@ -142,7 +142,10 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
 
                 if (l.R == null)
                     return;
-                o.ImageUrl = l.R.Name;
+                o.Images = l.R.Select(pr => new IMSSelfImageResponse() { 
+                     Id = pr.Id,
+                     Name = pr.Name
+                });
             }));
             var response = new PagerInfoResponse<IMSProductSelfDetailResponse>(request.PagerRequest, totalCount)
             {
@@ -216,7 +219,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                                                                     o => o.BrandId,
                                                                     i => i.Id,
                                                                     (o, i) => new { AB = o, B = i }),
-                                        o => o.StoreId,
+                                        o => o.SectionId,
                                         i => i.AB.SectionId,
                                         (o, i) => i).FirstOrDefault();
             List<dynamic> brands = null;

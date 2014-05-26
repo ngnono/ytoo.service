@@ -8,6 +8,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int SectionId { get; set; }
+        public string OperatorCode { get; set; }
 
         #region Overrides of BaseEntity
 
