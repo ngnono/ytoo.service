@@ -23,8 +23,23 @@ namespace Yintai.Hangzhou.Service.Logic
             switch (type)
             {
                 case SourceType.Product:
-                    var items = prepareProducts(id);
-                    client.IndexMany(items);
+                    try
+                    {
+                        var items = prepareProducts(id);
+                        var response =  client.IndexMany(items);
+                        if (!response.IsValid)
+                        {
+                            foreach(var item in response.Items)
+                            {
+                                if (!item.OK)
+                                    CommonUtil.Log.Error(item.Error);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        CommonUtil.Log.Error(ex);
+                    }
                     break;
                 default:
                     throw new ArgumentException("type not support");
