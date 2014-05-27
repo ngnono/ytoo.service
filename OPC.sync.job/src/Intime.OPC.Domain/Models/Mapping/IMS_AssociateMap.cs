@@ -21,6 +21,7 @@ namespace Intime.OPC.Domain.Models.Mapping
             this.Property(t => t.TemplateId).HasColumnName("TemplateId");
             this.Property(t => t.OperateRight).HasColumnName("OperateRight");
             this.Property(t => t.StoreId).HasColumnName("StoreId");
+            this.Property(t => t.SectionId).HasColumnName("SectionId");
         }
     }
 }

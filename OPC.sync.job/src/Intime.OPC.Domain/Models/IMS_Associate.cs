@@ -13,5 +13,7 @@ namespace Intime.OPC.Domain.Models
         public Nullable<int> TemplateId { get; set; }
         public Nullable<int> OperateRight { get; set; }
         public int StoreId { get; set; }
+
+        public int SectionId { get; set; }
     }
 }

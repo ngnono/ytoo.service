@@ -65,7 +65,7 @@ namespace Intime.OPC.Job.Trade.SelfProductOrder
                         db.OrderItems.Where(i => i.OrderNo == order.OrderNo)
                             .Join(db.Products, i => i.ProductId, p => p.Id, (i, p) => new { product = p, item = i })
                             .Join(db.IMS_Associate, x => x.product.CreatedUser, a => a.UserId,
-                                (x, a) => new { x.item, sectionid = a.StoreId }).GroupBy(x => x.sectionid);
+                                (x, a) => new { x.item, sectionid = a.SectionId }).GroupBy(x => x.sectionid);
                     foreach (var item in items)
                     {
                         int idx = 1;
