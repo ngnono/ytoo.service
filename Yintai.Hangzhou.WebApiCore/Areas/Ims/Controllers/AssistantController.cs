@@ -197,6 +197,12 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
             if (linq == null)
                 return this.RenderError(r => r.Message = "无权操作");
 
+            var codeEntity = Context.Set<IMS_AssociateSaleCodeEntity>().Where(ias => ias.AssociateId == linq.Id && ias.Code == sale_code).FirstOrDefault();
+            if (codeEntity != null)
+                return this.RenderError(r => r.Message = "销售码已存在！");
+
+
+
             _salescodeRepo.Insert(new IMS_AssociateSaleCodeEntity()
             {
                 AssociateId = linq.Id,
