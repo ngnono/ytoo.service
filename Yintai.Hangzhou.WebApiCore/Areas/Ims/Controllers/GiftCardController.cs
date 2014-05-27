@@ -1,17 +1,14 @@
-﻿using System.Configuration;
-using System.Runtime.CompilerServices;
-using com.intime.fashion.common.Extension;
-using com.intime.fashion.common.IT;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Transactions;
-using System.Web.Mvc;
+﻿using com.intime.fashion.common.Extension;
 using com.intime.o2o.data.exchange.IT;
 using com.intime.o2o.data.exchange.IT.Request;
 using com.intime.o2o.data.exchange.IT.Request.Entity;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Transactions;
+using System.Web.Mvc;
 using Yintai.Architecture.Common.Data.EF;
-using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Data.Models;
@@ -64,32 +61,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult IsBind(string phone, int authuid)
         {
-            var cardAccount = _userRepo.Find(x => x.GiftCardAccount == phone);
-            if (cardAccount == null)
-            {
-                if (IsPhoneBinded(phone))
-                {
-                    cardAccount = _userRepo.Find(x => x.UserId == authuid);
-
-                    if (cardAccount == null)
-                    {
-                        var user = _customerRepo.Find(x => x.Id == authuid);
-
-                        cardAccount = _userRepo.Insert(new IMS_GiftCardUserEntity()
-                        {
-                            UserId = authuid,
-                            CreateDate = DateTime.Now,
-                            GiftCardAccount = phone,
-                            Name = user.Nickname
-                        });
-                    }
-                }
-                else
-                {
-                    return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = false });
-                }
-            }
-            return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = cardAccount != null });
+            return this.RenderSuccess<dynamic>(c => c.Data = new { is_binded = IsPhoneBinded(phone) }); 
         }
 
         [RestfulAuthorize]
