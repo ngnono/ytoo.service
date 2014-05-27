@@ -745,6 +745,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return GiftCardListItemStatus.Sent;
             }
 
+            if (transfers.IsActive == 1)
+            {
+                return GiftCardListItemStatus.ReceivedButNoOperation;
+            }
+
             return GiftCardListItemStatus.None;
         }
 
@@ -896,6 +901,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         /// 已赠送但未被领取
         /// </summary>
         Waiting4Receive = 7,
+
+        /// <summary>
+        /// 已接受但是未操作状态
+        /// </summary>
+        ReceivedButNoOperation = 8,
     }
 
     public enum GiftCardOrderStatus
