@@ -21,7 +21,7 @@ namespace Yintai.Hangzhou.Service.Logic
         {
             var client = GetClient();
             switch (type)
-            { 
+            {
                 case SourceType.Product:
                     try
                     {
@@ -44,11 +44,12 @@ namespace Yintai.Hangzhou.Service.Logic
                 default:
                     throw new ArgumentException("type not support");
             }
-            
+
         }
         public static void IndexSingleAsync(int id, SourceType type)
         {
-            Task.Factory.StartNew(() => {
+            Task.Factory.StartNew(() =>
+            {
                 IndexSingle(id, type);
             });
         }
@@ -119,6 +120,8 @@ namespace Yintai.Hangzhou.Service.Logic
                                           Status = section.Status
                                       })
 
+                       let category = (from map in db.Set<ProductMapEntity>() where map.ProductId == p.Id && map.Channel == "intime" select map.ChannelCatId)
+
                        select new ESProduct()
                        {
                            Id = p.Id,
@@ -170,6 +173,8 @@ namespace Yintai.Hangzhou.Service.Logic
                            RecommendUserId = p.RecommendUser,
                            Section = section.FirstOrDefault(),
                            UpcCode = p.SkuCode,
+                           UpdatedDate = p.UpdatedDate,
+                           CategoryId = category.FirstOrDefault() == null ? 0 : (category.FirstOrDefault().HasValue ? category.FirstOrDefault().Value : 0),
                            IsSystem = (!p.ProductType.HasValue) || p.ProductType == (int)ProductType.FromSystem
 
                        };
