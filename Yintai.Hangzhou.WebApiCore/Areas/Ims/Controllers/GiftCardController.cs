@@ -644,7 +644,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             tran.OperateUser = authuid;
             tran.ToUserId = authuid;
             _transRepo.Update(tran);
-            return this.RenderSuccess<dynamic>(null);
+            return this.RenderSuccess<dynamic>(r => r.Data = new { trans_id = tran.Id, });
         }
 
         private bool IsPhoneBinded(string phone)
@@ -714,7 +714,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             if (trans.Any())
             {
-                return GiftCardListItemStatus.Sent;
+                return GiftCardListItemStatus.Waiting4Receive;
             }
 
             if (transfers.IsActive == 1)
@@ -784,7 +784,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 return GiftCardListItemStatus.Refused;
             }
-            if (trans.Any(x => !x.ToUserId.HasValue))
+            if (trans.Any(x => x.FromUserId == order.PurchaseUserId && !x.ToUserId.HasValue))
             {
                 return GiftCardListItemStatus.Waiting4Receive;
             }
