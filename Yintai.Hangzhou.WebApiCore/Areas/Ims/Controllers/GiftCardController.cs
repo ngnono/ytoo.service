@@ -714,7 +714,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             if (trans.Any())
             {
-                return GiftCardListItemStatus.Sent;
+                return GiftCardListItemStatus.Waiting4Receive;
             }
 
             if (transfers.IsActive == 1)
