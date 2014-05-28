@@ -79,10 +79,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             // 根据Id列表查询单品信息
             // ===========================================================================
             var productItems = _elasticClient.Search<ESStocks>(
-                body =>
-                    body.Filter(
-                    q => q.Terms(p => p.ProductId, productIds)
-            ));
+              body =>
+                  body.Filter(
+                  q => q.Terms(p => p.ProductId, productIds)
+            ).Skip(0).Size(int.MaxValue));
+
 
             // ===========================================================================
             // 针对ProductId进行分组Map
