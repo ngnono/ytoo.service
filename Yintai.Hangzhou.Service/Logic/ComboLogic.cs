@@ -56,8 +56,14 @@ namespace Yintai.Hangzhou.Service.Logic
             var comboRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_ComboEntity>>();
             var combo2productRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_Combo2ProductEntity>>();
             var resourceRepo = ServiceLocator.Current.Resolve<IResourceRepository>();
-            //step1: create combo
+         
             var createUserId = associateEntity.UserId;
+            //step1: offline one other combo
+            if (!ComboLogic.IfCanOnline(createUserId))
+            {
+                ComboLogic.OfflineComboOne(createUserId);
+            }
+            //step1.1: create combo
             var comboEntity = comboRepo.Insert(new IMS_ComboEntity()
             {
                 CreateDate = DateTime.Now,
@@ -123,11 +129,7 @@ namespace Yintai.Hangzhou.Service.Logic
                 });
             }
 
-            //step4: offline one other combo
-            if (!ComboLogic.IfCanOnline(createUserId))
-            {
-                ComboLogic.OfflineComboOne(createUserId);
-            }
+          
             return comboEntity;
         }
     }
