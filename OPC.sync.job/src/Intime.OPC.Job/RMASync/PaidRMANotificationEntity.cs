@@ -15,7 +15,7 @@ namespace Intime.OPC.Job.RMASync
 
         public override NotificationType Type
         {
-            get { return NotificationType.Create; }
+            get { return NotificationType.RMA; }
         }
 
         public override string PaymentType
