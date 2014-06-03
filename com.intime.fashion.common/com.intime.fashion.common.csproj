@@ -86,9 +86,6 @@
     <Compile Include="ConfigManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Configuration\CommonConfigurationBase.cs" />
-    <Compile Include="Configuration\CommonConfigurationFactory.cs" />
-    <Compile Include="Configuration\ElasticSearchConfigurationSetting.cs" />
     <Compile Include="Extension\EnumExtension.cs" />
     <Compile Include="Erp2ServiceHelper.cs" />
     <Compile Include="Erp2\Erp2Config.cs" />

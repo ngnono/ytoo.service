@@ -432,6 +432,7 @@ namespace Yintai.Architecture.Common.Data.EF
                         }
                     }
                 }
+                throw dbEx;
             }
         }
 

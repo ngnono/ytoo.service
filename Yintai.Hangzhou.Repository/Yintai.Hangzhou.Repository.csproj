@@ -136,6 +136,7 @@
     <Compile Include="Impl\CategoryRepository.cs" />
     <Compile Include="Impl\CategoryPropertyRepository.cs" />
     <Compile Include="Impl\CategoryPropertyValueRepository.cs" />
+    <Compile Include="Impl\ComboRepository.cs" />
     <Compile Include="Impl\CouponLogRepository.cs" />
     <Compile Include="Impl\HotWordRepository.cs" />
     <Compile Include="Impl\InboundPackageRepository.cs" />
@@ -203,6 +204,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.common.message\com.intime.fashion.common.message.csproj">
+      <Project>{a7154a06-be04-400f-8652-5b52e673b7db}</Project>
+      <Name>com.intime.fashion.common.message</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
       <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>
       <Name>Yintai.Hangzhou.Data</Name>

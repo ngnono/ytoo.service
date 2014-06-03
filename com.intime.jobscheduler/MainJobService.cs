@@ -1,4 +1,5 @@
-﻿using Common.Logging;
+﻿using com.intime.fashion.common.message;
+using Common.Logging;
 using Quartz;
 using Quartz.Impl;
 using System;
@@ -19,6 +20,7 @@ namespace com.intime.jobscheduler
     public partial class MainJobService : ServiceBase
     {
         private IScheduler _sche;
+        private MessageListener _messageListner;
         private ILog _log;
         public MainJobService()
         {
@@ -36,6 +38,9 @@ namespace com.intime.jobscheduler
             _log = _log??LogManager.GetLogger(typeof(MainJobService));
             ISchedulerFactory scheduler = new StdSchedulerFactory();
             _sche =  scheduler.GetScheduler();
+            //register message listen
+            _messageListner = MessageListener.Current;
+            _messageListner.Start();
             _log.Info("starting scheduler...");
             _sche.Start();
             _log.Info("started scheduler...");
@@ -49,6 +54,7 @@ namespace com.intime.jobscheduler
                 !_sche.IsShutdown)
             {
                 _sche.Shutdown();
+                _messageListner.Stop();
                 _log = _log ?? LogManager.GetLogger(typeof(MainJobService));
                 _log.Info("shut down scheduler...");
             }

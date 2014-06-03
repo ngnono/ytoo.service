@@ -14,7 +14,7 @@ using Yintai.Hangzhou.Model.ESModel;
 
 using com.intime.fashion.common;
 using Yintai.Hangzhou.Service.Logic;
-using com.intime.fashion.common.Configuration;
+using com.intime.fashion.common.config;
 
 
 namespace com.intime.jobscheduler.Job

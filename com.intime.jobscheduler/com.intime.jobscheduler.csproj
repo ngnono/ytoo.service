@@ -207,6 +207,8 @@
     <Compile Include="MainJobService.Designer.cs">
       <DependentUpon>MainJobService.cs</DependentUpon>
     </Compile>
+    <Compile Include="MessageHandler.cs" />
+    <Compile Include="MessageListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -241,6 +243,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.common.config\com.intime.fashion.common.config.csproj">
+      <Project>{5d633b61-5763-459b-a72e-ae66f5bc0793}</Project>
+      <Name>com.intime.fashion.common.config</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.common.message\com.intime.fashion.common.message.csproj">
+      <Project>{a7154a06-be04-400f-8652-5b52e673b7db}</Project>
+      <Name>com.intime.fashion.common.message</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>

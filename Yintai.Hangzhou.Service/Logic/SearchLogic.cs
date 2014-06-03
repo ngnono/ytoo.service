@@ -1,5 +1,5 @@
 ﻿using com.intime.fashion.common;
-using com.intime.fashion.common.Configuration;
+using com.intime.fashion.common.config;
 using Nest;
 using System;
 using System.Collections.Generic;
