@@ -28,5 +28,9 @@ namespace com.intime.fashion.common.config
                 return "rabbit";
             }
         }
+
+        public string Password { get { return GetItem("password"); } }
+
+        public string UserName { get { return GetItem("username"); } }
     }
 }

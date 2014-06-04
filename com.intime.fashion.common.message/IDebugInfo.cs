@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace com.intime.fashion.common.message
 {
-    [Flags]
-    public enum MessageAction
+   public interface IDebugInfo
     {
-        
-        CreateEntity = 1,
-        UpdateEntity = 2,
-        DeleteEntity = 4
+       string GetDebugInfo();
     }
 }

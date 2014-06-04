@@ -5,9 +5,9 @@ using System.Text;
 
 namespace com.intime.fashion.common.message
 {
-    public abstract class BaseMessage
+    public  class BaseMessage
     {
-        private long _messageId = long.Parse(string.Concat(DateTime.UtcNow.Ticks,new Random().Next(100)));
+        private long _messageId = DateTime.UtcNow.Ticks;
 
         public virtual long MessageId
         {
@@ -15,10 +15,14 @@ namespace com.intime.fashion.common.message
             {
                 return _messageId;
             }
+            set {
+                _messageId = value;
+            }
         }
+        public int EntityId { get; set; }
 
-        public abstract int ActionType { get; }
+        public virtual int ActionType { get; set; }
 
-        public abstract int SourceType { get; set; }
+        public virtual int SourceType { get; set; }
     }
 }

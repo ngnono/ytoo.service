@@ -115,6 +115,7 @@
     <Compile Include="Enums\UserRole.cs" />
     <Compile Include="ESModel\ESBanner.cs" />
     <Compile Include="ESModel\ESBrand.cs" />
+    <Compile Include="ESModel\ESCombo.cs" />
     <Compile Include="ESModel\ESComment.cs" />
     <Compile Include="ESModel\ESHotword.cs" />
     <Compile Include="ESModel\ESProduct.cs" />

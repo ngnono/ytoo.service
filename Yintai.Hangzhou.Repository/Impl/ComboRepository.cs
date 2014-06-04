@@ -12,7 +12,7 @@ using Yintai.Hangzhou.Data.Models;
 
 namespace Yintai.Hangzhou.Repository.Impl
 {
-    class ComboRepository : EFRepository<IMS_ComboEntity>
+    public class ComboRepository : EFRepository<IMS_ComboEntity>
     {
         public ComboRepository() : base(ServiceLocator.Current.Resolve<DbContext>()) { }
         public override void Update(IMS_ComboEntity entityToUpdate)

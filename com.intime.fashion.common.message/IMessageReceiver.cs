@@ -5,8 +5,10 @@ using System.Text;
 
 namespace com.intime.fashion.common.message
 {
-    public interface IMessageReceiver
+    public interface IMessageReceiver:IDebugInfo
     {
-        void ReceiveReliable<TMessage>(Func<TMessage,bool> postMessageHandler) where TMessage :BaseMessage;
+        void ReceiveReliable(Func<BaseMessage,bool> postMessageHandler);
+
+        void Cancel();
     }
 }

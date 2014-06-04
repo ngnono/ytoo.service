@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Yintai.Hangzhou.Model.ES
 {
+   
     public class ESBanner
     {
         public int Status { get; set; }

@@ -594,7 +594,7 @@
       </cron>
     </trigger>
     -->
-
+<!--
     <job>
       <name>IMS_BatchTransferQuery</name>
       <group>Item</group>
@@ -642,6 +642,7 @@
         <cron-expression>0 40 13 * * ?</cron-expression>
       </cron>
     </trigger>
+    -->
   </schedule>
 
 </job-scheduling-data>

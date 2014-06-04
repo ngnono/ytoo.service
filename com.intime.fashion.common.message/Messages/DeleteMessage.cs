@@ -8,11 +8,11 @@ namespace com.intime.fashion.common.message.Messages
 {
     public class DeleteMessage:BaseMessage
     {
-        public int EntityId { get; set; }
 
         public override int ActionType
         {
             get { return (int)MessageAction.UpdateEntity; }
+            set { }
         }
         public override int SourceType
         {

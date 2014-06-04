@@ -8,10 +8,11 @@ namespace com.intime.fashion.common.message.Messages
 {
    public class CreateMessage:BaseMessage
     {
-        public int EntityId { get; set; }
+
         public override int ActionType
         {
             get { return (int)MessageAction.CreateEntity; }
+            set { }
         }
         public override int SourceType
         {

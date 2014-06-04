@@ -12,8 +12,13 @@ namespace com.intime.fashion.common.message.rabbit
 {
     class MessageClient:IMessageReceiver,IMessageSender
     {
-        private ConnectionFactory _factory = new ConnectionFactory() { HostName = RabbitClientConfiguration.Current.Host };
- 
+        private ConnectionFactory _factory = new ConnectionFactory() { 
+                HostName = RabbitClientConfiguration.Current.Host , 
+                UserName = RabbitClientConfiguration.Current.UserName,
+                Password = RabbitClientConfiguration.Current.Password};
+        private bool _isCancel = false;
+        private StringBuilder _debug = new StringBuilder();
+
         public bool SendMessageReliable(BaseMessage message)
         {
             return SendMessageReliable(message, null);
@@ -41,34 +46,50 @@ namespace com.intime.fashion.common.message.rabbit
             return true;
         }
 
-        public void ReceiveReliable<TMessage>(Func<TMessage,bool> postMessageHandler) where TMessage:BaseMessage
+        public void ReceiveReliable(Func<BaseMessage,bool> postMessageHandler) 
         {
             using (var connection = _factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
+                   
                     var queueName = RabbitClientConfiguration.Current.QueueName;
                     channel.QueueDeclare(queueName, true, false, false, null);
 
                     channel.BasicQos(0, 1, false);
                     var consumer = new QueueingBasicConsumer(channel);
                     channel.BasicConsume(queueName, false, consumer);
-
-                    while (true)
+                    while (!_isCancel)
                     {
                         var ea =
                             (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+
                         var body = ea.Body;
                         var rawMessage = Encoding.UTF8.GetString(body);
-                        var message = JsonConvert.DeserializeObject(rawMessage) as TMessage;
+                        
+                        var message = JsonConvert.DeserializeObject<BaseMessage>(rawMessage);
+                        if (message == null)
+                            _debug.Append(rawMessage);
                         if (postMessageHandler(message))
                             channel.BasicAck(ea.DeliveryTag, false);
+                        else
+                            channel.BasicNack(ea.DeliveryTag, false, true);
                     }
                 }
             }
         }
 
-       
+        public void Cancel()
+        {
+            _isCancel = true;
+           
+        }
 
+        public string GetDebugInfo()
+        {
+            var debugInfo = _debug.ToString();
+            _debug.Clear();
+            return debugInfo;
+        }
     }
 }

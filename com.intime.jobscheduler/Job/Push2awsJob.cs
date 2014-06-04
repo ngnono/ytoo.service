@@ -42,8 +42,8 @@ namespace com.intime.jobscheduler.Job
 
             if (needRebuild)
             {
-                var response = client.DeleteIndex(ElasticSearchConfigurationSetting.Current.Index);
-                if (response.OK)
+                var response = client.DeleteIndex(idec=>idec.Index(ElasticSearchConfigurationSetting.Current.Index));
+                if (response.IsValid)
                 {
 
                     log.Info(string.Format("index:{0} is deleted!", ElasticSearchConfigurationSetting.Current.Index));
@@ -86,7 +86,6 @@ namespace com.intime.jobscheduler.Job
                         .Join(db.Products, i => i.ProductId, p => p.Id,
                             (i, p) => new { stock = i, price = p.Price, labelprice = p.UnitPrice });
                 int totalCount = inventories.Count();
-                client.MapFromAttributes<ESStock>();
                 while (cursor < totalCount)
                 {
                     var linq = from l in inventories.OrderByDescending(p => p.stock.Id).Skip(cursor).Take(size).ToList()
@@ -106,7 +105,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -139,7 +138,6 @@ namespace com.intime.jobscheduler.Job
                                     (o, i) => new { S = o, R = i });
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESStorePromotion>();
                 while (cursor < totalCount)
                 {
                     var linq = from l in prods.OrderByDescending(p => p.S.Id).Skip(cursor).Take(size).ToList()
@@ -157,7 +155,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -207,7 +205,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESResource>();
+              
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -215,7 +213,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -304,7 +302,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESUser>();
+             
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -312,7 +310,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -369,7 +367,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESComment>();
+               
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -377,7 +375,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -423,7 +421,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESHotword>();
+    
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -431,7 +429,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -496,7 +494,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESBanner>();
+       
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -504,7 +502,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -555,7 +553,7 @@ namespace com.intime.jobscheduler.Job
                             });
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESTag>();
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -563,7 +561,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -630,7 +628,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESStore>();
+     
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -638,7 +636,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -679,7 +677,7 @@ namespace com.intime.jobscheduler.Job
                             });
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESBrand>();
+    
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -687,7 +685,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -767,7 +765,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESSpecialTopic>();
+         
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -775,7 +773,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -892,7 +890,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESPromotion>();
+    
 
                 while (cursor < totalCount)
                 {
@@ -901,7 +899,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
@@ -1090,7 +1088,7 @@ namespace com.intime.jobscheduler.Job
 
                             };
                 int totalCount = prods.Count();
-                client.MapFromAttributes<ESProduct>();
+             
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -1098,7 +1096,7 @@ namespace com.intime.jobscheduler.Job
                     {
                         foreach (var item in result.Items)
                         {
-                            if (item.OK)
+                            if (string.IsNullOrEmpty(item.Error))
                                 successCount++;
                             else
                                 log.Info(string.Format("id index failed:{0}", item.Id));
