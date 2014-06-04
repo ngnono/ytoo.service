@@ -18,27 +18,13 @@ namespace Yintai.Hangzhou.Repository.Impl
         public override void Update(IMS_ComboEntity entityToUpdate)
         {
             base.Update(entityToUpdate);
-            //notify entity update message
-
-            var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-            messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
-            {
-                SourceType = (int)MessageSourceType.Combo,
-                EntityId = entityToUpdate.Id
-            });
+  
         }
 
         public override Yintai.Hangzhou.Data.Models.IMS_ComboEntity Insert(Yintai.Hangzhou.Data.Models.IMS_ComboEntity entity)
         {
             var newEntity = base.Insert(entity);
-            //notify entity update message
 
-            var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-            messageProvider.GetSender().SendMessageReliable(new CreateMessage()
-            {
-                SourceType = (int)MessageSourceType.Combo,
-                EntityId = newEntity.Id
-            });
             return newEntity;
         }
     }

@@ -20,9 +20,7 @@ namespace Yintai.Hangzhou.Service.Logic
     {
         private static ElasticClient _client = new ElasticClient(new ConnectionSettings(new Uri(ElasticSearchConfigurationSetting.Current.Host))
                                         .SetDefaultIndex(ElasticSearchConfigurationSetting.Current.Index)
-                                        .SetMaximumAsyncConnections(10)
-                                        .ExposeRawResponse()
-                                        .PluralizeTypeNames());
+                                        .SetMaximumAsyncConnections(10));
         
         public static void IndexSingle(int id, SourceType type)
         {

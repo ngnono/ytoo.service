@@ -42,7 +42,7 @@ namespace com.intime.jobscheduler.Job
 
             if (needRebuild)
             {
-                var response = client.DeleteIndex(idec=>idec.Index(ElasticSearchConfigurationSetting.Current.Index));
+                var response = client.DeleteIndex(ElasticSearchConfigurationSetting.Current.Index);
                 if (response.IsValid)
                 {
 

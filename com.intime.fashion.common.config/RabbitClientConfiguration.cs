@@ -20,6 +20,7 @@ namespace com.intime.fashion.common.config
 
         public string Host { get { return GetItem("host"); } }
         public string QueueName { get { return GetItem("queue"); } }
+        public string FailQueue { get { return GetItem("failqueue"); } }
 
         protected override string SectionName
         {
