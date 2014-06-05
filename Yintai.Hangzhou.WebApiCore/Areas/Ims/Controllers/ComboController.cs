@@ -121,7 +121,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     ComboLogic.OfflineComboOne(authuid);
                 }
                 ts.Complete();
-
+                //step5: notify message
                 var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
                 messageProvider.GetSender().SendMessageReliable(new CreateMessage()
                 {

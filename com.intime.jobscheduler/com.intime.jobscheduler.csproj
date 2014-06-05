@@ -212,6 +212,8 @@
     <Compile Include="MessageHandler.cs" />
     <Compile Include="MessageListener.cs" />
     <Compile Include="Message\ComboHandler.cs" />
+    <Compile Include="Message\InventoryHandler.cs" />
+    <Compile Include="Message\ProductHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScopedLifetimeManager.cs" />

@@ -9,6 +9,7 @@ namespace com.intime.fashion.common.message
     public enum MessageSourceType
     {
         Product = 1,
-        Combo = 2
+        Combo = 2,
+        Inventory
     }
 }

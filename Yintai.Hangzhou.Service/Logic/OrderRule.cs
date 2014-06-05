@@ -246,9 +246,7 @@ namespace Yintai.Hangzhou.Service.Logic
 
                 bool isSuccess = true;
                 if (isSuccess)
-                {
-                    
-                    
+                {   
                     exOrderNo = orderEntity.OrderNo;
                     ts.Complete();
                     createSuccess = true;

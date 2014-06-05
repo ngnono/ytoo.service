@@ -86,6 +86,7 @@ namespace com.intime.jobscheduler
         {
             var handlers = new List<MessageHandler>();
             handlers.Add(new Message.ComboHandler());
+            handlers.Add(new Message.ProductHandler());
             return handlers;
         }
 

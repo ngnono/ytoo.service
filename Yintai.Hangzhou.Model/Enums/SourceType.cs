@@ -69,6 +69,7 @@ namespace Yintai.Hangzhou.Model.Enums
         PMessage = 13,
 
         GiftCard = 14,
-        Combo = 15
+        Combo = 15,
+        Inventory = 100
     }
 }

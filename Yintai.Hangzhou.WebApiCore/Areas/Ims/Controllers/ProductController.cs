@@ -15,6 +15,9 @@ using com.intime.fashion.common.Extension;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.Service.Logic;
+using Yintai.Architecture.Framework.ServiceLocation;
+using com.intime.fashion.common.message;
+using com.intime.fashion.common.message.Messages;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -196,7 +199,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 if (haveValidImage)
                 {
                     ts.Complete();
-                    SearchLogic.IndexSingleAsync(productEntity.Id, SourceType.Product);
+                    //step5: notify message
+                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                    messageProvider.GetSender().SendMessageReliable(new CreateMessage()
+                    {
+                        SourceType = (int)MessageSourceType.Product,
+                        EntityId = productEntity.Id
+                    });
+
                     return this.RenderSuccess<dynamic>(c => c.Data = new
                     {
                         id = productEntity.Id,
@@ -382,7 +392,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 if (canCommit)
                 {
                     ts.Complete();
-                    SearchLogic.IndexSingleAsync(productEntity.Id, SourceType.Product);
+
+                    //step5: notify message
+                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                    messageProvider.GetSender().SendMessageReliable(new CreateMessage()
+                    {
+                        SourceType = (int)MessageSourceType.Product,
+                        EntityId = productEntity.Id
+                    });
+
                     return this.RenderSuccess<dynamic>(c => c.Data = new
                     {
                         id = productEntity.Id,
