@@ -35,7 +35,10 @@ namespace com.intime.jobscheduler.Message
         public override bool Work(BaseMessage message)
         {
             var comboId = message.EntityId;
-           return _esService.IndexSingle(comboId);
+            using (var slt = new ScopedLifetimeDbContextManager())
+            {
+                return _esService.IndexSingle(comboId);
+            }
             
         }
     }

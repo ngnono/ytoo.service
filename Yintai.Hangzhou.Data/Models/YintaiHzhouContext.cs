@@ -20,6 +20,7 @@ namespace Yintai.Hangzhou.Data.Models
 		{
 			Database.SetInitializer<YintaiHangzhouContext>(null);
 			_log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
+            
 		}
 
 		/// <summary>
@@ -280,6 +281,7 @@ namespace Yintai.Hangzhou.Data.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 			Configuration.AutoDetectChangesEnabled = false;
+            
             // 移除复数表名的契约
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 

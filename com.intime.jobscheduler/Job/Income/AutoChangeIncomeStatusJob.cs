@@ -64,31 +64,34 @@ namespace com.intime.jobscheduler.Job.Income
                 {
                     try
                     {
-                        using (var ts = new TransactionScope())
+                        using (var slt = new ScopedLifetimeDbContextManager())
                         {
-                            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+                            using (var ts = new TransactionScope())
                             {
-                                var rmaEntity = db.Set<RMAEntity>().Where(r => r.OrderNo == order.SourceNo
-                                            && r.Status != (int)RMAStatus.Void
-                                            && r.Status != (int)RMAStatus.Reject).FirstOrDefault();
-                                bool incomeIsAvail = rmaEntity == null ? true : false;
-                                bool isSuccess = false;
-                                if (incomeIsAvail)
+                                using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
                                 {
-                                   isSuccess= AssociateIncomeLogic.Avail(order);
-                                }
-                                else
-                                {
-                                    isSuccess =AssociateIncomeLogic.Void(order);
-                                }
+                                    var rmaEntity = db.Set<RMAEntity>().Where(r => r.OrderNo == order.SourceNo
+                                                && r.Status != (int)RMAStatus.Void
+                                                && r.Status != (int)RMAStatus.Reject).FirstOrDefault();
+                                    bool incomeIsAvail = rmaEntity == null ? true : false;
+                                    bool isSuccess = false;
+                                    if (incomeIsAvail)
+                                    {
+                                        isSuccess = AssociateIncomeLogic.Avail(order);
+                                    }
+                                    else
+                                    {
+                                        isSuccess = AssociateIncomeLogic.Void(order);
+                                    }
 
-                                if (isSuccess)
-                                {
-                                    ts.Complete();
-                                    successCount++;
+                                    if (isSuccess)
+                                    {
+                                        ts.Complete();
+                                        successCount++;
+                                    }
+                                    else
+                                        log.Error(string.Format("order:{0} cannot convert income to avail/void", order.SourceNo));
                                 }
-                                else
-                                    log.Error(string.Format("order:{0} cannot convert income to avail/void", order.SourceNo));
                             }
                         }
                     }

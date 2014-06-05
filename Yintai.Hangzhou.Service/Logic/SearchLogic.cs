@@ -38,10 +38,13 @@ namespace Yintai.Hangzhou.Service.Logic
                 if (error == null)
                     CommonUtil.Log.Error(response);
                 else
-                    CommonUtil.Log.Error(error.ToString());
+                {
+                    CommonUtil.Log.Error(error.Request);
+                    CommonUtil.Log.Error(error.Result);
+                }
                 return false;
             }
-           
+            
             return true;
 
         }

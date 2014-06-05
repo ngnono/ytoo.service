@@ -23,5 +23,8 @@ namespace Yintai.Hangzhou.Model.ESModel
         public Nullable<int> ProductType { get; set; }
         public DateTime? ExpireDate { get; set; }
         public IEnumerable<ESResource> Resources { get; set; }
+        public int StoreId { get; set; }
+        public IEnumerable<ESBrand> Brands { get; set; }
+        public int AssociateId { get; set; }
     }
 }
