@@ -112,6 +112,7 @@
     <Compile Include="Logic\AssociateIncomeLogic.cs" />
     <Compile Include="Logic\ComboLogic.cs" />
     <Compile Include="Logic\Search\ESComboService.cs" />
+    <Compile Include="Logic\Search\ESInventoryService.cs" />
     <Compile Include="Logic\Search\ESProductService.cs" />
     <Compile Include="Logic\Search\ESServiceBase.cs" />
     <Compile Include="Logic\IncomeRule\AssociateIncomeAccount.cs" />

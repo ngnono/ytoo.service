@@ -63,6 +63,8 @@ namespace Yintai.Hangzhou.Service.Logic
                     return new ESComboService();
                 case SourceType.Product:
                     return new ESProductService();
+                case SourceType.Inventory:
+                    return new ESInventoryService();
                 default:
                     throw new ArgumentException("type mismatch");
             }

@@ -15,7 +15,7 @@ namespace com.intime.jobscheduler.Message
        private ESServiceBase _esService = null;
          public InventoryHandler()
         {
-            _esService = SearchLogic.GetService(Yintai.Hangzhou.Model.Enums.SourceType.Product);
+            _esService = SearchLogic.GetService(Yintai.Hangzhou.Model.Enums.SourceType.Inventory);
         }
         public override int SourceType
         {
@@ -29,17 +29,10 @@ namespace com.intime.jobscheduler.Message
 
         public override bool Work(BaseMessage message)
         {
-            var productId = 0;
-            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
-            {
-                var inventoryEntity = db.Set<InventoryEntity>().Find(message.EntityId);
-                if (inventoryEntity == null)
-                    return false;
-                productId = inventoryEntity.ProductId;
-            }
+           
             using (var slt = new ScopedLifetimeDbContextManager())
             {
-                return _esService.IndexSingle(productId);
+                return _esService.IndexSingle(message.EntityId);
             }
         }
     }
