@@ -82,7 +82,8 @@
     <Compile Include="Aliyun\Config.cs" />
     <Compile Include="AwsHelper.cs" />
     <Compile Include="Aws\AwsConfig.cs" />
-    <Compile Include="CommonUtil.cs" />
+    <Compile Include="Util\ChineseUtil.cs" />
+    <Compile Include="Util\CommonUtil.cs" />
     <Compile Include="ConfigManager.cs">
       <SubType>Code</SubType>
     </Compile>

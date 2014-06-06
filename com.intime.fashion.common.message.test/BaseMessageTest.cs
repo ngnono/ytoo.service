@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using com.intime.fashion.common.message.test.fixture;
 using Newtonsoft.Json;
+using com.intime.fashion.test.fixture;
 
 namespace com.intime.fashion.common.message.test
 {

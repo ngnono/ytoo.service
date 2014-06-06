@@ -222,7 +222,7 @@ namespace com.intime.fashion.common
                 throw new ApplicationException("获取支付token失败");
             }
             return new WxAppPayTokenResponse() { 
-                 noncestr = Util.Nonce(),
+                 noncestr = Wxpay.Util.Nonce(),
                  timestamp = DateTime.Now.TicksOfWx(),
                   package = string.Format("Sign={0}",xmlResponse.tenpay_sign),
                  prepayid = xmlResponse.trade_token

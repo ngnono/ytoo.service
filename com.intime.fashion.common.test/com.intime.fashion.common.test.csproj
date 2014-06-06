@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{116B6F73-BAA5-4CD2-BB86-D3F63CF97AD5}</ProjectGuid>
+    <ProjectGuid>{4E60FC34-180C-44AE-91D9-D8C965C3911A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>com.intime.fashion.common.message.test</RootNamespace>
-    <AssemblyName>com.intime.fashion.common.message.test</AssemblyName>
+    <RootNamespace>com.intime.fashion.common.test</RootNamespace>
+    <AssemblyName>com.intime.fashion.common.test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -53,21 +50,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BaseMessageTest.cs" />
+    <Compile Include="ChineseUtilTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\com.intime.fashion.common.message\com.intime.fashion.common.message.csproj">
-      <Project>{a7154a06-be04-400f-8652-5b52e673b7db}</Project>
-      <Name>com.intime.fashion.common.message</Name>
+    <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
+      <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
+      <Name>com.intime.fashion.common</Name>
     </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.test.fixture\com.intime.fashion.test.fixture.csproj">
       <Project>{cbb18c09-4e7c-4d5f-999c-02434c8fa4f5}</Project>
       <Name>com.intime.fashion.test.fixture</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

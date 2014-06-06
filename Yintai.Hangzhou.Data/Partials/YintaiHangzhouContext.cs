@@ -43,7 +43,8 @@ namespace Yintai.Hangzhou.Data.Models
 
         private IEnumerable<dynamic> ParseEntityNotified()
         {
-
+            if (this.ObjectContext == null)
+                yield break;
             foreach (var entry in this.ObjectContext.ObjectStateManager
                                   .GetObjectStateEntries(EntityState.Added))
             {
@@ -72,6 +73,8 @@ namespace Yintai.Hangzhou.Data.Models
 
         private IEnumerable<dynamic> ParseEntityAccountTriggered()
         {
+            if (this.ObjectContext == null)
+                yield break;
             foreach (var entry in this.ObjectContext.ObjectStateManager
                                    .GetObjectStateEntries(EntityState.Added | EntityState.Modified |EntityState.Deleted))
             {
@@ -90,6 +93,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         private void DoSyncing(IEnumerable<dynamic> syncing)
         {
+
             foreach (var sync in syncing)
             {
                 AwsHelper.SendMessage(sync.TypeName
@@ -99,6 +103,8 @@ namespace Yintai.Hangzhou.Data.Models
 
         private IEnumerable<dynamic> ParseEntitySynced()
         {
+            if (this.ObjectContext == null)
+                yield break;
             foreach (var entry in this.ObjectContext.ObjectStateManager
                                     .GetObjectStateEntries(EntityState.Added))
             {
