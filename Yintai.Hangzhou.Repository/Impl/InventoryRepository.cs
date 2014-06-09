@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Repository.Contract;
@@ -16,14 +17,36 @@ namespace Yintai.Hangzhou.Repository.Impl
         public override void Update(InventoryEntity entity)
         {
             base.Update(entity);
-
-            //step5: notify message
-            var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-            messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
+            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
             {
-                SourceType = (int)MessageSourceType.Inventory,
-                EntityId = entity.Id
+                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
+                {
+                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                    messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
+                    {
+                        SourceType = (int)MessageSourceType.Inventory,
+                        EntityId = entity.Id
+                    });
+                }
             });
+           
+        }
+        public override Yintai.Hangzhou.Data.Models.InventoryEntity Insert(Yintai.Hangzhou.Data.Models.InventoryEntity entity)
+        {
+            var newEntity =  base.Insert(entity);
+            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
+            {
+                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
+                {
+                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                    messageProvider.GetSender().SendMessageReliable(new CreateMessage()
+                    {
+                        SourceType = (int)MessageSourceType.Inventory,
+                        EntityId = newEntity.Id
+                    });
+                }
+            });
+            return newEntity;
         }
 
       

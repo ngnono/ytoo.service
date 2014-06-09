@@ -1,9 +1,12 @@
-﻿using System;
+﻿using com.intime.fashion.common.message;
+using com.intime.fashion.common.message.Messages;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Transactions;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
 using Yintai.Architecture.Framework.ServiceLocation;
@@ -420,6 +423,39 @@ namespace Yintai.Hangzhou.Repository.Impl
             Update(productEntity);
             return productEntity;
         }
-     
+
+        public override Yintai.Hangzhou.Data.Models.ProductEntity Insert(Yintai.Hangzhou.Data.Models.ProductEntity entity)
+        {
+            var newEntity = base.Insert(entity);
+            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
+            {
+                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
+                {
+                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                    messageProvider.GetSender().SendMessageReliable(new CreateMessage()
+                    {
+                        SourceType = (int)MessageSourceType.Product,
+                        EntityId = newEntity.Id
+                    });
+                }
+            });
+            return newEntity;
+        }
+        public override void Update(ProductEntity entity)
+        {
+            base.Update(entity);
+            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
+            {
+                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
+                {
+                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                    messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
+                    {
+                        SourceType = (int)MessageSourceType.Product,
+                        EntityId = entity.Id
+                    });
+                }
+            });
+        }
     }
 }

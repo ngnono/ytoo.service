@@ -120,14 +120,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 {
                     ComboLogic.OfflineComboOne(authuid);
                 }
+
+               
                 ts.Complete();
-                //step5: notify message
-                var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                messageProvider.GetSender().SendMessageReliable(new CreateMessage()
-                {
-                    SourceType = (int)MessageSourceType.Combo,
-                    EntityId = comboEntity.Id
-                });
+               
                 return this.RenderSuccess<dynamic>(c => c.Data = new
                 {
                     combo_id = comboEntity.Id
@@ -198,14 +194,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     }
                 }
 
+              
                 ts.Complete();
 
-                var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
-                {
-                    SourceType = (int)MessageSourceType.Combo,
-                    EntityId = comboEntity.Id
-                });
+               
 
                 return this.RenderSuccess<dynamic>(c => c.Data = new { 
                     combo_id = request.Id

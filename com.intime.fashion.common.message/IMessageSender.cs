@@ -10,5 +10,7 @@ namespace com.intime.fashion.common.message
         bool SendMessageReliable(BaseMessage message);
 
         bool SendMessageReliable(BaseMessage message, Action<BaseMessage> preMessageHandler);
+
+        bool SendMessageReliable(BaseMessage message, Action<BaseMessage> preMessageHandler,string messageTopic);
     }
 }

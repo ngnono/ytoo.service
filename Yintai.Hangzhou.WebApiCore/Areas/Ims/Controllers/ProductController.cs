@@ -198,14 +198,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 }
                 if (haveValidImage)
                 {
+                   
                     ts.Complete();
-                    //step5: notify message
-                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                    messageProvider.GetSender().SendMessageReliable(new CreateMessage()
-                    {
-                        SourceType = (int)MessageSourceType.Product,
-                        EntityId = productEntity.Id
-                    });
+
+                   
 
                     return this.RenderSuccess<dynamic>(c => c.Data = new
                     {
@@ -391,15 +387,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
                 if (canCommit)
                 {
+                    
                     ts.Complete();
 
-                    //step5: notify message
-                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                    messageProvider.GetSender().SendMessageReliable(new CreateMessage()
-                    {
-                        SourceType = (int)MessageSourceType.Product,
-                        EntityId = productEntity.Id
-                    });
 
                     return this.RenderSuccess<dynamic>(c => c.Data = new
                     {

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace com.intime.fashion.common.message.rabbit
                 HostName = RabbitClientConfiguration.Current.Host , 
                 UserName = RabbitClientConfiguration.Current.UserName,
                 Password = RabbitClientConfiguration.Current.Password};
-        private bool _isCancel = false;
+        private IModel _model = null;
         private StringBuilder _debug = new StringBuilder();
 
         public bool SendMessageReliable(BaseMessage message)
@@ -26,13 +27,18 @@ namespace com.intime.fashion.common.message.rabbit
 
         public bool SendMessageReliable(BaseMessage message, Action<BaseMessage> preMessageHandler)
         {
+            return SendMessageReliable(message, preMessageHandler, RabbitClientConfiguration.Current.QueueName);
+        }
+
+        public bool SendMessageReliable(BaseMessage message, Action<BaseMessage> preMessageHandler, string messageTopic)
+        {
             if (preMessageHandler != null)
                 preMessageHandler(message);
             using (var connection = _factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
-                    var queueName = RabbitClientConfiguration.Current.QueueName;
+                    var queueName = messageTopic;
                     channel.QueueDeclare(queueName, true, false, false, null);
 
                     var jsonMessage = JsonConvert.SerializeObject(message);
@@ -48,40 +54,53 @@ namespace com.intime.fashion.common.message.rabbit
 
         public void ReceiveReliable(Func<BaseMessage,bool> postMessageHandler) 
         {
+            ReceiveReliable(postMessageHandler, RabbitClientConfiguration.Current.QueueName);
+        }
+        public void ReceiveReliable(Func<BaseMessage, bool> postMessageHandler, string messageTopic)
+        {
             using (var connection = _factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
-                   
-                    var queueName = RabbitClientConfiguration.Current.QueueName;
+                    var _channel = channel;
+                    var queueName = messageTopic;
                     channel.QueueDeclare(queueName, true, false, false, null);
 
                     channel.BasicQos(0, 1, false);
                     var consumer = new QueueingBasicConsumer(channel);
                     channel.BasicConsume(queueName, false, consumer);
-                    while (!_isCancel)
+                    while (true)
                     {
-                        var ea =
-                            (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+                        try
+                        {
+                            var ea =
+                                (BasicDeliverEventArgs)consumer.Queue.Dequeue();
 
-                        var body = ea.Body;
-                        var rawMessage = Encoding.UTF8.GetString(body);
-                        
-                        var message = JsonConvert.DeserializeObject<BaseMessage>(rawMessage);
-                        if (message == null)
-                            _debug.Append(rawMessage);
-                        if (postMessageHandler(message))
+                            var body = ea.Body;
+                            var rawMessage = Encoding.UTF8.GetString(body);
+
+                            var message = JsonConvert.DeserializeObject<BaseMessage>(rawMessage);
+                            if (message == null)
+                                _debug.Append(rawMessage);
                             channel.BasicAck(ea.DeliveryTag, false);
-                        else
-                            channel.BasicNack(ea.DeliveryTag, false, true);
+                            if (!postMessageHandler(message))
+                                SendMessageReliable(message,
+                                    null,
+                                    RabbitClientConfiguration.Current.FailQueue);
+                        }
+                        catch (OperationInterruptedException ex)
+                        {
+                            _debug.Append(ex.ToString());
+                            break;
+                        }
                     }
                 }
             }
         }
-
         public void Cancel()
         {
-            _isCancel = true;
+            if (_model != null)
+                _model.Close();
            
         }
 
@@ -91,5 +110,10 @@ namespace com.intime.fashion.common.message.rabbit
             _debug.Clear();
             return debugInfo;
         }
+
+
+      
+
+      
     }
 }
