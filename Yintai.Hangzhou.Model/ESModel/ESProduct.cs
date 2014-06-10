@@ -45,7 +45,8 @@ namespace Yintai.Hangzhou.Model.ES
         public IEnumerable<ESResource> Resource { get; set; }
         public IEnumerable<ESPromotion> Promotion { get; set; }
         public IEnumerable<ESSpecialTopic> SpecialTopic { get; set; }
-        public IEnumerable<ESProductPropertyValue> PropertyValues { get; set; } 
+        public IEnumerable<ESProductPropertyValue> PropertyValues { get; set; }
+        public IEnumerable<ESStockPropertyValue> StockPropertyValues { get; set; } 
         public int CreateUserId { get; set; }
         public bool Is4Sale { get; set; }
         public decimal? UnitPrice { get; set; }

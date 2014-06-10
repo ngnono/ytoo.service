@@ -119,6 +119,7 @@
     <Compile Include="ESModel\ESComment.cs" />
     <Compile Include="ESModel\ESHotword.cs" />
     <Compile Include="ESModel\ESProduct.cs" />
+    <Compile Include="ESModel\ESStockPropertyValue.cs" />
     <Compile Include="ESModel\ESProductPropertyValue.cs" />
     <Compile Include="ESModel\ESPromotion.cs" />
     <Compile Include="ESModel\ESResource.cs" />

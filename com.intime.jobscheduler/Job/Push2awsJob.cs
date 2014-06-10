@@ -31,7 +31,7 @@ namespace com.intime.jobscheduler.Job
 
             var needRebuild = data.ContainsKey("needrebuild") ? data.GetBooleanValue("needrebuild") : false;
 
-            var benchDate = BenchDate(context) ;
+            var benchDate = BenchDate(context);
 
             var client = SearchLogic.GetClient();
             if (client == null)
@@ -47,7 +47,7 @@ namespace com.intime.jobscheduler.Job
                 {
 
                     log.Info(string.Format("index:{0} is deleted!", ElasticSearchConfigurationSetting.Current.Index));
-                    
+
                 }
                 else
                 {
@@ -55,6 +55,7 @@ namespace com.intime.jobscheduler.Job
                 }
                 _isActiveOnly = true;
             }
+            
             IndexBrand(client, benchDate);
             IndexHotwork(client, benchDate);
             IndexStore(client, benchDate);
@@ -62,11 +63,12 @@ namespace com.intime.jobscheduler.Job
             IndexUser(client, benchDate);
             IndexResource(client, benchDate);
             IndexProds(client, benchDate, null);
+            IndexInventory(client, benchDate);
             IndexPros(client, benchDate, null);
             IndexBanner(client, benchDate);
             IndexSpecialTopic(client, benchDate, null);
             IndexStorePromotion(client, benchDate);
-            IndexInventory(client, benchDate);
+            
         }
 
         private void IndexInventory(ElasticClient client, DateTime benchDate)
@@ -205,7 +207,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-              
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -302,7 +304,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-             
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -367,7 +369,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-               
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -421,7 +423,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-    
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -494,7 +496,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-       
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -628,7 +630,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-     
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -677,7 +679,7 @@ namespace com.intime.jobscheduler.Job
                             });
 
                 int totalCount = prods.Count();
-    
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -765,7 +767,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-         
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
@@ -890,7 +892,7 @@ namespace com.intime.jobscheduler.Job
                             };
 
                 int totalCount = prods.Count();
-    
+
 
                 while (cursor < totalCount)
                 {
@@ -1028,6 +1030,20 @@ namespace com.intime.jobscheduler.Job
                                                       PropertyId = property.Id,
                                                       ValueDesc = v.ValueDesc
                                                   })
+                            let stockPropertyValues = (from inv in db.Inventories where inv.ProductId == p.Id
+                                                       join val in db.OPC_StockPropertyValues on inv.Id equals val.InventoryId
+                                                       join pty in db.OPC_StockProperties on val.StockPropertyId equals pty.Id
+                                                       select new ESStockPropertyValue()
+                                                           {
+                                                               ChannelPropertyId = pty.ChannelPropertyId,
+                                                               ChannelValueId = val.ChannelValueId,
+                                                               Id = val.Id,
+                                                               InventoryId = inv.Id,
+                                                               PropertyDesc = pty.PropertyDesc,
+                                                               PropertyId = pty.Id,
+                                                               ValueDesc = val.ValueDesc,
+                                                               ValueId = val.Id
+                                                           })
                             let category = (from map in db.ProductMaps where map.ProductId == p.Id && map.Channel == "intime" select map.ChannelCatId)
 
                             select new ESProduct()
@@ -1071,6 +1087,7 @@ namespace com.intime.jobscheduler.Job
                                     EngName = b.EnglishName
                                 },
                                 PropertyValues = propertyValues,
+                                StockPropertyValues = stockPropertyValues,
                                 Resource = resource,
                                 SpecialTopic = specials,
                                 Promotion = promotions,
@@ -1088,7 +1105,7 @@ namespace com.intime.jobscheduler.Job
 
                             };
                 int totalCount = prods.Count();
-             
+
                 while (cursor < totalCount)
                 {
                     var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
