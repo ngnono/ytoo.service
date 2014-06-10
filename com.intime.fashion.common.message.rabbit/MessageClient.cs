@@ -58,6 +58,10 @@ namespace com.intime.fashion.common.message.rabbit
         }
         public void ReceiveReliable(Func<BaseMessage, bool> postMessageHandler, string messageTopic)
         {
+            ReceiveReliable(postMessageHandler, messageTopic, false);
+        }
+        public void ReceiveReliable(Func<BaseMessage, bool> postMessageHandler, string messageTopic,bool discardFailMessage)
+        {
             using (var connection = _factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
@@ -83,7 +87,7 @@ namespace com.intime.fashion.common.message.rabbit
                             if (message == null)
                                 _debug.Append(rawMessage);
                             channel.BasicAck(ea.DeliveryTag, false);
-                            if (!postMessageHandler(message))
+                            if (!postMessageHandler(message) && !discardFailMessage)
                                 SendMessageReliable(message,
                                     null,
                                     RabbitClientConfiguration.Current.FailQueue);

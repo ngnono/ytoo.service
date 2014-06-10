@@ -1,4 +1,6 @@
 ﻿using com.intime.fashion.common.message;
+using com.intime.fashion.service.messages;
+using com.intime.fashion.service.messages.Message;
 using Common.Logging;
 using Newtonsoft.Json;
 using System;
@@ -59,14 +61,16 @@ namespace com.intime.jobscheduler
                         var validHandlers = _handlers.Where(h => h.SourceType == message.SourceType && (h.ActionType & message.ActionType) == message.ActionType);
                         foreach (var handler in validHandlers)
                         {
-                            
+
+                            using (var tls = new ScopedLifetimeDbContextManager())
+                            {
                                 bool isSuccess = handler.Work(message);
                                 if (!isSuccess)
                                 {
                                     _log.Warn(string.Format("message not handled:{0}", JsonConvert.SerializeObject(message)));
                                     return false;
                                 }
-                          
+                            }
                             
                         }
                         return true;
@@ -85,11 +89,11 @@ namespace com.intime.jobscheduler
         private IEnumerable<MessageHandler> GetMessageHandlers()
         {
             var handlers = new List<MessageHandler>();
-            handlers.Add(new Message.ComboHandler());
-            handlers.Add(new Message.ProductHandler());
-            handlers.Add(new Message.InventoryHandler());
-            handlers.Add(new Message.OrderPaidHandler());
-            handlers.Add(new Message.GiftcardPaidHandler());
+            handlers.Add(new ComboHandler());
+            handlers.Add(new ProductHandler());
+            handlers.Add(new InventoryHandler());
+            handlers.Add(new OrderPaidHandler());
+            handlers.Add(new GiftcardPaidHandler());
             return handlers;
         }
 

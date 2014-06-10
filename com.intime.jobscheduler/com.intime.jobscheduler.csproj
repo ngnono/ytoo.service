@@ -209,13 +209,7 @@
     <Compile Include="MainJobService.Designer.cs">
       <DependentUpon>MainJobService.cs</DependentUpon>
     </Compile>
-    <Compile Include="MessageHandler.cs" />
     <Compile Include="MessageListener.cs" />
-    <Compile Include="Message\ComboHandler.cs" />
-    <Compile Include="Message\GiftcardPaidHandler.cs" />
-    <Compile Include="Message\InventoryHandler.cs" />
-    <Compile Include="Message\OrderPaidHandler.cs" />
-    <Compile Include="Message\ProductHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScopedLifetimeManager.cs" />
@@ -276,6 +270,10 @@
     <ProjectReference Include="..\com.intime.fashion.data\com.intime.fashion.data.erp.csproj">
       <Project>{b224c596-53f1-48a6-948f-df3cd2acd15d}</Project>
       <Name>com.intime.fashion.data.erp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.messages\com.intime.fashion.service.messages.csproj">
+      <Project>{097e9eaf-ec77-4fb2-86fb-7b30acd7df93}</Project>
+      <Name>com.intime.fashion.service.messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
