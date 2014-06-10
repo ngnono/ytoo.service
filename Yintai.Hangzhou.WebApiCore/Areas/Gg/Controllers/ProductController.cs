@@ -82,7 +82,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
               body =>
                   body.Filter(
                   q => q.Terms(p => p.ProductId, productIds)
-            ).Skip(0).Size(int.MaxValue));
+            ).Skip(0).Size(5000));
 
 
             // ===========================================================================
