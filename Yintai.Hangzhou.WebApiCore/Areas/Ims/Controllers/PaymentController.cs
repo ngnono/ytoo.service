@@ -21,6 +21,10 @@ using Yintai.Hangzhou.Service.Logic;
 using Yintai.Hangzhou.Model;
 using com.intime.fashion.common;
 using Yintai.Architecture.Common.Logger;
+using System.Xml;
+using Yintai.Hangzhou.Service;
+using com.intime.fashion.common.message.Messages;
+using com.intime.fashion.common.message;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -135,7 +139,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             {
                                 ts.Complete();
                                 //notify wx async
-                                NotifyWxAsync(AssociateOrderType.Product, orderEntity.OrderNo, request.OpenId);
+                                MessageCenterService.SafeNotifyAsync(() =>
+                                {
+                                    return new PaidMessage()
+                                    {
+                                        SourceType = (int)MessageSourceType.Order,
+                                        SourceNo = orderEntity.OrderNo
+                                    };
+                                });
                             }
                             else
                                 return Content("fail");
@@ -150,6 +161,96 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             else
             {
                 return Content("fail");
+            }
+        }
+        public ActionResult Notify_ALI()
+        {
+            Dictionary<string, string> sPara = GetQueryStringParams();
+
+            if (sPara.Count > 0)
+            {
+                var aliNotify = new Com.Alipay2.Notify();
+                bool verifyResult = aliNotify.VerifyNotify(sPara, Request.Form["sign"]);
+
+                if (verifyResult)
+                {
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(sPara["notify_data"]);
+
+                    string out_trade_no = xmlDoc.SelectSingleNode("/notify/out_trade_no").InnerText;
+                    string trade_no = xmlDoc.SelectSingleNode("/notify/trade_no").InnerText;
+
+                    string trade_status = xmlDoc.SelectSingleNode("/notify/trade_status").InnerText;
+
+                    var amount = decimal.Parse(xmlDoc.SelectSingleNode("/notify/total_fee").InnerText);
+                    if (trade_status == "TRADE_FINISHED")
+                    {
+                        var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no
+                            && p.PaymentCode == Com.Alipay.Config.PaymentCode).FirstOrDefault();
+                        var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == out_trade_no).FirstOrDefault();
+                        if (paymentEntity == null && orderEntity != null)
+                        {
+                            OrderTransactionEntity orderTransaction = null;
+                            using (var ts = new TransactionScope())
+                            {
+                                _paymentNotifyRepo.Insert(new PaymentNotifyLogEntity()
+                                {
+                                    CreateDate = DateTime.Now,
+                                    OrderNo = out_trade_no,
+                                    PaymentCode = Com.Alipay.Config.PaymentCode,
+                                    PaymentContent = JsonConvert.SerializeObject(sPara)
+                                });
+
+                                orderTransaction = _orderTranRepo.Insert(new OrderTransactionEntity()
+                                {
+                                    Amount = amount,
+                                    OrderNo = out_trade_no,
+                                    CreateDate = DateTime.Now,
+                                    IsSynced = false,
+                                    PaymentCode = Com.Alipay.Config.PaymentCode,
+                                    TransNo = trade_no,
+                                    OrderType = (int)PaidOrderType.Self
+                                });
+                                if (orderEntity.Status != (int)OrderStatus.Paid && orderEntity.TotalAmount <= amount)
+                                {
+                                    orderEntity.Status = (int)OrderStatus.Paid;
+                                    orderEntity.UpdateDate = DateTime.Now;
+                                    orderEntity.RecAmount = amount;
+                                    _orderRepo.Update(orderEntity);
+
+                                    _orderlogRepo.Insert(new OrderLogEntity()
+                                    {
+                                        CreateDate = DateTime.Now,
+                                        CreateUser = 0,
+                                        CustomerId = orderEntity.CustomerId,
+                                        Operation = "支付订单",
+                                        OrderNo = out_trade_no,
+                                        Type = (int)OrderOpera.CustomerPay
+                                    });
+                                }
+                                ts.Complete();
+                                MessageCenterService.SafeNotifyAsync(() => {
+                                    return new PaidMessage() { 
+                                         SourceType = (int)MessageSourceType.Order,
+                                         SourceNo = orderEntity.OrderNo
+                                    };
+                                });
+                            }
+
+                        }
+
+                    }
+                    return Content("success");
+
+                }
+                else
+                {
+                    return Content("fail");
+                }
+            }
+            else
+            {
+                return Content("无通知参数");
             }
         }
         public ActionResult Notify_GiftCard(WxNotifyPostRequest request)
@@ -249,7 +350,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             }
                             ts.Complete();
                             //notify wx async
-                            NotifyWxAsync(AssociateOrderType.GiftCard, giftcardOrder.No, request.OpenId);
+                            MessageCenterService.SafeNotifyAsync(() =>
+                            {
+                                return new PaidMessage()
+                                {
+                                    SourceType = (int)MessageSourceType.GiftCard,
+                                    SourceNo = giftcardOrder.No
+                                };
+                            });
                         }
                     }
 
@@ -275,6 +383,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
             return requestParams;
         }
+
         private DbContext Context
         {
             get

@@ -10,7 +10,7 @@ namespace com.intime.fashion.common.config
     public class ElasticSearchConfigurationSetting : CommonConfigurationBase
     {
         private static ElasticSearchConfigurationSetting instance = new ElasticSearchConfigurationSetting();
-        private ElasticSearchConfigurationSetting() { }
+        internal ElasticSearchConfigurationSetting() { }
         public static ElasticSearchConfigurationSetting Current
         {
             get

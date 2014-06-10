@@ -12,6 +12,7 @@ namespace com.intime.fashion.common.message
         
         CreateEntity = 1,
         UpdateEntity = 2,
-        DeleteEntity = 4
+        DeleteEntity = 4,
+        Paid = 8
     }
 }

@@ -88,6 +88,8 @@ namespace com.intime.jobscheduler
             handlers.Add(new Message.ComboHandler());
             handlers.Add(new Message.ProductHandler());
             handlers.Add(new Message.InventoryHandler());
+            handlers.Add(new Message.OrderPaidHandler());
+            handlers.Add(new Message.GiftcardPaidHandler());
             return handlers;
         }
 

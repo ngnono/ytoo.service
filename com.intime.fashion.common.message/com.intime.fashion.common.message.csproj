@@ -46,6 +46,7 @@
     <Compile Include="IMessageSender.cs" />
     <Compile Include="MessageSourceType.cs" />
     <Compile Include="MessageAction.cs" />
+    <Compile Include="Messages\PaidMessage.cs" />
     <Compile Include="Messages\CreateMessage.cs" />
     <Compile Include="Messages\DeleteMessage.cs" />
     <Compile Include="Messages\UpdateMessage.cs" />
