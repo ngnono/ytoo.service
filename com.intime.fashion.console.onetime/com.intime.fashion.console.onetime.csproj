@@ -89,6 +89,10 @@
       <Project>{5d633b61-5763-459b-a72e-ae66f5bc0793}</Project>
       <Name>com.intime.fashion.common.config</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.common.message.rabbit\com.intime.fashion.common.message.rabbit.csproj">
+      <Project>{c5b14b68-f27c-4317-9327-5fcf66aefa52}</Project>
+      <Name>com.intime.fashion.common.message.rabbit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.common.message\com.intime.fashion.common.message.csproj">
       <Project>{a7154a06-be04-400f-8652-5b52e673b7db}</Project>
       <Name>com.intime.fashion.common.message</Name>
@@ -100,6 +104,10 @@
     <ProjectReference Include="..\com.intime.fashion.service.messages\com.intime.fashion.service.messages.csproj">
       <Project>{097e9eaf-ec77-4fb2-86fb-7b30acd7df93}</Project>
       <Name>com.intime.fashion.service.messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.search\com.intime.fashion.service.search.csproj">
+      <Project>{be512bbf-4f5a-4909-b9c0-cf3419e0f945}</Project>
+      <Name>com.intime.fashion.service.search</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
       <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>

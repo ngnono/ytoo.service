@@ -1,4 +1,5 @@
 ﻿using CLAP;
+using com.intime.fashion.service.search;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,7 +9,6 @@ using System.Threading.Tasks;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
-using Yintai.Hangzhou.Service.Logic;
 
 namespace com.intime.fashion.console.onetime
 {
