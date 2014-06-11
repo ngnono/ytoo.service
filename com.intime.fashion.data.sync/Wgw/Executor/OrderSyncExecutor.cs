@@ -48,7 +48,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             this.SyncShippedOrder(pageSize);
         }
 
-        private void DoQuery(Expression<Func<Map4Order, bool>> whereCondition, Action<IQueryable<Map4Order>> callback)
+        private void DoQuery(Expression<Func<Map4Order, bool>> whereCondition, Action<IQueryable<Map4OrderEntity>> callback)
         {
             using (var context = DbContextHelper.GetDbContext())
             {
@@ -78,7 +78,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
 
             while (cursor < totalCount)
             {
-                List<Map4Order> oneTimeList = null;
+                List<Map4OrderEntity> oneTimeList = null;
                 DoQuery(null,orders=>oneTimeList = orders.Where(o=>o.Id > lastCursor).OrderBy(o=>o.Id).Take(pageSize).ToList());
                 foreach (var map4Order in oneTimeList)
                 {

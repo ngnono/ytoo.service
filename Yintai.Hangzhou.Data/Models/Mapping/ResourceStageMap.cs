@@ -8,12 +8,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
         public ResourceStageEntityMap()
         {
             // Primary Key
-            this.HasKey(t => new { t.Id, t.Status });
+            this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
             this.Property(t => t.Name)
                 .HasMaxLength(200);
 
@@ -25,9 +22,6 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
 
             this.Property(t => t.ItemCode)
                 .HasMaxLength(64);
-
-            this.Property(t => t.Status)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             // Table & Column Mappings
             this.ToTable("ResourceStage");

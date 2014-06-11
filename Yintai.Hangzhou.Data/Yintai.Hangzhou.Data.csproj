@@ -88,6 +88,14 @@
   <ItemGroup>
     <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
     <Compile Include="Models\Banner.cs" />
+    <Compile Include="Models\IMS_InviteCodeRequest.cs" />
+    <Compile Include="Models\MappedProductBackup.cs" />
+    <Compile Include="Models\Mapping\IMS_InviteCodeRequestMap.cs" />
+    <Compile Include="Models\Mapping\Map4CategoryMap.cs" />
+    <Compile Include="Models\Mapping\Map4InventoryMap.cs" />
+    <Compile Include="Models\Mapping\Map4OrderMap.cs" />
+    <Compile Include="Models\Mapping\Map4ProductMap.cs" />
+    <Compile Include="Models\Mapping\MappedProductBackupMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthMenuMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleMenuMap.cs" />
@@ -115,8 +123,14 @@
     <Compile Include="Models\Mapping\OPC_ShippingSaleMap.cs" />
     <Compile Include="Models\Mapping\OPC_SKUMap.cs" />
     <Compile Include="Models\Mapping\OPC_StockMap.cs" />
+    <Compile Include="Models\Mapping\OPC_StockPropertyMap.cs" />
+    <Compile Include="Models\Mapping\OPC_StockPropertyValueMap.cs" />
+    <Compile Include="Models\Mapping\OPC_StockPropertyValueRawMap.cs" />
     <Compile Include="Models\Mapping\OPC_StorePriorityMap.cs" />
     <Compile Include="Models\Mapping\OPC_SupplierInfoMap.cs" />
+    <Compile Include="Models\Mapping\SectionBrandImportStageMap.cs" />
+    <Compile Include="Models\Mapping\SectionBrandImportStageOutputMap.cs" />
+    <Compile Include="Models\Mapping\Supplier_BrandMap.cs" />
     <Compile Include="Models\Mapping\WX_MenuMap.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />
@@ -145,8 +159,14 @@
     <Compile Include="Models\OPC_ShippingSaleComment.cs" />
     <Compile Include="Models\OPC_SKU.cs" />
     <Compile Include="Models\OPC_Stock.cs" />
+    <Compile Include="Models\OPC_StockProperty.cs" />
+    <Compile Include="Models\OPC_StockPropertyValue.cs" />
+    <Compile Include="Models\OPC_StockPropertyValueRaw.cs" />
     <Compile Include="Models\OPC_StorePriority.cs" />
     <Compile Include="Models\OPC_SupplierInfo.cs" />
+    <Compile Include="Models\SectionBrandImportStage.cs" />
+    <Compile Include="Models\SectionBrandImportStageOutput.cs" />
+    <Compile Include="Models\Supplier_Brand.cs" />
     <Compile Include="Models\WX_Menu.cs" />
     <Compile Include="Models\IMS_Associate.cs" />
     <Compile Include="Models\IMS_AssociateBrand.cs" />

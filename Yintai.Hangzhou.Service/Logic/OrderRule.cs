@@ -90,6 +90,29 @@ namespace Yintai.Hangzhou.Service.Logic
             };
 
         }
+        public static OrderComputeResult ComputeAmount_Combo(int comboId)
+        {
+            var linq = Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == comboId)
+                     .Join(Context.Set<ProductEntity>().Where(p => p.Is4Sale == true && p.Status == (int)DataStatus.Normal
+                                        && Context.Set<InventoryEntity>().Where(i => i.Amount > 0).Any(i => i.ProductId == p.Id)),
+                             o => o.ProductId,
+                             i => i.Id,
+                             (o, i) => i);
+            var amount = linq.Sum(l=>(decimal?)l.Price*1)??0m;
+
+            var discount = ComputeComboDiscount(comboId, linq.Select(l => l.Id));
+            var totalAmount = amount-discount;
+
+            return new OrderComputeResult()
+            {
+                TotalAmount = totalAmount,
+                ExtendPrice = amount,
+                TotalFee = 0m,
+                TotalPoints = 0,
+                TotalQuantity =linq.Count()
+            };
+
+        }
         public static OrderComputeResult ComputeFee()
         {
             return new OrderComputeResult()
@@ -113,6 +136,7 @@ namespace Yintai.Hangzhou.Service.Logic
             var _orderexRepo = ServiceLocator.Current.Resolve<IOrder2ExRepository>();
 
             decimal totalAmount = 0m;
+            decimal discountAmount = 0m;
             bool isSelfOrder = false;
             foreach (var product in request.OrderModel.Products)
             {
@@ -127,7 +151,11 @@ namespace Yintai.Hangzhou.Service.Logic
                     isSelfOrder = true;
                 }
             }
-
+            if (request.OrderModel.ComboId.HasValue && request.OrderModel.ComboId > 0)
+            {
+                discountAmount = ComputeComboDiscount(request.OrderModel.ComboId.Value, request.OrderModel.Products.Select(p => p.ProductId));
+                totalAmount = totalAmount - discountAmount;
+            }
             if (totalAmount <= 0)
                 return CommonUtil.RenderError(r => r.Message = "商品销售价信息错误！");
 
@@ -164,8 +192,9 @@ namespace Yintai.Hangzhou.Service.Logic
                     OrderNo = orderNo,
                     TotalPoints = otherFee.TotalPoints,
                     OrderSource = request.Channel,
-                    OrderProductType = isSelfOrder?(int)OrderProductType.SelfProduct:(int)OrderProductType.SystemProduct
-
+                    OrderProductType = isSelfOrder?(int)OrderProductType.SelfProduct:(int)OrderProductType.SystemProduct,
+                     DiscountAmount = discountAmount,
+                     PromotionFlag = discountAmount>0?true:false
                 });
                 foreach (var product in request.OrderModel.Products)
                 {
@@ -301,7 +330,7 @@ namespace Yintai.Hangzhou.Service.Logic
                     paymentName = paymentEntity.Name;
 
                     //渠道订单同步时传递的是渠道订单号
-                    var channelOrder = db.Set<Map4Order>().FirstOrDefault(o=>o.OrderNo==dealCode);
+                    var channelOrder = db.Set<Map4OrderEntity>().FirstOrDefault(o=>o.OrderNo==dealCode);
                     if (channelOrder != null && !string.IsNullOrEmpty(channelOrder.ChannelOrderCode))
                     {
                         dealCode = channelOrder.ChannelOrderCode;
@@ -356,7 +385,7 @@ namespace Yintai.Hangzhou.Service.Logic
             }
 
             var dealCode =
-                Context.Set<Map4Order>().First(o => o.OrderNo == orderNo && o.Channel == orderSource).ChannelOrderCode;
+                Context.Set<Map4OrderEntity>().First(o => o.OrderNo == orderNo && o.Channel == orderSource).ChannelOrderCode;
 
             var customer = Context.Set<UserEntity>().FirstOrDefault(u => u.Id == order.CustomerId);
 
@@ -463,6 +492,24 @@ namespace Yintai.Hangzhou.Service.Logic
                 //saleCodeSid = saleCodeId.HasValue ? saleCodeId.ToString() : string.Empty
             };
             return erpItem;
+        }
+
+        private static decimal ComputeComboDiscount(int comboId, IEnumerable<int> inProducts)
+        {
+            var comboEntity = Context.Set<IMS_ComboEntity>().Find(comboId);
+            bool notMatchCombo = false;
+            foreach (var product in Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == comboId))
+            {
+                if (!inProducts.Contains(product.ProductId))
+                {
+                    notMatchCombo = true;
+                    break;
+                }
+            }
+            bool inPromotion = (comboEntity.IsInPromotion ?? false) &&
+                                !notMatchCombo;
+
+            return inPromotion ? (comboEntity.DiscountAmount ?? 0m) :0m;
         }
 
         public static string CreateGiftCardNo()

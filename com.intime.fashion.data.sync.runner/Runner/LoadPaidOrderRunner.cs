@@ -32,12 +32,12 @@ namespace com.intime.fashion.data.sync.runner.Runner
             }
         }
 
-        private void Query(DateTime benchTime, Action<IQueryable<Map4Order>> callback)
+        private void Query(DateTime benchTime, Action<IQueryable<Map4OrderEntity>> callback)
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var orders =
-                    db.Set<Map4Order>()
+                    db.Set<Map4OrderEntity>()
                         .Where(
                             m =>
                                 m.CreateDate >= benchTime && m.Channel == ConstValue.WGW_CHANNEL_NAME &&
@@ -59,7 +59,7 @@ namespace com.intime.fashion.data.sync.runner.Runner
 
             while (cursor < totalCount)
             {
-                List<Map4Order> oneTimeList = null;
+                List<Map4OrderEntity> oneTimeList = null;
                 Query(benchTime, orders =>
                 {
                     oneTimeList = orders.Where(o => o.Id > lastCursor).OrderBy(a => a.Id).Take(size).ToList();

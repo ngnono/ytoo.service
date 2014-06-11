@@ -23,7 +23,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             //{
             var db = Context;
             string channelOrderNo = request.sonumber;
-            if (db.Set<Map4Order>().Any(x => x.Channel == channel && x.ChannelOrderCode == channelOrderNo))
+            if (db.Set<Map4OrderEntity>().Any(x => x.Channel == channel && x.ChannelOrderCode == channelOrderNo))
             {
                 return this.RenderError(r => r.Message = string.Format("订单号({0})对应订单已存在！", channelOrderNo));
             }
@@ -158,7 +158,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                     });
                 }
 
-                db.Set<Map4Order>().Add(new Map4Order
+                db.Set<Map4OrderEntity>().Add(new Map4OrderEntity
                 {
                     ChannelOrderCode = request.sonumber,
                     OrderNo = order.OrderNo,
@@ -207,7 +207,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             {
                 return this.RenderError(r => r.Message = "订单已发货，不能取消");
             }
-            var map4Order = db.Set<Map4Order>().FirstOrDefault(m => m.Channel == channel && m.OrderNo == orderNo);
+            var map4Order = db.Set<Map4OrderEntity>().FirstOrDefault(m => m.Channel == channel && m.OrderNo == orderNo);
             if (map4Order == null)
             {
                 return this.RenderError(r => r.Message = string.Format("该渠道({0})不存在此订单号({1})对应的订单", channel, orderNo));
@@ -252,7 +252,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             {
                 return this.RenderError(r => r.Message = string.Format("无效的订单号({0})", orderNo));
             }
-            if (!Context.Set<Map4Order>().Any(x => x.OrderNo == orderNo && x.Channel == channel))
+            if (!Context.Set<Map4OrderEntity>().Any(x => x.OrderNo == orderNo && x.Channel == channel))
             {
                 return this.RenderError(r => r.Message = string.Format("只能修改自己渠道的订单({0})", orderNo));
             }
@@ -285,7 +285,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             {
                 return this.RenderError(r => r.Message = string.Format("无效的订单号({0})", orderNo));
             }
-            if (!Context.Set<Map4Order>().Any(x => x.OrderNo == orderNo && x.Channel == channel))
+            if (!Context.Set<Map4OrderEntity>().Any(x => x.OrderNo == orderNo && x.Channel == channel))
             {
                 return this.RenderError(r => r.Message = string.Format("只能修改自己渠道的订单({0})", orderNo));
             }
@@ -332,7 +332,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                 .Where(
                     x =>
                         orderNoList.Contains(x.OrderNo) &&
-                        Context.Set<Map4Order>().Any(m => m.Channel == channel && m.OrderNo == x.OrderNo)).ToList();
+                        Context.Set<Map4OrderEntity>().Any(m => m.Channel == channel && m.OrderNo == x.OrderNo)).ToList();
 
             var result = new List<dynamic>();
 

@@ -1,0 +1,36 @@
+using System;
+using System.Collections.Generic;
+
+namespace Yintai.Hangzhou.Data.Models
+{
+    public partial class IMS_InviteCodeRequestEntity : Yintai.Architecture.Common.Models.BaseEntity
+    {
+        public int Id { get; set; }
+        public string ContactMobile { get; set; }
+        public string Name { get; set; }
+        public string SectionCode { get; set; }
+        public string SectionName { get; set; }
+        public string OperatorCode { get; set; }
+        public Nullable<int> StoreId { get; set; }
+        public int RequestType { get; set; }
+        public int CreateUser { get; set; }
+        public System.DateTime CreateDate { get; set; }
+        public int UpdateUser { get; set; }
+        public DateTime UpdateDate { get; set; }
+        public int Status { get; set; }
+        public int UserId { get; set; }
+
+        #region Overrides of BaseEntity
+
+        /// <summary>
+        /// KeyMemberId
+        /// </summary>
+        public override object EntityId
+        {       
+                get { return Id; }
+ 
+        }
+
+        #endregion
+    }
+}

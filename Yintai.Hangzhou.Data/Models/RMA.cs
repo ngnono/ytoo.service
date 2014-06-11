@@ -31,10 +31,10 @@ namespace Yintai.Hangzhou.Data.Models
         public string ContactPhone { get; set; }
         public Nullable<int> ShipviaId { get; set; }
         public string ShipNo { get; set; }
-        public string ContactPerson { get; set; }
         public Nullable<int> UserId { get; set; }
-        public Nullable<int> RMAReason { get; set; }
         public string MailAddress { get; set; }
+        public Nullable<int> RMAReason { get; set; }
+        public string ContactPerson { get; set; }
 
         #region Overrides of BaseEntity
 

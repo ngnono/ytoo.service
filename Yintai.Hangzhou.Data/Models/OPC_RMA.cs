@@ -9,7 +9,6 @@ namespace Yintai.Hangzhou.Data.Models
         public string SaleOrderNo { get; set; }
         public string RMANo { get; set; }
         public Nullable<bool> IsInquirer { get; set; }
-        public string SourceDesc { get; set; }
         public Nullable<int> SectionId { get; set; }
         public Nullable<int> StoreId { get; set; }
         public Nullable<int> Count { get; set; }
@@ -45,6 +44,17 @@ namespace Yintai.Hangzhou.Data.Models
         public int UpdatedUser { get; set; }
         public string RMACashNum { get; set; }
         public Nullable<System.DateTime> RMACashDate { get; set; }
+        public string Reason { get; set; }
+        public Nullable<System.DateTime> BackDate { get; set; }
+        public Nullable<System.DateTime> CustomerAuthDate { get; set; }
+        public Nullable<decimal> StoreFee { get; set; }
+        public Nullable<decimal> CustomFee { get; set; }
+        public Nullable<decimal> CompensationFee { get; set; }
+        public string SaleRMASource { get; set; }
+        public Nullable<int> RMAStatus { get; set; }
+        public Nullable<int> RMACashStatus { get; set; }
+        public Nullable<decimal> RealRMASumMoney { get; set; }
+        public Nullable<decimal> RecoverableSumMoney { get; set; }
 
         #region Overrides of BaseEntity
 

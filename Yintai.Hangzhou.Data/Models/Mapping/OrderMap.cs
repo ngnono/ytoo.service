@@ -47,7 +47,13 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(200);
 
             this.Property(t => t.OrderSource)
-                .HasMaxLength(20);
+                .HasMaxLength(10);
+
+            this.Property(t => t.PromotionDesc)
+                .HasMaxLength(500);
+
+            this.Property(t => t.PromotionRules)
+                .HasMaxLength(1000);
 
             // Table & Column Mappings
             this.ToTable("Order");
@@ -80,6 +86,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.TotalPoints).HasColumnName("TotalPoints");
             this.Property(t => t.OrderSource).HasColumnName("OrderSource");
             this.Property(t => t.OrderProductType).HasColumnName("OrderProductType");
+            this.Property(t => t.PromotionFlag).HasColumnName("PromotionFlag");
+            this.Property(t => t.PromotionDesc).HasColumnName("PromotionDesc");
+            this.Property(t => t.PromotionRules).HasColumnName("PromotionRules");
+            this.Property(t => t.DiscountAmount).HasColumnName("DiscountAmount");
 		Init();
         }
 

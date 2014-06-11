@@ -13,7 +13,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             // Properties
             this.Property(t => t.Name)
                 .IsRequired()
-                .HasMaxLength(10);
+                .HasMaxLength(64);
 
             this.Property(t => t.GiftCardAccount)
                 .IsRequired()

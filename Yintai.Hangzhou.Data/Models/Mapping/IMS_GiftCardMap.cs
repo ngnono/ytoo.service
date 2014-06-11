@@ -13,7 +13,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             // Properties
             this.Property(t => t.Name)
                 .IsRequired()
-                .HasMaxLength(500);
+                .HasMaxLength(50);
 
             // Table & Column Mappings
             this.ToTable("IMS_GiftCard");

@@ -61,6 +61,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
              var resources = Context.Set<ResourceEntity>().Where(r => request.Image_Ids.Any(image => image == r.Id));
              if (!resources.Any())
                  return this.RenderError(r => r.Message = "搭配必须图片");
+
+             var price = products.Sum(p => p.Price);
+             if (request.Has_Discount && !(request.Discount < price && request.Discount > 0))
+                 return this.RenderError(r => r.Message = "商品组合的折扣必须大于0，小于商品总价");
             var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
             var canOnline = ComboLogic.IfCanOnline(authuid);
 
@@ -73,14 +77,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     CreateUser = authuid,
                     Desc = request.Desc,
                     OnlineDate = DateTime.Now,
-                    Price = products.Sum(p => p.Price),
+                    Price = price,
                     Private2Name = request.Private_To ?? string.Empty,
                     Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
                     UpdateUser = authuid,
                     UserId = authuid,
                     ProductType = request.Product_Type,
-                    ExpireDate = DateTime.Now.AddDays(ConfigManager.COMBO_EXPIRED_DAYS)
+                    ExpireDate = DateTime.Now.AddDays(ConfigManager.COMBO_EXPIRED_DAYS),
+                    IsInPromotion = request.Has_Discount,
+                    DiscountAmount = request.Discount
                 });
 
                 //step2: create combo2product
@@ -150,11 +156,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             using (var ts = new TransactionScope())
             {
                 //step1: 更新combo
-
                 comboEntity.Private2Name = request.Private_To??string.Empty;
                 comboEntity.ProductType = request.Product_Type;
                 comboEntity.Desc = request.Desc;
                 comboEntity.UpdateDate = DateTime.Now;
+                comboEntity.IsInPromotion = request.Has_Discount;
+                comboEntity.DiscountAmount = request.Discount;
                 if (!noProduct)
                 {
                     var products = Context.Set<ProductEntity>().Where(p => request.ProductIds.Contains(p.Id));
@@ -169,6 +176,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         });
                     }
                 }
+                if (comboEntity.IsInPromotion.HasValue 
+                    && comboEntity.IsInPromotion.Value
+                    && !(comboEntity.DiscountAmount.Value < comboEntity.Price && comboEntity.DiscountAmount.Value > 0))
+                    return this.RenderError(r => r.Message = "商品组合的折扣必须大于0，小于商品总价");
                 _comboRepo.Update(comboEntity);
 
 
@@ -339,15 +350,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult ComputeAmount(int combo_id)
         {
-            var linq = Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == combo_id)
-                     .Join(Context.Set<ProductEntity>().Where(p => p.Is4Sale == true && p.Status == (int)DataStatus.Normal
-                                        && Context.Set<InventoryEntity>().Where(i=>i.Amount>0).Any(i=>i.ProductId==p.Id)),
-                             o => o.ProductId,
-                             i => i.Id,
-                             (o, i) => i);
-                     
-
-            var model = OrderRule.ComputeAmount(linq, 1);
+            var model = OrderRule.ComputeAmount_Combo(combo_id);
 
             return this.RenderSuccess<dynamic>(m => m.Data = new
             {

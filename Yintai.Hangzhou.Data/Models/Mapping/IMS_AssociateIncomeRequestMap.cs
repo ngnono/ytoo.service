@@ -28,7 +28,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(50);
 
             this.Property(t => t.TransferErrorCode)
-                .HasMaxLength(50);
+                .HasMaxLength(10);
 
             this.Property(t => t.TransferErrorMsg)
                 .HasMaxLength(200);

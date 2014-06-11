@@ -20,7 +20,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(200);
 
             this.Property(t => t.StoreItemNo)
-                .HasMaxLength(20);
+                .HasMaxLength(50);
 
             this.Property(t => t.StoreItemDesc)
                 .HasMaxLength(200);
@@ -32,10 +32,11 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(20);
 
             this.Property(t => t.ColorValueName)
-                .HasMaxLength(100);
+                .HasMaxLength(50);
 
             this.Property(t => t.SizeValueName)
-                .HasMaxLength(100);
+                .HasMaxLength(50);
+
             this.Property(t => t.StoreSalesCode)
                 .HasMaxLength(50);
 
@@ -67,8 +68,8 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ColorValueId).HasColumnName("ColorValueId");
             this.Property(t => t.ColorValueName).HasColumnName("ColorValueName");
             this.Property(t => t.SizeValueName).HasColumnName("SizeValueName");
-            this.Property(t => t.ProductType).HasColumnName("ProductType");
             this.Property(t => t.StoreSalesCode).HasColumnName("StoreSalesCode");
+            this.Property(t => t.ProductType).HasColumnName("ProductType");
 		Init();
         }
 

@@ -16,7 +16,8 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(128);
 
             this.Property(t => t.CardProfile)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(1000);
 
             // Table & Column Mappings
             this.ToTable("Card");

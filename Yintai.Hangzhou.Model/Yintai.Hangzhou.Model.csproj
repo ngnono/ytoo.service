@@ -80,6 +80,8 @@
     <Compile Include="Enums\CategorySizeType.cs" />
     <Compile Include="Enums\ComboType.cs" />
     <Compile Include="Enums\IncomeRuleType.cs" />
+    <Compile Include="Enums\InviteCodeRequestStatus.cs" />
+    <Compile Include="Enums\InviteCodeRequestType.cs" />
     <Compile Include="Enums\OrderProductType.cs" />
     <Compile Include="Enums\CouponActionType.cs" />
     <Compile Include="Enums\CouponStatus.cs" />

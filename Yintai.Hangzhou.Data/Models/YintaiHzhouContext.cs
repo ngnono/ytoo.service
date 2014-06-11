@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -12,114 +11,113 @@ using Yintai.Hangzhou.Data.Models.Mapping;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-	public partial class YintaiHangzhouContext : DbContext
-	{
-		private static readonly Architecture.Common.Logger.ILog _log;
+    public partial class YintaiHangzhouContext : DbContext
+    {
+        private static readonly Architecture.Common.Logger.ILog _log;
 
-		static YintaiHangzhouContext()
-		{
-			Database.SetInitializer<YintaiHangzhouContext>(null);
-			_log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
-            
-		}
-
-		/// <summary>
-		/// 正式环境使用，无跟踪
-		/// </summary>
-		public YintaiHangzhouContext()
-			: this("Name=YintaiHangzhouContext", "v1")
-		{
-		}
+        static YintaiHangzhouContext()
+        {
+            Database.SetInitializer<YintaiHangzhouContext>(null);
+            _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
+        }
 
 		/// <summary>
-		/// 正式环境使用，无跟踪
-		/// </summary>
-		/// <param name="nameOrConnectionString"></param>
-		/// <param name="version"></param>
-		public YintaiHangzhouContext(string nameOrConnectionString, string version)
-			: base(nameOrConnectionString)
-		{
-		}
+        /// 正式环境使用，无跟踪
+        /// </summary>
+        public YintaiHangzhouContext()
+            : this("Name=YintaiHangzhouContext", "v1")
+        {
+        }
 
-		#region ef tracing
+        /// <summary>
+        /// 正式环境使用，无跟踪
+        /// </summary>
+        /// <param name="nameOrConnectionString"></param>
+        /// <param name="version"></param>
+        public YintaiHangzhouContext(string nameOrConnectionString, string version)
+            : base(nameOrConnectionString)
+        {
+        }
+
+        #region ef tracing
 
 		public YintaiHangzhouContext(string nameOrConnectionString)
-			: this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
-		{
-		}
+            : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
+        {
+        }
 
-		public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
-			: base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
-		{
+        public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
+            : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
+        {
 			var ctx = ((IObjectContextAdapter)this).ObjectContext;
 
-			this.ObjectContext = ctx;
+            this.ObjectContext = ctx;
 
-			EFTracingConnection tracingConnection;
-			if (ObjectContext.TryUnwrapConnection(out tracingConnection))
-			{
-				ctx.GetTracingConnection().CommandExecuting += (s, e) => _log.Debug(e.ToTraceString());
-			}
+            EFTracingConnection tracingConnection;
+            if (ObjectContext.TryUnwrapConnection(out tracingConnection))
+            {
+                ctx.GetTracingConnection().CommandExecuting += (s, e) => _log.Debug(e.ToTraceString());
+            }
 
-			EFCachingConnection cachingConnection;
-			if (ObjectContext.TryUnwrapConnection(out cachingConnection))
-			{
-				Cache = cacheProvider;
-				CachingPolicy = cachingPolicy;
-			}
-		}
+            EFCachingConnection cachingConnection;
+            if (ObjectContext.TryUnwrapConnection(out cachingConnection))
+            {
+                Cache = cacheProvider;
+                CachingPolicy = cachingPolicy;
+            }
+        }
 
-		#endregion
+        #endregion
 
 		#region Tracing Extensions
 
-		private ObjectContext ObjectContext { get; set; }
+        private ObjectContext ObjectContext { get; set; }
 
-		private EFTracingConnection TracingConnection
-		{
-			get { return ObjectContext.UnwrapConnection<EFTracingConnection>(); }
-		}
+        private EFTracingConnection TracingConnection
+        {
+            get { return ObjectContext.UnwrapConnection<EFTracingConnection>(); }
+        }
 
-		public event EventHandler<CommandExecutionEventArgs> CommandExecuting
-		{
-			add { this.TracingConnection.CommandExecuting += value; }
-			remove { this.TracingConnection.CommandExecuting -= value; }
-		}
+        public event EventHandler<CommandExecutionEventArgs> CommandExecuting
+        {
+            add { this.TracingConnection.CommandExecuting += value; }
+            remove { this.TracingConnection.CommandExecuting -= value; }
+        }
 
-		public event EventHandler<CommandExecutionEventArgs> CommandFinished
-		{
-			add { this.TracingConnection.CommandFinished += value; }
-			remove { this.TracingConnection.CommandFinished -= value; }
-		}
+        public event EventHandler<CommandExecutionEventArgs> CommandFinished
+        {
+            add { this.TracingConnection.CommandFinished += value; }
+            remove { this.TracingConnection.CommandFinished -= value; }
+        }
 
-		public event EventHandler<CommandExecutionEventArgs> CommandFailed
-		{
-			add { this.TracingConnection.CommandFailed += value; }
-			remove { this.TracingConnection.CommandFailed -= value; }
-		}
+        public event EventHandler<CommandExecutionEventArgs> CommandFailed
+        {
+            add { this.TracingConnection.CommandFailed += value; }
+            remove { this.TracingConnection.CommandFailed -= value; }
+        }
 
-		#endregion
+        #endregion
 
-		#region Caching Extensions
+        #region Caching Extensions
 
-		private EFCachingConnection CachingConnection
-		{
-			get { return ObjectContext.UnwrapConnection<EFCachingConnection>(); }
-		}
+        private EFCachingConnection CachingConnection
+        {
+            get { return ObjectContext.UnwrapConnection<EFCachingConnection>(); }
+        }
 
-		public ICache Cache
-		{
-			get { return CachingConnection.Cache; }
-			set { CachingConnection.Cache = value; }
-		}
+        public ICache Cache
+        {
+            get { return CachingConnection.Cache; }
+            set { CachingConnection.Cache = value; }
+        }
 
-		public CachingPolicy CachingPolicy
-		{
-			get { return CachingConnection.CachingPolicy; }
-			set { CachingConnection.CachingPolicy = value; }
-		}
+        public CachingPolicy CachingPolicy
+        {
+            get { return CachingConnection.CachingPolicy; }
+            set { CachingConnection.CachingPolicy = value; }
+        }
 
-		#endregion
+        #endregion
 
 		#region code reverse
         public DbSet<AdminAccessRightEntity> AdminAccessRights { get; set; }
@@ -144,82 +142,6 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<FeedbackEntity> Feedbacks { get; set; }
         public DbSet<GroupEntity> Groups { get; set; }
         public DbSet<HotWordEntity> HotWords { get; set; }
-        public DbSet<InboundPackageEntity> InboundPackages { get; set; }
-        public DbSet<InventoryEntity> Inventories { get; set; }
-        public DbSet<JobSuccessHistoryEntity> JobSuccessHistories { get; set; }
-        public DbSet<LikeEntity> Likes { get; set; }
-        public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
-        public DbSet<OrderEntity> Orders { get; set; }
-        public DbSet<Order2ExEntity> Order2Ex { get; set; }
-        public DbSet<OrderItemEntity> OrderItems { get; set; }
-        public DbSet<OrderLogEntity> OrderLogs { get; set; }
-        public DbSet<OrderTransactionEntity> OrderTransactions { get; set; }
-        public DbSet<OutboundEntity> Outbounds { get; set; }
-        public DbSet<OutboundItemEntity> OutboundItems { get; set; }
-        public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
-        public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
-        public DbSet<PaymentNotifyLogEntity> PaymentNotifyLogs { get; set; }
-        public DbSet<PKeyEntity> PKeys { get; set; }
-        public DbSet<PMessageEntity> PMessages { get; set; }
-        public DbSet<PointHistoryEntity> PointHistories { get; set; }
-        public DbSet<PointOrderRuleEntity> PointOrderRules { get; set; }
-        public DbSet<ProductEntity> Products { get; set; }
-        public DbSet<ProductMapEntity> ProductMaps { get; set; }
-        public DbSet<ProductPriceEntity> ProductPrices { get; set; }
-        public DbSet<ProductPropertyEntity> ProductProperties { get; set; }
-        public DbSet<ProductPropertyStageEntity> ProductPropertyStages { get; set; }
-        public DbSet<ProductPropertyValueEntity> ProductPropertyValues { get; set; }
-        public DbSet<ProductStageEntity> ProductStages { get; set; }
-        public DbSet<ProductUploadJobEntity> ProductUploadJobs { get; set; }
-        public DbSet<PromotionEntity> Promotions { get; set; }
-        public DbSet<Promotion2ProductEntity> Promotion2Product { get; set; }
-        public DbSet<PromotionBrandRelationEntity> PromotionBrandRelations { get; set; }
-        public DbSet<RemindEntity> Reminds { get; set; }
-        public DbSet<ResourceEntity> Resources { get; set; }
-        public DbSet<ResourceStageEntity> ResourceStages { get; set; }
-        public DbSet<RMAEntity> RMAs { get; set; }
-        public DbSet<RMA2ExEntity> RMA2Ex { get; set; }
-        public DbSet<RMAItemEntity> RMAItems { get; set; }
-        public DbSet<RMALogEntity> RMALogs { get; set; }
-        public DbSet<RMAReasonEntity> RMAReasons { get; set; }
-        public DbSet<RoleEntity> Roles { get; set; }
-        public DbSet<RoleAccessRightEntity> RoleAccessRights { get; set; }
-        public DbSet<SectionEntity> Sections { get; set; }
-        public DbSet<SeedEntity> Seeds { get; set; }
-        public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
-        public DbSet<ShippingAddressEntity> ShippingAddresses { get; set; }
-        public DbSet<ShipViaEntity> ShipVias { get; set; }
-        public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
-        public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
-        public DbSet<StoreEntity> Stores { get; set; }
-        public DbSet<StoreCouponEntity> StoreCoupons { get; set; }
-        public DbSet<StorePromotionEntity> StorePromotions { get; set; }
-        public DbSet<StorePromotionScopeEntity> StorePromotionScopes { get; set; }
-        public DbSet<StoreRealEntity> StoreReals { get; set; }
-        public DbSet<TagEntity> Tags { get; set; }
-        public DbSet<TimeSeedEntity> TimeSeeds { get; set; }
-        public DbSet<UserEntity> Users { get; set; }
-        public DbSet<UserAccountEntity> UserAccounts { get; set; }
-        public DbSet<UserAuthEntity> UserAuths { get; set; }
-        public DbSet<UserRoleEntity> UserRoles { get; set; }
-        public DbSet<VerifyCodeEntity> VerifyCodes { get; set; }
-        public DbSet<WXReplyEntity> WXReplies { get; set; }
-        public DbSet<WX_MenuEntity> WXMenus { get; set; }
-        public DbSet<VUserEntity> VUsers { get; set; }
-        public DbSet<VUserRoleEntity> VUserRoles { get; set; }
-
-        public DbSet<Map4Brand> Map4Brands { get; set; }
-
-        public DbSet<Map4Product> Map4Products { get; set; }
-
-        public DbSet<Map4Category> Map4Categories { get; set; }
-
-        public DbSet<Map4Inventory> Map4Inventories { get; set; }
-
-        public DbSet<Map4Order> Map4Orders { get; set; }
-
-        public DbSet<MappedProductBackup> MappedProductBackups { get; set; }
-
         public DbSet<IMS_AssociateEntity> IMS_Associate { get; set; }
         public DbSet<IMS_AssociateBrandEntity> IMS_AssociateBrand { get; set; }
         public DbSet<IMS_AssociateIncomeEntity> IMS_AssociateIncome { get; set; }
@@ -243,11 +165,21 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<IMS_GiftCardTransfersEntity> IMS_GiftCardTransfers { get; set; }
         public DbSet<IMS_GiftCardUserEntity> IMS_GiftCardUser { get; set; }
         public DbSet<IMS_InviteCodeEntity> IMS_InviteCode { get; set; }
+        public DbSet<IMS_InviteCodeRequestEntity> IMS_InviteCodeRequest { get; set; }
         public DbSet<IMS_SalesCodeEntity> IMS_SalesCode { get; set; }
         public DbSet<IMS_SectionBrandEntity> IMS_SectionBrand { get; set; }
         public DbSet<IMS_SectionOperatorEntity> IMS_SectionOperator { get; set; }
-        public DbSet<ProductCode2StoreCodeEntity> ProductCode2StoreCode { get; set; }
-
+        public DbSet<InboundPackageEntity> InboundPackages { get; set; }
+        public DbSet<InventoryEntity> Inventories { get; set; }
+        public DbSet<JobSuccessHistoryEntity> JobSuccessHistories { get; set; }
+        public DbSet<LikeEntity> Likes { get; set; }
+        public DbSet<Map4BrandEntity> Map4Brand { get; set; }
+        public DbSet<Map4CategoryEntity> Map4Category { get; set; }
+        public DbSet<Map4InventoryEntity> Map4Inventory { get; set; }
+        public DbSet<Map4OrderEntity> Map4Order { get; set; }
+        public DbSet<Map4ProductEntity> Map4Product { get; set; }
+        public DbSet<MappedProductBackupEntity> MappedProductBackups { get; set; }
+        public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
         public DbSet<OPC_AuthMenuEntity> OPC_AuthMenu { get; set; }
         public DbSet<OPC_AuthRoleEntity> OPC_AuthRole { get; set; }
         public DbSet<OPC_AuthRoleMenuEntity> OPC_AuthRoleMenu { get; set; }
@@ -275,13 +207,75 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<OPC_ShippingSaleCommentEntity> OPC_ShippingSaleComment { get; set; }
         public DbSet<OPC_SKUEntity> OPC_SKU { get; set; }
         public DbSet<OPC_StockEntity> OPC_Stock { get; set; }
+        public DbSet<OPC_StockPropertyEntity> OPC_StockProperty { get; set; }
+        public DbSet<OPC_StockPropertyValueEntity> OPC_StockPropertyValue { get; set; }
+        public DbSet<OPC_StockPropertyValueRawEntity> OPC_StockPropertyValueRaw { get; set; }
         public DbSet<OPC_StorePriorityEntity> OPC_StorePriority { get; set; }
         public DbSet<OPC_SupplierInfoEntity> OPC_SupplierInfo { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<Order2ExEntity> Order2Ex { get; set; }
+        public DbSet<OrderItemEntity> OrderItems { get; set; }
+        public DbSet<OrderLogEntity> OrderLogs { get; set; }
+        public DbSet<OrderTransactionEntity> OrderTransactions { get; set; }
+        public DbSet<OutboundEntity> Outbounds { get; set; }
+        public DbSet<OutboundItemEntity> OutboundItems { get; set; }
+        public DbSet<OutsiteUserEntity> OutsiteUsers { get; set; }
+        public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
+        public DbSet<PaymentNotifyLogEntity> PaymentNotifyLogs { get; set; }
+        public DbSet<PKeyEntity> PKeys { get; set; }
+        public DbSet<PMessageEntity> PMessages { get; set; }
+        public DbSet<PointHistoryEntity> PointHistories { get; set; }
+        public DbSet<PointOrderRuleEntity> PointOrderRules { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<ProductCode2StoreCodeEntity> ProductCode2StoreCode { get; set; }
+        public DbSet<ProductMapEntity> ProductMaps { get; set; }
+        public DbSet<ProductPropertyEntity> ProductProperties { get; set; }
+        public DbSet<ProductPropertyStageEntity> ProductPropertyStages { get; set; }
+        public DbSet<ProductPropertyValueEntity> ProductPropertyValues { get; set; }
+        public DbSet<ProductStageEntity> ProductStages { get; set; }
+        public DbSet<ProductUploadJobEntity> ProductUploadJobs { get; set; }
+        public DbSet<PromotionEntity> Promotions { get; set; }
+        public DbSet<Promotion2ProductEntity> Promotion2Product { get; set; }
+        public DbSet<PromotionBrandRelationEntity> PromotionBrandRelations { get; set; }
+        public DbSet<RemindEntity> Reminds { get; set; }
+        public DbSet<ResourceEntity> Resources { get; set; }
+        public DbSet<ResourceStageEntity> ResourceStages { get; set; }
+        public DbSet<RMAEntity> RMAs { get; set; }
+        public DbSet<RMA2ExEntity> RMA2Ex { get; set; }
+        public DbSet<RMAItemEntity> RMAItems { get; set; }
+        public DbSet<RMALogEntity> RMALogs { get; set; }
+        public DbSet<RMAReasonEntity> RMAReasons { get; set; }
+        public DbSet<RoleEntity> Roles { get; set; }
+        public DbSet<RoleAccessRightEntity> RoleAccessRights { get; set; }
+        public DbSet<SectionEntity> Sections { get; set; }
+        public DbSet<SectionBrandImportStageEntity> SectionBrandImportStages { get; set; }
+        public DbSet<SectionBrandImportStageOutputEntity> SectionBrandImportStageOutputs { get; set; }
+        public DbSet<SeedEntity> Seeds { get; set; }
+        public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
+        public DbSet<ShippingAddressEntity> ShippingAddresses { get; set; }
+        public DbSet<ShipViaEntity> ShipVias { get; set; }
+        public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
+        public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
+        public DbSet<StoreEntity> Stores { get; set; }
+        public DbSet<StoreCouponEntity> StoreCoupons { get; set; }
+        public DbSet<StorePromotionEntity> StorePromotions { get; set; }
+        public DbSet<StorePromotionScopeEntity> StorePromotionScopes { get; set; }
+        public DbSet<StoreRealEntity> StoreReals { get; set; }
+        public DbSet<Supplier_BrandEntity> Supplier_Brand { get; set; }
+        public DbSet<TagEntity> Tags { get; set; }
+        public DbSet<TimeSeedEntity> TimeSeeds { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
+        public DbSet<UserAccountEntity> UserAccounts { get; set; }
+        public DbSet<UserAuthEntity> UserAuths { get; set; }
+        public DbSet<UserRoleEntity> UserRoles { get; set; }
+        public DbSet<VerifyCodeEntity> VerifyCodes { get; set; }
+        public DbSet<WXReplyEntity> WXReplies { get; set; }
+        public DbSet<VUserEntity> VUsers { get; set; }
+        public DbSet<VUserRoleEntity> VUserRoles { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 			Configuration.AutoDetectChangesEnabled = false;
-            
             // 移除复数表名的契约
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
@@ -310,75 +304,6 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new FeedbackEntityMap());
             modelBuilder.Configurations.Add(new GroupEntityMap());
             modelBuilder.Configurations.Add(new HotWordEntityMap());
-            modelBuilder.Configurations.Add(new InboundPackageEntityMap());
-            modelBuilder.Configurations.Add(new InventoryEntityMap());
-            modelBuilder.Configurations.Add(new JobSuccessHistoryEntityMap());
-            modelBuilder.Configurations.Add(new LikeEntityMap());
-            modelBuilder.Configurations.Add(new NotificationLogEntityMap());
-            modelBuilder.Configurations.Add(new OrderEntityMap());
-            modelBuilder.Configurations.Add(new Order2ExEntityMap());
-            modelBuilder.Configurations.Add(new OrderItemEntityMap());
-            modelBuilder.Configurations.Add(new OrderLogEntityMap());
-            modelBuilder.Configurations.Add(new OrderTransactionEntityMap());
-            modelBuilder.Configurations.Add(new OutboundEntityMap());
-            modelBuilder.Configurations.Add(new OutboundItemEntityMap());
-            modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
-            modelBuilder.Configurations.Add(new PaymentMethodEntityMap());
-            modelBuilder.Configurations.Add(new PaymentNotifyLogEntityMap());
-            modelBuilder.Configurations.Add(new PKeyEntityMap());
-            modelBuilder.Configurations.Add(new PMessageEntityMap());
-            modelBuilder.Configurations.Add(new PointHistoryEntityMap());
-            modelBuilder.Configurations.Add(new PointOrderRuleEntityMap());
-            modelBuilder.Configurations.Add(new ProductEntityMap());
-            modelBuilder.Configurations.Add(new ProductMapEntityMap());
-            modelBuilder.Configurations.Add(new ProductPriceEntityMap());
-            modelBuilder.Configurations.Add(new ProductPropertyEntityMap());
-            modelBuilder.Configurations.Add(new ProductPropertyStageEntityMap());
-            modelBuilder.Configurations.Add(new ProductPropertyValueEntityMap());
-            modelBuilder.Configurations.Add(new ProductStageEntityMap());
-            modelBuilder.Configurations.Add(new ProductUploadJobEntityMap());
-            modelBuilder.Configurations.Add(new PromotionEntityMap());
-            modelBuilder.Configurations.Add(new Promotion2ProductEntityMap());
-            modelBuilder.Configurations.Add(new PromotionBrandRelationEntityMap());
-            modelBuilder.Configurations.Add(new RemindEntityMap());
-            modelBuilder.Configurations.Add(new ResourceEntityMap());
-            modelBuilder.Configurations.Add(new ResourceStageEntityMap());
-            modelBuilder.Configurations.Add(new RMAEntityMap());
-            modelBuilder.Configurations.Add(new RMA2ExEntityMap());
-            modelBuilder.Configurations.Add(new RMAItemEntityMap());
-            modelBuilder.Configurations.Add(new RMALogEntityMap());
-            modelBuilder.Configurations.Add(new RMAReasonEntityMap());
-            modelBuilder.Configurations.Add(new RoleEntityMap());
-            modelBuilder.Configurations.Add(new RoleAccessRightEntityMap());
-            modelBuilder.Configurations.Add(new SectionEntityMap());
-            modelBuilder.Configurations.Add(new SeedEntityMap());
-            modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
-            modelBuilder.Configurations.Add(new ShippingAddressEntityMap());
-            modelBuilder.Configurations.Add(new ShipViaEntityMap());
-            modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
-            modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());
-            modelBuilder.Configurations.Add(new StoreEntityMap());
-            modelBuilder.Configurations.Add(new StoreCouponEntityMap());
-            modelBuilder.Configurations.Add(new StorePromotionEntityMap());
-            modelBuilder.Configurations.Add(new StorePromotionScopeEntityMap());
-            modelBuilder.Configurations.Add(new StoreRealEntityMap());
-            modelBuilder.Configurations.Add(new TagEntityMap());
-            modelBuilder.Configurations.Add(new TimeSeedEntityMap());
-            modelBuilder.Configurations.Add(new UserEntityMap());
-            modelBuilder.Configurations.Add(new UserAccountEntityMap());
-            modelBuilder.Configurations.Add(new UserAuthEntityMap());
-            modelBuilder.Configurations.Add(new UserRoleEntityMap());
-            modelBuilder.Configurations.Add(new VerifyCodeEntityMap());
-            modelBuilder.Configurations.Add(new WXReplyEntityMap());
-            modelBuilder.Configurations.Add(new WX_MenuEntityMap());
-            modelBuilder.Configurations.Add(new VUserEntityMap());
-            modelBuilder.Configurations.Add(new VUserRoleEntityMap());
-            modelBuilder.Configurations.Add(new Map4BrandMap());
-            modelBuilder.Configurations.Add(new Map4ProductMap());
-            modelBuilder.Configurations.Add(new Map4CategoryMap());
-            modelBuilder.Configurations.Add(new Map4InventoryMap());
-            modelBuilder.Configurations.Add(new Map4OrderMap());
-            modelBuilder.Configurations.Add(new MappedProductBackupMap());
             modelBuilder.Configurations.Add(new IMS_AssociateEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateBrandEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeEntityMap());
@@ -402,16 +327,115 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new IMS_GiftCardTransfersEntityMap());
             modelBuilder.Configurations.Add(new IMS_GiftCardUserEntityMap());
             modelBuilder.Configurations.Add(new IMS_InviteCodeEntityMap());
+            modelBuilder.Configurations.Add(new IMS_InviteCodeRequestEntityMap());
             modelBuilder.Configurations.Add(new IMS_SalesCodeEntityMap());
             modelBuilder.Configurations.Add(new IMS_SectionBrandEntityMap());
             modelBuilder.Configurations.Add(new IMS_SectionOperatorEntityMap());
-            modelBuilder.Configurations.Add(new ProductCode2StoreCodeEntityMap());
-            modelBuilder.Configurations.Add(new OPC_SaleDetailEntityMap());
+            modelBuilder.Configurations.Add(new InboundPackageEntityMap());
+            modelBuilder.Configurations.Add(new InventoryEntityMap());
+            modelBuilder.Configurations.Add(new JobSuccessHistoryEntityMap());
+            modelBuilder.Configurations.Add(new LikeEntityMap());
+            modelBuilder.Configurations.Add(new Map4BrandEntityMap());
+            modelBuilder.Configurations.Add(new Map4CategoryEntityMap());
+            modelBuilder.Configurations.Add(new Map4InventoryEntityMap());
+            modelBuilder.Configurations.Add(new Map4OrderEntityMap());
+            modelBuilder.Configurations.Add(new Map4ProductEntityMap());
+            modelBuilder.Configurations.Add(new MappedProductBackupEntityMap());
+            modelBuilder.Configurations.Add(new NotificationLogEntityMap());
+            modelBuilder.Configurations.Add(new OPC_AuthMenuEntityMap());
+            modelBuilder.Configurations.Add(new OPC_AuthRoleEntityMap());
+            modelBuilder.Configurations.Add(new OPC_AuthRoleMenuEntityMap());
+            modelBuilder.Configurations.Add(new OPC_AuthRoleUserEntityMap());
+            modelBuilder.Configurations.Add(new OPC_AuthUserEntityMap());
+            modelBuilder.Configurations.Add(new OPC_CategoryMapEntityMap());
+            modelBuilder.Configurations.Add(new OPC_ChannelMapEntityMap());
+            modelBuilder.Configurations.Add(new OPC_ChannelProductEntityMap());
+            modelBuilder.Configurations.Add(new OPC_OrderCommentEntityMap());
+            modelBuilder.Configurations.Add(new OPC_OrderSplitLogEntityMap());
+            modelBuilder.Configurations.Add(new OPC_OrgInfoEntityMap());
+            modelBuilder.Configurations.Add(new OPC_RMAEntityMap());
+            modelBuilder.Configurations.Add(new OPC_RMACommentEntityMap());
+            modelBuilder.Configurations.Add(new OPC_RMADetailEntityMap());
+            modelBuilder.Configurations.Add(new OPC_RMALogEntityMap());
+            modelBuilder.Configurations.Add(new OPC_RMANotificationLogEntityMap());
             modelBuilder.Configurations.Add(new OPC_SaleEntityMap());
+            modelBuilder.Configurations.Add(new OPC_SaleCommentEntityMap());
+            modelBuilder.Configurations.Add(new OPC_SaleDetailEntityMap());
+            modelBuilder.Configurations.Add(new OPC_SaleLogEntityMap());
+            modelBuilder.Configurations.Add(new OPC_SaleOrderNotificationLogEntityMap());
+            modelBuilder.Configurations.Add(new OPC_SaleRMAEntityMap());
+            modelBuilder.Configurations.Add(new OPC_SaleRMACommentEntityMap());
             modelBuilder.Configurations.Add(new OPC_ShippingSaleEntityMap());
+            modelBuilder.Configurations.Add(new OPC_ShippingSaleCommentEntityMap());
+            modelBuilder.Configurations.Add(new OPC_SKUEntityMap());
+            modelBuilder.Configurations.Add(new OPC_StockEntityMap());
+            modelBuilder.Configurations.Add(new OPC_StockPropertyEntityMap());
+            modelBuilder.Configurations.Add(new OPC_StockPropertyValueEntityMap());
+            modelBuilder.Configurations.Add(new OPC_StockPropertyValueRawEntityMap());
+            modelBuilder.Configurations.Add(new OPC_StorePriorityEntityMap());
+            modelBuilder.Configurations.Add(new OPC_SupplierInfoEntityMap());
+            modelBuilder.Configurations.Add(new OrderEntityMap());
+            modelBuilder.Configurations.Add(new Order2ExEntityMap());
+            modelBuilder.Configurations.Add(new OrderItemEntityMap());
+            modelBuilder.Configurations.Add(new OrderLogEntityMap());
+            modelBuilder.Configurations.Add(new OrderTransactionEntityMap());
+            modelBuilder.Configurations.Add(new OutboundEntityMap());
+            modelBuilder.Configurations.Add(new OutboundItemEntityMap());
+            modelBuilder.Configurations.Add(new OutsiteUserEntityMap());
+            modelBuilder.Configurations.Add(new PaymentMethodEntityMap());
+            modelBuilder.Configurations.Add(new PaymentNotifyLogEntityMap());
+            modelBuilder.Configurations.Add(new PKeyEntityMap());
+            modelBuilder.Configurations.Add(new PMessageEntityMap());
+            modelBuilder.Configurations.Add(new PointHistoryEntityMap());
+            modelBuilder.Configurations.Add(new PointOrderRuleEntityMap());
+            modelBuilder.Configurations.Add(new ProductEntityMap());
+            modelBuilder.Configurations.Add(new ProductCode2StoreCodeEntityMap());
+            modelBuilder.Configurations.Add(new ProductMapEntityMap());
+            modelBuilder.Configurations.Add(new ProductPropertyEntityMap());
+            modelBuilder.Configurations.Add(new ProductPropertyStageEntityMap());
+            modelBuilder.Configurations.Add(new ProductPropertyValueEntityMap());
+            modelBuilder.Configurations.Add(new ProductStageEntityMap());
+            modelBuilder.Configurations.Add(new ProductUploadJobEntityMap());
+            modelBuilder.Configurations.Add(new PromotionEntityMap());
+            modelBuilder.Configurations.Add(new Promotion2ProductEntityMap());
+            modelBuilder.Configurations.Add(new PromotionBrandRelationEntityMap());
+            modelBuilder.Configurations.Add(new RemindEntityMap());
+            modelBuilder.Configurations.Add(new ResourceEntityMap());
+            modelBuilder.Configurations.Add(new ResourceStageEntityMap());
+            modelBuilder.Configurations.Add(new RMAEntityMap());
+            modelBuilder.Configurations.Add(new RMA2ExEntityMap());
+            modelBuilder.Configurations.Add(new RMAItemEntityMap());
+            modelBuilder.Configurations.Add(new RMALogEntityMap());
+            modelBuilder.Configurations.Add(new RMAReasonEntityMap());
+            modelBuilder.Configurations.Add(new RoleEntityMap());
+            modelBuilder.Configurations.Add(new RoleAccessRightEntityMap());
+            modelBuilder.Configurations.Add(new SectionEntityMap());
+            modelBuilder.Configurations.Add(new SectionBrandImportStageEntityMap());
+            modelBuilder.Configurations.Add(new SectionBrandImportStageOutputEntityMap());
+            modelBuilder.Configurations.Add(new SeedEntityMap());
+            modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
+            modelBuilder.Configurations.Add(new ShippingAddressEntityMap());
+            modelBuilder.Configurations.Add(new ShipViaEntityMap());
+            modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
+            modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());
+            modelBuilder.Configurations.Add(new StoreEntityMap());
+            modelBuilder.Configurations.Add(new StoreCouponEntityMap());
+            modelBuilder.Configurations.Add(new StorePromotionEntityMap());
+            modelBuilder.Configurations.Add(new StorePromotionScopeEntityMap());
+            modelBuilder.Configurations.Add(new StoreRealEntityMap());
+            modelBuilder.Configurations.Add(new Supplier_BrandEntityMap());
+            modelBuilder.Configurations.Add(new TagEntityMap());
+            modelBuilder.Configurations.Add(new TimeSeedEntityMap());
+            modelBuilder.Configurations.Add(new UserEntityMap());
+            modelBuilder.Configurations.Add(new UserAccountEntityMap());
+            modelBuilder.Configurations.Add(new UserAuthEntityMap());
+            modelBuilder.Configurations.Add(new UserRoleEntityMap());
+            modelBuilder.Configurations.Add(new VerifyCodeEntityMap());
+            modelBuilder.Configurations.Add(new WXReplyEntityMap());
+            modelBuilder.Configurations.Add(new VUserEntityMap());
+            modelBuilder.Configurations.Add(new VUserRoleEntityMap());
         }
 
-
 		#endregion
-	}
+    }
 }

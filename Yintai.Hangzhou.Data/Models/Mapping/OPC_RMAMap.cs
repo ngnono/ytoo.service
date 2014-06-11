@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
@@ -18,9 +18,6 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.RMANo)
                 .IsRequired()
                 .HasMaxLength(20);
-
-            this.Property(t => t.SourceDesc)
-                .HasMaxLength(50);
 
             this.Property(t => t.OrderNo)
                 .IsRequired()
@@ -65,13 +62,18 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.RMACashNum)
                 .HasMaxLength(50);
 
+            this.Property(t => t.Reason)
+                .HasMaxLength(200);
+
+            this.Property(t => t.SaleRMASource)
+                .HasMaxLength(20);
+
             // Table & Column Mappings
             this.ToTable("OPC_RMA");
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.SaleOrderNo).HasColumnName("SaleOrderNo");
             this.Property(t => t.RMANo).HasColumnName("RMANo");
             this.Property(t => t.IsInquirer).HasColumnName("IsInquirer");
-            this.Property(t => t.SourceDesc).HasColumnName("SourceDesc");
             this.Property(t => t.SectionId).HasColumnName("SectionId");
             this.Property(t => t.StoreId).HasColumnName("StoreId");
             this.Property(t => t.Count).HasColumnName("Count");
@@ -107,6 +109,17 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.UpdatedUser).HasColumnName("UpdatedUser");
             this.Property(t => t.RMACashNum).HasColumnName("RMACashNum");
             this.Property(t => t.RMACashDate).HasColumnName("RMACashDate");
+            this.Property(t => t.Reason).HasColumnName("Reason");
+            this.Property(t => t.BackDate).HasColumnName("BackDate");
+            this.Property(t => t.CustomerAuthDate).HasColumnName("CustomerAuthDate");
+            this.Property(t => t.StoreFee).HasColumnName("StoreFee");
+            this.Property(t => t.CustomFee).HasColumnName("CustomFee");
+            this.Property(t => t.CompensationFee).HasColumnName("CompensationFee");
+            this.Property(t => t.SaleRMASource).HasColumnName("SaleRMASource");
+            this.Property(t => t.RMAStatus).HasColumnName("RMAStatus");
+            this.Property(t => t.RMACashStatus).HasColumnName("RMACashStatus");
+            this.Property(t => t.RealRMASumMoney).HasColumnName("RealRMASumMoney");
+            this.Property(t => t.RecoverableSumMoney).HasColumnName("RecoverableSumMoney");
 		Init();
         }
 

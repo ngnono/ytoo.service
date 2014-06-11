@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
@@ -28,12 +28,6 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.SaleRMASource)
                 .IsRequired()
                 .HasMaxLength(20);
-
-            this.Property(t => t.RMAStatus)
-                .HasMaxLength(50);
-
-            this.Property(t => t.RMACashStatus)
-                .HasMaxLength(50);
 
             this.Property(t => t.RMANo)
                 .HasMaxLength(20);

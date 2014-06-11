@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
@@ -28,6 +28,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.CreateUser).HasColumnName("CreateUser");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
+            this.Property(t => t.ShippingSaleId).HasColumnName("ShippingSaleId");
 		Init();
         }
 

@@ -1,26 +1,31 @@
-﻿
 using System;
+using System.Collections.Generic;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public class Map4Product:Map4EntityBase
+    public partial class Map4ProductEntity : Yintai.Architecture.Common.Models.BaseEntity
     {
+        public int Id { get; set; }
+        public Nullable<int> ChannelId { get; set; }
+        public string Channel { get; set; }
+        public System.DateTime CreateDate { get; set; }
+        public System.DateTime UpdateDate { get; set; }
         public string ChannelProductId { get; set; }
-
         public int ProductId { get; set; }
-
+        public int Status { get; set; }
         public Nullable<int> IsImageUpload { get; set; }
 
+        #region Overrides of BaseEntity
+
         /// <summary>
-        /// 商品在渠道的上下架状态
+        /// KeyMemberId
         /// </summary>
-        public int Status { get; set; }
-    }
+        public override object EntityId
+        {       
+                get { return Id; }
+ 
+        }
 
-    public class MappedProductBackup : Map4EntityBase
-    {
-        public string ChannelProductId { get; set; }
-
-        public string ProductId { get; set; }
+        #endregion
     }
 }

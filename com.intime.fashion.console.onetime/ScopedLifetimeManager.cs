@@ -12,6 +12,10 @@ using Yintai.Hangzhou.Data.Models;
 
 namespace com.intime.fashion.console.onetime
 {
+    /// <summary>
+    /// This class main purpose is to inject dbcontext class to fix the caching bug
+    /// 
+    /// </summary>
     public class ScopedLifetimeDbContextManager:IDisposable
     {
         DbContext _db = null;
