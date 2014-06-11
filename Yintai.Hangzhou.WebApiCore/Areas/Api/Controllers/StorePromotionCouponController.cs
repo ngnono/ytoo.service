@@ -293,7 +293,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                
                  // step4: void action should call aws service directly to check the real time coupon status
                string message = string.Empty;
-                bool isVoidSuccess = AwsHelper.SendHttpMessage(ConfigManager.AwsHttpUrlVoidCoupon,
+                bool isVoidSuccess = HttpClientUtil.SendHttpMessage(ConfigManager.AwsHttpUrlVoidCoupon,
                         new {
                           code = coupon.Code  
                         },

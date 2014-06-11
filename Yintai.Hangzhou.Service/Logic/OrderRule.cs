@@ -1,6 +1,4 @@
 ﻿using com.intime.fashion.common;
-using com.intime.fashion.common.Aws;
-using com.intime.fashion.common.Erp2;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -286,71 +284,6 @@ namespace Yintai.Hangzhou.Service.Logic
                     return CommonUtil.RenderError(r => r.Message = "失败");
                 }
             }
-        }
-        [Obsolete]
-        public static bool OrderPaid2Erp(OrderTransactionEntity order,bool isOnlinePay = true)
-        {
-            string vipCard = string.Empty;
-            var log = ServiceLocator.Current.Resolve<ILog>();
-            if (order.OutsiteType.HasValue && order.OutsiteType.Value == (int)OutsiteType.WX
-                && !string.IsNullOrEmpty(order.OutsiteUId))
-            {
-                try
-                {
-                    AwsHelper.SendHttpMessage(string.Format("{0}card/find", ConfigManager.AwsHost), new
-                    {
-                        uid = order.OutsiteUId
-                    }, ConfigManager.AwsHttpPublicKey, ConfigManager.AwsHttpPrivateKey, r => vipCard = r.data, null);
-                }
-                catch (Exception ex)
-                {
-                    log.Error(ex);
-                }
-            }
-            bool isSuccess = false;
-            if (order.OrderType == (int)PaidOrderType.Erp2)
-            {
-                isSuccess = Erp2ServiceHelper.SendHttpMessage(Erp2Config.PAY_URL, new { saleno = order.OrderNo, paymentcode = order.PaymentCode, transno = order.TransNo, vipno = vipCard }, null
-                              , null);
-            }
-            else if (order.OrderType == (int)PaidOrderType.Erp || order.OrderType == (int)PaidOrderType.Self)
-            {
-                var paymentName = string.Empty;
-
-                string dealCode = order.OrderNo;
-
-                using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
-                {
-                    var paymentEntity = db.Set<PaymentMethodEntity>().Where(p => p.Code == order.PaymentCode).FirstOrDefault();
-                    if (paymentEntity == null)
-                    {
-                        log.Error(string.Format("orderno :{1} not support payment code paid:{0}", order.PaymentCode, order.OrderNo));
-                        return false;
-                    }
-                    paymentName = paymentEntity.Name;
-
-                    //渠道订单同步时传递的是渠道订单号
-                    var channelOrder = db.Set<Map4OrderEntity>().FirstOrDefault(o=>o.OrderNo==dealCode);
-                    if (channelOrder != null && !string.IsNullOrEmpty(channelOrder.ChannelOrderCode))
-                    {
-                        dealCode = channelOrder.ChannelOrderCode;
-                    }
-                }
-                var paidFunc = isOnlinePay ? "WebOrdersPaid" : "WebSalesPaid";
-                isSuccess = ErpServiceHelper.SendHttpMessage(ConfigManager.ErpBaseUrl, new { func = paidFunc, dealCode, PAY_TYPE = order.PaymentCode, PaymentName = paymentName, TRADE_NO = order.TransNo, CardNo = vipCard }, null
-                              , null);
-            }
-            if (isSuccess)
-            {
-                using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
-                {
-                    order.IsSynced = true;
-                    order.SyncDate = DateTime.Now;
-                    db.Entry(order).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            return isSuccess;
         }
 
         public static DbContext Context

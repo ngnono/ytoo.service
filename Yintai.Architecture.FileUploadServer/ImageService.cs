@@ -1,4 +1,5 @@
 ﻿using com.intime.fashion.common;
+using com.intime.fashion.service.images;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -46,7 +47,7 @@ namespace Yintai.Architecture.ImageTool.Impl
             {
                 string keyPath = tFullName.Replace(_imageSetting.Folder, "");
                 Log.Debug("keyPath:" + keyPath);
-                AwsHelper.Transfer2S3(tFullName, keyPath);
+                AliyunUtil.Transfer2Aliyun(tFullName, keyPath, (object o) => Log.Error(o));
             }
             if (isReturnDuration)
             {
@@ -239,7 +240,7 @@ namespace Yintai.Architecture.ImageTool.Impl
                             {
                                 string keyPath = thumbPath.Replace(_imageSetting.Folder, "");
                                 Log.Debug("keyPath:" + keyPath);
-                                AwsHelper.Transfer2S3(thumbPath, keyPath);
+                                AliyunUtil.Transfer2Aliyun(thumbPath, keyPath, (object o) => Log.Error(o));
                             }
                         }
                         catch
@@ -370,7 +371,7 @@ namespace Yintai.Architecture.ImageTool.Impl
                             {
                                 string keyPath = thumbPath.Replace(_imageSetting.Folder,"");
                                 Log.Debug("keyPath:" + keyPath);
-                                AwsHelper.Transfer2S3(thumbPath,keyPath);
+                                AliyunUtil.Transfer2Aliyun(thumbPath, keyPath, (object o) => Log.Error(o));
                             }
                             thumbnailInfoes.Info.Add(thumb.Key, size);
                             thumbnailInfoes.Sizes.Add(thumb.Key, new ImageSize(realWidth, realHeight));
@@ -396,7 +397,7 @@ namespace Yintai.Architecture.ImageTool.Impl
                         {
                             string keyPath = targetPath.Replace(_imageSetting.Folder, "");
                             Log.Debug("keyPath:" + keyPath);
-                            AwsHelper.Transfer2S3(targetPath, keyPath);
+                            AliyunUtil.Transfer2Aliyun(targetPath, keyPath, (object o) => Log.Error(o));
                         }
                     }
 

@@ -32,7 +32,7 @@ namespace com.intime.jobscheduler.Job
             var private_key = data.GetString("privatekey");
 
             dynamic jsonResponse = null;
-            AwsHelper.SendHttpMessage(host, new
+            HttpClientUtil.SendHttpMessage(host, new
                 {
                     benchdate = benchDate.ToUniversalTime()
                 },public_key,private_key,r=>jsonResponse = r,null);

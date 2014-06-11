@@ -33,13 +33,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aliyun.OpenServices">
-      <HintPath>..\_dll\Aliyun.OpenServices.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK, Version=1.5.19.0, Culture=neutral, PublicKeyToken=9f476d3089b52be3, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AWSSDK.1.5.19.0\lib\AWSSDK.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -78,10 +71,7 @@
     <Compile Include="Alipay\AlipayNotify.cs" />
     <Compile Include="Alipay\MD5.cs" />
     <Compile Include="Alipay\RSA.cs" />
-    <Compile Include="Aliyun\AliyunUtil.cs" />
-    <Compile Include="Aliyun\Config.cs" />
-    <Compile Include="AwsHelper.cs" />
-    <Compile Include="Aws\AwsConfig.cs" />
+    <Compile Include="HttpClientUtil.cs" />
     <Compile Include="Util\ChineseUtil.cs" />
     <Compile Include="Util\CommonUtil.cs" />
     <Compile Include="ConfigManager.cs">

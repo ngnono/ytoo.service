@@ -1,4 +1,4 @@
-﻿using com.intime.fashion.common.Aliyun;
+﻿using com.intime.fashion.service.images;
 using Common.Logging;
 using Quartz;
 using System;
