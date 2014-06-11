@@ -88,7 +88,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
                     Request.Put("leafClassId", "123");
                     return;
                 }
-                var mapping = db.Map4Categories.FirstOrDefault(ccm => ccm.CategoryCode == cat.ExCatCode);
+                var mapping = db.Map4Category.FirstOrDefault(ccm => ccm.CategoryCode == cat.ExCatCode);
                 if (mapping == null)
                 {
                     Request.Put("leafClassId", "123");
@@ -108,7 +108,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
         {
             using (var db = GetDbContext())
             {
-                var map = db.Map4Brands.FirstOrDefault(b => b.BrandId == brandId);
+                var map = db.Map4Brand.FirstOrDefault(b => b.BrandId == brandId);
                 Request.Put("lable",
                     map == null
                         ? string.Format("brands|{0}", "wg138629481702337")

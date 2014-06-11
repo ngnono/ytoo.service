@@ -28,11 +28,11 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             get { return _failCount; }
         }
 
-        private void Query(Expression<Func<Map4Product, bool>> whereCondition, Action<IQueryable<Map4Product>> callBack)
+        private void Query(Expression<Func<Map4ProductEntity, bool>> whereCondition, Action<IQueryable<Map4ProductEntity>> callBack)
         {
             using (var db = DbContextHelper.GetDbContext())
             {
-                var linq = db.Map4Products.Where(m => m.UpdateDate >= BenchTime && m.Channel == ConstValue.WGW_CHANNEL_NAME);
+                var linq = db.Map4Product.Where(m => m.UpdateDate >= BenchTime && m.Channel == ConstValue.WGW_CHANNEL_NAME);
                 if (whereCondition != null)
                 {
                     linq = linq.Where(whereCondition);
@@ -49,12 +49,12 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             int pageSize = extraParameter ?? 20;
             int cursor = 0;
             int lastCursor = 0;
-            Expression<Func<Map4Product, bool>> whereCondition = null;
+            Expression<Func<Map4ProductEntity, bool>> whereCondition = null;
 
             Query(whereCondition, items => _totalCount = items.Count());
             while (cursor < _totalCount)
             {
-                List<Map4Product> oneTimeList = null;
+                List<Map4ProductEntity> oneTimeList = null;
                 Query(whereCondition,
                     items =>
                         oneTimeList = items.Where(i => i.Id > lastCursor).OrderBy(i => i.Id).Take(pageSize).ToList());
@@ -74,7 +74,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             }
         }
 
-        private bool SyncOne(Map4Product product)
+        private bool SyncOne(Map4ProductEntity product)
         {
             try
             {
@@ -92,12 +92,12 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                             if (int.TryParse(stock.stockId.ToString(), out stockId))
                             {
                                 var map =
-                                db.Map4Inventories.FirstOrDefault(
+                                db.Map4Inventory.FirstOrDefault(
                                     t => t.Channel == ConstValue.WGW_CHANNEL_NAME && t.InventoryId == stockId);
 
                                 if (map == null)
                                 {
-                                    db.Map4Inventories.Add(new Map4Inventory()
+                                    db.Map4Inventory.Add(new Map4InventoryEntity()
                                     {
                                         attr = stock.attr,
                                         skuId = stock.skuId,

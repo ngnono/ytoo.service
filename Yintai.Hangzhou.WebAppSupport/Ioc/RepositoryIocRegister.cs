@@ -90,7 +90,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IRMA2ExRepository, RMA2ExRepository>();
             Current.Register<IInventoryRepository, InventoryRepository>();
 
-            Current.Register<IEFRepository<OrderTransactionEntity>, EFRepository<OrderTransactionEntity>>();
+            Current.Register<IEFRepository<OrderTransactionEntity>, OrderTransactionRepository>();
             Current.Register<IEFRepository<PaymentNotifyLogEntity>, EFRepository<PaymentNotifyLogEntity>>();
             Current.Register<IEFRepository<ExOrderEntity>, EFRepository<ExOrderEntity>>();
             Current.Register<IEFRepository<IMS_AssociateEntity>, EFRepository<IMS_AssociateEntity>>();

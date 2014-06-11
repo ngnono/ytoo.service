@@ -40,7 +40,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     db.Resources.Where(
                         r =>
                             r.UpdatedDate >= BenchTime && r.Type == 1 && r.SourceType == (int) SourceType.Product &&
-                            db.Map4Products.Any(
+                            db.Map4Product.Any(
                                 m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ProductId == r.SourceId))
                         .GroupBy(r => r.SourceId, (key, rs) => key);
                 if (callback != null)

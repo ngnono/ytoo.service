@@ -53,7 +53,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     {
                         try
                         {
-                            if (Map4Brand(brand))
+                            if (Map4BrandEntity(brand))
                             {
                                 _succeedCount += 1;
                             }
@@ -77,7 +77,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             }
         }
 
-        private bool Map4Brand(dynamic brand)
+        private bool Map4BrandEntity(dynamic brand)
         {
             using (var db = DbContextHelper.GetDbContext())
             {
@@ -117,13 +117,13 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
         {
             using (var db = DbContextHelper.GetDbContext())
             {
-                if (db.Map4Brands.Any(t =>t.BrandId == brand.Id && t.ChannelBrandId == wgAppid &&t.Channel == ConstValue.WGW_CHANNEL_NAME))
+                if (db.Map4Brand.Any(t =>t.BrandId == brand.Id && t.ChannelBrandId == wgAppid &&t.Channel == ConstValue.WGW_CHANNEL_NAME))
                 {
                     //Logger.Info(string.Format("品牌 {0} ID = {1} 已映射", brand.Name, wgAppid));
                     return ;
                 }
 
-                db.Map4Brands.Add(new Map4Brand()
+                db.Map4Brand.Add(new Map4BrandEntity()
                 {
                     Channel = ConstValue.WGW_CHANNEL_NAME,
                     BrandId = brand.Id,

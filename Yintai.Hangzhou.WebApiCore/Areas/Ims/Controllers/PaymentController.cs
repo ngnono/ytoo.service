@@ -138,15 +138,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             if (isSuccess)
                             {
                                 ts.Complete();
-                                //notify wx async
-                                MessageCenterService.SafeNotifyAsync(() =>
-                                {
-                                    return new PaidMessage()
-                                    {
-                                        SourceType = (int)MessageSourceType.Order,
-                                        SourceNo = orderEntity.OrderNo
-                                    };
-                                });
+                                
                             }
                             else
                                 return Content("fail");
@@ -163,7 +155,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return Content("fail");
             }
         }
-        public ActionResult Notify_ALI()
+        public ActionResult Notify_From_ALI()
         {
             Dictionary<string, string> sPara = GetQueryStringParams();
 
@@ -229,12 +221,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     });
                                 }
                                 ts.Complete();
-                                MessageCenterService.SafeNotifyAsync(() => {
-                                    return new PaidMessage() { 
-                                         SourceType = (int)MessageSourceType.Order,
-                                         SourceNo = orderEntity.OrderNo
-                                    };
-                                });
+                               
                             }
 
                         }
@@ -349,15 +336,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 }
                             }
                             ts.Complete();
-                            //notify wx async
-                            MessageCenterService.SafeNotifyAsync(() =>
-                            {
-                                return new PaidMessage()
-                                {
-                                    SourceType = (int)MessageSourceType.GiftCard,
-                                    SourceNo = giftcardOrder.No
-                                };
-                            });
+                           
                         }
                     }
 
@@ -370,7 +349,118 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return Content("fail");
             }
         }
+        public ActionResult Notify_GiftCard_From_ALI()
+        {
+            Dictionary<string, string> sPara = GetQueryStringParams();
 
+            if (sPara.Count > 0)
+            {
+                var aliNotify = new Com.Alipay2.Notify();
+                bool verifyResult = aliNotify.VerifyNotify(sPara, Request.Form["sign"]);
+
+                if (verifyResult)
+                {
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(sPara["notify_data"]);
+
+                    string out_trade_no = xmlDoc.SelectSingleNode("/notify/out_trade_no").InnerText;
+                    string trade_no = xmlDoc.SelectSingleNode("/notify/trade_no").InnerText;
+
+                    string trade_status = xmlDoc.SelectSingleNode("/notify/trade_status").InnerText;
+
+                    var amount = decimal.Parse(xmlDoc.SelectSingleNode("/notify/total_fee").InnerText);
+                    if (trade_status == "TRADE_FINISHED")
+                    {
+                        var tradeNos = out_trade_no.Split('-');
+                        if (tradeNos.Length < 3)
+                        {
+                            Log.Error(string.Format("order paid, but trade_no:{0} not follow the correct format", out_trade_no));
+                            return Content("fail");
+                        }
+                        var trackOrderSource = false;
+                        if (tradeNos.Length >= 4)
+                            trackOrderSource = true;
+                        var giftcardId = int.Parse(tradeNos[1]);
+                        var orderUserId = int.Parse(tradeNos[2]);
+                        var giftCardEntity = Context.Set<IMS_GiftCardItemEntity>().Find(giftcardId);
+                        if (null == giftCardEntity)
+                        {
+                            Log.Error(string.Format("order paid, but gift card id:{0} not exists", giftcardId));
+                            return Content("success");
+                        }
+                        if (giftCardEntity.Price > amount)
+                        {
+                            Log.Error(string.Format("order paid, but gift card price:{0} not match paid amount:{1}", giftCardEntity.Price, amount));
+                            return Content("success");
+                        }
+                        var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.TransNo == trade_no
+                                                    && p.PaymentCode == Com.Alipay.Config.PaymentCode
+                                                    && (!p.OrderType.HasValue || p.OrderType.Value == (int)PaidOrderType.GiftCard)).FirstOrDefault();
+
+                        if (paymentEntity == null)
+                        {
+                            OrderTransactionEntity orderTransaction = null;
+                            using (var ts = new TransactionScope())
+                            {
+                                var giftcardOrder = _giftcardOrderRepo.Insert(new IMS_GiftCardOrderEntity()
+                                {
+                                    Amount = giftCardEntity.UnitPrice,
+                                    Price = giftCardEntity.Price,
+                                    CreateDate = DateTime.Now,
+                                    CreateUser = orderUserId,
+                                    GiftCardItemId = giftcardId,
+                                    OwnerUserId = orderUserId,
+                                    PurchaseUserId = orderUserId,
+                                    Status = (int)DataStatus.Normal,
+                                    No = OrderRule.CreateGiftCardNo()
+                                });
+
+                                _paymentNotifyRepo.Insert(new PaymentNotifyLogEntity()
+                                {
+                                    CreateDate = DateTime.Now,
+                                    OrderNo = giftcardOrder.No,
+                                    PaymentCode = WxPayConfig.PAYMENT_CODE4GIFTCARD,
+                                    PaymentContent = JsonConvert.SerializeObject(sPara)
+                                });
+
+                                orderTransaction = _orderTranRepo.Insert(new OrderTransactionEntity()
+                                {
+                                    Amount = amount,
+                                    OrderNo = giftcardOrder.No,
+                                    CreateDate = DateTime.Now,
+                                    IsSynced = false,
+                                    PaymentCode = Com.Alipay.Config.PaymentCode,
+                                    TransNo = trade_no,
+                                    OrderType = (int)PaidOrderType.GiftCard
+                                });
+
+                                if (trackOrderSource)
+                                {
+                                    int assocateId = int.Parse(tradeNos[3]);
+                                    var associatEntity = Context.Set<IMS_AssociateEntity>().Find(assocateId);
+                                    if (associatEntity != null)
+                                    {
+                                        AssociateIncomeLogic.Avail(associatEntity.UserId, giftcardOrder);
+                                    }
+                                }
+                                ts.Complete();
+                                
+                            }
+                        }
+                    }
+                    return Content("success");
+
+                }
+                else
+                {
+                    return Content("fail");
+                }
+            }
+            else
+            {
+                return Content("无通知参数");
+            }
+        }
         private Dictionary<string, string> GetQueryStringParams()
         {
             var requestParams = new Dictionary<string, string>();

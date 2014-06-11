@@ -153,6 +153,10 @@
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.search\com.intime.fashion.service.search.csproj">
+      <Project>{be512bbf-4f5a-4909-b9c0-cf3419e0f945}</Project>
+      <Name>com.intime.fashion.service.search</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.intime.o2o.data.exchange\com.intime.o2o.data.exchange.csproj">
       <Project>{6dfef1cf-0b94-420e-82a7-c6cabba3624a}</Project>
       <Name>com.intime.o2o.data.exchange</Name>

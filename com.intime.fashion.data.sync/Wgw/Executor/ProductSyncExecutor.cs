@@ -47,7 +47,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                                 && p.Is4Sale.HasValue
                                 && p.Is4Sale.Value
                                 && p.Status == 1
-                                && !db.Map4Products.Any(
+                                && !db.Map4Product.Any(
                                     m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ProductId == p.Id)
                         );
                 if (callback != null)
@@ -65,7 +65,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             using (var db = DbContextHelper.GetDbContext())
             {
                 var items =
-                    db.Products.Where(p=>p.UpdatedDate > BenchTime).Join(db.Map4Products.Where(pm => pm.Channel == ConstValue.WGW_CHANNEL_NAME), p => p.Id,
+                    db.Products.Where(p=>p.UpdatedDate > BenchTime).Join(db.Map4Product.Where(pm => pm.Channel == ConstValue.WGW_CHANNEL_NAME), p => p.Id,
                         pm => pm.ProductId, (p, pm) => new {p, pm})
                         .Where(@p1 => @p1.p.IsHasImage && @p1.p.UpdatedDate > @p1.pm.UpdateDate)
                         .Select(@t1 => @t1.p);
@@ -159,7 +159,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     using (var db = DbContextHelper.GetDbContext())
                     {
                         var map4Product =
-                            db.Map4Products.FirstOrDefault(
+                            db.Map4Product.FirstOrDefault(
                                 m => m.ProductId == item.Id && m.Channel == ConstValue.WGW_CHANNEL_NAME);
 
                         if (map4Product == null)

@@ -36,7 +36,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
         {
             using (var db = GetDbContext())
             {
-                var map = db.Map4Products.FirstOrDefault(m => m.ProductId == productId && m.Channel == ConstValue.WGW_CHANNEL_NAME);
+                var map = db.Map4Product.FirstOrDefault(m => m.ProductId == productId && m.Channel == ConstValue.WGW_CHANNEL_NAME);
                 return map == null?string.Empty:map.ChannelProductId;
             }
         }

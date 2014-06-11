@@ -18,7 +18,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
             using (var db = GetDbContext())
             {
                 var outBoundInfo =
-                    db.Map4Orders.Where(
+                    db.Map4Order.Where(
                         m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ChannelOrderCode == orderNo).Join(db.Orders, m => m.OrderNo, o => o.OrderNo, (o, m) => o).Join(db.Outbounds.Where(o => o.Status == 1), o => o.OrderNo, ot => ot.SourceNo, (o, ot) => ot).FirstOrDefault();
                 if (null == outBoundInfo)
                 {

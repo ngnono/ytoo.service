@@ -40,7 +40,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
             using (var db = GetDbContext())
             {
                 return
-                    db.Map4Orders.First(m => m.OrderNo == orderNo && m.Channel == ConstValue.WGW_CHANNEL_NAME).ChannelOrderCode;
+                    db.Map4Order.First(m => m.OrderNo == orderNo && m.Channel == ConstValue.WGW_CHANNEL_NAME).ChannelOrderCode;
             }
         }
     }

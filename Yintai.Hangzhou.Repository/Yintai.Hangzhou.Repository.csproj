@@ -146,6 +146,7 @@
     <Compile Include="Impl\OrderItemRepository.cs" />
     <Compile Include="Impl\OrderLogRepository.cs" />
     <Compile Include="Impl\OrderRepository.cs" />
+    <Compile Include="Impl\OrderTransactionRepository.cs" />
     <Compile Include="Impl\OutboundItemRepository.cs" />
     <Compile Include="Impl\OutboundRepository.cs" />
     <Compile Include="Impl\PMessageRepository.cs" />

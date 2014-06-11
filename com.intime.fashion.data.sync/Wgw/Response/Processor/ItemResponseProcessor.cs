@@ -33,14 +33,14 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
                 {
                     string itemId = itemInfo.itemId.ToString();
                     var mapping =
-                        db.Map4Products.FirstOrDefault(
+                        db.Map4Product.FirstOrDefault(
                             m =>
                                 m.ProductId == productId && m.ChannelProductId == itemId &&
                                 m.Channel == ConstValue.WGW_CHANNEL_NAME);
                     var product = db.Products.FirstOrDefault(p => p.Id == productId);
                     if (mapping == null)
                     {
-                        db.Map4Products.Add(new Map4Product
+                        db.Map4Product.Add(new Map4ProductEntity
                         {
                             Channel = ConstValue.WGW_CHANNEL_NAME,
                             ChannelProductId = itemId,
@@ -62,14 +62,14 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor
 
                         var skuId = (long)stock.skuId;
                         var inventoryId = (long)stock.stockId;
-                        var map = db.Map4Inventories.FirstOrDefault(m =>
+                        var map = db.Map4Inventory.FirstOrDefault(m =>
                             m.ProductId == productId &&
                             m.Channel == ConstValue.WGW_CHANNEL_NAME &&
                             m.skuId == skuId &&
                             m.InventoryId == inventoryId);
                         if (map == null)
                         {
-                            db.Map4Inventories.Add(new Map4Inventory
+                            db.Map4Inventory.Add(new Map4InventoryEntity
                             {
                                 ProductId = productId,
                                 itemId = itemId,

@@ -111,10 +111,6 @@
     <Compile Include="Impl\UserService.cs" />
     <Compile Include="Logic\AssociateIncomeLogic.cs" />
     <Compile Include="Logic\ComboLogic.cs" />
-    <Compile Include="Logic\Search\ESComboService.cs" />
-    <Compile Include="Logic\Search\ESInventoryService.cs" />
-    <Compile Include="Logic\Search\ESProductService.cs" />
-    <Compile Include="Logic\Search\ESServiceBase.cs" />
     <Compile Include="Logic\IncomeRule\AssociateIncomeAccount.cs" />
     <Compile Include="Logic\IncomeRule\IIncomeRule.cs" />
     <Compile Include="Logic\IncomeRule\IncomeRuleFix.cs" />
@@ -122,7 +118,6 @@
     <Compile Include="Logic\IncomeRule\IncomeRuleFlex.cs" />
     <Compile Include="Logic\OrderRule.cs" />
     <Compile Include="Logic\RMARule.cs" />
-    <Compile Include="Logic\SearchLogic.cs" />
     <Compile Include="Logic\StorePromotionRule.cs" />
     <Compile Include="Manager\CacheKeyManager.cs" />
     <Compile Include="Manager\FileUploadServiceManager.cs">

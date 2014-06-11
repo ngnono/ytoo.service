@@ -119,7 +119,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                             UnitPrice = product.UnitPrice
                         });
                     }
-                    db.Map4Orders.Add(new Map4Order
+                    db.Map4Order.Add(new Map4OrderEntity
                     {
                         ChannelOrderCode = dealDetail.dealCode,
                         OrderNo = order.OrderNo,
@@ -187,7 +187,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                 return
                     db.Orders.Where(o => o.OrderSource == ConstValue.WGW_CHANNEL_NAME)
                         .Join(
-                            db.Map4Orders.Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ChannelOrderCode == dealCode),
+                            db.Map4Order.Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ChannelOrderCode == dealCode),
                             o => o.OrderNo, m => m.OrderNo, (o, m) => o).Any();
             }
         }
@@ -354,7 +354,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                         return GetInventoryByItemId(db, trade.itemCode.ToString());
                     }
                     var map =
-                        db.Map4Inventories.FirstOrDefault(
+                        db.Map4Inventory.FirstOrDefault(
                             m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.skuId == skuid);
                     if (map == null)
                     {
@@ -370,7 +370,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
         {
             string snapshotId = SnapShotId2ItemId(itemId);
             var product =
-                context.Set<Map4Product>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME && (m.ChannelProductId == itemId || m.ChannelProductId == snapshotId))
+                context.Set<Map4ProductEntity>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME && (m.ChannelProductId == itemId || m.ChannelProductId == snapshotId))
                     .Join(context.Set<ProductEntity>(), m => m.ProductId, p => p.Id, (m, p) => p)
                     .FirstOrDefault();
             if (product == null)

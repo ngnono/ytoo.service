@@ -1,11 +1,10 @@
 ﻿using com.intime.fashion.common.message;
+using com.intime.fashion.service.search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yintai.Hangzhou.Service.Logic;
-using Yintai.Hangzhou.Service.Logic.Search;
 
 namespace com.intime.fashion.service.messages.Message
 {

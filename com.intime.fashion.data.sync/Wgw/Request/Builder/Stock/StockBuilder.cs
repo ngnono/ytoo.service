@@ -29,7 +29,7 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder.Stock
 
                 foreach (var inventory in inventories)
                 {
-                    Map4Inventory inventoryMap = db.Map4Inventories.FirstOrDefault(
+                    Map4InventoryEntity inventoryMap = db.Map4Inventory.FirstOrDefault(
                         m => m.InventoryId == inventory.Id && m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ProductId == inventory.ProductId);
                     var colorEntity = db.ProductPropertyValues.FirstOrDefault(t => t.Id == inventory.PColorId);
                     var sizeEntity = db.ProductPropertyValues.FirstOrDefault(t => t.Id == inventory.PSizeId);

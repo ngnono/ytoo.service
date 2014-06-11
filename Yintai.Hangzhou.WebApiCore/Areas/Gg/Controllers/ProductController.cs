@@ -1,4 +1,5 @@
-﻿using Nest;
+﻿using com.intime.fashion.service.search;
+using Nest;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
