@@ -1031,18 +1031,13 @@ namespace com.intime.jobscheduler.Job
                                                       ValueDesc = v.ValueDesc
                                                   })
                             let stockPropertyValues = (from inv in db.Inventories where inv.ProductId == p.Id
-                                                       join val in db.OPC_StockPropertyValues on inv.Id equals val.InventoryId
-                                                       join pty in db.OPC_StockProperties on val.StockPropertyId equals pty.Id
+                                                       join val in db.OPC_StockPropertyValueRaws on inv.Id equals val.InventoryId
                                                        select new ESStockPropertyValue()
                                                            {
-                                                               ChannelPropertyId = pty.ChannelPropertyId,
-                                                               ChannelValueId = val.ChannelValueId,
                                                                Id = val.Id,
                                                                InventoryId = inv.Id,
-                                                               PropertyDesc = pty.PropertyDesc,
-                                                               PropertyId = pty.Id,
-                                                               ValueDesc = val.ValueDesc,
-                                                               ValueId = val.Id
+                                                               PropertyData = val.PropertyData,
+                                                               UpdateTime = val.UpdateDate
                                                            })
                             let category = (from map in db.ProductMaps where map.ProductId == p.Id && map.Channel == "intime" select map.ChannelCatId)
 

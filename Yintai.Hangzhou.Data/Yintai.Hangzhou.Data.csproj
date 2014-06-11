@@ -113,8 +113,7 @@
     <Compile Include="Models\Mapping\OPC_SaleRMAMap.cs" />
     <Compile Include="Models\Mapping\OPC_ShippingSaleCommentMap.cs" />
     <Compile Include="Models\Mapping\OPC_ShippingSaleMap.cs" />
-    <Compile Include="Models\Mapping\OPC_StockPropertyMap.cs" />
-    <Compile Include="Models\Mapping\OPC_StockPropertyValueMap.cs" />
+    <Compile Include="Models\Mapping\OPC_StockPropertyValueRawMap.cs" />
     <Compile Include="Models\Mapping\OPC_SKUMap.cs" />
     <Compile Include="Models\Mapping\OPC_StockMap.cs" />
     <Compile Include="Models\Mapping\OPC_StorePriorityMap.cs" />
@@ -145,8 +144,7 @@
     <Compile Include="Models\OPC_SaleRMAComment.cs" />
     <Compile Include="Models\OPC_ShippingSale.cs" />
     <Compile Include="Models\OPC_ShippingSaleComment.cs" />
-    <Compile Include="Models\OPC_StockProperty.cs" />
-    <Compile Include="Models\OPC_StockPropertyValue.cs" />
+    <Compile Include="Models\OPC_StockPropertyValueRaw.cs" />
     <Compile Include="Models\OPC_SKU.cs" />
     <Compile Include="Models\OPC_Stock.cs" />
     <Compile Include="Models\OPC_StorePriority.cs" />

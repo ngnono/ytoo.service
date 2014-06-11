@@ -274,8 +274,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<OPC_ShippingSaleEntity> OPC_ShippingSale { get; set; }
         public DbSet<OPC_ShippingSaleCommentEntity> OPC_ShippingSaleComment { get; set; }
         public DbSet<OPC_SKUEntity> OPC_SKU { get; set; }
-        public DbSet<OPC_StockPropertyEntity> OPC_StockProperties { get; set; }
-        public DbSet<OPC_StockPropertyValueEntity> OPC_StockPropertyValues { get; set; }
+        public DbSet<OPC_StockPropertyValueRawEntity> OPC_StockPropertyValueRaws { get; set; }
         public DbSet<OPC_StockEntity> OPC_Stock { get; set; }
         public DbSet<OPC_StorePriorityEntity> OPC_StorePriority { get; set; }
         public DbSet<OPC_SupplierInfoEntity> OPC_SupplierInfo { get; set; }
@@ -410,9 +409,8 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new ProductCode2StoreCodeEntityMap());
             modelBuilder.Configurations.Add(new OPC_SaleDetailEntityMap());
             modelBuilder.Configurations.Add(new OPC_SaleEntityMap());
-            modelBuilder.Configurations.Add(new OPC_ShippingSaleEntityMap());
-            modelBuilder.Configurations.Add(new OPC_StockPropertyEntityMap());
-            modelBuilder.Configurations.Add(new OPC_StockPropertyValueEntityMap());
+            modelBuilder.Configurations.Add(new OPC_ShippingSaleEntityMap());;
+            modelBuilder.Configurations.Add(new OPC_StockPropertyValueRawEntityMap());
         }
 
 
