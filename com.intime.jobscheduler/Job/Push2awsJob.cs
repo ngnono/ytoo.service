@@ -665,16 +665,24 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var linq = db.Brands.Where(p => p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate);
+                var storeBrands = db.IMS_SectionBrand.Join(db.Sections,o=>o.SectionId,i=>i.Id,(o,i)=>new {SB=o,Sec=i})
+                                    .Join(db.Stores,o=>o.Sec.StoreId,i=>i.Id,(o,i)=>new {SB=o.SB,S=i});
+                var linq = db.Brands.Where(p => p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
+                          .GroupJoin(storeBrands
+                          ,o=>o.Id,i=>i.SB.BrandId,(o,i)=>new {B=o,S=i});
                 if (_isActiveOnly)
-                    linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
+                    linq = linq.Where(p => p.B.Status == (int)DataStatus.Normal);
                 var prods = linq.Select(p => new ESBrand()
                             {
-                                Id = p.Id,
-                                Name = p.Name,
-                                Description = p.Description,
-                                Status = p.Status,
-                                Group = p.Group
+                                Id = p.B.Id,
+                                Name = p.B.Name,
+                                Description = p.B.Description,
+                                Status = p.B.Status,
+                                Group = p.B.Group,
+                                EngName = p.B.EnglishName,
+                                Stores = p.S.Select(s => new ESStore() { 
+                                         Id = s.S.Id
+                                })
                             });
 
                 int totalCount = prods.Count();
