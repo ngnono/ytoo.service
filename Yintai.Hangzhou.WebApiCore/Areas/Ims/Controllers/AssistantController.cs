@@ -254,11 +254,11 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                                 .Join(Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.ItemType == request.Item_Type && iai.ItemId == request.Item_Id), o => o.Id, i => i.AssociateId, (o, i) => i)
                                 .FirstOrDefault();
             if (comboItemEntity == null)
-                return this.RenderError(r => r.Message = "无权操作该搭配");
+                return this.RenderError(r => r.Message = "无权操作该组合");
             if (request.Item_Type == (int)ComboType.Product && request.Is_Online)
             {
                 if (!ComboLogic.IfCanOnline(authuid))
-                    return this.RenderError(r => r.Message = "店铺上线搭配数量超出限制！");
+                    return this.RenderError(r => r.Message = "店铺上线组合数量超出限制！");
             }
             using (var ts = new TransactionScope())
             {

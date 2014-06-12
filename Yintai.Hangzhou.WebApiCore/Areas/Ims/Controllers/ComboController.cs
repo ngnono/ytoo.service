@@ -45,14 +45,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         {
             if (request.Image_Ids == null ||
                request.Image_Ids.Length < 1)
-                return this.RenderError(r => r.Message = "搭配必须图片");
+                return this.RenderError(r => r.Message = "组合必须图片");
             if (request.ProductIds == null ||
                 request.ProductIds.Length < 1)
-                return this.RenderError(r => r.Message = "搭配需要至少一个商品");
+                return this.RenderError(r => r.Message = "组合需要至少一个商品");
             if (string.IsNullOrEmpty(request.Desc))
-                return this.RenderError(r => r.Message = "搭配需要描述");
+                return this.RenderError(r => r.Message = "组合需要描述");
             if (!Array.Exists<int>((int[])Enum.GetValues(typeof(ProductType)), s => request.Product_Type == s))
-                return this.RenderError(r => r.Message = "搭配商品类型不正确");
+                return this.RenderError(r => r.Message = "组合商品类型不正确");
             var products = Context.Set<ProductEntity>().Where(p => request.ProductIds.Any(l => l == p.Id) &&
                             ((p.ProductType.HasValue && p.ProductType == request.Product_Type) ||
                             (!p.ProductType.HasValue && request.Product_Type == (int)ProductType.FromSystem)));
@@ -60,7 +60,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "商品类型不正确");
              var resources = Context.Set<ResourceEntity>().Where(r => request.Image_Ids.Any(image => image == r.Id));
              if (!resources.Any())
-                 return this.RenderError(r => r.Message = "搭配必须图片");
+                 return this.RenderError(r => r.Message = "组合必须图片");
 
              var price = products.Sum(p => p.Price);
              if (request.Has_Discount && !(request.Discount < price && request.Discount > 0))
@@ -86,7 +86,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     ProductType = request.Product_Type,
                     ExpireDate = DateTime.Now.AddDays(ConfigManager.COMBO_EXPIRED_DAYS),
                     IsInPromotion = request.Has_Discount,
-                    DiscountAmount = request.Discount
+                    DiscountAmount = request.Discount,
+                    IsPublic = request.Is_Public
                 });
 
                 //step2: create combo2product
@@ -143,13 +144,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         {
 
             if (string.IsNullOrEmpty(request.Desc))
-                return this.RenderError(r => r.Message = "搭配需要描述");
+                return this.RenderError(r => r.Message = "组合需要描述");
             if (!Array.Exists<int>((int[])Enum.GetValues(typeof(ProductType)), s => request.Product_Type == s))
-                return this.RenderError(r => r.Message = "搭配商品类型不正确");
+                return this.RenderError(r => r.Message = "组合商品类型不正确");
 
             var comboEntity = Context.Set<IMS_ComboEntity>().Find(request.Id);
             if (comboEntity == null)
-                return this.RenderError(r => r.Message = "搭配不存在");
+                return this.RenderError(r => r.Message = "组合不存在");
 
             bool noProduct = request.ProductIds == null || request.ProductIds.Length == 0;
             bool noImage = request.Image_Ids == null || request.Image_Ids.Length == 0;
@@ -162,6 +163,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 comboEntity.UpdateDate = DateTime.Now;
                 comboEntity.IsInPromotion = request.Has_Discount;
                 comboEntity.DiscountAmount = request.Discount;
+                comboEntity.IsPublic = request.Is_Public;
                 if (!noProduct)
                 {
                     var products = Context.Set<ProductEntity>().Where(p => request.ProductIds.Contains(p.Id));
@@ -223,7 +225,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             var comboEntity = Context.Set<IMS_ComboEntity>().Find(id);
             if (comboEntity == null)
-                return this.RenderError(r => r.Message = "搭配不存在");
+                return this.RenderError(r => r.Message = "组合不存在");
             using (var ts = new TransactionScope())
             {
                 comboEntity.Status = (int)DataStatus.Deleted;
@@ -259,7 +261,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     i => i.SourceId,
                                     (o, i) => new { C = o.C,A=o.A,AA=o.AA, CR = i.OrderByDescending(ir => ir.SortOrder).ThenBy(ir=>ir.Id) }).FirstOrDefault();
             if (comboEntity == null)
-                return this.RenderError(r => r.Message = "搭配不存在");
+                return this.RenderError(r => r.Message = "组合不存在");
             return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, oc =>
             {
                 oc.StoreId = comboEntity.A.AssociateId;

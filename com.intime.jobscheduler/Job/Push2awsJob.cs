@@ -60,14 +60,12 @@ namespace com.intime.jobscheduler.Job
             IndexHotwork(client, benchDate);
             IndexStore(client, benchDate);
             IndexTag(client, benchDate);
-            IndexUser(client, benchDate);
             IndexResource(client, benchDate);
             IndexProds(client, benchDate, null);
             IndexPros(client, benchDate, null);
-            IndexBanner(client, benchDate);
-            IndexSpecialTopic(client, benchDate, null);
             IndexStorePromotion(client, benchDate);
             IndexInventory(client, benchDate);
+            IndexUser(client, benchDate);
         }
 
         private void IndexInventory(ElasticClient client, DateTime benchDate)
@@ -329,70 +327,7 @@ namespace com.intime.jobscheduler.Job
 
         }
 
-        private void IndexComments(ElasticClient client, DateTime benchDate)
-        {
-            ILog log = LogManager.GetLogger(this.GetType());
-            int cursor = 0;
-            int size = JobConfig.DEFAULT_PAGE_SIZE;
-            int successCount = 0;
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
-            {
-                var prods = from p in db.Comments
-                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
-                            let resource = from r in db.Resources
-                                           where r.SourceId == p.Id && r.SourceType == 10
-                                           select new ESResource()
-                                            {
-                                                Domain = r.Domain,
-                                                Name = r.Name,
-                                                SortOrder = r.SortOrder,
-                                                IsDefault = r.IsDefault,
-                                                Type = r.Type,
-                                                Width = r.Width,
-                                                Height = r.Height
-                                            }
-                            select new ESComment()
-                            {
-                                Id = p.Id,
-                                Status = p.Status,
-                                Resource = resource,
-                                ParentCommentId = p.ReplyId,
-                                ParentCommentUserId = p.ReplyUser,
-                                SourceId = p.SourceId,
-                                SourceType = p.SourceType,
-                                CreatedDate = p.CreatedDate,
-                                CreateUserId = p.CreatedUser,
-                                TextMsg = p.Content
-                            };
-
-                int totalCount = prods.Count();
-               
-                while (cursor < totalCount)
-                {
-                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (!result.IsValid)
-                    {
-                        foreach (var item in result.Items)
-                        {
-                            if (string.IsNullOrEmpty(item.Error))
-                                successCount++;
-                            else
-                                log.Info(string.Format("id index failed:{0}", item.Id));
-                        }
-                    }
-                    else
-                        successCount += result.Items.Count();
-
-                    cursor += size;
-                }
-
-            }
-            sw.Stop();
-            log.Info(string.Format("{0} comments in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
-
-        }
+   
 
         private void IndexHotwork(ElasticClient client, DateTime benchDate)
         {
@@ -448,79 +383,7 @@ namespace com.intime.jobscheduler.Job
 
         }
 
-        private void IndexBanner(ElasticClient client, DateTime benchDate)
-        {
-            ILog log = LogManager.GetLogger(this.GetType());
-            int cursor = 0;
-            int size = JobConfig.DEFAULT_PAGE_SIZE;
-            int successCount = 0;
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
-            {
-                var linq = db.Banners.AsQueryable();
-                if (_isActiveOnly)
-                    linq = db.Banners.Where(b => b.Status == (int)DataStatus.Normal);
-                var prods = from p in linq
-                            join pro in db.Promotions on p.SourceId equals pro.Id
-                            where (p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
-                                && p.SourceType == 2
-                            let resource = (from r in db.Resources
-                                            where r.SourceId == p.Id
-                                            && r.SourceType == 11
-                                            select new ESResource()
-                                            {
-                                                Domain = r.Domain,
-                                                Name = r.Name,
-                                                SortOrder = r.SortOrder,
-                                                IsDefault = r.IsDefault,
-                                                Type = r.Type,
-                                                Width = r.Width,
-                                                Height = r.Height
-                                            })
-
-                            select new ESBanner()
-                            {
-                                Id = p.Id,
-                                SortOrder = p.SortOrder,
-                                CreatedDate = p.CreatedDate,
-                                Status = p.Status,
-                                SourceType = p.SourceType,
-                                Promotion = new ESPromotion()
-                                {
-                                    Id = pro.Id
-
-                                },
-                                Resource = resource
-                            };
-
-                int totalCount = prods.Count();
-       
-                while (cursor < totalCount)
-                {
-                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (!result.IsValid)
-                    {
-                        foreach (var item in result.Items)
-                        {
-                            if (string.IsNullOrEmpty(item.Error))
-                                successCount++;
-                            else
-                                log.Info(string.Format("id index failed:{0}", item.Id));
-                        }
-                    }
-                    else
-                        successCount += result.Items.Count();
-
-                    cursor += size;
-                }
-
-            }
-            sw.Stop();
-            log.Info(string.Format("{0} banners in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
-
-        }
-
+     
         private void IndexTag(ElasticClient client, DateTime benchDate)
         {
             ILog log = LogManager.GetLogger(this.GetType());
@@ -665,44 +528,23 @@ namespace com.intime.jobscheduler.Job
             sw.Start();
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var storeBrands = db.IMS_SectionBrand.Join(db.Sections,o=>o.SectionId,i=>i.Id,(o,i)=>new {SB=o,Sec=i})
-                                    .Join(db.Stores,o=>o.Sec.StoreId,i=>i.Id,(o,i)=>new {SB=o.SB,S=i});
-                var linq = db.Brands.Where(p => p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate)
-                          .GroupJoin(storeBrands
-                          ,o=>o.Id,i=>i.SB.BrandId,(o,i)=>new {B=o,S=i});
+                var linq = db.Brands.Where(p => p.CreatedDate >= benchDate || p.UpdatedDate >= benchDate);
                 if (_isActiveOnly)
-                    linq = linq.Where(p => p.B.Status == (int)DataStatus.Normal);
-                var prods = linq.Select(p => new ESBrand()
-                            {
-                                Id = p.B.Id,
-                                Name = p.B.Name,
-                                Description = p.B.Description,
-                                Status = p.B.Status,
-                                Group = p.B.Group,
-                                EngName = p.B.EnglishName,
-                                Stores = p.S.Select(s => new ESStore() { 
-                                         Id = s.S.Id
-                                })
-                            });
+                    linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
+                var prods = linq.Select(p => p);
 
                 int totalCount = prods.Count();
-    
+                var service = SearchLogic.GetService(IndexSourceType.Brand);
                 while (cursor < totalCount)
                 {
-                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (!result.IsValid)
+                    foreach (var target in prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size))
                     {
-                        foreach (var item in result.Items)
+                        using (var tls = new ScopedLifetimeDbContextManager())
                         {
-                            if (string.IsNullOrEmpty(item.Error))
+                            if (service.IndexSingle(target.Id))
                                 successCount++;
-                            else
-                                log.Info(string.Format("id index failed:{0}", item.Id));
                         }
                     }
-                    else
-                        successCount += result.Items.Count();
-
                     cursor += size;
                 }
 
@@ -962,157 +804,20 @@ namespace com.intime.jobscheduler.Job
                 }
 
                 var prods = from p in linq
-                            join s in db.Stores on p.Store_Id equals s.Id
-                            join b in db.Brands on p.Brand_Id equals b.Id
-                            join t in db.Tags on p.Tag_Id equals t.Id
-                            let resource = (from r in db.Resources
-                                            where r.SourceId == p.Id
-                                            && r.SourceType == 1
-                                            select new ESResource()
-                                            {
-                                                Domain = r.Domain,
-                                                Name = r.Name,
-                                                SortOrder = r.SortOrder,
-                                                IsDefault = r.IsDefault,
-                                                Type = r.Type,
-                                                Width = r.Width,
-                                                Height = r.Height
-                                            })
-                            let specials = from psp in db.SpecialTopicProductRelations
-                                           where psp.Product_Id == p.Id
-                                           join sp in db.SpecialTopics on psp.SpecialTopic_Id equals sp.Id
-                                           select new ESSpecialTopic
-                                           {
-                                               Id = sp.Id,
-                                               Name = sp.Name,
-                                               Description = sp.Description
-                                           }
-                            let promotions = db.Promotion2Product.Where(pp => pp.ProdId == p.Id)
-                                             .Join(db.Promotions, o => o.ProId, i => i.Id, (o, i) => i)
-                                             .GroupJoin(db.Resources.Where(pr => pr.SourceType == (int)SourceType.Promotion && pr.Type == (int)ResourceType.Image)
-                                                        , o => o.Id
-                                                        , i => i.SourceId
-                                                        , (o, i) => new { Pro = o, R = i.OrderByDescending(r => r.SortOrder) })
-                                             .Select(ppr => new ESPromotion
-                                             {
-                                                 Id = ppr.Pro.Id,
-                                                 Name = ppr.Pro.Name,
-                                                 Description = ppr.Pro.Description,
-                                                 CreatedDate = ppr.Pro.CreatedDate,
-                                                 StartDate = ppr.Pro.StartDate,
-                                                 EndDate = ppr.Pro.EndDate,
-                                                 Status = ppr.Pro.Status,
-                                                 Resource = ppr.R.Select(r => new ESResource()
-                                                 {
-                                                     Domain = r.Domain,
-                                                     Name = r.Name,
-                                                     SortOrder = r.SortOrder,
-                                                     IsDefault = r.IsDefault,
-                                                     Type = r.Type,
-                                                     Width = r.Width,
-                                                     Height = r.Height
-                                                 })
-                                             })
-                            let section = (from section in db.Sections
-                                           where section.BrandId == p.Brand_Id && section.StoreId == p.Store_Id
-                                           select new ESSection()
-                                           {
-                                               ContactPerson = section.ContactPerson,
-                                               ContactPhone = section.ContactPhone,
-                                               Id = section.Id,
-                                               Location = section.Location,
-                                               Name = section.Name,
-                                               Status = section.Status
-                                           })
-                            let propertyValues = (from property in db.ProductProperties
-                                                  where property.ProductId == p.Id
-                                                  join v in db.ProductPropertyValues on property.Id equals v.PropertyId
-                                                  select new ESProductPropertyValue
-                                                  {
-                                                      ProductId = p.Id,
-                                                      Id = v.Id,
-                                                      IsColor = property.IsColor.HasValue && property.IsColor.Value,
-                                                      IsSize = property.IsSize.HasValue && property.IsSize.Value,
-                                                      PropertyDesc = property.PropertyDesc,
-                                                      PropertyId = property.Id,
-                                                      ValueDesc = v.ValueDesc
-                                                  })
-                            let category = (from map in db.ProductMaps where map.ProductId == p.Id && map.Channel == "intime" select map.ChannelCatId)
-
-                            select new ESProduct()
-                            {
-                                Id = p.Id,
-                                Name = p.Name,
-                                Description = p.Description,
-                                CreatedDate = p.CreatedDate,
-                                Price = p.Price,
-                                RecommendedReason = p.RecommendedReason,
-                                Status = p.Status,
-                                CreateUserId = p.CreatedUser,
-                                SortOrder = p.SortOrder,
-                                Tag = new ESTag()
-                                {
-                                    Id = t.Id,
-                                    Name = t.Name,
-                                    Description = t.Description
-                                },
-                                Store = new ESStore()
-                                {
-                                    Id = s.Id,
-                                    Name = s.Name,
-                                    Description = s.Description,
-                                    Address = s.Location,
-                                    Location = new Location
-                                    {
-                                        Lon = s.Longitude,
-                                        Lat = s.Latitude
-                                    },
-                                    GpsAlt = s.GpsAlt,
-                                    GpsLat = s.GpsLat,
-                                    GpsLng = s.GpsLng,
-                                    Tel = s.Tel
-                                },
-                                Brand = new ESBrand()
-                                {
-                                    Id = b.Id,
-                                    Name = b.Name,
-                                    Description = b.Description,
-                                    EngName = b.EnglishName
-                                },
-                                PropertyValues = propertyValues,
-                                Resource = resource,
-                                SpecialTopic = specials,
-                                Promotion = promotions,
-                                Is4Sale = p.Is4Sale ?? false,
-                                UnitPrice = p.UnitPrice,
-                                FavoriteCount = p.FavoriteCount,
-                                InvolvedCount = p.InvolvedCount,
-                                ShareCount = p.ShareCount,
-                                RecommendUserId = p.RecommendUser,
-                                Section = section.FirstOrDefault(),
-                                UpcCode = p.SkuCode,
-                                UpdatedDate = p.UpdatedDate,
-                                CategoryId = category.FirstOrDefault() == null ? 0 : (category.FirstOrDefault().HasValue ? category.FirstOrDefault().Value : 0),
-                                IsSystem = (!p.ProductType.HasValue) || p.ProductType == (int)ProductType.FromSystem
-
-                            };
+                            select p;
+                           
                 int totalCount = prods.Count();
-             
+                var service = SearchLogic.GetService(IndexSourceType.Product);
                 while (cursor < totalCount)
                 {
-                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (!result.IsValid)
+                    foreach (var target in prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size))
                     {
-                        foreach (var item in result.Items)
+                        using (var tls = new ScopedLifetimeDbContextManager())
                         {
-                            if (string.IsNullOrEmpty(item.Error))
+                            if (service.IndexSingle(target.Id))
                                 successCount++;
-                            else
-                                log.Info(string.Format("id index failed:{0}", item.Id));
                         }
                     }
-                    else
-                        successCount += result.Items.Count();
 
                     cursor += size;
                 }

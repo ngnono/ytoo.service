@@ -18,5 +18,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public string Private_To { get; set; }
         public bool Has_Discount { get; set; }
         public decimal? Discount { get; set; }
+        public bool Is_Public { get; set; }
     }
 }

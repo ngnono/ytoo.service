@@ -12,6 +12,7 @@ namespace com.intime.fashion.common.message
         Combo = 2,
         Inventory = 3,
         Order = 4,
-        GiftCard = 5
+        GiftCard = 5,
+        SectionBrand = 6
     }
 }

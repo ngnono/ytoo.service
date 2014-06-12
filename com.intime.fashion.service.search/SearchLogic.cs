@@ -20,8 +20,8 @@ namespace com.intime.fashion.service.search
         private static ElasticClient _client = new ElasticClient(new ConnectionSettings(new Uri(ElasticSearchConfigurationSetting.Current.Host))
                                         .SetDefaultIndex(ElasticSearchConfigurationSetting.Current.Index)
                                         .SetMaximumAsyncConnections(10));
-        
-        public static void IndexSingle(int id, SourceType type)
+
+        public static void IndexSingle(int id, IndexSourceType type)
         {
             var serviceBase = GetService(type);
             serviceBase.IndexSingle(id);
@@ -47,23 +47,25 @@ namespace com.intime.fashion.service.search
             return true;
 
         }
-        public static void IndexSingleAsync(int id, SourceType type)
+        public static void IndexSingleAsync(int id, IndexSourceType type)
         {
             Task.Factory.StartNew(() =>
             {
                 IndexSingle(id, type);
             });
         }
-        public static ESServiceBase GetService(SourceType type)
+        public static ESServiceBase GetService(IndexSourceType type)
         {
             switch (type)
             { 
-                case SourceType.Combo:
+                case IndexSourceType.Combo:
                     return new ESComboService();
-                case SourceType.Product:
+                case IndexSourceType.Product:
                     return new ESProductService();
-                case SourceType.Inventory:
+                case IndexSourceType.Inventory:
                     return new ESInventoryService();
+                case IndexSourceType.Brand:
+                    return new ESBrandService();
                 default:
                     throw new ArgumentException("type mismatch");
             }

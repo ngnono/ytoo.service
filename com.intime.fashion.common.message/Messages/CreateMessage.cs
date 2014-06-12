@@ -14,10 +14,6 @@ namespace com.intime.fashion.common.message.Messages
             get { return (int)MessageAction.CreateEntity; }
             set { }
         }
-        public override int SourceType
-        {
-            get;
-            set;
-        }
+ 
     }
 }

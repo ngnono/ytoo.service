@@ -67,7 +67,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
             return (IsInPromotion.HasValue && IsInPromotion.Value) ? DiscountAmount.Value : 0m;
                   
         }}
-
+        [DataMember(Name="is_public")]
+        public bool Is_Public { get {
+            return IsPublic ?? true;
+        } }
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
         [IgnoreDataMember]
@@ -78,5 +81,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public Nullable<bool> IsInPromotion { get; set; }
         [IgnoreDataMember]
         public Nullable<decimal> DiscountAmount { get; set; }
+        public bool? IsPublic { get; set; }
     }
 }

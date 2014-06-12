@@ -36,6 +36,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ExpireDate).HasColumnName("ExpireDate");
             this.Property(t => t.IsInPromotion).HasColumnName("IsInPromotion");
             this.Property(t => t.DiscountAmount).HasColumnName("DiscountAmount");
+            this.Property(t => t.IsPublic).HasColumnName("IsPublic");
 		Init();
         }
 

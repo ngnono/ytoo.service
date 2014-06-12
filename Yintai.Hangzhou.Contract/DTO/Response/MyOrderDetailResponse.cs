@@ -83,9 +83,17 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         }
         [DataMember(Name="is_owner")]
           public bool IsOwner { get; set; }
+        [DataMember(Name = "has_promotion")]
+        public bool Promotion_Flag { get; set; }
+         [DataMember(Name = "promotion_desc")]
+        public string PromotionDesc { get; set; }
+         [DataMember(Name = "promotion_rules")]
+        public string PromotionRules { get; set; }
 
         [IgnoreDataMember]
         public bool IsDaoGou { get; set; }
+        [IgnoreDataMember]
+        public bool? PromotionFlag { get; set; }
 
     }
     [DataContract]
@@ -124,7 +132,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string Brand2Name { get; set; }
         [DataMember(Name = "properties")]
         public IEnumerable<TagPropertyDetailResponse> Properties { get; set; }
-
+        [DataMember(Name="sales_code")]
+        public string StoreSalesCode { get; set; }
     }
      [DataContract]
     public class MyRMAResponse : BaseResponse

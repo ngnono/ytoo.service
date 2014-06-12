@@ -20,6 +20,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<System.DateTime> ExpireDate { get; set; }
         public Nullable<bool> IsInPromotion { get; set; }
         public Nullable<decimal> DiscountAmount { get; set; }
+        public bool? IsPublic { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -13,7 +13,7 @@ namespace com.intime.fashion.service.messages.Message
          private ESServiceBase _esService = null;
          public ProductHandler()
         {
-            _esService = SearchLogic.GetService(Yintai.Hangzhou.Model.Enums.SourceType.Product);
+            _esService = SearchLogic.GetService(IndexSourceType.Product);
         }
         public override int SourceType
         {

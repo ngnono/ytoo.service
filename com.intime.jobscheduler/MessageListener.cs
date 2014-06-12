@@ -94,6 +94,7 @@ namespace com.intime.jobscheduler
             handlers.Add(new InventoryHandler());
             handlers.Add(new OrderPaidHandler());
             handlers.Add(new GiftcardPaidHandler());
+            handlers.Add(new SectionBrandHandler());
             return handlers;
         }
 

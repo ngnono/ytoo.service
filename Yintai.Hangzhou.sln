@@ -79,6 +79,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.common.notifyqueue", "com.intime.fashion.common.notifyqueue\com.intime.fashion.common.notifyqueue.csproj", "{28185801-0E57-4BD2-AC22-0D13ADA9BABF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.webapi.domain", "com.intime.fashion.webapi.domain\com.intime.fashion.webapi.domain.csproj", "{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -389,6 +391,16 @@ Global
 		{28185801-0E57-4BD2-AC22-0D13ADA9BABF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{28185801-0E57-4BD2-AC22-0D13ADA9BABF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{28185801-0E57-4BD2-AC22-0D13ADA9BABF}.Release|Win32.ActiveCfg = Release|Any CPU
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -412,6 +424,7 @@ Global
 		{3A1B5C84-F8E4-46D6-9D25-81CFE1AF27C1} = {C663D999-757F-442B-B755-904A56634F40}
 		{9EBD5D9A-F4DC-4A75-8348-BCE676C5C795} = {C663D999-757F-442B-B755-904A56634F40}
 		{CAD376ED-1609-4364-81C2-4CF65F43A61E} = {C663D999-757F-442B-B755-904A56634F40}
+		{CCDC3B67-04B5-4D3B-8F2F-0F99C36B0FBE} = {C663D999-757F-442B-B755-904A56634F40}
 		{93E896A8-D229-4422-B31B-DF2F2403728E} = {32D121FF-079E-402E-9A1E-C1049913BEF9}
 		{0F72CED6-CDD5-4F97-BB8B-CDB54FC1BEF6} = {32D121FF-079E-402E-9A1E-C1049913BEF9}
 		{6992FFB6-C70D-4F8A-A03A-4F663FA370F4} = {E958B8C0-AC89-400A-83F9-BB239A2DCD93}

@@ -15,7 +15,7 @@ namespace com.intime.fashion.service.messages.Message
        private ESServiceBase _esService = null;
          public InventoryHandler()
         {
-            _esService = SearchLogic.GetService(Yintai.Hangzhou.Model.Enums.SourceType.Inventory);
+            _esService = SearchLogic.GetService(IndexSourceType.Inventory);
         }
         public override int SourceType
         {

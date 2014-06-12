@@ -60,6 +60,7 @@
     <Compile Include="Message\InventoryHandler.cs" />
     <Compile Include="Message\OrderPaidHandler.cs" />
     <Compile Include="Message\ProductHandler.cs" />
+    <Compile Include="Message\SectionBrandHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

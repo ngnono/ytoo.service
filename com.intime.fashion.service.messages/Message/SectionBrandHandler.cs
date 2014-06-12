@@ -7,19 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yintai.Architecture.Framework.ServiceLocation;
+using Yintai.Hangzhou.Data.Models;
 
 namespace com.intime.fashion.service.messages.Message
 {
-   public class ComboHandler:MessageHandler
+    public class SectionBrandHandler : MessageHandler
     {
         private ESServiceBase _esService = null;
-        public ComboHandler()
+        private DbContext _db = null;
+        public SectionBrandHandler()
         {
-            _esService = SearchLogic.GetService(IndexSourceType.Combo);
+            _esService = SearchLogic.GetService(IndexSourceType.Brand);
+            _db = ServiceLocator.Current.Resolve<DbContext>();
         }
         public override int SourceType
         {
-            get { return (int)MessageSourceType.Combo; }
+            get { return (int)MessageSourceType.SectionBrand; }
         }
 
         public override int ActionType
@@ -33,10 +36,12 @@ namespace com.intime.fashion.service.messages.Message
         }
         public override bool Work(BaseMessage message)
         {
-            var comboId = message.EntityId;
+            var brand = _db.Set<IMS_SectionBrandEntity>().Find(message.EntityId);
+            if (brand == null)
+                return true;
 
-            return _esService.IndexSingle(comboId);
-            
+            return _esService.IndexSingle(brand.Id);
+
         }
     }
 }
