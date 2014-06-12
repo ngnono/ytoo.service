@@ -17,7 +17,7 @@ using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.DTO.Response;
 using com.intime.fashion.common.Wxpay;
 using Yintai.Hangzhou.Contract.DTO.Request.Customer;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using Yintai.Hangzhou.Model;
 using com.intime.fashion.common;
 using Yintai.Architecture.Common.Logger;

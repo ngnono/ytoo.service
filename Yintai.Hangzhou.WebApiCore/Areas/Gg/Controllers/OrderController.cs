@@ -8,7 +8,7 @@ using System.Transactions;
 using System.Web.Mvc;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
 {

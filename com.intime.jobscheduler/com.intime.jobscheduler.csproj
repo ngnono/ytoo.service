@@ -288,6 +288,10 @@
       <Project>{be512bbf-4f5a-4909-b9c0-cf3419e0f945}</Project>
       <Name>com.intime.fashion.service.search</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service\com.intime.fashion.service.csproj">
+      <Project>{be4f98bc-b4a2-4fc0-ae7a-96938218f098}</Project>
+      <Name>com.intime.fashion.service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
       <Name>Yintai.Hangzhou.Contract</Name>

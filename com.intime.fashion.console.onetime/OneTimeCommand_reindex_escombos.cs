@@ -20,7 +20,7 @@ namespace com.intime.fashion.console.onetime
             [Description("single combo id")]
             int? id)
         {
-            var indexService = SearchLogic.GetService(SourceType.Combo);
+            var indexService = SearchLogic.GetService(IndexSourceType.Combo);
             if (id.HasValue)
             {
                 indexService.IndexSingle(id.Value);

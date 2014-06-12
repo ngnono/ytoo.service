@@ -15,7 +15,7 @@ using com.intime.fashion.common.Extension;
 using com.intime.fashion.webapi.domain;
 
 using DomainRequest = com.intime.fashion.webapi.domain.Request;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using System.Transactions;
 using Yintai.Hangzhou.Repository.Contract;
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers

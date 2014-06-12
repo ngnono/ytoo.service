@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 
 namespace com.intime.fashion.console.onetime
 {

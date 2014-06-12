@@ -21,7 +21,7 @@ using Yintai.Hangzhou.WebApiCore;
 using System.Transactions;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Contract.DTO.Response;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 using com.intime.fashion.common;
 

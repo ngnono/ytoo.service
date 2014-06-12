@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using Yintai.Hangzhou.WebApiCore.Areas.Gg.ViewModels;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers

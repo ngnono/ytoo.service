@@ -6,7 +6,7 @@ using com.intime.fashion.data.sync.Wgw.Request.Order;
 using com.intime.jobscheduler.Job.Wgw;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 
 namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
 {

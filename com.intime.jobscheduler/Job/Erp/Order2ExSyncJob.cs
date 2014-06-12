@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Yintai.Hangzhou.Data.Models;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 
 namespace com.intime.jobscheduler.Job.Erp
 {

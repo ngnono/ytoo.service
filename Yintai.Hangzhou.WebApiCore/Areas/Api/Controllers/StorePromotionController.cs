@@ -16,7 +16,7 @@ using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Service.Contract.Apis;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers

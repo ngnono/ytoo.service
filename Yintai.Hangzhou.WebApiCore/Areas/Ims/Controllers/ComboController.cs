@@ -16,7 +16,7 @@ using com.intime.fashion.common.Extension;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using com.intime.fashion.common;
 using Yintai.Architecture.Framework.ServiceLocation;
 using com.intime.fashion.common.message;
