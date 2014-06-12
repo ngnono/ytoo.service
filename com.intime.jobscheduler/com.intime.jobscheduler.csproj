@@ -225,9 +225,6 @@
     <Content Include="Configuration\elasticSearch.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Configuration\aliyun.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Configuration\weixin_ims.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
