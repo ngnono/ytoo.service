@@ -207,10 +207,8 @@
     <Compile Include="MainJobService.Designer.cs">
       <DependentUpon>MainJobService.cs</DependentUpon>
     </Compile>
-    <Compile Include="MessageListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScopedLifetimeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

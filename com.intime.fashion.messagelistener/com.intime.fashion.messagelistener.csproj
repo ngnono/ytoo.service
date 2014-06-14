@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BE4F98BC-B4A2-4FC0-AE7A-96938218F098}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{4166633A-304A-426F-9A78-7B853A9490A2}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>com.intime.fashion.service</RootNamespace>
-    <AssemblyName>com.intime.fashion.service</AssemblyName>
+    <RootNamespace>com.intime.fashion.messagelistener</RootNamespace>
+    <AssemblyName>com.intime.fashion.messagelistener</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,15 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,43 +51,49 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IncomeRule\AssociateIncomeLogic.cs" />
-    <Compile Include="BusinessServiceBase.cs" />
-    <Compile Include="Combo\ComboLogic.cs" />
-    <Compile Include="IDbAware.cs" />
-    <Compile Include="IDebugAware.cs" />
-    <Compile Include="IncomeRule\AssociateIncomeAccount.cs" />
-    <Compile Include="IncomeRule\IIncomeRule.cs" />
-    <Compile Include="IncomeRule\IncomeRuleFix.cs" />
-    <Compile Include="IncomeRule\IncomeRuleFlatten.cs" />
-    <Compile Include="IncomeRule\IncomeRuleFlex.cs" />
-    <Compile Include="Order\OrderRule.cs" />
-    <Compile Include="OrderService.cs" />
+    <Compile Include="MainJobService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MainJobService.Designer.cs">
+      <DependentUpon>MainJobService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MessageListener.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Order\RMARule.cs" />
-    <Compile Include="ScopedLifetimeManager.cs" />
-    <Compile Include="StorePromotionRule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
-      <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
-      <Name>com.intime.fashion.common</Name>
+    <None Include="App.config" />
+    <Content Include="Configuration\elasticSearch.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Configuration\log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Configuration\rabbit.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Configuration\unity.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Configuration\weixin_ims.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="deploy\installer.bat" />
+    <None Include="deploy\uninstaller.bat" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.common.message\com.intime.fashion.common.message.csproj">
+      <Project>{a7154a06-be04-400f-8652-5b52e673b7db}</Project>
+      <Name>com.intime.fashion.common.message</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
-      <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
-      <Name>Yintai.Hangzhou.Contract</Name>
+    <ProjectReference Include="..\com.intime.fashion.service.messages\com.intime.fashion.service.messages.csproj">
+      <Project>{097e9eaf-ec77-4fb2-86fb-7b30acd7df93}</Project>
+      <Name>com.intime.fashion.service.messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
-      <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>
-      <Name>Yintai.Hangzhou.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
-      <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
-      <Name>Yintai.Hangzhou.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Yintai.Hangzhou.Repository\Yintai.Hangzhou.Repository.csproj">
-      <Project>{82be109a-483e-40bf-98b8-a555bca86111}</Project>
-      <Name>Yintai.Hangzhou.Repository</Name>
+    <ProjectReference Include="..\com.intime.fashion.service\com.intime.fashion.service.csproj">
+      <Project>{be4f98bc-b4a2-4fc0-ae7a-96938218f098}</Project>
+      <Name>com.intime.fashion.service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

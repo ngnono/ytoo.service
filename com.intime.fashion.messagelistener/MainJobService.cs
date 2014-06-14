@@ -1,7 +1,4 @@
 ﻿using com.intime.fashion.common.message;
-using Common.Logging;
-using Quartz;
-using Quartz.Impl;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,14 +9,15 @@ using System.Net;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using Yintai.Architecture.Common.Logger;
 using Yintai.Architecture.Framework.ServiceLocation;
 
 
-namespace com.intime.jobscheduler
+namespace com.intime.fashion.messagelistener
 {
     public partial class MainJobService : ServiceBase
     {
-        private IScheduler _sche;
+        private MessageListener _messageListener;
         private ILog _log;
         public MainJobService()
         {
@@ -34,25 +32,22 @@ namespace com.intime.jobscheduler
         }
         protected override void OnStart(string[] args)
         {
-            _log = _log??LogManager.GetLogger(typeof(MainJobService));
-            ISchedulerFactory scheduler = new StdSchedulerFactory();
-            _sche =  scheduler.GetScheduler();
-
-            _log.Info("starting scheduler...");
-            _sche.Start();
-            _log.Info("started scheduler...");
+            _log = ServiceLocator.Current.Resolve<ILog>();
+            //register message listen
+            _messageListener = MessageListener.Current;
+            _messageListener.Start();
+            _log.Info("started listener...");
 
         }
 
         protected override void OnStop()
         {
-           
-            if (_sche != null &&
-                !_sche.IsShutdown)
+
+            if (_messageListener.IsStart())
             {
-                _sche.Shutdown();
-                _log = _log ?? LogManager.GetLogger(typeof(MainJobService));
-                _log.Info("shut down scheduler...");
+                _messageListener.Stop();
+            
+                _log.Info("shut down listener...");
             }
         }
     }
