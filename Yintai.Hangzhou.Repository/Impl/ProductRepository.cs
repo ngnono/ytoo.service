@@ -427,35 +427,13 @@ namespace Yintai.Hangzhou.Repository.Impl
         public override Yintai.Hangzhou.Data.Models.ProductEntity Insert(Yintai.Hangzhou.Data.Models.ProductEntity entity)
         {
             var newEntity = base.Insert(entity);
-            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
-            {
-                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
-                {
-                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                    messageProvider.GetSender().SendMessageReliable(new CreateMessage()
-                    {
-                        SourceType = (int)MessageSourceType.Product,
-                        EntityId = newEntity.Id
-                    });
-                }
-            });
+           
             return newEntity;
         }
         public override void Update(ProductEntity entity)
         {
             base.Update(entity);
-            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
-            {
-                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
-                {
-                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                    messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
-                    {
-                        SourceType = (int)MessageSourceType.Product,
-                        EntityId = entity.Id
-                    });
-                }
-            });
+           
         }
     }
 }

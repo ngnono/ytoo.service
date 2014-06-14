@@ -39,8 +39,8 @@ namespace com.intime.jobscheduler
             ISchedulerFactory scheduler = new StdSchedulerFactory();
             _sche =  scheduler.GetScheduler();
             //register message listen
-            _messageListner = MessageListener.Current;
-            _messageListner.Start();
+           // _messageListner = MessageListener.Current;
+            //_messageListner.Start();
             _log.Info("starting scheduler...");
             _sche.Start();
             _log.Info("started scheduler...");
@@ -54,7 +54,7 @@ namespace com.intime.jobscheduler
                 !_sche.IsShutdown)
             {
                 _sche.Shutdown();
-                _messageListner.Stop();
+              //  _messageListner.Stop();
                 _log = _log ?? LogManager.GetLogger(typeof(MainJobService));
                 _log.Info("shut down scheduler...");
             }
