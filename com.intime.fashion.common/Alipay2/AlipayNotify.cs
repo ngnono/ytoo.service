@@ -42,13 +42,20 @@ namespace Com.Alipay2
         /// </summary>
         /// <param name="inputPara">通知返回参数数组</param>
         /// <param name="notify_id">通知验证ID</param>
-        public Notify()
+        public Notify():this(Config.Partner.Trim(),
+            Config.Key.Trim(),
+            Config.Private_key.Trim(),
+            Config.Public_key.Trim())
+        {
+           
+        }
+        public Notify(string parter,string key,string privateKey,string publicKey)
         {
             //初始化基础配置信息
-            _partner = Config.Partner.Trim();
-            _key = Config.Key.Trim();
-            _private_key = Config.Private_key.Trim();
-            _public_key = Config.Public_key.Trim();
+            _partner = parter;
+            _key = key;
+            _private_key = privateKey;
+            _public_key = publicKey;
             _input_charset = Config.Input_charset.Trim().ToLower();
             _sign_type = Config.Sign_type.Trim().ToUpper();
         }

@@ -164,6 +164,7 @@
     <Compile Include="ActionTimer.cs" />
     <Compile Include="Job\AccountSyncJob.cs" />
     <Compile Include="Job\Aliyun\TransferRSS2AliyunJob.cs" />
+    <Compile Include="Job\Analysis\PullAnalysisData2ESJob.cs" />
     <Compile Include="Job\ApnsNotificationCommonJob.cs" />
     <Compile Include="Job\ApnsNotificationJob.cs" />
     <Compile Include="Job\AutoConvertOrderStatus.cs" />

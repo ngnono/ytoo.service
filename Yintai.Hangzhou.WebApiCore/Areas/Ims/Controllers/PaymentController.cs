@@ -25,6 +25,7 @@ using System.Xml;
 using Yintai.Hangzhou.Service;
 using com.intime.fashion.common.message.Messages;
 using com.intime.fashion.common.message;
+using com.intime.fashion.common.config;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -161,7 +162,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             if (sPara.Count > 0)
             {
-                var aliNotify = new Com.Alipay2.Notify();
+                var alipayConfig = CommonConfiguration<Alipay_IMSConfiguration>.Current;
+                var aliNotify = new Com.Alipay2.Notify(alipayConfig.Partner,
+                    alipayConfig.Md5Key,
+                    alipayConfig.PrivateKey,
+                    alipayConfig.PublicKey);
                 bool verifyResult = aliNotify.VerifyNotify(sPara, Request.Form["sign"]);
 
                 if (verifyResult)
@@ -178,7 +183,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     if (trade_status == "TRADE_FINISHED")
                     {
                         var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no
-                            && p.PaymentCode == Com.Alipay.Config.PaymentCode).FirstOrDefault();
+                            && p.PaymentCode == alipayConfig.PaymentCode).FirstOrDefault();
                         var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == out_trade_no).FirstOrDefault();
                         if (paymentEntity == null && orderEntity != null)
                         {
@@ -189,7 +194,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 {
                                     CreateDate = DateTime.Now,
                                     OrderNo = out_trade_no,
-                                    PaymentCode = Com.Alipay.Config.PaymentCode,
+                                    PaymentCode = alipayConfig.PaymentCode,
                                     PaymentContent = JsonConvert.SerializeObject(sPara)
                                 });
 
@@ -199,7 +204,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     OrderNo = out_trade_no,
                                     CreateDate = DateTime.Now,
                                     IsSynced = false,
-                                    PaymentCode = Com.Alipay.Config.PaymentCode,
+                                    PaymentCode = alipayConfig.PaymentCode,
                                     TransNo = trade_no,
                                     OrderType = (int)PaidOrderType.Self
                                 });
@@ -355,7 +360,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             if (sPara.Count > 0)
             {
-                var aliNotify = new Com.Alipay2.Notify();
+                var alipayConfig = CommonConfiguration<Alipay_IMSConfiguration>.Current;
+                var aliNotify = new Com.Alipay2.Notify(alipayConfig.Partner,
+                    alipayConfig.Md5Key,
+                    alipayConfig.PrivateKey,
+                    alipayConfig.PublicKey);
                 bool verifyResult = aliNotify.VerifyNotify(sPara, Request.Form["sign"]);
 
                 if (verifyResult)
@@ -394,7 +403,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             return Content("success");
                         }
                         var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.TransNo == trade_no
-                                                    && p.PaymentCode == Com.Alipay.Config.PaymentCode
+                                                    && p.PaymentCode == alipayConfig.PaymentCodeGiftCard
                                                     && (!p.OrderType.HasValue || p.OrderType.Value == (int)PaidOrderType.GiftCard)).FirstOrDefault();
 
                         if (paymentEntity == null)
@@ -419,7 +428,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 {
                                     CreateDate = DateTime.Now,
                                     OrderNo = giftcardOrder.No,
-                                    PaymentCode = WxPayConfig.PAYMENT_CODE4GIFTCARD,
+                                    PaymentCode = alipayConfig.PaymentCodeGiftCard,
                                     PaymentContent = JsonConvert.SerializeObject(sPara)
                                 });
 
@@ -429,7 +438,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     OrderNo = giftcardOrder.No,
                                     CreateDate = DateTime.Now,
                                     IsSynced = false,
-                                    PaymentCode = Com.Alipay.Config.PaymentCode,
+                                    PaymentCode = alipayConfig.PaymentCodeGiftCard,
                                     TransNo = trade_no,
                                     OrderType = (int)PaidOrderType.GiftCard
                                 });
