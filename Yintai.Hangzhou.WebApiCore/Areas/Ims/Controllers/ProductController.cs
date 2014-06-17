@@ -115,7 +115,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     StoreId = assocateEntity.StoreId,
                     StoreProductCode = request.Sales_Code,
                     UpdateDate = DateTime.Now,
-                    UpdateUser = authuid
+                    UpdateUser = authuid,
+                    SectionId = assocateEntity.SectionId
                 });
                 //step2: create product color property
                 var propertyEntity = _productPropertyRepo.Insert(new ProductPropertyEntity()

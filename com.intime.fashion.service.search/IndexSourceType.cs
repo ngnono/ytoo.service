@@ -8,8 +8,8 @@ namespace com.intime.fashion.service.search
 {
     public enum IndexSourceType
     {
-        Product =1 ,
-        Combo =2 ,
+        Product = 1,
+        Combo = 2,
         Inventory = 3,
         Brand = 4
     }

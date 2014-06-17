@@ -43,17 +43,6 @@ namespace com.intime.jobscheduler.Job
 
             if (needRebuild)
             {
-                var response = client.DeleteIndex(ElasticSearchConfigurationSetting.Current.Index);
-                if (response.IsValid)
-                {
-
-                    log.Info(string.Format("index:{0} is deleted!", ElasticSearchConfigurationSetting.Current.Index));
-                    
-                }
-                else
-                {
-                    log.Info("remove index failed");
-                }
                 _isActiveOnly = true;
             }
             IndexBrand(client, benchDate);

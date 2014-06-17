@@ -47,6 +47,26 @@ namespace com.intime.fashion.service.search
             return true;
 
         }
+
+        public static bool IndexMany<T>(IEnumerable<T> source) where T:class
+        {
+            var client = GetClient();
+            var response = client.IndexMany<T>(source);
+            if (!response.IsValid)
+            {
+                var error = response.ConnectionStatus;
+                if (error == null)
+                    CommonUtil.Log.Error(response);
+                else
+                {
+                    CommonUtil.Log.Error(error.Request);
+                    CommonUtil.Log.Error(error.Result);
+                }
+                return false;
+            }
+
+            return true;
+        }
         public static void IndexSingleAsync(int id, IndexSourceType type)
         {
             Task.Factory.StartNew(() =>
@@ -76,6 +96,7 @@ namespace com.intime.fashion.service.search
             return _client;
         }
 
-      
+
+
     }
 }

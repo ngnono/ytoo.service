@@ -224,6 +224,9 @@
     <Content Include="Configuration\elasticSearch.config">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Configuration\flurry.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Configuration\weixin_ims.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -271,6 +274,10 @@
     <ProjectReference Include="..\com.intime.fashion.data\com.intime.fashion.data.erp.csproj">
       <Project>{b224c596-53f1-48a6-948f-df3cd2acd15d}</Project>
       <Name>com.intime.fashion.data.erp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.analysis\com.intime.fashion.service.analysis.csproj">
+      <Project>{21dc1636-76e3-4f12-8162-97a56b09c21d}</Project>
+      <Name>com.intime.fashion.service.analysis</Name>
     </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.service.images\com.intime.fashion.service.images.csproj">
       <Project>{f8565494-27d0-41e0-859a-ddfc47be3b38}</Project>
