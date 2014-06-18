@@ -386,6 +386,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 if (resourceEntity == null)
                     canCommit = false;
 
+                //step5: if create combo auto
+                int? comboId = null;
+                if (request.CreateCombo)
+                {
+                    var assocateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
+                    IMS_ComboEntity comboEntity = ComboLogic.CreateComboFromProduct(productEntity, assocateEntity);
+                    comboId = comboEntity.Id;
+                }
                 if (canCommit)
                 {
                     
@@ -396,7 +404,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     {
                         id = productEntity.Id,
                         image = resourceEntity.Name.Image320Url(),
-                        price = productEntity.Price
+                        price = productEntity.Price,
+                        combo_id = comboId
+
                     });
                 }
                 else
