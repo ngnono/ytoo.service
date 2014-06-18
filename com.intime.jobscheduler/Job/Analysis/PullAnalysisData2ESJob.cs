@@ -49,22 +49,22 @@ namespace com.intime.jobscheduler.Job.Analysis
     
                 bool isIndexedCombos = true;
                 analysisClient.ThreholdControl();
-                IEnumerable<ESAnalysisCombo> combos = analysisClient.GetComboEvent();
-                if (!SearchLogic.IndexMany<ESAnalysisCombo>(combos))
+                IEnumerable<ESAnalysisEvent> combos = analysisClient.GetComboEvent();
+                if (!SearchLogic.IndexMany<ESAnalysisEvent>(combos))
                     isIndexedCombos = false;
                 log.Info(string.Format("index analysis combos:{0}", isIndexedCombos));
 
                 bool isIndexedGiftCard = true;
                 analysisClient.ThreholdControl();
-                IEnumerable<ESAnalysisGiftCard> gfs = analysisClient.GetGiftCardEvent();
-                if (!SearchLogic.IndexMany<ESAnalysisGiftCard>(gfs))
+                IEnumerable<ESAnalysisEvent> gfs = analysisClient.GetGiftCardEvent();
+                if (!SearchLogic.IndexMany<ESAnalysisEvent>(gfs))
                     isIndexedGiftCard = false;
                 log.Info(string.Format("index analysis giftcards:{0}", isIndexedGiftCard));
 
                 bool isIndexedStores = true;
                 analysisClient.ThreholdControl();
-                IEnumerable<ESAnalysisStore> stores = analysisClient.GetStoreEvent();
-                if (!SearchLogic.IndexMany<ESAnalysisStore>(stores))
+                IEnumerable<ESAnalysisEvent> stores = analysisClient.GetStoreEvent();
+                if (!SearchLogic.IndexMany<ESAnalysisEvent>(stores))
                     isIndexedStores = false;
                 log.Info(string.Format("index analysis stores:{0}", isIndexedStores));
             }

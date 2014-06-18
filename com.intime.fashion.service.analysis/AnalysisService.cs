@@ -60,10 +60,10 @@ namespace com.intime.fashion.service.analysis
             return summary;
         }
 
-        public IEnumerable<ESAnalysisCombo> GetComboEvent()
+        public IEnumerable<ESAnalysisEvent> GetComboEvent()
         {
             var request = new ComboDetailEventRequest() { StartDate = _startDate, EndDate = _endDate };
-            var response = new List<ESAnalysisCombo>();
+            var response = new List<ESAnalysisEvent>();
             SendHttpEventRequest<ComboDetailEventResponse>(request)
                 .ContinueWith(res=>{
                     var items = res.Result.Items;
@@ -81,7 +81,7 @@ namespace com.intime.fashion.service.analysis
                             _log.Info(string.Format("anaysis combo event not found:{0}", comboId));
                             continue;
                         }
-                        response.Add(new ESAnalysisCombo()
+                        response.Add(new ESAnalysisEvent()
                         {
                             Id = item.Id,
                             Count = item.Count,
@@ -89,7 +89,8 @@ namespace com.intime.fashion.service.analysis
                             StoreId = associateEntity.StoreId,
                             AssociateId = associateEntity.Id,
                             StartDate = _startDate,
-                            EndDate = _endDate
+                            EndDate = _endDate,
+                            EventType = (int)ESEventType.Combo
                         });
                     }
                 })
@@ -97,11 +98,11 @@ namespace com.intime.fashion.service.analysis
             return response;
         }
 
-        public IEnumerable<ESAnalysisGiftCard> GetGiftCardEvent()
+        public IEnumerable<ESAnalysisEvent> GetGiftCardEvent()
         {
 
             var request = new GiftCardDetailEventRequest() { StartDate = _startDate, EndDate = _endDate };
-            var response = new List<ESAnalysisGiftCard>();
+            var response = new List<ESAnalysisEvent>();
             SendHttpEventRequest<GiftCardDetailEventResponse>(request)
                 .ContinueWith(res =>
                 {
@@ -120,7 +121,7 @@ namespace com.intime.fashion.service.analysis
                             _log.Info(string.Format("anaysis combo event not found:{0}", giftId));
                             continue;
                         }
-                        response.Add(new ESAnalysisGiftCard()
+                        response.Add(new ESAnalysisEvent()
                         {
                             Id = item.Id,
                             Count = item.Count,
@@ -128,7 +129,8 @@ namespace com.intime.fashion.service.analysis
                             StoreId = associateEntity.StoreId,
                             AssociateId = associateEntity.Id,
                             StartDate = _startDate,
-                            EndDate = _endDate
+                            EndDate = _endDate,
+                            EventType = (int)ESEventType.GiftCard
                         });
                     }
                 })
@@ -136,10 +138,10 @@ namespace com.intime.fashion.service.analysis
             return response;
         }
 
-        public IEnumerable<ESAnalysisStore> GetStoreEvent()
+        public IEnumerable<ESAnalysisEvent> GetStoreEvent()
         {
             var request = new StoreDetailEventRequest() { StartDate = _startDate, EndDate = _endDate };
-            var response = new List<ESAnalysisStore>();
+            var response = new List<ESAnalysisEvent>();
             SendHttpEventRequest<StoreDetailEventResponse>(request)
                 .ContinueWith(res =>
                 {
@@ -155,7 +157,7 @@ namespace com.intime.fashion.service.analysis
                             _log.Info(string.Format("anaysis store event not found:{0}", storeId));
                             continue;
                         }
-                        response.Add(new ESAnalysisStore()
+                        response.Add(new ESAnalysisEvent()
                         {
                             Id = item.Id,
                             Count = item.Count,
@@ -163,7 +165,8 @@ namespace com.intime.fashion.service.analysis
                             StoreId = associateEntity.StoreId,
                             AssociateId = associateEntity.Id,
                             StartDate = _startDate,
-                            EndDate = _endDate
+                            EndDate = _endDate,
+                            EventType = (int)ESEventType.Store
                         });
                     }
                 })
