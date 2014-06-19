@@ -8,9 +8,10 @@ namespace Yintai.Hangzhou.Model.ESModel
 {
     public class ESAnalysisEvent
     {
+
         public string Count { get; set; }
 
-        public string Id { get; set; }
+        public string EventId { get; set; }
 
         public int? SectionId { get; set; }
 

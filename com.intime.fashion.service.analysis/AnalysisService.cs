@@ -83,7 +83,7 @@ namespace com.intime.fashion.service.analysis
                         }
                         response.Add(new ESAnalysisEvent()
                         {
-                            Id = item.Id,
+                            EventId = item.Id,
                             Count = item.Count,
                             SectionId = associateEntity.SectionId,
                             StoreId = associateEntity.StoreId,
@@ -112,18 +112,16 @@ namespace com.intime.fashion.service.analysis
                     foreach (var item in res.Result.Items)
                     {
                         int giftId = int.Parse(item.Id);
-                        var associateEntity = _db.Set<IMS_AssociateItemsEntity>()
-                            .Where(ia => ia.ItemId == giftId && ia.ItemType == (int)ComboType.GiftCard)
-                            .Join(_db.Set<IMS_AssociateEntity>(), o => o.AssociateId, i => i.Id, (o, i) => i)
-                            .FirstOrDefault();
+                        var associateEntity = _db.Set<IMS_AssociateEntity>()
+                            .Find(item.Id);
                         if (associateEntity == null)
                         {
-                            _log.Info(string.Format("anaysis combo event not found:{0}", giftId));
+                            _log.Info(string.Format("anaysis giftcard event not found:{0}", giftId));
                             continue;
                         }
                         response.Add(new ESAnalysisEvent()
                         {
-                            Id = item.Id,
+                            EventId = item.Id,
                             Count = item.Count,
                             SectionId = associateEntity.SectionId,
                             StoreId = associateEntity.StoreId,
@@ -153,13 +151,13 @@ namespace com.intime.fashion.service.analysis
                         int storeId = int.Parse(item.Id);
                         var associateEntity = _db.Set<IMS_AssociateEntity>().Find(storeId);
                         if (associateEntity == null)
-                        {
+                        {   
                             _log.Info(string.Format("anaysis store event not found:{0}", storeId));
                             continue;
                         }
                         response.Add(new ESAnalysisEvent()
                         {
-                            Id = item.Id,
+                            EventId = item.Id,
                             Count = item.Count,
                             SectionId = associateEntity.SectionId,
                             StoreId = associateEntity.StoreId,
