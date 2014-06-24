@@ -69,7 +69,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 string out_trade_no = sPara["out_trade_no"];
                 string trade_no = sPara["transaction_id"];
                 int trade_status = int.Parse(sPara["trade_state"]);
-                string bank_bill_no = sPara["bank_billno"];
                 var amount = decimal.Parse(sPara["total_fee"]) / 100;
                 if (trade_status == 0)
                 {
@@ -168,7 +167,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 string out_trade_no = sPara["out_trade_no"];
                 string trade_no = sPara["transaction_id"];
                 int trade_status = int.Parse(sPara["trade_state"]);
-                string bank_bill_no = sPara["bank_billno"];
                 var amount = decimal.Parse(sPara["total_fee"]) / 100;
 
                 if (trade_status == 0)
