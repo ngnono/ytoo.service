@@ -182,7 +182,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     string trade_status = xmlDoc.SelectSingleNode("/notify/trade_status").InnerText;
 
                     var amount = decimal.Parse(xmlDoc.SelectSingleNode("/notify/total_fee").InnerText);
-                    if (trade_status == "TRADE_FINISHED")
+                    if (trade_status == "TRADE_FINISHED" ||
+                        trade_status == "TRADE_SUCCESS")
                     {
                         var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no
                             && p.PaymentCode == alipayConfig.PaymentCode).FirstOrDefault();
@@ -379,7 +380,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     string trade_status = xmlDoc.SelectSingleNode("/notify/trade_status").InnerText;
 
                     var amount = decimal.Parse(xmlDoc.SelectSingleNode("/notify/total_fee").InnerText);
-                    if (trade_status == "TRADE_FINISHED")
+                    if (trade_status == "TRADE_FINISHED" ||
+                        trade_status == "TRADE_SUCCESS")
                     {
                         var tradeNos = out_trade_no.Split('-');
                         if (tradeNos.Length < 3)
