@@ -71,6 +71,7 @@
     <Compile Include="Alipay\AlipayNotify.cs" />
     <Compile Include="Alipay\MD5.cs" />
     <Compile Include="Alipay\RSA.cs" />
+    <Compile Include="Extension\DictionaryExtension.cs" />
     <Compile Include="HttpClientUtil.cs" />
     <Compile Include="Util\ChineseUtil.cs" />
     <Compile Include="Util\CommonUtil.cs" />
