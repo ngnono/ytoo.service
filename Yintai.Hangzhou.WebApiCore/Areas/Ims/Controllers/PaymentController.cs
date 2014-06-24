@@ -27,6 +27,7 @@ using com.intime.fashion.common.message.Messages;
 using com.intime.fashion.common.message;
 using com.intime.fashion.common.config;
 using com.intime.fashion.common.Extension;
+using System.Collections.Specialized;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -159,7 +160,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
         public ActionResult Notify_From_ALI()
         {
-            Dictionary<string, string> sPara = GetQueryStringParams();
+            Dictionary<string, string> sPara = GetRequestPost();
 
             if (sPara.Count > 0)
             {
@@ -356,7 +357,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
         public ActionResult Notify_GiftCard_From_ALI()
         {
-            Dictionary<string, string> sPara = GetQueryStringParams();
+            Dictionary<string, string> sPara = GetRequestPost();
 
             if (sPara.Count > 0)
             {
@@ -482,7 +483,25 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             }
             return requestParams;
         }
+        private Dictionary<string, string> GetRequestPost()
+        {
+            int i = 0;
+            Dictionary<string, string> sArray = new Dictionary<string, string>();
+            NameValueCollection coll;
+            //Load Form variables into NameValueCollection variable.
+            var unValidRequest = Request.Unvalidated;
+            coll = unValidRequest.Form;
 
+            // Get names of all forms into a string array.
+            String[] requestItem = coll.AllKeys;
+
+            for (i = 0; i < requestItem.Length; i++)
+            {
+                sArray.Add(requestItem[i], unValidRequest.Form[requestItem[i]]);
+            }
+
+            return sArray;
+        }
         private DbContext Context
         {
             get
