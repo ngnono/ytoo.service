@@ -111,6 +111,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IEFRepository<IMS_GiftCardTransfersEntity>, EFRepository<IMS_GiftCardTransfersEntity>>();
             Current.Register<IEFRepository<IMS_GiftCardUserEntity>, EFRepository<IMS_GiftCardUserEntity>>();
             Current.Register<IEFRepository<IMS_InviteCodeEntity>, EFRepository<IMS_InviteCodeEntity>>();
+            Current.Register<IEFRepository<IMS_InviteCodeRequestEntity>, EFRepository<IMS_InviteCodeRequestEntity>>();
 
             Current.Register<IEFRepository<WX_MenuEntity>, EFRepository<WX_MenuEntity>>();
         }
