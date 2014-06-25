@@ -30,6 +30,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IInventoryRepository _inventoryRepo;
         private IResourceRepository _resourceRepo;
         private IEFRepository<ProductCode2StoreCodeEntity> _productCodeRepo;
+        private ComboService _comboService;
         public ProductController(IResourceService resourceService
             , IProductRepository productRepo
             , IProductPropertyRepository productPropertyRepo
@@ -45,6 +46,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _inventoryRepo = inventoryRepo;
             _resourceRepo = resourceRepo;
             _productCodeRepo = productCodeRepo;
+            _comboService = new ComboService();
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Create(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
@@ -194,7 +196,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 int? comboId = null;
                 if (request.CreateCombo)
                 {
-                   IMS_ComboEntity comboEntity =  ComboLogic.CreateComboFromProduct(productEntity,assocateEntity);
+                   IMS_ComboEntity comboEntity =  _comboService.CreateComboFromProduct(productEntity,assocateEntity);
                    comboId = comboEntity.Id;
                 }
                 if (haveValidImage)
@@ -391,7 +393,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 if (request.CreateCombo)
                 {
                     var assocateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
-                    IMS_ComboEntity comboEntity = ComboLogic.CreateComboFromProduct(productEntity, assocateEntity);
+                    IMS_ComboEntity comboEntity = _comboService.CreateComboFromProduct(productEntity, assocateEntity);
                     comboId = comboEntity.Id;
                 }
                 if (canCommit)

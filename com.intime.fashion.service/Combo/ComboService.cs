@@ -15,56 +15,60 @@ using Yintai.Hangzhou.Repository.Contract;
 
 namespace com.intime.fashion.service
 {
-    public static class ComboLogic
+    public partial  class ComboService
     {
-        public static bool IfCanOnline(int userId)
+        private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
+        private IEFRepository<IMS_ComboEntity> _comboRepo;
+        private IEFRepository<IMS_Combo2ProductEntity> _combo2productRepo;
+        private IResourceRepository _resourceRepo;
+        public ComboService()
         {
-            var onlineCount = Context.Set<IMS_AssociateItemsEntity>().Where(ia=>ia.Status==(int)DataStatus.Normal && 
+            _associateItemRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateItemsEntity>>();
+            _comboRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_ComboEntity>>();
+            _combo2productRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_Combo2ProductEntity>>();
+            _resourceRepo = ServiceLocator.Current.Resolve<IResourceRepository>();
+        }
+        public  bool IfCanOnline(int userId)
+        {
+            var onlineCount = _db.Set<IMS_AssociateItemsEntity>().Where(ia=>ia.Status==(int)DataStatus.Normal && 
                                     ia.ItemType==(int)ComboType.Product)
-                               .Join(Context.Set<IMS_ComboEntity>().Where(ic=>ic.ExpireDate>DateTime.Now),o=>o.ItemId,i=>i.Id,(o,i)=>o)
-                               .Join(Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == userId), o => o.AssociateId, i => i.Id,
+                               .Join(_db.Set<IMS_ComboEntity>().Where(ic=>ic.ExpireDate>DateTime.Now),o=>o.ItemId,i=>i.Id,(o,i)=>o)
+                               .Join(_db.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == userId), o => o.AssociateId, i => i.Id,
                                 (o, i) => o).Count();
             return onlineCount < ConfigManager.MAX_COMBO_ONLINE;
         }
-        private static DbContext Context
-        {
-            get { return ServiceLocator.Current.Resolve<DbContext>(); }
-        }
 
-        public static void OfflineComboOne(int authuid)
+        public void OfflineComboOne(int authuid)
         {
             //use the LFLO policy to offline the oldest combo
             var associateItemRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateItemsEntity>>();
             var comboRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_ComboEntity>>();
-            var associateItemEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
-                               .Join(Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.ItemType == (int)ComboType.Product && iai.Status==(int)DataStatus.Normal), o => o.Id, i => i.AssociateId, (o, i) => i)
+            var associateItemEntity = _db.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                               .Join(_db.Set<IMS_AssociateItemsEntity>().Where(iai => iai.ItemType == (int)ComboType.Product && iai.Status==(int)DataStatus.Normal), o => o.Id, i => i.AssociateId, (o, i) => i)
                                .OrderBy(ia=>ia.UpdateDate)
                                .FirstOrDefault();
             associateItemEntity.Status = (int)DataStatus.Default;
             associateItemEntity.UpdateDate = DateTime.Now;
             associateItemRepo.Update(associateItemEntity);
 
-            var comboEntity = Context.Set<IMS_ComboEntity>().Find(associateItemEntity.ItemId);
+            var comboEntity = _db.Set<IMS_ComboEntity>().Find(associateItemEntity.ItemId);
             comboEntity.Status = (int)DataStatus.Default;
             comboEntity.UpdateDate = DateTime.Now;
             comboRepo.Update(comboEntity);
         }
 
-        public static IMS_ComboEntity CreateComboFromProduct(ProductEntity productEntity, IMS_AssociateEntity associateEntity)
+        public IMS_ComboEntity CreateComboFromProduct(ProductEntity productEntity, IMS_AssociateEntity associateEntity)
         {
-            var associateItemRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateItemsEntity>>();
-            var comboRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_ComboEntity>>();
-            var combo2productRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_Combo2ProductEntity>>();
-            var resourceRepo = ServiceLocator.Current.Resolve<IResourceRepository>();
+           
          
             var createUserId = associateEntity.UserId;
             //step1: offline one other combo
-            if (!ComboLogic.IfCanOnline(createUserId))
+            if (!IfCanOnline(createUserId))
             {
-                ComboLogic.OfflineComboOne(createUserId);
+                OfflineComboOne(createUserId);
             }
             //step1.1: create combo
-            var comboEntity = comboRepo.Insert(new IMS_ComboEntity()
+            var comboEntity = _comboRepo.Insert(new IMS_ComboEntity()
             {
                 CreateDate = DateTime.Now,
                 CreateUser = createUserId,
@@ -81,7 +85,7 @@ namespace com.intime.fashion.service
             });
 
             //step2: create combo2product
-            combo2productRepo.Insert(new IMS_Combo2ProductEntity()
+            _combo2productRepo.Insert(new IMS_Combo2ProductEntity()
                 {
                     ComboId = comboEntity.Id,
                     ProductId = productEntity.Id
@@ -89,7 +93,7 @@ namespace com.intime.fashion.service
 
 
             //step2.1 associate combo
-            associateItemRepo.Insert(new IMS_AssociateItemsEntity()
+            _associateItemRepo.Insert(new IMS_AssociateItemsEntity()
             {
                 AssociateId = associateEntity.Id,
                 CreateDate = DateTime.Now,
@@ -103,12 +107,12 @@ namespace com.intime.fashion.service
 
             //step3: bind images
 
-            foreach (var resource in Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product &&
+            foreach (var resource in _db.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product &&
                                             r.SourceId == productEntity.Id &&
                                             r.Status == (int)DataStatus.Normal &&
                                             r.Type == (int)ResourceType.Image))
             {
-                resourceRepo.Insert(new ResourceEntity()
+                _resourceRepo.Insert(new ResourceEntity()
                 {
                     Size = resource.Size,
                     SortOrder = resource.SortOrder,

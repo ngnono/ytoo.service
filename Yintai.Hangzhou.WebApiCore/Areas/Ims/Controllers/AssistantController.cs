@@ -30,6 +30,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IInventoryRepository _inventoryRepo;
 private  IEFRepository<IMS_ComboEntity> _comboRepo;
 private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
+private ComboService _comboService;
         public AssistantController(IEFRepository<IMS_AssociateSaleCodeEntity> salescodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateitemRepo,
             IEFRepository<IMS_AssociateIncomeRequestEntity> incomerequestRepo,
@@ -54,6 +55,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
             _inventoryRepo = inventoryRepo;
             _comboRepo = comboRepo;
             _incomeRepo = incomeRepo;
+            _comboService = new ComboService();
         }
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request,int authuid)
@@ -257,7 +259,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                 return this.RenderError(r => r.Message = "无权操作该组合");
             if (request.Item_Type == (int)ComboType.Product && request.Is_Online)
             {
-                if (!ComboLogic.IfCanOnline(authuid))
+                if (!_comboService.IfCanOnline(authuid))
                     return this.RenderError(r => r.Message = "店铺上线组合数量超出限制！");
             }
             using (var ts = new TransactionScope())

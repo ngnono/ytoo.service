@@ -30,6 +30,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_Combo2ProductEntity> _combo2productRepo;
         private IResourceRepository _resourceRepo;
         private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
+        private ComboService _comboService;
         public ComboController(IEFRepository<IMS_ComboEntity> comboRepo
             , IEFRepository<IMS_Combo2ProductEntity> combo2productRepo
             , IResourceRepository resourceRepo,
@@ -39,6 +40,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _combo2productRepo = combo2productRepo;
             _resourceRepo = resourceRepo;
             _associateItemRepo = associateItemRepo;
+            _comboService = new ComboService();
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Create([InternalJsonArrayAttribute("image_ids,productids")] IMSComboCreateRequest request, int authuid)
@@ -66,7 +68,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
              if (request.Has_Discount && !(request.Discount < price && request.Discount > 0))
                  return this.RenderError(r => r.Message = "商品组合的折扣必须大于0，小于商品总价");
             var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
-            var canOnline = ComboLogic.IfCanOnline(authuid);
+            var canOnline = _comboService.IfCanOnline(authuid);
 
             using (var ts = new TransactionScope())
             {
@@ -125,7 +127,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 //step4: offline one other combo
                 if (!canOnline)
                 {
-                    ComboLogic.OfflineComboOne(authuid);
+                    _comboService.OfflineComboOne(authuid);
                 }
 
                

@@ -260,7 +260,7 @@ namespace Yintai.Hangzhou.Service.Manager
                         inValue.FileName = fileKey;
                         inValue.KeyName = key;
                         inValue.FileExt = fileExt;
-                        inValue.SaveOrigin = true;
+                        inValue.SaveOrigin = false;
                         inValue.FileData = postedFile.InputStream;
 
                         switch (fileInfor.ResourceType)
@@ -345,7 +345,7 @@ namespace Yintai.Hangzhou.Service.Manager
                     inValue.FileName = fileKey;
                     inValue.KeyName = key;
                     inValue.FileExt = fileExt;
-                    inValue.SaveOrigin = true;
+                    inValue.SaveOrigin = false;
 
                     if (postedFile.InputStream.CanRead)
                     {
@@ -527,7 +527,7 @@ namespace Yintai.Hangzhou.Service.Manager
                     inValue.FileName = fileKey;
                     inValue.KeyName = key;
                     inValue.FileExt = fileExt;
-                    inValue.SaveOrigin = true;
+                    inValue.SaveOrigin =false;
 
 
                     using (var fileHR = file.OpenRead())

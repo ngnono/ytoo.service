@@ -11,6 +11,7 @@ namespace com.intime.fashion.messagelistener
     {
         static void Main(string[] args)
         {
+        
 #if !DEBUG
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 

@@ -52,9 +52,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComboService.cs" />
     <Compile Include="IncomeRule\AssociateIncomeLogic.cs" />
     <Compile Include="BusinessServiceBase.cs" />
-    <Compile Include="Combo\ComboLogic.cs" />
+    <Compile Include="Combo\ComboService.cs" />
     <Compile Include="IDbAware.cs" />
     <Compile Include="IDebugAware.cs" />
     <Compile Include="IncomeRule\AssociateIncomeAccount.cs" />

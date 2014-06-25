@@ -28,7 +28,14 @@ namespace com.intime.fashion.service.images
                     {
                         client.PutObject(config.RSS_BUCKET_NAME, key.Replace("\\","/"), fs, new ObjectMetadata());
                     }
-
+                    try
+                    {
+                        File.Delete(local);
+                    }
+                    catch (Exception ex)
+                    { 
+                       //swallow exception here 
+                    }
                     return true;
                 }
                 catch (Exception ex)

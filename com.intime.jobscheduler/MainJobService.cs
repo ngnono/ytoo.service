@@ -24,7 +24,8 @@ namespace com.intime.jobscheduler
         public MainJobService()
         {
             InitializeComponent();
-            ServiceLocator.Current.RegisterSingleton<Yintai.Architecture.Common.Logger.ILog, Yintai.Architecture.Common.Logger.Log4NetLog>();
+
+            UnityBootStrapper.Init();
 
             ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };
         }
