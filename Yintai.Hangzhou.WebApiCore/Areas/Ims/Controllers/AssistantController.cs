@@ -41,7 +41,8 @@ private ComboService _comboService;
             IResourceRepository resourceRepo,
             IInventoryRepository inventoryRepo,
             IEFRepository<IMS_ComboEntity> comboRepo,
-            IEFRepository<IMS_AssociateIncomeEntity> incomeRepo
+            IEFRepository<IMS_AssociateIncomeEntity> incomeRepo,
+            ComboService comboService
             )
         {
             _salescodeRepo = salescodeRepo;
@@ -55,7 +56,7 @@ private ComboService _comboService;
             _inventoryRepo = inventoryRepo;
             _comboRepo = comboRepo;
             _incomeRepo = incomeRepo;
-            _comboService = new ComboService();
+            _comboService = comboService;
         }
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request,int authuid)

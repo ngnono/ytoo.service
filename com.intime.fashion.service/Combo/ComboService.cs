@@ -17,17 +17,8 @@ namespace com.intime.fashion.service
 {
     public partial  class ComboService
     {
-        private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
-        private IEFRepository<IMS_ComboEntity> _comboRepo;
-        private IEFRepository<IMS_Combo2ProductEntity> _combo2productRepo;
-        private IResourceRepository _resourceRepo;
-        public ComboService()
-        {
-            _associateItemRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateItemsEntity>>();
-            _comboRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_ComboEntity>>();
-            _combo2productRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_Combo2ProductEntity>>();
-            _resourceRepo = ServiceLocator.Current.Resolve<IResourceRepository>();
-        }
+        
+      
         public  bool IfCanOnline(int userId)
         {
             var onlineCount = _db.Set<IMS_AssociateItemsEntity>().Where(ia=>ia.Status==(int)DataStatus.Normal && 

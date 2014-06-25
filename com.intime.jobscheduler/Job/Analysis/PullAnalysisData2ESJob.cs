@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Model.ES;
 using Yintai.Hangzhou.Model.ESModel;
 
@@ -37,7 +38,8 @@ namespace com.intime.jobscheduler.Job.Analysis
             var benchTime = data.GetDateTime("benchtime");
 
             var sw = new Stopwatch();
-            var analysisClient = new AnalysisService(benchTime);
+            var analysisClient = ServiceLocator.Current.Resolve<AnalysisService>();
+            analysisClient.SetDate(benchTime, benchTime);
             using (var slt = new ScopedLifetimeDbContextManager())
             {
     

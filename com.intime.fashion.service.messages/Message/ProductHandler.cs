@@ -19,7 +19,7 @@ namespace com.intime.fashion.service.messages.Message
         public ProductHandler()
         {
             _esService = SearchLogic.GetService(IndexSourceType.Product);
-            _comboService = new ComboService();
+            _comboService = ServiceLocator.Current.Resolve<ComboService>();
         }
         public override int SourceType
         {

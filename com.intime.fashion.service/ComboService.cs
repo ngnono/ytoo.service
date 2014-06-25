@@ -1,14 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yintai.Architecture.Common.Data.EF;
+using Yintai.Architecture.Common.Logger;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Repository.Contract;
 
 namespace com.intime.fashion.service
 {
     public partial class ComboService:BusinessServiceBase
     {
+        private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
+        private IEFRepository<IMS_ComboEntity> _comboRepo;
+        private IEFRepository<IMS_Combo2ProductEntity> _combo2productRepo;
+        private IResourceRepository _resourceRepo;
+
+        public ComboService(IEFRepository<IMS_AssociateItemsEntity> associateItemRepo,
+            IEFRepository<IMS_ComboEntity> comboRepo,
+            IEFRepository<IMS_Combo2ProductEntity> combo2productRepo,
+            IResourceRepository resourceRepo,
+            ILog log,
+            DbContext db):base(log,db)
+        {
+            _associateItemRepo = associateItemRepo;
+            _comboRepo = comboRepo;
+            _combo2productRepo = combo2productRepo;
+        }
         public void RefreshPrice(IMS_ComboEntity combo)
         {
             if (combo == null)

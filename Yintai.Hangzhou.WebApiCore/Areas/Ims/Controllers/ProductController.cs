@@ -37,7 +37,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             , IProductPropertyValueRepository productPropertyValueRepo
             , IInventoryRepository inventoryRepo
             , IResourceRepository resourceRepo
-            , IEFRepository<ProductCode2StoreCodeEntity> productCodeRepo)
+            , IEFRepository<ProductCode2StoreCodeEntity> productCodeRepo
+            ,ComboService comboService)
+
         {
             _resourceService = resourceService;
             _productRepo = productRepo;
@@ -46,7 +48,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _inventoryRepo = inventoryRepo;
             _resourceRepo = resourceRepo;
             _productCodeRepo = productCodeRepo;
-            _comboService = new ComboService();
+            _comboService = comboService;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Create(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)

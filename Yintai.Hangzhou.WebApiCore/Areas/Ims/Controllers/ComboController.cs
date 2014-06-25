@@ -34,13 +34,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         public ComboController(IEFRepository<IMS_ComboEntity> comboRepo
             , IEFRepository<IMS_Combo2ProductEntity> combo2productRepo
             , IResourceRepository resourceRepo,
-            IEFRepository<IMS_AssociateItemsEntity> associateItemRepo)
+            IEFRepository<IMS_AssociateItemsEntity> associateItemRepo,
+            ComboService comboService)
         {
             _comboRepo = comboRepo;
             _combo2productRepo = combo2productRepo;
             _resourceRepo = resourceRepo;
             _associateItemRepo = associateItemRepo;
-            _comboService = new ComboService();
+            _comboService = comboService;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Create([InternalJsonArrayAttribute("image_ids,productids")] IMSComboCreateRequest request, int authuid)

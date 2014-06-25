@@ -23,19 +23,20 @@ namespace com.intime.fashion.service.analysis
         private DateTime _startDate;
         private DateTime _endDate;
         private HttpClient _client;
-        public AnalysisService(DateTime benchDate)
-            : this(benchDate, benchDate)
-        { }
-        public AnalysisService(DateTime startDate, DateTime endDate)
+
+        public AnalysisService()
         {
-            _startDate = startDate;
-            _endDate = endDate;
             _client = new HttpClient();
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                         
         }
-
+        public void SetDate(DateTime startDate,DateTime endDate)
+        {
+            _startDate = startDate;
+            _endDate = endDate;
+        }
+        
 
         public ESAnalysisSummary GetSummary()
         {

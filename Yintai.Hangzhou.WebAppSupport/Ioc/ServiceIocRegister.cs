@@ -1,3 +1,4 @@
+using com.intime.fashion.service;
 using com.intime.o2o.data.exchange.IT;
 using Yintai.Hangzhou.Contract.Apns;
 using Yintai.Hangzhou.Contract.Brand;
@@ -69,6 +70,9 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.RegisterSingleton<IGroupCardService, GroupCardService>();
 
             Current.Register<IHotwordDataService, HotwordDataService>();
+
+            Current.Register<ComboService, ComboService>();
+            Current.Register<OrderService, OrderService>();
         }
 
         #endregion

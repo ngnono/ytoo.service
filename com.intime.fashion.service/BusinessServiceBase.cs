@@ -11,8 +11,19 @@ namespace com.intime.fashion.service
 {
     public abstract class BusinessServiceBase:IDbAware,IDebugAare
     {
-        protected ILog _log = ServiceLocator.Current.Resolve<ILog>();
-        protected DbContext _db = ServiceLocator.Current.Resolve<DbContext>();
+        protected ILog _log ;
+        protected DbContext _db ;
+
+        public BusinessServiceBase()
+            : this(ServiceLocator.Current.Resolve<ILog>(),
+            ServiceLocator.Current.Resolve<DbContext>())
+        { }
+        public BusinessServiceBase(ILog log,
+            DbContext db)
+        {
+            _db = db;
+            _log = log;
+        }
 
         public ILog GetLog()
         {

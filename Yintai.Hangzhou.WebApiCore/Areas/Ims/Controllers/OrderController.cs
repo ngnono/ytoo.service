@@ -25,13 +25,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IOrderRepository _orderRepo;
         private IOrderItemRepository _orderItemRepo;
         private IOrderLogRepository _orderLogRepo;
+        private OrderService _orderService;
         public OrderController(IOrderRepository orderRepo,
             IOrderItemRepository orderItemRepo,
-            IOrderLogRepository orderLogRepo)
+            IOrderLogRepository orderLogRepo,
+            OrderService orderService)
         {
             _orderRepo = orderRepo;
             _orderItemRepo = orderItemRepo;
             _orderLogRepo = orderLogRepo;
+            _orderService = orderService;
         }
         [RestfulAuthorize]
         public ActionResult My(PagerInfoRequest request,int authuid)
@@ -79,10 +82,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == request.OrderNo).FirstOrDefault();
             if (orderEntity == null)
                 return this.RenderError(r => r.Message = "订单不存在！");
-            var service = new OrderService(orderEntity);
-            if (!service.IsAssociateOrder(authuid))
+            if (!_orderService.IsAssociateOrder(authuid,orderEntity))
                 return this.RenderError(r => r.Message = "无权操作该订单！");
-            if (!service.CanChangePro())
+            if (!_orderService.CanChangePro(orderEntity))
                 return this.RenderError(r => r.Message = "订单状态不允许修改促销信息！");
             using (var ts = new TransactionScope())
             {
