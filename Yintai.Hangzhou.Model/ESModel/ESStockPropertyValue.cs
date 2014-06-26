@@ -12,5 +12,9 @@ namespace Yintai.Hangzhou.Model.ESModel
         public string PropertyData { get; set; }
 
         public DateTime UpdateTime { get; set; }
+
+        public string BrandSizeCode { get; set; }
+
+        public string BrandSizeName { get; set; }
     }
 }

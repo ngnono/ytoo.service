@@ -1037,7 +1037,9 @@ namespace com.intime.jobscheduler.Job
                                                                Id = val.Id,
                                                                InventoryId = inv.Id,
                                                                PropertyData = val.PropertyData,
-                                                               UpdateTime = val.UpdateDate
+                                                               UpdateTime = val.UpdateDate,
+                                                               BrandSizeCode = val.BrandSizeCode,
+                                                               BrandSizeName = val.BrandSizeName
                                                            })
                             let category = (from map in db.ProductMaps where map.ProductId == p.Id && map.Channel == "intime" select map.ChannelCatId)
 

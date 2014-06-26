@@ -11,6 +11,9 @@ namespace Yintai.Hangzhou.Data.Models
         public string PropertyData { get; set; }
         public DateTime UpdateDate { get; set; }
         public string Channel { get; set; }
+        public string BrandSizeCode { get; set; }
+        public string BrandSizeName { get; set; }
+
 
         #region Overrides of BaseEntity
 
