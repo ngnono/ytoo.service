@@ -28,6 +28,7 @@ namespace com.intime.fashion.service
             _associateItemRepo = associateItemRepo;
             _comboRepo = comboRepo;
             _combo2productRepo = combo2productRepo;
+            _resourceRepo = resourceRepo;
         }
         public void RefreshPrice(IMS_ComboEntity combo)
         {
