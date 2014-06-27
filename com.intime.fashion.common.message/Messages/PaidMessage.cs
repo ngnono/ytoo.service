@@ -13,6 +13,6 @@ namespace com.intime.fashion.common.message.Messages
             get { return (int)MessageAction.Paid; }
             set { }
         }
-        public string SourceNo { get; set; }
+       
     }
 }

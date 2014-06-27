@@ -24,5 +24,6 @@ namespace com.intime.fashion.common.message
         public virtual int ActionType { get; set; }
 
         public virtual int SourceType { get; set; }
+        public string SourceNo { get; set; }
     }
 }

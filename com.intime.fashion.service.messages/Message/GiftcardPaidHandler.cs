@@ -34,7 +34,7 @@ namespace com.intime.fashion.service.messages.Message
 
         public override bool Work(BaseMessage message)
         {
-                var paidMessage = message as PaidMessage;
+                var paidMessage = message;
                 if (paidMessage == null)
                     return false;
                 var userEntity = _db.Set<OrderEntity>().Where(o => o.OrderNo == paidMessage.SourceNo)
