@@ -1047,10 +1047,6 @@
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Yintai.Architecture.Framework\Yintai.Architecture.Framework\Yintai.Architecture.Framework.csproj">
-      <Project>{11d4830c-fd83-48b8-96de-6f51c9c2576c}</Project>
-      <Name>Yintai.Architecture.Framework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
       <Name>Yintai.Hangzhou.Contract</Name>
