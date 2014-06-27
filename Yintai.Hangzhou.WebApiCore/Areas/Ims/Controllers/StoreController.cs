@@ -294,7 +294,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                       ImageUrl = l.CR.Name,
                                       Price = l.C.Price,
                                       ProductImageUrls = l.P.Select(lpr => lpr.R.Name),
-                                      ExpireDate = l.C.ExpireDate
+                                      ExpireDate = l.C.ExpireDate,
+                                      IsInPromotion = l.C.IsInPromotion,
+                                      DiscountAmount = l.C.DiscountAmount
                                   });
             return new IMSStoreDetailResponse()
             {
