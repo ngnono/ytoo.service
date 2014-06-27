@@ -43,6 +43,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name="template_id")]
         public int Template_Id { get; set; }
     }
+    [DataContract]
     public class IMSGiftCard
     {
         [DataMember(Name="id")]
@@ -56,6 +57,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
             return ImageUrl.Image320Url();
         } }
     }
+    [DataContract]
     public class IMSCombo
     {
         [DataMember(Name="id")]
