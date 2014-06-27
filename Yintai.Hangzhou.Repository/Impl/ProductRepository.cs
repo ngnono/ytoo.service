@@ -427,35 +427,30 @@ namespace Yintai.Hangzhou.Repository.Impl
         public override Yintai.Hangzhou.Data.Models.ProductEntity Insert(Yintai.Hangzhou.Data.Models.ProductEntity entity)
         {
             var newEntity = base.Insert(entity);
-            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
+            this.NotifyMessage<ProductEntity>(() =>
             {
-                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
+                var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                messageProvider.GetSender().SendMessageReliable(new CreateMessage()
                 {
-                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                    messageProvider.GetSender().SendMessageReliable(new CreateMessage()
-                    {
-                        SourceType = (int)MessageSourceType.Product,
-                        EntityId = newEntity.Id
-                    });
-                }
+                    SourceType = (int)MessageSourceType.Product,
+                    EntityId = newEntity.Id
+                });
             });
+           
             return newEntity;
         }
         public override void Update(ProductEntity entity)
         {
             base.Update(entity);
-            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
-            {
-                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
+            this.NotifyMessage<ProductEntity>(() => {
+                var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
                 {
-                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                    messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
-                    {
-                        SourceType = (int)MessageSourceType.Product,
-                        EntityId = entity.Id
-                    });
-                }
+                    SourceType = (int)MessageSourceType.Product,
+                    EntityId = entity.Id
+                });
             });
+           
         }
     }
 }

@@ -33,7 +33,7 @@ namespace com.intime.fashion.service.messages.Message
 
         public override bool Work(BaseMessage message)
         {
-            if (message is UpdateMessage)
+            if ((message.ActionType & (int)MessageAction.UpdateEntity) ==(int)MessageAction.UpdateEntity)
             {
                 _comboService.RefreshPrice(message.EntityId);
                

@@ -45,7 +45,8 @@ namespace com.intime.fashion.service
         public void RefreshPrice(int productId)
         {
             foreach (var combo in _db.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ProductId == productId)
-                                    .Join(_db.Set<IMS_ComboEntity>(),o=>o.ComboId,i=>i.Id,(o,i)=>i))
+                                    .Join(_db.Set<IMS_ComboEntity>(),o=>o.ComboId,i=>i.Id,(o,i)=>i)
+                                    .ToList())
             {
                 RefreshPrice(combo);
             }

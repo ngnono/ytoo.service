@@ -139,6 +139,7 @@
     <Compile Include="Impl\CategoryPropertyValueRepository.cs" />
     <Compile Include="Impl\ComboRepository.cs" />
     <Compile Include="Impl\CouponLogRepository.cs" />
+    <Compile Include="Impl\EFRepositoryExt.cs" />
     <Compile Include="Impl\HotWordRepository.cs" />
     <Compile Include="Impl\InboundPackageRepository.cs" />
     <Compile Include="Impl\InventoryRepository.cs" />

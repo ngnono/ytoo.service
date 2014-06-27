@@ -17,35 +17,30 @@ namespace Yintai.Hangzhou.Repository.Impl
         public override void Update(InventoryEntity entity)
         {
             base.Update(entity);
-            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
-            {
-                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
+            this.NotifyMessage<InventoryEntity>(() => {
+                var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
                 {
-                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                    messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
-                    {
-                        SourceType = (int)MessageSourceType.Inventory,
-                        EntityId = entity.Id
-                    });
-                }
+                    SourceType = (int)MessageSourceType.Inventory,
+                    EntityId = entity.Id
+                });
             });
+            
            
         }
         public override Yintai.Hangzhou.Data.Models.InventoryEntity Insert(Yintai.Hangzhou.Data.Models.InventoryEntity entity)
         {
             var newEntity =  base.Insert(entity);
-            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
+            this.NotifyMessage<InventoryEntity>(() =>
             {
-                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
+                var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                messageProvider.GetSender().SendMessageReliable(new CreateMessage()
                 {
-                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                    messageProvider.GetSender().SendMessageReliable(new CreateMessage()
-                    {
-                        SourceType = (int)MessageSourceType.Inventory,
-                        EntityId = newEntity.Id
-                    });
-                }
+                    SourceType = (int)MessageSourceType.Inventory,
+                    EntityId = newEntity.Id
+                });
             });
+           
             return newEntity;
         }
 
