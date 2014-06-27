@@ -15,7 +15,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int Id { get; set; }
         [DataMember(Name = "desc")]
         public string Desc { get; set; }
-        [DataMember(Name = "price")]
+        [DataMember(Name = "unit_price")]
         public decimal Price { get; set; }
         [DataMember(Name = "private_desc")]
         public string Private2Name { get; set; }
@@ -71,6 +71,11 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public bool Is_Public { get {
             return IsPublic ?? true;
         } }
+        [DataMember(Name="price")]
+        public decimal ActualPrice { get {
+            return Price - Discount;
+        } }
+
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
         [IgnoreDataMember]
