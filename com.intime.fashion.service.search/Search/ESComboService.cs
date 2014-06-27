@@ -40,6 +40,8 @@ namespace com.intime.fashion.service.search
                                target.AssociateId = l.A.Id;
                                target.StoreId = l.A.StoreId;
                                target.Brands = brandLinq.Select(b =>Mapper.Map<BrandEntity,ESBrand>(b));
+                               target.IsInPromotion = target.IsInPromotion ?? false;
+                               target.DiscountAmount = target.DiscountAmount ?? 0m;
                                if ((l.C.IsPublic??true)==false)
                                {
                                    target.Status = (int)DataStatus.Default;

@@ -29,7 +29,7 @@ namespace com.intime.fashion.console.onetime
             else
             {
                 var db = ServiceLocator.Current.Resolve<DbContext>();
-                foreach (var combo in db.Set<IMS_ComboEntity>().Where(ic => ic.Status == (int)DataStatus.Normal && ic.ExpireDate < DateTime.Now))
+                foreach (var combo in db.Set<IMS_ComboEntity>().Where(ic => ic.Status == (int)DataStatus.Normal && ic.ExpireDate > DateTime.Now))
                 {
                     indexService.IndexSingle(combo.Id);
                     Console.WriteLine(string.Format("{0} indexed", combo.Id));

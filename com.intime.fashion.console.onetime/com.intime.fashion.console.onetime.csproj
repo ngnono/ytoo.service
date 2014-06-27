@@ -69,6 +69,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScopedLifetimeManager.cs" />
+    <Compile Include="UnityBootStrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -123,6 +124,10 @@
     <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
       <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
       <Name>Yintai.Hangzhou.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Repository\Yintai.Hangzhou.Repository.csproj">
+      <Project>{82be109a-483e-40bf-98b8-a555bca86111}</Project>
+      <Name>Yintai.Hangzhou.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Service\Yintai.Hangzhou.Service.csproj">
       <Project>{193902dc-242c-4dba-b173-ee154e813c4b}</Project>
