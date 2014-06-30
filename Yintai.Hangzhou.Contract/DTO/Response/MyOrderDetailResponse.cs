@@ -73,12 +73,19 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
             return (!IsDaoGou) &&
                new int[]{(int)OrderStatus.Create}.Any(status => status == Status);
         } }
-          [DataMember(Name = "canrma")]
+        [DataMember(Name = "canrma")]
         public bool CanRMA {
             get {
                 return  (!IsDaoGou) &&
                         Status == (int)OrderStatus.Shipped &&
                         (RMAs==null || !RMAs.Any(r=>new int[]{(int)RMAStatus.Created,(int)RMAStatus.CustomerConfirmed,(int)RMAStatus.PackageReceived,(int)RMAStatus.PassConfirmed}.Any(status=>status==r.Status)));
+            }
+        }
+        [DataMember(Name = "canEditPro")]
+        public bool CanEditPro {
+            get {
+                return Promotion_Flag &&
+                        (Status == (int)OrderStatus.Paid || Status == (int)OrderStatus.AgentConfirmed);
             }
         }
         [DataMember(Name="is_owner")]
