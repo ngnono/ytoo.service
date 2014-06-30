@@ -287,7 +287,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                           , o => o.C.Id
                                           , i => i.P.ComboId
                                           , (o, i) => new { C = o.C, CR = o.R, P = i })
-                                  .Select(l => new IMSCombo()
+                                 .OrderByDescending(ia=>ia.C.CreateDate)
+                                 .Select(l => new IMSCombo()
                                   {
                                       Id = l.C.Id,
                                       Desc = l.C.Desc,
