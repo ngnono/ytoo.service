@@ -28,5 +28,6 @@ namespace Yintai.Hangzhou.Model.ESModel
         public int AssociateId { get; set; }
         public bool? IsInPromotion { get; set; }
         public decimal? DiscountAmount { get; set; }
+        public string AssociateName { get; set; }
     }
 }

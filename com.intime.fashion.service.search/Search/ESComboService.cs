@@ -38,6 +38,7 @@ namespace com.intime.fashion.service.search
                      .Select(l =>Mapper.Map<IMS_ComboEntity,ESCombo>(l.C,target=>{
                                target.Resources = l.R == null ? null : l.R.Select(r => Mapper.Map<ResourceEntity,ESResource>(r));
                                target.AssociateId = l.A.Id;
+                               target.AssociateName = db.Set<UserEntity>().Find(l.A.UserId).Nickname;
                                target.StoreId = l.A.StoreId;
                                target.Brands = brandLinq.Select(b =>Mapper.Map<BrandEntity,ESBrand>(b));
                                target.IsInPromotion = target.IsInPromotion ?? false;
