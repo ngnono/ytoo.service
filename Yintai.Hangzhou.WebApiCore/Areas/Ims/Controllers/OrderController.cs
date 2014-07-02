@@ -116,6 +116,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     item.UpdateUser = authuid;
                     _orderItemRepo.Update(item);
                 }
+                ts.Complete();
             }
             return this.RenderSuccess<dynamic>(null); 
         }
