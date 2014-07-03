@@ -181,9 +181,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         });
                     }
                 }
-                if (comboEntity.IsInPromotion.HasValue 
-                    && comboEntity.IsInPromotion.Value
-                    && !(comboEntity.DiscountAmount.Value < comboEntity.Price && comboEntity.DiscountAmount.Value > 0))
+                if (request.Has_Discount
+                    && (request.Discount >= comboEntity.Price || request.Discount < 0))
                     return this.RenderError(r => r.Message = "商品组合的折扣必须大于0，小于商品总价");
                 _comboRepo.Update(comboEntity);
 
