@@ -15,7 +15,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int Id { get; set; }
         [DataMember(Name = "desc")]
         public string Desc { get; set; }
-        [DataMember(Name = "price")]
+        [DataMember(Name = "unit_price")]
         public decimal Price { get; set; }
         [DataMember(Name = "private_desc")]
         public string Private2Name { get; set; }
@@ -62,6 +62,19 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int StoreId { get; set; }
         [DataMember(Name="template_id")]
         public int TemplateId { get; set; }
+        [DataMember(Name="discount")]
+        public decimal Discount {get{
+            return (IsInPromotion.HasValue && IsInPromotion.Value) ? DiscountAmount.Value : 0m;
+                  
+        }}
+        [DataMember(Name="is_public")]
+        public bool Is_Public { get {
+            return IsPublic ?? true;
+        } }
+        [DataMember(Name="price")]
+        public decimal ActualPrice { get {
+            return Price - Discount;
+        } }
 
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
@@ -69,5 +82,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int Status { get; set; }
         [IgnoreDataMember]
         public DateTime? ExpireDate { get; set; }
+        [IgnoreDataMember]
+        public Nullable<bool> IsInPromotion { get; set; }
+        [IgnoreDataMember]
+        public Nullable<decimal> DiscountAmount { get; set; }
+        public bool? IsPublic { get; set; }
     }
 }

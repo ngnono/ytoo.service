@@ -13,5 +13,6 @@ namespace Yintai.Hangzhou.Model.ES
         public string Description { get; set; }
         public int Status { get; set; }
         public string Group { get; set; }
+        public IEnumerable<ESStore> Stores { get; set; }
     }
 }

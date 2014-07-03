@@ -48,7 +48,7 @@ namespace com.intime.jobscheduler.Job
                 }
                 foreach (var coupon in oneTimeList)
                 {
-                    bool canRebate = AwsHelper.SendHttpMessage(awsExpireurl, new { code = coupon.Code }
+                    bool canRebate = HttpClientUtil.SendHttpMessage(awsExpireurl, new { code = coupon.Code }
                             , publickey
                             , privatekey
                             , null

@@ -10,6 +10,9 @@ namespace com.intime.fashion.common.message
     {
         Product = 1,
         Combo = 2,
-        Inventory
+        Inventory = 3,
+        Order = 4,
+        GiftCard = 5,
+        SectionBrand = 6
     }
 }

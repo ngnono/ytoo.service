@@ -15,7 +15,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int UpdatedUser { get; set; }
         public System.DateTime UpdatedDate { get; set; }
         public Nullable<bool> IsVisible { get; set; }
-        public bool IsSize { get; set; }
+        public Nullable<bool> IsSize { get; set; }
 
         #region Overrides of BaseEntity
 

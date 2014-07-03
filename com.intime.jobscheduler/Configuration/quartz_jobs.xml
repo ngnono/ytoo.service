@@ -643,6 +643,34 @@
       </cron>
     </trigger>
     -->
+    <job>
+      <name>PullAnalysisData</name>
+      <group>Fashion</group>
+      <description>pull analysis data to elastic search</description>
+      <job-type>com.intime.jobscheduler.Job.Analysis.PullAnalysisData2ESJob, com.intime.jobscheduler</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+      <job-data-map>
+        
+        <entry>
+          <key>intervalOfDays</key>
+          <value>1</value>
+        </entry>
+
+      </job-data-map>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>1HrEveryDay</name>
+        <group>Fashion</group>
+        <description>every midnight 1 am trigger</description>
+        <job-name>PullAnalysisData</job-name>
+        <job-group>Fashion</job-group>
+        <misfire-instruction>SmartPolicy</misfire-instruction>
+        <cron-expression>0 0/1 * * * ?</cron-expression>
+      </cron>
+    </trigger>
   </schedule>
 
 </job-scheduling-data>

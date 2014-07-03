@@ -73,7 +73,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
             return (!IsDaoGou) &&
                new int[]{(int)OrderStatus.Create}.Any(status => status == Status);
         } }
-          [DataMember(Name = "canrma")]
+        [DataMember(Name = "canrma")]
         public bool CanRMA {
             get {
                 return  (!IsDaoGou) &&
@@ -81,11 +81,26 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
                         (RMAs==null || !RMAs.Any(r=>new int[]{(int)RMAStatus.Created,(int)RMAStatus.CustomerConfirmed,(int)RMAStatus.PackageReceived,(int)RMAStatus.PassConfirmed}.Any(status=>status==r.Status)));
             }
         }
+        [DataMember(Name = "canEditPro")]
+        public bool CanEditPro {
+            get {
+                return Promotion_Flag &&
+                        (Status == (int)OrderStatus.Paid || Status == (int)OrderStatus.AgentConfirmed);
+            }
+        }
         [DataMember(Name="is_owner")]
           public bool IsOwner { get; set; }
+        [DataMember(Name = "has_promotion")]
+        public bool Promotion_Flag { get; set; }
+         [DataMember(Name = "promotion_desc")]
+        public string PromotionDesc { get; set; }
+         [DataMember(Name = "promotion_rules")]
+        public string PromotionRules { get; set; }
 
         [IgnoreDataMember]
         public bool IsDaoGou { get; set; }
+        [IgnoreDataMember]
+        public bool? PromotionFlag { get; set; }
 
     }
     [DataContract]
@@ -124,7 +139,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string Brand2Name { get; set; }
         [DataMember(Name = "properties")]
         public IEnumerable<TagPropertyDetailResponse> Properties { get; set; }
-
+        [DataMember(Name="sales_code")]
+        public string StoreSalesCode { get; set; }
     }
      [DataContract]
     public class MyRMAResponse : BaseResponse

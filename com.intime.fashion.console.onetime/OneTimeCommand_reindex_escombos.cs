@@ -1,4 +1,5 @@
 ﻿using CLAP;
+using com.intime.fashion.service.search;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,7 +9,6 @@ using System.Threading.Tasks;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
-using Yintai.Hangzhou.Service.Logic;
 
 namespace com.intime.fashion.console.onetime
 {
@@ -20,7 +20,7 @@ namespace com.intime.fashion.console.onetime
             [Description("single combo id")]
             int? id)
         {
-            var indexService = SearchLogic.GetService(SourceType.Combo);
+            var indexService = SearchLogic.GetService(IndexSourceType.Combo);
             if (id.HasValue)
             {
                 indexService.IndexSingle(id.Value);
@@ -29,7 +29,7 @@ namespace com.intime.fashion.console.onetime
             else
             {
                 var db = ServiceLocator.Current.Resolve<DbContext>();
-                foreach (var combo in db.Set<IMS_ComboEntity>().Where(ic => ic.Status == (int)DataStatus.Normal && ic.ExpireDate < DateTime.Now))
+                foreach (var combo in db.Set<IMS_ComboEntity>().Where(ic => ic.Status == (int)DataStatus.Normal && ic.ExpireDate > DateTime.Now))
                 {
                     indexService.IndexSingle(combo.Id);
                     Console.WriteLine(string.Format("{0} indexed", combo.Id));

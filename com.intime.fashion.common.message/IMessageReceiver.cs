@@ -9,6 +9,7 @@ namespace com.intime.fashion.common.message
     {
         void ReceiveReliable(Func<BaseMessage,bool> postMessageHandler);
         void ReceiveReliable(Func<BaseMessage, bool> postMessageHandler,string messageTopic);
+        void ReceiveReliable(Func<BaseMessage, bool> postMessageHandler, string messageTopic,bool discardFailMessage);
         void Cancel();
     }
 }

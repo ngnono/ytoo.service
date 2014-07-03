@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.Contract.Customer;
+using Yintai.Hangzhou.Contract.DTO.Request;
 using Yintai.Hangzhou.Contract.DTO.Request.Customer;
 using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Contract.DTO.Response.Customer;
@@ -28,13 +29,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private ICustomerRepository _customerRepo;
         private ICustomerDataService _customerService;
         private IEFRepository<IMS_InviteCodeEntity> _inviteRepo;
+        private IEFRepository<IMS_InviteCodeRequestEntity> _inviteRequestRepo;
         public StoreController(IEFRepository<IMS_AssociateEntity> associateRepo,
             IEFRepository<IMS_AssociateBrandEntity> associateBrandRepo,
             IEFRepository<IMS_AssociateSaleCodeEntity> associateSaleCodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateItemRepo,
             ICustomerRepository customerRepo,
             ICustomerDataService customerService,
-            IEFRepository<IMS_InviteCodeEntity> inviteRepo)
+            IEFRepository<IMS_InviteCodeEntity> inviteRepo,
+            IEFRepository<IMS_InviteCodeRequestEntity> inviteRequestRepo
+        )
         {
             _associateRepo = associateRepo;
             _associateBrandRepo = associateBrandRepo;
@@ -43,6 +47,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _customerRepo = customerRepo;
             _customerService = customerService;
             _inviteRepo = inviteRepo;
+            _inviteRequestRepo = inviteRequestRepo;
         }
 
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
@@ -165,6 +170,85 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         }
 
         [RestfulAuthorize]
+        public ActionResult RequestCode_Basic(IMSStoreInviteCodeBasicRequest request, int? authuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
+                return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
+            }
+            var requestEntity = Context.Set<IMS_InviteCodeRequestEntity>().Where(iv => iv.UserId == authuid.Value
+                                                && iv.Status !=(int)InviteCodeRequestStatus.Reject).FirstOrDefault();
+            if (requestEntity != null)
+            {
+                return this.RenderError(r => r.Message = "用户已申请邀请码，正在处理中...");
+            }
+
+            var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid.Value).FirstOrDefault();
+            if (associateEntity != null)
+            {
+                return this.RenderError(r => r.Message = "用户已开店！");
+            }
+            
+            _inviteRequestRepo.Insert(new IMS_InviteCodeRequestEntity() { 
+                 ContactMobile = request.Mobile,
+                  CreateDate = DateTime.Now,
+                   CreateUser = authuid.Value,
+                    Name = request.Name,
+                    UpdateDate = DateTime.Now,
+                    UpdateUser = authuid.Value,
+                    RequestType = (int)InviteCodeRequestType.Basic,
+                    Status = (int)InviteCodeRequestStatus.Requesting
+                
+            });
+           
+            return this.RenderSuccess<dynamic>(null);
+
+        }
+
+        [RestfulAuthorize]
+        public ActionResult RequestCode_DG(IMSStoreInviteCodeDaogouRequest request, int? authuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
+                return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
+            }
+            var requestEntity = Context.Set<IMS_InviteCodeRequestEntity>().Where(iv => iv.UserId == authuid.Value
+                                                && iv.Status != (int)InviteCodeRequestStatus.Reject).FirstOrDefault();
+            if (requestEntity != null)
+            {
+                return this.RenderError(r => r.Message = "用户已申请邀请码，正在处理中...");
+            }
+
+            var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid.Value).FirstOrDefault();
+            if (associateEntity != null)
+            {
+                return this.RenderError(r => r.Message = "用户已开店！");
+            }
+
+            _inviteRequestRepo.Insert(new IMS_InviteCodeRequestEntity()
+            {
+                ContactMobile = request.Mobile,
+                CreateDate = DateTime.Now,
+                CreateUser = authuid.Value,
+                Name = request.Name,
+                UpdateDate = DateTime.Now,
+                UpdateUser = authuid.Value,
+                 OperatorCode = request.OperatorCode,
+                  RequestType = (int)InviteCodeRequestType.Daogou,
+                   SectionCode= request.SectionCode,
+                    SectionName = request.SectionName,
+                     Status = (int)InviteCodeRequestStatus.Requesting,
+                      StoreId = request.StoreId,
+                       UserId = authuid.Value
+            });
+
+            return this.RenderSuccess<dynamic>(null);
+
+        }
+
+        [RestfulAuthorize]
         public ActionResult Detail(int id, int? authuid)
         {
             var store = GetStoreById(id,authuid.Value);
@@ -203,14 +287,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                           , o => o.C.Id
                                           , i => i.P.ComboId
                                           , (o, i) => new { C = o.C, CR = o.R, P = i })
-                                  .Select(l => new IMSCombo()
+                                 .OrderByDescending(ia=>ia.C.CreateDate)
+                                 .Select(l => new IMSCombo()
                                   {
                                       Id = l.C.Id,
                                       Desc = l.C.Desc,
                                       ImageUrl = l.CR.Name,
                                       Price = l.C.Price,
                                       ProductImageUrls = l.P.Select(lpr => lpr.R.Name),
-                                      ExpireDate = l.C.ExpireDate
+                                      ExpireDate = l.C.ExpireDate,
+                                      IsInPromotion = l.C.IsInPromotion,
+                                      DiscountAmount = l.C.DiscountAmount
                                   });
             return new IMSStoreDetailResponse()
             {

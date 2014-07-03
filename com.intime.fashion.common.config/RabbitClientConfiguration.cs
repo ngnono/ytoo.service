@@ -9,7 +9,7 @@ namespace com.intime.fashion.common.config
    public  class RabbitClientConfiguration: CommonConfigurationBase
     {
         private static RabbitClientConfiguration instance = new RabbitClientConfiguration();
-        private RabbitClientConfiguration() { }
+        internal RabbitClientConfiguration() { }
         public static RabbitClientConfiguration Current
         {
             get

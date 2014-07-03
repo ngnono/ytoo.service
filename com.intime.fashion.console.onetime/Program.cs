@@ -14,7 +14,7 @@ namespace com.intime.fashion.console.onetime
     {
         static void Main(string[] args)
         {
-            ServiceLocator.Current.RegisterSingleton<ILog, Log4NetLog>();
+            UnityBootStrapper.Init();
             Parser.RunConsole<OneTimeCommand>(args);
         }
     }

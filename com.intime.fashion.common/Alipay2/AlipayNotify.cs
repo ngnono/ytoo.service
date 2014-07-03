@@ -42,13 +42,20 @@ namespace Com.Alipay2
         /// </summary>
         /// <param name="inputPara">通知返回参数数组</param>
         /// <param name="notify_id">通知验证ID</param>
-        public Notify()
+        public Notify():this(Config.Partner.Trim(),
+            Config.Key.Trim(),
+            Config.Private_key.Trim(),
+            Config.Public_key.Trim())
+        {
+           
+        }
+        public Notify(string parter,string key,string privateKey,string publicKey)
         {
             //初始化基础配置信息
-            _partner = Config.Partner.Trim();
-            _key = Config.Key.Trim();
-            _private_key = Config.Private_key.Trim();
-            _public_key = Config.Public_key.Trim();
+            _partner = parter;
+            _key = key;
+            _private_key = privateKey;
+            _public_key = publicKey;
             _input_charset = Config.Input_charset.Trim().ToLower();
             _sign_type = Config.Sign_type.Trim().ToUpper();
         }
@@ -65,8 +72,8 @@ namespace Com.Alipay2
             bool isSign = GetSignVeryfy(inputPara, sign,true);
 
             //写日志记录（若要调试，请取消下面两行注释）
-            //string sWord = "isSign=" + isSign.ToString() + "\n 返回回来的参数：" + GetPreSignStr(inputPara) + "\n ";
-            //Core.LogResult(sWord);
+            string sWord = "isSign=" + isSign.ToString() + "\n 返回回来的参数：" + GetPreSignStr(inputPara) + "\n ";
+            Core.LogResult(sWord);
 
             //判断isSign是否为true
             //isSign不是true，与安全校验码、请求时的参数格式（如：带自定义参数等）、编码格式有关
@@ -104,7 +111,7 @@ namespace Com.Alipay2
                 xmlDoc.LoadXml(inputPara["notify_data"]);
                 notify_id = xmlDoc.SelectSingleNode("/notify/notify_id").InnerText;
 
-                if (notify_id != "") { responseTxt = GetResponseTxt(notify_id); }
+                //if (notify_id != "") {GetResponseTxt(notify_id); }
             }
             catch(Exception e)
             {
@@ -115,8 +122,8 @@ namespace Com.Alipay2
             bool isSign = GetSignVeryfy(inputPara, sign, false);
 
             //写日志记录（若要调试，请取消下面两行注释）
-            //string sWord = "responseTxt=" + responseTxt + "\n isSign=" + isSign.ToString() + "\n 返回回来的参数：" + GetPreSignStr(inputPara) + "\n ";
-            //Core.LogResult(sWord);
+            string sWord = "responseTxt=" + responseTxt + "\n isSign=" + isSign.ToString() + "\n 返回回来的参数：" + GetPreSignStr(inputPara) + "\n ";
+            Core.LogResult(sWord);
 
             //判断responsetTxt是否为true，isSign是否为true
             //responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关

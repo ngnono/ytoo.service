@@ -12,7 +12,7 @@ using Yintai.Hangzhou.Contract.Response;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using Yintai.Hangzhou.WebApiCore;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api2.Controllers

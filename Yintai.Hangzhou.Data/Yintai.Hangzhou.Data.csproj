@@ -73,9 +73,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebActivator">
-      <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
-    </Reference>
     <Reference Include="Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
@@ -86,8 +83,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
     <Compile Include="Models\Banner.cs" />
+    <Compile Include="Models\IMS_InviteCodeRequest.cs" />
+    <Compile Include="Models\MappedProductBackup.cs" />
+    <Compile Include="Models\Mapping\IMS_InviteCodeRequestMap.cs" />
+    <Compile Include="Models\Mapping\Map4CategoryMap.cs" />
+    <Compile Include="Models\Mapping\Map4InventoryMap.cs" />
+    <Compile Include="Models\Mapping\Map4OrderMap.cs" />
+    <Compile Include="Models\Mapping\Map4ProductMap.cs" />
+    <Compile Include="Models\Mapping\MappedProductBackupMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthMenuMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleMap.cs" />
     <Compile Include="Models\Mapping\OPC_AuthRoleMenuMap.cs" />
@@ -116,8 +120,13 @@
     <Compile Include="Models\Mapping\OPC_StockPropertyValueRawMap.cs" />
     <Compile Include="Models\Mapping\OPC_SKUMap.cs" />
     <Compile Include="Models\Mapping\OPC_StockMap.cs" />
+    <Compile Include="Models\Mapping\OPC_StockPropertyMap.cs" />
+    <Compile Include="Models\Mapping\OPC_StockPropertyValueMap.cs" />
     <Compile Include="Models\Mapping\OPC_StorePriorityMap.cs" />
     <Compile Include="Models\Mapping\OPC_SupplierInfoMap.cs" />
+    <Compile Include="Models\Mapping\SectionBrandImportStageMap.cs" />
+    <Compile Include="Models\Mapping\SectionBrandImportStageOutputMap.cs" />
+    <Compile Include="Models\Mapping\Supplier_BrandMap.cs" />
     <Compile Include="Models\Mapping\WX_MenuMap.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
     <Compile Include="Models\OPC_AuthRole.cs" />
@@ -144,11 +153,16 @@
     <Compile Include="Models\OPC_SaleRMAComment.cs" />
     <Compile Include="Models\OPC_ShippingSale.cs" />
     <Compile Include="Models\OPC_ShippingSaleComment.cs" />
-    <Compile Include="Models\OPC_StockPropertyValueRaw.cs" />
     <Compile Include="Models\OPC_SKU.cs" />
     <Compile Include="Models\OPC_Stock.cs" />
+    <Compile Include="Models\OPC_StockProperty.cs" />
+    <Compile Include="Models\OPC_StockPropertyValue.cs" />
+    <Compile Include="Models\OPC_StockPropertyValueRaw.cs" />
     <Compile Include="Models\OPC_StorePriority.cs" />
     <Compile Include="Models\OPC_SupplierInfo.cs" />
+    <Compile Include="Models\SectionBrandImportStage.cs" />
+    <Compile Include="Models\SectionBrandImportStageOutput.cs" />
+    <Compile Include="Models\Supplier_Brand.cs" />
     <Compile Include="Models\WX_Menu.cs" />
     <Compile Include="Models\IMS_Associate.cs" />
     <Compile Include="Models\IMS_AssociateBrand.cs" />
@@ -305,17 +319,7 @@
     <Compile Include="Models\UserAuth.cs" />
     <Compile Include="Models\WXReply.cs" />
     <Compile Include="Models\YintaiHzhouContext.cs" />
-    <Compile Include="Partials\CommentEntity.cs" />
-    <Compile Include="Partials\CouponHistoryEntity.cs" />
-    <Compile Include="Partials\FavoriteEntity.cs" />
-    <Compile Include="Partials\IAccountable.cs" />
-    <Compile Include="Partials\INotifyable.cs" />
-    <Compile Include="Partials\ISyncable.cs" />
-    <Compile Include="Partials\LikeEntity.cs" />
-    <Compile Include="Partials\PMessageEntity.cs" />
-    <Compile Include="Partials\PointHistoryEntity.cs" />
     <Compile Include="Partials\ResourceEntity.cs" />
-    <Compile Include="Partials\StoreCouponEntity.cs" />
     <Compile Include="Partials\StoreEntityMap.cs" />
     <Compile Include="Models\AdminAccessRight.cs" />
     <Compile Include="Models\Brand.cs" />
@@ -400,7 +404,6 @@
     <Compile Include="Models\VerifyCode.cs" />
     <Compile Include="Models\VUser.cs" />
     <Compile Include="Models\VUserRole.cs" />
-    <Compile Include="Partials\YintaiHangzhouContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -412,16 +415,6 @@
     <None Include="CodeTemplates\ReverseEngineerCodeFirst\Entity.tt" />
     <None Include="CodeTemplates\ReverseEngineerCodeFirst\Mapping.tt" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
-      <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
-      <Name>com.intime.fashion.common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
-      <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
-      <Name>Yintai.Hangzhou.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="SQL\YintaiHangzhou.sql" />

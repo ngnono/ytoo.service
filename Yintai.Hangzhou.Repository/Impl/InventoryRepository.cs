@@ -17,13 +17,34 @@ namespace Yintai.Hangzhou.Repository.Impl
         public override void Update(InventoryEntity entity)
         {
             base.Update(entity);
+
+            this.NotifyMessage<InventoryEntity>(() => {
+                var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                messageProvider.GetSender().SendMessageReliable(new UpdateMessage()
+                {
+                    SourceType = (int)MessageSourceType.Inventory,
+                    EntityId = entity.Id
+                });
+            });
+
             
            
         }
         public override Yintai.Hangzhou.Data.Models.InventoryEntity Insert(Yintai.Hangzhou.Data.Models.InventoryEntity entity)
         {
             var newEntity =  base.Insert(entity);
-            
+
+            this.NotifyMessage<InventoryEntity>(() =>
+            {
+                var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                messageProvider.GetSender().SendMessageReliable(new CreateMessage()
+                {
+                    SourceType = (int)MessageSourceType.Inventory,
+                    EntityId = newEntity.Id
+                });
+            });
+           
+
             return newEntity;
         }
 

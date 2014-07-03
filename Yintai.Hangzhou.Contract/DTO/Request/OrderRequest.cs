@@ -38,6 +38,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public string InvoiceDetail { get; set; }
         public string Memo { get; set; }
         public int? StoreId { get; set; }
+        public int? ComboId { get; set; }
 
         public int ShippingType { get {
             if (ShippingAddress == null ||ShippingAddress.ShippingZipCode==null)

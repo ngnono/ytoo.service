@@ -80,6 +80,8 @@
     <Compile Include="Enums\CategorySizeType.cs" />
     <Compile Include="Enums\ComboType.cs" />
     <Compile Include="Enums\IncomeRuleType.cs" />
+    <Compile Include="Enums\InviteCodeRequestStatus.cs" />
+    <Compile Include="Enums\InviteCodeRequestType.cs" />
     <Compile Include="Enums\OrderProductType.cs" />
     <Compile Include="Enums\CouponActionType.cs" />
     <Compile Include="Enums\CouponStatus.cs" />
@@ -113,10 +115,13 @@
     <Compile Include="Enums\TagSortOrder.cs" />
     <Compile Include="Enums\UserOperatorRight.cs" />
     <Compile Include="Enums\UserRole.cs" />
+    <Compile Include="ESModel\ESAnalysisEvent.cs" />
+    <Compile Include="ESModel\ESAnalysisSummary.cs" />
     <Compile Include="ESModel\ESBanner.cs" />
     <Compile Include="ESModel\ESBrand.cs" />
     <Compile Include="ESModel\ESCombo.cs" />
     <Compile Include="ESModel\ESComment.cs" />
+    <Compile Include="ESModel\ESEventType.cs" />
     <Compile Include="ESModel\ESHotword.cs" />
     <Compile Include="ESModel\ESProduct.cs" />
     <Compile Include="ESModel\ESStockPropertyValue.cs" />

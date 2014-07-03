@@ -30,11 +30,11 @@ namespace com.intime.fashion.data.sync.Wgw.Request.Builder
             new StockBuilder(Request, item).BuildStockInfo("stockstr");
         }
 
-        private Map4Product GetMap4Product(int productId)
+        private Map4ProductEntity GetMap4Product(int productId)
         {
             using (var db = GetDbContext())
             {
-                return db.Map4Products.FirstOrDefault(m => m.ProductId == productId && m.Channel == ConstValue.WGW_CHANNEL_NAME);
+                return db.Map4Product.FirstOrDefault(m => m.ProductId == productId && m.Channel == ConstValue.WGW_CHANNEL_NAME);
             }
         }
     }

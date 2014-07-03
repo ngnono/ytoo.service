@@ -48,7 +48,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             this.SyncShippedOrder(pageSize);
         }
 
-        private void DoQuery(Expression<Func<Map4Order, bool>> whereCondition, Action<IQueryable<Map4Order>> callback)
+        private void DoQuery(Expression<Func<Map4OrderEntity, bool>> whereCondition, Action<IQueryable<Map4OrderEntity>> callback)
         {
             using (var context = DbContextHelper.GetDbContext())
             {
@@ -56,7 +56,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                 const int fromCustomer = (int) OrderOpera.FromCustomer;
                 var linq =
                     context.OrderLogs.Where(l => l.Type == shipping && l.CreateDate >= BenchTime)
-                        .Join(context.Map4Orders.Where(m => m.SyncStatus == fromCustomer), l => l.OrderNo,
+                        .Join(context.Map4Order.Where(m => m.SyncStatus == fromCustomer), l => l.OrderNo,
                             m => m.OrderNo, (l, m) => m);
                 if (whereCondition != null)
                     linq = linq.Where(whereCondition);
@@ -78,7 +78,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
 
             while (cursor < totalCount)
             {
-                List<Map4Order> oneTimeList = null;
+                List<Map4OrderEntity> oneTimeList = null;
                 DoQuery(null,orders=>oneTimeList = orders.Where(o=>o.Id > lastCursor).OrderBy(o=>o.Id).Take(pageSize).ToList());
                 foreach (var map4Order in oneTimeList)
                 {
@@ -95,7 +95,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                         {
                             using (var db = DbContextHelper.GetDbContext())
                             {
-                                var mapping = db.Map4Orders.FirstOrDefault(m => m.Id == map4Order.Id);
+                                var mapping = db.Map4Order.FirstOrDefault(m => m.Id == map4Order.Id);
                                 if(mapping == null) continue;
                                 mapping.SyncStatus = (int)OrderOpera.Shipping;
                                 mapping.UpdateDate = DateTime.Now;

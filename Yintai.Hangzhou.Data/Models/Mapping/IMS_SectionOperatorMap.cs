@@ -15,6 +15,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(50);
 
+            this.Property(t => t.OperatorCode)
+                .HasMaxLength(50);
+
             // Table & Column Mappings
             this.ToTable("IMS_SectionOperator");
             this.Property(t => t.Id).HasColumnName("Id");

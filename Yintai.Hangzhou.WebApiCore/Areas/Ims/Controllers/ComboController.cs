@@ -16,7 +16,7 @@ using com.intime.fashion.common.Extension;
 using Yintai.Architecture.Common.Models;
 using Yintai.Hangzhou.WebSupport.Binder;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using com.intime.fashion.common;
 using Yintai.Architecture.Framework.ServiceLocation;
 using com.intime.fashion.common.message;
@@ -30,29 +30,32 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_Combo2ProductEntity> _combo2productRepo;
         private IResourceRepository _resourceRepo;
         private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
+        private ComboService _comboService;
         public ComboController(IEFRepository<IMS_ComboEntity> comboRepo
             , IEFRepository<IMS_Combo2ProductEntity> combo2productRepo
             , IResourceRepository resourceRepo,
-            IEFRepository<IMS_AssociateItemsEntity> associateItemRepo)
+            IEFRepository<IMS_AssociateItemsEntity> associateItemRepo,
+            ComboService comboService)
         {
             _comboRepo = comboRepo;
             _combo2productRepo = combo2productRepo;
             _resourceRepo = resourceRepo;
             _associateItemRepo = associateItemRepo;
+            _comboService = comboService;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Create([InternalJsonArrayAttribute("image_ids,productids")] IMSComboCreateRequest request, int authuid)
         {
             if (request.Image_Ids == null ||
                request.Image_Ids.Length < 1)
-                return this.RenderError(r => r.Message = "搭配必须图片");
+                return this.RenderError(r => r.Message = "组合必须图片");
             if (request.ProductIds == null ||
                 request.ProductIds.Length < 1)
-                return this.RenderError(r => r.Message = "搭配需要至少一个商品");
+                return this.RenderError(r => r.Message = "组合需要至少一个商品");
             if (string.IsNullOrEmpty(request.Desc))
-                return this.RenderError(r => r.Message = "搭配需要描述");
+                return this.RenderError(r => r.Message = "组合需要描述");
             if (!Array.Exists<int>((int[])Enum.GetValues(typeof(ProductType)), s => request.Product_Type == s))
-                return this.RenderError(r => r.Message = "搭配商品类型不正确");
+                return this.RenderError(r => r.Message = "组合商品类型不正确");
             var products = Context.Set<ProductEntity>().Where(p => request.ProductIds.Any(l => l == p.Id) &&
                             ((p.ProductType.HasValue && p.ProductType == request.Product_Type) ||
                             (!p.ProductType.HasValue && request.Product_Type == (int)ProductType.FromSystem)));
@@ -60,9 +63,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "商品类型不正确");
              var resources = Context.Set<ResourceEntity>().Where(r => request.Image_Ids.Any(image => image == r.Id));
              if (!resources.Any())
-                 return this.RenderError(r => r.Message = "搭配必须图片");
+                 return this.RenderError(r => r.Message = "组合必须图片");
+
+             var price = products.Sum(p => p.Price);
+             if (request.Has_Discount && !(request.Discount < price && request.Discount > 0))
+                 return this.RenderError(r => r.Message = "商品组合的折扣必须大于0，小于商品总价");
             var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
-            var canOnline = ComboLogic.IfCanOnline(authuid);
+            var canOnline = _comboService.IfCanOnline(authuid);
 
             using (var ts = new TransactionScope())
             {
@@ -73,14 +80,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     CreateUser = authuid,
                     Desc = request.Desc,
                     OnlineDate = DateTime.Now,
-                    Price = products.Sum(p => p.Price),
+                    Price = price,
                     Private2Name = request.Private_To ?? string.Empty,
                     Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
                     UpdateUser = authuid,
                     UserId = authuid,
                     ProductType = request.Product_Type,
-                    ExpireDate = DateTime.Now.AddDays(ConfigManager.COMBO_EXPIRED_DAYS)
+                    ExpireDate = DateTime.Now.AddDays(ConfigManager.COMBO_EXPIRED_DAYS),
+                    IsInPromotion = request.Has_Discount,
+                    DiscountAmount = request.Discount,
+                    IsPublic = request.Is_Public
                 });
 
                 //step2: create combo2product
@@ -118,7 +128,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 //step4: offline one other combo
                 if (!canOnline)
                 {
-                    ComboLogic.OfflineComboOne(authuid);
+                    _comboService.OfflineComboOne(authuid);
                 }
 
                
@@ -137,24 +147,26 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         {
 
             if (string.IsNullOrEmpty(request.Desc))
-                return this.RenderError(r => r.Message = "搭配需要描述");
+                return this.RenderError(r => r.Message = "组合需要描述");
             if (!Array.Exists<int>((int[])Enum.GetValues(typeof(ProductType)), s => request.Product_Type == s))
-                return this.RenderError(r => r.Message = "搭配商品类型不正确");
+                return this.RenderError(r => r.Message = "组合商品类型不正确");
 
             var comboEntity = Context.Set<IMS_ComboEntity>().Find(request.Id);
             if (comboEntity == null)
-                return this.RenderError(r => r.Message = "搭配不存在");
+                return this.RenderError(r => r.Message = "组合不存在");
 
             bool noProduct = request.ProductIds == null || request.ProductIds.Length == 0;
             bool noImage = request.Image_Ids == null || request.Image_Ids.Length == 0;
             using (var ts = new TransactionScope())
             {
                 //step1: 更新combo
-
                 comboEntity.Private2Name = request.Private_To??string.Empty;
                 comboEntity.ProductType = request.Product_Type;
                 comboEntity.Desc = request.Desc;
                 comboEntity.UpdateDate = DateTime.Now;
+                comboEntity.IsInPromotion = request.Has_Discount;
+                comboEntity.DiscountAmount = request.Discount;
+                comboEntity.IsPublic = request.Is_Public;
                 if (!noProduct)
                 {
                     var products = Context.Set<ProductEntity>().Where(p => request.ProductIds.Contains(p.Id));
@@ -169,6 +181,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                         });
                     }
                 }
+                if (request.Has_Discount
+                    && (request.Discount >= comboEntity.Price || request.Discount < 0))
+                    return this.RenderError(r => r.Message = "商品组合的折扣必须大于0，小于商品总价");
                 _comboRepo.Update(comboEntity);
 
 
@@ -212,7 +227,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 
             var comboEntity = Context.Set<IMS_ComboEntity>().Find(id);
             if (comboEntity == null)
-                return this.RenderError(r => r.Message = "搭配不存在");
+                return this.RenderError(r => r.Message = "组合不存在");
             using (var ts = new TransactionScope())
             {
                 comboEntity.Status = (int)DataStatus.Deleted;
@@ -248,7 +263,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     i => i.SourceId,
                                     (o, i) => new { C = o.C,A=o.A,AA=o.AA, CR = i.OrderByDescending(ir => ir.SortOrder).ThenBy(ir=>ir.Id) }).FirstOrDefault();
             if (comboEntity == null)
-                return this.RenderError(r => r.Message = "搭配不存在");
+                return this.RenderError(r => r.Message = "组合不存在");
             return this.RenderSuccess<IMSComboDetailResponse>(c => c.Data = new IMSComboDetailResponse().FromEntity<IMSComboDetailResponse>(comboEntity.C, oc =>
             {
                 oc.StoreId = comboEntity.A.AssociateId;
@@ -339,15 +354,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult ComputeAmount(int combo_id)
         {
-            var linq = Context.Set<IMS_Combo2ProductEntity>().Where(icp => icp.ComboId == combo_id)
-                     .Join(Context.Set<ProductEntity>().Where(p => p.Is4Sale == true && p.Status == (int)DataStatus.Normal
-                                        && Context.Set<InventoryEntity>().Where(i=>i.Amount>0).Any(i=>i.ProductId==p.Id)),
-                             o => o.ProductId,
-                             i => i.Id,
-                             (o, i) => i);
-                     
-
-            var model = OrderRule.ComputeAmount(linq, 1);
+            var model = OrderRule.ComputeAmount_Combo(combo_id);
 
             return this.RenderSuccess<dynamic>(m => m.Data = new
             {

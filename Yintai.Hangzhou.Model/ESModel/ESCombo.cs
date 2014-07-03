@@ -26,5 +26,8 @@ namespace Yintai.Hangzhou.Model.ESModel
         public int StoreId { get; set; }
         public IEnumerable<ESBrand> Brands { get; set; }
         public int AssociateId { get; set; }
+        public bool? IsInPromotion { get; set; }
+        public decimal? DiscountAmount { get; set; }
+        public string AssociateName { get; set; }
     }
 }

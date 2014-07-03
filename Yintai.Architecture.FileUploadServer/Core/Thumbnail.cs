@@ -233,7 +233,9 @@ namespace Yintai.Architecture.ImageTool.Core
             var sbFileArgs = new StringBuilder()
                         .Append(String.Format("{0}", originalImagePath))
                   .Append(@" -intent relative")
-                       .AppendFormat(" -resize \"{0}>\" ", width, height)
+
+                       .AppendFormat(@" -resize ""{0}>"" ", width)
+
                          .Append(@" -unsharp .5x.5+.5+0 ")
                 //        .Append(@" -depth 8 ")
                 //     .Append(@" -strip")
@@ -249,7 +251,7 @@ namespace Yintai.Architecture.ImageTool.Core
             var sbFileArgs = new StringBuilder()
                         .Append(String.Format("{0}", originalImagePath))
                   .Append(@" -intent relative")
-                       .AppendFormat(" -resize \"{0}>\" ", width)
+                       .AppendFormat(@" -resize ""{0}>"" ", width)
                          .Append(@" -unsharp .5x.5+.5+0 ")
                 //        .Append(@" -depth 8 ")
                 //     .Append(@" -strip")

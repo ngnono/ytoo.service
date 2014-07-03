@@ -63,7 +63,7 @@ namespace com.intime.fashion.common.Wxpay
                 case AccessTokenType.XihuanYintai:
                     return Renew();
                 case AccessTokenType.MiniYin:
-                    AwsHelper.SendHttpMessage(string.Format("{0}ims/weixin/access_token", ConfigManager.AwsHost),
+                    HttpClientUtil.SendHttpMessage(string.Format("{0}ims/weixin/access_token", ConfigManager.AwsHost),
                         null, ConfigManager.AwsHttpPublicKey,
                         ConfigManager.AwsHttpPrivateKey,
                         r =>
@@ -97,7 +97,7 @@ namespace com.intime.fashion.common.Wxpay
 
         private void RenewTokenFromAws()
         {
-            AwsHelper.SendHttpMessage(string.Format("{0}ims/weixin/renew", ConfigManager.AwsHost),
+            HttpClientUtil.SendHttpMessage(string.Format("{0}ims/weixin/renew", ConfigManager.AwsHost),
                          null, ConfigManager.AwsHttpPublicKey,
                          ConfigManager.AwsHttpPrivateKey,
                          r =>

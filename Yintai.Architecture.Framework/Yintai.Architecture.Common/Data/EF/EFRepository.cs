@@ -310,8 +310,27 @@ namespace Yintai.Architecture.Common.Data.EF
         public virtual T Insert(T entity)
         {
             var newentity = this._dbset.Add(entity);
-            this._context.SaveChanges();
-            //_unitOfWork.Commit();
+            try
+            {
+                this._context.SaveChanges();
+                //_unitOfWork.Commit();
+                // 写数据库
+            }
+
+            catch (DbEntityValidationException dbEx)
+            {
+                if (dbEx.EntityValidationErrors != null)
+                {
+                    foreach (var err in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var e in err.ValidationErrors)
+                        {
+                            _log.Error(e.PropertyName + ":" + e.ErrorMessage);
+                        }
+                    }
+                }
+                throw dbEx;
+            }
 
             return newentity;
         }

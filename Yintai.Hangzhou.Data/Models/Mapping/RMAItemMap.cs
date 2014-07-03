@@ -26,10 +26,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(200);
 
             this.Property(t => t.ColorValueName)
-                .HasMaxLength(100);
+                .HasMaxLength(50);
 
             this.Property(t => t.SizeValueName)
-                .HasMaxLength(100);
+                .HasMaxLength(50);
 
             // Table & Column Mappings
             this.ToTable("RMAItem");

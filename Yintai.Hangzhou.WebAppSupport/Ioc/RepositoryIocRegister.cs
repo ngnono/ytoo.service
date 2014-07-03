@@ -90,7 +90,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IRMA2ExRepository, RMA2ExRepository>();
             Current.Register<IInventoryRepository, InventoryRepository>();
 
-            Current.Register<IEFRepository<OrderTransactionEntity>, EFRepository<OrderTransactionEntity>>();
+            Current.Register<IEFRepository<OrderTransactionEntity>, OrderTransactionRepository>();
             Current.Register<IEFRepository<PaymentNotifyLogEntity>, EFRepository<PaymentNotifyLogEntity>>();
             Current.Register<IEFRepository<ExOrderEntity>, EFRepository<ExOrderEntity>>();
             Current.Register<IEFRepository<IMS_AssociateEntity>, EFRepository<IMS_AssociateEntity>>();
@@ -111,6 +111,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IEFRepository<IMS_GiftCardTransfersEntity>, EFRepository<IMS_GiftCardTransfersEntity>>();
             Current.Register<IEFRepository<IMS_GiftCardUserEntity>, EFRepository<IMS_GiftCardUserEntity>>();
             Current.Register<IEFRepository<IMS_InviteCodeEntity>, EFRepository<IMS_InviteCodeEntity>>();
+            Current.Register<IEFRepository<IMS_InviteCodeRequestEntity>, EFRepository<IMS_InviteCodeRequestEntity>>();
 
             Current.Register<IEFRepository<WX_MenuEntity>, EFRepository<WX_MenuEntity>>();
         }

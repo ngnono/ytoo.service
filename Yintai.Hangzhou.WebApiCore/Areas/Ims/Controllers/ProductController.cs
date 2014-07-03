@@ -14,7 +14,7 @@ using Yintai.Hangzhou.WebSupport.Mvc;
 using com.intime.fashion.common.Extension;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Hangzhou.WebSupport.Binder;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using Yintai.Architecture.Framework.ServiceLocation;
 using com.intime.fashion.common.message;
 using com.intime.fashion.common.message.Messages;
@@ -30,13 +30,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IInventoryRepository _inventoryRepo;
         private IResourceRepository _resourceRepo;
         private IEFRepository<ProductCode2StoreCodeEntity> _productCodeRepo;
+        private ComboService _comboService;
         public ProductController(IResourceService resourceService
             , IProductRepository productRepo
             , IProductPropertyRepository productPropertyRepo
             , IProductPropertyValueRepository productPropertyValueRepo
             , IInventoryRepository inventoryRepo
             , IResourceRepository resourceRepo
-            , IEFRepository<ProductCode2StoreCodeEntity> productCodeRepo)
+            , IEFRepository<ProductCode2StoreCodeEntity> productCodeRepo
+            ,ComboService comboService)
+
         {
             _resourceService = resourceService;
             _productRepo = productRepo;
@@ -45,6 +48,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _inventoryRepo = inventoryRepo;
             _resourceRepo = resourceRepo;
             _productCodeRepo = productCodeRepo;
+            _comboService = comboService;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Create(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
@@ -115,7 +119,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     StoreId = assocateEntity.StoreId,
                     StoreProductCode = request.Sales_Code,
                     UpdateDate = DateTime.Now,
-                    UpdateUser = authuid
+                    UpdateUser = authuid,
+                    SectionId = assocateEntity.SectionId
                 });
                 //step2: create product color property
                 var propertyEntity = _productPropertyRepo.Insert(new ProductPropertyEntity()
@@ -193,7 +198,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 int? comboId = null;
                 if (request.CreateCombo)
                 {
-                   IMS_ComboEntity comboEntity =  ComboLogic.CreateComboFromProduct(productEntity,assocateEntity);
+                   IMS_ComboEntity comboEntity =  _comboService.CreateComboFromProduct(productEntity,assocateEntity);
                    comboId = comboEntity.Id;
                 }
                 if (haveValidImage)
@@ -385,6 +390,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 if (resourceEntity == null)
                     canCommit = false;
 
+                //step5: if create combo auto
+                int? comboId = null;
+                if (request.CreateCombo)
+                {
+                    var assocateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
+                    IMS_ComboEntity comboEntity = _comboService.CreateComboFromProduct(productEntity, assocateEntity);
+                    comboId = comboEntity.Id;
+                }
                 if (canCommit)
                 {
                     
@@ -395,7 +408,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     {
                         id = productEntity.Id,
                         image = resourceEntity.Name.Image320Url(),
-                        price = productEntity.Price
+                        price = productEntity.Price,
+                        combo_id = comboId
+
                     });
                 }
                 else

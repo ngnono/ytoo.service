@@ -38,10 +38,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Nest, Version=0.12.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NEST.0.12.0.0\lib\NET4\Nest.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -109,26 +105,12 @@
     <Compile Include="Impl\ShareService.cs" />
     <Compile Include="Impl\UserRightService.cs" />
     <Compile Include="Impl\UserService.cs" />
-    <Compile Include="Logic\AssociateIncomeLogic.cs" />
-    <Compile Include="Logic\ComboLogic.cs" />
-    <Compile Include="Logic\Search\ESComboService.cs" />
-    <Compile Include="Logic\Search\ESInventoryService.cs" />
-    <Compile Include="Logic\Search\ESProductService.cs" />
-    <Compile Include="Logic\Search\ESServiceBase.cs" />
-    <Compile Include="Logic\IncomeRule\AssociateIncomeAccount.cs" />
-    <Compile Include="Logic\IncomeRule\IIncomeRule.cs" />
-    <Compile Include="Logic\IncomeRule\IncomeRuleFix.cs" />
-    <Compile Include="Logic\IncomeRule\IncomeRuleFlatten.cs" />
-    <Compile Include="Logic\IncomeRule\IncomeRuleFlex.cs" />
-    <Compile Include="Logic\OrderRule.cs" />
-    <Compile Include="Logic\RMARule.cs" />
-    <Compile Include="Logic\SearchLogic.cs" />
-    <Compile Include="Logic\StorePromotionRule.cs" />
     <Compile Include="Manager\CacheKeyManager.cs" />
     <Compile Include="Manager\FileUploadServiceManager.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Manager\UploadFileConfigManager.cs" />
+    <Compile Include="MessageCenterService.cs" />
     <Compile Include="PointDataService.cs" />
     <Compile Include="ItemsDataService.cs" />
     <Compile Include="ShareDataService.cs" />
@@ -146,6 +128,10 @@
     <ProjectReference Include="..\com.intime.fashion.common.config\com.intime.fashion.common.config.csproj">
       <Project>{5d633b61-5763-459b-a72e-ae66f5bc0793}</Project>
       <Name>com.intime.fashion.common.config</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.common.message\com.intime.fashion.common.message.csproj">
+      <Project>{a7154a06-be04-400f-8652-5b52e673b7db}</Project>
+      <Name>com.intime.fashion.common.message</Name>
     </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>

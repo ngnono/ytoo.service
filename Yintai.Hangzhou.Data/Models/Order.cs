@@ -34,6 +34,10 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<int> TotalPoints { get; set; }
         public string OrderSource { get; set; }
         public Nullable<int> OrderProductType { get; set; }
+        public Nullable<bool> PromotionFlag { get; set; }
+        public string PromotionDesc { get; set; }
+        public string PromotionRules { get; set; }
+        public Nullable<decimal> DiscountAmount { get; set; }
 
         #region Overrides of BaseEntity
 

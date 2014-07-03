@@ -43,7 +43,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
                     .Where(
                         p =>
                             p.UpdatedDate >= BenchTime)
-                    .Join(db.Set<Map4Product>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME), p => p.Id,
+                    .Join(db.Set<Map4ProductEntity>().Where(m => m.Channel == ConstValue.WGW_CHANNEL_NAME), p => p.Id,
                         m => m.ProductId, (p, m) => new { p, m }).Where(x => x.p.Status != x.m.Status || (!x.p.Is4Sale.HasValue || !x.p.Is4Sale.Value) && x.m.Status == 1).Select(x=>x.p);
    
                 if (whereCondition != null)
@@ -94,7 +94,7 @@ namespace com.intime.fashion.data.sync.Wgw.Executor
             using (var db = DbContextHelper.GetDbContext())
             {
                 var map =
-                    db.Map4Products.FirstOrDefault(
+                    db.Map4Product.FirstOrDefault(
                         m => m.ProductId == productId && m.Channel == ConstValue.WGW_CHANNEL_NAME);
                 if (map == null)
                 {

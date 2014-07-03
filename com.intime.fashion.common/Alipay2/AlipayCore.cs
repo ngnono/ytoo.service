@@ -6,6 +6,7 @@ using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using com.intime.fashion.common;
 
 namespace Com.Alipay2
 {
@@ -105,11 +106,8 @@ namespace Com.Alipay2
         /// <param name="sWord">要写入日志里的文本内容</param>
         public static void LogResult(string sWord)
         {
-            string strPath = HttpContext.Current.Server.MapPath("log");
-            strPath = strPath + "\\" + DateTime.Now.ToString().Replace(":", "") + ".txt";
-            StreamWriter fs = new StreamWriter(strPath, false, System.Text.Encoding.Default);
-            fs.Write(sWord);
-            fs.Close();
+            var log = CommonUtil.Log;
+            log.Debug(sWord);
         }
 
         /// <summary>

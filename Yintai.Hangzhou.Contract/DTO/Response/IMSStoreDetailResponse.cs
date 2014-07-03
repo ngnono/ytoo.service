@@ -43,6 +43,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         [DataMember(Name="template_id")]
         public int Template_Id { get; set; }
     }
+    [DataContract]
     public class IMSGiftCard
     {
         [DataMember(Name="id")]
@@ -56,14 +57,32 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
             return ImageUrl.Image320Url();
         } }
     }
+    [DataContract]
     public class IMSCombo
     {
         [DataMember(Name="id")]
         public int Id { get; set; }
         [DataMember(Name = "desc")]
         public string Desc { get; set; }
-        [DataMember(Name = "price")]
+        [DataMember(Name = "unit_price")]
         public decimal Price { get; set; }
+        [DataMember(Name = "discount")]
+        public decimal Discount
+        {
+            get
+            {
+                return (IsInPromotion.HasValue && IsInPromotion.Value) ? DiscountAmount.Value : 0m;
+
+            }
+        }
+        [DataMember(Name = "price")]
+        public decimal ActualPrice
+        {
+            get
+            {
+                return Price - Discount;
+            }
+        }
         [DataMember(Name="image")]
         public string Image { get {
             return ImageUrl.Image320Url();
@@ -91,6 +110,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public IEnumerable<string> ProductImageUrls { get; set; }
         [IgnoreDataMember]
         public DateTime? ExpireDate { get; set; }
+        [IgnoreDataMember]
+        public Nullable<bool> IsInPromotion { get; set; }
+        [IgnoreDataMember]
+        public Nullable<decimal> DiscountAmount { get; set; }
 
 
     }

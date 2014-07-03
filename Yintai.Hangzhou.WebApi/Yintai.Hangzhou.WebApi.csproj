@@ -172,6 +172,9 @@
     <Content Include="Configurations\production\rabbit.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Configurations\production\alipay_ims.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\HangzhouV45.pubxml" />
     <None Include="Properties\PublishProfiles\intimedemo - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\intimedemo - Web Deploy.pubxml" />
@@ -185,6 +188,10 @@
     <Folder Include="fileupload\video\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.common.message.rabbit\com.intime.fashion.common.message.rabbit.csproj">
+      <Project>{c5b14b68-f27c-4317-9327-5fcf66aefa52}</Project>
+      <Name>com.intime.fashion.common.message.rabbit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
       <Name>Yintai.Hangzhou.Contract</Name>

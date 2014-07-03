@@ -12,6 +12,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int Status { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public int UpdateUser { get; set; }
+        public Nullable<int> SectionId { get; set; }
 
         #region Overrides of BaseEntity
 

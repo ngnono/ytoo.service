@@ -19,11 +19,11 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                 string dealCode = response.dealCode;
                 var order =
                     db.Orders.Join(
-                        db.Map4Orders.Where(m => m.ChannelOrderCode == dealCode && m.Channel == ConstValue.WGW_CHANNEL_NAME),
+                        db.Map4Order.Where(m => m.ChannelOrderCode == dealCode && m.Channel == ConstValue.WGW_CHANNEL_NAME),
                         m => m.OrderNo, o => o.OrderNo, (o, m) => o).FirstOrDefault();
 
                 var mappedOrder = 
-                    db.Map4Orders.FirstOrDefault(
+                    db.Map4Order.FirstOrDefault(
                         m => m.ChannelOrderCode == dealCode && m.Channel == ConstValue.WGW_CHANNEL_NAME);
                 if (order == null || mappedOrder == null)
                 {

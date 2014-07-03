@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 
 namespace com.intime.jobscheduler.Job.Income
 {

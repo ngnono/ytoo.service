@@ -7,7 +7,6 @@ namespace Yintai.Hangzhou.Data.Models
     {
         public int Id { get; set; }
         public int PackageId { get; set; }
-        public int SerialNo { get; set; }
         public int TotalCount { get; set; }
         public int TotalFee { get; set; }
         public bool IsSuccess { get; set; }
@@ -17,6 +16,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int Status { get; set; }
         public string QueryRetCode { get; set; }
         public string QueryRetMsg { get; set; }
+        public int SerialNo { get; set; }
 
         #region Overrides of BaseEntity
 

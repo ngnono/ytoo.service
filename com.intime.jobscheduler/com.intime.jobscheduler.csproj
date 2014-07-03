@@ -164,6 +164,7 @@
     <Compile Include="ActionTimer.cs" />
     <Compile Include="Job\AccountSyncJob.cs" />
     <Compile Include="Job\Aliyun\TransferRSS2AliyunJob.cs" />
+    <Compile Include="Job\Analysis\PullAnalysisData2ESJob.cs" />
     <Compile Include="Job\ApnsNotificationCommonJob.cs" />
     <Compile Include="Job\ApnsNotificationJob.cs" />
     <Compile Include="Job\AutoConvertOrderStatus.cs" />
@@ -173,7 +174,6 @@
     <Compile Include="Job\Erp\CategorySyncJob.cs" />
     <Compile Include="Job\Erp\ErpGroupJob.cs" />
     <Compile Include="Job\Erp\Order2ExSyncJob.cs" />
-    <Compile Include="Job\Erp\OrderSyncJob.cs" />
     <Compile Include="Job\Erp\ProductPicSyncJob.cs" />
     <Compile Include="Job\Erp\ProductPropertySyncJob.cs" />
     <Compile Include="Job\Erp\ProductSyncJob.cs" />
@@ -193,7 +193,6 @@
     <Compile Include="Job\Erp\ProductInventorySyncJob.cs" />
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="Job\Push2awsJob.cs" />
-    <Compile Include="Job\Push2mysqlJob.cs" />
     <Compile Include="Job\Wgw\BrandSyncJob.cs" />
     <Compile Include="Job\Wgw\GetItemMultiStockJob.cs" />
     <Compile Include="Job\Wgw\ProductImageSyncJob.cs" />
@@ -209,14 +208,9 @@
     <Compile Include="MainJobService.Designer.cs">
       <DependentUpon>MainJobService.cs</DependentUpon>
     </Compile>
-    <Compile Include="MessageHandler.cs" />
-    <Compile Include="MessageListener.cs" />
-    <Compile Include="Message\ComboHandler.cs" />
-    <Compile Include="Message\InventoryHandler.cs" />
-    <Compile Include="Message\ProductHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScopedLifetimeManager.cs" />
+    <Compile Include="UnityBootStrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -231,6 +225,12 @@
     <Content Include="Configuration\elasticSearch.config">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Configuration\flurry.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Configuration\weixin_ims.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Configuration\rabbit.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -256,6 +256,10 @@
       <Project>{5d633b61-5763-459b-a72e-ae66f5bc0793}</Project>
       <Name>com.intime.fashion.common.config</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.common.message.rabbit\com.intime.fashion.common.message.rabbit.csproj">
+      <Project>{c5b14b68-f27c-4317-9327-5fcf66aefa52}</Project>
+      <Name>com.intime.fashion.common.message.rabbit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.common.message\com.intime.fashion.common.message.csproj">
       <Project>{a7154a06-be04-400f-8652-5b52e673b7db}</Project>
       <Name>com.intime.fashion.common.message</Name>
@@ -272,6 +276,26 @@
       <Project>{b224c596-53f1-48a6-948f-df3cd2acd15d}</Project>
       <Name>com.intime.fashion.data.erp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.analysis\com.intime.fashion.service.analysis.csproj">
+      <Project>{21dc1636-76e3-4f12-8162-97a56b09c21d}</Project>
+      <Name>com.intime.fashion.service.analysis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.images\com.intime.fashion.service.images.csproj">
+      <Project>{f8565494-27d0-41e0-859a-ddfc47be3b38}</Project>
+      <Name>com.intime.fashion.service.images</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.messages\com.intime.fashion.service.messages.csproj">
+      <Project>{097e9eaf-ec77-4fb2-86fb-7b30acd7df93}</Project>
+      <Name>com.intime.fashion.service.messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.search\com.intime.fashion.service.search.csproj">
+      <Project>{be512bbf-4f5a-4909-b9c0-cf3419e0f945}</Project>
+      <Name>com.intime.fashion.service.search</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service\com.intime.fashion.service.csproj">
+      <Project>{be4f98bc-b4a2-4fc0-ae7a-96938218f098}</Project>
+      <Name>com.intime.fashion.service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
       <Name>Yintai.Hangzhou.Contract</Name>
@@ -283,6 +307,10 @@
     <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
       <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
       <Name>Yintai.Hangzhou.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yintai.Hangzhou.Repository\Yintai.Hangzhou.Repository.csproj">
+      <Project>{82be109a-483e-40bf-98b8-a555bca86111}</Project>
+      <Name>Yintai.Hangzhou.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Service\Yintai.Hangzhou.Service.csproj">
       <Project>{193902dc-242c-4dba-b173-ee154e813c4b}</Project>

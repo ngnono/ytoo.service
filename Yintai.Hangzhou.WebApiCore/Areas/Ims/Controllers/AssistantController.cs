@@ -12,7 +12,7 @@ using Yintai.Hangzhou.Contract.DTO.Response;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
@@ -30,6 +30,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IInventoryRepository _inventoryRepo;
 private  IEFRepository<IMS_ComboEntity> _comboRepo;
 private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
+private ComboService _comboService;
         public AssistantController(IEFRepository<IMS_AssociateSaleCodeEntity> salescodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateitemRepo,
             IEFRepository<IMS_AssociateIncomeRequestEntity> incomerequestRepo,
@@ -40,7 +41,8 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
             IResourceRepository resourceRepo,
             IInventoryRepository inventoryRepo,
             IEFRepository<IMS_ComboEntity> comboRepo,
-            IEFRepository<IMS_AssociateIncomeEntity> incomeRepo
+            IEFRepository<IMS_AssociateIncomeEntity> incomeRepo,
+            ComboService comboService
             )
         {
             _salescodeRepo = salescodeRepo;
@@ -54,6 +56,7 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
             _inventoryRepo = inventoryRepo;
             _comboRepo = comboRepo;
             _incomeRepo = incomeRepo;
+            _comboService = comboService;
         }
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request,int authuid)
@@ -254,11 +257,11 @@ private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
                                 .Join(Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.ItemType == request.Item_Type && iai.ItemId == request.Item_Id), o => o.Id, i => i.AssociateId, (o, i) => i)
                                 .FirstOrDefault();
             if (comboItemEntity == null)
-                return this.RenderError(r => r.Message = "无权操作该搭配");
+                return this.RenderError(r => r.Message = "无权操作该组合");
             if (request.Item_Type == (int)ComboType.Product && request.Is_Online)
             {
-                if (!ComboLogic.IfCanOnline(authuid))
-                    return this.RenderError(r => r.Message = "店铺上线搭配数量超出限制！");
+                if (!_comboService.IfCanOnline(authuid))
+                    return this.RenderError(r => r.Message = "店铺上线组合数量超出限制！");
             }
             using (var ts = new TransactionScope())
             {

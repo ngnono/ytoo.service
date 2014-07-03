@@ -46,7 +46,7 @@ namespace com.intime.fashion.data.sync.Wgw.Response.Processor.Order
                     var order =
                         db.Set<OrderEntity>()
                             .Join(
-                                db.Set<Map4Order>()
+                                db.Set<Map4OrderEntity>()
                                     .Where(
                                         m => m.Channel == ConstValue.WGW_CHANNEL_NAME && m.ChannelOrderCode == dealCode),
                                 o => o.OrderNo, m => m.OrderNo, (o, m) => o)

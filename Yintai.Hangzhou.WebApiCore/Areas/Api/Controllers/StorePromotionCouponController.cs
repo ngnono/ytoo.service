@@ -19,7 +19,7 @@ using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
 using Yintai.Hangzhou.Repository.Impl;
 using Yintai.Hangzhou.Service.Contract.Apis;
-using Yintai.Hangzhou.Service.Logic;
+using com.intime.fashion.service;
 using Yintai.Hangzhou.Service.Manager;
 using Yintai.Hangzhou.WebSupport.Mvc;
 
@@ -293,7 +293,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                
                  // step4: void action should call aws service directly to check the real time coupon status
                string message = string.Empty;
-                bool isVoidSuccess = AwsHelper.SendHttpMessage(ConfigManager.AwsHttpUrlVoidCoupon,
+                bool isVoidSuccess = HttpClientUtil.SendHttpMessage(ConfigManager.AwsHttpUrlVoidCoupon,
                         new {
                           code = coupon.Code  
                         },

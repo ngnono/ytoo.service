@@ -100,6 +100,7 @@
     <Compile Include="DTO\Request\IMSProductCreateRequest.cs" />
     <Compile Include="DTO\Request\IMSProductSearchRequest.cs" />
     <Compile Include="DTO\Request\IMSStoreDetailUpdateRequest.cs" />
+    <Compile Include="DTO\Request\IMSStoreInviteCodeRequest.cs" />
     <Compile Include="DTO\Request\IMSUserFavorRequest.cs" />
     <Compile Include="DTO\Request\MyCommentListRequest.cs" />
     <Compile Include="DTO\Request\MyOrderDetailRequest.cs" />
