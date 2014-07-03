@@ -85,7 +85,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public bool CanEditPro {
             get {
                 return Promotion_Flag &&
-                        (Status == (int)OrderStatus.Paid || Status == (int)OrderStatus.AgentConfirmed);
+                        (Status == (int)OrderStatus.Paid || Status == (int)OrderStatus.AgentConfirmed)
+                        && IsDaoGou;
             }
         }
         [DataMember(Name="is_owner")]

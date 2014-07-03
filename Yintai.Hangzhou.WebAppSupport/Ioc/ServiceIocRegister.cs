@@ -1,3 +1,5 @@
+using com.intime.fashion.common.message;
+using com.intime.fashion.common.message.rabbit;
 using com.intime.fashion.service;
 using com.intime.o2o.data.exchange.IT;
 using Yintai.Hangzhou.Contract.Apns;
@@ -73,6 +75,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
 
             Current.Register<ComboService, ComboService>();
             Current.Register<OrderService, OrderService>();
+            Current.Register<IMessageCenterProvider, MessageProvider>();
         }
 
         #endregion
