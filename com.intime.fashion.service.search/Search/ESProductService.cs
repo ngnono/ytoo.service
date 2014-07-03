@@ -9,6 +9,7 @@ using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Model.ES;
+using Yintai.Hangzhou.Model.ESModel;
 
 namespace com.intime.fashion.service.search
 {
@@ -87,7 +88,32 @@ namespace com.intime.fashion.service.search
                                           Name = section.Name,
                                           Status = section.Status
                                       })
+                       let propertyValues = (from property in db.Set<ProductPropertyEntity>()
+                                             where property.ProductId == p.Id
+                                             join v in db.Set<CategoryPropertyValueEntity>() on property.Id equals v.PropertyId
+                                             select new ESProductPropertyValue
+                                             {
+                                                 ProductId = p.Id,
+                                                 Id = v.Id,
+                                                 IsColor = property.IsColor.HasValue && property.IsColor.Value,
+                                                 IsSize = property.IsSize.HasValue && property.IsSize.Value,
+                                                 PropertyDesc = property.PropertyDesc,
+                                                 PropertyId = property.Id,
+                                                 ValueDesc = v.ValueDesc
+                                             })
 
+                       let stockPropertyValues = (from inv in db.Set<InventoryEntity>()
+                                                  where inv.ProductId == p.Id
+                                                  join val in db.Set<OPC_StockPropertyValueRawEntity>() on inv.Id equals val.InventoryId
+                                                  select new ESStockPropertyValue()
+                                                  {
+                                                      Id = val.Id,
+                                                      InventoryId = inv.Id,
+                                                      PropertyData = val.PropertyData,
+                                                      UpdateTime = val.UpdateDate,
+                                                      BrandSizeCode = val.BrandSizeCode,
+                                                      BrandSizeName = val.BrandSizeName
+                                                  })
                        let category = (from map in db.Set<ProductMapEntity>() where map.ProductId == p.Id && map.Channel == "intime" select map.ChannelCatId)
 
                        select new ESProduct()
@@ -131,6 +157,8 @@ namespace com.intime.fashion.service.search
                                EngName = b.EnglishName
                            },
                            Resource = resource,
+                           PropertyValues = propertyValues,
+                           StockPropertyValues = stockPropertyValues,
                            SpecialTopic = specials,
                            Promotion = promotions,
                            Is4Sale = p.Is4Sale ?? false,
