@@ -32,14 +32,14 @@ namespace com.intime.jobscheduler.Job.Order
             JobDataMap data = context.JobDetail.JobDataMap;
            
             var totalCount = 0;
-            var interval = data.ContainsKey("intervalOfHrs") ? data.GetInt("intervalOfHrs") : 1;
+            var interval = data.ContainsKey("intervalOfMins") ? data.GetInt("intervalOfMins") : 30;
             if (!data.ContainsKey("benchtime"))
             {
-                data.Put("benchtime", DateTime.Now.AddHours(-interval));
+                data.Put("benchtime", DateTime.Now.AddMinutes(-interval));
             }
             else
             {
-                data["benchtime"] = data.GetDateTimeValue("benchtime").AddHours(interval);
+                data["benchtime"] = data.GetDateTimeValue("benchtime").AddMinutes(interval);
             }
             var benchTime = data.GetDateTime("benchtime");
 
