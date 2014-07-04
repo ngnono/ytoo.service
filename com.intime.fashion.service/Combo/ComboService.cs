@@ -72,6 +72,8 @@ namespace com.intime.fashion.service
                 UpdateUser = createUserId,
                 UserId = createUserId,
                 ProductType = (int)ProductType.FromSelf,
+                IsPublic = true,
+                IsInPromotion = false,
                 ExpireDate = DateTime.Now.AddDays(ConfigManager.COMBO_EXPIRED_DAYS)
             });
 
