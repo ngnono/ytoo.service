@@ -475,7 +475,7 @@ namespace com.intime.jobscheduler.Job
                                 GpsLat = s.GpsLat,
                                 GpsLng = s.GpsLng,
                                 Tel = s.Tel,
-                                Status = s.Status,
+                                Status = s.IsOnLine??0,
                                 Resource = resource
 
                             };

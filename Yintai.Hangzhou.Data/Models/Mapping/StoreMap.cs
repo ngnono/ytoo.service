@@ -63,6 +63,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.RMAZipCode).HasColumnName("RMAZipCode");
             this.Property(t => t.RMAPerson).HasColumnName("RMAPerson");
             this.Property(t => t.RMAPhone).HasColumnName("RMAPhone");
+            this.Property(t => t.IsOnLine).HasColumnName("IsOnLine");
 		Init();
         }
 

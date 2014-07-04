@@ -28,6 +28,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string RMAZipCode { get; set; }
         public string RMAPerson { get; set; }
         public string RMAPhone { get; set; }
+        public int? IsOnLine { get; set; }
 
         #region Overrides of BaseEntity
 
