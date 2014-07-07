@@ -44,8 +44,15 @@ namespace com.intime.fashion.console.onetime
             
             foreach (var iid in idList)
             {
-                indexService.IndexSingle(iid);
-                Console.WriteLine(string.Format("{0} indexed", iid));
+                try
+                {
+                    indexService.IndexSingle(iid);
+                    Console.WriteLine(string.Format("{0} indexed", iid));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(string.Format("error: {0} not indexed", iid));
+                }
             }
         }
 
