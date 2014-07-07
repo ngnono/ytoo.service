@@ -40,7 +40,8 @@ namespace com.intime.fashion.service.search
                                            IsDefault = r.IsDefault,
                                            Type = r.Type,
                                            Width = r.Width,
-                                           Height = r.Height
+                                           Height = r.Height,
+                                           ColorId = r.ColorId
                                        })
                        let specials = from psp in db.Set<SpecialTopicProductRelationEntity>().AsQueryable()
                                       where psp.Product_Id == p.Id
@@ -90,7 +91,7 @@ namespace com.intime.fashion.service.search
                                       })
                        let propertyValues = (from property in db.Set<ProductPropertyEntity>()
                                              where property.ProductId == p.Id
-                                             join v in db.Set<CategoryPropertyValueEntity>() on property.Id equals v.PropertyId
+                                             join v in db.Set<ProductPropertyValueEntity>() on property.Id equals v.PropertyId
                                              select new ESProductPropertyValue
                                              {
                                                  ProductId = p.Id,
