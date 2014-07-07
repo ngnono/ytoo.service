@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OneTimeCommand_reindex_types.cs" />
     <Compile Include="OneTimeCommand_failqueue_handle.cs" />
     <Compile Include="OneTimeCommand_gen_groupname_from_brand.cs" />
     <Compile Include="OneTimeCommand.cs" />

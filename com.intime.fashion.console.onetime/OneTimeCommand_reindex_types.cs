@@ -16,7 +16,7 @@ namespace com.intime.fashion.console.onetime
     {
         [Verb(IsDefault = false, Description = "reindex types", Aliases = "reindex_type")]
         static void Reindex_Types(
-            [Aliases("type")]
+            [Aliases("re_index_type")]
             [Description("p:product,b:brand")]
             [Required]
             string type)
