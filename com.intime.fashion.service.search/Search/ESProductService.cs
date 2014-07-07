@@ -75,7 +75,9 @@ namespace com.intime.fashion.service.search
                                                  IsDefault = r.IsDefault,
                                                  Type = r.Type,
                                                  Width = r.Width,
-                                                 Height = r.Height
+                                                 Height = r.Height,
+                                                 ColorId = r.ColorId
+
                                              })
                                          })
                        let section = (from section in db.Set<SectionEntity>().AsQueryable()
