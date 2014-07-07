@@ -1,11 +1,11 @@
-﻿using com.intime.fashion.service.search;
-using Nest;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using com.intime.fashion.service;
+using com.intime.fashion.service.search;
+using Nest;
 using Yintai.Hangzhou.WebApiCore.Areas.Gg.ViewModels;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
@@ -50,8 +50,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                 body.From(Skip(pageIndex, pageSize))
                     .Size(pageSize)
                     .SortAscending(p => p.UpdatedDate)
-                    .Query(q => q.Range(p => p.GreaterOrEquals(lastUpdate)
-                    .OnField(f => f.UpdatedDate))
+                    .Query(q =>
+                        q.Term(p => p.IsSystem, true) &
+                        q.Term(p => p.Status, 1) &
+                        q.Range(p => p.GreaterOrEquals(lastUpdate).OnField(f => f.UpdatedDate)
+                    )
                 ));
 
             // ===========================================================================
@@ -80,11 +83,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             // 根据Id列表查询单品信息
             // ===========================================================================
             var productItems = _elasticClient.Search<ESStocks>(
-              body =>
-                  body.Filter(
-                  q => q.Terms(p => p.ProductId, productIds)
-            ).Skip(0).Size(5000));
-
+               body =>
+                   body.Filter(
+                   q => q.Terms(p => p.ProductId, productIds)
+           ).Skip(0).Size(5000));
 
             // ===========================================================================
             // 针对ProductId进行分组Map
@@ -158,6 +160,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
         private IElasticClient GetDefaultElasticClient()
         {
             return SearchLogic.GetClient();
+        }
+
+        private string GetAppSetting(string key, string defaultValue = "")
+        {
+            return ConfigurationManager.AppSettings[key] ?? defaultValue;
         }
 
         private int Skip(int pageIndex, int pageSize)
