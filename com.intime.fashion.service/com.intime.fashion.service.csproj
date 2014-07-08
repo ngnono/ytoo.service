@@ -65,6 +65,9 @@
     <Compile Include="IncomeRule\IncomeRuleFlex.cs" />
     <Compile Include="Order\OrderRule.cs" />
     <Compile Include="OrderService.cs" />
+    <Compile Include="PromotionRule\IPromotionSharePolicy.cs" />
+    <Compile Include="PromotionRule\PricePerAmountPolicy.cs" />
+    <Compile Include="PromotionRule\PromotionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Order\RMARule.cs" />
     <Compile Include="ScopedLifetimeManager.cs" />

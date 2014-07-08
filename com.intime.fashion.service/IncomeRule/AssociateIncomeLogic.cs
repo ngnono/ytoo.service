@@ -10,6 +10,7 @@ using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using com.intime.fashion.service.IncomeRule;
+using com.intime.fashion.service.PromotionRule;
 
 namespace com.intime.fashion.service
 {
@@ -96,10 +97,20 @@ namespace com.intime.fashion.service
             if (order == null)
                 return 0m;
             var incomeSum = 0m;
+            var hasPromotion = order.PromotionFlag ?? false;
+            IPromotionSharePolicy promotionSharedPolicy = null;
+            if (hasPromotion)
+            {
+                promotionSharedPolicy = new PromotionService().GetDefaultSharePolicy();
+                promotionSharedPolicy.SourceOrder = order;
+            }
             foreach (var item in Context.Set<OrderItemEntity>().Where(o => o.OrderNo == order.OrderNo && o.Status == (int)DataStatus.Normal))
             { 
                 var product = Context.Set<ProductEntity>().Find(item.ProductId);
-                incomeSum += DoInternalCompute(item.ItemPrice, product.Tag_Id, item.Quantity);
+                var incomePrice = item.ItemPrice;
+                if (hasPromotion)
+                    incomePrice = promotionSharedPolicy.ComputeActualPrice(item);
+                incomeSum += DoInternalCompute(incomePrice, product.Tag_Id, item.Quantity);
             }
             return incomeSum;
         }
