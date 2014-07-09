@@ -34,8 +34,11 @@ namespace com.intime.fashion.service
         }
         public static bool Froze(string orderNo)
         {
+            orderNo = orderNo.Trim();
             var incomeRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateIncomeHistoryEntity>>();
-            foreach (var item in Context.Set<IMS_AssociateIncomeHistoryEntity>().Where(iai => iai.SourceType == (int)AssociateOrderType.Product && iai.SourceNo == orderNo))
+            foreach (var item in Context.Set<IMS_AssociateIncomeHistoryEntity>()
+                        .Where(iai => iai.SourceType == (int)AssociateOrderType.Product && iai.SourceNo == orderNo)
+                        .ToList())
             {
                 item.Status = (int)AssociateIncomeStatus.Frozen;
                 item.UpdateDate = DateTime.Now;

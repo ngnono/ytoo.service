@@ -53,7 +53,8 @@ namespace com.intime.fashion.service.IncomeRule
         }
         private static IMS_AssociateIncomeEntity EnsureAccount(int userId)
         {
-            var account = Context.Set<IMS_AssociateIncomeEntity>().Where(ia => ia.UserId == userId && ia.Status == (int)DataStatus.Normal).FirstOrDefault();
+            var account = Context.Set<IMS_AssociateIncomeEntity>()
+                .Where(ia => ia.UserId == userId && ia.Status == (int)DataStatus.Normal).FirstOrDefault();
             if (account == null)
             {
                 account = AccountRepo.Insert(new IMS_AssociateIncomeEntity()
