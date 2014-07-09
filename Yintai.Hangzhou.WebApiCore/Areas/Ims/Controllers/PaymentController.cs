@@ -227,6 +227,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                         OrderNo = out_trade_no,
                                         Type = (int)OrderOpera.CustomerPay
                                     });
+                                    AssociateIncomeLogic.Froze(orderEntity.OrderNo);
                                 }
                                 ts.Complete();
                                
