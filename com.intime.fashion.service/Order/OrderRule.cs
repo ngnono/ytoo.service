@@ -153,6 +153,15 @@ namespace com.intime.fashion.service
             {
                 discountAmount = ComputeComboDiscount(request.OrderModel.ComboId.Value, request.OrderModel.Products.Select(p => p.ProductId));
                 totalAmount = totalAmount - discountAmount;
+
+                //get storeid from comboid if no storeid passed in 
+                if ((request.OrderModel.StoreId ?? 0) == 0)
+                {
+                    var assocateEntity = Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.ItemType == (int)ComboType.Product
+                                && iai.ItemId == request.OrderModel.ComboId.Value).FirstOrDefault();
+                    if (assocateEntity != null)
+                        request.OrderModel.StoreId = assocateEntity.AssociateId;
+                }       
             }
             if (totalAmount <= 0)
                 return CommonUtil.RenderError(r => r.Message = "商品销售价信息错误！");
