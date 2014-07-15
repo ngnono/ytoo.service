@@ -29,6 +29,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
                 {
                     pageSize = 20;
                 }
+                else
+                    pageSize = value;
             } 
         }
     }
