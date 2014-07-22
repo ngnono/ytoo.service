@@ -123,6 +123,7 @@
     <Compile Include="ESModel\ESComment.cs" />
     <Compile Include="ESModel\ESEventType.cs" />
     <Compile Include="ESModel\ESHotword.cs" />
+    <Compile Include="ESModel\ESIMSTag.cs" />
     <Compile Include="ESModel\ESProduct.cs" />
     <Compile Include="ESModel\ESStockPropertyValue.cs" />
     <Compile Include="ESModel\ESProductPropertyValue.cs" />

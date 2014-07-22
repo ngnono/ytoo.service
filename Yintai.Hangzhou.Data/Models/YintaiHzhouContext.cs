@@ -169,6 +169,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<IMS_SalesCodeEntity> IMS_SalesCode { get; set; }
         public DbSet<IMS_SectionBrandEntity> IMS_SectionBrand { get; set; }
         public DbSet<IMS_SectionOperatorEntity> IMS_SectionOperator { get; set; }
+        public DbSet<IMS_TagEntity> IMS_Tag { get; set; }
         public DbSet<InboundPackageEntity> InboundPackages { get; set; }
         public DbSet<InventoryEntity> Inventories { get; set; }
         public DbSet<JobSuccessHistoryEntity> JobSuccessHistories { get; set; }
@@ -225,6 +226,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<PointHistoryEntity> PointHistories { get; set; }
         public DbSet<PointOrderRuleEntity> PointOrderRules { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<Product2IMSTagEntity> Product2IMSTag { get; set; }
         public DbSet<ProductCode2StoreCodeEntity> ProductCode2StoreCode { get; set; }
         public DbSet<ProductMapEntity> ProductMaps { get; set; }
         public DbSet<ProductPropertyEntity> ProductProperties { get; set; }
@@ -329,6 +331,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new IMS_SalesCodeEntityMap());
             modelBuilder.Configurations.Add(new IMS_SectionBrandEntityMap());
             modelBuilder.Configurations.Add(new IMS_SectionOperatorEntityMap());
+            modelBuilder.Configurations.Add(new IMS_TagEntityMap());
             modelBuilder.Configurations.Add(new InboundPackageEntityMap());
             modelBuilder.Configurations.Add(new InventoryEntityMap());
             modelBuilder.Configurations.Add(new JobSuccessHistoryEntityMap());
@@ -385,6 +388,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new PointHistoryEntityMap());
             modelBuilder.Configurations.Add(new PointOrderRuleEntityMap());
             modelBuilder.Configurations.Add(new ProductEntityMap());
+            modelBuilder.Configurations.Add(new Product2IMSTagEntityMap());
             modelBuilder.Configurations.Add(new ProductCode2StoreCodeEntityMap());
             modelBuilder.Configurations.Add(new ProductMapEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyEntityMap());

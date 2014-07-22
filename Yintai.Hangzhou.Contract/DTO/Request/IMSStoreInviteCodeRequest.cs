@@ -24,11 +24,13 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         [Required(ErrorMessage = "专柜编码必填")]
         [MinLength(1, ErrorMessage = "专柜编码不能为空")]
         public string SectionCode { get; set; }
-        [Required(ErrorMessage = "专柜名称必填")]
-        [MinLength(1, ErrorMessage = "专柜名称不能为空")]
-        public string SectionName { get; set; }
+
         [Required(ErrorMessage = "导购编码必填")]
         [MinLength(1,ErrorMessage="导购编码不能为空")]
         public string OperatorCode { get; set; }
+        [Required(ErrorMessage = "营业部门必选")]
+        [Range(1, int.MaxValue)]
+        public int DepartId { get; set; }
+
     }
 }

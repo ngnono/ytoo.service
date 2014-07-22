@@ -238,7 +238,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                  OperatorCode = request.OperatorCode,
                   RequestType = (int)InviteCodeRequestType.Daogou,
                    SectionCode= request.SectionCode,
-                    SectionName = request.SectionName,
                      Status = (int)InviteCodeRequestStatus.Requesting,
                       StoreId = request.StoreId,
                        UserId = authuid.Value

@@ -31,6 +31,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IResourceRepository _resourceRepo;
         private IEFRepository<ProductCode2StoreCodeEntity> _productCodeRepo;
         private ComboService _comboService;
+        private IEFRepository<Product2IMSTagEntity> _productTagRepo;
         public ProductController(IResourceService resourceService
             , IProductRepository productRepo
             , IProductPropertyRepository productPropertyRepo
@@ -38,7 +39,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             , IInventoryRepository inventoryRepo
             , IResourceRepository resourceRepo
             , IEFRepository<ProductCode2StoreCodeEntity> productCodeRepo
-            ,ComboService comboService)
+            ,ComboService comboService
+            ,IEFRepository<Product2IMSTagEntity> productTagRepo)
 
         {
             _resourceService = resourceService;
@@ -49,6 +51,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _resourceRepo = resourceRepo;
             _productCodeRepo = productCodeRepo;
             _comboService = comboService;
+            _productTagRepo = productTagRepo;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Create(Yintai.Hangzhou.Contract.DTO.Request.IMSProductCreateRequest request, int authuid)
@@ -122,6 +125,17 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     UpdateUser = authuid,
                     SectionId = assocateEntity.SectionId
                 });
+                if (request.Tag_Ids != null &&
+                    request.Tag_Ids.Length > 0)
+                {
+                    foreach (var tag in request.Tag_Ids)
+                    {
+                        _productTagRepo.Insert(new Product2IMSTagEntity() { 
+                             IMSTagId = tag,
+                             ProductId = productEntity.Id
+                        });
+                    }
+                }
                 //step2: create product color property
                 var propertyEntity = _productPropertyRepo.Insert(new ProductPropertyEntity()
                 {
@@ -279,6 +293,23 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 productcodeEntity.UpdateDate = DateTime.Now;
                 _productCodeRepo.Update(productcodeEntity);
 
+                foreach (var oldTag in Context.Set<Product2IMSTagEntity>()
+                                            .Where(p => p.ProductId == request.Id))
+                {
+                    _productTagRepo.Delete(oldTag);
+                }
+                if (request.Tag_Ids != null &&
+                    request.Tag_Ids.Length > 0)
+                {
+                    foreach (var tag in request.Tag_Ids)
+                    {
+                        _productTagRepo.Insert(new Product2IMSTagEntity()
+                        {
+                            IMSTagId = tag,
+                            ProductId = productEntity.Id
+                        });
+                    }
+                }
                 //step2: update product color property
                 if (!string.IsNullOrEmpty(request.Color_Str))
                 {
@@ -466,7 +497,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     SizeValueId = csv.PPV.Id,
                                     Inventory = csv.I.Amount
                                 });
-                                   
+                                p.IMS_Tags = Context.Set<Product2IMSTagEntity>()
+                                             .Where(pi => pi.ProductId == id)
+                                            .Join(Context.Set<IMS_TagEntity>().Where(it => it.Status == (int)DataStatus.Normal), o => o.IMSTagId, i => i.Id, (o, i) => i)
+                                            .Select(it => it.Id);
                                 if (productEntity.PR != null)
                                 {
                                     p.Images = productEntity.PR.Select(pr => new IMSSelfImageResponse() { 
