@@ -84,9 +84,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Banner.cs" />
+    <Compile Include="Models\Department.cs" />
     <Compile Include="Models\IMS_InviteCodeRequest.cs" />
     <Compile Include="Models\IMS_Tag.cs" />
     <Compile Include="Models\MappedProductBackup.cs" />
+    <Compile Include="Models\Mapping\DepartmentMap.cs" />
     <Compile Include="Models\Mapping\IMS_InviteCodeRequestMap.cs" />
     <Compile Include="Models\Mapping\IMS_TagMap.cs" />
     <Compile Include="Models\Mapping\Map4CategoryMap.cs" />

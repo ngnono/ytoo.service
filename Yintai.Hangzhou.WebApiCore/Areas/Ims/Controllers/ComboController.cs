@@ -66,6 +66,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                  return this.RenderError(r => r.Message = "组合必须图片");
 
              var price = products.Sum(p => p.Price);
+             var unitprice = products.Sum(p => p.UnitPrice);
              if (request.Has_Discount && !(request.Discount < price && request.Discount > 0))
                  return this.RenderError(r => r.Message = "商品组合的折扣必须大于0，小于商品总价");
             var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
@@ -81,6 +82,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     Desc = request.Desc,
                     OnlineDate = DateTime.Now,
                     Price = price,
+                    UnitPrice = unitprice,
                     Private2Name = request.Private_To ?? string.Empty,
                     Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
@@ -171,6 +173,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 {
                     var products = Context.Set<ProductEntity>().Where(p => request.ProductIds.Contains(p.Id));
                     comboEntity.Price = products.Sum(p => p.Price);
+                    comboEntity.UnitPrice = products.Sum(p => p.UnitPrice);
                     _combo2productRepo.Delete(icp => icp.ComboId == comboEntity.Id);
                     foreach (var product in products)
                     {

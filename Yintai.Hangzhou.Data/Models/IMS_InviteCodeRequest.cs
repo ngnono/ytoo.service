@@ -11,7 +11,8 @@ namespace Yintai.Hangzhou.Data.Models
         public string SectionCode { get; set; }
         public string SectionName { get; set; }
         public string OperatorCode { get; set; }
-        public Nullable<int> StoreId { get; set; }
+        public int StoreId { get; set; }
+        public int DepartmentId { get; set; }
         public int RequestType { get; set; }
         public int CreateUser { get; set; }
         public System.DateTime CreateDate { get; set; }
@@ -23,6 +24,9 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<int> ApprovedBy { get; set; }
         public Nullable<System.DateTime> ApprovedDate { get; set; }
         public string RejectReason { get; set; }
+        public string IdCard { get; set; }
+        public Nullable<int> ApprovedNotificationTimes { get; set; }
+        public Nullable<int> DemotionNotificationTimes { get; set; }
 
         #region Overrides of BaseEntity
 

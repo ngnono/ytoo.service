@@ -20,16 +20,22 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .HasMaxLength(50);
 
             this.Property(t => t.SectionCode)
+                .IsRequired()
                 .HasMaxLength(50);
 
             this.Property(t => t.SectionName)
+                .IsRequired()
                 .HasMaxLength(50);
 
             this.Property(t => t.OperatorCode)
+                .IsRequired()
                 .HasMaxLength(50);
 
             this.Property(t => t.RejectReason)
                 .HasMaxLength(50);
+
+            this.Property(t => t.IdCard)
+                .HasMaxLength(18);
 
             // Table & Column Mappings
             this.ToTable("IMS_InviteCodeRequest");
@@ -40,6 +46,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.SectionName).HasColumnName("SectionName");
             this.Property(t => t.OperatorCode).HasColumnName("OperatorCode");
             this.Property(t => t.StoreId).HasColumnName("StoreId");
+            this.Property(t => t.DepartmentId).HasColumnName("DepartmentId");
             this.Property(t => t.RequestType).HasColumnName("RequestType");
             this.Property(t => t.CreateUser).HasColumnName("CreateUser");
             this.Property(t => t.CreateDate).HasColumnName("CreateDate");
@@ -51,6 +58,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ApprovedBy).HasColumnName("ApprovedBy");
             this.Property(t => t.ApprovedDate).HasColumnName("ApprovedDate");
             this.Property(t => t.RejectReason).HasColumnName("RejectReason");
+            this.Property(t => t.IdCard).HasColumnName("IdCard");
+            this.Property(t => t.ApprovedNotificationTimes).HasColumnName("ApprovedNotificationTimes");
+            this.Property(t => t.DemotionNotificationTimes).HasColumnName("DemotionNotificationTimes");
 		Init();
         }
 
