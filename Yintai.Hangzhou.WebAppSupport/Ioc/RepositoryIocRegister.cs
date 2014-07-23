@@ -115,6 +115,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
 
             Current.Register<IEFRepository<WX_MenuEntity>, EFRepository<WX_MenuEntity>>();
             Current.Register<IEFRepository<Product2IMSTagEntity>, EFRepository<Product2IMSTagEntity>>();
+            Current.Register<IEFRepository<SectionEntity>, EFRepository<SectionEntity>>();
         }
 
         #endregion
