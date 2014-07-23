@@ -75,7 +75,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public decimal ActualPrice { get {
             return Price - Discount;
         } }
-
+       
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
         [IgnoreDataMember]

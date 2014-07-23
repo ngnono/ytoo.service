@@ -114,6 +114,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IEFRepository<IMS_InviteCodeRequestEntity>, EFRepository<IMS_InviteCodeRequestEntity>>();
 
             Current.Register<IEFRepository<WX_MenuEntity>, EFRepository<WX_MenuEntity>>();
+            Current.Register<IEFRepository<Product2IMSTagEntity>, EFRepository<Product2IMSTagEntity>>();
         }
 
         #endregion

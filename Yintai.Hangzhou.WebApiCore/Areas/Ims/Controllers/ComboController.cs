@@ -273,20 +273,31 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image && r.Status == (int)DataStatus.Normal),
                                         o => o.Id,
                                         i => i.SourceId,
-                                        (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder)})
+                                        (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder) })
                             .GroupJoin(Context.Set<InventoryEntity>(), o => o.P.Id, i => i.ProductId, (o, i) => new
                             {
                                 P = o.P,
                                 PR = o.PR,
                                 PI = i.OrderByDescending(pi => pi.Amount).FirstOrDefault()
                             })
+                            .GroupJoin(Context.Set<Product2IMSTagEntity>()
+                                        .Join(Context.Set<IMS_TagEntity>().Where(it => it.Status == (int)DataStatus.Normal), o => o.IMSTagId, i => i.Id, (o, i) => new { PIT = o, IT = i })
+                                            , o => o.P.Id
+                                            , i => i.PIT.ProductId
+                                            , (o, i) => new { P=o.P,PR=o.PR,PI=o.PI,PIT=i})
                             .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po =>
                             {
-                                po.Images = p.PR.Select(pr => new IMSSelfImageResponse() { 
-                                     Id = pr.Id,
-                                     Name = pr.Name
+                                po.Images = p.PR.Select(pr => new IMSSelfImageResponse()
+                                {
+                                    Id = pr.Id,
+                                    Name = pr.Name
                                 }); ;
-                                po.IsOnline = p.P.Status==(int)DataStatus.Normal && (p.P.Is4Sale??false)==true && p.PI!=null && p.PI.Amount>0;
+                                po.IsOnline = p.P.Status == (int)DataStatus.Normal && (p.P.Is4Sale ?? false) == true && p.PI != null && p.PI.Amount > 0;
+                                if (p.PIT != null)
+                                    po.IMS_Tags = p.PIT.Select(pit => new IMSTagResponse() { 
+                                         Id = pit.IT.Id,
+                                         Name = pit.IT.Name
+                                    });
                             }));
                 oc.Is_Owner = authuid == comboEntity.C.UserId;
                 oc.Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&
