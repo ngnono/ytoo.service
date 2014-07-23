@@ -17,7 +17,7 @@ using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
-    public class AssistantController : RestfulController
+    public partial class AssistantController : RestfulController
     {
         private IEFRepository<IMS_AssociateSaleCodeEntity> _salescodeRepo;
         private IEFRepository<IMS_AssociateItemsEntity> _associateitemRepo;
@@ -31,6 +31,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 private  IEFRepository<IMS_ComboEntity> _comboRepo;
 private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
 private ComboService _comboService;
+        private IEFRepository<IMS_InviteCodeRequestEntity> _inviteCodeRequestRepo;
+        private IEFRepository<SectionEntity> _sectionRepo;
         public AssistantController(IEFRepository<IMS_AssociateSaleCodeEntity> salescodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateitemRepo,
             IEFRepository<IMS_AssociateIncomeRequestEntity> incomerequestRepo,
@@ -42,7 +44,9 @@ private ComboService _comboService;
             IInventoryRepository inventoryRepo,
             IEFRepository<IMS_ComboEntity> comboRepo,
             IEFRepository<IMS_AssociateIncomeEntity> incomeRepo,
-            ComboService comboService
+            ComboService comboService,
+            IEFRepository<IMS_InviteCodeRequestEntity> inviteCodeRequestRepo,
+            IEFRepository<SectionEntity> sectionRepo 
             )
         {
             _salescodeRepo = salescodeRepo;
@@ -57,6 +61,8 @@ private ComboService _comboService;
             _comboRepo = comboRepo;
             _incomeRepo = incomeRepo;
             _comboService = comboService;
+            _inviteCodeRequestRepo = inviteCodeRequestRepo;
+            _sectionRepo = sectionRepo;
         }
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request,int authuid)
