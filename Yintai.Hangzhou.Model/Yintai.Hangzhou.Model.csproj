@@ -121,6 +121,7 @@
     <Compile Include="ESModel\ESBrand.cs" />
     <Compile Include="ESModel\ESCombo.cs" />
     <Compile Include="ESModel\ESComment.cs" />
+    <Compile Include="ESModel\ESDepartment.cs" />
     <Compile Include="ESModel\ESEventType.cs" />
     <Compile Include="ESModel\ESHotword.cs" />
     <Compile Include="ESModel\ESIMSTag.cs" />

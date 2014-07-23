@@ -1,4 +1,5 @@
 ﻿using com.intime.fashion.common;
+using com.intime.fashion.webapi.domain.Request.Assistant;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,10 +56,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         {
             var linq = Context.Set<UserEntity>().Where(u => u.Id == authuid.Value)
                        .Join(Context.Set<IMS_AssociateEntity>(), o => o.Id, i => i.UserId, (o, i) => i).First();
-           
-            var store = GetStoreById(linq.Id,authuid.Value);
 
-            return this.RenderSuccess<IMSStoreDetailResponse>(m => m.Data =store);
+            var store = GetStoreById(linq.Id, authuid.Value);
+
+            return this.RenderSuccess<IMSStoreDetailResponse>(m => m.Data = store);
 
         }
 
@@ -111,7 +112,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     Status = (int)DataStatus.Normal,
                     TemplateId = ConfigManager.IMS_DEFAULT_TEMPLATE,
                     UserId = authuid.Value,
-                    StoreId = sectionEntity.StoreId??0,
+                    StoreId = sectionEntity.StoreId ?? 0,
                     SectionId = sectionEntity.Id,
                     OperatorCode = inviteEntity.Sec.OperatorCode
                 });
@@ -159,55 +160,18 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     });
                 }
                 ts.Complete();
-               
+
             }
             var response = _customerService.GetUserInfo(new GetUserInfoRequest
             {
                 AuthUid = authuid.Value
             });
             return this.RenderSuccess<CustomerInfoResponse>(c => c.Data = response.Data);
-           
+
         }
 
         [RestfulAuthorize]
         public ActionResult RequestCode_Basic(IMSStoreInviteCodeBasicRequest request, int? authuid)
-        {
-            if (!ModelState.IsValid)
-            {
-                var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
-                return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
-            }
-            var requestEntity = Context.Set<IMS_InviteCodeRequestEntity>().Where(iv => iv.UserId == authuid.Value
-                                                && iv.Status !=(int)InviteCodeRequestStatus.Reject).FirstOrDefault();
-            if (requestEntity != null)
-            {
-                return this.RenderError(r => r.Message = "用户已申请邀请码，正在处理中...");
-            }
-
-            var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid.Value).FirstOrDefault();
-            if (associateEntity != null)
-            {
-                return this.RenderError(r => r.Message = "用户已开店！");
-            }
-            
-            _inviteRequestRepo.Insert(new IMS_InviteCodeRequestEntity() { 
-                 ContactMobile = request.Mobile,
-                  CreateDate = DateTime.Now,
-                   CreateUser = authuid.Value,
-                    Name = request.Name,
-                    UpdateDate = DateTime.Now,
-                    UpdateUser = authuid.Value,
-                    RequestType = (int)InviteCodeRequestType.Basic,
-                    Status = (int)InviteCodeRequestStatus.Requesting
-                
-            });
-           
-            return this.RenderSuccess<dynamic>(null);
-
-        }
-
-        [RestfulAuthorize]
-        public ActionResult RequestCode_DG(IMSStoreInviteCodeDaogouRequest request, int? authuid)
         {
             if (!ModelState.IsValid)
             {
@@ -235,12 +199,106 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 Name = request.Name,
                 UpdateDate = DateTime.Now,
                 UpdateUser = authuid.Value,
-                 OperatorCode = request.OperatorCode,
-                  RequestType = (int)InviteCodeRequestType.Daogou,
-                   SectionCode= request.SectionCode,
-                     Status = (int)InviteCodeRequestStatus.Requesting,
-                      StoreId = request.StoreId,
-                       UserId = authuid.Value
+                RequestType = (int)InviteCodeRequestType.Basic,
+                Status = (int)InviteCodeRequestStatus.Requesting
+
+            });
+
+            return this.RenderSuccess<dynamic>(null);
+
+        }
+
+        [RestfulAuthorize]
+        public ActionResult RequestCode_DG(IMSStoreInviteCodeDaogouRequest request, int? authuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
+                return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
+            }
+            var requestEntity = Context.Set<IMS_InviteCodeRequestEntity>().Where(iv => iv.UserId == authuid.Value
+                                                && iv.Status != (int)InviteCodeRequestStatus.Reject).FirstOrDefault();
+            if (requestEntity != null)
+            {
+                return this.RenderError(r => r.Message = "用户已申请，正在处理中...");
+            }
+
+            var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid.Value).FirstOrDefault();
+            if (associateEntity != null)
+            {
+                return this.RenderError(r => r.Message = "用户已开店！");
+            }
+            var sectionEntity = Context.Set<SectionEntity>().Where(s => s.Status == (int)DataStatus.Normal
+                    && s.StoreId == request.StoreId
+                    && s.SectionCode == request.SectionCode)
+                    .FirstOrDefault();
+            if (sectionEntity == null)
+                return this.RenderError(r => r.Message = "专柜码不存在！");
+            _inviteRequestRepo.Insert(new IMS_InviteCodeRequestEntity()
+            {
+                ContactMobile = request.Mobile,
+                CreateDate = DateTime.Now,
+                CreateUser = authuid.Value,
+                Name = request.Name,
+                UpdateDate = DateTime.Now,
+                UpdateUser = authuid.Value,
+                OperatorCode = request.OperatorCode,
+                RequestType = (int)InviteCodeRequestType.Daogou,
+                SectionCode = request.SectionCode,
+                Status = (int)InviteCodeRequestStatus.Requesting,
+                StoreId = request.StoreId,
+                DepartmentId = request.DepartId,
+                UserId = authuid.Value
+            });
+
+            return this.RenderSuccess<dynamic>(null);
+
+        }
+
+        [RestfulAuthorize]
+        public ActionResult RequestCode_Upgrade(IMSStoreInviteCodeUpgradeRequest request, int? authuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
+                return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
+            }
+            var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia=>ia.UserId ==authuid && ia.Status==(int)DataStatus.Normal)
+                    .FirstOrDefault();
+            if ((associateEntity.OperateRight & (int)UserOperatorRight.SelfProduct) ==
+                (int)UserOperatorRight.SelfProduct)
+                return this.RenderError(r => r.Message = "用户已有最高权限！");
+          
+            var requestEntity = Context.Set<IMS_InviteCodeRequestEntity>().Where(iv => iv.UserId == authuid.Value
+                                                && iv.Status != (int)InviteCodeRequestStatus.Reject
+                                                && iv.Status !=(int)InviteCodeRequestStatus.Approved).FirstOrDefault();
+            if (requestEntity != null)
+            {
+                return this.RenderError(r => r.Message = "用户已申请，正在处理中...");
+            }
+
+            var sectionEntity = Context.Set<SectionEntity>().Where(s => s.Status == (int)DataStatus.Normal
+                    && s.StoreId == request.StoreId
+                    && s.SectionCode == request.SectionCode)
+                    .FirstOrDefault();
+            if (sectionEntity == null)
+                return this.RenderError(r => r.Message = "专柜码不存在！");
+
+            _inviteRequestRepo.Insert(new IMS_InviteCodeRequestEntity()
+            {
+                ContactMobile = request.Mobile,
+                CreateDate = DateTime.Now,
+                CreateUser = authuid.Value,
+                Name = request.Name,
+                UpdateDate = DateTime.Now,
+                UpdateUser = authuid.Value,
+                OperatorCode = request.OperatorCode,
+                RequestType = (int)InviteCodeRequestType.Daogou,
+                SectionCode = request.SectionCode,
+                Status = (int)InviteCodeRequestStatus.Requesting,
+                StoreId = request.StoreId,
+                DepartmentId = request.DepartId,
+                UserId = authuid.Value
             });
 
             return this.RenderSuccess<dynamic>(null);
@@ -250,21 +308,21 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult Detail(int id, int? authuid)
         {
-            var store = GetStoreById(id,authuid.Value);
+            var store = GetStoreById(id, authuid.Value);
             return this.RenderSuccess<IMSStoreDetailResponse>(m => m.Data = store);
 
         }
 
-        private IMSStoreDetailResponse GetStoreById(int storeId,int authuid)
+        private IMSStoreDetailResponse GetStoreById(int storeId, int authuid)
         {
             var linq = Context.Set<UserEntity>()
-                       .Join(Context.Set<IMS_AssociateEntity>().Where(ia=>ia.Id == storeId), o => o.Id, i => i.UserId, (o, i) => new { U = o, Store = i }).First();
+                       .Join(Context.Set<IMS_AssociateEntity>().Where(ia => ia.Id == storeId), o => o.Id, i => i.UserId, (o, i) => new { U = o, Store = i }).First();
             var giftCards = Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.AssociateId == linq.Store.Id
                                              && iai.ItemType == (int)ComboType.GiftCard
                                              && iai.Status == (int)DataStatus.Normal)
                                  .Join(Context.Set<IMS_GiftCardEntity>(), o => o.ItemId, i => i.Id, (o, i) => i)
                                  .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.GiftCard && r.Status == (int)DataStatus.Normal),
-                                                 o => o.Id, i => i.SourceId, (o, i) => new { G = o, R = i.OrderByDescending(ir => ir.SortOrder).ThenBy(ir=>ir.Id).FirstOrDefault() })
+                                                 o => o.Id, i => i.SourceId, (o, i) => new { G = o, R = i.OrderByDescending(ir => ir.SortOrder).ThenBy(ir => ir.Id).FirstOrDefault() })
                                  .Select(l => new IMSGiftCard()
                                  {
                                      Id = l.G.Id,
@@ -274,7 +332,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var combos = Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.AssociateId == linq.Store.Id
                                              && iai.ItemType == (int)ComboType.Product
                                              && iai.Status == (int)DataStatus.Normal)
-                                 .Join(Context.Set<IMS_ComboEntity>().Where(c=>!c.ExpireDate.HasValue || c.ExpireDate>DateTime.Now), o => o.ItemId, i => i.Id, (o, i) => i)
+                                 .Join(Context.Set<IMS_ComboEntity>().Where(c => !c.ExpireDate.HasValue || c.ExpireDate > DateTime.Now), o => o.ItemId, i => i.Id, (o, i) => i)
                                  .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Combo && r.Status == (int)DataStatus.Normal),
                                                  o => o.Id, i => i.SourceId, (o, i) => new { C = o, R = i.OrderByDescending(ir => ir.SortOrder).ThenBy(ir => ir.Id).FirstOrDefault() })
                                  .GroupJoin(Context.Set<IMS_Combo2ProductEntity>()
@@ -286,7 +344,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                           , o => o.C.Id
                                           , i => i.P.ComboId
                                           , (o, i) => new { C = o.C, CR = o.R, P = i })
-                                 .OrderByDescending(ia=>ia.C.CreateDate)
+                                 .OrderByDescending(ia => ia.C.CreateDate)
                                  .Select(l => new IMSCombo()
                                   {
                                       Id = l.C.Id,
@@ -311,7 +369,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     f.FavoriteSourceType == (int)SourceType.Store &&
                                     f.FavoriteSourceId == storeId &&
                                     f.Status == (int)DataStatus.Normal),
-                Template_Id = linq.Store.TemplateId??1
+                Template_Id = linq.Store.TemplateId ?? 1
             };
         }
     }

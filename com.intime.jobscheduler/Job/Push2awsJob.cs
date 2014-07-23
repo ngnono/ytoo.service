@@ -484,60 +484,26 @@ namespace com.intime.jobscheduler.Job
                 if (_isActiveOnly)
                     linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
                 var prods = from s in linq
-                            let resource = (from r in db.Resources
-                                            where r.SourceId == s.Id
-                                            && r.SourceType == (int)SourceType.StoreLogo
-                                            select new ESResource()
-                                            {
-                                                Domain = r.Domain,
-                                                Name = r.Name,
-                                                SortOrder = r.SortOrder,
-                                                IsDefault = r.IsDefault,
-                                                Type = r.Type,
-                                                Width = r.Width,
-                                                Height = r.Height
-                                            })
                             where (s.CreatedDate >= benchDate || s.UpdatedDate >= benchDate)
-                            select new ESStore()
-                            {
-                                Id = s.Id,
-                                Name = s.Name,
-                                Description = s.Description,
-                                Address = s.Location,
-                                Location = new Location
-                                {
-                                    Lon = s.Longitude,
-                                    Lat = s.Latitude
-                                },
-                                GpsAlt = s.GpsAlt,
-                                GpsLat = s.GpsLat,
-                                GpsLng = s.GpsLng,
-                                Tel = s.Tel,
-                                Status = s.IsOnLine??0,
-                                Resource = resource
-
-                            };
+                            select s;
 
                 int totalCount = prods.Count();
 
+                var service = SearchLogic.GetService(IndexSourceType.Store);
+
                 while (cursor < totalCount)
                 {
-                    var result = client.IndexMany(prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size));
-                    if (result != null && !result.IsValid)
+                    foreach (var target in prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size))
                     {
-                        foreach (var item in result.Items)
+                        using (var tls = new ScopedLifetimeDbContextManager())
                         {
-                            if (string.IsNullOrEmpty(item.Error))
+                            if (service.IndexSingle(target.Id))
                                 successCount++;
-                            else
-                                log.Info(string.Format("id index failed:{0}", item.Id));
                         }
                     }
-                    else
-                        successCount += result.Items.Count();
-
                     cursor += size;
                 }
+               
 
             }
             sw.Stop();

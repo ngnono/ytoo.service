@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yintai.Hangzhou.Model.ESModel
+namespace Yintai.Hangzhou.Model.ES
 {
    public class ESIMSTag
     {

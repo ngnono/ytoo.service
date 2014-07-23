@@ -9,6 +9,7 @@ namespace Yintai.Hangzhou.Model.Enums
     public enum InviteCodeRequestStatus
     {
         Requesting = 1,
+        Approved = 10,
         Reject = 99
     }
 }
