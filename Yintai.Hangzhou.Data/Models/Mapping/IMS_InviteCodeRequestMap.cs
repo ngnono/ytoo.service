@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
@@ -28,6 +28,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.OperatorCode)
                 .HasMaxLength(50);
 
+            this.Property(t => t.RejectReason)
+                .HasMaxLength(50);
+
             // Table & Column Mappings
             this.ToTable("IMS_InviteCodeRequest");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -44,6 +47,10 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.UserId).HasColumnName("UserId");
+            this.Property(t => t.Approved).HasColumnName("Approved");
+            this.Property(t => t.ApprovedBy).HasColumnName("ApprovedBy");
+            this.Property(t => t.ApprovedDate).HasColumnName("ApprovedDate");
+            this.Property(t => t.RejectReason).HasColumnName("RejectReason");
 		Init();
         }
 

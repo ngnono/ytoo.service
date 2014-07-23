@@ -123,6 +123,7 @@
     <Compile Include="Areas\Gg\Controllers\RMAController.cs" />
     <Compile Include="Areas\Ims\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Ims\Controllers\AssistantController.cs" />
+    <Compile Include="Areas\Ims\Controllers\AssistantController~.cs" />
     <Compile Include="Areas\Ims\Controllers\ComboController.cs" />
     <Compile Include="Areas\Ims\Controllers\WeiXinController.cs" />
     <Compile Include="Areas\Ims\Controllers\GiftCardController.cs" />

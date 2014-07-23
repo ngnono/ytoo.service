@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Request\Assistant\DaogouApplicationRequest.cs" />
     <Compile Include="Request\BaseRequest.cs" />
     <Compile Include="Request\IMSOrderFillPromotionRequest.cs" />
     <Compile Include="Response\BaseResponse.cs" />

@@ -19,6 +19,10 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime UpdateDate { get; set; }
         public int Status { get; set; }
         public int UserId { get; set; }
+        public Nullable<bool> Approved { get; set; }
+        public Nullable<int> ApprovedBy { get; set; }
+        public Nullable<System.DateTime> ApprovedDate { get; set; }
+        public string RejectReason { get; set; }
 
         #region Overrides of BaseEntity
 
