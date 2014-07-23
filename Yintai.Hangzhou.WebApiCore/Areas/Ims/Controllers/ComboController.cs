@@ -287,9 +287,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                         .Join(Context.Set<IMS_TagEntity>().Where(it => it.Status == (int)DataStatus.Normal), o => o.IMSTagId, i => i.Id, (o, i) => new { PIT = o, IT = i })
                                             , o => o.P.Id
                                             , i => i.PIT.ProductId
-                                            , (o, i) => new { P=o.P,PR=o.PR,PI=o.PI,PIT=i})
+                                            , (o, i) => new { P = o.P, PR = o.PR, PI = o.PI, PIT = i })
+                            .Join(Context.Set<BrandEntity>(), o => o.P.Brand_Id, i => i.Id, (o, i) => new { P = o.P, PR = o.PR, PI = o.PI, PIT = o.PIT,B=i})
                             .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po =>
                             {
+                                po.Brand_Id = p.B.Id;
+                                po.Brand_Name = p.B.Name;
                                 po.Images = p.PR.Select(pr => new IMSSelfImageResponse()
                                 {
                                     Id = pr.Id,
@@ -297,9 +300,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 }); ;
                                 po.IsOnline = p.P.Status == (int)DataStatus.Normal && (p.P.Is4Sale ?? false) == true && p.PI != null && p.PI.Amount > 0;
                                 if (p.PIT != null)
-                                    po.IMS_Tags = p.PIT.Select(pit => new IMSTagResponse() { 
-                                         Id = pit.IT.Id,
-                                         Name = pit.IT.Name
+                                    po.IMS_Tags = p.PIT.Select(pit => new IMSTagResponse()
+                                    {
+                                        Id = pit.IT.Id,
+                                        Name = pit.IT.Name
                                     });
                             }));
                 oc.Is_Owner = authuid == comboEntity.C.UserId;
