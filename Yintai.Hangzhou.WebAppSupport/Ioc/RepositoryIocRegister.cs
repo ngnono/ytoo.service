@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Repository.Contract;
