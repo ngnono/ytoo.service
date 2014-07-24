@@ -344,7 +344,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                           , o => o.C.Id
                                           , i => i.P.ComboId
                                           , (o, i) => new { C = o.C, CR = o.R, P = i })
+                                .GroupJoin(Context.Set<IMS_Combo2ProductEntity>()
+                                                .Join(Context.Set<Product2IMSTagEntity>(), o => o.ProductId, i => i.ProductId, (o, i) => new { ICP = o, PIT = i })
+                                                .Join(Context.Set<IMS_TagEntity>().Where(it => it.Status == (int)DataStatus.Normal), o => o.PIT.IMSTagId, i => i.Id, (o, i) => new { ICP = o.ICP, IT = i }),
+                                            o => o.C.Id,
+                                            i => i.ICP.ComboId,
+                                            (o, i) => new { C = o.C, CR = o.CR, P = o.P,IT=i})
                                  .OrderByDescending(ia => ia.C.CreateDate)
+                                 .ToList()
                                  .Select(l => new IMSCombo()
                                   {
                                       Id = l.C.Id,
@@ -354,7 +361,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                       ProductImageUrls = l.P.Select(lpr => lpr.R.Name),
                                       ExpireDate = l.C.ExpireDate,
                                       IsInPromotion = l.C.IsInPromotion,
-                                      DiscountAmount = l.C.DiscountAmount
+                                      DiscountAmount = l.C.DiscountAmount,
+                                      Tags = l.IT.Distinct().Select(it=>new IMSTagResponse(){
+                                         Id = it.IT.Id,
+                                         Name = it.IT.Name
+                                      })
                                   });
             return new IMSStoreDetailResponse()
             {
