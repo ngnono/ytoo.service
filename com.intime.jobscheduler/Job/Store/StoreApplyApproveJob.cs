@@ -71,89 +71,88 @@ namespace com.intime.jobscheduler.Job.Store
             using (var Context = DbContextHelper.GetDbContext())
             {
                 var exitUserEntity = Context.Set<UserEntity>().Find(storeRequest.UserId);
-                if (exitUserEntity.UserLevel == (int)UserLevel.DaoGou)
-                    return this.RenderError(r => r.Message = "用户已经开过店了！");
+
                 //steps:
-                // 1. read initial info from invite code tables
-                // 2. initialize associate tables
-                using (var ts = new TransactionScope())
-                {
-                    var initialBrands = Context.Set<IMS_SectionBrandEntity>().Where(isb => isb.SectionId == inviteEntity.Sec.SectionId);
-                    var initialSaleCodes = Context.Set<IMS_SalesCodeEntity>().Where(isc => isc.SectionId == inviteEntity.Sec.SectionId);
-                    var sectionEntity = Context.Set<SectionEntity>().Find(inviteEntity.Sec.SectionId);
-                    //2.0 disable invite code
-                    inviteEntity.Inv.IsBinded = 1;
-                    inviteEntity.Inv.UpdateDate = DateTime.Now;
-                    inviteEntity.Inv.UserId = authuid.Value;
-                    _inviteRepo.Update(inviteEntity.Inv);
+                //// 1. read initial info from invite code tables
+                //// 2. initialize associate tables
+                //using (var ts = new TransactionScope())
+                //{
+                //    var initialBrands = Context.Set<IMS_SectionBrandEntity>().Where(isb => isb.SectionId == inviteEntity.Sec.SectionId);
+                //    var initialSaleCodes = Context.Set<IMS_SalesCodeEntity>().Where(isc => isc.SectionId == inviteEntity.Sec.SectionId);
+                //    var sectionEntity = Context.Set<SectionEntity>().Find(inviteEntity.Sec.SectionId);
+                //    //2.0 disable invite code
+                //    inviteEntity.Inv.IsBinded = 1;
+                //    inviteEntity.Inv.UpdateDate = DateTime.Now;
+                //    inviteEntity.Inv.UserId = authuid.Value;
+                //    _inviteRepo.Update(inviteEntity.Inv);
 
-                    //2.1 update user level to daogou
-                    exitUserEntity.UserLevel = (int)UserLevel.DaoGou;
-                    exitUserEntity.UpdatedDate = DateTime.Now;
-                    exitUserEntity.UpdatedUser = exitUserEntity.Id;
-                    if (string.IsNullOrEmpty(exitUserEntity.Logo))
-                        exitUserEntity.Logo = ConfigManager.IMS_DEFAULT_LOGO;
-                    _customerRepo.Update(exitUserEntity);
+                //    //2.1 update user level to daogou
+                //    exitUserEntity.UserLevel = (int)UserLevel.DaoGou;
+                //    exitUserEntity.UpdatedDate = DateTime.Now;
+                //    exitUserEntity.UpdatedUser = exitUserEntity.Id;
+                //    if (string.IsNullOrEmpty(exitUserEntity.Logo))
+                //        exitUserEntity.Logo = ConfigManager.IMS_DEFAULT_LOGO;
+                //    _customerRepo.Update(exitUserEntity);
 
-                    //2.2 create daogou's associate store
-                    var assocateEntity = _associateRepo.Insert(new IMS_AssociateEntity()
-                    {
-                        CreateDate = DateTime.Now,
-                        CreateUser = authuid.Value,
-                        OperateRight = inviteEntity.Inv.AuthRight.Value,
-                        Status = (int)DataStatus.Normal,
-                        TemplateId = ConfigManager.IMS_DEFAULT_TEMPLATE,
-                        UserId = authuid.Value,
-                        StoreId = sectionEntity.StoreId ?? 0,
-                        SectionId = sectionEntity.Id,
-                        OperatorCode = inviteEntity.Sec.OperatorCode
-                    });
-                    //2.3 create daogou's brands
-                    foreach (var brand in initialBrands)
-                    {
-                        _associateBrandRepo.Insert(new IMS_AssociateBrandEntity()
-                        {
-                            AssociateId = assocateEntity.Id,
-                            BrandId = brand.BrandId,
-                            CreateDate = DateTime.Now,
-                            CreateUser = authuid.Value,
-                            Status = (int)DataStatus.Normal,
-                            UserId = authuid.Value
-                        });
-                    }
-                    //2.4 create daogou's sales code
-                    foreach (var saleCode in initialSaleCodes)
-                    {
-                        _associateSaleCodeRepo.Insert(new IMS_AssociateSaleCodeEntity()
-                        {
-                            AssociateId = assocateEntity.Id,
-                            Code = saleCode.Code,
-                            CreateDate = DateTime.Now,
-                            CreateUser = authuid.Value,
-                            Status = (int)DataStatus.Normal,
-                            UserId = authuid.Value
+                //    //2.2 create daogou's associate store
+                //    var assocateEntity = _associateRepo.Insert(new IMS_AssociateEntity()
+                //    {
+                //        CreateDate = DateTime.Now,
+                //        CreateUser = authuid.Value,
+                //        OperateRight = inviteEntity.Inv.AuthRight.Value,
+                //        Status = (int)DataStatus.Normal,
+                //        TemplateId = ConfigManager.IMS_DEFAULT_TEMPLATE,
+                //        UserId = authuid.Value,
+                //        StoreId = sectionEntity.StoreId ?? 0,
+                //        SectionId = sectionEntity.Id,
+                //        OperatorCode = inviteEntity.Sec.OperatorCode
+                //    });
+                //    //2.3 create daogou's brands
+                //    foreach (var brand in initialBrands)
+                //    {
+                //        _associateBrandRepo.Insert(new IMS_AssociateBrandEntity()
+                //        {
+                //            AssociateId = assocateEntity.Id,
+                //            BrandId = brand.BrandId,
+                //            CreateDate = DateTime.Now,
+                //            CreateUser = authuid.Value,
+                //            Status = (int)DataStatus.Normal,
+                //            UserId = authuid.Value
+                //        });
+                //    }
+                //    //2.4 create daogou's sales code
+                //    foreach (var saleCode in initialSaleCodes)
+                //    {
+                //        _associateSaleCodeRepo.Insert(new IMS_AssociateSaleCodeEntity()
+                //        {
+                //            AssociateId = assocateEntity.Id,
+                //            Code = saleCode.Code,
+                //            CreateDate = DateTime.Now,
+                //            CreateUser = authuid.Value,
+                //            Status = (int)DataStatus.Normal,
+                //            UserId = authuid.Value
 
-                        });
-                    }
-                    //2.5 create daogou's giftcard
-                    var giftCardEntity = Context.Set<IMS_GiftCardEntity>().Where(igc => igc.Status == (int)DataStatus.Normal).FirstOrDefault();
-                    if (giftCardEntity != null)
-                    {
-                        _associateItemRepo.Insert(new IMS_AssociateItemsEntity()
-                        {
-                            AssociateId = assocateEntity.Id,
-                            CreateDate = DateTime.Now,
-                            CreateUser = authuid.Value,
-                            ItemId = giftCardEntity.Id,
-                            ItemType = (int)ComboType.GiftCard,
-                            Status = (int)DataStatus.Normal,
-                            UpdateDate = DateTime.Now,
-                            UpdateUser = authuid.Value
-                        });
-                    }
-                    ts.Complete();
+                //        });
+                //    }
+                //    //2.5 create daogou's giftcard
+                //    var giftCardEntity = Context.Set<IMS_GiftCardEntity>().Where(igc => igc.Status == (int)DataStatus.Normal).FirstOrDefault();
+                //    if (giftCardEntity != null)
+                //    {
+                //        _associateItemRepo.Insert(new IMS_AssociateItemsEntity()
+                //        {
+                //            AssociateId = assocateEntity.Id,
+                //            CreateDate = DateTime.Now,
+                //            CreateUser = authuid.Value,
+                //            ItemId = giftCardEntity.Id,
+                //            ItemType = (int)ComboType.GiftCard,
+                //            Status = (int)DataStatus.Normal,
+                //            UpdateDate = DateTime.Now,
+                //            UpdateUser = authuid.Value
+                //        });
+                //    }
+                //    ts.Complete();
 
-                }
+                //}
             }
         }
     }
