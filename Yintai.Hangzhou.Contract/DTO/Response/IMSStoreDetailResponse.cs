@@ -104,6 +104,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
                 return expireSpan < 0 ? 0 : expireSpan;
             }
         }
+        [DataMember(Name="tags")]
+        public IEnumerable<IMSTagResponse> Tags { get; set; }
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
         [IgnoreDataMember]
