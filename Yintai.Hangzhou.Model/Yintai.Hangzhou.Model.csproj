@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumExtension.cs" />
     <Compile Include="Enums\AccountType.cs" />
     <Compile Include="Enums\AssociateFavorType.cs" />
     <Compile Include="Enums\AssociateIncomeRequestStatus.cs" />

@@ -355,6 +355,45 @@ private ComboService _comboService;
             return this.RenderSuccess<PagerInfoResponse<IMSIncomeReqDetailResponse>>(c => c.Data = response);
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Income_History(PagerInfoRequest request, int authuid){
+            var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
+                            Where(iair => iair.AssociateUserId == authuid && iair.Status > (int)AssociateIncomeStatus.Create && iair.SourceType == (int)AssociateOrderType.GiftCard)
+                            .Join(Context.Set<IMS_GiftCardOrderEntity>(), o => o.SourceNo, i => i.No, (o, i) => new IMSIncomeDetailResponse
+                            {
+                                CreateDate = o.CreateDate,
+                                Id = i.Id,
+                                AssociateIncome = o.AssociateIncome,
+                                SourceNo = o.SourceNo,
+                                TotalAmount = i.Amount,
+                                SourceType = o.SourceType,
+                                Status = o.Status
+                            });
+
+            var linq2 = Context.Set<IMS_AssociateIncomeHistoryEntity>().
+                        Where(iair => iair.AssociateUserId == authuid && iair.Status > (int)AssociateIncomeStatus.Create && iair.SourceType == (int)AssociateOrderType.Product)
+                        .Join(Context.Set<OrderEntity>(), o => o.SourceNo, i => i.OrderNo, (o, i) => new IMSIncomeDetailResponse
+                        {
+                            CreateDate = o.CreateDate,
+                            Id = i.Id,
+                            AssociateIncome = o.AssociateIncome,
+                            SourceNo = o.SourceNo,
+                            TotalAmount = i.TotalAmount,
+                            SourceType = o.SourceType,
+                            Status = o.Status
+                        });
+            linq = linq.Union(linq2);
+            int totalCount = linq.Count();
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(l => l.CreateDate).Skip(skipCount).Take(request.Pagesize);
+            var result = linq.ToList();
+            var response = new PagerInfoResponse<IMSIncomeDetailResponse>(request.PagerRequest, totalCount)
+            {
+                Items = result.ToList()
+            };
+
+            return this.RenderSuccess<PagerInfoResponse<IMSIncomeDetailResponse>>(c => c.Data = response);
+        }
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Income_Frozen(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
