@@ -193,6 +193,7 @@
     <Compile Include="Job\Erp\ProductInventorySyncJob.cs" />
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="Job\Push2awsJob.cs" />
+    <Compile Include="Job\Store\StoreApplyApproveJob.cs" />
     <Compile Include="Job\Wgw\BrandSyncJob.cs" />
     <Compile Include="Job\Wgw\GetItemMultiStockJob.cs" />
     <Compile Include="Job\Wgw\ProductImageSyncJob.cs" />
