@@ -332,7 +332,8 @@ private ComboService _comboService;
                 received_amount = incomeEntity.ReceivedAmount,
                 frozen_amount = incomeEntity.TotalAmount - incomeEntity.AvailableAmount-incomeEntity.RequestAmount-incomeEntity.ReceivedAmount,
                 request_amount = incomeEntity.RequestAmount,
-                avail_amount = incomeEntity.AvailableAmount
+                avail_amount = incomeEntity.AvailableAmount,
+                total_amount = incomeEntity.TotalAmount
 
             });
         }
