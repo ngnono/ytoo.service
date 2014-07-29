@@ -355,6 +355,24 @@ private ComboService _comboService;
             return this.RenderSuccess<PagerInfoResponse<IMSIncomeReqDetailResponse>>(c => c.Data = response);
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Income_Requesting(PagerInfoRequest request, int authuid)
+        {
+            var linq = Context.Set<IMS_AssociateIncomeRequestEntity>().
+                        Where(iair => iair.UserId == authuid && 
+                               (iair.Status == (int)AssociateIncomeTransferStatus.RequestSent ||
+                               iair.Status ==(int)AssociateIncomeTransferStatus.NotStart));
+            int totalCount = linq.Count();
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(l => l.CreateDate).Skip(skipCount).Take(request.Pagesize);
+            var result = linq.ToList().Select(l => new IMSIncomeReqDetailResponse().FromEntity<IMSIncomeReqDetailResponse>(l));
+            var response = new PagerInfoResponse<IMSIncomeReqDetailResponse>(request.PagerRequest, totalCount)
+            {
+                Items = result.ToList()
+            };
+
+            return this.RenderSuccess<PagerInfoResponse<IMSIncomeReqDetailResponse>>(c => c.Data = response);
+        }
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Income_History(PagerInfoRequest request, int authuid){
             var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
                             Where(iair => iair.AssociateUserId == authuid && iair.Status > (int)AssociateIncomeStatus.Create && iair.SourceType == (int)AssociateOrderType.GiftCard)
