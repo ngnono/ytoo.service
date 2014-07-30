@@ -460,6 +460,8 @@ private ComboService _comboService;
                 return this.RenderError(r => r.Message = "银行卡号不能为空");
             if (string.IsNullOrEmpty(request.User_Name))
                 return this.RenderError(r => r.Message = "银行帐户名不能为空");
+            if (string.IsNullOrEmpty(request.Id_Card)
+                return this.RenderError(r=>r.Message="身份证号码不能为空");
             if (request.Amount <= ConfigManager.BANK_TRANSFER_FEE)
                 return this.RenderError(r => r.Message = string.Format("提现最小金额须大于{0}",ConfigManager.BANK_TRANSFER_FEE));
             var incomeAccountEntity = Context.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == authuid).FirstOrDefault();
@@ -495,7 +497,8 @@ private ComboService _comboService;
                     BankAccountName = request.User_Name,
                     UpdateDate = DateTime.Now,
                     UserId = authuid,
-                    TransferFee = ConfigManager.BANK_TRANSFER_FEE
+                    TransferFee = ConfigManager.BANK_TRANSFER_FEE,
+                    IDCard = request.Id_Card
                 });
 
                 incomeAccountEntity.AvailableAmount -= request.Amount;
@@ -634,7 +637,8 @@ private ComboService _comboService;
                     bank = bankInfo.BankName,
                     bank_code = bankInfo.BankCode,
                     bank_no = bankInfo.BankNo,
-                    user_name = bankInfo.BankAccountName
+                    user_name = bankInfo.BankAccountName,
+                    id_card = bankInfo.IDCard??string.Empty
                 });
             else
                 return this.RenderSuccess<dynamic>(c => c.Data = new { });
