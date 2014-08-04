@@ -349,7 +349,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                                 .Join(Context.Set<IMS_TagEntity>().Where(it => it.Status == (int)DataStatus.Normal), o => o.PIT.IMSTagId, i => i.Id, (o, i) => new { ICP = o.ICP, IT = i }),
                                             o => o.C.Id,
                                             i => i.ICP.ComboId,
-                                            (o, i) => new { C = o.C, CR = o.CR, P = o.P,IT=i})
+                                            (o, i) => new { C = o.C, CR = o.CR, P = o.P, IT = i })
+                                .GroupJoin(Context.Set<IMS_Combo2ProductEntity>()
+                                            .Join(Context.Set<ProductEntity>(),o=>o.ProductId,i=>i.Id,(o,i)=>new {ICP=o,Product=i})
+                                            .Join(Context.Set<BrandEntity>(), o => o.Product.Brand_Id, i => i.Id, (o, i) => new { ICP = o.ICP, Brand = i }),
+                                           o=>o.C.Id,
+                                           i=>i.ICP.ComboId,
+                                           (o,i)=>new {C = o.C, CR = o.CR, P = o.P, IT = o.IT,Brands=i })
                                  .OrderByDescending(ia => ia.C.CreateDate)
                                  .ToList()
                                  .Select(l => new IMSCombo()
@@ -362,10 +368,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                       ExpireDate = l.C.ExpireDate,
                                       IsInPromotion = l.C.IsInPromotion,
                                       DiscountAmount = l.C.DiscountAmount,
-                                      Tags = l.IT.Distinct().Select(it=>new IMSTagResponse(){
-                                         Id = it.IT.Id,
-                                         Name = it.IT.Name
-                                      })
+                                      Tags = l.IT.Select(it => new IMSTagResponse()
+                                      {
+                                          Id = it.IT.Id,
+                                          Name = it.IT.Name
+                                      }).Distinct(),
+                                      Brands = l.Brands.Select(b=>new 
+                                            {Id = b.Brand.Id,Name = b.Brand.Name})
+                                            .Distinct()
                                   });
             return new IMSStoreDetailResponse()
             {

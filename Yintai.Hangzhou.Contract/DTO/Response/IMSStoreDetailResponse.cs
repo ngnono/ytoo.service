@@ -106,6 +106,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         }
         [DataMember(Name="tags")]
         public IEnumerable<IMSTagResponse> Tags { get; set; }
+        [DataMember(Name="brands")]
+        public IEnumerable<dynamic> Brands { get; set; }
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
         [IgnoreDataMember]
