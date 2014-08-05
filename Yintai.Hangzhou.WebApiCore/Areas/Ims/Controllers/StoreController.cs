@@ -295,6 +295,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 OperatorCode = request.OperatorCode,
                 RequestType = (int)InviteCodeRequestType.Daogou,
                 SectionCode = request.SectionCode,
+                SectionName = sectionEntity.Name,
                 Status = (int)InviteCodeRequestStatus.Requesting,
                 StoreId = request.StoreId,
                 DepartmentId = request.DepartId,
