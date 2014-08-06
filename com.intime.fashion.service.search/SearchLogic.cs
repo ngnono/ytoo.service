@@ -50,6 +50,9 @@ namespace com.intime.fashion.service.search
 
         public static bool IndexMany<T>(IEnumerable<T> source) where T:class
         {
+            if (source == null ||
+                source.Count() <= 0)
+                return true;
             var client = GetClient();
             var response = client.IndexMany<T>(source);
             if (!response.IsValid)
