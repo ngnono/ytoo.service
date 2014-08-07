@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
-using com.intime.fashion.data.sync;
+﻿using com.intime.fashion.common;
+using com.intime.fashion.common.message;
+using com.intime.fashion.common.message.Messages;
 using Common.Logging;
 using Quartz;
-using Quartz.Simpl;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Transactions;
+using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 
@@ -17,195 +18,202 @@ namespace com.intime.jobscheduler.Job.Store
 {
     public class StoreApplyApproveJob : IJob
     {
+        private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
         public void Execute(IJobExecutionContext context)
         {
-            ILog logger = LogManager.GetCurrentClassLogger();
-            IApplyInfoStore store = new DefaultApplyInfoStore();
-            IApplyInfoProcessor processor = new DefaultApplyInfoProcessor();
+            int total = 0;
+            int succeedCount = 0;
+            DoQuery(requests => total = requests.Count());
 
-        }
-    }
-
-    public class StoreApplyExecutor
-    {
-        private ILog _logger;
-        private IApplyInfoProcessor _processor;
-        private IApplyInfoStore _store;
-        public StoreApplyExecutor(ILog logger, IApplyInfoStore store, IApplyInfoProcessor processor)
-        {
-            this._logger = logger;
-            this._store = store;
-            this._processor = processor;
-        }
-
-        public void Execute()
-        {
-            int totalCount = 0;
             int cursor = 0;
-            int lastCursor = 0;
-            int pageSize = 20;
-            while (cursor < totalCount)
+
+            JobDataMap data = context.JobDetail.JobDataMap;
+            int size = data.ContainsKey("pageSize") ? data.GetInt("pageSize") : 10;
+
+            while (true)
             {
-                var oneTimeList = _store.FetchRequest(cursor, pageSize, lastCursor);
-                foreach (var entity in oneTimeList)
+                List<IMS_InviteCodeRequestEntity> oneTimeList = null;
+                DoQuery(requests => oneTimeList = requests.OrderBy(x => x.Id).Skip(cursor).Take(size).ToList());
+                if (!oneTimeList.Any())
                 {
-                    try
+                    break;
+                }
+                TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+                var result = oneTimeList.AsParallel().Select(x => Task.Factory.StartNew(() => Initialize(x))).ToArray();
+                Task.WaitAll(result);
+                succeedCount += result.Count(x => x.Result);
+                cursor += size;
+            }
+        }
+
+        private bool Initialize(IMS_InviteCodeRequestEntity request)
+        {
+            using (var ts = new TransactionScope())
+            using (var db = ServiceLocator.Current.Resolve<DbContext>())
+            {
+                var user = db.Set<UserEntity>().FirstOrDefault(x => x.Id == request.UserId);
+                if (user == null)
+                {
+                    Logger.ErrorFormat("Invalid request {0}, user not exists", request.Id);
+                    return false;
+                }
+
+                var requestEntity = db.Set<IMS_InviteCodeRequestEntity>().FirstOrDefault(x => x.Id == request.Id);
+                if (requestEntity == null)
+                {
+                    Logger.ErrorFormat("Invalid request! id {0}", request.Id);
+                    return false;
+                }
+
+                if (requestEntity.Approved.HasValue)
+                {
+                    Logger.ErrorFormat("Entity has been approved! {0}", request.Id);
+                    return false;
+                }
+
+                requestEntity.Approved = true;
+                requestEntity.ApprovedDate = DateTime.Now;
+                requestEntity.ApprovedBy = request.UserId;
+                requestEntity.UpdateDate = DateTime.Now;
+                requestEntity.UpdateUser = request.UserId;
+                requestEntity.Status = (int)InviteCodeRequestStatus.Approved;
+                db.Entry(requestEntity).State = EntityState.Modified;
+
+                if (user.UserLevel != (int)UserLevel.DaoGou)
+                {
+                    user.UserLevel = (int)UserLevel.DaoGou;
+                    user.UpdatedDate = DateTime.Now;
+                    user.UpdatedUser = request.UserId;
+                    user.Logo = ConfigManager.IMS_DEFAULT_LOGO;
+                    user.Mobile = request.ContactMobile;
+                    db.Entry(user).State = EntityState.Modified;
+                }
+
+                var associate = db.Set<IMS_AssociateEntity>().FirstOrDefault(x => x.UserId == request.UserId);
+                if (associate == null)
+                {
+                    associate = CreateAssociate(request);
+                }
+                else
+                {
+                    associate.OperateRight = request.RequestType == (int)InviteCodeRequestType.Daogou ? (int)(UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct) : (int)(UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct);
+                    db.Entry(associate).State = EntityState.Modified;
+                }
+
+                var initialBrands = db.Set<IMS_SectionBrandEntity>().Where(x => x.SectionId == associate.SectionId);
+                foreach (var brand in initialBrands)
+                {
+                    if (db.Set<IMS_AssociateBrandEntity>().Any(x => x.AssociateId == associate.Id && x.BrandId == brand.BrandId && x.Status == 1))
+                        continue;
+                    db.Set<IMS_AssociateBrandEntity>().Add(new IMS_AssociateBrandEntity
                     {
-                        _processor.Process(entity);
-                    }
-                    catch (ApplyInfoProcessException ex)
+                        AssociateId = associate.Id,
+                        BrandId = brand.BrandId,
+                        CreateDate = DateTime.Now,
+                        CreateUser = request.UserId,
+                        Status = (int)DataStatus.Normal,
+                        UserId = request.UserId
+                    });
+                }
+
+                var initialSaleCodes = db.Set<IMS_SalesCodeEntity>().Where(x => x.SectionId == associate.SectionId);
+                foreach (var saleCode in initialSaleCodes)
+                {
+                    if (db.Set<IMS_AssociateSaleCodeEntity>().Any(x => x.AssociateId == associate.Id && x.Code == saleCode.Code && x.Status == 1))
+                        continue;
+                    db.Set<IMS_AssociateSaleCodeEntity>().Add(new IMS_AssociateSaleCodeEntity
                     {
-                        _logger.Error(string.Format("Process invite code error, invitecode request id{0}, error message{1}", entity.Id, ex.Message));
+                        AssociateId = associate.Id,
+                        Code = saleCode.Code,
+                        CreateDate = DateTime.Now,
+                        CreateUser = request.UserId,
+                        Status = (int)DataStatus.Normal,
+                        UserId = request.UserId
+
+                    });
+                }
+                if (!db.Set<IMS_AssociateItemsEntity>().Any(x => x.AssociateId == associate.Id && x.Status == (int)DataStatus.Normal))
+                {
+                    var giftCards = db.Set<IMS_GiftCardEntity>().FirstOrDefault(x => x.Status == (int)DataStatus.Normal);
+                    if (giftCards != null)
+                    {
+                        db.Set<IMS_AssociateItemsEntity>().Add(new IMS_AssociateItemsEntity
+                        {
+                            AssociateId = associate.Id,
+                            CreateDate = DateTime.Now,
+                            CreateUser = request.UserId,
+                            ItemId = giftCards.Id,
+                            ItemType = (int)ComboType.GiftCard,
+                            Status = (int)DataStatus.Normal,
+                            UpdateDate = DateTime.Now,
+                            UpdateUser = request.UserId
+                        });
                     }
                 }
-                cursor += pageSize;
-                lastCursor += oneTimeList.Max(x => x.Id);
+
+                db.SaveChanges();
+                ts.Complete();
+            }
+
+            ServiceLocator.Current.Resolve<IMessageCenterProvider>()
+                .GetSender()
+                .SendMessageReliable(new ApprovedMessage()
+                {
+                    EntityId = request.Id
+                });
+            return true;
+        }
+
+        private IMS_AssociateEntity CreateAssociate(IMS_InviteCodeRequestEntity request)
+        {
+            using (var db = ServiceLocator.Current.Resolve<DbContext>())
+            {
+                var section =
+                    db.Set<SectionEntity>()
+                        .FirstOrDefault(x => x.SectionCode == request.SectionCode && x.StoreId == request.StoreId);
+                if (section == null)
+                {
+                    return null;
+                }
+
+                var associate = new IMS_AssociateEntity()
+                {
+                    CreateDate = DateTime.Now,
+                    CreateUser = request.UserId,
+                    OperateRight = request.RequestType == (int)InviteCodeRequestType.Daogou ? (int)(UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct) : (int)(UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct),
+                    SectionId = section.Id,
+                    Status = (int)DataStatus.Normal,
+                    StoreId = request.StoreId,
+                    UserId = request.UserId,
+                    TemplateId = ConfigManager.IMS_DEFAULT_TEMPLATE,
+                    OperatorCode = request.OperatorCode,
+
+                };
+
+                associate = db.Set<IMS_AssociateEntity>().Add(associate);
+                db.SaveChanges();
+                return associate;
             }
         }
-    }
 
-    public class DefaultApplyInfoProcessor : IApplyInfoProcessor
-    {
-        public void Process(IMS_InviteCodeRequestEntity storeRequest)
+
+        void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            using (var Context = DbContextHelper.GetDbContext())
-            {
-                var exitUserEntity = Context.Set<UserEntity>().Find(storeRequest.UserId);
-
-                //steps:
-                //// 1. read initial info from invite code tables
-                //// 2. initialize associate tables
-                //using (var ts = new TransactionScope())
-                //{
-                //    var initialBrands = Context.Set<IMS_SectionBrandEntity>().Where(isb => isb.SectionId == inviteEntity.Sec.SectionId);
-                //    var initialSaleCodes = Context.Set<IMS_SalesCodeEntity>().Where(isc => isc.SectionId == inviteEntity.Sec.SectionId);
-                //    var sectionEntity = Context.Set<SectionEntity>().Find(inviteEntity.Sec.SectionId);
-                //    //2.0 disable invite code
-                //    inviteEntity.Inv.IsBinded = 1;
-                //    inviteEntity.Inv.UpdateDate = DateTime.Now;
-                //    inviteEntity.Inv.UserId = authuid.Value;
-                //    _inviteRepo.Update(inviteEntity.Inv);
-
-                //    //2.1 update user level to daogou
-                //    exitUserEntity.UserLevel = (int)UserLevel.DaoGou;
-                //    exitUserEntity.UpdatedDate = DateTime.Now;
-                //    exitUserEntity.UpdatedUser = exitUserEntity.Id;
-                //    if (string.IsNullOrEmpty(exitUserEntity.Logo))
-                //        exitUserEntity.Logo = ConfigManager.IMS_DEFAULT_LOGO;
-                //    _customerRepo.Update(exitUserEntity);
-
-                //    //2.2 create daogou's associate store
-                //    var assocateEntity = _associateRepo.Insert(new IMS_AssociateEntity()
-                //    {
-                //        CreateDate = DateTime.Now,
-                //        CreateUser = authuid.Value,
-                //        OperateRight = inviteEntity.Inv.AuthRight.Value,
-                //        Status = (int)DataStatus.Normal,
-                //        TemplateId = ConfigManager.IMS_DEFAULT_TEMPLATE,
-                //        UserId = authuid.Value,
-                //        StoreId = sectionEntity.StoreId ?? 0,
-                //        SectionId = sectionEntity.Id,
-                //        OperatorCode = inviteEntity.Sec.OperatorCode
-                //    });
-                //    //2.3 create daogou's brands
-                //    foreach (var brand in initialBrands)
-                //    {
-                //        _associateBrandRepo.Insert(new IMS_AssociateBrandEntity()
-                //        {
-                //            AssociateId = assocateEntity.Id,
-                //            BrandId = brand.BrandId,
-                //            CreateDate = DateTime.Now,
-                //            CreateUser = authuid.Value,
-                //            Status = (int)DataStatus.Normal,
-                //            UserId = authuid.Value
-                //        });
-                //    }
-                //    //2.4 create daogou's sales code
-                //    foreach (var saleCode in initialSaleCodes)
-                //    {
-                //        _associateSaleCodeRepo.Insert(new IMS_AssociateSaleCodeEntity()
-                //        {
-                //            AssociateId = assocateEntity.Id,
-                //            Code = saleCode.Code,
-                //            CreateDate = DateTime.Now,
-                //            CreateUser = authuid.Value,
-                //            Status = (int)DataStatus.Normal,
-                //            UserId = authuid.Value
-
-                //        });
-                //    }
-                //    //2.5 create daogou's giftcard
-                //    var giftCardEntity = Context.Set<IMS_GiftCardEntity>().Where(igc => igc.Status == (int)DataStatus.Normal).FirstOrDefault();
-                //    if (giftCardEntity != null)
-                //    {
-                //        _associateItemRepo.Insert(new IMS_AssociateItemsEntity()
-                //        {
-                //            AssociateId = assocateEntity.Id,
-                //            CreateDate = DateTime.Now,
-                //            CreateUser = authuid.Value,
-                //            ItemId = giftCardEntity.Id,
-                //            ItemType = (int)ComboType.GiftCard,
-                //            Status = (int)DataStatus.Normal,
-                //            UpdateDate = DateTime.Now,
-                //            UpdateUser = authuid.Value
-                //        });
-                //    }
-                //    ts.Complete();
-
-                //}
-            }
+            Logger.Error(e);
+            e.SetObserved();
         }
-    }
 
-    public interface IApplyInfoProcessor
-    {
-        void Process(IMS_InviteCodeRequestEntity storeRequest);
-    }
 
-    public class ApplyInfoProcessException : Exception
-    {
-
-        public ApplyInfoProcessException(string message)
-            : base(message)
+        private void DoQuery(Action<IQueryable<IMS_InviteCodeRequestEntity>> callback)
         {
-
-        }
-    }
-
-    public interface IApplyInfoStore
-    {
-        IEnumerable<IMS_InviteCodeRequestEntity> FetchRequest(int pageIndex, int pageSize, int benchmarkId);
-
-        int QueryCount();
-    }
-
-    public class DefaultApplyInfoStore : IApplyInfoStore
-    {
-        private void DoQuery(Expression<Func<IMS_InviteCodeRequestEntity, bool>> whereCondition, Action<IQueryable<IMS_InviteCodeRequestEntity>> callback)
-        {
-            using (var context = DbContextHelper.GetDbContext())
+            using (var context = ServiceLocator.Current.Resolve<DbContext>())
             {
-                var linq = context.IMS_InviteCodeRequest.Where(x => !x.Approved.HasValue && ! x.Approved.HasValue && x.Status == (int)InviteCodeRequestStatus.Requesting && x.RequestType == (int)InviteCodeRequestType.Daogou);
-
-                if (whereCondition != null)
-                    linq = linq.Where(whereCondition);
+                var linq = context.Set<IMS_InviteCodeRequestEntity>().Where(x => !x.Approved.HasValue);
                 if (callback != null)
+                {
                     callback(linq);
+                }
             }
-        }
-
-        public IEnumerable<IMS_InviteCodeRequestEntity> FetchRequest(int pageIndex, int pageSize, int benchmarkId)
-        {
-            List<IMS_InviteCodeRequestEntity> list = null;
-            DoQuery(null, x => list = x.Where(o => o.Id > benchmarkId).OrderBy(o => o.Id).Take(pageSize).ToList());
-            return list;
-        }
-
-        public int QueryCount()
-        {
-            int total = 0;
-            DoQuery(null, x => total = x.Count());
-            return total;
         }
     }
 }

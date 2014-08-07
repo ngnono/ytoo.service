@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="MessageHandler.cs" />
     <Compile Include="Message\ComboHandler.cs" />
+    <Compile Include="Message\DaogouApplyApprovedHandler.cs" />
     <Compile Include="Message\GiftcardPaidHandler.cs" />
     <Compile Include="Message\InventoryHandler.cs" />
     <Compile Include="Message\OrderPaidHandler.cs" />
