@@ -102,7 +102,11 @@ namespace com.intime.jobscheduler.Job.Store
                 }
                 else
                 {
-                    associate.OperateRight = request.RequestType == (int)InviteCodeRequestType.Daogou ? (int)(UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct) : (int)(UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct);
+                    var requestType = (InviteCodeRequestType)request.RequestType;
+                    var operateRight = requestType == InviteCodeRequestType.Daogou
+                        ? (UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct)
+                        : (UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct);
+                    associate.OperateRight = (int)operateRight;
                     db.Entry(associate).State = EntityState.Modified;
                 }
 
@@ -183,11 +187,17 @@ namespace com.intime.jobscheduler.Job.Store
                     return null;
                 }
 
+                var requestType = (InviteCodeRequestType)request.RequestType;
+                var operateRight = requestType == InviteCodeRequestType.Daogou
+                    ? (UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct)
+                    : (UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct);
+                 
+
                 var associate = new IMS_AssociateEntity()
                 {
                     CreateDate = DateTime.Now,
                     CreateUser = request.UserId,
-                    OperateRight = request.RequestType == (int)InviteCodeRequestType.Daogou ? (int)(UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct) : (int)(UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct),
+                    OperateRight = (int)operateRight,
                     SectionId = section.Id,
                     Status = (int)DataStatus.Normal,
                     StoreId = request.StoreId,
