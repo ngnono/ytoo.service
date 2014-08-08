@@ -16,6 +16,7 @@ using Yintai.Hangzhou.Model.Enums;
 
 namespace com.intime.jobscheduler.Job.Store
 {
+    [DisallowConcurrentExecution]
     public class StoreApplyApproveJob : IJob
     {
         //private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
