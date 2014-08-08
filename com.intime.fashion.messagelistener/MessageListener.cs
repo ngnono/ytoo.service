@@ -96,6 +96,7 @@ namespace com.intime.fashion.messagelistener
             handlers.Add(new OrderPaidHandler());
             handlers.Add(new GiftcardPaidHandler());
             handlers.Add(new SectionBrandHandler());
+            handlers.Add(new DaogouApplyApprovedHandler());
             return handlers;
         }
 
