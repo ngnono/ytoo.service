@@ -24,6 +24,7 @@ namespace com.intime.jobscheduler
             ServiceLocator.Current.Register<IEFRepository<IMS_AssociateIncomeEntity>, EFRepository<IMS_AssociateIncomeEntity>>();
 
             ServiceLocator.Current.Register<AnalysisService, AnalysisService>();
+            ServiceLocator.Current.Register<IMessageCenterProvider, MessageProvider>();
         }
     }
 }
