@@ -18,7 +18,8 @@ namespace com.intime.jobscheduler.Job.Store
 {
     public class StoreApplyApproveJob : IJob
     {
-        private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
+        //private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
+        ILog Logger = LogManager.GetLogger(typeof(StoreApplyApproveJob));
         public void Execute(IJobExecutionContext context)
         {
             int total = 0;
@@ -49,7 +50,7 @@ namespace com.intime.jobscheduler.Job.Store
         private bool Initialize(IMS_InviteCodeRequestEntity request)
         {
             using (var ts = new TransactionScope())
-            using (var db = ServiceLocator.Current.Resolve<DbContext>())
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var user = db.Set<UserEntity>().FirstOrDefault(x => x.Id == request.UserId);
                 if (user == null)
@@ -166,7 +167,7 @@ namespace com.intime.jobscheduler.Job.Store
 
         private IMS_AssociateEntity CreateAssociate(IMS_InviteCodeRequestEntity request)
         {
-            using (var db = ServiceLocator.Current.Resolve<DbContext>())
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var section =
                     db.Set<SectionEntity>()
@@ -206,7 +207,7 @@ namespace com.intime.jobscheduler.Job.Store
 
         private void DoQuery(Action<IQueryable<IMS_InviteCodeRequestEntity>> callback)
         {
-            using (var context = ServiceLocator.Current.Resolve<DbContext>())
+            using (var context = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
                 var linq = context.Set<IMS_InviteCodeRequestEntity>().Where(x => !x.Approved.HasValue);
                 if (callback != null)

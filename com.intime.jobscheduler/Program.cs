@@ -20,19 +20,22 @@ namespace com.intime.jobscheduler
         /// </summary>
         static void Main(string[] args)
         {
-#if !DEBUG
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[] 
-            { 
-                new MainJobService() 
-            };
-            ServiceBase.Run(ServicesToRun);
-#else
+            if (args.Length > 0)
+            {
+                var job = new MainJobService();
+                job.ConsoleDebug();
+            }
+            else
+            {
 
-            new MainJobService().ConsoleDebug();
-
-            Console.ReadLine();
-#endif
+                ServiceBase[] ServicesToRun;
+                ServicesToRun = new ServiceBase[]
+                {
+                    new MainJobService()
+                };
+                ServiceBase.Run(ServicesToRun);
+            }
         }
+
     }
 }
