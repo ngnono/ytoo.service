@@ -95,6 +95,10 @@ namespace com.intime.jobscheduler.Job.Store
                 if (associate == null)
                 {
                     associate = CreateAssociate(request);
+                    if (associate == null)
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
@@ -175,6 +179,7 @@ namespace com.intime.jobscheduler.Job.Store
                         .FirstOrDefault(x => x.SectionCode == request.SectionCode && x.StoreId == request.StoreId);
                 if (section == null)
                 {
+                    Logger.ErrorFormat("Can't find section by request info of sectioncode {0}, storeid {1}", request.SectionCode, request.StoreId);
                     return null;
                 }
 
