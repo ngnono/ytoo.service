@@ -114,7 +114,7 @@ namespace com.intime.fashion.service.analysis
                     {
                         int giftId = int.Parse(item.Id);
                         var associateEntity = _db.Set<IMS_AssociateEntity>()
-                            .Find(item.Id);
+                            .Find(giftId);
                         if (associateEntity == null)
                         {
                             _log.Info(string.Format("anaysis giftcard event not found:{0}", giftId));
