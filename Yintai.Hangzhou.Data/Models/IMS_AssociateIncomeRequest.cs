@@ -18,6 +18,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string TransferErrorCode { get; set; }
         public string TransferErrorMsg { get; set; }
         public Nullable<decimal> TransferFee { get; set; }
+        public string IDCard { get; set; }
 
         #region Overrides of BaseEntity
 

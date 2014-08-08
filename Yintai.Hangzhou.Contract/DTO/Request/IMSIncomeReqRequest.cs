@@ -15,5 +15,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public string Bank_No { get; set; }
         public string User_Name { get; set; }
         public decimal Amount { get; set; }
+        public string Id_Card { get; set; }
     }
 }

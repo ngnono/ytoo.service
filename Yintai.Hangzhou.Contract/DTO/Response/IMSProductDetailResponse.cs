@@ -43,18 +43,24 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
                 return string.Empty;
             }
         }
-        [DataMember(Name="is_online")]
+        [DataMember(Name = "is_online")]
         public bool IsOnline { get; set; }
-        [DataMember(Name="image_id")]
-        public int Image_Id { get {
-            if (Images != null && Images.Count() > 0)
-                return Images.First().Id;
-            return 0;
-        } }
+        [DataMember(Name = "image_id")]
+        public int Image_Id
+        {
+            get
+            {
+                if (Images != null && Images.Count() > 0)
+                    return Images.First().Id;
+                return 0;
+            }
+        }
         [DataMember(Name = "unitprice")]
         public decimal UnitPrice { get; set; }
-        [DataMember(Name="images")]
+        [DataMember(Name = "images")]
         public IEnumerable<IMSSelfImageResponse> Images { get; set; }
+        [DataMember(Name = "tags")]
+        public IEnumerable<IMSTagResponse> IMS_Tags { get; set; }
 
     }
 
@@ -63,11 +69,13 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
     {
         [DataMember(Name = "sizes")]
         public IEnumerable<IMSProductSizeResponse> Sizes { get; set; }
-        [DataMember(Name="sales_code")]
+        [DataMember(Name = "sales_code")]
         public string SalesCode { get; set; }
-        [DataMember(Name="color_str")]
+        [DataMember(Name = "color_str")]
         public string ColorStr { get; set; }
-      
+        [DataMember(Name = "tags")]
+        public IEnumerable<int> IMS_Tags { get; set; }
+
     }
     [DataContract]
     public class IMSProductSizeResponse
@@ -77,20 +85,32 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public int SizeValueId { get; set; }
         [DataMember(Name = "name")]
         public string SizeName { get; set; }
-        [DataMember(Name="inventory")]
+        [DataMember(Name = "inventory")]
         public int Inventory { get; set; }
     }
     [DataContract]
     public class IMSSelfImageResponse
     {
-        [DataMember(Name="id")]
+        [DataMember(Name = "id")]
         public int Id { get; set; }
         [DataMember(Name = "url")]
-        public string Url { get {
-            return Name.Image320Url();
-        } }
+        public string Url
+        {
+            get
+            {
+                return Name.Image320Url();
+            }
+        }
 
         [IgnoreDataMember]
+        public string Name { get; set; }
+    }
+    [DataContract]
+    public class IMSTagResponse
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+        [DataMember(Name = "name")]
         public string Name { get; set; }
     }
 }

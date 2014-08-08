@@ -17,7 +17,7 @@ namespace com.intime.fashion.console.onetime
         [Verb(IsDefault = false, Description = "reindex types", Aliases = "reindex_type")]
         static void Reindex_Types(
             [Aliases("re_index_type")]
-            [Description("p:product,b:brand")]
+            [Description("p:product,b:brand,s:store,it:imstags")]
             [Required]
             string type)
         {
@@ -33,6 +33,16 @@ namespace com.intime.fashion.console.onetime
                 indexType = IndexSourceType.Brand;
                 idList = allActiveBrands();
             }
+            else if (type == "s")
+            {
+                indexType = IndexSourceType.Store;
+                idList = allActiveStores();
+            }
+            else if (type == "it")
+            {
+                indexType = IndexSourceType.IMSTag;
+                idList = allActiveIMSTags();
+            }
             else
             {
                 Console.WriteLine("not support type");
@@ -40,8 +50,8 @@ namespace com.intime.fashion.console.onetime
             }
 
             var indexService = SearchLogic.GetService(indexType);
-            
-            
+
+
             foreach (var iid in idList)
             {
                 try
@@ -56,6 +66,22 @@ namespace com.intime.fashion.console.onetime
             }
         }
 
+        private static IEnumerable<int> allActiveIMSTags()
+        {
+            var db = ServiceLocator.Current.Resolve<DbContext>();
+            return db.Set<IMS_TagEntity>().Where(p => p.Status == (int)DataStatus.Normal)
+                   .Select(p => p.Id).ToList();
+        }
+
+        private static IEnumerable<int> allActiveStores()
+        {
+            var db = ServiceLocator.Current.Resolve<DbContext>();
+            return db.Set<StoreEntity>().Where(p => p.Status == (int)DataStatus.Normal && p.IsOnLine.HasValue
+                && p.IsOnLine.Value == 1
+                )
+                   .Select(p => p.Id).ToList();
+        }
+
         private static IEnumerable<int> allActiveBrands()
         {
             var db = ServiceLocator.Current.Resolve<DbContext>();
@@ -68,7 +94,7 @@ namespace com.intime.fashion.console.onetime
             var db = ServiceLocator.Current.Resolve<DbContext>();
             return db.Set<ProductEntity>().Where(p => p.Status == (int)DataStatus.Normal)
                    .Select(p => p.Id).ToList();
-               
+
         }
     }
 }

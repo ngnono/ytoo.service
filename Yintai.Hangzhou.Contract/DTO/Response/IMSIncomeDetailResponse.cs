@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using Yintai.Hangzhou.Contract.Response;
 using com.intime.fashion.common.Extension;
+using Yintai.Hangzhou.Model.Enums;
 
 namespace Yintai.Hangzhou.Contract.DTO.Response
 {
@@ -25,5 +26,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public decimal TotalAmount { get; set; }
         [DataMember(Name = "create_date")]
         public DateTime CreateDate { get; set; }
+        [DataMember(Name="status_show")]
+        public string Status_Display { get {
+            return ((AssociateIncomeStatus)Status).FriendString();
+        } }
     }
 }

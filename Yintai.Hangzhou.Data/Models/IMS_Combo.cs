@@ -21,6 +21,7 @@ namespace Yintai.Hangzhou.Data.Models
         public Nullable<bool> IsInPromotion { get; set; }
         public Nullable<decimal> DiscountAmount { get; set; }
         public Nullable<bool> IsPublic { get; set; }
+        public Nullable<decimal> UnitPrice { get; set; }
 
         #region Overrides of BaseEntity
 

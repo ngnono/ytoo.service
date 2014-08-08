@@ -11,6 +11,8 @@ namespace com.intime.fashion.service.search
         Product = 1,
         Combo = 2,
         Inventory = 3,
-        Brand = 4
+        Brand = 4,
+        IMSTag = 5,
+        Store
     }
 }

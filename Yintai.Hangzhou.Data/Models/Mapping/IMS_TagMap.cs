@@ -3,37 +3,29 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace Yintai.Hangzhou.Data.Models.Mapping
 {
-    public partial class PaymentMethodEntityMap : EntityTypeConfiguration<PaymentMethodEntity>
+    public partial class IMS_TagEntityMap : EntityTypeConfiguration<IMS_TagEntity>
     {
-        public PaymentMethodEntityMap()
+        public IMS_TagEntityMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Code)
-                .IsRequired()
-                .HasMaxLength(10);
-
             this.Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            this.Property(t => t.Prefix)
-                .HasMaxLength(10);
-
             // Table & Column Mappings
-            this.ToTable("PaymentMethod");
+            this.ToTable("IMS_Tag");
             this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.Code).HasColumnName("Code");
             this.Property(t => t.Name).HasColumnName("Name");
             this.Property(t => t.Status).HasColumnName("Status");
+            this.Property(t => t.CreateDate).HasColumnName("CreateDate");
+            this.Property(t => t.CreateUser).HasColumnName("CreateUser");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
-            this.Property(t => t.IsCOD).HasColumnName("IsCOD");
-            this.Property(t => t.AvailChannels).HasColumnName("AvailChannels");
-            this.Property(t => t.Prefix).HasColumnName("Prefix");
-            this.Property(t => t.AvoidInvoice).HasColumnName("AvoidInvoice");
+            this.Property(t => t.SortOrder).HasColumnName("SortOrder");
+            this.Property(t => t.Visible4Display).HasColumnName("Visible4Display");
 		Init();
         }
 

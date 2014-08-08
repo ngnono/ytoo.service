@@ -13,6 +13,7 @@ namespace com.intime.fashion.common.message
         Inventory = 3,
         Order = 4,
         GiftCard = 5,
-        SectionBrand = 6
+        SectionBrand = 6,
+        DaogouApply = 7,
     }
 }

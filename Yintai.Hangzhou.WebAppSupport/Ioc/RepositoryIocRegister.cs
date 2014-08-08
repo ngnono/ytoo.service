@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using Yintai.Architecture.Common.Data.EF;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Repository.Contract;
@@ -114,6 +115,8 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IEFRepository<IMS_InviteCodeRequestEntity>, EFRepository<IMS_InviteCodeRequestEntity>>();
 
             Current.Register<IEFRepository<WX_MenuEntity>, EFRepository<WX_MenuEntity>>();
+            Current.Register<IEFRepository<Product2IMSTagEntity>, EFRepository<Product2IMSTagEntity>>();
+            Current.Register<IEFRepository<SectionEntity>, EFRepository<SectionEntity>>();
         }
 
         #endregion

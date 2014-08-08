@@ -32,6 +32,8 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
 
             this.Property(t => t.TransferErrorMsg)
                 .HasMaxLength(200);
+            this.Property(t => t.IDCard)
+                .HasMaxLength(100);
 
             // Table & Column Mappings
             this.ToTable("IMS_AssociateIncomeRequest");
@@ -48,6 +50,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.TransferErrorCode).HasColumnName("TransferErrorCode");
             this.Property(t => t.TransferErrorMsg).HasColumnName("TransferErrorMsg");
             this.Property(t => t.TransferFee).HasColumnName("TransferFee");
+            this.Property(t => t.IDCard).HasColumnName("IdCard");
 		Init();
         }
 

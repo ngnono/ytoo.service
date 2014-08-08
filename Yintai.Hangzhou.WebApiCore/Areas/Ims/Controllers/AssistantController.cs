@@ -17,7 +17,7 @@ using Yintai.Hangzhou.WebSupport.Mvc;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
-    public class AssistantController : RestfulController
+    public partial class AssistantController : RestfulController
     {
         private IEFRepository<IMS_AssociateSaleCodeEntity> _salescodeRepo;
         private IEFRepository<IMS_AssociateItemsEntity> _associateitemRepo;
@@ -31,6 +31,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 private  IEFRepository<IMS_ComboEntity> _comboRepo;
 private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
 private ComboService _comboService;
+        private IEFRepository<IMS_InviteCodeRequestEntity> _inviteCodeRequestRepo;
+        private IEFRepository<SectionEntity> _sectionRepo;
         public AssistantController(IEFRepository<IMS_AssociateSaleCodeEntity> salescodeRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateitemRepo,
             IEFRepository<IMS_AssociateIncomeRequestEntity> incomerequestRepo,
@@ -42,7 +44,9 @@ private ComboService _comboService;
             IInventoryRepository inventoryRepo,
             IEFRepository<IMS_ComboEntity> comboRepo,
             IEFRepository<IMS_AssociateIncomeEntity> incomeRepo,
-            ComboService comboService
+            ComboService comboService,
+            IEFRepository<IMS_InviteCodeRequestEntity> inviteCodeRequestRepo,
+            IEFRepository<SectionEntity> sectionRepo 
             )
         {
             _salescodeRepo = salescodeRepo;
@@ -57,6 +61,8 @@ private ComboService _comboService;
             _comboRepo = comboRepo;
             _incomeRepo = incomeRepo;
             _comboService = comboService;
+            _inviteCodeRequestRepo = inviteCodeRequestRepo;
+            _sectionRepo = sectionRepo;
         }
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request,int authuid)
@@ -326,7 +332,8 @@ private ComboService _comboService;
                 received_amount = incomeEntity.ReceivedAmount,
                 frozen_amount = incomeEntity.TotalAmount - incomeEntity.AvailableAmount-incomeEntity.RequestAmount-incomeEntity.ReceivedAmount,
                 request_amount = incomeEntity.RequestAmount,
-                avail_amount = incomeEntity.AvailableAmount
+                avail_amount = incomeEntity.AvailableAmount,
+                total_amount = incomeEntity.TotalAmount
 
             });
         }
@@ -346,6 +353,63 @@ private ComboService _comboService;
             };
 
             return this.RenderSuccess<PagerInfoResponse<IMSIncomeReqDetailResponse>>(c => c.Data = response);
+        }
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Income_Requesting(PagerInfoRequest request, int authuid)
+        {
+            var linq = Context.Set<IMS_AssociateIncomeRequestEntity>().
+                        Where(iair => iair.UserId == authuid && 
+                               (iair.Status == (int)AssociateIncomeTransferStatus.RequestSent ||
+                               iair.Status ==(int)AssociateIncomeTransferStatus.NotStart));
+            int totalCount = linq.Count();
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(l => l.CreateDate).Skip(skipCount).Take(request.Pagesize);
+            var result = linq.ToList().Select(l => new IMSIncomeReqDetailResponse().FromEntity<IMSIncomeReqDetailResponse>(l));
+            var response = new PagerInfoResponse<IMSIncomeReqDetailResponse>(request.PagerRequest, totalCount)
+            {
+                Items = result.ToList()
+            };
+
+            return this.RenderSuccess<PagerInfoResponse<IMSIncomeReqDetailResponse>>(c => c.Data = response);
+        }
+        [RestfulRoleAuthorize(UserLevel.DaoGou)]
+        public ActionResult Income_History(PagerInfoRequest request, int authuid){
+            var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
+                            Where(iair => iair.AssociateUserId == authuid && iair.Status > (int)AssociateIncomeStatus.Create && iair.SourceType == (int)AssociateOrderType.GiftCard)
+                            .Join(Context.Set<IMS_GiftCardOrderEntity>(), o => o.SourceNo, i => i.No, (o, i) => new IMSIncomeDetailResponse
+                            {
+                                CreateDate = o.CreateDate,
+                                Id = i.Id,
+                                AssociateIncome = o.AssociateIncome,
+                                SourceNo = o.SourceNo,
+                                TotalAmount = i.Amount,
+                                SourceType = o.SourceType,
+                                Status = o.Status
+                            });
+
+            var linq2 = Context.Set<IMS_AssociateIncomeHistoryEntity>().
+                        Where(iair => iair.AssociateUserId == authuid && iair.Status > (int)AssociateIncomeStatus.Create && iair.SourceType == (int)AssociateOrderType.Product)
+                        .Join(Context.Set<OrderEntity>(), o => o.SourceNo, i => i.OrderNo, (o, i) => new IMSIncomeDetailResponse
+                        {
+                            CreateDate = o.CreateDate,
+                            Id = i.Id,
+                            AssociateIncome = o.AssociateIncome,
+                            SourceNo = o.SourceNo,
+                            TotalAmount = i.TotalAmount,
+                            SourceType = o.SourceType,
+                            Status = o.Status
+                        });
+            linq = linq.Union(linq2);
+            int totalCount = linq.Count();
+            int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
+            linq = linq.OrderByDescending(l => l.CreateDate).Skip(skipCount).Take(request.Pagesize);
+            var result = linq.ToList();
+            var response = new PagerInfoResponse<IMSIncomeDetailResponse>(request.PagerRequest, totalCount)
+            {
+                Items = result.ToList()
+            };
+
+            return this.RenderSuccess<PagerInfoResponse<IMSIncomeDetailResponse>>(c => c.Data = response);
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Income_Frozen(PagerInfoRequest request, int authuid)
@@ -396,6 +460,8 @@ private ComboService _comboService;
                 return this.RenderError(r => r.Message = "银行卡号不能为空");
             if (string.IsNullOrEmpty(request.User_Name))
                 return this.RenderError(r => r.Message = "银行帐户名不能为空");
+            if (string.IsNullOrEmpty(request.Id_Card))
+                return this.RenderError(r=>r.Message="身份证号码不能为空");
             if (request.Amount <= ConfigManager.BANK_TRANSFER_FEE)
                 return this.RenderError(r => r.Message = string.Format("提现最小金额须大于{0}",ConfigManager.BANK_TRANSFER_FEE));
             var incomeAccountEntity = Context.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == authuid).FirstOrDefault();
@@ -431,7 +497,8 @@ private ComboService _comboService;
                     BankAccountName = request.User_Name,
                     UpdateDate = DateTime.Now,
                     UserId = authuid,
-                    TransferFee = ConfigManager.BANK_TRANSFER_FEE
+                    TransferFee = ConfigManager.BANK_TRANSFER_FEE,
+                    IDCard = request.Id_Card
                 });
 
                 incomeAccountEntity.AvailableAmount -= request.Amount;
@@ -570,7 +637,8 @@ private ComboService _comboService;
                     bank = bankInfo.BankName,
                     bank_code = bankInfo.BankCode,
                     bank_no = bankInfo.BankNo,
-                    user_name = bankInfo.BankAccountName
+                    user_name = bankInfo.BankAccountName,
+                    id_card = bankInfo.IDCard??string.Empty
                 });
             else
                 return this.RenderSuccess<dynamic>(c => c.Data = new { });

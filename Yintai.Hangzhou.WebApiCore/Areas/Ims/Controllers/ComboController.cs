@@ -66,6 +66,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                  return this.RenderError(r => r.Message = "组合必须图片");
 
              var price = products.Sum(p => p.Price);
+             var unitprice = products.Sum(p => p.UnitPrice);
              if (request.Has_Discount && !(request.Discount < price && request.Discount > 0))
                  return this.RenderError(r => r.Message = "商品组合的折扣必须大于0，小于商品总价");
             var associateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
@@ -81,6 +82,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     Desc = request.Desc,
                     OnlineDate = DateTime.Now,
                     Price = price,
+                    UnitPrice = unitprice,
                     Private2Name = request.Private_To ?? string.Empty,
                     Status = (int)DataStatus.Normal,
                     UpdateDate = DateTime.Now,
@@ -171,6 +173,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 {
                     var products = Context.Set<ProductEntity>().Where(p => request.ProductIds.Contains(p.Id));
                     comboEntity.Price = products.Sum(p => p.Price);
+                    comboEntity.UnitPrice = products.Sum(p => p.UnitPrice);
                     _combo2productRepo.Delete(icp => icp.ComboId == comboEntity.Id);
                     foreach (var product in products)
                     {
@@ -273,20 +276,35 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Type == (int)ResourceType.Image && r.Status == (int)DataStatus.Normal),
                                         o => o.Id,
                                         i => i.SourceId,
-                                        (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder)})
+                                        (o, i) => new { P = o, PR = i.OrderByDescending(ir => ir.SortOrder) })
                             .GroupJoin(Context.Set<InventoryEntity>(), o => o.P.Id, i => i.ProductId, (o, i) => new
                             {
                                 P = o.P,
                                 PR = o.PR,
                                 PI = i.OrderByDescending(pi => pi.Amount).FirstOrDefault()
                             })
+                            .GroupJoin(Context.Set<Product2IMSTagEntity>()
+                                        .Join(Context.Set<IMS_TagEntity>().Where(it => it.Status == (int)DataStatus.Normal), o => o.IMSTagId, i => i.Id, (o, i) => new { PIT = o, IT = i })
+                                            , o => o.P.Id
+                                            , i => i.PIT.ProductId
+                                            , (o, i) => new { P = o.P, PR = o.PR, PI = o.PI, PIT = i })
+                            .Join(Context.Set<BrandEntity>(), o => o.P.Brand_Id, i => i.Id, (o, i) => new { P = o.P, PR = o.PR, PI = o.PI, PIT = o.PIT,B=i})
                             .ToList().Select(p => new IMSProductDetailResponse().FromEntity<IMSProductDetailResponse>(p.P, po =>
                             {
-                                po.Images = p.PR.Select(pr => new IMSSelfImageResponse() { 
-                                     Id = pr.Id,
-                                     Name = pr.Name
+                                po.Brand_Id = p.B.Id;
+                                po.Brand_Name = p.B.Name;
+                                po.Images = p.PR.Select(pr => new IMSSelfImageResponse()
+                                {
+                                    Id = pr.Id,
+                                    Name = pr.Name
                                 }); ;
-                                po.IsOnline = p.P.Status==(int)DataStatus.Normal && (p.P.Is4Sale??false)==true && p.PI!=null && p.PI.Amount>0;
+                                po.IsOnline = p.P.Status == (int)DataStatus.Normal && (p.P.Is4Sale ?? false) == true && p.PI != null && p.PI.Amount > 0;
+                                if (p.PIT != null)
+                                    po.IMS_Tags = p.PIT.Select(pit => new IMSTagResponse()
+                                    {
+                                        Id = pit.IT.Id,
+                                        Name = pit.IT.Name
+                                    });
                             }));
                 oc.Is_Owner = authuid == comboEntity.C.UserId;
                 oc.Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&

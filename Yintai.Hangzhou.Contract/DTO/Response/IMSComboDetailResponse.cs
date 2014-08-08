@@ -17,6 +17,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string Desc { get; set; }
         [DataMember(Name = "unit_price")]
         public decimal Price { get; set; }
+        [DataMember(Name="origin_price")]
+        public decimal UnitPrice_Show { get {
+            return UnitPrice ?? Price;
+        } }
         [DataMember(Name = "private_desc")]
         public string Private2Name { get; set; }
         [DataMember(Name = "is_online")]
@@ -75,7 +79,10 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public decimal ActualPrice { get {
             return Price - Discount;
         } }
-
+        [DataMember(Name = "contain_self_product")]
+        public bool ContainsSelfProduct { get {
+            return (ProductType ?? (int)Yintai.Hangzhou.Model.Enums.ProductType.FromSelf) == (int)Yintai.Hangzhou.Model.Enums.ProductType.FromSelf;
+        } }
         [IgnoreDataMember]
         public string ImageUrl { get; set; }
         [IgnoreDataMember]
@@ -86,6 +93,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public Nullable<bool> IsInPromotion { get; set; }
         [IgnoreDataMember]
         public Nullable<decimal> DiscountAmount { get; set; }
+        [IgnoreDataMember]
         public bool? IsPublic { get; set; }
+        [IgnoreDataMember]
+        public decimal? UnitPrice { get; set; }
+        [IgnoreDataMember]
+        public Nullable<int> ProductType { get; set; }
+
     }
 }

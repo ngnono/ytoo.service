@@ -20,6 +20,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string StoreCode { get; set; }
         public Nullable<int> ChannelSectionId { get; set; }
         public string SectionCode { get; set; }
+        public Nullable<int> DepartmentId { get; set; }
 
         #region Overrides of BaseEntity
 
