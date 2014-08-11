@@ -16,6 +16,7 @@ using Yintai.Hangzhou.Model.Enums;
 
 namespace com.intime.jobscheduler.Job.Store
 {
+    [DisallowConcurrentExecution]
     public class StoreApplyApproveJob : IJob
     {
         //private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
@@ -94,10 +95,18 @@ namespace com.intime.jobscheduler.Job.Store
                 if (associate == null)
                 {
                     associate = CreateAssociate(request);
+                    if (associate == null)
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
-                    associate.OperateRight = request.RequestType == (int)InviteCodeRequestType.Daogou ? (int)(UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct) : (int)(UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct);
+                    var requestType = (InviteCodeRequestType)request.RequestType;
+                    var operateRight = requestType == InviteCodeRequestType.Daogou
+                        ? (UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct)
+                        : (UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct);
+                    associate.OperateRight = (int)operateRight;
                     db.Entry(associate).State = EntityState.Modified;
                 }
 
@@ -174,14 +183,21 @@ namespace com.intime.jobscheduler.Job.Store
                         .FirstOrDefault(x => x.SectionCode == request.SectionCode && x.StoreId == request.StoreId);
                 if (section == null)
                 {
+                    Logger.ErrorFormat("Can't find section by request info of sectioncode {0}, storeid {1}", request.SectionCode, request.StoreId);
                     return null;
                 }
+
+                var requestType = (InviteCodeRequestType)request.RequestType;
+                var operateRight = requestType == InviteCodeRequestType.Daogou
+                    ? (UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct)
+                    : (UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct);
+                 
 
                 var associate = new IMS_AssociateEntity()
                 {
                     CreateDate = DateTime.Now,
                     CreateUser = request.UserId,
-                    OperateRight = request.RequestType == (int)InviteCodeRequestType.Daogou ? (int)(UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct) : (int)(UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct),
+                    OperateRight = (int)operateRight,
                     SectionId = section.Id,
                     Status = (int)DataStatus.Normal,
                     StoreId = request.StoreId,
