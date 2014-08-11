@@ -61,7 +61,13 @@ namespace com.intime.fashion.service.messages.Message
             var storeUrl = string.Format("{0}{1}{2}{3}", ConfigManager.AwsHost, "ims/store/stores/", associate.Id,
                 "/my/");
             bool sent;
+            var store = _db.Set<StoreEntity>().FirstOrDefault(x => x.Id == request.StoreId);
+            var department = _db.Set<DepartmentEntity>().FirstOrDefault(x => x.Id == request.DepartmentId);
 
+            if (store == null || department == null)
+            {
+                return false;
+            }
 
             if (request.Approved.HasValue && request.Approved.Value)
             {
@@ -73,9 +79,13 @@ namespace com.intime.fashion.service.messages.Message
                     topcolor = "#FF0000",
                     data = new
                     {
+
                         first = new { value = "您的开店申请已审核通过。" },
                         VIPName = new { value = requestWithUser.Request.Name, color = "#173177" },
+                        cardNumber = new { value = associate.Id, color = "#173177" },
+                        type = new { value = string.Format("{0}-{1}", store.Name, department.Name), color = "#173177" },
                         VIPPhone = new { value = requestWithUser.Request.ContactMobile, color = "#173177" },
+                        expDate = new { value = "长期有效", color = "#173177" },
                         remark = new { value = "点击进入您的店铺", color = "#173177" }
                     }
                 }, AccessTokenType.MiniYin, null, null);

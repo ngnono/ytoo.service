@@ -11,20 +11,22 @@ namespace com.intime.fashion.messagelistener
     {
         static void Main(string[] args)
         {
-        
-#if !DEBUG
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[] 
-            { 
-                new MainJobService() 
-            };
-            ServiceBase.Run(ServicesToRun);
-#else
 
-            new MainJobService().ConsoleDebug();
+            if (args.Length > 0)
+            {
+                var job = new MainJobService();
+                job.ConsoleDebug();
+            }
+            else
+            {
 
-            Console.ReadLine();
-#endif
+                ServiceBase[] ServicesToRun;
+                ServicesToRun = new ServiceBase[]
+                {
+                    new MainJobService()
+                };
+                ServiceBase.Run(ServicesToRun);
+            }
         }
     }
 }
