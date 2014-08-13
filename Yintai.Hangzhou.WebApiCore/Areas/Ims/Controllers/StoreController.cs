@@ -366,19 +366,20 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                       Desc = l.C.Desc,
                                       ImageUrl = l.CR.Name,
                                       Price = l.C.Price,
-                                      ProductImageUrls = l.P.Select(lpr => lpr.R.Name),
+                                      //ProductImageUrls = l.P.Select(lpr => lpr.R.Name),
                                       ExpireDate = l.C.ExpireDate,
                                       IsInPromotion = l.C.IsInPromotion,
                                       DiscountAmount = l.C.DiscountAmount,
-                                      Tags = l.IT.Select(it => new IMSTagResponse()
+                                      Tags = l.IT==null?null:l.IT.Select(it => new IMSTagResponse()
                                       {
                                           Id = it.IT.Id,
                                           Name = it.IT.Name
                                       }).Distinct(),
-                                      Brands = l.Brands.Select(b=>new 
+                                      Brands = l.Brands==null?null: l.Brands.Select(b=>new 
                                             {Id = b.Brand.Id,Name = b.Brand.Name})
                                             .Distinct()
                                   });
+           
             return new IMSStoreDetailResponse()
             {
                 Id = linq.Store.Id,
