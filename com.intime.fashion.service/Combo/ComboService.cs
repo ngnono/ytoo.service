@@ -65,6 +65,7 @@ namespace com.intime.fashion.service
                 CreateUser = createUserId,
                 Desc = productEntity.Description,
                 OnlineDate = DateTime.Now,
+                UnitPrice = productEntity.UnitPrice,
                 Price = productEntity.Price,
                 Private2Name = string.Empty,
                 Status = (int)DataStatus.Normal,
