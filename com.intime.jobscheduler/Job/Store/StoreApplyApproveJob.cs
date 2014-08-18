@@ -91,10 +91,19 @@ namespace com.intime.jobscheduler.Job.Store
                     db.Entry(user).State = EntityState.Modified;
                 }
 
+                var section =
+                    db.Set<SectionEntity>()
+                        .FirstOrDefault(x => x.SectionCode == request.SectionCode && x.StoreId == request.StoreId);
+                if (section == null)
+                {
+                    Logger.ErrorFormat("Can't find section by request info of sectioncode {0}, storeid {1}", request.SectionCode, request.StoreId);
+                    return false;
+                }
+
                 var associate = db.Set<IMS_AssociateEntity>().FirstOrDefault(x => x.UserId == request.UserId);
                 if (associate == null)
                 {
-                    associate = CreateAssociate(request);
+                    associate = CreateAssociate(request,section);
                     if (associate == null)
                     {
                         return false;
@@ -107,6 +116,8 @@ namespace com.intime.jobscheduler.Job.Store
                         ? (UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct)
                         : (UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct);
                     associate.OperateRight = (int)operateRight;
+                    associate.SectionId = section.Id;
+                    associate.StoreId = request.StoreId;
                     db.Entry(associate).State = EntityState.Modified;
                 }
 
@@ -174,24 +185,17 @@ namespace com.intime.jobscheduler.Job.Store
             return true;
         }
 
-        private IMS_AssociateEntity CreateAssociate(IMS_InviteCodeRequestEntity request)
+        private IMS_AssociateEntity CreateAssociate(IMS_InviteCodeRequestEntity request, SectionEntity section)
         {
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
             {
-                var section =
-                    db.Set<SectionEntity>()
-                        .FirstOrDefault(x => x.SectionCode == request.SectionCode && x.StoreId == request.StoreId);
-                if (section == null)
-                {
-                    Logger.ErrorFormat("Can't find section by request info of sectioncode {0}, storeid {1}", request.SectionCode, request.StoreId);
-                    return null;
-                }
+                
 
                 var requestType = (InviteCodeRequestType)request.RequestType;
                 var operateRight = requestType == InviteCodeRequestType.Daogou
                     ? (UserOperatorRight.GiftCard | UserOperatorRight.SelfProduct | UserOperatorRight.SystemProduct)
                     : (UserOperatorRight.GiftCard | UserOperatorRight.SystemProduct);
-                 
+
 
                 var associate = new IMS_AssociateEntity()
                 {
