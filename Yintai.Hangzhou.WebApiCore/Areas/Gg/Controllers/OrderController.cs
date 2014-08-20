@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography;
 using System.Transactions;
@@ -312,6 +313,43 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             order.UpdateUser = GG_CREATE_USERID;
             Context.SaveChanges();
             return this.RenderSuccess<dynamic>(r => r.IsSuccess = true);
+        }
+
+        public ActionResult UpdateContactInfo(dynamic request, string channel)
+        {
+            string orderNo = request.orderno;
+            if (string.IsNullOrEmpty(orderNo))
+            {
+                return this.RenderError(r => r.Message = "订单号为空");
+            }
+
+            var order = Context.Set<OrderEntity>().FirstOrDefault(x => x.OrderNo == orderNo);
+            if (order == null)
+            {
+                return this.RenderError(r => r.Message = string.Format("无效的订单号({0})", orderNo));
+            }
+            if (!Context.Set<Map4OrderEntity>().Any(x => x.OrderNo == orderNo && x.Channel == channel))
+            {
+                return this.RenderError(r => r.Message = string.Format("只能修改自己渠道的订单({0})", orderNo));
+            }
+
+            var sales = Context.Set<OPC_SaleEntity>().Where(x => x.OrderNo == orderNo).ToList();
+
+            if (sales.Any(x => x.Status == 30 || x.Status == 35 || x.Status == 40))
+            {
+                return this.RenderError(r => r.Message = string.Format("订单({0})已发货，无法修改收货人地址", orderNo));
+            }
+
+            order.ShippingAddress = request.contact.addr;
+            order.ShippingContactPerson = request.contact.person;
+            order.ShippingContactPhone = request.contact.phone;
+            order.ShippingZipCode = request.contact.zip;
+            order.UpdateDate = DateTime.Now;
+            order.UpdateUser = GG_CREATE_USERID;
+            Context.Entry(order).State = EntityState.Modified;
+
+            Context.SaveChanges();
+            return this.RenderSuccess<dynamic>(x => x.IsSuccess = true);
         }
 
         [ValidateParameters]
