@@ -50,7 +50,7 @@ namespace com.intime.fashion.service.images
         private static OssClient GetOssClient()
         {
             var config = CommonConfiguration<AliYunConfiguration>.Current;
-            return new OssClient(config.ACCESS_ID, config.ACCESS_KEY);
+            return new OssClient(new Uri(config.END_POINT),config.ACCESS_ID, config.ACCESS_KEY);
         }
     }
 }
