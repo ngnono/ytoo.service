@@ -10,12 +10,20 @@ using System.Web.Mvc;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using com.intime.fashion.service;
+using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
 {
     public class OrderController : GgController
     {
         private const int GG_CREATE_USERID = -1;
+        private IInventoryRepository _inventoryRepo;
+
+        public OrderController(IInventoryRepository inventoryRepo)
+        {
+            this._inventoryRepo = inventoryRepo;
+        }
+
         [ValidateParameters]
         public ActionResult Create(dynamic request, string channel)
         {
@@ -96,7 +104,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                 foreach (var item in request.products)
                 {
 
-
                     //var colorValueId = (int)item.colorValueId;
                     //var sizeValueId = (int)item.sizeValueId;
                     var stockId = (int)item.stockId;
@@ -116,8 +123,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                         return this.RenderError(r => r.Message = string.Format("商品({0})库存不足，无法创建订单", inventory.ProductId));
                     }
 
-                    inventory.Amount -= itemQuantity; //扣减库存
-                    db.Entry(inventory).State = EntityState.Modified;
+                    //inventory.Amount -= itemQuantity; //扣减库存
+                    //db.Entry(inventory).State = EntityState.Modified;
+                    _inventoryRepo.Update(inventory);
                     var product = db.Set<ProductEntity>().FirstOrDefault(x => x.Id == inventory.ProductId);
                     if (product == null)
                     {
