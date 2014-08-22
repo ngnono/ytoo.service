@@ -364,7 +364,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                   {
                                       Id = l.C.Id,
                                       Desc = l.C.Desc,
-                                      ImageUrl = l.CR.Name,
+                                      ImageUrl = l.CR==null?string.Empty:l.CR.Name,
                                       Price = l.C.Price,
                                       //ProductImageUrls = l.P.Select(lpr => lpr.R.Name),
                                       ExpireDate = l.C.ExpireDate,
@@ -379,7 +379,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                             {Id = b.Brand.Id,Name = b.Brand.Name})
                                             .Distinct()
                                   });
-           
+  
             return new IMSStoreDetailResponse()
             {
                 Id = linq.Store.Id,
