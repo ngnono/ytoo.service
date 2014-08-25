@@ -82,7 +82,8 @@ namespace com.intime.fashion.service.messages.Message
 
                         first = new { value = "您的开店申请已审核通过,20分钟后生效,请耐心等候。" },
                         cardNumber = new { value = associate.Id, color = "#173177" },
-                        type = new { value = string.Format("{0}-{1}", store.Name, department.Name), color = "#173177" },
+                        type = new { value = "迷你银导购", color = "#173177" },
+                        address = new { value = string.Format("{0}-{1}", store.Name, department.Name), color = "#173177" },
                         VIPName = new { value = requestWithUser.Request.Name, color = "#173177" },
                         VIPPhone = new { value = requestWithUser.Request.ContactMobile, color = "#173177" },
                         expDate = new { value = "长期有效", color = "#173177" },
