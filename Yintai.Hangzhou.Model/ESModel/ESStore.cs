@@ -21,6 +21,7 @@ namespace Yintai.Hangzhou.Model.ES
         public Nullable<decimal> GpsAlt { get; set; }
         public IEnumerable<ESResource> Resource { get; set; }
         public IEnumerable<ESDepartment> Departments { get; set; }
+        public int? GroupId { get; set; }
     }
 
     public class Location

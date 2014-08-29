@@ -6,6 +6,7 @@ namespace Yintai.Hangzhou.Data.Models
     public partial class SectionBrandImportStageEntity : Yintai.Architecture.Common.Models.BaseEntity
     {
         public string StoreCode { get; set; }
+        public string Department { get; set; }
         public string SupplyCode { get; set; }
         public string ContractCode { get; set; }
         public string CompanyName { get; set; }

@@ -68,6 +68,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AliPayKey.cs" />
+    <Compile Include="BaseModel.cs" />
     <Compile Include="EnumExtension.cs" />
     <Compile Include="Enums\AccountType.cs" />
     <Compile Include="Enums\AssociateFavorType.cs" />
@@ -171,6 +173,7 @@
     <Compile Include="StoreModel.cs" />
     <Compile Include="UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WeixinPayKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

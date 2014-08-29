@@ -29,6 +29,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api2
                     new { controller = "WeiXin", action = "Monitor", method = UrlParameter.Optional },
                     new[] { "Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers" }
                     );
+            
             context.MapRoute(
                 "Ims_default",
                 "ims/{controller}/{action}/{method}",

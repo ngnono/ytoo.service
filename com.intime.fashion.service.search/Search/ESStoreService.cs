@@ -68,7 +68,8 @@ namespace com.intime.fashion.service.search
                                 CreateUser = d.CreateUser,
                                 UpdateUser = d.UpdateUser,
                                 SortOrder = d.SortOrder
-                            })
+                            }),
+                GroupId = entity.Group_Id
 
             };
 

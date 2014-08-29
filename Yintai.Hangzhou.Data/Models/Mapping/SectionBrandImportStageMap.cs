@@ -15,6 +15,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(50);
 
+            this.Property(t => t.Department)
+                .HasMaxLength(50);
+
             this.Property(t => t.SupplyCode)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -54,6 +57,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             // Table & Column Mappings
             this.ToTable("SectionBrandImportStage");
             this.Property(t => t.StoreCode).HasColumnName("StoreCode");
+            this.Property(t => t.Department).HasColumnName("Department");
             this.Property(t => t.SupplyCode).HasColumnName("SupplyCode");
             this.Property(t => t.ContractCode).HasColumnName("ContractCode");
             this.Property(t => t.CompanyName).HasColumnName("CompanyName");

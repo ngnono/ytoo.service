@@ -142,6 +142,8 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<FavoriteEntity> Favorites { get; set; }
         public DbSet<FeedbackEntity> Feedbacks { get; set; }
         public DbSet<GroupEntity> Groups { get; set; }
+        public DbSet<Group_AliKeysEntity> Group_AliKeys { get; set; }
+        public DbSet<Group_WeixinKeysEntity> Group_WeixinKeys { get; set; }
         public DbSet<HotWordEntity> HotWords { get; set; }
         public DbSet<IMS_AssociateEntity> IMS_Associate { get; set; }
         public DbSet<IMS_AssociateBrandEntity> IMS_AssociateBrand { get; set; }
@@ -305,6 +307,8 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new FavoriteEntityMap());
             modelBuilder.Configurations.Add(new FeedbackEntityMap());
             modelBuilder.Configurations.Add(new GroupEntityMap());
+            modelBuilder.Configurations.Add(new Group_AliKeysEntityMap());
+            modelBuilder.Configurations.Add(new Group_WeixinKeysEntityMap());
             modelBuilder.Configurations.Add(new HotWordEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateBrandEntityMap());

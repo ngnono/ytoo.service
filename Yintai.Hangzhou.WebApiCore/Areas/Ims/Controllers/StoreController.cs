@@ -144,20 +144,26 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     });
                 }
                 //2.5 create daogou's giftcard
-                var giftCardEntity = Context.Set<IMS_GiftCardEntity>().Where(igc => igc.Status == (int)DataStatus.Normal).FirstOrDefault();
-                if (giftCardEntity != null)
+                var groupEntity = Context.Set<StoreEntity>().Where(s=>s.Id == sectionEntity.StoreId)
+                                .Join(Context.Set<GroupEntity>(),o=>o.Group_Id,i=>i.Id,(o,i)=>i).FirstOrDefault();
+                if (groupEntity != null)
                 {
-                    _associateItemRepo.Insert(new IMS_AssociateItemsEntity()
+                    var giftCardEntity = Context.Set<IMS_GiftCardEntity>().Where(igc => igc.Status == (int)DataStatus.Normal &&igc.GroupId == groupEntity.Id)
+                                        .FirstOrDefault();
+                    if (giftCardEntity != null)
                     {
-                        AssociateId = assocateEntity.Id,
-                        CreateDate = DateTime.Now,
-                        CreateUser = authuid.Value,
-                        ItemId = giftCardEntity.Id,
-                        ItemType = (int)ComboType.GiftCard,
-                        Status = (int)DataStatus.Normal,
-                        UpdateDate = DateTime.Now,
-                        UpdateUser = authuid.Value
-                    });
+                        _associateItemRepo.Insert(new IMS_AssociateItemsEntity()
+                        {
+                            AssociateId = assocateEntity.Id,
+                            CreateDate = DateTime.Now,
+                            CreateUser = authuid.Value,
+                            ItemId = giftCardEntity.Id,
+                            ItemType = (int)ComboType.GiftCard,
+                            Status = (int)DataStatus.Normal,
+                            UpdateDate = DateTime.Now,
+                            UpdateUser = authuid.Value
+                        });
+                    }
                 }
                 ts.Complete();
 

@@ -3,13 +3,15 @@ using System.Collections.Generic;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class IMS_GiftCardEntity : Yintai.Architecture.Common.Models.BaseEntity
+    public partial class Group_AliKeysEntity : Yintai.Architecture.Common.Models.BaseEntity
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public int GroupId { get; set; }
+        public string ParterId { get; set; }
+        public string Md5Key { get; set; }
         public int Status { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public Nullable<int> GroupId { get; set; }
+        public System.DateTime CreateDate { get; set; }
+        public int CreateUser { get; set; }
 
         #region Overrides of BaseEntity
 
