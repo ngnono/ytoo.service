@@ -123,6 +123,14 @@
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.cache\com.intime.fashion.service.cache.csproj">
+      <Project>{9f3b1365-64f9-43d3-8aa8-eab91e1b7c9e}</Project>
+      <Name>com.intime.fashion.service.cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.contract\com.intime.fashion.service.contract.csproj">
+      <Project>{e69391ab-6e94-4937-9c34-3a5485f71592}</Project>
+      <Name>com.intime.fashion.service.contract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.service\com.intime.fashion.service.csproj">
       <Project>{be4f98bc-b4a2-4fc0-ae7a-96938218f098}</Project>
       <Name>com.intime.fashion.service</Name>

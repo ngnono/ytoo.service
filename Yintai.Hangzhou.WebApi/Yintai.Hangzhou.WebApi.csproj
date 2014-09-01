@@ -177,6 +177,7 @@
     </Content>
     <Content Include="Configurations\production\cache_authkeys.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="Properties\PublishProfiles\HangzhouV45.pubxml" />
     <None Include="Properties\PublishProfiles\intimedemo - FTP.pubxml" />
