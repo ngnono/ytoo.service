@@ -11,6 +11,7 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime EndDate { get; set; }
         public int RuleType { get; set; }
         public int Status { get; set; }
+        public int? GroupId { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -12,20 +12,14 @@ using Yintai.Hangzhou.Model.ESModel;
 
 namespace com.intime.fashion.service.search
 {
-    class ESIMSTagService : ESServiceSingle<ESIMSTag>
+    class ESGroupService : ESServiceSingle<ESGroup>
     {
-        protected override ESIMSTag entity2Model(int entityId)
+        protected override ESGroup entity2Model(int entityId)
         {
             var db = Context;
-            var tagEntity = Context.Set<IMS_TagEntity>().Find(entityId);
-            return new ESIMSTag()
-            {
-                Id = tagEntity.Id,
-                Name = tagEntity.Name,
-                SortOrder = tagEntity.SortOrder ?? 0,
-                Status = tagEntity.Status
-            };
+            var entity = Context.Set<GroupEntity>().Find(entityId);
+            return Mapper.Map<GroupEntity, ESGroup>(entity);
         }
-        
+       
     }
 }

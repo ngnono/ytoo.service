@@ -93,7 +93,10 @@ namespace com.intime.fashion.service
         {
             if (giftcardOrder == null)
                 return 0m;
-            return DoInternalCompute(giftcardOrder.Price.Value, ConfigManager.IMS_GIFTCARD_CAT_ID, 1);
+            var group = Context.Set<IMS_GiftCardItemEntity>().Where(igi => igi.GiftCardId == giftcardOrder.GiftCardItemId)
+                         .Join(Context.Set<IMS_GiftCardEntity>(), o => o.GiftCardId, i => i.Id, (o, i) => i)
+                         .FirstOrDefault();
+            return DoInternalCompute(giftcardOrder.Price.Value, ConfigManager.IMS_GIFTCARD_CAT_ID, 1,group==null?null:group.GroupId);
         }
         private static decimal ComputeIncome(OrderEntity order)
         {
@@ -113,14 +116,18 @@ namespace com.intime.fashion.service
                 var incomePrice = item.ItemPrice;
                 if (hasPromotion)
                     incomePrice = promotionSharedPolicy.ComputeActualPrice(item);
-                incomeSum += DoInternalCompute(incomePrice, product.Tag_Id, item.Quantity);
+                var groupId = Context.Set<StoreEntity>().Find(item.StoreId).Group_Id;
+
+                incomeSum += DoInternalCompute(incomePrice, product.Tag_Id, item.Quantity,groupId);
             }
             return incomeSum;
         }
-        private static decimal DoInternalCompute(decimal price, int categoryId, int quantity)
+        private static decimal DoInternalCompute(decimal price, int categoryId, int quantity,int? groupId=null)
         {
             var incomeRuleEntity = Context.Set<IMS_AssociateIncomeRuleEntity>().Where(iar => iar.Status == (int)DataStatus.Normal &&
-                            iar.FromDate <= DateTime.Now && iar.EndDate > DateTime.Now && iar.CategoryId == categoryId).FirstOrDefault();
+                            iar.FromDate <= DateTime.Now && iar.EndDate > DateTime.Now 
+                            && iar.CategoryId == categoryId
+                            && (groupId == null || iar.GroupId ==groupId)).FirstOrDefault();
             if (incomeRuleEntity == null)
                 return 0m;
             

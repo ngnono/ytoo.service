@@ -13,6 +13,7 @@ namespace com.intime.fashion.service.search
         Inventory = 3,
         Brand = 4,
         IMSTag = 5,
-        Store
+        Store = 6,
+        Group = 7
     }
 }

@@ -46,7 +46,7 @@ namespace com.intime.jobscheduler.Job
 
                 _isActiveOnly = true;
             }
-            
+            IndexGroup(benchDate);
             IndexBrand(client, benchDate);
             IndexHotwork(client, benchDate);
             IndexStore(client, benchDate);
@@ -467,6 +467,48 @@ namespace com.intime.jobscheduler.Job
             }
             sw.Stop();
             log.Info(string.Format("{0} tags in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+
+        }
+
+
+        private void IndexGroup(DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var linq = db.Groups.AsQueryable();
+                if (_isActiveOnly)
+                    linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
+                var prods = from s in linq
+                            where (s.CreatedDate >= benchDate || s.UpdatedDate >= benchDate)
+                            select s;
+
+                int totalCount = prods.Count();
+
+                var service = SearchLogic.GetService(IndexSourceType.Group);
+
+                while (cursor < totalCount)
+                {
+                    foreach (var target in prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size))
+                    {
+                        using (var tls = new ScopedLifetimeDbContextManager())
+                        {
+                            if (service.IndexSingle(target.Id))
+                                successCount++;
+                        }
+                    }
+                    cursor += size;
+                }
+
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} stores in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
 
         }
 

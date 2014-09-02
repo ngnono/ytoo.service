@@ -10,16 +10,9 @@ using Yintai.Hangzhou.Model.ESModel;
 
 namespace com.intime.fashion.service.search
 {
-    class ESInventoryService : ESServiceBase
+    class ESInventoryService : ESServiceSingle<ESStock>
     {
-        public override bool IndexSingle(int entityId)
-        {
-
-            var esStock = stock2ES(entityId);
-            return SearchLogic.IndexSingle<ESStock>(esStock);
-        }
-
-        private ESStock stock2ES(int id)
+        protected override ESStock entity2Model(int id)
         {
             var db = Context;
             var inventoryEntity = db.Set<InventoryEntity>().Where(i => i.Id == id)
@@ -27,20 +20,17 @@ namespace com.intime.fashion.service.search
             if (inventoryEntity == null)
                 return null;
             return new ESStock()
-                    {
-                        ProductId = inventoryEntity.I.ProductId,
-                        Amount = inventoryEntity.I.Amount,
-                        ColorValueId = inventoryEntity.I.PColorId,
-                        SizeValueId = inventoryEntity.I.PSizeId,
-                        Id = inventoryEntity.I.Id,
-                        LabelPrice = inventoryEntity.P.UnitPrice.HasValue ? inventoryEntity.P.UnitPrice.Value : 999999,
-                        Price = inventoryEntity.P.Price,
-                        UpdateDate = DateTime.Now,
-                    };
+            {
+                ProductId = inventoryEntity.I.ProductId,
+                Amount = inventoryEntity.I.Amount,
+                ColorValueId = inventoryEntity.I.PColorId,
+                SizeValueId = inventoryEntity.I.PSizeId,
+                Id = inventoryEntity.I.Id,
+                LabelPrice = inventoryEntity.P.UnitPrice.HasValue ? inventoryEntity.P.UnitPrice.Value : 999999,
+                Price = inventoryEntity.P.Price,
+                UpdateDate = DateTime.Now,
+            };
         }
-        private DbContext Context
-        {
-            get { return ServiceLocator.Current.Resolve<DbContext>(); }
-        }
+       
     }
 }

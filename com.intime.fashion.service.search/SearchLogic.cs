@@ -93,6 +93,8 @@ namespace com.intime.fashion.service.search
                     return new ESIMSTagService();
                 case IndexSourceType.Store:
                     return new ESStoreService();
+                case IndexSourceType.Group:
+                    return new ESGroupService();
                 default:
                     throw new ArgumentException("type mismatch");
             }

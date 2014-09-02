@@ -118,6 +118,7 @@
     <Compile Include="Enums\TagSortOrder.cs" />
     <Compile Include="Enums\UserOperatorRight.cs" />
     <Compile Include="Enums\UserRole.cs" />
+    <Compile Include="ESModel\ESGroup.cs" />
     <Compile Include="ESModel\ESAnalysisEvent.cs" />
     <Compile Include="ESModel\ESAnalysisSummary.cs" />
     <Compile Include="ESModel\ESBanner.cs" />

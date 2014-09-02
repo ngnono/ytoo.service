@@ -138,7 +138,7 @@ private ComboService _comboService;
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Products(PagerInfoRequest request, int authuid)
         {
-            var linq = Context.Set<ProductEntity>().Where(ia => ia.CreatedUser == authuid && ia.ProductType == (int)ProductType.FromSelf)
+            var linq = Context.Set<ProductEntity>().Where(ia => ia.CreatedUser == authuid && ia.Status!=(int)DataStatus.Deleted && ia.ProductType == (int)ProductType.FromSelf)
                        .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Status == (int)DataStatus.Normal),
                                     o => o.Id,
                                     i => i.SourceId,

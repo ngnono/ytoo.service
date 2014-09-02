@@ -58,6 +58,8 @@
     <Compile Include="IndexSourceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchLogic.cs" />
+    <Compile Include="Search\ESGroupService.cs" />
+    <Compile Include="Search\ESServiceSingle.cs" />
     <Compile Include="Search\ESStoreService.cs" />
     <Compile Include="Search\ESIMSTagService.cs" />
     <Compile Include="Search\ESBrandService.cs" />
