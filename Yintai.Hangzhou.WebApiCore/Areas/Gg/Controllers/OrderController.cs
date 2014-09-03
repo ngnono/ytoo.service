@@ -222,11 +222,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                 return this.RenderError(r => r.Message = string.Format("该渠道({0})不存在此订单号({1})对应的订单", channel, orderNo));
             }
 
-            var opcSales = db.Set<OPC_SaleEntity>().Where(x => x.OrderNo == orderNo);
+            var opcSales = db.Set<OPC_SaleEntity>().Where(x => x.OrderNo == orderNo).ToList();
             if (opcSales.Any())
             {
                 if (
-                    opcSales.Join(db.Set<OPC_SaleOrderNotificationLogEntity>().Where(l => l.Status == 1 || l.Status == 3), s => s.SaleOrderNo, l => l.SaleOrderNo,
+                    db.Set<OPC_SaleEntity>().Where(x => x.OrderNo == orderNo).Join(db.Set<OPC_SaleOrderNotificationLogEntity>().Where(l => l.Status == 1 || l.Status == 3), s => s.SaleOrderNo, l => l.SaleOrderNo,
                         (o, s) => s).Any())
                 {
                     return this.RenderError(r => r.Message = "订单已送收银，不能取消");
