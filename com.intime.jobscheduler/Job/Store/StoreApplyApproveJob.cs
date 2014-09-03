@@ -93,7 +93,7 @@ namespace com.intime.jobscheduler.Job.Store
 
                 var section =
                     db.Set<SectionEntity>()
-                        .FirstOrDefault(x => x.SectionCode == request.SectionCode && x.StoreId == request.StoreId);
+                        .FirstOrDefault(x => x.SectionCode == request.SectionCode && x.StoreId == request.StoreId && x.DepartmentId == request.DepartmentId);
                 if (section == null)
                 {
                     Logger.ErrorFormat("Can't find section by request info of sectioncode {0}, storeid {1}", request.SectionCode, request.StoreId);
