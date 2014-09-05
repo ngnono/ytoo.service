@@ -183,6 +183,14 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Configurations\test\env.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configurations\test\cache_authkeys.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\HangzhouV45.pubxml" />
     <None Include="Properties\PublishProfiles\intimedemo - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\intimedemo - Web Deploy.pubxml" />
