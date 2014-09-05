@@ -111,6 +111,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.common.config\com.intime.fashion.common.config.csproj">
+      <Project>{5d633b61-5763-459b-a72e-ae66f5bc0793}</Project>
+      <Name>com.intime.fashion.common.config</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.common.message.rabbit\com.intime.fashion.common.message.rabbit.csproj">
       <Project>{c5b14b68-f27c-4317-9327-5fcf66aefa52}</Project>
       <Name>com.intime.fashion.common.message.rabbit</Name>

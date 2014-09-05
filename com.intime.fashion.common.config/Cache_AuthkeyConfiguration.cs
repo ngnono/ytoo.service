@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace com.intime.fashion.common.config
 {
-    public class Cache_AuthkeyConfiguration:CommonConfigurationBase
+    public class EnvironmentConfiguration:CommonConfigurationBase
     {
         protected override string SectionName
         {
-            get { return "cache_auth"; }
+            get { return "env"; }
         }
-        public string Host { get { return GetItem("host"); } }
-        public string Port { get { return GetItem("port"); } }
-        public string UserName { get { return GetItem("user_name"); } }
-        public string Password { get { return GetItem("pass_word"); } }
-        public string Prefix { get { return GetItem("prefix"); } }
+        public string Name { get { return GetItem("name"); } }
+        public bool IsProduction { get { return string.Compare(Name,"Production",true)==0; } }
+  
     }
 }

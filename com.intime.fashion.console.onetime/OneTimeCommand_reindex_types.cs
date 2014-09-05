@@ -17,7 +17,7 @@ namespace com.intime.fashion.console.onetime
         [Verb(IsDefault = false, Description = "reindex types", Aliases = "reindex_type")]
         static void Reindex_Types(
             [Aliases("re_index_type")]
-            [Description("p:product,b:brand,s:store,it:imstags")]
+            [Description("p:product,b:brand,s:store,it:imstags,g:group")]
             [Required]
             string type)
         {
@@ -43,6 +43,11 @@ namespace com.intime.fashion.console.onetime
                 indexType = IndexSourceType.IMSTag;
                 idList = allActiveIMSTags();
             }
+            else if (type == "g")
+            {
+                indexType = IndexSourceType.Group;
+                idList = allActiveGroups();
+            }
             else
             {
                 Console.WriteLine("not support type");
@@ -64,6 +69,13 @@ namespace com.intime.fashion.console.onetime
                     Console.WriteLine(string.Format("error: {0} not indexed", iid));
                 }
             }
+        }
+
+        private static IEnumerable<int> allActiveGroups()
+        {
+            var db = ServiceLocator.Current.Resolve<DbContext>();
+            return db.Set<GroupEntity>().Where(p => p.Status == (int)DataStatus.Normal)
+                   .Select(p => p.Id).ToList();
         }
 
         private static IEnumerable<int> allActiveIMSTags()

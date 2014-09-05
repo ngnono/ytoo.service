@@ -179,6 +179,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Configurations\production\env.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\HangzhouV45.pubxml" />
     <None Include="Properties\PublishProfiles\intimedemo - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\intimedemo - Web Deploy.pubxml" />

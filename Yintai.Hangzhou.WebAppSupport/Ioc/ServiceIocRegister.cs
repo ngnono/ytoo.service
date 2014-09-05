@@ -1,3 +1,4 @@
+using com.intime.fashion.common.config;
 using com.intime.fashion.common.message;
 using com.intime.fashion.common.message.rabbit;
 using com.intime.fashion.service;
@@ -79,7 +80,11 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<OrderService, OrderService>();
             Current.Register<IMessageCenterProvider, MessageProvider>();
 
-            Current.Register<ICacheService, MemCacheService>();
+            var env_config = CommonConfiguration<EnvironmentConfiguration>.Current;
+            if (env_config.IsProduction)
+                Current.Register<ICacheService, MemCacheService>();
+            else
+                Current.Register<ICacheService, NoCacheService>();
             Current.Register<AuthKeysService, AuthKeysService>();
         }
 
