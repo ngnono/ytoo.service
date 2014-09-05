@@ -176,7 +176,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 app_id = key.AppId,
                 app_secret = key.AppSecret,
                 pay_signkey = key.PaySignKey,
-                parter_id = key.ParterId
+                parter_id = key.ParterId,
+                parter_key = key.ParterKey
             });
 
         }

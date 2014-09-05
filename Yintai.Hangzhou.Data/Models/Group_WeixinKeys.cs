@@ -11,6 +11,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string AppSecret { get; set; }
         public string PaySignKey { get; set; }
         public string ParterId { get; set; }
+        public string ParterKey { get; set; }
         public int Status { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int CreateUser { get; set; }

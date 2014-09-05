@@ -13,5 +13,6 @@ namespace Yintai.Hangzhou.Model
         public string AppSecret { get; set; }
         public string PaySignKey { get; set; }
         public string ParterId { get; set; }
+        public string ParterKey { get; set; }
     }
 }
