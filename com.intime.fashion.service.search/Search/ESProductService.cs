@@ -111,7 +111,6 @@ namespace com.intime.fashion.service.search
                                                       BrandSizeName = val.BrandSizeName
                                                   })
                        let category = (from map in db.Set<ProductMapEntity>() where map.ProductId == p.Id && map.Channel == "intime" select map.ChannelCatId)
-
                        select new ESProduct()
                        {
                            Id = p.Id,

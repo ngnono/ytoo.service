@@ -45,6 +45,9 @@ namespace com.intime.fashion.service.search
                          target.DiscountAmount = target.DiscountAmount ?? 0m;
                          target.OriginPrice = l.C.UnitPrice ?? l.C.Price;
                          target.Tags = tagLinq.Select(t => Mapper.Map<IMS_TagEntity, ESIMSTag>(t));
+                         target.Group = Mapper.Map<GroupEntity, ESGroup>(Context.Set<StoreEntity>().Where(s => s.Id == l.A.StoreId)
+                                        .Join(Context.Set<GroupEntity>(), o => o.Group_Id, i => i.Id, (o, i) => i)
+                                        .FirstOrDefault());
                          if ((l.C.IsPublic ?? true) == false)
                          {
                              target.Status = (int)DataStatus.Default;

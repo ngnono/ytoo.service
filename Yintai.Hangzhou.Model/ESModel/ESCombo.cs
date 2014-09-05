@@ -31,5 +31,6 @@ namespace Yintai.Hangzhou.Model.ESModel
         public string AssociateName { get; set; }
         public decimal OriginPrice { get; set; }
         public IEnumerable<ESIMSTag> Tags { get; set; }
+        public ESGroup Group { get; set; }
     }
 }
