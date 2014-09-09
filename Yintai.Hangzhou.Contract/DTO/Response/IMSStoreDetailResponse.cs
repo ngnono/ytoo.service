@@ -42,6 +42,8 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public bool Is_Favored { get; set; }
         [DataMember(Name="template_id")]
         public int Template_Id { get; set; }
+        [DataMember(Name="is_support_giftcard")]
+        public bool IsSupportGiftCard { get; set; }
     }
     [DataContract]
     public class IMSGiftCard

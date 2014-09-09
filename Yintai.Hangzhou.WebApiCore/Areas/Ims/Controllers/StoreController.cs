@@ -58,7 +58,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                        .Join(Context.Set<IMS_AssociateEntity>(), o => o.Id, i => i.UserId, (o, i) => i).First();
 
             var store = GetStoreById(linq.Id, authuid.Value);
-
             return this.RenderSuccess<IMSStoreDetailResponse>(m => m.Data = store);
 
         }
@@ -324,7 +323,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IMSStoreDetailResponse GetStoreById(int storeId, int authuid)
         {
             var linq = Context.Set<UserEntity>()
-                       .Join(Context.Set<IMS_AssociateEntity>().Where(ia => ia.Id == storeId), o => o.Id, i => i.UserId, (o, i) => new { U = o, Store = i }).First();
+                       .Join(Context.Set<IMS_AssociateEntity>().Where(ia => ia.Id == storeId), o => o.Id, i => i.UserId, (o, i) => new { U = o, Store = i })
+                       .First();
+            var groupLinq = Context.Set<IMS_AssociateEntity>().Where(ia => ia.Id == storeId)
+                           .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => i)
+                           .Join(Context.Set<GroupEntity>(), o => o.Group_Id, i => i.Id, (o, i) => i)
+                           .Join(Context.Set<IMS_GiftCardEntity>().Where(igc=>igc.Status==(int)DataStatus.Normal),o=>o.Id,i=>i.GroupId,(o,i)=>i)
+                           .FirstOrDefault();
+            
             var giftCards = Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.AssociateId == linq.Store.Id
                                              && iai.ItemType == (int)ComboType.GiftCard
                                              && iai.Status == (int)DataStatus.Normal)
@@ -399,7 +405,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     f.FavoriteSourceType == (int)SourceType.Store &&
                                     f.FavoriteSourceId == storeId &&
                                     f.Status == (int)DataStatus.Normal),
-                Template_Id = linq.Store.TemplateId ?? 1
+                Template_Id = linq.Store.TemplateId ?? 1,
+                IsSupportGiftCard = groupLinq!=null
             };
         }
     }
