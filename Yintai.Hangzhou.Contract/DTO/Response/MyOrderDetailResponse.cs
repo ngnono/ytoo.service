@@ -97,6 +97,12 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string PromotionDesc { get; set; }
          [DataMember(Name = "promotion_rules")]
         public string PromotionRules { get; set; }
+        [DataMember(Name="can_like_miniyin")]
+         public bool CanLikeMiniYin { get {
+             return !string.IsNullOrWhiteSpace(LikeRedirectUrl);
+         } }
+        [DataMember(Name="liked_redirect_url")]
+        public string LikeRedirectUrl { get; set; }
 
         [IgnoreDataMember]
         public bool IsDaoGou { get; set; }
