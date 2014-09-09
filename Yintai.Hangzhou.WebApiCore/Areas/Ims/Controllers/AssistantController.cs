@@ -67,12 +67,16 @@ private ComboService _comboService;
         [RestfulAuthorize]
         public ActionResult Gift_Cards(PagerInfoRequest request,int authuid)
         {
+            var groupLinq = Context.Set<IMS_AssociateEntity>().Where(ia=>ia.UserId == authuid)
+                            .Join(Context.Set<StoreEntity>(),o=>o.StoreId,i=>i.Id,(o,i)=>i)
+                            .Join(Context.Set<GroupEntity>(),o=>o.Group_Id,i=>i.Id,(o,i)=>i);
             int page = request.Page <= 0 ? 0 : request.Page - 1;
             int pagesize = request.Pagesize >= 40 || request.Pagesize <= 0 ? 20 : request.Pagesize;
             var count = _cardRepo.Get(x => x.Status == 1).Count();
             var cards = new List<dynamic>();     
             var linq =
                 _cardRepo.Get(x => x.Status == 1)
+                    .Join(groupLinq,o=>o.GroupId,i=>i.Id,(o,i)=>i)
                     .OrderByDescending(x => x.Id)
                     .Skip(page*pagesize)
                     .Take(pagesize)
