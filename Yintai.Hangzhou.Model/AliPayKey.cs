@@ -11,5 +11,6 @@ namespace Yintai.Hangzhou.Model
         public string ParterId { get; set; }
         public string Md5Key { get; set; }
         public int GroupId { get; set; }
+        public string SellerAccount { get; set; }
     }
 }

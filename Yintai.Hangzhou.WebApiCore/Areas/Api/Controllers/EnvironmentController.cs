@@ -164,7 +164,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var key = _keyService.GetAlipayKey(groupId);
            return this.RenderSuccess<dynamic>(c => c.Data = new { 
                 parter_id = key.ParterId,
-                md5_key = key.Md5Key
+                md5_key = key.Md5Key,
+                seller_account = key.SellerAccount
             });
         }
 
@@ -177,8 +178,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 app_secret = key.AppSecret,
                 pay_signkey = key.PaySignKey,
                 parter_id = key.ParterId,
-                parter_key = key.ParterKey,
-                seller_account = key.SellerAccount
+                parter_key = key.ParterKey
             });
 
         }
