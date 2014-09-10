@@ -162,11 +162,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             return SearchLogic.GetClient();
         }
 
-        private string GetAppSetting(string key, string defaultValue = "")
-        {
-            return ConfigurationManager.AppSettings[key] ?? defaultValue;
-        }
-
         private int Skip(int pageIndex, int pageSize)
         {
             pageIndex = Math.Max(pageIndex - 1, 0);
