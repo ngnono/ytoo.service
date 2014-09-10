@@ -12,6 +12,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int Status { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int CreateUser { get; set; }
+        public string SellerAccount { get; set; }
 
         #region Overrides of BaseEntity
 
