@@ -162,7 +162,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                              });
                 o.IsDaoGou = isDaogou;
                 o.IsOwner = linq.O.CustomerId == authUser.Id;
-                var groupEntity = Context.Set<StoreEntity>().Where(s => s.Id == linq.OI.First().StoreId)
+                var storeId = linq.OI.First().StoreId;
+                var groupEntity = Context.Set<StoreEntity>().Where(s => s.Id == storeId)
                                   .Join(Context.Set<GroupEntity>(), og => og.Group_Id, i => i.Id, (og, i) => i)
                                   .Join(Context.Set<Group_WeixinKeysEntity>(), ow => ow.Id, i => i.GroupId, (ow, i) => i).FirstOrDefault();
                 if (groupEntity !=null)
