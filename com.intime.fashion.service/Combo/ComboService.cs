@@ -1,5 +1,6 @@
 ﻿
 using com.intime.fashion.common;
+using com.intime.fashion.common.config;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -59,6 +60,9 @@ namespace com.intime.fashion.service
                 OfflineComboOne(createUserId);
             }
             //step1.1: create combo
+            var definedTags = CommonConfiguration<EnvironmentConfiguration>.Current.Tags4ImmediatePublic;
+            bool should_public = _db.Set<Product2IMSTagEntity>().Where(pi => pi.ProductId == productEntity.Id)
+                        .Any(pi => definedTags.Contains(pi.IMSTagId));
             var comboEntity = _comboRepo.Insert(new IMS_ComboEntity()
             {
                 CreateDate = DateTime.Now,
@@ -73,7 +77,7 @@ namespace com.intime.fashion.service
                 UpdateUser = createUserId,
                 UserId = createUserId,
                 ProductType = (int)ProductType.FromSelf,
-                IsPublic = false,
+                IsPublic = should_public,
                 IsInPromotion = false,
                 ExpireDate = DateTime.Now.AddDays(ConfigManager.COMBO_EXPIRED_DAYS)
             });

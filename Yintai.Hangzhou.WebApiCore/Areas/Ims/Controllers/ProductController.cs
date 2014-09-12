@@ -80,9 +80,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "商品原价必须大于等于销售价！");
             if (string.IsNullOrEmpty(request.Color_Str))
                 request.Color_Str = "均色";
-            var productName = string.Format("{0}-{1}-{2}", brandEntity.Name, categoryEntity.Name, request.Sku_Code);
+            if (string.IsNullOrWhiteSpace(request.Name))
+                request.Name  = string.Format("{0}-{1}-{2}", brandEntity.Name, categoryEntity.Name, request.Sku_Code);
             if (string.IsNullOrEmpty(request.Desc))
-                request.Desc = productName;
+                request.Desc = request.Name;
             var assocateEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid).First();
             using (var ts = new TransactionScope())
             {
@@ -99,7 +100,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     Is4Sale = true,
                     IsHasImage = true,
                     MoreDesc = string.Empty,
-                    Name = productName,
+                    Name = request.Name,
                     Price = request.Price,
                     ProductType = (int)ProductType.FromSelf,
                     RecommendedReason = string.Empty,
@@ -270,9 +271,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             request.UnitPrice = (!request.UnitPrice.HasValue || request.UnitPrice <= 0) ? request.Price : request.UnitPrice;
             if (request.UnitPrice < request.Price)
                 return this.RenderError(r => r.Message = "商品原价必须大于等于销售价！");
-            var productName = string.Format("{0}-{1}-{2}", brandEntity.Name, categoryEntity.Name, request.Sku_Code);
+            if (string.IsNullOrWhiteSpace(request.Name))
+                request.Name = string.Format("{0}-{1}-{2}", brandEntity.Name, categoryEntity.Name, request.Sku_Code);
             if (string.IsNullOrEmpty(request.Desc))
-                request.Desc = productName;
+                request.Desc = request.Name;
             using (var ts = new TransactionScope())
             {
                 //step1: update product 
@@ -281,7 +283,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 productEntity.UpdatedDate = DateTime.Now;
                 productEntity.UpdatedUser = authuid;
                 productEntity.SkuCode = request.Sku_Code;
-                productEntity.Name = productName;
+                productEntity.Name = request.Name;
                 productEntity.Description = request.Desc;
                 productEntity.Price = request.Price;
                 productEntity.UnitPrice = request.UnitPrice;
