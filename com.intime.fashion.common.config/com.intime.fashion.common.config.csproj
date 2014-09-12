@@ -44,8 +44,8 @@
     <Compile Include="CommonConfigurationBase.cs" />
     <Compile Include="CommonConfigurationFactory.cs" />
     <Compile Include="Alipay_IMSConfiguration.cs" />
-    <Compile Include="Cache_AuthkeyConfiguration.cs" />
     <Compile Include="EnvironmentConfiguration.cs" />
+    <Compile Include="Cache_AuthkeyConfiguration.cs" />
     <Compile Include="ElasticSearchConfigurationSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RabbitClientConfiguration.cs" />
