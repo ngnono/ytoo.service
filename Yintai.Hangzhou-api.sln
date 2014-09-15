@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}"
@@ -66,6 +68,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.service.contract", "com.intime.fashion.service.contract\com.intime.fashion.service.contract.csproj", "{E69391AB-6E94-4937-9C34-3A5485F71592}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.service.cache", "com.intime.fashion.service.cache\com.intime.fashion.service.cache.csproj", "{9F3B1365-64F9-43D3-8AA8-EAB91E1B7C9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.data.tmall", "com.intime.fashion.data.tmall\com.intime.fashion.data.tmall.csproj", "{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -347,6 +351,16 @@ Global
 		{9F3B1365-64F9-43D3-8AA8-EAB91E1B7C9E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9F3B1365-64F9-43D3-8AA8-EAB91E1B7C9E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9F3B1365-64F9-43D3-8AA8-EAB91E1B7C9E}.Release|Win32.ActiveCfg = Release|Any CPU
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -355,6 +369,7 @@ Global
 		{B07CEC69-B35A-4435-9E83-D7AD4E1F236E} = {3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}
 		{B224C596-53F1-48A6-948F-DF3CD2ACD15D} = {3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}
 		{174CFFF7-C2B4-4E57-8503-733EC3062BAE} = {3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}
+		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185} = {3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}
 		{173FF5C0-5631-47AD-AF9E-16442858C080} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
 		{11F8922E-2EEB-4229-BA7C-1D44843C4EDA} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
 		{193902DC-242C-4DBA-B173-EE154E813C4B} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}

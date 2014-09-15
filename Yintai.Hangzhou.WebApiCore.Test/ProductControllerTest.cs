@@ -1,7 +1,7 @@
 ﻿using System;
-using com.intime.fashion.data.sync.Taobao.Factory;
-using com.intime.fashion.data.sync.Taobao.Fetcher;
-using com.intime.fashion.data.sync.Taobao.Request;
+//using com.intime.fashion.data.sync.Taobao.Factory;
+//using com.intime.fashion.data.sync.Taobao.Fetcher;
+//using com.intime.fashion.data.sync.Taobao.Request;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nest;
 using Yintai.Hangzhou.Model.ES;
@@ -37,17 +37,17 @@ namespace Yintai.Hangzhou.WebApiCore.Test
         [TestMethod]
         public void Test4Facet()
         {
-            FetchRequest request = new FetchRequest()
-            {
-                Channel = "IMS",
-                LastUpdateTime = DateTime.Now.AddMonths(-3),
-                PageSize = 10,
-                PageIndex = 1
-            };
+            //FetchRequest request = new FetchRequest()
+            //{
+            //    Channel = "IMS",
+            //    LastUpdateTime = DateTime.Now.AddMonths(-3),
+            //    PageSize = 10,
+            //    PageIndex = 1
+            //};
 
-            var result = new IMSProductFetcher(ElasticClient).Fetch(request);
+            //var result = new IMSProductFetcher(ElasticClient).Fetch(request);
 
-            Assert.IsNotNull(result);
+            //Assert.IsNotNull(result);
         }
     }
 }
