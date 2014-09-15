@@ -163,7 +163,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         {
             var key = _keyService.GetAlipayKey(groupId);
            return this.RenderSuccess<dynamic>(c => c.Data = new { 
-                parter_id = key.ParterId,
+                partner_id = key.ParterId,
                 md5_key = key.Md5Key,
                 seller_account = key.SellerAccount
             });
