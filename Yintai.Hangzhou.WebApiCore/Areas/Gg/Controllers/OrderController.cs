@@ -60,7 +60,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                     RecAmount = request.receivedAmount,
                     ShippingFee = request.shippingFee,
                     OrderSource = channel,
-                    OrderProductType = (int)OrderProductType.SystemProduct,
+                    OrderProductType = GetProductType(channel),
                     OrderNo = orderNo,
                     Status = isPaid ? (int)OrderStatus.Paid : (int)OrderStatus.Complete,
                 };
@@ -194,6 +194,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
 
                 return this.RenderSuccess<dynamic>(r => r.Data = new { orderno = orderNo });
             }
+        }
+
+        private int? GetProductType(string channel)
+        {
+            return channel.ToLower() == "yintai" ? (int) OrderProductType.SystemProduct : (int) OrderProductType.SelfProduct;
         }
 
         [ValidateParameters]
