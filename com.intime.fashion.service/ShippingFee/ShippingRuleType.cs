@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace com.intime.fashion.service.contract
+namespace com.intime.fashion.service.ShippingFee
 {
-    class AliPayKey
+   public enum ShippingRuleType
     {
+        Fix
     }
 }

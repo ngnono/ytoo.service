@@ -14,6 +14,7 @@ using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Repository.Contract;
 using com.intime.fashion.service;
 using Yintai.Hangzhou.WebSupport.Mvc;
+using com.intime.fashion.service.contract;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -28,9 +29,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_GiftCardEntity> _cardRepo;
         private IResourceRepository _resourceRepo;
         private IInventoryRepository _inventoryRepo;
-private  IEFRepository<IMS_ComboEntity> _comboRepo;
-private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
-private ComboService _comboService;
+        private IEFRepository<IMS_ComboEntity> _comboRepo;
+        private IEFRepository<IMS_AssociateIncomeEntity> _incomeRepo;
+        private IComboService _comboService;
         private IEFRepository<IMS_InviteCodeRequestEntity> _inviteCodeRequestRepo;
         private IEFRepository<SectionEntity> _sectionRepo;
         public AssistantController(IEFRepository<IMS_AssociateSaleCodeEntity> salescodeRepo,
@@ -44,9 +45,9 @@ private ComboService _comboService;
             IInventoryRepository inventoryRepo,
             IEFRepository<IMS_ComboEntity> comboRepo,
             IEFRepository<IMS_AssociateIncomeEntity> incomeRepo,
-            ComboService comboService,
+            IComboService comboService,
             IEFRepository<IMS_InviteCodeRequestEntity> inviteCodeRequestRepo,
-            IEFRepository<SectionEntity> sectionRepo 
+            IEFRepository<SectionEntity> sectionRepo
             )
         {
             _salescodeRepo = salescodeRepo;
@@ -65,24 +66,24 @@ private ComboService _comboService;
             _sectionRepo = sectionRepo;
         }
         [RestfulAuthorize]
-        public ActionResult Gift_Cards(PagerInfoRequest request,int authuid)
+        public ActionResult Gift_Cards(PagerInfoRequest request, int authuid)
         {
-            var groupLinq = Context.Set<IMS_AssociateEntity>().Where(ia=>ia.UserId == authuid)
-                            .Join(Context.Set<StoreEntity>(),o=>o.StoreId,i=>i.Id,(o,i)=>i)
-                            .Join(Context.Set<GroupEntity>(),o=>o.Group_Id,i=>i.Id,(o,i)=>i);
+            var groupLinq = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                            .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => i)
+                            .Join(Context.Set<GroupEntity>(), o => o.Group_Id, i => i.Id, (o, i) => i);
             int page = request.Page <= 0 ? 0 : request.Page - 1;
             int pagesize = request.Pagesize >= 40 || request.Pagesize <= 0 ? 20 : request.Pagesize;
             var count = _cardRepo.Get(x => x.Status == 1).Count();
-            var cards = new List<dynamic>();     
+            var cards = new List<dynamic>();
             var linq =
                 _cardRepo.Get(x => x.Status == 1)
-                    .Join(groupLinq,o=>o.GroupId,i=>i.Id,(o,i)=>i)
+                    .Join(groupLinq, o => o.GroupId, i => i.Id, (o, i) => i)
                     .OrderByDescending(x => x.Id)
-                    .Skip(page*pagesize)
+                    .Skip(page * pagesize)
                     .Take(pagesize)
-                    .GroupJoin(Context.Set<IMS_AssociateItemsEntity>().Where(x=>x.ItemType == (int)ComboType.GiftCard && x.CreateUser == authuid),card=>card.Id,item=>item.ItemId,(c,i)=>new{id=c.Id,desc=c.Name,sale = i.FirstOrDefault()})
-                    .GroupJoin(_resourceRepo.Get(x => x.SourceType == (int) SourceType.GiftCard), c => c.id,
-                        s => s.SourceId, (c, rs) => new {card = c, image= rs.FirstOrDefault()});
+                    .GroupJoin(Context.Set<IMS_AssociateItemsEntity>().Where(x => x.ItemType == (int)ComboType.GiftCard && x.CreateUser == authuid), card => card.Id, item => item.ItemId, (c, i) => new { id = c.Id, desc = c.Name, sale = i.FirstOrDefault() })
+                    .GroupJoin(_resourceRepo.Get(x => x.SourceType == (int)SourceType.GiftCard), c => c.id,
+                        s => s.SourceId, (c, rs) => new { card = c, image = rs.FirstOrDefault() });
             foreach (var cr in linq)
             {
                 cards.Add(new
@@ -93,7 +94,7 @@ private ComboService _comboService;
                     is_online = cr.card.sale != null && cr.card.sale.Status == (int)DataStatus.Normal,
                 });
             }
-            var rsp = new PagerInfoResponse<dynamic>(request.PagerRequest, count) {Items = cards};
+            var rsp = new PagerInfoResponse<dynamic>(request.PagerRequest, count) { Items = cards };
             return this.RenderSuccess<PagerInfoResponse<dynamic>>(c => c.Data = rsp);
         }
 
@@ -101,12 +102,12 @@ private ComboService _comboService;
         public ActionResult Combos(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
-                       .Join(Context.Set<IMS_AssociateItemsEntity>().Where(ia => ia.ItemType == (int)ComboType.Product && ia.Status!=(int)DataStatus.Deleted), o => o.Id, i => i.AssociateId, (o, i) => i)
+                       .Join(Context.Set<IMS_AssociateItemsEntity>().Where(ia => ia.ItemType == (int)ComboType.Product && ia.Status != (int)DataStatus.Deleted), o => o.Id, i => i.AssociateId, (o, i) => i)
                        .Join(Context.Set<IMS_ComboEntity>(), o => o.ItemId, i => i.Id, (o, i) => i)
                        .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Combo && r.Status == (int)DataStatus.Normal)
                                 , o => o.Id
                                 , i => i.SourceId
-                                , (o, i) => new { A = o, R = i.OrderByDescending(ir => ir.SortOrder).ThenBy(ir=>ir.Id).FirstOrDefault() });
+                                , (o, i) => new { A = o, R = i.OrderByDescending(ir => ir.SortOrder).ThenBy(ir => ir.Id).FirstOrDefault() });
 
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
@@ -135,14 +136,15 @@ private ComboService _comboService;
                                             o => o.Id, i => i.AssociateId,
                                             (o, i) => i);
 
-            return this.RenderSuccess<dynamic>(c => c.Data = new { 
+            return this.RenderSuccess<dynamic>(c => c.Data = new
+            {
                 total_count = linq.Count()
             });
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Products(PagerInfoRequest request, int authuid)
         {
-            var linq = Context.Set<ProductEntity>().Where(ia => ia.CreatedUser == authuid && ia.Status!=(int)DataStatus.Deleted && ia.ProductType == (int)ProductType.FromSelf)
+            var linq = Context.Set<ProductEntity>().Where(ia => ia.CreatedUser == authuid && ia.Status != (int)DataStatus.Deleted && ia.ProductType == (int)ProductType.FromSelf)
                        .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Product && r.Status == (int)DataStatus.Normal),
                                     o => o.Id,
                                     i => i.SourceId,
@@ -155,9 +157,10 @@ private ComboService _comboService;
 
                 if (l.R == null)
                     return;
-                o.Images = l.R.Select(pr => new IMSSelfImageResponse() { 
-                     Id = pr.Id,
-                     Name = pr.Name
+                o.Images = l.R.Select(pr => new IMSSelfImageResponse()
+                {
+                    Id = pr.Id,
+                    Name = pr.Name
                 });
             }));
             var response = new PagerInfoResponse<IMSProductSelfDetailResponse>(request.PagerRequest, totalCount)
@@ -189,10 +192,11 @@ private ComboService _comboService;
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Avail_Banks()
         {
-            var linq = Context.Set<IMS_BankEntity>().Where(ia => ia.Status == (int)DataStatus.Normal).OrderBy(l=>l.Name);
+            var linq = Context.Set<IMS_BankEntity>().Where(ia => ia.Status == (int)DataStatus.Normal).OrderBy(l => l.Name);
             var response = new PagerInfoResponse<dynamic>(new PagerRequest(), linq.Count())
             {
-                Items = linq.ToList().Select(l=>new {
+                Items = linq.ToList().Select(l => new
+                {
                     code = l.Code,
                     name = l.Name
                 }).ToList<dynamic>()
@@ -275,7 +279,7 @@ private ComboService _comboService;
             }
             using (var ts = new TransactionScope())
             {
-                comboItemEntity.Status = request.Is_Online?(int)DataStatus.Normal:(int)DataStatus.Default;
+                comboItemEntity.Status = request.Is_Online ? (int)DataStatus.Normal : (int)DataStatus.Default;
                 comboItemEntity.UpdateDate = DateTime.Now;
                 _associateitemRepo.Update(comboItemEntity);
 
@@ -294,10 +298,10 @@ private ComboService _comboService;
                                              o => o.Id,
                                              i => i.ProductId,
                                              (o, i) => o)
-                                         .Join(Context.Set<InventoryEntity>().Join(Context.Set<ProductPropertyValueEntity>().Where(ppv=>ppv.Status==(int)DataStatus.Normal),
-                                                                                    o=>o.PSizeId,
-                                                                                    i=>i.Id,
-                                                                                    (o,i)=>o),
+                                         .Join(Context.Set<InventoryEntity>().Join(Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Status == (int)DataStatus.Normal),
+                                                                                    o => o.PSizeId,
+                                                                                    i => i.Id,
+                                                                                    (o, i) => o),
                                                     o => o.Id,
                                                     i => i.ProductId,
                                                     (o, i) => i);
@@ -334,7 +338,7 @@ private ComboService _comboService;
             return this.RenderSuccess<dynamic>(c => c.Data = new
             {
                 received_amount = incomeEntity.ReceivedAmount,
-                frozen_amount = incomeEntity.TotalAmount - incomeEntity.AvailableAmount-incomeEntity.RequestAmount-incomeEntity.ReceivedAmount,
+                frozen_amount = incomeEntity.TotalAmount - incomeEntity.AvailableAmount - incomeEntity.RequestAmount - incomeEntity.ReceivedAmount,
                 request_amount = incomeEntity.RequestAmount,
                 avail_amount = incomeEntity.AvailableAmount,
                 total_amount = incomeEntity.TotalAmount
@@ -362,9 +366,9 @@ private ComboService _comboService;
         public ActionResult Income_Requesting(PagerInfoRequest request, int authuid)
         {
             var linq = Context.Set<IMS_AssociateIncomeRequestEntity>().
-                        Where(iair => iair.UserId == authuid && 
+                        Where(iair => iair.UserId == authuid &&
                                (iair.Status == (int)AssociateIncomeTransferStatus.RequestSent ||
-                               iair.Status ==(int)AssociateIncomeTransferStatus.NotStart));
+                               iair.Status == (int)AssociateIncomeTransferStatus.NotStart));
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
             linq = linq.OrderByDescending(l => l.CreateDate).Skip(skipCount).Take(request.Pagesize);
@@ -377,7 +381,8 @@ private ComboService _comboService;
             return this.RenderSuccess<PagerInfoResponse<IMSIncomeReqDetailResponse>>(c => c.Data = response);
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
-        public ActionResult Income_History(PagerInfoRequest request, int authuid){
+        public ActionResult Income_History(PagerInfoRequest request, int authuid)
+        {
             var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
                             Where(iair => iair.AssociateUserId == authuid && iair.Status > (int)AssociateIncomeStatus.Create && iair.SourceType == (int)AssociateOrderType.GiftCard)
                             .Join(Context.Set<IMS_GiftCardOrderEntity>(), o => o.SourceNo, i => i.No, (o, i) => new IMSIncomeDetailResponse
@@ -421,15 +426,15 @@ private ComboService _comboService;
             var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
                         Where(iair => iair.AssociateUserId == authuid && iair.Status == (int)AssociateIncomeStatus.Frozen && iair.SourceType == (int)AssociateOrderType.GiftCard)
                         .Join(Context.Set<IMS_GiftCardOrderEntity>(), o => o.SourceNo, i => i.No, (o, i) => new IMSIncomeDetailResponse
-                         { 
-                            CreateDate = o.CreateDate,
-                            Id = i.Id,
+                         {
+                             CreateDate = o.CreateDate,
+                             Id = i.Id,
                              AssociateIncome = o.AssociateIncome,
-                              SourceNo =o.SourceNo,
-                               TotalAmount = i.Amount,
-                                SourceType = o.SourceType,
-                                 Status = o.Status
-                        });
+                             SourceNo = o.SourceNo,
+                             TotalAmount = i.Amount,
+                             SourceType = o.SourceType,
+                             Status = o.Status
+                         });
 
             var linq2 = Context.Set<IMS_AssociateIncomeHistoryEntity>().
                         Where(iair => iair.AssociateUserId == authuid && iair.Status == (int)AssociateIncomeStatus.Frozen && iair.SourceType == (int)AssociateOrderType.Product)
@@ -465,19 +470,19 @@ private ComboService _comboService;
             if (string.IsNullOrEmpty(request.User_Name))
                 return this.RenderError(r => r.Message = "银行帐户名不能为空");
             if (string.IsNullOrEmpty(request.Id_Card))
-                return this.RenderError(r=>r.Message="身份证号码不能为空");
+                return this.RenderError(r => r.Message = "身份证号码不能为空");
             if (request.Amount <= ConfigManager.BANK_TRANSFER_FEE)
-                return this.RenderError(r => r.Message = string.Format("提现最小金额须大于{0}",ConfigManager.BANK_TRANSFER_FEE));
+                return this.RenderError(r => r.Message = string.Format("提现最小金额须大于{0}", ConfigManager.BANK_TRANSFER_FEE));
             var incomeAccountEntity = Context.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == authuid).FirstOrDefault();
             if (incomeAccountEntity == null)
                 return this.RenderError(r => r.Message = "账户内可提现金额不足！");
             if (incomeAccountEntity.AvailableAmount < request.Amount)
                 return this.RenderError(r => r.Message = "账户内可提现金额不足!");
             var thisMonth = DateTime.Parse(DateTime.Today.ToString("yyyy-MM-01"));
-            var incomeRequestHistory = Context.Set<IMS_AssociateIncomeRequestEntity>().Where(iair => iair.UserId == authuid && 
+            var incomeRequestHistory = Context.Set<IMS_AssociateIncomeRequestEntity>().Where(iair => iair.UserId == authuid &&
                             iair.Status != (int)AssociateIncomeRequestStatus.Failed &&
-                            iair.CreateDate>thisMonth);
-            var requestedAmount = incomeRequestHistory.Sum(l=>(decimal?)l.Amount)??0m;
+                            iair.CreateDate > thisMonth);
+            var requestedAmount = incomeRequestHistory.Sum(l => (decimal?)l.Amount) ?? 0m;
             var availLimitAmount = ConfigManager.IMS_MAX_REQUEST_AMOUNT_MON - requestedAmount;
             if (request.Amount > availLimitAmount)
                 return this.RenderError(r => r.Message = string.Format("每月累计提现额度为:{0},本月还可提现:{1}",
@@ -642,7 +647,7 @@ private ComboService _comboService;
                     bank_code = bankInfo.BankCode,
                     bank_no = bankInfo.BankNo,
                     user_name = bankInfo.BankAccountName,
-                    id_card = bankInfo.IDCard??string.Empty
+                    id_card = bankInfo.IDCard ?? string.Empty
                 });
             else
                 return this.RenderSuccess<dynamic>(c => c.Data = new { });

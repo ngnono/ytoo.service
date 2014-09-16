@@ -135,6 +135,8 @@
     <Compile Include="Models\Mapping\Product2IMSTagMap.cs" />
     <Compile Include="Models\Mapping\SectionBrandImportStageMap.cs" />
     <Compile Include="Models\Mapping\SectionBrandImportStageOutputMap.cs" />
+    <Compile Include="Models\Mapping\ShippingRuleFixMap.cs" />
+    <Compile Include="Models\Mapping\ShippingRuleMap.cs" />
     <Compile Include="Models\Mapping\Supplier_BrandMap.cs" />
     <Compile Include="Models\Mapping\WX_MenuMap.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
@@ -172,6 +174,8 @@
     <Compile Include="Models\Product2IMSTag.cs" />
     <Compile Include="Models\SectionBrandImportStage.cs" />
     <Compile Include="Models\SectionBrandImportStageOutput.cs" />
+    <Compile Include="Models\ShippingRule.cs" />
+    <Compile Include="Models\ShippingRuleFix.cs" />
     <Compile Include="Models\Supplier_Brand.cs" />
     <Compile Include="Models\WX_Menu.cs" />
     <Compile Include="Models\IMS_Associate.cs" />

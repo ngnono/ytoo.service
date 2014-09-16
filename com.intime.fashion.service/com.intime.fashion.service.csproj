@@ -72,6 +72,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Order\RMARule.cs" />
     <Compile Include="ScopedLifetimeManager.cs" />
+    <Compile Include="ShippingFeeService.cs" />
+    <Compile Include="ShippingFee\IShippingRule.cs" />
+    <Compile Include="ShippingFee\IShippingRuleMatch.cs" />
+    <Compile Include="ShippingFee\ShippingFeeRuleFactory.cs" />
+    <Compile Include="ShippingFee\ShippingRuleFix.cs" />
+    <Compile Include="ShippingFee\ShippingRuleMatchMethod.cs" />
+    <Compile Include="ShippingFee\ShippingRuleType.cs" />
+    <Compile Include="ShippingFee\StoreMatchMethod.cs" />
     <Compile Include="StorePromotionRule.cs" />
   </ItemGroup>
   <ItemGroup>

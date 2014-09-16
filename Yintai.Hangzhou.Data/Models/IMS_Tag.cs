@@ -14,7 +14,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int UpdateUser { get; set; }
         public Nullable<int> SortOrder { get; set; }
         public bool Visible4Display { get; set; }
-        public bool? ImmediatePublic { get; set; }
+        public Nullable<bool> ImmediatePublic { get; set; }
 
         #region Overrides of BaseEntity
 

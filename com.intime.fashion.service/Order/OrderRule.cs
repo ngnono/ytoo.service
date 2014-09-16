@@ -436,7 +436,7 @@ namespace com.intime.fashion.service
             return erpItem;
         }
 
-        private static decimal ComputeComboDiscount(int comboId, IEnumerable<int> inProducts)
+        internal static decimal ComputeComboDiscount(int comboId, IEnumerable<int> inProducts)
         {
             var comboEntity = Context.Set<IMS_ComboEntity>().Find(comboId);
             bool notMatchCombo = false;

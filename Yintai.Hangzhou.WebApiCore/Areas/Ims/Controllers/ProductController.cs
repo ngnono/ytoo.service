@@ -18,6 +18,7 @@ using com.intime.fashion.service;
 using Yintai.Architecture.Framework.ServiceLocation;
 using com.intime.fashion.common.message;
 using com.intime.fashion.common.message.Messages;
+using com.intime.fashion.service.contract;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -30,7 +31,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IInventoryRepository _inventoryRepo;
         private IResourceRepository _resourceRepo;
         private IEFRepository<ProductCode2StoreCodeEntity> _productCodeRepo;
-        private ComboService _comboService;
+        private IComboService _comboService;
         private IEFRepository<Product2IMSTagEntity> _productTagRepo;
         public ProductController(IResourceService resourceService
             , IProductRepository productRepo
@@ -39,7 +40,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             , IInventoryRepository inventoryRepo
             , IResourceRepository resourceRepo
             , IEFRepository<ProductCode2StoreCodeEntity> productCodeRepo
-            ,ComboService comboService
+            ,IComboService comboService
             ,IEFRepository<Product2IMSTagEntity> productTagRepo)
 
         {
