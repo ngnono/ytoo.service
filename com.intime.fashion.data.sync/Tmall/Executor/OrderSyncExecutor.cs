@@ -1,21 +1,28 @@
-﻿using System.Transactions;
+﻿using System.Configuration;
 using com.intime.fashion.data.tmall.Models;
+using com.intime.o2o.data.exchange.Ims.Request;
+using com.intime.o2o.data.exchange.IT;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Transactions;
 
 namespace com.intime.fashion.data.sync.Tmall.Executor
 {
-    public class OrderPushExecutor : OrderExecutorBase
+    public class OrderSyncExecutor : OrderExecutorBase
     {
-        public OrderPushExecutor(DateTime benchTime, int pageSize)
+        private static string TMALL_PAYMENT_METHOD_CODE = ConfigurationManager.AppSettings["TMALL_PAYMENT_METHOD_CODE"];
+        private static string TMALL_PAYMENT_METHOD_NAME = ConfigurationManager.AppSettings["TMALL_PAYMENT_METHOD_NAME"];
+        private IApiClient _imsClient;
+        public OrderSyncExecutor(DateTime benchTime, int pageSize, IApiClient client)
             : base(benchTime, pageSize)
         {
+            this._imsClient = client;
         }
 
-        public OrderPushExecutor()
-            : this(DateTime.Now.AddMinutes(-10), 50)
+        public OrderSyncExecutor(IApiClient client)
+            : this(DateTime.Now.AddMinutes(-10), 50, client)
         {
         }
 
@@ -42,7 +49,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                     }
                     catch (Exception ex)
                     {
-                        result = SyncResult.FailedResult(ex, trade);
+                        result = SyncResult.ExceptionResult(ex, trade);
                         Logger.Error(ex);
                     }
                     ProcessSyncResult(result);
@@ -53,10 +60,10 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             }
         }
 
-       /// <summary>
-       /// 处理成功后要记录在订单映射表
-       /// </summary>
-       /// <param name="result"></param>
+        /// <summary>
+        /// 处理成功后要记录在订单映射表
+        /// </summary>
+        /// <param name="result"></param>
         private void ProcessSyncResult(SyncResult result)
         {
             using (var db = DbContextHelper.GetJushitaContext())
@@ -125,6 +132,11 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             }
         }
 
+        /// <summary>
+        /// 推送迷你银订单
+        /// </summary>
+        /// <param name="trade"></param>
+        /// <returns></returns>
         private SyncResult SyncOne(JDP_TB_TRADE trade)
         {
             if (string.IsNullOrEmpty(trade.jdp_response))
@@ -138,7 +150,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 transno = tmallOrder.tid,
                 totalAmount = tmallOrder.total_fee,
                 receivedAmount = tmallOrder.payment,
-                paymentMehtodCode = "C019",//todo 支付编码未确定
+                paymentMehtodCode = TMALL_PAYMENT_METHOD_CODE,//todo 支付编码未确定
                 shipingFee = tmallOrder.post_fee,
                 memo = tmallOrder.buyer_message,
                 paid = true,
@@ -162,8 +174,8 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             //todo 支付编码未确定
             imsOrder.payment.Add(new
             {
-                code = "",
-                name = "",
+                code = TMALL_PAYMENT_METHOD_CODE,
+                name = TMALL_PAYMENT_METHOD_NAME,
                 amount = tmallOrder.payment,
             });
 
@@ -179,7 +191,13 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 });
             }
 
-            return SyncResult.SucceedResult(null, tmallOrder.tid, tmallOrder);
+            var request = new CreateOrderRequest { Data = imsOrder };
+            var rsp = _imsClient.Post(request);
+            if (rsp.Status)
+            {
+                return SyncResult.SucceedResult(rsp.Data.orderNo.ToString(), tmallOrder.tid, tmallOrder);
+            }
+            return SyncResult.FailedResult(string.Format("Notify order failed, order tid is ({0}) Error reason is: ({1})", tmallOrder.tid, rsp.Message));
         }
 
         public override OrderType OrderType

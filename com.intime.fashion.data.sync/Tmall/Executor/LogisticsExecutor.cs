@@ -1,20 +1,24 @@
 ﻿using com.intime.fashion.data.tmall.Models;
+using com.intime.o2o.data.exchange.Ims.Domain;
+using com.intime.o2o.data.exchange.Ims.Request;
+using com.intime.o2o.data.exchange.IT;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Top.Api;
-using Top.Api.Domain;
 using Top.Api.Request;
 
 namespace com.intime.fashion.data.sync.Tmall.Executor
 {
     public class LogisticsExecutor : ExecutorBase
     {
-        private ITopClient _client;
-        public LogisticsExecutor(DateTime benchTime, int pageSize,ITopClient topClient)
+        private ITopClient _topClient;
+        private IApiClient _imsApiClient;
+        public LogisticsExecutor(DateTime benchTime, int pageSize, ITopClient topClient, IApiClient apiClient)
             : base(benchTime, pageSize)
         {
-            _client = topClient;
+            _topClient = topClient;
+            _imsApiClient = apiClient;
         }
 
         public override void Execute()
@@ -29,38 +33,74 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 List<OrderSync> oneTimeList = null;
                 DoQuery(orders =>
                         oneTimeList = orders.Where(o => o.Id > lastCursor).OrderBy(o => o.Id).Take(_pageSize).ToList());
-                BatchProcess(oneTimeList);
+                try
+                {
+                    Batch(oneTimeList);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+                lastCursor = oneTimeList.Max(x => x.Id);
+                cursor += _pageSize;
             }
         }
 
-        private void BatchProcess(IEnumerable<OrderSync> oneTimeList)
+        /// <summary>
+        /// 批处理订单号，通过订单状态接口查询订单状态及物流信息
+        /// </summary>
+        /// <param name="oneTimeList"></param>
+        private void Batch(IEnumerable<OrderSync> oneTimeList)
         {
             var orderIds = oneTimeList.Select(x => x.ImsOrderNo);
             // todo 获取订单状态
-        }
-
-        private void Mark(IEnumerable<OrderSync> oneTimeList, IEnumerable<dynamic> result)
-        {
-            foreach (var orderSync in oneTimeList)
+            var request = new QueryOrderStatusRequest() { Data = orderIds };
+            var response = _imsApiClient.Post(request);
+            if (response.Status)
             {
-                SyncOne(orderSync, result.FirstOrDefault(x => x.OrderNo == orderSync.ImsOrderNo));
+                Mark(oneTimeList, response.Data);
+            }
+            else
+            {
+                // log an error here!
+                Logger.ErrorFormat("Query order status error. orderno is ({0})", string.Join(",", oneTimeList.Select(x => x.ImsOrderNo)));
             }
         }
 
-        private void SyncOne(OrderSync orderSync, dynamic rsp)
+        private void Mark(IEnumerable<OrderSync> oneTimeList, IEnumerable<LogisticStatus> logisticStatus)
         {
-            foreach (var item in rsp.itemStatus)
+            foreach (var orderSync in oneTimeList)
             {
-                int stockId = item.stockId;
+                try
+                {
+                    SyncOne(orderSync, logisticStatus.FirstOrDefault(x => x.OrderNo == orderSync.ImsOrderNo));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 使用top接口回传子订单物流信息
+        /// </summary>
+        /// <param name="orderSync"></param>
+        /// <param name="logistic"></param>
+        private void SyncOne(OrderSync orderSync, LogisticStatus logistic)
+        {
+            foreach (var item in logistic.Logistics)
+            {
+                int stockId = item.StockId;
                 var request = new LogisticsOfflineSendRequest
                 {
                     CompanyCode = GetCompanyCode(item),
-                    OutSid = item.ShippingCode,
+                    OutSid = item.LogisticCode,
                     Tid = long.Parse(orderSync.TmallOrderId.ToString()),
-                    SubTid = GetSubOrderId(item.stockId)
+                    SubTid = GetSubOrderId(item.StockId)
                 };
 
-                var response = _client.Execute(request);
+                var response = _topClient.Execute(request);
                 if (response.IsError)
                 {
                     Logger.Error(response.ErrMsg);
@@ -107,6 +147,11 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             }
         }
 
+        /// <summary>
+        /// 获取天猫子订单号，对应线下库存ID
+        /// </summary>
+        /// <param name="stockId"></param>
+        /// <returns></returns>
         private string GetSubOrderId(int stockId)
         {
             using (var db = DbContextHelper.GetJushitaContext())
@@ -114,12 +159,17 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 var subOrder = db.Set<SubOrder>().FirstOrDefault(x => x.ImsInventoryId == stockId);
                 if (subOrder == null)
                 {
-                    throw new ArgumentException(string.Format("Invalid stockId ({0})",stockId));
+                    throw new ArgumentException(string.Format("Invalid stockId ({0})", stockId));
                 }
                 return subOrder.TmallSubOrderId.ToString();
             }
         }
 
+        /// <summary>
+        /// 天猫规则，如果是天猫签约物流公司，则传递签约公司code，否则传物流公司名称及相应运单号
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private string GetCompanyCode(dynamic item)
         {
             using (var db = DbContextHelper.GetJushitaContext())

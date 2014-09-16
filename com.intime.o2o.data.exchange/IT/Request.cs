@@ -20,7 +20,7 @@ namespace com.intime.o2o.data.exchange.IT
         /// 时间戳
         /// </summary>
         [DataMember(Name = "timestamp")]
-        public string Timestamp { get; set; }
+        public virtual string Timestamp { get; set; }
 
         /// <summary>
         /// 程序随机数0-99

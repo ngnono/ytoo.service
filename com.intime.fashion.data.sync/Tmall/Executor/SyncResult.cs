@@ -6,7 +6,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
 {
     public class SyncResult
     {
-        public static SyncResult FailedResult(Exception ex, JDP_TB_TRADE trade)
+        public static SyncResult ExceptionResult(Exception ex, JDP_TB_TRADE trade)
         {
             return new SyncResult
             {
@@ -16,12 +16,22 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             };
         }
 
-        public static SyncResult SucceedResult(string targetOrderNo, decimal tmallOrderId, dynamic tmallOrder)
+        public static SyncResult FailedResult(string message)
+        {
+            return new SyncResult()
+            {
+                FailedReason = message,
+                Exception = null,
+                Succeed = false
+            };
+        }
+
+        public static SyncResult SucceedResult(string imsOrderNo, decimal tmallOrderId, dynamic tmallOrder)
         {
             return new SyncResult
             {
                 Succeed = true,
-                TargetOrderNo = targetOrderNo,
+                TargetOrderNo = imsOrderNo,
                 TmalOrderId = tmallOrderId,
                 TmallOrder = tmallOrder
             };

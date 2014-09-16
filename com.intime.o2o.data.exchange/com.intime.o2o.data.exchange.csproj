@@ -50,6 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ims\Domain\LogisticStatus.cs" />
+    <Compile Include="Ims\ImsRequest.cs" />
+    <Compile Include="Ims\Request\CreateOrderRequest.cs" />
+    <Compile Include="Ims\Request\QueryOrderStatusRequest.cs" />
+    <Compile Include="Ims\Response\QueryOrderStatusResponse.cs" />
     <Compile Include="IT\DefaultApiClient.cs" />
     <Compile Include="IT\IApiClient.cs" />
     <Compile Include="IT\InvalidResultException.cs" />
