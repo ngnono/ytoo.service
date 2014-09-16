@@ -3,9 +3,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace com.intime.fashion.data.tmall.Models.Mapping
 {
-    public class OrderPushErrorLogMap : EntityTypeConfiguration<OrderPushErrorLog>
+    public class OrderSynchErrorLogMap : EntityTypeConfiguration<OrderSynchErrorLog>
     {
-        public OrderPushErrorLogMap()
+        public OrderSynchErrorLogMap()
         {
             // Primary Key
             this.HasKey(t => t.Id);
@@ -16,7 +16,7 @@ namespace com.intime.fashion.data.tmall.Models.Mapping
                 .HasMaxLength(500);
 
             // Table & Column Mappings
-            this.ToTable("OrderPushErrorLog");
+            this.ToTable("OrderSynchErrorLog");
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.TmallOrderId).HasColumnName("TmallOrderId");
             this.Property(t => t.CreateDate).HasColumnName("CreateDate");
