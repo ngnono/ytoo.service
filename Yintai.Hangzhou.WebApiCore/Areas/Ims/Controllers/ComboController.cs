@@ -32,13 +32,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_Combo2ProductEntity> _combo2productRepo;
         private IResourceRepository _resourceRepo;
         private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
-        private ComboService _comboService;
+        private IComboService _comboService;
         private IOrderService _orderService;
         public ComboController(IEFRepository<IMS_ComboEntity> comboRepo
             , IEFRepository<IMS_Combo2ProductEntity> combo2productRepo
             , IResourceRepository resourceRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateItemRepo,
-            ComboService comboService,
+            IComboService comboService,
             IOrderService orderService)
         {
             _comboRepo = comboRepo;

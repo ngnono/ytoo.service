@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.service.analysis", "com.intime.fashion.service.analysis\com.intime.fashion.service.analysis.csproj", "{21DC1636-76E3-4F12-8162-97A56B09C21D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.service.contract", "com.intime.fashion.service.contract\com.intime.fashion.service.contract.csproj", "{E69391AB-6E94-4937-9C34-3A5485F71592}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -297,6 +299,16 @@ Global
 		{21DC1636-76E3-4F12-8162-97A56B09C21D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{21DC1636-76E3-4F12-8162-97A56B09C21D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{21DC1636-76E3-4F12-8162-97A56B09C21D}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E69391AB-6E94-4937-9C34-3A5485F71592}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E69391AB-6E94-4937-9C34-3A5485F71592}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E69391AB-6E94-4937-9C34-3A5485F71592}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E69391AB-6E94-4937-9C34-3A5485F71592}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E69391AB-6E94-4937-9C34-3A5485F71592}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E69391AB-6E94-4937-9C34-3A5485F71592}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E69391AB-6E94-4937-9C34-3A5485F71592}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E69391AB-6E94-4937-9C34-3A5485F71592}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E69391AB-6E94-4937-9C34-3A5485F71592}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E69391AB-6E94-4937-9C34-3A5485F71592}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -315,6 +327,7 @@ Global
 		{097E9EAF-EC77-4FB2-86FB-7B30ACD7DF93} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
 		{BE512BBF-4F5A-4909-B9C0-CF3419E0F945} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
 		{21DC1636-76E3-4F12-8162-97A56B09C21D} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
+		{E69391AB-6E94-4937-9C34-3A5485F71592} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
 		{93E896A8-D229-4422-B31B-DF2F2403728E} = {32D121FF-079E-402E-9A1E-C1049913BEF9}
 		{0F72CED6-CDD5-4F97-BB8B-CDB54FC1BEF6} = {32D121FF-079E-402E-9A1E-C1049913BEF9}
 		{4166633A-304A-426F-9A78-7B853A9490A2} = {32D121FF-079E-402E-9A1E-C1049913BEF9}

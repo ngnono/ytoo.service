@@ -76,7 +76,8 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
 
             Current.Register<IHotwordDataService, HotwordDataService>();
 
-            Current.Register<ComboService, ComboService>();
+            Current.Register<IComboService, ComboService>();
+            Current.Register<IShippingFeeService, ShippingFeeService>();
             Current.Register<IOrderService, OrderService>();
             Current.Register<IMessageCenterProvider, MessageProvider>();
 

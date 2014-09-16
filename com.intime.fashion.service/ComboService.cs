@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.intime.fashion.service.contract;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -11,7 +12,7 @@ using Yintai.Hangzhou.Repository.Contract;
 
 namespace com.intime.fashion.service
 {
-    public partial class ComboService:BusinessServiceBase
+    public partial class ComboService:BusinessServiceBase, IComboService
     {
         private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
         private IEFRepository<IMS_ComboEntity> _comboRepo;
@@ -21,9 +22,7 @@ namespace com.intime.fashion.service
         public ComboService(IEFRepository<IMS_AssociateItemsEntity> associateItemRepo,
             IEFRepository<IMS_ComboEntity> comboRepo,
             IEFRepository<IMS_Combo2ProductEntity> combo2productRepo,
-            IResourceRepository resourceRepo,
-            ILog log,
-            DbContext db):base(log,db)
+            IResourceRepository resourceRepo):base()
         {
             _associateItemRepo = associateItemRepo;
             _comboRepo = comboRepo;
