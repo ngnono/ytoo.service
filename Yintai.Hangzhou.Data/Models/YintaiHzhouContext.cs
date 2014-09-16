@@ -256,6 +256,8 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<SeedEntity> Seeds { get; set; }
         public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
         public DbSet<ShippingAddressEntity> ShippingAddresses { get; set; }
+        public DbSet<ShippingRuleEntity> ShippingRules { get; set; }
+        public DbSet<ShippingRuleFixEntity> ShippingRuleFixes { get; set; }
         public DbSet<ShipViaEntity> ShipVias { get; set; }
         public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
         public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
@@ -421,6 +423,8 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new SeedEntityMap());
             modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
             modelBuilder.Configurations.Add(new ShippingAddressEntityMap());
+            modelBuilder.Configurations.Add(new ShippingRuleEntityMap());
+            modelBuilder.Configurations.Add(new ShippingRuleFixEntityMap());
             modelBuilder.Configurations.Add(new ShipViaEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());

@@ -19,6 +19,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(100);
 
+            this.Property(t => t.SellerAccount)
+                .HasMaxLength(500);
+
             // Table & Column Mappings
             this.ToTable("Group_AliKeys");
             this.Property(t => t.Id).HasColumnName("Id");

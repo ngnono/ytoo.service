@@ -27,6 +27,13 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(100);
 
+            this.Property(t => t.ParterKey)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            this.Property(t => t.PaidLikeUrl)
+                .HasMaxLength(500);
+
             // Table & Column Mappings
             this.ToTable("Group_WeixinKeys");
             this.Property(t => t.Id).HasColumnName("Id");
