@@ -71,8 +71,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.fashion.data.tmall", "com.intime.fashion.data.tmall\com.intime.fashion.data.tmall.csproj", "{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.intime.o2o.data.exchange.test", "com.intime.o2o.data.exchange.test\com.intime.o2o.data.exchange.test.csproj", "{3BF622CC-ACE4-4A0C-8DB8-18B975089347}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -363,16 +361,6 @@ Global
 		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185}.Release|Win32.ActiveCfg = Release|Any CPU
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -407,6 +395,5 @@ Global
 		{E69391AB-6E94-4937-9C34-3A5485F71592} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
 		{9F3B1365-64F9-43D3-8AA8-EAB91E1B7C9E} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
 		{0DC9C1AC-D758-40D5-A5D2-73BC0ECC9185} = {3B87CA1E-85FA-456C-ADF0-6B53AFF9EE9E}
-		{3BF622CC-ACE4-4A0C-8DB8-18B975089347} = {6A5C4C61-BE33-460B-BAF5-7E74DCFE7317}
 	EndGlobalSection
 EndGlobal
