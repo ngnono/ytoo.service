@@ -39,6 +39,7 @@
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +47,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TopSdk">
+      <HintPath>..\_dll\TopSdk.dll</HintPath>
+    </Reference>
     <Reference Include="Yintai.Architecture.Common">
       <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
@@ -56,8 +60,10 @@
   <ItemGroup>
     <Compile Include="MessageHandler.cs" />
     <Compile Include="Message\ComboHandler.cs" />
+    <Compile Include="Message\ComboUpdatedHandler.cs" />
     <Compile Include="Message\DaogouApplyApprovedHandler.cs" />
     <Compile Include="Message\GiftcardPaidHandler.cs" />
+    <Compile Include="Message\InventoryUpdatedHandler.cs" />
     <Compile Include="Message\InventoryHandler.cs" />
     <Compile Include="Message\OrderPaidHandler.cs" />
     <Compile Include="Message\ProductHandler.cs" />
