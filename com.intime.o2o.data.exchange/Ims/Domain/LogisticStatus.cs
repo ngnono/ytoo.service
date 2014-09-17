@@ -36,5 +36,8 @@ namespace com.intime.o2o.data.exchange.Ims.Domain
 
         [DataMember(Name = "store")]
         public string Store { get; set; }
+
+        [DataMember(Name = "storeId")]
+        public int StoreId { get; set; }
     }
 }

@@ -425,7 +425,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                             express = sse.ShipViaName,
                             expressId = sse.ShipViaId,
                             shippno = sse.ShippingCode,
-                            store = store.Name
+                            store = store.Name,
+                            storeId = store.Id
                         };
             return items;
         }

@@ -50,7 +50,6 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                     catch (Exception ex)
                     {
                         result = SyncResult.ExceptionResult(ex, trade);
-                        Logger.Error(ex);
                     }
                     ProcessSyncResult(result);
                 }
@@ -128,6 +127,10 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                         db.Set<OrderSynchErrorLog>().Add(failedLog);
                         db.SaveChanges();
                     }
+                    if (result.Exception != null)
+                    {
+                        Logger.Error(result.Exception);
+                    }
                 }
             }
         }
@@ -144,10 +147,11 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 throw new ArgumentException("Trade response is null");
             }
             var tmallOrder = JsonConvert.DeserializeObject<dynamic>(trade.jdp_response);
+           
             dynamic imsOrder = new
             {
                 sonumber = tmallOrder.tid,
-                transno = tmallOrder.tid,
+                transno = tmallOrder.alipay_no,
                 totalAmount = tmallOrder.total_fee,
                 receivedAmount = tmallOrder.payment,
                 paymentMehtodCode = TMALL_PAYMENT_METHOD_CODE,//todo 支付编码未确定

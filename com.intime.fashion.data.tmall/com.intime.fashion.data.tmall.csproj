@@ -54,10 +54,12 @@
     <Compile Include="Models\Mapping\JDP_TB_TRADEMap.cs" />
     <Compile Include="Models\Mapping\OrderSynchErrorLogMap.cs" />
     <Compile Include="Models\Mapping\OrderSyncMap.cs" />
+    <Compile Include="Models\Mapping\LogisticsAddressMappingMap.cs" />
     <Compile Include="Models\Mapping\ShipViaMappingMap.cs" />
     <Compile Include="Models\Mapping\SubOrderMap.cs" />
     <Compile Include="Models\OrderSync.cs" />
     <Compile Include="Models\OrderSynchErrorLog.cs" />
+    <Compile Include="Models\LogisticsAddressMapping.cs" />
     <Compile Include="Models\ShipViaMapping.cs" />
     <Compile Include="Models\SubOrder.cs" />
     <Compile Include="Models\SYS_INFOContext.cs" />

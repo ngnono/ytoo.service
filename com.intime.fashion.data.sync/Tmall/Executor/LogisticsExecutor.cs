@@ -56,9 +56,13 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             // todo 获取订单状态
             var request = new QueryOrderStatusRequest() { Data = orderIds };
             var response = _imsApiClient.Post(request);
+            if (!response.Data.Any())
+            {
+                return;
+            }
             if (response.Status)
             {
-                Mark(oneTimeList, response.Data);
+                SyncLogistics(oneTimeList, response.Data);
             }
             else
             {
@@ -67,7 +71,12 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             }
         }
 
-        private void Mark(IEnumerable<OrderSync> oneTimeList, IEnumerable<LogisticStatus> logisticStatus)
+        /// <summary>
+        /// 同步物流信息
+        /// </summary>
+        /// <param name="oneTimeList"></param>
+        /// <param name="logisticStatus"></param>
+        private void SyncLogistics(IEnumerable<OrderSync> oneTimeList, IEnumerable<LogisticStatus> logisticStatus)
         {
             foreach (var orderSync in oneTimeList)
             {
@@ -89,40 +98,74 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
         /// <param name="logistic"></param>
         private void SyncOne(OrderSync orderSync, LogisticStatus logistic)
         {
-            foreach (var item in logistic.Logistics)
+
+            foreach (var express in logistic.Logistics.GroupBy(x => string.Format("{0}/{1}{2}", x.StoreId, x.LogisticCode, x.CompanyId)))
             {
-                int stockId = item.StockId;
+                var ship = express.FirstOrDefault();
+                if(ship == null) continue;
                 var request = new LogisticsOfflineSendRequest
                 {
-                    CompanyCode = GetCompanyCode(item),
-                    OutSid = item.LogisticCode,
+                    CompanyCode = GetCompanyCode(express.FirstOrDefault()),
+                    OutSid =ship.LogisticCode,
                     Tid = long.Parse(orderSync.TmallOrderId.ToString()),
-                    SubTid = GetSubOrderId(item.StockId)
+                    SubTid = GetSubOrderIdStr(express),
+                    CancelId = GetCancelId(ship.StoreId)
                 };
 
-                var response = _topClient.Execute(request);
-                if (response.IsError)
+                var rsp = _topClient.Execute(request);
+                if (rsp.IsError)
                 {
-                    Logger.Error(response.ErrMsg);
+                    Logger.Error(rsp);
                 }
                 else
                 {
-                    using (var db = DbContextHelper.GetJushitaContext())
-                    {
-                        //todo here log logistics
-                        var subOrder =
-                            db.Set<SubOrder>().FirstOrDefault(x => x.TmallOrderId == orderSync.TmallOrderId && x.ImsInventoryId == stockId);
-                        if (subOrder != null && !subOrder.LogisticsSynced)
-                        {
-                            subOrder.LogisticsSynced = true;
-                            subOrder.UpdateDate = DateTime.Now;
-                            db.SaveChanges();
-                        }
-                    }
+                    MarkSubOrders(orderSync, express.AsEnumerable());
                 }
             }
-
+            
             SetOrderLogisticsSynced(orderSync);
+        }
+
+        /// <summary>
+        /// 获取门店对应的发货地址ID
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <returns></returns>
+        private long? GetCancelId(int storeId)
+        {
+            using (var db = DbContextHelper.GetJushitaContext())
+            {
+                var map = db.Set<LogisticsAddressMapping>().FirstOrDefault(x => x.StoreId == storeId);
+                if (map == null)
+                {
+                    return null;
+                }
+                return map.TmallAddressId;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderSync"></param>
+        /// <param name="express"></param>
+        private void MarkSubOrders(OrderSync orderSync, IEnumerable<Logistic> express)
+        {
+            using (var db = DbContextHelper.GetJushitaContext())
+            {
+                foreach (var logistic in express)
+                {
+                    int stockId = logistic.StockId;
+                    var subOrder =
+                                 db.Set<SubOrder>().FirstOrDefault(x => x.TmallOrderId == orderSync.TmallOrderId && x.ImsInventoryId == stockId);
+                    if (subOrder != null && !subOrder.LogisticsSynced)
+                    {
+                        subOrder.LogisticsSynced = true;
+                        subOrder.UpdateDate = DateTime.Now;
+                        db.SaveChanges();
+                    }     
+                }
+            }
         }
 
         /// <summary>
@@ -148,20 +191,16 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
         }
 
         /// <summary>
-        /// 获取天猫子订单号，对应线下库存ID
+        /// 获取同一个快递包裹里所有的子订单号
         /// </summary>
         /// <param name="stockId"></param>
         /// <returns></returns>
-        private string GetSubOrderId(int stockId)
+        private string GetSubOrderIdStr(IEnumerable<Logistic> logistics)
         {
+            var stockIds = logistics.Select(x => x.StockId).ToList();
             using (var db = DbContextHelper.GetJushitaContext())
             {
-                var subOrder = db.Set<SubOrder>().FirstOrDefault(x => x.ImsInventoryId == stockId);
-                if (subOrder == null)
-                {
-                    throw new ArgumentException(string.Format("Invalid stockId ({0})", stockId));
-                }
-                return subOrder.TmallSubOrderId.ToString();
+                return string.Join(",", db.Set<SubOrder>().Where(x => stockIds.Contains(x.ImsInventoryId)).Select(x=>x.TmallSubOrderId));                
             }
         }
 
@@ -170,15 +209,15 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        private string GetCompanyCode(dynamic item)
+        private string GetCompanyCode(Logistic item)
         {
             using (var db = DbContextHelper.GetJushitaContext())
             {
-                int expressId = item.expressId;
+                int expressId = item.CompanyId;
                 var logistics = db.Set<ShipViaMapping>().FirstOrDefault(x => x.ImsShipViaId == expressId && x.Channel == "tmall");
                 if (logistics == null)
                 {
-                    return item.ShipViaName;
+                    return item.CompanyName;
                 }
                 return logistics.CompanyCode;
             }
