@@ -60,6 +60,9 @@
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="TopSdk">
+      <HintPath>..\_dll\TopSdk.dll</HintPath>
+    </Reference>
     <Reference Include="Yintai.Architecture.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
@@ -71,8 +74,9 @@
     <Compile Include="ISyncRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tmall\Executor\ExecutorBase.cs" />
+    <Compile Include="Tmall\Executor\LogisticsExecutor.cs" />
     <Compile Include="Tmall\Executor\OrderExecutorBase.cs" />
-    <Compile Include="Tmall\Executor\OrderPushExecutor.cs" />
+    <Compile Include="Tmall\Executor\OrderSyncExecutor.cs" />
     <Compile Include="Tmall\Executor\OrderType.cs" />
     <Compile Include="Tmall\Executor\SyncResult.cs" />
     <Compile Include="WebUtils.cs" />
@@ -150,6 +154,10 @@
     <ProjectReference Include="..\com.intime.fashion.service\com.intime.fashion.service.csproj">
       <Project>{be4f98bc-b4a2-4fc0-ae7a-96938218f098}</Project>
       <Name>com.intime.fashion.service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.o2o.data.exchange\com.intime.o2o.data.exchange.csproj">
+      <Project>{6dfef1cf-0b94-420e-82a7-c6cabba3624a}</Project>
+      <Name>com.intime.o2o.data.exchange</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
       <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>

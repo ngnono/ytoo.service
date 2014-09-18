@@ -19,16 +19,22 @@ namespace com.intime.fashion.data.tmall.Models
         public DbSet<JDP_TB_ITEM> JDP_TB_ITEM { get; set; }
         public DbSet<JDP_TB_REFUND> JDP_TB_REFUND { get; set; }
         public DbSet<JDP_TB_TRADE> JDP_TB_TRADE { get; set; }
-        public DbSet<OrderPushErrorLog> OrderPushErrorLogs { get; set; }
-        public DbSet<OrderPushHistory> OrderPushHistories { get; set; }
+        public DbSet<LogisticsAddressMapping> LogisticsAddressMappings { get; set; } 
+        public DbSet<OrderSync> OrderSyncs { get; set; }
+        public DbSet<OrderSynchErrorLog> OrderSynchErrorLogs { get; set; }
+        public DbSet<ShipViaMapping> ShipViaMappings { get; set; }
+        public DbSet<SubOrder> SubOrders { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new JDP_TB_ITEMMap());
             modelBuilder.Configurations.Add(new JDP_TB_REFUNDMap());
             modelBuilder.Configurations.Add(new JDP_TB_TRADEMap());
-            modelBuilder.Configurations.Add(new OrderPushErrorLogMap());
-            modelBuilder.Configurations.Add(new OrderPushHistoryMap());
+            modelBuilder.Configurations.Add(new LogisticsAddressMappingMap());
+            modelBuilder.Configurations.Add(new OrderSyncMap());
+            modelBuilder.Configurations.Add(new OrderSynchErrorLogMap());
+            modelBuilder.Configurations.Add(new ShipViaMappingMap());
+            modelBuilder.Configurations.Add(new SubOrderMap());
         }
     }
 }

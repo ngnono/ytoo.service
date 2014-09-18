@@ -1,20 +1,28 @@
-﻿using com.intime.fashion.data.tmall.Models;
+﻿using System.Configuration;
+using com.intime.fashion.data.tmall.Models;
+using com.intime.o2o.data.exchange.Ims.Request;
+using com.intime.o2o.data.exchange.IT;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Transactions;
 
 namespace com.intime.fashion.data.sync.Tmall.Executor
 {
-    public class OrderPushExecutor : OrderExecutorBase
+    public class OrderSyncExecutor : OrderExecutorBase
     {
-        public OrderPushExecutor(DateTime benchTime, int pageSize)
+        private static string TMALL_PAYMENT_METHOD_CODE = ConfigurationManager.AppSettings["TMALL_PAYMENT_METHOD_CODE"];
+        private static string TMALL_PAYMENT_METHOD_NAME = ConfigurationManager.AppSettings["TMALL_PAYMENT_METHOD_NAME"];
+        private IApiClient _imsClient;
+        public OrderSyncExecutor(DateTime benchTime, int pageSize, IApiClient client)
             : base(benchTime, pageSize)
         {
+            this._imsClient = client;
         }
 
-        public OrderPushExecutor()
-            : this(DateTime.Now.AddMinutes(-10), 50)
+        public OrderSyncExecutor(IApiClient client)
+            : this(DateTime.Now.AddMinutes(-10), 50, client)
         {
         }
 
@@ -41,7 +49,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                     }
                     catch (Exception ex)
                     {
-                        result = SyncResult.FailedResult(ex, trade);
+                        result = SyncResult.ExceptionResult(ex, trade);
                     }
                     ProcessSyncResult(result);
                 }
@@ -51,28 +59,54 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             }
         }
 
+        /// <summary>
+        /// 处理成功后要记录在订单映射表
+        /// </summary>
+        /// <param name="result"></param>
         private void ProcessSyncResult(SyncResult result)
         {
             using (var db = DbContextHelper.GetJushitaContext())
             {
                 if (result.Succeed)
                 {
-                    if (!db.Set<OrderPushHistory>().Any(x => x.TmallOrderId == result.TmalOrderId))
+                    using (var trans = new TransactionScope())
                     {
-                        db.Set<OrderPushHistory>().Add(new OrderPushHistory()
+                        if (!db.Set<OrderSync>().Any(x => x.TmallOrderId == result.TmalOrderId))
                         {
-                            CreateDate = DateTime.Now,
-                            TmallOrderId = result.TmalOrderId,
-                            ImsOrderNo = result.TargetOrderNo,
-                            Type = (int)OrderType.Order,
-                            UpdateDate = DateTime.Now
-                        });
-                        db.SaveChanges();
+                            //天猫订单和ims订单映射关系
+                            db.Set<OrderSync>().Add(new OrderSync()
+                            {
+                                CreateDate = DateTime.Now,
+                                TmallOrderId = result.TmalOrderId,
+                                ImsOrderNo = result.TargetOrderNo,
+                                Type = (int)OrderType.Order,
+                                UpdateDate = DateTime.Now,
+                                LogisticsSynced = false
+                            });
+
+                            // 子订单映射到ims库存，以便物流信息回传使用
+                            foreach (var subOrder in result.TmallOrder.orders.order)
+                            {
+                                db.Set<SubOrder>().Add(new SubOrder()
+                                {
+                                    CreateDate = DateTime.Now,
+                                    IsForceSynced = false,
+                                    LogisticsSynced = false,
+                                    Store = null,
+                                    TmallOrderId = result.TmalOrderId,
+                                    TmallSubOrderId = subOrder.oid,
+                                    UpdateDate = DateTime.Now,
+                                    ImsInventoryId = subOrder.outer_sku_id
+                                });
+                            }
+                            db.SaveChanges();
+                            trans.Complete();
+                        }
                     }
                 }
                 else
                 {
-                    var failedLog = db.Set<OrderPushErrorLog>()
+                    var failedLog = db.Set<OrderSynchErrorLog>()
                         .FirstOrDefault(x => x.TmallOrderId == result.TmalOrderId);
                     if (failedLog != null)
                     {
@@ -81,7 +115,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                     }
                     else
                     {
-                        failedLog = new OrderPushErrorLog()
+                        failedLog = new OrderSynchErrorLog()
                         {
                             CreateDate = DateTime.Now,
                             FailedCount = 1,
@@ -90,27 +124,37 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                             TmallOrderId = result.TmalOrderId,
                             Type = (int)OrderType.Order
                         };
-                        db.Set<OrderPushErrorLog>().Add(failedLog);
+                        db.Set<OrderSynchErrorLog>().Add(failedLog);
                         db.SaveChanges();
+                    }
+                    if (result.Exception != null)
+                    {
+                        Logger.Error(result.Exception);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// 推送迷你银订单
+        /// </summary>
+        /// <param name="trade"></param>
+        /// <returns></returns>
         private SyncResult SyncOne(JDP_TB_TRADE trade)
         {
             if (string.IsNullOrEmpty(trade.jdp_response))
             {
                 throw new ArgumentException("Trade response is null");
             }
-            var  tmallOrder = JsonConvert.DeserializeObject<dynamic>(trade.jdp_response);
+            var tmallOrder = JsonConvert.DeserializeObject<dynamic>(trade.jdp_response);
+           
             dynamic imsOrder = new
             {
                 sonumber = tmallOrder.tid,
-                transno = tmallOrder.tid,
+                transno = tmallOrder.alipay_no,
                 totalAmount = tmallOrder.total_fee,
                 receivedAmount = tmallOrder.payment,
-                paymentMehtodCode = "C019",//
+                paymentMehtodCode = TMALL_PAYMENT_METHOD_CODE,//todo 支付编码未确定
                 shipingFee = tmallOrder.post_fee,
                 memo = tmallOrder.buyer_message,
                 paid = true,
@@ -131,12 +175,14 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 products = new List<dynamic>(),
             };
 
+            //todo 支付编码未确定
             imsOrder.payment.Add(new
             {
-                code = "",
-                name = "",
+                code = TMALL_PAYMENT_METHOD_CODE,
+                name = TMALL_PAYMENT_METHOD_NAME,
                 amount = tmallOrder.payment,
             });
+
 
             foreach (var order in tmallOrder.orders.order)
             {
@@ -149,7 +195,13 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 });
             }
 
-            return SyncResult.SucceedResult(null, decimal.MaxValue);
+            var request = new CreateOrderRequest { Data = imsOrder };
+            var rsp = _imsClient.Post(request);
+            if (rsp.Status)
+            {
+                return SyncResult.SucceedResult(rsp.Data.orderNo.ToString(), tmallOrder.tid, tmallOrder);
+            }
+            return SyncResult.FailedResult(string.Format("Notify order failed, order tid is ({0}) Error reason is: ({1})", tmallOrder.tid, rsp.Message));
         }
 
         public override OrderType OrderType

@@ -403,10 +403,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
 
         private IEnumerable<dynamic> QueryStatus(OrderEntity order)
         {
-            if (order.Status != (int)OrderStatus.Shipped)
-            {
-                return new List<dynamic>();
-            }
+            //if (order.Status != (int)OrderStatus.Shipped)
+            //{
+            //    return new List<dynamic>();
+            //}
 
             var items = from sale in Context.Set<OPC_SaleEntity>()
                         from sd in Context.Set<OPC_SaleDetailEntity>()
@@ -423,8 +423,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                             productId = oi.ProductId,
                             stockId = stock.Id,
                             express = sse.ShipViaName,
+                            expressId = sse.ShipViaId,
                             shippno = sse.ShippingCode,
-                            store = store.Name
+                            store = store.Name,
+                            storeId = store.Id
                         };
             return items;
         }

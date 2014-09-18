@@ -1,27 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 using com.intime.fashion.data.tmall.Models;
 
 namespace com.intime.fashion.data.sync.Tmall.Executor
 {
     public class SyncResult
     {
-        public static SyncResult FailedResult(Exception ex,JDP_TB_TRADE trade)
+        public static SyncResult ExceptionResult(Exception ex, JDP_TB_TRADE trade)
         {
-            return new SyncResult()
+            return new SyncResult
             {
-                FailedReason =  string.Format("Order tid is({0})",trade.tid),
-                Exception =  ex,
-                Succeed =  false
+                FailedReason = string.Format("Order tid is({0})", trade.tid),
+                Exception = ex,
+                Succeed = false
             };
         }
 
-        public static SyncResult SucceedResult(string targetOrderNo,decimal tmallOrderId)
+        public static SyncResult FailedResult(string message)
         {
             return new SyncResult()
             {
+                FailedReason = message,
+                Exception = null,
+                Succeed = false
+            };
+        }
+
+        public static SyncResult SucceedResult(string imsOrderNo, decimal tmallOrderId, dynamic tmallOrder)
+        {
+            return new SyncResult
+            {
                 Succeed = true,
-                TargetOrderNo = targetOrderNo,
-                TmalOrderId = tmallOrderId
+                TargetOrderNo = imsOrderNo,
+                TmalOrderId = tmallOrderId,
+                TmallOrder = tmallOrder
             };
         }
 
@@ -34,5 +46,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
         public string FailedReason { get; set; }
 
         public Exception Exception { get; set; }
+
+        public dynamic TmallOrder { get; private set; }
     }
 }
