@@ -39,7 +39,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             , IResourceRepository resourceRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateItemRepo,
             IComboService comboService,
-            IOrderService orderService)
+            IOrderService orderService
+            )
         {
             _comboRepo = comboRepo;
             _combo2productRepo = combo2productRepo;

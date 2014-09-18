@@ -32,6 +32,7 @@ namespace com.intime.fashion.service.ShippingFee
                 {
                     if (_matchMethods == null)
                     {
+                        _matchMethods = new List<IShippingRuleMatch>();
                         _matchMethods.Add(new StoreMatchMethod());
                     }
                 }
