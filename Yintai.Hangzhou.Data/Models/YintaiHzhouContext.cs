@@ -21,7 +21,7 @@ namespace Yintai.Hangzhou.Data.Models
             _log = Architecture.Framework.ServiceLocation.ServiceLocator.Current.Resolve<Architecture.Common.Logger.ILog>();
         }
 
-		/// <summary>
+        /// <summary>
         /// 正式环境使用，无跟踪
         /// </summary>
         public YintaiHangzhouContext()
@@ -41,7 +41,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         #region ef tracing
 
-		public YintaiHangzhouContext(string nameOrConnectionString)
+        public YintaiHangzhouContext(string nameOrConnectionString)
             : this(nameOrConnectionString, new InMemoryCache(512), CachingPolicy.CacheAll)
         {
         }
@@ -49,7 +49,7 @@ namespace Yintai.Hangzhou.Data.Models
         public YintaiHangzhouContext(string nameOrConnectionString, ICache cacheProvider, CachingPolicy cachingPolicy)
             : base(Architecture.Common.Data.EF.EFTracingUtil.GetConnection(nameOrConnectionString), true)
         {
-			var ctx = ((IObjectContextAdapter)this).ObjectContext;
+            var ctx = ((IObjectContextAdapter)this).ObjectContext;
 
             this.ObjectContext = ctx;
 
@@ -69,7 +69,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         #endregion
 
-		#region Tracing Extensions
+        #region Tracing Extensions
 
         private ObjectContext ObjectContext { get; set; }
 
@@ -119,7 +119,7 @@ namespace Yintai.Hangzhou.Data.Models
 
         #endregion
 
-		#region code reverse
+        #region code reverse
         public DbSet<AdminAccessRightEntity> AdminAccessRights { get; set; }
         public DbSet<BannerEntity> Banners { get; set; }
         public DbSet<BrandEntity> Brands { get; set; }
@@ -277,10 +277,11 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<WXReplyEntity> WXReplies { get; set; }
         public DbSet<VUserEntity> VUsers { get; set; }
         public DbSet<VUserRoleEntity> VUserRoles { get; set; }
+        public DbSet<ProductPoolEntity> ProductPool { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-			Configuration.AutoDetectChangesEnabled = false;
+            Configuration.AutoDetectChangesEnabled = false;
             // 移除复数表名的契约
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
@@ -444,8 +445,9 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new WXReplyEntityMap());
             modelBuilder.Configurations.Add(new VUserEntityMap());
             modelBuilder.Configurations.Add(new VUserRoleEntityMap());
+            modelBuilder.Configurations.Add(new ProductPoolEntityMap());
         }
 
-		#endregion
+        #endregion
     }
 }
