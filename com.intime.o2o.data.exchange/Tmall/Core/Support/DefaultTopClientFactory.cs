@@ -29,7 +29,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Core.Support
 
         private string GetConfig(string key, string consumerKey)
         {
-            var configKey = string.Format("{0}.{1}", consumerKey, key);
+            var configKey = string.Format("{0}.tmall.{1}", consumerKey, key);
             return ConfigurationManager.AppSettings[key] ?? string.Empty;
         }
     }

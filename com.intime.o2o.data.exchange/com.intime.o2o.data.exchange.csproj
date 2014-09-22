@@ -98,8 +98,6 @@
     <Compile Include="Tmall\Core\ConvertionExtensions.cs" />
     <Compile Include="Tmall\Core\ITopClientFactory.cs" />
     <Compile Include="Tmall\Core\Support\DefaultTopClientFactory.cs" />
-    <Compile Include="Tmall\Product\Jobs\ItemPushJob.cs" />
-    <Compile Include="Tmall\Product\Jobs\ProductPushJob.cs" />
     <Compile Include="Tmall\Product\Mappers\IBrandMapper.cs" />
     <Compile Include="Tmall\Product\Mappers\ICategoryMapper.cs" />
     <Compile Include="Tmall\Product\Mappers\IItemMapper.cs" />
@@ -111,10 +109,11 @@
     <Compile Include="Tmall\Product\Mappers\Support\DefaultItemMapper.cs" />
     <Compile Include="Tmall\Product\Mappers\Support\DefaultProductMapper.cs" />
     <Compile Include="Tmall\Product\Mappers\Support\DefaultSchemaMapper.cs" />
+    <Compile Include="Tmall\Product\Models\ProductSynStatus.cs" />
     <Compile Include="Tmall\Product\Models\ResultInfo.cs" />
-    <Compile Include="Tmall\Product\Services\IExtractionService.cs" />
+    <Compile Include="Tmall\Product\Services\IProductPoolService.cs" />
     <Compile Include="Tmall\Product\Services\IProductPushService.cs" />
-    <Compile Include="Tmall\Product\Services\Support\ExtractionService.cs" />
+    <Compile Include="Tmall\Product\Services\Support\ProductPoolService.cs" />
     <Compile Include="Tmall\Product\Services\Support\ProductPushService.cs" />
   </ItemGroup>
   <ItemGroup>

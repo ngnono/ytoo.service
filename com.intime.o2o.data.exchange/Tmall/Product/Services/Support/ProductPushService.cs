@@ -8,6 +8,7 @@ using com.intime.o2o.data.exchange.Tmall.Core;
 using com.intime.o2o.data.exchange.Tmall.Core.Support;
 using com.intime.o2o.data.exchange.Tmall.Mappers.Support;
 using com.intime.o2o.data.exchange.Tmall.Product.Mappers;
+using com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
 
 using Top.Api.Request;
@@ -90,9 +91,6 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             // 保存上传商品和成功后的商品Id的关系
             _productMapper.Save(productSchema.Id, productId);
-
-            //更新商品更新状态
-            //TODO:更新商品更新状态
 
             return Ok(productId);
         }

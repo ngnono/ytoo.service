@@ -194,6 +194,8 @@
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="Job\Push2awsJob.cs" />
     <Compile Include="Job\Store\StoreApplyApproveJob.cs" />
+    <Compile Include="Job\Tmall\Product\ItemPushJob.cs" />
+    <Compile Include="Job\Tmall\Product\ProductPushJob.cs" />
     <Compile Include="Job\Wgw\BrandSyncJob.cs" />
     <Compile Include="Job\Wgw\GetItemMultiStockJob.cs" />
     <Compile Include="Job\Wgw\ProductImageSyncJob.cs" />
@@ -297,6 +299,10 @@
       <Project>{be4f98bc-b4a2-4fc0-ae7a-96938218f098}</Project>
       <Name>com.intime.fashion.service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.o2o.data.exchange\com.intime.o2o.data.exchange.csproj">
+      <Project>{6dfef1cf-0b94-420e-82a7-c6cabba3624a}</Project>
+      <Name>com.intime.o2o.data.exchange</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>
       <Name>Yintai.Hangzhou.Contract</Name>
@@ -340,7 +346,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Configuration\Tmall\Templates\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

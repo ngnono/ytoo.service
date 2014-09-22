@@ -14,6 +14,7 @@ namespace Yintai.Hangzhou.Data.Models
         public bool POIUploaded { get; set; }
         public string MergedProductCode { get; set; }
         public string ErrorMessage { get; set; }
+        public bool IsDefault { get; set; }
 
         #region Overrides of BaseEntity
 

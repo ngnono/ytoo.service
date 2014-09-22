@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
-using com.intime.o2o.data.exchange.Tmall.Product.Mappers;
-using Commons.Collections;
 
+using Commons.Collections;
 using NVelocity;
 using NVelocity.App;
 using NVelocity.Runtime;
 
-namespace com.intime.o2o.data.exchange.Tmall.Mappers.Support
+namespace com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support
 {
     /// <summary>
     /// 默认Schema转化器
@@ -16,7 +15,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Mappers.Support
     public class DefaultSchemaMapper : ISchemaMapper
     {
         private readonly VelocityEngine _velocity;
-        private readonly string _tplPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates\\tmall");
+        private readonly string _tplPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configuration\\Templates\\Tmall");
 
         public DefaultSchemaMapper()
         {
@@ -28,6 +27,12 @@ namespace com.intime.o2o.data.exchange.Tmall.Mappers.Support
             _velocity = new VelocityEngine(props);
         }
 
+        /// <summary>
+        /// 映射模版数据
+        /// </summary>
+        /// <param name="schemaName">模版名称</param>
+        /// <param name="context">模版数据</param>
+        /// <returns>合并后的Xml数据</returns>
         public string Map(string schemaName, Hashtable context)
         {
             var template = _velocity.GetTemplate(string.Format("{0}.xml", schemaName));

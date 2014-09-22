@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using com.intime.o2o.data.exchange.Tmall.Core;
-using com.intime.o2o.data.exchange.Tmall.Product.Mappers;
 using Yintai.Hangzhou.Data.Models;
 
-namespace com.intime.o2o.data.exchange.Tmall.Mappers.Support
+namespace com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support
 {
     public class DefaultCategoryMapper : ICategoryMapper
     {
