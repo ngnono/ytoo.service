@@ -6,7 +6,6 @@ using System.Xml.XPath;
 
 using com.intime.o2o.data.exchange.Tmall.Core;
 using com.intime.o2o.data.exchange.Tmall.Core.Support;
-using com.intime.o2o.data.exchange.Tmall.Mappers.Support;
 using com.intime.o2o.data.exchange.Tmall.Product.Mappers;
 using com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
