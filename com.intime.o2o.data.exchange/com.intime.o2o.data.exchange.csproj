@@ -42,15 +42,14 @@
     <Reference Include="Nest">
       <HintPath>..\packages\NEST.0.12.0.0\lib\NET4\Nest.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NVelocity">
       <HintPath>..\packages\NVelocity.1.0.3\lib\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="Quartz">
-      <HintPath>..\packages\Quartz.2.2.4\lib\net40\Quartz.dll</HintPath>
+      <HintPath>..\packages\Quartz.2.2\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -67,6 +66,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="TopSdk">
       <HintPath>..\_dll\TopSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Yintai.Architecture.Common">
+      <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -123,10 +125,6 @@
     <ProjectReference Include="..\com.intime.fashion.service.search\com.intime.fashion.service.search.csproj">
       <Project>{be512bbf-4f5a-4909-b9c0-cf3419e0f945}</Project>
       <Name>com.intime.fashion.service.search</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Yintai.Architecture.Framework\Yintai.Architecture.Common\Yintai.Architecture.Common.csproj">
-      <Project>{59e0c0a8-622a-498a-ac66-1c9e0588c74c}</Project>
-      <Name>Yintai.Architecture.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
       <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>

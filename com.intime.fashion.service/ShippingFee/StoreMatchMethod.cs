@@ -18,8 +18,8 @@ namespace com.intime.fashion.service.ShippingFee
             var db = ServiceLocator.Current.Resolve<DbContext>();
             var productEntity = db.Set<ProductEntity>().Find(productId);
            var matchEntity= db.Set<ShippingRuleEntity>().Where(s => s.Status == (int)DataStatus.Normal &&
-                    s.FromDate >= DateTime.Now &&
-                    s.EndDate < DateTime.Now &&
+                    s.FromDate <= DateTime.Now &&
+                    s.EndDate > DateTime.Now &&
                     s.MatchMethod == (int)ShippingRuleMatchMethod.Store &&
                     s.MatchId == productEntity.Store_Id).FirstOrDefault();
            if (matchEntity == null)
