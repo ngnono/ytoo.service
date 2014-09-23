@@ -260,8 +260,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             {
                 o.Channel = channel;
                 o.Payment = PaymentMethod.FromEntity<PaymentMethod>(request.OrderModel.Payment);
-                o.Products = request.OrderModel.Products.Select(p => OrderItem.FromEntity<OrderItem>(p));
-                o.Properties = request.OrderModel.Properties.Select(pp => ProductPropertyValue.FromEntity<ProductPropertyValue>(pp));
+                o.Products = request.OrderModel.Products.Select(p => OrderItem.FromEntity<OrderItem>(p, pp => {
+                    pp.Properties = ProductPropertyValue.FromEntity<ProductPropertyValue>(p.Properties);
+                }));
                 o.ShippingAddress = OrderShippingAddress.FromEntity<OrderShippingAddress>(request.OrderModel.ShippingAddress);
 
             });

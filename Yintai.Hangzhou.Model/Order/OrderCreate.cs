@@ -13,7 +13,6 @@ namespace Yintai.Hangzhou.Model.Order
     {
         public IEnumerable<OrderItem> Products { get; set; }
 
-        public IEnumerable<ProductPropertyValue> Properties { get; set; }
 
         public OrderShippingAddress ShippingAddress { get; set; }
 
