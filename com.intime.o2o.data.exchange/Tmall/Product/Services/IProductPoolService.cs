@@ -27,6 +27,6 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services
         /// </summary>
         /// <param name="productId"></param>
         /// <param name="status"></param>
-        void UpdateProductStatus(int productId, ProductPoolStatus status);
+        void UpdateProductStatus(int productId, ProductPoolStatus status, string errorMessage);
     }
 }

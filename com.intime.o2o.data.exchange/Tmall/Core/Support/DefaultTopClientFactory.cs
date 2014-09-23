@@ -10,7 +10,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Core.Support
     {
         public ITopClient Get(string consumerKey)
         {
-            var serverUrl = GetConfig("serverUrl", consumerKey);
+            var serverUrl = GetConfig("serverURL", consumerKey);
             var appKey = GetConfig("appKey", consumerKey);
             var appSecure = GetConfig("appSecure", consumerKey);
 
@@ -30,7 +30,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Core.Support
         private string GetConfig(string key, string consumerKey)
         {
             var configKey = string.Format("{0}.tmall.{1}", consumerKey, key);
-            return ConfigurationManager.AppSettings[key] ?? string.Empty;
+            return ConfigurationManager.AppSettings[configKey] ?? string.Empty;
         }
     }
 }

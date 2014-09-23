@@ -16,7 +16,8 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support
 
             using (var db = new YintaiHangzhouContext())
             {
-                var extCategory = db.Map4Category.FirstOrDefault(c => c.CategoryCode == innerId.ToString() && c.Channel == ConstValue.Tmall);
+                var innerIdStr = innerId.ToString();
+                var extCategory = db.Map4Category.FirstOrDefault(c => c.CategoryCode == innerIdStr && c.Channel == ConstValue.Tmall);
                 return extCategory == null ? null : extCategory.ChannelCategoryId.ConvertTo<long>();
             }
         }
