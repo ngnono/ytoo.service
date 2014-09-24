@@ -31,6 +31,7 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
             {
                 Log.Info(string.Format("开始同步产品id:{0}到天猫", productSchema.Id));
 
+                // push 本地商品到tmall
                 var result = _productPushService.AddProduct(productSchema, "intime");
 
                 // 更新商品更新状态
@@ -38,6 +39,8 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
 
                 Log.Info(string.Format("完成同步产品id:{0}到天猫", productSchema.Id));
             }
+
+            Log.Info("结束同步商品到天猫");
         }
     }
 }

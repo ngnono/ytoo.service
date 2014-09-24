@@ -3,7 +3,6 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using System.Xml.XPath;
 
 using com.intime.o2o.data.exchange.Tmall.Core;
 using com.intime.o2o.data.exchange.Tmall.Core.Support;
@@ -22,6 +21,8 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
     /// </summary>
     public class ProductPushService : IProductPushService
     {
+        #region fileds
+
         private readonly ITopClientFactory _topClientFactory = new DefaultTopClientFactory();
         private readonly IBrandMapper _brandMapper = new DefaultBrandMapper();
         private readonly ICategoryMapper _categoryMapper = new DefaultCategoryMapper();
@@ -29,6 +30,10 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         private readonly IItemMapper _itemMapper = new DefaultItemMapper();
         private readonly ISchemaMapper _schemaMapper = new DefaultSchemaMapper();
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        #endregion
+
+        #region .ctor
 
         public ProductPushService()
         {
@@ -44,6 +49,10 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             _schemaMapper = schemaMapper;
             _itemMapper = itemMapper;
         }
+
+        #endregion
+
+        #region 产品相关接口
 
         /// <summary>
         /// 添加商品
@@ -134,15 +143,58 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             return Ok(productId);
         }
 
-        ResultInfo<bool> IProductPushService.UpdateProduct(ESProduct product, string consumerKey)
+        public ResultInfo<bool> UpdateProduct(ESProduct productSchema, string consumerKey)
         {
             /**================================================
-             * 获取商品映射关系
+             * 获取商品Id映射关系
              ==================================================*/
-            var productId = _productMapper.ToChannel(product.Id);
+            var productId = _productMapper.ToChannel(productSchema.Id);
+
+            if (productId == null)
+            {
+                var errorMessage = string.Format("商品Id没有映射，或没有上传商品，productId:{0}", productSchema.Id);
+                Log.Error(errorMessage);
+                return Error<bool>(errorMessage, "-10005");
+            }
+
+            /**================================================
+             * 品牌映射关系
+             ==================================================*/
+            var brandId = _brandMapper.ToChannel(productSchema.Brand.Id);
+
+            if (brandId == null)
+            {
+                var errorMessage = string.Format("商品品牌没有映射，productId:{0},brandId:{1}", productSchema.Id,
+                    productSchema.Brand.Id);
+                Log.Error(errorMessage);
+                return Error<bool>(errorMessage, "-10001");
+            }
+
+            /**================================================
+            * 分类的映射关系
+            ==================================================*/
+            var categoryId = _categoryMapper.ToChannel(productSchema.CategoryId);
+
+            if (categoryId == null)
+            {
+                var errorMessage = string.Format("商品分类没有映射，productId:{0},brandId:{1}", productSchema.Id,
+                    productSchema.CategoryId);
+                Log.Error(errorMessage);
+                return Error<bool>(errorMessage, "-10002");
+            }
+
+            // 创建templatekey,{模版名称}+{分类}+{品牌}
+            var templateKey = string.Format("tmall.schema.product.{0}.{1}", categoryId, brandId);
+
+            if (!_schemaMapper.ExistsTemplate(templateKey))
+            {
+                var errorMessage = string.Format("商品上传数据模版不存在，tempalte:{0}", templateKey);
+                Log.Error(errorMessage);
+                return Error<bool>(errorMessage, "-10003");
+            }
 
             // 转化商品数据Schema
-            var xmlData = CreateXmlData("tmall.schema.product", new Hashtable { { "product", product } });
+            var xmlData = CreateXmlData("tmall.schema.product", new Hashtable { { "product", productSchema } });
 
             // 根据门店获取Client
             var topClient = _topClientFactory.Get(consumerKey);
@@ -161,6 +213,10 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             return Ok(true);
         }
+
+        #endregion
+
+        #region 商品相关接口
 
         public ResultInfo<long> AddItem(ESStock item, ESProduct product, string consumerKey)
         {
@@ -222,6 +278,8 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             return Ok(true);
         }
+
+        #endregion
 
         #region 帮助方法
 

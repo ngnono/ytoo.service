@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+
 using com.intime.fashion.service.search;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
 using Nest;
@@ -14,6 +16,17 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
     /// </summary>
     public class ProductPoolService : IProductPoolService
     {
+        private const int ChannelId = 1008;
+        /**
+         * 说明：ProductPool status:
+         * 
+         * 100: 待处理产品
+         * 200：已经成功添加的商品
+         * 500：上传商品出错
+         * 800：上传产品完成，并完成商品的添加
+         * */
+        #region 获取待处理的新产品
+
         public IEnumerable<ESProduct> GetPendingProducts()
         {
             /**
@@ -33,11 +46,18 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             return GetProductsByIds(ids);
         }
 
+        #endregion
+
+        #region 获取待处理的Items
+
         public IEnumerable<ESStock> GetPendingItems()
         {
-            // TODO:实现获取单品信息逻辑
-            throw new System.NotImplementedException();
+            var mergedCodeList = GetAddedMergedProductCode();
         }
+
+        #endregion
+
+        #region 更新同步商品状态及失败原因
 
         public void UpdateProductStatus(int productId, ProductPoolStatus status, string errorMessage)
         {
@@ -53,6 +73,8 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             }
         }
 
+        #endregion
+
         #region 帮助方法
 
         private IList<string> GetProductIds()
@@ -66,15 +88,53 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 var list = db.ProductPool.Where(
                     p =>
                         p.Status == 100
-                        && p.ChannelId == 1008
+                        && p.ChannelId == ChannelId
                         && p.IsDefault == true)
                     .OrderBy(p => p.Id)
                    .Skip(0)
                    .Take(10).ToList();
 
-                return list.ConvertAll(p => p.ProductId.ToString());
+                return list.ConvertAll(p => p.ProductId.ToString(CultureInfo.InvariantCulture));
             }
         }
+
+        private IList<string> GetAddedMergedProductCode()
+        {
+            /**
+            *   获取已经成功上传产品的IDS
+             *  默认一次获取20条数据
+            */
+            using (var db = new YintaiHangzhouContext())
+            {
+                var list = db.ProductPool.Where(
+                    p =>
+                        p.Status == 200
+                        && p.ChannelId == ChannelId)
+                    .OrderBy(p => p.ProductId)
+                   .Skip(0)
+                   .Take(10).ToList();
+
+                return list.ConvertAll(p => p.MergedProductCode.ToString(CultureInfo.InvariantCulture));
+            }
+        }
+
+        private IList<string> GetProductIdsByMergedProductCode(string code)
+        {
+            using (var db = new YintaiHangzhouContext())
+            {
+                var list = db.ProductPool.Where(
+                    p =>
+                        p.Status == 200
+                        && p.MergedProductCode == code
+                        && p.ChannelId == ChannelId)
+                    .OrderBy(p => p.ProductId)
+                   .Skip(0)
+                   .Take(10).ToList();
+
+                return list.ConvertAll(p => p.MergedProductCode.ToString(CultureInfo.InvariantCulture));
+            }
+        }
+
 
         /// <summary>
         /// 获取默认的Es搜索Client
@@ -112,6 +172,22 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 body =>
                     body.Filter(q =>
                         q.Terms(p => p.Id, ids))
+                        .Skip(0).
+                        Size(5000))
+                    .Documents;
+        }
+
+        /// <summary>
+        /// 根据库存id,获取单品列表信息
+        /// </summary>
+        /// <param name="productId">商品Id</param>
+        /// <returns></returns>
+        private IEnumerable<ESStock> GetItemsByIdsByProductId(int productId)
+        {
+            return GetDefaultElasticClient().Search<ESStock>(
+                body =>
+                    body.Filter(q =>
+                        q.Term(p => p.ProductId, productId))
                         .Skip(0).
                         Size(5000))
                     .Documents;
