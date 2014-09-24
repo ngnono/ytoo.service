@@ -101,8 +101,6 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public decimal? UnitPrice { get; set; }
         [IgnoreDataMember]
         public Nullable<int> ProductType { get; set; }
-        [IgnoreDataMember]
-        public bool ChildNoVisible { get; set; }
 
     }
 }

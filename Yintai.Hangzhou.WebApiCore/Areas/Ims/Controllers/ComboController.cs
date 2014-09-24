@@ -325,7 +325,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     f.FavoriteSourceId == comboEntity.C.Id &&
                                     f.Status == (int)DataStatus.Normal);
                 oc.TemplateId = comboEntity.AA.TemplateId ?? 1;
-                oc.ChildNoVisible = oc.Products.Any(op => op.IsOnline == false);
 
             }));
 
