@@ -15,7 +15,8 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support
     public class DefaultSchemaMapper : ISchemaMapper
     {
         private readonly VelocityEngine _velocity;
-        private readonly string _tplPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configuration\\Templates\\Tmall");
+        private readonly string _tplPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configuration\\Tmall\\Templates");
+        private const string Ext = ".xml";
 
         public DefaultSchemaMapper()
         {
@@ -27,6 +28,11 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support
             _velocity = new VelocityEngine(props);
         }
 
+        public bool ExistsTemplate(string templateName)
+        {
+            return File.Exists(Path.Combine(_tplPath, templateName + Ext));
+        }
+
         /// <summary>
         /// 映射模版数据
         /// </summary>
@@ -35,7 +41,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support
         /// <returns>合并后的Xml数据</returns>
         public string Map(string schemaName, Hashtable context)
         {
-            var template = _velocity.GetTemplate(string.Format("{0}.xml", schemaName));
+            var template = _velocity.GetTemplate(string.Format("{0}{1}", schemaName, Ext));
 
             var velocityContext = new VelocityContext(context);
             var writer = new StringWriter();

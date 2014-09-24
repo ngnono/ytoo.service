@@ -15,5 +15,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Mappers
         /// <param name="context">转化的上下文</param>
         /// <returns>转化后的数据</returns>
         string Map(string schemaName, Hashtable context);
+
+        bool ExistsTemplate(string templateName);
     }
 }

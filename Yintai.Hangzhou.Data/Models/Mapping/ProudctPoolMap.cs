@@ -11,7 +11,12 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.HasKey(t => t.Id);
 
             // Properties
-          
+            this.Property(t => t.MergedProductCode)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            this.Property(t => t.ErrorMessage)
+                .HasMaxLength(500);
 
             // Table & Column Mappings
             this.ToTable("ProductPool");
@@ -23,11 +28,11 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ChannelId).HasColumnName("ChannelId");
             this.Property(t => t.POIUploaded).HasColumnName("POIUploaded");
             this.Property(t => t.MergedProductCode).HasColumnName("MergedProductCode");
+            this.Property(t => t.IsDefault).HasColumnName("IsDefault");
             this.Property(t => t.ErrorMessage).HasColumnName("ErrorMessage");
-            
-		Init();
+            Init();
         }
 
-		partial void Init();
+        partial void Init();
     }
 }

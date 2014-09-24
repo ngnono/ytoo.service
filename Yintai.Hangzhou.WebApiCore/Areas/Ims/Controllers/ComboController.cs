@@ -304,13 +304,20 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     Id = pr.Id,
                                     Name = pr.Name
                                 }); ;
-                                po.IsOnline = p.P.Status == (int)DataStatus.Normal && (p.P.Is4Sale ?? false) == true && p.PI != null && p.PI.Amount > 0;
+                                po.IsOnline = p.P.Status == (int)DataStatus.Normal 
+                                                && (p.P.Is4Sale ?? false) == true 
+                                                && p.PI != null 
+                                                && p.PI.Amount > 0;
                                 if (p.PIT != null)
+                                {
                                     po.IMS_Tags = p.PIT.Select(pit => new IMSTagResponse()
                                     {
                                         Id = pit.IT.Id,
                                         Name = pit.IT.Name
                                     });
+                                    po.IsOnline = po.IsOnline 
+                                                && !p.PIT.Any(pit => (pit.IT.Only4Tmall ?? false) == true); //exclude tmall only products
+                                }   
                             }));
                 oc.Is_Owner = authuid == comboEntity.C.UserId;
                 oc.Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&
@@ -338,8 +345,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 Items = linq.ToList().Select(l => new GetProductInfo4PResponse().FromEntity<GetProductInfo4PResponse>(l.P, res =>
                 {
+                    var only4Tmall = Context.Set<Product2IMSTagEntity>().Where(pit => pit.ProductId == l.P.Id)
+                                        .Join(Context.Set<IMS_TagEntity>().Where(it => (it.Only4Tmall ?? false) == true), o => o.IMSTagId, i => i.Id, (o, i) => o)
+                                        .Any();
                     
-                    res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == l.P.Id &&
+                    res.SaleColors = Context.Set<InventoryEntity>()
+                                            .Where(pi => pi.ProductId == l.P.Id &&
+                                                !only4Tmall &&
                                                 l.P.Is4Sale.HasValue && l.P.Is4Sale==true &&
                                                 l.P.Status == (int)DataStatus.Normal &&
                                                 pi.Amount > 0).GroupBy(pi => pi.PColorId)

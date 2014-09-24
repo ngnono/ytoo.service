@@ -25,10 +25,10 @@ namespace com.intime.fashion.data.tmall.test
 
         private const string sessionKey_container = "http://container.open.taobao.com/container?appkey=23021668&encode=utf-8205";
 
-        private const string sandbox_appkey = "1023021668";
-        private const string appKey = "23021668";
-        private const string appSecret = "baf0dcd2f1ee89159dcccfab0db3368f";
-        private const string sessionKey = "6101827124a157b78801f2b9d11bc9e0c2c1f3a2b4c2f5e2247396485";
+        private const string sandbox_appkey = "10230216681";
+        private const string appKey = "230216681";
+        private const string appSecret = "baf0dcd2f1ee89159dcccfab0db3368f1";
+        private const string sessionKey = "6101827124a157b78801f2b9d11bc9e0c2c1f3a2b4c2f5e22473964851";
         private const string sandbox_appSecret = "sandbox2f1ee89159dcccfab0db3368f";
         private const string sandbox_sessionKey = "6101917dbd7eaa6637868f8061cd05c572121559a074b593641246042";
 

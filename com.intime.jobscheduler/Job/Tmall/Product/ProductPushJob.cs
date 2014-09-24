@@ -34,7 +34,7 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
                 var result = _productPushService.AddProduct(productSchema, "intime");
 
                 // 更新商品更新状态
-                _productPoolService.UpdateProductStatus(productSchema.Id, result.IsError ? ProductPoolStatus.Error : ProductPoolStatus.Ok);
+                _productPoolService.UpdateProductStatus(productSchema.Id, result.IsError ? ProductPoolStatus.Error : ProductPoolStatus.Ok, result.ErrMsg);
 
                 Log.Info(string.Format("完成同步产品id:{0}到天猫", productSchema.Id));
             }

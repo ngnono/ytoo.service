@@ -22,7 +22,15 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
              * 2 .根据列表获取商品
              */
 
+
             var ids = GetProductIds();
+
+            // 没有数据处理是返会空集合，如果去搜索查询返回所有数据
+            if (ids.Count == 0)
+            {
+                return new List<ESProduct>();
+            }
+
 
             return GetProductsByIds(ids);
         }
@@ -33,19 +41,26 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             throw new System.NotImplementedException();
         }
 
-        public void UpdateProductStatus(int productId, ProductPoolStatus status)
+
+        public void UpdateProductStatus(int productId, ProductPoolStatus status, string errorMessage)
         {
             using (var db = new YintaiHangzhouContext())
             {
                 var extProductPool = db.ProductPool.FirstOrDefault(p => p.ProductId == productId);
-                if (extProductPool != null) extProductPool.Status = (int)status;
+
+                if (extProductPool != null)
+                {
+                    extProductPool.Status = (int)status;
+                    extProductPool.ErrorMessage = errorMessage;
+                }
                 db.SaveChanges();
             }
         }
 
         #region 帮助方法
 
-        private IEnumerable<string> GetProductIds()
+
+        private IList<string> GetProductIds()
         {
             /**
             *   获取ProductPool表中的，待处理产品数据中默认商品的ProductId进行添加商品
@@ -53,15 +68,16 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             */
             using (var db = new YintaiHangzhouContext())
             {
-                return db.ProductPool.Where(
+                var list = db.ProductPool.Where(
                     p =>
                         p.Status == 100
+                        && p.ChannelId == 1008
                         && p.IsDefault == true)
-                    .Select(p =>
-                        p.ProductId.ToString(CultureInfo.InvariantCulture))
-                    .Skip(0)
-                    .Take(0)
-                    .ToList();
+                    .OrderBy(p => p.Id)
+                   .Skip(0)
+                   .Take(10).ToList();
+
+                return list.ConvertAll(p => p.ProductId.ToString());
             }
         }
 

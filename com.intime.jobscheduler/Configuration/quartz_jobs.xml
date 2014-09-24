@@ -672,16 +672,13 @@
       </cron>
     </trigger>-->
 
-
         <job>
-            <name>Tmall Product Push Job</name>
+            <name>TmallProductPushJob</name>
             <group>Tmall</group>
             <description>Tmall Product Push Job</description>
             <job-type>com.intime.jobscheduler.Job.Tmall.Product.ProductPushJob, com.intime.jobscheduler</job-type>
             <durable>true</durable>
             <recover>false</recover>
-            <job-data-map>
-            </job-data-map>
         </job>
 
         <trigger>
@@ -689,10 +686,10 @@
                 <name>EverySecond</name>
                 <group>Tmall</group>
                 <description>every second</description>
-                <job-name>Tmall Product Push Job</job-name>
+                <job-name>TmallProductPushJob</job-name>
                 <job-group>Tmall</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
-                <cron-expression>0 0/1 * * * ?</cron-expression>
+                <cron-expression>0/2 * * * * ?</cron-expression>
             </cron>
         </trigger>
     </schedule>
