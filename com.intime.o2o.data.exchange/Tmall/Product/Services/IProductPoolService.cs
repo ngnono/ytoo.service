@@ -16,17 +16,30 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services
         /// <returns></returns>
         IEnumerable<ESProduct> GetPendingProducts();
 
-        /// <summary>
-        /// 获取带待处理的商品列表
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<ESStock> GetPendingItems();
 
         /// <summary>
-        /// 
+        /// 根据聚合Code获取商品Id列表
         /// </summary>
-        /// <param name="productId"></param>
-        /// <param name="status"></param>
+        /// <param name="code">聚合的商品列表</param>
+        /// <returns></returns>
+        IList<int> GetProductIdsByMergedProductCode(string code);
+
+        /// <summary>
+        /// 获取已经成功添加的商品的列表
+        /// </summary>
+        /// <returns></returns>
+        IList<string> GetAddedMergedProductCode();
+
+        ESProduct GetProductByProductId(int productId);
+
+        IEnumerable<ESStock> GetItemsByIdsByProductId(int productId);
+
+        /// <summary>
+        /// 更新产品更新状态
+        /// </summary>
+        /// <param name="productId">产品id</param>
+        /// <param name="status">更新状态</param>
+        /// <param name="errorMessage">错误信息</param>
         void UpdateProductStatus(int productId, ProductPoolStatus status, string errorMessage);
     }
 }

@@ -216,6 +216,10 @@
     <Compile Include="UnityBootStrapper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.item.50026312.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Configuration\Tmall\Templates\tmall.schema.product_50012037_20578.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

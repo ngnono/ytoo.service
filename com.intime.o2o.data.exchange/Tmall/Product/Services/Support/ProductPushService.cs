@@ -13,6 +13,7 @@ using Common.Logging;
 using Top.Api.Request;
 using Yintai.Hangzhou.Model.ES;
 using Yintai.Hangzhou.Model.ESModel;
+using System.Collections.Generic;
 
 namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 {
@@ -118,7 +119,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             if (result.IsError)
             {
-                return Error<long>(result.ErrCode, result.ErrMsg);
+                return Error<long>(string.Format("{0}[{1}]", result.ErrMsg, result.SubErrMsg), result.ErrCode);
             }
 
             // 解析XMl返回结果提取productId
@@ -208,7 +209,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             if (result.IsError)
             {
-                return Error<bool>(result.ErrCode, string.Format("{0}[{1}]", result.ErrMsg, result.SubErrMsg));
+                return Error<bool>(string.Format("{0}[{1}]", result.ErrMsg, result.SubErrMsg), result.ErrCode);
             }
 
             return Ok(true);
@@ -218,14 +219,37 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
         #region 商品相关接口
 
-        public ResultInfo<long> AddItem(ESStock item, ESProduct product, string consumerKey)
+        public ResultInfo<long> AddItem(IEnumerable<ESStock> items, ESProduct product, string consumerKey)
         {
             // 获取产品Id和分类Id
-            var productId = _productMapper.ToChannel(item.ProductId);
+            var productId = _productMapper.ToChannel(product.Id);
             var categoryId = _categoryMapper.ToChannel(product.CategoryId);
 
+            // 创建templatekey,{模版名称}+{分类}+{品牌}
+            var templateKey = string.Format("tmall.schema.item.{0}", categoryId);
+
+            var esStocks = items as IList<ESStock> ?? items.ToList();
+            var colorIds = esStocks.Select(p => p.ColorValueId).Distinct().ToList();
+            var sizeIds = esStocks.Select(p => p.SizeValueId).Distinct().ToList();
+
+            //商品总数量
+            var total = esStocks.Sum(p => p.Amount);
+
+            // 价格
+            var minPrice = esStocks.Min(p => p.Price);
+
             // 转化商品数据Schema
-            var xmlData = CreateXmlData("tmall.schema.item", new Hashtable { { "product", product }, { "item", item } });
+            var xmlData = CreateXmlData(templateKey, new Hashtable
+            {
+                { "product", product },
+                { "items", items }, 
+                { "consumerKey", consumerKey },
+                { "colorIds", colorIds },
+                 { "sizeIds", sizeIds },
+                 { "total", total },
+                 { "minPrice", minPrice },
+                 {"tools",new Tools()}
+            });
 
             // 根据门店获取Client
             var topClient = _topClientFactory.Get(consumerKey);
@@ -236,47 +260,19 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 ProductId = productId,
                 CategoryId = categoryId,
                 XmlData = xmlData
-            });
+            }, _topClientFactory.GetSessionKey("intime"));
 
             if (result.IsError)
             {
-                return Error<long>(result.ErrCode, result.ErrMsg);
+                return Error<long>(string.Format("{0}[{1}]", result.ErrMsg, result.SubErrMsg), result.ErrCode);
             }
 
-            //TODO:提取ItemId逻辑添加
-
-            return Ok(0L);
+            return Ok(Convert.ToInt64(result.AddItemResult));
         }
 
         public ResultInfo<bool> UpdateItem(ESStock item, ESProduct product, string consumerKey)
         {
-            // 获取数据映射关系
-            var itemId = _itemMapper.ToChannel(item.Id);
-            var categoryId = _categoryMapper.ToChannel(product.CategoryId);
-            var productId = _productMapper.ToChannel(item.ProductId);
-
-            //TODO:根据实际情况调整模版Key
-            // 转化商品数据Schema
-            var xmlData = CreateXmlData("tmall.schema.item", new Hashtable { { "product", product }, { "item", item } });
-
-            // 根据门店获取Client
-            var topClient = _topClientFactory.Get(consumerKey);
-
-            // 请求Taobao接口
-            var result = topClient.Execute(new TmallItemSchemaUpdateRequest()
-            {
-                ItemId = itemId,
-                CategoryId = categoryId,
-                ProductId = productId,
-                XmlData = xmlData
-            });
-
-            if (result.IsError)
-            {
-                return Error<bool>(result.ErrCode, result.ErrMsg);
-            }
-
-            return Ok(true);
+            throw new NotImplementedException();
         }
 
         #endregion

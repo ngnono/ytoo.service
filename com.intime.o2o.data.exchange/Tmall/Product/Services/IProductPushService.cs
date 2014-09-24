@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
 using Yintai.Hangzhou.Model.ES;
 using Yintai.Hangzhou.Model.ESModel;
@@ -34,7 +35,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services
         ///  /// <param name="product">产品信息</param>
         /// <param name="consumerKey">消费者Key</param>
         /// <returns>添加商品结果</returns>
-        ResultInfo<long> AddItem(ESStock item, ESProduct product, string consumerKey);
+        ResultInfo<long> AddItem(IEnumerable<ESStock> item, ESProduct product, string consumerKey);
 
         /// <summary>
         /// 天猫TopSchema更新商品
@@ -43,6 +44,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services
         /// <param name="product">产品信息</param>
         /// <param name="consumerKey">消费者Key</param>
         /// <returns>添加商品结果</returns>
+        [Obsolete("目前先不考虑更新产品，逻辑已经ok")]
         ResultInfo<bool> UpdateItem(ESStock item, ESProduct product, string consumerKey);
     }
 }

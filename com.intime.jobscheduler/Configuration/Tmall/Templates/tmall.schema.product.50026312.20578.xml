@@ -3,7 +3,7 @@
         <value>20578</value>
     </field>
     <field id="prop_13021751" name="款号" type="input">
-        <value>${product.UpcCode}JJ</value>
+        <value>${product.UpcCode}</value>
     </field>
     <field id="prop_22196" name="运动鞋分类" type="singleCheck">
         <value>28691</value>
