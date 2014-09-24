@@ -33,8 +33,10 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support
 
             using (var db = new YintaiHangzhouContext())
             {
+
+                var outerIdStr = outerId.ToString();
                 var extBrand = db.Map4Brand.FirstOrDefault(
-                    b => b.ChannelBrandId == outerId.ToString()
+                    b => b.ChannelBrandId == outerIdStr
                      && b.Channel == ConstValue.Tmall);
                 return extBrand == null ? null : extBrand.BrandId.ConvertTo<int>();
             }
