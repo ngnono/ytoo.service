@@ -7,9 +7,14 @@ using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography;
 using System.Transactions;
 using System.Web.Mvc;
+using com.intime.fashion.service.contract;
+using Yintai.Architecture.Common.Data.EF;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Model;
 using Yintai.Hangzhou.Model.Enums;
 using com.intime.fashion.service;
+using Yintai.Hangzhou.Model.Order;
+using Yintai.Hangzhou.Model.Product;
 using Yintai.Hangzhou.Repository.Contract;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
@@ -18,15 +23,249 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
     {
         private const int GG_CREATE_USERID = -1;
         private IInventoryRepository _inventoryRepo;
-
-        public OrderController(IInventoryRepository inventoryRepo)
+        private IOrderService _orderService;
+        private IEFRepository<OrderTransactionEntity> _orderTranRepo;
+        private IProductRepository _productRepo;
+        private IAssociateIncomeService _associateIncomeService;
+        private IOrderItemRepository _orderItemRepo;
+        private IOrderRepository _orderRepo;
+        public OrderController(
+            IOrderService orderService,
+            IAssociateIncomeService associateIncomeService,
+            IEFRepository<OrderTransactionEntity> orderTranRepo,
+            IInventoryRepository inventoryRepo,
+            IOrderRepository orderRepo,
+            IOrderItemRepository orderItemRepo,
+            IProductRepository productRepo
+            )
         {
             this._inventoryRepo = inventoryRepo;
+            this._orderService = orderService;
+            this._associateIncomeService = associateIncomeService;
+            this._orderTranRepo = orderTranRepo;
+            this._orderRepo = orderRepo;
+            this._orderItemRepo = orderItemRepo;
+            this._productRepo = productRepo;
         }
 
+        [ValidateParameters]
         public ActionResult CreateOrder(dynamic request, string channel)
         {
-            throw new NotImplementedException();
+            int authuid = GetUserId(channel);
+            var db = Context;
+            string channelOrderNo = request.sonumber;
+            if (db.Set<Map4OrderEntity>().Any(x => x.Channel == channel && x.ChannelOrderCode == channelOrderNo))
+            {
+                return this.RenderError(r => r.Message = string.Format("订单号({0})对应订单已存在！", channelOrderNo));
+            }
+            bool isPaid = Convert.ToBoolean(request.paid);
+            var orderNo = OrderRule.CreateCode(0);
+
+            using (var ts = new TransactionScope())
+            {
+                var order = new OrderEntity()
+                {
+                    CreateDate = DateTime.Now,
+                    CreateUser = authuid,
+                    UpdateDate = DateTime.Now,
+                    UpdateUser = authuid,
+                    BrandId = 0,
+                    CustomerId = authuid,
+                    InvoiceAmount = request.invoice != null ? request.invoice.amount : null,
+                    InvoiceDetail = request.invoice.detail,
+                    InvoiceSubject = request.invoice.subject,
+                    Memo = request.memo,
+                    ShippingAddress = request.contact.addr,
+                    ShippingContactPerson = request.contact.person,
+                    ShippingContactPhone = request.contact.phone,
+                    ShippingZipCode = request.contact.zip,
+                    TotalAmount = request.totalAmount,
+                    RecAmount = request.receivedAmount,
+                    ShippingFee = request.shippingFee,
+                    OrderSource = channel,
+                    OrderProductType = GetProductType(channel),
+                    OrderNo = orderNo,
+                    Status = isPaid ? (int)OrderStatus.Paid : (int)OrderStatus.Complete,
+                };
+
+                _orderRepo.Insert(order);
+                _associateIncomeService.Create(order);
+
+                if (isPaid)
+                {
+                    if (request.payment == null || request.payment.Count == 0)
+                    {
+                        return this.RenderError(r => r.Message = "没有支付信息的订单");
+                    }
+
+                    foreach (var pay in request.payment)
+                    {
+                        string payCode = pay.code;
+                        var method = db.Set<PaymentMethodEntity>().FirstOrDefault(x => x.Code == payCode);
+                        if (method == null)
+                        {
+                            return this.RenderError(r => r.Message = "不支持的支付方式");
+                        }
+                        order.PaymentMethodCode = method.Code;
+                        order.PaymentMethodName = method.Name;
+                        var payment = new OrderTransactionEntity()
+                        {
+                            Amount = pay.amount,
+                            PaymentCode = method.Code,
+                            CreateDate = DateTime.Now,
+                            CanSync = -1,
+                            OrderNo = order.OrderNo,
+                            TransNo = request.transno,
+                        };
+                        _orderTranRepo.Insert(payment);
+                    }
+                }
+
+
+                if (request.products == null || request.products.Count == 0)
+                {
+                    return this.RenderError(r => r.Message = "订单没有商品信息");
+                }
+                foreach (var item in request.products)
+                {
+                    var stockId = (int)item.stockId;
+                    var orderItems =
+                                from stock in db.Set<InventoryEntity>()
+                                from p in db.Set<ProductEntity>()
+                                from color in db.Set<ProductPropertyEntity>()
+                                from size in db.Set<ProductPropertyEntity>()
+                                from colorValue in db.Set<ProductPropertyValueEntity>()
+                                from sizeValue in db.Set<ProductPropertyValueEntity>()
+
+                                where
+                                    stock.Id == stockId &&
+                                    p.Id == stock.ProductId &&
+                                    colorValue.Id == stock.PColorId &&
+                                    sizeValue.Id == stock.PSizeId &&
+                                    color.ProductId == stock.Id &&
+                                    size.ProductId == stock.ProductId &&
+                                    size.IsSize.HasValue &&
+                                    size.IsSize.Value &&
+                                    color.ProductId == stock.ProductId &&
+                                    color.IsColor.HasValue &&
+                                    color.IsColor.HasValue
+                                select new
+                                {
+                                    Inventory = stock,
+                                    Product = p,
+                                    Color = color,
+                                    Size = size,
+                                    ColorValue = colorValue,
+                                    SizeValue = sizeValue
+
+                                };
+
+                    var orderItem = orderItems.FirstOrDefault();
+
+                    if (orderItem == null)
+                    {
+                        return this.RenderError(r => r.Message = string.Format("无效的商品商家编码 {0}", stockId));
+                    }
+
+                    int itemQuantity = item.quantity;
+                    var inventory = orderItem.Inventory;
+
+                    if (inventory.Amount < itemQuantity)
+                    {
+                        return this.RenderError(r => r.Message = string.Format("商品({0})库存不足", inventory.ProductId));
+                    }
+                    inventory.Amount -= itemQuantity;
+                    inventory.UpdateDate = DateTime.Now;
+                    _inventoryRepo.Update(inventory);
+
+                    var product = orderItem.Product;
+                    string salesCode = string.Empty;
+                    if (product.ProductType == (int)ProductType.FromSelf)
+                    {
+                        var productSaleCodeEntity =
+                            db.Set<ProductCode2StoreCodeEntity>().FirstOrDefault(p => p.ProductId == product.Id && p.Status == (int)DataStatus.Normal);
+
+                        if (productSaleCodeEntity != null)
+                        {
+                            salesCode = productSaleCodeEntity.StoreProductCode;
+                        }
+                    }
+
+                    _orderItemRepo.Insert(new OrderItemEntity()
+                    {
+                        OrderNo = order.OrderNo,
+                        ProductId = product.Id,
+                        BrandId = product.Brand_Id,
+                        StoreId = product.Store_Id,
+                        CreateUser = authuid,
+                        CreateDate = DateTime.Now,
+                        ItemPrice = item.itemPrice,
+                        Quantity = itemQuantity,
+                        ProductName = product.Name,
+                        Status = (int)DataStatus.Normal,
+                        UpdateDate = DateTime.Now,
+                        UpdateUser = authuid,
+                        ExtendPrice = item.extendPrice,
+                        ProductDesc =
+                            string.Format("{0}:{1},{2}:{3}", orderItem.Color.PropertyDesc,
+                                orderItem.ColorValue.ValueDesc, orderItem.Size.PropertyDesc,
+                                orderItem.SizeValue.ValueDesc),
+                        ColorId = orderItem.Color.Id,
+                        ColorValueId = orderItem.ColorValue.Id,
+                        SizeId = orderItem.Size.Id,
+                        SizeValueId = orderItem.SizeValue.Id,
+                        ColorValueName = orderItem.ColorValue.ValueDesc,
+                        SizeValueName = orderItem.SizeValue.ValueDesc,
+                        StoreItemNo = product.SkuCode,
+                        Points = 0,
+                        UnitPrice = product.UnitPrice,
+                        StoreSalesCode = salesCode,
+                        ProductType = (int)ProductType.FromSelf
+
+                    });
+                }
+
+                db.Set<Map4OrderEntity>().Add(new Map4OrderEntity
+                {
+                    ChannelOrderCode = request.sonumber,
+                    OrderNo = order.OrderNo,
+                    Channel = channel,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    SyncStatus = (int)OrderOpera.FromCustomer,
+                });
+                db.Set<OrderLogEntity>().Add(new OrderLogEntity()
+                {
+                    CreateDate = DateTime.Now,
+                    CreateUser = authuid,
+                    CustomerId = authuid,
+                    Operation = isPaid ? "创建已支付订单" : "创建订单",
+                    OrderNo = order.OrderNo,
+                    Type = (int)OrderOpera.FromOperator
+                });
+                db.SaveChanges();
+                ts.Complete();
+
+            }
+
+            if (isPaid)
+            {
+                _associateIncomeService.Froze(orderNo);
+
+            }
+            return this.RenderSuccess<dynamic>(r => r.Data = new { orderno = orderNo });
+        }
+   
+        private int GetUserId(string channel)
+        {
+            switch (channel.ToLower())
+            {
+                case "yintai":
+                    return -1;
+                case "tmall":
+                    return -2;
+            }
+            return 0;
         }
 
         [ValidateParameters]
@@ -203,7 +442,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
 
         private int? GetProductType(string channel)
         {
-            return channel.ToLower() == "yintai" ? (int) OrderProductType.SystemProduct : (int) OrderProductType.SelfProduct;
+            return channel.ToLower() == "yintai" ? (int)OrderProductType.SystemProduct : (int)OrderProductType.SelfProduct;
         }
 
         [ValidateParameters]

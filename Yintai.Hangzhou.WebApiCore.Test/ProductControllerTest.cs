@@ -5,6 +5,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nest;
 using Yintai.Hangzhou.Model.ES;
+using Yintai.Hangzhou.Model.ESModel;
 using Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers;
 
 namespace Yintai.Hangzhou.WebApiCore.Test
@@ -18,7 +19,17 @@ namespace Yintai.Hangzhou.WebApiCore.Test
             var result = ElasticClient.Search<ESProduct>(body =>
                 // return first 5 results, default is 10
                 body.Size(5).Query(query =>
-                    query.Term(p => p.IsSystem, true)));
+                    query.Term(p => p.IsSystem, false)));
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void TestStocks()
+        {
+            var result = ElasticClient.Search<ESStock>(body =>
+                // return first 5 results, default is 10
+               body.SortDescending(b=>b.UpdateDate).Size(15).Query(query =>
+                   query.Term(p => p, false)));
             Assert.IsNotNull(result);
         }
 
