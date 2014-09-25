@@ -9,19 +9,16 @@ using Yintai.Hangzhou.Data.Models;
 
 namespace com.intime.fashion.service.IncomeRule
 {
-    internal class IncomeRuleFlatten:IIncomeRule
+    internal class IncomeRuleFlatten:BaseIncomeRule
     {
-        public decimal Compute(int ruleId, decimal price, int quantity)
+        public override decimal Compute(int ruleId, decimal price, int quantity)
         {
             var benchAmount = price * quantity;
-            var rule = Context.Set<IMS_AssociateIncomeRuleFlattenEntity>().Where(iar => iar.RuleId == ruleId).FirstOrDefault();
+            var rule = _db.Set<IMS_AssociateIncomeRuleFlattenEntity>().Where(iar => iar.RuleId == ruleId).FirstOrDefault();
             if (rule == null)
                 return 0m;
             return benchAmount * rule.Percentage;
         }
-        private static DbContext Context
-        {
-            get { return ServiceLocator.Current.Resolve<DbContext>(); }
-        }
+
     }
 }

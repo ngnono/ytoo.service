@@ -84,7 +84,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Banner.cs" />
-    <Compile Include="Models\Mapping\ProudctPoolMap.cs" />
+    <Compile Include="Models\IMS_AssociateIncomeRuleMultiple.cs" />
+    <Compile Include="Models\Mapping\IMS_AssociateIncomeRuleMultipleMap.cs" />
+    <Compile Include="Models\Mapping\ProductPoolMap.cs" />
+    <Compile Include="Models\Mapping\testtableMap.cs" />
     <Compile Include="Models\ProductPool.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Group_AliKeys.cs" />
@@ -179,6 +182,7 @@
     <Compile Include="Models\ShippingRule.cs" />
     <Compile Include="Models\ShippingRuleFix.cs" />
     <Compile Include="Models\Supplier_Brand.cs" />
+    <Compile Include="Models\testtable.cs" />
     <Compile Include="Models\WX_Menu.cs" />
     <Compile Include="Models\IMS_Associate.cs" />
     <Compile Include="Models\IMS_AssociateBrand.cs" />

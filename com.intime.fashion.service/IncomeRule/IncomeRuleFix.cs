@@ -9,18 +9,15 @@ using Yintai.Hangzhou.Data.Models;
 
 namespace com.intime.fashion.service.IncomeRule
 {
-    internal class IncomeRuleFix:IIncomeRule
+    internal class IncomeRuleFix:BaseIncomeRule
     {
-        public decimal Compute(int ruleId, decimal price, int quantity)
+        public override decimal Compute(int ruleId, decimal price, int quantity)
         {
-            var rule = Context.Set<IMS_AssociateIncomeRuleFixEntity>().Where(iar => iar.RuleId == ruleId).FirstOrDefault();
+            var rule = _db.Set<IMS_AssociateIncomeRuleFixEntity>().Where(iar => iar.RuleId == ruleId).FirstOrDefault();
             if (rule == null)
                 return 0m;
             return rule.FixAmount;
         }
-        private static DbContext Context
-        {
-            get { return ServiceLocator.Current.Resolve<DbContext>(); }
-        }
+
     }
 }

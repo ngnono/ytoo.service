@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Yintai.Hangzhou.Model.Enums
 {
-    public enum IncomeRuleType
+    public enum RuleComputeType
     {
-        Flat = 1,
-        Fix = 2,
-        Flex = 3,
-        Multiple
+        //compute income directly
+        Compute= 1,
+        //compute income based on other rules
+        Multiple = 2
     }
 }

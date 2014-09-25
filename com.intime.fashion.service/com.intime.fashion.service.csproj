@@ -60,10 +60,13 @@
     <Compile Include="IDbAware.cs" />
     <Compile Include="IDebugAware.cs" />
     <Compile Include="IncomeRule\AssociateIncomeAccount.cs" />
+    <Compile Include="IncomeRule\BaseIncomeRule.cs" />
     <Compile Include="IncomeRule\IIncomeRule.cs" />
     <Compile Include="IncomeRule\IncomeRuleFix.cs" />
     <Compile Include="IncomeRule\IncomeRuleFlatten.cs" />
     <Compile Include="IncomeRule\IncomeRuleFlex.cs" />
+    <Compile Include="IncomeRule\IncomeRuleMultiple.cs" />
+    <Compile Include="IncomeRule\RuleContext.cs" />
     <Compile Include="Order\OrderRule.cs" />
     <Compile Include="OrderService.cs" />
     <Compile Include="PromotionRule\IPromotionSharePolicy.cs" />

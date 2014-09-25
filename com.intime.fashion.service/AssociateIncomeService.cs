@@ -138,23 +138,42 @@ namespace com.intime.fashion.service
             var groupId = _db.Set<StoreEntity>().Find(orderItem.StoreId).Group_Id;
 
             incomeSum = DoInternalCompute(incomePrice, product.Tag_Id, orderItem.Quantity, groupId);
+            incomeSum = ApplyMultiplyRule(orderItem,product.Tag_Id, groupId, incomeSum);
             return incomeSum;
+        }
+
+        private decimal ApplyMultiplyRule(OrderItemEntity orderItem,int categoryId, int groupId, decimal incomeSum)
+        {
+            var incomeRule = _db.Set<IMS_AssociateIncomeRuleEntity>().Where(iar => iar.Status == (int)DataStatus.Normal &&
+                            iar.FromDate <= DateTime.Now && iar.EndDate > DateTime.Now
+                            && iar.CategoryId == categoryId
+                            && iar.ComputeType == (int)RuleComputeType.Multiple
+                            && (groupId == null || iar.GroupId == groupId)).FirstOrDefault();
+            if (incomeRule == null)
+                return incomeSum;
+            var rule = CreateRule(incomeRule.RuleType);
+            if (rule == null)
+                return incomeSum;
+            rule.Context.OrderItem = orderItem;
+            return rule.Multiple(incomeRule.Id,incomeSum);
         }
         private decimal DoInternalCompute(decimal price, int categoryId, int quantity, int? groupId = null)
         {
-            var incomeRuleEntity = _db.Set<IMS_AssociateIncomeRuleEntity>().Where(iar => iar.Status == (int)DataStatus.Normal &&
+            var incomeRule= _db.Set<IMS_AssociateIncomeRuleEntity>().Where(iar => iar.Status == (int)DataStatus.Normal &&
                             iar.FromDate <= DateTime.Now && iar.EndDate > DateTime.Now
                             && iar.CategoryId == categoryId
+                            && iar.ComputeType == (int)RuleComputeType.Compute
                             && (groupId == null || iar.GroupId == groupId)).FirstOrDefault();
-            if (incomeRuleEntity == null)
+            if (incomeRule==null)
                 return 0m;
-
-            IIncomeRule rule = CreateRule(incomeRuleEntity.RuleType);
+            var rule = CreateRule(incomeRule.RuleType);
             if (rule == null)
                 return 0m;
-            return rule.Compute(incomeRuleEntity.Id, price, quantity);
+            return rule.Compute(incomeRule.Id,price,quantity);
+           
+            
         }
-        private IIncomeRule CreateRule(int ruleType)
+        private BaseIncomeRule CreateRule(int ruleType)
         {
             switch (ruleType)
             {
@@ -164,6 +183,8 @@ namespace com.intime.fashion.service
                     return new IncomeRuleFlatten();
                 case (int)IncomeRuleType.Flex:
                     return new IncomeRuleFlex();
+                case (int)IncomeRuleType.Multiple:
+                    return new IncomeRuleMultiple();
                 default:
                     return null;
             }
