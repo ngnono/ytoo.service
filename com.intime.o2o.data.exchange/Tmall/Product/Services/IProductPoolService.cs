@@ -11,10 +11,10 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services
     public interface IProductPoolService
     {
         /// <summary>
-        /// 获取待处理的产品列表
+        /// 获取待处理的产品Id列表
         /// </summary>
         /// <returns></returns>
-        IEnumerable<ESProduct> GetPendingProducts();
+        IEnumerable<int> GetPendingProductIds();
 
 
         /// <summary>
@@ -22,13 +22,13 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services
         /// </summary>
         /// <param name="code">聚合的商品列表</param>
         /// <returns></returns>
-        IList<int> GetProductIdsByMergedProductCode(string code);
+        IEnumerable<int> GetProductIdsByMergedProductCode(string code);
 
         /// <summary>
         /// 获取已经成功添加的商品的列表
         /// </summary>
         /// <returns></returns>
-        IList<string> GetAddedMergedProductCode();
+        IEnumerable<string> GetAddedMergedProductCode();
 
         ESProduct GetProductByProductId(int productId);
 

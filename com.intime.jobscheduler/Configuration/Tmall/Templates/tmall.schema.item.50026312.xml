@@ -33,9 +33,8 @@
     </field>
     <field id="sku" name="SKU" type="multiComplex">
 
-
-        #set($mapColors = $tools.Zip($colorIds,[3232483,3232484,3232481,90554,28332,30156,60092,3232482]) )
-        #set($mapSizes = $tools.Zip($sizeIds,[28918,28919,658546749,28920,658666166,28921,658684057,28922]) )
+        #set($mapColors = $tools.Zip($colors,[3232483,3232484,3232481,90554,28332,30156,60092,3232482]) )
+        #set($mapSizes = $tools.Zip($sizes,[28918,28919,658546749,28920,658666166,28921,658684057,28922]) )
 
         #foreach($item in $items)
         <complex-values>
@@ -119,14 +118,14 @@
         <value isInput="false">false</value>
     </field>
     <field id="description" name="商品描述" type="input">
-        <value>${product.Name}测试商品描述，请勿拍！！！</value>
+        <value>${product.Description} 测试商品描述，请勿拍！！！</value>
     </field>
 
     <field id="valid_thru" name="有效期" type="singleCheck">
         <value isInput="false">7</value>
     </field>
     <field id="diaopai_pic" name="吊牌图" type="input">
-        <value>http://img04.taobaocdn.com/imgextra/i4/2247396485/TB2vY7NapXXXXbTXXXXXXXXXXXX-2247396485.jpg</value>
+        <value>http://gi2.md.alicdn.com/bao/uploaded/i2/TB1FnAtGXXXXXaEXXXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg</value>
     </field>
     <field id="service_version" name="天猫系统服务版本" type="input">
         <value>10000</value>

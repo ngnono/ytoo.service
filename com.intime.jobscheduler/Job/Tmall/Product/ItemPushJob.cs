@@ -1,4 +1,5 @@
-﻿using com.intime.o2o.data.exchange.Tmall.Product.Services;
+﻿using com.intime.o2o.data.exchange.Tmall.Product.Models;
+using com.intime.o2o.data.exchange.Tmall.Product.Services;
 using com.intime.o2o.data.exchange.Tmall.Product.Services.Support;
 using Common.Logging;
 using Quartz;
@@ -47,8 +48,14 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
 
             if (result.IsError)
             {
-                Log.ErrorFormat("ES同步商品信息失败,productId:{0}，items:{1},errorMsg:{2}", productId, items.ToJson(), result.ErrMsg);
+                Log.ErrorFormat("同步商品信息失败,productId:{0}，items:{1},errorMsg:{2}", productId, items.ToJson(), result.ErrMsg);
+                _productPoolService.UpdateProductStatus(productId, ProductPoolStatus.AddItemError, result.ErrMsg);
+                return;
             }
+
+            //更新产品添加状态
+            _productPoolService.UpdateProductStatus(productId, ProductPoolStatus.AddItemFinished, result.ErrMsg);
+            Log.InfoFormat("同步商品完成，productid:{0},tmall_itemid:{1}", productId, result.Data);
         }
     }
 }

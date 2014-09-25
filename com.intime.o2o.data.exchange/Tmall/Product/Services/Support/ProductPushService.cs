@@ -178,7 +178,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             if (categoryId == null)
             {
-                var errorMessage = string.Format("商品分类没有映射，productId:{0},brandId:{1}", productSchema.Id,
+                var errorMessage = string.Format("商品分类没有映射，productId:{0},cateory:{1}", productSchema.Id,
                     productSchema.CategoryId);
                 Log.Error(errorMessage);
                 return Error<bool>(errorMessage, "-10002");
@@ -221,6 +221,20 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
         public ResultInfo<long> AddItem(IEnumerable<ESStock> items, ESProduct product, string consumerKey)
         {
+            if (product == null)
+            {
+                var errorMsg = string.Format("产品为空,请检查参数");
+                Log.Error(errorMsg);
+                return Error<long>(errorMsg, "408");
+            }
+
+            if (items == null)
+            {
+                var errorMsg = string.Format("单品列表为空,productId:{0}", product.Id);
+                Log.Error(errorMsg);
+                return Error<long>(errorMsg, "408");
+            }
+
             // 获取产品Id和分类Id
             var productId = _productMapper.ToChannel(product.Id);
             var categoryId = _categoryMapper.ToChannel(product.CategoryId);
@@ -229,8 +243,8 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             var templateKey = string.Format("tmall.schema.item.{0}", categoryId);
 
             var esStocks = items as IList<ESStock> ?? items.ToList();
-            var colorIds = esStocks.Select(p => p.ColorValueId).Distinct().ToList();
-            var sizeIds = esStocks.Select(p => p.SizeValueId).Distinct().ToList();
+            var colors = esStocks.Select(p => p.ColorValueId).Distinct().ToList();
+            var sizes = esStocks.Select(p => p.SizeValueId).Distinct().ToList();
 
             //商品总数量
             var total = esStocks.Sum(p => p.Amount);
@@ -244,8 +258,8 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 { "product", product },
                 { "items", items }, 
                 { "consumerKey", consumerKey },
-                { "colorIds", colorIds },
-                 { "sizeIds", sizeIds },
+                { "colors", colors },
+                 { "sizes", sizes },
                  { "total", total },
                  { "minPrice", minPrice },
                  {"tools",new Tools()}

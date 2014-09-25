@@ -6,8 +6,12 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Models
     /// </summary>
     public enum ProductPoolStatus
     {
-        Pending = 100,
-        Ok = 200,
-        Error = 500
+        PendingProduct = 100,
+        AddProudctFinished = 200,
+        ElasticSearchNotFound = 404,
+        AddProudctError = 500,
+        AddItemError = 700,
+        AddItemFinished = 800
+
     }
 }

@@ -27,23 +27,25 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
          * */
         #region 获取待处理的新产品
 
-        public IEnumerable<ESProduct> GetPendingProducts()
+        public IEnumerable<int> GetPendingProductIds()
         {
             /**
-             * 1. 获取待处理的商品Id列表
-             * 2 .根据列表获取商品
-             */
-            var a = 10;
-
-            var ids = GetProductIds();
-
-            // 没有数据处理是返会空集合，如果去搜索查询返回所有数据
-            if (ids.Count == 0)
+            *   获取ProductPool表中的，待处理产品数据中默认商品的ProductId进行添加商品
+             *  默认一次获取20条数据
+            */
+            using (var db = new YintaiHangzhouContext())
             {
-                return new List<ESProduct>();
-            }
+                var list = db.ProductPool.Where(
+                    p =>
+                        p.Status == 100
+                        && p.ChannelId == ChannelId
+                        && p.IsDefault == true)
+                    .OrderBy(p => p.Id)
+                   .Skip(0)
+                   .Take(10).ToList();
 
-            return GetProductsByIds(ids);
+                return list.ConvertAll(p => p.ProductId);
+            }
         }
 
         #endregion
@@ -58,10 +60,10 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                         q.Term(p => p.Id, productId))
                         .Skip(0).
                         Size(1))
-                    .Documents.First();
+                    .Documents.FirstOrDefault();
         }
 
-        public IList<string> GetAddedMergedProductCode()
+        public IEnumerable<string> GetAddedMergedProductCode()
         {
             /**
             *   获取已经成功上传产品的IDS
@@ -81,7 +83,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             }
         }
 
-        public IList<int> GetProductIdsByMergedProductCode(string code)
+        public IEnumerable<int> GetProductIdsByMergedProductCode(string code)
         {
             using (var db = new YintaiHangzhouContext())
             {
@@ -137,28 +139,6 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
         #region 帮助方法
 
-        private IList<string> GetProductIds()
-        {
-            /**
-            *   获取ProductPool表中的，待处理产品数据中默认商品的ProductId进行添加商品
-             *  默认一次获取20条数据
-            */
-            using (var db = new YintaiHangzhouContext())
-            {
-                var list = db.ProductPool.Where(
-                    p =>
-                        p.Status == 100
-                        && p.ChannelId == ChannelId
-                        && p.IsDefault == true)
-                    .OrderBy(p => p.Id)
-                   .Skip(0)
-                   .Take(10).ToList();
-
-                return list.ConvertAll(p => p.ProductId.ToString(CultureInfo.InvariantCulture));
-            }
-        }
-
-
         /// <summary>
         /// 获取默认的Es搜索Client
         /// </summary>
@@ -166,22 +146,6 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         private IElasticClient GetDefaultElasticClient()
         {
             return SearchLogic.GetClient();
-        }
-
-        /// <summary>
-        /// 根据商品列表获取商品信息
-        /// </summary>
-        /// <param name="ids">商品id列表</param>
-        /// <returns>商品基本信息列表</returns>
-        private IEnumerable<ESProduct> GetProductsByIds(IEnumerable<string> ids)
-        {
-            return GetDefaultElasticClient().Search<ESProduct>(
-                body =>
-                    body.Filter(q =>
-                        q.Terms(p => p.Id, ids))
-                        .Skip(0)
-                        .Size(5000))
-                    .Documents;
         }
 
         #endregion
