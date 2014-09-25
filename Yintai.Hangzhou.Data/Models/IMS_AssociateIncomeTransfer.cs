@@ -17,6 +17,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string QueryRetCode { get; set; }
         public string QueryRetMsg { get; set; }
         public int SerialNo { get; set; }
+        public int? GroupId { get; set; }
 
         #region Overrides of BaseEntity
 

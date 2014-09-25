@@ -63,7 +63,7 @@ namespace com.intime.jobscheduler.Job.Income
                     LogManager.GetLogger(this.GetType());
             }
         }
-        private IMS_AssociateIncomeTransferEntity CreateTransferRecord(DateTime benchTime)
+        private IMS_AssociateIncomeTransferEntity CreateTransferRecord(DateTime benchTime,int? groupId)
         {
             var packageId = int.Parse(benchTime.ToString("yyyyMMdd"));
             using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
@@ -82,7 +82,8 @@ namespace com.intime.jobscheduler.Job.Income
                         TotalCount = 0,
                         TotalFee = 0,
                         TransferRetCode = "-1",
-                        TransferRetMsg = string.Empty
+                        TransferRetMsg = string.Empty,
+                        GroupId = groupId
                     });
                     db.SaveChanges();
                 }
@@ -118,10 +119,13 @@ namespace com.intime.jobscheduler.Job.Income
 
                     using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
                     {
-                         var transferJobEntity = CreateTransferRecord(benchTime);
-                        string fullPackageId = string.Concat(transferJobEntity.PackageId,transferJobEntity.SerialNo);
-                        foreach (var order in oneTimeList)
+                        foreach (var group in oneTimeList.GroupBy(otl => otl.GroupId))
                         {
+                            var groupId = group.Key;
+                            var transferJobEntity = CreateTransferRecord(benchTime,groupId);
+                            string fullPackageId = string.Concat(transferJobEntity.PackageId, transferJobEntity.SerialNo);
+                            foreach (var order in oneTimeList.Where(ot=>ot.GroupId == groupId))
+                            {
                                 order.Status = (int)AssociateIncomeRequestStatus.Transferring;
                                 order.UpdateDate = DateTime.Now;
                                 db.Entry(order).State = System.Data.EntityState.Modified;
@@ -130,7 +134,7 @@ namespace com.intime.jobscheduler.Job.Income
                                 {
                                     AccountName = order.BankAccountName,
                                     AccountType = 1,
-                                    AmountOfFen = CommonUtil.Yuan2Fen(order.Amount-(order.TransferFee??0m)),
+                                    AmountOfFen = CommonUtil.Yuan2Fen(order.Amount - (order.TransferFee ?? 0m)),
                                     BankCode = order.BankCode,
                                     BankNo = order.BankNo,
                                     Desc = "银泰分成",
@@ -138,50 +142,53 @@ namespace com.intime.jobscheduler.Job.Income
                                     Serial = order.Id.ToString()
                                 });
 
-                                db.IMS_AssociateIncomeTran2Req.Add(new IMS_AssociateIncomeTran2ReqEntity() {
-                                     FullPackageId = int.Parse(fullPackageId),
-                                      RequestId = order.Id
+                                db.IMS_AssociateIncomeTran2Req.Add(new IMS_AssociateIncomeTran2ReqEntity()
+                                {
+                                    FullPackageId = int.Parse(fullPackageId),
+                                    RequestId = order.Id
                                 });
                                 db.SaveChanges();
-                            
-                        }
-                        if (transferItems.Count <= 0)
-                        {
-                            Log.Info(string.Format("this day:{0} has no cps records",benchTime));
-                            return;
-                        }
-                       
 
-                        var totalNum = transferItems.Count;
-                        var totalAmount = transferItems.Sum(l=>l.AmountOfFen);
-                        var transferResponse = AutoBankTransfer.Instance.BatchTransfer(new BatchTransferRequest() { 
-                             Records = transferItems.ToArray(),
-                              TotalNum = totalNum,
-                               TotalAmountOfFen = totalAmount,
-                               PackageId = string.Concat(transferJobEntity.PackageId,transferJobEntity.SerialNo)
-                        });
-                        if (transferResponse != null)
-                        {
-                            transferJobEntity.Status = (int)AssociateIncomeTransferStatus.RequestSent;
-                            transferJobEntity.IsSuccess = true;
-                            transferJobEntity.TotalCount = totalNum;
-                            transferJobEntity.TotalFee = totalAmount;
-                            transferJobEntity.TransferRetCode = transferResponse.RetCode;
-                            transferJobEntity.TransferRetMsg = transferResponse.RetMsg;
-                            db.Entry(transferJobEntity).State = System.Data.EntityState.Modified;
-                            db.SaveChanges();
-                            ts.Complete();
-                            successCount++;
+                            }
+                            if (transferItems.Count <= 0)
+                            {
+                                Log.Info(string.Format("this day:{0} has no cps records", benchTime));
+                                return;
+                            }
+
+
+                            var totalNum = transferItems.Count;
+                            var totalAmount = transferItems.Sum(l => l.AmountOfFen);
+                            var transferResponse = AutoBankTransfer.Instance.BatchTransfer(new BatchTransferRequest()
+                            {
+                                Records = transferItems.ToArray(),
+                                TotalNum = totalNum,
+                                TotalAmountOfFen = totalAmount,
+                                PackageId = string.Concat(transferJobEntity.PackageId, transferJobEntity.SerialNo),
+                                GroupId = groupId
+                            });
+                            if (transferResponse != null)
+                            {
+                                transferJobEntity.Status = (int)AssociateIncomeTransferStatus.RequestSent;
+                                transferJobEntity.IsSuccess = true;
+                                transferJobEntity.TotalCount = totalNum;
+                                transferJobEntity.TotalFee = totalAmount;
+                                transferJobEntity.TransferRetCode = transferResponse.RetCode;
+                                transferJobEntity.TransferRetMsg = transferResponse.RetMsg;
+                                db.Entry(transferJobEntity).State = System.Data.EntityState.Modified;
+                                db.SaveChanges();
+                                ts.Complete();
+                                successCount++;
+                            }
+                            else if (transferResponse != null)
+                            {
+                                Log.Error(string.Format("income transfer fail, code:{0},msg:{1}", transferResponse.RetCode, transferResponse.RetMsg));
+                            }
+                            else
+                            {
+                                Log.Error("income transfer fail, unknow problem!");
+                            }
                         }
-                        else if (transferResponse != null)
-                        {
-                            Log.Error(string.Format("income transfer fail, code:{0},msg:{1}", transferResponse.RetCode, transferResponse.RetMsg));
-                        }
-                        else
-                        {
-                            Log.Error("income transfer fail, unknow problem!");
-                        }
-                       
                         
                     }
                 }

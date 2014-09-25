@@ -66,8 +66,8 @@ namespace com.intime.fashion.service
         }
         public bool Avail(int associateUserId, IMS_GiftCardOrderEntity giftOrder)
         {
-
-            var thisIncome = ComputeIncome(giftOrder);
+            var groupid = GetGroupFromGiftCard(giftOrder);
+            var thisIncome = ComputeIncome(giftOrder,groupid);
             _incomeHistoryRepo.Insert(new IMS_AssociateIncomeHistoryEntity()
             {
                 CreateDate = DateTime.Now,
@@ -76,7 +76,8 @@ namespace com.intime.fashion.service
                 Status = (int)AssociateIncomeStatus.Avail,
                 UpdateDate = DateTime.Now,
                 AssociateIncome = thisIncome,
-                AssociateUserId = associateUserId
+                AssociateUserId = associateUserId,
+                GroupId = groupid
             });
 
             AssociateIncomeAccount.AvailGift(associateUserId, thisIncome);
@@ -103,14 +104,19 @@ namespace com.intime.fashion.service
         }
 
 
-        private decimal ComputeIncome(IMS_GiftCardOrderEntity giftcardOrder)
+        private decimal ComputeIncome(IMS_GiftCardOrderEntity giftcardOrder,int? groupId)
         {
             if (giftcardOrder == null)
                 return 0m;
+
+            return DoInternalCompute(giftcardOrder.Price.Value, ConfigManager.IMS_GIFTCARD_CAT_ID, 1, groupId);
+        }
+        private int? GetGroupFromGiftCard(IMS_GiftCardOrderEntity giftcardOrder)
+        {
             var group = _db.Set<IMS_GiftCardItemEntity>().Where(igi => igi.GiftCardId == giftcardOrder.GiftCardItemId)
                          .Join(_db.Set<IMS_GiftCardEntity>(), o => o.GiftCardId, i => i.Id, (o, i) => i)
                          .FirstOrDefault();
-            return DoInternalCompute(giftcardOrder.Price.Value, ConfigManager.IMS_GIFTCARD_CAT_ID, 1, group == null ? null : group.GroupId);
+            return group == null ? null : group.GroupId;
         }
         private decimal ComputeIncome(OrderEntity order, OrderItemEntity orderItem)
         {

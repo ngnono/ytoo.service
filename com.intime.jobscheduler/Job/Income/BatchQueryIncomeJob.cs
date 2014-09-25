@@ -43,30 +43,7 @@ namespace com.intime.jobscheduler.Job.Income
                     LogManager.GetLogger(this.GetType());
             }
         }
-        private IMS_AssociateIncomeTransferEntity CreateTransferRecord(DateTime benchTime)
-        {
-            var packageId = int.Parse(benchTime.ToString("yyyyMMdd"));
-            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
-            {
-                var transferEntity = db.Set<IMS_AssociateIncomeTransferEntity>().Where(ia => ia.PackageId == packageId)
-                                    .OrderByDescending(l => l.SerialNo).FirstOrDefault();
-                db.IMS_AssociateIncomeTransfer.Add(new IMS_AssociateIncomeTransferEntity()
-                {
-                    CreateDate = DateTime.Now,
-                    IsSuccess = false,
-                    PackageId = packageId,
-                    SerialNo = transferEntity == null ? 1 : transferEntity.SerialNo + 1,
-                    Status = (int)AssociateIncomeTransferStatus.NotStart,
-                    TotalCount = 0,
-                    TotalFee = 0,
-                    TransferRetCode = "-1",
-                    TransferRetMsg = string.Empty
-                });
-                db.SaveChanges();
-                return transferEntity;
-            }
-        }
-
+      
         private void DoQuery()
         {
             Stopwatch sw = new Stopwatch();
@@ -100,6 +77,7 @@ namespace com.intime.jobscheduler.Job.Income
                             {
                                 PackageId = fullPackageId,
                                 ServiceVersion = "1.2",
+                                GroupId = order.GroupId
                             });
                             if (response != null && response.IsSuccess)
                             {
@@ -169,7 +147,7 @@ namespace com.intime.jobscheduler.Job.Income
                     request.TransferErrorMsg = order.QueryRetMsg;
                     db.Entry(request).State = System.Data.EntityState.Modified;
 
-                    var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId).First();
+                    var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId && iai.GroupId == order.GroupId).First();
                     incomeAccount.RequestAmount -= request.Amount;
                     incomeAccount.ReceivedAmount += request.Amount;
                     incomeAccount.UpdateDate = DateTime.Now;
@@ -190,7 +168,7 @@ namespace com.intime.jobscheduler.Job.Income
                         request.TransferErrorMsg = failRequest.ErrorMsg;
                         db.Entry(request).State = System.Data.EntityState.Modified;
 
-                        var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId).First();
+                        var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId && iai.GroupId == order.GroupId).First();
                         incomeAccount.RequestAmount -= request.Amount;
                         incomeAccount.AvailableAmount += request.Amount;
                         incomeAccount.UpdateDate = DateTime.Now;
@@ -241,7 +219,7 @@ namespace com.intime.jobscheduler.Job.Income
                 request.TransferErrorMsg = order.QueryRetMsg;
                 db.Entry(request).State = System.Data.EntityState.Modified;
 
-                var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId).First();
+                var incomeAccount = db.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == request.UserId && iai.GroupId == order.GroupId).First();
                 incomeAccount.RequestAmount -= request.Amount;
                 incomeAccount.AvailableAmount += request.Amount;
                 incomeAccount.UpdateDate = DateTime.Now;
