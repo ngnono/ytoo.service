@@ -28,6 +28,7 @@ using com.intime.fashion.common.message;
 using com.intime.fashion.common.config;
 using com.intime.fashion.common.Extension;
 using System.Collections.Specialized;
+using com.intime.fashion.service.contract;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -41,7 +42,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<ExOrderEntity> _exorderRepo;
         private Architecture.Common.Data.EF.IEFRepository<Data.Models.IMS_GiftCardOrderEntity> _giftcardOrderRepo;
         private IEFRepository<IMS_AssociateIncomeHistoryEntity> _incomehisRepo;
-        private AuthKeysService _keyService;
+        private IAuthKeysService _keyService;
+        private IAssociateIncomeService _associateIncomeService;
 
         public PaymentController(IEFRepository<OrderTransactionEntity> ordTranRepo
             , IEFRepository<PaymentNotifyLogEntity> paynotiRepo
@@ -50,7 +52,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             , IEFRepository<ExOrderEntity> exorderRepo
             , IEFRepository<IMS_GiftCardOrderEntity> giftcardOrderRepo,
             IEFRepository<IMS_AssociateIncomeHistoryEntity> incomehisRepo,
-            AuthKeysService keyService)
+            IAuthKeysService keyService,
+            IAssociateIncomeService associateIncomeService)
         {
             _orderTranRepo = ordTranRepo;
             _paymentNotifyRepo = paynotiRepo;
@@ -61,6 +64,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _giftcardOrderRepo = giftcardOrderRepo;
             _incomehisRepo = incomehisRepo;
            _keyService = keyService ;
+           _associateIncomeService = associateIncomeService;
         }
 
 
@@ -154,7 +158,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     Type = (int)OrderOpera.CustomerPay
                                 });
 
-                                AssociateIncomeLogic.Froze(orderEntity.OrderNo);
+                                _associateIncomeService.Froze(orderEntity.OrderNo);
 
                             }
 
@@ -271,7 +275,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     OrderNo = out_trade_no,
                                     Type = (int)OrderOpera.CustomerPay
                                 });
-                                AssociateIncomeLogic.Froze(orderEntity.OrderNo);
+                                _associateIncomeService.Froze(orderEntity.OrderNo);
                             }
                             ts.Complete();
 
@@ -397,7 +401,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 var associatEntity = Context.Set<IMS_AssociateEntity>().Find(assocateId);
                                 if (associatEntity != null)
                                 {
-                                    AssociateIncomeLogic.Avail(associatEntity.UserId, giftcardOrder);
+                                    _associateIncomeService.Avail(associatEntity.UserId, giftcardOrder);
                                 }
                             }
                             ts.Complete();
@@ -533,7 +537,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     var associatEntity = Context.Set<IMS_AssociateEntity>().Find(assocateId);
                                     if (associatEntity != null)
                                     {
-                                        AssociateIncomeLogic.Avail(associatEntity.UserId, giftcardOrder);
+                                        _associateIncomeService.Avail(associatEntity.UserId, giftcardOrder);
                                     }
                                 }
                                 ts.Complete();

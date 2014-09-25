@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using com.intime.fashion.common.message;
+using System;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using com.intime.fashion.common.message;
 using Top.Api;
 using Top.Api.Request;
 using Yintai.Architecture.Framework.ServiceLocation;
@@ -93,6 +89,7 @@ namespace com.intime.fashion.service.messages.Message
                     NumIid = Convert.ToInt64(entity.ChannelProductId),
                     Num = stocks.Count(x => x.Inventory.Amount > 0)
                 };
+
                 if (_topClient.Execute(req).IsError)
                 {
                     allSucceed = false;

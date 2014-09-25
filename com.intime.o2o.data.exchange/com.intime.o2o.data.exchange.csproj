@@ -59,6 +59,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ims\Domain\LogisticStatus.cs" />
+    <Compile Include="Ims\ImsApiClient.cs" />
     <Compile Include="Ims\ImsRequest.cs" />
     <Compile Include="Ims\Request\CreateOrderRequest.cs" />
     <Compile Include="Ims\Request\QueryOrderStatusRequest.cs" />

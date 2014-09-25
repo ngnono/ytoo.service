@@ -243,8 +243,8 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             var templateKey = string.Format("tmall.schema.item.{0}", categoryId);
 
             var esStocks = items as IList<ESStock> ?? items.ToList();
-            var colors = esStocks.Select(p => p.ColorValueId).Distinct().ToList();
-            var sizes = esStocks.Select(p => p.SizeValueId).Distinct().ToList();
+            var colors = esStocks.Select(p => p.ColorDesc).Distinct().ToList();
+            var sizes = esStocks.Select(p => p.SizeDesc).Distinct().ToList();
 
             //商品总数量
             var total = esStocks.Sum(p => p.Amount);

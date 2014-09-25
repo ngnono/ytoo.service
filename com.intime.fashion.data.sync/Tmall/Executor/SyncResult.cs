@@ -26,7 +26,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             };
         }
 
-        public static SyncResult SucceedResult(string imsOrderNo, decimal tmallOrderId, dynamic tmallOrder)
+        public static SyncResult SucceedResult(string imsOrderNo, long tmallOrderId, dynamic tmallOrder)
         {
             return new SyncResult
             {
@@ -37,7 +37,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             };
         }
 
-        public decimal TmalOrderId { get; set; }
+        public long TmalOrderId { get; set; }
 
         public string TargetOrderNo { get; set; }
 

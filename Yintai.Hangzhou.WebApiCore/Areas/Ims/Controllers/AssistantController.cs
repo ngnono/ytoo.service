@@ -324,7 +324,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Income(int authuid)
         {
-            var incomeEntity = Context.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == authuid).FirstOrDefault();
+            var storeEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                          .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => i).First();
+            var groupId = storeEntity.Group_Id;
+            var incomeEntity = Context.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == authuid && iai.GroupId == groupId).FirstOrDefault();
             if (incomeEntity == null)
                 incomeEntity = new IMS_AssociateIncomeEntity()
                 {
@@ -349,8 +352,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Income_Received(PagerInfoRequest request, int authuid)
         {
+            var storeEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                          .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => i).First();
+            var groupId = storeEntity.Group_Id;
             var linq = Context.Set<IMS_AssociateIncomeRequestEntity>().
-                        Where(iair => iair.UserId == authuid);
+                        Where(iair => iair.UserId == authuid && iair.GroupId == groupId);
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
             linq = linq.OrderByDescending(l => l.CreateDate).Skip(skipCount).Take(request.Pagesize);
@@ -365,10 +371,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Income_Requesting(PagerInfoRequest request, int authuid)
         {
+            var storeEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                           .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => i).First();
+            var groupId = storeEntity.Group_Id;
             var linq = Context.Set<IMS_AssociateIncomeRequestEntity>().
                         Where(iair => iair.UserId == authuid &&
                                (iair.Status == (int)AssociateIncomeTransferStatus.RequestSent ||
-                               iair.Status == (int)AssociateIncomeTransferStatus.NotStart));
+                               iair.Status == (int)AssociateIncomeTransferStatus.NotStart)
+                               && iair.GroupId == groupId);
             int totalCount = linq.Count();
             int skipCount = request.Page > 0 ? (request.Page - 1) * request.Pagesize : 0;
             linq = linq.OrderByDescending(l => l.CreateDate).Skip(skipCount).Take(request.Pagesize);
@@ -383,8 +393,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Income_History(PagerInfoRequest request, int authuid)
         {
+            var storeEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                           .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => i).First();
+            var groupId = storeEntity.Group_Id;
             var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
-                            Where(iair => iair.AssociateUserId == authuid && iair.Status > (int)AssociateIncomeStatus.Create && iair.SourceType == (int)AssociateOrderType.GiftCard)
+                            Where(iair => iair.AssociateUserId == authuid 
+                                && iair.Status > (int)AssociateIncomeStatus.Create 
+                                && iair.SourceType == (int)AssociateOrderType.GiftCard
+                                && iair.GroupId == groupId)
                             .Join(Context.Set<IMS_GiftCardOrderEntity>(), o => o.SourceNo, i => i.No, (o, i) => new IMSIncomeDetailResponse
                             {
                                 CreateDate = o.CreateDate,
@@ -397,7 +413,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             });
 
             var linq2 = Context.Set<IMS_AssociateIncomeHistoryEntity>().
-                        Where(iair => iair.AssociateUserId == authuid && iair.Status > (int)AssociateIncomeStatus.Create && iair.SourceType == (int)AssociateOrderType.Product)
+                        Where(iair => iair.AssociateUserId == authuid 
+                                && iair.Status > (int)AssociateIncomeStatus.Create 
+                                && iair.SourceType == (int)AssociateOrderType.Product
+                                && iair.GroupId == groupId)
                         .Join(Context.Set<OrderEntity>(), o => o.SourceNo, i => i.OrderNo, (o, i) => new IMSIncomeDetailResponse
                         {
                             CreateDate = o.CreateDate,
@@ -423,8 +442,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Income_Frozen(PagerInfoRequest request, int authuid)
         {
+            var storeEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                           .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => i).First();
+            var groupId = storeEntity.Group_Id;
             var linq = Context.Set<IMS_AssociateIncomeHistoryEntity>().
-                        Where(iair => iair.AssociateUserId == authuid && iair.Status == (int)AssociateIncomeStatus.Frozen && iair.SourceType == (int)AssociateOrderType.GiftCard)
+                        Where(iair => iair.AssociateUserId == authuid 
+                                && iair.Status == (int)AssociateIncomeStatus.Frozen 
+                                && iair.SourceType == (int)AssociateOrderType.GiftCard
+                                && iair.GroupId == groupId)
                         .Join(Context.Set<IMS_GiftCardOrderEntity>(), o => o.SourceNo, i => i.No, (o, i) => new IMSIncomeDetailResponse
                          {
                              CreateDate = o.CreateDate,
@@ -437,7 +462,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                          });
 
             var linq2 = Context.Set<IMS_AssociateIncomeHistoryEntity>().
-                        Where(iair => iair.AssociateUserId == authuid && iair.Status == (int)AssociateIncomeStatus.Frozen && iair.SourceType == (int)AssociateOrderType.Product)
+                        Where(iair => iair.AssociateUserId == authuid 
+                            && iair.Status == (int)AssociateIncomeStatus.Frozen 
+                            && iair.SourceType == (int)AssociateOrderType.Product
+                            && iair.GroupId == groupId)
                         .Join(Context.Set<OrderEntity>(), o => o.SourceNo, i => i.OrderNo, (o, i) => new IMSIncomeDetailResponse
                         {
                             CreateDate = o.CreateDate,
@@ -473,7 +501,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 return this.RenderError(r => r.Message = "身份证号码不能为空");
             if (request.Amount <= ConfigManager.BANK_TRANSFER_FEE)
                 return this.RenderError(r => r.Message = string.Format("提现最小金额须大于{0}", ConfigManager.BANK_TRANSFER_FEE));
-            var incomeAccountEntity = Context.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == authuid).FirstOrDefault();
+            var storeEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == authuid)
+                            .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => i).First();
+            var groupId = storeEntity.Group_Id;
+            var incomeAccountEntity = Context.Set<IMS_AssociateIncomeEntity>().Where(iai => iai.UserId == authuid && iai.GroupId == groupId).FirstOrDefault();
             if (incomeAccountEntity == null)
                 return this.RenderError(r => r.Message = "账户内可提现金额不足！");
             if (incomeAccountEntity.AvailableAmount < request.Amount)
@@ -481,6 +512,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var thisMonth = DateTime.Parse(DateTime.Today.ToString("yyyy-MM-01"));
             var incomeRequestHistory = Context.Set<IMS_AssociateIncomeRequestEntity>().Where(iair => iair.UserId == authuid &&
                             iair.Status != (int)AssociateIncomeRequestStatus.Failed &&
+                            iair.GroupId == groupId &&
                             iair.CreateDate > thisMonth);
             var requestedAmount = incomeRequestHistory.Sum(l => (decimal?)l.Amount) ?? 0m;
             var availLimitAmount = ConfigManager.IMS_MAX_REQUEST_AMOUNT_MON - requestedAmount;
@@ -507,7 +539,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     UpdateDate = DateTime.Now,
                     UserId = authuid,
                     TransferFee = ConfigManager.BANK_TRANSFER_FEE,
-                    IDCard = request.Id_Card
+                    IDCard = request.Id_Card,
+                    GroupId = groupId
                 });
 
                 incomeAccountEntity.AvailableAmount -= request.Amount;

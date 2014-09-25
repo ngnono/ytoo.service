@@ -67,10 +67,10 @@ namespace com.intime.fashion.service.messages.Message
                     }, AccessTokenType.MiniYin, null, null);
                 }
                 //step2: send income message to dagou
-                var associateOrder = _db.Set<IMS_AssociateIncomeHistoryEntity>().Where(iai => iai.SourceNo == paidMessage.SourceNo && iai.SourceType == (int)AssociateOrderType.Product).FirstOrDefault();
-                if (associateOrder != null)
+                var associateOrders = _db.Set<IMS_AssociateIncomeHistoryEntity>().Where(iai => iai.SourceNo == paidMessage.SourceNo && iai.SourceType == (int)AssociateOrderType.Product);
+                foreach(var order in associateOrders)
                 {
-                    var daogouEntity = _db.Set<OutsiteUserEntity>().Where(o => o.AssociateUserId == associateOrder.AssociateUserId).FirstOrDefault();
+                    var daogouEntity = _db.Set<OutsiteUserEntity>().Where(o => o.AssociateUserId == order.AssociateUserId).FirstOrDefault();
                     if (daogouEntity == null)
                         return true;
                     var daogou_url_path = "ims/store/stores/records";

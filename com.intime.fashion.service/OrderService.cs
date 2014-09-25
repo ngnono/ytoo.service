@@ -24,13 +24,15 @@ namespace com.intime.fashion.service
         private IInventoryRepository _inventoryRepo;
         private IOrder2ExRepository _order2exRepo;
         private IShippingFeeService _shippingFeeService;
+        private IAssociateIncomeService _associateIncomeService;
         public OrderService(IProductRepository productRepo,
             IOrderRepository orderRepo,
             IOrderLogRepository orderLogRepo,
             IOrderItemRepository orderItemRepo,
             IInventoryRepository inventoryRepo,
             IOrder2ExRepository order2exRepo,
-            IShippingFeeService shippingFeeService)
+            IShippingFeeService shippingFeeService,
+            IAssociateIncomeService associateIncomeService)
             : base()
         {
             _productRepo = productRepo;
@@ -40,6 +42,7 @@ namespace com.intime.fashion.service
             _inventoryRepo = inventoryRepo;
             _order2exRepo = order2exRepo;
             _shippingFeeService = shippingFeeService;
+            _associateIncomeService = associateIncomeService;
 
         }
         public bool CanChangePro(OrderEntity order)
@@ -58,7 +61,7 @@ namespace com.intime.fashion.service
                                     .FirstOrDefault();
             return associateIncome != null;
         }
-        public BusinessResult<OrderCreateResult> Create(OrderCreate request, UserModel authUser)
+        public BusinessResult<OrderCreateResult> Create(OrderCreate request, UserModel authUser, bool needShippingFee = true)
         {
 
             decimal totalAmount = 0m;
@@ -92,12 +95,17 @@ namespace com.intime.fashion.service
                 }
             }
             if (totalAmount <= 0)
-                return Error<OrderCreateResult>( "商品销售价信息错误！");
+                return Error<OrderCreateResult>("商品销售价信息错误！");
 
 
             var orderNo = OrderRule.CreateCode(0);
-            decimal shippingFee = _shippingFeeService.Calculate(request.Products);
-            totalAmount+=shippingFee;
+            decimal shippingFee = 0;
+            if (needShippingFee)
+            {
+                shippingFee = _shippingFeeService.Calculate(request.Products);
+                totalAmount += shippingFee;
+            }
+
             using (var ts = new TransactionScope())
             {
                 var orderEntity = _orderRepo.Insert(new OrderEntity()
@@ -198,14 +206,8 @@ namespace com.intime.fashion.service
                     OrderNo = orderNo,
                     Type = (int)OrderOpera.FromCustomer
                 });
-                if (request.StoreId.HasValue && request.StoreId > 0)
-                {
+                _associateIncomeService.Create(orderEntity);
 
-                    var associateEntity = _db.Set<IMS_AssociateEntity>().Find(request.StoreId);
-                    if (associateEntity != null)
-                        AssociateIncomeLogic.Create(associateEntity.UserId, orderEntity);
-
-                }
                 string exOrderNo = string.Empty;
 
                 bool isSuccess = true;
@@ -214,13 +216,13 @@ namespace com.intime.fashion.service
                     exOrderNo = orderEntity.OrderNo;
                     ts.Complete();
                     return Success<OrderCreateResult>(OrderCreateResult.FromEntity<OrderCreateResult>(orderEntity, o => o.ExOrderNo = exOrderNo));
-                    
+
                 }
                 else
                 {
                     return Error<OrderCreateResult>("失败");
                 }
-            }  
+            }
         }
 
 

@@ -12,7 +12,7 @@ using Yintai.Hangzhou.Model.Enums;
 
 namespace com.intime.fashion.service
 {
-    public class AuthKeysService : BusinessServiceBase
+    public class AuthKeysService : BusinessServiceBase, IAuthKeysService
     {
         private ICacheService _cacheService;
         public AuthKeysService(ICacheService cacheService)

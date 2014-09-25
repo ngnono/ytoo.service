@@ -10,6 +10,8 @@ using System.Transactions;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using com.intime.fashion.service;
+using Yintai.Architecture.Framework.ServiceLocation;
+using com.intime.fashion.service.contract;
 
 namespace com.intime.jobscheduler.Job.Income
 {
@@ -75,13 +77,14 @@ namespace com.intime.jobscheduler.Job.Income
                                                 && r.Status != (int)RMAStatus.Reject).FirstOrDefault();
                                     bool incomeIsAvail = rmaEntity == null ? true : false;
                                     bool isSuccess = false;
+                                    var associateIncomeService = ServiceLocator.Current.Resolve<IAssociateIncomeService>();
                                     if (incomeIsAvail)
                                     {
-                                        isSuccess = AssociateIncomeLogic.Avail(order);
+                                        isSuccess = associateIncomeService.Avail(order);
                                     }
                                     else
                                     {
-                                        isSuccess = AssociateIncomeLogic.Void(order);
+                                        isSuccess = associateIncomeService.Void(order);
                                     }
 
                                     if (isSuccess)
