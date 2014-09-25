@@ -14,11 +14,13 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
     {
         private ITopClient _topClient;
         private IApiClient _imsApiClient;
-        public LogisticsExecutor(DateTime benchTime, int pageSize, ITopClient topClient, IApiClient apiClient)
+        private string _sessionKey;
+        public LogisticsExecutor(DateTime benchTime, int pageSize, ITopClient topClient, IApiClient apiClient,string sessionKey)
             : base(benchTime, pageSize)
         {
             _topClient = topClient;
             _imsApiClient = apiClient;
+            _sessionKey = sessionKey;
         }
 
         public override void Execute()
@@ -112,7 +114,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                     CancelId = GetCancelId(ship.StoreId)
                 };
 
-                var rsp = _topClient.Execute(request);
+                var rsp = _topClient.Execute(request,_sessionKey);
                 if (rsp.IsError)
                 {
                     Logger.Error(rsp);

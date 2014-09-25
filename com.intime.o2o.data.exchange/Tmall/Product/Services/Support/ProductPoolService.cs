@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using com.intime.fashion.service.search;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
@@ -20,7 +21,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
              * 1. 获取待处理的商品Id列表
              * 2 .根据列表获取商品
              */
-            var a = 10;
+
 
             var ids = GetProductIds();
 
@@ -29,6 +30,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             {
                 return new List<ESProduct>();
             }
+
 
             return GetProductsByIds(ids);
         }
@@ -39,11 +41,13 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             throw new System.NotImplementedException();
         }
 
+
         public void UpdateProductStatus(int productId, ProductPoolStatus status, string errorMessage)
         {
             using (var db = new YintaiHangzhouContext())
             {
                 var extProductPool = db.ProductPool.FirstOrDefault(p => p.ProductId == productId);
+
                 if (extProductPool != null)
                 {
                     extProductPool.Status = (int)status;
@@ -54,6 +58,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         }
 
         #region 帮助方法
+
 
         private IList<string> GetProductIds()
         {

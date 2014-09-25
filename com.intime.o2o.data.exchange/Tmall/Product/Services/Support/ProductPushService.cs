@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -10,7 +9,7 @@ using com.intime.o2o.data.exchange.Tmall.Core.Support;
 using com.intime.o2o.data.exchange.Tmall.Product.Mappers;
 using com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
-using Common.Logging;
+
 using Top.Api.Request;
 using Yintai.Hangzhou.Model.ES;
 using Yintai.Hangzhou.Model.ESModel;
@@ -28,7 +27,6 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         private readonly IProductMapper _productMapper = new DefaultProductMapper();
         private readonly IItemMapper _itemMapper = new DefaultItemMapper();
         private readonly ISchemaMapper _schemaMapper = new DefaultSchemaMapper();
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         public ProductPushService()
         {
@@ -54,40 +52,13 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         public ResultInfo<long> AddProduct(ESProduct productSchema, string consumerKey)
         {
             /**================================================
-             * 品牌映射关系
+             * 获取品牌和分类的映射关系
              ==================================================*/
             var brandId = _brandMapper.ToChannel(productSchema.Brand.Id);
-
-            if (brandId == null)
-            {
-                var errorMessage = string.Format("商品品牌没有映射，productId:{0},brandId:{1}", productSchema.Id,
-                    productSchema.Brand.Id);
-                Log.Error(errorMessage);
-                return Error<long>(errorMessage, "-10001");
-            }
-
-            /**================================================
-            * 分类的映射关系
-            ==================================================*/
             var categoryId = _categoryMapper.ToChannel(productSchema.CategoryId);
 
-            if (categoryId == null)
-            {
-                var errorMessage = string.Format("商品分类没有映射，productId:{0},brandId:{1}", productSchema.Id,
-                    productSchema.CategoryId);
-                Log.Error(errorMessage);
-                return Error<long>(errorMessage, "-10002");
-            }
-
-            // 创建templatekey,{模版名称}+{分类}+{品牌}
-            var templateKey = string.Format("tmall.schema.product.{0}.{1}", categoryId, brandId);
-
-            if (!_schemaMapper.ExistsTemplate(templateKey))
-            {
-                var errorMessage = string.Format("商品上传数据模版不存在，tempalte:{0}", templateKey);
-                Log.Error(errorMessage);
-                return Error<long>(errorMessage, "-10003");
-            }
+            //创建templatekey,{模版名称}+{分类}+{品牌}
+            var templateKey = string.Format("tmall.schema.product_{0}_{1}", categoryId, brandId);
 
             // 转化商品数据Schema
             var xmlData = CreateXmlData(templateKey, new Hashtable
@@ -115,18 +86,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             // 解析XMl返回结果提取productId
             var root = XElement.Load(new StringReader(result.AddProductResult));
 
-            var field = (from item in root.Elements("field")
-                         where item.Attribute("id").Value == "product_id"
-                         select item).FirstOrDefault();
-
-            if (field == null)
-            {
-                var errorMessage = string.Format("解析productId出错，result:{0}", result.AddProductResult);
-                Log.Error(errorMessage);
-                return Error<long>(errorMessage, "-10004");
-            }
-
-            var productId = Convert.ToInt64(field.Value);
+            var productId = Convert.ToInt64(root.XPathSelectElement("field[id='product_id']").Value);
 
             // 保存上传商品和成功后的商品Id的关系
             _productMapper.Save(productSchema.Id, productId);
@@ -156,7 +116,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             if (result.IsError)
             {
-                return Error<bool>(result.ErrCode, string.Format("{0}[{1}]", result.ErrMsg, result.SubErrMsg));
+                return Error<bool>(result.ErrCode, result.ErrMsg);
             }
 
             return Ok(true);

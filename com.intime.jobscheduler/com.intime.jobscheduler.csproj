@@ -147,6 +147,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
+    <Reference Include="TopSdk, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\TopSdk.dll</HintPath>
+    </Reference>
     <Reference Include="WebActivator, Version=1.4.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
@@ -194,6 +198,8 @@
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="Job\Push2awsJob.cs" />
     <Compile Include="Job\Store\StoreApplyApproveJob.cs" />
+    <Compile Include="Job\Tmall\Order\LogisticInfo2TmallJob.cs" />
+    <Compile Include="Job\Tmall\Order\OrderPush2ImsJob.cs" />
     <Compile Include="Job\Tmall\Product\ItemPushJob.cs" />
     <Compile Include="Job\Tmall\Product\ProductPushJob.cs" />
     <Compile Include="Job\Wgw\BrandSyncJob.cs" />
