@@ -62,7 +62,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IFavoriteService, FavoriteService>();
             Current.Register<Service.Contract.ILikeService, LikeService>();
             Current.Register<Service.Contract.IPointService, PointService>();
-            Current.Register<Service.Contract.IPromotionService, PromotionService>();
+            Current.Register<Service.Contract.IPromotionService, Service.Impl.PromotionService>();
             Current.Register<IRemindService, RemindService>();
             Current.Register<Service.Contract.IResourceService, ResourceService>();
             Current.Register<IShareService, ShareService>();

@@ -32,6 +32,7 @@ namespace com.intime.fashion.service
                                         && oi.Status == (int)DataStatus.Normal))
             {
                 var _associateUserEntity = _db.Set<ProductEntity>().Find(orderItem.ProductId);
+                var _storeEntity = _db.Set<StoreEntity>().Find(orderItem.StoreId);
                 _incomeHistoryRepo.Insert(new IMS_AssociateIncomeHistoryEntity()
                 {
                     CreateDate = DateTime.Now,
@@ -40,7 +41,8 @@ namespace com.intime.fashion.service
                     Status = (int)AssociateIncomeStatus.Create,
                     UpdateDate = DateTime.Now,
                     AssociateIncome = ComputeIncome(order, orderItem),
-                    AssociateUserId = _associateUserEntity.CreatedUser
+                    AssociateUserId = _associateUserEntity.CreatedUser,
+                    GroupId = _storeEntity.Group_Id
                 });
             }
 
