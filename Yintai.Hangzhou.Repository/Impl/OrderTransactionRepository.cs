@@ -22,27 +22,24 @@ namespace Yintai.Hangzhou.Repository.Impl
         public override Yintai.Hangzhou.Data.Models.OrderTransactionEntity Insert(Yintai.Hangzhou.Data.Models.OrderTransactionEntity entity)
         {
             var newEntity = base.Insert(entity);
-            Transaction.Current.TransactionCompleted += new TransactionCompletedEventHandler((o, e) =>
+            this.NotifyMessage<OrderTransactionEntity>(() =>
             {
-                if (e.Transaction.TransactionInformation.Status == TransactionStatus.Committed)
+                var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
+                var validSources = new Dictionary<int, int>();
+                validSources.Add((int)PaidOrderType.GiftCard, (int)MessageSourceType.GiftCard);
+                validSources.Add((int)PaidOrderType.Self, (int)MessageSourceType.Order);
+                validSources.Add((int)PaidOrderType.Self_ProductOfSelf, (int)MessageSourceType.Order);
+                if (validSources.Keys.Contains(newEntity.OrderType.Value))
                 {
-                    var messageProvider = ServiceLocator.Current.Resolve<IMessageCenterProvider>();
-                    var validSources = new Dictionary<int,int>();
-                    validSources.Add((int)PaidOrderType.GiftCard,(int)MessageSourceType.GiftCard);
-                    validSources.Add((int)PaidOrderType.Self,(int)MessageSourceType.Order);
-                    validSources.Add((int)PaidOrderType.Self_ProductOfSelf,(int)MessageSourceType.Order);
-                  
-                    if (validSources.Keys.Contains(newEntity.OrderType.Value))
+                    messageProvider.GetSender().SendMessageReliable(new PaidMessage()
                     {
-                        messageProvider.GetSender().SendMessageReliable(new PaidMessage()
-                        {
-                            SourceType = validSources[newEntity.OrderType.Value],
-                            SourceNo = newEntity.OrderNo
-                        });
-                    }
+                        SourceType = validSources[newEntity.OrderType.Value],
+                        SourceNo = newEntity.OrderNo
+                    });
                 }
-
+               
             });
+           
             return newEntity;
         }
     }
