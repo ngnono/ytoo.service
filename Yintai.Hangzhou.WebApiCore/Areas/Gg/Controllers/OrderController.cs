@@ -24,6 +24,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             this._inventoryRepo = inventoryRepo;
         }
 
+        public ActionResult CreateOrder(dynamic request, string channel)
+        {
+            throw new NotImplementedException();
+        }
+
         [ValidateParameters]
         public ActionResult Create(dynamic request, string channel)
         {

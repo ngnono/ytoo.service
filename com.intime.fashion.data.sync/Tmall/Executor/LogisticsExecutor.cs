@@ -15,7 +15,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
         private ITopClient _topClient;
         private IApiClient _imsApiClient;
         private string _sessionKey;
-        public LogisticsExecutor(DateTime benchTime, int pageSize, ITopClient topClient, IApiClient apiClient,string sessionKey)
+        public LogisticsExecutor(DateTime benchTime, int pageSize, ITopClient topClient, IApiClient apiClient, string sessionKey)
             : base(benchTime, pageSize)
         {
             _topClient = topClient;
@@ -54,7 +54,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
         /// <param name="oneTimeList"></param>
         private void Batch(IEnumerable<OrderSync> oneTimeList)
         {
-            var orderIds = oneTimeList.Select(x => x.ImsOrderNo);
+            var orderIds = oneTimeList.Select(x => new { orderno = x.ImsOrderNo });
             // todo 获取订单状态
             var request = new QueryOrderStatusRequest() { Data = orderIds };
             var response = _imsApiClient.Post(request);
@@ -62,7 +62,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             {
                 return;
             }
-            if (response.Status)
+            if (response.Data != null)
             {
                 SyncLogistics(oneTimeList, response.Data);
             }
@@ -100,21 +100,24 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
         /// <param name="logistic"></param>
         private void SyncOne(OrderSync orderSync, LogisticStatus logistic)
         {
-
-            foreach (var express in logistic.Logistics.GroupBy(x => string.Format("{0}/{1}{2}", x.StoreId, x.LogisticCode, x.CompanyId)))
+            var groups = logistic.Logistics.GroupBy(x => string.Format("{0}/{1}{2}", x.StoreId, x.LogisticCode, x.CompanyId));
+            if (groups.Count() == 0)
             {
+                return;
+            }
+            if (groups.Count() == 1)
+            {
+                var express = groups.First();
                 var ship = express.FirstOrDefault();
-                if(ship == null) continue;
+                if (ship == null) return;
                 var request = new LogisticsOfflineSendRequest
                 {
                     CompanyCode = GetCompanyCode(express.FirstOrDefault()),
-                    OutSid =ship.LogisticCode,
+                    OutSid = ship.LogisticCode,
                     Tid = long.Parse(orderSync.TmallOrderId.ToString()),
-                    SubTid = GetSubOrderIdStr(express),
                     CancelId = GetCancelId(ship.StoreId)
                 };
-
-                var rsp = _topClient.Execute(request,_sessionKey);
+                var rsp = _topClient.Execute(request, _sessionKey);
                 if (rsp.IsError)
                 {
                     Logger.Error(rsp);
@@ -124,7 +127,33 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                     MarkSubOrders(orderSync, express.AsEnumerable());
                 }
             }
-            
+            else
+            {
+                foreach (var express in groups)
+                {
+                    var ship = express.FirstOrDefault();
+                    if (ship == null) continue;
+                    var request = new LogisticsOfflineSendRequest
+                    {
+                        CompanyCode = GetCompanyCode(express.FirstOrDefault()),
+                        OutSid = ship.LogisticCode,
+                        Tid = long.Parse(orderSync.TmallOrderId.ToString()),
+                        SubTid = GetSubOrderIdStr(express),
+                        CancelId = GetCancelId(ship.StoreId)
+                    };
+
+                    var rsp = _topClient.Execute(request, _sessionKey);
+                    if (rsp.IsError)
+                    {
+                        Logger.Error(rsp);
+                    }
+                    else
+                    {
+                        MarkSubOrders(orderSync, express.AsEnumerable());
+                    }
+                }
+            }
+
             SetOrderLogisticsSynced(orderSync);
         }
 
@@ -165,7 +194,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                         subOrder.LogisticsSynced = true;
                         subOrder.UpdateDate = DateTime.Now;
                         db.SaveChanges();
-                    }     
+                    }
                 }
             }
         }
@@ -202,7 +231,8 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             var stockIds = logistics.Select(x => x.StockId).ToList();
             using (var db = DbContextHelper.GetJushitaContext())
             {
-                return string.Join(",", db.Set<SubOrder>().Where(x => stockIds.Contains(x.ImsInventoryId)).Select(x=>x.TmallSubOrderId));                
+                var linq = db.Set<SubOrder>().Where(x => stockIds.Contains(x.ImsInventoryId)).Select(x => x.TmallSubOrderId).ToList();
+                return linq.Count > 1 ? string.Join(",", linq) : null;
             }
         }
 

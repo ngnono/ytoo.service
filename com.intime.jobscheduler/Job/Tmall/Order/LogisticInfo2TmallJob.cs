@@ -17,10 +17,14 @@ namespace com.intime.jobscheduler.Job.Tmall.Order
     {
         public void Execute(IJobExecutionContext context)
         {
+#if DEBUG
+            var pageSize = 20;
+            int interval = 15;
+#else
             JobDataMap data = context.JobDetail.JobDataMap;
             var pageSize = data.ContainsKey("pageSize") ? data.GetInt("pageSize") : 20;
             var interval = data.ContainsKey("intervalOfMins") ? data.GetInt("intervalOfMins") : 15;
-
+#endif
             var benchTime = DateTime.Now.AddMinutes(-interval);
             ITopClient topClient = new DefaultTopClient(ConstValue.TOP_SERVICE_URL, ConstValue.TOP_APP_KEY,
                 ConstValue.TOP_APP_SECRET);
