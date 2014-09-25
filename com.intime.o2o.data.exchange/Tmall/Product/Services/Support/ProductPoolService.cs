@@ -46,7 +46,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         {
             using (var db = new YintaiHangzhouContext())
             {
-                var extProductPool = db.ProductPool.FirstOrDefault(p => p.ProductId == productId);
+                var extProductPool = db.ProductPools.FirstOrDefault(p => p.ProductId == productId);
 
                 if (extProductPool != null)
                 {
@@ -68,7 +68,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             */
             using (var db = new YintaiHangzhouContext())
             {
-                var list = db.ProductPool.Where(
+                var list = db.ProductPools.Where(
                     p =>
                         p.Status == 100
                         && p.ChannelId == 1008

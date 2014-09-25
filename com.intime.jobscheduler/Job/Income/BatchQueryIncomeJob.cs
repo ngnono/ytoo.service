@@ -73,11 +73,17 @@ namespace com.intime.jobscheduler.Job.Income
                         using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
                         {
                             var fullPackageId = string.Concat(order.PackageId, order.SerialNo);
+                            var keyEntity = db.Set<Group_WeixinKeysEntity>().Where(gw => gw.GroupId == order.GroupId && gw.Status == (int)DataStatus.Normal)
+                                    .First();
                             BatchQueryResponse response = AutoBankTransfer.Instance.Query(new BatchQueryRequest()
                             {
                                 PackageId = fullPackageId,
                                 ServiceVersion = "1.2",
-                                GroupId = order.GroupId
+                                GroupId = order.GroupId,
+                                OperateUser = keyEntity.Outcome_OperatorId,
+                                OperatePwd = keyEntity.Outcome_OperatorPwd,
+                                SPId = keyEntity.Outcome_ParterId
+
                             });
                             if (response != null && response.IsSuccess)
                             {

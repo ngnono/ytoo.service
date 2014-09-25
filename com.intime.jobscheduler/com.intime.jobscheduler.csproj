@@ -202,13 +202,6 @@
     <Compile Include="Job\Tmall\Order\OrderPush2ImsJob.cs" />
     <Compile Include="Job\Tmall\Product\ItemPushJob.cs" />
     <Compile Include="Job\Tmall\Product\ProductPushJob.cs" />
-    <Compile Include="Job\Wgw\BrandSyncJob.cs" />
-    <Compile Include="Job\Wgw\GetItemMultiStockJob.cs" />
-    <Compile Include="Job\Wgw\ProductImageSyncJob.cs" />
-    <Compile Include="Job\Wgw\ProductStatusSyncJob.cs" />
-    <Compile Include="Job\Wgw\InventorySyncJob.cs" />
-    <Compile Include="Job\Wgw\OrderSyncJob.cs" />
-    <Compile Include="Job\Wgw\ProductSyncJob.cs" />
     <Compile Include="Job\Wx\NotifyExShippingJob.cs" />
     <Compile Include="Job\Wx\NotifyShippingJob.cs" />
     <Compile Include="MainJobService.cs">

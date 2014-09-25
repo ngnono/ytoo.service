@@ -84,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Banner.cs" />
-    <Compile Include="Models\Mapping\ProudctPoolMap.cs" />
+    <Compile Include="Models\Mapping\ProductPoolMap.cs" />
     <Compile Include="Models\ProductPool.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Group_AliKeys.cs" />
@@ -334,7 +334,7 @@
     <Compile Include="Models\StoreReal.cs" />
     <Compile Include="Models\UserAuth.cs" />
     <Compile Include="Models\WXReply.cs" />
-    <Compile Include="Models\YintaiHzhouContext.cs" />
+    <Compile Include="Models\YintaiHZhouContext.cs" />
     <Compile Include="Partials\ResourceEntity.cs" />
     <Compile Include="Partials\StoreEntityMap.cs" />
     <Compile Include="Models\AdminAccessRight.cs" />

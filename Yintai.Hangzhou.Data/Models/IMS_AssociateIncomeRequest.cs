@@ -19,7 +19,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string TransferErrorMsg { get; set; }
         public Nullable<decimal> TransferFee { get; set; }
         public string IDCard { get; set; }
-        public int? GroupId { get; set; }
+        public Nullable<int> GroupId { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -159,13 +159,19 @@ namespace com.intime.jobscheduler.Job.Income
 
                             var totalNum = transferItems.Count;
                             var totalAmount = transferItems.Sum(l => l.AmountOfFen);
+                            var keyEntity = db.Set<Group_WeixinKeysEntity>().Where(gw => gw.GroupId == groupId && gw.Status == (int)DataStatus.Normal)
+                                    .First();
                             var transferResponse = AutoBankTransfer.Instance.BatchTransfer(new BatchTransferRequest()
                             {
                                 Records = transferItems.ToArray(),
                                 TotalNum = totalNum,
                                 TotalAmountOfFen = totalAmount,
                                 PackageId = string.Concat(transferJobEntity.PackageId, transferJobEntity.SerialNo),
-                                GroupId = groupId
+                                GroupId = groupId,
+                                OperateUser = keyEntity.Outcome_OperatorId,
+                                OperatePwdMd5 = keyEntity.Outcome_OperatorPwd,
+                                 SPId = keyEntity.Outcome_ParterId
+                                
                             });
                             if (transferResponse != null)
                             {

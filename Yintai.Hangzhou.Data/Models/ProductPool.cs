@@ -22,9 +22,9 @@ namespace Yintai.Hangzhou.Data.Models
         /// KeyMemberId
         /// </summary>
         public override object EntityId
-        {
-            get { return Id; }
-
+        {       
+                get { return Id; }
+ 
         }
 
         #endregion
