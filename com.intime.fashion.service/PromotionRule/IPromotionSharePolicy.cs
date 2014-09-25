@@ -7,7 +7,7 @@ using Yintai.Hangzhou.Data.Models;
 
 namespace com.intime.fashion.service.PromotionRule
 {
-    interface IPromotionSharePolicy
+   public interface IPromotionSharePolicy
     {
         OrderEntity SourceOrder { get; set; }
 

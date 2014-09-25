@@ -1,6 +1,8 @@
 ﻿using com.intime.fashion.common.message;
 using com.intime.fashion.common.message.rabbit;
+using com.intime.fashion.service;
 using com.intime.fashion.service.analysis;
+using com.intime.fashion.service.contract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +24,7 @@ namespace com.intime.jobscheduler
             ServiceLocator.Current.Register<IOrderRepository, OrderRepository>();
             ServiceLocator.Current.Register<IEFRepository<IMS_AssociateIncomeHistoryEntity>, EFRepository<IMS_AssociateIncomeHistoryEntity>>();
             ServiceLocator.Current.Register<IEFRepository<IMS_AssociateIncomeEntity>, EFRepository<IMS_AssociateIncomeEntity>>();
+            ServiceLocator.Current.Register<IAssociateIncomeService, AssociateIncomeService>();
 
             ServiceLocator.Current.Register<AnalysisService, AnalysisService>();
             ServiceLocator.Current.Register<IMessageCenterProvider, MessageProvider>();

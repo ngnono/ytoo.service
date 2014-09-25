@@ -24,13 +24,15 @@ namespace com.intime.fashion.service
         private IInventoryRepository _inventoryRepo;
         private IOrder2ExRepository _order2exRepo;
         private IShippingFeeService _shippingFeeService;
+        private IAssociateIncomeService _associateIncomeService;
         public OrderService(IProductRepository productRepo,
             IOrderRepository orderRepo,
             IOrderLogRepository orderLogRepo,
             IOrderItemRepository orderItemRepo,
             IInventoryRepository inventoryRepo,
             IOrder2ExRepository order2exRepo,
-            IShippingFeeService shippingFeeService)
+            IShippingFeeService shippingFeeService,
+            IAssociateIncomeService associateIncomeService)
             : base()
         {
             _productRepo = productRepo;
@@ -40,6 +42,7 @@ namespace com.intime.fashion.service
             _inventoryRepo = inventoryRepo;
             _order2exRepo = order2exRepo;
             _shippingFeeService = shippingFeeService;
+            _associateIncomeService = associateIncomeService;
 
         }
         public bool CanChangePro(OrderEntity order)
@@ -198,14 +201,8 @@ namespace com.intime.fashion.service
                     OrderNo = orderNo,
                     Type = (int)OrderOpera.FromCustomer
                 });
-                if (request.StoreId.HasValue && request.StoreId > 0)
-                {
-
-                    var associateEntity = _db.Set<IMS_AssociateEntity>().Find(request.StoreId);
-                    if (associateEntity != null)
-                        AssociateIncomeLogic.Create(associateEntity.UserId, orderEntity);
-
-                }
+                _associateIncomeService.Create(orderEntity);
+               
                 string exOrderNo = string.Empty;
 
                 bool isSuccess = true;

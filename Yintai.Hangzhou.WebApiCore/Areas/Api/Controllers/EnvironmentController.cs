@@ -1,4 +1,5 @@
 ﻿using com.intime.fashion.service;
+using com.intime.fashion.service.contract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 {
     public class EnvironmentController : RestfulController
     {
-        private AuthKeysService _keyService;
-        public EnvironmentController(AuthKeysService keyService) {
+        private IAuthKeysService _keyService;
+        public EnvironmentController(IAuthKeysService keyService) {
             _keyService = keyService;
         }
         public ActionResult ServerDateTime()

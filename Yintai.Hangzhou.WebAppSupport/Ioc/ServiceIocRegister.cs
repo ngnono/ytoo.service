@@ -77,6 +77,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IHotwordDataService, HotwordDataService>();
 
             Current.Register<IComboService, ComboService>();
+            Current.Register<IAssociateIncomeService, AssociateIncomeService>();
             Current.Register<IShippingFeeService, ShippingFeeService>();
             Current.Register<IOrderService, OrderService>();
             Current.Register<IMessageCenterProvider, MessageProvider>();
@@ -86,7 +87,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
                 Current.Register<ICacheService, MemCacheService>();
             else
                 Current.Register<ICacheService, NoCacheService>();
-            Current.Register<AuthKeysService, AuthKeysService>();
+            Current.Register<IAuthKeysService, AuthKeysService>();
         }
 
         #endregion
