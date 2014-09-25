@@ -15,7 +15,7 @@ namespace com.intime.fashion.service.contract
 
         bool IsAssociateOrder(int authuid, OrderEntity order);
 
-        BusinessResult<OrderCreateResult> Create(OrderCreate request, UserModel authUser, bool needShippingFee);
+        BusinessResult<OrderCreateResult> Create(OrderCreate request, UserModel authUser, bool needShippingFee = true);
 
         OrderPreCalculateResult PreCalculate(OrderPreCalculate request);
     }
