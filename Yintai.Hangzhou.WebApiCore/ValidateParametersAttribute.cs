@@ -49,11 +49,11 @@ namespace Yintai.Hangzhou.WebApiCore
 
             if (!long.TryParse(timestamp, out tslong))
                 throw new ArgumentException("ts not correct format,should be seconds from 1001");
-#if DEBUG
-            var validDate = new DateTime(tslong * (long)Math.Pow(10, 7), DateTimeKind.Utc).ToLocalTime();
-            if (validDate > DateTime.Now.AddMinutes(5) || validDate < DateTime.Now.AddMinutes(-5))
-                throw new ArgumentException("ts expired");
-#endif
+//#if DEBUG
+//            var validDate = new DateTime(tslong * (long)Math.Pow(10, 7), DateTimeKind.Utc).ToLocalTime();
+//            if (validDate > DateTime.Now.AddMinutes(5) || validDate < DateTime.Now.AddMinutes(-5))
+//                throw new ArgumentException("ts expired");
+//#endif
             var rawSignings = new List<string> { nonce, channel, timestamp, data };
             rawSignings.Sort(StringComparer.Ordinal);
             var rawSigning = rawSignings.Aggregate(new StringBuilder(), (s, e) => s.Append(e), s => s.ToString());

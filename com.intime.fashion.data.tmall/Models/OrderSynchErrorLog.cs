@@ -6,7 +6,7 @@ namespace com.intime.fashion.data.tmall.Models
     public partial class OrderSynchErrorLog
     {
         public int Id { get; set; }
-        public decimal TmallOrderId { get; set; }
+        public long TmallOrderId { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int Status { get; set; }
         public string Reason { get; set; }

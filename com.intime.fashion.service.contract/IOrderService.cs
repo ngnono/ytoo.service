@@ -11,12 +11,12 @@ namespace com.intime.fashion.service.contract
 {
     public interface IOrderService
     {
-         bool CanChangePro(OrderEntity order);
-      
-         bool IsAssociateOrder(int authuid, OrderEntity order);
+        bool CanChangePro(OrderEntity order);
 
-         BusinessResult<OrderCreateResult> Create(OrderCreate request, UserModel authUser);
+        bool IsAssociateOrder(int authuid, OrderEntity order);
 
-         OrderPreCalculateResult PreCalculate(OrderPreCalculate request);
+        BusinessResult<OrderCreateResult> Create(OrderCreate request, UserModel authUser, bool needShippingFee);
+
+        OrderPreCalculateResult PreCalculate(OrderPreCalculate request);
     }
 }

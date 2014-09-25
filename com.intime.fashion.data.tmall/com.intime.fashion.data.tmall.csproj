@@ -45,10 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\JDP_TB_ITEM.cs" />
-    <Compile Include="Models\JDP_TB_REFUND.cs" />
     <Compile Include="Models\JDP_TB_TRADE.cs" />
     <Compile Include="Models\Mapping\JDP_TB_ITEMMap.cs" />
-    <Compile Include="Models\Mapping\JDP_TB_REFUNDMap.cs" />
     <Compile Include="Models\Mapping\JDP_TB_TRADEMap.cs" />
     <Compile Include="Models\Mapping\OrderSynchErrorLogMap.cs" />
     <Compile Include="Models\Mapping\OrderSyncMap.cs" />

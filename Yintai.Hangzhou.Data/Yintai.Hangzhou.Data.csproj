@@ -84,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Banner.cs" />
-    <Compile Include="Models\Mapping\ProductPoolMap.cs" />
+    <Compile Include="Models\Mapping\ProudctPoolMap.cs" />
     <Compile Include="Models\ProductPool.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Group_AliKeys.cs" />

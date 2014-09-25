@@ -1,10 +1,11 @@
-﻿using System.Configuration;
+﻿using System.Web.Script.Serialization;
 using com.intime.fashion.data.tmall.Models;
 using com.intime.o2o.data.exchange.Ims.Request;
 using com.intime.o2o.data.exchange.IT;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Transactions;
 
@@ -12,8 +13,8 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
 {
     public class OrderSyncExecutor : OrderExecutorBase
     {
-        private static string TMALL_PAYMENT_METHOD_CODE = ConfigurationManager.AppSettings["TMALL_PAYMENT_METHOD_CODE"];
-        private static string TMALL_PAYMENT_METHOD_NAME = ConfigurationManager.AppSettings["TMALL_PAYMENT_METHOD_NAME"];
+        private static string TMALL_PAYMENT_METHOD_CODE = ConfigurationManager.AppSettings["TMALL_PAYMENT_METHOD_CODE"] ?? "274";
+        private static string TMALL_PAYMENT_METHOD_NAME = ConfigurationManager.AppSettings["TMALL_PAYMENT_METHOD_NAME"] ?? "TMMini";
         private IApiClient _imsClient;
         public OrderSyncExecutor(DateTime benchTime, int pageSize, IApiClient client)
             : base(benchTime, pageSize)
@@ -146,8 +147,9 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             {
                 throw new ArgumentException("Trade response is null");
             }
-            var tmallOrder = JsonConvert.DeserializeObject<dynamic>(trade.jdp_response);
-           
+            dynamic tradeRsp = JsonConvert.DeserializeObject(trade.jdp_response);
+
+            var tmallOrder = tradeRsp["trade_fullinfo_get_response"]["trade"];
             dynamic imsOrder = new
             {
                 sonumber = tmallOrder.tid,
@@ -168,7 +170,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 {
                     addr = string.Format("{0}{1}{2}", tmallOrder.receiver_state, tmallOrder.receiver_city, tmallOrder.receiver_address),
                     person = tmallOrder.receiver_name,
-                    phone = string.IsNullOrEmpty(tmallOrder.receiver_mobile) ? tmallOrder.receiver_mobile : tmallOrder.receiver_phone,
+                    phone = tmallOrder.receiver_mobile ?? tmallOrder.receiver_phone,
                     zip = tmallOrder.receiver_zip,
                 },
                 payment = new List<dynamic>(),
@@ -197,9 +199,9 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
 
             var request = new CreateOrderRequest { Data = imsOrder };
             var rsp = _imsClient.Post(request);
-            if (rsp.Status)
+            if (rsp.Data != null)
             {
-                return SyncResult.SucceedResult(rsp.Data.orderNo.ToString(), tmallOrder.tid, tmallOrder);
+                return SyncResult.SucceedResult(rsp.Data.orderno.ToString(), Convert.ToInt64(tmallOrder.tid.ToString()), tmallOrder);
             }
             return SyncResult.FailedResult(string.Format("Notify order failed, order tid is ({0}) Error reason is: ({1})", tmallOrder.tid, rsp.Message));
         }

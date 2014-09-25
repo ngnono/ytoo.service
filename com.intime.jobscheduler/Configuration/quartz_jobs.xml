@@ -683,10 +683,32 @@
 
         <trigger>
             <cron>
-                <name>EverySecond</name>
+                <name>TmallProductPushJobTigger</name>
                 <group>Tmall</group>
                 <description>every second</description>
                 <job-name>TmallProductPushJob</job-name>
+                <job-group>Tmall</job-group>
+                <misfire-instruction>SmartPolicy</misfire-instruction>
+                <cron-expression>0/2 * * * * ?</cron-expression>
+            </cron>
+        </trigger>
+
+
+        <job>
+            <name>TmallItemPushJob</name>
+            <group>Tmall</group>
+            <description>Tmall Item Push Job</description>
+            <job-type>com.intime.jobscheduler.Job.Tmall.Product.ItemPushJob, com.intime.jobscheduler</job-type>
+            <durable>true</durable>
+            <recover>false</recover>
+        </job>
+
+        <trigger>
+            <cron>
+                <name>TmallItemPushJobTigger</name>
+                <group>Tmall</group>
+                <description>every second</description>
+                <job-name>TmallItemPushJob</job-name>
                 <job-group>Tmall</job-group>
                 <misfire-instruction>SmartPolicy</misfire-instruction>
                 <cron-expression>0/2 * * * * ?</cron-expression>

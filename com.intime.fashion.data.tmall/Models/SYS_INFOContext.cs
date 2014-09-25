@@ -17,7 +17,6 @@ namespace com.intime.fashion.data.tmall.Models
         }
 
         public DbSet<JDP_TB_ITEM> JDP_TB_ITEM { get; set; }
-        public DbSet<JDP_TB_REFUND> JDP_TB_REFUND { get; set; }
         public DbSet<JDP_TB_TRADE> JDP_TB_TRADE { get; set; }
         public DbSet<LogisticsAddressMapping> LogisticsAddressMappings { get; set; } 
         public DbSet<OrderSync> OrderSyncs { get; set; }
@@ -28,7 +27,6 @@ namespace com.intime.fashion.data.tmall.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new JDP_TB_ITEMMap());
-            modelBuilder.Configurations.Add(new JDP_TB_REFUNDMap());
             modelBuilder.Configurations.Add(new JDP_TB_TRADEMap());
             modelBuilder.Configurations.Add(new LogisticsAddressMappingMap());
             modelBuilder.Configurations.Add(new OrderSyncMap());

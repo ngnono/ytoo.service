@@ -61,7 +61,7 @@ namespace com.intime.fashion.service
                                     .FirstOrDefault();
             return associateIncome != null;
         }
-        public BusinessResult<OrderCreateResult> Create(OrderCreate request, UserModel authUser)
+        public BusinessResult<OrderCreateResult> Create(OrderCreate request, UserModel authUser, bool needShippingFee = true)
         {
 
             decimal totalAmount = 0m;
@@ -95,12 +95,17 @@ namespace com.intime.fashion.service
                 }
             }
             if (totalAmount <= 0)
-                return Error<OrderCreateResult>( "商品销售价信息错误！");
+                return Error<OrderCreateResult>("商品销售价信息错误！");
 
 
             var orderNo = OrderRule.CreateCode(0);
-            decimal shippingFee = _shippingFeeService.Calculate(request.Products);
-            totalAmount+=shippingFee;
+            decimal shippingFee = 0;
+            if (needShippingFee)
+            {
+                shippingFee = _shippingFeeService.Calculate(request.Products);
+                totalAmount += shippingFee;
+            }
+
             using (var ts = new TransactionScope())
             {
                 var orderEntity = _orderRepo.Insert(new OrderEntity()
@@ -202,7 +207,7 @@ namespace com.intime.fashion.service
                     Type = (int)OrderOpera.FromCustomer
                 });
                 _associateIncomeService.Create(orderEntity);
-               
+
                 string exOrderNo = string.Empty;
 
                 bool isSuccess = true;
@@ -211,13 +216,13 @@ namespace com.intime.fashion.service
                     exOrderNo = orderEntity.OrderNo;
                     ts.Complete();
                     return Success<OrderCreateResult>(OrderCreateResult.FromEntity<OrderCreateResult>(orderEntity, o => o.ExOrderNo = exOrderNo));
-                    
+
                 }
                 else
                 {
                     return Error<OrderCreateResult>("失败");
                 }
-            }  
+            }
         }
 
 

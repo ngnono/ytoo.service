@@ -5,7 +5,7 @@ namespace com.intime.fashion.data.tmall.Models
 {
     public partial class JDP_TB_TRADE
     {
-        public decimal tid { get; set; }
+        public long tid { get; set; }
         public string status { get; set; }
         public string type { get; set; }
         public string seller_nick { get; set; }
