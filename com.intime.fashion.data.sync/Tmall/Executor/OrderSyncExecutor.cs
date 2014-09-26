@@ -156,7 +156,8 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 transno = tmallOrder.alipay_no,
                 totalAmount = tmallOrder.total_fee,
                 receivedAmount = tmallOrder.payment,
-                paymentMehtodCode = TMALL_PAYMENT_METHOD_CODE,//todo 支付编码未确定
+                paymentcode = TMALL_PAYMENT_METHOD_CODE,//todo 支付编码未确定
+                paymentname = TMALL_PAYMENT_METHOD_NAME,
                 shipingFee = tmallOrder.post_fee,
                 memo = tmallOrder.buyer_message,
                 paid = true,

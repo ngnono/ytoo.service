@@ -85,11 +85,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                     OrderSource = channel,
                     OrderProductType = GetProductType(channel),
                     OrderNo = orderNo,
+                    PaymentMethodCode = request.paymentcode,
+                    PaymentMethodName = request.paymentname,
                     Status = isPaid ? (int)OrderStatus.Paid : (int)OrderStatus.Complete,
                 };
 
                 _orderRepo.Insert(order);
-                _associateIncomeService.Create(order);
 
                 if (isPaid)
                 {
@@ -111,11 +112,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                         var payment = new OrderTransactionEntity()
                         {
                             Amount = pay.amount,
+                            IsSynced =  false,
                             PaymentCode = method.Code,
                             CreateDate = DateTime.Now,
                             CanSync = -1,
                             OrderNo = order.OrderNo,
                             TransNo = request.transno,
+                            OrderType = (int)PaidOrderType.Self
+                            
                         };
                         _orderTranRepo.Insert(payment);
                     }
@@ -141,14 +145,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                                     stock.Id == stockId &&
                                     p.Id == stock.ProductId &&
                                     colorValue.Id == stock.PColorId &&
-                                    sizeValue.Id == stock.PSizeId &&
-                                    color.ProductId == stock.Id &&
-                                    size.ProductId == stock.ProductId &&
-                                    size.IsSize.HasValue &&
-                                    size.IsSize.Value &&
-                                    color.ProductId == stock.ProductId &&
-                                    color.IsColor.HasValue &&
-                                    color.IsColor.HasValue
+                                    color.ProductId == p.Id && color.IsColor.HasValue && color.IsColor.Value &&
+                                    sizeValue.Id == stock.PSizeId &&                                    
+                                    size.ProductId == p.Id && size.IsSize.HasValue && size.IsSize.Value 
+                                    
                                 select new
                                 {
                                     Inventory = stock,
@@ -243,16 +243,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                     OrderNo = order.OrderNo,
                     Type = (int)OrderOpera.FromOperator
                 });
+                _associateIncomeService.Create(order);
+                _associateIncomeService.Froze(orderNo);
                 db.SaveChanges();
                 ts.Complete();
-
             }
 
-            if (isPaid)
-            {
-                _associateIncomeService.Froze(orderNo);
-
-            }
             return this.RenderSuccess<dynamic>(r => r.Data = new { orderno = orderNo });
         }
    
