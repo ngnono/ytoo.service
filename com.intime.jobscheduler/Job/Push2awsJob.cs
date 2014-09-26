@@ -112,7 +112,16 @@ namespace com.intime.jobscheduler.Job
                         .GroupBy(x => x.ProductId)
                         .Join(db.Inventories, p => p.Key, i => i.ProductId, (k, i) => i)
                         .Join(db.Products, i => i.ProductId, p => p.Id,
-                            (i, p) => new { stock = i, price = p.Price, labelprice = p.UnitPrice });
+                            (i, p) => new { stock = i, price = p.Price, labelprice = p.UnitPrice })
+                            .Join(db.ProductPropertyValues,s=>s.stock.PColorId,ppv=>ppv.Id,(s,ppv)=>new
+                            {
+                               s.stock, s.price,s.labelprice,color = ppv.ValueDesc
+                            }).Join(db.ProductPropertyValues,s=>s.stock.PSizeId,ppv=>ppv.Id,(s,ppv)=>new
+                            {
+                                s.stock,s.price,s.labelprice,s.color,size = ppv.ValueDesc
+                            });
+
+
                 int totalCount = inventories.Count();
                 while (cursor < totalCount)
                 {
@@ -127,6 +136,8 @@ namespace com.intime.jobscheduler.Job
                                    LabelPrice = l.labelprice.HasValue ? l.labelprice.Value : 999999,
                                    Price = l.price,
                                    UpdateDate = DateTime.Now,
+                                   ColorDesc = l.color,
+                                   SizeDesc = l.size
                                };
                     var result = client.IndexMany(linq);
                     if (!result.IsValid)
@@ -545,7 +556,7 @@ namespace com.intime.jobscheduler.Job
                     }
                     cursor += size;
                 }
-               
+
 
             }
             sw.Stop();
@@ -842,7 +853,7 @@ namespace com.intime.jobscheduler.Job
 
                 var prods = from p in linq
                             select p;
-                           
+
                 int totalCount = prods.Count();
                 var service = SearchLogic.GetService(IndexSourceType.Product);
                 while (cursor < totalCount)
