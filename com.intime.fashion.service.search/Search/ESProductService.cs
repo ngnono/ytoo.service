@@ -13,16 +13,9 @@ using Yintai.Hangzhou.Model.ESModel;
 
 namespace com.intime.fashion.service.search
 {
-    class ESProductService:ESServiceBase
+    class ESProductService:ESServiceSingle<ESProduct>
     {
-        public override bool IndexSingle(int entityId)
-        {
-
-            var esProduct = product2ES(entityId);
-            return SearchLogic.IndexSingle<ESProduct>(esProduct);
-        }
-
-        private ESProduct product2ES(int id)
+        protected override ESProduct entity2Model(int id)
         {
             var db = Context;
             var linq = from p in db.Set<ProductEntity>().Where(pe => pe.Id == id).AsQueryable()
@@ -118,7 +111,6 @@ namespace com.intime.fashion.service.search
                                                       BrandSizeName = val.BrandSizeName
                                                   })
                        let category = (from map in db.Set<ProductMapEntity>() where map.ProductId == p.Id && map.Channel == "intime" select map.ChannelCatId)
-
                        select new ESProduct()
                        {
                            Id = p.Id,
@@ -179,9 +171,6 @@ namespace com.intime.fashion.service.search
                        };
             return linq.FirstOrDefault();
         }
-        private DbContext Context
-        {
-            get { return ServiceLocator.Current.Resolve<DbContext>(); }
-        }
+       
     }
 }

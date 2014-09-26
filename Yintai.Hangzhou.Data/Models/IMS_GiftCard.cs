@@ -9,6 +9,7 @@ namespace Yintai.Hangzhou.Data.Models
         public string Name { get; set; }
         public int Status { get; set; }
         public System.DateTime UpdateDate { get; set; }
+        public Nullable<int> GroupId { get; set; }
 
         #region Overrides of BaseEntity
 

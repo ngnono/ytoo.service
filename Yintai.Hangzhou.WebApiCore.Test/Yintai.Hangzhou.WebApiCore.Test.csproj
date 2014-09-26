@@ -69,6 +69,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.data.sync\com.intime.fashion.data.sync.csproj">
+      <Project>{174CFFF7-C2B4-4E57-8503-733EC3062BAE}</Project>
+      <Name>com.intime.fashion.data.sync</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Model\Yintai.Hangzhou.Model.csproj">
       <Project>{173ff5c0-5631-47ad-af9e-16442858c080}</Project>
       <Name>Yintai.Hangzhou.Model</Name>

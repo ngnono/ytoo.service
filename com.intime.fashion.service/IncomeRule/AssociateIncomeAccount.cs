@@ -53,8 +53,12 @@ namespace com.intime.fashion.service.IncomeRule
         }
         private static IMS_AssociateIncomeEntity EnsureAccount(int userId)
         {
+            var storeEntity = Context.Set<IMS_AssociateEntity>().Where(ia => ia.UserId == userId)
+                          .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => i).First();
+            var groupId = storeEntity.Group_Id;
             var account = Context.Set<IMS_AssociateIncomeEntity>()
-                .Where(ia => ia.UserId == userId && ia.Status == (int)DataStatus.Normal).FirstOrDefault();
+                .Where(ia => ia.UserId == userId && ia.Status == (int)DataStatus.Normal
+                 && ia.GroupId == groupId).FirstOrDefault();
             if (account == null)
             {
                 account = AccountRepo.Insert(new IMS_AssociateIncomeEntity()
@@ -66,37 +70,13 @@ namespace com.intime.fashion.service.IncomeRule
                     Status = (int)DataStatus.Normal,
                     TotalAmount = 0m,
                     UpdateDate = DateTime.Now,
-                    UserId = userId
+                    UserId = userId,
+                    GroupId = groupId
                 });
             }
             return account;
         }
-        private static bool MakeIncomeAvail2Account(int userId, decimal availAmount)
-        {
-            var incomeAccountRepo = AccountRepo;
-            var account = Context.Set<IMS_AssociateIncomeEntity>().Where(ia => ia.UserId == userId && ia.Status == (int)DataStatus.Normal).FirstOrDefault();
-            if (account == null)
-            {
-                incomeAccountRepo.Insert(new IMS_AssociateIncomeEntity()
-                {
-                    AvailableAmount = availAmount,
-                    TotalAmount = availAmount,
-                    CreateDate = DateTime.Now,
-                    ReceivedAmount = 0m,
-                    RequestAmount = 0m,
-                    Status = (int)DataStatus.Normal,
-                    UserId = userId,
-                    UpdateDate = DateTime.Now
-                });
-            }
-            else
-            {
-                account.AvailableAmount += availAmount;
-                account.UpdateDate = DateTime.Now;
-                incomeAccountRepo.Update(account);
-            }
-            return true;
-        }
+     
         private static IEFRepository<IMS_AssociateIncomeEntity> AccountRepo { get {
             return ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateIncomeEntity>>();
         } }

@@ -157,6 +157,10 @@
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.contract\com.intime.fashion.service.contract.csproj">
+      <Project>{e69391ab-6e94-4937-9c34-3a5485f71592}</Project>
+      <Name>com.intime.fashion.service.contract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.service.search\com.intime.fashion.service.search.csproj">
       <Project>{be512bbf-4f5a-4909-b9c0-cf3419e0f945}</Project>
       <Name>com.intime.fashion.service.search</Name>

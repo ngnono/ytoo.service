@@ -26,6 +26,8 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.UpdateUser).HasColumnName("UpdateUser");
             this.Property(t => t.SortOrder).HasColumnName("SortOrder");
             this.Property(t => t.Visible4Display).HasColumnName("Visible4Display");
+            this.Property(t => t.ImmediatePublic).HasColumnName("ImmediatePublic");
+            this.Property(t => t.Only4Tmall).HasColumnName("Only4Tmall");
 		Init();
         }
 

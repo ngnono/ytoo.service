@@ -27,7 +27,9 @@ namespace com.intime.fashion.common.Tencent
         [XmlElement("op_user", Order = 6)]
         public string OperateUser { get; set; }
         [XmlElement("op_passwd", Order = 4)]
-        public string OperatePwdMd5 { get; set; }
+        public string OperatePwdMd5 { get {
+            return CommonUtil.MD5_Encode(OperatePwd, Config.DEFAULT_ENCODE);
+        } }
         [XmlElement("op_time", Order = 5)]
         public string OperateTime { get; set; }
         [XmlElement("sp_id", Order = 9)]
@@ -36,7 +38,7 @@ namespace com.intime.fashion.common.Tencent
         public string PackageId { get; set; }
         [XmlElement("client_ip",Order=1)]
         public string ClientIp { get; set; }
-
-
+        [XmlIgnore]
+        public string OperatePwd { get; set; }
     }
 }

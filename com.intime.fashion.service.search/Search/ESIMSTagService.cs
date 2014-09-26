@@ -12,16 +12,9 @@ using Yintai.Hangzhou.Model.ESModel;
 
 namespace com.intime.fashion.service.search
 {
-    class ESIMSTagService : ESServiceBase
+    class ESIMSTagService : ESServiceSingle<ESIMSTag>
     {
-        public override bool IndexSingle(int entityId)
-        {
-
-            var esCombo = combo2ESIMSTag(entityId);
-            return SearchLogic.IndexSingle<ESIMSTag>(esCombo);
-        }
-
-        private ESIMSTag combo2ESIMSTag(int entityId)
+        protected override ESIMSTag entity2Model(int entityId)
         {
             var db = Context;
             var tagEntity = Context.Set<IMS_TagEntity>().Find(entityId);
@@ -32,11 +25,7 @@ namespace com.intime.fashion.service.search
                 SortOrder = tagEntity.SortOrder ?? 0,
                 Status = tagEntity.Status
             };
-
         }
-        private DbContext Context
-        {
-            get { return ServiceLocator.Current.Resolve<DbContext>(); }
-        }
+        
     }
 }

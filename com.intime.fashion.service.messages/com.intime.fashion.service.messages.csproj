@@ -39,6 +39,7 @@
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +47,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TopSdk">
+      <HintPath>..\_dll\TopSdk.dll</HintPath>
+    </Reference>
     <Reference Include="Yintai.Architecture.Common">
       <HintPath>..\_dll\Yintai.Architecture.Common.dll</HintPath>
     </Reference>
@@ -56,8 +60,10 @@
   <ItemGroup>
     <Compile Include="MessageHandler.cs" />
     <Compile Include="Message\ComboHandler.cs" />
+    <Compile Include="Message\ComboUpdatedHandler.cs" />
     <Compile Include="Message\DaogouApplyApprovedHandler.cs" />
     <Compile Include="Message\GiftcardPaidHandler.cs" />
+    <Compile Include="Message\InventoryUpdatedHandler.cs" />
     <Compile Include="Message\InventoryHandler.cs" />
     <Compile Include="Message\OrderPaidHandler.cs" />
     <Compile Include="Message\ProductHandler.cs" />
@@ -76,6 +82,10 @@
     <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.contract\com.intime.fashion.service.contract.csproj">
+      <Project>{e69391ab-6e94-4937-9c34-3a5485f71592}</Project>
+      <Name>com.intime.fashion.service.contract</Name>
     </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.service.search\com.intime.fashion.service.search.csproj">
       <Project>{be512bbf-4f5a-4909-b9c0-cf3419e0f945}</Project>

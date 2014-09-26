@@ -31,6 +31,7 @@ namespace Yintai.Hangzhou.Contract.DTO.Request
         public string Desc { get; set; }
         public bool CreateCombo { get; set; }
         public int[] Tag_Ids { get; set; }
+        public string Name { get; set; }
     }
    public class SizePropertyValue
    {

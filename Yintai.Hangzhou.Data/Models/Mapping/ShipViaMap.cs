@@ -18,6 +18,9 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.Url)
                 .HasMaxLength(200);
 
+            this.Property(t => t.TemplateName)
+                .HasMaxLength(100);
+
             // Table & Column Mappings
             this.ToTable("ShipVia");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -27,6 +30,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.CreateDate).HasColumnName("CreateDate");
             this.Property(t => t.UpdateDate).HasColumnName("UpdateDate");
             this.Property(t => t.IsOnline).HasColumnName("IsOnline");
+            this.Property(t => t.TemplateName).HasColumnName("TemplateName");
 		Init();
         }
 

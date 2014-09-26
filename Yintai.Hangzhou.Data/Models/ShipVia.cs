@@ -12,6 +12,7 @@ namespace Yintai.Hangzhou.Data.Models
         public System.DateTime CreateDate { get; set; }
         public System.DateTime UpdateDate { get; set; }
         public Nullable<bool> IsOnline { get; set; }
+        public string TemplateName { get; set; }
 
         #region Overrides of BaseEntity
 

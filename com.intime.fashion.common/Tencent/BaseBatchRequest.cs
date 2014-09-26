@@ -33,5 +33,7 @@ namespace com.intime.fashion.common.Tencent
                 return string.Format("content={0}&abstract={1}",HttpUtility.UrlEncode(baseEncodedXml,Config.DEFAULT_ENCODE), HttpUtility.UrlEncode(signedXml,Config.DEFAULT_ENCODE));
             }
         }
+        [XmlIgnore]
+        public int? GroupId { get; set; }
     }
 }

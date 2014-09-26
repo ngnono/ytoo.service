@@ -117,8 +117,8 @@ namespace com.intime.fashion.common.Tencent
         {
             if (request != null) {
 
-                request.OperatePwdMd5 = operateUserPwd;
-                request.OperateUser = operateUserId;
+               // request.OperatePwdMd5 = operateUserPwd;
+               // request.OperateUser = operateUserId;
                 request.SPId = parterId;
                 request.OperateTime = DateTime.Now.ToString("yyyyMMddHHmmssSSS");
                 request.ClientIp = staticIp;
@@ -130,9 +130,9 @@ namespace com.intime.fashion.common.Tencent
             if (request != null)
             {
 
-                request.OperatePwdMd5 = operateUserPwd;
-                request.OperateUser = operateUserId;
-                request.SPId = parterId;
+               // request.OperatePwdMd5 = operateUserPwd;
+                //request.OperateUser = operateUserId;
+               // request.SPId = parterId;
                 request.OperateTime = DateTime.Now.ToString("yyyyMMddHHmmssSSS");
                 request.ClientIp = staticIp;
             }

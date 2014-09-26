@@ -12,21 +12,14 @@ using Yintai.Hangzhou.Model.ESModel;
 
 namespace com.intime.fashion.service.search
 {
-    class ESBrandService:ESServiceBase
+    class ESBrandService:ESServiceSingle<ESBrand>
     {
-        public override bool IndexSingle(int entityId)
-        {
-
-            var esCombo = combo2ESBrand(entityId);
-            return SearchLogic.IndexSingle<ESBrand>(esCombo);
-        }
-
-        private ESBrand combo2ESBrand(int entityId)
+        protected override ESBrand entity2Model(int entityId)
         {
             var db = Context;
             var storeBrands = db.Set<IMS_SectionBrandEntity>().Join(db.Set<SectionEntity>(), o => o.SectionId, i => i.Id, (o, i) => new { SB = o, Sec = i })
                                      .Join(db.Set<StoreEntity>(), o => o.Sec.StoreId, i => i.Id, (o, i) => new { SB = o.SB, S = i });
-            var linq = db.Set<BrandEntity>().Where(p => p.Id==entityId)
+            var linq = db.Set<BrandEntity>().Where(p => p.Id == entityId)
                       .GroupJoin(storeBrands
                       , o => o.Id, i => i.SB.BrandId, (o, i) => new { B = o, S = i });
             return linq.Select(p => new ESBrand()
@@ -42,11 +35,7 @@ namespace com.intime.fashion.service.search
                     Id = s.S.Id
                 })
             }).FirstOrDefault();
-
         }
-        private DbContext Context
-        {
-            get { return ServiceLocator.Current.Resolve<DbContext>(); }
-        }
+       
     }
 }

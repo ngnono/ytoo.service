@@ -111,6 +111,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\com.intime.fashion.common.config\com.intime.fashion.common.config.csproj">
+      <Project>{5d633b61-5763-459b-a72e-ae66f5bc0793}</Project>
+      <Name>com.intime.fashion.common.config</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.common.message.rabbit\com.intime.fashion.common.message.rabbit.csproj">
       <Project>{c5b14b68-f27c-4317-9327-5fcf66aefa52}</Project>
       <Name>com.intime.fashion.common.message.rabbit</Name>
@@ -122,6 +126,14 @@
     <ProjectReference Include="..\com.intime.fashion.common\com.intime.fashion.common.csproj">
       <Project>{6992ffb6-c70d-4f8a-a03a-4f663fa370f4}</Project>
       <Name>com.intime.fashion.common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.cache\com.intime.fashion.service.cache.csproj">
+      <Project>{9f3b1365-64f9-43d3-8aa8-eab91e1b7c9e}</Project>
+      <Name>com.intime.fashion.service.cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.contract\com.intime.fashion.service.contract.csproj">
+      <Project>{e69391ab-6e94-4937-9c34-3a5485f71592}</Project>
+      <Name>com.intime.fashion.service.contract</Name>
     </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.service\com.intime.fashion.service.csproj">
       <Project>{be4f98bc-b4a2-4fc0-ae7a-96938218f098}</Project>
@@ -153,6 +165,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

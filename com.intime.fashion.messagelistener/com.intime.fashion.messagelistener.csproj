@@ -99,6 +99,10 @@
       <Project>{a7154a06-be04-400f-8652-5b52e673b7db}</Project>
       <Name>com.intime.fashion.common.message</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.contract\com.intime.fashion.service.contract.csproj">
+      <Project>{e69391ab-6e94-4937-9c34-3a5485f71592}</Project>
+      <Name>com.intime.fashion.service.contract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.service.messages\com.intime.fashion.service.messages.csproj">
       <Project>{097e9eaf-ec77-4fb2-86fb-7b30acd7df93}</Project>
       <Name>com.intime.fashion.service.messages</Name>

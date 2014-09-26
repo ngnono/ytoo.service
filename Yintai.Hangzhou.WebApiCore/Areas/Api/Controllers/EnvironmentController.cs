@@ -1,4 +1,6 @@
-﻿using System;
+﻿using com.intime.fashion.service;
+using com.intime.fashion.service.contract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +18,10 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 {
     public class EnvironmentController : RestfulController
     {
+        private IAuthKeysService _keyService;
+        public EnvironmentController(IAuthKeysService keyService) {
+            _keyService = keyService;
+        }
         public ActionResult ServerDateTime()
         {
             return new RestfulResult
@@ -152,6 +158,30 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 Items = invoices.ToList()
             };
             return new RestfulResult { Data = new ExecuteResult<PagerInfoResponse<dynamic>>(response) };
+        }
+
+        public ActionResult GetAliPayKey(int groupId)
+        {
+            var key = _keyService.GetAlipayKey(groupId);
+           return this.RenderSuccess<dynamic>(c => c.Data = new { 
+                partner_id = key.ParterId,
+                md5_key = key.Md5Key,
+                seller_account = key.SellerAccount
+            });
+        }
+
+        public ActionResult GetWeixinKey(int groupId)
+        {
+            var key = _keyService.GetWeixinPayKey(groupId);
+            return this.RenderSuccess<dynamic>(c => c.Data = new
+            {
+                app_id = key.AppId,
+                app_secret = key.AppSecret,
+                pay_signkey = key.PaySignKey,
+                parter_id = key.ParterId,
+                parter_key = key.ParterKey
+            });
+
         }
     }
 }

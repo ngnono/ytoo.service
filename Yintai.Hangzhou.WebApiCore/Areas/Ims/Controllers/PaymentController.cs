@@ -28,6 +28,7 @@ using com.intime.fashion.common.message;
 using com.intime.fashion.common.config;
 using com.intime.fashion.common.Extension;
 using System.Collections.Specialized;
+using com.intime.fashion.service.contract;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -41,6 +42,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<ExOrderEntity> _exorderRepo;
         private Architecture.Common.Data.EF.IEFRepository<Data.Models.IMS_GiftCardOrderEntity> _giftcardOrderRepo;
         private IEFRepository<IMS_AssociateIncomeHistoryEntity> _incomehisRepo;
+        private IAuthKeysService _keyService;
+        private IAssociateIncomeService _associateIncomeService;
 
         public PaymentController(IEFRepository<OrderTransactionEntity> ordTranRepo
             , IEFRepository<PaymentNotifyLogEntity> paynotiRepo
@@ -48,7 +51,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             , IOrderLogRepository orderLogRepo
             , IEFRepository<ExOrderEntity> exorderRepo
             , IEFRepository<IMS_GiftCardOrderEntity> giftcardOrderRepo,
-            IEFRepository<IMS_AssociateIncomeHistoryEntity> incomehisRepo)
+            IEFRepository<IMS_AssociateIncomeHistoryEntity> incomehisRepo,
+            IAuthKeysService keyService,
+            IAssociateIncomeService associateIncomeService)
         {
             _orderTranRepo = ordTranRepo;
             _paymentNotifyRepo = paynotiRepo;
@@ -58,6 +63,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             _exorderRepo = exorderRepo;
             _giftcardOrderRepo = giftcardOrderRepo;
             _incomehisRepo = incomehisRepo;
+           _keyService = keyService ;
+           _associateIncomeService = associateIncomeService;
         }
 
 
@@ -69,11 +76,30 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 var requestSign = sPara["sign"];
                 sPara.Remove("sign");
-                var notifySigned = Util.NotifySignIMS(sPara);
-                if (string.Compare(requestSign, notifySigned, true) != 0)
-                    return Content("fail");
                 //external order no
                 string out_trade_no = sPara["out_trade_no"];
+                // get auth key via order items' group id
+                // check the sign
+                var groupEntity = Context.Set<OrderItemEntity>().Where(o => o.OrderNo == out_trade_no)
+                                   .Join(Context.Set<ProductEntity>(), o => o.ProductId, i => i.Id, (o, i) => i)
+                                   .Join(Context.Set<StoreEntity>(), o => o.Store_Id, i => i.Id, (o, i) => i)
+                                   .Join(Context.Set<GroupEntity>(), o => o.Group_Id, i => i.Id, (o, i) => i)
+                                   .FirstOrDefault();
+                bool isValid = false;
+                if (groupEntity == null)
+                {
+                    isValid = Util.CheckNotifySign(sPara, WxPayConfig.IMS_PARTER_KEY, requestSign);
+                }
+                else
+                {
+                    WeixinPayKey payKey = _keyService.GetWeixinPayKey(groupEntity.Id);
+                    isValid = Util.CheckNotifySign(sPara, payKey.PaySignKey, requestSign);
+                }
+                if (!isValid)
+                {
+                    return Content("fail");
+                }
+
                 string trade_no = sPara["transaction_id"];
                 int trade_status = int.Parse(sPara["trade_state"]);
 
@@ -132,7 +158,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     Type = (int)OrderOpera.CustomerPay
                                 });
 
-                                AssociateIncomeLogic.Froze(orderEntity.OrderNo);
+                                _associateIncomeService.Froze(orderEntity.OrderNo);
 
                             }
 
@@ -141,12 +167,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                             if (isSuccess)
                             {
                                 ts.Complete();
-                                
+
                             }
                             else
                                 return Content("fail");
                         }
-                       
+
                     }
 
                 }
@@ -165,84 +191,101 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             if (sPara.Count > 0)
             {
                 var alipayConfig = CommonConfiguration<Alipay_IMSConfiguration>.Current;
-                var aliNotify = new Com.Alipay2.Notify(alipayConfig.Partner,
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(sPara["notify_data"]);
+
+                string out_trade_no = xmlDoc.SelectSingleNode("/notify/out_trade_no").InnerText;
+                //get auth key via order items' group id
+                var groupEntity = Context.Set<OrderItemEntity>().Where(o => o.OrderNo == out_trade_no)
+                                   .Join(Context.Set<ProductEntity>(), o => o.ProductId, i => i.Id, (o, i) => i)
+                                   .Join(Context.Set<StoreEntity>(), o => o.Store_Id, i => i.Id, (o, i) => i)
+                                   .Join(Context.Set<GroupEntity>(), o => o.Group_Id, i => i.Id, (o, i) => i)
+                                   .FirstOrDefault();
+                Com.Alipay2.Notify aliNotify = null;
+                if (groupEntity == null)
+                {
+
+                    aliNotify = new Com.Alipay2.Notify(alipayConfig.Partner,
                     alipayConfig.Md5Key,
                     alipayConfig.PrivateKey,
                     alipayConfig.PublicKey);
-                bool verifyResult = aliNotify.VerifyNotify(sPara, Request.Form["sign"]);
-
-                if (verifyResult)
+                }
+                else
                 {
-                    XmlDocument xmlDoc = new XmlDocument();
-                    xmlDoc.LoadXml(sPara["notify_data"]);
+                    AliPayKey alipayKey = _keyService.GetAlipayKey(groupEntity.Id);
+                    aliNotify = new Com.Alipay2.Notify(alipayKey.ParterId,
+                    alipayKey.Md5Key,
+                    string.Empty,
+                    string.Empty);
+                }
+                bool verifyResult = aliNotify.VerifyNotify(sPara, Request.Form["sign"]);
+                if (!verifyResult)
+                {
+                    return Content("fail");
+                }
 
-                    string out_trade_no = xmlDoc.SelectSingleNode("/notify/out_trade_no").InnerText;
-                    string trade_no = xmlDoc.SelectSingleNode("/notify/trade_no").InnerText;
 
-                    string trade_status = xmlDoc.SelectSingleNode("/notify/trade_status").InnerText;
+                string trade_no = xmlDoc.SelectSingleNode("/notify/trade_no").InnerText;
 
-                    var amount = decimal.Parse(xmlDoc.SelectSingleNode("/notify/total_fee").InnerText);
-                    if (trade_status == "TRADE_FINISHED" ||
-                        trade_status == "TRADE_SUCCESS")
+                string trade_status = xmlDoc.SelectSingleNode("/notify/trade_status").InnerText;
+
+                var amount = decimal.Parse(xmlDoc.SelectSingleNode("/notify/total_fee").InnerText);
+                if (trade_status == "TRADE_FINISHED" ||
+                    trade_status == "TRADE_SUCCESS")
+                {
+                    var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no
+                        && p.PaymentCode == alipayConfig.PaymentCode).FirstOrDefault();
+                    var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == out_trade_no).FirstOrDefault();
+                    if (paymentEntity == null && orderEntity != null)
                     {
-                        var paymentEntity = Context.Set<OrderTransactionEntity>().Where(p => p.OrderNo == out_trade_no
-                            && p.PaymentCode == alipayConfig.PaymentCode).FirstOrDefault();
-                        var orderEntity = Context.Set<OrderEntity>().Where(o => o.OrderNo == out_trade_no).FirstOrDefault();
-                        if (paymentEntity == null && orderEntity != null)
+                        OrderTransactionEntity orderTransaction = null;
+                        using (var ts = new TransactionScope())
                         {
-                            OrderTransactionEntity orderTransaction = null;
-                            using (var ts = new TransactionScope())
+                            _paymentNotifyRepo.Insert(new PaymentNotifyLogEntity()
                             {
-                                _paymentNotifyRepo.Insert(new PaymentNotifyLogEntity()
+                                CreateDate = DateTime.Now,
+                                OrderNo = out_trade_no,
+                                PaymentCode = alipayConfig.PaymentCode,
+                                PaymentContent = JsonConvert.SerializeObject(sPara)
+                            });
+
+                            orderTransaction = _orderTranRepo.Insert(new OrderTransactionEntity()
+                            {
+                                Amount = amount,
+                                OrderNo = out_trade_no,
+                                CreateDate = DateTime.Now,
+                                IsSynced = false,
+                                PaymentCode = alipayConfig.PaymentCode,
+                                TransNo = trade_no,
+                                OrderType = (int)PaidOrderType.Self
+                            });
+                            if (orderEntity.Status != (int)OrderStatus.Paid && orderEntity.TotalAmount <= amount)
+                            {
+                                orderEntity.Status = (int)OrderStatus.Paid;
+                                orderEntity.UpdateDate = DateTime.Now;
+                                orderEntity.RecAmount = amount;
+                                _orderRepo.Update(orderEntity);
+
+                                _orderlogRepo.Insert(new OrderLogEntity()
                                 {
                                     CreateDate = DateTime.Now,
+                                    CreateUser = 0,
+                                    CustomerId = orderEntity.CustomerId,
+                                    Operation = "支付订单",
                                     OrderNo = out_trade_no,
-                                    PaymentCode = alipayConfig.PaymentCode,
-                                    PaymentContent = JsonConvert.SerializeObject(sPara)
+                                    Type = (int)OrderOpera.CustomerPay
                                 });
-
-                                orderTransaction = _orderTranRepo.Insert(new OrderTransactionEntity()
-                                {
-                                    Amount = amount,
-                                    OrderNo = out_trade_no,
-                                    CreateDate = DateTime.Now,
-                                    IsSynced = false,
-                                    PaymentCode = alipayConfig.PaymentCode,
-                                    TransNo = trade_no,
-                                    OrderType = (int)PaidOrderType.Self
-                                });
-                                if (orderEntity.Status != (int)OrderStatus.Paid && orderEntity.TotalAmount <= amount)
-                                {
-                                    orderEntity.Status = (int)OrderStatus.Paid;
-                                    orderEntity.UpdateDate = DateTime.Now;
-                                    orderEntity.RecAmount = amount;
-                                    _orderRepo.Update(orderEntity);
-
-                                    _orderlogRepo.Insert(new OrderLogEntity()
-                                    {
-                                        CreateDate = DateTime.Now,
-                                        CreateUser = 0,
-                                        CustomerId = orderEntity.CustomerId,
-                                        Operation = "支付订单",
-                                        OrderNo = out_trade_no,
-                                        Type = (int)OrderOpera.CustomerPay
-                                    });
-                                    AssociateIncomeLogic.Froze(orderEntity.OrderNo);
-                                }
-                                ts.Complete();
-                               
+                                _associateIncomeService.Froze(orderEntity.OrderNo);
                             }
+                            ts.Complete();
 
                         }
 
                     }
-                    return Content("success");
 
                 }
-                else
-                {
-                    return Content("fail");
-                }
+                return Content("success");
+
             }
             else
             {
@@ -257,35 +300,53 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 var requestSign = sPara["sign"];
                 sPara.Remove("sign");
-                var notifySigned = Util.NotifySignIMS(sPara);
 
-                if (string.Compare(requestSign, notifySigned, true) != 0)
-                    return Content("fail");
                 //external order no
                 string out_trade_no = sPara["out_trade_no"];
+                var tradeNos = out_trade_no.Split('-');
+                if (tradeNos.Length < 3)
+                {
+                    Log.Error(string.Format("order paid, but trade_no:{0} not follow the correct format", out_trade_no));
+                    return Content("fail");
+                }
+                var trackOrderSource = false;
+                if (tradeNos.Length >= 4)
+                    trackOrderSource = true;
+                var giftcardId = int.Parse(tradeNos[1]);
+                var orderUserId = int.Parse(tradeNos[2]);
+                var giftCardEntity = Context.Set<IMS_GiftCardItemEntity>().Find(giftcardId);
+                if (null == giftCardEntity)
+                {
+                    Log.Error(string.Format("order paid, but gift card id:{0} not exists", giftcardId));
+                    return Content("success");
+                }
+                // get auth key via order items' group id
+                // check the sign
+                var groupEntity = Context.Set<IMS_GiftCardEntity>().Where(o => o.Id == giftCardEntity.GiftCardId)
+                                   .Join(Context.Set<GroupEntity>(), o => o.GroupId, i => i.Id, (o, i) => i)
+                                   .FirstOrDefault();
+                bool isValid = false;
+                if (groupEntity == null)
+                {
+                    isValid = Util.CheckNotifySign(sPara, WxPayConfig.IMS_PARTER_KEY, requestSign);
+                }
+                else
+                {
+                    WeixinPayKey payKey = _keyService.GetWeixinPayKey(groupEntity.Id);
+                    isValid = Util.CheckNotifySign(sPara, payKey.PaySignKey, requestSign);
+                }
+                if (!isValid)
+                {
+                    return Content("fail");
+                }
+
                 string trade_no = sPara["transaction_id"];
                 int trade_status = int.Parse(sPara["trade_state"]);
                 var amount = decimal.Parse(sPara["total_fee"]) / 100;
 
                 if (trade_status == 0)
                 {
-                    var tradeNos = out_trade_no.Split('-');
-                    if (tradeNos.Length < 3)
-                    {
-                        Log.Error(string.Format("order paid, but trade_no:{0} not follow the correct format", out_trade_no));
-                        return Content("fail");
-                    }
-                    var trackOrderSource = false;
-                    if (tradeNos.Length >= 4)
-                        trackOrderSource = true;
-                    var giftcardId = int.Parse(tradeNos[1]);
-                    var orderUserId = int.Parse(tradeNos[2]);
-                    var giftCardEntity = Context.Set<IMS_GiftCardItemEntity>().Find(giftcardId);
-                    if (null == giftCardEntity)
-                    {
-                        Log.Error(string.Format("order paid, but gift card id:{0} not exists", giftcardId));
-                        return Content("success");
-                    }
+                    
                     if (giftCardEntity.Price > amount)
                     {
                         Log.Error(string.Format("order paid, but gift card price:{0} not match paid amount:{1}", giftCardEntity.Price, amount));
@@ -340,11 +401,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                 var associatEntity = Context.Set<IMS_AssociateEntity>().Find(assocateId);
                                 if (associatEntity != null)
                                 {
-                                    AssociateIncomeLogic.Avail(associatEntity.UserId, giftcardOrder);
+                                    _associateIncomeService.Avail(associatEntity.UserId, giftcardOrder);
                                 }
                             }
                             ts.Complete();
-                           
+
                         }
                     }
 
@@ -364,18 +425,57 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             if (sPara.Count > 0)
             {
                 var alipayConfig = CommonConfiguration<Alipay_IMSConfiguration>.Current;
-                var aliNotify = new Com.Alipay2.Notify(alipayConfig.Partner,
-                    alipayConfig.Md5Key,
-                    alipayConfig.PrivateKey,
-                    alipayConfig.PublicKey);
-                bool verifyResult = aliNotify.VerifyNotify(sPara, Request.Form["sign"]);
-
-                if (verifyResult)
-                {
                     XmlDocument xmlDoc = new XmlDocument();
                     xmlDoc.LoadXml(sPara["notify_data"]);
 
                     string out_trade_no = xmlDoc.SelectSingleNode("/notify/out_trade_no").InnerText;
+                    var tradeNos = out_trade_no.Split('-');
+                    if (tradeNos.Length < 3)
+                    {
+                        Log.Error(string.Format("order paid, but trade_no:{0} not follow the correct format", out_trade_no));
+                        return Content("fail");
+                    }
+                    var trackOrderSource = false;
+                    if (tradeNos.Length >= 4)
+                        trackOrderSource = true;
+                    var giftcardId = int.Parse(tradeNos[1]);
+                    var orderUserId = int.Parse(tradeNos[2]);
+                    var giftCardEntity = Context.Set<IMS_GiftCardItemEntity>().Find(giftcardId);
+                    if (null == giftCardEntity)
+                    {
+                        Log.Error(string.Format("order paid, but gift card id:{0} not exists", giftcardId));
+                        return Content("success");
+                    }
+                    //1. get auth key via order items' group id
+                    //2. verify the request
+                    Com.Alipay2.Notify aliNotify = null;
+                    var groupEntity = Context.Set<IMS_GiftCardEntity>().Where(ig => ig.Id == giftCardEntity.GiftCardId)
+                                    .Join(Context.Set<GroupEntity>(), o => o.GroupId, i => i.Id, (o, i) => i)
+                                    .FirstOrDefault();
+                                    
+                    if (groupEntity== null)
+                    {
+
+                        aliNotify = new Com.Alipay2.Notify(alipayConfig.Partner,
+                        alipayConfig.Md5Key,
+                        alipayConfig.PrivateKey,
+                        alipayConfig.PublicKey);
+                    }
+                    else
+                    {
+                        AliPayKey alipayKey = _keyService.GetAlipayKey(groupEntity.Id);
+                        aliNotify = new Com.Alipay2.Notify(alipayKey.ParterId,
+                        alipayKey.Md5Key,
+                        string.Empty,
+                        string.Empty);
+                    }
+                    bool verifyResult = aliNotify.VerifyNotify(sPara, Request.Form["sign"]);
+                    if (!verifyResult)
+                    {
+                        return Content("fail");
+                    }
+
+
                     string trade_no = xmlDoc.SelectSingleNode("/notify/trade_no").InnerText;
 
                     string trade_status = xmlDoc.SelectSingleNode("/notify/trade_status").InnerText;
@@ -384,23 +484,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     if (trade_status == "TRADE_FINISHED" ||
                         trade_status == "TRADE_SUCCESS")
                     {
-                        var tradeNos = out_trade_no.Split('-');
-                        if (tradeNos.Length < 3)
-                        {
-                            Log.Error(string.Format("order paid, but trade_no:{0} not follow the correct format", out_trade_no));
-                            return Content("fail");
-                        }
-                        var trackOrderSource = false;
-                        if (tradeNos.Length >= 4)
-                            trackOrderSource = true;
-                        var giftcardId = int.Parse(tradeNos[1]);
-                        var orderUserId = int.Parse(tradeNos[2]);
-                        var giftCardEntity = Context.Set<IMS_GiftCardItemEntity>().Find(giftcardId);
-                        if (null == giftCardEntity)
-                        {
-                            Log.Error(string.Format("order paid, but gift card id:{0} not exists", giftcardId));
-                            return Content("success");
-                        }
+                        
                         if (giftCardEntity.Price > amount)
                         {
                             Log.Error(string.Format("order paid, but gift card price:{0} not match paid amount:{1}", giftCardEntity.Price, amount));
@@ -453,21 +537,15 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     var associatEntity = Context.Set<IMS_AssociateEntity>().Find(assocateId);
                                     if (associatEntity != null)
                                     {
-                                        AssociateIncomeLogic.Avail(associatEntity.UserId, giftcardOrder);
+                                        _associateIncomeService.Avail(associatEntity.UserId, giftcardOrder);
                                     }
                                 }
                                 ts.Complete();
-                                
+
                             }
                         }
                     }
                     return Content("success");
-
-                }
-                else
-                {
-                    return Content("fail");
-                }
             }
             else
             {

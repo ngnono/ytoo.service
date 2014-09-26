@@ -107,7 +107,7 @@ publish
 [Oo]bj
 sql
 TestResults
-*.Cache
+#*.Cache
 ClientBin
 stylecop.*
 ~$*

@@ -24,6 +24,9 @@ using Yintai.Hangzhou.Contract.DTO.Response;
 using com.intime.fashion.service;
 using Yintai.Hangzhou.Contract.DTO.Response.Resources;
 using com.intime.fashion.common;
+using com.intime.fashion.service.contract;
+using Yintai.Hangzhou.Model.Order;
+using Yintai.Hangzhou.Model.Product;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
 {
@@ -41,8 +44,9 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         private IOrder2ExRepository _orderexRepo;
         private IRMA2ExRepository _rmaexRepo;
         private IInventoryRepository _inventoryRepo;
+        private IOrderService _orderService;
 
-        public ProductController(IProductDataService productDataService, 
+        public ProductController(IProductDataService productDataService,
             IBrandDataService brandDataService,
             IOrderRepository orderRepo,
             IOrderItemRepository orderItemRepo,
@@ -52,7 +56,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             IPromotionRepository promotionRepo,
             IOrder2ExRepository orderexRepo,
             IRMA2ExRepository rmaexRepo,
-           IInventoryRepository inventoryRepo)
+           IInventoryRepository inventoryRepo,
+           IOrderService orderService)
         {
             _productDataService = productDataService;
             _passHelper = new PassHelper(brandDataService);
@@ -65,6 +70,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             _orderexRepo = orderexRepo;
             _rmaexRepo = rmaexRepo;
             _inventoryRepo = inventoryRepo;
+            _orderService = orderService;
 
         }
 
@@ -209,7 +215,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             return new RestfulResult { Data = this._productDataService.GetProductList(request) };
         }
 
-        [RestfulRoleAuthorize(UserRole.Admin , UserLevel.Daren)]
+        [RestfulRoleAuthorize(UserRole.Admin, UserLevel.Daren)]
         [HttpPost]
         public ActionResult Destroy(FormCollection formCollection, DestroyProductRequest request, int? authuid, UserModel authUser, [FetchProduct(KeyName = "productid", IsCanMissing = true)]ProductEntity entity)
         {
@@ -223,50 +229,54 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             //运营 管理员权限的用户才可以删除他人的商品
             var t = false;
             //3
-            if (((authUser.UserRole & (int)UserRole.Admin) != 0) )
+            if (((authUser.UserRole & (int)UserRole.Admin) != 0))
             {
                 t = true;
             }
             else
             {
-                    if (authUser.Id == entity.RecommendUser && (authUser.Level & UserLevel.Daren) != 0)
-                    {
-                        t = true;
-                    }
+                if (authUser.Id == entity.RecommendUser && (authUser.Level & UserLevel.Daren) != 0)
+                {
+                    t = true;
+                }
             }
             request.AuthUid = authuid.Value;
             request.AuthUser = authUser;
 
             return t ? new RestfulResult { Data = this._productDataService.DestroyProduct(request) } : new RestfulResult { Data = new ExecuteResult { StatusCode = StatusCode.ClientError, Message = "您没有权限操作他人的商品" } };
         }
-       
+
 
         [RestfulAuthorize]
         [HttpPost]
-        public ActionResult Order(OrderRequest request,UserModel authUser,string channel)
+        public ActionResult Order(OrderRequest request, UserModel authUser, string channel)
         {
             if (!ModelState.IsValid)
             {
                 var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
-            request.AuthUser = authUser;
-            request.Channel = channel;
-            bool isSuccess;
-            return OrderRule.Create(request, authUser, out isSuccess);
+            var createRequest = OrderCreate.FromEntity<OrderCreate>(request.OrderModel, o =>
+            {
+                o.Channel = channel;
+                o.Payment = PaymentMethod.FromEntity<PaymentMethod>(request.OrderModel.Payment);
+                o.Products = request.OrderModel.Products.Select(p => OrderItem.FromEntity<OrderItem>(p, pp => {
+                    pp.Properties = ProductPropertyValue.FromEntity<ProductPropertyValue>(p.Properties);
+                }));
+                o.ShippingAddress = OrderShippingAddress.FromEntity<OrderShippingAddress>(request.OrderModel.ShippingAddress);
+
+            });
+
+
+            var result = _orderService.Create(createRequest, authUser);
+            if (result.IsSuccess)
+                return this.RenderSuccess<OrderResponse>(r => r.Data = new OrderResponse().FromEntity<OrderResponse>(result.Result));
+            else
+                return this.RenderError(r => r.Message = result.Error.Message);
 
         }
 
-        [RestfulAuthorize]
-        [HttpPost]
-        public ActionResult Order4BarCode(OrderRequest request, UserModel authUser)
-        {
-            request.AuthUser = authUser;
-            request.Channel = "BarSale";
-            bool isSuccess;
-            return OrderRule.Create(request, authUser,out isSuccess);
 
-        }
 
         /// <summary>
         /// get the purchase detail product info
@@ -274,7 +284,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         /// <param name="request"></param>
         /// <param name="currentAuthUser"></param>
         /// <returns></returns>
-        public ActionResult Detail4P(GetProductInfo4PRequest request,string channel)
+        public ActionResult Detail4P(GetProductInfo4PRequest request, string channel)
         {
             if (!ModelState.IsValid)
             {
@@ -283,34 +293,34 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             }
             var context = _productRepo.Context;
             var linq = _productRepo.Get(p => p.Id == request.ProductId && p.Is4Sale.HasValue && p.Is4Sale.Value)
-                       .GroupJoin(context.Set<BrandEntity>(),o=>o.Brand_Id,i=>i.Id,(o,i)=>new {P=o,B=i.FirstOrDefault()})
+                       .GroupJoin(context.Set<BrandEntity>(), o => o.Brand_Id, i => i.Id, (o, i) => new { P = o, B = i.FirstOrDefault() })
                      .FirstOrDefault();
 
             if (linq == null)
                 return this.RenderError(r => r.Message = "产品不存在!");
-           
+
             var data = new GetProductInfo4PResponse().FromEntity<GetProductInfo4PResponse>(linq.P, res =>
             {
                 var dimensionEntity = Context.Set<ResourceEntity>().Where(r => r.Status == (int)DataStatus.Normal &&
                                     r.IsDimension.HasValue &&
                                     r.IsDimension.Value == true &&
                                     r.SourceId == linq.P.Id).FirstOrDefault();
-                if (dimensionEntity!=null)
+                if (dimensionEntity != null)
                     res.DimensionResource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(dimensionEntity);
-                var rmaMsg = Context.Set<ConfigMsgEntity>().Where(c=>c.MKey=="O_C_RMAPolicy").FirstOrDefault();
-                res.RMAPolicy = rmaMsg==null?string.Empty:rmaMsg.Message;
+                var rmaMsg = Context.Set<ConfigMsgEntity>().Where(c => c.MKey == "O_C_RMAPolicy").FirstOrDefault();
+                res.RMAPolicy = rmaMsg == null ? string.Empty : rmaMsg.Message;
                 var channelEntity = Context.Set<ChannelEntity>().Where(c => c.Name == channel).FirstOrDefault();
                 if (channelEntity != null)
                 {
                     res.SupportPayments = context.Set<PaymentMethodEntity>().Where(p => p.Status == (int)DataStatus.Normal)
                                     .ToList()
-                                    .Where(p=> (!p.AvailChannels.HasValue) ||((p.AvailChannels| channelEntity.BusinessId)== channelEntity.BusinessId))
+                                    .Where(p => (!p.AvailChannels.HasValue) || ((p.AvailChannels | channelEntity.BusinessId) == channelEntity.BusinessId))
                                     .Select(p => new PaymentResponse().FromEntity<PaymentResponse>(p));
                 }
-                res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id && pi.Amount>0).GroupBy(pi => pi.PColorId)
+                res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id && pi.Amount > 0).GroupBy(pi => pi.PColorId)
                                 .Select(pi => pi.Key)
                                 .Join(Context.Set<ProductPropertyValueEntity>(), o => o, i => i.Id, (o, i) => i)
-                                .GroupJoin(Context.Set<ResourceEntity>().Where(pr => pr.SourceType == (int)SourceType.Product && pr.Type==(int)ResourceType.Image && pr.SourceId == linq.P.Id), o => o.Id, i => i.ColorId, (o, i) => new { C = o, CR = i.FirstOrDefault() })
+                                .GroupJoin(Context.Set<ResourceEntity>().Where(pr => pr.SourceType == (int)SourceType.Product && pr.Type == (int)ResourceType.Image && pr.SourceId == linq.P.Id), o => o.Id, i => i.ColorId, (o, i) => new { C = o, CR = i.FirstOrDefault() })
                                 .ToList()
                                 .Select(color => new SaleColorPropertyResponse()
                                 {
@@ -319,15 +329,16 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                                     Resource = new ResourceInfoResponse().FromEntity<ResourceInfoResponse>(color.CR),
                                     Sizes = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == linq.P.Id && pi.PColorId == color.C.Id)
                                             .Join(Context.Set<ProductPropertyValueEntity>().Where(ppv => ppv.Status == (int)DataStatus.Normal), o => o.PSizeId, i => i.Id, (o, i) => new { PI = o, PPV = i }).ToList()
-                                            .Where(pi=>pi.PI.Amount>0)
-                                            .Select(pi => new SaleSizePropertyResponse() { 
-                                                 Is4Sale = pi.PI.Amount>0,
-                                                  SizeId=pi.PI.PSizeId,
-                                                   SizeName = pi.PPV.ValueDesc
+                                            .Where(pi => pi.PI.Amount > 0)
+                                            .Select(pi => new SaleSizePropertyResponse()
+                                            {
+                                                Is4Sale = pi.PI.Amount > 0,
+                                                SizeId = pi.PI.PSizeId,
+                                                SizeName = pi.PPV.ValueDesc
                                             })
 
                                 });
-                if (linq.B !=null)
+                if (linq.B != null)
                 {
                     res.BrandId = linq.B.Id;
                     res.BrandName = linq.B.Name;
@@ -350,19 +361,31 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                 var error = ModelState.Values.Where(v => v.Errors.Count() > 0).First();
                 return this.RenderError(r => r.Message = error.Errors.First().ErrorMessage);
             }
-            var linq = Context.Set<ProductEntity>().Where(p=>p.Id== request.ProductId).FirstOrDefault();
+            var linq = Context.Set<ProductEntity>().Where(p => p.Id == request.ProductId).FirstOrDefault();
             if (linq == null)
-                return this.RenderError(m=>m.Message="商品不存在");
-            var model = OrderRule.ComputeAmount(linq, request.Quantity);
+                return this.RenderError(m => m.Message = "商品不存在");
+            var items = new List<OrderPreCalculateItem>();
+            items.Add(new OrderPreCalculateItem()
+            {
+                ProductId = linq.Id,
+                Quantity = 1,
+                Price = linq.Price
+            });
+            OrderPreCalculateResult model = _orderService.PreCalculate(new OrderPreCalculate()
+            {
+                CalculateType = OrderPreCalculateType.Product,
+                Products = items
+            });
 
-            return this.RenderSuccess<dynamic>(m => m.Data = new { 
+            return this.RenderSuccess<dynamic>(m => m.Data = new
+            {
                 totalquantity = model.TotalQuantity,
                 totalfee = model.TotalFee,
                 totalpoints = model.TotalPoints,
                 totalamount = model.TotalAmount,
                 extendprice = model.ExtendPrice
             });
- 
+
         }
 
         /// <summary>
@@ -373,7 +396,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
         /// </summary>
         /// <param name="authUser"></param>
         /// <returns></returns>
-        public ActionResult AvailOperations(GetProductInfoRequest request,[FetchRestfulAuthUserAttribute(IsCanMissing = true, KeyName = Define.Token)] UserModel authUser)
+        public ActionResult AvailOperations(GetProductInfoRequest request, [FetchRestfulAuthUserAttribute(IsCanMissing = true, KeyName = Define.Token)] UserModel authUser)
         {
             //是否收藏
             bool isFavored = false;
@@ -381,7 +404,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             var withUserId = (authUser != null && authUser.Id > 0);
             if (withUserId)
             {
-               isFavored = _favoriteRepo.Get(f => f.User_Id == authUser.Id && f.FavoriteSourceType == (int)SourceType.Product && f.FavoriteSourceId == request.ProductId && f.Status != (int)DataStatus.Deleted).Any();
+                isFavored = _favoriteRepo.Get(f => f.User_Id == authUser.Id && f.FavoriteSourceType == (int)SourceType.Product && f.FavoriteSourceId == request.ProductId && f.Status != (int)DataStatus.Deleted).Any();
             }
 
             var dbContext = Context;
@@ -391,40 +414,42 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
                         i => i.Id,
                         (o, i) => new { Pro = i })
                  .ToList();
-           ifCanCoupon =  linq.Any(l => {
-               bool hadGetCoupon = false;
-               if (withUserId)
-               {
-                   hadGetCoupon= dbContext.Set<CouponHistoryEntity>().Where(c => c.User_Id == authUser.Id && c.FromPromotion == l.Pro.Id).Any();
-               }
+            ifCanCoupon = linq.Any(l =>
+            {
+                bool hadGetCoupon = false;
+                if (withUserId)
+                {
+                    hadGetCoupon = dbContext.Set<CouponHistoryEntity>().Where(c => c.User_Id == authUser.Id && c.FromPromotion == l.Pro.Id).Any();
+                }
                 if (l.Pro.PublicationLimit == null || l.Pro.PublicationLimit == -1)
                 {
-                   return  (!hadGetCoupon) || 
-                                  (hadGetCoupon && (!l.Pro.IsLimitPerUser.HasValue ||l.Pro.IsLimitPerUser.Value==false));
+                    return (!hadGetCoupon) ||
+                                   (hadGetCoupon && (!l.Pro.IsLimitPerUser.HasValue || l.Pro.IsLimitPerUser.Value == false));
                 }
                 else
                 {
                     return l.Pro.InvolvedCount < l.Pro.PublicationLimit &&
                                  (!hadGetCoupon || (hadGetCoupon && (!l.Pro.IsLimitPerUser.HasValue || l.Pro.IsLimitPerUser.Value == false)));
                 }
-               
-           });
-           var productEntity = dbContext.Set<ProductEntity>().Where(p =>p.Id == request.ProductId &&
-                                                p.Status == (int)DataStatus.Normal && (p.Is4Sale??false) == true)
-                                   .Join(dbContext.Set<InventoryEntity>().Where(inv => inv.Amount > 0),
-                                       o => o.Id,
-                                       i => i.ProductId,
-                                       (o, i) => o).FirstOrDefault();
-           return this.RenderSuccess<GetAvailOperationsResponse>(m=>m.Data=new GetAvailOperationsResponse() { 
-                 IsFavored = isFavored,
-                  IfCanCoupon = ifCanCoupon,
-                  IfCanTalk = false,
-                  Is4Sale = productEntity!=null
-               });
-           
+
+            });
+            var productEntity = dbContext.Set<ProductEntity>().Where(p => p.Id == request.ProductId &&
+                                                 p.Status == (int)DataStatus.Normal && (p.Is4Sale ?? false) == true)
+                                    .Join(dbContext.Set<InventoryEntity>().Where(inv => inv.Amount > 0),
+                                        o => o.Id,
+                                        i => i.ProductId,
+                                        (o, i) => o).FirstOrDefault();
+            return this.RenderSuccess<GetAvailOperationsResponse>(m => m.Data = new GetAvailOperationsResponse()
+            {
+                IsFavored = isFavored,
+                IfCanCoupon = ifCanCoupon,
+                IfCanTalk = false,
+                Is4Sale = productEntity != null
+            });
+
         }
 
 
-     
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using com.intime.fashion.common.message;
 using com.intime.fashion.common.message.rabbit;
 using com.intime.fashion.service;
+using com.intime.fashion.service.contract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace com.intime.fashion.messagelistener
         private static void ConfigureService()
         {
             ServiceLocator.Current.Register<IMessageCenterProvider, MessageProvider>();
-            ServiceLocator.Current.Register<ComboService, ComboService>();
+            ServiceLocator.Current.Register<IComboService, ComboService>();
         }
 
         private static void ConfigureData()

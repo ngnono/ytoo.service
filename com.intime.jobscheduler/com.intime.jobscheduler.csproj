@@ -40,7 +40,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -147,6 +147,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
+    <Reference Include="TopSdk, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\TopSdk.dll</HintPath>
+    </Reference>
     <Reference Include="WebActivator, Version=1.4.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
@@ -194,13 +198,10 @@
     <Compile Include="Job\Push2awsIncreJob.cs" />
     <Compile Include="Job\Push2awsJob.cs" />
     <Compile Include="Job\Store\StoreApplyApproveJob.cs" />
-    <Compile Include="Job\Wgw\BrandSyncJob.cs" />
-    <Compile Include="Job\Wgw\GetItemMultiStockJob.cs" />
-    <Compile Include="Job\Wgw\ProductImageSyncJob.cs" />
-    <Compile Include="Job\Wgw\ProductStatusSyncJob.cs" />
-    <Compile Include="Job\Wgw\InventorySyncJob.cs" />
-    <Compile Include="Job\Wgw\OrderSyncJob.cs" />
-    <Compile Include="Job\Wgw\ProductSyncJob.cs" />
+    <Compile Include="Job\Tmall\Order\LogisticInfo2TmallJob.cs" />
+    <Compile Include="Job\Tmall\Order\OrderPush2ImsJob.cs" />
+    <Compile Include="Job\Tmall\Product\ItemPushJob.cs" />
+    <Compile Include="Job\Tmall\Product\ProductPushJob.cs" />
     <Compile Include="Job\Wx\NotifyExShippingJob.cs" />
     <Compile Include="Job\Wx\NotifyShippingJob.cs" />
     <Compile Include="MainJobService.cs">
@@ -214,6 +215,16 @@
     <Compile Include="UnityBootStrapper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.item.50026312.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.product_50012037_20578.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.product.50026312.20578.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
@@ -225,20 +236,21 @@
     </None>
     <Content Include="Configuration\elasticSearch.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Configuration\flurry.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Configuration\weixin_ims.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Configuration\rabbit.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="deploy\installer.bat" />
     <None Include="deploy\uninstaller.bat" />
     <None Include="Configuration\log4net.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
     <None Include="unity.config">
@@ -248,7 +260,7 @@
   <ItemGroup>
     <None Include="Properties\app.manifest" />
     <None Include="Configuration\quartz_jobs.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -281,6 +293,10 @@
       <Project>{21dc1636-76e3-4f12-8162-97a56b09c21d}</Project>
       <Name>com.intime.fashion.service.analysis</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.contract\com.intime.fashion.service.contract.csproj">
+      <Project>{e69391ab-6e94-4937-9c34-3a5485f71592}</Project>
+      <Name>com.intime.fashion.service.contract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.service.images\com.intime.fashion.service.images.csproj">
       <Project>{f8565494-27d0-41e0-859a-ddfc47be3b38}</Project>
       <Name>com.intime.fashion.service.images</Name>
@@ -296,6 +312,10 @@
     <ProjectReference Include="..\com.intime.fashion.service\com.intime.fashion.service.csproj">
       <Project>{be4f98bc-b4a2-4fc0-ae7a-96938218f098}</Project>
       <Name>com.intime.fashion.service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.o2o.data.exchange\com.intime.o2o.data.exchange.csproj">
+      <Project>{6dfef1cf-0b94-420e-82a7-c6cabba3624a}</Project>
+      <Name>com.intime.o2o.data.exchange</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Contract\Yintai.Hangzhou.Contract.csproj">
       <Project>{11f8922e-2eeb-4229-ba7c-1d44843c4eda}</Project>

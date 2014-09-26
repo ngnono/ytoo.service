@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.SqlServer.Server;
 
 namespace Yintai.Hangzhou.Model.ESModel
 {
@@ -10,7 +11,11 @@ namespace Yintai.Hangzhou.Model.ESModel
 
         public int ColorValueId { get; set; }
 
+        public string ColorDesc { get; set; }
+
         public int SizeValueId { get; set; }
+
+        public string SizeDesc { get; set; }
 
         public int Amount { get; set; }
 

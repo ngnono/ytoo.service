@@ -42,7 +42,8 @@ namespace com.intime.fashion.common.Tencent
         [XmlArray("record_set", Order = 8)]
         [XmlArrayItem("record")]
         public BatchTransferItem[] Records { get; set; }
-
+        [XmlIgnore]
+        public string OperatePwd { get; set; }
        
     }
     public class BatchTransferItem

@@ -38,6 +38,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.QueryRetCode).HasColumnName("QueryRetCode");
             this.Property(t => t.QueryRetMsg).HasColumnName("QueryRetMsg");
             this.Property(t => t.SerialNo).HasColumnName("SerialNo");
+            this.Property(t => t.GroupId).HasColumnName("GroupId");
 		Init();
         }
 

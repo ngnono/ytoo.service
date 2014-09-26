@@ -1,5 +1,4 @@
-﻿using Nest;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,13 +13,13 @@ namespace Yintai.Hangzhou.Model.ES
         public string Address { get; set; }
         public string Tel { get; set; }
         public int Status { get; set; }
-        [ElasticProperty(Type=FieldType.geo_point)]
         public Location Location { get; set; }
         public Nullable<decimal> GpsLat { get; set; }
         public Nullable<decimal> GpsLng { get; set; }
         public Nullable<decimal> GpsAlt { get; set; }
         public IEnumerable<ESResource> Resource { get; set; }
         public IEnumerable<ESDepartment> Departments { get; set; }
+        public int? GroupId { get; set; }
     }
 
     public class Location

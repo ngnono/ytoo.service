@@ -142,6 +142,8 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<FavoriteEntity> Favorites { get; set; }
         public DbSet<FeedbackEntity> Feedbacks { get; set; }
         public DbSet<GroupEntity> Groups { get; set; }
+        public DbSet<Group_AliKeysEntity> Group_AliKeys { get; set; }
+        public DbSet<Group_WeixinKeysEntity> Group_WeixinKeys { get; set; }
         public DbSet<HotWordEntity> HotWords { get; set; }
         public DbSet<IMS_AssociateEntity> IMS_Associate { get; set; }
         public DbSet<IMS_AssociateBrandEntity> IMS_AssociateBrand { get; set; }
@@ -230,6 +232,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<Product2IMSTagEntity> Product2IMSTag { get; set; }
         public DbSet<ProductCode2StoreCodeEntity> ProductCode2StoreCode { get; set; }
         public DbSet<ProductMapEntity> ProductMaps { get; set; }
+        public DbSet<ProductPoolEntity> ProductPools { get; set; }
         public DbSet<ProductPropertyEntity> ProductProperties { get; set; }
         public DbSet<ProductPropertyStageEntity> ProductPropertyStages { get; set; }
         public DbSet<ProductPropertyValueEntity> ProductPropertyValues { get; set; }
@@ -254,6 +257,8 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<SeedEntity> Seeds { get; set; }
         public DbSet<ShareHistoryEntity> ShareHistories { get; set; }
         public DbSet<ShippingAddressEntity> ShippingAddresses { get; set; }
+        public DbSet<ShippingRuleEntity> ShippingRules { get; set; }
+        public DbSet<ShippingRuleFixEntity> ShippingRuleFixes { get; set; }
         public DbSet<ShipViaEntity> ShipVias { get; set; }
         public DbSet<SpecialTopicEntity> SpecialTopics { get; set; }
         public DbSet<SpecialTopicProductRelationEntity> SpecialTopicProductRelations { get; set; }
@@ -305,6 +310,8 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new FavoriteEntityMap());
             modelBuilder.Configurations.Add(new FeedbackEntityMap());
             modelBuilder.Configurations.Add(new GroupEntityMap());
+            modelBuilder.Configurations.Add(new Group_AliKeysEntityMap());
+            modelBuilder.Configurations.Add(new Group_WeixinKeysEntityMap());
             modelBuilder.Configurations.Add(new HotWordEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateBrandEntityMap());
@@ -393,6 +400,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new Product2IMSTagEntityMap());
             modelBuilder.Configurations.Add(new ProductCode2StoreCodeEntityMap());
             modelBuilder.Configurations.Add(new ProductMapEntityMap());
+            modelBuilder.Configurations.Add(new ProductPoolEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyStageEntityMap());
             modelBuilder.Configurations.Add(new ProductPropertyValueEntityMap());
@@ -417,6 +425,8 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new SeedEntityMap());
             modelBuilder.Configurations.Add(new ShareHistoryEntityMap());
             modelBuilder.Configurations.Add(new ShippingAddressEntityMap());
+            modelBuilder.Configurations.Add(new ShippingRuleEntityMap());
+            modelBuilder.Configurations.Add(new ShippingRuleFixEntityMap());
             modelBuilder.Configurations.Add(new ShipViaEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicEntityMap());
             modelBuilder.Configurations.Add(new SpecialTopicProductRelationEntityMap());

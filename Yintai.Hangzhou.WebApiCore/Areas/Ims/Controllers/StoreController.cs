@@ -58,7 +58,6 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                        .Join(Context.Set<IMS_AssociateEntity>(), o => o.Id, i => i.UserId, (o, i) => i).First();
 
             var store = GetStoreById(linq.Id, authuid.Value);
-
             return this.RenderSuccess<IMSStoreDetailResponse>(m => m.Data = store);
 
         }
@@ -144,20 +143,26 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                     });
                 }
                 //2.5 create daogou's giftcard
-                var giftCardEntity = Context.Set<IMS_GiftCardEntity>().Where(igc => igc.Status == (int)DataStatus.Normal).FirstOrDefault();
-                if (giftCardEntity != null)
+                var groupEntity = Context.Set<StoreEntity>().Where(s=>s.Id == sectionEntity.StoreId)
+                                .Join(Context.Set<GroupEntity>(),o=>o.Group_Id,i=>i.Id,(o,i)=>i).FirstOrDefault();
+                if (groupEntity != null)
                 {
-                    _associateItemRepo.Insert(new IMS_AssociateItemsEntity()
+                    var giftCardEntity = Context.Set<IMS_GiftCardEntity>().Where(igc => igc.Status == (int)DataStatus.Normal &&igc.GroupId == groupEntity.Id)
+                                        .FirstOrDefault();
+                    if (giftCardEntity != null)
                     {
-                        AssociateId = assocateEntity.Id,
-                        CreateDate = DateTime.Now,
-                        CreateUser = authuid.Value,
-                        ItemId = giftCardEntity.Id,
-                        ItemType = (int)ComboType.GiftCard,
-                        Status = (int)DataStatus.Normal,
-                        UpdateDate = DateTime.Now,
-                        UpdateUser = authuid.Value
-                    });
+                        _associateItemRepo.Insert(new IMS_AssociateItemsEntity()
+                        {
+                            AssociateId = assocateEntity.Id,
+                            CreateDate = DateTime.Now,
+                            CreateUser = authuid.Value,
+                            ItemId = giftCardEntity.Id,
+                            ItemType = (int)ComboType.GiftCard,
+                            Status = (int)DataStatus.Normal,
+                            UpdateDate = DateTime.Now,
+                            UpdateUser = authuid.Value
+                        });
+                    }
                 }
                 ts.Complete();
 
@@ -318,7 +323,14 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IMSStoreDetailResponse GetStoreById(int storeId, int authuid)
         {
             var linq = Context.Set<UserEntity>()
-                       .Join(Context.Set<IMS_AssociateEntity>().Where(ia => ia.Id == storeId), o => o.Id, i => i.UserId, (o, i) => new { U = o, Store = i }).First();
+                       .Join(Context.Set<IMS_AssociateEntity>().Where(ia => ia.Id == storeId), o => o.Id, i => i.UserId, (o, i) => new { U = o, Store = i })
+                       .First();
+            var groupLinq = Context.Set<IMS_AssociateEntity>().Where(ia => ia.Id == storeId)
+                           .Join(Context.Set<StoreEntity>(), o => o.StoreId, i => i.Id, (o, i) => i)
+                           .Join(Context.Set<GroupEntity>(), o => o.Group_Id, i => i.Id, (o, i) => i)
+                           .Join(Context.Set<IMS_GiftCardEntity>().Where(igc=>igc.Status==(int)DataStatus.Normal),o=>o.Id,i=>i.GroupId,(o,i)=>i)
+                           .FirstOrDefault();
+            
             var giftCards = Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.AssociateId == linq.Store.Id
                                              && iai.ItemType == (int)ComboType.GiftCard
                                              && iai.Status == (int)DataStatus.Normal)
@@ -334,7 +346,12 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             var combos = Context.Set<IMS_AssociateItemsEntity>().Where(iai => iai.AssociateId == linq.Store.Id
                                              && iai.ItemType == (int)ComboType.Product
                                              && iai.Status == (int)DataStatus.Normal)
-                                 .Join(Context.Set<IMS_ComboEntity>().Where(c => !c.ExpireDate.HasValue || c.ExpireDate > DateTime.Now), o => o.ItemId, i => i.Id, (o, i) => i)
+                                 .Join(Context.Set<IMS_ComboEntity>().Where(c => (!c.ExpireDate.HasValue || c.ExpireDate > DateTime.Now) &&
+                                            !Context.Set<IMS_Combo2ProductEntity>().Where(icp=>icp.ComboId == c.Id)
+                                                    .Join(Context.Set<Product2IMSTagEntity>(),o=>o.ProductId,i=>i.ProductId,(o,i)=>i)
+                                                    .Join(Context.Set<IMS_TagEntity>().Where(it=>(it.Only4Tmall??false)==true),o=>o.IMSTagId,i=>i.Id,(o,i)=>i)
+                                                    .Any())
+                                        , o => o.ItemId, i => i.Id, (o, i) => i)
                                  .GroupJoin(Context.Set<ResourceEntity>().Where(r => r.SourceType == (int)SourceType.Combo && r.Status == (int)DataStatus.Normal),
                                                  o => o.Id, i => i.SourceId, (o, i) => new { C = o, R = i.OrderByDescending(ir => ir.SortOrder).ThenBy(ir => ir.Id).FirstOrDefault() })
                                  .GroupJoin(Context.Set<IMS_Combo2ProductEntity>()
@@ -393,7 +410,8 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     f.FavoriteSourceType == (int)SourceType.Store &&
                                     f.FavoriteSourceId == storeId &&
                                     f.Status == (int)DataStatus.Normal),
-                Template_Id = linq.Store.TemplateId ?? 1
+                Template_Id = linq.Store.TemplateId ?? 1,
+                IsSupportGiftCard = groupLinq!=null
             };
         }
     }

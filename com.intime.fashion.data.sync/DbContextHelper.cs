@@ -1,4 +1,5 @@
-﻿using Yintai.Hangzhou.Data.Models;
+﻿using com.intime.fashion.data.tmall.Models;
+using Yintai.Hangzhou.Data.Models;
 
 namespace com.intime.fashion.data.sync
 {
@@ -9,6 +10,15 @@ namespace com.intime.fashion.data.sync
         public static YintaiHangzhouContext GetDbContext()
         {
             return new YintaiHangzhouContext("YintaiHangzhouContext");
+        }
+
+        public static SYS_INFOContext GetJushitaContext(string name = null)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return new SYS_INFOContext();
+            }
+            return new SYS_INFOContext();
         }
     }
 }

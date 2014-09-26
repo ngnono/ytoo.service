@@ -12,31 +12,24 @@ using Yintai.Hangzhou.Model.ESModel;
 
 namespace com.intime.fashion.service.search
 {
-    class ESStoreService : ESServiceBase
+    class ESStoreService : ESServiceSingle<ESStore>
     {
-        public override bool IndexSingle(int entityId)
-        {
-
-            var esCombo = combo2ESStore(entityId);
-            return SearchLogic.IndexSingle<ESStore>(esCombo);
-        }
-
-        private ESStore combo2ESStore(int entityId)
+        protected override ESStore entity2Model(int entityId)
         {
             var db = Context;
             var entity = Context.Set<StoreEntity>().Find(entityId);
             var resource = Context.Set<ResourceEntity>().Where(r => r.SourceId == entityId
                               && r.SourceType == (int)SourceType.StoreLogo)
                           .Select(r => new ESResource()
-                                              {
-                                                  Domain = r.Domain,
-                                                  Name = r.Name,
-                                                  SortOrder = r.SortOrder,
-                                                  IsDefault = r.IsDefault,
-                                                  Type = r.Type,
-                                                  Width = r.Width,
-                                                  Height = r.Height
-                                              });
+                          {
+                              Domain = r.Domain,
+                              Name = r.Name,
+                              SortOrder = r.SortOrder,
+                              IsDefault = r.IsDefault,
+                              Type = r.Type,
+                              Width = r.Width,
+                              Height = r.Height
+                          });
 
 
             return new ESStore()
@@ -68,15 +61,11 @@ namespace com.intime.fashion.service.search
                                 CreateUser = d.CreateUser,
                                 UpdateUser = d.UpdateUser,
                                 SortOrder = d.SortOrder
-                            })
+                            }),
+                GroupId = entity.Group_Id
 
             };
 
-
-        }
-        private DbContext Context
-        {
-            get { return ServiceLocator.Current.Resolve<DbContext>(); }
         }
     }
 }

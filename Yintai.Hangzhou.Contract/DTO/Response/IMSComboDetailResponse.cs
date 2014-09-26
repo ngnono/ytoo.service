@@ -25,7 +25,9 @@ namespace Yintai.Hangzhou.Contract.DTO.Response
         public string Private2Name { get; set; }
         [DataMember(Name = "is_online")]
         public bool Status_B { get {
-            return Status == 1 && (!ExpireDate.HasValue || ExpireDate>DateTime.Now) ? true : false;
+            return Status == 1 
+                    && (!ExpireDate.HasValue || ExpireDate>DateTime.Now) ? true : false
+                    ;
         } }
         [DataMember(Name = "user_id")]
         public int UserId { get; set; }

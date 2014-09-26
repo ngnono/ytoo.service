@@ -46,7 +46,7 @@ namespace com.intime.jobscheduler.Job
 
                 _isActiveOnly = true;
             }
-            
+            IndexGroup(benchDate);
             IndexBrand(client, benchDate);
             IndexHotwork(client, benchDate);
             IndexStore(client, benchDate);
@@ -112,7 +112,16 @@ namespace com.intime.jobscheduler.Job
                         .GroupBy(x => x.ProductId)
                         .Join(db.Inventories, p => p.Key, i => i.ProductId, (k, i) => i)
                         .Join(db.Products, i => i.ProductId, p => p.Id,
-                            (i, p) => new { stock = i, price = p.Price, labelprice = p.UnitPrice });
+                            (i, p) => new { stock = i, price = p.Price, labelprice = p.UnitPrice })
+                            .Join(db.ProductPropertyValues,s=>s.stock.PColorId,ppv=>ppv.Id,(s,ppv)=>new
+                            {
+                               s.stock, s.price,s.labelprice,color = ppv.ValueDesc
+                            }).Join(db.ProductPropertyValues,s=>s.stock.PSizeId,ppv=>ppv.Id,(s,ppv)=>new
+                            {
+                                s.stock,s.price,s.labelprice,s.color,size = ppv.ValueDesc
+                            });
+
+
                 int totalCount = inventories.Count();
                 while (cursor < totalCount)
                 {
@@ -127,6 +136,8 @@ namespace com.intime.jobscheduler.Job
                                    LabelPrice = l.labelprice.HasValue ? l.labelprice.Value : 999999,
                                    Price = l.price,
                                    UpdateDate = DateTime.Now,
+                                   ColorDesc = l.color,
+                                   SizeDesc = l.size
                                };
                     var result = client.IndexMany(linq);
                     if (!result.IsValid)
@@ -470,6 +481,48 @@ namespace com.intime.jobscheduler.Job
 
         }
 
+
+        private void IndexGroup(DateTime benchDate)
+        {
+            ILog log = LogManager.GetLogger(this.GetType());
+            int cursor = 0;
+            int size = JobConfig.DEFAULT_PAGE_SIZE;
+            int successCount = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+            {
+                var linq = db.Groups.AsQueryable();
+                if (_isActiveOnly)
+                    linq = linq.Where(p => p.Status == (int)DataStatus.Normal);
+                var prods = from s in linq
+                            where (s.CreatedDate >= benchDate || s.UpdatedDate >= benchDate)
+                            select s;
+
+                int totalCount = prods.Count();
+
+                var service = SearchLogic.GetService(IndexSourceType.Group);
+
+                while (cursor < totalCount)
+                {
+                    foreach (var target in prods.OrderByDescending(p => p.Id).Skip(cursor).Take(size))
+                    {
+                        using (var tls = new ScopedLifetimeDbContextManager())
+                        {
+                            if (service.IndexSingle(target.Id))
+                                successCount++;
+                        }
+                    }
+                    cursor += size;
+                }
+
+
+            }
+            sw.Stop();
+            log.Info(string.Format("{0} stores in {1} => {2} docs/s", successCount, sw.Elapsed, successCount / sw.Elapsed.TotalSeconds));
+
+        }
+
         private void IndexStore(ElasticClient client, DateTime benchDate)
         {
             ILog log = LogManager.GetLogger(this.GetType());
@@ -503,7 +556,7 @@ namespace com.intime.jobscheduler.Job
                     }
                     cursor += size;
                 }
-               
+
 
             }
             sw.Stop();
@@ -800,7 +853,7 @@ namespace com.intime.jobscheduler.Job
 
                 var prods = from p in linq
                             select p;
-                           
+
                 int totalCount = prods.Count();
                 var service = SearchLogic.GetService(IndexSourceType.Product);
                 while (cursor < totalCount)

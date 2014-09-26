@@ -1,6 +1,9 @@
+using com.intime.fashion.common.config;
 using com.intime.fashion.common.message;
 using com.intime.fashion.common.message.rabbit;
 using com.intime.fashion.service;
+using com.intime.fashion.service.cache;
+using com.intime.fashion.service.contract;
 using com.intime.o2o.data.exchange.IT;
 using Yintai.Hangzhou.Contract.Apns;
 using Yintai.Hangzhou.Contract.Brand;
@@ -59,7 +62,7 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
             Current.Register<IFavoriteService, FavoriteService>();
             Current.Register<Service.Contract.ILikeService, LikeService>();
             Current.Register<Service.Contract.IPointService, PointService>();
-            Current.Register<Service.Contract.IPromotionService, PromotionService>();
+            Current.Register<Service.Contract.IPromotionService, Service.Impl.PromotionService>();
             Current.Register<IRemindService, RemindService>();
             Current.Register<Service.Contract.IResourceService, ResourceService>();
             Current.Register<IShareService, ShareService>();
@@ -73,9 +76,18 @@ namespace Yintai.Hangzhou.WebSupport.Ioc
 
             Current.Register<IHotwordDataService, HotwordDataService>();
 
-            Current.Register<ComboService, ComboService>();
-            Current.Register<OrderService, OrderService>();
+            Current.Register<IComboService, ComboService>();
+            Current.Register<IAssociateIncomeService, AssociateIncomeService>();
+            Current.Register<IShippingFeeService, ShippingFeeService>();
+            Current.Register<IOrderService, OrderService>();
             Current.Register<IMessageCenterProvider, MessageProvider>();
+
+            var env_config = CommonConfiguration<EnvironmentConfiguration>.Current;
+            if (env_config.IsProduction)
+                Current.Register<ICacheService, MemCacheService>();
+            else
+                Current.Register<ICacheService, NoCacheService>();
+            Current.Register<IAuthKeysService, AuthKeysService>();
         }
 
         #endregion

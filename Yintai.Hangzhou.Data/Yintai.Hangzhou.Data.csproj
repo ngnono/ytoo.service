@@ -84,11 +84,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Banner.cs" />
+    <Compile Include="Models\Mapping\ProudctPoolMap.cs" />
+    <Compile Include="Models\ProductPool.cs" />
     <Compile Include="Models\Department.cs" />
+    <Compile Include="Models\Group_AliKeys.cs" />
+    <Compile Include="Models\Group_WeixinKeys.cs" />
     <Compile Include="Models\IMS_InviteCodeRequest.cs" />
     <Compile Include="Models\IMS_Tag.cs" />
     <Compile Include="Models\MappedProductBackup.cs" />
     <Compile Include="Models\Mapping\DepartmentMap.cs" />
+    <Compile Include="Models\Mapping\Group_AliKeysMap.cs" />
+    <Compile Include="Models\Mapping\Group_WeixinKeysMap.cs" />
     <Compile Include="Models\Mapping\IMS_InviteCodeRequestMap.cs" />
     <Compile Include="Models\Mapping\IMS_TagMap.cs" />
     <Compile Include="Models\Mapping\Map4CategoryMap.cs" />
@@ -131,6 +137,8 @@
     <Compile Include="Models\Mapping\Product2IMSTagMap.cs" />
     <Compile Include="Models\Mapping\SectionBrandImportStageMap.cs" />
     <Compile Include="Models\Mapping\SectionBrandImportStageOutputMap.cs" />
+    <Compile Include="Models\Mapping\ShippingRuleFixMap.cs" />
+    <Compile Include="Models\Mapping\ShippingRuleMap.cs" />
     <Compile Include="Models\Mapping\Supplier_BrandMap.cs" />
     <Compile Include="Models\Mapping\WX_MenuMap.cs" />
     <Compile Include="Models\OPC_AuthMenu.cs" />
@@ -168,6 +176,8 @@
     <Compile Include="Models\Product2IMSTag.cs" />
     <Compile Include="Models\SectionBrandImportStage.cs" />
     <Compile Include="Models\SectionBrandImportStageOutput.cs" />
+    <Compile Include="Models\ShippingRule.cs" />
+    <Compile Include="Models\ShippingRuleFix.cs" />
     <Compile Include="Models\Supplier_Brand.cs" />
     <Compile Include="Models\WX_Menu.cs" />
     <Compile Include="Models\IMS_Associate.cs" />
@@ -324,7 +334,7 @@
     <Compile Include="Models\StoreReal.cs" />
     <Compile Include="Models\UserAuth.cs" />
     <Compile Include="Models\WXReply.cs" />
-    <Compile Include="Models\YintaiHzhouContext.cs" />
+    <Compile Include="Models\YintaiHZhouContext.cs" />
     <Compile Include="Partials\ResourceEntity.cs" />
     <Compile Include="Partials\StoreEntityMap.cs" />
     <Compile Include="Models\AdminAccessRight.cs" />

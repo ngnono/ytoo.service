@@ -21,6 +21,8 @@ using com.intime.fashion.common;
 using Yintai.Architecture.Framework.ServiceLocation;
 using com.intime.fashion.common.message;
 using com.intime.fashion.common.message.Messages;
+using com.intime.fashion.service.contract;
+using Yintai.Hangzhou.Model.Order;
 
 namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
 {
@@ -30,18 +32,22 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         private IEFRepository<IMS_Combo2ProductEntity> _combo2productRepo;
         private IResourceRepository _resourceRepo;
         private IEFRepository<IMS_AssociateItemsEntity> _associateItemRepo;
-        private ComboService _comboService;
+        private IComboService _comboService;
+        private IOrderService _orderService;
         public ComboController(IEFRepository<IMS_ComboEntity> comboRepo
             , IEFRepository<IMS_Combo2ProductEntity> combo2productRepo
             , IResourceRepository resourceRepo,
             IEFRepository<IMS_AssociateItemsEntity> associateItemRepo,
-            ComboService comboService)
+            IComboService comboService,
+            IOrderService orderService
+            )
         {
             _comboRepo = comboRepo;
             _combo2productRepo = combo2productRepo;
             _resourceRepo = resourceRepo;
             _associateItemRepo = associateItemRepo;
             _comboService = comboService;
+            _orderService = orderService;
         }
         [RestfulRoleAuthorize(UserLevel.DaoGou)]
         public ActionResult Create([InternalJsonArrayAttribute("image_ids,productids")] IMSComboCreateRequest request, int authuid)
@@ -298,13 +304,20 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                                     Id = pr.Id,
                                     Name = pr.Name
                                 }); ;
-                                po.IsOnline = p.P.Status == (int)DataStatus.Normal && (p.P.Is4Sale ?? false) == true && p.PI != null && p.PI.Amount > 0;
+                                po.IsOnline = p.P.Status == (int)DataStatus.Normal 
+                                                && (p.P.Is4Sale ?? false) == true 
+                                                && p.PI != null 
+                                                && p.PI.Amount > 0;
                                 if (p.PIT != null)
+                                {
                                     po.IMS_Tags = p.PIT.Select(pit => new IMSTagResponse()
                                     {
                                         Id = pit.IT.Id,
                                         Name = pit.IT.Name
                                     });
+                                    po.IsOnline = po.IsOnline 
+                                                && !p.PIT.Any(pit => (pit.IT.Only4Tmall ?? false) == true); //exclude tmall only products
+                                }   
                             }));
                 oc.Is_Owner = authuid == comboEntity.C.UserId;
                 oc.Is_Favored = Context.Set<FavoriteEntity>().Any(f => f.User_Id == authuid &&
@@ -332,8 +345,13 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
             {
                 Items = linq.ToList().Select(l => new GetProductInfo4PResponse().FromEntity<GetProductInfo4PResponse>(l.P, res =>
                 {
+                    var only4Tmall = Context.Set<Product2IMSTagEntity>().Where(pit => pit.ProductId == l.P.Id)
+                                        .Join(Context.Set<IMS_TagEntity>().Where(it => (it.Only4Tmall ?? false) == true), o => o.IMSTagId, i => i.Id, (o, i) => o)
+                                        .Any();
                     
-                    res.SaleColors = Context.Set<InventoryEntity>().Where(pi => pi.ProductId == l.P.Id &&
+                    res.SaleColors = Context.Set<InventoryEntity>()
+                                            .Where(pi => pi.ProductId == l.P.Id &&
+                                                !only4Tmall &&
                                                 l.P.Is4Sale.HasValue && l.P.Is4Sale==true &&
                                                 l.P.Status == (int)DataStatus.Normal &&
                                                 pi.Amount > 0).GroupBy(pi => pi.PColorId)
@@ -372,7 +390,11 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
         [RestfulAuthorize]
         public ActionResult ComputeAmount(int combo_id)
         {
-            var model = OrderRule.ComputeAmount_Combo(combo_id);
+            OrderPreCalculateResult model = _orderService.PreCalculate(new OrderPreCalculate()
+            {
+                CalculateType = OrderPreCalculateType.Combo,
+                ComboId = combo_id
+            });
 
             return this.RenderSuccess<dynamic>(m => m.Data = new
             {
