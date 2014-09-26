@@ -35,6 +35,9 @@
     <StartupObject>com.intime.fashion.console.onetime.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aliyun.OpenServices">
+      <HintPath>..\_dll\Aliyun.OpenServices.dll</HintPath>
+    </Reference>
     <Reference Include="CLAP">
       <HintPath>..\packages\CLAP.4.5\lib\net35\CLAP.dll</HintPath>
     </Reference>
@@ -62,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OneTimeCommand_allow_cors_oss.cs" />
     <Compile Include="OneTimeCommand_reindex_types.cs" />
     <Compile Include="OneTimeCommand_failqueue_handle.cs" />
     <Compile Include="OneTimeCommand_gen_groupname_from_brand.cs" />
@@ -81,6 +85,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Configurations\aliyun.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Configurations\rabbit.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -109,6 +116,10 @@
     <ProjectReference Include="..\com.intime.fashion.service.contract\com.intime.fashion.service.contract.csproj">
       <Project>{e69391ab-6e94-4937-9c34-3a5485f71592}</Project>
       <Name>com.intime.fashion.service.contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.intime.fashion.service.images\com.intime.fashion.service.images.csproj">
+      <Project>{f8565494-27d0-41e0-859a-ddfc47be3b38}</Project>
+      <Name>com.intime.fashion.service.images</Name>
     </ProjectReference>
     <ProjectReference Include="..\com.intime.fashion.service.messages\com.intime.fashion.service.messages.csproj">
       <Project>{097e9eaf-ec77-4fb2-86fb-7b30acd7df93}</Project>

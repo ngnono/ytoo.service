@@ -93,7 +93,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Ims.Controllers
                 else
                 {
                     WeixinPayKey payKey = _keyService.GetWeixinPayKey(groupEntity.Id);
-                    isValid = Util.CheckNotifySign(sPara, payKey.PaySignKey, requestSign);
+                    isValid = Util.CheckNotifySign(sPara, payKey.ParterKey, requestSign);
                 }
                 if (!isValid)
                 {
