@@ -15,6 +15,8 @@ namespace com.intime.fashion.common.config
         public string Paid4DaoGou_Template_Id { get { return GetItem("paid_daogou_template_id"); } }
         public string Paid4User_Template_Id { get { return GetItem("paid_user_template_id"); } }
         public string StoreApply_Template_Id { get { return GetItem("store_apply_template_id"); } }
+        public string App_Id { get { return GetItem("app_id"); } }
+        public string App_Secret { get { return GetItem("app_secret"); } }
 
     }
 }

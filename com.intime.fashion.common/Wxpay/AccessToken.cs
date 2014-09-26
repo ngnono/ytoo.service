@@ -1,4 +1,5 @@
-﻿using com.intime.fashion.common.Weigou;
+﻿using com.intime.fashion.common.config;
+using com.intime.fashion.common.Weigou;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -63,13 +64,8 @@ namespace com.intime.fashion.common.Wxpay
                 case AccessTokenType.XihuanYintai:
                     return Renew();
                 case AccessTokenType.MiniYin:
-                    HttpClientUtil.SendHttpMessage(string.Format("{0}ims/weixin/access_token", ConfigManager.AwsHost),
-                        null, ConfigManager.AwsHttpPublicKey,
-                        ConfigManager.AwsHttpPrivateKey,
-                        r =>
-                        {
-                            access_token = r.token;
-                        }, null);
+
+                    RenewTokenFromAws();
                     return this;
                 default:
                     break;
@@ -97,8 +93,9 @@ namespace com.intime.fashion.common.Wxpay
 
         private void RenewTokenFromAws()
         {
-            HttpClientUtil.SendHttpMessage(string.Format("{0}ims/weixin/renew", ConfigManager.AwsHost),
-                         null, ConfigManager.AwsHttpPublicKey,
+            var imsConfig = CommonConfiguration<Weixin_IMSConfiguration>.Current;
+            HttpClientUtil.SendHttpMessage(string.Format("{0}ims/app/token", ConfigManager.AwsHost),
+                          new { app_id = imsConfig.App_Id, app_secret = imsConfig.App_Secret }, ConfigManager.AwsHttpPublicKey,
                          ConfigManager.AwsHttpPrivateKey,
                          r =>
                          {
