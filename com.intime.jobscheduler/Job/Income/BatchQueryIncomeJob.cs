@@ -103,9 +103,9 @@ namespace com.intime.jobscheduler.Job.Income
                             }
                             else
                             {
-                               // if (response != null)
-                                //    doFailAll(db, order, response, int.Parse(fullPackageId));
-                               // else
+                                if (response != null && response.IsAllFail)
+                                    doFailAll(db, order, response, int.Parse(fullPackageId));
+                                else
                                     canComplete = false;
                                 
                             }

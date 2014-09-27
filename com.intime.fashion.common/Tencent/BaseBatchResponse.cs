@@ -32,5 +32,15 @@ namespace com.intime.fashion.common.Tencent
                 return RetCode == "0" || RetCode == "00";
             }
         }
+        [XmlIgnore]
+        public bool IsAllFail
+        {
+            get {
+                var failCodes = new string[] { 
+                    "03020165","03020081"
+                };
+                return failCodes.Any<string>(code=>string.Compare(code,RetCode,true)==0);
+            }
+        }
     }
 }
