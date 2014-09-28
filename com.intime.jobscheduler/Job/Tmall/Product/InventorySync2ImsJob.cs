@@ -4,30 +4,23 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using com.intime.fashion.data.sync.Tmall;
 using com.intime.fashion.data.sync.Tmall.Executor;
 using com.intime.o2o.data.exchange.IT;
-using com.intime.o2o.data.exchange.Tmall.Core;
-using com.intime.o2o.data.exchange.Tmall.Core.Support;
 using Common.Logging;
 using Quartz;
 using Top.Api;
-using ConstValue = com.intime.fashion.data.sync.Tmall.ConstValue;
 
-namespace com.intime.jobscheduler.Job.Tmall.Order
+namespace com.intime.jobscheduler.Job.Tmall.Product
 {
-    public class LogisticInfo2TmallJob : IJob
+    [DisallowConcurrentExecution]
+    public class InventorySync2ImsJob:IJob
     {
         private ITopClient _client;
         private string _sessionKey;
         private static string CONSUMER_KEY = ConfigurationManager.AppSettings["CONSUMER_KEY"] ?? "intime";
         private ILog _logger;
-        public LogisticInfo2TmallJob()
-        {
-            ITopClientFactory factory = new DefaultTopClientFactory();
-            _logger = LogManager.GetCurrentClassLogger();
-            _client = factory.Get(CONSUMER_KEY);
-            _sessionKey = factory.GetSessionKey(CONSUMER_KEY);
-        }
+
         public void Execute(IJobExecutionContext context)
         {
 #if DEBUG
@@ -41,16 +34,10 @@ namespace com.intime.jobscheduler.Job.Tmall.Order
             var benchTime = DateTime.Now.AddMinutes(-interval);
 
             IApiClient imsClient = new DefaultApiClient(ConstValue.IMS_SERVICE_URL, ConstValue.IMS_APP_SECRET, ConstValue.IMS_APP_KEY);
-            var logisticExecutor = new LogisticsExecutor(benchTime, pageSize, _client, imsClient, _sessionKey);
-
-            try
-            {
-                logisticExecutor.Execute();
-            }
-            catch (Exception e)
-            {
-                LogManager.GetCurrentClassLogger().Error(e);
-            }
+            _logger.Info("Begin sync inventory to ims");
+            var executor = new ItemSyncExecutor(benchTime, pageSize, imsClient);
+            executor.Execute();
+            _logger.Info("End sync!");
         }
     }
 }
