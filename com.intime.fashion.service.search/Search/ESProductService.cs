@@ -34,7 +34,8 @@ namespace com.intime.fashion.service.search
                                            Type = r.Type,
                                            Width = r.Width,
                                            Height = r.Height,
-                                           ColorId = r.ColorId
+                                           ColorId = r.ColorId,
+                                           Status = r.Status
                                        })
                        let specials = from psp in db.Set<SpecialTopicProductRelationEntity>().AsQueryable()
                                       where psp.Product_Id == p.Id
@@ -69,7 +70,8 @@ namespace com.intime.fashion.service.search
                                                  Type = r.Type,
                                                  Width = r.Width,
                                                  Height = r.Height,
-                                                 ColorId = r.ColorId
+                                                 ColorId = r.ColorId,
+                                                 Status = r.Status
 
                                              })
                                          })
