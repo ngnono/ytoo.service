@@ -182,6 +182,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<Map4InventoryEntity> Map4Inventory { get; set; }
         public DbSet<Map4OrderEntity> Map4Order { get; set; }
         public DbSet<Map4ProductEntity> Map4Product { get; set; }
+        public DbSet<Map4StoreEntity> Map4Store { get; set; } 
         public DbSet<MappedProductBackupEntity> MappedProductBackups { get; set; }
         public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
         public DbSet<OPC_AuthMenuEntity> OPC_AuthMenu { get; set; }
@@ -350,6 +351,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new Map4InventoryEntityMap());
             modelBuilder.Configurations.Add(new Map4OrderEntityMap());
             modelBuilder.Configurations.Add(new Map4ProductEntityMap());
+            modelBuilder.Configurations.Add(new Map4StoreEntityMap());
             modelBuilder.Configurations.Add(new MappedProductBackupEntityMap());
             modelBuilder.Configurations.Add(new NotificationLogEntityMap());
             modelBuilder.Configurations.Add(new OPC_AuthMenuEntityMap());

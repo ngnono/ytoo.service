@@ -73,6 +73,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tmall\ConstValue.cs" />
     <Compile Include="Tmall\Executor\ExecutorBase.cs" />
+    <Compile Include="Tmall\Executor\ItemSyncExecutor.cs" />
     <Compile Include="Tmall\Executor\LogisticsExecutor.cs" />
     <Compile Include="Tmall\Executor\OrderExecutorBase.cs" />
     <Compile Include="Tmall\Executor\OrderSyncExecutor.cs" />

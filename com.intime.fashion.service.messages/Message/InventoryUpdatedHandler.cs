@@ -3,6 +3,8 @@ using System;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
+using com.intime.o2o.data.exchange.Tmall.Core;
+using com.intime.o2o.data.exchange.Tmall.Core.Support;
 using Top.Api;
 using Top.Api.Request;
 using Yintai.Architecture.Framework.ServiceLocation;
@@ -15,13 +17,14 @@ namespace com.intime.fashion.service.messages.Message
     {
         private DbContext _context;
         private ITopClient _topClient;
-        internal static string TOP_SERVERURL = ConfigurationManager.AppSettings["TOP_SERVERURL"];
-        internal static string TOP_APPKEY = ConfigurationManager.AppSettings["TOP_APPKEY"];
-        internal static string TOP_APPSECRET = ConfigurationManager.AppSettings["TOP_APPSECRET"];
+        private string _sessionKey;
+        internal static string TOP_CONSUMER_KEY = ConfigurationManager.AppSettings["TOP_CONSUMER_KEY"];
+        private readonly ITopClientFactory _topClientFactory = new DefaultTopClientFactory();
         public InventoryUpdatedHandler()
         {
             _context = ServiceLocator.Current.Resolve<DbContext>();
-            _topClient = new DefaultTopClient(TOP_SERVERURL, TOP_APPKEY, TOP_APPSECRET);
+            _topClient = _topClientFactory.Get(TOP_CONSUMER_KEY);
+            _sessionKey = _topClientFactory.GetSessionKey(TOP_CONSUMER_KEY);
         }
         public override int SourceType
         {
@@ -38,7 +41,7 @@ namespace com.intime.fashion.service.messages.Message
             return SyncInventory(message.EntityId, _context, _topClient);
         }
 
-        internal static bool SyncInventory(int inventoryId, DbContext db, ITopClient topClient)
+        private  bool SyncInventory(int inventoryId, DbContext db, ITopClient topClient)
         {
             var stockInfo =
                  db.Set<InventoryEntity>()
@@ -60,7 +63,7 @@ namespace com.intime.fashion.service.messages.Message
                 SkuId = stockInfo.Map4Inventory.skuId
             };
 
-            return topClient.Execute(req).IsError;
+            return topClient.Execute(req,_sessionKey).IsError;
         }
     }
 }

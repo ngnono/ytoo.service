@@ -95,6 +95,10 @@
       <Project>{be4f98bc-b4a2-4fc0-ae7a-96938218f098}</Project>
       <Name>com.intime.fashion.service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\com.intime.o2o.data.exchange\com.intime.o2o.data.exchange.csproj">
+      <Project>{6DFEF1CF-0B94-420E-82A7-C6CABBA3624A}</Project>
+      <Name>com.intime.o2o.data.exchange</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yintai.Hangzhou.Data\Yintai.Hangzhou.Data.csproj">
       <Project>{b07cec69-b35a-4435-9e83-d7ad4e1f236e}</Project>
       <Name>Yintai.Hangzhou.Data</Name>

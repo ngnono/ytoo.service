@@ -201,6 +201,8 @@
     <Compile Include="Job\Tmall\Order\LogisticInfo2TmallJob.cs" />
     <Compile Include="Job\Tmall\Order\OrderPush2ImsJob.cs" />
     <Compile Include="Job\Tmall\Product\ItemPushJob.cs" />
+    <Compile Include="Job\Tmall\Product\MarkItemPOIJob.cs" />
+    <Compile Include="Job\Tmall\Product\PriceSyncJob.cs" />
     <Compile Include="Job\Tmall\Product\ProductPushJob.cs" />
     <Compile Include="Job\Wx\NotifyExShippingJob.cs" />
     <Compile Include="Job\Wx\NotifyShippingJob.cs" />

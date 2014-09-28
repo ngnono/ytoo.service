@@ -1,8 +1,12 @@
-﻿using com.intime.fashion.common.message;
+﻿using System.Security.Cryptography;
+using com.intime.fashion.common.message;
 using System;
 using System.Data.Entity;
 using System.Linq;
+using com.intime.o2o.data.exchange.Tmall.Core;
+using com.intime.o2o.data.exchange.Tmall.Core.Support;
 using Top.Api;
+using Top.Api.Domain;
 using Top.Api.Request;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
@@ -14,10 +18,13 @@ namespace com.intime.fashion.service.messages.Message
     {
         private DbContext _db;
         private ITopClient _topClient;
+        private string _sessionKey;
+        private readonly ITopClientFactory _topClientFactory = new DefaultTopClientFactory();
         public ComboUpdatedHandler()
         {
-            _topClient = new DefaultTopClient(InventoryUpdatedHandler.TOP_SERVERURL, InventoryUpdatedHandler.TOP_APPKEY, InventoryUpdatedHandler.TOP_APPSECRET);
             _db = ServiceLocator.Current.Resolve<DbContext>();
+            _topClient = _topClientFactory.Get(InventoryUpdatedHandler.TOP_CONSUMER_KEY);
+            _sessionKey = _topClientFactory.GetSessionKey(InventoryUpdatedHandler.TOP_CONSUMER_KEY);
         }
 
         public override int SourceType
@@ -42,61 +49,44 @@ namespace com.intime.fashion.service.messages.Message
             {
                 return false;
             }
+            var mergedProducts =
+                _db.Set<IMS_Combo2ProductEntity>()
+                    .Where(c => c.ComboId == message.EntityId)
+                    .Join(_db.Set<ProductPoolEntity>(), c => c.ProductId, p => p.ProductId, (c, p) => p);
 
-            var mappedProducts =
-                    _db.Set<IMS_Combo2ProductEntity>()
-                        .Where(x => x.ComboId == message.EntityId)
-                        .Join(_db.Set<Map4ProductEntity>().Where(m => m.Channel == "tmall"), c => c.ProductId,
-                            m => m.ProductId, (c, m) => m);
+
+            var mappedInventories =
+                mergedProducts.Join(_db.Set<ProductPoolEntity>(), p1 => p1.MergedProductCode, p2 => p2.MergedProductCode,
+                    (p1, p2) => p2)
+                    .Join(_db.Set<InventoryEntity>(), p => p.ProductId, m => m.ProductId, (p, i) => i)
+                    .Join(_db.Set<Map4InventoryEntity>().Where(m => m.Channel == "tmall"), i => i.Id, m => m.InventoryId,
+                        (i, m) => new { Inventory = i, Map = m });
 
             bool allSucceed = true;
-            //下架删除搭配的商品或下架的搭配下的商品
-            if (combo.Status == (int)DataStatus.Default || combo.Status == (int)DataStatus.Deleted)
+            bool isDown = combo.Status == (int)DataStatus.Default || combo.Status == (int)DataStatus.Deleted;
+            foreach (var entity in mappedInventories)
             {
+                string outerId = entity.Inventory.Id.ToString();
+                long num_iid = Convert.ToInt64(entity.Map.itemId);
+                long skuId = entity.Map.skuId;
+                int amount = isDown ? 0 : entity.Inventory.Amount;
 
-                foreach (var entity in mappedProducts)
-                {
-                    var req = new ItemUpdateDelistingRequest
-                    {
-                        NumIid = Convert.ToInt64(entity.ChannelProductId)
-                    };
-                    var rsp = _topClient.Execute(req);
-                    if (rsp.IsError)
-                    {
-                        allSucceed = false;
-                    }
-                }
-                return allSucceed;
-            }
-
-            // todo 上架，上架分两步，上架并同时更新库存
-            foreach (var entity in mappedProducts)
-            {
-                var stocks =
-                    _db.Set<Map4InventoryEntity>()
-                        .Where(x => x.ProductId == entity.ProductId && x.Channel == "tmall")
-                        .Join(_db.Set<InventoryEntity>(), m => m.InventoryId, i => i.Id,
-                            (m, i) => new {Map4Inventory = m, Inventory = i});
-                
-                //先更新库存，再上线
-                if (Enumerable.Any(stocks, stock => !InventoryUpdatedHandler.SyncInventory(stock.Inventory.Id, _db, _topClient)))
-                {
-                    continue;
-                }          
-
-                var req = new ItemUpdateListingRequest
-                {
-                    NumIid = Convert.ToInt64(entity.ChannelProductId),
-                    Num = stocks.Count(x => x.Inventory.Amount > 0)
-                };
-
-                if (_topClient.Execute(req).IsError)
-                {
-                    allSucceed = false;
-                }
+                allSucceed = SyncInventory(outerId, num_iid, skuId, amount);
             }
 
             return allSucceed;
+        }
+
+        private bool SyncInventory(string inventoryId, long channelItemId, long channelSkuId, int amount)
+        {
+            var req = new ItemQuantityUpdateRequest
+            {
+                OuterId = inventoryId,
+                Quantity = amount,
+                NumIid = channelItemId,
+                SkuId = channelSkuId,
+            };
+            return (_topClient.Execute(req, _sessionKey).IsError);
         }
     }
 }

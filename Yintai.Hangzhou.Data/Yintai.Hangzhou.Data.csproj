@@ -84,6 +84,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Banner.cs" />
+    <Compile Include="Models\Map4Store.cs" />
+    <Compile Include="Models\Mapping\Map4StoreMap.cs" />
     <Compile Include="Models\Mapping\ProudctPoolMap.cs" />
     <Compile Include="Models\ProductPool.cs" />
     <Compile Include="Models\Department.cs" />
