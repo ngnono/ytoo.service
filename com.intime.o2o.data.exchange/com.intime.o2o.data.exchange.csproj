@@ -77,6 +77,7 @@
     <Compile Include="Ims\ImsApiClient.cs" />
     <Compile Include="Ims\ImsRequest.cs" />
     <Compile Include="Ims\Request\CreateOrderRequest.cs" />
+    <Compile Include="Ims\Request\ItemMapRequest.cs" />
     <Compile Include="Ims\Request\QueryOrderStatusRequest.cs" />
     <Compile Include="Ims\Response\QueryOrderStatusResponse.cs" />
     <Compile Include="IT\DefaultApiClient.cs" />

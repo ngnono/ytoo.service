@@ -53,6 +53,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
         public ESProduct GetProductByProductId(int productId)
         {
+
             return GetDefaultElasticClient().Search<ESProduct>(
                 body =>
                     body.Filter(q =>
