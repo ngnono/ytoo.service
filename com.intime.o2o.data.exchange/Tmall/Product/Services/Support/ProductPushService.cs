@@ -359,7 +359,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             proprties.Add("_brand", _brandMapper);
             proprties.Add("_category", _categoryMapper);
             proprties.Add("_product", _productMapper);
-            proprties.Add("_util", new Tools.Util());
+            proprties.Add("_util", new Tools.UtilTool());
             proprties.Add("_store", new StoreTool());
             proprties.Add("_tag", new TagTool());
 

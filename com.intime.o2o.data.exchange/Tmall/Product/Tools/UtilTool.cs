@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace com.intime.o2o.data.exchange.Tmall.Product.Tools
 {
-    public class Util
+    public class UtilTool
     {
         public IDictionary<string, string> Zip(List<string> a, ArrayList b)
         {
