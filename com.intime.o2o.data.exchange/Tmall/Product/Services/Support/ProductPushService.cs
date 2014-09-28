@@ -433,7 +433,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             var url = string.Format("{0}/{1}", exPicDomain.TrimEnd('/'), resource.Name);
 
-            url = "http://gi3.md.alicdn.com/bao/uploaded/i3/TB14vMQGXXXXXczXXXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg";
+            //  url = "http://gi3.md.alicdn.com/bao/uploaded/i3/TB14vMQGXXXXXczXXXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg";
             var client = new HttpClient();
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tmp", DateTime.Today.ToString("yyyyMMdd"));
             if (!Directory.Exists(directory))
