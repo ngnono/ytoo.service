@@ -1,22 +1,23 @@
 <itemRule>
     <field id="prop_20000" name="品牌" type="singleCheck">
-        <value>20578</value>
+        <value isInput="false">$_brand.ToChannel($product.Brand.Id)</value>
     </field>
     <field id="prop_13021751" name="款号" type="input">
-        <value>${product.UpcCode}</value>
+        <value>${product.Id}</value>
     </field>
     <field id="prop_22196" name="运动鞋分类" type="singleCheck">
-        <value>28691</value>
+        <value isInput="false">${_category.ToChannel($product.CategoryId)-50000000}</value>
     </field>
-
-    <field id="product_images" name="产品图片" type="complex">
-        <fields>
-            <field id="product_image_0" name="产品图片" type="input">
-                <value>http://img04.taobaocdn.com/imgextra/i4/2247396485/TB2vY7NapXXXXbTXXXXXXXXXXXX-2247396485.jpg</value>
+    <field id="product_images" name="商品图片" type="complex">
+        <complex-values>
+            #foreach($img in $imgs)
+            <field id="product_image_$velocityCount" name="" type="input">
+                <value>$img</value>
             </field>
-        </fields>
+            #end
+        </complex-values>
     </field>
     <field id="market_price" name="市场价格" type="input">
-        <value>100.00</value>
+        <value>${product.Price}</value>
     </field>
 </itemRule>

@@ -28,11 +28,12 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.ChannelId).HasColumnName("ChannelId");
             this.Property(t => t.POIUploaded).HasColumnName("POIUploaded");
             this.Property(t => t.MergedProductCode).HasColumnName("MergedProductCode");
+            this.Property(t => t.StoreId).HasColumnName("StoreId");
             this.Property(t => t.IsDefault).HasColumnName("IsDefault");
             this.Property(t => t.ErrorMessage).HasColumnName("ErrorMessage");
-            Init();
+		Init();
         }
 
-        partial void Init();
+		partial void Init();
     }
 }

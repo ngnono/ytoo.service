@@ -24,6 +24,9 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support
             props.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, _tplPath);
             props.SetProperty(RuntimeConstants.INPUT_ENCODING, "utf-8");
             props.SetProperty(RuntimeConstants.OUTPUT_ENCODING, "utf-8");
+            props.SetProperty(RuntimeConstants.COUNTER_INITIAL_VALUE, 0);
+
+
 
             _velocity = new VelocityEngine(props);
         }

@@ -34,6 +34,27 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.PaidLikeUrl)
                 .HasMaxLength(500);
 
+            this.Property(t => t.Outcome_OperatorId)
+                .HasMaxLength(100);
+
+            this.Property(t => t.Outcome_OperatorPwd)
+                .HasMaxLength(100);
+
+            this.Property(t => t.Outcome_ParterId)
+                .HasMaxLength(100);
+
+            this.Property(t => t.Outcome_ParterKey)
+                .HasMaxLength(100);
+
+            this.Property(t => t.Outcome_CARelativeFilePath)
+                .HasMaxLength(500);
+
+            this.Property(t => t.Outcome_CertRelativeFilePath)
+                .HasMaxLength(500);
+
+            this.Property(t => t.Outcome_CertFilePwd)
+                .HasMaxLength(100);
+
             // Table & Column Mappings
             this.ToTable("Group_WeixinKeys");
             this.Property(t => t.Id).HasColumnName("Id");
@@ -47,6 +68,13 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.CreateUser).HasColumnName("CreateUser");
             this.Property(t => t.ParterKey).HasColumnName("ParterKey");
             this.Property(t => t.PaidLikeUrl).HasColumnName("PaidLikeUrl");
+            this.Property(t => t.Outcome_OperatorId).HasColumnName("Outcome_OperatorId");
+            this.Property(t => t.Outcome_OperatorPwd).HasColumnName("Outcome_OperatorPwd");
+            this.Property(t => t.Outcome_ParterId).HasColumnName("Outcome_ParterId");
+            this.Property(t => t.Outcome_ParterKey).HasColumnName("Outcome_ParterKey");
+            this.Property(t => t.Outcome_CARelativeFilePath).HasColumnName("Outcome_CARelativeFilePath");
+            this.Property(t => t.Outcome_CertRelativeFilePath).HasColumnName("Outcome_CertRelativeFilePath");
+            this.Property(t => t.Outcome_CertFilePwd).HasColumnName("Outcome_CertFilePwd");
 		Init();
         }
 

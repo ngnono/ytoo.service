@@ -102,7 +102,9 @@
     <Compile Include="Tmall\Core\ConvertionExtensions.cs" />
     <Compile Include="Tmall\Core\ITopClientFactory.cs" />
     <Compile Include="Tmall\Core\Support\DefaultTopClientFactory.cs" />
-    <Compile Include="Tmall\Core\Tools.cs" />
+    <Compile Include="Tmall\Product\Tools\TagTool.cs" />
+    <Compile Include="Tmall\Product\Tools\StoreTool.cs" />
+    <Compile Include="Tmall\Product\Tools\Util.cs" />
     <Compile Include="Tmall\Product\Mappers\IBrandMapper.cs" />
     <Compile Include="Tmall\Product\Mappers\ICategoryMapper.cs" />
     <Compile Include="Tmall\Product\Mappers\IItemMapper.cs" />

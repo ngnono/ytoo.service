@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.ES;
 using Yintai.Hangzhou.Model.ESModel;
 
@@ -15,7 +17,6 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services
         /// </summary>
         /// <returns></returns>
         IEnumerable<int> GetPendingProductIds();
-
 
         /// <summary>
         /// 根据聚合Code获取商品Id列表

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-
 using com.intime.fashion.service.search;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
 using Nest;
@@ -35,7 +34,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             */
             using (var db = new YintaiHangzhouContext())
             {
-                var list = db.ProductPool.Where(
+                var list = db.ProductPools.Where(
                     p =>
                         p.Status == 100
                         && p.ChannelId == ChannelId
@@ -71,7 +70,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             */
             using (var db = new YintaiHangzhouContext())
             {
-                var list = db.ProductPool.Where(
+                var list = db.ProductPools.Where(
                     p =>
                         p.Status == 200
                         && p.ChannelId == ChannelId)
@@ -87,7 +86,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         {
             using (var db = new YintaiHangzhouContext())
             {
-                var list = db.ProductPool.Where(
+                var list = db.ProductPools.Where(
                     p =>
                         p.Status == 200
                         && p.MergedProductCode == code
@@ -118,6 +117,17 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
         #endregion
 
+        #region 属性提取
+
+        public string GetSalePropertyDesc(int id)
+        {
+            using (var db = new YintaiHangzhouContext())
+            {
+                return db.ProductPropertyValues.Where(c => c.Id == id).Select(p => p.ValueDesc).FirstOrDefault();
+            }
+        }
+
+        #endregion
 
         #region 更新同步商品状态及失败原因
 
@@ -125,7 +135,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         {
             using (var db = new YintaiHangzhouContext())
             {
-                var extProductPool = db.ProductPool.FirstOrDefault(p => p.ProductId == productId);
+                var extProductPool = db.ProductPools.FirstOrDefault(p => p.ProductId == productId);
                 if (extProductPool != null)
                 {
                     extProductPool.Status = (int)status;

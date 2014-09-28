@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
+using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.ES;
 using Yintai.Hangzhou.Model.ESModel;
 

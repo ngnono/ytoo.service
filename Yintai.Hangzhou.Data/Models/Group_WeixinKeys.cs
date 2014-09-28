@@ -16,6 +16,13 @@ namespace Yintai.Hangzhou.Data.Models
         public int CreateUser { get; set; }
         public string ParterKey { get; set; }
         public string PaidLikeUrl { get; set; }
+        public string Outcome_OperatorId { get; set; }
+        public string Outcome_OperatorPwd { get; set; }
+        public string Outcome_ParterId { get; set; }
+        public string Outcome_ParterKey { get; set; }
+        public string Outcome_CARelativeFilePath { get; set; }
+        public string Outcome_CertRelativeFilePath { get; set; }
+        public string Outcome_CertFilePwd { get; set; }
 
         #region Overrides of BaseEntity
 

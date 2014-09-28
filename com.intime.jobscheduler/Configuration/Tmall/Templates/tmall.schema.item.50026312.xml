@@ -1,6 +1,6 @@
 ﻿<itemRule>
     <field id="title" name="商品标题" type="input">
-        <value>${product.Name} 聚合测试商品,不发货</value>
+        <value>${product.Name} 聚合测试商品,不发货  ${_tag.GetImsTag($product.Id)}</value>
     </field>
     <field id="sell_point" name="商品卖点" type="input">
         <value>不发货、不退款，请飘过!</value>
@@ -33,16 +33,16 @@
     </field>
     <field id="sku" name="SKU" type="multiComplex">
 
-        #set($mapColors = $tools.Zip($colors,[3232483,3232484,3232481,90554,28332,30156,60092,3232482]) )
-        #set($mapSizes = $tools.Zip($sizes,[28918,28919,658546749,28920,658666166,28921,658684057,28922]) )
+        #set($mapColors = $_util.Zip($colors,[3232483,3232484,3232481,90554,28332,30156,60092,3232482]) )
+        #set($mapSizes =  $_util.Zip($sizes,[28918,28919,658546749,28920,658666166,28921,658684057,28922]) )
 
         #foreach($item in $items)
         <complex-values>
             <field id="prop_1627207" name="颜色分类" type="singleCheck">
-                <value isInput="false">$tools.GetValue($mapColors,"$item.ColorValueId")</value>
+                <value isInput="false">$tools.GetValue($mapColors,"$item.ColorDesc")</value>
             </field>
             <field id="prop_20549" name="鞋码" type="singleCheck">
-                <value isInput="false">$tools.GetValue($mapSizes,"$item.SizeValueId")</value>
+                <value isInput="false">$tools.GetValue($mapSizes,"$item.SizeDesc")</value>
             </field>
             <field id="sku_price" name="价格" type="input">
                 <value>${item.price}</value>
@@ -89,13 +89,14 @@
     <field id="price" name="商品价格" type="input">
         <value>${minPrice}</value>
     </field>
+    $set($location = $_store.GetLocation($proudct.Store.Id))
     <field id="location" name="所在地" type="complex">
         <complex-values>
             <field id="prov" name="" type="input">
-                <value>浙江</value>
+                <value>$!{location.prov}</value>
             </field>
             <field id="city" name="" type="input">
-                <value>杭州</value>
+                <value>$!{location.city}</value>
             </field>
         </complex-values>
     </field>
@@ -119,6 +120,16 @@
     </field>
     <field id="description" name="商品描述" type="input">
         <value>${product.Description} 测试商品描述，请勿拍！！！</value>
+    </field>
+
+    <field id="item_images" name="商品图片" type="complex">
+        <complex-values>
+            #foreach($img in $imgs)
+            <field id="item_image_$velocityCount" name="" type="input">
+                <value>$img</value>
+            </field>
+           #end
+        </complex-values>
     </field>
 
     <field id="valid_thru" name="有效期" type="singleCheck">

@@ -13,6 +13,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int ChannelId { get; set; }
         public bool POIUploaded { get; set; }
         public string MergedProductCode { get; set; }
+        public int StoreId { get; set; }
         public bool IsDefault { get; set; }
         public string ErrorMessage { get; set; }
 
@@ -22,9 +23,9 @@ namespace Yintai.Hangzhou.Data.Models
         /// KeyMemberId
         /// </summary>
         public override object EntityId
-        {
-            get { return Id; }
-
+        {       
+                get { return Id; }
+ 
         }
 
         #endregion

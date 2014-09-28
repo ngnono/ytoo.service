@@ -1,4 +1,6 @@
-﻿using com.intime.o2o.data.exchange.Tmall.Product.Models;
+﻿using System;
+using System.Collections.Generic;
+using com.intime.o2o.data.exchange.Tmall.Product.Models;
 using com.intime.o2o.data.exchange.Tmall.Product.Services;
 using com.intime.o2o.data.exchange.Tmall.Product.Services.Support;
 using Common.Logging;

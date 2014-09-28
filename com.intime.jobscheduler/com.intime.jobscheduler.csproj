@@ -226,10 +226,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configuration\Tmall\Templates\tmall.schema.product_50012037_20578.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configuration\Tmall\Templates\tmall.schema.product.50026312.20578.xml">
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.product.20610.20578.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="App.config">

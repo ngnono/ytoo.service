@@ -12,6 +12,7 @@ namespace Yintai.Hangzhou.Data.Models
         public int RuleType { get; set; }
         public int Status { get; set; }
         public Nullable<int> GroupId { get; set; }
+        public Nullable<int> ComputeType { get; set; }
 
         #region Overrides of BaseEntity
 
