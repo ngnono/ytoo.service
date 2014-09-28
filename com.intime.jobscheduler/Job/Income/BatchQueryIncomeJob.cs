@@ -73,16 +73,13 @@ namespace com.intime.jobscheduler.Job.Income
                         using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
                         {
                             var fullPackageId = string.Concat(order.PackageId, order.SerialNo);
-                            var keyEntity = db.Set<Group_WeixinKeysEntity>().Where(gw => gw.GroupId == order.GroupId && gw.Status == (int)DataStatus.Normal)
-                                    .First();
+                           // var keyEntity = db.Set<Group_WeixinKeysEntity>().Where(gw => gw.GroupId == order.GroupId && gw.Status == (int)DataStatus.Normal)
+                            //        .First();
                             BatchQueryResponse response = AutoBankTransfer.Instance.Query(new BatchQueryRequest()
                             {
                                 PackageId = fullPackageId,
                                 ServiceVersion = "1.2",
-                                GroupId = order.GroupId,
-                                OperateUser = keyEntity.Outcome_OperatorId,
-                                OperatePwd = keyEntity.Outcome_OperatorPwd,
-                                SPId = keyEntity.Outcome_ParterId
+                                GroupId = order.GroupId
 
                             });
                             if (response != null && response.IsSuccess)
@@ -106,9 +103,9 @@ namespace com.intime.jobscheduler.Job.Income
                             }
                             else
                             {
-                               // if (response != null)
-                                //    doFailAll(db, order, response, int.Parse(fullPackageId));
-                               // else
+                                if (response != null && response.IsAllFail)
+                                    doFailAll(db, order, response, int.Parse(fullPackageId));
+                                else
                                     canComplete = false;
                                 
                             }

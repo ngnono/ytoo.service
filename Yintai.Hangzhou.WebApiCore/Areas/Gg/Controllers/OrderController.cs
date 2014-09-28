@@ -466,8 +466,31 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
             {
                 return this.RenderError(r => r.Message = string.Format("该渠道({0})不存在此订单号({1})对应的订单", channel, orderNo));
             }
+
+            var opcSales = db.Set<OPC_SaleEntity>().Where(x => x.OrderNo == orderNo).ToList();
+            if (opcSales.Any())
+            {
+                if (
+                    db.Set<OPC_SaleEntity>().Where(x => x.OrderNo == orderNo).Join(db.Set<OPC_SaleOrderNotificationLogEntity>().Where(l => l.Status == 1 || l.Status == 3), s => s.SaleOrderNo, l => l.SaleOrderNo,
+                        (o, s) => s).Any())
+                {
+                    return this.RenderError(r => r.Message = "订单已送收银，不能取消");
+                }
+
+            }
+
             using (var ts = new TransactionScope())
             {
+                foreach (var sale in opcSales)
+                {
+                    sale.Status = (int)OrderStatus.Void;
+                    sale.UpdatedDate = DateTime.Now;
+                    sale.UpdatedUser = GG_CREATE_USERID;
+                    sale.Remark = string.Format("Void by ({0})", channel);
+                    sale.RemarkDate = DateTime.Now;
+                    db.Entry(sale).State = EntityState.Modified;
+                }
+
                 order.Status = (int)OrderStatus.Void;
                 order.UpdateDate = DateTime.Now;
                 order.UpdateUser = GG_CREATE_USERID;
