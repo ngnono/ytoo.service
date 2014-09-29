@@ -45,6 +45,8 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
                     continue;
                 }
 
+                
+
                 // push 本地商品到tmall
                 var result = _productPushService.AddProduct(productSchema, "intime");
 
