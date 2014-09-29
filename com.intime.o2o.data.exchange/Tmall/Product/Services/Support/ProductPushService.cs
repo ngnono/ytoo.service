@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -9,11 +10,15 @@ using com.intime.o2o.data.exchange.Tmall.Core.Support;
 using com.intime.o2o.data.exchange.Tmall.Product.Mappers;
 using com.intime.o2o.data.exchange.Tmall.Product.Mappers.Support;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
+using com.intime.o2o.data.exchange.Tmall.Product.Tools;
 using Common.Logging;
+using Top.Api;
 using Top.Api.Request;
+using Top.Api.Util;
 using Yintai.Hangzhou.Model.ES;
 using Yintai.Hangzhou.Model.ESModel;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 {
@@ -79,7 +84,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             /**================================================
             * 分类的映射关系
             ==================================================*/
-            var categoryId = _categoryMapper.ToChannel(productSchema.CategoryId);
+            var categoryId = _categoryMapper.ToChannel(productSchema.Tag.Id);
 
             if (categoryId == null)
             {
@@ -94,20 +99,24 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             if (!_schemaMapper.ExistsTemplate(templateKey))
             {
-                var errorMessage = string.Format("商品上传数据模版不存在，tempalte:{0}", templateKey);
+                var errorMessage = string.Format("产品上传数据模版不存在，tempalte:{0}", templateKey);
                 Log.Error(errorMessage);
                 return Error<long>(errorMessage, "-10003");
             }
+
+            // 根据门店获取Client
+            var topClient = _topClientFactory.Get(consumerKey);
+
+            // 获取最大5张图片处理
+            var imgs = UploadImgs(productSchema.Resource, 1, topClient);
 
             // 转化商品数据Schema
             var xmlData = CreateXmlData(templateKey, new Hashtable
             {
                 { "product", productSchema },
+                {"imgs",imgs},
                 {"consumerKey",consumerKey}
             });
-
-            // 根据门店获取Client
-            var topClient = _topClientFactory.Get(consumerKey);
 
             // 请求Taobao接口
             var result = topClient.Execute(new TmallProductSchemaAddRequest()
@@ -116,11 +125,13 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 CategoryId = categoryId,
                 XmlData = xmlData
             }, _topClientFactory.GetSessionKey(consumerKey));
-
+           
             if (result.IsError)
             {
-                return Error<long>(string.Format("{0}[{1}]", result.ErrMsg, result.SubErrMsg), result.ErrCode);
+                return Error<long>(string.Format("{0}-{1}", result.ErrMsg, result.SubErrCode), result.ErrCode);
             }
+
+
 
             // 解析XMl返回结果提取productId
             var root = XElement.Load(new StringReader(result.AddProductResult));
@@ -144,8 +155,11 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             return Ok(productId);
         }
 
+        [Obsolete("暂时先不使用")]
         public ResultInfo<bool> UpdateProduct(ESProduct productSchema, string consumerKey)
         {
+            #region
+
             /**================================================
              * 获取商品Id映射关系
              ==================================================*/
@@ -195,7 +209,10 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             }
 
             // 转化商品数据Schema
-            var xmlData = CreateXmlData("tmall.schema.product", new Hashtable { { "product", productSchema } });
+            var xmlData = CreateXmlData("tmall.schema.product", new Hashtable
+            {
+                { "product", productSchema }
+            });
 
             // 根据门店获取Client
             var topClient = _topClientFactory.Get(consumerKey);
@@ -209,10 +226,12 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             if (result.IsError)
             {
-                return Error<bool>(string.Format("{0}[{1}]", result.ErrMsg, result.SubErrMsg), result.ErrCode);
+                return Error<bool>(result.SubErrMsg, result.ErrCode);
             }
 
             return Ok(true);
+
+            #endregion
         }
 
         #endregion
@@ -221,6 +240,9 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
         public ResultInfo<long> AddItem(IEnumerable<ESStock> items, ESProduct product, string consumerKey)
         {
+            #region 校验参数
+
+            // 校验参数
             if (product == null)
             {
                 var errorMsg = string.Format("产品为空,请检查参数");
@@ -235,16 +257,32 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 return Error<long>(errorMsg, "408");
             }
 
+            #endregion
+
+            #region 获取productId,categoryId的映射关系
+
+
             // 获取产品Id和分类Id
             var productId = _productMapper.ToChannel(product.Id);
-            var categoryId = _categoryMapper.ToChannel(product.CategoryId);
+            var categoryId = _categoryMapper.ToChannel(product.Tag.Id);
 
-            // 创建templatekey,{模版名称}+{分类}+{品牌}
-            var templateKey = string.Format("tmall.schema.item.{0}", categoryId);
+            #endregion
 
+            #region 处理花色和颜色的映射问题
+
+            /**
+             * 处理花色和颜色的映射问题
+             */
             var esStocks = items as IList<ESStock> ?? items.ToList();
+
             var colors = esStocks.Select(p => p.ColorDesc).Distinct().ToList();
             var sizes = esStocks.Select(p => p.SizeDesc).Distinct().ToList();
+            //var colors = esStocks.Select(p => p.ColorValueId).Distinct().ToList();
+            //var sizes = esStocks.Select(p => p.SizeValueId).Distinct().ToList();
+
+            #endregion
+
+            #region 商品数量和价格
 
             //商品总数量
             var total = esStocks.Sum(p => p.Amount);
@@ -252,22 +290,60 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             // 价格
             var minPrice = esStocks.Min(p => p.Price);
 
-            // 转化商品数据Schema
-            var xmlData = CreateXmlData(templateKey, new Hashtable
-            {
-                { "product", product },
-                { "items", items }, 
-                { "consumerKey", consumerKey },
-                { "colors", colors },
-                 { "sizes", sizes },
-                 { "total", total },
-                 { "minPrice", minPrice },
-                 {"tools",new Tools()}
-            });
+            #endregion
 
             // 根据门店获取Client
             var topClient = _topClientFactory.Get(consumerKey);
 
+            /**==============================================
+            * 获取最大5张图片处理
+            ================================================*/
+            var resources = UploadImgsForItems(product.Resource, esStocks, 20, topClient);
+
+            var colorResources = resources as ColorResource[] ?? resources.ToArray();
+
+            var imgs = colorResources.Select(p => p.Url).Take(5);
+
+            var colorImgs = new Dictionary<string, string>();
+
+            foreach (var colorImg in colorResources)
+            {
+                if (!colorImgs.ContainsKey(colorImg.ColorDesc))
+                {
+                    colorImgs.Add(colorImg.ColorDesc, colorImg.Url);
+                }
+            }
+
+            Console.WriteLine("==========================================================");
+            Console.WriteLine(string.Join(",", colorImgs.Keys.ToArray()));
+            Console.WriteLine(string.Join(",", colorImgs.Values.ToArray()));
+
+            var context = new Hashtable
+            {
+                {"product", product},
+                {"items", items},
+                {"consumerKey", consumerKey},
+                {"colors", colors},
+                {"skuImgs", colorImgs},
+                {"sizes", sizes},
+                {"total", total},
+                {"imgs", imgs},
+                {"minPrice", minPrice}
+            };
+
+            // 创建templatekey,{模版名称}+{分类}+{品牌}
+            var templateKey = string.Format("tmall.schema.item.{0}", categoryId);
+
+            if (!_schemaMapper.ExistsTemplate(templateKey))
+            {
+                var errorMessage = string.Format("商品上传数据模版不存在，tempalte:{0}", templateKey);
+                Log.Error(errorMessage);
+                return Error<long>(errorMessage, "-20003");
+            }
+
+            // 转化商品数据Schema
+            var xmlData = CreateXmlData(templateKey, context);
+            Log.Error(xmlData);
             // 请求Taobao接口
             var result = topClient.Execute(new TmallItemSchemaAddRequest()
             {
@@ -276,12 +352,18 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 XmlData = xmlData
             }, _topClientFactory.GetSessionKey("intime"));
 
+            Log.Error(result.ErrMsg);
+
             if (result.IsError)
             {
-                return Error<long>(string.Format("{0}[{1}]", result.ErrMsg, result.SubErrMsg), result.ErrCode);
+                return Error<long>(string.Format("{0}-{1}", result.ErrMsg, result.SubErrCode), result.ErrCode);
             }
 
-            return Ok(Convert.ToInt64(result.AddItemResult));
+            // 转化itemId
+            var itemId = Convert.ToInt64(result.AddItemResult);
+            //TODO:tianjia item save
+
+            return Ok(itemId);
         }
 
         public ResultInfo<bool> UpdateItem(ESStock item, ESProduct product, string consumerKey)
@@ -296,12 +378,14 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         private string CreateXmlData(string schemaName, Hashtable proprties)
         {
             /**================================================
-            * 添加公共方法
+            * 添加公共方法,用于所有模版使用
             ================================================*/
-            proprties.Add("brandMapper", _brandMapper);
-            proprties.Add("categoryMapper", _categoryMapper);
-            proprties.Add("productMapper", _productMapper);
-            proprties.Add("itemMapper", _itemMapper);
+            proprties.Add("_brand", _brandMapper);
+            proprties.Add("_category", _categoryMapper);
+            proprties.Add("_product", _productMapper);
+            proprties.Add("_util", new Tools.UtilTool());
+            proprties.Add("_store", new StoreTool());
+            proprties.Add("_tag", new TagTool());
 
             // 转化商品数据Schema
             return _schemaMapper.Map(schemaName, proprties);
@@ -324,6 +408,146 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             };
         }
 
+        #region 图片处理
+
+        /// <summary>
+        /// 处理商品资源问题并进行上传
+        /// </summary>
+        /// <param name="resources">资源列表</param>
+        /// <param name="topN">处理图片条数</param>
+        /// <param name="topClient"></param>
+        /// <returns></returns>
+        private IEnumerable<string> UploadImgs(IEnumerable<ESResource> resources, int topN, ITopClient topClient)
+        {
+            var imgs = new List<string>();
+
+            // 获取前五张图片
+            resources = resources.Take(topN);
+
+            foreach (var resource in resources)
+            {
+                try
+                {
+                    var path = FetchRemotePic(resource);
+                    var img = UploadImg2Tmall(path,
+                        topClient);
+
+                    if (img != null)
+                    {
+                        imgs.Add(img);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                }
+            }
+
+            return imgs;
+        }
+
+        private IEnumerable<ColorResource> UploadImgsForItems(IEnumerable<ESResource> resources, IList<ESStock> items, int topN, ITopClient topClient)
+        {
+            var imgs = new List<ColorResource>();
+
+
+            foreach (var resource in resources)
+            {
+                try
+                {
+                    var path = FetchRemotePic(resource);
+                    var img = UploadImg2Tmall(path,
+                        topClient);
+
+                    if (img != null)
+                    {
+                        var extItem = items.FirstOrDefault(p => resource.ColorId.HasValue &&p.ColorValueId == resource.ColorId);
+
+                        if (extItem != null)
+                        {
+                            imgs.Add(new ColorResource()
+                            {
+                                ColorDesc = extItem.ColorDesc,
+                                Url = img
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                }
+            }
+
+            return imgs;
+        }
+
+
+        /// <summary>
+        /// 获取远程资源
+        /// </summary>
+        /// <param name="resource">资源</param>
+        /// <returns>本地资源地址</returns>
+        private static string FetchRemotePic(ESResource resource)
+        {
+            string exPicDomain = ConfigurationManager.AppSettings["EXPIC_DOMAIN"];
+
+            var url = string.Format("{0}/{1}_640x0.jpg", exPicDomain.TrimEnd('/'), resource.Name);
+            Log.Error(url);
+            //  url = "http://gi3.md.alicdn.com/bao/uploaded/i3/TB14vMQGXXXXXczXXXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg";
+            var client = new HttpClient();
+            string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tmp", DateTime.Today.ToString("yyyyMMdd"));
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+            var path = string.Format("{0}/{1}.jpg", directory, Guid.NewGuid());
+            client.GetAsync(url)
+               .ContinueWith(request =>
+               {
+                   var response = request.Result;
+                   response.EnsureSuccessStatusCode();
+                   using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
+                   {
+                       response.Content.CopyToAsync(fileStream).Wait();
+                       fileStream.Flush();
+                   }
+               }).Wait();
+            return path;
+        }
+
+        private string UploadImg2Tmall(string path, ITopClient topClient)
+        {
+            // 上传商品到TMall
+            var uploadImg = topClient.Execute(new PictureUploadRequest()
+            {
+                ImageInputTitle = "图片说明",
+                Img = new FileItem(path),
+                PictureCategoryId = 0,
+            }, _topClientFactory.GetSessionKey("intime"));
+
+            if (!uploadImg.IsError)
+            {
+                Console.WriteLine("upload OK!");
+                // 清理上传成功图片
+                File.Delete(path);
+                return uploadImg.Picture.PicturePath;
+            }
+
+            Log.Error(string.Format("{0}-{1}", uploadImg.ErrMsg, uploadImg.SubErrMsg));
+            Log.Error("上传图片失败,path:" + path);
+
+            // 清理上传成功图片
+            File.Delete(path);
+            return null;
+        }
+
         #endregion
+
+        #endregion
+    }
+
+    public class ColorResource
+    {
+        public string ColorDesc { get; set; }
+        public string Url { get; set; }
     }
 }

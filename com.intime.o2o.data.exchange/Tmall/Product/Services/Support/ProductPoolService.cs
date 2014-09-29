@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-
 using com.intime.fashion.service.search;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
 using Nest;
@@ -119,6 +118,17 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
         #endregion
 
+        #region 属性提取
+
+        public string GetSalePropertyDesc(int id)
+        {
+            using (var db = new YintaiHangzhouContext())
+            {
+                return db.ProductPropertyValues.Where(c => c.Id == id).Select(p => p.ValueDesc).FirstOrDefault();
+            }
+        }
+
+        #endregion
 
         #region 更新同步商品状态及失败原因
 

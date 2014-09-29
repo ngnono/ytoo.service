@@ -1,0 +1,209 @@
+﻿<itemRule>
+  <field id="title" name="商品标题" type="input">
+    <value>${product.Name}  $!{_tag.GetImsTag($product.Id)}</value>
+  </field>
+  <field id="short_title" name="无线短标题" type="input">
+    <value>$_util.Sub($product.Name,10)</value>
+  </field>
+
+  <field id="sell_point" name="商品卖点" type="input">
+    <value>原价 ${product.UnitPrice} 元</value>
+  </field>
+  <field id="item_status" name="商品状态" type="singleCheck">
+    <value isInput="false">0</value>
+  </field>
+  <field id="sub_stock" name="拍下减库存" type="singleCheck">
+    <value isInput="false">true</value>
+  </field>
+  <field id="second_kill" name="商品秒杀" type="multiCheck">
+    <values/>
+  </field>
+  <field id="item_type" name="发布类型" type="singleCheck">
+    <value isInput="false">b</value>
+  </field>
+  <field id="stuff_status" name="宝贝类型" type="singleCheck">
+    <value isInput="false">5</value>
+  </field>
+
+  <field id="auction_point" name="返点比例" type="input">
+    <value isInput="false">0.5</value>
+  </field>
+
+  <field id="prop_122216347" name="上市年份季节" type="singleCheck">
+    <value isInput="false">380120406</value>
+  </field>
+  <field id="prop_129498239" name="是否商场同款" type="singleCheck">
+    <value isInput="false">21958</value>
+  </field>
+  <field id="sku" name="SKU" type="multiComplex">
+
+    #set($mapColors=$_util.Zip($colors,[3232483,3232484,3232481,90554,28332,30156,60092,3232482]))
+    #set($mapSizes=$_util.Zip($sizes,[28415,28416,28417,28418,28419,28420,28421,28422]))
+
+    #foreach($item in $items)
+    <complex-values>
+      <field id="prop_1627207" name="颜色分类" type="singleCheck">
+        <value isInput="false">$_util.GetValue($mapColors,"$item.ColorDesc")</value>
+      </field>
+      <field id="prop_20518" name="尺寸" type="singleCheck">
+        <value isInput="false">$_util.GetValue($mapSizes,"$item.SizeDesc")</value>
+      </field>
+      <field id="sku_price" name="价格" type="input">
+        <value>${item.price}</value>
+      </field>
+      <field id="sku_quantity" name="库存" type="input">
+        <value>${item.Amount}</value>
+      </field>
+      <field id="sku_outerId" name="商家编码" type="input">
+        <value>${item.Id}</value>
+      </field>
+    </complex-values>
+    #end
+  </field>
+
+  <field id="prop_extend_1627207" name="颜色分类扩展" type="multiComplex">
+    #foreach($colorItem in $mapColors)
+    <complex-values>
+      <field id="prop_1627207" name="" type="singleCheck">
+        <value isInput="false">$colorItem.Value</value>
+      </field>
+      <field id="alias_name" name="" type="input">
+        <value>$colorItem.Key</value>
+      </field>
+      <field id="prop_image" name="属性图片" type="input">
+        <value>$_util.GetValue($skuImgs,"$colorItem.Key")</value>
+      </field>
+    </complex-values>
+    #end
+  </field>
+  <field id="prop_extend_20518" name="尺寸扩展" type="multiComplex">
+    #foreach($sizeItem in $mapSizes)
+    <complex-values>
+      <field id="prop_20518" name="尺寸" type="singleCheck">
+        <value isInput="false">$sizeItem.Value</value>
+      </field>
+      <field id="alias_name" name="" type="input">
+        <value>$sizeItem.Key</value>
+      </field>
+    </complex-values>
+    #end
+  </field>
+  <field id="lang" name="商品文字的字符集" type="singleCheck">
+    <value isInput="false">zh_CN</value>
+  </field>
+  <field id="quantity" name="商品数量" type="input">
+    <value>${total}</value>
+  </field>
+  <field id="price" name="商品价格" type="input">
+    <value>${minPrice}</value>
+  </field>
+  #set($location=$_store.GetLocation($product.Store.Id))
+  <field id="location" name="所在地" type="complex">
+    <complex-values>
+      <field id="prov" name="" type="input">
+        <value>$!{location.prov}</value>
+      </field>
+      <field id="city" name="" type="input">
+        <value>$!{location.city}</value>
+      </field>
+    </complex-values>
+  </field>
+  <field id="freight_payer" name="运费承担方式" type="singleCheck">
+    <Value isInput="false">2</Value>
+  </field>
+  <field id="has_warranty" name="保修" type="singleCheck">
+    <value isInput="false">true</value>
+  </field>
+  <field id="has_invoice" name="发票" type="singleCheck">
+    <value isInput="false">true</value>
+  </field>
+  <field id="is_taobao" name="是否在淘宝上显示" type="singleCheck">
+    <value isInput="false">true</value>
+  </field>
+  <field id="outer_id" name="商家外部编码" type="input">
+    <value>${product.Id}</value>
+  </field>
+  <field id="is_xinpin" name="是否新品" type="singleCheck">
+    <value isInput="false">false</value>
+  </field>
+  <field id="description" name="商品描述" type="complex">
+
+    <complex-values>
+      <field id="desc_module_116_cat_mod" name="产品图" type="complex">
+        <complex-values>
+          <field id="desc_module_116_cat_mod_content" name="产品图内容" type="input">
+            <value>暂时还没有呢</value>
+          </field>
+          <field id="desc_module_116_cat_mod_order" name="产品图排序值" type="input">
+            <value>0</value>
+          </field>
+        </complex-values>
+      </field>
+      <field id="desc_module_117_cat_mod" name="尺寸及试穿" type="complex">
+        <complex-values>
+          <field id="desc_module_117_cat_mod_content" name="尺寸及试穿内容" type="input">
+            <value>暂时还没有呢</value>
+          </field>
+          <field id="desc_module_117_cat_mod_order" name="尺寸及试穿排序值" type="input">
+            <value>0</value>
+          </field>
+        </complex-values>
+      </field>
+      <field id="desc_module_118_cat_mod" name="相关推荐" type="complex">
+        <complex-values>
+          <field id="desc_module_118_cat_mod_content" name="相关推荐内容" type="input">
+            <value>暂时还没有呢</value>
+          </field>
+          <field id="desc_module_118_cat_mod_order" name="相关推荐排序值" type="input">
+            <value>1</value>
+          </field>
+        </complex-values>
+      </field>
+      <field id="desc_module_47_cat_mod" name="模特效果图" type="complex">
+        <complex-values>
+          <field id="desc_module_47_cat_mod_content" name="模特效果图内容" type="input">
+            <value>暂时还没有呢</value>
+          </field>
+          <field id="desc_module_47_cat_mod_order" name="模特效果图排序值" type="input">
+            <value>2</value>
+          </field>
+        </complex-values>
+      </field>
+      <field id="desc_module_119_cat_mod" name="商家说明" type="complex">
+        <complex-values>
+
+          <field id="desc_module_119_cat_mod_content" name="商家说明内容" type="input">
+            <value>暂时还没有呢</value>
+          </field>
+          <field id="desc_module_119_cat_mod_order" name="商家说明排序值" type="input">
+            <value>4</value>
+          </field>
+        </complex-values>
+      </field>
+    </complex-values>
+  </field>
+
+  <field id="item_images" name="商品图片" type="complex">
+    <complex-values>
+      #foreach($img in $imgs)
+      <field id="item_image_$velocityCount" name="" type="input">
+        <value>$img</value>
+      </field>
+      #end
+    </complex-values>
+  </field>
+
+  <field id="valid_thru" name="有效期" type="singleCheck">
+    <value isInput="false">7</value>
+  </field>
+  <field id="vertical_image" name="商品竖图" type="input">
+    <value>http://img01.taobaocdn.com/imgextra/i1/2247396485/TB2GMB4aFXXXXX1XXXXXXXXXXXX_!!2247396485.jpg</value>
+  </field>
+
+  <field id="diaopai_pic" name="吊牌图" type="input">
+    <value>http://img01.taobaocdn.com/imgextra/i1/2247396485/TB25uxgaFXXXXaDXpXXXXXXXXXX_!!2247396485.jpg</value>
+  </field>
+  <field id="service_version" name="天猫系统服务版本" type="input">
+    <value>10000</value>
+  </field>
+</itemRule>

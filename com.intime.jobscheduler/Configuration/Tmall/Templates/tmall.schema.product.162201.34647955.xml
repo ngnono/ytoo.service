@@ -1,13 +1,23 @@
-<itemRule>
+﻿<itemRule>
+    <field id="prop_13021751" name="货号" type="input">
+        <value>${product.Id}</value>
+    </field>
+
     <field id="prop_20000" name="品牌" type="singleCheck">
         <value isInput="false">$_brand.ToChannel($product.Brand.Id)</value>
     </field>
-    <field id="prop_13021751" name="款号" type="input">
-        <value>${product.Id}</value>
+
+    <field id="prop_34272" name="流行元素" type="singleCheck">
+        <value isInput="false">7642045</value>
     </field>
-    <field id="prop_22196" name="运动鞋分类" type="singleCheck">
-        <value isInput="false">${_category.ToChannel($product.CategoryId)-50000000}</value>
+    <field id="prop_20418023" name="主图来源" type="singleCheck">
+        <value isInput="false">157305307</value>
     </field>
+
+    <field id="prop_122216347" name="年份季节" type="multiCheck">
+        <values><value isInput="false">380120406</value></values>
+    </field>
+
     <field id="product_images" name="商品图片" type="complex">
         <complex-values>
             #foreach($img in $imgs)

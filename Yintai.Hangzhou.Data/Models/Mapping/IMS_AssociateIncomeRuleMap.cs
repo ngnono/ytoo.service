@@ -20,6 +20,7 @@ namespace Yintai.Hangzhou.Data.Models.Mapping
             this.Property(t => t.RuleType).HasColumnName("RuleType");
             this.Property(t => t.Status).HasColumnName("Status");
             this.Property(t => t.GroupId).HasColumnName("GroupId");
+            this.Property(t => t.ComputeType).HasColumnName("ComputeType");
 		Init();
         }
 

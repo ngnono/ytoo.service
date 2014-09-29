@@ -3,19 +3,16 @@ using System.Collections.Generic;
 
 namespace Yintai.Hangzhou.Data.Models
 {
-    public partial class ProductPoolEntity : Yintai.Architecture.Common.Models.BaseEntity
+    public partial class IMS_AssociateIncomeRuleMultipleEntity : Yintai.Architecture.Common.Models.BaseEntity
     {
         public int Id { get; set; }
-        public int ProductId { get; set; }
+        public int RuleId { get; set; }
+        public System.TimeSpan EffectTimeFrom { get; set; }
+        public System.TimeSpan EffectTimeTo { get; set; }
+        public decimal Multiple { get; set; }
         public int Status { get; set; }
         public System.DateTime CreateDate { get; set; }
-        public System.DateTime UpdateDate { get; set; }
-        public int ChannelId { get; set; }
-        public bool POIUploaded { get; set; }
-        public string MergedProductCode { get; set; }
-        public int StoreId { get; set; }
-        public bool IsDefault { get; set; }
-        public string ErrorMessage { get; set; }
+        public int CreateUser { get; set; }
 
         #region Overrides of BaseEntity
 

@@ -117,6 +117,7 @@
     <Compile Include="Areas\Gg\Controllers\GgController.cs" />
     <Compile Include="Areas\Gg\Controllers\OrderController.cs" />
     <Compile Include="Areas\Gg\Controllers\ProductController.cs" />
+    <Compile Include="Areas\Gg\Controllers\StockController.cs" />
     <Compile Include="Areas\Gg\ViewModels\ESProducts.cs" />
     <Compile Include="Areas\Gg\ViewModels\ESStocks.cs" />
     <Compile Include="Areas\Gg\ViewModels\PagedListViewModel.cs" />

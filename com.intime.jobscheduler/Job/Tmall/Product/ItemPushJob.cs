@@ -42,6 +42,7 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
             if (product == null)
                 Log.ErrorFormat("ES获取产品信息失败,productId:{0}", productId);
 
+            // 获取单品列表
             var items = _productPoolService.GetItemsByIdsByProductId(productId);
 
             var result = _productPushService.AddItem(items, product, "intime");
@@ -57,5 +58,7 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
             _productPoolService.UpdateProductStatus(productId, ProductPoolStatus.AddItemFinished, result.ErrMsg);
             Log.InfoFormat("同步商品完成，productid:{0},tmall_itemid:{1}", productId, result.Data);
         }
+
+
     }
 }

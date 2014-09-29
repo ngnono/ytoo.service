@@ -154,6 +154,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<IMS_AssociateIncomeRuleFixEntity> IMS_AssociateIncomeRuleFix { get; set; }
         public DbSet<IMS_AssociateIncomeRuleFlattenEntity> IMS_AssociateIncomeRuleFlatten { get; set; }
         public DbSet<IMS_AssociateIncomeRuleFlexEntity> IMS_AssociateIncomeRuleFlex { get; set; }
+        public DbSet<IMS_AssociateIncomeRuleMultipleEntity> IMS_AssociateIncomeRuleMultiple { get; set; }
         public DbSet<IMS_AssociateIncomeTran2ReqEntity> IMS_AssociateIncomeTran2Req { get; set; }
         public DbSet<IMS_AssociateIncomeTransferEntity> IMS_AssociateIncomeTransfer { get; set; }
         public DbSet<IMS_AssociateItemsEntity> IMS_AssociateItems { get; set; }
@@ -182,6 +183,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<Map4InventoryEntity> Map4Inventory { get; set; }
         public DbSet<Map4OrderEntity> Map4Order { get; set; }
         public DbSet<Map4ProductEntity> Map4Product { get; set; }
+        public DbSet<Map4StoreEntity> Map4Store { get; set; }
         public DbSet<MappedProductBackupEntity> MappedProductBackups { get; set; }
         public DbSet<NotificationLogEntity> NotificationLogs { get; set; }
         public DbSet<OPC_AuthMenuEntity> OPC_AuthMenu { get; set; }
@@ -269,6 +271,7 @@ namespace Yintai.Hangzhou.Data.Models
         public DbSet<StoreRealEntity> StoreReals { get; set; }
         public DbSet<Supplier_BrandEntity> Supplier_Brand { get; set; }
         public DbSet<TagEntity> Tags { get; set; }
+        public DbSet<testtableEntity> testtables { get; set; }
         public DbSet<TimeSeedEntity> TimeSeeds { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<UserAccountEntity> UserAccounts { get; set; }
@@ -322,6 +325,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFixEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFlattenEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleFlexEntityMap());
+            modelBuilder.Configurations.Add(new IMS_AssociateIncomeRuleMultipleEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeTran2ReqEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateIncomeTransferEntityMap());
             modelBuilder.Configurations.Add(new IMS_AssociateItemsEntityMap());
@@ -350,6 +354,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new Map4InventoryEntityMap());
             modelBuilder.Configurations.Add(new Map4OrderEntityMap());
             modelBuilder.Configurations.Add(new Map4ProductEntityMap());
+            modelBuilder.Configurations.Add(new Map4StoreEntityMap());
             modelBuilder.Configurations.Add(new MappedProductBackupEntityMap());
             modelBuilder.Configurations.Add(new NotificationLogEntityMap());
             modelBuilder.Configurations.Add(new OPC_AuthMenuEntityMap());
@@ -437,6 +442,7 @@ namespace Yintai.Hangzhou.Data.Models
             modelBuilder.Configurations.Add(new StoreRealEntityMap());
             modelBuilder.Configurations.Add(new Supplier_BrandEntityMap());
             modelBuilder.Configurations.Add(new TagEntityMap());
+            modelBuilder.Configurations.Add(new testtableEntityMap());
             modelBuilder.Configurations.Add(new TimeSeedEntityMap());
             modelBuilder.Configurations.Add(new UserEntityMap());
             modelBuilder.Configurations.Add(new UserAccountEntityMap());
