@@ -39,7 +39,6 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
             int total = 0;
             int succeedCount = 0;
             DoQuery(items => total = items.Count());
-
             int cursor = 0;
 #if !DEBUG
             JobDataMap data = context.JobDetail.JobDataMap;

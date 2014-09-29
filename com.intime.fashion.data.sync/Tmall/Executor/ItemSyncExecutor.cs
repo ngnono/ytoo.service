@@ -28,6 +28,8 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             Decimal lastCursor = 0;
             DoQuery(null, items => totalCount = items.Count());
 
+            Logger.InfoFormat("获取到({0})商品");
+
             while (cursor < totalCount)
             {
                 List<JDP_TB_ITEM> oneTimeList = null;

@@ -2,10 +2,6 @@
   <field id="title" name="商品标题" type="input">
     <value>${product.Name}  $!{_tag.GetImsTag($product.Id)}</value>
   </field>
-  <field id="short_title" name="无线短标题" type="input">
-    <value>$_util.Sub($product.Name,10)</value>
-  </field>
-
   <field id="sell_point" name="商品卖点" type="input">
     <value>原价 ${product.UnitPrice} 元</value>
   </field>
@@ -14,10 +10,7 @@
   </field>
   <field id="sub_stock" name="拍下减库存" type="singleCheck">
     <value isInput="false">true</value>
-  </field>
-  <field id="second_kill" name="商品秒杀" type="multiCheck">
-    <values/>
-  </field>
+  </field>  
   <field id="item_type" name="发布类型" type="singleCheck">
     <value isInput="false">b</value>
   </field>
@@ -60,7 +53,6 @@
     </complex-values>
     #end
   </field>
-
   <field id="prop_extend_1627207" name="颜色分类扩展" type="multiComplex">
     #foreach($colorItem in $mapColors)
     <complex-values>
@@ -70,9 +62,6 @@
       <field id="alias_name" name="" type="input">
         <value>$colorItem.Key</value>
       </field>
-      <field id="prop_image" name="属性图片" type="input">
-        <value>$_util.GetValue($skuImgs,"$colorItem.Key")</value>
-      </field>
     </complex-values>
     #end
   </field>
@@ -80,10 +69,10 @@
     #foreach($sizeItem in $mapSizes)
     <complex-values>
       <field id="prop_20518" name="尺寸" type="singleCheck">
-        <value isInput="false">$sizeItem.Value</value>
+        <value isInput="false">${sizeItem.Value}</value>
       </field>
       <field id="alias_name" name="" type="input">
-        <value>$sizeItem.Key</value>
+        <value>{$sizeItem.Key}</value>
       </field>
     </complex-values>
     #end
@@ -126,61 +115,8 @@
   <field id="is_xinpin" name="是否新品" type="singleCheck">
     <value isInput="false">false</value>
   </field>
-  <field id="description" name="商品描述" type="complex">
-
-    <complex-values>
-      <field id="desc_module_116_cat_mod" name="产品图" type="complex">
-        <complex-values>
-          <field id="desc_module_116_cat_mod_content" name="产品图内容" type="input">
-            <value>暂时还没有呢</value>
-          </field>
-          <field id="desc_module_116_cat_mod_order" name="产品图排序值" type="input">
-            <value>0</value>
-          </field>
-        </complex-values>
-      </field>
-      <field id="desc_module_117_cat_mod" name="尺寸及试穿" type="complex">
-        <complex-values>
-          <field id="desc_module_117_cat_mod_content" name="尺寸及试穿内容" type="input">
-            <value>暂时还没有呢</value>
-          </field>
-          <field id="desc_module_117_cat_mod_order" name="尺寸及试穿排序值" type="input">
-            <value>0</value>
-          </field>
-        </complex-values>
-      </field>
-      <field id="desc_module_118_cat_mod" name="相关推荐" type="complex">
-        <complex-values>
-          <field id="desc_module_118_cat_mod_content" name="相关推荐内容" type="input">
-            <value>暂时还没有呢</value>
-          </field>
-          <field id="desc_module_118_cat_mod_order" name="相关推荐排序值" type="input">
-            <value>1</value>
-          </field>
-        </complex-values>
-      </field>
-      <field id="desc_module_47_cat_mod" name="模特效果图" type="complex">
-        <complex-values>
-          <field id="desc_module_47_cat_mod_content" name="模特效果图内容" type="input">
-            <value>暂时还没有呢</value>
-          </field>
-          <field id="desc_module_47_cat_mod_order" name="模特效果图排序值" type="input">
-            <value>2</value>
-          </field>
-        </complex-values>
-      </field>
-      <field id="desc_module_119_cat_mod" name="商家说明" type="complex">
-        <complex-values>
-
-          <field id="desc_module_119_cat_mod_content" name="商家说明内容" type="input">
-            <value>暂时还没有呢</value>
-          </field>
-          <field id="desc_module_119_cat_mod_order" name="商家说明排序值" type="input">
-            <value>4</value>
-          </field>
-        </complex-values>
-      </field>
-    </complex-values>
+  <field id="description" name="商品描述" type="input">
+    <value>${product.Description} </value>
   </field>
 
   <field id="item_images" name="商品图片" type="complex">
@@ -197,11 +133,11 @@
     <value isInput="false">7</value>
   </field>
   <field id="vertical_image" name="商品竖图" type="input">
-    <value>http://img01.taobaocdn.com/imgextra/i1/2247396485/TB2GMB4aFXXXXX1XXXXXXXXXXXX_!!2247396485.jpg</value>
+    <value>http://gi2.md.alicdn.com/bao/uploaded/i2/TB1FnAtGXXXXXaEXXXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg</value>
   </field>
 
   <field id="diaopai_pic" name="吊牌图" type="input">
-    <value>http://img01.taobaocdn.com/imgextra/i1/2247396485/TB25uxgaFXXXXaDXpXXXXXXXXXX_!!2247396485.jpg</value>
+    <value>http://gi2.md.alicdn.com/bao/uploaded/i2/TB1FnAtGXXXXXaEXXXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg</value>
   </field>
   <field id="service_version" name="天猫系统服务版本" type="input">
     <value>10000</value>

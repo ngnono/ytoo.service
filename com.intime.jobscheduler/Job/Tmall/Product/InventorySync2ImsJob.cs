@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using com.intime.fashion.data.sync.Tmall;
 using com.intime.fashion.data.sync.Tmall.Executor;
+using com.intime.o2o.data.exchange.Ims;
 using com.intime.o2o.data.exchange.IT;
 using Common.Logging;
 using Quartz;
@@ -19,7 +20,7 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
         private ITopClient _client;
         private string _sessionKey;
         private static string CONSUMER_KEY = ConfigurationManager.AppSettings["CONSUMER_KEY"] ?? "intime";
-        private ILog _logger;
+        private ILog _logger = LogManager.GetCurrentClassLogger();
 
         public void Execute(IJobExecutionContext context)
         {
@@ -33,7 +34,7 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
 #endif
             var benchTime = DateTime.Now.AddMinutes(-interval);
 
-            IApiClient imsClient = new DefaultApiClient(ConstValue.IMS_SERVICE_URL, ConstValue.IMS_APP_SECRET, ConstValue.IMS_APP_KEY);
+            IApiClient imsClient = new ImsApiClient(ConstValue.IMS_SERVICE_URL, ConstValue.IMS_APP_KEY, ConstValue.IMS_APP_SECRET);
             _logger.Info("Begin sync inventory to ims");
             var executor = new ItemSyncExecutor(benchTime, pageSize, imsClient);
             executor.Execute();

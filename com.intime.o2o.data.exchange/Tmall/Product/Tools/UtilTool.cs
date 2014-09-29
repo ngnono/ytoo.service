@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace com.intime.o2o.data.exchange.Tmall.Product.Tools
 {
@@ -28,7 +29,23 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Tools
 
         public string GetValue(IDictionary<string, string> dic, string key)
         {
-            return dic[key];
+            if (dic.ContainsKey(key)) return dic[key];
+            return string.Empty;
+        }
+
+        public string Sub(string input, int count)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return string.Empty;
+            }
+
+            if (input.Length < count)
+            {
+                return input;
+            }
+
+            return input.Substring(0, count);
         }
     }
 }
