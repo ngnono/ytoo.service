@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using com.intime.fashion.data.sync.Tmall.Executor;
+using com.intime.o2o.data.exchange.Ims;
 using com.intime.o2o.data.exchange.IT;
 using com.intime.o2o.data.exchange.Tmall.Core;
 using com.intime.o2o.data.exchange.Tmall.Core.Support;
@@ -38,8 +39,8 @@ namespace com.intime.jobscheduler.Job.Tmall.Order
             var interval = data.ContainsKey("intervalOfMins")?data.GetInt("intervalOfMins"):15;
 
             var benchTime = DateTime.Now.AddMinutes(-interval);
-
-            IApiClient imsClient = new DefaultApiClient(ConstValue.IMS_SERVICE_URL, ConstValue.IMS_APP_SECRET, ConstValue.IMS_APP_KEY);
+            
+            IApiClient imsClient = new ImsApiClient(ConstValue.IMS_SERVICE_URL, ConstValue.IMS_APP_KEY, ConstValue.IMS_APP_SECRET);
 
             var orderSyncExecutor = new OrderSyncExecutor(benchTime, pageSize, imsClient);
 
@@ -49,7 +50,7 @@ namespace com.intime.jobscheduler.Job.Tmall.Order
             }
             catch (Exception e)
             {
-                LogManager.GetCurrentClassLogger().Error(e);
+                _logger.Error(e);
             }
         }
     }

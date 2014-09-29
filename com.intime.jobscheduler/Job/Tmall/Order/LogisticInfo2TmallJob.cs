@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using com.intime.fashion.data.sync.Tmall.Executor;
+using com.intime.o2o.data.exchange.Ims;
 using com.intime.o2o.data.exchange.IT;
 using com.intime.o2o.data.exchange.Tmall.Core;
 using com.intime.o2o.data.exchange.Tmall.Core.Support;
@@ -39,8 +40,8 @@ namespace com.intime.jobscheduler.Job.Tmall.Order
             var interval = data.ContainsKey("intervalOfMins") ? data.GetInt("intervalOfMins") : 15;
 #endif
             var benchTime = DateTime.Now.AddMinutes(-interval);
+            IApiClient imsClient = new ImsApiClient(ConstValue.IMS_SERVICE_URL, ConstValue.IMS_APP_KEY, ConstValue.IMS_APP_SECRET);
 
-            IApiClient imsClient = new DefaultApiClient(ConstValue.IMS_SERVICE_URL, ConstValue.IMS_APP_SECRET, ConstValue.IMS_APP_KEY);
             var logisticExecutor = new LogisticsExecutor(benchTime, pageSize, _client, imsClient, _sessionKey);
 
             try

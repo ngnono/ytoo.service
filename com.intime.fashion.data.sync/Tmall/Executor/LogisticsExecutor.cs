@@ -120,7 +120,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 var rsp = _topClient.Execute(request, _sessionKey);
                 if (rsp.IsError)
                 {
-                    Logger.Error(rsp);
+                    Logger.ErrorFormat("{0} == {1}",rsp.ErrMsg,rsp.SubErrMsg);
                 }
                 else
                 {

@@ -24,7 +24,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             using (var context = DbContextHelper.GetJushitaContext())
             {
                 var linq =
-                    context.JDP_TB_TRADE.Where(x => x.status == OrderStatus.WAIT_SELLER_SEND_GOODS && x.created >= _benchDateTime && !context.Set<OrderSync>().Any(o => o.TmallOrderId == x.tid && o.Type == (int)OrderType));
+                    context.JDP_TB_TRADE.Where(x => x.status == OrderStatus.WAIT_SELLER_SEND_GOODS && !context.Set<OrderSync>().Any(o => o.TmallOrderId == x.tid && o.Type == (int)OrderType));
                 if (whereCondition != null)
                     linq = linq.Where(whereCondition);
                 if (callback != null)

@@ -32,8 +32,8 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
             int totalCount = 0;
             int cursor = 0;
             Decimal lastCursor = 0;
-            DoQuery(null, orders => totalCount = orders.Count());
 
+            DoQuery(null, orders => totalCount = orders.Count());            
             while (cursor < totalCount)
             {
                 List<JDP_TB_TRADE> oneTimeList = null;
@@ -148,7 +148,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 throw new ArgumentException("Trade response is null");
             }
             dynamic tradeRsp = JsonConvert.DeserializeObject(trade.jdp_response);
-
+            Logger.Error(trade.jdp_response);
             var tmallOrder = tradeRsp["trade_fullinfo_get_response"]["trade"];
             dynamic imsOrder = new
             {
@@ -198,8 +198,10 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
                 });
             }
 
+
             var request = new CreateOrderRequest { Data = imsOrder };
-            var rsp = _imsClient.Post(request);
+
+            var rsp = _imsClient.Post(request);            
             if (rsp.Data != null)
             {
                 return SyncResult.SucceedResult(rsp.Data.orderno.ToString(), Convert.ToInt64(tmallOrder.tid.ToString()), tmallOrder);
