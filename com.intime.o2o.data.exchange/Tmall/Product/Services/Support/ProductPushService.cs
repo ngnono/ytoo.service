@@ -3,6 +3,7 @@ using System.Collections;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Web.UI.WebControls;
 using System.Xml.Linq;
 
 using com.intime.o2o.data.exchange.Tmall.Core;
@@ -118,6 +119,32 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 {"consumerKey",consumerKey}
             });
 
+            Log.Error(xmlData);
+
+            var query = new TmallProductSchemaMatchRequest();
+            query.CategoryId = categoryId;
+            query.Propvalues = xmlData;
+            var rsp = topClient.Execute(query, _topClientFactory.GetSessionKey(consumerKey));
+
+            Log.Error(string.Format("{0}-{1}", rsp.ErrMsg, rsp.SubErrMsg));
+
+            if (!rsp.IsError)
+            {
+                Log.Error("**********");
+                Log.Error(rsp.MatchResult);
+                var product_id = rsp.MatchResult;
+                if (!string.IsNullOrEmpty(product_id))
+                {
+                    // 保存上传商品和成功后的商品Id的关系
+                    var pId = Convert.ToInt64(product_id);
+                    _productMapper.Save(productSchema.Id, pId);
+
+                    return Ok(pId);
+                }
+
+            }
+
+
             // 请求Taobao接口
             var result = topClient.Execute(new TmallProductSchemaAddRequest()
             {
@@ -125,12 +152,13 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 CategoryId = categoryId,
                 XmlData = xmlData
             }, _topClientFactory.GetSessionKey(consumerKey));
-           
+
+
+            Log.Error(string.Format("{0}-{1}", result.ErrMsg, result.SubErrMsg));
             if (result.IsError)
             {
-                return Error<long>(string.Format("{0}-{1}", result.ErrMsg, result.SubErrCode), result.ErrCode);
+                return Error<long>(string.Format("{0}-{1}", result.ErrMsg, result.SubErrMsg), result.ErrCode);
             }
-
 
 
             // 解析XMl返回结果提取productId
@@ -147,6 +175,9 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 return Error<long>(errorMessage, "-10004");
             }
 
+
+            Log.Error("&&&");
+            Log.Error(field.Value);
             var productId = Convert.ToInt64(field.Value);
 
             // 保存上传商品和成功后的商品Id的关系
@@ -308,15 +339,12 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             foreach (var colorImg in colorResources)
             {
+                if (string.IsNullOrEmpty(colorImg.ColorDesc)) continue;
                 if (!colorImgs.ContainsKey(colorImg.ColorDesc))
                 {
                     colorImgs.Add(colorImg.ColorDesc, colorImg.Url);
                 }
             }
-
-            Console.WriteLine("==========================================================");
-            Console.WriteLine(string.Join(",", colorImgs.Keys.ToArray()));
-            Console.WriteLine(string.Join(",", colorImgs.Values.ToArray()));
 
             var context = new Hashtable
             {
@@ -461,7 +489,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
                     if (img != null)
                     {
-                        var extItem = items.FirstOrDefault(p => resource.ColorId.HasValue &&p.ColorValueId == resource.ColorId);
+                        var extItem = items.FirstOrDefault(p => resource.ColorId.HasValue && p.ColorValueId == resource.ColorId);
 
                         if (extItem != null)
                         {
