@@ -368,7 +368,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Api.Controllers
             items.Add(new OrderPreCalculateItem()
             {
                 ProductId = linq.Id,
-                Quantity = 1,
+                Quantity = request.Quantity,
                 Price = linq.Price
             });
             OrderPreCalculateResult model = _orderService.PreCalculate(new OrderPreCalculate()
