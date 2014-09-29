@@ -52,11 +52,18 @@ namespace com.intime.fashion.service.cache
             {
                 MemcachedClientConfiguration config = new MemcachedClientConfiguration();
                 var memConfig = CommonConfiguration<Cache_AuthkeyConfiguration>.Current;
-                config.AddServer(memConfig.Host,int.Parse(memConfig.Port));
+                IPAddress newaddress = Dns.GetHostEntry(memConfig.Host).AddressList[0];
+                IPEndPoint ipEndPoint = new IPEndPoint(newaddress, 11211);
+                config.Servers.Add(ipEndPoint);
+
                 config.Protocol = MemcachedProtocol.Binary;
                 config.Authentication.Type = typeof(PlainTextAuthenticator);
+                config.Authentication.Parameters["zone"] = string.Empty;
                 config.Authentication.Parameters["userName"] = memConfig.UserName;
                 config.Authentication.Parameters["password"] = memConfig.Password;
+                config.SocketPool.MinPoolSize = 5;
+                config.SocketPool.MaxPoolSize = 200;
+
                 _prefix = memConfig.Prefix;
                 _client = new MemcachedClient(config);
             }
