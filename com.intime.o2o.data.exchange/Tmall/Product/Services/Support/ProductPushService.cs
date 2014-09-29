@@ -329,7 +329,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             /**==============================================
             * 获取最大5张图片处理
             ================================================*/
-            var resources = UploadImgsForItems(product.Resource, esStocks, 20, topClient);
+            var resources = UploadImgsForItems(product.Resource, esStocks, topClient);
 
             var colorResources = resources as ColorResource[] ?? resources.ToArray();
 
@@ -449,10 +449,12 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         {
             var imgs = new List<string>();
 
-            // 获取前五张图片
-            resources = resources.Take(topN);
+            var pictures = resources.Where(p => p.Status == 1).OrderByDescending(p => p.SortOrder).Take(topN);
 
-            foreach (var resource in resources)
+            // 获取前五张图片
+            //resources = resources.Take(topN);
+
+            foreach (var resource in pictures)
             {
                 try
                 {
@@ -474,12 +476,14 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             return imgs;
         }
 
-        private IEnumerable<ColorResource> UploadImgsForItems(IEnumerable<ESResource> resources, IList<ESStock> items, int topN, ITopClient topClient)
+        private IEnumerable<ColorResource> UploadImgsForItems(IEnumerable<ESResource> resources, IList<ESStock> items, ITopClient topClient)
         {
             var imgs = new List<ColorResource>();
 
+            var sourcePictures =
+                resources.Where(r => r.Status == 1).OrderByDescending(x => x.SortOrder).ThenBy(x => x.ColorId);
 
-            foreach (var resource in resources)
+            foreach (var resource in sourcePictures)
             {
                 try
                 {
