@@ -10,6 +10,8 @@ using System.Transactions;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.Enums;
 using com.intime.fashion.service;
+using Yintai.Architecture.Framework.ServiceLocation;
+using Yintai.Architecture.Common.Data.EF;
 
 namespace com.intime.jobscheduler.Job.Combo
 {
@@ -51,6 +53,8 @@ namespace com.intime.jobscheduler.Job.Combo
             int successCount = 0;
             int size = JobConfig.DEFAULT_PAGE_SIZE;
             int lastCursor = 0;
+            var comboRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_ComboEntity>>();
+            var associateItemRepo = ServiceLocator.Current.Resolve<IEFRepository<IMS_AssociateItemsEntity>>();
             Stopwatch sw = new Stopwatch();
             sw.Start();
             while (cursor < totalCount)
@@ -64,31 +68,32 @@ namespace com.intime.jobscheduler.Job.Combo
                 {
                     try
                     {
-                        using (var ts = new TransactionScope())
+                        using (var slt = new ScopedLifetimeDbContextManager())
                         {
-                            using (var db = new YintaiHangzhouContext("YintaiHangzhouContext"))
+                            using (var ts = new TransactionScope())
                             {
-                                order.Status = (int)DataStatus.Default;
-                                order.UpdateDate = DateTime.Now;
-                                db.Entry(order).State = System.Data.EntityState.Modified;
+                                
+                                    order.Status = (int)DataStatus.Default;
+                                    order.UpdateDate = DateTime.Now;
+                                    comboRepo.Update(order);
 
-                                var associateItemEntity = db.Set<IMS_AssociateItemsEntity>().Where(ia => ia.ItemType == (int)ComboType.Product
-                                                && ia.ItemId == order.Id
-                                                && ia.Status == (int)DataStatus.Normal).FirstOrDefault();
-                                if (associateItemEntity != null)
-                                {
-                                    associateItemEntity.Status = (int)DataStatus.Default;
-                                    associateItemEntity.UpdateDate = DateTime.Now;
-                                    db.Entry(associateItemEntity).State = System.Data.EntityState.Modified;
+                                    var associateItemEntity = associateItemRepo.Find(ia => ia.ItemType == (int)ComboType.Product
+                                                    && ia.ItemId == order.Id
+                                                    && ia.Status == (int)DataStatus.Normal);
+                                    if (associateItemEntity != null)
+                                    {
+                                        associateItemEntity.Status = (int)DataStatus.Default;
+                                        associateItemEntity.UpdateDate = DateTime.Now;
+                                        associateItemRepo.Update(associateItemEntity);
+                                    }
+
+
+                                    ts.Complete();
+
+                                    successCount++;
+
                                 }
-                                db.SaveChanges();
-
-                                ts.Complete();
-                                
-                                successCount++;
-                                
                             }
-                        }
                     }
                     catch (Exception ex)
                     {
