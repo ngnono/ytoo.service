@@ -24,6 +24,9 @@ namespace com.intime.jobscheduler
             ServiceLocator.Current.Register<IOrderRepository, OrderRepository>();
             ServiceLocator.Current.Register<IEFRepository<IMS_AssociateIncomeHistoryEntity>, EFRepository<IMS_AssociateIncomeHistoryEntity>>();
             ServiceLocator.Current.Register<IEFRepository<IMS_AssociateIncomeEntity>, EFRepository<IMS_AssociateIncomeEntity>>();
+            ServiceLocator.Current.Register<IEFRepository<IMS_ComboEntity>, EFRepository<IMS_ComboEntity>>();
+            ServiceLocator.Current.Register<IEFRepository<IMS_AssociateItemsEntity>, EFRepository<IMS_AssociateItemsEntity>>();
+
             ServiceLocator.Current.Register<IAssociateIncomeService, AssociateIncomeService>();
 
             ServiceLocator.Current.Register<AnalysisService, AnalysisService>();
