@@ -13,7 +13,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services
     public interface IProductPoolService
     {
         /// <summary>
-        /// 获取待处理的产品Id列表
+        /// 获取待处理的聚合产品Id列表
         /// </summary>
         /// <returns></returns>
         IEnumerable<int> GetPendingProductIds();

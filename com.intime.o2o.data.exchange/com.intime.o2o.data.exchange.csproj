@@ -103,6 +103,7 @@
     <Compile Include="Tmall\Core\ConvertionExtensions.cs" />
     <Compile Include="Tmall\Core\ITopClientFactory.cs" />
     <Compile Include="Tmall\Core\Support\DefaultTopClientFactory.cs" />
+    <Compile Include="Tmall\Product\Models\ColorResource.cs" />
     <Compile Include="Tmall\Product\Tools\TagTool.cs" />
     <Compile Include="Tmall\Product\Tools\StoreTool.cs" />
     <Compile Include="Tmall\Product\Mappers\IBrandMapper.cs" />

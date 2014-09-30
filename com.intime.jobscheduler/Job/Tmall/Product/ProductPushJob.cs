@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using com.intime.o2o.data.exchange.Tmall.Product.Models;
+﻿using com.intime.o2o.data.exchange.Tmall.Product.Models;
 using com.intime.o2o.data.exchange.Tmall.Product.Services;
 using com.intime.o2o.data.exchange.Tmall.Product.Services.Support;
 using Common.Logging;
@@ -44,8 +42,6 @@ namespace com.intime.jobscheduler.Job.Tmall.Product
                     _productPoolService.UpdateProductStatus(productId, ProductPoolStatus.ElasticSearchNotFound, string.Format("搜索中没有找到产品信息:productId:{0}", productId));
                     continue;
                 }
-
-                
 
                 // push 本地商品到tmall
                 var result = _productPushService.AddProduct(productSchema, "intime");

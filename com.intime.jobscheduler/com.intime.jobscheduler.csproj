@@ -225,10 +225,17 @@
     <Compile Include="UnityBootStrapper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.item.162201.xml" />
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.item.50012006.xml" />
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.item.50013204.xml" />
     <Content Include="Configuration\Tmall\Templates\tmall.schema.item.50026312.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.product.162201.34647955.xml" />
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.product.50012006.224832530.xml" />
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.product.50013204.20578.xml" />
+    <Content Include="Configuration\Tmall\Templates\tmall.schema.product.50013204.20579.xml" />
     <Content Include="Configuration\Tmall\Templates\tmall.schema.product.50026312.20578.xml" />
     <None Include="App.config">
       <SubType>Designer</SubType>

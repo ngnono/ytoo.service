@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using com.intime.fashion.service.search;
 using com.intime.o2o.data.exchange.Tmall.Product.Models;
+using Common.Logging;
 using Nest;
 using Yintai.Hangzhou.Data.Models;
 using Yintai.Hangzhou.Model.ES;
@@ -15,6 +17,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
     /// </summary>
     public class ProductPoolService : IProductPoolService
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private const int ChannelId = 1008;
         /**
          * 说明：ProductPool status:
@@ -30,7 +33,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         {
             /**
             *   获取ProductPool表中的，待处理产品数据中默认商品的ProductId进行添加商品
-             *  默认一次获取20条数据
+             *  默认一次获取10条数据
             */
             using (var db = new YintaiHangzhouContext())
             {
@@ -53,21 +56,124 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
         public ESProduct GetProductByProductId(int productId)
         {
+            /**===============================================
+             * :: 聚合商品信息
+             * 1. 根据productId获取聚合后的商品列表
+             * 2. 根据ProductIds,获取所有商品
+             * 3. 选取默认商品进行商品组装
+            ================================================== */
 
-            return GetDefaultElasticClient().Search<ESProduct>(
+            var productPoolEnitys = GetGroupedProductIdsByProductId(productId);
+
+            if (productPoolEnitys == null)
+            {
+                Log.ErrorFormat("获取ProductPool列表失败,{0}", productId);
+                return null;
+            }
+
+            var productIds = productPoolEnitys.Select(p => p.ProductId.ToString(CultureInfo.InvariantCulture));
+
+            /**=================================================================
+            * 聚合商品列表
+             ===================================================================== */
+            var products = GetDefaultElasticClient().Search<ESProduct>(
                 body =>
                     body.Filter(q =>
-                        q.Term(p => p.Id, productId))
+                        q.Terms(p => p.Id, productIds))
                         .Skip(0).
-                        Size(1))
-                    .Documents.FirstOrDefault();
+                        Size(5000))
+                    .Documents;
+
+            if (products == null)
+            {
+                Log.ErrorFormat("根据Id获取商品列表出错,productIds", string.Join(",", productIds.ToArray()));
+                return null;
+            }
+
+            var esProducts = products as IList<ESProduct> ?? products.ToList();
+
+            /**=================================================================
+             * 默认商品Id
+            ===================================================================== */
+            var defaultProductPoolEntity = productPoolEnitys.FirstOrDefault(p => p.IsDefault == true);
+
+            if (defaultProductPoolEntity == null)
+            {
+                Log.ErrorFormat("ProductPool聚合产品中选取默认商品出错，情进行排查,productId:{0}", productId);
+                return null;
+            }
+
+            /**=================================================================
+             * 获取默认商品
+            ===================================================================== */
+
+            var defaultProduct = esProducts.FirstOrDefault(p => p.Id == defaultProductPoolEntity.ProductId);
+
+            if (defaultProduct == null)
+            {
+                Log.ErrorFormat("ES聚合产品中选取默认商品出错，情进行排查,productId:{0}", productId);
+                return null;
+            }
+
+            /**=================================================================
+            * 进行商品聚合
+             * 1. 图片进行聚合
+             * 2. 价格获取最低价格
+            ===================================================================== */
+
+            var otherProducts = esProducts.Where(p => p.Id != defaultProductPoolEntity.ProductId);
+
+            var resources = new List<ESResource>(defaultProduct.Resource);
+            var defaultPrice = defaultProduct.Price;
+
+            foreach (var otherProduct in otherProducts)
+            {
+                // 聚合图片
+                resources.AddRange(otherProduct.Resource);
+
+                // 价格处理
+                if (otherProduct.Price < defaultPrice)
+                {
+                    defaultPrice = otherProduct.Price;
+                }
+            }
+
+            // 组装默认商品
+            defaultProduct.Resource = resources;
+            defaultProduct.Price = defaultPrice;
+
+            return defaultProduct;
         }
+
+        private IList<ProductPoolEntity> GetGroupedProductIdsByProductId(int productId)
+        {
+            using (var db = new YintaiHangzhouContext())
+            {
+                var extProductPool = db.ProductPools.FirstOrDefault(p => p.ProductId == productId);
+
+                if (extProductPool == null)
+                {
+                    Log.ErrorFormat("在ProductPool中获取商品失败,productId:{0}", productId);
+                    return null;
+                }
+
+                var productPoolEnitys = db.ProductPools.Where(p => p.MergedProductCode == extProductPool.MergedProductCode).ToList();
+                if (productPoolEnitys.Count == 0)
+                {
+                    Log.ErrorFormat("在ProductPool中获取商品失败,productId:{0},mergeProductCode:{1}", productId, extProductPool.MergedProductCode);
+                    return null;
+                }
+
+                return productPoolEnitys;
+            }
+        }
+
 
         public IEnumerable<string> GetAddedMergedProductCode()
         {
             /**
             *   获取已经成功上传产品的IDS
-             *  默认一次获取20条数据
+             *  默认一次获取10条数据
             */
             using (var db = new YintaiHangzhouContext())
             {
@@ -91,6 +197,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                     p =>
                         p.Status == 200
                         && p.MergedProductCode == code
+                        && p.IsDefault == true
                         && p.ChannelId == ChannelId)
                     .OrderBy(p => p.ProductId)
                    .Skip(0)
@@ -107,10 +214,25 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         /// <returns></returns>
         public IEnumerable<ESStock> GetItemsByIdsByProductId(int productId)
         {
+            /**
+             * 根据ProductId进行聚合的单品
+             */
+            var productPoolEnitys = GetGroupedProductIdsByProductId(productId);
+
+            if (productPoolEnitys == null)
+            {
+                Log.ErrorFormat("获取ProductPool列表失败,{0}", productId);
+                return null;
+            }
+
+            var productIds = productPoolEnitys.Select(p => p.ProductId.ToString(CultureInfo.InvariantCulture)).ToList();
+
+            Log.InfoFormat("获取ESStock,ProductIds:{0}", string.Join(",", productIds.ToArray()));
+
             return GetDefaultElasticClient().Search<ESStock>(
                 body =>
                     body.Filter(q =>
-                        q.Term(p => p.ProductId, productId))
+                        q.Terms(p => p.ProductId, productIds))
                         .Skip(0).
                         Size(5000))
                     .Documents;
@@ -134,12 +256,23 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
         public void UpdateProductStatus(int productId, ProductPoolStatus status, string errorMessage)
         {
+            var productPoolEnitys = GetGroupedProductIdsByProductId(productId);
+
+            foreach (var productPoolEntity in productPoolEnitys)
+            {
+                UpdateChildProductStatus(productPoolEntity.ProductId, status, errorMessage);
+            }
+        }
+
+        public void UpdateChildProductStatus(int productId, ProductPoolStatus status, string errorMessage)
+        {
             using (var db = new YintaiHangzhouContext())
             {
                 var extProductPool = db.ProductPools.FirstOrDefault(p => p.ProductId == productId);
                 if (extProductPool != null)
                 {
                     extProductPool.Status = (int)status;
+                    extProductPool.UpdateDate = DateTime.Now;
                     extProductPool.ErrorMessage = errorMessage;
                 }
                 db.SaveChanges();
