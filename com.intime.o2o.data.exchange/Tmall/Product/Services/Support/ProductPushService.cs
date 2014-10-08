@@ -89,13 +89,17 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             if (categoryId == null)
             {
-                var errorMessage = string.Format("商品分类没有映射，productId:{0},brandId:{1}", productSchema.Id,
-                    productSchema.CategoryId);
+                var errorMessage = string.Format("商品分类没有映射，productId:{0},categoryId:{1}", productSchema.Id,
+                    productSchema.Tag.Id);
                 Log.Error(errorMessage);
                 return Error<long>(errorMessage, "-10002");
             }
 
-            // 创建templatekey,{模版名称}+{分类}+{品牌}
+            /**================================================
+             * 模版组装校验
+             *  // 创建templatekey,{模版名称}+{分类}+{品牌}
+            ==================================================*/
+
             var templateKey = string.Format("tmall.schema.product.{0}.{1}", categoryId, brandId);
 
             if (!_schemaMapper.ExistsTemplate(templateKey))
@@ -121,29 +125,37 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             Log.Error(xmlData);
 
-            var query = new TmallProductSchemaMatchRequest();
-            query.CategoryId = categoryId;
-            query.Propvalues = xmlData;
+            /**================================================
+            * 匹配产品，如果已经添加直接返回ProductId
+           ==================================================*/
+            var query = new TmallProductSchemaMatchRequest
+            {
+                CategoryId = categoryId,
+                Propvalues = xmlData
+            };
+
             var rsp = topClient.Execute(query, _topClientFactory.GetSessionKey(consumerKey));
 
-            Log.Error(string.Format("{0}-{1}", rsp.ErrMsg, rsp.SubErrMsg));
+            Log.InfoFormat("Match产品返回结果,{0}-{1}", rsp.ErrMsg, rsp.SubErrMsg);
 
             if (!rsp.IsError)
             {
                 Log.Error("**********");
                 Log.Error(rsp.MatchResult);
-                var product_id = rsp.MatchResult;
-                if (!string.IsNullOrEmpty(product_id))
+                var matchedProductId = rsp.MatchResult;
+                if (!string.IsNullOrEmpty(matchedProductId))
                 {
                     // 保存上传商品和成功后的商品Id的关系
-                    var pId = Convert.ToInt64(product_id);
+                    var pId = Convert.ToInt64(matchedProductId);
                     _productMapper.Save(productSchema.Id, pId);
 
                     return Ok(pId);
                 }
-
             }
 
+            /**================================================
+            * 添加新商品
+            ==================================================*/
 
             // 请求Taobao接口
             var result = topClient.Execute(new TmallProductSchemaAddRequest()
@@ -175,9 +187,6 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 return Error<long>(errorMessage, "-10004");
             }
 
-
-            Log.Error("&&&");
-            Log.Error(field.Value);
             var productId = Convert.ToInt64(field.Value);
 
             // 保存上传商品和成功后的商品Id的关系
@@ -306,10 +315,15 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
              */
             var esStocks = items as IList<ESStock> ?? items.ToList();
 
+            //TODO:临时修改,解决同款下面花色名称和尺码名称相同问题
+            foreach (ESStock t in esStocks)
+            {
+                t.ColorDesc = string.Format("{0}/{1}", t.ColorDesc, t.ColorValueId);
+                t.SizeDesc = string.Format("{0}/{1}", t.SizeDesc, t.SizeValueId);
+            }
+
             var colors = esStocks.Select(p => p.ColorDesc).Distinct().ToList();
             var sizes = esStocks.Select(p => p.SizeDesc).Distinct().ToList();
-            //var colors = esStocks.Select(p => p.ColorValueId).Distinct().ToList();
-            //var sizes = esStocks.Select(p => p.SizeValueId).Distinct().ToList();
 
             #endregion
 
@@ -340,6 +354,9 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             foreach (var colorImg in colorResources)
             {
                 if (string.IsNullOrEmpty(colorImg.ColorDesc)) continue;
+
+                Console.Write("ColorDesc:{0},ColorValueId:{1},Url:{2}", colorImg.ColorDesc, colorImg.ColorValueId, colorImg.Url);
+
                 if (!colorImgs.ContainsKey(colorImg.ColorDesc))
                 {
                     colorImgs.Add(colorImg.ColorDesc, colorImg.Url);
@@ -369,8 +386,10 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                 return Error<long>(errorMessage, "-20003");
             }
 
+
             // 转化商品数据Schema
             var xmlData = CreateXmlData(templateKey, context);
+
             Log.Error(xmlData);
             // 请求Taobao接口
             var result = topClient.Execute(new TmallItemSchemaAddRequest()
@@ -384,7 +403,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             if (result.IsError)
             {
-                return Error<long>(string.Format("{0}-{1}", result.ErrMsg, result.SubErrCode), result.ErrCode);
+                return Error<long>(string.Format("{0}-{1}", result.ErrMsg, result.SubErrMsg), result.ErrCode);
             }
 
             // 转化itemId
@@ -451,8 +470,6 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             var pictures = resources.Where(p => p.Status == 1).OrderByDescending(p => p.SortOrder).Take(topN);
 
-            // 获取前五张图片
-            //resources = resources.Take(topN);
 
             foreach (var resource in pictures)
             {
@@ -500,6 +517,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
                             imgs.Add(new ColorResource()
                             {
                                 ColorDesc = extItem.ColorDesc,
+                                ColorValueId = extItem.ColorValueId,
                                 Url = img
                             });
                         }
@@ -525,8 +543,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
             string exPicDomain = ConfigurationManager.AppSettings["EXPIC_DOMAIN"];
 
             var url = string.Format("{0}/{1}_640x0.jpg", exPicDomain.TrimEnd('/'), resource.Name);
-            Log.Error(url);
-            //  url = "http://gi3.md.alicdn.com/bao/uploaded/i3/TB14vMQGXXXXXczXXXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg";
+            Log.ErrorFormat("下载图片:{0}", url);
             var client = new HttpClient();
             string directory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tmp", DateTime.Today.ToString("yyyyMMdd"));
             if (!Directory.Exists(directory))
@@ -575,11 +592,5 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
         #endregion
 
         #endregion
-    }
-
-    public class ColorResource
-    {
-        public string ColorDesc { get; set; }
-        public string Url { get; set; }
     }
 }

@@ -30,15 +30,15 @@
   </field>
   <field id="sku" name="SKU" type="multiComplex">
 
-    #set($mapColors=$_util.Zip($colors,[3232483,3232484,3232481,90554,28332,30156,60092,3232482]))
-    #set($mapSizes=$_util.Zip($sizes,[28415,28416,28417,28418,28419,28420,28421,28422]))
+    #set($mapColors=$_util.Zip($colors,[3232483,3232484,3232481,90554,28332,30156,60092,3232482,3232478,3232479,28340,28320,3232480,80882,28329,28326,28335,130164,28338,132069,107121,28327,28324,28341]))
+    #set($mapSizes=$_util.Zip($sizes,[28383,44913,28381,28313,28314,28315,28316,28317,28318,28319,44911]))
 
     #foreach($item in $items)
     <complex-values>
       <field id="prop_1627207" name="颜色分类" type="singleCheck">
         <value isInput="false">$_util.GetValue($mapColors,"$item.ColorDesc")</value>
       </field>
-      <field id="prop_20518" name="尺寸" type="singleCheck">
+      <field id="prop_20509" name="尺码" type="singleCheck">
         <value isInput="false">$_util.GetValue($mapSizes,"$item.SizeDesc")</value>
       </field>
       <field id="sku_price" name="价格" type="input">
@@ -65,14 +65,14 @@
     </complex-values>
     #end
   </field>
-  <field id="prop_extend_20518" name="尺寸扩展" type="multiComplex">
+  <field id="prop_extend_20509" name="尺码扩展" type="multiComplex">
     #foreach($sizeItem in $mapSizes)
     <complex-values>
-      <field id="prop_20518" name="尺寸" type="singleCheck">
+      <field id="prop_20509" name="尺码" type="singleCheck">
         <value isInput="false">${sizeItem.Value}</value>
       </field>
       <field id="alias_name" name="" type="input">
-        <value>{$sizeItem.Key}</value>
+        <value>$sizeItem.Key</value>
       </field>
     </complex-values>
     #end
@@ -131,14 +131,7 @@
 
   <field id="valid_thru" name="有效期" type="singleCheck">
     <value isInput="false">7</value>
-  </field>
-  <field id="vertical_image" name="商品竖图" type="input">
-    <value>http://gi2.md.alicdn.com/bao/uploaded/i2/TB1FnAtGXXXXXaEXXXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg</value>
-  </field>
-
-  <field id="diaopai_pic" name="吊牌图" type="input">
-    <value>http://gi2.md.alicdn.com/bao/uploaded/i2/TB1FnAtGXXXXXaEXXXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg</value>
-  </field>
+  </field>  
   <field id="service_version" name="天猫系统服务版本" type="input">
     <value>10000</value>
   </field>

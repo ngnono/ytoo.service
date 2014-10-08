@@ -124,7 +124,7 @@
     <value>${product.Id}</value>
   </field>
   <field id="is_xinpin" name="是否新品" type="singleCheck">
-    <value isInput="false">false</value>
+    <value isInput="false">true</value>
   </field>
   <field id="description" name="商品描述" type="complex">
 

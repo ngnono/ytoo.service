@@ -41,9 +41,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Tools
             }
 
             if (input.Length < count)
-            {
                 return input;
-            }
 
             return input.Substring(0, count);
         }

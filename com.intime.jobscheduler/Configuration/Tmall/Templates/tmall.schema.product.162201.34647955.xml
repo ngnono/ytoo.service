@@ -1,6 +1,6 @@
 ﻿<itemRule>
     <field id="prop_13021751" name="货号" type="input">
-        <value>${product.Id}</value>
+        <value>${product.UpcCode}</value>
     </field>
 
     <field id="prop_20000" name="品牌" type="singleCheck">
