@@ -18,7 +18,7 @@ namespace com.intime.fashion.service.messages.Message
         private DbContext _context;
         private ITopClient _topClient;
         private string _sessionKey;
-        internal static string TOP_CONSUMER_KEY = ConfigurationManager.AppSettings["TOP_CONSUMER_KEY"];
+        internal static string TOP_CONSUMER_KEY = ConfigurationManager.AppSettings["TOP_CONSUMER_KEY"]??"intime";
         private readonly ITopClientFactory _topClientFactory = new DefaultTopClientFactory();
         public InventoryUpdatedHandler()
         {

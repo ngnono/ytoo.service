@@ -113,12 +113,19 @@ namespace com.intime.jobscheduler.Job
                         .Join(db.Inventories, p => p.Key, i => i.ProductId, (k, i) => i)
                         .Join(db.Products, i => i.ProductId, p => p.Id,
                             (i, p) => new { stock = i, price = p.Price, labelprice = p.UnitPrice })
-                            .Join(db.ProductPropertyValues,s=>s.stock.PColorId,ppv=>ppv.Id,(s,ppv)=>new
+                            .Join(db.ProductPropertyValues.Where(ppv => ppv.Status == (int)DataStatus.Normal), s => s.stock.PColorId, ppv => ppv.Id, (s, ppv) => new
                             {
-                               s.stock, s.price,s.labelprice,color = ppv.ValueDesc
-                            }).Join(db.ProductPropertyValues,s=>s.stock.PSizeId,ppv=>ppv.Id,(s,ppv)=>new
+                                s.stock,
+                                s.price,
+                                s.labelprice,
+                                color = ppv.ValueDesc
+                            }).Join(db.ProductPropertyValues.Where(ppv => ppv.Status == (int)DataStatus.Normal), s => s.stock.PSizeId, ppv => ppv.Id, (s, ppv) => new
                             {
-                                s.stock,s.price,s.labelprice,s.color,size = ppv.ValueDesc
+                                s.stock,
+                                s.price,
+                                s.labelprice,
+                                s.color,
+                                size = ppv.ValueDesc
                             });
 
 
