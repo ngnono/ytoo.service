@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Model.Enums;
 using Yintai.Hangzhou.Model.ESModel;
 
 namespace com.intime.fashion.service.search
@@ -33,27 +34,27 @@ namespace com.intime.fashion.service.search
             //};
 
             var stocks = from inventory in db.Set<InventoryEntity>()
-                from product in db.Set<ProductEntity>()
-                from cppv in db.Set<ProductPropertyValueEntity>()
-                from sppv in db.Set<ProductPropertyValueEntity>()
-                where
-                    inventory.Id == id && inventory.ProductId == product.Id && inventory.PColorId == cppv.Id &&
-                    inventory.PSizeId == sppv.Id
-                select new ESStock()
-                {
-                    ProductId = inventory.ProductId,
-                    Amount = inventory.Amount,
-                    ColorValueId = cppv.Id,
-                    ColorDesc = cppv.ValueDesc,
-                    SizeValueId = sppv.Id,
-                    SizeDesc = sppv.ValueDesc,
-                    Id = inventory.Id,
-                    LabelPrice = product.UnitPrice.HasValue ? product.UnitPrice.Value : 999999,
-                    Price = product.Price,
-                    UpdateDate = DateTime.Now
-                };
+                         from product in db.Set<ProductEntity>()
+                         from cppv in db.Set<ProductPropertyValueEntity>()
+                         from sppv in db.Set<ProductPropertyValueEntity>()
+                         where
+                             inventory.Id == id && inventory.ProductId == product.Id && inventory.PColorId == cppv.Id &&
+                             inventory.PSizeId == sppv.Id && cppv.Status == (int)DataStatus.Normal && sppv.Status == (int)DataStatus.Normal
+                         select new ESStock()
+                         {
+                             ProductId = inventory.ProductId,
+                             Amount = inventory.Amount,
+                             ColorValueId = cppv.Id,
+                             ColorDesc = cppv.ValueDesc,
+                             SizeValueId = sppv.Id,
+                             SizeDesc = sppv.ValueDesc,
+                             Id = inventory.Id,
+                             LabelPrice = product.UnitPrice.HasValue ? product.UnitPrice.Value : 999999,
+                             Price = product.Price,
+                             UpdateDate = DateTime.Now
+                         };
             return stocks.FirstOrDefault();
         }
-       
+
     }
 }
