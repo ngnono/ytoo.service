@@ -101,7 +101,7 @@ namespace com.intime.fashion.data.sync.Tmall.Executor
         private void SyncOne(OrderSync orderSync, LogisticStatus logistic)
         {
             var groups = logistic.Logistics.GroupBy(x => string.Format("{0}/{1}{2}", x.StoreId, x.LogisticCode, x.CompanyId));
-            if (groups.Count() == 0)
+            if (!groups.Any())
             {
                 return;
             }

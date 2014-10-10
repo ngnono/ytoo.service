@@ -59,7 +59,7 @@ namespace com.intime.fashion.service.messages.Message
                 mergedProducts.Join(_db.Set<ProductPoolEntity>(), p1 => p1.MergedProductCode, p2 => p2.MergedProductCode,
                     (p1, p2) => p2)
                     .Join(_db.Set<InventoryEntity>(), p => p.ProductId, m => m.ProductId, (p, i) => i)
-                    .Join(_db.Set<Map4InventoryEntity>().Where(m => m.Channel == "tmall"), i => i.Id, m => m.InventoryId,
+                    .Join(_db.Set<Map4InventoryEntity>().Where(m => m.Channel == "tmall" && m.status == (int)DataStatus.Normal), i => i.Id, m => m.InventoryId,
                         (i, m) => new { Inventory = i, Map = m });
 
             bool allSucceed = true;

@@ -9,6 +9,7 @@ using Top.Api;
 using Top.Api.Request;
 using Yintai.Architecture.Framework.ServiceLocation;
 using Yintai.Hangzhou.Data.Models;
+using Yintai.Hangzhou.Model.Enums;
 
 
 namespace com.intime.fashion.service.messages.Message
@@ -18,7 +19,7 @@ namespace com.intime.fashion.service.messages.Message
         private DbContext _context;
         private ITopClient _topClient;
         private string _sessionKey;
-        internal static string TOP_CONSUMER_KEY = ConfigurationManager.AppSettings["TOP_CONSUMER_KEY"]??"intime";
+        internal static string TOP_CONSUMER_KEY = ConfigurationManager.AppSettings["TOP_CONSUMER_KEY"] ?? "intime";
         private readonly ITopClientFactory _topClientFactory = new DefaultTopClientFactory();
         public InventoryUpdatedHandler()
         {
@@ -41,15 +42,22 @@ namespace com.intime.fashion.service.messages.Message
             return SyncInventory(message.EntityId, _context, _topClient);
         }
 
-        private  bool SyncInventory(int inventoryId, DbContext db, ITopClient topClient)
+        /// <summary>
+        /// 增加OrderByDescending，防止天猫上删除的sku在map表中重复导致的库存更新问题
+        /// </summary>
+        /// <param name="inventoryId"></param>
+        /// <param name="db"></param>
+        /// <param name="topClient"></param>
+        /// <returns></returns>
+        private bool SyncInventory(int inventoryId, DbContext db, ITopClient topClient)
         {
             var stockInfo =
                  db.Set<InventoryEntity>()
                      .Where(x => x.Id == inventoryId)
                      .Join(
                          db.Set<Map4InventoryEntity>()
-                             .Where(m => m.Channel == "tmall" && m.InventoryId == inventoryId), i => i.Id,
-                         m => m.InventoryId, (i, m) => new { Inventory = i, Map4Inventory = m })
+                             .Where(m => m.Channel == "tmall" && m.status == (int)DataStatus.Normal && m.InventoryId == inventoryId), i => i.Id,
+                         m => m.InventoryId, (i, m) => new { Inventory = i, Map4Inventory = m }).OrderByDescending(x => x.Map4Inventory.Id)
                      .FirstOrDefault();
             if (stockInfo == null)
             {
@@ -63,7 +71,7 @@ namespace com.intime.fashion.service.messages.Message
                 SkuId = stockInfo.Map4Inventory.skuId
             };
 
-            return topClient.Execute(req,_sessionKey).IsError;
+            return topClient.Execute(req, _sessionKey).IsError;
         }
     }
 }

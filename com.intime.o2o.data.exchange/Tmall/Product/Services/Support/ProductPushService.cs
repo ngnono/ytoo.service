@@ -104,7 +104,7 @@ namespace com.intime.o2o.data.exchange.Tmall.Product.Services.Support
 
             if (!_schemaMapper.ExistsTemplate(templateKey))
             {
-                var errorMessage = string.Format("产品上传数据模版不存在，tempalte:{0}", templateKey);
+                var errorMessage = string.Format("产品上传数据模版不存在，template:{0}", templateKey);
                 Log.Error(errorMessage);
                 return Error<long>(errorMessage, "-10003");
             }
