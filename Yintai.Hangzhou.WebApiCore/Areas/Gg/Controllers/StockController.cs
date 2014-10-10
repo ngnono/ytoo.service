@@ -52,6 +52,7 @@ namespace Yintai.Hangzhou.WebApiCore.Areas.Gg.Controllers
                         map.UpdateDate = DateTime.Now;
                         map.num = sku.quantity;
                         map.price = sku.price;
+                        map.itemId = itemId;
                         map.saleAttr = sku.properties;
                     }
                     db.SaveChanges();
